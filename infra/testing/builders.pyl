@@ -330,12 +330,14 @@
       {'name': 'v8testing', 'variant': 'infra_staging', 'shards': 2},
       # Native context independent code.
       {'name': 'v8testing', 'variant': 'nci'},
-      {'name': 'v8testing', 'variant': 'nci_as_highest_tier'},
+      {'name': 'v8testing', 'variant': 'nci_as_midtier'},
       # Stress sampling.
       {'name': 'mjsunit', 'variant': 'stress_sampling'},
       {'name': 'webkit', 'variant': 'stress_sampling'},
       # Stress snapshot.
       {'name': 'mjsunit', 'variant': 'stress_snapshot'},
+      # Experimental regexp engine.
+      {'name': 'mjsunit', 'variant': 'experimental_regexp'},
     ],
   },
   'v8_linux64_msan_rel_ng_triggered': {
@@ -635,6 +637,27 @@
     },
     'tests': [
       {'name': 'v8testing'},
+      {'name': 'test262'},
+    ],
+  },
+  'v8_mac_arm64_dbg_ng_triggered': {
+    'swarming_dimensions' : {
+      'cpu': 'x86-64',
+      'os': 'Mac-10.13',
+    },
+    'tests': [
+      {'name': 'v8testing'},
+      {'name': 'test262'},
+    ],
+  },
+  'v8_mac_arm64_full_dbg_ng_triggered': {
+    'swarming_dimensions' : {
+      'cpu': 'x86-64',
+      'os': 'Mac-10.13',
+    },
+    'tests': [
+      {'name': 'v8testing'},
+      {'name': 'test262'},
     ],
   },
   ##############################################################################
@@ -970,12 +993,14 @@
       {'name': 'v8testing', 'variant': 'infra_staging', 'shards': 2},
       # Native context independent code.
       {'name': 'v8testing', 'variant': 'nci'},
-      {'name': 'v8testing', 'variant': 'nci_as_highest_tier'},
+      {'name': 'v8testing', 'variant': 'nci_as_midtier'},
       # Stress sampling.
       {'name': 'mjsunit', 'variant': 'stress_sampling'},
       {'name': 'webkit', 'variant': 'stress_sampling'},
       # Stress snapshot.
       {'name': 'mjsunit', 'variant': 'stress_snapshot'},
+      # Experimental regexp engine.
+      {'name': 'mjsunit', 'variant': 'experimental_regexp'},
     ],
   },
   'V8 Linux64 - debug - perfetto': {
@@ -1000,12 +1025,14 @@
       {'name': 'v8testing', 'variant': 'infra_staging'},
       # Native context independent code.
       {'name': 'v8testing', 'variant': 'nci'},
-      {'name': 'v8testing', 'variant': 'nci_as_highest_tier'},
+      {'name': 'v8testing', 'variant': 'nci_as_midtier'},
       # Stress sampling.
       {'name': 'mjsunit', 'variant': 'stress_sampling'},
       {'name': 'webkit', 'variant': 'stress_sampling'},
       # Stress snapshot.
       {'name': 'mjsunit', 'variant': 'stress_snapshot'},
+      # Experimental regexp engine.
+      {'name': 'mjsunit', 'variant': 'experimental_regexp'},
     ],
   },
   'V8 Linux64 - gcov coverage': {
@@ -1122,7 +1149,7 @@
       {
         'name': 'v8testing',
         'test_args': ['--extra-flags=--stress-incremental-marking'],
-        'shards': 4,
+        'shards': 6,
       },
     ],
   },

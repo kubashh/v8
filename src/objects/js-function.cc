@@ -94,6 +94,11 @@ bool JSFunction::HasAvailableOptimizedCode() const {
   return (result & kOptimizedJSFunctionCodeKindsMask) != 0;
 }
 
+bool JSFunction::HasAvailableCodeKind(CodeKind kind) const {
+  CodeKinds result = GetAvailableCodeKinds();
+  return (result & CodeKindToCodeKindFlag(kind)) != 0;
+}
+
 namespace {
 
 // Returns false if no highest tier exists (i.e. the function is not compiled),
@@ -132,17 +137,30 @@ bool JSFunction::ActiveTierIsIgnition() const {
 bool JSFunction::ActiveTierIsTurbofan() const {
   CodeKind highest_tier;
   if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
-  bool result = highest_tier == CodeKind::OPTIMIZED_FUNCTION;
-  DCHECK_IMPLIES(result, !code().marked_for_deoptimization());
-  return result;
+  return highest_tier == CodeKind::OPTIMIZED_FUNCTION;
 }
 
 bool JSFunction::ActiveTierIsNCI() const {
   CodeKind highest_tier;
   if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
-  bool result = highest_tier == CodeKind::NATIVE_CONTEXT_INDEPENDENT;
-  DCHECK_IMPLIES(result, !code().marked_for_deoptimization());
-  return result;
+  return highest_tier == CodeKind::NATIVE_CONTEXT_INDEPENDENT;
+}
+
+CodeKind JSFunction::NextTier() const {
+  return (FLAG_turbo_nci_as_midtier && ActiveTierIsIgnition())
+             ? CodeKind::NATIVE_CONTEXT_INDEPENDENT
+             : CodeKind::OPTIMIZED_FUNCTION;
+}
+
+bool JSFunction::CanDiscardCompiled() const {
+  // Essentially, what we are asking here is, has this function been compiled
+  // from JS code? We can currently tell only indirectly, by looking at
+  // available code kinds. If any JS code kind exists, we can discard.
+  //
+  // Note that when the function has not yet been compiled we also return
+  // false; that's fine, since nothing must be discarded in that case.
+  CodeKinds result = GetAvailableCodeKinds();
+  return (result & kJSFunctionCodeKindsMask) != 0;
 }
 
 bool JSFunction::HasOptimizationMarker() {
@@ -237,7 +255,7 @@ void JSFunction::ClearOptimizedCodeSlot(const char* reason) {
 void JSFunction::SetOptimizationMarker(OptimizationMarker marker) {
   DCHECK(has_feedback_vector());
   DCHECK(ChecksOptimizationMarker());
-  DCHECK(!HasAvailableOptimizedCode());
+  DCHECK(!ActiveTierIsTurbofan());
 
   feedback_vector().SetOptimizationMarker(marker);
 }
@@ -458,9 +476,9 @@ void JSFunction::MarkForOptimization(ConcurrencyMode mode) {
     mode = ConcurrencyMode::kNotConcurrent;
   }
 
-  DCHECK(!is_compiled() || ActiveTierIsIgnition());
+  DCHECK(!is_compiled() || ActiveTierIsIgnition() || ActiveTierIsNCI());
+  DCHECK(!ActiveTierIsTurbofan());
   DCHECK(shared().IsInterpreted());
-  DCHECK(!HasAvailableOptimizedCode());
   DCHECK(shared().allows_lazy_compilation() ||
          !shared().optimization_disabled());
 

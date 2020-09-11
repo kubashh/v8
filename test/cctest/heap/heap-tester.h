@@ -33,7 +33,6 @@
   V(InvalidatedSlotsFastToSlow)                             \
   V(InvalidatedSlotsSomeInvalidatedRanges)                  \
   V(TestNewSpaceRefsInCopiedCode)                           \
-  V(GCDuringOffThreadMergeWithTransferHandle)               \
   V(GCFlags)                                                \
   V(MarkCompactCollector)                                   \
   V(MarkCompactEpochCounter)                                \
@@ -62,7 +61,8 @@
   V(WriteBarrier_Marking)                                   \
   V(WriteBarrier_MarkingExtension)                          \
   V(WriteBarriersInCopyJSObject)                            \
-  V(DoNotEvacuatePinnedPages)
+  V(DoNotEvacuatePinnedPages)                               \
+  V(ObjectStartBitmap)
 
 #define HEAP_TEST(Name)                                                   \
   CcTest register_test_##Name(v8::internal::heap::HeapTester::Test##Name, \

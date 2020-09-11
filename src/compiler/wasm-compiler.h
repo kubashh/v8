@@ -274,11 +274,16 @@ class WasmGraphBuilder {
   Node* CallIndirect(uint32_t table_index, uint32_t sig_index,
                      Vector<Node*> args, Vector<Node*> rets,
                      wasm::WasmCodePosition position);
+  Node* CallRef(uint32_t sig_index, Vector<Node*> args, Vector<Node*> rets,
+                CheckForNull null_check, wasm::WasmCodePosition position);
 
   Node* ReturnCall(uint32_t index, Vector<Node*> args,
                    wasm::WasmCodePosition position);
   Node* ReturnCallIndirect(uint32_t table_index, uint32_t sig_index,
                            Vector<Node*> args, wasm::WasmCodePosition position);
+  Node* ReturnCallRef(uint32_t sig_index, Vector<Node*> args,
+                      CheckForNull null_check, wasm::WasmCodePosition position);
+
   // Return value is not expected to be used,
   // but we need it for compatibility with graph-builder-interface.
   Node* BrOnNull(Node* ref_object, Node** non_null_node, Node** null_node);
@@ -501,6 +506,9 @@ class WasmGraphBuilder {
   Node* BuildImportCall(const wasm::FunctionSig* sig, Vector<Node*> args,
                         Vector<Node*> rets, wasm::WasmCodePosition position,
                         Node* func_index, IsReturnCall continuation);
+  Node* BuildCallRef(uint32_t sig_index, Vector<Node*> args, Vector<Node*> rets,
+                     CheckForNull null_check, IsReturnCall continuation,
+                     wasm::WasmCodePosition position);
   Node* GetBuiltinPointerTarget(int builtin_id);
 
   Node* BuildF32CopySign(Node* left, Node* right);
@@ -598,6 +606,10 @@ class WasmGraphBuilder {
 
   Node* BuildMultiReturnFixedArrayFromIterable(const wasm::FunctionSig* sig,
                                                Node* iterable, Node* context);
+
+  Node* BuildLoadFunctionDataFromExportedFunction(Node* closure);
+  Node* BuildLoadJumpTableOffsetFromExportedFunctionData(Node* function_data);
+  Node* BuildLoadFunctionIndexFromExportedFunctionData(Node* function_data);
 
   //-----------------------------------------------------------------------
   // Operations involving the CEntry, a dependency we want to remove

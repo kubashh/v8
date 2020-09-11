@@ -26,7 +26,7 @@ namespace internal {
 // Forward declarations.
 namespace compiler {
 class CallDescriptor;
-}
+}  // namespace compiler
 
 namespace wasm {
 
@@ -134,6 +134,8 @@ class LiftoffAssembler : public TurboAssembler {
     CacheState& operator=(CacheState&&) V8_NOEXCEPT = default;
     // Disallow copy construction.
     CacheState(const CacheState&) = delete;
+
+    void DefineSafepoint(Safepoint& safepoint);
 
     base::SmallVector<VarState, 8> stack_state;
     LiftoffRegList used_registers;
@@ -381,6 +383,8 @@ class LiftoffAssembler : public TurboAssembler {
     return SpillOneRegister(candidates, pinned);
   }
 
+  void MaterializeMergedConstants(uint32_t arity);
+
   void MergeFullStackWith(const CacheState& target, const CacheState& source);
   void MergeStackWith(const CacheState& target, uint32_t arity);
 
@@ -479,7 +483,7 @@ class LiftoffAssembler : public TurboAssembler {
   inline void SpillInstance(Register instance);
   inline void FillInstanceInto(Register dst);
   inline void LoadTaggedPointer(Register dst, Register src_addr,
-                                Register offset_reg, uint32_t offset_imm,
+                                Register offset_reg, int32_t offset_imm,
                                 LiftoffRegList pinned);
   inline void Load(LiftoffRegister dst, Register src_addr, Register offset_reg,
                    uint32_t offset_imm, LoadType type, LiftoffRegList pinned,
@@ -1117,10 +1121,7 @@ class LiftoffAssembler : public TurboAssembler {
   uint32_t num_locals() const { return num_locals_; }
   void set_num_locals(uint32_t num_locals);
 
-  int GetTotalFrameSlotCount() const {
-    // TODO(zhin): Temporary for migration from index to offset.
-    return ((max_used_spill_offset_ + kStackSlotSize - 1) / kStackSlotSize);
-  }
+  int GetTotalFrameSlotCountForGC() const;
 
   int GetTotalFrameSize() const { return max_used_spill_offset_; }
 

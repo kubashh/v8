@@ -37,13 +37,13 @@
 #include "src/debug/debug.h"
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/execution/execution.h"
-#include "src/execution/off-thread-isolate.h"
 #include "src/handles/global-handles.h"
 #include "src/heap/combined-heap.h"
 #include "src/heap/factory.h"
 #include "src/heap/gc-tracer.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/incremental-marking.h"
+#include "src/heap/large-spaces.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/memory-reducer.h"
@@ -420,8 +420,9 @@ TEST(GarbageCollection) {
 
 static void VerifyStringAllocation(Isolate* isolate, const char* string) {
   HandleScope scope(isolate);
-  Handle<String> s = isolate->factory()->NewStringFromUtf8(
-      CStrVector(string)).ToHandleChecked();
+  Handle<String> s = isolate->factory()
+                         ->NewStringFromUtf8(CStrVector(string))
+                         .ToHandleChecked();
   CHECK_EQ(strlen(string), s->length());
   for (int index = 0; index < s->length(); index++) {
     CHECK_EQ(static_cast<uint16_t>(string[index]), s->Get(index));
@@ -696,67 +697,18 @@ TEST(BytecodeArrayAging) {
 }
 
 static const char* not_so_random_string_table[] = {
-  "abstract",
-  "boolean",
-  "break",
-  "byte",
-  "case",
-  "catch",
-  "char",
-  "class",
-  "const",
-  "continue",
-  "debugger",
-  "default",
-  "delete",
-  "do",
-  "double",
-  "else",
-  "enum",
-  "export",
-  "extends",
-  "false",
-  "final",
-  "finally",
-  "float",
-  "for",
-  "function",
-  "goto",
-  "if",
-  "implements",
-  "import",
-  "in",
-  "instanceof",
-  "int",
-  "interface",
-  "long",
-  "native",
-  "new",
-  "null",
-  "package",
-  "private",
-  "protected",
-  "public",
-  "return",
-  "short",
-  "static",
-  "super",
-  "switch",
-  "synchronized",
-  "this",
-  "throw",
-  "throws",
-  "transient",
-  "true",
-  "try",
-  "typeof",
-  "var",
-  "void",
-  "volatile",
-  "while",
-  "with",
-  nullptr
-};
+    "abstract",   "boolean",      "break",      "byte",    "case",
+    "catch",      "char",         "class",      "const",   "continue",
+    "debugger",   "default",      "delete",     "do",      "double",
+    "else",       "enum",         "export",     "extends", "false",
+    "final",      "finally",      "float",      "for",     "function",
+    "goto",       "if",           "implements", "import",  "in",
+    "instanceof", "int",          "interface",  "long",    "native",
+    "new",        "null",         "package",    "private", "protected",
+    "public",     "return",       "short",      "static",  "super",
+    "switch",     "synchronized", "this",       "throw",   "throws",
+    "transient",  "true",         "try",        "typeof",  "var",
+    "void",       "volatile",     "while",      "with",    nullptr};
 
 static void CheckInternalizedStrings(const char** strings) {
   Isolate* isolate = CcTest::i_isolate();
@@ -1329,6 +1281,7 @@ TEST(TestOptimizeAfterBytecodeFlushingCandidate) {
   i::FLAG_incremental_marking = true;
   i::FLAG_flush_bytecode = true;
   i::FLAG_allow_natives_syntax = true;
+  ManualGCScope manual_gc_scope;
 
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -1868,6 +1821,7 @@ static Address AlignOldSpace(AllocationAlignment alignment, int offset) {
 // Test the case where allocation must be done from the free list, so filler
 // may precede or follow the object.
 TEST(TestAlignedOverAllocation) {
+  ManualGCScope manual_gc_scope;
   Heap* heap = CcTest::heap();
   // Test checks for fillers before and behind objects and requires a fresh
   // page and empty free list.
@@ -1991,7 +1945,7 @@ TEST(GrowAndShrinkNewSpace) {
   // Avoid shrinking new space in GC epilogue. This can happen if allocation
   // throughput samples have been taken while executing the benchmark.
   FLAG_predictable = true;
-
+  FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
   Heap* heap = CcTest::heap();
   NewSpace* new_space = heap->new_space();
@@ -2047,6 +2001,7 @@ TEST(GrowAndShrinkNewSpace) {
 
 TEST(CollectingAllAvailableGarbageShrinksNewSpace) {
   if (FLAG_single_generation) return;
+  FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
   Heap* heap = CcTest::heap();
   if (heap->MaxSemiSpaceSize() == heap->InitialSemiSpaceSize()) {
@@ -2441,6 +2396,7 @@ TEST(IdleNotificationFinishMarking) {
 TEST(OptimizedAllocationAlwaysInNewSpace) {
   if (FLAG_single_generation) return;
   FLAG_allow_natives_syntax = true;
+  FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
   if (!CcTest::i_isolate()->use_optimizer() || FLAG_always_opt) return;
   if (FLAG_gc_global || FLAG_stress_compaction ||
@@ -3019,9 +2975,8 @@ static void AddTransitions(int transitions_count) {
   }
 }
 
-
-static void AddPropertyTo(
-    int gc_count, Handle<JSObject> object, const char* property_name) {
+static void AddPropertyTo(int gc_count, Handle<JSObject> object,
+                          const char* property_name) {
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
   Handle<String> prop_name = factory->InternalizeUtf8String(property_name);
@@ -3032,7 +2987,6 @@ static void AddPropertyTo(
   CcTest::heap()->set_allocation_timeout(gc_count);
   Object::SetProperty(isolate, object, prop_name, twenty_three).Check();
 }
-
 
 TEST(TransitionArrayShrinksDuringAllocToZero) {
   FLAG_stress_compaction = false;
@@ -3052,8 +3006,9 @@ TEST(TransitionArrayShrinksDuringAllocToZero) {
   CHECK_EQ(transitions_count, transitions_before);
 
   // Get rid of o
-  CompileRun("o = new F;"
-             "root = new F");
+  CompileRun(
+      "o = new F;"
+      "root = new F");
   root = GetByName("root");
   AddPropertyTo(2, root, "funny");
   CcTest::CollectGarbage(NEW_SPACE);
@@ -3221,8 +3176,9 @@ TEST(PrintSharedFunctionInfo) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   v8::Local<v8::Context> ctx = CcTest::isolate()->GetCurrentContext();
-  const char* source = "f = function() { return 987654321; }\n"
-                       "g = function() { return 123456789; }\n";
+  const char* source =
+      "f = function() { return 987654321; }\n"
+      "g = function() { return 123456789; }\n";
   CompileRun(source);
   i::Handle<JSFunction> g = i::Handle<JSFunction>::cast(
       v8::Utils::OpenHandle(*v8::Local<v8::Function>::Cast(
@@ -3509,32 +3465,42 @@ UNINITIALIZED_TEST(ReleaseStackTraceData) {
     v8::Isolate::Scope isolate_scope(isolate);
     v8::HandleScope handle_scope(isolate);
     v8::Context::New(isolate)->Enter();
-    static const char* source1 = "var error = null;            "
-    /* Normal Error */           "try {                        "
-                                 "  throw new Error();         "
-                                 "} catch (e) {                "
-                                 "  error = e;                 "
-                                 "}                            ";
-    static const char* source2 = "var error = null;            "
-    /* Stack overflow */         "try {                        "
-                                 "  (function f() { f(); })(); "
-                                 "} catch (e) {                "
-                                 "  error = e;                 "
-                                 "}                            ";
-    static const char* source3 = "var error = null;            "
-    /* Normal Error */           "try {                        "
-    /* as prototype */           "  throw new Error();         "
-                                 "} catch (e) {                "
-                                 "  error = {};                "
-                                 "  error.__proto__ = e;       "
-                                 "}                            ";
-    static const char* source4 = "var error = null;            "
-    /* Stack overflow */         "try {                        "
-    /* as prototype   */         "  (function f() { f(); })(); "
-                                 "} catch (e) {                "
-                                 "  error = {};                "
-                                 "  error.__proto__ = e;       "
-                                 "}                            ";
+    static const char* source1 =
+        "var error = null;            "
+        /* Normal Error */
+        "try {                        "
+        "  throw new Error();         "
+        "} catch (e) {                "
+        "  error = e;                 "
+        "}                            ";
+    static const char* source2 =
+        "var error = null;            "
+        /* Stack overflow */
+        "try {                        "
+        "  (function f() { f(); })(); "
+        "} catch (e) {                "
+        "  error = e;                 "
+        "}                            ";
+    static const char* source3 =
+        "var error = null;            "
+        /* Normal Error */
+        "try {                        "
+        /* as prototype */
+        "  throw new Error();         "
+        "} catch (e) {                "
+        "  error = {};                "
+        "  error.__proto__ = e;       "
+        "}                            ";
+    static const char* source4 =
+        "var error = null;            "
+        /* Stack overflow */
+        "try {                        "
+        /* as prototype   */
+        "  (function f() { f(); })(); "
+        "} catch (e) {                "
+        "  error = {};                "
+        "  error.__proto__ = e;       "
+        "}                            ";
     static const char* getter = "error.stack";
     static const char* setter = "error.stack = 0";
 
@@ -3685,17 +3651,18 @@ TEST(Regress169928) {
     return;
 
   // Prepare the environment
-  CompileRun("function fastliteralcase(literal, value) {"
-             "    literal[0] = value;"
-             "    return literal;"
-             "}"
-             "function get_standard_literal() {"
-             "    var literal = [1, 2, 3];"
-             "    return literal;"
-             "}"
-             "obj = fastliteralcase(get_standard_literal(), 1);"
-             "obj = fastliteralcase(get_standard_literal(), 1.5);"
-             "obj = fastliteralcase(get_standard_literal(), 2);");
+  CompileRun(
+      "function fastliteralcase(literal, value) {"
+      "    literal[0] = value;"
+      "    return literal;"
+      "}"
+      "function get_standard_literal() {"
+      "    var literal = [1, 2, 3];"
+      "    return literal;"
+      "}"
+      "obj = fastliteralcase(get_standard_literal(), 1);"
+      "obj = fastliteralcase(get_standard_literal(), 1.5);"
+      "obj = fastliteralcase(get_standard_literal(), 2);");
 
   // prepare the heap
   v8::Local<v8::String> mote_code_string =
@@ -3882,11 +3849,12 @@ TEST(IncrementalMarkingStepMakesBigProgressWithLargeObjects) {
   ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
-  CompileRun("function f(n) {"
-             "    var a = new Array(n);"
-             "    for (var i = 0; i < n; i += 100) a[i] = i;"
-             "};"
-             "f(10 * 1024 * 1024);");
+  CompileRun(
+      "function f(n) {"
+      "    var a = new Array(n);"
+      "    for (var i = 0; i < n; i += 100) a[i] = i;"
+      "};"
+      "f(10 * 1024 * 1024);");
   IncrementalMarking* marking = CcTest::heap()->incremental_marking();
   if (marking->IsStopped()) {
     CcTest::heap()->StartIncrementalMarking(
@@ -3983,9 +3951,8 @@ TEST(EnsureAllocationSiteDependentCodesProcessed) {
     // One allocation site should have been created.
     int new_count = AllocationSitesCount(heap);
     CHECK_EQ(new_count, (count + 1));
-    site = Handle<AllocationSite>::cast(
-        global_handles->Create(
-            AllocationSite::cast(heap->allocation_sites_list())));
+    site = Handle<AllocationSite>::cast(global_handles->Create(
+        AllocationSite::cast(heap->allocation_sites_list())));
 
     CompileRun("%OptimizeFunctionOnNextCall(bar); bar();");
 
@@ -5061,6 +5028,7 @@ TEST(Regress388880) {
   if (!FLAG_incremental_marking) return;
   FLAG_stress_incremental_marking = false;
   FLAG_expose_gc = true;
+  FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
@@ -5361,6 +5329,7 @@ TEST(NewSpaceAllocationCounter) {
 
 
 TEST(OldSpaceAllocationCounter) {
+  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
@@ -5462,8 +5431,9 @@ TEST(CanonicalSharedFunctionInfo) {
   v8::Isolate* isolate = CcTest::isolate();
   v8::HandleScope scope(isolate);
   v8::Local<v8::ObjectTemplate> global = v8::ObjectTemplate::New(isolate);
-  global->Set(isolate, "check", v8::FunctionTemplate::New(
-                                    isolate, CheckEqualSharedFunctionInfos));
+  global->Set(
+      isolate, "check",
+      v8::FunctionTemplate::New(isolate, CheckEqualSharedFunctionInfos));
   global->Set(isolate, "remove",
               v8::FunctionTemplate::New(isolate, RemoveCodeAndGC));
   v8::Local<v8::Context> context = v8::Context::New(isolate, nullptr, global);
@@ -5532,8 +5502,10 @@ AllocationResult HeapTester::AllocateByteArrayForTest(
 }
 
 bool HeapTester::CodeEnsureLinearAllocationArea(Heap* heap, int size_in_bytes) {
-  return heap->code_space()->EnsureLabMain(size_in_bytes,
-                                           AllocationOrigin::kRuntime);
+  bool result = heap->code_space()->EnsureLabMain(size_in_bytes,
+                                                  AllocationOrigin::kRuntime);
+  heap->code_space()->UpdateInlineAllocationLimit(0);
+  return result;
 }
 
 HEAP_TEST(Regress587004) {
@@ -5577,7 +5549,7 @@ HEAP_TEST(Regress587004) {
 }
 
 HEAP_TEST(Regress589413) {
-  if (!FLAG_incremental_marking) return;
+  if (!FLAG_incremental_marking || FLAG_stress_concurrent_allocation) return;
   FLAG_stress_compaction = true;
   FLAG_manual_evacuation_candidates_selection = true;
   FLAG_parallel_compaction = false;
@@ -5813,6 +5785,7 @@ Handle<FixedArray> ShrinkArrayAndCheckSize(Heap* heap, int length) {
 }
 
 TEST(Regress609761) {
+  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Heap* heap = CcTest::heap();
@@ -5822,6 +5795,7 @@ TEST(Regress609761) {
 }
 
 TEST(LiveBytes) {
+  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Heap* heap = CcTest::heap();
@@ -5939,6 +5913,7 @@ TEST(Regress631969) {
 
 TEST(LeftTrimFixedArrayInBlackArea) {
   if (!FLAG_incremental_marking) return;
+  FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Heap* heap = CcTest::heap();
@@ -5979,6 +5954,7 @@ TEST(LeftTrimFixedArrayInBlackArea) {
 
 TEST(ContinuousLeftTrimFixedArrayInBlackArea) {
   if (!FLAG_incremental_marking) return;
+  FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Heap* heap = CcTest::heap();
@@ -6047,6 +6023,7 @@ TEST(ContinuousLeftTrimFixedArrayInBlackArea) {
 
 TEST(ContinuousRightTrimFixedArrayInBlackArea) {
   if (!FLAG_incremental_marking) return;
+  FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Heap* heap = CcTest::heap();
@@ -6255,6 +6232,7 @@ static size_t GetRememberedSetSize(HeapObject obj) {
 
 TEST(RememberedSet_InsertOnWriteBarrier) {
   if (FLAG_single_generation) return;
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
@@ -6282,6 +6260,7 @@ TEST(RememberedSet_InsertOnWriteBarrier) {
 
 TEST(RememberedSet_InsertInLargePage) {
   if (FLAG_single_generation) return;
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
@@ -6308,6 +6287,7 @@ TEST(RememberedSet_InsertInLargePage) {
 
 TEST(RememberedSet_InsertOnPromotingObjectToOld) {
   if (FLAG_single_generation) return;
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
@@ -6337,6 +6317,7 @@ TEST(RememberedSet_InsertOnPromotingObjectToOld) {
 
 TEST(RememberedSet_RemoveStaleOnScavenge) {
   if (FLAG_single_generation) return;
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
@@ -6376,7 +6357,7 @@ TEST(RememberedSet_RemoveStaleOnScavenge) {
 // that compaction has happened and otherwise relies on code's self-validation.
 TEST(RememberedSet_OldToOld) {
   if (FLAG_stress_incremental_marking) return;
-
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
@@ -6691,7 +6672,8 @@ UNINITIALIZED_TEST(OutOfMemory) {
 
 UNINITIALIZED_TEST(OutOfMemoryIneffectiveGC) {
   if (!FLAG_detect_ineffective_gcs_near_heap_limit) return;
-  if (FLAG_stress_incremental_marking) return;
+  if (FLAG_stress_incremental_marking || FLAG_stress_concurrent_allocation)
+    return;
 #ifdef VERIFY_HEAP
   if (FLAG_verify_heap) return;
 #endif
@@ -6767,6 +6749,7 @@ HEAP_TEST(Regress779503) {
   // that it currently processes because it might allocate over the currently
   // processed slot.
   if (FLAG_single_generation) return;
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   const int kArraySize = 2048;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -7178,44 +7161,6 @@ TEST(Regress978156) {
   marking_state->GreyToBlack(filler);
 }
 
-HEAP_TEST(GCDuringOffThreadMergeWithTransferHandle) {
-  CcTest::InitializeVM();
-  Isolate* isolate = CcTest::i_isolate();
-  Heap* heap = isolate->heap();
-
-  HandleScope handle_scope(isolate);
-
-  Zone zone(isolate->allocator(), ZONE_NAME);
-  OffThreadIsolate off_thread_isolate(isolate, &zone);
-
-  OffThreadTransferHandle<FixedArray> transfer_handle;
-
-  {
-    OffThreadHandleScope handle_scope(&off_thread_isolate);
-    Handle<FixedArray> obj =
-        off_thread_isolate.factory()->NewFixedArray(10, AllocationType::kOld);
-
-    transfer_handle = off_thread_isolate.TransferHandle(obj);
-
-    off_thread_isolate.FinishOffThread();
-  }
-
-  heap->set_force_oom(true);
-
-  heap->AddNearHeapLimitCallback(
-      [](void* data, size_t current_heap_limit,
-         size_t initial_heap_limit) -> size_t {
-        Heap* heap = static_cast<Heap*>(data);
-        heap->set_force_oom(false);
-        return 0;
-      },
-      heap);
-
-  off_thread_isolate.Publish(isolate);
-  CHECK(transfer_handle.ToHandle()->IsFixedArray());
-  CHECK_EQ(transfer_handle.ToHandle()->length(), 10);
-}
-
 TEST(GarbageCollectionWithLocalHeap) {
   FLAG_local_heaps = true;
   ManualGCScope manual_gc_scope;
@@ -7230,7 +7175,6 @@ TEST(GarbageCollectionWithLocalHeap) {
 }
 
 TEST(Regress10698) {
-  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
   Heap* heap = CcTest::i_isolate()->heap();
   Factory* factory = CcTest::i_isolate()->factory();

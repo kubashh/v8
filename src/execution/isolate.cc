@@ -99,6 +99,10 @@
 #include "src/diagnostics/unwinding-info-win64.h"
 #endif  // V8_OS_WIN64
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/conservative-stack-visitor.h"
+#endif
+
 extern "C" const uint8_t* v8_Default_embedded_blob_code_;
 extern "C" uint32_t v8_Default_embedded_blob_code_size_;
 extern "C" const uint8_t* v8_Default_embedded_blob_metadata_;
@@ -504,6 +508,11 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
         Root::kTop, nullptr,
         FullObjectSlot(reinterpret_cast<Address>(&(block->message_obj_))));
   }
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  ConservativeStackVisitor stack_visitor(this, v);
+  thread_local_top()->stack_.IteratePointers(&stack_visitor);
+#endif
 
   // Iterate over pointers on native execution stack.
   wasm::WasmCodeRefScope wasm_code_ref_scope;
@@ -2971,17 +2980,6 @@ void Isolate::CheckIsolateLayout() {
            Internals::kIsolateStackGuardOffset);
   CHECK_EQ(static_cast<int>(OFFSET_OF(Isolate, isolate_data_.roots_)),
            Internals::kIsolateRootsOffset);
-  CHECK_EQ(Internals::kExternalMemoryOffset % 8, 0);
-  CHECK_EQ(static_cast<int>(OFFSET_OF(Isolate, isolate_data_.external_memory_)),
-           Internals::kExternalMemoryOffset);
-  CHECK_EQ(Internals::kExternalMemoryLimitOffset % 8, 0);
-  CHECK_EQ(static_cast<int>(
-               OFFSET_OF(Isolate, isolate_data_.external_memory_limit_)),
-           Internals::kExternalMemoryLimitOffset);
-  CHECK_EQ(Internals::kExternalMemoryLowSinceMarkCompactOffset % 8, 0);
-  CHECK_EQ(static_cast<int>(OFFSET_OF(
-               Isolate, isolate_data_.external_memory_low_since_mark_compact_)),
-           Internals::kExternalMemoryLowSinceMarkCompactOffset);
 }
 
 void Isolate::ClearSerializerData() {
@@ -3006,6 +3004,7 @@ void Isolate::Deinit() {
   }
 
   metrics_recorder_->NotifyIsolateDisposal();
+  recorder_context_id_map_.clear();
 
 #if defined(V8_OS_WIN64)
   if (win64_unwindinfo::CanRegisterUnwindInfoForNonABICompliantCodeRange() &&
@@ -3334,6 +3333,8 @@ void Isolate::CreateAndSetEmbeddedBlob() {
 
   PrepareBuiltinSourcePositionMap();
 
+  PrepareBuiltinLabelInfoMap();
+
   // If a sticky blob has been set, we reuse it.
   if (StickyEmbeddedBlobCode() != nullptr) {
     CHECK_EQ(embedded_blob_code(), StickyEmbeddedBlobCode());
@@ -3490,7 +3491,7 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
   // Enable logging before setting up the heap
   logger_->SetUp(this);
 
-  metrics_recorder_ = std::make_shared<metrics::Recorder>(this);
+  metrics_recorder_ = std::make_shared<metrics::Recorder>();
 
   {  // NOLINT
     // Ensure that the thread has a valid stack guard.  The v8::Locker object
@@ -4208,6 +4209,15 @@ void Isolate::PrepareBuiltinSourcePositionMap() {
   }
 }
 
+void Isolate::PrepareBuiltinLabelInfoMap() {
+  if (embedded_file_writer_ != nullptr) {
+    embedded_file_writer_->PrepareBuiltinLabelInfoMap(
+        heap()->construct_stub_create_deopt_pc_offset().value(),
+        heap()->construct_stub_invoke_deopt_pc_offset().value(),
+        heap()->arguments_adaptor_deopt_pc_offset().value());
+  }
+}
+
 #if defined(V8_OS_WIN64)
 void Isolate::SetBuiltinUnwindData(
     int builtin_index,
@@ -4371,13 +4381,6 @@ void Isolate::CountUsage(v8::Isolate::UseCounterFeature feature) {
 }
 
 int Isolate::GetNextScriptId() { return heap()->NextScriptId(); }
-
-int Isolate::GetNextStackFrameInfoId() {
-  int id = last_stack_frame_info_id();
-  int next_id = id == Smi::kMaxValue ? 0 : (id + 1);
-  set_last_stack_frame_info_id(next_id);
-  return next_id;
-}
 
 // static
 std::string Isolate::GetTurboCfgFileName(Isolate* isolate) {

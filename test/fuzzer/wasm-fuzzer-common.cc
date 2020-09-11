@@ -33,17 +33,15 @@ void InterpretAndExecuteModule(i::Isolate* isolate,
   if (module_object->module()->start_function_index >= 0) return;
 
   HandleScope handle_scope(isolate);  // Avoid leaking handles.
-  MaybeHandle<WasmInstanceObject> maybe_instance;
   Handle<WasmInstanceObject> instance;
 
   // Try to instantiate, return if it fails.
   {
     ErrorThrower thrower(isolate, "WebAssembly Instantiation");
-    maybe_instance = isolate->wasm_engine()->SyncInstantiate(
-        isolate, &thrower, module_object,
-        Handle<JSReceiver>::null(),     // imports
-        MaybeHandle<JSArrayBuffer>());  // memory
-    if (!maybe_instance.ToHandle(&instance)) {
+    if (!isolate->wasm_engine()
+             ->SyncInstantiate(isolate, &thrower, module_object, {},
+                               {})  // no imports & memory
+             .ToHandle(&instance)) {
       isolate->clear_pending_exception();
       thrower.Reset();  // Ignore errors.
       return;
@@ -57,13 +55,14 @@ void InterpretAndExecuteModule(i::Isolate* isolate,
     return;
   }
 
-  std::unique_ptr<WasmValue[]> arguments =
-      testing::MakeDefaultArguments(isolate, main_function->sig());
+  OwnedVector<WasmValue> arguments =
+      testing::MakeDefaultInterpreterArguments(isolate, main_function->sig());
 
   // Now interpret.
   testing::WasmInterpretationResult interpreter_result =
-      testing::InterpretWasmModule(
-          isolate, instance, main_function->function_index(), arguments.get());
+      testing::InterpretWasmModule(isolate, instance,
+                                   main_function->function_index(),
+                                   arguments.begin());
   if (interpreter_result.failed()) return;
 
   // The WebAssembly spec allows the sign bit of NaN to be non-deterministic.
@@ -76,33 +75,31 @@ void InterpretAndExecuteModule(i::Isolate* isolate,
 
   // Try to instantiate and execute the module_object.
   {
-    ErrorThrower thrower(isolate, "InterpretAndExecuteModule");
-    maybe_instance = isolate->wasm_engine()->SyncInstantiate(
-        isolate, &thrower, module_object,
-        Handle<JSReceiver>::null(),     // imports
-        MaybeHandle<JSArrayBuffer>());  // memory
-    if (!maybe_instance.ToHandle(&instance)) {
-      isolate->clear_pending_exception();
-      thrower.Reset();  // Ignore errors.
-      return;
-    }
+    ErrorThrower thrower(isolate, "Second Instantiation");
+    // We instantiated before, so the second instantiation must also succeed:
+    CHECK(isolate->wasm_engine()
+              ->SyncInstantiate(isolate, &thrower, module_object, {},
+                                {})  // no imports & memory
+              .ToHandle(&instance));
   }
 
+  OwnedVector<Handle<Object>> compiled_args =
+      testing::MakeDefaultArguments(isolate, main_function->sig());
+
+  bool exception = false;
   int32_t result_compiled = testing::CallWasmFunctionForTesting(
-      isolate, instance, "main", 0, nullptr);
-  if (interpreter_result.trapped() != isolate->has_pending_exception()) {
+      isolate, instance, "main", static_cast<int>(compiled_args.size()),
+      compiled_args.begin(), &exception);
+  if (interpreter_result.trapped() != exception) {
     const char* exception_text[] = {"no exception", "exception"};
     FATAL("interpreter: %s; compiled: %s",
           exception_text[interpreter_result.trapped()],
-          exception_text[isolate->has_pending_exception()]);
+          exception_text[exception]);
   }
 
   if (interpreter_result.finished()) {
     CHECK_EQ(interpreter_result.result(), result_compiled);
   }
-
-  // Cleanup any pending exception.
-  isolate->clear_pending_exception();
 }
 
 namespace {
@@ -166,7 +163,8 @@ void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
   ModuleResult module_res = DecodeWasmModule(
       enabled_features, wire_bytes.start(), wire_bytes.end(), kVerifyFunctions,
       ModuleOrigin::kWasmOrigin, isolate->counters(),
-      isolate->wasm_engine()->allocator());
+      isolate->metrics_recorder(), v8::metrics::Recorder::ContextId::Empty(),
+      DecodingMethod::kSync, isolate->wasm_engine()->allocator());
   CHECK(module_res.ok());
   WasmModule* module = module_res.value().get();
   CHECK_NOT_NULL(module);
@@ -312,12 +310,6 @@ void WasmExecutionFuzzer::FuzzWasmModule(Vector<const uint8_t> data,
   FlagScope<bool> enable_##feat(&FLAG_experimental_wasm_##feat, true);
   FOREACH_WASM_STAGING_FEATURE_FLAG(ENABLE_STAGED_FEATURES)
 #undef ENABLE_STAGED_FEATURES
-  // SIMD is not included in staging yet, so we enable it here for fuzzing.
-  EXPERIMENTAL_FLAG_SCOPE(simd);
-  // TODO(v8:10308): Bitmask was merged into proposal after 84 cut, so it was
-  // left gated by this flag. In order to fuzz it, we need this flag. This
-  // should be removed once we move bitmask out of post mvp.
-  FLAG_SCOPE(wasm_simd_post_mvp);
 
   // Strictly enforce the input size limit. Note that setting "max_len" on the
   // fuzzer target is not enough, since different fuzzers are used and not all

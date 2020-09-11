@@ -291,13 +291,11 @@ void BytecodeArray::BytecodeArrayVerify(Isolate* isolate) {
   CHECK(IsBytecodeArray());
   CHECK(constant_pool().IsFixedArray());
   VerifyHeapPointer(isolate, constant_pool());
-  CHECK(source_position_table().IsUndefined() ||
-        source_position_table().IsException() ||
-        source_position_table().IsByteArray());
+  CHECK(synchronized_source_position_table().IsUndefined() ||
+        synchronized_source_position_table().IsException() ||
+        synchronized_source_position_table().IsByteArray());
   CHECK(handler_table().IsByteArray());
 }
-
-USE_TORQUE_VERIFIER(FeedbackVector)
 
 USE_TORQUE_VERIFIER(JSReceiver)
 
@@ -703,12 +701,10 @@ void JSArgumentsObject::JSArgumentsObjectVerify(Isolate* isolate) {
 
 void JSAsyncFunctionObject::JSAsyncFunctionObjectVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::JSAsyncFunctionObjectVerify(*this, isolate);
-  promise().HeapObjectVerify(isolate);
 }
 
 void JSAsyncGeneratorObject::JSAsyncGeneratorObjectVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::JSAsyncGeneratorObjectVerify(*this, isolate);
-  queue().HeapObjectVerify(isolate);
 }
 
 void JSDate::JSDateVerify(Isolate* isolate) {
@@ -810,12 +806,12 @@ void JSFunction::JSFunctionVerify(Isolate* isolate) {
 }
 
 void SharedFunctionInfo::SharedFunctionInfoVerify(Isolate* isolate) {
-  // TODO(leszeks): Add a TorqueGeneratedClassVerifier for OffThreadIsolate.
+  // TODO(leszeks): Add a TorqueGeneratedClassVerifier for LocalIsolate.
   TorqueGeneratedClassVerifiers::SharedFunctionInfoVerify(*this, isolate);
   this->SharedFunctionInfoVerify(ReadOnlyRoots(isolate));
 }
 
-void SharedFunctionInfo::SharedFunctionInfoVerify(OffThreadIsolate* isolate) {
+void SharedFunctionInfo::SharedFunctionInfoVerify(LocalIsolate* isolate) {
   this->SharedFunctionInfoVerify(ReadOnlyRoots(isolate));
 }
 
@@ -1219,6 +1215,42 @@ void JSRegExp::JSRegExpVerify(Isolate* isolate) {
       CHECK(arr.get(JSRegExp::kAtomPatternIndex).IsString());
       break;
     }
+    case JSRegExp::EXPERIMENTAL: {
+      FixedArray arr = FixedArray::cast(data());
+      Smi uninitialized = Smi::FromInt(JSRegExp::kUninitializedValue);
+
+      Object latin1_code = arr.get(JSRegExp::kIrregexpLatin1CodeIndex);
+      Object uc16_code = arr.get(JSRegExp::kIrregexpUC16CodeIndex);
+      Object latin1_bytecode = arr.get(JSRegExp::kIrregexpLatin1BytecodeIndex);
+      Object uc16_bytecode = arr.get(JSRegExp::kIrregexpUC16BytecodeIndex);
+
+      bool is_compiled = latin1_code.IsCode();
+      if (is_compiled) {
+        CHECK_EQ(Code::cast(latin1_code).builtin_index(),
+                 Builtins::kRegExpExperimentalTrampoline);
+        CHECK_EQ(uc16_code, latin1_code);
+
+        CHECK(latin1_bytecode.IsByteArray());
+        CHECK_EQ(uc16_bytecode, latin1_bytecode);
+      } else {
+        CHECK_EQ(latin1_code, uninitialized);
+        CHECK_EQ(uc16_code, uninitialized);
+
+        CHECK_EQ(latin1_bytecode, uninitialized);
+        CHECK_EQ(uc16_bytecode, uninitialized);
+      }
+
+      CHECK_EQ(arr.get(JSRegExp::kIrregexpMaxRegisterCountIndex),
+               uninitialized);
+      // TODO(mbid,v8:10765): Once the EXPERIMENTAL regexps support captures,
+      // the capture count should be allowed to be a Smi >= 0.
+      CHECK_EQ(arr.get(JSRegExp::kIrregexpCaptureCountIndex), Smi::FromInt(0));
+      CHECK_EQ(arr.get(JSRegExp::kIrregexpCaptureNameMapIndex), uninitialized);
+      CHECK_EQ(arr.get(JSRegExp::kIrregexpTicksUntilTierUpIndex),
+               uninitialized);
+      CHECK_EQ(arr.get(JSRegExp::kIrregexpBacktrackLimit), uninitialized);
+      break;
+    }
     case JSRegExp::IRREGEXP: {
       bool can_be_interpreted = RegExp::CanGenerateBytecode();
 
@@ -1308,7 +1340,6 @@ void AsyncGeneratorRequest::AsyncGeneratorRequestVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::AsyncGeneratorRequestVerify(*this, isolate);
   CHECK_GE(resume_mode(), JSGeneratorObject::kNext);
   CHECK_LE(resume_mode(), JSGeneratorObject::kThrow);
-  next().ObjectVerify(isolate);
 }
 
 void BigIntBase::BigIntBaseVerify(Isolate* isolate) {

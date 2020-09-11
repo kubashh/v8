@@ -62,7 +62,16 @@ class FrameWriter {
     }
   }
 
-  void PushCallerPc(intptr_t pc) {
+  // There is no check against the allowed addresses for bottommost frames, as
+  // the caller's pc could be anything. The caller's pc pushed here should never
+  // be re-signed.
+  void PushBottommostCallerPc(intptr_t pc) {
+    top_offset_ -= kPCOnStackSize;
+    frame_->SetFrameSlot(top_offset_, pc);
+    DebugPrintOutputPc(pc, "bottommost caller's pc\n");
+  }
+
+  void PushApprovedCallerPc(intptr_t pc) {
     top_offset_ -= kPCOnStackSize;
     frame_->SetCallerPc(top_offset_, pc);
     DebugPrintOutputPc(pc, "caller's pc\n");
@@ -110,6 +119,8 @@ class FrameWriter {
   }
 
   unsigned top_offset() const { return top_offset_; }
+
+  FrameDescription* frame() { return frame_; }
 
  private:
   void PushValue(intptr_t value) {
@@ -170,12 +181,12 @@ class FrameWriter {
 DeoptimizerData::DeoptimizerData(Heap* heap) : heap_(heap), current_(nullptr) {
   Code* start = &deopt_entry_code_[0];
   Code* end = &deopt_entry_code_[DeoptimizerData::kLastDeoptimizeKind + 1];
-  heap_->RegisterStrongRoots(FullObjectSlot(start), FullObjectSlot(end));
+  strong_roots_entry_ =
+      heap_->RegisterStrongRoots(FullObjectSlot(start), FullObjectSlot(end));
 }
 
 DeoptimizerData::~DeoptimizerData() {
-  Code* start = &deopt_entry_code_[0];
-  heap_->UnregisterStrongRoots(FullObjectSlot(start));
+  heap_->UnregisterStrongRoots(strong_roots_entry_);
 }
 
 Code DeoptimizerData::deopt_entry_code(DeoptimizeKind kind) {
@@ -530,6 +541,7 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction function,
       caller_pc_(0),
       caller_constant_pool_(0),
       input_frame_context_(0),
+      actual_argument_count_(0),
       stack_fp_(0),
       trace_scope_(nullptr) {
   if (isolate->deoptimizer_lazy_throw()) {
@@ -755,15 +767,10 @@ void Deoptimizer::DoComputeOutputFrames() {
     caller_fp_ = Memory<intptr_t>(fp_address);
     caller_pc_ =
         Memory<intptr_t>(fp_address + CommonFrameConstants::kCallerPCOffset);
-    // Sign caller_pc_ with caller_frame_top_ to be consistent with everything
-    // else here.
-    uint64_t sp = stack_fp_ + StandardFrameConstants::kCallerSPOffset;
-    // TODO(v8:10026): avoid replacing a signed pointer.
-    PointerAuthentication::ReplaceContext(
-        reinterpret_cast<Address*>(&caller_pc_), sp, caller_frame_top_);
-
     input_frame_context_ = Memory<intptr_t>(
         fp_address + CommonFrameConstants::kContextOrFrameTypeOffset);
+    actual_argument_count_ =
+        Memory<intptr_t>(fp_address + StandardFrameConstants::kArgCOffset);
 
     if (FLAG_enable_embedded_constant_pool) {
       caller_constant_pool_ = Memory<intptr_t>(
@@ -970,9 +977,11 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
   // input frame.  For all subsequent output frames, it can be read from the
   // previous one.  This frame's pc can be computed from the non-optimized
   // function code and AST id of the bailout.
-  const intptr_t caller_pc =
-      is_bottommost ? caller_pc_ : output_[frame_index - 1]->GetPc();
-  frame_writer.PushCallerPc(caller_pc);
+  if (is_bottommost) {
+    frame_writer.PushBottommostCallerPc(caller_pc_);
+  } else {
+    frame_writer.PushApprovedCallerPc(output_[frame_index - 1]->GetPc());
+  }
 
   // The caller's frame pointer for the bottommost output frame is the same
   // as in the input frame.  For all subsequent output frames, it can be
@@ -1020,6 +1029,9 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
 
   // The function was mentioned explicitly in the BEGIN_FRAME.
   frame_writer.PushTranslatedValue(function_iterator, "function");
+
+  // Actual argument count.
+  frame_writer.PushRawValue(actual_argument_count_, "actual argument count\n");
 
   // Set the bytecode array pointer.
   Object bytecode_array = shared.HasBreakInfo()
@@ -1124,8 +1136,17 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
               !goto_catch_handler
           ? builtins->builtin(Builtins::kInterpreterEnterBytecodeAdvance)
           : builtins->builtin(Builtins::kInterpreterEnterBytecodeDispatch);
-  output_frame->SetPc(
-      static_cast<intptr_t>(dispatch_builtin.InstructionStart()));
+  if (is_topmost) {
+    // Only the pc of the topmost frame needs to be signed since it is
+    // authenticated at the end of GenerateDeoptimizationEntries.
+    const intptr_t top_most_pc = PointerAuthentication::SignAndCheckPC(
+        static_cast<intptr_t>(dispatch_builtin.InstructionStart()),
+        frame_writer.frame()->GetTop());
+    output_frame->SetPc(top_most_pc);
+  } else {
+    output_frame->SetPc(
+        static_cast<intptr_t>(dispatch_builtin.InstructionStart()));
+  }
 
   // Update constant pool.
   if (FLAG_enable_embedded_constant_pool) {
@@ -1194,17 +1215,17 @@ void Deoptimizer::DoComputeArgumentsAdaptorFrame(
   }
 
   // Compute the incoming parameter translation.
-  for (int i = 0; i < parameters_count; ++i, ++value_iterator) {
-    frame_writer.PushTranslatedValue(value_iterator, "stack parameter");
-  }
+  frame_writer.PushStackJSArguments(value_iterator, parameters_count);
 
   DCHECK_EQ(output_frame->GetLastArgumentSlotOffset(),
             frame_writer.top_offset());
 
   // Read caller's PC from the previous frame.
-  const intptr_t caller_pc =
-      is_bottommost ? caller_pc_ : output_[frame_index - 1]->GetPc();
-  frame_writer.PushCallerPc(caller_pc);
+  if (is_bottommost) {
+    frame_writer.PushBottommostCallerPc(caller_pc_);
+  } else {
+    frame_writer.PushApprovedCallerPc(output_[frame_index - 1]->GetPc());
+  }
 
   // Read caller's FP from the previous frame, and set this frame's FP.
   const intptr_t caller_fp =
@@ -1315,7 +1336,7 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
 
   // Read caller's PC from the previous frame.
   const intptr_t caller_pc = output_[frame_index - 1]->GetPc();
-  frame_writer.PushCallerPc(caller_pc);
+  frame_writer.PushApprovedCallerPc(caller_pc);
 
   // Read caller's FP from the previous frame, and set this frame's FP.
   const intptr_t caller_fp = output_[frame_index - 1]->GetFp();
@@ -1383,7 +1404,14 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
           ? isolate_->heap()->construct_stub_create_deopt_pc_offset().value()
           : isolate_->heap()->construct_stub_invoke_deopt_pc_offset().value();
   intptr_t pc_value = static_cast<intptr_t>(start + pc_offset);
-  output_frame->SetPc(pc_value);
+  if (is_topmost) {
+    // Only the pc of the topmost frame needs to be signed since it is
+    // authenticated at the end of GenerateDeoptimizationEntries.
+    output_frame->SetPc(PointerAuthentication::SignAndCheckPC(
+        pc_value, frame_writer.frame()->GetTop()));
+  } else {
+    output_frame->SetPc(pc_value);
+  }
 
   // Update constant pool.
   if (FLAG_enable_embedded_constant_pool) {
@@ -1692,9 +1720,11 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   output_frame->SetRegister(kContextRegister.code(), value);
 
   // Set caller's PC (JSFunction continuation).
-  const intptr_t caller_pc =
-      is_bottommost ? caller_pc_ : output_[frame_index - 1]->GetPc();
-  frame_writer.PushCallerPc(caller_pc);
+  if (is_bottommost) {
+    frame_writer.PushBottommostCallerPc(caller_pc_);
+  } else {
+    frame_writer.PushApprovedCallerPc(output_[frame_index - 1]->GetPc());
+  }
 
   // Read caller's FP from the previous frame, and set this frame's FP.
   const intptr_t caller_fp =
@@ -1804,8 +1834,17 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   Code continue_to_builtin =
       isolate()->builtins()->builtin(TrampolineForBuiltinContinuation(
           mode, frame_info.frame_has_result_stack_slot()));
-  output_frame->SetPc(
-      static_cast<intptr_t>(continue_to_builtin.InstructionStart()));
+  if (is_topmost) {
+    // Only the pc of the topmost frame needs to be signed since it is
+    // authenticated at the end of GenerateDeoptimizationEntries.
+    const intptr_t top_most_pc = PointerAuthentication::SignAndCheckPC(
+        static_cast<intptr_t>(continue_to_builtin.InstructionStart()),
+        frame_writer.frame()->GetTop());
+    output_frame->SetPc(top_most_pc);
+  } else {
+    output_frame->SetPc(
+        static_cast<intptr_t>(continue_to_builtin.InstructionStart()));
+  }
 
   Code continuation =
       isolate()->builtins()->builtin(Builtins::kNotifyDeoptimized);

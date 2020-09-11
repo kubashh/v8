@@ -13,6 +13,7 @@
 #include "src/utils/ostreams.h"
 #include "src/utils/utils.h"
 #include "src/utils/version.h"
+#include "src/wasm/code-space-access.h"
 #include "src/wasm/function-compiler.h"
 #include "src/wasm/module-compiler.h"
 #include "src/wasm/module-decoder.h"
@@ -474,7 +475,7 @@ class V8_EXPORT_PRIVATE NativeModuleDeserializer {
 
  private:
   bool ReadHeader(Reader* reader);
-  bool ReadCode(int fn_index, Reader* reader);
+  void ReadCode(int fn_index, Reader* reader);
 
   NativeModule* const native_module_;
   bool read_called_;
@@ -494,7 +495,7 @@ bool NativeModuleDeserializer::Read(Reader* reader) {
   uint32_t first_wasm_fn = native_module_->num_imported_functions();
   WasmCodeRefScope wasm_code_ref_scope;
   for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
-    if (!ReadCode(i, reader)) return false;
+    ReadCode(i, reader);
   }
   return reader->current_size() == 0;
 }
@@ -506,13 +507,13 @@ bool NativeModuleDeserializer::ReadHeader(Reader* reader) {
          imports == native_module_->num_imported_functions();
 }
 
-bool NativeModuleDeserializer::ReadCode(int fn_index, Reader* reader) {
+void NativeModuleDeserializer::ReadCode(int fn_index, Reader* reader) {
   bool has_code = reader->Read<bool>();
   if (!has_code) {
     DCHECK(FLAG_wasm_lazy_compilation ||
            native_module_->enabled_features().has_compilation_hints());
     native_module_->UseLazyStub(fn_index);
-    return true;
+    return;
   }
   int constant_pool_offset = reader->Read<int>();
   int safepoint_table_offset = reader->Read<int>();
@@ -534,6 +535,7 @@ bool NativeModuleDeserializer::ReadCode(int fn_index, Reader* reader) {
   auto protected_instructions =
       reader->ReadVector<byte>(protected_instructions_size);
 
+  CODE_SPACE_WRITE_SCOPE
   WasmCode* code = native_module_->AddDeserializedCode(
       fn_index, code_buffer, stack_slot_count, tagged_parameter_slots,
       safepoint_table_offset, handler_table_offset, constant_pool_offset,
@@ -593,8 +595,6 @@ bool NativeModuleDeserializer::ReadCode(int fn_index, Reader* reader) {
   // Finally, flush the icache for that code.
   FlushInstructionCache(code->instructions().begin(),
                         code->instructions().size());
-
-  return true;
 }
 
 bool IsSupportedVersion(Vector<const byte> header) {
@@ -618,9 +618,11 @@ MaybeHandle<WasmModuleObject> DeserializeNativeModule(
   WasmFeatures enabled_features = WasmFeatures::FromIsolate(isolate);
   ModuleResult decode_result = DecodeWasmModule(
       enabled_features, wire_bytes.start(), wire_bytes.end(), false,
-      i::wasm::kWasmOrigin, isolate->counters(), wasm_engine->allocator());
+      i::wasm::kWasmOrigin, isolate->counters(), isolate->metrics_recorder(),
+      isolate->GetOrRegisterRecorderContextId(isolate->native_context()),
+      DecodingMethod::kDeserialize, wasm_engine->allocator());
   if (decode_result.failed()) return {};
-  std::shared_ptr<WasmModule> module = std::move(decode_result.value());
+  std::shared_ptr<WasmModule> module = std::move(decode_result).value();
   CHECK_NOT_NULL(module);
 
   auto shared_native_module = wasm_engine->MaybeGetNativeModule(
@@ -638,6 +640,7 @@ MaybeHandle<WasmModuleObject> DeserializeNativeModule(
     NativeModuleDeserializer deserializer(shared_native_module.get());
     Reader reader(data + WasmSerializer::kHeaderSize);
     bool error = !deserializer.Read(&reader);
+    shared_native_module->compilation_state()->InitializeAfterDeserialization();
     wasm_engine->UpdateNativeModuleCache(error, &shared_native_module, isolate);
     if (error) return {};
   }

@@ -1224,17 +1224,20 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
               kSpeculationPoisonRegister);
       break;
     case kPPC_Peek: {
-      // The incoming value is 0-based, but we need a 1-based value.
-      int reverse_slot = i.InputInt32(0) + 1;
+      int reverse_slot = i.InputInt32(0);
       int offset =
           FrameSlotToFPOffset(frame()->GetTotalFrameSlotCount() - reverse_slot);
       if (instr->OutputAt(0)->IsFPRegister()) {
         LocationOperand* op = LocationOperand::cast(instr->OutputAt(0));
         if (op->representation() == MachineRepresentation::kFloat64) {
           __ LoadDouble(i.OutputDoubleRegister(), MemOperand(fp, offset), r0);
-        } else {
-          DCHECK_EQ(MachineRepresentation::kFloat32, op->representation());
+        } else if (op->representation() == MachineRepresentation::kFloat32) {
           __ LoadFloat32(i.OutputFloatRegister(), MemOperand(fp, offset), r0);
+        } else {
+          DCHECK_EQ(MachineRepresentation::kSimd128, op->representation());
+          __ mov(ip, Operand(offset));
+          __ LoadSimd128(i.OutputSimd128Register(), MemOperand(fp, ip), r0,
+                         kScratchDoubleReg);
         }
       } else {
         __ LoadP(i.OutputRegister(), MemOperand(fp, offset), r0);
@@ -3302,6 +3305,62 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
                i.InputSimd128Register(1));
       break;
     }
+    case kPPC_F64x2Qfma: {
+      Simd128Register src0 = i.InputSimd128Register(0);
+      Simd128Register src1 = i.InputSimd128Register(1);
+      Simd128Register src2 = i.InputSimd128Register(2);
+      Simd128Register dst = i.OutputSimd128Register();
+      __ vor(kScratchDoubleReg, src1, src1);
+      __ xvmaddmdp(kScratchDoubleReg, src2, src0);
+      __ vor(dst, kScratchDoubleReg, kScratchDoubleReg);
+      break;
+    }
+    case kPPC_F64x2Qfms: {
+      Simd128Register src0 = i.InputSimd128Register(0);
+      Simd128Register src1 = i.InputSimd128Register(1);
+      Simd128Register src2 = i.InputSimd128Register(2);
+      Simd128Register dst = i.OutputSimd128Register();
+      __ vor(kScratchDoubleReg, src1, src1);
+      __ xvnmsubmdp(kScratchDoubleReg, src2, src0);
+      __ vor(dst, kScratchDoubleReg, kScratchDoubleReg);
+      break;
+    }
+    case kPPC_F32x4Qfma: {
+      Simd128Register src0 = i.InputSimd128Register(0);
+      Simd128Register src1 = i.InputSimd128Register(1);
+      Simd128Register src2 = i.InputSimd128Register(2);
+      Simd128Register dst = i.OutputSimd128Register();
+      __ vor(kScratchDoubleReg, src1, src1);
+      __ xvmaddmsp(kScratchDoubleReg, src2, src0);
+      __ vor(dst, kScratchDoubleReg, kScratchDoubleReg);
+      break;
+    }
+    case kPPC_F32x4Qfms: {
+      Simd128Register src0 = i.InputSimd128Register(0);
+      Simd128Register src1 = i.InputSimd128Register(1);
+      Simd128Register src2 = i.InputSimd128Register(2);
+      Simd128Register dst = i.OutputSimd128Register();
+      __ vor(kScratchDoubleReg, src1, src1);
+      __ xvnmsubmsp(kScratchDoubleReg, src2, src0);
+      __ vor(dst, kScratchDoubleReg, kScratchDoubleReg);
+      break;
+    }
+    case kPPC_I16x8RoundingAverageU: {
+      __ vavguh(i.OutputSimd128Register(), i.InputSimd128Register(0),
+                i.InputSimd128Register(1));
+      break;
+    }
+    case kPPC_I8x16RoundingAverageU: {
+      __ vavgub(i.OutputSimd128Register(), i.InputSimd128Register(0),
+                i.InputSimd128Register(1));
+      break;
+    }
+    case kPPC_S128AndNot: {
+      Simd128Register dst = i.OutputSimd128Register();
+      Simd128Register src = i.InputSimd128Register(0);
+      __ vandc(dst, src, i.InputSimd128Register(1));
+      break;
+    }
     case kPPC_StoreCompressTagged: {
       ASSEMBLE_STORE_INTEGER(StoreTaggedField, StoreTaggedFieldX);
       break;
@@ -3578,9 +3637,6 @@ void CodeGenerator::AssembleConstructFrame() {
       }
     } else if (call_descriptor->IsJSFunctionCall()) {
       __ Prologue();
-      if (call_descriptor->PushArgumentCount()) {
-        __ Push(kJavaScriptCallArgCountRegister);
-      }
     } else {
       StackFrame::Type type = info()->GetOutputStackFrameType();
       // TODO(mbrandy): Detect cases where ip is the entrypoint (for

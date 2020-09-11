@@ -565,6 +565,7 @@ UNINITIALIZED_TEST(InlineAllocationObserverCadence) {
 }
 
 HEAP_TEST(Regress777177) {
+  FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
@@ -650,6 +651,7 @@ HEAP_TEST(Regress791582) {
 
 TEST(ShrinkPageToHighWaterMarkFreeSpaceEnd) {
   FLAG_stress_incremental_marking = false;
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   HandleScope scope(isolate);
@@ -678,6 +680,7 @@ TEST(ShrinkPageToHighWaterMarkFreeSpaceEnd) {
 }
 
 TEST(ShrinkPageToHighWaterMarkNoFiller) {
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   HandleScope scope(isolate);
@@ -700,6 +703,7 @@ TEST(ShrinkPageToHighWaterMarkNoFiller) {
 }
 
 TEST(ShrinkPageToHighWaterMarkOneWordFiller) {
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   HandleScope scope(isolate);
@@ -727,6 +731,7 @@ TEST(ShrinkPageToHighWaterMarkOneWordFiller) {
 }
 
 TEST(ShrinkPageToHighWaterMarkTwoWordFiller) {
+  FLAG_stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   HandleScope scope(isolate);
@@ -887,12 +892,18 @@ TEST(ReadOnlySpaceMetrics_AlignedAllocations) {
       faked_space->AllocateRaw(object_size, kDoubleAligned).ToObjectChecked();
   CHECK_EQ(object.address() % alignment, 0);
 
+  // Calculate size of allocations based on area_start.
+  Address area_start = faked_space->pages().back()->GetAreaStart();
+  Address top = RoundUp(area_start, alignment) + object_size;
+  top = RoundUp(top, alignment) + object_size;
+  size_t expected_size = top - area_start;
+
   faked_space->ShrinkPages();
   faked_space->Seal(ReadOnlySpace::SealMode::kDoNotDetachFromHeap);
 
   // Allocated objects size may will contain 4 bytes of padding on 32-bit or
   // with pointer compression.
-  CHECK_EQ(faked_space->Size(), object_size + RoundUp(object_size, alignment));
+  CHECK_EQ(faked_space->Size(), expected_size);
 
   size_t committed_memory = RoundUp(
       MemoryChunkLayout::ObjectStartOffsetInDataPage() + faked_space->Size(),

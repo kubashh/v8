@@ -366,6 +366,17 @@ const char* GetWasmCodeKindAsString(WasmCode::Kind);
 // Manages the code reservations and allocations of a single {NativeModule}.
 class WasmCodeAllocator {
  public:
+#if V8_TARGET_ARCH_ARM64
+  // ARM64 only supports direct calls within a 128 MB range.
+  static constexpr size_t kMaxCodeSpaceSize = 128 * MB;
+#else
+  // Use 1024 MB limit for code spaces on other platforms. This is smaller than
+  // the total allowed code space (kMaxWasmCodeMemory) to avoid unnecessarily
+  // big reservations, and to ensure that distances within a code space fit
+  // within a 32-bit signed integer.
+  static constexpr size_t kMaxCodeSpaceSize = 1024 * MB;
+#endif
+
   // {OptionalLock} is passed between {WasmCodeAllocator} and {NativeModule} to
   // indicate that the lock on the {WasmCodeAllocator} is already taken. It's
   // optional to allow to also call methods without holding the lock.
@@ -581,6 +592,10 @@ class V8_EXPORT_PRIVATE NativeModule final {
   size_t committed_code_space() const {
     return code_allocator_.committed_code_space();
   }
+  size_t generated_code_size() const {
+    return code_allocator_.generated_code_size();
+  }
+  size_t liftoff_bailout_count() const { return liftoff_bailout_count_.load(); }
   WasmEngine* engine() const { return engine_; }
 
   bool HasWireBytes() const {
@@ -772,6 +787,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
   int modification_scope_depth_ = 0;
   UseTrapHandler use_trap_handler_ = kNoTrapHandler;
   bool lazy_compile_frozen_ = false;
+  std::atomic<size_t> liftoff_bailout_count_{0};
 
   DISALLOW_COPY_AND_ASSIGN(NativeModule);
 };
@@ -824,7 +840,7 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
 
   V8_WARN_UNUSED_RESULT VirtualMemory TryAllocate(size_t size,
                                                   void* hint = nullptr);
-  bool Commit(base::AddressRegion);
+  void Commit(base::AddressRegion);
   void Decommit(base::AddressRegion);
 
   void FreeNativeModule(Vector<VirtualMemory> owned_code,

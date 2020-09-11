@@ -1399,35 +1399,40 @@ void InstructionSelector::VisitChangeInt32ToInt64(Node* node) {
   }
 }
 
-void InstructionSelector::VisitChangeUint32ToUint64(Node* node) {
-  Mips64OperandGenerator g(this);
-  Node* value = node->InputAt(0);
-  switch (value->opcode()) {
+bool InstructionSelector::ZeroExtendsWord32ToWord64NoPhis(Node* node) {
+  DCHECK_NE(node->opcode(), IrOpcode::kPhi);
+  switch (node->opcode()) {
     // 32-bit operations will write their result in a 64 bit register,
     // clearing the top 32 bits of the destination register.
     case IrOpcode::kUint32Div:
     case IrOpcode::kUint32Mod:
-    case IrOpcode::kUint32MulHigh: {
-      Emit(kArchNop, g.DefineSameAsFirst(node), g.Use(value));
-      return;
-    }
+    case IrOpcode::kUint32MulHigh:
+      return true;
     case IrOpcode::kLoad: {
-      LoadRepresentation load_rep = LoadRepresentationOf(value->op());
+      LoadRepresentation load_rep = LoadRepresentationOf(node->op());
       if (load_rep.IsUnsigned()) {
         switch (load_rep.representation()) {
           case MachineRepresentation::kWord8:
           case MachineRepresentation::kWord16:
           case MachineRepresentation::kWord32:
-            Emit(kArchNop, g.DefineSameAsFirst(node), g.Use(value));
-            return;
+            return true;
           default:
-            break;
+            return false;
         }
       }
-      break;
+      return false;
     }
     default:
-      break;
+      return false;
+  }
+}
+
+void InstructionSelector::VisitChangeUint32ToUint64(Node* node) {
+  Mips64OperandGenerator g(this);
+  Node* value = node->InputAt(0);
+  if (ZeroExtendsWord32ToWord64(value)) {
+    Emit(kArchNop, g.DefineSameAsFirst(node), g.Use(value));
+    return;
   }
   Emit(kMips64Dext, g.DefineAsRegister(node), g.UseRegister(node->InputAt(0)),
        g.TempImmediate(0), g.TempImmediate(32));
@@ -1711,7 +1716,7 @@ void InstructionSelector::EmitPrepareResults(
     Node* node) {
   Mips64OperandGenerator g(this);
 
-  int reverse_slot = 0;
+  int reverse_slot = 1;
   for (PushParameter output : *results) {
     if (!output.location.IsCallerFrameSlot()) continue;
     // Skip any alignment holes in nodes.
@@ -1721,6 +1726,8 @@ void InstructionSelector::EmitPrepareResults(
         MarkAsFloat32(output.node);
       } else if (output.location.GetType() == MachineType::Float64()) {
         MarkAsFloat64(output.node);
+      } else if (output.location.GetType() == MachineType::Simd128()) {
+        MarkAsSimd128(output.node);
       }
       Emit(kMips64Peek, g.DefineAsRegister(output.node),
            g.UseImmediate(reverse_slot));

@@ -42,6 +42,8 @@ inline void Load(LiftoffAssembler* assm, LiftoffRegister dst, Register base,
   Operand src(base, offset);
   switch (type.kind()) {
     case ValueType::kI32:
+    case ValueType::kOptRef:
+    case ValueType::kRef:
       assm->mov(dst.gp(), src);
       break;
     case ValueType::kI64:
@@ -78,6 +80,9 @@ inline void Store(LiftoffAssembler* assm, Register base, int32_t offset,
       break;
     case ValueType::kF64:
       assm->movsd(dst, src.fp());
+      break;
+    case ValueType::kS128:
+      assm->movdqu(dst, src.fp());
       break;
     default:
       UNREACHABLE();
@@ -226,7 +231,9 @@ int LiftoffAssembler::SlotSizeForType(ValueType type) {
   return type.element_size_bytes();
 }
 
-bool LiftoffAssembler::NeedsAlignment(ValueType type) { return false; }
+bool LiftoffAssembler::NeedsAlignment(ValueType type) {
+  return type.is_reference_type();
+}
 
 void LiftoffAssembler::LoadConstant(LiftoffRegister reg, WasmValue value,
                                     RelocInfo::Mode rmode) {
@@ -276,11 +283,12 @@ void LiftoffAssembler::FillInstanceInto(Register dst) {
 
 void LiftoffAssembler::LoadTaggedPointer(Register dst, Register src_addr,
                                          Register offset_reg,
-                                         uint32_t offset_imm,
+                                         int32_t offset_imm,
                                          LiftoffRegList pinned) {
+  DCHECK_GE(offset_imm, 0);
   STATIC_ASSERT(kTaggedSize == kInt32Size);
-  Load(LiftoffRegister(dst), src_addr, offset_reg, offset_imm,
-       LoadType::kI32Load, pinned);
+  Load(LiftoffRegister(dst), src_addr, offset_reg,
+       static_cast<uint32_t>(offset_imm), LoadType::kI32Load, pinned);
 }
 
 void LiftoffAssembler::Load(LiftoffRegister dst, Register src_addr,
@@ -1024,7 +1032,7 @@ void LiftoffAssembler::MoveStackValue(uint32_t dst_offset, uint32_t src_offset,
 
 void LiftoffAssembler::Move(Register dst, Register src, ValueType type) {
   DCHECK_NE(dst, src);
-  DCHECK_EQ(kWasmI32, type);
+  DCHECK(kWasmI32 == type || type.is_reference_type());
   mov(dst, src);
 }
 
@@ -1046,6 +1054,8 @@ void LiftoffAssembler::Spill(int offset, LiftoffRegister reg, ValueType type) {
   Operand dst = liftoff::GetStackSlot(offset);
   switch (type.kind()) {
     case ValueType::kI32:
+    case ValueType::kOptRef:
+    case ValueType::kRef:
       mov(dst, reg.gp());
       break;
     case ValueType::kI64:
@@ -2703,8 +2713,7 @@ void LiftoffAssembler::emit_s8x16_shuffle(LiftoffRegister dst,
 void LiftoffAssembler::emit_s8x16_swizzle(LiftoffRegister dst,
                                           LiftoffRegister lhs,
                                           LiftoffRegister rhs) {
-  XMMRegister mask =
-      GetUnusedRegister(kFpReg, LiftoffRegList::ForRegs(lhs, rhs)).fp();
+  XMMRegister mask = liftoff::kScratchDoubleReg;
   // Out-of-range indices should return 0, add 112 (0x70) so that any value > 15
   // saturates to 128 (top bit set), so pshufb will zero that lane.
   TurboAssembler::Move(mask, uint32_t{0x70707070});

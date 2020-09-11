@@ -23,24 +23,26 @@ std::ostream& operator<<(std::ostream& os, const FunctionSig& function);
 bool IsJSCompatibleSignature(const FunctionSig* sig, const WasmFeatures&);
 
 // Control expressions and blocks.
-#define FOREACH_CONTROL_OPCODE(V)               \
-  V(Unreachable, 0x00, _)                       \
-  V(Nop, 0x01, _)                               \
-  V(Block, 0x02, _)                             \
-  V(Loop, 0x03, _)                              \
-  V(If, 0x04, _)                                \
-  V(Else, 0x05, _)                              \
-  V(Try, 0x06, _ /* eh_prototype */)            \
-  V(Catch, 0x07, _ /* eh_prototype */)          \
-  V(Throw, 0x08, _ /* eh_prototype */)          \
-  V(Rethrow, 0x09, _ /* eh_prototype */)        \
-  V(BrOnExn, 0x0a, _ /* eh prototype */)        \
-  V(End, 0x0b, _)                               \
-  V(Br, 0x0c, _)                                \
-  V(BrIf, 0x0d, _)                              \
-  V(BrTable, 0x0e, _)                           \
-  V(Return, 0x0f, _)                            \
-  V(Let, 0x17, _ /* typed_funcref prototype */) \
+#define FOREACH_CONTROL_OPCODE(V)                         \
+  V(Unreachable, 0x00, _)                                 \
+  V(Nop, 0x01, _)                                         \
+  V(Block, 0x02, _)                                       \
+  V(Loop, 0x03, _)                                        \
+  V(If, 0x04, _)                                          \
+  V(Else, 0x05, _)                                        \
+  V(Try, 0x06, _ /* eh_prototype */)                      \
+  V(Catch, 0x07, _ /* eh_prototype */)                    \
+  V(Throw, 0x08, _ /* eh_prototype */)                    \
+  V(Rethrow, 0x09, _ /* eh_prototype */)                  \
+  V(BrOnExn, 0x0a, _ /* eh prototype */)                  \
+  V(End, 0x0b, _)                                         \
+  V(Br, 0x0c, _)                                          \
+  V(BrIf, 0x0d, _)                                        \
+  V(BrTable, 0x0e, _)                                     \
+  V(Return, 0x0f, _)                                      \
+  V(CallRef, 0x14, _ /* typed_funcref prototype */)       \
+  V(ReturnCallRef, 0x15, _ /* typed_funcref prototype */) \
+  V(Let, 0x17, _ /* typed_funcref prototype */)           \
   V(BrOnNull, 0xd4, _ /* gc prototype */)
 
 // Constants, locals, globals, and calls.
@@ -349,6 +351,7 @@ bool IsJSCompatibleSignature(const FunctionSig* sig, const WasmFeatures&);
   V(I8x16Neg, 0xfd61, s_s)                   \
   V(V8x16AnyTrue, 0xfd62, i_s)               \
   V(V8x16AllTrue, 0xfd63, i_s)               \
+  V(I8x16BitMask, 0xfd64, i_s)               \
   V(I8x16SConvertI16x8, 0xfd65, s_ss)        \
   V(I8x16UConvertI16x8, 0xfd66, s_ss)        \
   V(I8x16Shl, 0xfd6b, s_si)                  \
@@ -369,6 +372,7 @@ bool IsJSCompatibleSignature(const FunctionSig* sig, const WasmFeatures&);
   V(I16x8Neg, 0xfd81, s_s)                   \
   V(V16x8AnyTrue, 0xfd82, i_s)               \
   V(V16x8AllTrue, 0xfd83, i_s)               \
+  V(I16x8BitMask, 0xfd84, i_s)               \
   V(I16x8SConvertI32x4, 0xfd85, s_ss)        \
   V(I16x8UConvertI32x4, 0xfd86, s_ss)        \
   V(I16x8SConvertI8x16Low, 0xfd87, s_s)      \
@@ -394,6 +398,7 @@ bool IsJSCompatibleSignature(const FunctionSig* sig, const WasmFeatures&);
   V(I32x4Neg, 0xfda1, s_s)                   \
   V(V32x4AnyTrue, 0xfda2, i_s)               \
   V(V32x4AllTrue, 0xfda3, i_s)               \
+  V(I32x4BitMask, 0xfda4, i_s)               \
   V(I32x4SConvertI16x8Low, 0xfda7, s_s)      \
   V(I32x4SConvertI16x8High, 0xfda8, s_s)     \
   V(I32x4UConvertI16x8Low, 0xfda9, s_s)      \
@@ -444,9 +449,6 @@ bool IsJSCompatibleSignature(const FunctionSig* sig, const WasmFeatures&);
 
 #define FOREACH_SIMD_POST_MVP_OPCODE(V) \
   V(I8x16Mul, 0xfd75, s_ss)             \
-  V(I8x16BitMask, 0xfd64, i_s)          \
-  V(I16x8BitMask, 0xfd84, i_s)          \
-  V(I32x4BitMask, 0xfda4, i_s)          \
   V(V64x2AnyTrue, 0xfdc2, i_s)          \
   V(V64x2AllTrue, 0xfdc3, i_s)          \
   V(I64x2Eq, 0xfdc0, s_ss)              \

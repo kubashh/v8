@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include "src/execution/local-isolate-wrapper.h"
+#include "src/common/globals.h"
 #include "src/objects/allocation-site.h"
 #include "src/objects/api-callbacks.h"
 #include "src/objects/backing-store.h"
@@ -49,7 +49,7 @@ class V8_EXPORT_PRIVATE Deserializer : public SerializerDeserializer {
   // Create a deserializer from a snapshot byte source.
   template <class Data>
   Deserializer(Data* data, bool deserializing_user_code)
-      : local_isolate_(nullptr),
+      : isolate_(nullptr),
         source_(data->Payload()),
         magic_number_(data->GetMagicNumber()),
         deserializing_user_code_(deserializing_user_code),
@@ -60,10 +60,7 @@ class V8_EXPORT_PRIVATE Deserializer : public SerializerDeserializer {
     backing_stores_.push_back({});
   }
 
-  void Initialize(Isolate* isolate) {
-    Initialize(LocalIsolateWrapper(isolate));
-  }
-  void Initialize(LocalIsolateWrapper isolate);
+  void Initialize(Isolate* isolate);
   void DeserializeDeferredObjects();
 
   // Create Log events for newly deserialized objects.
@@ -85,10 +82,7 @@ class V8_EXPORT_PRIVATE Deserializer : public SerializerDeserializer {
     CHECK_EQ(new_off_heap_array_buffers().size(), 0);
   }
 
-  LocalIsolateWrapper local_isolate() const { return local_isolate_; }
-  Isolate* isolate() const { return local_isolate().main_thread(); }
-  bool is_main_thread() const { return local_isolate().is_main_thread(); }
-  bool is_off_thread() const { return local_isolate().is_off_thread(); }
+  Isolate* isolate() const { return isolate_; }
 
   SnapshotByteSource* source() { return &source_; }
   const std::vector<AllocationSite>& new_allocation_sites() const {
@@ -133,33 +127,37 @@ class V8_EXPORT_PRIVATE Deserializer : public SerializerDeserializer {
   inline TSlot Write(TSlot dest, MaybeObject value);
 
   template <typename TSlot>
+  inline TSlot Write(TSlot dest, HeapObject value,
+                     HeapObjectReferenceType type);
+
+  template <typename TSlot>
   inline TSlot WriteAddress(TSlot dest, Address value);
 
   template <typename TSlot>
   inline TSlot WriteExternalPointer(TSlot dest, Address value);
 
-  // Fills in some heap data in an area from start to end (non-inclusive).  The
-  // space id is used for the write barrier.  The object_address is the address
-  // of the object we are writing into, or nullptr if we are not writing into an
-  // object, i.e. if we are writing a series of tagged values that are not on
-  // the heap. Return false if the object content has been deferred.
+  // Fills in some heap data in an area from start to end (non-inclusive). The
+  // object_address is the address of the object we are writing into, or nullptr
+  // if we are not writing into an object, i.e. if we are writing a series of
+  // tagged values that are not on the heap.
   template <typename TSlot>
-  bool ReadData(TSlot start, TSlot end, SnapshotSpace space,
-                Address object_address);
+  void ReadData(TSlot start, TSlot end, Address object_address);
 
-  // A helper function for ReadData, templatized on the bytecode for efficiency.
-  // Returns the new value of {current}.
-  template <typename TSlot, Bytecode bytecode,
-            SnapshotSpace space_number_if_any>
-  inline TSlot ReadDataCase(TSlot current, Address current_object_address,
-                            byte data, bool write_barrier_needed);
+  // Helper for ReadData which reads the given bytecode and fills in some heap
+  // data into the given slot. May fill in zero or multiple slots, so it returns
+  // the next unfilled slot.
+  template <typename TSlot>
+  TSlot ReadSingleBytecodeData(byte data, TSlot current,
+                               Address object_address);
 
   // A helper function for ReadData for reading external references.
   inline Address ReadExternalReferenceCase();
 
   HeapObject ReadObject(SnapshotSpace space_number);
-  void ReadCodeObjectBody(SnapshotSpace space_number,
-                          Address code_object_address);
+  HeapObject ReadMetaMap();
+  void ReadCodeObjectBody(Address code_object_address);
+
+  HeapObjectReferenceType GetAndResetNextReferenceType();
 
  protected:
   HeapObject ReadObject();
@@ -180,7 +178,7 @@ class V8_EXPORT_PRIVATE Deserializer : public SerializerDeserializer {
   HeapObject PostProcessNewObject(HeapObject obj, SnapshotSpace space);
 
   // Cached current isolate.
-  LocalIsolateWrapper local_isolate_;
+  Isolate* isolate_;
 
   // Objects from the attached object descriptions in the serialized user code.
   std::vector<Handle<HeapObject>> attached_objects_;
@@ -197,17 +195,23 @@ class V8_EXPORT_PRIVATE Deserializer : public SerializerDeserializer {
   std::vector<Handle<JSArrayBuffer>> new_off_heap_array_buffers_;
   std::vector<std::shared_ptr<BackingStore>> backing_stores_;
 
+  // Unresolved forward references (registered with kRegisterPendingForwardRef)
+  // are collected in order as (object, field offset) pairs. The subsequent
+  // forward ref resolution (with kResolvePendingForwardRef) accesses this
+  // vector by index.
+  //
+  // The vector is cleared when there are no more unresolved forward refs.
+  std::vector<std::pair<HeapObject, int>> unresolved_forward_refs_;
+  int num_unresolved_forward_refs_ = 0;
+
   DeserializerAllocator allocator_;
   const bool deserializing_user_code_;
+
+  bool next_reference_is_weak_ = false;
 
   // TODO(6593): generalize rehashing, and remove this flag.
   bool can_rehash_;
   std::vector<HeapObject> to_rehash_;
-  // Store the objects whose maps are deferred and thus initialized as filler
-  // maps during deserialization, so that they can be processed later when the
-  // maps become available.
-  std::unordered_map<HeapObject, SnapshotSpace, Object::Hasher>
-      fillers_to_post_process_;
 
 #ifdef DEBUG
   uint32_t num_api_references_;
@@ -226,7 +230,8 @@ class StringTableInsertionKey final : public StringTableKey {
 
   bool IsMatch(String string) override;
 
-  V8_WARN_UNUSED_RESULT Handle<String> AsHandle(Isolate* isolate) override;
+  V8_WARN_UNUSED_RESULT Handle<String> AsHandle(Isolate* isolate);
+  V8_WARN_UNUSED_RESULT Handle<String> AsHandle(LocalIsolate* isolate);
 
  private:
   uint32_t ComputeHashField(String string);

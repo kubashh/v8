@@ -50,6 +50,8 @@ inline CPURegister GetRegFromType(const LiftoffRegister& reg, ValueType type) {
     case ValueType::kI32:
       return reg.gp().W();
     case ValueType::kI64:
+    case ValueType::kRef:
+    case ValueType::kOptRef:
       return reg.gp().X();
     case ValueType::kF32:
       return reg.fp().S();
@@ -88,11 +90,10 @@ inline CPURegister AcquireByType(UseScratchRegisterScope* temps,
   }
 }
 
+template <typename T>
 inline MemOperand GetMemOp(LiftoffAssembler* assm,
                            UseScratchRegisterScope* temps, Register addr,
-                           Register offset, uint32_t offset_imm) {
-  // Wasm memory is limited to a size <4GB.
-  DCHECK(is_uint32(offset_imm));
+                           Register offset, T offset_imm) {
   if (offset.is_valid()) {
     if (offset_imm == 0) return MemOperand(addr.X(), offset.W(), UXTW);
     Register tmp = temps->AcquireW();
@@ -277,13 +278,7 @@ int LiftoffAssembler::SlotSizeForType(ValueType type) {
 }
 
 bool LiftoffAssembler::NeedsAlignment(ValueType type) {
-  switch (type.kind()) {
-    case ValueType::kS128:
-      return true;
-    default:
-      // No alignment because all other types are kStackSlotSize.
-      return false;
-  }
+  return type.kind() == ValueType::kS128 || type.is_reference_type();
 }
 
 void LiftoffAssembler::LoadConstant(LiftoffRegister reg, WasmValue value,
@@ -335,7 +330,7 @@ void LiftoffAssembler::FillInstanceInto(Register dst) {
 
 void LiftoffAssembler::LoadTaggedPointer(Register dst, Register src_addr,
                                          Register offset_reg,
-                                         uint32_t offset_imm,
+                                         int32_t offset_imm,
                                          LiftoffRegList pinned) {
   UseScratchRegisterScope temps(this);
   MemOperand src_op =
@@ -736,7 +731,7 @@ void LiftoffAssembler::Move(Register dst, Register src, ValueType type) {
   if (type == kWasmI32) {
     Mov(dst.W(), src.W());
   } else {
-    DCHECK_EQ(kWasmI64, type);
+    DCHECK(kWasmI64 == type || type.is_reference_type());
     Mov(dst.X(), src.X());
   }
 }

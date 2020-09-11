@@ -1828,17 +1828,22 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArmPeek: {
-      // The incoming value is 0-based, but we need a 1-based value.
-      int reverse_slot = i.InputInt32(0) + 1;
+      int reverse_slot = i.InputInt32(0);
       int offset =
           FrameSlotToFPOffset(frame()->GetTotalFrameSlotCount() - reverse_slot);
       if (instr->OutputAt(0)->IsFPRegister()) {
         LocationOperand* op = LocationOperand::cast(instr->OutputAt(0));
         if (op->representation() == MachineRepresentation::kFloat64) {
           __ vldr(i.OutputDoubleRegister(), MemOperand(fp, offset));
-        } else {
-          DCHECK_EQ(MachineRepresentation::kFloat32, op->representation());
+        } else if (op->representation() == MachineRepresentation::kFloat32) {
           __ vldr(i.OutputFloatRegister(), MemOperand(fp, offset));
+        } else {
+          DCHECK_EQ(MachineRepresentation::kSimd128, op->representation());
+          UseScratchRegisterScope temps(tasm());
+          Register scratch = temps.Acquire();
+          __ add(scratch, fp, Operand(offset));
+          __ vld1(Neon8, NeonListOperand(i.OutputSimd128Register()),
+                  NeonMemOperand(scratch));
         }
       } else {
         __ ldr(i.OutputRegister(), MemOperand(fp, offset));
@@ -2145,7 +2150,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArmI64x2Neg: {
       Simd128Register dst = i.OutputSimd128Register();
       __ vmov(dst, uint64_t{0});
-      __ vqsub(NeonS64, dst, dst, i.InputSimd128Register(0));
+      __ vsub(Neon64, dst, dst, i.InputSimd128Register(0));
       break;
     }
     case kArmI64x2Shl: {
@@ -3643,9 +3648,6 @@ void CodeGenerator::AssembleConstructFrame() {
       }
     } else if (call_descriptor->IsJSFunctionCall()) {
       __ Prologue();
-      if (call_descriptor->PushArgumentCount()) {
-        __ Push(kJavaScriptCallArgCountRegister);
-      }
     } else {
       __ StubPrologue(info()->GetOutputStackFrameType());
       if (call_descriptor->IsWasmFunctionCall()) {

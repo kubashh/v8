@@ -1196,6 +1196,7 @@ Type Typer::Visitor::TypeTypeOf(Node* node) {
   return Type::InternalizedString();
 }
 
+Type Typer::Visitor::TypeTierUpCheck(Node* node) { UNREACHABLE(); }
 Type Typer::Visitor::TypeUpdateInterruptBudget(Node* node) { UNREACHABLE(); }
 
 // JS conversion operators.
@@ -1306,6 +1307,10 @@ Type Typer::Visitor::TypeJSLoadProperty(Node* node) {
 }
 
 Type Typer::Visitor::TypeJSLoadNamed(Node* node) { return Type::NonInternal(); }
+
+Type Typer::Visitor::TypeJSLoadNamedFromSuper(Node* node) {
+  return Type::NonInternal();
+}
 
 Type Typer::Visitor::TypeJSLoadGlobal(Node* node) {
   return Type::NonInternal();

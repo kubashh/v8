@@ -170,6 +170,7 @@
   JS_CREATE_OP_LIST(V)            \
   V(JSLoadProperty)               \
   V(JSLoadNamed)                  \
+  V(JSLoadNamedFromSuper)         \
   V(JSLoadGlobal)                 \
   V(JSStoreProperty)              \
   V(JSStoreNamed)                 \
@@ -482,6 +483,7 @@
   V(StringToLowerCaseIntl)              \
   V(StringToNumber)                     \
   V(StringToUpperCaseIntl)              \
+  V(TierUpCheck)                        \
   V(ToBoolean)                          \
   V(TransitionAndStoreElement)          \
   V(TransitionAndStoreNonNumberElement) \

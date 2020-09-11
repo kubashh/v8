@@ -49,7 +49,7 @@ namespace v8 {
 
 namespace base {
 class RandomNumberGenerator;
-}
+}  // namespace base
 
 namespace debug {
 class ConsoleDelegate;
@@ -112,19 +112,19 @@ class VMState;
 
 namespace interpreter {
 class Interpreter;
-}
+}  // namespace interpreter
 
 namespace compiler {
 class PerIsolateCompilerCache;
-}
+}  // namespace compiler
 
 namespace wasm {
 class WasmEngine;
-}
+}  // namespace wasm
 
 namespace win64_unwindinfo {
 class BuiltinUnwindInfo;
-}
+}  // namespace win64_unwindinfo
 
 namespace metrics {
 class Recorder;
@@ -443,7 +443,6 @@ using DebugObjectCache = std::vector<Handle<HeapObject>>;
   /* Current code coverage mode */                                             \
   V(debug::CoverageMode, code_coverage_mode, debug::CoverageMode::kBestEffort) \
   V(debug::TypeProfileMode, type_profile_mode, debug::TypeProfileMode::kNone)  \
-  V(int, last_stack_frame_info_id, 0)                                          \
   V(int, last_console_context_id, 0)                                           \
   V(v8_inspector::V8Inspector*, inspector, nullptr)                            \
   V(bool, next_v8_call_is_safe_for_termination, false)                         \
@@ -1311,8 +1310,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   int GetNextScriptId();
 
-  int GetNextStackFrameInfoId();
-
 #if V8_SFI_HAS_UNIQUE_ID
   int GetNextUniqueSharedFunctionInfoId() {
     int current_id = next_unique_sfi_id_.load(std::memory_order_relaxed);
@@ -1465,6 +1462,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // replaced with trampolines. Those source positions are used to
   // annotate the builtin blob with debugging information.
   void PrepareBuiltinSourcePositionMap();
+
+  // Store the position of the labels that will be used in the list of allowed
+  // return addresses.
+  void PrepareBuiltinLabelInfoMap();
 
 #if defined(V8_OS_WIN64)
   void SetBuiltinUnwindData(

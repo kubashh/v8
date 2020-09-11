@@ -6,7 +6,6 @@
 #define V8_SNAPSHOT_DESERIALIZER_ALLOCATOR_H_
 
 #include "src/common/globals.h"
-#include "src/execution/local-isolate-wrapper.h"
 #include "src/heap/heap.h"
 #include "src/objects/heap-object.h"
 #include "src/roots/roots.h"
@@ -18,13 +17,12 @@ namespace internal {
 
 class Deserializer;
 class StartupDeserializer;
-class OffThreadHeap;
 
 class DeserializerAllocator final {
  public:
   DeserializerAllocator() = default;
 
-  void Initialize(LocalHeapWrapper heap);
+  void Initialize(Heap* heap);
 
   // ------- Allocation Methods -------
   // Methods related to memory allocation during deserialization.
@@ -38,20 +36,6 @@ class DeserializerAllocator final {
     DCHECK_LE(alignment, kDoubleUnaligned);
     next_alignment_ = static_cast<AllocationAlignment>(alignment);
   }
-
-  void set_next_reference_is_weak(bool next_reference_is_weak) {
-    next_reference_is_weak_ = next_reference_is_weak;
-  }
-
-  bool GetAndClearNextReferenceIsWeak() {
-    bool saved = next_reference_is_weak_;
-    next_reference_is_weak_ = false;
-    return saved;
-  }
-
-#ifdef DEBUG
-  bool next_reference_is_weak() const { return next_reference_is_weak_; }
-#endif
 
   HeapObject GetMap(uint32_t index);
   HeapObject GetLargeObject(uint32_t index);
@@ -89,9 +73,14 @@ class DeserializerAllocator final {
   uint32_t current_chunk_[kNumberOfPreallocatedSpaces];
   Address high_water_[kNumberOfPreallocatedSpaces];
 
+#ifdef DEBUG
+  // Record the previous object allocated for DCHECKs.
+  Address previous_allocation_start_ = kNullAddress;
+  int previous_allocation_size_ = 0;
+#endif
+
   // The alignment of the next allocation.
   AllocationAlignment next_alignment_ = kWordAligned;
-  bool next_reference_is_weak_ = false;
 
   // All required maps are pre-allocated during reservation. {next_map_index_}
   // stores the index of the next map to return from allocation.
@@ -103,7 +92,7 @@ class DeserializerAllocator final {
   std::vector<HeapObject> deserialized_large_objects_;
 
   // ReadOnlyRoots and heap are null until Initialize is called.
-  LocalHeapWrapper heap_ = LocalHeapWrapper(nullptr);
+  Heap* heap_ = nullptr;
   ReadOnlyRoots roots_ = ReadOnlyRoots(static_cast<Address*>(nullptr));
 
   DISALLOW_COPY_AND_ASSIGN(DeserializerAllocator);

@@ -154,8 +154,7 @@ class PipelineData {
         codegen_zone_(codegen_zone_scope_.zone()),
         broker_(new JSHeapBroker(
             isolate_, info_->zone(), info_->trace_heap_broker(),
-            is_concurrent_inlining, info->IsNativeContextIndependent(),
-            info->DetachPersistentHandles())),
+            is_concurrent_inlining, info->IsNativeContextIndependent())),
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
@@ -770,19 +769,19 @@ class PipelineRunScope {
 class LocalHeapScope {
  public:
   explicit LocalHeapScope(JSHeapBroker* broker, OptimizedCompilationInfo* info)
-      : broker_(broker), tick_counter_(&info->tick_counter()) {
-    broker_->InitializeLocalHeap();
-    tick_counter_->AttachLocalHeap(broker_->local_heap());
+      : broker_(broker), info_(info) {
+    broker_->InitializeLocalHeap(info_);
+    info_->tick_counter().AttachLocalHeap(broker_->local_heap());
   }
 
   ~LocalHeapScope() {
-    tick_counter_->DetachLocalHeap();
-    broker_->TearDownLocalHeap();
+    info_->tick_counter().DetachLocalHeap();
+    broker_->TearDownLocalHeap(info_);
   }
 
  private:
   JSHeapBroker* broker_;
-  TickCounter* tick_counter_;
+  OptimizedCompilationInfo* info_;
 };
 
 // Scope that unparks the LocalHeap, if:
@@ -882,7 +881,8 @@ void PrintCode(Isolate* isolate, Handle<Code> code,
   const bool print_code =
       FLAG_print_code ||
       (info->IsOptimizing() && FLAG_print_opt_code &&
-       info->shared_info()->PassesFilter(FLAG_print_opt_code_filter));
+       info->shared_info()->PassesFilter(FLAG_print_opt_code_filter)) ||
+      (info->IsNativeContextIndependent() && FLAG_print_nci_code);
   if (print_code) {
     std::unique_ptr<char[]> debug_name = info->GetDebugName();
     CodeTracer::StreamScope tracing_scope(isolate->GetCodeTracer());
@@ -1423,17 +1423,14 @@ struct GraphBuilderPhase {
     if (data->info()->bailout_on_uninitialized()) {
       flags |= BytecodeGraphBuilderFlag::kBailoutOnUninitialized;
     }
-    if (data->info()->IsNativeContextIndependent()) {
-      flags |= BytecodeGraphBuilderFlag::kNativeContextIndependent;
-    }
 
     JSFunctionRef closure(data->broker(), data->info()->closure());
     CallFrequency frequency(1.0f);
     BuildGraphFromBytecode(
         data->broker(), temp_zone, closure.shared(), closure.feedback_vector(),
         data->info()->osr_offset(), data->jsgraph(), frequency,
-        data->source_positions(), SourcePosition::kNotInlined, flags,
-        &data->info()->tick_counter());
+        data->source_positions(), SourcePosition::kNotInlined,
+        data->info()->code_kind(), flags, &data->info()->tick_counter());
   }
 };
 
@@ -1512,6 +1509,9 @@ struct TyperPhase {
     LoopVariableOptimizer induction_vars(data->jsgraph()->graph(),
                                          data->common(), temp_zone);
     if (FLAG_turbo_loop_variable) induction_vars.Run();
+
+    // The typer inspects heap objects, so we need to unpark the local heap.
+    UnparkedScopeIfNeeded scope(data->broker());
     typer->Run(roots, &induction_vars);
   }
 };
@@ -1684,6 +1684,9 @@ struct SimplifiedLoweringPhase {
                                 data->source_positions(), data->node_origins(),
                                 data->info()->GetPoisoningMitigationLevel(),
                                 &data->info()->tick_counter());
+
+    // RepresentationChanger needs the LocalHeap unparked.
+    UnparkedScopeIfNeeded scope(data->broker());
     lowering.LowerAllNodes();
   }
 };
@@ -2243,16 +2246,6 @@ struct MergeSplintersPhase {
         pipeline_data->top_tier_register_allocation_data();
     LiveRangeMerger live_range_merger(data, temp_zone);
     live_range_merger.Merge();
-  }
-};
-
-
-struct LocateSpillSlotsPhase {
-  DECL_PIPELINE_PHASE_CONSTANTS(LocateSpillSlots)
-
-  void Run(PipelineData* data, Zone* temp_zone) {
-    SpillSlotLocator locator(data->top_tier_register_allocation_data());
-    locator.LocateSpillSlots();
   }
 };
 
@@ -3041,19 +3034,43 @@ MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
   Linkage linkage(Linkage::ComputeIncoming(data.instruction_zone(), info));
   Deoptimizer::EnsureCodeForDeoptimizationEntries(isolate);
 
-  pipeline.Serialize();
   {
-    LocalHeapScope local_heap_scope(data.broker(), data.info());
-    if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
+    CompilationHandleScope compilation_scope(isolate, info);
+    CanonicalHandleScope canonical(isolate, info);
+    info->ReopenHandlesInNewHandleScope(isolate);
+    pipeline.Serialize();
+    // Emulating the proper pipeline, we call CreateGraph on different places
+    // (i.e before or after creating a LocalHeapScope) depending on
+    // is_concurrent_inlining.
+    if (!data.broker()->is_concurrent_inlining()) {
+      if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
+    }
+  }
+
+  {
+    LocalHeapScope local_heap_scope(data.broker(), info);
+    if (data.broker()->is_concurrent_inlining()) {
+      if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
+    }
     // We selectively Unpark inside OptimizeGraph.
     ParkedScope parked_scope(data.broker()->local_heap());
     if (!pipeline.OptimizeGraph(&linkage)) return MaybeHandle<Code>();
   }
+
+  const bool will_retire_broker = out_broker == nullptr;
+  if (!will_retire_broker) {
+    // If the broker is going to be kept alive, pass the persistent and the
+    // canonical handles containers back to the JSHeapBroker since it will
+    // outlive the OptimizedCompilationInfo.
+    data.broker()->SetPersistentAndCopyCanonicalHandlesForTesting(
+        info->DetachPersistentHandles(), info->DetachCanonicalHandles());
+  }
+
   pipeline.AssembleCode(&linkage);
   Handle<Code> code;
-  if (pipeline.FinalizeCode(out_broker == nullptr).ToHandle(&code) &&
+  if (pipeline.FinalizeCode(will_retire_broker).ToHandle(&code) &&
       pipeline.CommitDependencies(code)) {
-    if (out_broker != nullptr) *out_broker = data.ReleaseBroker();
+    if (!will_retire_broker) *out_broker = data.ReleaseBroker();
     return code;
   }
   return MaybeHandle<Code>();
@@ -3678,15 +3695,16 @@ void PipelineImpl::AllocateRegistersForTopTier(
     verifier->VerifyAssignment("Immediately after CommitAssignmentPhase.");
   }
 
-  Run<PopulateReferenceMapsPhase>();
 
   Run<ConnectRangesPhase>();
 
   Run<ResolveControlFlowPhase>();
+
+  Run<PopulateReferenceMapsPhase>();
+
   if (FLAG_turbo_move_optimization) {
     Run<OptimizeMovesPhase>();
   }
-  Run<LocateSpillSlotsPhase>();
 
   TraceSequence(info(), data, "after register allocation");
 

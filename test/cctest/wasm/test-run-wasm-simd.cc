@@ -604,8 +604,9 @@ void CheckFloatResult(float x, float y, float expected, float actual,
 static constexpr uint32_t nan_test_array[] = {
     // Bit patterns of quiet NaNs and signaling NaNs, with or without
     // additional payload.
-    0x7FC00000, 0xFFC00000, 0x7FFFFFFF, 0x7F800000, 0xFF800000, 0x7F876543,
-    0xFF876543,
+    0x7FC00000, 0xFFC00000, 0x7FFFFFFF, 0xFFFFFFFF, 0x7F876543, 0xFF876543,
+    // NaN with top payload bit unset.
+    0x7FA00000,
     // Both Infinities.
     0x7F800000, 0xFF800000,
     // Some "normal" numbers, 1 and -1.
@@ -898,7 +899,7 @@ WASM_SIMD_TEST_NO_LOWERING(F32x4Qfms) {
 }
 #endif  // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_S390X
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2Splat) {
+WASM_SIMD_TEST(I64x2Splat) {
   WasmRunner<int32_t, int64_t> r(execution_tier, lower_simd);
   // Set up a global to hold output vector.
   int64_t* g = r.builder().AddGlobal<int64_t>(kWasmS128);
@@ -916,7 +917,7 @@ WASM_SIMD_TEST_NO_LOWERING(I64x2Splat) {
   }
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2ExtractLane) {
+WASM_SIMD_TEST(I64x2ExtractLane) {
   WasmRunner<int64_t> r(execution_tier, lower_simd);
   r.AllocateLocal(kWasmI64);
   r.AllocateLocal(kWasmS128);
@@ -929,7 +930,7 @@ WASM_SIMD_TEST_NO_LOWERING(I64x2ExtractLane) {
   CHECK_EQ(0xFFFFFFFFFF, r.Call());
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2ReplaceLane) {
+WASM_SIMD_TEST(I64x2ReplaceLane) {
   WasmRunner<int32_t> r(execution_tier, lower_simd);
   // Set up a global to hold input/output vector.
   int64_t* g = r.builder().AddGlobal<int64_t>(kWasmS128);
@@ -969,7 +970,7 @@ void RunI64x2UnOpTest(TestExecutionTier execution_tier, LowerSimd lower_simd,
   }
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2Neg) {
+WASM_SIMD_TEST(I64x2Neg) {
   RunI64x2UnOpTest(execution_tier, lower_simd, kExprI64x2Neg,
                    base::NegateWithWraparound);
 }
@@ -1006,17 +1007,17 @@ void RunI64x2ShiftOpTest(TestExecutionTier execution_tier, LowerSimd lower_simd,
   }
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2Shl) {
+WASM_SIMD_TEST(I64x2Shl) {
   RunI64x2ShiftOpTest(execution_tier, lower_simd, kExprI64x2Shl,
                       LogicalShiftLeft);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2ShrS) {
+WASM_SIMD_TEST(I64x2ShrS) {
   RunI64x2ShiftOpTest(execution_tier, lower_simd, kExprI64x2ShrS,
                       ArithmeticShiftRight);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2ShrU) {
+WASM_SIMD_TEST(I64x2ShrU) {
   RunI64x2ShiftOpTest(execution_tier, lower_simd, kExprI64x2ShrU,
                       LogicalShiftRight);
 }
@@ -1048,12 +1049,12 @@ void RunI64x2BinOpTest(TestExecutionTier execution_tier, LowerSimd lower_simd,
   }
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2Add) {
+WASM_SIMD_TEST(I64x2Add) {
   RunI64x2BinOpTest(execution_tier, lower_simd, kExprI64x2Add,
                     base::AddWithWraparound);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2Sub) {
+WASM_SIMD_TEST(I64x2Sub) {
   RunI64x2BinOpTest(execution_tier, lower_simd, kExprI64x2Sub,
                     base::SubWithWraparound);
 }
@@ -1102,7 +1103,7 @@ WASM_SIMD_TEST_NO_LOWERING(I64x2GeU) {
 }
 #endif  // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_S390X
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Splat) {
+WASM_SIMD_TEST(F64x2Splat) {
   WasmRunner<int32_t, double> r(execution_tier, lower_simd);
   // Set up a global to hold output vector.
   double* g = r.builder().AddGlobal<double>(kWasmS128);
@@ -1124,7 +1125,7 @@ WASM_SIMD_TEST_NO_LOWERING(F64x2Splat) {
   }
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2ExtractLane) {
+WASM_SIMD_TEST(F64x2ExtractLane) {
   WasmRunner<double, double> r(execution_tier, lower_simd);
   byte param1 = 0;
   byte temp1 = r.AllocateLocal(kWasmF64);
@@ -1146,7 +1147,7 @@ WASM_SIMD_TEST_NO_LOWERING(F64x2ExtractLane) {
   }
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2ReplaceLane) {
+WASM_SIMD_TEST(F64x2ReplaceLane) {
   WasmRunner<int32_t> r(execution_tier, lower_simd);
   // Set up globals to hold input/output vector.
   double* g0 = r.builder().AddGlobal<double>(kWasmS128);
@@ -1307,15 +1308,15 @@ void RunF64x2UnOpTest(TestExecutionTier execution_tier, LowerSimd lower_simd,
   }
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Abs) {
+WASM_SIMD_TEST(F64x2Abs) {
   RunF64x2UnOpTest(execution_tier, lower_simd, kExprF64x2Abs, std::abs);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Neg) {
+WASM_SIMD_TEST(F64x2Neg) {
   RunF64x2UnOpTest(execution_tier, lower_simd, kExprF64x2Neg, Negate);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Sqrt) {
+WASM_SIMD_TEST(F64x2Sqrt) {
   RunF64x2UnOpTest(execution_tier, lower_simd, kExprF64x2Sqrt, Sqrt);
 }
 
@@ -1392,19 +1393,19 @@ void RunF64x2BinOpTest(TestExecutionTier execution_tier, LowerSimd lower_simd,
 
 #undef FOR_FLOAT64_NAN_INPUTS
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Add) {
+WASM_SIMD_TEST(F64x2Add) {
   RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Add, Add);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Sub) {
+WASM_SIMD_TEST(F64x2Sub) {
   RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Sub, Sub);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Mul) {
+WASM_SIMD_TEST(F64x2Mul) {
   RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Mul, Mul);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Div) {
+WASM_SIMD_TEST(F64x2Div) {
   RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Div, Div);
 }
 
@@ -1461,39 +1462,39 @@ void RunF64x2CompareOpTest(TestExecutionTier execution_tier,
   }
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Eq) {
+WASM_SIMD_TEST(F64x2Eq) {
   RunF64x2CompareOpTest(execution_tier, lower_simd, kExprF64x2Eq, Equal);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Ne) {
+WASM_SIMD_TEST(F64x2Ne) {
   RunF64x2CompareOpTest(execution_tier, lower_simd, kExprF64x2Ne, NotEqual);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Gt) {
+WASM_SIMD_TEST(F64x2Gt) {
   RunF64x2CompareOpTest(execution_tier, lower_simd, kExprF64x2Gt, Greater);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Ge) {
+WASM_SIMD_TEST(F64x2Ge) {
   RunF64x2CompareOpTest(execution_tier, lower_simd, kExprF64x2Ge, GreaterEqual);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Lt) {
+WASM_SIMD_TEST(F64x2Lt) {
   RunF64x2CompareOpTest(execution_tier, lower_simd, kExprF64x2Lt, Less);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Le) {
+WASM_SIMD_TEST(F64x2Le) {
   RunF64x2CompareOpTest(execution_tier, lower_simd, kExprF64x2Le, LessEqual);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Min) {
+WASM_SIMD_TEST(F64x2Min) {
   RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Min, JSMin);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(F64x2Max) {
+WASM_SIMD_TEST(F64x2Max) {
   RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Max, JSMax);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2Mul) {
+WASM_SIMD_TEST(I64x2Mul) {
   RunI64x2BinOpTest(execution_tier, lower_simd, kExprI64x2Mul,
                     base::MulWithWraparound);
 }
@@ -1670,10 +1671,7 @@ WASM_SIMD_TEST(I16x8ReplaceLane) {
   }
 }
 
-#if V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_ARM || V8_TARGET_ARCH_IA32 || \
-    V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_MIPS || V8_TARGET_ARCH_MIPS64
 WASM_SIMD_TEST(I8x16BitMask) {
-  FLAG_SCOPE(wasm_simd_post_mvp);
   WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
   byte value1 = r.AllocateLocal(kWasmS128);
 
@@ -1693,7 +1691,6 @@ WASM_SIMD_TEST(I8x16BitMask) {
 }
 
 WASM_SIMD_TEST(I16x8BitMask) {
-  FLAG_SCOPE(wasm_simd_post_mvp);
   WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
   byte value1 = r.AllocateLocal(kWasmS128);
 
@@ -1713,7 +1710,6 @@ WASM_SIMD_TEST(I16x8BitMask) {
 }
 
 WASM_SIMD_TEST(I32x4BitMask) {
-  FLAG_SCOPE(wasm_simd_post_mvp);
   WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
   byte value1 = r.AllocateLocal(kWasmS128);
 
@@ -1731,8 +1727,6 @@ WASM_SIMD_TEST(I32x4BitMask) {
     CHECK_EQ(actual, expected);
   }
 }
-#endif  // V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_ARM || V8_TARGET_ARCH_IA32 ||
-        // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_MIPS || V8_TARGET_ARCH_MIPS64
 
 WASM_SIMD_TEST(I8x16Splat) {
   WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
@@ -3499,6 +3493,22 @@ void RunLoadSplatTest(TestExecutionTier execution_tier, LowerSimd lower_simd,
       CHECK_EQ(x, ReadLittleEndianValue<T>(&global[i]));
     }
   }
+
+  // Test for OOB.
+  {
+    WasmRunner<int32_t, uint32_t> r(execution_tier, lower_simd);
+    r.builder().AddMemoryElems<T>(kWasmPageSize / sizeof(T));
+    r.builder().AddGlobal<T>(kWasmS128);
+
+    BUILD(r, WASM_SET_GLOBAL(0, WASM_SIMD_LOAD_OP(op, WASM_GET_LOCAL(0))),
+          WASM_ONE);
+
+    // Load splats load sizeof(T) bytes.
+    for (uint32_t offset = kWasmPageSize - (sizeof(T) - 1);
+         offset < kWasmPageSize; ++offset) {
+      CHECK_TRAP(r.Call(offset));
+    }
+  }
 }
 
 WASM_SIMD_TEST(S8x16LoadSplat) {
@@ -3574,6 +3584,22 @@ void RunLoadExtendTest(TestExecutionTier execution_tier, LowerSimd lower_simd,
       CHECK_EQ(expected, ReadLittleEndianValue<T>(&global[i]));
     }
   }
+
+  // Test for OOB.
+  {
+    WasmRunner<int32_t, uint32_t> r(execution_tier, lower_simd);
+    r.builder().AddMemoryElems<S>(kWasmPageSize / sizeof(S));
+    r.builder().AddGlobal<T>(kWasmS128);
+
+    BUILD(r, WASM_SET_GLOBAL(0, WASM_SIMD_LOAD_OP(op, WASM_GET_LOCAL(0))),
+          WASM_ONE);
+
+    // Load extends load 8 bytes, so should trap from -7.
+    for (uint32_t offset = kWasmPageSize - 7; offset < kWasmPageSize;
+         ++offset) {
+      CHECK_TRAP(r.Call(offset));
+    }
+  }
 }
 
 WASM_SIMD_TEST(I16x8Load8x8U) {
@@ -3595,12 +3621,12 @@ WASM_SIMD_TEST(I32x4Load16x4S) {
                                       kExprI32x4Load16x4S);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2Load32x2U) {
+WASM_SIMD_TEST(I64x2Load32x2U) {
   RunLoadExtendTest<uint32_t, uint64_t>(execution_tier, lower_simd,
                                         kExprI64x2Load32x2U);
 }
 
-WASM_SIMD_TEST_NO_LOWERING(I64x2Load32x2S) {
+WASM_SIMD_TEST(I64x2Load32x2S) {
   RunLoadExtendTest<int32_t, int64_t>(execution_tier, lower_simd,
                                       kExprI64x2Load32x2S);
 }

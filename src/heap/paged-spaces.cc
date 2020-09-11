@@ -9,7 +9,6 @@
 #include "src/execution/isolate.h"
 #include "src/execution/vm-state-inl.h"
 #include "src/heap/array-buffer-sweeper.h"
-#include "src/heap/array-buffer-tracker-inl.h"
 #include "src/heap/heap.h"
 #include "src/heap/incremental-marking.h"
 #include "src/heap/memory-allocator.h"
@@ -53,15 +52,6 @@ PagedSpaceObjectIterator::PagedSpaceObjectIterator(Heap* heap,
 #endif  // DEBUG
 }
 
-PagedSpaceObjectIterator::PagedSpaceObjectIterator(OffThreadSpace* space)
-    : cur_addr_(kNullAddress),
-      cur_end_(kNullAddress),
-      space_(space),
-      page_range_(space->first_page(), nullptr),
-      current_page_(page_range_.begin()) {
-  space_->MakeLinearAllocationAreaIterable();
-}
-
 // We have hit the end of the page and should advance to the next block of
 // objects.  This happens at the end of the page.
 bool PagedSpaceObjectIterator::AdvanceToNextPage() {
@@ -81,8 +71,7 @@ Page* PagedSpace::InitializePage(MemoryChunk* chunk) {
       page->area_size());
   // Make sure that categories are initialized before freeing the area.
   page->ResetAllocationStatistics();
-  page->SetOldGenerationPageFlags(!is_off_thread_space() &&
-                                  heap()->incremental_marking()->IsMarking());
+  page->SetOldGenerationPageFlags(heap()->incremental_marking()->IsMarking());
   page->AllocateFreeListCategories();
   page->InitializeFreeListCategories();
   page->list_node().Initialize();
@@ -116,7 +105,6 @@ void PagedSpace::RefillFreeList() {
       identity() != MAP_SPACE) {
     return;
   }
-  DCHECK_NE(local_space_kind(), LocalSpaceKind::kOffThreadSpace);
   DCHECK_IMPLIES(is_local_space(), is_compaction_space());
   MarkCompactCollector* collector = heap()->mark_compact_collector();
   size_t added = 0;
@@ -161,12 +149,6 @@ void PagedSpace::RefillFreeList() {
   }
 }
 
-void OffThreadSpace::RefillFreeList() {
-  // We should never try to refill the free list in off-thread space, because
-  // we know it will always be fully linear.
-  UNREACHABLE();
-}
-
 void PagedSpace::MergeLocalSpace(LocalSpace* other) {
   base::MutexGuard guard(mutex());
 
@@ -185,29 +167,11 @@ void PagedSpace::MergeLocalSpace(LocalSpace* other) {
   DCHECK_EQ(kNullAddress, other->top());
   DCHECK_EQ(kNullAddress, other->limit());
 
-  bool merging_from_off_thread = other->is_off_thread_space();
-
   // Move over pages.
   for (auto it = other->begin(); it != other->end();) {
     Page* p = *(it++);
 
-    if (merging_from_off_thread) {
-      DCHECK_NULL(p->sweeping_slot_set());
-
-      // Make sure the page is entirely white.
-      CHECK(heap()
-                ->incremental_marking()
-                ->non_atomic_marking_state()
-                ->bitmap(p)
-                ->IsClean());
-
-      p->SetOldGenerationPageFlags(heap()->incremental_marking()->IsMarking());
-      if (heap()->incremental_marking()->black_allocation()) {
-        p->CreateBlackArea(p->area_start(), p->HighWaterMark());
-      }
-    } else {
       p->MergeOldToNewRememberedSets();
-    }
 
     // Ensure that pages are initialized before objects on it are discovered by
     // concurrent markers.
@@ -236,6 +200,7 @@ void PagedSpace::MergeLocalSpace(LocalSpace* other) {
 size_t PagedSpace::CommittedPhysicalMemory() {
   if (!base::OS::HasLazyCommits()) return CommittedMemory();
   BasicMemoryChunk::UpdateHighWaterMark(allocation_info_.top());
+  base::MutexGuard guard(mutex());
   size_t size = 0;
   for (Page* page : *this) {
     size += page->CommittedPhysicalMemory();
@@ -342,6 +307,7 @@ Page* PagedSpace::AllocatePage() {
 Page* PagedSpace::Expand() {
   Page* page = AllocatePage();
   if (page == nullptr) return nullptr;
+  ConcurrentAllocationMutex guard(this);
   AddPage(page);
   Free(page->area_start(), page->area_size(),
        SpaceAccountingMode::kSpaceAccounted);
@@ -351,7 +317,7 @@ Page* PagedSpace::Expand() {
 Page* PagedSpace::ExpandBackground(LocalHeap* local_heap) {
   Page* page = AllocatePage();
   if (page == nullptr) return nullptr;
-  base::MutexGuard lock(&allocation_mutex_);
+  base::MutexGuard lock(&space_mutex_);
   AddPage(page);
   Free(page->area_start(), page->area_size(),
        SpaceAccountingMode::kSpaceAccounted);
@@ -369,7 +335,7 @@ int PagedSpace::CountTotalPages() {
 
 void PagedSpace::SetLinearAllocationArea(Address top, Address limit) {
   SetTopAndLimit(top, limit);
-  if (top != kNullAddress && top != limit && !is_off_thread_space() &&
+  if (top != kNullAddress && top != limit &&
       heap()->incremental_marking()->black_allocation()) {
     Page::FromAllocationAreaAddress(top)->CreateBlackArea(top, limit);
   }
@@ -434,13 +400,7 @@ void PagedSpace::MakeLinearAllocationAreaIterable() {
 }
 
 size_t PagedSpace::Available() {
-  base::Optional<base::MutexGuard> optional_mutex;
-
-  if (FLAG_concurrent_allocation && identity() == OLD_SPACE &&
-      !is_local_space()) {
-    optional_mutex.emplace(&allocation_mutex_);
-  }
-
+  ConcurrentAllocationMutex guard(this);
   return free_list_->Available();
 }
 
@@ -456,7 +416,7 @@ void PagedSpace::FreeLinearAllocationArea() {
 
   AdvanceAllocationObservers();
 
-  if (current_top != current_limit && !is_off_thread_space() &&
+  if (current_top != current_limit &&
       heap()->incremental_marking()->black_allocation()) {
     Page::FromAddress(current_top)
         ->DestroyBlackArea(current_top, current_limit);
@@ -530,6 +490,7 @@ std::unique_ptr<ObjectIterator> PagedSpace::GetObjectIterator(Heap* heap) {
 
 bool PagedSpace::TryAllocationFromFreeListMain(size_t size_in_bytes,
                                                AllocationOrigin origin) {
+  ConcurrentAllocationMutex guard(this);
   DCHECK(IsAligned(size_in_bytes, kTaggedSize));
   DCHECK_LE(top(), limit());
 #ifdef DEBUG
@@ -593,10 +554,7 @@ base::Optional<std::pair<Address, size_t>> PagedSpace::RawRefillLabBackground(
   if (collector->sweeping_in_progress()) {
     // First try to refill the free-list, concurrent sweeper threads
     // may have freed some objects in the meantime.
-    {
-      base::MutexGuard lock(&allocation_mutex_);
-      RefillFreeList();
-    }
+    RefillFreeList();
 
     // Retry the free list allocation.
     auto result = TryAllocationFromFreeListBackground(
@@ -614,10 +572,7 @@ base::Optional<std::pair<Address, size_t>> PagedSpace::RawRefillLabBackground(
         identity(), static_cast<int>(min_size_in_bytes), kMaxPagesToSweep,
         invalidated_slots_in_free_space);
 
-    {
-      base::MutexGuard lock(&allocation_mutex_);
-      RefillFreeList();
-    }
+    RefillFreeList();
 
     if (static_cast<size_t>(max_freed) >= min_size_in_bytes) {
       auto result = TryAllocationFromFreeListBackground(
@@ -640,10 +595,7 @@ base::Optional<std::pair<Address, size_t>> PagedSpace::RawRefillLabBackground(
     // Complete sweeping for this space.
     collector->DrainSweepingWorklistForSpace(identity());
 
-    {
-      base::MutexGuard lock(&allocation_mutex_);
-      RefillFreeList();
-    }
+    RefillFreeList();
 
     // Last try to acquire memory from free list.
     return TryAllocationFromFreeListBackground(
@@ -659,7 +611,7 @@ PagedSpace::TryAllocationFromFreeListBackground(LocalHeap* local_heap,
                                                 size_t max_size_in_bytes,
                                                 AllocationAlignment alignment,
                                                 AllocationOrigin origin) {
-  base::MutexGuard lock(&allocation_mutex_);
+  base::MutexGuard lock(&space_mutex_);
   DCHECK_LE(min_size_in_bytes, max_size_in_bytes);
   DCHECK_EQ(identity(), OLD_SPACE);
 
@@ -755,14 +707,6 @@ void PagedSpace::Verify(Isolate* isolate, ObjectVisitor* visitor) {
         ExternalString external_string = ExternalString::cast(object);
         size_t size = external_string.ExternalPayloadSize();
         external_page_bytes[ExternalBackingStoreType::kExternalString] += size;
-      } else if (object.IsJSArrayBuffer()) {
-        JSArrayBuffer array_buffer = JSArrayBuffer::cast(object);
-        if (ArrayBufferTracker::IsTracked(array_buffer)) {
-          size_t size =
-              ArrayBufferTracker::Lookup(isolate->heap(), array_buffer)
-                  ->PerIsolateAccountingLength();
-          external_page_bytes[ExternalBackingStoreType::kArrayBuffer] += size;
-        }
       }
     }
     for (int i = 0; i < kNumTypes; i++) {
@@ -772,15 +716,13 @@ void PagedSpace::Verify(Isolate* isolate, ObjectVisitor* visitor) {
     }
   }
   for (int i = 0; i < kNumTypes; i++) {
-    if (V8_ARRAY_BUFFER_EXTENSION_BOOL &&
-        i == ExternalBackingStoreType::kArrayBuffer)
-      continue;
+    if (i == ExternalBackingStoreType::kArrayBuffer) continue;
     ExternalBackingStoreType t = static_cast<ExternalBackingStoreType>(i);
     CHECK_EQ(external_space_bytes[t], ExternalBackingStoreBytes(t));
   }
   CHECK(allocation_pointer_found_in_space);
 
-  if (identity() == OLD_SPACE && V8_ARRAY_BUFFER_EXTENSION_BOOL) {
+  if (identity() == OLD_SPACE) {
     size_t bytes = heap()->array_buffer_sweeper()->old().BytesSlow();
     CHECK_EQ(bytes,
              ExternalBackingStoreBytes(ExternalBackingStoreType::kArrayBuffer));
@@ -883,32 +825,12 @@ bool PagedSpace::RefillLabMain(int size_in_bytes, AllocationOrigin origin) {
   VMState<GC> state(heap()->isolate());
   RuntimeCallTimerScope runtime_timer(
       heap()->isolate(), RuntimeCallCounterId::kGC_Custom_SlowAllocateRaw);
-  base::Optional<base::MutexGuard> optional_mutex;
-
-  if (FLAG_concurrent_allocation && origin != AllocationOrigin::kGC &&
-      identity() == OLD_SPACE) {
-    optional_mutex.emplace(&allocation_mutex_);
-  }
-
   return RawRefillLabMain(size_in_bytes, origin);
 }
 
 bool CompactionSpace::RefillLabMain(int size_in_bytes,
                                     AllocationOrigin origin) {
   return RawRefillLabMain(size_in_bytes, origin);
-}
-
-bool OffThreadSpace::RefillLabMain(int size_in_bytes, AllocationOrigin origin) {
-  if (TryAllocationFromFreeListMain(size_in_bytes, origin)) return true;
-
-  if (heap()->CanExpandOldGenerationBackground(size_in_bytes) && Expand()) {
-    DCHECK((CountTotalPages() > 1) ||
-           (static_cast<size_t>(size_in_bytes) <= free_list_->Available()));
-    return TryAllocationFromFreeListMain(static_cast<size_t>(size_in_bytes),
-                                         origin);
-  }
-
-  return false;
 }
 
 bool PagedSpace::RawRefillLabMain(int size_in_bytes, AllocationOrigin origin) {

@@ -23,6 +23,7 @@
 #include "src/execution/isolate-data.h"
 #include "src/execution/isolate.h"
 #include "src/heap/code-object-registry.h"
+#include "src/heap/large-spaces.h"
 #include "src/heap/memory-allocator.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/new-spaces-inl.h"
@@ -76,29 +77,10 @@ Isolate* Heap::isolate() {
       reinterpret_cast<size_t>(reinterpret_cast<Isolate*>(16)->heap()) + 16);
 }
 
-int64_t Heap::external_memory() {
-  return isolate()->isolate_data()->external_memory_;
-}
+int64_t Heap::external_memory() { return external_memory_.total(); }
 
-void Heap::update_external_memory(int64_t delta) {
-  const int64_t amount = isolate()->isolate_data()->external_memory_ + delta;
-  isolate()->isolate_data()->external_memory_ = amount;
-  if (amount <
-      isolate()->isolate_data()->external_memory_low_since_mark_compact_) {
-    isolate()->isolate_data()->external_memory_low_since_mark_compact_ = amount;
-    isolate()->isolate_data()->external_memory_limit_ =
-        amount + kExternalAllocationSoftLimit;
-  }
-}
-
-void Heap::update_external_memory_concurrently_freed(uintptr_t freed) {
-  external_memory_concurrently_freed_ += freed;
-}
-
-void Heap::account_external_memory_concurrently_freed() {
-  update_external_memory(
-      -static_cast<int64_t>(external_memory_concurrently_freed_));
-  external_memory_concurrently_freed_ = 0;
+int64_t Heap::update_external_memory(int64_t delta) {
+  return external_memory_.Update(delta);
 }
 
 RootsTable& Heap::roots_table() { return isolate()->roots_table(); }
@@ -264,6 +246,15 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationType type,
             ->RegisterNewlyAllocatedCodeObject(object.address());
       }
     }
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (AllocationType::kReadOnly != type) {
+      DCHECK_TAG_ALIGNED(object.address());
+      Page::FromHeapObject(object)->object_start_bitmap()->SetBit(
+          object.address());
+    }
+#endif
+
     OnAllocationEvent(object, size_in_bytes);
   }
 

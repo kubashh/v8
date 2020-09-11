@@ -582,20 +582,6 @@ Handle<String> Factory::InternalizeUtf8String(
       Vector<const uc16>(buffer.get(), decoder.utf16_length()));
 }
 
-Handle<String> Factory::InternalizeString(Vector<const uint8_t> string,
-                                          bool convert_encoding) {
-  SequentialStringKey<uint8_t> key(string, HashSeed(isolate()),
-                                   convert_encoding);
-  return InternalizeStringWithKey(&key);
-}
-
-Handle<String> Factory::InternalizeString(Vector<const uint16_t> string,
-                                          bool convert_encoding) {
-  SequentialStringKey<uint16_t> key(string, HashSeed(isolate()),
-                                    convert_encoding);
-  return InternalizeStringWithKey(&key);
-}
-
 template <typename SeqString>
 Handle<String> Factory::InternalizeString(Handle<SeqString> string, int from,
                                           int length, bool convert_encoding) {
@@ -610,15 +596,6 @@ template Handle<String> Factory::InternalizeString(
 template Handle<String> Factory::InternalizeString(
     Handle<SeqTwoByteString> string, int from, int length,
     bool convert_encoding);
-
-template <class StringTableKey>
-Handle<String> Factory::InternalizeStringWithKey(StringTableKey* key) {
-  return isolate()->string_table()->LookupKey(isolate(), key);
-}
-template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
-    Handle<String> Factory::InternalizeStringWithKey(OneByteStringKey* key);
-template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
-    Handle<String> Factory::InternalizeStringWithKey(TwoByteStringKey* key);
 
 MaybeHandle<String> Factory::NewStringFromOneByte(
     const Vector<const uint8_t>& string, AllocationType allocation) {
@@ -885,15 +862,6 @@ Handle<String> Factory::LookupSingleCharacterStringFromCode(uint16_t code) {
   }
   uint16_t buffer[] = {code};
   return InternalizeString(Vector<const uint16_t>(buffer, 1));
-}
-
-Handle<String> Factory::MakeOrFindTwoCharacterString(uint16_t c1, uint16_t c2) {
-  if ((c1 | c2) <= unibrow::Latin1::kMaxChar) {
-    uint8_t buffer[] = {static_cast<uint8_t>(c1), static_cast<uint8_t>(c2)};
-    return InternalizeString(Vector<const uint8_t>(buffer, 2));
-  }
-  uint16_t buffer[] = {c1, c2};
-  return InternalizeString(Vector<const uint16_t>(buffer, 2));
 }
 
 Handle<String> Factory::NewSurrogatePairString(uint16_t lead, uint16_t trail) {
@@ -2194,7 +2162,8 @@ Handle<BytecodeArray> Factory::CopyBytecodeArray(
       bytecode_array->incoming_new_target_or_generator_register());
   copy->set_constant_pool(bytecode_array->constant_pool());
   copy->set_handler_table(bytecode_array->handler_table());
-  copy->set_source_position_table(bytecode_array->source_position_table());
+  copy->set_synchronized_source_position_table(
+      bytecode_array->synchronized_source_position_table());
   copy->set_osr_loop_nesting_level(bytecode_array->osr_loop_nesting_level());
   copy->set_bytecode_age(bytecode_array->bytecode_age());
   bytecode_array->CopyBytecodesTo(*copy);
@@ -2825,7 +2794,7 @@ Handle<JSGlobalProxy> Factory::NewUninitializedJSGlobalProxy(int size) {
   map->set_may_have_interesting_symbols(true);
   LOG(isolate(), MapDetails(*map));
   Handle<JSGlobalProxy> proxy = Handle<JSGlobalProxy>::cast(
-      NewJSObjectFromMap(map, AllocationType::kYoung));
+      NewJSObjectFromMap(map, AllocationType::kOld));
   // Create identity hash early in case there is any JS collection containing
   // a global proxy key and needs to be rehashed after deserialization.
   proxy->GetOrCreateIdentityHash(isolate());
@@ -2950,7 +2919,8 @@ V8_INLINE Handle<String> CharToString(Factory* factory, const char* string,
 
 void Factory::NumberToStringCacheSet(Handle<Object> number, int hash,
                                      Handle<String> js_string) {
-  if (!number_string_cache()->get(hash * 2).IsUndefined(isolate())) {
+  if (!number_string_cache()->get(hash * 2).IsUndefined(isolate()) &&
+      !FLAG_optimize_for_size) {
     int full_size = isolate()->heap()->MaxNumberToStringCacheSize();
     if (number_string_cache()->length() != full_size) {
       Handle<FixedArray> new_cache =
@@ -3130,7 +3100,6 @@ Handle<StackTraceFrame> Factory::NewStackTraceFrame(
   frame->set_frame_index(index);
   frame->set_frame_info(*undefined_value());
 
-  frame->set_id(isolate()->GetNextStackFrameInfoId());
   return frame;
 }
 
@@ -3323,12 +3292,11 @@ Handle<StoreHandler> Factory::NewStoreHandler(int data_count) {
   return handle(StoreHandler::cast(New(map, AllocationType::kOld)), isolate());
 }
 
-void Factory::SetRegExpAtomData(Handle<JSRegExp> regexp, JSRegExp::Type type,
-                                Handle<String> source, JSRegExp::Flags flags,
-                                Handle<Object> data) {
+void Factory::SetRegExpAtomData(Handle<JSRegExp> regexp, Handle<String> source,
+                                JSRegExp::Flags flags, Handle<Object> data) {
   Handle<FixedArray> store = NewFixedArray(JSRegExp::kAtomDataSize);
 
-  store->set(JSRegExp::kTagIndex, Smi::FromInt(type));
+  store->set(JSRegExp::kTagIndex, Smi::FromInt(JSRegExp::ATOM));
   store->set(JSRegExp::kSourceIndex, *source);
   store->set(JSRegExp::kFlagsIndex, Smi::FromInt(flags));
   store->set(JSRegExp::kAtomPatternIndex, *data);
@@ -3336,7 +3304,7 @@ void Factory::SetRegExpAtomData(Handle<JSRegExp> regexp, JSRegExp::Type type,
 }
 
 void Factory::SetRegExpIrregexpData(Handle<JSRegExp> regexp,
-                                    JSRegExp::Type type, Handle<String> source,
+                                    Handle<String> source,
                                     JSRegExp::Flags flags, int capture_count,
                                     uint32_t backtrack_limit) {
   DCHECK(Smi::IsValid(backtrack_limit));
@@ -3345,7 +3313,7 @@ void Factory::SetRegExpIrregexpData(Handle<JSRegExp> regexp,
   Smi ticks_until_tier_up = FLAG_regexp_tier_up
                                 ? Smi::FromInt(FLAG_regexp_tier_up_ticks)
                                 : uninitialized;
-  store->set(JSRegExp::kTagIndex, Smi::FromInt(type));
+  store->set(JSRegExp::kTagIndex, Smi::FromInt(JSRegExp::IRREGEXP));
   store->set(JSRegExp::kSourceIndex, *source);
   store->set(JSRegExp::kFlagsIndex, Smi::FromInt(flags));
   store->set(JSRegExp::kIrregexpLatin1CodeIndex, uninitialized);
@@ -3357,6 +3325,28 @@ void Factory::SetRegExpIrregexpData(Handle<JSRegExp> regexp,
   store->set(JSRegExp::kIrregexpCaptureNameMapIndex, uninitialized);
   store->set(JSRegExp::kIrregexpTicksUntilTierUpIndex, ticks_until_tier_up);
   store->set(JSRegExp::kIrregexpBacktrackLimit, Smi::FromInt(backtrack_limit));
+  regexp->set_data(*store);
+}
+
+void Factory::SetRegExpExperimentalData(Handle<JSRegExp> regexp,
+                                        Handle<String> source,
+                                        JSRegExp::Flags flags,
+                                        int capture_count) {
+  Handle<FixedArray> store = NewFixedArray(JSRegExp::kExperimentalDataSize);
+  Smi uninitialized = Smi::FromInt(JSRegExp::kUninitializedValue);
+
+  store->set(JSRegExp::kTagIndex, Smi::FromInt(JSRegExp::EXPERIMENTAL));
+  store->set(JSRegExp::kSourceIndex, *source);
+  store->set(JSRegExp::kFlagsIndex, Smi::FromInt(flags));
+  store->set(JSRegExp::kIrregexpLatin1CodeIndex, uninitialized);
+  store->set(JSRegExp::kIrregexpUC16CodeIndex, uninitialized);
+  store->set(JSRegExp::kIrregexpLatin1BytecodeIndex, uninitialized);
+  store->set(JSRegExp::kIrregexpUC16BytecodeIndex, uninitialized);
+  store->set(JSRegExp::kIrregexpMaxRegisterCountIndex, uninitialized);
+  store->set(JSRegExp::kIrregexpCaptureCountIndex, Smi::FromInt(capture_count));
+  store->set(JSRegExp::kIrregexpCaptureNameMapIndex, uninitialized);
+  store->set(JSRegExp::kIrregexpTicksUntilTierUpIndex, uninitialized);
+  store->set(JSRegExp::kIrregexpBacktrackLimit, uninitialized);
   regexp->set_data(*store);
 }
 

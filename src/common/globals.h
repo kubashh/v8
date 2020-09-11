@@ -186,14 +186,13 @@ constexpr int kElidedFrameSlots = 0;
 #endif
 
 constexpr int kDoubleSizeLog2 = 3;
-constexpr size_t kMaxWasmCodeMB = 1024;
+
+// Total wasm code space per engine (i.e. per process) is limited to make
+// certain attacks that rely on heap spraying harder.
+// This limit was increased to 2GB in August 2020 and we have security clearance
+// to increase to 4GB if needed.
+constexpr size_t kMaxWasmCodeMB = 2048;
 constexpr size_t kMaxWasmCodeMemory = kMaxWasmCodeMB * MB;
-#if V8_TARGET_ARCH_ARM64
-// ARM64 only supports direct calls within a 128 MB range.
-constexpr size_t kMaxWasmCodeSpaceSize = 128 * MB;
-#else
-constexpr size_t kMaxWasmCodeSpaceSize = kMaxWasmCodeMemory;
-#endif
 
 #if V8_HOST_ARCH_64_BIT
 constexpr int kSystemPointerSizeLog2 = 3;
@@ -655,6 +654,7 @@ class JSReceiver;
 class JSArray;
 class JSFunction;
 class JSObject;
+class LocalIsolate;
 class MacroAssembler;
 class Map;
 class MapSpace;
@@ -672,7 +672,6 @@ class NewSpace;
 class NewLargeObjectSpace;
 class NumberDictionary;
 class Object;
-class OffThreadIsolate;
 class OldLargeObjectSpace;
 template <HeapObjectReferenceType kRefType, typename StorageType>
 class TaggedImpl;
@@ -682,9 +681,11 @@ class CompressedObjectSlot;
 class CompressedMaybeObjectSlot;
 class CompressedMapWordSlot;
 class CompressedHeapObjectSlot;
+class OffHeapCompressedObjectSlot;
 class FullObjectSlot;
 class FullMaybeObjectSlot;
 class FullHeapObjectSlot;
+class OffHeapFullObjectSlot;
 class OldSpace;
 class ReadOnlySpace;
 class RelocInfo;
@@ -701,46 +702,39 @@ class Struct;
 class Symbol;
 class Variable;
 
-enum class SlotLocation { kOnHeap, kOffHeap };
-
-template <SlotLocation slot_location>
-struct SlotTraits;
-
-// Off-heap slots are always full-pointer slots.
-template <>
-struct SlotTraits<SlotLocation::kOffHeap> {
-  using TObjectSlot = FullObjectSlot;
-  using TMaybeObjectSlot = FullMaybeObjectSlot;
-  using THeapObjectSlot = FullHeapObjectSlot;
-};
-
-// On-heap slots are either full-pointer slots or compressed slots depending
-// on whether the pointer compression is enabled or not.
-template <>
-struct SlotTraits<SlotLocation::kOnHeap> {
+// Slots are either full-pointer slots or compressed slots depending on whether
+// pointer compression is enabled or not.
+struct SlotTraits {
 #ifdef V8_COMPRESS_POINTERS
   using TObjectSlot = CompressedObjectSlot;
   using TMaybeObjectSlot = CompressedMaybeObjectSlot;
   using THeapObjectSlot = CompressedHeapObjectSlot;
+  using TOffHeapObjectSlot = OffHeapCompressedObjectSlot;
 #else
   using TObjectSlot = FullObjectSlot;
   using TMaybeObjectSlot = FullMaybeObjectSlot;
   using THeapObjectSlot = FullHeapObjectSlot;
+  using TOffHeapObjectSlot = OffHeapFullObjectSlot;
 #endif
 };
 
 // An ObjectSlot instance describes a kTaggedSize-sized on-heap field ("slot")
-// holding Object value (smi or strong heap object).
-using ObjectSlot = SlotTraits<SlotLocation::kOnHeap>::TObjectSlot;
+// holding an Object value (smi or strong heap object).
+using ObjectSlot = SlotTraits::TObjectSlot;
 
 // A MaybeObjectSlot instance describes a kTaggedSize-sized on-heap field
 // ("slot") holding MaybeObject (smi or weak heap object or strong heap object).
-using MaybeObjectSlot = SlotTraits<SlotLocation::kOnHeap>::TMaybeObjectSlot;
+using MaybeObjectSlot = SlotTraits::TMaybeObjectSlot;
 
 // A HeapObjectSlot instance describes a kTaggedSize-sized field ("slot")
 // holding a weak or strong pointer to a heap object (think:
 // HeapObjectReference).
-using HeapObjectSlot = SlotTraits<SlotLocation::kOnHeap>::THeapObjectSlot;
+using HeapObjectSlot = SlotTraits::THeapObjectSlot;
+
+// An OffHeapObjectSlot instance describes a kTaggedSize-sized field ("slot")
+// holding an Object value (smi or strong heap object), whose slot location is
+// off-heap.
+using OffHeapObjectSlot = SlotTraits::TOffHeapObjectSlot;
 
 using WeakSlotCallback = bool (*)(FullObjectSlot pointer);
 
@@ -752,20 +746,20 @@ using WeakSlotCallbackWithHeap = bool (*)(Heap* heap, FullObjectSlot pointer);
 // NOTE: SpaceIterator depends on AllocationSpace enumeration values being
 // consecutive.
 enum AllocationSpace {
-  RO_SPACE,    // Immortal, immovable and immutable objects,
-  NEW_SPACE,   // Young generation semispaces for regular objects collected with
-               // Scavenger.
-  OLD_SPACE,   // Old generation regular object space.
-  CODE_SPACE,  // Old generation code object space, marked executable.
-  MAP_SPACE,   // Old generation map object space, non-movable.
-  LO_SPACE,    // Old generation large object space.
+  RO_SPACE,       // Immortal, immovable and immutable objects,
+  OLD_SPACE,      // Old generation regular object space.
+  CODE_SPACE,     // Old generation code object space, marked executable.
+  MAP_SPACE,      // Old generation map object space, non-movable.
+  LO_SPACE,       // Old generation large object space.
   CODE_LO_SPACE,  // Old generation large code object space.
   NEW_LO_SPACE,   // Young generation large object space.
+  NEW_SPACE,  // Young generation semispaces for regular objects collected with
+              // Scavenger.
 
   FIRST_SPACE = RO_SPACE,
-  LAST_SPACE = NEW_LO_SPACE,
-  FIRST_MUTABLE_SPACE = NEW_SPACE,
-  LAST_MUTABLE_SPACE = NEW_LO_SPACE,
+  LAST_SPACE = NEW_SPACE,
+  FIRST_MUTABLE_SPACE = OLD_SPACE,
+  LAST_MUTABLE_SPACE = NEW_SPACE,
   FIRST_GROWABLE_PAGED_SPACE = OLD_SPACE,
   LAST_GROWABLE_PAGED_SPACE = MAP_SPACE
 };
@@ -821,7 +815,6 @@ enum GarbageCollector { SCAVENGER, MARK_COMPACTOR, MINOR_MARK_COMPACTOR };
 
 enum class LocalSpaceKind {
   kNone,
-  kOffThreadSpace,
   kCompactionSpaceForScavenge,
   kCompactionSpaceForMarkCompact,
   kCompactionSpaceForMinorMarkCompact,

@@ -31,11 +31,13 @@ MaybeHandle<WasmExportedFunction> GetExportedFunction(
 
 // Call an exported wasm function by name. Returns -1 if the export does not
 // exist or throws an error. Errors are cleared from the isolate before
-// returning.
+// returning. {exception} is set to to true if an exception happened during
+// execution of the wasm function.
 int32_t CallWasmFunctionForTesting(Isolate* isolate,
                                    Handle<WasmInstanceObject> instance,
                                    const char* name, int argc,
-                                   Handle<Object> argv[]);
+                                   Handle<Object> argv[],
+                                   bool* exception = nullptr);
 
 // Decode, verify, and run the function labeled "main" in the
 // given encoded module. The module should have no imports.
@@ -97,9 +99,17 @@ WasmInterpretationResult InterpretWasmModule(
     Isolate* isolate, Handle<WasmInstanceObject> instance,
     int32_t function_index, WasmValue* args);
 
-// Generate an array of default arguments for the given signature.
-std::unique_ptr<WasmValue[]> MakeDefaultArguments(Isolate* isolate,
-                                                  const FunctionSig* sig);
+// Generate an array of default arguments for the given signature, to be used in
+// the interpreter.
+OwnedVector<WasmValue> MakeDefaultInterpreterArguments(Isolate* isolate,
+                                                       const FunctionSig* sig);
+
+// Generate an array of default arguments for the given signature, to be used
+// when calling compiled code. Make sure that the arguments match the ones
+// returned by {MakeDefaultInterpreterArguments}, otherwise fuzzers will report
+// differences between interpreter and compiled code.
+OwnedVector<Handle<Object>> MakeDefaultArguments(Isolate* isolate,
+                                                 const FunctionSig* sig);
 
 // Install function map, module symbol for testing
 void SetupIsolateForWasmModule(Isolate* isolate);

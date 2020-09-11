@@ -11,10 +11,9 @@
 namespace v8 {
 namespace internal {
 
-void DeserializerAllocator::Initialize(LocalHeapWrapper heap) {
+void DeserializerAllocator::Initialize(Heap* heap) {
   heap_ = heap;
-  roots_ = heap.is_off_thread() ? ReadOnlyRoots(heap.off_thread())
-                                : ReadOnlyRoots(heap.main_thread());
+  roots_ = ReadOnlyRoots(heap);
 }
 
 // We know the space requirements before deserialization and can
@@ -34,15 +33,10 @@ Address DeserializerAllocator::AllocateRaw(SnapshotSpace space, int size) {
     // Note that we currently do not support deserialization of large code
     // objects.
     HeapObject obj;
-    if (heap_.is_off_thread()) {
-      obj = heap_.off_thread()->lo_space_.AllocateRaw(size).ToObjectChecked();
-    } else {
-      Heap* heap = heap_.main_thread();
-      AlwaysAllocateScope scope(heap);
-      OldLargeObjectSpace* lo_space = heap->lo_space();
-      AllocationResult result = lo_space->AllocateRaw(size);
-      obj = result.ToObjectChecked();
-    }
+    AlwaysAllocateScope scope(heap_);
+    OldLargeObjectSpace* lo_space = heap_->lo_space();
+    AllocationResult result = lo_space->AllocateRaw(size);
+    obj = result.ToObjectChecked();
     deserialized_large_objects_.push_back(obj);
     return obj.address();
   } else if (space == SnapshotSpace::kMap) {
@@ -70,6 +64,22 @@ Address DeserializerAllocator::AllocateRaw(SnapshotSpace space, int size) {
 }
 
 Address DeserializerAllocator::Allocate(SnapshotSpace space, int size) {
+#ifdef DEBUG
+  if (previous_allocation_start_ != kNullAddress) {
+    // Make sure that the previous allocation is initialized sufficiently to
+    // be iterated over by the GC.
+    Address object_address = previous_allocation_start_;
+    Address previous_allocation_end =
+        previous_allocation_start_ + previous_allocation_size_;
+    while (object_address != previous_allocation_end) {
+      int object_size = HeapObject::FromAddress(object_address).Size();
+      DCHECK_GT(object_size, 0);
+      DCHECK_LE(object_address + object_size, previous_allocation_end);
+      object_address += object_size;
+    }
+  }
+#endif
+
   Address address;
   HeapObject obj;
   // TODO(steveblackburn) Note that the third party heap allocates objects
@@ -86,9 +96,9 @@ Address DeserializerAllocator::Allocate(SnapshotSpace space, int size) {
   // abstracting away the details of the memory allocator from this code.
   // At each allocation, the regular allocator performs allocation,
   // and a fixed-sized table is used to track and fix all back references.
-  if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return AllocateRaw(space, size);
-
-  if (next_alignment_ != kWordAligned) {
+  if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
+    address = AllocateRaw(space, size);
+  } else if (next_alignment_ != kWordAligned) {
     const int reserved = size + Heap::GetMaximumFillToAlign(next_alignment_);
     address = AllocateRaw(space, reserved);
     obj = HeapObject::FromAddress(address);
@@ -101,10 +111,16 @@ Address DeserializerAllocator::Allocate(SnapshotSpace space, int size) {
     obj = Heap::AlignWithFiller(roots_, obj, size, reserved, next_alignment_);
     address = obj.address();
     next_alignment_ = kWordAligned;
-    return address;
   } else {
-    return AllocateRaw(space, size);
+    address = AllocateRaw(space, size);
   }
+
+#ifdef DEBUG
+  previous_allocation_start_ = address;
+  previous_allocation_size_ = size;
+#endif
+
+  return address;
 }
 
 void DeserializerAllocator::MoveToNextChunk(SnapshotSpace space) {
@@ -121,7 +137,6 @@ void DeserializerAllocator::MoveToNextChunk(SnapshotSpace space) {
 }
 
 HeapObject DeserializerAllocator::GetMap(uint32_t index) {
-  DCHECK(!heap_.is_off_thread());
   DCHECK_LT(index, next_map_index_);
   return HeapObject::FromAddress(allocated_maps_[index]);
 }
@@ -169,16 +184,10 @@ bool DeserializerAllocator::ReserveSpace() {
   }
 #endif  // DEBUG
   DCHECK(allocated_maps_.empty());
-  if (heap_.is_off_thread()) {
-    if (!heap_.off_thread()->ReserveSpace(reservations_)) {
-      return false;
-    }
-  } else {
-    // TODO(v8:7464): Allocate using the off-heap ReadOnlySpace here once
-    // implemented.
-    if (!heap_.main_thread()->ReserveSpace(reservations_, &allocated_maps_)) {
-      return false;
-    }
+  // TODO(v8:7464): Allocate using the off-heap ReadOnlySpace here once
+  // implemented.
+  if (!heap_->ReserveSpace(reservations_, &allocated_maps_)) {
+    return false;
   }
   for (int i = 0; i < kNumberOfPreallocatedSpaces; i++) {
     high_water_[i] = reservations_[i][0].start;
@@ -200,8 +209,7 @@ bool DeserializerAllocator::ReservationsAreFullyUsed() const {
 }
 
 void DeserializerAllocator::RegisterDeserializedObjectsForBlackAllocation() {
-  DCHECK(!heap_.is_off_thread());
-  heap_.main_thread()->RegisterDeserializedObjectsForBlackAllocation(
+  heap_->RegisterDeserializedObjectsForBlackAllocation(
       reservations_, deserialized_large_objects_, allocated_maps_);
 }
 

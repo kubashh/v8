@@ -34,11 +34,10 @@
 #include "src/execution/isolate-utils-inl.h"
 #include "src/execution/isolate-utils.h"
 #include "src/execution/microtask-queue.h"
-#include "src/execution/off-thread-isolate.h"
 #include "src/execution/protectors-inl.h"
 #include "src/heap/factory-inl.h"
 #include "src/heap/heap-inl.h"
-#include "src/heap/off-thread-factory-inl.h"
+#include "src/heap/local-factory-inl.h"
 #include "src/heap/read-only-heap.h"
 #include "src/ic/ic.h"
 #include "src/init/bootstrapper.h"
@@ -72,6 +71,7 @@
 #include "src/objects/objects-inl.h"
 #include "src/objects/property-details.h"
 #include "src/roots/roots.h"
+#include "src/snapshot/deserializer.h"
 #include "src/utils/identity-map.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-break-iterator.h"
@@ -671,12 +671,18 @@ Maybe<ComparisonResult> Object::Compare(Isolate* isolate, Handle<Object> x,
                                 Handle<String>::cast(y)));
   }
   if (x->IsBigInt() && y->IsString()) {
-    return Just(BigInt::CompareToString(isolate, Handle<BigInt>::cast(x),
-                                        Handle<String>::cast(y)));
+    return BigInt::CompareToString(isolate, Handle<BigInt>::cast(x),
+                                   Handle<String>::cast(y));
   }
   if (x->IsString() && y->IsBigInt()) {
-    return Just(Reverse(BigInt::CompareToString(
-        isolate, Handle<BigInt>::cast(y), Handle<String>::cast(x))));
+    Maybe<ComparisonResult> maybe_result = BigInt::CompareToString(
+        isolate, Handle<BigInt>::cast(y), Handle<String>::cast(x));
+    ComparisonResult result;
+    if (maybe_result.To(&result)) {
+      return Just(Reverse(result));
+    } else {
+      return Nothing<ComparisonResult>();
+    }
   }
   // ES6 section 7.2.11 Abstract Relational Comparison step 6.
   if (!Object::ToNumeric(isolate, x).ToHandle(&x) ||
@@ -735,8 +741,8 @@ Maybe<bool> Object::Equals(Isolate* isolate, Handle<Object> x,
         return Just(
             StrictNumberEquals(*x, Handle<Oddball>::cast(y)->to_number()));
       } else if (y->IsBigInt()) {
-        return Just(BigInt::EqualToString(isolate, Handle<BigInt>::cast(y),
-                                          Handle<String>::cast(x)));
+        return BigInt::EqualToString(isolate, Handle<BigInt>::cast(y),
+                                     Handle<String>::cast(x));
       } else if (y->IsJSReceiver()) {
         if (!JSReceiver::ToPrimitive(Handle<JSReceiver>::cast(y))
                  .ToHandle(&y)) {
@@ -2354,22 +2360,21 @@ bool HeapObject::CanBeRehashed() const {
   return false;
 }
 
-void HeapObject::RehashBasedOnMap(LocalIsolateWrapper isolate) {
-  const Isolate* ptr_cmp_isolate = GetIsolateForPtrCompr(isolate);
+void HeapObject::RehashBasedOnMap(Isolate* isolate) {
   switch (map().instance_type()) {
     case HASH_TABLE_TYPE:
       UNREACHABLE();
     case NAME_DICTIONARY_TYPE:
-      NameDictionary::cast(*this).Rehash(ptr_cmp_isolate);
+      NameDictionary::cast(*this).Rehash(isolate);
       break;
     case GLOBAL_DICTIONARY_TYPE:
-      GlobalDictionary::cast(*this).Rehash(ptr_cmp_isolate);
+      GlobalDictionary::cast(*this).Rehash(isolate);
       break;
     case NUMBER_DICTIONARY_TYPE:
-      NumberDictionary::cast(*this).Rehash(ptr_cmp_isolate);
+      NumberDictionary::cast(*this).Rehash(isolate);
       break;
     case SIMPLE_NUMBER_DICTIONARY_TYPE:
-      SimpleNumberDictionary::cast(*this).Rehash(ptr_cmp_isolate);
+      SimpleNumberDictionary::cast(*this).Rehash(isolate);
       break;
     case DESCRIPTOR_ARRAY_TYPE:
       DCHECK_LE(1, DescriptorArray::cast(*this).number_of_descriptors());
@@ -2388,13 +2393,11 @@ void HeapObject::RehashBasedOnMap(LocalIsolateWrapper isolate) {
     case ORDERED_HASH_SET_TYPE:
       UNREACHABLE();  // We'll rehash from the JSMap or JSSet referencing them.
     case JS_MAP_TYPE: {
-      DCHECK(isolate.is_main_thread());
-      JSMap::cast(*this).Rehash(isolate.main_thread());
+      JSMap::cast(*this).Rehash(isolate);
       break;
     }
     case JS_SET_TYPE: {
-      DCHECK(isolate.is_main_thread());
-      JSSet::cast(*this).Rehash(isolate.main_thread());
+      JSSet::cast(*this).Rehash(isolate);
       break;
     }
     case SMALL_ORDERED_NAME_DICTIONARY_TYPE:
@@ -4298,7 +4301,7 @@ template Handle<DescriptorArray> DescriptorArray::Allocate(
     Isolate* isolate, int nof_descriptors, int slack,
     AllocationType allocation);
 template Handle<DescriptorArray> DescriptorArray::Allocate(
-    OffThreadIsolate* isolate, int nof_descriptors, int slack,
+    LocalIsolate* isolate, int nof_descriptors, int slack,
     AllocationType allocation);
 
 void DescriptorArray::Initialize(EnumCache enum_cache,
@@ -4754,7 +4757,7 @@ void Script::InitLineEnds(LocalIsolate* isolate, Handle<Script> script) {
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void Script::InitLineEnds(
     Isolate* isolate, Handle<Script> script);
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void Script::InitLineEnds(
-    OffThreadIsolate* isolate, Handle<Script> script);
+    LocalIsolate* isolate, Handle<Script> script);
 
 bool Script::GetPositionInfo(Handle<Script> script, int position,
                              PositionInfo* info, OffsetFlag offset_flag) {
@@ -4939,7 +4942,7 @@ MaybeHandle<SharedFunctionInfo> Script::FindSharedFunctionInfo(
 template MaybeHandle<SharedFunctionInfo> Script::FindSharedFunctionInfo(
     Isolate* isolate, int function_literal_id);
 template MaybeHandle<SharedFunctionInfo> Script::FindSharedFunctionInfo(
-    OffThreadIsolate* isolate, int function_literal_id);
+    LocalIsolate* isolate, int function_literal_id);
 
 Script::Iterator::Iterator(Isolate* isolate)
     : iterator_(isolate->heap()->script_list()) {}
@@ -5331,6 +5334,8 @@ static void MoveMessageToPromise(Isolate* isolate, Handle<JSPromise> promise) {
 Handle<Object> JSPromise::Reject(Handle<JSPromise> promise,
                                  Handle<Object> reason, bool debug_event) {
   Isolate* const isolate = promise->GetIsolate();
+  DCHECK(
+      !reinterpret_cast<v8::Isolate*>(isolate)->GetCurrentContext().IsEmpty());
 
   if (isolate->debug()->is_active()) MoveMessageToPromise(isolate, promise);
 
@@ -5368,6 +5373,8 @@ Handle<Object> JSPromise::Reject(Handle<JSPromise> promise,
 MaybeHandle<Object> JSPromise::Resolve(Handle<JSPromise> promise,
                                        Handle<Object> resolution) {
   Isolate* const isolate = promise->GetIsolate();
+  DCHECK(
+      !reinterpret_cast<v8::Isolate*>(isolate)->GetCurrentContext().IsEmpty());
 
   isolate->RunPromiseHook(PromiseHookType::kResolve, promise,
                           isolate->factory()->undefined_value());
@@ -7149,15 +7156,15 @@ Address Smi::LexicographicCompare(Isolate* isolate, Smi x, Smi y) {
   HashTable<DERIVED, SHAPE>::New(Isolate*, int, AllocationType,             \
                                  MinimumCapacity);                          \
   template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) Handle<DERIVED>        \
-  HashTable<DERIVED, SHAPE>::New(OffThreadIsolate*, int, AllocationType,    \
+  HashTable<DERIVED, SHAPE>::New(LocalIsolate*, int, AllocationType,        \
                                  MinimumCapacity);                          \
                                                                             \
   template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) Handle<DERIVED>        \
   HashTable<DERIVED, SHAPE>::EnsureCapacity(Isolate*, Handle<DERIVED>, int, \
                                             AllocationType);                \
   template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) Handle<DERIVED>        \
-  HashTable<DERIVED, SHAPE>::EnsureCapacity(                                \
-      OffThreadIsolate*, Handle<DERIVED>, int, AllocationType);
+  HashTable<DERIVED, SHAPE>::EnsureCapacity(LocalIsolate*, Handle<DERIVED>, \
+                                            int, AllocationType);
 
 #define EXTERN_DEFINE_OBJECT_BASE_HASH_TABLE(DERIVED, SHAPE) \
   EXTERN_DEFINE_HASH_TABLE(DERIVED, SHAPE)                   \
@@ -7173,7 +7180,7 @@ Address Smi::LexicographicCompare(Isolate* isolate, Smi x, Smi y) {
       Isolate* isolate, Handle<DERIVED>, Key, Handle<Object>, PropertyDetails, \
       InternalIndex*);                                                         \
   template V8_EXPORT_PRIVATE Handle<DERIVED> Dictionary<DERIVED, SHAPE>::Add(  \
-      OffThreadIsolate* isolate, Handle<DERIVED>, Key, Handle<Object>,         \
+      LocalIsolate* isolate, Handle<DERIVED>, Key, Handle<Object>,             \
       PropertyDetails, InternalIndex*);
 
 #define EXTERN_DEFINE_BASE_NAME_DICTIONARY(DERIVED, SHAPE)                     \
@@ -7185,8 +7192,8 @@ Address Smi::LexicographicCompare(Isolate* isolate, Smi x, Smi y) {
   BaseNameDictionary<DERIVED, SHAPE>::New(Isolate*, int, AllocationType,       \
                                           MinimumCapacity);                    \
   template V8_EXPORT_PRIVATE Handle<DERIVED>                                   \
-  BaseNameDictionary<DERIVED, SHAPE>::New(OffThreadIsolate*, int,              \
-                                          AllocationType, MinimumCapacity);    \
+  BaseNameDictionary<DERIVED, SHAPE>::New(LocalIsolate*, int, AllocationType,  \
+                                          MinimumCapacity);                    \
                                                                                \
   template Handle<DERIVED>                                                     \
   BaseNameDictionary<DERIVED, SHAPE>::AddNoUpdateNextEnumerationIndex(         \
@@ -7194,7 +7201,7 @@ Address Smi::LexicographicCompare(Isolate* isolate, Smi x, Smi y) {
       InternalIndex*);                                                         \
   template Handle<DERIVED>                                                     \
   BaseNameDictionary<DERIVED, SHAPE>::AddNoUpdateNextEnumerationIndex(         \
-      OffThreadIsolate* isolate, Handle<DERIVED>, Key, Handle<Object>,         \
+      LocalIsolate* isolate, Handle<DERIVED>, Key, Handle<Object>,             \
       PropertyDetails, InternalIndex*);
 
 EXTERN_DEFINE_HASH_TABLE(StringSet, StringSetShape)

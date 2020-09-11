@@ -9,6 +9,7 @@
 #include "src/flags/flags.h"
 #include "src/init/v8.h"
 #include "src/logging/counters.h"
+#include "src/logging/metrics.h"
 #include "src/objects/objects-inl.h"
 #include "src/utils/ostreams.h"
 #include "src/wasm/decoder.h"
@@ -263,6 +264,27 @@ class WasmSectionIterator {
       decoder_->consume_bytes(remaining, "section payload");
     }
   }
+};
+
+class AutoSubmitMetrics : public v8::metrics::WasmModuleDecoded {
+ public:
+  AutoSubmitMetrics(std::shared_ptr<metrics::Recorder> recorder,
+                    v8::metrics::Recorder::ContextId context_id)
+      : recorder_(std::move(recorder)),
+        context_id_(context_id),
+        timed_scope_(this,
+                     &v8::metrics::WasmModuleDecoded::wall_clock_time_in_us) {}
+
+  ~AutoSubmitMetrics() {
+    timed_scope_.Stop();
+    recorder_->DelayMainThreadEvent<v8::metrics::WasmModuleDecoded>(
+        *this, context_id_);
+  }
+
+ private:
+  std::shared_ptr<metrics::Recorder> recorder_;
+  v8::metrics::Recorder::ContextId context_id_;
+  metrics::TimedScope<v8::metrics::WasmModuleDecoded> timed_scope_;
 };
 
 }  // namespace
@@ -703,7 +725,7 @@ class ModuleDecoderImpl : public Decoder {
       WasmTable* table = &module_->tables.back();
       const byte* type_position = pc();
       table->type = consume_reference_type();
-      if (table->type.kind() != ValueType::kOptRef) {
+      if (!table->type.is_nullable()) {
         // TODO(7748): Implement other table types.
         error(type_position,
               "Currently, only nullable references are allowed as table types");
@@ -1189,6 +1211,14 @@ class ModuleDecoderImpl : public Decoder {
     if (ok() && CheckMismatchedCounts()) {
       CalculateGlobalOffsets(module_.get());
     }
+
+    if (metrics_) {
+      metrics_->success = ok() && !intermediate_error_.has_error();
+      metrics_->module_size_in_bytes = end() - start();
+      metrics_->function_count = module_->num_declared_functions;
+      metrics_.reset();
+    }
+
     ModuleResult result = toResult(std::move(module_));
     if (verify_functions && result.ok() && intermediate_error_.has_error()) {
       // Copy error message and location.
@@ -1232,6 +1262,13 @@ class ModuleDecoderImpl : public Decoder {
     if (FLAG_dump_wasm_module) DumpModule(orig_bytes);
 
     if (decoder.failed()) {
+      if (metrics_) {
+        metrics_->success = false;
+        metrics_->module_size_in_bytes = orig_bytes.length();
+        metrics_->function_count = module_->num_declared_functions;
+        metrics_.reset();
+      }
+
       return decoder.toResult<std::unique_ptr<WasmModule>>(nullptr);
     }
 
@@ -1285,6 +1322,32 @@ class ModuleDecoderImpl : public Decoder {
     counters_ = counters;
   }
 
+  void EnableMetricsRecording(
+      std::shared_ptr<metrics::Recorder> metrics_recorder,
+      v8::metrics::Recorder::ContextId context_id,
+      DecodingMethod decoding_method) {
+    metrics_ = std::make_unique<AutoSubmitMetrics>(std::move(metrics_recorder),
+                                                   context_id);
+    switch (decoding_method) {
+      case DecodingMethod::kSync:
+        break;
+      case DecodingMethod::kAsync:
+        metrics_->async = true;
+        break;
+      case DecodingMethod::kSyncStream:
+        metrics_->streamed = true;
+        break;
+      case DecodingMethod::kAsyncStream:
+        metrics_->async = true;
+        metrics_->streamed = true;
+        break;
+      case DecodingMethod::kDeserialize:
+        // TODO(ecmziegler): verify if we need to add a deserialized metric flag
+        // in the next UKM update.
+        break;
+    }
+  }
+
  private:
   const WasmFeatures enabled_features_;
   std::shared_ptr<WasmModule> module_;
@@ -1310,6 +1373,7 @@ class ModuleDecoderImpl : public Decoder {
   // reporting once the whole type section is parsed.
   std::unordered_map<uint32_t, int> deferred_check_type_index_;
   ModuleOrigin origin_;
+  std::unique_ptr<AutoSubmitMetrics> metrics_;
 
   ValueType TypeOf(const WasmInitExpr& expr) {
     switch (expr.kind()) {
@@ -1619,10 +1683,6 @@ class ModuleDecoderImpl : public Decoder {
   }
 
   WasmInitExpr consume_init_expr(WasmModule* module, ValueType expected) {
-    if (pc() >= end()) {
-      error(pc(), "Global initializer starting beyond code end");
-      return {};
-    }
     constexpr Decoder::ValidateFlag validate = Decoder::kValidate;
     WasmOpcode opcode = kExprNop;
     std::vector<WasmInitExpr> stack;
@@ -1635,14 +1695,14 @@ class ModuleDecoderImpl : public Decoder {
           len = 1 + imm.length;
           if (V8_UNLIKELY(module->globals.size() <= imm.index)) {
             error(pc() + 1, "global index is out of bounds");
-            break;
+            return {};
           }
           WasmGlobal* global = &module->globals[imm.index];
           if (V8_UNLIKELY(global->mutability || !global->imported)) {
             error(pc() + 1,
                   "only immutable imported globals can be used in initializer "
                   "expressions");
-            break;
+            return {};
           }
           stack.push_back(WasmInitExpr::GlobalGet(imm.index));
           break;
@@ -1678,12 +1738,12 @@ class ModuleDecoderImpl : public Decoder {
                    "invalid opcode 0x%x in global initializer, enable with "
                    "--experimental-wasm-reftypes or --experimental-wasm-eh",
                    kExprRefNull);
-            break;
+            return {};
           }
           HeapTypeImmediate<Decoder::kValidate> imm(enabled_features_, this,
                                                     pc() + 1);
           len = 1 + imm.length;
-          if (!Validate(pc() + 1, imm)) break;
+          if (!Validate(pc() + 1, imm)) return {};
           stack.push_back(
               WasmInitExpr::RefNullConst(imm.type.representation()));
           break;
@@ -1694,14 +1754,14 @@ class ModuleDecoderImpl : public Decoder {
                    "invalid opcode 0x%x in global initializer, enable with "
                    "--experimental-wasm-reftypes",
                    kExprRefFunc);
-            break;
+            return {};
           }
 
           FunctionIndexImmediate<Decoder::kValidate> imm(this, pc() + 1);
           len = 1 + imm.length;
           if (V8_UNLIKELY(module->functions.size() <= imm.index)) {
             errorf(pc(), "invalid function index: %u", imm.index);
-            break;
+            return {};
           }
           stack.push_back(WasmInitExpr::RefFuncConst(imm.index));
           // Functions referenced in the globals section count as "declared".
@@ -1709,11 +1769,14 @@ class ModuleDecoderImpl : public Decoder {
           break;
         }
         case kSimdPrefix: {
+          // No need to check for Simd in enabled_features_ here; we either
+          // failed to validate the global's type earlier, or will fail in
+          // the type check or stack height check at the end.
           opcode = read_prefixed_opcode<validate>(pc(), &len);
           if (V8_UNLIKELY(opcode != kExprS128Const)) {
             errorf(pc(), "invalid SIMD opcode 0x%x in global initializer",
                    opcode);
-            break;
+            return {};
           }
 
           Simd128Immediate<validate> imm(this, pc() + len + 1);
@@ -1722,13 +1785,16 @@ class ModuleDecoderImpl : public Decoder {
           break;
         }
         case kGCPrefix: {
+          // No need to check for GC in enabled_features_ here; we either
+          // failed to validate the global's type earlier, or will fail in
+          // the type check or stack height check at the end.
           opcode = read_prefixed_opcode<validate>(pc(), &len);
           switch (opcode) {
             case kExprRttCanon: {
               HeapTypeImmediate<validate> imm(enabled_features_, this,
                                               pc() + 2);
               len += 1 + imm.length;
-              if (!Validate(pc() + 2, imm)) break;
+              if (!Validate(pc() + 2, imm)) return {};
               stack.push_back(
                   WasmInitExpr::RttCanon(imm.type.representation()));
               break;
@@ -1737,10 +1803,10 @@ class ModuleDecoderImpl : public Decoder {
               HeapTypeImmediate<validate> imm(enabled_features_, this,
                                               pc() + 2);
               len += 1 + imm.length;
-              if (!Validate(pc() + 2, imm)) break;
+              if (!Validate(pc() + 2, imm)) return {};
               if (stack.empty()) {
                 error(pc(), "calling rtt.sub without arguments");
-                break;
+                return {};
               }
               WasmInitExpr parent = std::move(stack.back());
               stack.pop_back();
@@ -1752,7 +1818,7 @@ class ModuleDecoderImpl : public Decoder {
                           ValueType::Ref(parent_type.heap_type(), kNonNullable),
                           module_.get()))) {
                 error(pc(), "rtt.sub requires a supertype rtt on stack");
-                break;
+                return {};
               }
               stack.push_back(WasmInitExpr::RttSub(imm.type.representation(),
                                                    std::move(parent)));
@@ -1760,18 +1826,12 @@ class ModuleDecoderImpl : public Decoder {
             }
             default: {
               errorf(pc(), "invalid opcode 0x%x in global initializer", opcode);
-              break;
+              return {};
             }
           }
-          break;
+          break;  // case kGCPrefix
         }
         case kExprEnd:
-          if (V8_UNLIKELY(stack.size() != 1)) {
-            errorf(pc(),
-                   "Found 'end' in global initalizer, but %s expressions were "
-                   "found on the stack",
-                   stack.size() > 1 ? "more than one" : "no");
-          }
           break;
         default: {
           errorf(pc(), "invalid opcode 0x%x in global initializer", opcode);
@@ -1785,9 +1845,17 @@ class ModuleDecoderImpl : public Decoder {
       error(end(), "Global initializer extending beyond code end");
       return {};
     }
-    if (V8_UNLIKELY(this->failed())) return {};
-
-    DCHECK_EQ(stack.size(), 1);
+    if (V8_UNLIKELY(opcode != kExprEnd)) {
+      error(pc(), "Global initializer is missing 'end'");
+      return {};
+    }
+    if (V8_UNLIKELY(stack.size() != 1)) {
+      errorf(pc(),
+             "Found 'end' in global initalizer, but %s expressions were "
+             "found on the stack",
+             stack.size() > 1 ? "more than one" : "no");
+      return {};
+    }
 
     WasmInitExpr expr = std::move(stack.back());
     if (expected != kWasmStmt && !IsSubtypeOf(TypeOf(expr), expected, module)) {
@@ -2117,11 +2185,12 @@ class ModuleDecoderImpl : public Decoder {
   }
 };
 
-ModuleResult DecodeWasmModule(const WasmFeatures& enabled,
-                              const byte* module_start, const byte* module_end,
-                              bool verify_functions, ModuleOrigin origin,
-                              Counters* counters,
-                              AccountingAllocator* allocator) {
+ModuleResult DecodeWasmModule(
+    const WasmFeatures& enabled, const byte* module_start,
+    const byte* module_end, bool verify_functions, ModuleOrigin origin,
+    Counters* counters, std::shared_ptr<metrics::Recorder> metrics_recorder,
+    v8::metrics::Recorder::ContextId context_id, DecodingMethod decoding_method,
+    AccountingAllocator* allocator) {
   size_t size = module_end - module_start;
   CHECK_LE(module_start, module_end);
   size_t max_size = max_module_size();
@@ -2136,6 +2205,8 @@ ModuleResult DecodeWasmModule(const WasmFeatures& enabled,
   // Signatures are stored in zone memory, which have the same lifetime
   // as the {module}.
   ModuleDecoderImpl decoder(enabled, module_start, module_end, origin);
+  decoder.EnableMetricsRecording(std::move(metrics_recorder), context_id,
+                                 decoding_method);
   return decoder.DecodeModule(counters, allocator, verify_functions);
 }
 
@@ -2148,11 +2219,14 @@ const std::shared_ptr<WasmModule>& ModuleDecoder::shared_module() const {
   return impl_->shared_module();
 }
 
-void ModuleDecoder::StartDecoding(Counters* counters,
-                                  AccountingAllocator* allocator,
-                                  ModuleOrigin origin) {
+void ModuleDecoder::StartDecoding(
+    Counters* counters, std::shared_ptr<metrics::Recorder> metrics_recorder,
+    v8::metrics::Recorder::ContextId context_id, AccountingAllocator* allocator,
+    ModuleOrigin origin) {
   DCHECK_NULL(impl_);
   impl_.reset(new ModuleDecoderImpl(enabled_features_, origin));
+  impl_->EnableMetricsRecording(std::move(metrics_recorder), context_id,
+                                DecodingMethod::kAsyncStream);
   impl_->StartDecoding(counters, allocator);
 }
 

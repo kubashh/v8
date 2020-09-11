@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "src/objects/objects.h"
-
 #include <iomanip>
 #include <memory>
 
@@ -27,6 +25,7 @@
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
 #include "src/objects/objects-inl.h"
+#include "src/objects/objects.h"
 #include "src/snapshot/embedded/embedded-data.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-break-iterator-inl.h"
@@ -875,7 +874,8 @@ void FeedbackCell::FeedbackCellPrint(std::ostream& os) {  // NOLINT
   } else {
     os << "\n - Invalid FeedbackCell map";
   }
-  os << " - value: " << Brief(value());
+  os << "\n - value: " << Brief(value());
+  os << "\n - interrupt_budget: " << interrupt_budget();
   os << "\n";
 }
 
@@ -951,8 +951,9 @@ void FeedbackVector::FeedbackVectorPrint(std::ostream& os) {  // NOLINT
     int entry_size = iter.entry_size();
     if (entry_size > 0) os << " {";
     for (int i = 0; i < entry_size; i++) {
-      int index = GetIndex(slot) + i;
-      os << "\n     [" << index << "]: " << Brief(get(index));
+      FeedbackSlot slot_with_offset = slot.WithOffset(i);
+      os << "\n     [" << slot_with_offset.ToInt()
+         << "]: " << Brief(Get(slot_with_offset));
     }
     if (entry_size > 0) os << "\n  }";
   }
@@ -1370,11 +1371,7 @@ void SharedFunctionInfo::SharedFunctionInfoPrint(std::ostream& os) {  // NOLINT
   os << "\n - language_mode: " << language_mode();
   os << "\n - data: " << Brief(function_data());
   os << "\n - code (from data): ";
-  if (Heap::InOffThreadSpace(*this)) {
-    os << "<not available off-thread>";
-  } else {
     os << Brief(GetCode());
-  }
   PrintSourceCode(os);
   // Script files are often large, thus only print their {Brief} representation.
   os << "\n - script: " << Brief(script());
@@ -1802,6 +1799,7 @@ void WasmExportedFunctionData::WasmExportedFunctionDataPrint(
 
 void WasmJSFunctionData::WasmJSFunctionDataPrint(std::ostream& os) {  // NOLINT
   PrintHeader(os, "WasmJSFunctionData");
+  os << "\n - callable: " << Brief(callable());
   os << "\n - wrapper_code: " << Brief(wrapper_code());
   os << "\n";
 }
@@ -2209,7 +2207,6 @@ void ScopeInfo::ScopeInfoPrint(std::ostream& os) {  // NOLINT
 void StackTraceFrame::StackTraceFramePrint(std::ostream& os) {  // NOLINT
   PrintHeader(os, "StackTraceFrame");
   os << "\n - frame_index: " << frame_index();
-  os << "\n - id: " << id();
   os << "\n - frame_info: " << Brief(frame_info());
   os << "\n";
 }

@@ -318,66 +318,34 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   using AllocationFlags = base::Flags<AllocationFlag>;
 
-  enum ParameterMode { SMI_PARAMETERS, INTPTR_PARAMETERS };
-
-  // On 32-bit platforms, there is a slight performance advantage to doing all
-  // of the array offset/index arithmetic with SMIs, since it's possible
-  // to save a few tag/untag operations without paying an extra expense when
-  // calculating array offset (the smi math can be folded away) and there are
-  // fewer live ranges. Thus only convert indices to untagged value on 64-bit
-  // platforms.
-  ParameterMode OptimalParameterMode() const {
-#if defined(BINT_IS_SMI)
-    return SMI_PARAMETERS;
-#elif defined(BINT_IS_INTPTR)
-    return INTPTR_PARAMETERS;
-#else
-#error Unknown BInt type.
-#endif
-  }
-
   TNode<IntPtrT> ParameterToIntPtr(TNode<Smi> value) { return SmiUntag(value); }
   TNode<IntPtrT> ParameterToIntPtr(TNode<IntPtrT> value) { return value; }
-  // TODO(v8:9708): remove once all uses are ported.
-  TNode<IntPtrT> ParameterToIntPtr(Node* value, ParameterMode mode) {
-    if (mode == SMI_PARAMETERS) value = SmiUntag(value);
-    return UncheckedCast<IntPtrT>(value);
+  TNode<IntPtrT> ParameterToIntPtr(TNode<UintPtrT> value) {
+    return Signed(value);
   }
 
   TNode<Smi> ParameterToTagged(TNode<Smi> value) { return value; }
 
   TNode<Smi> ParameterToTagged(TNode<IntPtrT> value) { return SmiTag(value); }
 
-  TNode<Smi> ParameterToTagged(Node* value, ParameterMode mode) {
-    if (mode != SMI_PARAMETERS) return SmiTag(value);
-    return UncheckedCast<Smi>(value);
-  }
-
   template <typename TIndex>
   TNode<TIndex> TaggedToParameter(TNode<Smi> value);
 
-  // TODO(v8:9708): remove once all uses are ported.
-  Node* TaggedToParameter(TNode<Smi> value, ParameterMode mode) {
-    if (mode != SMI_PARAMETERS) return SmiUntag(value);
-    return value;
+  bool ToParameterConstant(TNode<Smi> node, intptr_t* out) {
+    Smi constant;
+    if (ToSmiConstant(node, &constant)) {
+      *out = static_cast<intptr_t>(constant.value());
+      return true;
+    }
+    return false;
   }
 
-  bool ToParameterConstant(Node* node, intptr_t* out, ParameterMode mode) {
-    if (mode == ParameterMode::SMI_PARAMETERS) {
-      Smi constant;
-      if (ToSmiConstant(node, &constant)) {
-        *out = static_cast<intptr_t>(constant.value());
-        return true;
-      }
-    } else {
-      DCHECK_EQ(mode, ParameterMode::INTPTR_PARAMETERS);
-      intptr_t constant;
-      if (ToIntPtrConstant(node, &constant)) {
-        *out = constant;
-        return true;
-      }
+  bool ToParameterConstant(TNode<IntPtrT> node, intptr_t* out) {
+    intptr_t constant;
+    if (ToIntPtrConstant(node, &constant)) {
+      *out = constant;
+      return true;
     }
-
     return false;
   }
 
@@ -472,19 +440,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return CAST(heap_object);
   }
 
-  Node* MatchesParameterMode(Node* value, ParameterMode mode);
-
 #define PARAMETER_BINOP(OpName, IntPtrOpName, SmiOpName)                    \
-  /* TODO(v8:9708): remove once all uses are ported. */                     \
-  Node* OpName(Node* a, Node* b, ParameterMode mode) {                      \
-    if (mode == SMI_PARAMETERS) {                                           \
-      return SmiOpName(CAST(a), CAST(b));                                   \
-    } else {                                                                \
-      DCHECK_EQ(INTPTR_PARAMETERS, mode);                                   \
-      return IntPtrOpName(UncheckedCast<IntPtrT>(a),                        \
-                          UncheckedCast<IntPtrT>(b));                       \
-    }                                                                       \
-  }                                                                         \
   TNode<Smi> OpName(TNode<Smi> a, TNode<Smi> b) { return SmiOpName(a, b); } \
   TNode<IntPtrT> OpName(TNode<IntPtrT> a, TNode<IntPtrT> b) {               \
     return IntPtrOpName(a, b);                                              \
@@ -497,22 +453,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
         ReinterpretCast<IntPtrT>(a), ReinterpretCast<IntPtrT>(b)));         \
   }
   // TODO(v8:9708): Define BInt operations once all uses are ported.
-  PARAMETER_BINOP(IntPtrOrSmiMin, IntPtrMin, SmiMin)
   PARAMETER_BINOP(IntPtrOrSmiAdd, IntPtrAdd, SmiAdd)
   PARAMETER_BINOP(IntPtrOrSmiSub, IntPtrSub, SmiSub)
 #undef PARAMETER_BINOP
 
 #define PARAMETER_BINOP(OpName, IntPtrOpName, SmiOpName)                      \
-  /* TODO(v8:9708): remove once all uses are ported. */                       \
-  TNode<BoolT> OpName(Node* a, Node* b, ParameterMode mode) {                 \
-    if (mode == SMI_PARAMETERS) {                                             \
-      return SmiOpName(CAST(a), CAST(b));                                     \
-    } else {                                                                  \
-      DCHECK_EQ(INTPTR_PARAMETERS, mode);                                     \
-      return IntPtrOpName(UncheckedCast<IntPtrT>(a),                          \
-                          UncheckedCast<IntPtrT>(b));                         \
-    }                                                                         \
-  }                                                                           \
   TNode<BoolT> OpName(TNode<Smi> a, TNode<Smi> b) { return SmiOpName(a, b); } \
   TNode<BoolT> OpName(TNode<IntPtrT> a, TNode<IntPtrT> b) {                   \
     return IntPtrOpName(a, b);                                                \
@@ -526,12 +471,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // TODO(v8:9708): Define BInt operations once all uses are ported.
   PARAMETER_BINOP(IntPtrOrSmiEqual, WordEqual, SmiEqual)
   PARAMETER_BINOP(IntPtrOrSmiNotEqual, WordNotEqual, SmiNotEqual)
-  PARAMETER_BINOP(IntPtrOrSmiLessThan, IntPtrLessThan, SmiLessThan)
   PARAMETER_BINOP(IntPtrOrSmiLessThanOrEqual, IntPtrLessThanOrEqual,
                   SmiLessThanOrEqual)
   PARAMETER_BINOP(IntPtrOrSmiGreaterThan, IntPtrGreaterThan, SmiGreaterThan)
-  PARAMETER_BINOP(IntPtrOrSmiGreaterThanOrEqual, IntPtrGreaterThanOrEqual,
-                  SmiGreaterThanOrEqual)
   PARAMETER_BINOP(UintPtrOrSmiLessThan, UintPtrLessThan, SmiBelow)
   PARAMETER_BINOP(UintPtrOrSmiGreaterThanOrEqual, UintPtrGreaterThanOrEqual,
                   SmiAboveOrEqual)
@@ -583,11 +525,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   template <typename TIndex>
   TNode<TIndex> IntPtrOrSmiConstant(int value);
-  // TODO(v8:9708): remove once all uses are ported.
-  Node* IntPtrOrSmiConstant(int value, ParameterMode mode);
 
-  bool TryGetIntPtrOrSmiConstantValue(Node* maybe_constant, int* value,
-                                      ParameterMode mode);
+  bool TryGetIntPtrOrSmiConstantValue(TNode<Smi> maybe_constant, int* value);
+  bool TryGetIntPtrOrSmiConstantValue(TNode<IntPtrT> maybe_constant,
+                                      int* value);
 
   // Round the 32bits payload of the provided word up to the next power of two.
   TNode<IntPtrT> IntPtrRoundUpToPowerOfTwo32(TNode<IntPtrT> value);
@@ -1083,14 +1024,16 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Object> LoadObjectField(TNode<HeapObject> object,
                                 TNode<IntPtrT> offset) {
     return UncheckedCast<Object>(
-        LoadObjectField(object, offset, MachineType::AnyTagged()));
+        LoadFromObject(MachineType::AnyTagged(), object,
+                       IntPtrSub(offset, IntPtrConstant(kHeapObjectTag))));
   }
   template <class T, typename std::enable_if<
                          std::is_convertible<TNode<T>, TNode<UntaggedT>>::value,
                          int>::type = 0>
   TNode<T> LoadObjectField(TNode<HeapObject> object, TNode<IntPtrT> offset) {
     return UncheckedCast<T>(
-        LoadObjectField(object, offset, MachineTypeOf<T>::value));
+        LoadFromObject(MachineTypeOf<T>::value, object,
+                       IntPtrSub(offset, IntPtrConstant(kHeapObjectTag))));
   }
   // Load a SMI field and untag it.
   TNode<IntPtrT> LoadAndUntagObjectField(SloppyTNode<HeapObject> object,
@@ -1310,9 +1253,16 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<MaybeObject> MakeWeak(TNode<HeapObject> value);
 
-  void FixedArrayBoundsCheck(TNode<FixedArrayBase> array, Node* index,
-                             int additional_offset = 0,
-                             ParameterMode parameter_mode = INTPTR_PARAMETERS);
+  void FixedArrayBoundsCheck(TNode<FixedArrayBase> array, TNode<Smi> index,
+                             int additional_offset);
+
+  void FixedArrayBoundsCheck(TNode<FixedArrayBase> array, TNode<IntPtrT> index,
+                             int additional_offset);
+
+  void FixedArrayBoundsCheck(TNode<FixedArrayBase> array, TNode<UintPtrT> index,
+                             int additional_offset) {
+    FixedArrayBoundsCheck(array, Signed(index), additional_offset);
+  }
 
   // Array is any array-like type that has a fixed header followed by
   // tagged elements.
@@ -1321,11 +1271,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // Array is any array-like type that has a fixed header followed by
   // tagged elements.
-  template <typename Array, typename T = MaybeObject>
-  TNode<T> LoadArrayElement(
-      TNode<Array> array, int array_header_size, Node* index,
+  template <typename Array, typename TIndex, typename TValue = MaybeObject>
+  TNode<TValue> LoadArrayElement(
+      TNode<Array> array, int array_header_size, TNode<TIndex> index,
       int additional_offset = 0,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS,
       LoadSensitivity needs_poisoning = LoadSensitivity::kSafe);
 
   template <typename TIndex>
@@ -1384,24 +1333,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // Load an array element from a FixedDoubleArray.
   TNode<Float64T> LoadFixedDoubleArrayElement(
-      SloppyTNode<FixedDoubleArray> object, Node* index,
-      MachineType machine_type, int additional_offset = 0,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS,
-      Label* if_hole = nullptr);
-
-  TNode<Float64T> LoadFixedDoubleArrayElement(TNode<FixedDoubleArray> object,
-                                              TNode<Smi> index,
-                                              Label* if_hole = nullptr) {
-    return LoadFixedDoubleArrayElement(object, index, MachineType::Float64(), 0,
-                                       SMI_PARAMETERS, if_hole);
-  }
-
-  TNode<Float64T> LoadFixedDoubleArrayElement(TNode<FixedDoubleArray> object,
-                                              TNode<IntPtrT> index,
-                                              Label* if_hole = nullptr) {
-    return LoadFixedDoubleArrayElement(object, index, MachineType::Float64(), 0,
-                                       INTPTR_PARAMETERS, if_hole);
-  }
+      TNode<FixedDoubleArray> object, TNode<IntPtrT> index,
+      Label* if_hole = nullptr,
+      MachineType machine_type = MachineType::Float64());
 
   // Load an array element from a FixedArray, FixedDoubleArray or a
   // NumberDictionary (depending on the |elements_kind|) and return
@@ -1421,23 +1355,15 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<IntPtrT> LoadFeedbackVectorLength(TNode<FeedbackVector>);
   TNode<Float64T> LoadDoubleWithHoleCheck(TNode<FixedDoubleArray> array,
-                                          TNode<Smi> index,
-                                          Label* if_hole = nullptr);
-  TNode<Float64T> LoadDoubleWithHoleCheck(TNode<FixedDoubleArray> array,
                                           TNode<IntPtrT> index,
                                           Label* if_hole = nullptr);
-  TNode<Float64T> LoadDoubleWithHoleCheck(TNode<FixedDoubleArray> array,
-                                          TNode<UintPtrT> index,
-                                          Label* if_hole = nullptr) {
-    return LoadDoubleWithHoleCheck(array, Signed(index), if_hole);
-  }
 
   TNode<BoolT> IsDoubleHole(TNode<Object> base, TNode<IntPtrT> offset);
   // Load Float64 value by |base| + |offset| address. If the value is a double
   // hole then jump to |if_hole|. If |machine_type| is None then only the hole
   // check is generated.
   TNode<Float64T> LoadDoubleWithHoleCheck(
-      SloppyTNode<Object> base, SloppyTNode<IntPtrT> offset, Label* if_hole,
+      TNode<Object> base, TNode<IntPtrT> offset, Label* if_hole,
       MachineType machine_type = MachineType::Float64());
   TNode<Numeric> LoadFixedTypedArrayElementAsTagged(TNode<RawPtrT> data_pointer,
                                                     TNode<UintPtrT> index,
@@ -1475,6 +1401,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     GotoIf(TaggedEqual(value, LoadContextElement(native_context, slot_index)),
            if_equal);
   }
+
+  TNode<Map> LoadObjectMap(TNode<Context> context);
+  TNode<Map> LoadObjectWithNullPrototypeMap(TNode<Context> context);
 
   TNode<Map> LoadJSArrayElementsMap(ElementsKind kind,
                                     SloppyTNode<NativeContext> native_context);
@@ -1546,21 +1475,18 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
       CheckBounds check_bounds = CheckBounds::kAlways) {
     return StoreFixedArrayElement(object, IntPtrConstant(index), value,
-                                  barrier_mode, 0, INTPTR_PARAMETERS,
-                                  check_bounds);
+                                  barrier_mode, 0, check_bounds);
   }
   // This doesn't emit a bounds-check. As part of the security-performance
   // tradeoff, only use it if it is performance critical.
   void UnsafeStoreFixedArrayElement(
-      TNode<FixedArray> object, int index, SloppyTNode<Object> value,
+      TNode<FixedArray> object, int index, TNode<Object> value,
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER) {
     return StoreFixedArrayElement(object, index, value, barrier_mode,
                                   CheckBounds::kDebugOnly);
   }
-  void UnsafeStoreFixedArrayElement(
-      TNode<FixedArray> object, int index, TNode<Smi> value,
-      WriteBarrierMode barrier_mode = SKIP_WRITE_BARRIER) {
-    DCHECK_EQ(SKIP_WRITE_BARRIER, barrier_mode);
+  void UnsafeStoreFixedArrayElement(TNode<FixedArray> object, int index,
+                                    TNode<Smi> value) {
     return StoreFixedArrayElement(object, index, value,
                                   UNSAFE_SKIP_WRITE_BARRIER,
                                   CheckBounds::kDebugOnly);
@@ -1569,63 +1495,53 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                               TNode<Smi> value,
                               CheckBounds check_bounds = CheckBounds::kAlways) {
     return StoreFixedArrayElement(object, IntPtrConstant(index), value,
-                                  UNSAFE_SKIP_WRITE_BARRIER, 0,
-                                  INTPTR_PARAMETERS, check_bounds);
+                                  UNSAFE_SKIP_WRITE_BARRIER, 0, check_bounds);
   }
-  // This doesn't emit a bounds-check. As part of the security-performance
-  // tradeoff, only use it if it is performance critical.
-  void UnsafeStoreFixedArrayElement(TNode<FixedArray> object, int index,
-                                    TNode<Smi> value) {
-    return StoreFixedArrayElement(object, index, value,
-                                  CheckBounds::kDebugOnly);
-  }
-
+  template <typename TIndex>
   void StoreFixedArrayElement(
-      TNode<FixedArray> array, Node* index, SloppyTNode<Object> value,
+      TNode<FixedArray> array, TNode<TIndex> index, SloppyTNode<Object> value,
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
       int additional_offset = 0,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS,
       CheckBounds check_bounds = CheckBounds::kAlways) {
+    // TODO(v8:9708): Do we want to keep both IntPtrT and UintPtrT variants?
+    static_assert(std::is_same<TIndex, Smi>::value ||
+                      std::is_same<TIndex, UintPtrT>::value ||
+                      std::is_same<TIndex, IntPtrT>::value,
+                  "Only Smi, UintPtrT or IntPtrT index is allowed");
     if (NeedsBoundsCheck(check_bounds)) {
-      FixedArrayBoundsCheck(array, index, additional_offset, parameter_mode);
+      FixedArrayBoundsCheck(array, index, additional_offset);
     }
     StoreFixedArrayOrPropertyArrayElement(array, index, value, barrier_mode,
-                                          additional_offset, parameter_mode);
+                                          additional_offset);
   }
-
   // This doesn't emit a bounds-check. As part of the security-performance
   // tradeoff, only use it if it is performance critical.
   void UnsafeStoreFixedArrayElement(
-      TNode<FixedArray> array, Node* index, SloppyTNode<Object> value,
+      TNode<FixedArray> array, TNode<IntPtrT> index, TNode<Object> value,
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
-      int additional_offset = 0,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS) {
+      int additional_offset = 0) {
     return StoreFixedArrayElement(array, index, value, barrier_mode,
-                                  additional_offset, parameter_mode,
-                                  CheckBounds::kDebugOnly);
+                                  additional_offset, CheckBounds::kDebugOnly);
   }
-  void UnsafeStoreFixedArrayElement(
-      TNode<FixedArray> array, Node* index, TNode<Smi> value,
-      WriteBarrierMode barrier_mode = SKIP_WRITE_BARRIER,
-      int additional_offset = 0,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS) {
-    DCHECK_EQ(SKIP_WRITE_BARRIER, barrier_mode);
+
+  void UnsafeStoreFixedArrayElement(TNode<FixedArray> array,
+                                    TNode<IntPtrT> index, TNode<Smi> value,
+                                    int additional_offset) {
     return StoreFixedArrayElement(array, index, value,
                                   UNSAFE_SKIP_WRITE_BARRIER, additional_offset,
-                                  parameter_mode, CheckBounds::kDebugOnly);
+                                  CheckBounds::kDebugOnly);
   }
 
   void StorePropertyArrayElement(TNode<PropertyArray> array,
                                  TNode<IntPtrT> index, TNode<Object> value) {
-    StoreFixedArrayOrPropertyArrayElement(
-        array, index, value, UPDATE_WRITE_BARRIER, 0, INTPTR_PARAMETERS);
+    StoreFixedArrayOrPropertyArrayElement(array, index, value,
+                                          UPDATE_WRITE_BARRIER);
   }
 
   void StoreFixedArrayElement(
       TNode<FixedArray> array, TNode<Smi> index, TNode<Object> value,
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER) {
-    StoreFixedArrayElement(array, index, value, barrier_mode, 0,
-                           SMI_PARAMETERS);
+    StoreFixedArrayElement(array, index, value, barrier_mode, 0);
   }
   void StoreFixedArrayElement(
       TNode<FixedArray> array, TNode<IntPtrT> index, TNode<Smi> value,
@@ -1641,28 +1557,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       int additional_offset = 0) {
     DCHECK_EQ(SKIP_WRITE_BARRIER, barrier_mode);
     StoreFixedArrayElement(array, index, TNode<Object>{value},
-                           UNSAFE_SKIP_WRITE_BARRIER, additional_offset,
-                           SMI_PARAMETERS);
+                           UNSAFE_SKIP_WRITE_BARRIER, additional_offset);
   }
 
+  template <typename TIndex>
   void StoreFixedDoubleArrayElement(
-      TNode<FixedDoubleArray> object, Node* index, TNode<Float64T> value,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS,
-      CheckBounds check_bounds = CheckBounds::kAlways);
-  // This doesn't emit a bounds-check. As part of the security-performance
-  // tradeoff, only use it if it is performance critical.
-  void UnsafeStoreFixedDoubleArrayElement(
-      TNode<FixedDoubleArray> object, Node* index, TNode<Float64T> value,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS) {
-    return StoreFixedDoubleArrayElement(object, index, value, parameter_mode,
-                                        CheckBounds::kDebugOnly);
-  }
-
-  void StoreFixedDoubleArrayElementSmi(TNode<FixedDoubleArray> object,
-                                       TNode<Smi> index,
-                                       TNode<Float64T> value) {
-    StoreFixedDoubleArrayElement(object, index, value, SMI_PARAMETERS);
-  }
+      TNode<FixedDoubleArray> object, TNode<TIndex> index,
+      TNode<Float64T> value, CheckBounds check_bounds = CheckBounds::kAlways);
 
   void StoreDoubleHole(TNode<HeapObject> object, TNode<IntPtrT> offset);
   void StoreFixedDoubleArrayHole(TNode<FixedDoubleArray> array,
@@ -1855,24 +1756,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                     TNode<JSArray> array, TNode<BInt> begin,
                                     TNode<BInt> count);
 
+  template <typename TIndex>
   TNode<FixedArrayBase> AllocateFixedArray(
-      ElementsKind kind, Node* capacity, ParameterMode mode = INTPTR_PARAMETERS,
-      AllocationFlags flags = kNone,
-      SloppyTNode<Map> fixed_array_map = nullptr);
-
-  TNode<FixedArrayBase> AllocateFixedArray(
-      ElementsKind kind, TNode<IntPtrT> capacity, AllocationFlags flags,
-      SloppyTNode<Map> fixed_array_map = nullptr) {
-    return AllocateFixedArray(kind, capacity, INTPTR_PARAMETERS, flags,
-                              fixed_array_map);
-  }
-
-  TNode<FixedArrayBase> AllocateFixedArray(
-      ElementsKind kind, TNode<Smi> capacity, AllocationFlags flags,
-      SloppyTNode<Map> fixed_array_map = nullptr) {
-    return AllocateFixedArray(kind, capacity, SMI_PARAMETERS, flags,
-                              fixed_array_map);
-  }
+      ElementsKind kind, TNode<TIndex> capacity, AllocationFlags flags = kNone,
+      base::Optional<TNode<Map>> fixed_array_map = base::nullopt);
 
   TNode<NativeContext> GetCreationContext(TNode<JSReceiver> receiver,
                                           Label* if_bailout);
@@ -1936,10 +1823,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                        TNode<Object> originalArray,
                                        TNode<Number> len);
 
+  template <typename TIndex>
   void FillFixedArrayWithValue(ElementsKind kind, TNode<FixedArrayBase> array,
-                               Node* from_index, Node* to_index,
-                               RootIndex value_root_index,
-                               ParameterMode mode = INTPTR_PARAMETERS);
+                               TNode<TIndex> from_index, TNode<TIndex> to_index,
+                               RootIndex value_root_index);
 
   // Uses memset to effectively initialize the given FixedArray with zeroes.
   void FillFixedArrayWithSmiZero(TNode<FixedArray> array,
@@ -1973,14 +1860,14 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // Copies all elements from |from_array| of |length| size to
   // |to_array| of the same size respecting the elements kind.
+  template <typename TIndex>
   void CopyFixedArrayElements(
       ElementsKind kind, TNode<FixedArrayBase> from_array,
-      TNode<FixedArrayBase> to_array, Node* length,
-      WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
-      ParameterMode mode = INTPTR_PARAMETERS) {
+      TNode<FixedArrayBase> to_array, TNode<TIndex> length,
+      WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER) {
     CopyFixedArrayElements(kind, from_array, kind, to_array,
-                           IntPtrOrSmiConstant(0, mode), length, length,
-                           barrier_mode, mode);
+                           IntPtrOrSmiConstant<TIndex>(0), length, length,
+                           barrier_mode);
   }
 
   // Copies |element_count| elements from |from_array| starting from element
@@ -1992,11 +1879,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       ElementsKind to_kind, TNode<FixedArrayBase> to_array,
       TNode<TIndex> element_count, TNode<TIndex> capacity,
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER) {
-    const ParameterMode mode =
-        std::is_same<TIndex, Smi>::value ? SMI_PARAMETERS : INTPTR_PARAMETERS;
     CopyFixedArrayElements(from_kind, from_array, to_kind, to_array,
                            IntPtrOrSmiConstant<TIndex>(0), element_count,
-                           capacity, barrier_mode, mode);
+                           capacity, barrier_mode);
   }
 
   // Copies |element_count| elements from |from_array| starting from element
@@ -2007,12 +1892,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // (i.e. that there were holes). If |convert_holes_to_undefined| is
   // HoleConversionMode::kConvertToUndefined, then it must not be the case that
   // IsDoubleElementsKind(to_kind).
+  template <typename TIndex>
   void CopyFixedArrayElements(
       ElementsKind from_kind, TNode<FixedArrayBase> from_array,
-      ElementsKind to_kind, TNode<FixedArrayBase> to_array, Node* first_element,
-      Node* element_count, Node* capacity,
+      ElementsKind to_kind, TNode<FixedArrayBase> to_array,
+      TNode<TIndex> first_element, TNode<TIndex> element_count,
+      TNode<TIndex> capacity,
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
-      ParameterMode mode = INTPTR_PARAMETERS,
       HoleConversionMode convert_holes = HoleConversionMode::kDontConvert,
       TVariable<BoolT>* var_holes_converted = nullptr);
 
@@ -2131,8 +2017,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // PACKED/HOLEY_ELEMENTS can be used, but not PACKED_DOUBLE_ELEMENTS.
   // * |allocation_flags| and |extract_flags| influence how the target
   // FixedArray is allocated.
-  // * |parameter_mode| determines the parameter mode of |first|, |count| and
-  // |capacity|.
   // * |convert_holes| is used to signify that the target array should use
   // undefined in places of holes.
   // * If |convert_holes| is true and |var_holes_converted| not nullptr, then
@@ -2141,15 +2025,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // compatible with the result array. For example, if the input was of
   // HOLEY_SMI_ELEMENTS kind, and a conversion took place, the result will be
   // compatible only with HOLEY_ELEMENTS and PACKED_ELEMENTS.
+  template <typename TIndex>
   TNode<FixedArray> ExtractToFixedArray(
-      SloppyTNode<FixedArrayBase> source, Node* first, Node* count,
-      Node* capacity, SloppyTNode<Map> source_map,
-      ElementsKind from_kind = PACKED_ELEMENTS,
-      AllocationFlags allocation_flags = AllocationFlag::kNone,
-      ExtractFixedArrayFlags extract_flags =
-          ExtractFixedArrayFlag::kAllFixedArrays,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS,
-      HoleConversionMode convert_holes = HoleConversionMode::kDontConvert,
+      SloppyTNode<FixedArrayBase> source, TNode<TIndex> first,
+      TNode<TIndex> count, TNode<TIndex> capacity, TNode<Map> source_map,
+      ElementsKind from_kind, AllocationFlags allocation_flags,
+      ExtractFixedArrayFlags extract_flags, HoleConversionMode convert_holes,
       TVariable<BoolT>* var_holes_converted = nullptr,
       base::Optional<TNode<Int32T>> source_runtime_kind = base::nullopt);
 
@@ -2169,15 +2050,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // is produced or not.
   // * |allocation_flags| and |extract_flags| influence how the target array is
   // allocated.
-  // * |parameter_mode| determines the parameter mode of |first|, |count| and
-  // |capacity|.
+  template <typename TIndex>
   TNode<FixedArrayBase> ExtractFixedDoubleArrayFillingHoles(
-      TNode<FixedArrayBase> source, Node* first, Node* count, Node* capacity,
-      TNode<Map> source_map, TVariable<BoolT>* var_holes_converted,
-      AllocationFlags allocation_flags,
-      ExtractFixedArrayFlags extract_flags =
-          ExtractFixedArrayFlag::kAllFixedArrays,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS);
+      TNode<FixedArrayBase> source, TNode<TIndex> first, TNode<TIndex> count,
+      TNode<TIndex> capacity, TNode<Map> source_map,
+      TVariable<BoolT>* var_holes_converted, AllocationFlags allocation_flags,
+      ExtractFixedArrayFlags extract_flags);
 
   // Copy the entire contents of a FixedArray or FixedDoubleArray to a new
   // array, including special appropriate handling for empty arrays and COW
@@ -2516,9 +2394,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // [0, 2^32-1).
   TNode<BoolT> IsNumberArrayIndex(TNode<Number> number);
 
-  TNode<BoolT> FixedArraySizeDoesntFitInNewSpace(
-      Node* element_count, int base_size = FixedArray::kHeaderSize,
-      ParameterMode mode = INTPTR_PARAMETERS);
+  template <typename TIndex>
+  TNode<BoolT> FixedArraySizeDoesntFitInNewSpace(TNode<TIndex> element_count,
+                                                 int base_size);
 
   TNode<BoolT> IsMetaMap(TNode<HeapObject> o) { return IsMapMap(o); }
 
@@ -3214,12 +3092,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // TODO(turbofan): For BIGINT64_ELEMENTS and BIGUINT64_ELEMENTS
   // we pass {value} as BigInt object instead of int64_t. We should
   // teach TurboFan to handle int64_t on 32-bit platforms eventually.
-  void StoreElement(Node* elements, ElementsKind kind, Node* index, Node* value,
-                    ParameterMode mode);
-  void StoreElement(TNode<RawPtrT> elements, ElementsKind kind,
-                    TNode<UintPtrT> index, Node* value) {
-    return StoreElement(elements, kind, index, value, INTPTR_PARAMETERS);
-  }
+  template <typename TIndex>
+  void StoreElement(Node* elements, ElementsKind kind, TNode<TIndex> index,
+                    Node* value);
 
   // Implements the BigInt part of
   // https://tc39.github.io/proposal-bigint/#sec-numbertorawbytes,
@@ -3261,8 +3136,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<AllocationSite> CreateAllocationSiteInFeedbackVector(
       TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot);
 
-  // TODO(ishell, cbruni): Change to HasBoilerplate.
-  TNode<BoolT> NotHasBoilerplate(TNode<Object> maybe_literal_site);
+  TNode<BoolT> HasBoilerplate(TNode<Object> maybe_literal_site);
   TNode<Smi> LoadTransitionInfo(TNode<AllocationSite> allocation_site);
   TNode<JSObject> LoadBoilerplate(TNode<AllocationSite> allocation_site);
   TNode<Int32T> LoadElementsKind(TNode<AllocationSite> allocation_site);
@@ -3292,39 +3166,23 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   using FastArrayForEachBody =
       std::function<void(TNode<HeapObject> array, TNode<IntPtrT> offset)>;
 
+  template <typename TIndex>
   void BuildFastArrayForEach(
-      const CodeStubAssembler::VariableList& vars, Node* array,
-      ElementsKind kind, Node* first_element_inclusive,
-      Node* last_element_exclusive, const FastArrayForEachBody& body,
-      ParameterMode mode = INTPTR_PARAMETERS,
+      TNode<UnionT<UnionT<FixedArray, PropertyArray>, HeapObject>> array,
+      ElementsKind kind, TNode<TIndex> first_element_inclusive,
+      TNode<TIndex> last_element_exclusive, const FastArrayForEachBody& body,
       ForEachDirection direction = ForEachDirection::kReverse);
 
-  void BuildFastArrayForEach(
-      Node* array, ElementsKind kind, Node* first_element_inclusive,
-      Node* last_element_exclusive, const FastArrayForEachBody& body,
-      ParameterMode mode = INTPTR_PARAMETERS,
-      ForEachDirection direction = ForEachDirection::kReverse) {
-    CodeStubAssembler::VariableList list(0, zone());
-    BuildFastArrayForEach(list, array, kind, first_element_inclusive,
-                          last_element_exclusive, body, mode, direction);
-  }
-
-  TNode<IntPtrT> GetArrayAllocationSize(TNode<IntPtrT> element_count,
+  template <typename TIndex>
+  TNode<IntPtrT> GetArrayAllocationSize(TNode<TIndex> element_count,
                                         ElementsKind kind, int header_size) {
     return ElementOffsetFromIndex(element_count, kind, header_size);
   }
 
-  // TODO(v8:9708): remove once all uses are ported.
-  TNode<IntPtrT> GetArrayAllocationSize(Node* element_count, ElementsKind kind,
-                                        ParameterMode mode, int header_size) {
-    return ElementOffsetFromIndex(element_count, kind, mode, header_size);
-  }
-
-  TNode<IntPtrT> GetFixedArrayAllocationSize(Node* element_count,
-                                             ElementsKind kind,
-                                             ParameterMode mode) {
-    return GetArrayAllocationSize(element_count, kind, mode,
-                                  FixedArray::kHeaderSize);
+  template <typename TIndex>
+  TNode<IntPtrT> GetFixedArrayAllocationSize(TNode<TIndex> element_count,
+                                             ElementsKind kind) {
+    return GetArrayAllocationSize(element_count, kind, FixedArray::kHeaderSize);
   }
 
   TNode<IntPtrT> GetPropertyArrayAllocationSize(TNode<IntPtrT> element_count) {
@@ -3332,9 +3190,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                   PropertyArray::kHeaderSize);
   }
 
-  void GotoIfFixedArraySizeDoesntFitInNewSpace(Node* element_count,
-                                               Label* doesnt_fit, int base_size,
-                                               ParameterMode mode);
+  template <typename TIndex>
+  void GotoIfFixedArraySizeDoesntFitInNewSpace(TNode<TIndex> element_count,
+                                               Label* doesnt_fit,
+                                               int base_size);
 
   void InitializeFieldsWithRoot(TNode<HeapObject> object,
                                 TNode<IntPtrT> start_offset,
@@ -3465,13 +3324,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // JSTypedArray helpers
   TNode<UintPtrT> LoadJSTypedArrayLength(TNode<JSTypedArray> typed_array);
   TNode<RawPtrT> LoadJSTypedArrayDataPtr(TNode<JSTypedArray> typed_array);
+  TNode<JSArrayBuffer> GetTypedArrayBuffer(TNode<Context> context,
+                                           TNode<JSTypedArray> array);
 
   template <typename TIndex>
   TNode<IntPtrT> ElementOffsetFromIndex(TNode<TIndex> index, ElementsKind kind,
                                         int base_size = 0);
-  // TODO(v8:9708): remove once all uses are ported.
-  TNode<IntPtrT> ElementOffsetFromIndex(Node* index, ElementsKind kind,
-                                        ParameterMode mode, int base_size = 0);
 
   // Check that a field offset is within the bounds of the an object.
   TNode<BoolT> IsOffsetInBounds(SloppyTNode<IntPtrT> offset,
@@ -3674,6 +3532,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                     Label* bailout);
 
   TNode<Object> CallGetterIfAccessor(TNode<Object> value,
+                                     TNode<HeapObject> holder,
                                      TNode<Uint32T> details,
                                      TNode<Context> context,
                                      TNode<Object> receiver, Label* if_bailout,
@@ -3764,8 +3623,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                   TVariable<Smi>* var_feedback = nullptr);
 
   Node* LoadObjectField(TNode<HeapObject> object, int offset, MachineType type);
-  Node* LoadObjectField(TNode<HeapObject> object, TNode<IntPtrT> offset,
-                        MachineType type);
 
   // Low-level accessors for Descriptor arrays.
   template <typename T>
@@ -3781,11 +3638,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return CodeAssembler::LoadRoot(root_index);
   }
 
+  template <typename TIndex>
   void StoreFixedArrayOrPropertyArrayElement(
-      TNode<UnionT<FixedArray, PropertyArray>> array, Node* index,
+      TNode<UnionT<FixedArray, PropertyArray>> array, TNode<TIndex> index,
       TNode<Object> value, WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
-      int additional_offset = 0,
-      ParameterMode parameter_mode = INTPTR_PARAMETERS);
+      int additional_offset = 0);
 };
 
 class V8_EXPORT_PRIVATE CodeStubArguments {

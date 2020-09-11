@@ -642,11 +642,14 @@ Handle<JSFunction> Genesis::GetThrowTypeErrorIntrinsic() {
   Handle<JSFunction> function = factory()->NewFunction(args);
   function->shared().DontAdaptArguments();
 
-  // %ThrowTypeError% must not have a name property.
-  if (JSReceiver::DeleteProperty(function, factory()->name_string())
-          .IsNothing()) {
-    DCHECK(false);
-  }
+  // %ThrowTypeError% must have a name property with an empty string value. Per
+  // spec, ThrowTypeError's name is non-configurable, unlike ordinary functions'
+  // name property. To redefine it to be non-configurable, use
+  // SetOwnPropertyIgnoreAttributes.
+  JSObject::SetOwnPropertyIgnoreAttributes(
+      function, factory()->name_string(), factory()->empty_string(),
+      static_cast<PropertyAttributes>(DONT_ENUM | DONT_DELETE | READ_ONLY))
+      .Assert();
 
   // length needs to be non configurable.
   Handle<Object> value(Smi::FromInt(function->length()), isolate());
@@ -4216,7 +4219,7 @@ void Genesis::InitializeGlobal_harmony_weak_refs() {
                        factory->WeakRef_string());
 
     SimpleInstallFunction(isolate(), weak_ref_prototype, "deref",
-                          Builtins::kWeakRefDeref, 0, false);
+                          Builtins::kWeakRefDeref, 0, true);
   }
 }
 

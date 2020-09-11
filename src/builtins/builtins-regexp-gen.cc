@@ -28,7 +28,15 @@ using compiler::Node;
 // static
 void Builtins::Generate_RegExpInterpreterTrampoline(MacroAssembler* masm) {
   ExternalReference interpreter_code_entry =
-      ExternalReference::re_match_for_call_from_js(masm->isolate());
+      ExternalReference::re_match_for_call_from_js();
+  masm->Jump(interpreter_code_entry);
+}
+
+// Tail calls the experimental regular expression engine.
+// static
+void Builtins::Generate_RegExpExperimentalTrampoline(MacroAssembler* masm) {
+  ExternalReference interpreter_code_entry =
+      ExternalReference::re_experimental_match_for_call_from_js();
   masm->Jump(interpreter_code_entry);
 }
 
@@ -276,8 +284,7 @@ TNode<JSRegExpResult> RegExpBuiltinsAssembler::ConstructNewResultFromMatchInfo(
 
     TNode<IntPtrT> num_properties = WordSar(names_length, 1);
     TNode<NativeContext> native_context = LoadNativeContext(context);
-    TNode<Map> map = CAST(LoadContextElement(
-        native_context, Context::SLOW_OBJECT_WITH_NULL_PROTOTYPE_MAP));
+    TNode<Map> map = LoadObjectWithNullPrototypeMap(native_context);
     TNode<NameDictionary> properties =
         AllocateNameDictionary(num_properties, kAllowLargeObjectAllocation);
 
@@ -399,9 +406,9 @@ TNode<HeapObject> RegExpBuiltinsAssembler::RegExpExecInternal(
       int32_t values[] = {
           JSRegExp::IRREGEXP,
           JSRegExp::ATOM,
-          JSRegExp::NOT_COMPILED,
+          JSRegExp::EXPERIMENTAL,
       };
-      Label* labels[] = {&next, &atom, &runtime};
+      Label* labels[] = {&next, &atom, &next};
 
       STATIC_ASSERT(arraysize(values) == arraysize(labels));
       Switch(tag, &unreachable, values, labels, arraysize(values));
@@ -606,9 +613,8 @@ TNode<HeapObject> RegExpBuiltinsAssembler::RegExpExecInternal(
     GotoIf(SmiGreaterThan(register_count, available_slots), &runtime);
 
     // Fill match_info.
-    UnsafeStoreFixedArrayElement(match_info,
-                                 RegExpMatchInfo::kNumberOfCapturesIndex,
-                                 register_count, SKIP_WRITE_BARRIER);
+    UnsafeStoreFixedArrayElement(
+        match_info, RegExpMatchInfo::kNumberOfCapturesIndex, register_count);
     UnsafeStoreFixedArrayElement(match_info, RegExpMatchInfo::kLastSubjectIndex,
                                  string);
     UnsafeStoreFixedArrayElement(match_info, RegExpMatchInfo::kLastInputIndex,
@@ -844,19 +850,17 @@ TF_BUILTIN(RegExpExecAtom, RegExpBuiltinsAssembler) {
     const TNode<Smi> match_to =
         SmiAdd(match_from, LoadStringLengthAsSmi(needle_string));
 
-    UnsafeStoreFixedArrayElement(
-        match_info, RegExpMatchInfo::kNumberOfCapturesIndex,
-        SmiConstant(kNumRegisters), SKIP_WRITE_BARRIER);
+    UnsafeStoreFixedArrayElement(match_info,
+                                 RegExpMatchInfo::kNumberOfCapturesIndex,
+                                 SmiConstant(kNumRegisters));
     UnsafeStoreFixedArrayElement(match_info, RegExpMatchInfo::kLastSubjectIndex,
                                  subject_string);
     UnsafeStoreFixedArrayElement(match_info, RegExpMatchInfo::kLastInputIndex,
                                  subject_string);
-    UnsafeStoreFixedArrayElement(match_info,
-                                 RegExpMatchInfo::kFirstCaptureIndex,
-                                 match_from, SKIP_WRITE_BARRIER);
-    UnsafeStoreFixedArrayElement(match_info,
-                                 RegExpMatchInfo::kFirstCaptureIndex + 1,
-                                 match_to, SKIP_WRITE_BARRIER);
+    UnsafeStoreFixedArrayElement(
+        match_info, RegExpMatchInfo::kFirstCaptureIndex, match_from);
+    UnsafeStoreFixedArrayElement(
+        match_info, RegExpMatchInfo::kFirstCaptureIndex + 1, match_to);
 
     Return(match_info);
   }

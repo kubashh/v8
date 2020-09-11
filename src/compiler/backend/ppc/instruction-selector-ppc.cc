@@ -1200,6 +1200,10 @@ void InstructionSelector::VisitSignExtendWord32ToInt64(Node* node) {
   VisitRR(this, kPPC_ExtendSignWord32, node);
 }
 
+bool InstructionSelector::ZeroExtendsWord32ToWord64NoPhis(Node* node) {
+  UNIMPLEMENTED();
+}
+
 void InstructionSelector::VisitChangeUint32ToUint64(Node* node) {
   // TODO(mbrandy): inspect input to see if nop is appropriate.
   VisitRR(this, kPPC_Uint32ToUint64, node);
@@ -2201,6 +2205,7 @@ void InstructionSelector::VisitInt64AbsWithOverflow(Node* node) {
   V(I16x8SubSaturateS)     \
   V(I16x8AddSaturateU)     \
   V(I16x8SubSaturateU)     \
+  V(I16x8RoundingAverageU) \
   V(I8x16Add)              \
   V(I8x16Sub)              \
   V(I8x16Mul)              \
@@ -2220,10 +2225,12 @@ void InstructionSelector::VisitInt64AbsWithOverflow(Node* node) {
   V(I8x16SubSaturateS)     \
   V(I8x16AddSaturateU)     \
   V(I8x16SubSaturateU)     \
+  V(I8x16RoundingAverageU) \
+  V(S8x16Swizzle)          \
   V(S128And)               \
   V(S128Or)                \
   V(S128Xor)               \
-  V(S8x16Swizzle)
+  V(S128AndNot)
 
 #define SIMD_UNOP_LIST(V)   \
   V(F64x2Abs)               \
@@ -2398,22 +2405,18 @@ void InstructionSelector::VisitS128Select(Node* node) {
 
 void InstructionSelector::VisitS128Const(Node* node) { UNIMPLEMENTED(); }
 
-void InstructionSelector::VisitI16x8RoundingAverageU(Node* node) {
-  UNIMPLEMENTED();
-}
+void InstructionSelector::VisitI8x16BitMask(Node* node) { UNIMPLEMENTED(); }
 
-void InstructionSelector::VisitI8x16RoundingAverageU(Node* node) {
-  UNIMPLEMENTED();
-}
+void InstructionSelector::VisitI16x8BitMask(Node* node) { UNIMPLEMENTED(); }
 
-void InstructionSelector::VisitS128AndNot(Node* node) { UNIMPLEMENTED(); }
+void InstructionSelector::VisitI32x4BitMask(Node* node) { UNIMPLEMENTED(); }
 
 void InstructionSelector::EmitPrepareResults(
     ZoneVector<PushParameter>* results, const CallDescriptor* call_descriptor,
     Node* node) {
   PPCOperandGenerator g(this);
 
-  int reverse_slot = 0;
+  int reverse_slot = 1;
   for (PushParameter output : *results) {
     if (!output.location.IsCallerFrameSlot()) continue;
     // Skip any alignment holes in nodes.
@@ -2423,6 +2426,8 @@ void InstructionSelector::EmitPrepareResults(
         MarkAsFloat32(output.node);
       } else if (output.location.GetType() == MachineType::Float64()) {
         MarkAsFloat64(output.node);
+      } else if (output.location.GetType() == MachineType::Simd128()) {
+        MarkAsSimd128(output.node);
       }
       Emit(kPPC_Peek, g.DefineAsRegister(output.node),
            g.UseImmediate(reverse_slot));

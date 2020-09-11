@@ -111,6 +111,7 @@ class MockPlatform final : public TestPlatform {
     }
     void Join() override { orig_handle_->Join(); }
     void Cancel() override { orig_handle_->Cancel(); }
+    bool IsCompleted() override { return orig_handle_->IsCompleted(); }
     bool IsRunning() override { return orig_handle_->IsRunning(); }
 
    private:
@@ -309,10 +310,11 @@ STREAM_TEST(TestAllBytesArriveAOTCompilerFinishesFirst) {
 
 size_t GetFunctionOffset(i::Isolate* isolate, const uint8_t* buffer,
                          size_t size, size_t index) {
-  ModuleResult result =
-      DecodeWasmModule(WasmFeatures::All(), buffer, buffer + size, false,
-                       ModuleOrigin::kWasmOrigin, isolate->counters(),
-                       isolate->wasm_engine()->allocator());
+  ModuleResult result = DecodeWasmModule(
+      WasmFeatures::All(), buffer, buffer + size, false,
+      ModuleOrigin::kWasmOrigin, isolate->counters(),
+      isolate->metrics_recorder(), v8::metrics::Recorder::ContextId::Empty(),
+      DecodingMethod::kSyncStream, isolate->wasm_engine()->allocator());
   CHECK(result.ok());
   const WasmFunction* func = &result.value()->functions[index];
   return func->code.offset();

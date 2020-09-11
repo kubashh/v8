@@ -567,8 +567,7 @@ TNode<Object> BaseCollectionsAssembler::LoadAndNormalizeFixedDoubleArrayElement(
   TVARIABLE(Object, entry);
   Label if_hole(this, Label::kDeferred), next(this);
   TNode<Float64T> element =
-      LoadFixedDoubleArrayElement(CAST(elements), index, MachineType::Float64(),
-                                  0, INTPTR_PARAMETERS, &if_hole);
+      LoadFixedDoubleArrayElement(CAST(elements), index, &if_hole);
   {  // not hole
     entry = AllocateHeapNumberWithValue(element);
     Goto(&next);
@@ -1729,13 +1728,13 @@ void CollectionsBuiltinsAssembler::StoreOrderedHashMapNewEntry(
       kTaggedSize * (OrderedHashMap::HashTableStartIndex() +
                      OrderedHashMap::kValueOffset));
   UnsafeStoreFixedArrayElement(
-      table, entry_start, bucket_entry, SKIP_WRITE_BARRIER,
+      table, entry_start, bucket_entry,
       kTaggedSize * (OrderedHashMap::HashTableStartIndex() +
                      OrderedHashMap::kChainOffset));
 
   // Update the bucket head.
   UnsafeStoreFixedArrayElement(
-      table, bucket, SmiTag(occupancy), SKIP_WRITE_BARRIER,
+      table, bucket, SmiTag(occupancy),
       OrderedHashMap::HashTableStartIndex() * kTaggedSize);
 
   // Bump the elements count.
@@ -1897,13 +1896,13 @@ void CollectionsBuiltinsAssembler::StoreOrderedHashSetNewEntry(
       table, entry_start, key, UPDATE_WRITE_BARRIER,
       kTaggedSize * OrderedHashSet::HashTableStartIndex());
   UnsafeStoreFixedArrayElement(
-      table, entry_start, bucket_entry, SKIP_WRITE_BARRIER,
+      table, entry_start, bucket_entry,
       kTaggedSize * (OrderedHashSet::HashTableStartIndex() +
                      OrderedHashSet::kChainOffset));
 
   // Update the bucket head.
   UnsafeStoreFixedArrayElement(
-      table, bucket, SmiTag(occupancy), SKIP_WRITE_BARRIER,
+      table, bucket, SmiTag(occupancy),
       OrderedHashSet::HashTableStartIndex() * kTaggedSize);
 
   // Bump the elements count.
@@ -2492,9 +2491,9 @@ void WeakCollectionsBuiltinsAssembler::AddEntry(
   UnsafeStoreFixedArrayElement(table, value_index, value);
 
   // See HashTableBase::ElementAdded().
-  UnsafeStoreFixedArrayElement(
-      table, EphemeronHashTable::kNumberOfElementsIndex,
-      SmiFromIntPtr(number_of_elements), SKIP_WRITE_BARRIER);
+  UnsafeStoreFixedArrayElement(table,
+                               EphemeronHashTable::kNumberOfElementsIndex,
+                               SmiFromIntPtr(number_of_elements));
 }
 
 TNode<HeapObject> WeakCollectionsBuiltinsAssembler::AllocateTable(

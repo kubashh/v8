@@ -2315,8 +2315,10 @@ void TurboAssembler::TruncateDoubleToI(Isolate* isolate, Zone* zone,
 }
 
 void TurboAssembler::Prologue() {
-  Push<TurboAssembler::kSignLR>(lr, fp, cp, x1);
-  Add(fp, sp, StandardFrameConstants::kFixedFrameSizeFromFp);
+  Push<TurboAssembler::kSignLR>(lr, fp);
+  mov(fp, sp);
+  STATIC_ASSERT(kExtraSlotClaimedByPrologue == 1);
+  Push(cp, kJSFunctionRegister, kJavaScriptCallArgCountRegister, padreg);
 }
 
 void TurboAssembler::EnterFrame(StackFrame::Type type) {

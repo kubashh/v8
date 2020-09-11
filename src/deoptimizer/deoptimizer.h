@@ -17,6 +17,7 @@
 #include "src/diagnostics/code-tracer.h"
 #include "src/execution/frame-constants.h"
 #include "src/execution/isolate.h"
+#include "src/heap/heap.h"
 #include "src/objects/feedback-vector.h"
 #include "src/objects/js-function.h"
 #include "src/objects/shared-function-info.h"
@@ -35,6 +36,7 @@ class TranslatedFrame;
 class TranslatedState;
 class RegisterValues;
 class MacroAssembler;
+class StrongRootsEntry;
 
 enum class BuiltinContinuationMode;
 
@@ -482,6 +484,13 @@ class Deoptimizer : public Malloced {
   // refer to that code.
   static void DeoptimizeMarkedCode(Isolate* isolate);
 
+  // Check the given address against a list of allowed addresses, to prevent a
+  // potential attacker from using the frame creation process in the
+  // deoptimizer, in particular the signing process, to gain control over the
+  // program.
+  // When building mksnapshot, always return false.
+  static bool IsValidReturnAddress(Address address);
+
   ~Deoptimizer();
 
   void MaterializeHeapObjects();
@@ -600,6 +609,7 @@ class Deoptimizer : public Malloced {
   intptr_t caller_pc_;
   intptr_t caller_constant_pool_;
   intptr_t input_frame_context_;
+  intptr_t actual_argument_count_;
 
   // Key for lookup of previously materialized objects
   intptr_t stack_fp_;
@@ -814,6 +824,7 @@ class DeoptimizerData {
   void set_deopt_entry_code(DeoptimizeKind kind, Code code);
 
   Deoptimizer* current_;
+  StrongRootsEntry* strong_roots_entry_;
 
   friend class Deoptimizer;
 

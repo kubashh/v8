@@ -39,7 +39,7 @@ class BytecodeGraphBuilder {
                        BailoutId osr_offset, JSGraph* jsgraph,
                        CallFrequency const& invocation_frequency,
                        SourcePositionTable* source_positions, int inlining_id,
-                       BytecodeGraphBuilderFlags flags,
+                       CodeKind code_kind, BytecodeGraphBuilderFlags flags,
                        TickCounter* tick_counter);
 
   // Creates a graph by visiting bytecodes.
@@ -63,8 +63,9 @@ class BytecodeGraphBuilder {
   // Get or create the node that represents the outer function closure.
   Node* GetFunctionClosure();
 
+  CodeKind code_kind() const { return code_kind_; }
   bool native_context_independent() const {
-    return native_context_independent_;
+    return CodeKindIsNativeContextIndependentJSFunction(code_kind_);
   }
 
   // The node representing the current feedback vector is generated once prior
@@ -96,6 +97,12 @@ class BytecodeGraphBuilder {
   }
 
   Node* BuildLoadFeedbackCell(int index);
+
+  // Checks the optimization marker and potentially triggers compilation or
+  // installs the finished code object.
+  // Only relevant for specific code kinds (see
+  // CodeKindChecksOptimizationMarker).
+  void MaybeBuildTierUpCheck();
 
   // Builder for loading the a native context field.
   Node* BuildLoadNativeContextField(int index);
@@ -426,7 +433,7 @@ class BytecodeGraphBuilder {
   int input_buffer_size_;
   Node** input_buffer_;
 
-  const bool native_context_independent_;
+  const CodeKind code_kind_;
   Node* feedback_cell_node_;
   Node* feedback_vector_node_;
   Node* native_context_node_;
@@ -958,7 +965,7 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
     SharedFunctionInfoRef const& shared_info,
     FeedbackVectorRef const& feedback_vector, BailoutId osr_offset,
     JSGraph* jsgraph, CallFrequency const& invocation_frequency,
-    SourcePositionTable* source_positions, int inlining_id,
+    SourcePositionTable* source_positions, int inlining_id, CodeKind code_kind,
     BytecodeGraphBuilderFlags flags, TickCounter* tick_counter)
     : broker_(broker),
       local_zone_(local_zone),
@@ -977,7 +984,7 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
           bytecode_array().parameter_count(), bytecode_array().register_count(),
           shared_info.object())),
       source_position_iterator_(std::make_unique<SourcePositionTableIterator>(
-          bytecode_array().source_positions())),
+          bytecode_array().SourcePositionTable())),
       bytecode_iterator_(
           std::make_unique<OffHeapBytecodeArray>(bytecode_array())),
       bytecode_analysis_(broker_->GetBytecodeAnalysis(
@@ -997,8 +1004,7 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
       current_exception_handler_(0),
       input_buffer_size_(0),
       input_buffer_(nullptr),
-      native_context_independent_(
-          flags & BytecodeGraphBuilderFlag::kNativeContextIndependent),
+      code_kind_(code_kind),
       feedback_cell_node_(nullptr),
       feedback_vector_node_(nullptr),
       native_context_node_(nullptr),
@@ -1120,6 +1126,19 @@ Node* BytecodeGraphBuilder::BuildLoadNativeContext() {
   return native_context;
 }
 
+void BytecodeGraphBuilder::MaybeBuildTierUpCheck() {
+  if (!CodeKindChecksOptimizationMarker(code_kind())) return;
+
+  Environment* env = environment();
+  Node* control = env->GetControlDependency();
+  Node* effect = env->GetEffectDependency();
+
+  effect = graph()->NewNode(simplified()->TierUpCheck(), feedback_vector_node(),
+                            effect, control);
+
+  env->UpdateEffectDependency(effect);
+}
+
 Node* BytecodeGraphBuilder::BuildLoadNativeContextField(int index) {
   Node* result = NewNode(javascript()->LoadContext(0, index, true));
   NodeProperties::ReplaceContextInput(result, native_context_node());
@@ -1141,8 +1160,9 @@ void BytecodeGraphBuilder::CreateGraph() {
   // Set up the basic structure of the graph. Outputs for {Start} are the formal
   // parameters (including the receiver) plus new target, number of arguments,
   // context and closure.
-  int actual_parameter_count = bytecode_array().parameter_count() + 4;
-  graph()->SetStart(graph()->NewNode(common()->Start(actual_parameter_count)));
+  int start_output_arity = StartNode::OutputArityForFormalParameterCount(
+      bytecode_array().parameter_count());
+  graph()->SetStart(graph()->NewNode(common()->Start(start_output_arity)));
 
   Environment env(this, bytecode_array().register_count(),
                   bytecode_array().parameter_count(),
@@ -1152,7 +1172,9 @@ void BytecodeGraphBuilder::CreateGraph() {
 
   CreateFeedbackCellNode();
   CreateFeedbackVectorNode();
+  MaybeBuildTierUpCheck();
   CreateNativeContextNode();
+
   VisitBytecodes();
 
   // Finish the basic structure of the graph.
@@ -1993,6 +2015,20 @@ void BytecodeGraphBuilder::VisitLdaNamedPropertyNoFeedback() {
                bytecode_iterator().GetConstantForIndexOperand(1, isolate()));
   const Operator* op = javascript()->LoadNamed(name.object(), FeedbackSource());
   Node* node = NewNode(op, object, feedback_vector_node());
+  environment()->BindAccumulator(node, Environment::kAttachFrameState);
+}
+
+void BytecodeGraphBuilder::VisitLdaNamedPropertyFromSuper() {
+  PrepareEagerCheckpoint();
+  Node* receiver =
+      environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
+  Node* home_object = environment()->LookupAccumulator();
+  NameRef name(broker(),
+               bytecode_iterator().GetConstantForIndexOperand(1, isolate()));
+  const Operator* op = javascript()->LoadNamedFromSuper(name.object());
+  // TODO(marja, v8:9237): Use lowering.
+
+  Node* node = NewNode(op, receiver, home_object);
   environment()->BindAccumulator(node, Environment::kAttachFrameState);
 }
 
@@ -4387,13 +4423,14 @@ void BuildGraphFromBytecode(JSHeapBroker* broker, Zone* local_zone,
                             BailoutId osr_offset, JSGraph* jsgraph,
                             CallFrequency const& invocation_frequency,
                             SourcePositionTable* source_positions,
-                            int inlining_id, BytecodeGraphBuilderFlags flags,
+                            int inlining_id, CodeKind code_kind,
+                            BytecodeGraphBuilderFlags flags,
                             TickCounter* tick_counter) {
   DCHECK(broker->IsSerializedForCompilation(shared_info, feedback_vector));
   BytecodeGraphBuilder builder(
       broker, local_zone, broker->target_native_context(), shared_info,
       feedback_vector, osr_offset, jsgraph, invocation_frequency,
-      source_positions, inlining_id, flags, tick_counter);
+      source_positions, inlining_id, code_kind, flags, tick_counter);
   builder.CreateGraph();
 }
 

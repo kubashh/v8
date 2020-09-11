@@ -31,6 +31,7 @@ SerializerTester::SerializerTester(const char* source)
   // We need allocation of executable memory for the compilation.
   FLAG_jitless = false;
   FLAG_allow_natives_syntax = true;
+  FlagList::EnforceFlagImplications();
 
   std::string function_string = "(function() { ";
   function_string += source;
@@ -45,6 +46,9 @@ SerializerTester::SerializerTester(const char* source)
                    i::OptimizedCompilationInfo::kSplitting |
                    i::OptimizedCompilationInfo::kAnalyzeEnvironmentLiveness;
   Optimize(function, main_zone(), main_isolate(), flags, &broker_);
+  // Update handle to the corresponding serialized Handle in the broker.
+  function =
+      broker_->FindCanonicalPersistentHandleForTesting<JSFunction>(*function);
   function_ = JSFunctionRef(broker(), function);
 }
 
@@ -77,10 +81,16 @@ void CheckForSerializedInlinee(const char* source, int argc = 0,
       "The return value of the outer function must be a function too");
   Handle<JSFunction> g_func = Handle<JSFunction>::cast(g);
 
-  SharedFunctionInfoRef g_sfi(tester.broker(),
-                              handle(g_func->shared(), tester.isolate()));
-  FeedbackVectorRef g_fv(tester.broker(),
-                         handle(g_func->feedback_vector(), tester.isolate()));
+  // Look up corresponding serialized Handles in the broker.
+  Handle<SharedFunctionInfo> sfi(
+      tester.broker()
+          ->FindCanonicalPersistentHandleForTesting<SharedFunctionInfo>(
+              g_func->shared()));
+  SharedFunctionInfoRef g_sfi(tester.broker(), sfi);
+  Handle<FeedbackVector> fv(
+      tester.broker()->FindCanonicalPersistentHandleForTesting<FeedbackVector>(
+          g_func->feedback_vector()));
+  FeedbackVectorRef g_fv(tester.broker(), fv);
   CHECK(tester.broker()->IsSerializedForCompilation(g_sfi, g_fv));
 }
 

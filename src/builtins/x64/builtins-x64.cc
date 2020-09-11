@@ -45,23 +45,29 @@ void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address) {
 static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
                                            Runtime::FunctionId function_id) {
   // ----------- S t a t e -------------
+  //  -- rax : actual argument count
   //  -- rdx : new target (preserved for callee)
   //  -- rdi : target function (preserved for callee)
   // -----------------------------------
   {
     FrameScope scope(masm, StackFrame::INTERNAL);
-    // Push a copy of the target function and the new target.
-    __ Push(rdi);
-    __ Push(rdx);
+    // Push a copy of the target function, the new target and the actual
+    // argument count.
+    __ Push(kJavaScriptCallTargetRegister);
+    __ Push(kJavaScriptCallNewTargetRegister);
+    __ SmiTag(kJavaScriptCallArgCountRegister);
+    __ Push(kJavaScriptCallArgCountRegister);
     // Function is also the parameter to the runtime call.
-    __ Push(rdi);
+    __ Push(kJavaScriptCallTargetRegister);
 
     __ CallRuntime(function_id, 1);
     __ movq(rcx, rax);
 
-    // Restore target function and new target.
-    __ Pop(rdx);
-    __ Pop(rdi);
+    // Restore target function, new target and actual argument count.
+    __ Pop(kJavaScriptCallArgCountRegister);
+    __ SmiUntag(kJavaScriptCallArgCountRegister);
+    __ Pop(kJavaScriptCallNewTargetRegister);
+    __ Pop(kJavaScriptCallTargetRegister);
   }
   static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
   __ JumpCodeObject(rcx);
@@ -940,6 +946,7 @@ static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
 static void MaybeOptimizeCode(MacroAssembler* masm, Register feedback_vector,
                               Register optimization_marker) {
   // ----------- S t a t e -------------
+  //  -- rax : actual argument count
   //  -- rdx : new target (preserved for callee if needed, and caller)
   //  -- rdi : target function (preserved for callee if needed, and caller)
   //  -- feedback vector (preserved for caller if needed)
@@ -974,6 +981,7 @@ static void TailCallOptimizedCodeSlot(MacroAssembler* masm,
                                       Register optimized_code_entry,
                                       Register scratch1, Register scratch2) {
   // ----------- S t a t e -------------
+  //  -- rax : actual argument count
   //  -- rdx : new target (preserved for callee if needed, and caller)
   //  -- rdi : target function (preserved for callee if needed, and caller)
   // -----------------------------------
@@ -1087,10 +1095,10 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
 
 // Generate code for entering a JS function with the interpreter.
 // On entry to the function the receiver and arguments have been pushed on the
-// stack left to right.  The actual argument count matches the formal parameter
-// count expected by the function.
+// stack left to right.
 //
 // The live registers are:
+//   o rax: actual argument count (not including the receiver)
 //   o rdi: the JS function object being called
 //   o rdx: the incoming new target or generator object
 //   o rsi: our context
@@ -1106,17 +1114,19 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // Get the bytecode array from the function object and load it into
   // kInterpreterBytecodeArrayRegister.
   __ LoadTaggedPointerField(
-      rax, FieldOperand(closure, JSFunction::kSharedFunctionInfoOffset));
+      kScratchRegister,
+      FieldOperand(closure, JSFunction::kSharedFunctionInfoOffset));
   __ LoadTaggedPointerField(
       kInterpreterBytecodeArrayRegister,
-      FieldOperand(rax, SharedFunctionInfo::kFunctionDataOffset));
+      FieldOperand(kScratchRegister, SharedFunctionInfo::kFunctionDataOffset));
   GetSharedFunctionInfoBytecode(masm, kInterpreterBytecodeArrayRegister,
                                 kScratchRegister);
 
   // The bytecode array could have been flushed from the shared function info,
   // if so, call into CompileLazy.
   Label compile_lazy;
-  __ CmpObjectType(kInterpreterBytecodeArrayRegister, BYTECODE_ARRAY_TYPE, rax);
+  __ CmpObjectType(kInterpreterBytecodeArrayRegister, BYTECODE_ARRAY_TYPE,
+                   kScratchRegister);
   __ j(not_equal, &compile_lazy);
 
   // Load the feedback vector from the closure.
@@ -1162,8 +1172,9 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   FrameScope frame_scope(masm, StackFrame::MANUAL);
   __ pushq(rbp);  // Caller's frame pointer.
   __ movq(rbp, rsp);
-  __ Push(rsi);  // Callee's context.
-  __ Push(rdi);  // Callee's JS function.
+  __ Push(kContextRegister);                 // Callee's context.
+  __ Push(kJavaScriptCallTargetRegister);    // Callee's JS function.
+  __ Push(kJavaScriptCallArgCountRegister);  // Actual argument count.
 
   // Reset code age and the OSR arming. The OSR field and BytecodeAgeOffset are
   // 8-bit fields next to each other, so we could just optimize by writing a
@@ -2371,37 +2382,82 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
   __ subl(r8, rcx);
   __ j(less_equal, &stack_done);
   {
+    // ----------- S t a t e -------------
+    //  -- rax : the number of arguments already in the stack (not including the
+    //  receiver)
+    //  -- rbx : point to the caller stack frame
+    //  -- rcx : start index (to support rest parameters)
+    //  -- rdx : the new target (for [[Construct]] calls)
+    //  -- rdi : the target to call (can be any Object)
+    //  -- r8  : number of arguments to copy, i.e. arguments count - start index
+    // -----------------------------------
+
     // Check for stack overflow.
-    Generate_StackOverflowCheck(masm, r8, rcx, &stack_overflow, Label::kNear);
+    Generate_StackOverflowCheck(masm, r8, r12, &stack_overflow, Label::kNear);
 
     // Forward the arguments from the caller frame.
+#ifdef V8_REVERSE_JSARGS
+    // Move the arguments already in the stack,
+    // including the receiver and the return address.
+    {
+      Label copy, check;
+      Register src = r9, dest = rsp, num = r12, current = r11;
+      __ movq(src, rsp);
+      __ leaq(kScratchRegister, Operand(r8, times_system_pointer_size, 0));
+      __ AllocateStackSpace(kScratchRegister);
+      __ leaq(num, Operand(rax, 2));  // Number of words to copy.
+                                      // +2 for receiver and return address.
+      __ Set(current, 0);
+      __ jmp(&check);
+      __ bind(&copy);
+      __ movq(kScratchRegister,
+              Operand(src, current, times_system_pointer_size, 0));
+      __ movq(Operand(dest, current, times_system_pointer_size, 0),
+              kScratchRegister);
+      __ incq(current);
+      __ bind(&check);
+      __ cmpq(current, num);
+      __ j(less, &copy);
+      __ leaq(r9, Operand(rsp, num, times_system_pointer_size, 0));
+    }
+
+    __ addl(rax, r8);  // Update total number of arguments.
+
+    // Point to the first argument to copy (skipping receiver).
+    __ leaq(rcx, Operand(rcx, times_system_pointer_size,
+                         CommonFrameConstants::kFixedFrameSizeAboveFp +
+                             kSystemPointerSize));
+    __ addq(rbx, rcx);
+
+    // Copy the additional caller arguments onto the stack.
+    // TODO(victorgomes): Consider using forward order as potentially more cache
+    // friendly.
+    {
+      Register src = rbx, dest = r9, num = r8;
+      Label loop;
+      __ bind(&loop);
+      __ decq(num);
+      __ movq(kScratchRegister,
+              Operand(src, num, times_system_pointer_size, 0));
+      __ movq(Operand(dest, num, times_system_pointer_size, 0),
+              kScratchRegister);
+      __ j(not_zero, &loop);
+    }
+#else
     {
       Label loop;
       __ addl(rax, r8);
       __ PopReturnAddressTo(rcx);
-#ifdef V8_REVERSE_JSARGS
-      // The new receiver is already on the stack. Save it to push it later.
-      __ Pop(kScratchRegister);
-#endif
       __ bind(&loop);
       {
         __ decl(r8);
-#ifdef V8_REVERSE_JSARGS
-        // Skips the old receiver.
-        __ Push(Operand(rbx, r8, times_system_pointer_size,
-                        kFPOnStackSize + kPCOnStackSize + kSystemPointerSize));
-#else
         __ Push(Operand(rbx, r8, times_system_pointer_size,
                         kFPOnStackSize + kPCOnStackSize));
-#endif
         __ j(not_zero, &loop);
       }
-#ifdef V8_REVERSE_JSARGS
-      // Recover the new receiver.
-      __ Push(kScratchRegister);
-#endif
       __ PushReturnAddressFrom(rcx);
     }
+#endif
   }
   __ jmp(&stack_done, Label::kNear);
   __ bind(&stack_overflow);
@@ -3205,12 +3261,13 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   __ EnterFrame(StackFrame::JS_TO_WASM);
 
   Register closure = rdi;
-  Register shared_function_info = rbx;
+  Register shared_function_info = closure;
   __ LoadAnyTaggedField(
       shared_function_info,
       MemOperand(
           closure,
           wasm::ObjectAccess::SharedFunctionInfoOffsetInTaggedJSFunction()));
+  closure = no_reg;
 
   Register function_data = shared_function_info;
   __ LoadAnyTaggedField(
@@ -3225,34 +3282,149 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
       MemOperand(function_data,
                  WasmExportedFunctionData::kInstanceOffset - kHeapObjectTag));
 
-  // Int signature_type gives the number of int32 params (can be only 0 or 1).
-  Register signature_type = r9;
-  __ SmiUntagField(
-      signature_type,
-      MemOperand(function_data, WasmExportedFunctionData::kSignatureTypeOffset -
-                                    kHeapObjectTag));
+  // Get the signature for the parameter count.
+  Register foreign_signature = r11;
 
-  __ cmpl(signature_type, Immediate(0));
+  __ LoadAnyTaggedField(
+      foreign_signature,
+      MemOperand(function_data,
+                 WasmExportedFunctionData::kSignatureOffset - kHeapObjectTag));
+  Register signature = foreign_signature;
+  __ movq(signature,
+          MemOperand(foreign_signature, wasm::ObjectAccess::ToTagged(
+                                            Foreign::kForeignAddressOffset)));
+  foreign_signature = no_reg;
+
+  Register return_count = r8;
+  __ movq(return_count,
+          MemOperand(signature, wasm::FunctionSig::kReturnCountOffset));
+
+  Register param_count = signature;
+  __ movq(param_count,
+          MemOperand(signature, wasm::FunctionSig::kParameterCountOffset));
+  signature = no_reg;
+
+  // We store values on the stack to restore them after function calls.
+  // We cannot push values onto the stack right before the wasm call. The wasm
+  // function expects the parameters, that didn't fit into the registers, on the
+  // top of the stack.
+  // We will have to save a value indicating the GC the number
+  // of values on the top of the stack that have to be scanned before calling
+  // the Wasm function.
+  constexpr int kFrameMarkerOffset = -kSystemPointerSize;
+  constexpr int kGCScanSlotCountOffset =
+      kFrameMarkerOffset - kSystemPointerSize;
+  constexpr int kParamCountOffset = kGCScanSlotCountOffset - kSystemPointerSize;
+  constexpr int kReturnCountOffset = kParamCountOffset - kSystemPointerSize;
+  constexpr int kNumSpillSlots = 3;
+  __ subq(rsp, Immediate(kNumSpillSlots * kSystemPointerSize));
+  __ movq(MemOperand(rbp, kParamCountOffset), param_count);
+  __ movq(MemOperand(rbp, kReturnCountOffset), return_count);
+
+  __ cmpl(param_count, Immediate(0));
 
   // In 0 param case jump through parameter handling.
   Label params_done;
   __ j(equal, &params_done);
 
   // Param handling.
-  Register param = rax;
-  const int firstParamOffset = 16;
-  __ movq(param, MemOperand(rbp, firstParamOffset));
 
-  Label not_smi;
-  __ JumpIfNotSmi(param, &not_smi);
+  // Make sure we have the same number of arguments in order to be able to load
+  // the arguments using static offsets below.
+  __ cmpl(kJavaScriptCallArgCountRegister, param_count);
+  __ Check(equal, AbortReason::kInvalidNumberOfJsArgs);
+
+  // We have to put the first 5 parameters into the proper registers before the
+  // wasm call. By reserving 5 slots on the stack we can always pop the top 5
+  // values to these registers without popping unwanted slots from the stack.
+  // We make sure all reserved slots are freed later by restoring the stack
+  // pointer.
+  __ subq(rsp, Immediate(5 * kSystemPointerSize));
+
+  // Looping through the params, starting with the 1st param.
+  // The order of processing the params is important. We have to evaluate them
+  // in an increasing order.
+  //      Not reversed                Reversed
+  //   +-----------------+------+-----------------+---------------
+  //   |    receiver     |      |     param n     |
+  //   |- - - - - - - - -|      |- - - - - - - - -|
+  //   |      param 1    |      |    param n-1    |   Caller
+  //   |       ...       |      |       ...       | frame slots
+  //   |    param n-1    |      |     param 1     |
+  //   |- - - - - - - - -|      |- - - - - - - - -|
+  //   |     param n     |      |    receiver     |
+  //  -+-----------------+------+-----------------+---------------
+  //   |  return addr    |      |  return addr    |
+  //   |- - - - - - - - -|<-FP->|- - - - - - - - -|
+  //   |      rbp        |      |      rbp        |   Spill slots
+  //   |- - - - - - - - -|      |- - - - - - - - -|
+  //
+  // [rbp + current_param] gives us the parameter we are processing.
+  // We iterate through half-open interval <1st param, [rbp + param_limit]).
+
+  // The Wasm function expects that the params can be popped from the top of the
+  // stack in an increasing order. As we have to process the params in an
+  // increasing order too, we have to reserve param_count slots where we will
+  // move the processed parameters so that they can be popped in an increasing
+  // order.
+  Register js_arguments_size_in_bytes = kJavaScriptCallArgCountRegister;
+  __ shlq(js_arguments_size_in_bytes, Immediate(kSystemPointerSizeLog2));
+  __ subq(rsp, js_arguments_size_in_bytes);
+  js_arguments_size_in_bytes = no_reg;
+  Register current_param_slot = r8;
+  __ movq(current_param_slot, rsp);
+
+  Register current_param = r14;
+  Register param_limit = r15;
+#ifdef V8_REVERSE_JSARGS
+  constexpr int kReceiverOnStackSize = kSystemPointerSize;
+  __ movq(current_param,
+          Immediate(kFPOnStackSize + kPCOnStackSize + kReceiverOnStackSize));
+  __ movq(param_limit, param_count);
+  __ shlq(param_limit, Immediate(kSystemPointerSizeLog2));
+  __ addq(param_limit,
+          Immediate(kFPOnStackSize + kPCOnStackSize + kReceiverOnStackSize));
+  const int increment = kSystemPointerSize;
+#else
+  __ movq(current_param, param_count);
+  __ shlq(current_param, Immediate(kSystemPointerSizeLog2));
+  __ addq(current_param, Immediate(kFPOnStackSize));
+  __ movq(param_limit, Immediate(kFPOnStackSize));
+  const int increment = -kSystemPointerSize;
+#endif
+  Register param = rax;
+  Label loop;
+  __ bind(&loop);
+
+  __ movq(param, MemOperand(rbp, current_param, times_1, 0));
+  __ addq(current_param, Immediate(increment));
+
+  Label param_not_smi;
+  __ JumpIfNotSmi(param, &param_not_smi);
 
   // Change from smi to int32.
   __ SmiUntag(param);
 
+  Label param_conversion_done;
+  __ bind(&param_conversion_done);
+
+  __ movq(MemOperand(current_param_slot, 0), param);
+  __ addq(current_param_slot, Immediate(kSystemPointerSize));
+
+  __ cmpq(current_param, param_limit);
+  __ j(not_equal, &loop);
+
+  // We pop the top 5 parameters into the proper param registers.
+  __ popq(rax);
+  __ popq(rdx);
+  __ popq(rcx);
+  __ popq(rbx);
+  __ popq(r9);
+
   __ bind(&params_done);
 
   // Set thread_in_wasm_flag.
-  Register thread_in_wasm_flag_addr = rdx;
+  Register thread_in_wasm_flag_addr = r12;
   __ movq(
       thread_in_wasm_flag_addr,
       MemOperand(kRootRegister, Isolate::thread_in_wasm_flag_address_offset()));
@@ -3280,14 +3452,19 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   jump_table_offset = no_reg;
   jump_table_start = no_reg;
 
-  __ pushq(wasm_instance);
-  __ pushq(signature_type);
+  // We set the indicating value for the GC to the proper one for Wasm call.
+  constexpr int kWasmCallGCScanSlotCount = 0;
+  __ movq(MemOperand(rbp, kGCScanSlotCountOffset),
+          Immediate(kWasmCallGCScanSlotCount));
 
   __ call(function_entry);
   function_entry = no_reg;
 
-  __ popq(signature_type);
-  __ popq(wasm_instance);
+  // Restore rsp to free the reserved stack slots for 5 param Registers.
+  constexpr int kLastSpillOffset =
+      kFrameMarkerOffset - kNumSpillSlots * kSystemPointerSize;
+  __ leaq(rsp, MemOperand(rbp, kLastSpillOffset));
+  __ movq(param_count, MemOperand(rbp, kParamCountOffset));
 
   // Unset thread_in_wasm_flag.
   thread_in_wasm_flag_addr = r8;
@@ -3295,29 +3472,58 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
       thread_in_wasm_flag_addr,
       MemOperand(kRootRegister, Isolate::thread_in_wasm_flag_address_offset()));
   __ movl(MemOperand(thread_in_wasm_flag_addr, 0), Immediate(0));
+  thread_in_wasm_flag_addr = no_reg;
 
+  // Handle returns.
+  __ movq(return_count, MemOperand(rbp, kReturnCountOffset));
   Register return_reg = rax;
+
+  // If we have 1 return value, then jump to conversion.
+  __ cmpl(return_count, Immediate(1));
+  Label convert_return;
+  __ j(equal, &convert_return);
+
+  // Otherwise load undefined.
   __ LoadRoot(return_reg, RootIndex::kUndefinedValue);
+
+  Label return_done;
+  __ bind(&return_done);
 
   // Deconstrunct the stack frame.
   __ LeaveFrame(StackFrame::JS_TO_WASM);
 
-  __ cmpl(signature_type, Immediate(0));
-
-  Label ret_0_param;
-  __ j(equal, &ret_0_param);
-
-  __ ret(16);
-
-  __ bind(&ret_0_param);
-  __ ret(8);
+  // We have to remove the caller frame slots:
+  //  - JS arguments
+  //  - the receiver
+  // and transfer the control to the return address (the return address is
+  // expected to be on the top of the stack).
+  // We cannot use just the ret instruction for this, because we cannot pass the
+  // number of slots to remove in a Register as an argument.
+  Register return_addr = rbx;
+  __ popq(return_addr);
+  Register caller_frame_slots_count = param_count;
+  __ addq(caller_frame_slots_count, Immediate(1));
+  __ shlq(caller_frame_slots_count, Immediate(kSystemPointerSizeLog2));
+  __ addq(rsp, caller_frame_slots_count);
+  __ pushq(return_addr);
+  __ ret(0);
 
   // Handle the conversion to int32 when the param is not a smi.
-  __ bind(&not_smi);
+  __ bind(&param_not_smi);
 
+  // The order of pushes is important. We want the heap objects, that should be
+  // scanned by GC, to be on the top of the stack.
+  // We have to set the indicating value for the GC to the number of values on
+  // the top of the stack that have to be scanned before calling the builtin
+  // function.
+  constexpr int kBuiltinCallGCScanSlotCount = 2;
+  __ movq(MemOperand(rbp, kGCScanSlotCountOffset),
+          Immediate(kBuiltinCallGCScanSlotCount));
+  __ pushq(current_param);
+  __ pushq(param_limit);
+  __ pushq(current_param_slot);
   __ pushq(wasm_instance);
   __ pushq(function_data);
-  __ pushq(signature_type);
   __ LoadAnyTaggedField(
       rsi,
       MemOperand(wasm_instance, wasm::ObjectAccess::ToTagged(
@@ -3327,11 +3533,44 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   __ Call(BUILTIN_CODE(masm->isolate(), WasmTaggedNonSmiToInt32),
           RelocInfo::CODE_TARGET);
 
-  __ popq(signature_type);
   __ popq(function_data);
   __ popq(wasm_instance);
+  __ popq(current_param_slot);
+  __ popq(param_limit);
+  __ popq(current_param);
+  __ movq(param_count, MemOperand(rbp, kParamCountOffset));
+  __ jmp(&param_conversion_done);
 
-  __ jmp(&params_done);
+  __ bind(&convert_return);
+
+  Label to_heapnumber;
+  // If pointer compression is disabled, we can convert the return to a smi.
+  if (SmiValuesAre32Bits()) {
+    __ SmiTag(return_reg);
+  } else {
+    Register temp = rbx;
+    __ movq(temp, return_reg);
+    // Double the return value to test if it can be a Smi.
+    __ addl(temp, return_reg);
+    // If there was overflow, convert the return value to a HeapNumber.
+    __ j(overflow, &to_heapnumber);
+    // If there was no overflow, we can convert to Smi.
+    __ SmiTag(return_reg);
+  }
+  __ jmp(&return_done);
+
+  // Handle the conversion of the return value to HeapNumber when it cannot be a
+  // smi.
+  __ bind(&to_heapnumber);
+  // We have to make sure that the kGCScanSlotCount is set correctly. For this
+  // builtin it's the same as for the Wasm call = 0, so we don't have to reset
+  // it.
+  // We don't need the JS context for this builtin call.
+  __ Call(BUILTIN_CODE(masm->isolate(), WasmInt32ToHeapNumber),
+          RelocInfo::CODE_TARGET);
+  // We will need the parameter_count later.
+  __ movq(param_count, MemOperand(rbp, kParamCountOffset));
+  __ jmp(&return_done);
 }
 
 namespace {

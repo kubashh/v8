@@ -44,9 +44,27 @@ class V8_EXPORT_PRIVATE LocalHeap {
   LocalHandles* handles() { return handles_.get(); }
 
   template <typename T>
-  inline Handle<T> NewPersistentHandle(T object);
+  Handle<T> NewPersistentHandle(T object) {
+    if (!persistent_handles_) {
+      EnsurePersistentHandles();
+    }
+    return persistent_handles_->NewHandle(object);
+  }
+
   template <typename T>
-  inline Handle<T> NewPersistentHandle(Handle<T> object);
+  Handle<T> NewPersistentHandle(Handle<T> object) {
+    return NewPersistentHandle(*object);
+  }
+
+  template <typename T>
+  MaybeHandle<T> NewPersistentMaybeHandle(MaybeHandle<T> maybe_handle) {
+    Handle<T> handle;
+    if (maybe_handle.ToHandle(&handle)) {
+      return NewPersistentHandle(handle);
+    }
+    return kNullMaybeHandle;
+  }
+
   std::unique_ptr<PersistentHandles> DetachPersistentHandles();
 #ifdef DEBUG
   bool ContainsPersistentHandle(Address* location);
@@ -58,6 +76,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
 
   Heap* heap() { return heap_; }
 
+  MarkingBarrier* marking_barrier() { return marking_barrier_.get(); }
   ConcurrentAllocator* old_space_allocator() { return &old_space_allocator_; }
 
   // Mark/Unmark linear allocation areas black. Used for black allocation.
@@ -137,6 +156,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
 
   std::unique_ptr<LocalHandles> handles_;
   std::unique_ptr<PersistentHandles> persistent_handles_;
+  std::unique_ptr<MarkingBarrier> marking_barrier_;
 
   ConcurrentAllocator old_space_allocator_;
 

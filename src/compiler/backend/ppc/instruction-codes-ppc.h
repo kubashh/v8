@@ -205,6 +205,8 @@ namespace compiler {
   V(PPC_F64x2Abs)                    \
   V(PPC_F64x2Neg)                    \
   V(PPC_F64x2Sqrt)                   \
+  V(PPC_F64x2Qfma)                   \
+  V(PPC_F64x2Qfms)                   \
   V(PPC_F32x4Splat)                  \
   V(PPC_F32x4ExtractLane)            \
   V(PPC_F32x4ReplaceLane)            \
@@ -271,6 +273,8 @@ namespace compiler {
   V(PPC_I32x4SConvertI16x8High)      \
   V(PPC_I32x4UConvertI16x8Low)       \
   V(PPC_I32x4UConvertI16x8High)      \
+  V(PPC_F32x4Qfma)                   \
+  V(PPC_F32x4Qfms)                   \
   V(PPC_I16x8Splat)                  \
   V(PPC_I16x8ExtractLaneU)           \
   V(PPC_I16x8ExtractLaneS)           \
@@ -304,6 +308,7 @@ namespace compiler {
   V(PPC_I16x8SubSaturateS)           \
   V(PPC_I16x8AddSaturateU)           \
   V(PPC_I16x8SubSaturateU)           \
+  V(PPC_I16x8RoundingAverageU)       \
   V(PPC_I8x16Splat)                  \
   V(PPC_I8x16ExtractLaneU)           \
   V(PPC_I8x16ExtractLaneS)           \
@@ -332,6 +337,7 @@ namespace compiler {
   V(PPC_I8x16SubSaturateS)           \
   V(PPC_I8x16AddSaturateU)           \
   V(PPC_I8x16SubSaturateU)           \
+  V(PPC_I8x16RoundingAverageU)       \
   V(PPC_S8x16Shuffle)                \
   V(PPC_S8x16Swizzle)                \
   V(PPC_V64x2AnyTrue)                \
@@ -348,6 +354,7 @@ namespace compiler {
   V(PPC_S128Zero)                    \
   V(PPC_S128Not)                     \
   V(PPC_S128Select)                  \
+  V(PPC_S128AndNot)                  \
   V(PPC_StoreCompressTagged)         \
   V(PPC_LoadDecompressTaggedSigned)  \
   V(PPC_LoadDecompressTaggedPointer) \

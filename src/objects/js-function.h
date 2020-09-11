@@ -110,9 +110,18 @@ class JSFunction : public JSFunctionOrBoundFunction {
   V8_EXPORT_PRIVATE bool HasAttachedOptimizedCode() const;
   bool HasAvailableOptimizedCode() const;
 
+  bool HasAvailableCodeKind(CodeKind kind) const;
+
   V8_EXPORT_PRIVATE bool ActiveTierIsIgnition() const;
   bool ActiveTierIsTurbofan() const;
   bool ActiveTierIsNCI() const;
+
+  CodeKind NextTier() const;
+
+  // Similar to SharedFunctionInfo::CanDiscardCompiled. Returns true, if the
+  // attached code can be recreated at a later point by replacing it with
+  // CompileLazy.
+  bool CanDiscardCompiled() const;
 
   // Tells whether or not this function checks its optimization marker in its
   // feedback vector.

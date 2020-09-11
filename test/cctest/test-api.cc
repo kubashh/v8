@@ -509,7 +509,7 @@ THREADED_TEST(ScriptUsingStringResource) {
     Local<Value> value = script->Run(env.local()).ToLocalChecked();
     CHECK(value->IsNumber());
     CHECK_EQ(7, value->Int32Value(env.local()).FromJust());
-    CHECK(source->IsExternal());
+    CHECK(source->IsExternalTwoByte());
     CHECK_EQ(resource,
              static_cast<TestResource*>(source->GetExternalStringResource()));
     String::Encoding encoding = String::UNKNOWN_ENCODING;
@@ -568,7 +568,7 @@ THREADED_TEST(ScriptMakingExternalString) {
     // Trigger GCs so that the newly allocated string moves to old gen.
     CcTest::CollectGarbage(i::NEW_SPACE);  // in survivor space now
     CcTest::CollectGarbage(i::NEW_SPACE);  // in old gen now
-    CHECK(!source->IsExternal());
+    CHECK(!source->IsExternalTwoByte());
     CHECK(!source->IsExternalOneByte());
     String::Encoding encoding = String::UNKNOWN_ENCODING;
     CHECK(!source->GetExternalStringResourceBase(&encoding));
@@ -685,6 +685,7 @@ TEST(MakingExternalOneByteStringConditions) {
 
 
 TEST(MakingExternalUnalignedOneByteString) {
+  i::FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   LocalContext env;
   v8::HandleScope scope(env->GetIsolate());
 
@@ -2248,6 +2249,69 @@ static void TestObjectTemplateInheritedWithoutInstanceTemplate(
     CHECK_EQ(900, CompileRun("o.nirk")->IntegerValue(env.local()).FromJust());
     CHECK_EQ(560, CompileRun("o.rino")->IntegerValue(env.local()).FromJust());
   }
+}
+
+THREADED_TEST(TestDataTypeChecks) {
+  LocalContext env;
+  v8::Isolate* isolate = CcTest::isolate();
+  v8::HandleScope scope(isolate);
+
+  v8::Local<v8::Data> values[] = {
+      v8::Undefined(isolate),
+      v8::Null(isolate),
+      v8::True(isolate),
+      v8::Integer::New(isolate, 10),
+      v8::Number::New(isolate, 3.14),
+      v8::BigInt::NewFromUnsigned(isolate, 10),
+      v8::Symbol::New(isolate),
+      v8::String::NewFromUtf8Literal(isolate, "hello"),
+  };
+  for (auto x : values) {
+    CHECK(!x->IsModule());
+    CHECK(x->IsValue());
+    CHECK(!x->IsPrivate());
+    CHECK(!x->IsObjectTemplate());
+    CHECK(!x->IsFunctionTemplate());
+    v8::Local<v8::Value>::Cast(x);
+  }
+
+  v8::ScriptOrigin origin(
+      v8_str(""), Local<v8::Integer>(), Local<v8::Integer>(),
+      Local<v8::Boolean>(), Local<v8::Integer>(), Local<v8::Value>(),
+      Local<v8::Boolean>(), Local<v8::Boolean>(), True(isolate));
+  v8::ScriptCompiler::Source source(v8::String::NewFromUtf8Literal(isolate, ""),
+                                    origin);
+  v8::Local<v8::Data> module =
+      v8::ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
+  CHECK(module->IsModule());
+  CHECK(!module->IsValue());
+  CHECK(!module->IsPrivate());
+  CHECK(!module->IsObjectTemplate());
+  CHECK(!module->IsFunctionTemplate());
+  v8::Local<v8::Module>::Cast(module);
+
+  v8::Local<v8::Data> p = v8::Private::New(isolate);
+  CHECK(!p->IsModule());
+  CHECK(!p->IsValue());
+  CHECK(p->IsPrivate());
+  CHECK(!p->IsObjectTemplate());
+  CHECK(!p->IsFunctionTemplate());
+  CHECK(!(*reinterpret_cast<Local<Value>*>(&p))->IsSymbol());
+  v8::Local<v8::Private>::Cast(p);
+
+  v8::Local<v8::Data> otmpl = v8::ObjectTemplate::New(isolate);
+  CHECK(!otmpl->IsModule());
+  CHECK(!otmpl->IsValue());
+  CHECK(!otmpl->IsPrivate());
+  CHECK(otmpl->IsObjectTemplate());
+  CHECK(!otmpl->IsFunctionTemplate());
+
+  v8::Local<v8::Data> ftmpl = v8::FunctionTemplate::New(isolate);
+  CHECK(!ftmpl->IsModule());
+  CHECK(!ftmpl->IsValue());
+  CHECK(!ftmpl->IsPrivate());
+  CHECK(!ftmpl->IsObjectTemplate());
+  CHECK(ftmpl->IsFunctionTemplate());
 }
 
 THREADED_TEST(TestObjectTemplateInheritedWithPrototype1) {
@@ -13746,6 +13810,7 @@ static void event_handler(const v8::JitCodeEvent* event) {
 UNINITIALIZED_TEST(SetJitCodeEventHandler) {
   i::FLAG_stress_compaction = true;
   i::FLAG_incremental_marking = false;
+  i::FLAG_stress_concurrent_allocation = false;  // For SimulateFullSpace.
   if (i::FLAG_never_compact) return;
   const char* script =
       "function bar() {"
@@ -16731,10 +16796,11 @@ class VisitorImpl : public v8::ExternalResourceVisitor {
   }
   ~VisitorImpl() override = default;
   void VisitExternalString(v8::Local<v8::String> string) override {
-    if (!string->IsExternal()) {
-      CHECK(string->IsExternalOneByte());
+    if (string->IsExternalOneByte()) {
+      CHECK(!string->IsExternalTwoByte());
       return;
     }
+    CHECK(string->IsExternalTwoByte());
     v8::String::ExternalStringResource* resource =
         string->GetExternalStringResource();
     CHECK(resource);
@@ -16773,7 +16839,7 @@ TEST(ExternalizeOldSpaceTwoByteCons) {
       AsciiToTwoByteString("Romeo Montague Juliet Capulet"));
   cons->MakeExternal(resource);
 
-  CHECK(cons->IsExternal());
+  CHECK(cons->IsExternalTwoByte());
   CHECK_EQ(resource, cons->GetExternalStringResource());
   String::Encoding encoding;
   CHECK_EQ(resource, cons->GetExternalStringResourceBase(&encoding));
@@ -16840,10 +16906,10 @@ TEST(VisitExternalStrings) {
   CHECK(string3_i->IsInternalizedString());
 
   // We need to add usages for string* to avoid warnings in GCC 4.7
-  CHECK(string0->IsExternal());
-  CHECK(string1->IsExternal());
-  CHECK(string2->IsExternal());
-  CHECK(string3->IsExternal());
+  CHECK(string0->IsExternalTwoByte());
+  CHECK(string1->IsExternalTwoByte());
+  CHECK(string2->IsExternalTwoByte());
+  CHECK(string3->IsExternalTwoByte());
 
   VisitorImpl visitor(resource);
   isolate->VisitExternalResources(&visitor);
@@ -17906,6 +17972,8 @@ TEST(GCCallbacksWithData) {
 }
 
 TEST(GCCallbacks) {
+  // For SimulateFullSpace in PrologueCallbackAlloc and EpilogueCallbackAlloc.
+  i::FLAG_stress_concurrent_allocation = false;
   LocalContext context;
   v8::Isolate* isolate = context->GetIsolate();
   gc_callbacks_isolate = isolate;
@@ -26692,42 +26760,6 @@ TEST(BigIntAPI) {
   }
 }
 
-TEST(TestGetUnwindState) {
-  LocalContext env;
-  v8::Isolate* isolate = env->GetIsolate();
-  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
-
-// Ignore deprecation warnings so that we can keep the tests for now.
-// TODO(petermarshall): Remove this once the deprecated API is gone.
-#if __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-#endif
-  v8::UnwindState unwind_state = isolate->GetUnwindState();
-#if __clang__
-#pragma clang diagnostic pop
-#endif
-  v8::MemoryRange builtins_range = unwind_state.embedded_code_range;
-
-  // Check that each off-heap builtin is within the builtins code range.
-  for (int id = 0; id < i::Builtins::builtin_count; id++) {
-    if (!i::Builtins::IsIsolateIndependent(id)) continue;
-    i::Code builtin = i_isolate->builtins()->builtin(id);
-    i::Address start = builtin.InstructionStart();
-    i::Address end = start + builtin.InstructionSize();
-
-    i::Address builtins_start =
-        reinterpret_cast<i::Address>(builtins_range.start);
-    CHECK(start >= builtins_start &&
-          end < builtins_start + builtins_range.length_in_bytes);
-  }
-
-  v8::JSEntryStub js_entry_stub = unwind_state.js_entry_stub;
-
-  CHECK_EQ(i_isolate->heap()->builtin(i::Builtins::kJSEntry).InstructionStart(),
-           reinterpret_cast<i::Address>(js_entry_stub.code.start));
-}
-
 TEST(GetJSEntryStubs) {
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
@@ -28281,7 +28313,9 @@ TEST(TriggerDelayedMainThreadMetricsEvent) {
     CHECK_EQ(recorder->count_, 0);        // Unchanged.
     CHECK_EQ(recorder->time_in_us_, -1);  // Unchanged.
     v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(1100));
-    v8::platform::PumpMessageLoop(v8::internal::V8::GetCurrentPlatform(), iso);
+    while (v8::platform::PumpMessageLoop(v8::internal::V8::GetCurrentPlatform(),
+                                         iso)) {
+    }
     CHECK_EQ(recorder->count_, 1);  // Increased.
     CHECK_GT(recorder->time_in_us_, 100);
   }
@@ -28292,7 +28326,9 @@ TEST(TriggerDelayedMainThreadMetricsEvent) {
   // invalid.
   i_iso->metrics_recorder()->DelayMainThreadEvent(event, context_id);
   v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(1100));
-  v8::platform::PumpMessageLoop(v8::internal::V8::GetCurrentPlatform(), iso);
+  while (v8::platform::PumpMessageLoop(v8::internal::V8::GetCurrentPlatform(),
+                                       iso)) {
+  }
   CHECK_EQ(recorder->count_, 1);  // Unchanged.
 }
 

@@ -206,15 +206,19 @@ class WasmModuleVerifyTest : public TestWithIsolateAndZone {
     }
     ModuleResult result = DecodeWasmModule(
         enabled_features_, temp, temp + total, false, kWasmOrigin,
-        isolate()->counters(), isolate()->wasm_engine()->allocator());
+        isolate()->counters(), isolate()->metrics_recorder(),
+        v8::metrics::Recorder::ContextId::Empty(), DecodingMethod::kSync,
+        isolate()->wasm_engine()->allocator());
     delete[] temp;
     return result;
   }
   ModuleResult DecodeModuleNoHeader(const byte* module_start,
                                     const byte* module_end) {
-    return DecodeWasmModule(enabled_features_, module_start, module_end, false,
-                            kWasmOrigin, isolate()->counters(),
-                            isolate()->wasm_engine()->allocator());
+    return DecodeWasmModule(
+        enabled_features_, module_start, module_end, false, kWasmOrigin,
+        isolate()->counters(), isolate()->metrics_recorder(),
+        v8::metrics::Recorder::ContextId::Empty(), DecodingMethod::kSync,
+        isolate()->wasm_engine()->allocator());
   }
 };
 
@@ -489,6 +493,61 @@ TEST_F(WasmModuleVerifyTest, Global_invalid_type2) {
   };
 
   EXPECT_FAILURE(data);
+}
+
+TEST_F(WasmModuleVerifyTest, Global_invalid_init) {
+  static const byte no_initializer_no_end[] = {
+      SECTION(Global,          //--
+              ENTRY_COUNT(1),  //--
+              kLocalI32,       // type
+              1)               // mutable
+  };
+  EXPECT_FAILURE_WITH_MSG(no_initializer_no_end,
+                          "Global initializer is missing 'end'");
+
+  static const byte no_initializer[] = {
+      SECTION(Global,          //--
+              ENTRY_COUNT(1),  //--
+              kLocalI32,       // type
+              1,               // mutable
+              kExprEnd)        // --
+  };
+  EXPECT_FAILURE_WITH_MSG(no_initializer,
+                          "Found 'end' in global initalizer, but no "
+                          "expressions were found on the stack");
+
+  static const byte too_many_initializers_no_end[] = {
+      SECTION(Global,           // --
+              ENTRY_COUNT(1),   // --
+              kLocalI32,        // type
+              1,                // mutable
+              WASM_I32V_1(42),  // one value is good
+              WASM_I32V_1(43))  // another value is too much
+  };
+  EXPECT_FAILURE_WITH_MSG(too_many_initializers_no_end,
+                          "Global initializer is missing 'end'");
+
+  static const byte too_many_initializers[] = {
+      SECTION(Global,           // --
+              ENTRY_COUNT(1),   // --
+              kLocalI32,        // type
+              1,                // mutable
+              WASM_I32V_1(42),  // one value is good
+              WASM_I32V_1(43),  // another value is too much
+              kExprEnd)};
+  EXPECT_FAILURE_WITH_MSG(too_many_initializers,
+                          "Found 'end' in global initalizer, but more than one "
+                          "expressions were found on the stack");
+
+  static const byte missing_end_opcode[] = {
+      SECTION(Global,           // --
+              ENTRY_COUNT(1),   // --
+              kLocalI32,        // type
+              1,                // mutable
+              WASM_I32V_1(42))  // init value
+  };
+  EXPECT_FAILURE_WITH_MSG(missing_end_opcode,
+                          "Global initializer is missing 'end'");
 }
 
 TEST_F(WasmModuleVerifyTest, ZeroGlobals) {
