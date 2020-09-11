@@ -36,6 +36,42 @@
     },
     {
       "key": {
+        "uuid": "51aeb3bd_273ae346",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2020-09-11T11:23:47Z",
+      "side": 1,
+      "message": "https://chromium-swarm.appspot.com/botlist?c\u003did\u0026c\u003dtask\u0026c\u003dos\u0026c\u003dstatus\u0026d\u003dasc\u0026f\u003dos%3AMac-11\u0026f\u003dcpu%3Aarm64\u0026f\u003dpool%3Achromium.tests.mac-arm64\u0026s\u003did",
+      "parentUuid": "8b26fb9c_e16eb57d",
+      "revId": "d8986576a6546c2e32804741691d19cf023c6a9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec07e044_45dba063",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2020-09-11T11:23:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b12ab7b4_ec7b2e09",
+      "revId": "d8986576a6546c2e32804741691d19cf023c6a9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e0a35b7_9e848a64",
         "filename": "infra/testing/builders.pyl",
         "patchSetId": 2
@@ -56,6 +92,30 @@
       "revId": "d8986576a6546c2e32804741691d19cf023c6a9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e6162d6_f86beb95",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2020-09-11T11:23:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e0a35b7_9e848a64",
+      "range": {
+        "startLine": 639,
+        "startChar": 16,
+        "endLine": 639,
+        "endChar": 25
+      },
+      "revId": "d8986576a6546c2e32804741691d19cf023c6a9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

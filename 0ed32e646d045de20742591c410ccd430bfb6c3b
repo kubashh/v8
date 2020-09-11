@@ -22,6 +22,30 @@
       "revId": "0ed32e646d045de20742591c410ccd430bfb6c3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c13f4f46_094b1e7b",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2020-09-11T11:23:47Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "398d22fc_f5ec7d43",
+      "range": {
+        "startLine": 640,
+        "startChar": 16,
+        "endLine": 640,
+        "endChar": 23
+      },
+      "revId": "0ed32e646d045de20742591c410ccd430bfb6c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
