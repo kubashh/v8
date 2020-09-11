@@ -1231,32 +1231,6 @@ InstanceType HeapObjectData::GetMapInstanceType() const {
   return map_data->AsMap()->instance_type();
 }
 
-namespace {
-bool IsReadOnlyLengthDescriptor(Isolate* isolate, Handle<Map> jsarray_map) {
-  DCHECK(!jsarray_map->is_dictionary_map());
-  Handle<Name> length_string = isolate->factory()->length_string();
-  DescriptorArray descriptors = jsarray_map->instance_descriptors();
-  // TODO(jkummerow): We could skip the search and hardcode number == 0.
-  InternalIndex number = descriptors.Search(*length_string, *jsarray_map);
-  DCHECK(number.is_found());
-  return descriptors.GetDetails(number).IsReadOnly();
-}
-
-bool SupportsFastArrayIteration(Isolate* isolate, Handle<Map> map) {
-  return map->instance_type() == JS_ARRAY_TYPE &&
-         IsFastElementsKind(map->elements_kind()) &&
-         map->prototype().IsJSArray() &&
-         isolate->IsAnyInitialArrayPrototype(
-             handle(JSArray::cast(map->prototype()), isolate)) &&
-         Protectors::IsNoElementsIntact(isolate);
-}
-
-bool SupportsFastArrayResize(Isolate* isolate, Handle<Map> map) {
-  return SupportsFastArrayIteration(isolate, map) && map->is_extensible() &&
-         !map->is_dictionary_map() && !IsReadOnlyLengthDescriptor(isolate, map);
-}
-}  // namespace
-
 MapData::MapData(JSHeapBroker* broker, ObjectData** storage, Handle<Map> object)
     : HeapObjectData(broker, storage, object),
       instance_type_(object->instance_type()),
@@ -1279,9 +1253,9 @@ MapData::MapData(JSHeapBroker* broker, ObjectData** storage, Handle<Map> object)
       next_free_property_index_(object->NextFreePropertyIndex()),
       unused_property_fields_(object->UnusedPropertyFields()),
       supports_fast_array_iteration_(
-          SupportsFastArrayIteration(broker->isolate(), object)),
+          JSArray::MapSupportsFastArrayIteration(broker->isolate(), object)),
       supports_fast_array_resize_(
-          SupportsFastArrayResize(broker->isolate(), object)),
+          JSArray::MapSupportsFastArrayResize(broker->isolate(), object)),
       is_abandoned_prototype_map_(object->is_abandoned_prototype_map()),
       elements_kind_generalizations_(broker->zone()) {}
 
@@ -2906,7 +2880,8 @@ bool MapRef::supports_fast_array_iteration() const {
                                                             broker()->mode());
     AllowHandleAllocationIfNeeded allow_handle_allocation(data()->kind(),
                                                           broker()->mode());
-    return SupportsFastArrayIteration(broker()->isolate(), object());
+    return JSArray::MapSupportsFastArrayIteration(broker()->isolate(),
+                                                  object());
   }
   return data()->AsMap()->supports_fast_array_iteration();
 }
@@ -2917,7 +2892,7 @@ bool MapRef::supports_fast_array_resize() const {
                                                             broker()->mode());
     AllowHandleAllocationIfNeeded allow_handle_allocation(data()->kind(),
                                                           broker()->mode());
-    return SupportsFastArrayResize(broker()->isolate(), object());
+    return JSArray::MapSupportsFastArrayResize(broker()->isolate(), object());
   }
   return data()->AsMap()->supports_fast_array_resize();
 }
@@ -4605,12 +4580,15 @@ bool ElementAccessFeedback::HasOnlyStringMaps(JSHeapBroker* broker) const {
 
 MinimorphicLoadPropertyAccessFeedback::MinimorphicLoadPropertyAccessFeedback(
     NameRef const& name, FeedbackSlotKind slot_kind, Handle<Object> handler,
-    MaybeHandle<Map> maybe_map, bool has_migration_target_maps)
+    MaybeHandle<Map> maybe_map, bool has_migration_target_maps,
+    bool supports_fast_array_resize, ElementsKind elements_kind)
     : ProcessedFeedback(kMinimorphicPropertyAccess, slot_kind),
       name_(name),
       handler_(handler),
       maybe_map_(maybe_map),
-      has_migration_target_maps_(has_migration_target_maps) {
+      has_migration_target_maps_(has_migration_target_maps),
+      supports_fast_array_resize_(supports_fast_array_resize),
+      elements_kind_(elements_kind) {
   DCHECK(IsLoadICKind(slot_kind));
 }
 
@@ -4716,6 +4694,22 @@ bool HasMigrationTargets(const MapHandles& maps) {
   }
   return false;
 }
+
+std::pair<bool, ElementsKind> GetArrayInlineInfo(Handle<Object> handler) {
+  int int_handler = -1;
+  if (handler->IsSmi()) {
+    int_handler = handler->ToSmi().value();
+  } else {
+    DCHECK(handler->IsDataHandler());
+    DCHECK(DataHandler::cast(*handler).smi_handler().IsSmi());
+    int_handler = DataHandler::cast(*handler).smi_handler().ToSmi().value();
+  }
+  int decoded_value = LoadHandler::ArrayInlineInfoBits::decode(int_handler);
+  if (decoded_value == LoadHandler::ArrayInlineInfoBits::kMax)
+    return std::pair<bool, ElementsKind>(false, ElementsKind::NO_ELEMENTS);
+  DCHECK_LE(decoded_value, ElementsKind::LAST_FAST_ELEMENTS_KIND);
+  return std::pair<bool, ElementsKind>(true, (ElementsKind)decoded_value);
+}
 }  // namespace
 
 bool JSHeapBroker::CanUseFeedback(const FeedbackNexus& nexus) const {
@@ -4752,8 +4746,10 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
       DCHECK_EQ(maps.size(), 1);
       maybe_map = maps[0];
     }
+    std::pair<bool, ElementsKind> p = GetArrayInlineInfo(handler.object());
     return *zone()->New<MinimorphicLoadPropertyAccessFeedback>(
-        *name, kind, handler.object(), maybe_map, HasMigrationTargets(maps));
+        *name, kind, handler.object(), maybe_map, HasMigrationTargets(maps),
+        p.first, p.second);
   }
 
   FilterRelevantReceiverMaps(isolate(), &maps);

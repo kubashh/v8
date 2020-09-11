@@ -22,6 +22,17 @@ class JSGraph;
 class JSHeapBroker;
 class Node;
 
+// ArrayInlineInfo holds information needed to decide if array builtins can be
+// inlined.
+struct ArrayInlineInfo {
+  ArrayInlineInfo(bool supports_fast_array_resize, ElementsKind elements_kind)
+      : supports_fast_array_resize(supports_fast_array_resize),
+        elements_kind(elements_kind) {}
+
+  bool supports_fast_array_resize = false;
+  ElementsKind elements_kind = ElementsKind::NO_ELEMENTS;
+};
+
 // The MapInference class provides access to the "inferred" maps of an
 // {object}. This information can be either "reliable", meaning that the object
 // is guaranteed to have one of these maps at runtime, or "unreliable", meaning
@@ -57,6 +68,9 @@ class MapInference {
       std::function<bool(InstanceType)> f);
   V8_WARN_UNUSED_RESULT bool Is(Handle<Map> expected_map);
 
+  V8_WARN_UNUSED_RESULT std::vector<ArrayInlineInfo> const&
+  GetArrayInlineInfos();
+
   // These methods provide a guard.
   //
   // Returns true iff maps were already reliable or stability dependencies were
@@ -83,6 +97,7 @@ class MapInference {
   JSHeapBroker* const broker_;
   Node* const object_;
 
+  std::vector<ArrayInlineInfo> array_inline_infos_;
   MapHandles maps_;
   enum {
     kReliableOrGuarded,
