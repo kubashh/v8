@@ -16,6 +16,23 @@
       "revId": "dfb3f7daa502ab0f5a97bd5dd2d4b4ad7d5177de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f7faaca6_76cb075b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145459
+      },
+      "writtenOn": "2020-09-11T15:21:50Z",
+      "side": 1,
+      "message": "Arghh, making a bit of a mess with the comments here, sorry. I think I\u0027m starting to understand how this UI works. In any case, a copy of your comments from 2386332:\n\nPeter Marshall:\n\nWow, thanks for the investigation and write-up!\n\n1. Add the storage leak fix to this CL.\n\nSounds good to me\n\n3. Add another test to drive the storage leak code with 100% reliability. No multi-threading or multiple profilers required\n\nThat would be great if you can add this test to this CL as well. It\u0027s not your bug so I don\u0027t expect you to go overboard here, if you can write this test reasonably easily then that\u0027s great. If not I can take a look.\n\n2. Fix up my test to not drive the storage leak code.\n\nThat sounds good. There is one other problem I noticed with your test (my bad, missed this when reviewing). Each profile you start should use a different name, otherwise they are ignored - see https://source.chromium.org/chromium/chromium/src/+/master:v8/src/profiler/profile-generator.cc;l\u003d764;drc\u003dc741e070dbfcc33b2369e7a5131be87c7b21bb99\n\nRe. the zombie OSR code - I\u0027m not sure what the retention mechanism is for OSR code. Attaching it to the SFI/JSFunction would keep it alive which is why we don\u0027t do that I guess. Let me look into that further but we don\u0027t need to block on it for this work.\n\nVery interesting finding that we don\u0027t log creation of OSR code and that you can reproduce a lack of tick in a test case. We should definitely look at fixing that as it is probably essential for some sorts of workloads. I guess this only applies to code where the interpreted bytecode is created before profiling, and the OSR happens after profiling starts? I will take a look at this, thanks for the bug report.",
+      "revId": "dfb3f7daa502ab0f5a97bd5dd2d4b4ad7d5177de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
