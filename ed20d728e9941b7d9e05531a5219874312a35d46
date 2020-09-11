@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d52681f3_aa88c3f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-11T14:11:05Z",
+      "side": 1,
+      "message": "I tried to change the code a bit by using a dedicated structure instead of a std::pair. I also dropped the compact elements kind and used supports_fast_array_resize flag instead of using elements_kind !\u003d NO_ELEMENTS to infer that. Let me know if it is better now.",
+      "parentUuid": "422d9948_8be52add",
+      "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "93ffbe8e_135f9ff7",
         "filename": "src/objects/elements-kind.h",
         "patchSetId": 19
@@ -51,6 +69,24 @@
       "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05c6c165_8b3f9118",
+        "filename": "src/objects/elements-kind.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-11T14:11:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93ffbe8e_135f9ff7",
+      "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "2d3a7b23_e2f598af",
+        "filename": "src/objects/elements-kind.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-11T14:11:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "975b02c9_33e21819",
+      "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afd8b538_3d129c4c",
         "filename": "src/objects/elements-kind.h",
         "patchSetId": 19
@@ -85,6 +139,24 @@
       "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "437b93a1_97c0b536",
+        "filename": "src/objects/elements-kind.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-11T14:11:05Z",
+      "side": 1,
+      "message": "Done. We don\u0027t have it anymore.",
+      "parentUuid": "afd8b538_3d129c4c",
+      "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

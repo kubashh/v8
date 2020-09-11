@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e366aba4_996dd91e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-11T14:11:05Z",
+      "side": 1,
+      "message": "Thanks Georg! I was looking at few flakes yesterday, so it took longer than expected. PTAL. ",
+      "revId": "d81b3268caec76fca46b746e937803e4aa48c5d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
