@@ -39,6 +39,30 @@
       "revId": "b031e01426f4ba829cf3b962fa755a26ad046182",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fad7a1f6_498b0143",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1145459
+      },
+      "writtenOn": "2020-09-11T15:17:54Z",
+      "side": 1,
+      "message": "OK, added to the commit message. Hopefully, it\u0027s clear without being too much. Hmm.. now that I think about it maybe you meant a comment in the code? Happy to do so, if that\u0027s what you meant, it\u0027s largely just copying and pasting my commit message. I resisted adding a comment to the code as there\u0027s a lot of very subtle and complex stuff that\u0027s in V8 that goes without comment -- if every subtle complex bit of code in V8 were commented V8 would be mostly comments. ;-) Besides, the test for the sampled thread holding the lock was already there in sample.cc, but only for Linux/Unix variants and that test was made without comment. But again, happy to do whatever you suggest -- I just need the fix for my own selfish pruposes, to be able to profile under Windows. ;-)",
+      "parentUuid": "69b5726f_962960ff",
+      "range": {
+        "startLine": 38,
+        "startChar": 53,
+        "endLine": 38,
+        "endChar": 62
+      },
+      "revId": "b031e01426f4ba829cf3b962fa755a26ad046182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

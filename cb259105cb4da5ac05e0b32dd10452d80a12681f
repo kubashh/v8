@@ -34,6 +34,24 @@
       "revId": "cb259105cb4da5ac05e0b32dd10452d80a12681f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "56f2cda1_8ac9b2d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145459
+      },
+      "writtenOn": "2020-09-11T15:17:54Z",
+      "side": 1,
+      "message": "Peter, Thanks for that. Funny, when I did my original commit before the cl upload I did have comments but they were not there in Gerrit. So have gone through the update instructions and they\u0027re there now.\n\nI also have comments that might not belong in the commit message. Like it seemed that the call to IsLockedByThread might make more sense in sample.cc (where is IsLocked call used to be and in the comparable Fuchsia and Windows code) but sample.cc did not have knowledge of the internal namespace (very surprising) and it felt like too big a step for me to introduce it to internal. \n\nAlso, keeping the ThreadId in the CpuSampler makes the profiler a teeny bit more efficient if using Lockers since it avoids a ThreadId::Current call which ends up in a TLS call.\n\nFinally, I hope the methods I added to LocalContext in cctest aren\u0027t over-stepping my bounds but they seem generally useful and, in fact, I saw quite a few places where AddGlobalFunction could eliminate lots of duplicated code, though again, I didn\u0027t feel it was my place to \"fix\" them all up.\n\nOh yes, there is no formal bug report for this fix though I did post a query to v8-users: https://groups.google.com/g/v8-users/c/r0oCFeECoX8. Should I open a bug report?\n\nOh yes, and one more thing. The JS code that reproduced the problem in test-cpu-profiler.cc was created with lots of fiddling to produce a high failure rate without the fix while minimizing runtime (I got it down to ~+50 msec). But dunno if there\u0027s any formal mechanism to demonstrate that the test actually produces the problem without the fix. Seems like a bit of a gotcha with fix and test being in the same commit. I manually demonstrated it by running the test without my fix but you kind of have to take that on faith.\n\nAnd one last thing.. when I compiled under Windows I was getting a compile error for the line:\nuintptr_t data_address \u003d reinterpret_cast\u003cuintptr_t\u003e(resource_data);\nThe compiler was complaining that the reinterpret_cast was unnecessary and should be a static_cast which is fair enough as resource_data is effectively an Address which is effectively a void* so no reinterpretation required. I guess maybe a reinterpret_cast is harmless enough and for some reason my compiler is being a bit more picky than everyone else\u0027s (or everyone\u0027s using compressed pointers?) but I did change that to a static_cast and it seemed happy on all my OSes.",
+      "parentUuid": "fb583cb2_5e7cddc9",
+      "revId": "cb259105cb4da5ac05e0b32dd10452d80a12681f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
