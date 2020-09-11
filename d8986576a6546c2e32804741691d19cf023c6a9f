@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b26fb9c_e16eb57d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-11T08:32:27Z",
+      "side": 1,
+      "message": "Hmm, I don\u0027t find these bots in the pool do you have a link to them?",
+      "revId": "d8986576a6546c2e32804741691d19cf023c6a9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e0a35b7_9e848a64",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-11T08:32:27Z",
+      "side": 1,
+      "message": "Also add , \u0027variant\u0027: \u0027default\u0027\nso that we only run the default variant.\n\nFor more variants or other test suites we probably need separate builders with something in their name, e.g. v8_mac_arm64_full_rel_ng_triggered, but let\u0027s create those on demand when we need them.",
+      "range": {
+        "startLine": 639,
+        "startChar": 16,
+        "endLine": 639,
+        "endChar": 25
+      },
+      "revId": "d8986576a6546c2e32804741691d19cf023c6a9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

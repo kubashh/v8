@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "398d22fc_f5ec7d43",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-11T08:32:27Z",
+      "side": 0,
+      "message": "Note, as soon as this lands, the builders won\u0027t isolate test262 any longer. But we probably won\u0027t test more with it now. We can add a full builder later that isolates more.",
+      "range": {
+        "startLine": 640,
+        "startChar": 16,
+        "endLine": 640,
+        "endChar": 23
+      },
+      "revId": "0ed32e646d045de20742591c410ccd430bfb6c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
