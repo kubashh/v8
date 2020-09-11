@@ -52,6 +52,23 @@
       "revId": "1897e130c3458ba93e7f7cd5ae3bbb4c743ad3fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ede1630d_91fa1609",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-11T09:50:35Z",
+      "side": 1,
+      "message": "Please mark this as experiment in CL description. It\u0027s also useful to add:\n\nCOMMIT\u003dfalse\n\nThen CQ won\u0027t land it my mistake. Did you retry running with this, now that other things got greener?",
+      "revId": "1897e130c3458ba93e7f7cd5ae3bbb4c743ad3fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
