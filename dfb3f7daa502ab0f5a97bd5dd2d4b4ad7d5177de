@@ -33,6 +33,41 @@
       "revId": "dfb3f7daa502ab0f5a97bd5dd2d4b4ad7d5177de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cabe8f3f_16d30a56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145459
+      },
+      "writtenOn": "2020-09-11T15:56:45Z",
+      "side": 1,
+      "message": "So ",
+      "revId": "dfb3f7daa502ab0f5a97bd5dd2d4b4ad7d5177de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "92d0dd23_aec693f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145459
+      },
+      "writtenOn": "2020-09-11T15:56:45Z",
+      "side": 1,
+      "message": "Will fix things up as you suggest. \n\nAs far as your comment on the profile start names, the test actually creates a separate CpuProfiler object for each thread so can start each with the same name. I don\u0027t know if this is weird or not, but in my own embedder code I didn\u0027t find any performance difference between a CpuProfiler per profiler or multiple names on a single profiler and I found a CpuProfiler per profile much easier to manage. In fact, I was kind of forced to do this in my own embedder code because I needed different sampling intervals for different profiles (long story).\n\nAnother thought on the OSR code is that we could walk the stack looking for OSR code in EnumerateCompiledFunctions. This could be done fairly efficiently. \n\nI wonder if it even makes sense for OSR code to be in the optimized code hash table -- it was very strange in my playing around seeing a new function compilation force deoptimization of an OSR compilation. If the OSR was still in use on the stack, it would know to deoptimize itself when it hit the modified global property or whatever else causes deoptimization.",
+      "parentUuid": "f7faaca6_76cb075b",
+      "revId": "dfb3f7daa502ab0f5a97bd5dd2d4b4ad7d5177de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
