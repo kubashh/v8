@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "b12ab7b4_ec7b2e09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-11T09:48:20Z",
+      "side": 1,
+      "message": "These are the bots:\nhttps://chromium-swarm.appspot.com/botlist?c\u003did\u0026c\u003dtask\u0026c\u003dos\u0026c\u003dstatus\u0026d\u003dasc\u0026f\u003dos%3AMac-11\u0026f\u003dcpu%3Aarm64\u0026k\u003dcpu\u0026s\u003did\n\nWe need to add the pool dimension and call it:\nchromium.tests.mac-arm64\n\nOtherwise it will default to chromium.tests\n\n",
+      "revId": "d8986576a6546c2e32804741691d19cf023c6a9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e0a35b7_9e848a64",
         "filename": "infra/testing/builders.pyl",
         "patchSetId": 2
