@@ -65,6 +65,7 @@ FEATURE_FLAGS = {
   'logical-assignment-operators': '--harmony-logical-assignment',
   'Promise.any': '--harmony-promise-any',
   'Atomics.waitAsync': '--harmony-atomics-waitasync',
+  'legacy-regexp': '--harmony_regexp_match_indices',
 }
 
 SKIPPED_FEATURES = set([])
