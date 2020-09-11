@@ -50,6 +50,24 @@
       "revId": "fc676179c5d6bf51913341418b21ba3cb84b4091",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02ab3e22_785d70fa",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-11T11:49:16Z",
+      "side": 1,
+      "message": "Not sure. It would make debugging slightly more obvious than the comment makes it, but would otherwise just trade one crash for another. Especially now that the \u0027Scope itself is platform-specific, it wouldn\u0027t provide additional test coverage on other platforms.\nI\u0027d say we can add such a DCHECK if/when we have more than one place where we\u0027d use it, or if an example of an issue comes up where it would have helped to have it.",
+      "parentUuid": "6419e2f5_594d0a20",
+      "revId": "fc676179c5d6bf51913341418b21ba3cb84b4091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
