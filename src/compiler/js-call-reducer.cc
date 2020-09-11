@@ -3207,20 +3207,18 @@ bool CanInlineArrayIteratingBuiltin(JSHeapBroker* broker,
   return true;
 }
 
-bool CanInlineArrayResizingBuiltin(JSHeapBroker* broker,
-                                   MapHandles const& receiver_maps,
-                                   std::vector<ElementsKind>* kinds,
-                                   bool builtin_is_push = false) {
-  DCHECK_NE(0, receiver_maps.size());
-  for (auto receiver_map : receiver_maps) {
-    MapRef map(broker, receiver_map);
-    if (!map.supports_fast_array_resize()) return false;
+bool CanInlineArrayResizingBuiltin(
+    JSHeapBroker* broker, std::vector<ArrayInlineInfo> array_inline_infos,
+    std::vector<ElementsKind>* kinds, bool builtin_is_push = false) {
+  DCHECK_NE(0, array_inline_infos.size());
+  for (ArrayInlineInfo info : array_inline_infos) {
+    if (!info.supports_fast_array_resize) return false;
     // TODO(turbofan): We should also handle fast holey double elements once
     // we got the hole NaN mess sorted out in TurboFan/V8.
-    if (map.elements_kind() == HOLEY_DOUBLE_ELEMENTS && !builtin_is_push) {
+    if (info.elements_kind == HOLEY_DOUBLE_ELEMENTS && !builtin_is_push) {
       return false;
     }
-    ElementsKind current_kind = map.elements_kind();
+    ElementsKind current_kind = info.elements_kind;
     auto kind_ptr = kinds->data();
     size_t i;
     for (i = 0; i < kinds->size(); i++, kind_ptr++) {
@@ -5052,11 +5050,13 @@ Reduction JSCallReducer::ReduceArrayPrototypePush(Node* node) {
   Control control = n.control();
 
   MapInference inference(broker(), receiver, effect);
-  if (!inference.HaveMaps()) return NoChange();
-  MapHandles const& receiver_maps = inference.GetMaps();
+  std::vector<ArrayInlineInfo> array_inline_infos =
+      inference.GetArrayInlineInfos();
+  if (array_inline_infos.empty()) return NoChange();
 
   std::vector<ElementsKind> kinds;
-  if (!CanInlineArrayResizingBuiltin(broker(), receiver_maps, &kinds, true)) {
+  if (!CanInlineArrayResizingBuiltin(broker(), array_inline_infos, &kinds,
+                                     true)) {
     return inference.NoChange();
   }
   if (!dependencies()->DependOnNoElementsProtector()) UNREACHABLE();
@@ -5189,11 +5189,12 @@ Reduction JSCallReducer::ReduceArrayPrototypePop(Node* node) {
   Node* receiver = n.receiver();
 
   MapInference inference(broker(), receiver, effect);
-  if (!inference.HaveMaps()) return NoChange();
-  MapHandles const& receiver_maps = inference.GetMaps();
+  std::vector<ArrayInlineInfo> array_inline_infos =
+      inference.GetArrayInlineInfos();
+  if (array_inline_infos.empty()) return NoChange();
 
   std::vector<ElementsKind> kinds;
-  if (!CanInlineArrayResizingBuiltin(broker(), receiver_maps, &kinds)) {
+  if (!CanInlineArrayResizingBuiltin(broker(), array_inline_infos, &kinds)) {
     return inference.NoChange();
   }
   if (!dependencies()->DependOnNoElementsProtector()) UNREACHABLE();
@@ -5329,11 +5330,12 @@ Reduction JSCallReducer::ReduceArrayPrototypeShift(Node* node) {
   Control control = n.control();
 
   MapInference inference(broker(), receiver, effect);
-  if (!inference.HaveMaps()) return NoChange();
-  MapHandles const& receiver_maps = inference.GetMaps();
+  std::vector<ArrayInlineInfo> array_inline_infos =
+      inference.GetArrayInlineInfos();
+  if (array_inline_infos.empty()) return NoChange();
 
   std::vector<ElementsKind> kinds;
-  if (!CanInlineArrayResizingBuiltin(broker(), receiver_maps, &kinds)) {
+  if (!CanInlineArrayResizingBuiltin(broker(), array_inline_infos, &kinds)) {
     return inference.NoChange();
   }
   if (!dependencies()->DependOnNoElementsProtector()) UNREACHABLE();
@@ -5558,18 +5560,17 @@ Reduction JSCallReducer::ReduceArrayPrototypeSlice(Node* node) {
   }
 
   MapInference inference(broker(), receiver, effect);
-  if (!inference.HaveMaps()) return NoChange();
-  MapHandles const& receiver_maps = inference.GetMaps();
+  std::vector<ArrayInlineInfo> array_inline_infos =
+      inference.GetArrayInlineInfos();
+  if (array_inline_infos.empty()) return NoChange();
 
   // Check that the maps are of JSArray (and more).
   // TODO(turbofan): Consider adding special case for the common pattern
   // `slice.call(arguments)`, for example jQuery makes heavy use of that.
   bool can_be_holey = false;
-  for (Handle<Map> map : receiver_maps) {
-    MapRef receiver_map(broker(), map);
-    if (!receiver_map.supports_fast_array_iteration())
-      return inference.NoChange();
-    if (IsHoleyElementsKind(receiver_map.elements_kind())) {
+  for (ArrayInlineInfo info : array_inline_infos) {
+    if (!info.supports_fast_array_resize) return inference.NoChange();
+    if (IsHoleyElementsKind(info.elements_kind)) {
       can_be_holey = true;
     }
   }

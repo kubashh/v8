@@ -19,6 +19,7 @@ namespace compiler {
 class Graph;
 class Operator;
 class CommonOperatorBuilder;
+struct ArrayInlineInfo;
 
 // A facade that simplifies access to the different kinds of inputs to a node.
 class V8_EXPORT_PRIVATE NodeProperties final {
@@ -196,7 +197,8 @@ class V8_EXPORT_PRIVATE NodeProperties final {
   // DO NOT USE InferReceiverMapsUnsafe IN NEW CODE. Use MapInference instead.
   static InferReceiverMapsResult InferReceiverMapsUnsafe(
       JSHeapBroker* broker, Node* receiver, Node* effect,
-      ZoneHandleSet<Map>* maps_return);
+      ZoneHandleSet<Map>* maps_return,
+      std::vector<ArrayInlineInfo>* array_inline_info = nullptr);
 
   // Return the initial map of the new-target if the allocation can be inlined.
   static base::Optional<MapRef> GetJSCreateMap(JSHeapBroker* broker,

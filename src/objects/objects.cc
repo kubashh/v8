@@ -5135,6 +5135,32 @@ bool JSArray::WouldChangeReadOnlyLength(Handle<JSArray> array, uint32_t index) {
   return false;
 }
 
+bool JSArray::MapHasReadOnlyLengthDescriptor(Isolate* isolate,
+                                             Handle<Map> jsarray_map) {
+  DCHECK(!jsarray_map->is_dictionary_map());
+  Handle<Name> length_string = isolate->factory()->length_string();
+  DescriptorArray descriptors = jsarray_map->instance_descriptors();
+  // TODO(jkummerow): We could skip the search and hardcode number == 0.
+  InternalIndex number = descriptors.Search(*length_string, *jsarray_map);
+  DCHECK(number.is_found());
+  return descriptors.GetDetails(number).IsReadOnly();
+}
+
+bool JSArray::MapSupportsFastArrayIteration(Isolate* isolate, Handle<Map> map) {
+  return map->instance_type() == JS_ARRAY_TYPE &&
+         IsFastElementsKind(map->elements_kind()) &&
+         map->prototype().IsJSArray() &&
+         isolate->IsAnyInitialArrayPrototype(
+             handle(JSArray::cast(map->prototype()), isolate)) &&
+         Protectors::IsNoElementsIntact(isolate);
+}
+
+bool JSArray::MapSupportsFastArrayResize(Isolate* isolate, Handle<Map> map) {
+  return MapSupportsFastArrayIteration(isolate, map) && map->is_extensible() &&
+         !map->is_dictionary_map() &&
+         !MapHasReadOnlyLengthDescriptor(isolate, map);
+}
+
 // Certain compilers request function template instantiation when they
 // see the definition of the other template functions in the
 // class. This requires us to have the template functions put
