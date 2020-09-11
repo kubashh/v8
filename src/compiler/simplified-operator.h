@@ -398,6 +398,17 @@ DEFINE_OPERATORS_FOR_FLAGS(CheckMapsFlags)
 
 std::ostream& operator<<(std::ostream&, CheckMapsFlags);
 
+enum class DynamicCheckMapsFlag : uint8_t {
+  kNone = 0u,
+  kTryMigrateInstance = 1u << 0,
+  kSupportsFastArrayResize = 1u << 1,
+};
+using DynamicCheckMapsFlags = base::Flags<DynamicCheckMapsFlag>;
+
+DEFINE_OPERATORS_FOR_FLAGS(DynamicCheckMapsFlags)
+
+std::ostream& operator<<(std::ostream&, DynamicCheckMapsFlags);
+
 // A descriptor for map checks. The {feedback} parameter is optional.
 // If {feedback} references a valid CallIC slot and this MapCheck fails,
 // then speculation on that CallIC slot will be disabled.
@@ -431,20 +442,28 @@ class DynamicCheckMapsParameters final {
  public:
   enum ICState { kMonomorphic, kPolymorphic };
 
-  DynamicCheckMapsParameters(CheckMapsFlags flags, Handle<Object> handler,
-                             const FeedbackSource& feedback, ICState state)
-      : flags_(flags), handler_(handler), feedback_(feedback), state_(state) {}
+  DynamicCheckMapsParameters(DynamicCheckMapsFlags flags,
+                             Handle<Object> handler,
+                             const FeedbackSource& feedback, ICState state,
+                             ElementsKind elements_kind)
+      : flags_(flags),
+        handler_(handler),
+        feedback_(feedback),
+        state_(state),
+        elements_kind_(elements_kind) {}
 
-  CheckMapsFlags flags() const { return flags_; }
+  DynamicCheckMapsFlags flags() const { return flags_; }
   Handle<Object> handler() const { return handler_; }
+  ElementsKind elements_kind() const { return elements_kind_; }
   FeedbackSource const& feedback() const { return feedback_; }
   ICState const& state() const { return state_; }
 
  private:
-  CheckMapsFlags const flags_;
+  DynamicCheckMapsFlags const flags_;
   Handle<Object> const handler_;
   FeedbackSource const feedback_;
   ICState const state_;
+  ElementsKind const elements_kind_;
 };
 
 bool operator==(DynamicCheckMapsParameters const&,
@@ -875,10 +894,11 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckInternalizedString();
   const Operator* CheckMaps(CheckMapsFlags, ZoneHandleSet<Map>,
                             const FeedbackSource& = FeedbackSource());
-  const Operator* DynamicCheckMaps(
-      CheckMapsFlags flags, Handle<Object> handler,
-      const FeedbackSource& feedback,
-      DynamicCheckMapsParameters::ICState ic_state);
+  const Operator* DynamicCheckMaps(DynamicCheckMapsFlags flags,
+                                   Handle<Object> handler,
+                                   const FeedbackSource& feedback,
+                                   DynamicCheckMapsParameters::ICState ic_state,
+                                   ElementsKind elements_kind);
   const Operator* CheckNotTaggedHole();
   const Operator* CheckNumber(const FeedbackSource& feedback);
   const Operator* CheckReceiver();

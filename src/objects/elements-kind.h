@@ -364,11 +364,21 @@ enum class CompactElementsKind : uint8_t {
 };
 
 inline CompactElementsKind ToCompactElementsKind(ElementsKind kind) {
-  if (base::IsInRange(kind, PACKED_ELEMENTS, HOLEY_DOUBLE_ELEMENTS)) {
+  if (base::IsInRange(kind, PACKED_SMI_ELEMENTS, HOLEY_DOUBLE_ELEMENTS)) {
     return static_cast<CompactElementsKind>(kind);
   }
 
   return CompactElementsKind::NON_COMPACT_ELEMENTS_KIND;
+}
+
+inline ElementsKind ToElementsKind(CompactElementsKind kind) {
+  if (kind == CompactElementsKind::NON_COMPACT_ELEMENTS_KIND) {
+    return ElementsKind::NO_ELEMENTS;
+  }
+  ElementsKind elements_kind = static_cast<ElementsKind>(kind);
+  DCHECK(base::IsInRange(elements_kind, PACKED_SMI_ELEMENTS,
+                         HOLEY_DOUBLE_ELEMENTS));
+  return elements_kind;
 }
 
 }  // namespace internal

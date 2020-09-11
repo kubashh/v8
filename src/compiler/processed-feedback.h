@@ -175,22 +175,26 @@ class NamedAccessFeedback : public ProcessedFeedback {
 
 class MinimorphicLoadPropertyAccessFeedback : public ProcessedFeedback {
  public:
-  MinimorphicLoadPropertyAccessFeedback(NameRef const& name,
-                                        FeedbackSlotKind slot_kind,
-                                        bool is_monomorphic,
-                                        Handle<Object> handler,
-                                        bool has_migration_target_maps);
-
+  MinimorphicLoadPropertyAccessFeedback(
+      NameRef const& name, FeedbackSlotKind slot_kind, bool is_monomorphic,
+      Handle<Object> handler, bool has_migration_target_maps,
+      bool supports_fast_array_resize, ElementsKind elements_kind);
   NameRef const& name() const { return name_; }
   bool is_monomorphic() const { return is_monomorphic_; }
   Handle<Object> handler() const { return handler_; }
   bool has_migration_target_maps() const { return has_migration_target_maps_; }
+  bool supports_fast_array_resize() const {
+    return supports_fast_array_resize_;
+  }
+  ElementsKind elements_kind() const { return elements_kind_; }
 
  private:
   NameRef const name_;
   bool const is_monomorphic_;
   Handle<Object> const handler_;
   bool const has_migration_target_maps_;
+  bool const supports_fast_array_resize_;
+  ElementsKind elements_kind_;
 };
 
 class CallFeedback : public ProcessedFeedback {
