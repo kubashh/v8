@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5e0c0bc_25de05e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-11T12:11:11Z",
+      "side": 1,
+      "message": "Could you update the PRESUBMIT.py script in this folder to also accept now the pool dimension?",
+      "revId": "d7e991e05f3939a21c288a4b1a4c4d2340d6ad2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
