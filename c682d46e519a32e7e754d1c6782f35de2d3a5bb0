@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a9962de_4d2b751f",
+        "filename": "test/test262/testcfg.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-09-11T17:51:40Z",
+      "side": 1,
+      "message": "This isn\u0027t the right flag. --harmony-regexp-match-indices is for https://github.com/tc39/proposal-regexp-match-indices",
+      "revId": "c682d46e519a32e7e754d1c6782f35de2d3a5bb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
