@@ -160,10 +160,6 @@ void SimdScalarLowering::LowerGraph() {
   V(S128Not)                      \
   V(V32x4AnyTrue)                 \
   V(V32x4AllTrue)                 \
-  V(V16x8AnyTrue)                 \
-  V(V16x8AllTrue)                 \
-  V(V8x16AnyTrue)                 \
-  V(V8x16AllTrue)                 \
   V(I32x4BitMask)
 
 #define FOREACH_FLOAT64X2_OPCODE(V) \
@@ -221,6 +217,8 @@ void SimdScalarLowering::LowerGraph() {
   V(I16x8SConvertI8x16Low)        \
   V(I16x8SConvertI8x16High)       \
   V(I16x8Neg)                     \
+  V(V16x8AnyTrue)                 \
+  V(V16x8AllTrue)                 \
   V(I16x8Shl)                     \
   V(I16x8ShrS)                    \
   V(I16x8SConvertI32x4)           \
@@ -290,6 +288,8 @@ void SimdScalarLowering::LowerGraph() {
   V(S8x16Shuffle)                 \
   V(I8x16RoundingAverageU)        \
   V(I8x16Abs)                     \
+  V(V8x16AnyTrue)                 \
+  V(V8x16AllTrue)                 \
   V(I8x16BitMask)
 
 MachineType SimdScalarLowering::MachineTypeFrom(SimdType simdType) {
@@ -1987,17 +1987,8 @@ void SimdScalarLowering::LowerNode(Node* node) {
     case IrOpcode::kV8x16AnyTrue:
     case IrOpcode::kV8x16AllTrue: {
       DCHECK_EQ(1, node->InputCount());
-      SimdType input_rep_type = ReplacementType(node->InputAt(0));
-      Node** rep;
-      // If the input is a SIMD float, bitcast it to a SIMD int of the same
-      // shape, because the comparisons below use Word32.
-      if (input_rep_type == SimdType::kFloat32x4) {
-        // TODO(v8:9418): f64x2 lowering is not implemented yet.
-        rep = GetReplacementsWithType(node->InputAt(0), SimdType::kInt32x4);
-      } else {
-        rep = GetReplacements(node->InputAt(0));
-      }
-      int input_num_lanes = NumLanes(input_rep_type);
+      Node** rep = GetReplacementsWithType(node->InputAt(0), rep_type);
+
       Node** rep_node = zone()->NewArray<Node*>(num_lanes);
       Node* true_node = mcgraph_->Int32Constant(1);
       Node* false_node = mcgraph_->Int32Constant(0);
@@ -2007,7 +1998,7 @@ void SimdScalarLowering::LowerNode(Node* node) {
           node->opcode() == IrOpcode::kV8x16AllTrue) {
         tmp_result = true_node;
       }
-      for (int i = 0; i < input_num_lanes; ++i) {
+      for (int i = 0; i < num_lanes; ++i) {
         Diamond is_false(
             graph(), common(),
             graph()->NewNode(machine()->Word32Equal(), rep[i], false_node));
