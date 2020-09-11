@@ -1188,8 +1188,10 @@ void SimdScalarLowering::LowerNode(Node* node) {
       switch (rep_type) {
         case SimdType::kInt8x16: {
           for (int i = 0; i < num_lanes; ++i) {
+            Address data_address = reinterpret_cast<Address>(params.data() + i);
             rep_node[i] = mcgraph_->Int32Constant(
-                static_cast<int32_t>(static_cast<int8_t>(params.data()[i])));
+                static_cast<int32_t>(static_cast<int8_t>(
+                    base::ReadLittleEndianValue<int8_t>(data_address))));
           }
           break;
         }
@@ -1197,7 +1199,8 @@ void SimdScalarLowering::LowerNode(Node* node) {
           int16_t val[kNumLanes16];
           memcpy(val, params.data(), kSimd128Size);
           for (int i = 0; i < num_lanes; ++i) {
-            rep_node[i] = mcgraph_->Int32Constant(static_cast<int32_t>(val[i]));
+            rep_node[i] = mcgraph_->Int32Constant(static_cast<int32_t>(
+                base::ReadLittleEndianValue<int16_t>(&val[i])));
           }
           break;
         }
@@ -1206,7 +1209,8 @@ void SimdScalarLowering::LowerNode(Node* node) {
           uint32_t val[kNumLanes32];
           memcpy(val, params.data(), kSimd128Size);
           for (int i = 0; i < num_lanes; ++i) {
-            rep_node[i] = mcgraph_->Int32Constant(val[i]);
+            rep_node[i] = mcgraph_->Int32Constant(
+                base::ReadLittleEndianValue<uint32_t>(&val[i]));
           }
           break;
         }
