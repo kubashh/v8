@@ -267,6 +267,19 @@ std::ostream& operator<<(std::ostream& os, CheckMapsFlags flags) {
   }
 }
 
+std::ostream& operator<<(std::ostream& os, DynamicCheckMapsFlags flags) {
+  if (flags & DynamicCheckMapsFlag::kTryMigrateInstance) {
+    os << "TryMigrateInstance ";
+  }
+  if (flags & DynamicCheckMapsFlag::kSupportsFastArrayResize) {
+    os << "SupportsFastArrayResize ";
+  }
+  if (flags == DynamicCheckMapsFlag::kNone) {
+    os << "None";
+  }
+  return os;
+}
+
 bool operator==(CheckMapsParameters const& lhs,
                 CheckMapsParameters const& rhs) {
   return lhs.flags() == rhs.flags() && lhs.maps() == rhs.maps() &&
@@ -308,7 +321,7 @@ size_t hash_value(DynamicCheckMapsParameters const& p) {
 std::ostream& operator<<(std::ostream& os,
                          DynamicCheckMapsParameters const& p) {
   return os << p.handler() << ", " << p.feedback() << "," << p.state() << ","
-            << p.flags() << "," << p.map().address();
+            << p.flags() << "," << p.map().address() << p.elements_kind();
 }
 
 DynamicCheckMapsParameters const& DynamicCheckMapsParametersOf(
@@ -1487,10 +1500,11 @@ const Operator* SimplifiedOperatorBuilder::CheckMaps(
 }
 
 const Operator* SimplifiedOperatorBuilder::DynamicCheckMaps(
-    CheckMapsFlags flags, Handle<Object> handler, MaybeHandle<Map> maybe_map,
-    const FeedbackSource& feedback) {
+    DynamicCheckMapsFlags flags, Handle<Object> handler,
+    MaybeHandle<Map> maybe_map, const FeedbackSource& feedback,
+    ElementsKind elements_kind) {
   DynamicCheckMapsParameters const parameters(flags, handler, maybe_map,
-                                              feedback);
+                                              feedback, elements_kind);
   return zone()->New<Operator1<DynamicCheckMapsParameters>>(  // --
       IrOpcode::kDynamicCheckMaps,                            // opcode
       Operator::kNoThrow | Operator::kNoWrite,                // flags

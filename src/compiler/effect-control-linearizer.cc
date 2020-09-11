@@ -2061,7 +2061,7 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
     Node* strong_feedback;
     Node* poly_array;
 
-    if (p.flags() & CheckMapsFlag::kTryMigrateInstance) {
+    if (p.flags() & DynamicCheckMapsFlag::kTryMigrateInstance) {
       auto map_check_failed = __ MakeDeferredLabel();
       BranchOnICState(feedback.index(), vector, value_map, frame_state,
                       &monomorphic_map_match, &maybe_poly, &map_check_failed,

@@ -49,19 +49,23 @@ Handle<Smi> LoadHandler::LoadSlow(Isolate* isolate) {
 }
 
 Handle<Smi> LoadHandler::LoadField(Isolate* isolate, FieldIndex field_index,
-                                   ElementsKind kind) {
+                                   ElementsKind kind,
+                                   bool supports_fast_array_resize) {
+  DCHECK_IMPLIES(supports_fast_array_resize, IsFastElementsKind(kind));
+  STATIC_ASSERT(ElementsKind::LAST_FAST_ELEMENTS_KIND <
+                ArrayInlineInfoBits::kMax);
+  int array_inline_info_encoding =
+      supports_fast_array_resize ? ArrayInlineInfoBits::kMax : kind;
   int config = KindBits::encode(kField) |
                IsInobjectBits::encode(field_index.is_inobject()) |
                IsDoubleBits::encode(field_index.is_double()) |
                FieldIndexBits::encode(field_index.index()) |
-               CompactElementsKindBits::encode(ToCompactElementsKind(kind));
+               ArrayInlineInfoBits::encode(array_inline_info_encoding);
   return handle(Smi::FromInt(config), isolate);
 }
 
-Handle<Smi> LoadHandler::LoadConstantFromPrototype(Isolate* isolate,
-                                                   ElementsKind kind) {
-  int config = KindBits::encode(kConstantFromPrototype) |
-               CompactElementsKindBits::encode(ToCompactElementsKind(kind));
+Handle<Smi> LoadHandler::LoadConstantFromPrototype(Isolate* isolate) {
+  int config = KindBits::encode(kConstantFromPrototype);
   return handle(Smi::FromInt(config), isolate);
 }
 
