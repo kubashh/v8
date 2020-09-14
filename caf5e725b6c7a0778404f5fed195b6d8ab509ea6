@@ -87,6 +87,30 @@
       "revId": "caf5e725b6c7a0778404f5fed195b6d8ab509ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cec78d1b_2e77f655",
+        "filename": "src/compiler/simplified-operator-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-09-14T17:50:45Z",
+      "side": 1,
+      "message": "Hi Tobias, thanks for your feedback. Where should we put this logic?",
+      "parentUuid": "8e07e84f_5a7090c7",
+      "range": {
+        "startLine": 241,
+        "startChar": 14,
+        "endLine": 241,
+        "endChar": 79
+      },
+      "revId": "caf5e725b6c7a0778404f5fed195b6d8ab509ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
