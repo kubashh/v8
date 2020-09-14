@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd49e149_e574d6c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-14T15:59:34Z",
+      "side": 1,
+      "message": "Sorry I didn\u0027t get to it today, but you can expect feedback tomorrow.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
