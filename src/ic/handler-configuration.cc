@@ -176,6 +176,113 @@ KeyedAccessLoadMode LoadHandler::GetKeyedAccessLoadMode(MaybeObject handler) {
   return STANDARD_LOAD;
 }
 
+#if defined(DEBUG) || defined(OBJECT_PRINT)
+namespace {
+void PrintSmiLoadHandler(int raw_handler, std::ostream& os) {
+  LoadHandler::Kind kind = LoadHandler::KindBits::decode(raw_handler);
+  os << "LoadHandler(Smi) (kind = ";
+  switch (kind) {
+    case LoadHandler::Kind::kElement:
+      os << "kElement, allow out of bounds = "
+         << LoadHandler::AllowOutOfBoundsBits::decode(raw_handler)
+         << ", is JSArray = " << LoadHandler::IsJsArrayBits::decode(raw_handler)
+         << ", convert hole = "
+         << LoadHandler::ConvertHoleBits::decode(raw_handler)
+         << ", elements kind = "
+         << ElementsKindToString(
+                LoadHandler::ElementsKindBits::decode(raw_handler));
+      break;
+    case LoadHandler::Kind::kIndexedString:
+      os << "kIndexedString, allow out of bounds = "
+         << LoadHandler::AllowOutOfBoundsBits::decode(raw_handler);
+      break;
+    case LoadHandler::Kind::kNormal:
+      os << "kNormal";
+      break;
+    case LoadHandler::Kind::kGlobal:
+      os << "kGlobal";
+      break;
+    case LoadHandler::Kind::kField: {
+      auto elements_kind = static_cast<ElementsKind>(
+          LoadHandler::CompactElementsKindBits::decode(raw_handler));
+      os << "kField, is in object = "
+         << LoadHandler::IsInobjectBits::decode(raw_handler)
+         << ", is double = " << LoadHandler::IsDoubleBits::decode(raw_handler)
+         << ", field index = "
+         << LoadHandler::FieldIndexBits::decode(raw_handler)
+         << ", compact elements kind = " << ElementsKindToString(elements_kind);
+      break;
+    }
+    case LoadHandler::Kind::kConstantFromPrototype: {
+      auto elements_kind = static_cast<ElementsKind>(
+          LoadHandler::CompactElementsKindBits::decode(raw_handler));
+      os << "kConstantFromPrototype, elements kind = "
+         << ElementsKindToString(elements_kind);
+      break;
+    }
+    case LoadHandler::Kind::kAccessor:
+      os << "kAccessor, descriptor = "
+         << LoadHandler::DescriptorBits::decode(raw_handler);
+      break;
+    case LoadHandler::Kind::kNativeDataProperty:
+      os << "kNativeDataProperty, descriptor = "
+         << LoadHandler::DescriptorBits::decode(raw_handler);
+      break;
+    case LoadHandler::Kind::kApiGetter:
+      os << "kApiGetter";
+      break;
+    case LoadHandler::Kind::kApiGetterHolderIsPrototype:
+      os << "kApiGetterHolderIsPrototype";
+      break;
+    case LoadHandler::Kind::kInterceptor:
+      os << "kInterceptor";
+      break;
+    case LoadHandler::Kind::kSlow:
+      os << "kSlow";
+      break;
+    case LoadHandler::Kind::kProxy:
+      os << "kProxy";
+      break;
+    case LoadHandler::Kind::kNonExistent:
+      os << "kNonExistent";
+      break;
+    case LoadHandler::Kind::kModuleExport:
+      os << "kModuleExport, exports index = "
+         << LoadHandler::ExportsIndexBits::decode(raw_handler);
+      break;
+  }
+  os << ")";
+}
+}  // namespace
+
+// static
+void LoadHandler::PrintHandler(Object handler, std::ostream& os) {
+  DisallowHeapAllocation no_gc;
+  if (handler.IsSmi()) {
+    int raw_handler = handler.ToSmi().value();
+    PrintSmiLoadHandler(raw_handler, os);
+    os << std::endl;
+  } else {
+    LoadHandler load_handler = LoadHandler::cast(handler);
+    os << "LoadHandler(smi handler = ";
+    PrintSmiLoadHandler(load_handler.smi_handler().ToSmi().value(), os);
+    if (load_handler.data_field_count() >= 1) {
+      os << ", data1 = ";
+      load_handler.data1().ShortPrint(os);
+    }
+    if (load_handler.data_field_count() >= 2) {
+      os << ", data2 = ";
+      load_handler.data2().ShortPrint(os);
+    }
+    if (load_handler.data_field_count() >= 3) {
+      os << ", data3 = ";
+      load_handler.data3().ShortPrint(os);
+    }
+    os << ")" << std::endl;
+  }
+}
+#endif  // defined(DEBUG) || defined(OBJECT_PRINT)
+
 // static
 KeyedAccessStoreMode StoreHandler::GetKeyedAccessStoreMode(
     MaybeObject handler) {
