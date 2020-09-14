@@ -63,6 +63,30 @@
       "revId": "caf5e725b6c7a0778404f5fed195b6d8ab509ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e07e84f_5a7090c7",
+        "filename": "src/compiler/simplified-operator-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-14T17:30:39Z",
+      "side": 1,
+      "message": "I\u0027m very sorry, but after looking into this for a bit more, I fear what I sugggested is unsound. We do rely on deoptimizing checks really deopting, and just removing them could easily lead to a type system violation. We have code that ensures that if a node ends up having type None (for example, because it always overflows), then the code after it should indeed be unreachable. This stuff is really increadibly intricate, beause it\u0027s a hidden contract between the typer and the rest of the compiler pipeline.\nSo I fear for this optimization to work, we\u0027ll have to do the less nice solution of detecting that the first checked addition will overflow less than the second one, so it is fine to remove it as soon as it has no value or overflow-bit uses anymore.",
+      "parentUuid": "7fe454dd_846b7a51",
+      "range": {
+        "startLine": 241,
+        "startChar": 14,
+        "endLine": 241,
+        "endChar": 79
+      },
+      "revId": "caf5e725b6c7a0778404f5fed195b6d8ab509ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
