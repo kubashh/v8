@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db854bce_687e067b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-09-14T13:59:06Z",
+      "side": 1,
+      "message": "Hi Michael Hablich, would you please take a look at this change, thank you.",
+      "revId": "c6877081da3fbc80dcf37e774a53b068e08d28ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
