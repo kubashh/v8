@@ -68,6 +68,24 @@
       "revId": "dfb3f7daa502ab0f5a97bd5dd2d4b4ad7d5177de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2329dec9_e097fc40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-09-14T09:02:10Z",
+      "side": 1,
+      "message": "\u003e the test actually creates a separate CpuProfiler object for each thread\nOh yeah, very good! Then it\u0027s fine\n\nI chatted to some v8 folks about OSR code. We have a cache which weakly holds OSR code \"OSROptimizedCodeCache\": https://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/osr-optimized-code-cache.h;l\u003d15;drc\u003d5c860faff8acca32094b87f229b630519326372e\n\nThe same OSR code will be re-used if we hit the same loop again, and trigger the same tier-up conditions (we don\u0027t use it 1st time on re-entering the loop). I don\u0027t think the OSR code is kept forever (or if it is, that\u0027s unintentional AFAIK). A GC should be able to clear the weak cache and we shouldn\u0027t hold OSR code strongly anywhere else.\n\nWe could iterate that cache at profiler startup. I don\u0027t know the exact timing details so I would need to verify that the OSR code is never executed until after it is put in the cache, so that there is no timing hazard. But as these both happen on the main thread I think it should be fine.",
+      "parentUuid": "92d0dd23_aec693f9",
+      "revId": "dfb3f7daa502ab0f5a97bd5dd2d4b4ad7d5177de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
