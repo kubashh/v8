@@ -110,6 +110,57 @@
     },
     {
       "key": {
+        "uuid": "3c698935_5f08a912",
+        "filename": "src/compiler/map-inference.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T12:01:56Z",
+      "side": 1,
+      "message": "Please add a DCHECK that true implies fast elements kind.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44b6a841_2ec67221",
+        "filename": "src/compiler/map-inference.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T12:01:56Z",
+      "side": 1,
+      "message": "Let\u0027s remove the initializers here to make it clearer that the only way to construct an ArrayInlineInfo is through the constructor above.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c0ce24b_427fb169",
+        "filename": "src/compiler/map-inference.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T12:01:56Z",
+      "side": 1,
+      "message": "Please remove the empty line, otherwise one gets the impression that the comment above does not appyl to GetArrayInlineInfos.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8db89583_7692aea7",
         "filename": "src/compiler/node-properties.cc",
         "patchSetId": 23
@@ -121,6 +172,120 @@
       "writtenOn": "2020-09-15T07:21:54Z",
       "side": 1,
       "message": "Nit: remove empty line or add one below.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a722d4af_24d114a0",
+        "filename": "src/compiler/node-properties.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T12:01:56Z",
+      "side": 1,
+      "message": "Please negate the condition from 417 and move it into 418.\nif (result \u003d\u003d kReliable... \u0026\u0026 ...) ...",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70b58cba_26829076",
+        "filename": "src/compiler/node-properties.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T12:01:56Z",
+      "side": 1,
+      "message": "There needs to be an explanation here of the array_inline_info out parameter. In particular of the fact that it can be non-empty even when kNoReceiverMaps is returned.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee8dbf30_1943ec28",
+        "filename": "src/compiler/node-properties.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T12:01:56Z",
+      "side": 1,
+      "message": "..._return to be consistent with maps_return. (Feel free to shorten both to ..._out.)",
+      "range": {
+        "startLine": 201,
+        "startChar": 36,
+        "endLine": 201,
+        "endChar": 53
+      },
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fcf2c82_99a9f73d",
+        "filename": "src/compiler/processed-feedback.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T12:01:56Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 198,
+        "startChar": 2,
+        "endLine": 198,
+        "endChar": 14
+      },
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87e8cafe_ada25efc",
+        "filename": "src/objects/js-array.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T12:01:56Z",
+      "side": 1,
+      "message": "How about moving them into Map and dropping the Map prefix? (And making the latter two return false for non-JSArray maps).",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b724a5be_746be71a",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 5155,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T12:01:56Z",
+      "side": 1,
+      "message": "BTW, I\u0027m wondering why we insist on IsNoElementsIntact even when the array isn\u0027t holey.",
       "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
