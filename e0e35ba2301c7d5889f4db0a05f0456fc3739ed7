@@ -16,6 +16,114 @@
       "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d3a01bee_e8ce9428",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T07:21:54Z",
+      "side": 1,
+      "message": "Thanks, looks much better. Some first comments, will look more carefully later today.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b46314c_23e04ed1",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 4749,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T07:21:54Z",
+      "side": 1,
+      "message": "Can you use your struct here too?",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "604c8261_a187cf04",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T07:21:54Z",
+      "side": 1,
+      "message": "Let\u0027s do what I suggested earlier: remove these things from the parameter and fetch them later from the ProcessedFeedback instead. It\u0027s fine to add the broker to EffectControlLinearizer.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a505c36_8876e948",
+        "filename": "src/compiler/map-inference.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T07:21:54Z",
+      "side": 1,
+      "message": "!empty()",
+      "range": {
+        "startLine": 131,
+        "startChar": 42,
+        "endLine": 131,
+        "endChar": 54
+      },
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a67cb2d6_949629d2",
+        "filename": "src/compiler/map-inference.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T07:21:54Z",
+      "side": 1,
+      "message": "Please combine these two.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8db89583_7692aea7",
+        "filename": "src/compiler/node-properties.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-15T07:21:54Z",
+      "side": 1,
+      "message": "Nit: remove empty line or add one below.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
