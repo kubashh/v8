@@ -16,6 +16,23 @@
       "revId": "160e93174d26308b0cf36c268da49987509f43e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "252a81d1_55d84dd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-09-15T08:33:35Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make more sense to make this a property of the template that creates the objects? If so, IsCodeKind() would just check that bit on the template attached to the map, rather than needing to add marker private symbols on objects after the fact.",
+      "revId": "160e93174d26308b0cf36c268da49987509f43e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
