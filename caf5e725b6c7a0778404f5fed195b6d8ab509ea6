@@ -111,6 +111,30 @@
       "revId": "caf5e725b6c7a0778404f5fed195b6d8ab509ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcdcd112_952aa497",
+        "filename": "src/compiler/simplified-operator-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-15T10:43:14Z",
+      "side": 1,
+      "message": "I\u0027d recommend to do everything in SimplifiedOperatorReducer:\nWalk the uses of the second CheckedInt32Add and only do the reduction if it has no other value uses, and then to do RelaxEffectsAndControls on it after performing the reduction to remove it from the effect chain. Just be sure to create a new node for the addition of the two constants and don\u0027t reuse the old one to avoid nodes changing meaning.",
+      "parentUuid": "cec78d1b_2e77f655",
+      "range": {
+        "startLine": 241,
+        "startChar": 14,
+        "endLine": 241,
+        "endChar": 79
+      },
+      "revId": "caf5e725b6c7a0778404f5fed195b6d8ab509ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
