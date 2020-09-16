@@ -16,6 +16,40 @@
       "revId": "175d238b8e9044194137f8c4825f9b5eaa831c8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c1371793_c07c0701",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-16T14:22:10Z",
+      "side": 1,
+      "message": "Do we still need an extra class for this now?",
+      "revId": "175d238b8e9044194137f8c4825f9b5eaa831c8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "373f74ea_f4be31f1",
+        "filename": "src/objects/map.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 2737,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-16T14:22:10Z",
+      "side": 1,
+      "message": "This function is less generic than I had thought, so I\u0027d not expose it at all, just define it as a local function here.",
+      "revId": "175d238b8e9044194137f8c4825f9b5eaa831c8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
