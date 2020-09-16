@@ -48,6 +48,17 @@ class V8_EXPORT OSROptimizedCodeCache : public WeakFixedArray {
   // Remove all code objects marked for deoptimization from OSR code cache.
   void EvictMarkedCode(Isolate* isolate);
 
+  class Iterator {
+   public:
+    explicit Iterator(Handle<NativeContext> native_context);
+
+    std::pair<SharedFunctionInfo, Code> Next();
+
+   private:
+    Handle<OSROptimizedCodeCache> cache_;
+    int index_ = 0;  // Index into the FixedArray; a multiple of kEntryLength.
+  };
+
  private:
   // Functions that implement heuristics on when to grow / shrink the cache.
   static int CapacityForLength(int curr_capacity);

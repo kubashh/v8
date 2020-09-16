@@ -2284,10 +2284,10 @@ TEST(StartProfilingAfterOsr) {
   const CpuProfileNode* root = profile->GetTopDownRoot();
   const v8::CpuProfileNode* notHotNode = GetChild(env, root, "notHot");
   const v8::CpuProfileNode* hotNode = GetChild(env, notHotNode, "hot");
-  USE(hotNode);
+  // USE(hotNode);
   // If/when OSR sampling is fixed the following CHECK_GT could/should be
   // uncommented and the node = node line deleted.
-  // CHECK_GT(hotNode->GetHitCount(), notHotNode->GetHitCount());
+  CHECK_GT(hotNode->GetHitCount(), notHotNode->GetHitCount());
 }
 
 TEST(DontStopOnFinishedProfileDelete) {
