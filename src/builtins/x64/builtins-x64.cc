@@ -3698,6 +3698,8 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
 
   Label return_kWasmI32;
   Label return_kWasmI64;
+  Label return_kWasmF32;
+  Label return_kWasmF64;
 
   __ cmpq(valuetype, Immediate(wasm::kWasmI32.raw_bit_field()));
   __ j(equal, &return_kWasmI32);
@@ -3705,11 +3707,37 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   __ cmpq(valuetype, Immediate(wasm::kWasmI64.raw_bit_field()));
   __ j(equal, &return_kWasmI64);
 
+  __ cmpq(valuetype, Immediate(wasm::kWasmF32.raw_bit_field()));
+  __ j(equal, &return_kWasmF32);
+
+  __ cmpq(valuetype, Immediate(wasm::kWasmF64.raw_bit_field()));
+  __ j(equal, &return_kWasmF64);
+
   __ int3();
 
   __ bind(&return_kWasmI64);
   // We don't need the JS context for this builtin call.
   __ Call(BUILTIN_CODE(masm->isolate(), I64ToBigInt), RelocInfo::CODE_TARGET);
+  // We will need the parameter_count later.
+  __ movq(param_count, MemOperand(rbp, kParamCountOffset));
+  __ jmp(&return_done);
+
+  __ bind(&return_kWasmF32);
+  // The builtin expects the value to be in xmm0.
+  __ Movss(xmm0, xmm1);
+  // We don't need the JS context for this builtin call.
+  __ Call(BUILTIN_CODE(masm->isolate(), WasmFloat32ToNumber),
+          RelocInfo::CODE_TARGET);
+  // We will need the parameter_count later.
+  __ movq(param_count, MemOperand(rbp, kParamCountOffset));
+  __ jmp(&return_done);
+
+  __ bind(&return_kWasmF64);
+  // The builtin expects the value to be in xmm0.
+  __ Movsd(xmm0, xmm1);
+  // We don't need the JS context for this builtin call.
+  __ Call(BUILTIN_CODE(masm->isolate(), WasmFloat64ToNumber),
+          RelocInfo::CODE_TARGET);
   // We will need the parameter_count later.
   __ movq(param_count, MemOperand(rbp, kParamCountOffset));
   __ jmp(&return_done);
