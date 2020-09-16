@@ -1803,7 +1803,8 @@ struct EffectControlLinearizationPhase {
       // - introduce effect phis and rewire effects to get SSA again.
       LinearizeEffectControl(data->jsgraph(), schedule, temp_zone,
                              data->source_positions(), data->node_origins(),
-                             mask_array_index, MaintainSchedule::kDiscard);
+                             mask_array_index, MaintainSchedule::kDiscard,
+                             data->broker());
     }
     {
       // The {EffectControlLinearizer} might leave {Dead} nodes behind, so we
@@ -1973,7 +1974,8 @@ struct ScheduledEffectControlLinearizationPhase {
     // - introduce effect phis and rewire effects to get SSA again.
     LinearizeEffectControl(data->jsgraph(), data->schedule(), temp_zone,
                            data->source_positions(), data->node_origins(),
-                           mask_array_index, MaintainSchedule::kMaintain);
+                           mask_array_index, MaintainSchedule::kMaintain,
+                           data->broker());
 
     // TODO(rmcilroy) Avoid having to rebuild rpo_order on schedule each time.
     Scheduler::ComputeSpecialRPO(temp_zone, data->schedule());

@@ -21,6 +21,7 @@ struct FeedbackSource;
 class JSGraph;
 class JSHeapBroker;
 class Node;
+struct ArrayInlineInfo;
 
 // The MapInference class provides access to the "inferred" maps of an
 // {object}. This information can be either "reliable", meaning that the object
@@ -56,6 +57,8 @@ class MapInference {
   V8_WARN_UNUSED_RESULT bool AllOfInstanceTypes(
       std::function<bool(InstanceType)> f);
   V8_WARN_UNUSED_RESULT bool Is(Handle<Map> expected_map);
+  V8_WARN_UNUSED_RESULT std::vector<ArrayInlineInfo> const&
+  GetArrayInlineInfos();
 
   // These methods provide a guard.
   //
@@ -83,6 +86,7 @@ class MapInference {
   JSHeapBroker* const broker_;
   Node* const object_;
 
+  std::vector<ArrayInlineInfo> array_inline_infos_;
   MapHandles maps_;
   enum {
     kReliableOrGuarded,
