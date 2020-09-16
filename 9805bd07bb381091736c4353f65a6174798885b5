@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce31eb08_42015c8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-09-16T16:35:22Z",
+      "side": 1,
+      "message": "ptal.\n\nI\u0027m looking into what we can support for marking in the standalone library case.\nI think we can do better than we currently do in regards to incremental marking.",
+      "revId": "9805bd07bb381091736c4353f65a6174798885b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
