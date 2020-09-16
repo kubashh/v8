@@ -5,13 +5,12 @@
 #ifndef V8_OBJECTS_STRUCT_INL_H_
 #define V8_OBJECTS_STRUCT_INL_H_
 
-#include "src/objects/struct.h"
-
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/oddball.h"
+#include "src/objects/struct.h"
 #include "src/roots/roots-inl.h"
-#include "torque-generated/class-definitions-tq-inl.h"
+#include "torque-generated/class-definitions-inl.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
