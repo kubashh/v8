@@ -5,13 +5,12 @@
 #ifndef V8_OBJECTS_FIXED_ARRAY_INL_H_
 #define V8_OBJECTS_FIXED_ARRAY_INL_H_
 
-#include "src/objects/fixed-array.h"
-
 #include "src/handles/handles-inl.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/numbers/conversions.h"
 #include "src/objects/bigint.h"
 #include "src/objects/compressed-slots.h"
+#include "src/objects/fixed-array.h"
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/map.h"
 #include "src/objects/maybe-object-inl.h"
@@ -20,8 +19,7 @@
 #include "src/objects/slots.h"
 #include "src/roots/roots-inl.h"
 #include "src/sanitizer/tsan.h"
-
-#include "torque-generated/class-definitions-tq-inl.h"
+#include "torque-generated/class-definitions-inl.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
