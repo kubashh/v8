@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "43ddc626_36797532",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T17:06:38Z",
+      "side": 1,
+      "message": "Done. You are right we don\u0027t need this anymore.",
+      "parentUuid": "c1371793_c07c0701",
+      "revId": "175d238b8e9044194137f8c4825f9b5eaa831c8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "373f74ea_f4be31f1",
         "filename": "src/objects/map.cc",
         "patchSetId": 25
@@ -67,6 +85,24 @@
       "revId": "175d238b8e9044194137f8c4825f9b5eaa831c8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46984afa_9017e893",
+        "filename": "src/objects/map.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 2737,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T17:06:38Z",
+      "side": 1,
+      "message": "Done. Since the only usage of this is in SupportsFastArrayResize I just inlined this into that method.",
+      "parentUuid": "373f74ea_f4be31f1",
+      "revId": "175d238b8e9044194137f8c4825f9b5eaa831c8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
