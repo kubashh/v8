@@ -1034,8 +1034,9 @@ BUILTIN(SegmentsPrototypeContaining) {
                                      Object::ToInteger(isolate, index));
   double const n = index->Number();
 
-  RETURN_RESULT_OR_FAILURE(
-      isolate, JSSegments::Containing(isolate, segments, static_cast<int>(n)));
+  int32_t n_int32 = static_cast<int32_t>(n);
+  RETURN_RESULT_OR_FAILURE(isolate,
+                           JSSegments::Containing(isolate, segments, n_int32));
 }
 
 // ecma402 #sec-%segmentsprototype%-@@iterator
