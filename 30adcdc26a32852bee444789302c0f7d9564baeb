@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f298532_2fded873",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-09-16T14:53:42Z",
+      "side": 1,
+      "message": "Mythri PTAL for osr-optimized-code-cache\nDominik PTAL for heap\nAlex FYI\n\nThe other option is just to iterate Code objects in log.cc instead of SFI/JSFunctions/This cache. Not sure if that would work/contain all the same Code objects we end up getting this way",
+      "revId": "30adcdc26a32852bee444789302c0f7d9564baeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c5f91a09_05c1f6ea",
+        "filename": "src/objects/osr-optimized-code-cache.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-09-16T14:53:42Z",
+      "side": 1,
+      "message": "If I\u0027m reading the class correctly then we never have null entries in the underlying arrays before real entries. Otherwise this is wrong and will return null entries too early and the caller will stop iterating",
+      "range": {
+        "startLine": 233,
+        "startChar": 18,
+        "endLine": 234,
+        "endChar": 67
+      },
+      "revId": "30adcdc26a32852bee444789302c0f7d9564baeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
