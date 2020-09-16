@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "7ef04937_fd51f951",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 4749,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b46314c_23e04ed1",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "604c8261_a187cf04",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 23
@@ -67,6 +85,24 @@
       "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcadec0c_fe8b796e",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "604c8261_a187cf04",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +129,30 @@
     },
     {
       "key": {
+        "uuid": "4390a0eb_c2a77920",
+        "filename": "src/compiler/map-inference.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a505c36_8876e948",
+      "range": {
+        "startLine": 131,
+        "startChar": 42,
+        "endLine": 131,
+        "endChar": 54
+      },
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a67cb2d6_949629d2",
         "filename": "src/compiler/map-inference.cc",
         "patchSetId": 23
@@ -107,6 +167,24 @@
       "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb303039_02ed4246",
+        "filename": "src/compiler/map-inference.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a67cb2d6_949629d2",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -127,6 +205,24 @@
     },
     {
       "key": {
+        "uuid": "2783b551_c5f0d5bb",
+        "filename": "src/compiler/map-inference.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c698935_5f08a912",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44b6a841_2ec67221",
         "filename": "src/compiler/map-inference.h",
         "patchSetId": 23
@@ -141,6 +237,24 @@
       "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e250eec_12db0ecc",
+        "filename": "src/compiler/map-inference.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done. Moved this to processed-feedback.h so I could use this structure when processing feedback too.",
+      "parentUuid": "44b6a841_2ec67221",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +275,24 @@
     },
     {
       "key": {
+        "uuid": "bca29f32_75984e58",
+        "filename": "src/compiler/map-inference.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c0ce24b_427fb169",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8db89583_7692aea7",
         "filename": "src/compiler/node-properties.cc",
         "patchSetId": 23
@@ -175,6 +307,24 @@
       "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24745491_0535a92d",
+        "filename": "src/compiler/node-properties.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8db89583_7692aea7",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -195,6 +345,24 @@
     },
     {
       "key": {
+        "uuid": "d9895472_250003ff",
+        "filename": "src/compiler/node-properties.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a722d4af_24d114a0",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70b58cba_26829076",
         "filename": "src/compiler/node-properties.h",
         "patchSetId": 23
@@ -209,6 +377,24 @@
       "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fddffc42_7d80fd67",
+        "filename": "src/compiler/node-properties.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70b58cba_26829076",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -235,6 +421,30 @@
     },
     {
       "key": {
+        "uuid": "d8875fb2_825a1959",
+        "filename": "src/compiler/node-properties.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee8dbf30_1943ec28",
+      "range": {
+        "startLine": 201,
+        "startChar": 36,
+        "endLine": 201,
+        "endChar": 53
+      },
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5fcf2c82_99a9f73d",
         "filename": "src/compiler/processed-feedback.h",
         "patchSetId": 23
@@ -258,6 +468,30 @@
     },
     {
       "key": {
+        "uuid": "cb495e7f_1a717377",
+        "filename": "src/compiler/processed-feedback.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fcf2c82_99a9f73d",
+      "range": {
+        "startLine": 198,
+        "startChar": 2,
+        "endLine": 198,
+        "endChar": 14
+      },
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87e8cafe_ada25efc",
         "filename": "src/objects/js-array.h",
         "patchSetId": 23
@@ -275,6 +509,24 @@
     },
     {
       "key": {
+        "uuid": "20def47f_35bccb2b",
+        "filename": "src/objects/js-array.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87e8cafe_ada25efc",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b724a5be_746be71a",
         "filename": "src/objects/objects.cc",
         "patchSetId": 23
@@ -286,6 +538,24 @@
       "writtenOn": "2020-09-15T12:01:56Z",
       "side": 1,
       "message": "BTW, I\u0027m wondering why we insist on IsNoElementsIntact even when the array isn\u0027t holey.",
+      "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55c90148_02419915",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 5155,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-16T13:48:56Z",
+      "side": 1,
+      "message": "I am not sure either. Is it to protect if the array turns holey at a later point. But I guess we deopt in that case. Not sure.",
+      "parentUuid": "b724a5be_746be71a",
       "revId": "e0e35ba2301c7d5889f4db0a05f0456fc3739ed7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
