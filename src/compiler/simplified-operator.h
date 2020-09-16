@@ -429,28 +429,12 @@ CheckMapsParameters const& CheckMapsParametersOf(Operator const*)
 // A descriptor for dynamic map checks.
 class DynamicCheckMapsParameters final {
  public:
-  enum ICState { kMonomorphic, kPolymorphic };
+  explicit DynamicCheckMapsParameters(const FeedbackSource& feedback)
+      : feedback_(feedback) {}
 
-  DynamicCheckMapsParameters(CheckMapsFlags flags, Handle<Object> handler,
-                             MaybeHandle<Map> maybe_map,
-                             const FeedbackSource& feedback)
-      : flags_(flags),
-        handler_(handler),
-        maybe_map_(maybe_map),
-        feedback_(feedback) {}
-
-  CheckMapsFlags flags() const { return flags_; }
-  Handle<Object> handler() const { return handler_; }
-  MaybeHandle<Map> map() const { return maybe_map_; }
   FeedbackSource const& feedback() const { return feedback_; }
-  ICState state() const {
-    return maybe_map_.is_null() ? ICState::kPolymorphic : ICState::kMonomorphic;
-  }
 
  private:
-  CheckMapsFlags const flags_;
-  Handle<Object> const handler_;
-  MaybeHandle<Map> const maybe_map_;
   FeedbackSource const feedback_;
 };
 
@@ -887,9 +871,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckInternalizedString();
   const Operator* CheckMaps(CheckMapsFlags, ZoneHandleSet<Map>,
                             const FeedbackSource& = FeedbackSource());
-  const Operator* DynamicCheckMaps(CheckMapsFlags flags, Handle<Object> handler,
-                                   MaybeHandle<Map> map,
-                                   const FeedbackSource& feedback);
+  const Operator* DynamicCheckMaps(const FeedbackSource& feedback);
   const Operator* CheckNotTaggedHole();
   const Operator* CheckNumber(const FeedbackSource& feedback);
   const Operator* CheckReceiver();

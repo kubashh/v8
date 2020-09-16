@@ -6,6 +6,7 @@
 
 #include "src/execution/frames.h"
 #include "src/execution/isolate.h"
+#include "src/execution/protectors-inl.h"
 #include "src/handles/handles-inl.h"
 #include "src/handles/maybe-handles.h"
 #include "src/heap/heap-write-barrier-inl.h"
@@ -15,6 +16,7 @@
 #include "src/objects/descriptor-array.h"
 #include "src/objects/elements-kind.h"
 #include "src/objects/field-type.h"
+#include "src/objects/js-array-inl.h"
 #include "src/objects/js-objects.h"
 #include "src/objects/layout-descriptor.h"
 #include "src/objects/map-updater.h"
@@ -2730,6 +2732,32 @@ void NormalizedMapCache::Set(Handle<Map> fast_map, Handle<Map> normalized_map) {
   DCHECK(normalized_map->is_dictionary_map());
   WeakFixedArray::Set(GetIndex(fast_map),
                       HeapObjectReference::Weak(*normalized_map));
+}
+
+bool Map::HasReadOnlyLengthDescriptor(Isolate* isolate,
+                                      Handle<Map> jsarray_map) {
+  DCHECK(!jsarray_map->is_dictionary_map());
+  Handle<Name> length_string = isolate->factory()->length_string();
+  DescriptorArray descriptors = jsarray_map->instance_descriptors();
+  // TODO(jkummerow): We could skip the search and hardcode number == 0.
+  InternalIndex number = descriptors.Search(*length_string, *jsarray_map);
+  DCHECK(number.is_found());
+  return descriptors.GetDetails(number).IsReadOnly();
+}
+
+bool Map::SupportsFastArrayIteration(Isolate* isolate, Handle<Map> map) {
+  return map->instance_type() == JS_ARRAY_TYPE &&
+         IsFastElementsKind(map->elements_kind()) &&
+         map->prototype().IsJSArray() &&
+         isolate->IsAnyInitialArrayPrototype(
+             handle(JSArray::cast(map->prototype()), isolate)) &&
+         Protectors::IsNoElementsIntact(isolate);
+}
+
+bool Map::SupportsFastArrayResize(Isolate* isolate, Handle<Map> map) {
+  return SupportsFastArrayIteration(isolate, map) && map->is_extensible() &&
+         !map->is_dictionary_map() &&
+         !HasReadOnlyLengthDescriptor(isolate, map);
 }
 
 }  // namespace internal

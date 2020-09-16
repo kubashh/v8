@@ -19,6 +19,7 @@ namespace compiler {
 class Graph;
 class Operator;
 class CommonOperatorBuilder;
+struct ArrayInlineInfo;
 
 // A facade that simplifies access to the different kinds of inputs to a node.
 class V8_EXPORT_PRIVATE NodeProperties final {
@@ -194,9 +195,16 @@ class V8_EXPORT_PRIVATE NodeProperties final {
     kUnreliableReceiverMaps  // Receiver maps might have changed (side-effect).
   };
   // DO NOT USE InferReceiverMapsUnsafe IN NEW CODE. Use MapInference instead.
+  // |maps_out| contain the set of possible maps for the given |receiver|
+  // |array_inline_info_out| holds the information required to inline array
+  // builtins for the |receiver|.With dynamic map checks operator, it is
+  // possible that we don't infer any maps (i.e. return kNoReceiverMaps and the
+  // |maps_out| is empty) but we still have array_inline_information. Dynamic
+  // map checks derives this information from the IC handlers.
   static InferReceiverMapsResult InferReceiverMapsUnsafe(
       JSHeapBroker* broker, Node* receiver, Node* effect,
-      ZoneHandleSet<Map>* maps_return);
+      ZoneHandleSet<Map>* maps_out,
+      std::vector<ArrayInlineInfo>* array_inline_info_out = nullptr);
 
   // Return the initial map of the new-target if the allocation can be inlined.
   static base::Optional<MapRef> GetJSCreateMap(JSHeapBroker* broker,

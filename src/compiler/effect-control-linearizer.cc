@@ -14,11 +14,13 @@
 #include "src/compiler/feedback-source.h"
 #include "src/compiler/graph-assembler.h"
 #include "src/compiler/js-graph.h"
+#include "src/compiler/js-heap-broker.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/node-origin-table.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/node.h"
+#include "src/compiler/processed-feedback.h"
 #include "src/compiler/schedule.h"
 #include "src/execution/frames.h"
 #include "src/heap/factory-inl.h"
@@ -37,7 +39,8 @@ class EffectControlLinearizer {
                           SourcePositionTable* source_positions,
                           NodeOriginTable* node_origins,
                           MaskArrayIndexEnable mask_array_index,
-                          MaintainSchedule maintain_schedule)
+                          MaintainSchedule maintain_schedule,
+                          JSHeapBroker* broker)
       : js_graph_(js_graph),
         schedule_(schedule),
         temp_zone_(temp_zone),
@@ -45,6 +48,7 @@ class EffectControlLinearizer {
         maintain_schedule_(maintain_schedule),
         source_positions_(source_positions),
         node_origins_(node_origins),
+        broker_(broker),
         graph_assembler_(js_graph, temp_zone,
                          should_maintain_schedule() ? schedule : nullptr),
         frame_state_zapper_(nullptr) {}
@@ -311,6 +315,7 @@ class EffectControlLinearizer {
   }
   MachineOperatorBuilder* machine() const { return js_graph_->machine(); }
   JSGraphAssembler* gasm() { return &graph_assembler_; }
+  JSHeapBroker* broker() const { return broker_; }
 
   JSGraph* js_graph_;
   Schedule* schedule_;
@@ -320,6 +325,7 @@ class EffectControlLinearizer {
   RegionObservability region_observability_ = RegionObservability::kObservable;
   SourcePositionTable* source_positions_;
   NodeOriginTable* node_origins_;
+  JSHeapBroker* const broker_;
   JSGraphAssembler graph_assembler_;
   Node* frame_state_zapper_;  // For tracking down compiler::Node::New crashes.
 };
@@ -2043,27 +2049,30 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
       DynamicCheckMapsParametersOf(node->op());
   Node* value = node->InputAt(0);
 
-  FeedbackSource const& feedback = p.feedback();
-  Node* vector = __ HeapConstant(feedback.vector);
+  FeedbackSource const& feedback_source = p.feedback();
+  MinimorphicLoadPropertyAccessFeedback feedback =
+      broker()->GetFeedback(feedback_source).AsMinimorphicPropertyAccess();
+  Node* vector = __ HeapConstant(feedback_source.vector);
   Node* value_map = __ LoadField(AccessBuilder::ForMap(), value);
-  Node* handler = p.handler()->IsSmi()
-                      ? __ SmiConstant(Smi::ToInt(*p.handler()))
-                      : __ HeapConstant(Handle<HeapObject>::cast(p.handler()));
+  Node* handler =
+      feedback.handler()->IsSmi()
+          ? __ SmiConstant(Smi::ToInt(*feedback.handler()))
+          : __ HeapConstant(Handle<HeapObject>::cast(feedback.handler()));
 
   auto done = __ MakeLabel();
 
   // Emit monomorphic checks only if current state is monomorphic. In
   // case the current state is polymorphic, and if we ever go back to
   // monomorphic start, we will deopt and reoptimize the code.
-  if (p.state() == DynamicCheckMapsParameters::kMonomorphic) {
+  if (feedback.is_monomorphic()) {
     auto monomorphic_map_match = __ MakeLabel();
     auto maybe_poly = __ MakeLabel();
     Node* strong_feedback;
     Node* poly_array;
 
-    if (p.flags() & CheckMapsFlag::kTryMigrateInstance) {
+    if (feedback.has_migration_target_maps()) {
       auto map_check_failed = __ MakeDeferredLabel();
-      BranchOnICState(feedback.index(), vector, value_map, frame_state,
+      BranchOnICState(feedback_source.index(), vector, value_map, frame_state,
                       &monomorphic_map_match, &maybe_poly, &map_check_failed,
                       &strong_feedback, &poly_array);
 
@@ -2079,17 +2088,18 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
                            DeoptimizeReason::kMissingMap, FeedbackSource(),
                            mono_check, frame_state,
                            IsSafetyCheck::kCriticalSafetyCheck);
-        ProcessMonomorphic(handler, &done, frame_state, feedback.index(),
+        ProcessMonomorphic(handler, &done, frame_state, feedback_source.index(),
                            vector);
       }
     } else {
-      BranchOnICState(feedback.index(), vector, value_map, frame_state,
+      BranchOnICState(feedback_source.index(), vector, value_map, frame_state,
                       &monomorphic_map_match, &maybe_poly, nullptr,
                       &strong_feedback, &poly_array);
     }
 
     __ Bind(&monomorphic_map_match);
-    ProcessMonomorphic(handler, &done, frame_state, feedback.index(), vector);
+    ProcessMonomorphic(handler, &done, frame_state, feedback_source.index(),
+                       vector);
 
     __ Bind(&maybe_poly);
     // TODO(mythria): ICs don't drop deprecated maps from feedback vector.
@@ -2098,9 +2108,9 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
     // if this is required.
     CheckPolymorphic(poly_array, value_map, handler, &done, frame_state);
   } else {
-    DCHECK_EQ(p.state(), DynamicCheckMapsParameters::kPolymorphic);
+    DCHECK(feedback.is_polymorphic());
     Node* feedback_slot = __ LoadField(
-        AccessBuilder::ForFeedbackVectorSlot(feedback.index()), vector);
+        AccessBuilder::ForFeedbackVectorSlot(feedback_source.index()), vector);
     // If the IC state at code generation time is not monomorphic, we don't
     // handle monomorphic states and just deoptimize if IC transitions to
     // monomorphic. For polymorphic ICs it is not required to migrate deprecated
@@ -6615,10 +6625,11 @@ void LinearizeEffectControl(JSGraph* graph, Schedule* schedule, Zone* temp_zone,
                             SourcePositionTable* source_positions,
                             NodeOriginTable* node_origins,
                             MaskArrayIndexEnable mask_array_index,
-                            MaintainSchedule maintain_schedule) {
-  EffectControlLinearizer linearizer(graph, schedule, temp_zone,
-                                     source_positions, node_origins,
-                                     mask_array_index, maintain_schedule);
+                            MaintainSchedule maintain_schedule,
+                            JSHeapBroker* broker) {
+  EffectControlLinearizer linearizer(
+      graph, schedule, temp_zone, source_positions, node_origins,
+      mask_array_index, maintain_schedule, broker);
   linearizer.Run();
 }
 
