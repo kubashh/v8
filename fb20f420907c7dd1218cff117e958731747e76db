@@ -16,6 +16,23 @@
       "revId": "fb20f420907c7dd1218cff117e958731747e76db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "be4b0dc1_c2c743fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145459
+      },
+      "writtenOn": "2020-09-16T16:09:51Z",
+      "side": 1,
+      "message": "Was a bit concerned about what happens if the OSR optimized code is collected after being reported to the sampler but it looks like it will get cleaned up in CodeMap::ClearCodesInRange called from AddCode and MoveCode. I guess that\u0027s generally the way the profiler deals with collected code -- it\u0027s not a problem unless part of its location gets reused and if/when it does,its CodeMap entry is iced. Couldn\u0027t spot any test cases for this but I could see it would be challenging to build such a test.\n\nSo lgtm FWIW (thanks for the cc).",
+      "revId": "fb20f420907c7dd1218cff117e958731747e76db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
