@@ -348,10 +348,24 @@ base::Optional<MapRef> NodeProperties::GetJSCreateMap(JSHeapBroker* broker,
   return base::nullopt;
 }
 
+namespace {
+void GetArrayInlineInfoFromMaps(
+    JSHeapBroker* broker, ZoneHandleSet<Map>* maps,
+    std::vector<ArrayInlineInfo>* array_inline_infos) {
+  if (array_inline_infos == nullptr) return;
+  for (auto receiver_map : *maps) {
+    MapRef map(broker, receiver_map);
+    array_inline_infos->push_back(
+        ArrayInlineInfo(map.supports_fast_array_resize(), map.elements_kind()));
+  }
+}
+}  // namespace
+
 // static
 NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
     JSHeapBroker* broker, Node* receiver, Node* effect,
-    ZoneHandleSet<Map>* maps_return) {
+    ZoneHandleSet<Map>* maps_return,
+    std::vector<ArrayInlineInfo>* array_inline_infos) {
   HeapObjectMatcher m(receiver);
   if (m.HasValue()) {
     HeapObjectRef receiver = m.Ref(broker);
@@ -368,6 +382,7 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
         // The {receiver_map} is only reliable when we install a stability
         // code dependency.
         *maps_return = ZoneHandleSet<Map>(receiver.map().object());
+        GetArrayInlineInfoFromMaps(broker, maps_return, array_inline_infos);
         return kUnreliableReceiverMaps;
       }
     }
@@ -379,6 +394,7 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
         Node* const object = GetValueInput(effect, 0);
         if (IsSame(receiver, object)) {
           *maps_return = MapGuardMapsOf(effect->op());
+          GetArrayInlineInfoFromMaps(broker, maps_return, array_inline_infos);
           return result;
         }
         break;
@@ -387,7 +403,23 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
         Node* const object = GetValueInput(effect, 0);
         if (IsSame(receiver, object)) {
           *maps_return = CheckMapsParametersOf(effect->op()).maps();
+          GetArrayInlineInfoFromMaps(broker, maps_return, array_inline_infos);
           return result;
+        }
+        break;
+      }
+      case IrOpcode::kDynamicCheckMaps: {
+        Node* const object = GetValueInput(effect, 0);
+        if (IsSame(receiver, object)) {
+          if (result != kUnreliableReceiverMaps &&
+              array_inline_infos != nullptr) {
+            DynamicCheckMapsParameters const& p =
+                DynamicCheckMapsParametersOf(effect->op());
+            ProcessedFeedback feedback = broker->GetFeedback(p.feedback());
+            array_inline_infos->push_back(
+                feedback.AsMinimorphicPropertyAccess().array_inline_info());
+          }
+          return kNoReceiverMaps;
         }
         break;
       }
@@ -396,6 +428,7 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
           base::Optional<MapRef> initial_map = GetJSCreateMap(broker, receiver);
           if (initial_map.has_value()) {
             *maps_return = ZoneHandleSet<Map>(initial_map->object());
+            GetArrayInlineInfoFromMaps(broker, maps_return, array_inline_infos);
             return result;
           }
           // We reached the allocation of the {receiver}.
@@ -410,6 +443,7 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
                                                 .promise_function()
                                                 .initial_map()
                                                 .object());
+          GetArrayInlineInfoFromMaps(broker, maps_return, array_inline_infos);
           return result;
         }
         break;
@@ -425,6 +459,8 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
             HeapObjectMatcher m(value);
             if (m.HasValue()) {
               *maps_return = ZoneHandleSet<Map>(m.Ref(broker).AsMap().object());
+              GetArrayInlineInfoFromMaps(broker, maps_return,
+                                         array_inline_infos);
               return result;
             }
           }

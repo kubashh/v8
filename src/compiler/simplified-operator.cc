@@ -289,26 +289,17 @@ CheckMapsParameters const& CheckMapsParametersOf(Operator const* op) {
 
 bool operator==(DynamicCheckMapsParameters const& lhs,
                 DynamicCheckMapsParameters const& rhs) {
-  // FeedbackSource is sufficient as an equality check. FeedbackSource uniquely
-  // determines all other properties (handler, flags and the monomorphic map
-  DCHECK_IMPLIES(lhs.feedback() == rhs.feedback(),
-                 lhs.flags() == rhs.flags() && lhs.state() == rhs.state() &&
-                     lhs.handler().address() == rhs.handler().address() &&
-                     lhs.map().address() == rhs.map().address());
   return lhs.feedback() == rhs.feedback();
 }
 
 size_t hash_value(DynamicCheckMapsParameters const& p) {
   FeedbackSource::Hash feedback_hash;
-  // FeedbackSource is sufficient for hashing. FeedbackSource uniquely
-  // determines all other properties (handler, flags and the monomorphic map
-  return base::hash_combine(feedback_hash(p.feedback()));
+  return feedback_hash(p.feedback());
 }
 
 std::ostream& operator<<(std::ostream& os,
                          DynamicCheckMapsParameters const& p) {
-  return os << p.handler() << ", " << p.feedback() << "," << p.state() << ","
-            << p.flags() << "," << p.map().address();
+  return os << p.feedback();
 }
 
 DynamicCheckMapsParameters const& DynamicCheckMapsParametersOf(
@@ -1487,10 +1478,8 @@ const Operator* SimplifiedOperatorBuilder::CheckMaps(
 }
 
 const Operator* SimplifiedOperatorBuilder::DynamicCheckMaps(
-    CheckMapsFlags flags, Handle<Object> handler, MaybeHandle<Map> maybe_map,
     const FeedbackSource& feedback) {
-  DynamicCheckMapsParameters const parameters(flags, handler, maybe_map,
-                                              feedback);
+  DynamicCheckMapsParameters const parameters(feedback);
   return zone()->New<Operator1<DynamicCheckMapsParameters>>(  // --
       IrOpcode::kDynamicCheckMaps,                            // opcode
       Operator::kNoThrow | Operator::kNoWrite,                // flags

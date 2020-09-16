@@ -25,6 +25,20 @@ class NamedAccessFeedback;
 class RegExpLiteralFeedback;
 class TemplateObjectFeedback;
 
+// ArrayInlineInfo holds information needed to decide if array builtins can be
+// inlined.
+struct ArrayInlineInfo {
+  ArrayInlineInfo(bool supports_fast_array_resize, ElementsKind elements_kind)
+      : supports_fast_array_resize(supports_fast_array_resize),
+        elements_kind(elements_kind) {
+    DCHECK_IMPLIES(supports_fast_array_resize,
+                   IsFastElementsKind(elements_kind));
+  }
+
+  bool supports_fast_array_resize;
+  ElementsKind elements_kind;
+};
+
 class ProcessedFeedback : public ZoneObject {
  public:
   enum Kind {
@@ -175,23 +189,23 @@ class NamedAccessFeedback : public ProcessedFeedback {
 
 class MinimorphicLoadPropertyAccessFeedback : public ProcessedFeedback {
  public:
-  MinimorphicLoadPropertyAccessFeedback(NameRef const& name,
-                                        FeedbackSlotKind slot_kind,
-                                        Handle<Object> handler,
-                                        MaybeHandle<Map> maybe_map,
-                                        bool has_migration_target_maps);
-
+  MinimorphicLoadPropertyAccessFeedback(
+      NameRef const& name, FeedbackSlotKind slot_kind, Handle<Object> handler,
+      MaybeHandle<Map> maybe_map, bool has_migration_target_maps,
+      ArrayInlineInfo const& array_inline_info_);
   NameRef const& name() const { return name_; }
   bool is_monomorphic() const { return !maybe_map_.is_null(); }
   Handle<Object> handler() const { return handler_; }
   MaybeHandle<Map> map() const { return maybe_map_; }
   bool has_migration_target_maps() const { return has_migration_target_maps_; }
+  ArrayInlineInfo array_inline_info() const { return array_inline_info_; }
 
  private:
   NameRef const name_;
   Handle<Object> const handler_;
   MaybeHandle<Map> const maybe_map_;
   bool const has_migration_target_maps_;
+  ArrayInlineInfo const array_inline_info_;
 };
 
 class CallFeedback : public ProcessedFeedback {
