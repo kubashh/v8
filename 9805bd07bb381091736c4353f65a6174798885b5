@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "8d12cf0d_dfa3631e",
+        "filename": "src/heap/cppgc/gc-invoker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-17T10:16:00Z",
+      "side": 1,
+      "message": "(This is just about the comment.)\n\nI think I tripped over \"GC finalization is only supported through ForceGCSlow.\"\n\nI think we need to add something like \"In this configuration the GC finalization can only be triggered through... For that reason, we do not support running incremental GCs here.\"",
+      "parentUuid": "efaa9afa_9f4b9f55",
+      "range": {
+        "startLine": 100,
+        "startChar": 10,
+        "endLine": 100,
+        "endChar": 22
+      },
+      "revId": "9805bd07bb381091736c4353f65a6174798885b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a6f2ffe_d7d52547",
         "filename": "src/heap/cppgc/marker.cc",
         "patchSetId": 2
