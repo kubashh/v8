@@ -283,46 +283,142 @@ int FeedbackMetadataIterator::entry_size() const {
   return FeedbackMetadata::GetSlotSize(kind());
 }
 
+MaybeObject NexusConfig::GetFeedback(FeedbackVector vector,
+                                     FeedbackSlot slot) const {
+  return vector.Get(slot);
+}
+
+void NexusConfig::SetFeedback(FeedbackVector vector, FeedbackSlot slot,
+                              MaybeObject feedback,
+                              WriteBarrierMode mode) const {
+  DCHECK(can_write());
+  vector.Set(slot, feedback, mode);
+}
+
+MaybeObject FeedbackNexus::Cache::slot1(const NexusConfig* config) const {
+  DCHECK(is_active());
+  if (slot1_cleared_) {
+    return HeapObjectReference::ClearedValue(config->isolate());
+  }
+  return *slot1_;
+}
+
+MaybeObject FeedbackNexus::Cache::slot2(const NexusConfig* config) const {
+  DCHECK(is_active());
+  if (slot2_cleared_) {
+    return HeapObjectReference::ClearedValue(config->isolate());
+  }
+  return *slot2_;
+}
+
+void FeedbackNexus::Cache::set_slot1(const NexusConfig* config,
+                                     MaybeObject object) {
+  is_active_ = true;
+  if (object.IsCleared()) {
+    slot1_cleared_ = true;
+    slot1_ = MaybeObjectHandle();
+  } else {
+    slot1_cleared_ = false;
+    slot1_ = MaybeObjectHandle(config->NewHandle(object));
+  }
+}
+
+void FeedbackNexus::Cache::set_slot2(const NexusConfig* config,
+                                     MaybeObject object) {
+  is_active_ = true;
+  if (object.IsCleared()) {
+    slot2_cleared_ = true;
+    slot2_ = MaybeObjectHandle();
+  } else {
+    slot2_cleared_ = false;
+    slot2_ = MaybeObjectHandle(config->NewHandle(object));
+  }
+}
+
 MaybeObject FeedbackNexus::GetFeedback() const {
-  MaybeObject feedback = vector().Get(slot());
-  FeedbackVector::AssertNoLegacyTypes(feedback);
-  return feedback;
+  auto pair = GetFeedbackPair();
+  return pair.first;
+  /*
+    if (g_->config() == NexusConfig::BackgroundThread && cache_.is_active()) {
+      return cache_.slot1(g_);
+    }
+    MaybeObject feedback = g_->GetFeedback(vector(), slot());
+    FeedbackVector::AssertNoLegacyTypes(feedback);
+    if (g_->config() == NexusConfig::BackgroundThread) {
+      cache_.set_slot1(g_, feedback);
+    }
+    return feedback;
+  */
 }
 
 MaybeObject FeedbackNexus::GetFeedbackExtra() const {
-#ifdef DEBUG
-  FeedbackSlotKind kind = vector().GetKind(slot());
-  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind));
-#endif
-  return vector().Get(slot().WithOffset(1));
+  auto pair = GetFeedbackPair();
+  return pair.second;
+}
+
+std::pair<MaybeObject, MaybeObject> FeedbackNexus::GetFeedbackPair() const {
+  if (g_->config() == NexusConfig::BackgroundThread && cache_.is_active()) {
+    return std::pair<MaybeObject, MaybeObject>(cache_.slot1(g_),
+                                               cache_.slot2(g_));
+  }
+  auto pair = FeedbackMetadata::GetSlotSize(kind()) == 2
+                  ? g_->GetFeedbackPair(vector(), slot())
+                  : std::pair<MaybeObject, MaybeObject>(
+                        g_->GetFeedback(vector(), slot()), MaybeObject());
+  FeedbackVector::AssertNoLegacyTypes(pair.first);
+  if (g_->config() == NexusConfig::BackgroundThread) {
+    cache_.set_slot1(g_, pair.first);
+    cache_.set_slot2(g_, pair.second);
+  }
+  return pair;
 }
 
 void FeedbackNexus::SetFeedback(Object feedback, WriteBarrierMode mode) {
-  SetFeedback(MaybeObject::FromObject(feedback));
+  g_->SetFeedback(vector(), slot(), MaybeObject::FromObject(feedback), mode);
 }
 
 void FeedbackNexus::SetFeedback(MaybeObject feedback, WriteBarrierMode mode) {
   FeedbackVector::AssertNoLegacyTypes(feedback);
-  vector().Set(slot(), feedback, mode);
+  g_->SetFeedback(vector(), slot(), feedback, mode);
 }
 
-void FeedbackNexus::SetFeedbackExtra(Object feedback_extra,
-                                     WriteBarrierMode mode) {
-#ifdef DEBUG
-  FeedbackSlotKind kind = vector().GetKind(slot());
-  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind));
-  FeedbackVector::AssertNoLegacyTypes(MaybeObject::FromObject(feedback_extra));
-#endif
-  vector().Set(slot().WithOffset(1), MaybeObject::FromObject(feedback_extra),
-               mode);
+void FeedbackNexus::SetFeedback(Object feedback, WriteBarrierMode mode,
+                                Object feedback_extra,
+                                WriteBarrierMode mode_extra) {
+  FeedbackVector::AssertNoLegacyTypes(MaybeObject::FromObject(feedback));
+  g_->SetFeedbackPair(vector(), slot(), MaybeObject::FromObject(feedback), mode,
+                      MaybeObject::FromObject(feedback_extra), mode_extra);
 }
 
-void FeedbackNexus::SetFeedbackExtra(MaybeObject feedback_extra,
-                                     WriteBarrierMode mode) {
-#ifdef DEBUG
+void FeedbackNexus::SetFeedback(Object feedback, WriteBarrierMode mode,
+                                MaybeObject feedback_extra,
+                                WriteBarrierMode mode_extra) {
+  FeedbackVector::AssertNoLegacyTypes(MaybeObject::FromObject(feedback));
+  g_->SetFeedbackPair(vector(), slot(), MaybeObject::FromObject(feedback), mode,
+                      feedback_extra, mode_extra);
+}
+
+void FeedbackNexus::SetFeedback(MaybeObject feedback, WriteBarrierMode mode,
+                                Object feedback_extra,
+                                WriteBarrierMode mode_extra) {
+  FeedbackVector::AssertNoLegacyTypes(feedback);
+  g_->SetFeedbackPair(vector(), slot(), feedback, mode,
+                      MaybeObject::FromObject(feedback_extra), mode_extra);
+}
+
+void FeedbackNexus::SetFeedback(MaybeObject feedback, WriteBarrierMode mode,
+                                MaybeObject feedback_extra,
+                                WriteBarrierMode mode_extra) {
+  FeedbackVector::AssertNoLegacyTypes(feedback);
   FeedbackVector::AssertNoLegacyTypes(feedback_extra);
-#endif
-  vector().Set(slot().WithOffset(1), feedback_extra, mode);
+  g_->SetFeedbackPair(vector(), slot(), feedback, mode, feedback_extra,
+                      mode_extra);
+}
+
+bool FeedbackNexus::vector_needs_update() const {
+  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind()));
+  // TODO(mvstanton): This is a bizarre request.
+  return GetFeedbackExtra().ToSmi().value() != ELEMENT;
 }
 
 Isolate* FeedbackNexus::GetIsolate() const { return vector().GetIsolate(); }
