@@ -50,6 +50,24 @@
       "revId": "fb20f420907c7dd1218cff117e958731747e76db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2976845_fd785228",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-09-17T08:03:36Z",
+      "side": 1,
+      "message": "Yep, we assume we won\u0027t get ticks in dead code, and as you say, if new code gets allocated there we update the code map accordingly.\n\nThe other thing I need to double check is that OSR code created after the profile has started is properly logged - did you find that out in your exploration by any chance?",
+      "parentUuid": "be4b0dc1_c2c743fc",
+      "revId": "fb20f420907c7dd1218cff117e958731747e76db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
