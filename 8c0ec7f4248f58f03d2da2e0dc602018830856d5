@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22a9e7a6_94a4eaf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-17T18:00:45Z",
+      "side": 1,
+      "message": "Hi Nico, thanks for the great comments, here is my update.\n--Michael",
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
