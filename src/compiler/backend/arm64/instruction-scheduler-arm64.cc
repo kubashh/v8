@@ -383,6 +383,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64I32x4Load16x4U:
     case kArm64I64x2Load32x2S:
     case kArm64I64x2Load32x2U:
+    case kArm64S128LoadMem32Zero:
       return kIsLoadOperation;
 
     case kArm64Claim:
