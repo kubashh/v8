@@ -3895,8 +3895,10 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
     const int to_space_tasks = CollectToSpaceUpdatingItems(&updating_job);
     const int num_ephemeron_table_updating_tasks = 1;
     const int num_tasks =
-        Max(to_space_tasks,
-            remembered_set_tasks + num_ephemeron_table_updating_tasks);
+        FLAG_parallel_pointer_update
+            ? Max(to_space_tasks,
+                  remembered_set_tasks + num_ephemeron_table_updating_tasks)
+            : 1;
     for (int i = 0; i < num_tasks; i++) {
       updating_job.AddTask(new PointersUpdatingTask(
           isolate(), GCTracer::Scope::MC_EVACUATE_UPDATE_POINTERS_PARALLEL,
