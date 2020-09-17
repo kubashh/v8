@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c2d230e_e4e8ee96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-17T16:36:03Z",
+      "side": 1,
+      "message": "This won\u0027t work as is, see comment below.\n\nSide note: testing with UBSan locally isn\u0027t hard, just add `is_ubsan \u003d true` to your GN flags. Or put a standalone snippet into a file test.cc, and do:\n\n  third_party/llvm-build/Release+Asserts/bin/clang++ -fsanitize\u003dundefined -o test.bin test.cc \u0026\u0026 ./test.bin\n\nIn this case, the snippet could be as simple as:\n\n  #include \u003ciostream\u003e\n  #include \u003climits\u003e\n  #include \u003cstdint.h\u003e\n\n  int main(int argc, char** argv) {\n    double val \u003d std::numeric_limits\u003cdouble\u003e::infinity();\n    std::cout \u003c\u003c static_cast\u003cint32_t\u003e(val) \u003c\u003c \"\\n\";\n    return 0;\n  }\n",
+      "revId": "a2e06f286cb84c5e14b67dae2747926092df2195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7c7295_87066e76",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-17T16:36:03Z",
+      "side": 1,
+      "message": "This is not a fix, static_cast\u003cint\u003e and static_cast\u003cint32_t\u003e are equivalent. (The try jobs are green because the ubsan bots don\u0027t execute test262.)\n\nThe key point is that you need to check whether the double is between kMinInt and kMaxInt before casting to int.\n\nI think the best fix in this case would be to change the signature of JSSegments::Containing() to take `n` as a double. Then you can perform the cast to int after the range check (spec step 7), at which point it\u0027s guaranteed that the value is in int range.",
+      "range": {
+        "startLine": 1037,
+        "startChar": 2,
+        "endLine": 1037,
+        "endChar": 44
+      },
+      "revId": "a2e06f286cb84c5e14b67dae2747926092df2195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
