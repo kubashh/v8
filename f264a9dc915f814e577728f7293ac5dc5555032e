@@ -16,6 +16,57 @@
       "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7fc3f2d0_7940a5f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-09-17T06:00:29Z",
+      "side": 1,
+      "message": "Very nice already, mostly nits.",
+      "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a389baa_1db544e9",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3725,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-09-17T06:00:29Z",
+      "side": 1,
+      "message": "The order in which you handle the return types seems weird to me: I64 -\u003e F32 -\u003e F64 -\u003e I32. Above in the conditions you have I32 -\u003e I64 -\u003e F32 -\u003e F64. Could you use the I I32 -\u003e I64 -\u003e F32 -\u003e F64 order everywhere consistently?",
+      "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aa75073_8a83aeaf",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3732,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-09-17T06:00:29Z",
+      "side": 1,
+      "message": "I wonder if we should just reload param_count after \u0026return_done, instead of at the end of each return type conversion.\nPro:\n* Less code;\n* Less error prone, as we would reload the param_count right before the use.\nCon:\n* One additional instruction in the case where we return a Smi.\n\nQuestion: why is the param_count even loaded before the handling of the return, could we not just load it at \u0026return_done?\n\nThibaud, what do you think?",
+      "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
