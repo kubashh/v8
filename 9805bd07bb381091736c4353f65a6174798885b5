@@ -16,6 +16,69 @@
       "revId": "9805bd07bb381091736c4353f65a6174798885b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "794486e4_c727e08c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-17T09:01:58Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "9805bd07bb381091736c4353f65a6174798885b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c39ffe9_2f1195f5",
+        "filename": "src/heap/cppgc/gc-invoker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-17T09:01:58Z",
+      "side": 1,
+      "message": "Not just finalization, but the whole GC, right? We shouldn\u0027t start incremental marking if we know that we cannot finish it meaningfully without the user invoking ForceGCSlow.\n\nFor the future: Maybe we should think about a way to ensure that defined a meaningful set of the platform and pass matching configs. E.g., we should avoid the config where we don\u0027t have delayed tasks and cannot run conservative.",
+      "range": {
+        "startLine": 100,
+        "startChar": 10,
+        "endLine": 100,
+        "endChar": 22
+      },
+      "revId": "9805bd07bb381091736c4353f65a6174798885b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a6f2ffe_d7d52547",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-17T09:01:58Z",
+      "side": 1,
+      "message": "nit: Maybe move this to Post(). Run() seems fine as well but as I was following the code I was wondering in Post() why that is correct.",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 18
+      },
+      "revId": "9805bd07bb381091736c4353f65a6174798885b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
