@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "567a8d51_5c30e980",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3725,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-09-17T07:30:03Z",
+      "side": 1,
+      "message": "Ok. \n(I assume that the conversion to heapnumber should be in one block with the whole i32 case)",
+      "parentUuid": "0a389baa_1db544e9",
+      "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0aa75073_8a83aeaf",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 2
@@ -67,6 +85,24 @@
       "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0706b12_f30181c0",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3732,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-09-17T07:30:03Z",
+      "side": 1,
+      "message": "I think I loaded param_count in l.3592, because I will remove it from the stack with the LeaveFrame in l.3623 and back then I wanted it to be right after the call. \nSo, yes, makes sense to load it after \u0026return_done.\nThanks!",
+      "parentUuid": "0aa75073_8a83aeaf",
+      "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
