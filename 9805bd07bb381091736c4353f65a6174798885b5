@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "efaa9afa_9f4b9f55",
+        "filename": "src/heap/cppgc/gc-invoker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-09-17T09:49:39Z",
+      "side": 1,
+      "message": "Yes, but I think the whole GC is not supported because we can\u0027t finalize. From a correctness pov, starting incremental GC would still be correct. The problem imo is that it would be very inefficient since we can\u0027t finalize it without the user. That\u0027s what I tried to convey in this comment, that the reason we bail out on StartIncrementalGC is because we wouldn\u0027t be able to finalize it.\n\nIs there something specific you\u0027d like me to change/add in the comment?",
+      "parentUuid": "3c39ffe9_2f1195f5",
+      "range": {
+        "startLine": 100,
+        "startChar": 10,
+        "endLine": 100,
+        "endChar": 22
+      },
+      "revId": "9805bd07bb381091736c4353f65a6174798885b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a6f2ffe_d7d52547",
         "filename": "src/heap/cppgc/marker.cc",
         "patchSetId": 2
@@ -79,6 +103,30 @@
       "revId": "9805bd07bb381091736c4353f65a6174798885b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc2c5d62_8c495e9d",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-09-17T09:49:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a6f2ffe_d7d52547",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 18
+      },
+      "revId": "9805bd07bb381091736c4353f65a6174798885b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
