@@ -121,6 +121,24 @@
       "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d35cd88_2b7a7c10",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3732,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-09-17T15:51:30Z",
+      "side": 1,
+      "message": "Sorry, I didn\u0027t set the registers to no_reg. After the wasm call, I just assumed that none of these registers contain the expected values. So after the wasm call we have to load again into every register we\u0027ll need (that is return_count and param_count). \nI thought about setting every register alias to no_reg after the contents may change. For example I could set each of these register aliases used for the loop (current param, param_limit, current_param_slot) to no_reg after I finished the loop, but then I have Debug check failed: is_valid() error. I guess the problem is that I use these register aliases in the deferred code and that\u0027s placed after the normal flow code, and that\u0027s why I have this error. \nPossible solution is just to reset these aliases in the deferred code, but I didn\u0027t like it that way. But if you think it\u0027s better, I can change it.\nSame happens when I want to set param_count to no_reg after the wasm call.\n\nAnd about the Smi case:\nWe need param_count in the Smi case too to remove the caller frame slots.\nIn the current version (patchset 4) I just moved the loading to param_count to the return_done label, so there\u0027s no additional load. I realized that by moving it there I don\u0027t need to reset it after the builtin calls, because we get to this return_done label after the builtin call.",
+      "parentUuid": "653c43c5_40052844",
+      "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
