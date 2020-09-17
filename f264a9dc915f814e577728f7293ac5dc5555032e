@@ -139,6 +139,24 @@
       "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c4f4e23_da0c471c",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3732,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-09-17T15:58:01Z",
+      "side": 1,
+      "message": "I made the same comment about setting the registers to no_reg before, with the same response by Eva. With the deferred code it\u0027s really not easy to find an optimal solution. Back then we considered the current solution the best.",
+      "parentUuid": "4d35cd88_2b7a7c10",
+      "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
