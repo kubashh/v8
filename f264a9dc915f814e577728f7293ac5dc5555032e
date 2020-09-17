@@ -103,6 +103,24 @@
       "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "653c43c5_40052844",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3732,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-09-17T14:37:02Z",
+      "side": 1,
+      "message": "A few thoughts:\n\nI think an additional stack move in the Smi case could have a noticeable impact on performance.\n\nCurrently we save and restore \"param_count\" at each param builtin call. I think that this is no longer necessary with the suggested change, since \"param_count\" is not used until it is reloaded after \"return_done\". So this could be a small speed-up for the builtin case.\n\nI still think optimizing the Smi case is important if we want the comparison with TurboFan-generated wrappers to be fair. But I am fine with leaving that for later, if we even observe a difference. The suggested change looks good.\n\nRelated side note: I just noticed that we use the same register for the \"thread_in_wasm\" flag (r12). I am wondering how that works currently since we seem to expect \"param_count\" to be live until the end of the builtin (we never set it to \"no_reg\"). It\u0027s getting hard to keep track of live ranges manually, though, maybe it is correct.",
+      "parentUuid": "b0706b12_f30181c0",
+      "revId": "f264a9dc915f814e577728f7293ac5dc5555032e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
