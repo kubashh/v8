@@ -1711,6 +1711,11 @@
         'suffix': 'scavenge',
         'test_args': ['--total-timeout-sec=2100', '--stress-scavenge=1']
       },
+      {
+        'name': 'numfuzz',
+        'suffix': 'no_local_heaps',
+        'variant': 'no_local_heaps'
+      },
     ],
   },
   'V8 NumFuzz - debug': {
@@ -1765,6 +1770,11 @@
         'suffix': 'deopt',
         'test_args': ['--total-timeout-sec=2100', '--stress-deopt=1'],
         'shards': 2
+      },
+      {
+        'name': 'numfuzz',
+        'suffix': 'no_local_heaps',
+        'variant': 'no_local_heaps'
       },
     ],
   },
