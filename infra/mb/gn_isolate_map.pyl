@@ -17,42 +17,51 @@
   },
   "benchmarks": {
     "label": "//test/benchmarks:v8_benchmarks",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "bot_default": {
     "label": "//test:v8_bot_default",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "check-static-initializers": {
     "label": "//tools:v8_check_static_initializers",
+    "script": "//tools/check-static-initializers.sh",
     "type": "script",
   },
   "d8_default": {
     "label": "//test:v8_d8_default",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "generate-bytecode-expectations": {
     "label": "//test/cctest:generate-bytecode-expectations",
-    "type": "script",
+    "type": "raw",
   },
   "mjsunit": {
     "label": "//test/mjsunit:v8_mjsunit",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "mozilla": {
     "label": "//test/mozilla:v8_mozilla",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "optimize_for_size": {
     "label": "//test:v8_optimize_for_size",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "perf": {
     "label": "//test:v8_perf",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "perf_integration": {
     "label": "//test:v8_perf",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "jsfunfuzz": {
@@ -61,26 +70,32 @@
   },
   "run-gcmole": {
     "label": "//tools/gcmole:v8_run_gcmole",
+    "script": "//tools/gcmole/run-gcmole.py",
     "type": "script",
   },
   "run-num-fuzzer": {
     "label": "//test:v8_run_num_fuzzer",
+    "script": "//tools/testrunner/run_numfuzz.py",
     "type": "script",
   },
   "test262": {
     "label": "//test/test262:v8_test262",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "unittests": {
     "label": "//test/unittests:unittests",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "fuchsia-unittests": {
     "label": "//test/unittests:v8_unittests_fuchsia",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
   "webkit": {
     "label": "//test/webkit:v8_webkit",
+    "script": "//tools/testrunner/run_tests.py",
     "type": "script",
   },
 }
