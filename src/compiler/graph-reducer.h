@@ -35,8 +35,8 @@ class Reduction final {
 
   Node* replacement() const { return replacement_; }
   bool Changed() const { return replacement() != nullptr; }
-  Reduction FollowedBy(Reduction next) const {
-    if (next.Changed()) return next;
+  Reduction FollowedBy(Reduction next, bool forward_return = true) const {
+    if (next.Changed() && forward_return) return next;
     return *this;
   }
 
