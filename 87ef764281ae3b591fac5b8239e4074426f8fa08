@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cef6320a_09e657f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-09-18T14:03:04Z",
+      "side": 1,
+      "message": " - This exposes the nodeName() implementation directly in the value mirror, which is generally good, as not the value exposed now directly reflects what the user gets when evaluating node.nodeName in JavaScript.\n\n- This has impact at least in the DevTools console, where this will lead to upper-case tag identifiers to be displayed in certain places (e.g. typing document.body in the console would preview the value \u0027body\u0027 before this patch and \u0027BODY\u0027 with this patch). I don\u0027t know where else this has impact, but *if* someone uses the value mirror exposed nodeName for string comparisons, this will break them.\n\nOtherwise, nice cleanup.",
+      "revId": "87ef764281ae3b591fac5b8239e4074426f8fa08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
