@@ -10090,29 +10090,6 @@ v8::MaybeLocal<v8::Array> v8::Object::PreviewEntries(bool* is_key_value) {
   return v8::MaybeLocal<v8::Array>();
 }
 
-Local<Function> debug::GetBuiltin(Isolate* v8_isolate, Builtin builtin) {
-  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
-  i::HandleScope handle_scope(isolate);
-  i::Builtins::Name builtin_id;
-  switch (builtin) {
-    case kStringToLowerCase:
-      builtin_id = i::Builtins::kStringPrototypeToLocaleLowerCase;
-      break;
-    default:
-      UNREACHABLE();
-  }
-
-  i::Handle<i::String> name = isolate->factory()->empty_string();
-  i::NewFunctionArgs args = i::NewFunctionArgs::ForBuiltinWithoutPrototype(
-      name, builtin_id, i::LanguageMode::kStrict);
-  i::Handle<i::JSFunction> fun = isolate->factory()->NewFunction(args);
-
-  fun->shared().set_internal_formal_parameter_count(0);
-  fun->shared().set_length(0);
-  return Utils::ToLocal(handle_scope.CloseAndEscape(fun));
-}
-
 void debug::SetConsoleDelegate(Isolate* v8_isolate, ConsoleDelegate* delegate) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);

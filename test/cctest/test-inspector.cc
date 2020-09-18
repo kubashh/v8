@@ -64,6 +64,51 @@ TEST(WrapInsideWrapOnInterrupt) {
   session->wrapObject(env.local(), v8::Null(isolate), object_group_view, false);
 }
 
+class TestClient : public v8_inspector::V8InspectorClient {
+ public:
+  std::unique_ptr<StringBuffer> valueSubtype(v8::Local<v8::Value>) override {
+    const char* type = "node";
+    StringView type_view(reinterpret_cast<const uint8_t*>(type), strlen(type));
+    return v8_inspector::StringBuffer::create(type_view);
+  }
+};
+
+TEST(WrapObjectNodeNameDescription) {
+  LocalContext env;
+  v8::Isolate* isolate = env->GetIsolate();
+  v8::HandleScope handle_scope(isolate);
+
+  TestClient test_client;
+  std::unique_ptr<V8Inspector> inspector =
+      V8Inspector::create(isolate, &test_client);
+  const char* name = "";
+  StringView name_view(reinterpret_cast<const uint8_t*>(name), strlen(name));
+  V8ContextInfo context_info(env.local(), 1, name_view);
+  inspector->contextCreated(context_info);
+
+  NoopChannel channel;
+  const char* state = "{}";
+  StringView state_view(reinterpret_cast<const uint8_t*>(state), strlen(state));
+  std::unique_ptr<V8InspectorSession> session =
+      inspector->connect(1, &channel, state_view);
+
+  v8::Local<v8::Value> value =
+      CompileRun("let a = { nodeName: 'TestName' }; a");
+
+  const char* object_group = "";
+  StringView object_group_view(reinterpret_cast<const uint8_t*>(object_group),
+                               strlen(object_group));
+  auto wrapped =
+      session->wrapObject(env.local(), value, object_group_view, false);
+  CHECK_EQ(0,
+           strcmp("TestName",
+                  static_cast<v8_inspector::protocol::Runtime::RemoteObject*>(
+                      wrapped.get())
+                      ->getDescription("")
+                      .utf8()
+                      .c_str()));
+}
+
 TEST(BinaryFromBase64) {
   auto checkBinary = [](const v8_inspector::protocol::Binary& binary,
                         const std::vector<uint8_t>& values) {

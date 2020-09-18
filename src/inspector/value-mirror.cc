@@ -1641,16 +1641,9 @@ String16 descriptionForNode(v8::Local<v8::Context> context,
     return String16();
   }
   String16 description;
-  v8::Local<v8::Function> toLowerCase =
-      v8::debug::GetBuiltin(isolate, v8::debug::kStringToLowerCase);
   if (nodeName->IsString()) {
-    if (!toLowerCase->Call(context, nodeName, 0, nullptr).ToLocal(&nodeName))
-      return String16();
-    if (nodeName->IsString()) {
-      description = toProtocolString(isolate, nodeName.As<v8::String>());
-    }
-  }
-  if (!description.length()) {
+    description = toProtocolString(isolate, nodeName.As<v8::String>());
+  } else {
     v8::Local<v8::Value> value;
     if (!object->Get(context, toV8String(isolate, "constructor"))
              .ToLocal(&value) ||
