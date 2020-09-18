@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "2b05819f_0f183aad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-18T12:01:08Z",
+      "side": 1,
+      "message": "Thanks, landing.",
+      "revId": "40085f034f0d3940cbc7c82504a653556df936ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdb9aa3f_13282244",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 4
@@ -30,6 +47,30 @@
       "writtenOn": "2020-09-18T12:00:05Z",
       "side": 1,
       "message": "I would have used `Address`, but `uintptr_t` is fine too.",
+      "range": {
+        "startLine": 4590,
+        "startChar": 2,
+        "endLine": 4590,
+        "endChar": 11
+      },
+      "revId": "40085f034f0d3940cbc7c82504a653556df936ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "91990b5c_03da1d09",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4590,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-18T12:01:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cdb9aa3f_13282244",
       "range": {
         "startLine": 4590,
         "startChar": 2,
