@@ -47,6 +47,8 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorReducer final
   Reduction ReplaceNumber(double value);
   Reduction ReplaceNumber(int32_t value);
 
+  Reduction RelaxEffectsAndControlsForNode(Node* node);
+
   Factory* factory() const;
   Graph* graph() const;
   MachineOperatorBuilder* machine() const;
