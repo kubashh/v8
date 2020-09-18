@@ -13,6 +13,7 @@
 namespace v8 {
 namespace internal {
 
+class ArrayInlineInfo;
 
 namespace compiler {
 
@@ -56,6 +57,8 @@ class MapInference {
   V8_WARN_UNUSED_RESULT bool AllOfInstanceTypes(
       std::function<bool(InstanceType)> f);
   V8_WARN_UNUSED_RESULT bool Is(Handle<Map> expected_map);
+  V8_WARN_UNUSED_RESULT std::vector<ArrayInlineInfo> const&
+  GetArrayInlineInfos();
 
   // These methods provide a guard.
   //
@@ -83,6 +86,7 @@ class MapInference {
   JSHeapBroker* const broker_;
   Node* const object_;
 
+  std::vector<ArrayInlineInfo> array_inline_infos_;
   MapHandles maps_;
   enum {
     kReliableOrGuarded,

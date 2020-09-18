@@ -23,6 +23,30 @@ OBJECT_CONSTRUCTORS_IMPL(LoadHandler, DataHandler)
 
 CAST_ACCESSOR(LoadHandler)
 
+// static
+ArrayInlineInfo ArrayInlineInfo::DecodeValue(int encoded_value) {
+  if (encoded_value == LoadHandler::ArrayInlineInfoBits::kMax)
+    return ArrayInlineInfo(false, ElementsKind::NO_ELEMENTS);
+  DCHECK_LE(encoded_value, ElementsKind::LAST_FAST_ELEMENTS_KIND);
+  return ArrayInlineInfo(true, (ElementsKind)encoded_value);
+}
+
+int ArrayInlineInfo::GetEncoding() {
+  DCHECK_IMPLIES(supports_fast_array_resize, IsFastElementsKind(elements_kind));
+  // This information is used by TurboFan to inline array builtins. TurboFan
+  // only supports inlining when the arrays have fast elements kind. So we only
+  // encode fast elements kind to limit the number of bits needed to encode.
+  // Assert that the fast elements kind fit in specified number of bits.
+  // ArrayInlineInfo::kMax value is used to encode that it isn't possible to
+  // inline these builtins and hence the strict less than.
+  STATIC_ASSERT(ElementsKind::LAST_FAST_ELEMENTS_KIND <
+                LoadHandler::ArrayInlineInfoBits::kMax);
+  int array_inline_info_encoding = supports_fast_array_resize
+                                       ? elements_kind
+                                       : LoadHandler::ArrayInlineInfoBits::kMax;
+  return array_inline_info_encoding;
+}
+
 // Decodes kind from Smi-handler.
 LoadHandler::Kind LoadHandler::GetHandlerKind(Smi smi_handler) {
   return KindBits::decode(smi_handler.value());
@@ -49,19 +73,17 @@ Handle<Smi> LoadHandler::LoadSlow(Isolate* isolate) {
 }
 
 Handle<Smi> LoadHandler::LoadField(Isolate* isolate, FieldIndex field_index,
-                                   ElementsKind kind) {
+                                   ArrayInlineInfo info) {
   int config = KindBits::encode(kField) |
                IsInobjectBits::encode(field_index.is_inobject()) |
                IsDoubleBits::encode(field_index.is_double()) |
                FieldIndexBits::encode(field_index.index()) |
-               CompactElementsKindBits::encode(ToCompactElementsKind(kind));
+               ArrayInlineInfoBits::encode(info.GetEncoding());
   return handle(Smi::FromInt(config), isolate);
 }
 
-Handle<Smi> LoadHandler::LoadConstantFromPrototype(Isolate* isolate,
-                                                   ElementsKind kind) {
-  int config = KindBits::encode(kConstantFromPrototype) |
-               CompactElementsKindBits::encode(ToCompactElementsKind(kind));
+Handle<Smi> LoadHandler::LoadConstantFromPrototype(Isolate* isolate) {
+  int config = KindBits::encode(kConstantFromPrototype);
   return handle(Smi::FromInt(config), isolate);
 }
 
