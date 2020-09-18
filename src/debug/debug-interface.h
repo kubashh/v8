@@ -244,10 +244,6 @@ void ResetBlackboxedStateCache(Isolate* isolate,
 
 int EstimatedValueSize(Isolate* isolate, v8::Local<v8::Value> value);
 
-enum Builtin { kStringToLowerCase };
-
-Local<Function> GetBuiltin(Isolate* isolate, Builtin builtin);
-
 V8_EXPORT_PRIVATE void SetConsoleDelegate(Isolate* isolate,
                                           ConsoleDelegate* delegate);
 
