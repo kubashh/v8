@@ -3087,6 +3087,7 @@ void InstructionSelector::VisitUnreachable(Node* node) {
 }
 
 void InstructionSelector::VisitStaticAssert(Node* node) {
+  AllowHandleDereference allow_dereference;  // For printing.
   Node* asserted = node->InputAt(0);
   AllowHandleDereference allow_handle_dereference;
   asserted->Print(4);
