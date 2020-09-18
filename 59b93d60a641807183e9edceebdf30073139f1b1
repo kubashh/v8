@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a07b6f39_25b6ba59",
+        "filename": "src/ic/handler-configuration-inl.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-18T16:26:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3dbf9fe_9f304903",
+      "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb89963d_0a302e80",
         "filename": "src/ic/handler-configuration-inl.h",
         "patchSetId": 27
@@ -30,6 +48,24 @@
       "writtenOn": "2020-09-18T09:33:17Z",
       "side": 1,
       "message": "This means we don\u0027t support non-extensible elements kinds right now, right?",
+      "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78a6738f_36757921",
+        "filename": "src/ic/handler-configuration-inl.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-18T16:26:31Z",
+      "side": 1,
+      "message": "Yes, TF needs this information only for fast elements kind. It uses this information to inline array builtins and only supports fast elements kinds for now [1]. For other elements kind it just calls out to the builtin. So we don\u0027t need to encode any other elements kind for now.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-heap-broker.cc;l\u003d1249;drc\u003da99a3ceb38a6dc703411ea74d467de613b2d2a57",
+      "parentUuid": "fb89963d_0a302e80",
       "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "70d2cc2c_111e5032",
+        "filename": "src/ic/handler-configuration-inl.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-18T16:26:31Z",
+      "side": 1,
+      "message": "Thanks, I added a comment. Yes, for Array slice we aren\u0027t inlining yet. I need to encode another bit which says if the array allows fast array iterator or not [1]. I added array resizing builtins first. I will expand this to allow array slice too in a follow up cl. I added a TODO here. \n\n[1]: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-call-reducer.cc;l\u003d5570;drc\u003da99a3ceb38a6dc703411ea74d467de613b2d2a57?q\u003djs-call-re\u0026ss\u003dchromium",
+      "parentUuid": "1394b180_db5f2ded",
+      "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a7c8cc9_1f1b6758",
         "filename": "src/ic/handler-configuration.h",
         "patchSetId": 27
@@ -64,6 +118,24 @@
       "writtenOn": "2020-09-18T09:33:17Z",
       "side": 1,
       "message": "It seems like it would be nice to change the U template parameter of BitField to Smi. Instead of using sizeof*8 for all U types, we could add special support for Smi that knows it has 31 bits...",
+      "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a50dc7c_b6ec5cda",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-18T16:26:31Z",
+      "side": 1,
+      "message": "I am not sure I understood correctly. Is it that we can eliminate this and other static asserts if BitField supports Smi and adds assert so that we never exceed 31 bits? I think that may need some changes to BitField too. Would it be OK if I did it as a follow up cl and have a TODO here for now?",
+      "parentUuid": "8a7c8cc9_1f1b6758",
       "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

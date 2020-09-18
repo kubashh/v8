@@ -16,6 +16,24 @@
       "revId": "798ca7fed4b2e457271c27b414a1eaa2d37bae37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7abad30d_0e5a2a08",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-18T16:26:31Z",
+      "side": 0,
+      "message": "Currently, we don\u0027t use dynamic map checks for these handlers. So, TurboProp continues to inline those by inferring the information from the maps in the feedback vector. We want to expand dynamic map checks to these handlers as well so I agree in future we would need to support the encoding here too. So, I just removed this since we aren\u0027t currently using it. Happy to update this in this cl too.",
+      "parentUuid": "5b103167_3f54ef23",
+      "revId": "798ca7fed4b2e457271c27b414a1eaa2d37bae37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
