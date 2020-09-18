@@ -34,6 +34,46 @@
       "revId": "d086b7dcbdc6f6f3e781f20221fd6959bb87ea49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e37442c_bea413c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-18T19:30:31Z",
+      "side": 1,
+      "message": "Would be nice to get some traction here... I think the original patch that this is a follow-up to is what caused crbug.com/1128932; I\u0027m suggesting a fix below.",
+      "revId": "d086b7dcbdc6f6f3e781f20221fd6959bb87ea49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc9b940d_c710e41f",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-18T19:30:31Z",
+      "side": 1,
+      "message": "I believe this (as well as the same conditions in line 236 and 265 below) should be V8_HOST_ARCH_ARM64.\n\nV8_HOST_ARCH_* is where the compiled binary will run.\nV8_TARGET_ARCH_* is what V8\u0027s JIT compilers will target.\n(The names may be misleading but at least they\u0027ve been consistently used that way for 10 years... arguably we should rename them.)\n\nSo in particular, when cross-compiling for arm64 on x64, then V8_HOST_ARCH_ARM64 will be set (see base/build_config.h). When compiling an arm64 simulator build on (and for) an x64 host, then V8_HOST_ARCH_X64 and V8_TARGET_ARCH_ARM64 will be set -- and then we\u0027ll get failing DCHECKs because V8 believes the OS uses 16KB pages but the OS actually does use 4KB pages: crbug.com/1128932.\nThe same V8_HOST_ARCH_X64 / V8_TARGET_ARCH_ARM64 combination will be set for the mksnapshot binary during a cross-compile. As jgruber@ explained elsewhere, the snapshot itself should not be page size specific, so it should be fine that this is not distinguishable from a simulator build meant for running tests.\n\nI\u0027ve verified locally that switching all these conditions from TARGET to HOST fixes the test failures reported in crbug.com/1128932 without re-introducing the cross-compiling mksnapshot failure addressed in crbug.com/1107945.\n\nSince V8_TARGET_ARCH_* describes the CPU architecture that V8\u0027s JIT compilers are targeting, not the hardware or OS it is running on, it generally doesn\u0027t make sense to let it be the decision-maker for platform things like page size.\n\n(Looks like the confusion was originally introduced in https://chromium-review.googlesource.com/c/v8/v8/+/1701127, which also should have used V8_HOST_ARCH_ARM64.)",
+      "range": {
+        "startLine": 114,
+        "startChar": 36,
+        "endLine": 114,
+        "endChar": 56
+      },
+      "revId": "d086b7dcbdc6f6f3e781f20221fd6959bb87ea49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
