@@ -16,6 +16,138 @@
       "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "726adffe_5e68b50a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-18T10:55:38Z",
+      "side": 1,
+      "message": "Did a quick look at the CL and I have some comments.\nI will have to read it in more detail later.",
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e0eef6a1_27721fee",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3090,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-18T10:55:38Z",
+      "side": 1,
+      "message": "There is already an AllowHandleDereference two lines below. Let\u0027s keep only one.",
+      "range": {
+        "startLine": 3090,
+        "startChar": 2,
+        "endLine": 3090,
+        "endChar": 61
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a75dd2ae_97887e32",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-18T10:55:38Z",
+      "side": 1,
+      "message": "Remove?",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 4
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0333a53_a2908969",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-18T10:55:38Z",
+      "side": 1,
+      "message": "When do we need to call FeedbackVector::AssertNoLegacyTypes? Is it on MaybeObject only? I can\u0027t find a consistency.\n\nAlso, on tip of tree sometimes we have an #ifdef DEBUG around it which makes things harder for me to understand exactly when we should be using it.",
+      "range": {
+        "startLine": 381,
+        "startChar": 2,
+        "endLine": 381,
+        "endChar": 48
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3240df23_f5e293ad",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-18T10:55:38Z",
+      "side": 1,
+      "message": "Could these be templatized? I am thinking we could have a\n\n\u003e static_assert(std::is_same\u003cT, MaybeObject\u003e || std::is_same\u003cT, Object\u003e, \"feedbacks need to be either Object or MaybeObejct\")\n\nto make sure we only call it with those two classes. Then, the method can be something like:\n\n\u003e MaybeObject feedback_maybe_object;\n\u003e if (std::is_same\u003cT, Object\u003e) {\n\u003e   feedback_maybe_object \u003d MaybeObject::FromObject(feedback);\n\u003e } else {\n\u003e   feedback_maybe_object \u003d feedback;\n\u003e }\n\u003e FeedbackVector::AssertNoLegacyTypes(feedback_maybe_object);\n\u003e // Same for feedback_extra\n\u003e // ...\n\u003e g_-\u003eSetFeedbackPair(vector(), slot(), feedback_maybe_object, mode,\n\u003e                    feedback_extra_maybe_object, mode_extra);\n\nNote that I used \u0027T\u0027 but maybe better a naming could be FeedbackType and FeedbackExtraType.\n\nIf we do this change, we might be able to do something similar to the SetFeedback method above that only sets one feedback (and not extra).",
+      "range": {
+        "startLine": 385,
+        "startChar": 0,
+        "endLine": 416,
+        "endChar": 1
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03055967_60748a7b",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-18T10:55:38Z",
+      "side": 1,
+      "message": "Why is this a bizarre request? This is a method added in this CL",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 420,
+        "endChar": 48
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
