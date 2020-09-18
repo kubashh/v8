@@ -1,4 +1,3 @@
-# Copyright 2016 the V8 project authors. All rights reserved.
 # Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -22,13 +21,6 @@ def _CommonChecks(input_api, output_api):
       input_api.Command(name='mb_validate',
                         cmd=cmd, kwargs=kwargs,
                         message=output_api.PresubmitError)]))
-
-  results.extend(
-      input_api.canned_checks.CheckLongLines(
-          input_api,
-          output_api,
-          maxlen=80,
-          source_file_filter=lambda x: 'mb_config.pyl' in x.LocalPath()))
 
   return results
 
