@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3dbf9fe_9f304903",
+        "filename": "src/ic/handler-configuration-inl.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-09-18T09:33:17Z",
+      "side": 1,
+      "message": "It seems like all of this code should be moved out to a helper function, and this function should probably just get a new kind of input; something like ArrayAccessInfo or so.",
+      "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb89963d_0a302e80",
+        "filename": "src/ic/handler-configuration-inl.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-09-18T09:33:17Z",
+      "side": 1,
+      "message": "This means we don\u0027t support non-extensible elements kinds right now, right?",
+      "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1394b180_db5f2ded",
+        "filename": "src/ic/handler-configuration-inl.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-09-18T09:33:17Z",
+      "side": 1,
+      "message": "It seems a little arbitrary to not track elements kind info simply because the underlying array cannot be resized. What if all you\u0027re doing is loading from the array later? E.g., array.slice()?\n\nAt the least this needs a comment.",
+      "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a7c8cc9_1f1b6758",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-09-18T09:33:17Z",
+      "side": 1,
+      "message": "It seems like it would be nice to change the U template parameter of BitField to Smi. Instead of using sizeof*8 for all U types, we could add special support for Smi that knows it has 31 bits...",
+      "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

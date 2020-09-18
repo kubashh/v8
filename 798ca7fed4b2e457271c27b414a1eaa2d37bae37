@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b103167_3f54ef23",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-09-18T09:33:17Z",
+      "side": 0,
+      "message": "I\u0027m a little confused why this was moved. a.push/slice will be a LoadConstantFromPrototype case right?\nI presume it could have been made non-const by some framework on some benchmark, in which case we should probably support both?",
+      "revId": "798ca7fed4b2e457271c27b414a1eaa2d37bae37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
