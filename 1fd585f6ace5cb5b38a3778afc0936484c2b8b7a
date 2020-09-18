@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfb430fb_174298a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-09-18T09:26:53Z",
+      "side": 1,
+      "message": "Unmodified reland in patch-set 1, listed bug fix in patch-set 2.\n\nIgor, PTAL at the bug fix (https://chromium-review.googlesource.com/c/v8/v8/+/2418101/1..2)\nJakob G, putting you as TBR for the rest of the reland.\n\nEveryone else: FYI",
+      "revId": "1fd585f6ace5cb5b38a3778afc0936484c2b8b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
