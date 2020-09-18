@@ -21,6 +21,24 @@ namespace internal {
 
 class JSProxy;
 
+// ArrayInlineInfo holds information needed to decide if array builtins can be
+// inlined by TurboFan. This information isn't used by the ICs.
+class ArrayInlineInfo {
+ public:
+  ArrayInlineInfo(bool supports_fast_array_resize, ElementsKind elements_kind)
+      : supports_fast_array_resize(supports_fast_array_resize),
+        elements_kind(elements_kind) {
+    DCHECK_IMPLIES(supports_fast_array_resize,
+                   IsFastElementsKind(elements_kind));
+  }
+
+  static inline ArrayInlineInfo DecodeValue(int encoded_value);
+  inline int GetEncoding();
+
+  bool supports_fast_array_resize;
+  ElementsKind elements_kind;
+};
+
 // A set of bit fields representing Smi handlers for loads and a HeapObject
 // that represents load handlers that can't be encoded in a Smi.
 // TODO(ishell): move to load-handler.h
@@ -78,9 +96,9 @@ class LoadHandler final : public DataHandler {
   // +1 here is to cover all possible JSObject header sizes.
   using FieldIndexBits =
       IsDoubleBits::Next<unsigned, kDescriptorIndexBitCount + 1>;
-  using CompactElementsKindBits = FieldIndexBits::Next<CompactElementsKind, 3>;
+  using ArrayInlineInfoBits = FieldIndexBits::Next<unsigned, 3>;
   // Make sure we don't overflow the smi.
-  STATIC_ASSERT(CompactElementsKindBits::kLastUsedBit < kSmiValueSize);
+  STATIC_ASSERT(ArrayInlineInfoBits::kLastUsedBit < kSmiValueSize);
 
   //
   // Encoding when KindBits contains kElement or kIndexedString.
@@ -120,12 +138,11 @@ class LoadHandler final : public DataHandler {
 
   // Creates a Smi-handler for loading a field from fast object.
   static inline Handle<Smi> LoadField(Isolate* isolate, FieldIndex field_index,
-                                      ElementsKind kind);
+                                      ArrayInlineInfo info);
 
   // Creates a Smi-handler for loading a cached constant from fast
   // prototype object.
-  static inline Handle<Smi> LoadConstantFromPrototype(Isolate* isolate,
-                                                      ElementsKind kind);
+  static inline Handle<Smi> LoadConstantFromPrototype(Isolate* isolate);
 
   // Creates a Smi-handler for calling a getter on a fast object.
   static inline Handle<Smi> LoadAccessor(Isolate* isolate, int descriptor);

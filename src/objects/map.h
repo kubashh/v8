@@ -528,6 +528,9 @@ class Map : public HeapObject {
       Isolate* isolate, InstanceType instance_type,
       Representation* representation, Handle<FieldType>* field_type);
 
+  static bool SupportsFastArrayIteration(Isolate* isolate, Handle<Map> map);
+  static bool SupportsFastArrayResize(Isolate* isolate, Handle<Map> map);
+
   V8_EXPORT_PRIVATE static Handle<Map> ReconfigureProperty(
       Isolate* isolate, Handle<Map> map, InternalIndex modify_index,
       PropertyKind new_kind, PropertyAttributes new_attributes,

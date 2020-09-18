@@ -287,34 +287,14 @@ CheckMapsParameters const& CheckMapsParametersOf(Operator const* op) {
   return OpParameter<CheckMapsParameters>(op);
 }
 
-bool operator==(DynamicCheckMapsParameters const& lhs,
-                DynamicCheckMapsParameters const& rhs) {
-  // FeedbackSource is sufficient as an equality check. FeedbackSource uniquely
-  // determines all other properties (handler, flags and the monomorphic map
-  DCHECK_IMPLIES(lhs.feedback() == rhs.feedback(),
-                 lhs.flags() == rhs.flags() && lhs.state() == rhs.state() &&
-                     lhs.handler().address() == rhs.handler().address() &&
-                     lhs.map().address() == rhs.map().address());
-  return lhs.feedback() == rhs.feedback();
-}
-
-size_t hash_value(DynamicCheckMapsParameters const& p) {
+size_t hash_value(FeedbackSource const& p) {
   FeedbackSource::Hash feedback_hash;
-  // FeedbackSource is sufficient for hashing. FeedbackSource uniquely
-  // determines all other properties (handler, flags and the monomorphic map
-  return base::hash_combine(feedback_hash(p.feedback()));
+  return feedback_hash(p);
 }
 
-std::ostream& operator<<(std::ostream& os,
-                         DynamicCheckMapsParameters const& p) {
-  return os << p.handler() << ", " << p.feedback() << "," << p.state() << ","
-            << p.flags() << "," << p.map().address();
-}
-
-DynamicCheckMapsParameters const& DynamicCheckMapsParametersOf(
-    Operator const* op) {
+FeedbackSource const& DynamicCheckMapsParametersOf(Operator const* op) {
   DCHECK_EQ(IrOpcode::kDynamicCheckMaps, op->opcode());
-  return OpParameter<DynamicCheckMapsParameters>(op);
+  return OpParameter<FeedbackSource>(op);
 }
 
 ZoneHandleSet<Map> const& CompareMapsParametersOf(Operator const* op) {
@@ -1487,16 +1467,13 @@ const Operator* SimplifiedOperatorBuilder::CheckMaps(
 }
 
 const Operator* SimplifiedOperatorBuilder::DynamicCheckMaps(
-    CheckMapsFlags flags, Handle<Object> handler, MaybeHandle<Map> maybe_map,
     const FeedbackSource& feedback) {
-  DynamicCheckMapsParameters const parameters(flags, handler, maybe_map,
-                                              feedback);
-  return zone()->New<Operator1<DynamicCheckMapsParameters>>(  // --
-      IrOpcode::kDynamicCheckMaps,                            // opcode
-      Operator::kNoThrow | Operator::kNoWrite,                // flags
-      "DynamicCheckMaps",                                     // name
-      1, 1, 1, 0, 1, 0,                                       // counts
-      parameters);                                            // parameter
+  return zone()->New<Operator1<FeedbackSource>>(  // --
+      IrOpcode::kDynamicCheckMaps,                // opcode
+      Operator::kNoThrow | Operator::kNoWrite,    // flags
+      "DynamicCheckMaps",                         // name
+      1, 1, 1, 0, 1, 0,                           // counts
+      feedback);                                  // parameter
 }
 
 const Operator* SimplifiedOperatorBuilder::MapGuard(ZoneHandleSet<Map> maps) {

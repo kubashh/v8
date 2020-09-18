@@ -426,42 +426,7 @@ std::ostream& operator<<(std::ostream&, CheckMapsParameters const&);
 CheckMapsParameters const& CheckMapsParametersOf(Operator const*)
     V8_WARN_UNUSED_RESULT;
 
-// A descriptor for dynamic map checks.
-class DynamicCheckMapsParameters final {
- public:
-  enum ICState { kMonomorphic, kPolymorphic };
-
-  DynamicCheckMapsParameters(CheckMapsFlags flags, Handle<Object> handler,
-                             MaybeHandle<Map> maybe_map,
-                             const FeedbackSource& feedback)
-      : flags_(flags),
-        handler_(handler),
-        maybe_map_(maybe_map),
-        feedback_(feedback) {}
-
-  CheckMapsFlags flags() const { return flags_; }
-  Handle<Object> handler() const { return handler_; }
-  MaybeHandle<Map> map() const { return maybe_map_; }
-  FeedbackSource const& feedback() const { return feedback_; }
-  ICState state() const {
-    return maybe_map_.is_null() ? ICState::kPolymorphic : ICState::kMonomorphic;
-  }
-
- private:
-  CheckMapsFlags const flags_;
-  Handle<Object> const handler_;
-  MaybeHandle<Map> const maybe_map_;
-  FeedbackSource const feedback_;
-};
-
-bool operator==(DynamicCheckMapsParameters const&,
-                DynamicCheckMapsParameters const&);
-
-size_t hash_value(DynamicCheckMapsParameters const&);
-
-std::ostream& operator<<(std::ostream&, DynamicCheckMapsParameters const&);
-
-DynamicCheckMapsParameters const& DynamicCheckMapsParametersOf(Operator const*)
+FeedbackSource const& DynamicCheckMapsParametersOf(Operator const*)
     V8_WARN_UNUSED_RESULT;
 
 ZoneHandleSet<Map> const& MapGuardMapsOf(Operator const*) V8_WARN_UNUSED_RESULT;
@@ -887,9 +852,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckInternalizedString();
   const Operator* CheckMaps(CheckMapsFlags, ZoneHandleSet<Map>,
                             const FeedbackSource& = FeedbackSource());
-  const Operator* DynamicCheckMaps(CheckMapsFlags flags, Handle<Object> handler,
-                                   MaybeHandle<Map> map,
-                                   const FeedbackSource& feedback);
+  const Operator* DynamicCheckMaps(const FeedbackSource& feedback);
   const Operator* CheckNotTaggedHole();
   const Operator* CheckNumber(const FeedbackSource& feedback);
   const Operator* CheckReceiver();
