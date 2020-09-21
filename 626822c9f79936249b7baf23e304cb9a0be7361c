@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d72a5f32_689567ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-21T14:29:47Z",
+      "side": 1,
+      "message": "Thanks for the comment on https://crrev.com/c/2416386, that was indeed wrong. Here is the fix, PTAL",
+      "revId": "626822c9f79936249b7baf23e304cb9a0be7361c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
