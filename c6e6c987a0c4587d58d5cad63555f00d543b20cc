@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "745346d3_3767331b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-21T14:26:03Z",
+      "side": 1,
+      "message": "Thank you, this is looking good!",
+      "revId": "c6e6c987a0c4587d58d5cad63555f00d543b20cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82b3f3d2_0d2a458e",
         "filename": "src/compiler/simplified-operator-reducer.cc",
         "patchSetId": 19
