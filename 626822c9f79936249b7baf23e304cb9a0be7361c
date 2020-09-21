@@ -16,6 +16,23 @@
       "revId": "626822c9f79936249b7baf23e304cb9a0be7361c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c1cdc2c_ec6e5452",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-09-21T14:30:33Z",
+      "side": 1,
+      "message": "The title is of the CL is too long, otherwise LGTM.",
+      "revId": "626822c9f79936249b7baf23e304cb9a0be7361c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
