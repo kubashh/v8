@@ -66,6 +66,7 @@ class StructType : public ZoneObject {
   }
 
   void InitializeOffsets() {
+    if (field_count() == 0) return;
     uint32_t offset = field(0).element_size_bytes();
     for (uint32_t i = 1; i < field_count(); i++) {
       uint32_t field_size = field(i).element_size_bytes();
@@ -102,17 +103,17 @@ class StructType : public ZoneObject {
 
    private:
     const uint32_t field_count_;
-    Zone* zone_;
+    Zone* const zone_;
     uint32_t cursor_;
-    ValueType* buffer_;
-    bool* mutabilities_;
+    ValueType* const buffer_;
+    bool* const mutabilities_;
   };
 
  private:
-  uint32_t field_count_;
-  uint32_t* field_offsets_;
-  const ValueType* reps_;
-  const bool* mutabilities_;
+  const uint32_t field_count_;
+  uint32_t* const field_offsets_;
+  const ValueType* const reps_;
+  const bool* const mutabilities_;
 };
 
 class ArrayType : public ZoneObject {
