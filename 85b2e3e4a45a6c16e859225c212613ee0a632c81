@@ -16,6 +16,23 @@
       "revId": "85b2e3e4a45a6c16e859225c212613ee0a632c81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3d04bc96_7026c1a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-21T09:38:02Z",
+      "side": 1,
+      "message": "This not doing the exact same thing anymore. Before your change, the ToHandleChecked made sure that the returned values are actual handles (and not null). This check is now lost. Can we add such a check again or is there a reason we shouldn\u0027t need to do it anymore?",
+      "revId": "85b2e3e4a45a6c16e859225c212613ee0a632c81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
