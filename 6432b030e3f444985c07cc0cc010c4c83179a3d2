@@ -33,6 +33,23 @@
       "revId": "6432b030e3f444985c07cc0cc010c4c83179a3d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab37c104_6888532a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-09-21T23:41:55Z",
+      "side": 1,
+      "message": "are you going to address the red on trybot. or I could fix it from my side",
+      "revId": "6432b030e3f444985c07cc0cc010c4c83179a3d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
