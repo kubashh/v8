@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82b3f3d2_0d2a458e",
+        "filename": "src/compiler/simplified-operator-reducer.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-21T14:25:45Z",
+      "side": 1,
+      "message": "I think this should also ignore effect edges, even if they are different from {node}.",
+      "range": {
+        "startLine": 238,
+        "startChar": 14,
+        "endLine": 243,
+        "endChar": 15
+      },
+      "revId": "c6e6c987a0c4587d58d5cad63555f00d543b20cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f328992_949ebb52",
+        "filename": "src/compiler/simplified-operator-reducer.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-21T14:25:45Z",
+      "side": 1,
+      "message": "Why not just:\n\nRelaxEffectsAndControls(checked_int32_add);\nreturn Changed(node);\n\nThat\u0027s how we usually do it.",
+      "range": {
+        "startLine": 247,
+        "startChar": 16,
+        "endLine": 249,
+        "endChar": 51
+      },
+      "revId": "c6e6c987a0c4587d58d5cad63555f00d543b20cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
