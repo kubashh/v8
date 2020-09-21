@@ -213,6 +213,10 @@ struct Flag {
   }
 
   static bool ShouldCheckFlagContradictions() {
+    if (FLAG_allow_overwriting_for_next_flag) {
+      FindFlagByPointer(&FLAG_allow_overwriting_for_next_flag)->Reset();
+      return false;
+    }
     return FLAG_abort_on_contradictory_flags && !FLAG_fuzzing;
   }
 
