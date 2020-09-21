@@ -33,6 +33,24 @@
       "revId": "f7698f9f0c646f054ed6fff9e3e320859aa050fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6c51e6f0_35fbba89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-09-21T13:52:41Z",
+      "side": 1,
+      "message": "Wow, good point. I did need to fix another spot. Thanks.",
+      "parentUuid": "76c774a4_1496e284",
+      "revId": "f7698f9f0c646f054ed6fff9e3e320859aa050fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
