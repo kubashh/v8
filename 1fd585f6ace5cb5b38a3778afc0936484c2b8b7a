@@ -16,6 +16,29 @@
       "revId": "1fd585f6ace5cb5b38a3778afc0936484c2b8b7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0ee13d5_94440626",
+        "filename": "src/snapshot/deserializer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-21T06:32:57Z",
+      "side": 1,
+      "message": "nit: now ref_type is also involved.",
+      "range": {
+        "startLine": 199,
+        "startChar": 31,
+        "endLine": 199,
+        "endChar": 53
+      },
+      "revId": "1fd585f6ace5cb5b38a3778afc0936484c2b8b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
