@@ -139,6 +139,24 @@
       "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "116137a9_25dde56e",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-09-21T15:16:38Z",
+      "side": 1,
+      "message": "Yes I\u0027m talking about an independent CL. And yes, I\u0027d prefer it if we\u0027d make BitField smi aware over spreading explicit additional smi checks over the codebase for BitFields that access a smi.",
+      "parentUuid": "4a50dc7c_b6ec5cda",
+      "revId": "59b93d60a641807183e9edceebdf30073139f1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -34,6 +34,24 @@
       "revId": "798ca7fed4b2e457271c27b414a1eaa2d37bae37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dbbfa5b_ece06f28",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-09-21T15:16:38Z",
+      "side": 0,
+      "message": "I\u0027m still confused though. Isn\u0027t this exactly the case you needed to support? (E.g., [...].push(...). Array.prototype.push is a LoadConstantFromPrototype case.). If not, what are you looking to support? Is this for usecases where \".length\" is used? What other inobject property do you expect to be commonly used on arrays (I presume that\u0027s what you\u0027re targeting mostly?)",
+      "parentUuid": "7abad30d_0e5a2a08",
+      "revId": "798ca7fed4b2e457271c27b414a1eaa2d37bae37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
