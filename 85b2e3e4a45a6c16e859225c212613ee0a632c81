@@ -33,6 +33,24 @@
       "revId": "85b2e3e4a45a6c16e859225c212613ee0a632c81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a243f602_306da2d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-09-21T09:54:50Z",
+      "side": 1,
+      "message": "The caller of GenerateCodeForCodeStub() needs to invoke ToHandleChecked() again anyways to convert MaybeHandle to Handle (see CodeAssembler::GenerateCode). Right now ToHandleChecked() is invoked twice, after this CL only once. I think it\u0027s nicer to let the caller invoke ToHandleChecked() when returning MaybeHandle. otoh GenerateCodeForCodeStub() could also return Handle instead in case it is never allowed to fail.",
+      "parentUuid": "3d04bc96_7026c1a1",
+      "revId": "85b2e3e4a45a6c16e859225c212613ee0a632c81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
