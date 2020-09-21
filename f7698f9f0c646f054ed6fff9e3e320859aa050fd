@@ -16,6 +16,23 @@
       "revId": "f7698f9f0c646f054ed6fff9e3e320859aa050fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "76c774a4_1496e284",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-21T10:59:02Z",
+      "side": 1,
+      "message": "LGTM. Have you checked whether actually allocating a zero-field struct also works without issues? Might want to add a quick test to cctest/test-gc/WasmBasicStruct.",
+      "revId": "f7698f9f0c646f054ed6fff9e3e320859aa050fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
