@@ -210,8 +210,7 @@ void AccessorAssembler::HandleLoadAccessor(
 
   TNode<Foreign> foreign = LoadObjectField<Foreign>(
       call_handler_info, CallHandlerInfo::kJsCallbackOffset);
-  TNode<RawPtrT> callback =
-      DecodeExternalPointer(LoadForeignForeignAddress(foreign));
+  TNode<RawPtrT> callback = LoadForeignForeignAddressPtr(foreign);
   TNode<Object> data =
       LoadObjectField(call_handler_info, CallHandlerInfo::kDataOffset);
 
@@ -1659,8 +1658,7 @@ void AccessorAssembler::HandleStoreICProtoHandler(
 
       TNode<Foreign> foreign = LoadObjectField<Foreign>(
           call_handler_info, CallHandlerInfo::kJsCallbackOffset);
-      TNode<RawPtrT> callback =
-          DecodeExternalPointer(LoadForeignForeignAddress(foreign));
+      TNode<RawPtrT> callback = LoadForeignForeignAddressPtr(foreign);
       TNode<Object> data =
           LoadObjectField(call_handler_info, CallHandlerInfo::kDataOffset);
 
