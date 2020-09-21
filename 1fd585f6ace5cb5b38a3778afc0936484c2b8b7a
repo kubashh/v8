@@ -39,6 +39,30 @@
       "revId": "1fd585f6ace5cb5b38a3778afc0936484c2b8b7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4422c57_9f861334",
+        "filename": "src/snapshot/deserializer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-09-21T07:24:24Z",
+      "side": 1,
+      "message": "Ah good point, I\u0027ll update this documentation in a followup.",
+      "parentUuid": "d0ee13d5_94440626",
+      "range": {
+        "startLine": 199,
+        "startChar": 31,
+        "endLine": 199,
+        "endChar": 53
+      },
+      "revId": "1fd585f6ace5cb5b38a3778afc0936484c2b8b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
