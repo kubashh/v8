@@ -19423,7 +19423,7 @@ void CheckCodeGenerationDisallowed() {
 char first_fourty_bytes[41];
 
 v8::ModifyCodeGenerationFromStringsResult CodeGenerationAllowed(
-    Local<Context> context, Local<Value> source) {
+    Local<Context> context, Local<Value> source, bool is_code_kind) {
   String::Utf8Value str(CcTest::isolate(), source);
   size_t len = std::min(sizeof(first_fourty_bytes) - 1,
                         static_cast<size_t>(str.length()));
@@ -19434,13 +19434,13 @@ v8::ModifyCodeGenerationFromStringsResult CodeGenerationAllowed(
 }
 
 v8::ModifyCodeGenerationFromStringsResult CodeGenerationDisallowed(
-    Local<Context> context, Local<Value> source) {
+    Local<Context> context, Local<Value> source, bool is_code_kind) {
   ApiTestFuzzer::Fuzz();
   return {false, {}};
 }
 
 v8::ModifyCodeGenerationFromStringsResult ModifyCodeGeneration(
-    Local<Context> context, Local<Value> source) {
+    Local<Context> context, Local<Value> source, bool is_code_kind) {
   // Allow (passthrough, unmodified) all objects that are not strings.
   if (!source->IsString()) {
     return {/* codegen_allowed= */ true, v8::MaybeLocal<String>()};
@@ -19536,7 +19536,7 @@ TEST(ModifyCodeGenFromStrings) {
 }
 
 v8::ModifyCodeGenerationFromStringsResult RejectStringsIncrementNumbers(
-    Local<Context> context, Local<Value> source) {
+    Local<Context> context, Local<Value> source, bool was_code_kind) {
   if (source->IsString()) {
     return {false, v8::MaybeLocal<String>()};
   }
@@ -28347,4 +28347,147 @@ TEST(TriggerThreadSafeMetricsEvent) {
   i_iso->metrics_recorder()->AddThreadSafeEvent(event);
   CHECK_EQ(recorder->count_, 1);  // Increased.
   CHECK_EQ(recorder->module_count_, 42);
+}
+
+TEST(CodeKindEval) {
+  LocalContext env;
+  v8::Isolate* isolate = env->GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  // Setup two object templates with an eval-able string representation.
+  // One code kind, one not, and otherwise identical.
+  auto string_fn = v8::FunctionTemplate::New(
+      isolate, [](const v8::FunctionCallbackInfo<v8::Value>& info) {
+        info.GetReturnValue().Set(v8_str("2+2"));
+      });
+  v8::Local<ObjectTemplate> code_kind_templ = v8::ObjectTemplate::New(isolate);
+  code_kind_templ->Set(isolate, "toString", string_fn);
+  code_kind_templ->SetCodeKind();
+  v8::Local<ObjectTemplate> other_kind_templ = v8::ObjectTemplate::New(isolate);
+  other_kind_templ->Set(isolate, "toString", string_fn);
+
+  CHECK(code_kind_templ->IsCodeKind());
+  CHECK(!other_kind_templ->IsCodeKind());
+
+  // Expected behaviour for normal objects:
+  // - eval returns them as-is
+  // - when pre-stringified, the string gets evaluated (of course)
+  v8::Local<Object> other_kind =
+      other_kind_templ->NewInstance(env.local()).ToLocalChecked();
+  CHECK(env->Global()
+            ->Set(env.local(), v8_str("other_kind"), other_kind)
+            .FromJust());
+  ExpectInt32("eval(\"\" + other_kind)", 4);
+  ExpectObject("eval(other_kind)", other_kind);
+
+  // Expected behaviour for 'code kind': Is always evaluated.
+  v8::Local<Object> code_kind =
+      code_kind_templ->NewInstance(env.local()).ToLocalChecked();
+  CHECK(env->Global()
+            ->Set(env.local(), v8_str("code_kind"), code_kind)
+            .FromJust());
+  ExpectInt32("eval(\"\" + code_kind)", 4);
+  ExpectInt32("eval(code_kind)", 4);
+
+  // Modify callback will always returns a replacement string:
+  // Expected behaviour: Always execute the replacement string.
+  isolate->SetModifyCodeGenerationFromStringsCallback(
+      [](v8::Local<v8::Context> context, v8::Local<v8::Value> source,
+         bool is_code_kind) -> v8::ModifyCodeGenerationFromStringsResult {
+        return {true, v8_str("3+3")};
+      });
+  ExpectInt32("eval(other_kind)", 6);
+  ExpectInt32("eval(code_kind)", 6);
+
+  // Modify callback always disallows:
+  // Expected behaviour: Always fail to execute.
+  isolate->SetModifyCodeGenerationFromStringsCallback(
+      [](v8::Local<v8::Context> context, v8::Local<v8::Value> source,
+         bool is_code_kind) -> v8::ModifyCodeGenerationFromStringsResult {
+        return {false, v8::Local<v8::String>()};
+      });
+  CHECK(CompileRun("eval(other_kind)").IsEmpty());
+  CHECK(CompileRun("eval(code_kind)").IsEmpty());
+
+  // Modify callback allows only "code kind":
+  // Expected behaviour: Only code_kind executed, with replacement string.
+  isolate->SetModifyCodeGenerationFromStringsCallback(
+      [](v8::Local<v8::Context> context, v8::Local<v8::Value> source,
+         bool is_code_kind) -> v8::ModifyCodeGenerationFromStringsResult {
+        bool ok = is_code_kind ||
+                  (source->IsObject() &&
+                   source.As<v8::Object>()->IsCodeKind(context->GetIsolate()));
+        return {ok, v8_str("5+7")};
+      });
+  CHECK(CompileRun("eval(other_kind)").IsEmpty());
+  ExpectInt32("eval(code_kind)", 12);
+}
+
+TEST(CodeKindFunction) {
+  LocalContext env;
+  v8::Isolate* isolate = env->GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  // These follow the pattern of the CodeKindEval test above, but with
+  // "new Function" instead of eval.
+
+  // Setup two object templates with an eval-able string representation.
+  // One code kind, one not, and otherwise identical.
+  auto string_fn = v8::FunctionTemplate::New(
+      isolate, [](const v8::FunctionCallbackInfo<v8::Value>& info) {
+        info.GetReturnValue().Set(v8_str("return 2+2"));
+      });
+  v8::Local<ObjectTemplate> code_kind_templ = v8::ObjectTemplate::New(isolate);
+  code_kind_templ->Set(isolate, "toString", string_fn);
+  code_kind_templ->SetCodeKind();
+  v8::Local<ObjectTemplate> other_kind_templ = v8::ObjectTemplate::New(isolate);
+  other_kind_templ->Set(isolate, "toString", string_fn);
+
+  CHECK(code_kind_templ->IsCodeKind());
+  CHECK(!other_kind_templ->IsCodeKind());
+
+  v8::Local<Object> other_kind =
+      other_kind_templ->NewInstance(env.local()).ToLocalChecked();
+  CHECK(env->Global()
+            ->Set(env.local(), v8_str("other_kind"), other_kind)
+            .FromJust());
+  ExpectInt32("new Function(other_kind)()", 4);
+
+  v8::Local<Object> code_kind =
+      code_kind_templ->NewInstance(env.local()).ToLocalChecked();
+  CHECK(env->Global()
+            ->Set(env.local(), v8_str("code_kind"), code_kind)
+            .FromJust());
+  ExpectInt32("new Function(code_kind)()", 4);
+
+  // Modify callback will always return a replacement string:
+  env.local()->AllowCodeGenerationFromStrings(false);
+  isolate->SetModifyCodeGenerationFromStringsCallback(
+      [](v8::Local<v8::Context> context, v8::Local<v8::Value> source,
+         bool is_code_kind) -> v8::ModifyCodeGenerationFromStringsResult {
+        return {true, v8_str("(function anonymous(\n) {\nreturn 7;\n})\n")};
+      });
+  ExpectInt32("new Function(other_kind)()", 7);
+  ExpectInt32("new Function(code_kind)()", 7);
+
+  // Modify callback always disallows:
+  isolate->SetModifyCodeGenerationFromStringsCallback(
+      [](v8::Local<v8::Context> context, v8::Local<v8::Value> source,
+         bool is_code_kind) -> v8::ModifyCodeGenerationFromStringsResult {
+        return {false, v8::Local<v8::String>()};
+      });
+  CHECK(CompileRun("new Function(other_kind)()").IsEmpty());
+  CHECK(CompileRun("new Function(code_kind)()").IsEmpty());
+
+  // Modify callback allows only "code kind":
+  isolate->SetModifyCodeGenerationFromStringsCallback(
+      [](v8::Local<v8::Context> context, v8::Local<v8::Value> source,
+         bool is_code_kind) -> v8::ModifyCodeGenerationFromStringsResult {
+        bool ok = is_code_kind ||
+                  (source->IsObject() &&
+                   source.As<v8::Object>()->IsCodeKind(context->GetIsolate()));
+        return {ok, v8_str("(function anonymous(\n) {\nreturn 7;\n})\n")};
+      });
+  CHECK(CompileRun("new Function(other_kind)()").IsEmpty());
+  ExpectInt32("new Function(code_kind)()", 7);
 }

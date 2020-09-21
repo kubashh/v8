@@ -347,6 +347,7 @@
   V(_, generic_symbol)                                \
   V(_, home_object_symbol)                            \
   V(_, interpreter_trampoline_symbol)                 \
+  V(_, is_code_kind_symbol)                           \
   V(_, megamorphic_symbol)                            \
   V(_, native_context_index_symbol)                   \
   V(_, nonextensible_symbol)                          \

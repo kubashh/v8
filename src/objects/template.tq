@@ -65,6 +65,7 @@ extern class FunctionTemplateInfo extends TemplateInfo {
 
 bitfield struct ObjectTemplateInfoFlags extends uint31 {
   is_immutable_prototype: bool: 1 bit;
+  is_code_kind: bool: 1 bit;
   embedder_field_count: int32: 29 bit;
 }
 

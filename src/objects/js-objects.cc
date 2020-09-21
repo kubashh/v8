@@ -2034,6 +2034,18 @@ bool JSReceiver::HasProxyInPrototype(Isolate* isolate) {
   return false;
 }
 
+void JSReceiver::SetCodeKind(Isolate* isolate, Handle<JSReceiver> receiver) {
+  CreateDataProperty(isolate, receiver,
+                     isolate->factory()->is_code_kind_symbol(),
+                     isolate->factory()->true_value(), Just(kDontThrow))
+      .Check();
+}
+
+bool JSReceiver::IsCodeKind(Isolate* isolate, Handle<JSReceiver> receiver) {
+  return HasProperty(receiver, isolate->factory()->is_code_kind_symbol())
+      .FromMaybe(false);
+}
+
 // static
 MaybeHandle<JSObject> JSObject::New(Handle<JSFunction> constructor,
                                     Handle<JSReceiver> new_target,
