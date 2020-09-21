@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "037974b4_6058d94a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-09-21T08:19:34Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "62a2708b5148805e6a69a929bade459a1e890d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "42407811_3d63bf1c",
+        "filename": "test/cctest/heap/test-spaces.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-09-21T08:19:34Z",
+      "side": 1,
+      "message": "Was this comment cut off?",
+      "revId": "62a2708b5148805e6a69a929bade459a1e890d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
