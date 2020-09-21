@@ -16,6 +16,92 @@
       "revId": "515b5331f15d0a6333e73b9423f8541a36b48b5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d49d920f_01a343d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-21T17:27:42Z",
+      "side": 1,
+      "message": "What I don\u0027t understand is, why is the feature not just off due to passing --no-abort-on-contradictory-flags? Or is it that the flags --enable-slow-asserts --verify-heap are passed before that flag, which triggers the feature, but the error message is somehow off (see comments below)?",
+      "revId": "515b5331f15d0a6333e73b9423f8541a36b48b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3d505915_4c45fd34",
+        "filename": "test/mjsunit/ensure-growing-store-learns.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-21T17:27:42Z",
+      "side": 1,
+      "message": "Note that also the fuzzers might pick up this flag here, but I guess it has no effect anyways when also --fuzzing is passed.",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 43
+      },
+      "revId": "515b5331f15d0a6333e73b9423f8541a36b48b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93e8384f_cbef96e5",
+        "filename": "test/mjsunit/ensure-growing-store-learns.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-21T17:27:42Z",
+      "side": 1,
+      "message": "Note https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8868578792383501008/+/steps/Num_Fuzz_-_deopt/0/logs/ensure-growing-store-learns/0 complains about --opt",
+      "range": {
+        "startLine": 11,
+        "startChar": 33,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "515b5331f15d0a6333e73b9423f8541a36b48b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f85b45f_4c474139",
+        "filename": "test/mjsunit/random-bit-correlations.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-21T17:27:42Z",
+      "side": 1,
+      "message": "Note that here https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8868579147485082464/+/steps/Num_Fuzz_-_marking/0/logs/random-bit-correlations/0 it complains about --always-opt/--noalways_opt\nbut here\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8868578792383501008/+/steps/Num_Fuzz_-_deopt/0/logs/random-bit-correlations/0 about --liftoff.\n\nHow do we know how many different contradictions we\u0027re seeing?",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 39
+      },
+      "revId": "515b5331f15d0a6333e73b9423f8541a36b48b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
