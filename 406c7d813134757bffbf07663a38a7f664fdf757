@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9b5c11e_7d18ecdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2020-09-21T08:32:29Z",
+      "side": 1,
+      "message": "I\u0027m going to abandon this for an alternate approach.",
+      "revId": "406c7d813134757bffbf07663a38a7f664fdf757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
