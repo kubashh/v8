@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ebf3d07_e22a2dd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-21T21:06:44Z",
+      "side": 1,
+      "message": "Jakob: PTAL.\nNico: FYI.\n\n(Note that the v8_mac_arm64_* bots that do *not* have \"_sim_\" in the name are expected to compile successfully, but not to pass tests, so they will turn red. These bots are not yet set up to run tests on arm64 hardware, so the x64 bot will refuse to execute \"invalid\" binaries.)",
+      "revId": "bc56228297db8025281ccff714451945730688d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
