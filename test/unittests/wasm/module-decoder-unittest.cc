@@ -44,20 +44,6 @@ namespace module_decoder_unittest {
 
 #define UNKNOWN_SECTION(size) 0, U32V_1(size + 5), ADD_COUNT('l', 'u', 'l', 'z')
 
-template <typename... Args>
-std::integral_constant<size_t, sizeof...(Args)> CountArgsHelper(Args...);
-#define COUNT_ARGS(...) (decltype(CountArgsHelper(__VA_ARGS__))::value)
-
-template <size_t num>
-struct CheckLEB1 : std::integral_constant<size_t, num> {
-  static_assert(num <= I32V_MAX(1), "LEB range check");
-};
-#define CHECK_LEB1(num) CheckLEB1<num>::value
-
-#define ADD_COUNT(...) CHECK_LEB1(COUNT_ARGS(__VA_ARGS__)), __VA_ARGS__
-
-#define SECTION(name, ...) k##name##SectionCode, ADD_COUNT(__VA_ARGS__)
-
 #define SIGNATURES_SECTION(count, ...) SECTION(Type, U32V_1(count), __VA_ARGS__)
 #define FUNCTION_SIGNATURES_SECTION(count, ...) \
   SECTION(Function, U32V_1(count), __VA_ARGS__)
