@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce4c5cd2_124b0a8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-09-22T18:01:39Z",
+      "side": 1,
+      "message": "I find the CL description and instruction names a bit confusing, until I understood that this is load and zero extend.",
+      "revId": "a3f5d8aec14c8cc52d63851a44460b6803808d56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
