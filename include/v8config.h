@@ -482,6 +482,16 @@ V8 shared library set USING_V8_SHARED.
 
 #endif  // V8_OS_WIN
 
+// When the following flag is enabled, floating point parameters are
+// supported in C calling conventions. That's currently the case only
+// for the platforms listed below. We don't plan to add support for IA32,
+// because it has a totally different approach (using FP stack). As support
+// is added to more platforms, please make sure to list them here in order
+// to enable tests of this functionality.
+#if defined(V8_TARGET_ARCH_X64)
+#define V8_ENABLE_FP_PARAMS_IN_C_LINKAGE
+#endif
+
 // clang-format on
 
 #endif  // V8CONFIG_H_

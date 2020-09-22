@@ -2,6 +2,7 @@
 // source code is governed by a BSD-style license that can be found in the
 // LICENSE file.
 
+#include "src/codegen/external-reference.h"
 #include "src/objects/objects-inl.h"
 #include "src/wasm/wasm-external-refs.h"
 #include "test/cctest/cctest.h"
@@ -372,6 +373,236 @@ TEST(RunCallFloat64Pow) {
   TestExternalReference_BinOp<double>(&m, ref, wasm::float64_pow_wrapper,
                                       ValueHelper::float64_vector());
 }
+
+#ifdef V8_ENABLE_FP_PARAMS_IN_C_LINKAGE
+template <typename T>
+MachineType MachineTypeForCType() {
+  return MachineType::AnyTagged();
+}
+
+template <>
+MachineType MachineTypeForCType<int64_t>() {
+  return MachineType::Int64();
+}
+
+template <>
+MachineType MachineTypeForCType<int32_t>() {
+  return MachineType::Int32();
+}
+
+template <>
+MachineType MachineTypeForCType<double>() {
+  return MachineType::Float64();
+}
+
+#define SIGNATURE_TYPES(TYPE, IDX, VALUE) MachineTypeForCType<TYPE>()
+
+#define PARAM_PAIRS(TYPE, IDX, VALUE) \
+  std::make_pair(MachineTypeForCType<TYPE>(), m.Parameter(IDX))
+
+#define CALL_ARGS(TYPE, IDX, VALUE) static_cast<TYPE>(VALUE)
+
+#define CHECK_ARG_I(TYPE, IDX, VALUE) (result = result && (arg##IDX == VALUE))
+
+#define SIGNATURE_TEST(NAME, SIGNATURE, FUNC)                            \
+  TEST(NAME) {                                                           \
+    RawMachineAssemblerTester<int64_t> m(SIGNATURE(SIGNATURE_TYPES));    \
+                                                                         \
+    Address func_address = FUNCTION_ADDR(&FUNC);                         \
+    ExternalReference::Type func_type = ExternalReference::BUILTIN_CALL; \
+    ApiFunction func(func_address);                                      \
+    ExternalReference ref = ExternalReference::Create(&func, func_type); \
+                                                                         \
+    Node* function = m.ExternalConstant(ref);                            \
+    m.Return(m.CallCFunction(function, MachineType::Int64(),             \
+                             SIGNATURE(PARAM_PAIRS)));                   \
+                                                                         \
+    int64_t c = m.Call(SIGNATURE(CALL_ARGS));                            \
+    CHECK_EQ(c, 42);                                                     \
+  }
+
+#define MIXED_SIGNATURE_SIMPLE(V) V(int, 0, 0), V(double, 1, 1.5), V(int, 2, 2)
+
+int64_t test_api_func_simple(int arg0, double arg1, int arg2) {
+  bool result = true;
+  MIXED_SIGNATURE_SIMPLE(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithMixedSignatureSimple, MIXED_SIGNATURE_SIMPLE,
+               test_api_func_simple)
+
+#define MIXED_SIGNATURE(V)                                              \
+  V(int, 0, 0), V(double, 1, 1.5), V(int, 2, 2), V(double, 3, 3.5),     \
+      V(int, 4, 4), V(double, 5, 5.5), V(int, 6, 6), V(double, 7, 7.5), \
+      V(int, 8, 8), V(double, 9, 9.5), V(int, 10, 10)
+
+int64_t test_api_func(int arg0, double arg1, int arg2, double arg3, int arg4,
+                      double arg5, int arg6, double arg7, int arg8, double arg9,
+                      int arg10) {
+  bool result = true;
+  MIXED_SIGNATURE(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithMixedSignature, MIXED_SIGNATURE, test_api_func)
+
+#define MIXED_SIGNATURE_DOUBLE_INT(V)                                          \
+  V(double, 0, 0.5), V(double, 1, 1.5), V(double, 2, 2.5), V(double, 3, 3.5),  \
+      V(double, 4, 4.5), V(double, 5, 5.5), V(double, 6, 6.5),                 \
+      V(double, 7, 7.5), V(double, 8, 8.5), V(double, 9, 9.5), V(int, 10, 10), \
+      V(int, 11, 11), V(int, 12, 12), V(int, 13, 13), V(int, 14, 14),          \
+      V(int, 15, 15), V(int, 16, 16), V(int, 17, 17), V(int, 18, 18),          \
+      V(int, 19, 19)
+
+int64_t func_mixed_double_int(double arg0, double arg1, double arg2,
+                              double arg3, double arg4, double arg5,
+                              double arg6, double arg7, double arg8,
+                              double arg9, int arg10, int arg11, int arg12,
+                              int arg13, int arg14, int arg15, int arg16,
+                              int arg17, int arg18, int arg19) {
+  bool result = true;
+  MIXED_SIGNATURE_DOUBLE_INT(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithMixedSignatureDoubleInt, MIXED_SIGNATURE_DOUBLE_INT,
+               func_mixed_double_int)
+
+#define MIXED_SIGNATURE_INT_DOUBLE(V)                                       \
+  V(int, 0, 0), V(int, 1, 1), V(int, 2, 2), V(int, 3, 3), V(int, 4, 4),     \
+      V(int, 5, 5), V(int, 6, 6), V(int, 7, 7), V(int, 8, 8), V(int, 9, 9), \
+      V(double, 10, 10.5), V(double, 11, 11.5), V(double, 12, 12.5),        \
+      V(double, 13, 13.5), V(double, 14, 14.5), V(double, 15, 15.5),        \
+      V(double, 16, 16.5), V(double, 17, 17.5), V(double, 18, 18.5),        \
+      V(double, 19, 19.5)
+
+int64_t func_mixed_int_double(int arg0, int arg1, int arg2, int arg3, int arg4,
+                              int arg5, int arg6, int arg7, int arg8, int arg9,
+                              double arg10, double arg11, double arg12,
+                              double arg13, double arg14, double arg15,
+                              double arg16, double arg17, double arg18,
+                              double arg19) {
+  bool result = true;
+  MIXED_SIGNATURE_INT_DOUBLE(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithMixedSignatureIntDouble, MIXED_SIGNATURE_INT_DOUBLE,
+               func_mixed_int_double)
+
+#define MIXED_SIGNATURE_INT_DOUBLE_ALT(V)                                   \
+  V(int, 0, 0), V(double, 1, 1.5), V(int, 2, 2), V(double, 3, 3.5),         \
+      V(int, 4, 4), V(double, 5, 5.5), V(int, 6, 6), V(double, 7, 7.5),     \
+      V(int, 8, 8), V(double, 9, 9.5), V(int, 10, 10), V(double, 11, 11.5), \
+      V(int, 12, 12), V(double, 13, 13.5), V(int, 14, 14),                  \
+      V(double, 15, 15.5), V(int, 16, 16), V(double, 17, 17.5),             \
+      V(int, 18, 18), V(double, 19, 19.5)
+
+int64_t func_mixed_int_double_alt(int arg0, double arg1, int arg2, double arg3,
+                                  int arg4, double arg5, int arg6, double arg7,
+                                  int arg8, double arg9, int arg10,
+                                  double arg11, int arg12, double arg13,
+                                  int arg14, double arg15, int arg16,
+                                  double arg17, int arg18, double arg19) {
+  bool result = true;
+  MIXED_SIGNATURE_INT_DOUBLE_ALT(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithMixedSignatureIntDoubleAlt,
+               MIXED_SIGNATURE_INT_DOUBLE_ALT, func_mixed_int_double_alt)
+
+#define SIGNATURE_ONLY_DOUBLE(V)                                              \
+  V(double, 0, 0.5), V(double, 1, 1.5), V(double, 2, 2.5), V(double, 3, 3.5), \
+      V(double, 4, 4.5), V(double, 5, 5.5), V(double, 6, 6.5),                \
+      V(double, 7, 7.5), V(double, 8, 8.5), V(double, 9, 9.5)
+
+int64_t func_only_double(double arg0, double arg1, double arg2, double arg3,
+                         double arg4, double arg5, double arg6, double arg7,
+                         double arg8, double arg9) {
+  bool result = true;
+  SIGNATURE_ONLY_DOUBLE(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithSignatureOnlyDouble, SIGNATURE_ONLY_DOUBLE,
+               func_only_double)
+
+#define SIGNATURE_ONLY_INT(V)                                           \
+  V(int, 0, 0), V(int, 1, 1), V(int, 2, 2), V(int, 3, 3), V(int, 4, 4), \
+      V(int, 5, 5), V(int, 6, 6), V(int, 7, 7), V(int, 8, 8), V(int, 9, 9)
+
+int64_t func_only_int(int arg0, int arg1, int arg2, int arg3, int arg4,
+                      int arg5, int arg6, int arg7, int arg8, int arg9) {
+  bool result = true;
+  SIGNATURE_ONLY_INT(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithSignatureOnlyInt, SIGNATURE_ONLY_INT, func_only_int)
+
+#define SIGNATURE_ONLY_DOUBLE_20(V)                                           \
+  V(double, 0, 0.5), V(double, 1, 1.5), V(double, 2, 2.5), V(double, 3, 3.5), \
+      V(double, 4, 4.5), V(double, 5, 5.5), V(double, 6, 6.5),                \
+      V(double, 7, 7.5), V(double, 8, 8.5), V(double, 9, 9.5),                \
+      V(double, 10, 10.5), V(double, 11, 11.5), V(double, 12, 12.5),          \
+      V(double, 13, 13.5), V(double, 14, 14.5), V(double, 15, 15.5),          \
+      V(double, 16, 16.5), V(double, 17, 17.5), V(double, 18, 18.5),          \
+      V(double, 19, 19.5)
+
+int64_t func_only_double_20(double arg0, double arg1, double arg2, double arg3,
+                            double arg4, double arg5, double arg6, double arg7,
+                            double arg8, double arg9, double arg10,
+                            double arg11, double arg12, double arg13,
+                            double arg14, double arg15, double arg16,
+                            double arg17, double arg18, double arg19) {
+  bool result = true;
+  SIGNATURE_ONLY_DOUBLE_20(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithSignatureOnlyDouble20, SIGNATURE_ONLY_DOUBLE_20,
+               func_only_double_20)
+
+#define SIGNATURE_ONLY_INT_20(V)                                            \
+  V(int, 0, 0), V(int, 1, 1), V(int, 2, 2), V(int, 3, 3), V(int, 4, 4),     \
+      V(int, 5, 5), V(int, 6, 6), V(int, 7, 7), V(int, 8, 8), V(int, 9, 9), \
+      V(int, 10, 10), V(int, 11, 11), V(int, 12, 12), V(int, 13, 13),       \
+      V(int, 14, 14), V(int, 15, 15), V(int, 16, 16), V(int, 17, 17),       \
+      V(int, 18, 18), V(int, 19, 19)
+
+int64_t func_only_int_20(int arg0, int arg1, int arg2, int arg3, int arg4,
+                         int arg5, int arg6, int arg7, int arg8, int arg9,
+                         int arg10, int arg11, int arg12, int arg13, int arg14,
+                         int arg15, int arg16, int arg17, int arg18,
+                         int arg19) {
+  bool result = true;
+  SIGNATURE_ONLY_INT_20(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithSignatureOnlyInt20, SIGNATURE_ONLY_INT_20,
+               func_only_int_20)
+#endif  // V8_ENABLE_FP_PARAMS_IN_C_LINKAGE
 
 }  // namespace compiler
 }  // namespace internal
