@@ -16,6 +16,23 @@
       "revId": "9bbaef0e321fcb9e3699c4b9072aa2fb48b5bd9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4912e8f6_7f7f2a92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2020-09-22T07:24:55Z",
+      "side": 1,
+      "message": "Why don\u0027t you also remove me. I think the src/snapshot is in good hands :)",
+      "revId": "9bbaef0e321fcb9e3699c4b9072aa2fb48b5bd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
