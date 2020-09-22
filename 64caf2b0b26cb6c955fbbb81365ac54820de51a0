@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4534de91_fa94f49f",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-09-22T17:44:30Z",
+      "side": 1,
+      "message": "FYI: https://source.chromium.org/chromium/chromium/src/+/master:v8/tools/gcmole/run-gcmole.py;l\u003d24?q\u003d%22Expected%20generated%20headers%22\u0026ss\u003dchromium%2Fchromium%2Fsrc:v8%2Ftools%2Fgcmole%2F needs to be updated with the new filename.",
+      "range": {
+        "startLine": 1322,
+        "startChar": 6,
+        "endLine": 1322,
+        "endChar": 63
+      },
+      "revId": "64caf2b0b26cb6c955fbbb81365ac54820de51a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
