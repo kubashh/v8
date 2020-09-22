@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c6dbb0d_b8348ef3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-22T12:20:41Z",
+      "side": 1,
+      "message": "TBH I find the entire case-folding implementation very confusing. For example, why do we have both AddUnicodeCaseEquivalents and CharacterRange::AddCaseEquivalents, with the latter looking like a more complete version of the former? Why the weird mechanism of calling the former early, and only calling the latter if the former wasn\u0027t applied? Could we merge the two?\n\nAnyways, the cause of this particular bug was that we weren\u0027t preserving flags correctly, therefore we incorrectly skipped the CharacterRange::AddCaseEquivalents call.\n\nPTAL.",
+      "revId": "aa973a3c10ec268fbe7ec76133f9939588e63af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
