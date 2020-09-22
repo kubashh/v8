@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "d658ce21_ba460e83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-22T17:08:35Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "515b5331f15d0a6333e73b9423f8541a36b48b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d505915_4c45fd34",
         "filename": "test/mjsunit/ensure-growing-store-learns.js",
         "patchSetId": 3
@@ -118,6 +135,30 @@
       "side": 1,
       "message": "The problem was the pattern:\n\n--no-abort-on-contradictory-flags --my-flag-that-needs-overwriting --abort-on-contradictory-flags\n\nThis isn\u0027t a good idiom because it doesn\u0027t just temporarily disable flags checking, it also unconditionally enables flag checking in the end, even if it was disabled before. That\u0027s why we suddenly get flag contradictions in other flags, which should have been suppressed by --fuzzing or the like.\n\nThat\u0027s why this CL introduces a new pattern only affecting the interpretation of the next flag without affecting if the checking is generally enabled or not.",
       "parentUuid": "93e8384f_cbef96e5",
+      "range": {
+        "startLine": 11,
+        "startChar": 33,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "515b5331f15d0a6333e73b9423f8541a36b48b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bf98070_b8c64dae",
+        "filename": "test/mjsunit/ensure-growing-store-learns.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-22T17:08:35Z",
+      "side": 1,
+      "message": "Ah, got it. I didn\u0027t see that the test exhibited the --abort-on-contradictory-flags flag.",
+      "parentUuid": "ee0024a6_02f1aa2a",
       "range": {
         "startLine": 11,
         "startChar": 33,
