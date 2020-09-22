@@ -16,6 +16,40 @@
       "revId": "bc56228297db8025281ccff714451945730688d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7368e33a_3c50d3df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-22T05:15:35Z",
+      "side": 1,
+      "message": "Thanks, lgtm.",
+      "revId": "bc56228297db8025281ccff714451945730688d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "334c91fb_6f4a3f43",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-22T05:15:35Z",
+      "side": 1,
+      "message": "Optional: IMO it\u0027d be nice to update all occurrences of __APPLE__ in this file at once.",
+      "revId": "bc56228297db8025281ccff714451945730688d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
