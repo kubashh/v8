@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "d7558db6_35a5a7e7",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T17:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d071bdff_7f4068a1",
+      "range": {
+        "startLine": 371,
+        "startChar": 11,
+        "endLine": 371,
+        "endChar": 46
+      },
+      "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76e14604_3b815298",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 14
@@ -62,6 +86,30 @@
       "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fddaed67_812d3afa",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T17:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76e14604_3b815298",
+      "range": {
+        "startLine": 481,
+        "startChar": 69,
+        "endLine": 481,
+        "endChar": 78
+      },
+      "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "2b6f6b69_38bb5f42",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T17:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bf8efab_a9842d0d",
+      "range": {
+        "startLine": 482,
+        "startChar": 51,
+        "endLine": 482,
+        "endChar": 56
+      },
+      "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "839d74cd_b5263a68",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 14
@@ -108,6 +180,30 @@
       "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21792f74_002547de",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T17:02:35Z",
+      "side": 1,
+      "message": "Good idea, we don\u0027t. I limited access to FeedbackVector::Set() to the NexusConfig class.",
+      "parentUuid": "839d74cd_b5263a68",
+      "range": {
+        "startLine": 487,
+        "startChar": 0,
+        "endLine": 488,
+        "endChar": 69
+      },
+      "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "72bde4cc_6b14b1c9",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T17:02:35Z",
+      "side": 1,
+      "message": "Done. There is no reason for that terrible train of accesses!",
+      "parentUuid": "e1546e04_98221840",
+      "range": {
+        "startLine": 500,
+        "startChar": 4,
+        "endLine": 500,
+        "endChar": 34
+      },
+      "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e65e4ae_805095e0",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 14
@@ -157,6 +277,30 @@
     },
     {
       "key": {
+        "uuid": "6e2c9b0b_c6e6d76b",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T17:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e65e4ae_805095e0",
+      "range": {
+        "startLine": 669,
+        "startChar": 4,
+        "endLine": 671,
+        "endChar": 24
+      },
+      "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83b0b52b_043da174",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 14
@@ -177,6 +321,30 @@
       "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ea7f6a1_02a02ff9",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T17:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83b0b52b_043da174",
+      "range": {
+        "startLine": 673,
+        "startChar": 71,
+        "endLine": 673,
+        "endChar": 77
+      },
+      "revId": "d504389f4ed014fc6722e4d7c86f2dbd9d778035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
