@@ -16,6 +16,24 @@
       "revId": "a3f5d8aec14c8cc52d63851a44460b6803808d56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51488576_996f8378",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-09-22T18:12:05Z",
+      "side": 1,
+      "message": "Heh yea it is a bit confusing, if this is merged I think we can change the names to something better, the name we are thinking of is v128.load32_zero. I commented at https://github.com/WebAssembly/simd/pull/237#issuecomment-696891594 to suggest something clearer.",
+      "parentUuid": "ce4c5cd2_124b0a8d",
+      "revId": "a3f5d8aec14c8cc52d63851a44460b6803808d56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
