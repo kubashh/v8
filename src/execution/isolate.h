@@ -87,6 +87,7 @@ class Logger;
 class MaterializedObjectStore;
 class Microtask;
 class MicrotaskQueue;
+class NexusConfig;
 class OptimizingCompileDispatcher;
 class PersistentHandles;
 class PersistentHandlesList;
@@ -622,6 +623,15 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   // The isolate's string table.
   StringTable* string_table() { return string_table_.get(); }
+
+  // Shared mutex for allowing concurrent read/writes to FeedbackVectors.
+  base::SharedMutex* feedback_vector_access() {
+    return &feedback_vector_access_;
+  }
+
+  const NexusConfig* feedback_nexus_config() const {
+    return feedback_nexus_config_;
+  }
 
   Address get_address_from_id(IsolateAddressId id);
 
@@ -1682,6 +1692,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   std::shared_ptr<Counters> async_counters_;
   base::RecursiveMutex break_access_;
   base::SharedMutex transition_array_access_;
+  base::SharedMutex feedback_vector_access_;
+  const NexusConfig* feedback_nexus_config_ = nullptr;
   Logger* logger_ = nullptr;
   StubCache* load_stub_cache_ = nullptr;
   StubCache* store_stub_cache_ = nullptr;
