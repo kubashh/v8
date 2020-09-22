@@ -170,5 +170,7 @@ void Heap::FinalizeGarbageCollection(Config::StackState stack_state) {
   gc_in_progress_ = false;
 }
 
+void Heap::DisableHeapGrowthLimitsForTesting() { growing_.DisableForTesting(); }
+
 }  // namespace internal
 }  // namespace cppgc
