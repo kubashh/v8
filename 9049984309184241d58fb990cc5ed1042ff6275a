@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c1e1080_130fb05d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-09-22T11:16:29Z",
+      "side": 1,
+      "message": "Hi Jakob, PTAL at this small change adding tests for floats (based on the doubles test machinery from https://chromium-review.googlesource.com/c/v8/v8/+/2416028)",
+      "revId": "9049984309184241d58fb990cc5ed1042ff6275a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
