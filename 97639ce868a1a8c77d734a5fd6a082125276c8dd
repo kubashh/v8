@@ -51,6 +51,41 @@
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a664f48d_31ccf459",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1148006
+      },
+      "writtenOn": "2020-09-22T08:29:24Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1654dc81_98c012d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1148006
+      },
+      "writtenOn": "2020-09-22T08:29:24Z",
+      "side": 1,
+      "message": "Thanks all for your quick response.\n@Ulan, we meet a critical performance issue caused by inaccurate load start time, which degrades WebXPRT3 (a famous industry web workload) ~5% performance. This patch is to fix the issue. If we can land it ASAP, I would be very appreciated. If not, can I try your new solution to verify if it can resolve the issue?",
+      "parentUuid": "fd6b3cb3_aeae42a0",
+      "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
