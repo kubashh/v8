@@ -16,6 +16,46 @@
       "revId": "f43ca372ce26e3badcaf2aa5b4d55dc9d9f7dc78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ced53d2b_22ba9260",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-22T12:58:11Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "f43ca372ce26e3badcaf2aa5b4d55dc9d9f7dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7d494dab_420f5ed0",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-22T12:58:11Z",
+      "side": 1,
+      "message": "This is equivalent to the UNREACHABLE at the end, right? I\u0027m fine with keeping it, to make the precondition explicit.",
+      "range": {
+        "startLine": 944,
+        "startChar": 4,
+        "endLine": 944,
+        "endChar": 34
+      },
+      "revId": "f43ca372ce26e3badcaf2aa5b4d55dc9d9f7dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
