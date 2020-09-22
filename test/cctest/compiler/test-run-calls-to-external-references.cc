@@ -395,6 +395,11 @@ MachineType MachineTypeForCType<double>() {
   return MachineType::Float64();
 }
 
+template <>
+MachineType MachineTypeForCType<float>() {
+  return MachineType::Float32();
+}
+
 #define SIGNATURE_TYPES(TYPE, IDX, VALUE) MachineTypeForCType<TYPE>()
 
 #define PARAM_PAIRS(TYPE, IDX, VALUE) \
@@ -602,6 +607,85 @@ int64_t func_only_int_20(int arg0, int arg1, int arg2, int arg3, int arg4,
 
 SIGNATURE_TEST(RunCallWithSignatureOnlyInt20, SIGNATURE_ONLY_INT_20,
                func_only_int_20)
+
+#define MIXED_SIGNATURE_SIMPLE_FLOAT(V) \
+  V(int, 0, 0), V(float, 1, 1.5), V(int, 2, 2)
+
+int64_t test_api_func_simple_float(int arg0, float arg1, int arg2) {
+  bool result = true;
+  MIXED_SIGNATURE_SIMPLE_FLOAT(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithMixedSignatureSimpleFloat,
+               MIXED_SIGNATURE_SIMPLE_FLOAT, test_api_func_simple_float)
+
+#define MIXED_SIGNATURE_FLOAT(V)                                      \
+  V(int, 0, 0), V(float, 1, 1.5), V(int, 2, 2), V(float, 3, 3.5),     \
+      V(int, 4, 4), V(float, 5, 5.5), V(int, 6, 6), V(float, 7, 7.5), \
+      V(int, 8, 8), V(float, 9, 9.5), V(int, 10, 10)
+
+int64_t test_api_func_float(int arg0, float arg1, int arg2, float arg3,
+                            int arg4, float arg5, int arg6, float arg7,
+                            int arg8, float arg9, int arg10) {
+  bool result = true;
+  MIXED_SIGNATURE_FLOAT(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithMixedSignatureFloat, MIXED_SIGNATURE_FLOAT,
+               test_api_func_float)
+
+#define MIXED_SIGNATURE_INT_FLOAT_ALT(V)                                      \
+  V(int, 0, 0), V(float, 1, 1.5), V(int, 2, 2), V(float, 3, 3.5),             \
+      V(int, 4, 4), V(float, 5, 5.5), V(int, 6, 6), V(float, 7, 7.5),         \
+      V(int, 8, 8), V(float, 9, 9.5), V(int, 10, 10), V(float, 11, 11.5),     \
+      V(int, 12, 12), V(float, 13, 13.5), V(int, 14, 14), V(float, 15, 15.5), \
+      V(int, 16, 16), V(float, 17, 17.5), V(int, 18, 18), V(float, 19, 19.5)
+
+int64_t func_mixed_int_float_alt(int arg0, float arg1, int arg2, float arg3,
+                                 int arg4, float arg5, int arg6, float arg7,
+                                 int arg8, float arg9, int arg10, float arg11,
+                                 int arg12, float arg13, int arg14, float arg15,
+                                 int arg16, float arg17, int arg18,
+                                 float arg19) {
+  bool result = true;
+  MIXED_SIGNATURE_INT_FLOAT_ALT(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithMixedSignatureIntFloatAlt,
+               MIXED_SIGNATURE_INT_FLOAT_ALT, func_mixed_int_float_alt)
+
+#define SIGNATURE_ONLY_FLOAT_20(V)                                            \
+  V(float, 0, 0.5), V(float, 1, 1.5), V(float, 2, 2.5), V(float, 3, 3.5),     \
+      V(float, 4, 4.5), V(float, 5, 5.5), V(float, 6, 6.5), V(float, 7, 7.5), \
+      V(float, 8, 8.5), V(float, 9, 9.5), V(float, 10, 10.5),                 \
+      V(float, 11, 11.5), V(float, 12, 12.5), V(float, 13, 13.5),             \
+      V(float, 14, 14.5), V(float, 15, 15.5), V(float, 16, 16.5),             \
+      V(float, 17, 17.5), V(float, 18, 18.5), V(float, 19, 19.5)
+
+int64_t func_only_float_20(float arg0, float arg1, float arg2, float arg3,
+                           float arg4, float arg5, float arg6, float arg7,
+                           float arg8, float arg9, float arg10, float arg11,
+                           float arg12, float arg13, float arg14, float arg15,
+                           float arg16, float arg17, float arg18, float arg19) {
+  bool result = true;
+  SIGNATURE_ONLY_FLOAT_20(CHECK_ARG_I);
+  CHECK(result);
+
+  return 42;
+}
+
+SIGNATURE_TEST(RunCallWithSignatureOnlyFloat20, SIGNATURE_ONLY_FLOAT_20,
+               func_only_float_20)
+
 #endif  // V8_ENABLE_FP_PARAMS_IN_C_LINKAGE
 
 }  // namespace compiler
