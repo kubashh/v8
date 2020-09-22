@@ -11,7 +11,7 @@
 #include "src/execution/isolate-utils.h"
 #include "src/objects/string-inl.h"
 #include "src/strings/unicode-inl.h"
-#include "torque-generated/class-debug-readers-tq.h"
+#include "torque-generated/class-debug-readers.h"
 
 namespace i = v8::internal;
 
