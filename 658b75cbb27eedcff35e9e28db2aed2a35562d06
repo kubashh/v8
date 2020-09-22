@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "40208cb3_f2165914",
+        "filename": "src/api/api.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2042,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-22T15:41:37Z",
+      "side": 1,
+      "message": "So far we don\u0027t log setting up Object/Function templates, thus all good.",
+      "parentUuid": "9ab10d30_98622aa3",
+      "range": {
+        "startLine": 2042,
+        "startChar": 2,
+        "endLine": 2042,
+        "endChar": 8
+      },
+      "revId": "658b75cbb27eedcff35e9e28db2aed2a35562d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d0caf51_075be66d",
         "filename": "src/objects/template.tq",
         "patchSetId": 14

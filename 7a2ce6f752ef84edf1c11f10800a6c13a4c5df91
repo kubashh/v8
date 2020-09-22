@@ -16,6 +16,46 @@
       "revId": "7a2ce6f752ef84edf1c11f10800a6c13a4c5df91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "528457a4_4aba812f",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 28375,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-22T15:41:37Z",
+      "side": 1,
+      "message": "can you add a check for the instance method?\n\n  other_kind-\u003eIsCodeKind()",
+      "range": {
+        "startLine": 28375,
+        "startChar": 20,
+        "endLine": 28375,
+        "endChar": 30
+      },
+      "revId": "7a2ce6f752ef84edf1c11f10800a6c13a4c5df91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99745f36_0200b296",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 28384,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-22T15:41:37Z",
+      "side": 1,
+      "message": "can you add a check for the instance method?\n\n  code_kind-\u003eIsCodeKind()",
+      "revId": "7a2ce6f752ef84edf1c11f10800a6c13a4c5df91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
