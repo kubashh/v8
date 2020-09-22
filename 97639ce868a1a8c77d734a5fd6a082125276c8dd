@@ -34,6 +34,23 @@
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd6b3cb3_aeae42a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-22T08:01:49Z",
+      "side": 1,
+      "message": "Hi Hong. Thanks for the patch!\n\nWe are planning to remove RAIL APIs from V8 and instead provide a generic API that allows the embedder to choose between memory / performance directly. It will happen sometime in Q4.\n\nIs this fix urgent for you?\n\n",
+      "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
