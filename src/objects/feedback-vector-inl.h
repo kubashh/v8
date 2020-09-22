@@ -21,6 +21,20 @@
 namespace v8 {
 namespace internal {
 
+#ifdef DEBUG
+// Instead of FixedArray, the Feedback and the Extra should contain
+// WeakFixedArrays. The only allowed FixedArray subtype is HashTable.
+#define DCHECK_NO_LEGACY_TYPES(value)                                        \
+  {                                                                          \
+    HeapObject heap_object;                                                  \
+    if (value->GetHeapObject(&heap_object)) {                                \
+      DCHECK_IMPLIES(heap_object.IsFixedArray(), heap_object.IsHashTable()); \
+    }                                                                        \
+  }
+#else
+#define DCHECK_NO_LEGACY_TYPES(value)
+#endif  // !DEBUG
+
 TQ_OBJECT_CONSTRUCTORS_IMPL(FeedbackVector)
 OBJECT_CONSTRUCTORS_IMPL(FeedbackMetadata, HeapObject)
 OBJECT_CONSTRUCTORS_IMPL(ClosureFeedbackCellArray, FixedArray)
@@ -140,12 +154,16 @@ FeedbackSlot FeedbackVector::ToSlot(intptr_t index) {
 }
 
 MaybeObject FeedbackVector::Get(FeedbackSlot slot) const {
-  return raw_feedback_slots(GetIndex(slot));
+  MaybeObject value = raw_feedback_slots(GetIndex(slot));
+  DCHECK_NO_LEGACY_TYPES(value);
+  return value;
 }
 
 MaybeObject FeedbackVector::Get(const Isolate* isolate,
                                 FeedbackSlot slot) const {
-  return raw_feedback_slots(isolate, GetIndex(slot));
+  MaybeObject value = raw_feedback_slots(isolate, GetIndex(slot));
+  DCHECK_NO_LEGACY_TYPES(value);
+  return value;
 }
 
 Handle<FeedbackCell> FeedbackVector::GetClosureFeedbackCell(int index) const {
@@ -155,14 +173,43 @@ Handle<FeedbackCell> FeedbackVector::GetClosureFeedbackCell(int index) const {
   return cell_array.GetFeedbackCell(index);
 }
 
+MaybeObject FeedbackVector::SynchronizedGet(FeedbackSlot slot) const {
+  const int i = slot.ToInt();
+  DCHECK_LT(i, this->length());
+  const int offset = kRawFeedbackSlotsOffset + i * kTaggedSize;
+  MaybeObject value = TaggedField<MaybeObject>::Acquire_Load(*this, offset);
+  DCHECK_NO_LEGACY_TYPES(value);
+  return value;
+}
+
+void FeedbackVector::SynchronizedSet(FeedbackSlot slot, MaybeObject value,
+                                     WriteBarrierMode mode) {
+  DCHECK_NO_LEGACY_TYPES(value);
+  const int i = slot.ToInt();
+  DCHECK_LT(i, this->length());
+  const int offset = kRawFeedbackSlotsOffset + i * kTaggedSize;
+  TaggedField<MaybeObject>::Release_Store(*this, offset, value);
+  CONDITIONAL_WEAK_WRITE_BARRIER(*this, offset, value, mode);
+}
+
+void FeedbackVector::SynchronizedSet(FeedbackSlot slot, Object value,
+                                     WriteBarrierMode mode) {
+  MaybeObject maybe_value = MaybeObject::FromObject(value);
+  DCHECK_NO_LEGACY_TYPES(maybe_value);
+  SynchronizedSet(slot, maybe_value, mode);
+}
+
 void FeedbackVector::Set(FeedbackSlot slot, MaybeObject value,
                          WriteBarrierMode mode) {
+  DCHECK_NO_LEGACY_TYPES(value);
   set_raw_feedback_slots(GetIndex(slot), value, mode);
 }
 
 void FeedbackVector::Set(FeedbackSlot slot, Object value,
                          WriteBarrierMode mode) {
-  set_raw_feedback_slots(GetIndex(slot), MaybeObject::FromObject(value), mode);
+  MaybeObject maybe_value = MaybeObject::FromObject(value);
+  DCHECK_NO_LEGACY_TYPES(maybe_value);
+  set_raw_feedback_slots(GetIndex(slot), maybe_value, mode);
 }
 
 inline MaybeObjectSlot FeedbackVector::slots_start() {
@@ -255,10 +302,6 @@ Handle<Symbol> FeedbackVector::UninitializedSentinel(Isolate* isolate) {
   return isolate->factory()->uninitialized_symbol();
 }
 
-Handle<Symbol> FeedbackVector::GenericSentinel(Isolate* isolate) {
-  return isolate->factory()->generic_symbol();
-}
-
 Handle<Symbol> FeedbackVector::MegamorphicSentinel(Isolate* isolate) {
   return isolate->factory()->megamorphic_symbol();
 }
@@ -283,46 +326,131 @@ int FeedbackMetadataIterator::entry_size() const {
   return FeedbackMetadata::GetSlotSize(kind());
 }
 
+MaybeObject NexusConfig::GetFeedback(FeedbackVector vector,
+                                     FeedbackSlot slot) const {
+  return vector.SynchronizedGet(slot);
+}
+
+void NexusConfig::SetFeedback(FeedbackVector vector, FeedbackSlot slot,
+                              MaybeObject feedback,
+                              WriteBarrierMode mode) const {
+  DCHECK(can_write());
+  vector.SynchronizedSet(slot, feedback, mode);
+}
+
+MaybeObject FeedbackNexus::UninitializedSentinel() const {
+  return MaybeObject::FromObject(
+      *FeedbackVector::UninitializedSentinel(GetIsolate()));
+}
+
+MaybeObject FeedbackNexus::MegamorphicSentinel() const {
+  return MaybeObject::FromObject(
+      *FeedbackVector::MegamorphicSentinel(GetIsolate()));
+}
+
+MaybeObject FeedbackNexus::Cache::slot1(const NexusConfig* config) const {
+  DCHECK(is_active());
+  if (slot1_cleared_) {
+    return HeapObjectReference::ClearedValue(config->isolate());
+  }
+  return *slot1_;
+}
+
+MaybeObject FeedbackNexus::Cache::slot2(const NexusConfig* config) const {
+  DCHECK(is_active());
+  if (slot2_cleared_) {
+    return HeapObjectReference::ClearedValue(config->isolate());
+  }
+  return *slot2_;
+}
+
+void FeedbackNexus::Cache::set_slot1(const NexusConfig* config,
+                                     MaybeObject object) {
+  is_active_ = true;
+  if (object.IsCleared()) {
+    slot1_cleared_ = true;
+    slot1_ = MaybeObjectHandle();
+  } else {
+    slot1_cleared_ = false;
+    slot1_ = MaybeObjectHandle(config->NewHandle(object));
+  }
+}
+
+void FeedbackNexus::Cache::set_slot2(const NexusConfig* config,
+                                     MaybeObject object) {
+  is_active_ = true;
+  if (object.IsCleared()) {
+    slot2_cleared_ = true;
+    slot2_ = MaybeObjectHandle();
+  } else {
+    slot2_cleared_ = false;
+    slot2_ = MaybeObjectHandle(config->NewHandle(object));
+  }
+}
+
 MaybeObject FeedbackNexus::GetFeedback() const {
-  MaybeObject feedback = vector().Get(slot());
-  FeedbackVector::AssertNoLegacyTypes(feedback);
-  return feedback;
+  auto pair = GetFeedbackPair();
+  return pair.first;
 }
 
 MaybeObject FeedbackNexus::GetFeedbackExtra() const {
-#ifdef DEBUG
-  FeedbackSlotKind kind = vector().GetKind(slot());
-  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind));
-#endif
-  return vector().Get(slot().WithOffset(1));
+  auto pair = GetFeedbackPair();
+  return pair.second;
 }
 
-void FeedbackNexus::SetFeedback(Object feedback, WriteBarrierMode mode) {
-  SetFeedback(MaybeObject::FromObject(feedback));
+std::pair<MaybeObject, MaybeObject> FeedbackNexus::GetFeedbackPair() const {
+  if (config()->config() == NexusConfig::BackgroundThread &&
+      cache_.is_active()) {
+    return std::pair<MaybeObject, MaybeObject>(cache_.slot1(config()),
+                                               cache_.slot2(config()));
+  }
+  auto pair = FeedbackMetadata::GetSlotSize(kind()) == 2
+                  ? config()->GetFeedbackPair(vector(), slot())
+                  : std::pair<MaybeObject, MaybeObject>(
+                        config()->GetFeedback(vector(), slot()), MaybeObject());
+  if (config()->config() == NexusConfig::BackgroundThread) {
+    cache_.set_slot1(config(), pair.first);
+    cache_.set_slot2(config(), pair.second);
+  }
+  return pair;
 }
 
-void FeedbackNexus::SetFeedback(MaybeObject feedback, WriteBarrierMode mode) {
-  FeedbackVector::AssertNoLegacyTypes(feedback);
-  vector().Set(slot(), feedback, mode);
+inline MaybeObject FeedbackConvert(MaybeObject o) { return o; }
+inline MaybeObject FeedbackConvert(Smi o) { return MaybeObject::FromSmi(o); }
+inline MaybeObject FeedbackConvert(Object o) {
+  return MaybeObject::FromObject(o);
 }
 
-void FeedbackNexus::SetFeedbackExtra(Object feedback_extra,
-                                     WriteBarrierMode mode) {
-#ifdef DEBUG
-  FeedbackSlotKind kind = vector().GetKind(slot());
-  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind));
-  FeedbackVector::AssertNoLegacyTypes(MaybeObject::FromObject(feedback_extra));
-#endif
-  vector().Set(slot().WithOffset(1), MaybeObject::FromObject(feedback_extra),
-               mode);
+template <typename T>
+void FeedbackNexus::SetFeedback(T feedback, WriteBarrierMode mode) {
+  static_assert(std::is_base_of<MaybeObject, T>::value ||
+                    std::is_same<T, Smi>::value ||
+                    std::is_base_of<Object, T>::value,
+                "feedbacks need to be Smi, Object or MaybeObject");
+  MaybeObject fmo = FeedbackConvert(feedback);
+  config()->SetFeedback(vector(), slot(), fmo, mode);
 }
 
-void FeedbackNexus::SetFeedbackExtra(MaybeObject feedback_extra,
-                                     WriteBarrierMode mode) {
-#ifdef DEBUG
-  FeedbackVector::AssertNoLegacyTypes(feedback_extra);
-#endif
-  vector().Set(slot().WithOffset(1), feedback_extra, mode);
+template <typename T, typename U>
+void FeedbackNexus::SetFeedback(T feedback, WriteBarrierMode mode,
+                                U feedback_extra, WriteBarrierMode mode_extra) {
+  static_assert(std::is_base_of<MaybeObject, T>::value ||
+                    std::is_same<T, Smi>::value ||
+                    std::is_base_of<Object, T>::value,
+                "feedbacks need to be Smi, Object or MaybeObject");
+  static_assert(std::is_base_of<MaybeObject, U>::value ||
+                    std::is_same<T, Smi>::value ||
+                    std::is_base_of<Object, U>::value,
+                "feedbacks need to be Smi, Object or MaybeObject");
+  MaybeObject fmo = FeedbackConvert(feedback);
+  MaybeObject fmo_extra = FeedbackConvert(feedback_extra);
+  config()->SetFeedbackPair(vector(), slot(), fmo, mode, fmo_extra, mode_extra);
+}
+
+bool FeedbackNexus::vector_needs_update() const {
+  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind()));
+  // TODO(mvstanton): This is a bizarre request.
+  return GetFeedbackExtra().ToSmi().value() != ELEMENT;
 }
 
 Isolate* FeedbackNexus::GetIsolate() const { return vector().GetIsolate(); }

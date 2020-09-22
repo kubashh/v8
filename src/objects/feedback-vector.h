@@ -217,12 +217,15 @@ class FeedbackVector
 
   // Conversion from an integer index to the underlying array to a slot.
   static inline FeedbackSlot ToSlot(intptr_t index);
+
+  inline MaybeObject SynchronizedGet(FeedbackSlot slot) const;
+  inline void SynchronizedSet(FeedbackSlot slot, MaybeObject value,
+                              WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+  inline void SynchronizedSet(FeedbackSlot slot, Object value,
+                              WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+
   inline MaybeObject Get(FeedbackSlot slot) const;
   inline MaybeObject Get(const Isolate* isolate, FeedbackSlot slot) const;
-  inline void Set(FeedbackSlot slot, MaybeObject value,
-                  WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
-  inline void Set(FeedbackSlot slot, Object value,
-                  WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
 
   // Returns the feedback cell at |index| that is used to create the
   // closure.
@@ -271,8 +274,6 @@ class FeedbackVector
     return GetLanguageModeFromSlotKind(GetKind(slot));
   }
 
-  V8_EXPORT_PRIVATE static void AssertNoLegacyTypes(MaybeObject object);
-
   DECL_PRINTER(FeedbackVector)
 
   void FeedbackSlotPrint(std::ostream& os, FeedbackSlot slot);  // NOLINT
@@ -282,9 +283,6 @@ class FeedbackVector
 
   // The object that indicates an uninitialized cache.
   static inline Handle<Symbol> UninitializedSentinel(Isolate* isolate);
-
-  // The object that indicates a generic state.
-  static inline Handle<Symbol> GenericSentinel(Isolate* isolate);
 
   // The object that indicates a megamorphic state.
   static inline Handle<Symbol> MegamorphicSentinel(Isolate* isolate);
@@ -307,6 +305,12 @@ class FeedbackVector
  private:
   static void AddToVectorsForProfilingTools(Isolate* isolate,
                                             Handle<FeedbackVector> vector);
+
+  // Private for initializing stores in FeedbackVector::New().
+  inline void Set(FeedbackSlot slot, MaybeObject value,
+                  WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+  inline void Set(FeedbackSlot slot, Object value,
+                  WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
 
   // Don't expose the raw feedback slot getter/setter.
   using TorqueGeneratedFeedbackVector::raw_feedback_slots;
@@ -587,20 +591,54 @@ class FeedbackMetadataIterator {
   FeedbackSlotKind slot_kind_;
 };
 
+class NexusConfig {
+ public:
+  explicit NexusConfig(Isolate* isolate)
+      : isolate_(isolate), local_heap_(nullptr) {}
+  NexusConfig(Isolate* isolate, LocalHeap* local_heap)
+      : isolate_(isolate), local_heap_(local_heap) {}
+
+  enum Config { MainThread, BackgroundThread };
+
+  Config config() const {
+    return local_heap_ == nullptr ? Config::MainThread
+                                  : Config::BackgroundThread;
+  }
+
+  Isolate* isolate() const { return isolate_; }
+
+  MaybeObjectHandle NewHandle(MaybeObject object) const;
+  template <typename J>
+  Handle<J> NewHandle(J object) const;
+
+  bool can_write() const { return config() == Config::MainThread; }
+
+  inline MaybeObject GetFeedback(FeedbackVector vector,
+                                 FeedbackSlot slot) const;
+  inline void SetFeedback(FeedbackVector vector, FeedbackSlot slot,
+                          MaybeObject object,
+                          WriteBarrierMode mode = UPDATE_WRITE_BARRIER) const;
+
+  std::pair<MaybeObject, MaybeObject> GetFeedbackPair(FeedbackVector vector,
+                                                      FeedbackSlot slot) const;
+  void SetFeedbackPair(FeedbackVector vector, FeedbackSlot start_slot,
+                       MaybeObject object, WriteBarrierMode mode,
+                       MaybeObject object1, WriteBarrierMode mode1) const;
+
+ private:
+  Isolate* isolate_;
+  LocalHeap* local_heap_;
+};
+
 // A FeedbackNexus is the combination of a FeedbackVector and a slot.
 class V8_EXPORT_PRIVATE FeedbackNexus final {
  public:
-  FeedbackNexus(Handle<FeedbackVector> vector, FeedbackSlot slot)
-      : vector_handle_(vector), slot_(slot) {
-    kind_ =
-        (vector.is_null()) ? FeedbackSlotKind::kInvalid : vector->GetKind(slot);
-  }
-  FeedbackNexus(FeedbackVector vector, FeedbackSlot slot)
-      : vector_(vector), slot_(slot) {
-    kind_ =
-        (vector.is_null()) ? FeedbackSlotKind::kInvalid : vector.GetKind(slot);
-  }
+  FeedbackNexus(Handle<FeedbackVector> vector, FeedbackSlot slot);
+  FeedbackNexus(FeedbackVector vector, FeedbackSlot slot);
+  FeedbackNexus(Handle<FeedbackVector> vector, FeedbackSlot slot,
+                const NexusConfig* config);
 
+  const NexusConfig* config() const { return config_; }
   Handle<FeedbackVector> vector_handle() const {
     DCHECK(vector_.is_null());
     return vector_handle_;
@@ -608,6 +646,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   FeedbackVector vector() const {
     return vector_handle_.is_null() ? vector_ : *vector_handle_;
   }
+
   FeedbackSlot slot() const { return slot_; }
   FeedbackSlotKind kind() const { return kind_; }
 
@@ -624,13 +663,15 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
 
   // For map-based ICs (load, keyed-load, store, keyed-store).
   Map GetFirstMap() const;
-
   int ExtractMaps(MapHandles* maps) const;
   // Used to obtain maps and the associated handlers stored in the feedback
   // vector. This should be called when we expect only a handler to be sotred in
   // the extra feedback. This is used by ICs when updting the handlers.
+  using TryUpdateHandler = std::function<MaybeHandle<Map>(Handle<Map>)>;
+  int ExtractMapsAndHandlers(
+      std::vector<MapAndHandler>* maps_and_handlers) const;
   int ExtractMapsAndHandlers(std::vector<MapAndHandler>* maps_and_handlers,
-                             bool try_update_deprecated = false) const;
+                             const TryUpdateHandler& map_handler) const;
   MaybeObjectHandle FindHandlerForMap(Handle<Map> map) const;
   // Used to obtain maps and the associated feedback stored in the feedback
   // vector. The returned feedback need not be always a handler. It could be a
@@ -654,6 +695,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
 
   inline MaybeObject GetFeedback() const;
   inline MaybeObject GetFeedbackExtra() const;
+  inline std::pair<MaybeObject, MaybeObject> GetFeedbackPair() const;
 
   inline Isolate* GetIsolate() const;
 
@@ -726,19 +768,39 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   std::vector<int> GetSourcePositions() const;
   std::vector<Handle<String>> GetTypesForSourcePositions(uint32_t pos) const;
 
-  inline void SetFeedback(Object feedback,
+  // This is used
+  inline bool vector_needs_update() const;
+
+ private:
+  template <typename T>
+  inline void SetFeedback(T feedback,
                           WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
-  inline void SetFeedback(MaybeObject feedback,
-                          WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
-  inline void SetFeedbackExtra(Object feedback_extra,
-                               WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
-  inline void SetFeedbackExtra(MaybeObject feedback_extra,
-                               WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+  template <typename T, typename U>
+  inline void SetFeedback(T feedback, WriteBarrierMode mode, U feedback_extra,
+                          WriteBarrierMode mode_extra = UPDATE_WRITE_BARRIER);
+
+  inline MaybeObject UninitializedSentinel() const;
+  inline MaybeObject MegamorphicSentinel() const;
 
   // Create an array. The caller must install it in a feedback vector slot.
   Handle<WeakFixedArray> CreateArrayOfSize(int length);
 
- private:
+  struct Cache {
+    Cache() : is_active_(false), slot1_cleared_(false), slot2_cleared_(false) {}
+
+    bool is_active() const { return is_active_; }
+
+    inline MaybeObject slot1(const NexusConfig* config) const;
+    inline MaybeObject slot2(const NexusConfig* config) const;
+    inline void set_slot1(const NexusConfig*, MaybeObject);
+    inline void set_slot2(const NexusConfig*, MaybeObject);
+
+    bool is_active_;
+    bool slot1_cleared_;
+    bool slot2_cleared_;
+    MaybeObjectHandle slot1_;
+    MaybeObjectHandle slot2_;
+  };
   // The reason for having a vector handle and a raw pointer is that we can and
   // should use handles during IC miss, but not during GC when we clear ICs. If
   // you have a handle to the vector that is better because more operations can
@@ -747,6 +809,8 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   FeedbackVector vector_;
   FeedbackSlot slot_;
   FeedbackSlotKind kind_;
+  mutable Cache cache_;
+  const NexusConfig* config_;
 };
 
 class V8_EXPORT_PRIVATE FeedbackIterator final {
