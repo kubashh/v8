@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32af8015_47ed4b67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-22T14:45:37Z",
+      "side": 1,
+      "message": "Thank you, LGTM!",
+      "revId": "29e470835436715f770ac27341f2563b413dfa80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3d568c4c_d667415f",
+        "filename": "src/compiler/graph-reducer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-22T14:45:37Z",
+      "side": 1,
+      "message": "Could you please undo this change, as it is no longer needed?",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 3
+      },
+      "revId": "29e470835436715f770ac27341f2563b413dfa80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
