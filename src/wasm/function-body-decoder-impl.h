@@ -1968,7 +1968,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
 
     CALL_INTERFACE(StartFunction);
     DecodeFunctionBody();
-    if (!this->failed()) CALL_INTERFACE(FinishFunction);
+    if (this->ok()) CALL_INTERFACE(FinishFunction);
 
     // Generate a better error message whether the unterminated control
     // structure is the function body block or an innner structure.

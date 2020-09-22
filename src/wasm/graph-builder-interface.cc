@@ -135,7 +135,10 @@ class WasmGraphBuildingInterface {
     }
     while (index < num_locals) {
       ValueType type = decoder->local_type(index);
-      TFNode* node = DefaultValue(type);
+      // A valid module cannot define non-defaultable locals, but the module
+      // might be invalid at this point.
+      DCHECK_IMPLIES(decoder->ok(), type.is_defaultable());
+      TFNode* node = type.is_defaultable() ? DefaultValue(type) : nullptr;
       while (index < num_locals && decoder->local_type(index) == type) {
         // Do a whole run of like-typed locals at a time.
         ssa_env->locals[index++] = node;
@@ -941,6 +944,7 @@ class WasmGraphBuildingInterface {
   }
 
   TFNode* DefaultValue(ValueType type) {
+    DCHECK(type.is_defaultable());
     switch (type.kind()) {
       case ValueType::kI8:
       case ValueType::kI16:
