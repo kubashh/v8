@@ -50,6 +50,24 @@
       "revId": "bc56228297db8025281ccff714451945730688d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d72a69a5_4628804a",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-22T10:33:06Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "334c91fb_6f4a3f43",
+      "revId": "bc56228297db8025281ccff714451945730688d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

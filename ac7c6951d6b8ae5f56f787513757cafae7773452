@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17a8fddc_727ddc76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-22T10:33:06Z",
+      "side": 1,
+      "message": "Thanks for the review, comment addressed.\n\nMichael: Can you do an OWNERS review please?",
+      "revId": "ac7c6951d6b8ae5f56f787513757cafae7773452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
