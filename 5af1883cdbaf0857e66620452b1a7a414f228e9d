@@ -50,6 +50,24 @@
       "revId": "5af1883cdbaf0857e66620452b1a7a414f228e9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b867b46b_5227dc82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-22T16:47:00Z",
+      "side": 1,
+      "message": "I updated the CL description. The cross-combination of --future with the other variants seems to flush out some bugs. I just don\u0027t know if they are in relation to no-concurrent-marking or if they are more general. See the trybot that I ran:\nhttps://ci.chromium.org/p/v8/builders/try.triggered/v8_linux64_tsan_no_cm_rel_ng_triggered/b8868457111092064192?\n\nAre these errors useful? Should we first fix them or skip them?",
+      "parentUuid": "6c7c18ae_6dbdefb7",
+      "revId": "5af1883cdbaf0857e66620452b1a7a414f228e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
