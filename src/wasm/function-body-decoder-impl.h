@@ -1963,26 +1963,28 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             "Cannot define function-level local of non-defaultable type %s",
             this->local_type(index).name().c_str());
       }
+      return this->TraceFailed();
     }
     this->consume_bytes(locals_length);
 
     CALL_INTERFACE(StartFunction);
     DecodeFunctionBody();
-    if (!this->failed()) CALL_INTERFACE(FinishFunction);
+    if (this->failed()) return this->TraceFailed();
+    CALL_INTERFACE(FinishFunction);
 
     // Generate a better error message whether the unterminated control
     // structure is the function body block or an innner structure.
     if (!VALIDATE(control_.empty())) {
       if (control_.size() > 1) {
         this->error(control_.back().pc, "unterminated control structure");
+        return this->TraceFailed();
       } else if (control_.size() == 1) {
         this->error("function body must end with \"end\" opcode");
+        return this->TraceFailed();
       }
     }
 
-    if (!VALIDATE(this->ok())) return this->TraceFailed();
-
-    TRACE("wasm-decode %s\n\n", VALIDATE(this->ok()) ? "ok" : "failed");
+    TRACE("wasm-decode ok\n\n");
 
     return true;
   }
