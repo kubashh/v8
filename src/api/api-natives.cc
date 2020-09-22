@@ -422,6 +422,9 @@ MaybeHandle<JSObject> InstantiateObject(Isolate* isolate,
   if (info->immutable_proto()) {
     JSObject::SetImmutableProto(object);
   }
+  if (info->code_kind()) {
+    JSObject::SetCodeKind(isolate, object);
+  }
   if (!is_prototype) {
     // Keep prototypes in slow-mode. Let them be lazily turned fast later on.
     // TODO(dcarney): is this necessary?
