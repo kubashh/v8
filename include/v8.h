@@ -9290,6 +9290,11 @@ class V8_EXPORT Isolate {
   void SetRAILMode(RAILMode rail_mode);
 
   /**
+   * Update load start time for performance
+   */
+  void UpdateLoadStartTime();
+
+  /**
    * Optional notification to tell V8 the current isolate is used for debugging
    * and requires higher heap limit.
    */
