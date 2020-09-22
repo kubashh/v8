@@ -488,6 +488,30 @@
     },
     {
       "key": {
+        "uuid": "81d8c63c_6ea609ab",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "It is not doing that. But I don\u0027t think Compiler/Interpreter is the right name. The first important distinction is Main/Background because of how handles are created, I would say. With can_write() I\u0027m just piggybacking on that.",
+      "parentUuid": "46c04eeb_e301f75e",
+      "range": {
+        "startLine": 640,
+        "startChar": 2,
+        "endLine": 640,
+        "endChar": 67
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9aa8454_1fc5347a",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 10
@@ -511,6 +535,30 @@
     },
     {
       "key": {
+        "uuid": "b71f1e45_7f61520d",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9aa8454_1fc5347a",
+      "range": {
+        "startLine": 663,
+        "startChar": 16,
+        "endLine": 663,
+        "endChar": 35
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74d3213a_41b6aa4e",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 10
@@ -522,6 +570,30 @@
       "writtenOn": "2020-07-27T13:44:19Z",
       "side": 1,
       "message": "Can you please add a short comment when a vector needs update?",
+      "range": {
+        "startLine": 784,
+        "startChar": 2,
+        "endLine": 784,
+        "endChar": 42
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a62f8133_a65c0ea3",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "I\u0027ll leave this one open. It\u0027s an attempt to package up a strange read of the vector that the IC system uses to determine it\u0027s own logic. I\u0027ll try to find out and return.",
+      "parentUuid": "74d3213a_41b6aa4e",
       "range": {
         "startLine": 784,
         "startChar": 2,
@@ -554,6 +626,30 @@
       "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc2166d5_fd370f54",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "That makes sense, but as it turns out, I followed up on Santiago\u0027s suggestion first of templating the SetFeedback() methods, which also reduces the code. If y\u0027all agree, I\u0027d be happy to change to the constructor approach.",
+      "parentUuid": "1a1bc10a_832cea76",
+      "range": {
+        "startLine": 791,
+        "startChar": 2,
+        "endLine": 802,
+        "endChar": 78
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -623,6 +719,54 @@
       "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24f8e8c0_a5efff84",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "181a4a60_287948ba",
+      "range": {
+        "startLine": 832,
+        "startChar": 2,
+        "endLine": 832,
+        "endChar": 17
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6d734051_9a0e3794",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e14fc01f_47243ffa",
+      "range": {
+        "startLine": 832,
+        "startChar": 15,
+        "endLine": 832,
+        "endChar": 17
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

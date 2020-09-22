@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "16d7e4de_4213be38",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3090,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "Ah, I missed that on the rebase...somebody beat me to it :).",
+      "parentUuid": "e0eef6a1_27721fee",
+      "range": {
+        "startLine": 3090,
+        "startChar": 2,
+        "endLine": 3090,
+        "endChar": 61
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a75dd2ae_97887e32",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 12
@@ -105,6 +129,30 @@
     },
     {
       "key": {
+        "uuid": "8675b78e_7f5ae824",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "Good point. We should call that right at the bottleneck point before returning or storing a value in vector slots. I\u0027ve moved it to ensure that. Also, at Nico\u0027s suggestion, turned it into a macro such that it\u0027s clear it\u0027s a DCHECK only.",
+      "parentUuid": "c0333a53_a2908969",
+      "range": {
+        "startLine": 381,
+        "startChar": 2,
+        "endLine": 381,
+        "endChar": 48
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3240df23_f5e293ad",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 12
@@ -128,6 +176,30 @@
     },
     {
       "key": {
+        "uuid": "451fab97_c5c366d5",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3240df23_f5e293ad",
+      "range": {
+        "startLine": 385,
+        "startChar": 0,
+        "endLine": 416,
+        "endChar": 1
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03055967_60748a7b",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 12
@@ -139,6 +211,30 @@
       "writtenOn": "2020-09-18T10:55:38Z",
       "side": 1,
       "message": "Why is this a bizarre request? This is a method added in this CL",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 420,
+        "endChar": 48
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fa35e07_d6b6f9aa",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-22T15:00:56Z",
+      "side": 1,
+      "message": "I\u0027ll leave this one open as I\u0027m not happy with the method.\n\nThe method is an attempt to package up a rather bizarre request in ic.cc to look into vector internals. I think we need to understand this better. I\u0027ll work on it tomorrow (Nico also pointed out the same concern, but in the header file).",
+      "parentUuid": "03055967_60748a7b",
       "range": {
         "startLine": 420,
         "startChar": 0,
