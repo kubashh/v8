@@ -33,6 +33,41 @@
       "revId": "aa973a3c10ec268fbe7ec76133f9939588e63af3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0df18b13_a879f8c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2020-09-23T05:58:22Z",
+      "side": 1,
+      "message": "Those are good questions. I rewrote AddCaseEquivalents, but I\u0027m not sure I\u0027ve ever seen AddUnicodeCaseEquivalents. It looks like it was added here: https://codereview.chromium.org/1599303002/diff/220001/src/regexp/jsregexp.cc. At that point it fell back to the non-Unicode version in the absence of ICU.\n\nIt stopped falling back to AddCaseEquivalents in this patch: https://codereview.chromium.org/2725583002.\n\nThis was the change that added ICU support to AddCaseEquivalents: https://chromium-review.googlesource.com/c/v8/v8/+/1478710. \n\nIt\u0027s pretty tangled. The support for flipping flags on and off mid-regexp doesn\u0027t help either. AFAIK that feature has no path to standardization. Have we considered removing it?\n\nAs far as this patch goes: I\u0027m not clear why the no_i18n build fails without these flags, but the regular build succeeds. Can you shed any light?",
+      "parentUuid": "8c6dbb0d_b8348ef3",
+      "revId": "aa973a3c10ec268fbe7ec76133f9939588e63af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b1ed3965_9a4c37d5",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2020-09-23T05:58:22Z",
+      "side": 1,
+      "message": "We also use default_flags to create a TextNode here. Does this need fixing?\n\n(RegExpCharacterClass::ToNode and RegExpAssertion::ToNode also use default_flags, but I think those uses are fine. Mentioning them here for completeness.)",
+      "revId": "aa973a3c10ec268fbe7ec76133f9939588e63af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
