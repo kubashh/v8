@@ -61,7 +61,12 @@ namespace v8 {
 namespace internal {
 
 // Simulators only support C calls with up to kMaxCParameters parameters.
+#ifdef USE_SIMULATOR
 static constexpr int kMaxCParameters = 10;
+#else
+// The C++ standard defines a limit of 256 parameters.
+static constexpr int kMaxCParameters = 256;
+#endif
 
 class FrameScope {
  public:
