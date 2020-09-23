@@ -70,7 +70,7 @@ class ConcurrentSearchThread final : public v8::base::Thread {
 
 // Uses linear search on a flat object, with up to 8 elements.
 TEST(LinearSearchFlatObject) {
-  FLAG_local_heaps = true;
+  if (!FLAG_local_heaps) FLAG_local_heaps = true;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
 
@@ -122,8 +122,8 @@ TEST(LinearSearchFlatObject) {
 
 // Uses linear search on a flat object, which has more than 8 elements.
 TEST(LinearSearchFlatObject_ManyElements) {
+  if (!FLAG_local_heaps) FLAG_local_heaps = true;
   CcTest::InitializeVM();
-  FLAG_local_heaps = true;
   Isolate* isolate = CcTest::i_isolate();
 
   std::unique_ptr<PersistentHandles> ph = isolate->NewPersistentHandles();

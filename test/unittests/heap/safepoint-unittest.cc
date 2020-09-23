@@ -16,8 +16,8 @@ namespace internal {
 using SafepointTest = TestWithIsolate;
 
 TEST_F(SafepointTest, ReachSafepointWithoutLocalHeaps) {
+  if (!FLAG_local_heaps) FLAG_local_heaps = true;
   Heap* heap = i_isolate()->heap();
-  FLAG_local_heaps = true;
   bool run = false;
   {
     SafepointScope scope(heap);
@@ -47,8 +47,8 @@ class ParkedThread final : public v8::base::Thread {
 };
 
 TEST_F(SafepointTest, StopParkedThreads) {
+  if (!FLAG_local_heaps) FLAG_local_heaps = true;
   Heap* heap = i_isolate()->heap();
-  FLAG_local_heaps = true;
 
   int safepoints = 0;
 
@@ -106,8 +106,8 @@ class RunningThread final : public v8::base::Thread {
 };
 
 TEST_F(SafepointTest, StopRunningThreads) {
+  if (!FLAG_local_heaps) FLAG_local_heaps = true;
   Heap* heap = i_isolate()->heap();
-  FLAG_local_heaps = true;
 
   const int kThreads = 10;
   const int kRuns = 5;
@@ -139,8 +139,8 @@ TEST_F(SafepointTest, StopRunningThreads) {
 }
 
 TEST_F(SafepointTest, SkipLocalHeapOfThisThread) {
+  if (!FLAG_local_heaps) FLAG_local_heaps = true;
   Heap* heap = i_isolate()->heap();
-  FLAG_local_heaps = true;
   LocalHeap local_heap(heap);
   {
     SafepointScope scope(heap);
