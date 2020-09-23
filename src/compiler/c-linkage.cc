@@ -237,6 +237,11 @@ CallDescriptor* Linkage::GetSimplifiedCDescriptor(Zone* zone,
   // Currently no floating point parameters or returns are allowed
   // on IA32, because the approach for handling them is really different
   // from x64, i.e. involves a separate FP stack.
+  for (size_t i = 0; i < msig->return_count(); i++) {
+    MachineRepresentation rep = msig->GetReturn(i).representation();
+    CHECK_NE(MachineRepresentation::kFloat32, rep);
+    CHECK_NE(MachineRepresentation::kFloat64, rep);
+  }
   for (size_t i = 0; i < msig->parameter_count(); i++) {
     MachineRepresentation rep = msig->GetParam(i).representation();
     CHECK_NE(MachineRepresentation::kFloat32, rep);
@@ -251,11 +256,6 @@ CallDescriptor* Linkage::GetSimplifiedCDescriptor(Zone* zone,
 #endif
 
   // Add return location(s). We don't support FP returns for now.
-  for (size_t i = 0; i < locations.return_count_; i++) {
-    MachineType type = msig->GetReturn(i);
-    CHECK(!IsFloatingPoint(type.representation()));
-  }
-
   CHECK_GE(2, locations.return_count_);
   if (locations.return_count_ > 0) {
     locations.AddReturn(LinkageLocation::ForRegister(kReturnRegister0.code(),
