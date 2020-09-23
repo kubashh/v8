@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "d10fc537_7e9c0e0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2020-09-23T15:33:01Z",
+      "side": 1,
+      "message": "Okay, makes sense. LGTM.",
+      "parentUuid": "677bc402_09ea9827",
+      "revId": "aa973a3c10ec268fbe7ec76133f9939588e63af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1ed3965_9a4c37d5",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 2
