@@ -112,9 +112,14 @@ void MarkingState::MarkAndPush(const void* object, TraceDescriptor desc) {
 void MarkingState::MarkAndPush(HeapObjectHeader& header, TraceDescriptor desc) {
   DCHECK_NOT_NULL(desc.callback);
 
+  // Loading the object's in-construction bit serves as the sync point for
+  // concurrent marking.
+  const bool object_is_in_construction =
+      header.IsInConstruction<HeapObjectHeader::AccessMode::kAtomic>();
+
   if (!MarkNoPush(header)) return;
 
-  if (header.IsInConstruction<HeapObjectHeader::AccessMode::kNonAtomic>()) {
+  if (object_is_in_construction) {
     not_fully_constructed_worklist_.Push(&header);
   } else {
     marking_worklist_.Push(desc);
@@ -126,7 +131,7 @@ bool MarkingState::MarkNoPush(HeapObjectHeader& header) {
   DCHECK_EQ(&heap_, BasePage::FromPayload(&header)->heap());
   // Never mark free space objects. This would e.g. hint to marking a promptly
   // freed backing store.
-  DCHECK(!header.IsFree());
+  DCHECK(!header.IsFree<HeapObjectHeader::AccessMode::kAtomic>());
   return header.TryMarkAtomic();
 }
 
@@ -185,10 +190,10 @@ void MarkingState::RegisterWeakCallback(WeakCallback callback,
 
 void MarkingState::AccountMarkedBytes(const HeapObjectHeader& header) {
   marked_bytes_ +=
-      header.IsLargeObject()
+      header.IsLargeObject<HeapObjectHeader::AccessMode::kAtomic>()
           ? reinterpret_cast<const LargePage*>(BasePage::FromPayload(&header))
                 ->PayloadSize()
-          : header.GetSize();
+          : header.GetSize<HeapObjectHeader::AccessMode::kAtomic>();
 }
 
 }  // namespace internal

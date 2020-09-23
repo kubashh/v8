@@ -152,8 +152,12 @@ HeapObjectHeader::HeapObjectHeader(size_t size, GCInfoIndex gc_info_index) {
   DCHECK_LT(gc_info_index, GCInfoTable::kMaxIndex);
   DCHECK_EQ(0u, size & (sizeof(HeapObjectHeader) - 1));
   DCHECK_GE(kMaxSize, size);
-  encoded_high_ = GCInfoIndexField::encode(gc_info_index);
   encoded_low_ = EncodeSize(size);
+  // This write cannot be relaxed because ObjectAllocator zaps the header
+  // (via SET_MEMORY_ACCESIBLE).
+  v8::base::AsAtomicPtr(&encoded_high_)
+      ->store(GCInfoIndexField::encode(gc_info_index),
+              std::memory_order_release);
   DCHECK(IsInConstruction());
 #ifdef DEBUG
   CheckApiConstants();
@@ -235,7 +239,7 @@ bool HeapObjectHeader::IsYoung() const {
 
 template <HeapObjectHeader::AccessMode mode>
 bool HeapObjectHeader::IsFree() const {
-  return GetGCInfoIndex() == kFreeListGCInfoIndex;
+  return GetGCInfoIndex<mode>() == kFreeListGCInfoIndex;
 }
 
 bool HeapObjectHeader::IsFinalizable() const {
