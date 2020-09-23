@@ -137,6 +137,10 @@ class Visitor {
   virtual void VisitWeakRoot(const void* self, TraceDescriptor, WeakCallback,
                              const void* weak_root) {}
 
+  // Returns true if tracing is deferred to mutator thread.
+  virtual bool DeferTraceToMutatorThreadIfConcurrent(const void*, TraceCallback,
+                                                     size_t);
+
  private:
   template <typename T, void (T::*method)(const LivenessBroker&)>
   static void WeakCallbackMethodDelegate(const LivenessBroker& info,
