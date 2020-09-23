@@ -16,6 +16,391 @@
       "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "322ca29e_b546d5c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "Another round of comments",
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58d8a1e9_2a574b6f",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "Are we not gathering feedback on the background? If not, are there any plans to do it?",
+      "range": {
+        "startLine": 108,
+        "startChar": 24,
+        "endLine": 109,
+        "endChar": 13
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4eb7e95_ddca37d3",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "Not a blocker for this CL, but have we made any progress on unifying on LocalIsolate to avoid duplication in cases like these?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45248030_f8408626",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "I don\u0027t think this one is necessary since the first thing we do in the other SynchronizedSet is the DCHECK.",
+      "range": {
+        "startLine": 198,
+        "startChar": 2,
+        "endLine": 198,
+        "endChar": 38
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff4a3598_c80ecb85",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "I like these cleanups!",
+      "range": {
+        "startLine": 341,
+        "startChar": 27,
+        "endLine": 341,
+        "endChar": 48
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d248a2b8_9ce7d54c",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "The cache_ starts inactive, and turns active when one of the slots is set. Then, it can never be inactive again. Therefore, we will always see the same feedback over and over. This should be okay since we might read stale data, but never inconsistent data. Is my reasoning correct?",
+      "range": {
+        "startLine": 403,
+        "startChar": 6,
+        "endLine": 403,
+        "endChar": 24
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff864204_3e94c1b9",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "I\u0027m curious as to why \u0027J\u0027 here",
+      "range": {
+        "startLine": 459,
+        "startChar": 19,
+        "endLine": 459,
+        "endChar": 20
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa1ff9ee_f29cc988",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "why not do\n\n\u003e bool update_required \u003d feedback.first !\u003d sentinel || feedback.second !\u003d maybe_extra;\n\nhere, instead of splitting it into two lines?",
+      "range": {
+        "startLine": 626,
+        "startChar": 2,
+        "endLine": 626,
+        "endChar": 70
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "389ef594_cddaceb5",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "If I am understanding correctly, the ExtractMapsAndHandlers above sends a dummy lambda which will return the map and therefore it won\u0027t go into the continue in line 1050. If so, what about using base::Optional here instead?",
+      "range": {
+        "startLine": 1038,
+        "startChar": 4,
+        "endLine": 1038,
+        "endChar": 39
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51a49c79_dc3de958",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "Can you add a description above the class definition explaining what a NexusConfig is?",
+      "range": {
+        "startLine": 598,
+        "startChar": 0,
+        "endLine": 598,
+        "endChar": 0
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40f35956_67b52736",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "nit: FeedbackType",
+      "range": {
+        "startLine": 778,
+        "startChar": 21,
+        "endLine": 778,
+        "endChar": 22
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bab26059_f53c6c62",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "nit: FeedbackType, and U FeedbackExtraType",
+      "range": {
+        "startLine": 781,
+        "startChar": 21,
+        "endLine": 781,
+        "endChar": 22
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac00e01d_18dbc009",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "nit: filename test-concurrent-feedback-vector",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0588b058_cfc47c6a",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "nit: FeedbackVector",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 12
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "765f27b6_d8e002de",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "Maybe as a follow-up, but would it be useful to have a StoreIC test too?",
+      "range": {
+        "startLine": 66,
+        "startChar": 17,
+        "endLine": 66,
+        "endChar": 23
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf994b2e_11d69670",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "What\u0027s this \u002710\u0027 here?",
+      "range": {
+        "startLine": 111,
+        "startChar": 47,
+        "endLine": 111,
+        "endChar": 49
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8971d12_e4b0af31",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-23T16:15:47Z",
+      "side": 1,
+      "message": "Are these sleeps necessary?",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 59
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
