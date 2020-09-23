@@ -22,6 +22,7 @@
 namespace cppgc {
 namespace internal {
 
+class ConcurrentMarkerBase;
 class HeapBase;
 class MarkerFactory;
 
@@ -73,7 +74,7 @@ class V8_EXPORT_PRIVATE MarkerBase {
   bool AdvanceMarkingWithMaxDuration(v8::base::TimeDelta);
 
   // Makes marking progress when allocation a new lab.
-  bool AdvanceMarkingOnAllocation();
+  void AdvanceMarkingOnAllocation();
 
   // Signals leaving the atomic marking pause. This method expects no more
   // objects to be marked and merely updates marking states if needed.
@@ -93,7 +94,9 @@ class V8_EXPORT_PRIVATE MarkerBase {
   HeapBase& heap() { return heap_; }
 
   MarkingWorklists& MarkingWorklistsForTesting() { return marking_worklists_; }
-  MarkingState& MarkingStateForTesting() { return mutator_marking_state_; }
+  MutatorMarkingState& MutatorMarkingStateForTesting() {
+    return mutator_marking_state_;
+  }
   cppgc::Visitor& VisitorForTesting() { return visitor(); }
   void ClearAllWorklistsForTesting();
 
@@ -134,6 +137,8 @@ class V8_EXPORT_PRIVATE MarkerBase {
   // trigger incremental/concurrent marking if needed.
   void StartMarking();
 
+  virtual std::unique_ptr<ConcurrentMarkerBase> CreateConcurrentMarker() = 0;
+
   virtual cppgc::Visitor& visitor() = 0;
   virtual ConservativeTracingVisitor& conservative_visitor() = 0;
   virtual heap::base::StackVisitor& stack_visitor() = 0;
@@ -162,10 +167,12 @@ class V8_EXPORT_PRIVATE MarkerBase {
   IncrementalMarkingTask::Handle incremental_marking_handle_;
 
   MarkingWorklists marking_worklists_;
-  MarkingState mutator_marking_state_;
-  bool is_marking_started_ = false;
+  MutatorMarkingState mutator_marking_state_;
+  bool is_marking_started_{false};
 
   IncrementalMarkingSchedule schedule_;
+
+  std::unique_ptr<ConcurrentMarkerBase> concurrent_marker_{nullptr};
 
   bool incremental_marking_disabled_for_testing_{false};
 
@@ -199,8 +206,10 @@ class V8_EXPORT_PRIVATE Marker final : public MarkerBase {
     return conservative_marking_visitor_;
   }
 
+  std::unique_ptr<ConcurrentMarkerBase> CreateConcurrentMarker() final;
+
  private:
-  MarkingVisitor marking_visitor_;
+  MutatorMarkingVisitor marking_visitor_;
   ConservativeMarkingVisitor conservative_marking_visitor_;
 };
 
