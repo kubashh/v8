@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "54b904a9_d057c332",
+        "filename": "test/cctest/compiler/test-run-calls-to-external-references.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-09-23T07:45:22Z",
+      "side": 1,
+      "message": "I\u0027d like to keep them, because they are easier to debug and test the very basic case (without register spilling). So if in the future we have a failure in all tests but those two, we know the problem is with the stack allocation. If instead the 3- and 10-param tests fail too, that means we have a general issue.",
+      "parentUuid": "3954c571_4a5235ad",
+      "revId": "9049984309184241d58fb990cc5ed1042ff6275a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42f80036_903a461c",
         "filename": "test/cctest/compiler/test-run-calls-to-external-references.cc",
         "patchSetId": 1
@@ -67,6 +85,24 @@
       "revId": "9049984309184241d58fb990cc5ed1042ff6275a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c27dda61_096a8a7b",
+        "filename": "test/cctest/compiler/test-run-calls-to-external-references.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-09-23T07:45:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42f80036_903a461c",
+      "revId": "9049984309184241d58fb990cc5ed1042ff6275a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
