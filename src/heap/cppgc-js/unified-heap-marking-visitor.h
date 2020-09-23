@@ -74,6 +74,9 @@ class V8_EXPORT_PRIVATE ConcurrentUnifiedHeapMarkingVisitor
                      const void*) final {
     UNREACHABLE();
   }
+
+  bool DeferTraceToMutatorThreadIfConcurrent(const void*, cppgc::TraceCallback,
+                                             size_t) final;
 };
 
 }  // namespace internal

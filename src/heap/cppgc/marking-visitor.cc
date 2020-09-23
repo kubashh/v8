@@ -67,5 +67,13 @@ void ConservativeMarkingVisitor::VisitPointer(const void* address) {
   TraceConservativelyIfNeeded(address);
 }
 
+bool ConcurrentMarkingVisitor::DeferTraceToMutatorThreadIfConcurrent(
+    const void* parameter, TraceCallback callback, size_t deferred_size) {
+  marking_state_.concurrent_marking_bailout_worklist().Push(
+      {parameter, callback, deferred_size});
+  marking_state_.AccountMarkedBytes(-deferred_size);
+  return true;
+}
+
 }  // namespace internal
 }  // namespace cppgc

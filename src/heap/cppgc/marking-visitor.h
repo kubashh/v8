@@ -55,6 +55,9 @@ class V8_EXPORT_PRIVATE ConcurrentMarkingVisitor : public MarkingVisitorBase {
                      const void*) final {
     UNREACHABLE();
   }
+
+  bool DeferTraceToMutatorThreadIfConcurrent(const void*, TraceCallback,
+                                             size_t) final;
 };
 
 class ConservativeMarkingVisitor : public ConservativeTracingVisitor,
