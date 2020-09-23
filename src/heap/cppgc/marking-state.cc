@@ -7,7 +7,7 @@
 namespace cppgc {
 namespace internal {
 
-void MarkingState::FlushNotFullyConstructedObjects() {
+void MutatorMarkingState::FlushNotFullyConstructedObjects() {
   not_fully_constructed_worklist().Publish();
   if (!not_fully_constructed_worklist_.IsGlobalEmpty()) {
     previously_not_fully_constructed_worklist_.Merge(
