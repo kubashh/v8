@@ -22,6 +22,30 @@
       "revId": "64caf2b0b26cb6c955fbbb81365ac54820de51a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "09b2979f_50419b0d",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-09-23T07:09:43Z",
+      "side": 1,
+      "message": "Simply updating the python script should be enough for after this CL has landed, but if there\u0027s some issue running gcmole in the trybots, please let me know!",
+      "parentUuid": "4534de91_fa94f49f",
+      "range": {
+        "startLine": 1322,
+        "startChar": 6,
+        "endLine": 1322,
+        "endChar": 63
+      },
+      "revId": "64caf2b0b26cb6c955fbbb81365ac54820de51a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
