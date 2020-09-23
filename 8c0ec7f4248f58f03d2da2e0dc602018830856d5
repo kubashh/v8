@@ -106,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "411fad33_1ed37fe5",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-23T13:25:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a75dd2ae_97887e32",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 4
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0333a53_a2908969",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 12
@@ -244,6 +268,30 @@
       "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b74dd901_6682bb86",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-23T13:25:29Z",
+      "side": 1,
+      "message": "Deleted the method, having found a better response to the code in ic-inl.h.",
+      "parentUuid": "3fa35e07_d6b6f9aa",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 420,
+        "endChar": 48
+      },
+      "revId": "8c0ec7f4248f58f03d2da2e0dc602018830856d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
