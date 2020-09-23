@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3e96670_f9e37786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-23T11:20:27Z",
+      "side": 1,
+      "message": "ptal\n\n(only changing logical assignment here; the other lines in the test files are verifying that we keep the current behavior)",
+      "revId": "fcbf318da6cb789c88bc919b01ffc6fb422afc29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
