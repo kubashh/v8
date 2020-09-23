@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f93e5d9c_89559ccc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-09-23T23:04:43Z",
+      "side": 1,
+      "message": "ptal. I added a couple of disable flags for testing to force more work to the concurrent threads.",
+      "revId": "5ef92b4a1f0041c649d272d63f0b8f18477745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
