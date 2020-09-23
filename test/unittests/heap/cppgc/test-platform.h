@@ -16,6 +16,8 @@ namespace cppgc {
 namespace internal {
 namespace testing {
 
+class TestJob;
+
 class TestTaskRunner : public v8::TaskRunner {
  public:
   void PostTask(std::unique_ptr<v8::Task> task) override;
@@ -61,6 +63,8 @@ class TestPlatform : public Platform {
     return foreground_task_runner_;
   }
 
+  // TestPlatform does not support job priorities. All jobs would be assigned
+  // the same priority regardless of the v8::TaskPriority parameter.
   std::unique_ptr<v8::JobHandle> PostJob(
       v8::TaskPriority, std::unique_ptr<v8::JobTask> job_task) override;
 
@@ -70,49 +74,13 @@ class TestPlatform : public Platform {
   void WaitAllBackgroundTasks();
 
  private:
-  class TestJobHandle;
-
-  class WorkerThread : public v8::base::Thread {
-   public:
-    explicit WorkerThread(std::unique_ptr<v8::Task> task)
-        : Thread(Options("worker")), task_(std::move(task)) {}
-
-    void Run() override {
-      if (task_) std::move(task_)->Run();
-    }
-
-   private:
-    std::unique_ptr<v8::Task> task_;
-  };
-
-  class JobThread : public v8::base::Thread {
-   public:
-    explicit JobThread(std::unique_ptr<v8::JobTask> task)
-        : Thread(Options("job")), task_(std::move(task)) {}
-
-    void Run() override {
-      class JobDelegate : public v8::JobDelegate {
-       public:
-        bool ShouldYield() override { return false; }
-        void NotifyConcurrencyIncrease() override {}
-        uint8_t GetTaskId() override { return 0; }
-        bool IsJoiningThread() const override { return false; }
-      } delegate;
-
-      if (task_) task_->Run(&delegate);
-    }
-
-   private:
-    std::unique_ptr<v8::JobTask> task_;
-  };
-
   bool AreBackgroundTasksDisabled() const {
     return disabled_background_tasks_ > 0;
   }
 
   v8::base::PageAllocator page_allocator_;
   std::shared_ptr<TestTaskRunner> foreground_task_runner_;
-  std::vector<std::shared_ptr<JobThread>> job_threads_;
+  std::vector<std::shared_ptr<TestJob>> jobs_;
   size_t disabled_background_tasks_ = 0;
 };
 
