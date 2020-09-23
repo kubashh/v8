@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "677bc402_09ea9827",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-23T06:44:16Z",
+      "side": 1,
+      "message": "\u003e It\u0027s pretty tangled. The support for flipping flags on and off mid-regexp doesn\u0027t help either. AFAIK that feature has no path to standardization. Have we considered removing it?\n\nYes I\u0027d like to do that, but haven\u0027t had time so far (and I don\u0027t think it\u0027ll be a trivial task).\n\n\u003e As far as this patch goes: I\u0027m not clear why the no_i18n build fails without these flags, but the regular build succeeds. Can you shed any light?\n\nno_i18n:\n- AddUnicodeCaseEquivalents is a no-op.\n- TextNode::MakeCaseIndependent doesn\u0027t end up calling AddCaseEquivalents because IgnoreCase(cc-\u003eflags()) was false (this is fixed in this CL).\n- So nothing adds case equivalents.\n\ndefault config:\n- AddUnicodeCaseEquivalents adds the equivalents.",
+      "parentUuid": "0df18b13_a879f8c1",
+      "revId": "aa973a3c10ec268fbe7ec76133f9939588e63af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1ed3965_9a4c37d5",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 2
@@ -68,6 +86,24 @@
       "revId": "aa973a3c10ec268fbe7ec76133f9939588e63af3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a422da_91da7f17",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-23T06:44:16Z",
+      "side": 1,
+      "message": "I looked through all other cases of using default flags yesterday, they all seem okay. In this particular case, the range is {0, String::kMaxUtf16CodeUnit}, so no need to add case-equivalents. (It should probably just use the \u0027*\u0027 standard range instead.)",
+      "parentUuid": "b1ed3965_9a4c37d5",
+      "revId": "aa973a3c10ec268fbe7ec76133f9939588e63af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
