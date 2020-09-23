@@ -16,6 +16,23 @@
       "revId": "70e5378b12e4de6ede53504f6fde9279d53539ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cafe19c0_46bd84aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-09-23T09:41:21Z",
+      "side": 1,
+      "message": "Manos, this is the first CL, PTAL.",
+      "revId": "70e5378b12e4de6ede53504f6fde9279d53539ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
