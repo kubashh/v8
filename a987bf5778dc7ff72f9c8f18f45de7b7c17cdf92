@@ -34,6 +34,23 @@
       "revId": "a987bf5778dc7ff72f9c8f18f45de7b7c17cdf92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2e927a5_ea3ebd18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-24T13:07:14Z",
+      "side": 1,
+      "message": "Cool, let\u0027s keep it.",
+      "revId": "a987bf5778dc7ff72f9c8f18f45de7b7c17cdf92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
