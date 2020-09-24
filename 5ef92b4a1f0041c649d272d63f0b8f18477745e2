@@ -16,6 +16,69 @@
       "revId": "5ef92b4a1f0041c649d272d63f0b8f18477745e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d8436c42_fcc797b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-24T08:29:55Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5ef92b4a1f0041c649d272d63f0b8f18477745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "28eeddfb_07d1756f",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-24T08:29:55Z",
+      "side": 1,
+      "message": "nit: I\u0027d say DisableHeapGrowingForTesting()",
+      "range": {
+        "startLine": 173,
+        "startChar": 11,
+        "endLine": 173,
+        "endChar": 44
+      },
+      "revId": "5ef92b4a1f0041c649d272d63f0b8f18477745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56005465_259747df",
+        "filename": "test/unittests/heap/cppgc/concurrent-marking-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-24T08:29:55Z",
+      "side": 1,
+      "message": "Can we go lower without loosing too much coverage? We should make sure that unit tests run reasonably fast (also in debug modes).",
+      "range": {
+        "startLine": 103,
+        "startChar": 34,
+        "endLine": 103,
+        "endChar": 38
+      },
+      "revId": "5ef92b4a1f0041c649d272d63f0b8f18477745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
