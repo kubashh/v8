@@ -80,6 +80,30 @@
       "revId": "a7163b17b7a701c75af56b2019391ec9dda3848b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b51e785a_f67e47a4",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 2709,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-24T12:03:04Z",
+      "side": 1,
+      "message": "Nice, that resolves my concern!\n\nShould the commit message be updated to reflect that? Currently it says:\n\"This CL does not yet implement freeing of external pointer table entires\n(this has to happen in object finalizers)\"",
+      "parentUuid": "99a64f08_655e33a5",
+      "range": {
+        "startLine": 2709,
+        "startChar": 2,
+        "endLine": 2709,
+        "endChar": 45
+      },
+      "revId": "a7163b17b7a701c75af56b2019391ec9dda3848b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
