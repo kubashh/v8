@@ -22,6 +22,30 @@
       "revId": "f79c9872a5eb779b5d75ef771aa48e8126cc1f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3625d043_80871ac6",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7209,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-09-24T10:12:43Z",
+      "side": 1,
+      "message": "Good idea! Will do..",
+      "parentUuid": "1ceaaec4_aef17eae",
+      "range": {
+        "startLine": 7209,
+        "startChar": 2,
+        "endLine": 7209,
+        "endChar": 49
+      },
+      "revId": "f79c9872a5eb779b5d75ef771aa48e8126cc1f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
