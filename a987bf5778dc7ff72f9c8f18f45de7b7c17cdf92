@@ -51,6 +51,24 @@
       "revId": "a987bf5778dc7ff72f9c8f18f45de7b7c17cdf92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "07c11afd_af5064fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-24T13:16:49Z",
+      "side": 1,
+      "message": "Done. Also running the optional trybot once more to see if there\u0027s any problem left.",
+      "parentUuid": "b2e927a5_ea3ebd18",
+      "revId": "a987bf5778dc7ff72f9c8f18f45de7b7c17cdf92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
