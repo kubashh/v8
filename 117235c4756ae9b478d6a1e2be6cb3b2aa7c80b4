@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c005f35_ee0c2332",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-24T12:02:26Z",
+      "side": 1,
+      "message": "PTAL, some quick fix to make CF happy again.",
+      "revId": "117235c4756ae9b478d6a1e2be6cb3b2aa7c80b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
