@@ -16,6 +16,23 @@
       "revId": "d6ae69d04f622aa443a016628a1c0994a38bc888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "332fc1a1_1be142d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-24T07:35:46Z",
+      "side": 1,
+      "message": "Hm, running locally I get a ton of other failures as well, for example:\n\n\u003d\u003d\u003d cctest/test-invalidated-slots/InvalidatedSlotsLeftTrimFixedArray \u003d\u003d\u003d      \n#\n# Fatal error in ../../src/heap/heap.cc, line 3140\n# Debug check failed: CanMoveObjectStart(object).",
+      "revId": "d6ae69d04f622aa443a016628a1c0994a38bc888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
