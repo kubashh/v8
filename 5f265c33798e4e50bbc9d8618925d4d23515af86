@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99b79628_90883b5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-24T13:01:20Z",
+      "side": 1,
+      "message": "ACK. I\u0027m happy that we don\u0027t need the max_initial/max_maximum distinction any more.",
+      "revId": "5f265c33798e4e50bbc9d8618925d4d23515af86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
