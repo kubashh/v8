@@ -33,6 +33,29 @@
       "revId": "a7163b17b7a701c75af56b2019391ec9dda3848b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea4685fb_61bf7378",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 2709,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-24T10:56:31Z",
+      "side": 1,
+      "message": "I see a potential blocker here when releasing the entry.\n\nWe don\u0027t have finalizers for typed arrays and friends. We only have them for the actual backing stores (BackingStore objects): https://docs.google.com/document/d/1-ZrLdlFX1nXT3z-FAgLbKal1gI8Auiaya_My-a0UJ28/edit\n\nAdding finalizers for typed arrays is going to regress GC performance.",
+      "range": {
+        "startLine": 2709,
+        "startChar": 2,
+        "endLine": 2709,
+        "endChar": 45
+      },
+      "revId": "a7163b17b7a701c75af56b2019391ec9dda3848b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
