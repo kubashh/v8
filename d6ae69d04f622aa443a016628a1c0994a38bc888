@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01bd34c6_e961c0fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-24T07:33:15Z",
+      "side": 1,
+      "message": "PTAL, just to get the bot green again until these tests are fixed.",
+      "revId": "d6ae69d04f622aa443a016628a1c0994a38bc888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
