@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e112fcba_f3329632",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-24T12:18:03Z",
+      "side": 1,
+      "message": "Thanks. Do we also run it with just the default configuration (i.e. without --future)?",
+      "revId": "a987bf5778dc7ff72f9c8f18f45de7b7c17cdf92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
