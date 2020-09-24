@@ -56,6 +56,30 @@
       "revId": "a7163b17b7a701c75af56b2019391ec9dda3848b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99a64f08_655e33a5",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 2709,
+      "author": {
+        "id": 1412532
+      },
+      "writtenOn": "2020-09-24T11:51:52Z",
+      "side": 1,
+      "message": "I\u0027m not sure I fully understand the concern, but the slot entries will be garbage collected (see https://chromium-review.googlesource.com/c/v8/v8/+/2252179 for a PoC of that) and so as far as I understand, there will be no need for additional finalizers to clean up these entries.",
+      "parentUuid": "ea4685fb_61bf7378",
+      "range": {
+        "startLine": 2709,
+        "startChar": 2,
+        "endLine": 2709,
+        "endChar": 45
+      },
+      "revId": "a7163b17b7a701c75af56b2019391ec9dda3848b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
