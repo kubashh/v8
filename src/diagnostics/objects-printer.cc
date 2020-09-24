@@ -2691,6 +2691,10 @@ V8_EXPORT_PRIVATE extern void _v8_internal_Print_Object(void* object) {
   GetObjectFromRaw(object).Print();
 }
 
+V8_EXPORT_PRIVATE extern void _v8_internal_Print_LoadHandler(void* object) {
+  i::LoadHandler::PrintHandler(GetObjectFromRaw(object), std::cout);
+}
+
 V8_EXPORT_PRIVATE extern void _v8_internal_Print_Code(void* object) {
   i::Address address = reinterpret_cast<i::Address>(object);
   i::Isolate* isolate = i::Isolate::Current();
