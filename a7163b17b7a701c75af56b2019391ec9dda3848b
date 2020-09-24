@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3972d25_d615e36c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-24T10:36:11Z",
+      "side": 1,
+      "message": "Ulan, PTAL @ include/, src/api/ and src/heap/",
+      "revId": "a7163b17b7a701c75af56b2019391ec9dda3848b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
