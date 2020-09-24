@@ -29,6 +29,15 @@ Print content of a v8::Local handle
 Usage: jlh local_handle
 end
 
+# Print tagged object.
+define jlha
+call (void) _v8_internal_Print_LoadHandler((void*)($arg0))
+end
+document jlha
+Print a LoadHandler
+Usage: jlha tagged_ptr
+end
+
 # Print Code objects containing given PC.
 define jco
 call (void) _v8_internal_Print_Code((void*)($arg0))
