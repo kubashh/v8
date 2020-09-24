@@ -313,7 +313,7 @@ if (v8_enable_zone_compression == "") {
   v8_enable_zone_compression = false
 }
 if (v8_enable_heap_sandbox == "") {
-  v8_enable_heap_sandbox = false
+  v8_enable_heap_sandbox = v8_current_cpu == "x64"
 }
 if (v8_enable_single_generation == "") {
   v8_enable_single_generation = v8_disable_write_barriers
@@ -2475,6 +2475,8 @@ v8_source_set("v8_base_without_compiler") {
     "src/execution/arguments.h",
     "src/execution/execution.cc",
     "src/execution/execution.h",
+    "src/execution/external-pointer-table.cc",
+    "src/execution/external-pointer-table.h",
     "src/execution/frame-constants.h",
     "src/execution/frames-inl.h",
     "src/execution/frames.cc",
