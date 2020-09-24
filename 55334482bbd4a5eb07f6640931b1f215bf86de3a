@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "7a80739a_3ae117d1",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-09-24T08:02:48Z",
+      "side": 1,
+      "message": "I don\u0027t want to change the semantics here, and I think it makes sense to show the \"invalid memory limits flags\" error instead of the \"shared needs maximum\" if threads are disabled.\n\nThe flag exists because the spec defines it, but V8 does not support shared memory without a maximum. I added a comment to say that.",
+      "parentUuid": "f0624c71_6ebb9eaf",
+      "revId": "55334482bbd4a5eb07f6640931b1f215bf86de3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00184186_4e8f3b7b",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 6
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "cf74e177_f408349f",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-09-24T08:02:48Z",
+      "side": 1,
+      "message": "That\u0027s true (for now at least). I just removed the comment, since this method is used for both memory limits and table limits, and the multiplication with the page size only happens for memory.",
+      "parentUuid": "00184186_4e8f3b7b",
+      "revId": "55334482bbd4a5eb07f6640931b1f215bf86de3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3d5f4a3_e189dc54",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 6
@@ -67,6 +103,24 @@
       "revId": "55334482bbd4a5eb07f6640931b1f215bf86de3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66dd7c01_28ae3984",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-09-24T08:02:48Z",
+      "side": 1,
+      "message": "Yeah, I see that another design is possible here, but since this method directly sets the fields in WasmTable or WasmModule (for initial and maximum size), it makes sense to also set the \"has_maximum\" field directly.\n\nAn alternative design would be to return a tuple of all three values (initial, has_max, max), and assign to the proper fields in the caller. I am not sure if that\u0027s nicer though, as it requires some more code in each caller.",
+      "parentUuid": "f3d5f4a3_e189dc54",
+      "revId": "55334482bbd4a5eb07f6640931b1f215bf86de3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
