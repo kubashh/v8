@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0f39753_f5f3cdd2",
+        "filename": "src/heap/cppgc/heap-object-header.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-24T08:49:54Z",
+      "side": 1,
+      "message": "Add:\nObjects may get published to the marker without any other synchronization (e.g., write barrier) in which case the in-construction bit is read concurrently which requires reading encoded_high_ atomically.",
+      "range": {
+        "startLine": 156,
+        "startChar": 3,
+        "endLine": 156,
+        "endChar": 4
+      },
+      "revId": "99aeadae715bf241d60ff9f6cb1f8d750f4790df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ae018e7_41e6f35a",
+        "filename": "src/heap/cppgc/heap-object-header.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-24T08:49:54Z",
+      "side": 1,
+      "message": "I do not understand that argument: ObjectAllocator zaps on the same thread as the object is initialized and order is guaranteed through that.\n\nThe concurrent thread will not look at the object until it\u0027s fully constructed which has the fence.",
+      "range": {
+        "startLine": 157,
+        "startChar": 10,
+        "endLine": 157,
+        "endChar": 30
+      },
+      "revId": "99aeadae715bf241d60ff9f6cb1f8d750f4790df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10fdfe80_b5ebbb0d",
+        "filename": "src/heap/cppgc/heap-page.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-24T08:49:54Z",
+      "side": 1,
+      "message": "Can we add a comment that describes what the pair of SynchronizedLoad/SynchronizedStore do?",
+      "range": {
+        "startLine": 66,
+        "startChar": 7,
+        "endLine": 66,
+        "endChar": 23
+      },
+      "revId": "99aeadae715bf241d60ff9f6cb1f8d750f4790df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9263ead7_400ca357",
+        "filename": "src/heap/cppgc/heap-page.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-24T08:49:54Z",
+      "side": 1,
+      "message": "Add a comment why we need SynchronizedLoad() here.\n\nI see that a newly allocated object may be on a new page that\u0027s zeroed by the OS and uses SynchronizeStore(). I don\u0027t see why we need the SynchronizedLoad() here to rely on the contents of the memory being zeroed.",
+      "range": {
+        "startLine": 262,
+        "startChar": 2,
+        "endLine": 262,
+        "endChar": 18
+      },
+      "revId": "99aeadae715bf241d60ff9f6cb1f8d750f4790df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bab58922_f1e0e047",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-24T08:49:54Z",
+      "side": 1,
+      "message": "I do not understand why we cannot attempt MarkNoPush first. Is it because of the DCHECKs?\n\nThis is performance sensitive in cases where we try to MarkAndPush already marked objects.",
+      "range": {
+        "startLine": 115,
+        "startChar": 5,
+        "endLine": 115,
+        "endChar": 12
+      },
+      "revId": "99aeadae715bf241d60ff9f6cb1f8d750f4790df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
