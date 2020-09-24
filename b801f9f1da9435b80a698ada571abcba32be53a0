@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81d48471_8eda49f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-09-24T10:54:50Z",
+      "side": 1,
+      "message": "I\u0027ve updated the CL, PTALA.\n\nI had to introduce two versions of EnsureFlagLocalHeapsEnabled(), for cctest and unittests",
+      "revId": "b801f9f1da9435b80a698ada571abcba32be53a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
