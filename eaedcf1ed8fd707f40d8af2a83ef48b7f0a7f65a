@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "4960e3ca_c7bf325d",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Definitely there are plans! I think this CL is about landing infrastructure and basic tests. The next CL must be about actually reading directly on the background thread.",
+      "parentUuid": "58d8a1e9_2a574b6f",
+      "range": {
+        "startLine": 108,
+        "startChar": 24,
+        "endLine": 109,
+        "endChar": 13
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4eb7e95_ddca37d3",
         "filename": "src/handles/maybe-handles.h",
         "patchSetId": 20
@@ -79,6 +103,30 @@
       "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaf411ad_03b0389c",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "I\u0027m definitely interested in that (unifying as we see fit). If it\u0027s alright I will not try that in this CL. But I\u0027d be happy to follow up later and do that.",
+      "parentUuid": "e4eb7e95_ddca37d3",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +153,30 @@
     },
     {
       "key": {
+        "uuid": "dd4108f4_a3e4bed1",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Oh, good point, thank you!",
+      "parentUuid": "45248030_f8408626",
+      "range": {
+        "startLine": 198,
+        "startChar": 2,
+        "endLine": 198,
+        "endChar": 38
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff4a3598_c80ecb85",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 20
@@ -116,6 +188,30 @@
       "writtenOn": "2020-09-23T16:15:47Z",
       "side": 1,
       "message": "I like these cleanups!",
+      "range": {
+        "startLine": 341,
+        "startChar": 27,
+        "endLine": 341,
+        "endChar": 48
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "719607fe_1cb2e5ab",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Thank you! I was afraid of churning the tree too much, but it was crying out for some cleanup. :)",
+      "parentUuid": "ff4a3598_c80ecb85",
       "range": {
         "startLine": 341,
         "startChar": 27,
@@ -151,6 +247,30 @@
     },
     {
       "key": {
+        "uuid": "c9a6475d_88f68122",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Yes, that matches my thinking. On the background compiler thread, we want to get a read and not later be confused by different values.",
+      "parentUuid": "d248a2b8_9ce7d54c",
+      "range": {
+        "startLine": 403,
+        "startChar": 6,
+        "endLine": 403,
+        "endChar": 24
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff864204_3e94c1b9",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 20
@@ -171,6 +291,30 @@
       "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7e5bffa_a68b04b3",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "No reason I can remember -- it is now \"T,\" per convention.",
+      "parentUuid": "ff864204_3e94c1b9",
+      "range": {
+        "startLine": 459,
+        "startChar": 19,
+        "endLine": 459,
+        "endChar": 20
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -197,6 +341,30 @@
     },
     {
       "key": {
+        "uuid": "bc1b37ff_1cd426a4",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Good idea: done.",
+      "parentUuid": "aa1ff9ee_f29cc988",
+      "range": {
+        "startLine": 626,
+        "startChar": 2,
+        "endLine": 626,
+        "endChar": 70
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "389ef594_cddaceb5",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 20
@@ -217,6 +385,30 @@
       "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa3a9389_4a6f693f",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "That is more elegant and efficient, thank you!",
+      "parentUuid": "389ef594_cddaceb5",
+      "range": {
+        "startLine": 1038,
+        "startChar": 4,
+        "endLine": 1038,
+        "endChar": 39
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -243,6 +435,30 @@
     },
     {
       "key": {
+        "uuid": "d1eb3a6a_d55fde3f",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Thank you, good idea: done.",
+      "parentUuid": "51a49c79_dc3de958",
+      "range": {
+        "startLine": 598,
+        "startChar": 0,
+        "endLine": 598,
+        "endChar": 0
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40f35956_67b52736",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 20
@@ -263,6 +479,30 @@
       "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb8cdc1e_60f31215",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40f35956_67b52736",
+      "range": {
+        "startLine": 778,
+        "startChar": 21,
+        "endLine": 778,
+        "endChar": 22
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -289,6 +529,30 @@
     },
     {
       "key": {
+        "uuid": "7914e05e_7da5220d",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bab26059_f53c6c62",
+      "range": {
+        "startLine": 781,
+        "startChar": 21,
+        "endLine": 781,
+        "endChar": 22
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac00e01d_18dbc009",
         "filename": "test/cctest/test-concurrent-vector.cc",
         "patchSetId": 20
@@ -309,6 +573,30 @@
       "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0edb85e_a25345b9",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac00e01d_18dbc009",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -335,6 +623,30 @@
     },
     {
       "key": {
+        "uuid": "48eba470_88ae22a3",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0588b058_cfc47c6a",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 12
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "765f27b6_d8e002de",
         "filename": "test/cctest/test-concurrent-vector.cc",
         "patchSetId": 20
@@ -355,6 +667,30 @@
       "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fb01551_b8d56c51",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "That makes sense, as well as CallIC. I will follow up.",
+      "parentUuid": "765f27b6_d8e002de",
+      "range": {
+        "startLine": 66,
+        "startChar": 17,
+        "endLine": 66,
+        "endChar": 23
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -381,6 +717,30 @@
     },
     {
       "key": {
+        "uuid": "b5e21c72_2b4f023c",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "It means nothing. I just know that the \"shape\" of an IC has a map along with some Smi that contains interesting bits for the IC system. I\u0027ll add a comment to make it clear that it\u0027s just a dummy number.",
+      "parentUuid": "cf994b2e_11d69670",
+      "range": {
+        "startLine": 111,
+        "startChar": 47,
+        "endLine": 111,
+        "endChar": 49
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8971d12_e4b0af31",
         "filename": "test/cctest/test-concurrent-vector.cc",
         "patchSetId": 20
@@ -401,6 +761,30 @@
       "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "108f75ad_9779ba07",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-24T12:53:05Z",
+      "side": 1,
+      "message": "Removed, sorry, Nico mentioned those before.",
+      "parentUuid": "d8971d12_e4b0af31",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 59
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
