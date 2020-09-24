@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0624c71_6ebb9eaf",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-09-24T06:00:12Z",
+      "side": 1,
+      "message": "nit: I think a better structure would be\n\n case kSharedNoMaximum:\n   errorf(pc() - 1,\n          \"memory limits flags should have maximum defined if shared is \"\n          \"true\");\n   V8_FALLTHROUGH;\n case kSharedWithMaximum:\n   if (!enabled_features_.has_threads()) {\n     errorf(pc() - 1,\n            \"invalid memory limits flags (enable via \"\n            \"--experimental-wasm-threads)\");\n   }\n   *has_shared_memory \u003d true;\n   break;\n\nAlso, why does the kSharedNoMaximum flag exist if it always leads to an error?",
+      "revId": "55334482bbd4a5eb07f6640931b1f215bf86de3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00184186_4e8f3b7b",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-09-24T06:00:12Z",
+      "side": 1,
+      "message": "nit: This comment is not clear: It implies that I could define a memory \u003e4GB using current limits, when in reality I can\u0027t.",
+      "revId": "55334482bbd4a5eb07f6640931b1f215bf86de3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3d5f4a3_e189dc54",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-09-24T06:00:12Z",
+      "side": 1,
+      "message": "nit: I understand that this is not handled in this CL, but why is this function setting has_max, if it only depends directly on parameters? It should be the caller does.",
+      "revId": "55334482bbd4a5eb07f6640931b1f215bf86de3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
