@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "b55088e0_9c2f5216",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-25T14:56:46Z",
+      "side": 0,
+      "message": "why are we moving this? it\u0027s more contained here if this is the only place it needs to be used.",
+      "revId": "e241c6da39e214fe5e6fd8e07eea3f8e7322c08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d92f239_35c05353",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 5
@@ -22,6 +39,30 @@
       "revId": "e241c6da39e214fe5e6fd8e07eea3f8e7322c08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c7b0d353_d0896f8d",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-25T14:56:46Z",
+      "side": 0,
+      "message": "I think this would be better next to AtomicExchange, maybe move that one too?",
+      "parentUuid": "4d92f239_35c05353",
+      "range": {
+        "startLine": 765,
+        "startChar": 2,
+        "endLine": 765,
+        "endChar": 4
+      },
+      "revId": "e241c6da39e214fe5e6fd8e07eea3f8e7322c08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
