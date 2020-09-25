@@ -19,6 +19,12 @@ void Visitor::CheckObjectNotInConstruction(const void* address) {
 }
 #endif  // V8_ENABLE_CHECKS
 
+// Default implementation does not defer.
+bool Visitor::DeferTraceToMutatorThreadIfConcurrent(const void*, TraceCallback,
+                                                    size_t) {
+  return false;
+}
+
 namespace internal {
 
 ConservativeTracingVisitor::ConservativeTracingVisitor(
