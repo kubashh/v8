@@ -2245,6 +2245,11 @@ class V8_EXPORT StackFrame {
   bool IsWasm() const;
 
   /**
+   * Returns whether or not the associated functions is async.
+   */
+  bool IsAsync() const;
+
+  /**
    * Returns whether or not the associated function is defined by the user.
    */
   bool IsUserJavaScript() const;

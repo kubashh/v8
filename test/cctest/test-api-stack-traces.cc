@@ -795,6 +795,47 @@ TEST(DynamicWithSourceURLInStackTraceString) {
   CHECK_NOT_NULL(strstr(*stack, "at foo (source_url:3:5)"));
 }
 
+
+void PromiseRejectCallback(v8::PromiseRejectMessage reject_message) {
+  CHECK_EQ(v8::Promise::PromiseState::kRejected,
+           reject_message.GetPromise()->State());
+  CHECK_EQ(v8::PromiseRejectEvent::kPromiseRejectWithNoHandler,
+           reject_message.GetEvent());
+  auto error = reject_message.GetValue();
+  v8::Local<v8::StackTrace> stackTrace = v8::Exception::GetStackTrace(error);
+  CHECK(!stackTrace.IsEmpty());
+  CHECK_EQ(1, stackTrace->GetFrameCount());
+  auto frame0 = stackTrace->GetFrame(CcTest::isolate(), 0);
+  printf("PromiseRejectCallbackConstructError2 \n");
+  CHECK(frame0->IsAsync());
+}
+
+THREADED_TEST(IsAsync) {
+  CHECK(v8::internal::FLAG_async_stack_traces);
+
+  LocalContext context;
+  v8::HandleScope scope(context->GetIsolate());
+
+  v8::Isolate* isolate = context->GetIsolate();
+  isolate->SetCaptureStackTraceForUncaughtExceptions(true, 10);
+  isolate->SetPromiseRejectCallback(PromiseRejectCallback);
+
+  v8::TryCatch try_catch(isolate);
+  CompileRun(
+      "(async () => {\n"
+      "  const p = (async () => {\n"
+      "    await Promise.resolve().then(() => {\n"
+      "      throw Error('foo');\n"
+      "    });\n"
+      "  })();\n"
+      "  await p;\n"
+      "})();\n");
+  // isolate->RunMicrotasks();
+  // CHECK(try_catch.HasCaught());
+  // auto stack_trace = try_catch.StackTrace(context.local());
+  // v8::Local<v8::Value> error = try_catch.Exception();
+}
+
 TEST(CaptureStackTraceForStackOverflow) {
   v8::internal::FLAG_stack_size = 150;
   LocalContext current;
