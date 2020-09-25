@@ -123,7 +123,8 @@ void* ObjectAllocator::AllocateObjectOnSpace(NormalPageSpace* space,
 
   NormalPage::From(BasePage::FromPayload(header))
       ->object_start_bitmap()
-      .SetBit(reinterpret_cast<ConstAddress>(header));
+      .SetBit<HeapObjectHeader::AccessMode::kAtomic>(
+          reinterpret_cast<ConstAddress>(header));
 
   return header->Payload();
 }
