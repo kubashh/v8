@@ -1209,6 +1209,7 @@ int PerIsolateData::HandleUnhandledPromiseRejections() {
     Shell::ReportException(isolate_, message, value);
   }
   unhandled_promises_.clear();
+  ignore_unhandled_promises_ = false;
   return static_cast<int>(i);
 }
 
@@ -3602,6 +3603,9 @@ int Shell::RunMain(Isolate* isolate, bool last_run) {
     printf("%i pending unhandled Promise rejection(s) detected.\n",
            Shell::unhandled_promise_rejections_.load());
     success = false;
+    // RunMain may be executed multiple times, e.g. in REPRL mode, so we have to
+    // reset this counter.
+    Shell::unhandled_promise_rejections_.store(0);
   }
   // In order to finish successfully, success must be != expected_to_throw.
   return success == Shell::options.expected_to_throw ? 1 : 0;
