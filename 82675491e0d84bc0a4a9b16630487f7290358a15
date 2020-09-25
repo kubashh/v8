@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c672582_019ebf9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-25T13:07:26Z",
+      "side": 1,
+      "message": "Igor, PTAL. This is the fix I discussed with you earlier.\n\nSantiago, FYI.\n\nThanks,\nMythri",
+      "revId": "82675491e0d84bc0a4a9b16630487f7290358a15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
