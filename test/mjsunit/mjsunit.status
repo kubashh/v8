@@ -1152,7 +1152,6 @@
 ##############################################################################
 ['variant == turboprop', {
   # Deopts differently than TurboFan.
-  'parallel-optimize-disabled': [SKIP],
   'compiler/native-context-specialization-hole-check': [SKIP],
   'compiler/number-comparison-truncations': [SKIP],
   'compiler/redundancy-elimination': [SKIP],
@@ -1394,7 +1393,6 @@
   'optimized-array-some': [SKIP],
   'optimized-filter': [SKIP],
   'optimized-map': [SKIP],
-  'parallel-optimize-disabled': [SKIP],
   'regress/regress-1016450': [SKIP],
   'regress/regress-1034449': [SKIP],
   'regress/regress-1073440': [SKIP],
