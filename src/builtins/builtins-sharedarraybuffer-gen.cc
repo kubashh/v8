@@ -19,10 +19,10 @@ class SharedArrayBufferBuiltinsAssembler : public CodeStubAssembler {
       : CodeStubAssembler(state) {}
 
  protected:
-  using AssemblerFunction = Node* (CodeAssembler::*)(MachineType type,
-                                                     Node* base, Node* offset,
-                                                     Node* value,
-                                                     Node* value_high);
+  using AssemblerFunction =
+      Node* (CodeAssembler::*)(MachineType type, TNode<RawPtrT> base,
+                               TNode<UintPtrT> offset, TNode<UintPtrT> value,
+                               base::Optional<TNode<UintPtrT>> value_high);
   TNode<JSArrayBuffer> ValidateIntegerTypedArray(
       TNode<Object> maybe_array, TNode<Context> context,
       TNode<Int32T>* out_elements_kind, TNode<RawPtrT>* out_backing_store,
@@ -705,7 +705,8 @@ void SharedArrayBufferBuiltinsAssembler::AtomicBinopBuiltinCommon(
 
   DebugSanityCheckAtomicIndex(array, index_word);
 
-  TNode<Word32T> value_word32 = TruncateTaggedToWord32(context, value_integer);
+  TNode<UintPtrT> truncated_value =
+      ChangeUint32ToWord(TruncateTaggedToWord32(context, value_integer));
 
   // Steps 8-12.
   //
@@ -722,31 +723,35 @@ void SharedArrayBufferBuiltinsAssembler::AtomicBinopBuiltinCommon(
 
   BIND(&i8);
   Return(SmiFromInt32((this->*function)(MachineType::Int8(), backing_store,
-                                        index_word, value_word32, nullptr)));
+                                        index_word, truncated_value,
+                                        base::nullopt)));
 
   BIND(&u8);
   Return(SmiFromInt32((this->*function)(MachineType::Uint8(), backing_store,
-                                        index_word, value_word32, nullptr)));
+                                        index_word, truncated_value,
+                                        base::nullopt)));
 
   BIND(&i16);
   Return(SmiFromInt32((this->*function)(MachineType::Int16(), backing_store,
-                                        WordShl(index_word, 1), value_word32,
-                                        nullptr)));
+                                        WordShl(index_word, UintPtrConstant(1)),
+                                        truncated_value, base::nullopt)));
 
   BIND(&u16);
   Return(SmiFromInt32((this->*function)(MachineType::Uint16(), backing_store,
-                                        WordShl(index_word, 1), value_word32,
-                                        nullptr)));
+                                        WordShl(index_word, UintPtrConstant(1)),
+                                        truncated_value, base::nullopt)));
 
   BIND(&i32);
   Return(ChangeInt32ToTagged(
       (this->*function)(MachineType::Int32(), backing_store,
-                        WordShl(index_word, 2), value_word32, nullptr)));
+                        WordShl(index_word, UintPtrConstant(2)),
+                        truncated_value, base::nullopt)));
 
   BIND(&u32);
   Return(ChangeUint32ToTagged(
       (this->*function)(MachineType::Uint32(), backing_store,
-                        WordShl(index_word, 2), value_word32, nullptr)));
+                        WordShl(index_word, UintPtrConstant(2)),
+                        truncated_value, base::nullopt)));
 
   BIND(&big);
   // 4. If typedArray.[[ContentType]] is BigInt, let v be ? ToBigInt(value).
@@ -769,14 +774,14 @@ void SharedArrayBufferBuiltinsAssembler::AtomicBinopBuiltinCommon(
   // This uses Uint64() intentionally: Atomic* ops are not implemented for
   // Int64(), which is fine because the machine instructions only care
   // about words.
-  Return(BigIntFromSigned64(
-      (this->*function)(MachineType::Uint64(), backing_store,
-                        WordShl(index_word, 3), var_low.value(), high)));
+  Return(BigIntFromSigned64((this->*function)(
+      MachineType::Uint64(), backing_store,
+      WordShl(index_word, UintPtrConstant(3)), var_low.value(), high)));
 
   BIND(&u64);
-  Return(BigIntFromUnsigned64(
-      (this->*function)(MachineType::Uint64(), backing_store,
-                        WordShl(index_word, 3), var_low.value(), high)));
+  Return(BigIntFromUnsigned64((this->*function)(
+      MachineType::Uint64(), backing_store,
+      WordShl(index_word, UintPtrConstant(3)), var_low.value(), high)));
 
   // This shouldn't happen, we've already validated the type.
   BIND(&other);
