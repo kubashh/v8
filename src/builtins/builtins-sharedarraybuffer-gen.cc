@@ -19,10 +19,6 @@ class SharedArrayBufferBuiltinsAssembler : public CodeStubAssembler {
       : CodeStubAssembler(state) {}
 
  protected:
-  using AssemblerFunction = Node* (CodeAssembler::*)(MachineType type,
-                                                     Node* base, Node* offset,
-                                                     Node* value,
-                                                     Node* value_high);
   TNode<JSArrayBuffer> ValidateIntegerTypedArray(
       TNode<Object> maybe_array, TNode<Context> context,
       TNode<Int32T>* out_elements_kind, TNode<RawPtrT>* out_backing_store,
@@ -32,12 +28,12 @@ class SharedArrayBufferBuiltinsAssembler : public CodeStubAssembler {
                                        TNode<Object> index,
                                        TNode<Context> context);
 
-  inline void DebugSanityCheckAtomicIndex(TNode<JSTypedArray> array,
-                                          TNode<UintPtrT> index);
+  inline void DebugCheckAtomicIndex(TNode<JSTypedArray> array,
+                                    TNode<UintPtrT> index);
 
   void AtomicBinopBuiltinCommon(TNode<Object> maybe_array, TNode<Object> index,
                                 TNode<Object> value, TNode<Context> context,
-                                AssemblerFunction function,
+                                AtomicAssemblerFunction function,
                                 Runtime::FunctionId runtime_function,
                                 const char* method_name);
 
@@ -127,9 +123,9 @@ TNode<UintPtrT> SharedArrayBufferBuiltinsAssembler::ValidateAtomicAccess(
   return index_uintptr;
 }
 
-void SharedArrayBufferBuiltinsAssembler::DebugSanityCheckAtomicIndex(
+void SharedArrayBufferBuiltinsAssembler::DebugCheckAtomicIndex(
     TNode<JSTypedArray> array, TNode<UintPtrT> index) {
-  // In Debug mode, we re-validate the index as a sanity check because ToInteger
+  // In Debug mode, we re-validate the index as a check because ToInteger
   // above calls out to JavaScript. Atomics work on ArrayBuffers, which may be
   // detached, and detachment state must be checked and throw before this
   // check. The length cannot change.
@@ -295,7 +291,7 @@ TF_BUILTIN(AtomicsStore, SharedArrayBufferBuiltinsAssembler) {
 
   TNode<Word32T> value_word32 = TruncateTaggedToWord32(context, value_integer);
 
-  DebugSanityCheckAtomicIndex(array, index_word);
+  DebugCheckAtomicIndex(array, index_word);
 
   // Steps 8-13.
   //
@@ -336,7 +332,7 @@ TF_BUILTIN(AtomicsStore, SharedArrayBufferBuiltinsAssembler) {
   // 6. If IsDetachedBuffer(buffer) is true, throw a TypeError exception.
   GotoIf(IsDetachedBuffer(array_buffer), &detached);
 
-  DebugSanityCheckAtomicIndex(array, index_word);
+  DebugCheckAtomicIndex(array, index_word);
 
   TVARIABLE(UintPtrT, var_low);
   TVARIABLE(UintPtrT, var_high);
@@ -405,7 +401,7 @@ TF_BUILTIN(AtomicsExchange, SharedArrayBufferBuiltinsAssembler) {
   // buffer to become detached.
   GotoIf(IsDetachedBuffer(array_buffer), &detached);
 
-  DebugSanityCheckAtomicIndex(array, index_word);
+  DebugCheckAtomicIndex(array, index_word);
 
   TNode<Word32T> value_word32 = TruncateTaggedToWord32(context, value_integer);
 
@@ -455,7 +451,7 @@ TF_BUILTIN(AtomicsExchange, SharedArrayBufferBuiltinsAssembler) {
   // 6. If IsDetachedBuffer(buffer) is true, throw a TypeError exception.
   GotoIf(IsDetachedBuffer(array_buffer), &detached);
 
-  DebugSanityCheckAtomicIndex(array, index_word);
+  DebugCheckAtomicIndex(array, index_word);
 
   TVARIABLE(UintPtrT, var_low);
   TVARIABLE(UintPtrT, var_high);
@@ -540,7 +536,7 @@ TF_BUILTIN(AtomicsCompareExchange, SharedArrayBufferBuiltinsAssembler) {
   // buffer to become detached.
   GotoIf(IsDetachedBuffer(array_buffer), &detached);
 
-  DebugSanityCheckAtomicIndex(array, index_word);
+  DebugCheckAtomicIndex(array, index_word);
 
   TNode<Word32T> old_value_word32 =
       TruncateTaggedToWord32(context, old_value_integer);
@@ -600,7 +596,7 @@ TF_BUILTIN(AtomicsCompareExchange, SharedArrayBufferBuiltinsAssembler) {
   // 6. If IsDetachedBuffer(buffer) is true, throw a TypeError exception.
   GotoIf(IsDetachedBuffer(array_buffer), &detached);
 
-  DebugSanityCheckAtomicIndex(array, index_word);
+  DebugCheckAtomicIndex(array, index_word);
 
   TVARIABLE(UintPtrT, var_old_low);
   TVARIABLE(UintPtrT, var_old_high);
@@ -665,7 +661,7 @@ BINOP_BUILTIN(Xor, "Atomics.xor")
 // https://tc39.es/ecma262/#sec-atomicreadmodifywrite
 void SharedArrayBufferBuiltinsAssembler::AtomicBinopBuiltinCommon(
     TNode<Object> maybe_array, TNode<Object> index, TNode<Object> value,
-    TNode<Context> context, AssemblerFunction function,
+    TNode<Context> context, AtomicAssemblerFunction function,
     Runtime::FunctionId runtime_function, const char* method_name) {
   // 1. Let buffer be ? ValidateIntegerTypedArray(typedArray).
   Label detached(this);
@@ -703,7 +699,7 @@ void SharedArrayBufferBuiltinsAssembler::AtomicBinopBuiltinCommon(
   // buffer to become detached.
   GotoIf(IsDetachedBuffer(array_buffer), &detached);
 
-  DebugSanityCheckAtomicIndex(array, index_word);
+  DebugCheckAtomicIndex(array, index_word);
 
   TNode<Word32T> value_word32 = TruncateTaggedToWord32(context, value_integer);
 
@@ -755,7 +751,7 @@ void SharedArrayBufferBuiltinsAssembler::AtomicBinopBuiltinCommon(
   // 6. If IsDetachedBuffer(buffer) is true, throw a TypeError exception.
   GotoIf(IsDetachedBuffer(array_buffer), &detached);
 
-  DebugSanityCheckAtomicIndex(array, index_word);
+  DebugCheckAtomicIndex(array, index_word);
 
   TVARIABLE(UintPtrT, var_low);
   TVARIABLE(UintPtrT, var_high);
