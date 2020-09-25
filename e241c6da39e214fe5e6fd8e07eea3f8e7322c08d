@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a0f119d_75241ae0",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-25T15:03:01Z",
+      "side": 0,
+      "message": "I started this CL by TNodifying the parameters, but then I realized that the functions that we were calling are from code-assembler so maybe it was best not to modify the functions themselves. That\u0027s why I thought defining it over at code-assembler would be better.",
+      "parentUuid": "b55088e0_9c2f5216",
+      "revId": "e241c6da39e214fe5e6fd8e07eea3f8e7322c08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d92f239_35c05353",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 5
@@ -63,6 +81,30 @@
       "revId": "e241c6da39e214fe5e6fd8e07eea3f8e7322c08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f29239e_a4bbdb4c",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-25T15:03:01Z",
+      "side": 0,
+      "message": "SGTM moved AtomicExchange downwards and did the same in the .cc",
+      "parentUuid": "c7b0d353_d0896f8d",
+      "range": {
+        "startLine": 765,
+        "startChar": 2,
+        "endLine": 765,
+        "endChar": 4
+      },
+      "revId": "e241c6da39e214fe5e6fd8e07eea3f8e7322c08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
