@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfea9280_5930da8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-25T09:53:26Z",
+      "side": 1,
+      "message": "I now added also the feature to skip tests in status file in this new mode.\n\nI broadened marking harmony/sharedarraybuffer-worker-gc-stress as slow as it also times out here.\n\nI\u0027ll land this despite some test failures, since the CI builder is experimental.",
+      "revId": "edf0f116dd5052e3fb66c1eb76768c36238cedb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
