@@ -758,15 +758,16 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   Node* AtomicStore(MachineRepresentation rep, Node* base, Node* offset,
                     Node* value, Node* value_high = nullptr);
 
+  // Type representing atomic function's signature such as AtomicAdd.
+  using AtomicAssemblerFunction = Node* (CodeAssembler::*)(MachineType type,
+                                                           Node* base,
+                                                           Node* offset,
+                                                           Node* value,
+                                                           Node* value_high);
+
   // Exchange value at raw memory location
   Node* AtomicExchange(MachineType type, Node* base, Node* offset, Node* value,
                        Node* value_high = nullptr);
-
-  // Compare and Exchange value at raw memory location
-  Node* AtomicCompareExchange(MachineType type, Node* base, Node* offset,
-                              Node* old_value, Node* new_value,
-                              Node* old_value_high = nullptr,
-                              Node* new_value_high = nullptr);
 
   Node* AtomicAdd(MachineType type, Node* base, Node* offset, Node* value,
                   Node* value_high = nullptr);
@@ -783,6 +784,11 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   Node* AtomicXor(MachineType type, Node* base, Node* offset, Node* value,
                   Node* value_high = nullptr);
 
+  // Compare and Exchange value at raw memory location
+  Node* AtomicCompareExchange(MachineType type, Node* base, Node* offset,
+                              Node* old_value, Node* new_value,
+                              Node* old_value_high = nullptr,
+                              Node* new_value_high = nullptr);
   // Store a value to the root array.
   Node* StoreRoot(RootIndex root_index, Node* value);
 
