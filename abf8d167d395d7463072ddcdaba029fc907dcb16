@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9d2f330_7483ff27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326579
+      },
+      "writtenOn": "2020-09-25T14:13:57Z",
+      "side": 1,
+      "message": "Hello,\n\nI\u0027m trying to add StackFrame::IsAsync, which is present in the javascript stack API. However I can\u0027t get this test to work. The PromiseRejectCallback only sees a single frame and IsAsync is false. Advice would be appreciated.\n\nRyan ",
+      "revId": "abf8d167d395d7463072ddcdaba029fc907dcb16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
