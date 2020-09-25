@@ -16,6 +16,114 @@
       "revId": "c903f48090171d6332bb08223869c1bb2521f18a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7898c523_6766a1a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-25T15:49:11Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "c903f48090171d6332bb08223869c1bb2521f18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "479f1e48_e49ec575",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-25T15:49:11Z",
+      "side": 1,
+      "message": "Interesting! This kind doesn\u0027t seem to be used at all.",
+      "revId": "c903f48090171d6332bb08223869c1bb2521f18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86e67434_d2f9d810",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-25T15:49:11Z",
+      "side": 1,
+      "message": "Duplicate output.",
+      "revId": "c903f48090171d6332bb08223869c1bb2521f18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09a89936_57341d26",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-25T15:49:11Z",
+      "side": 1,
+      "message": "We could print the name here: Bulitins::name(code.builtin_index());\nOr we can just ShortPrint the code object - it\u0027ll print all the details.",
+      "revId": "c903f48090171d6332bb08223869c1bb2521f18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7faa43bc_2981027d",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-25T15:49:11Z",
+      "side": 1,
+      "message": "also kAccessor and kNativeDataProperty.\nThe bits after DescriptorBits seems to be kField only.",
+      "revId": "c903f48090171d6332bb08223869c1bb2521f18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2a0db33_1a4b07fc",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-25T15:49:11Z",
+      "side": 1,
+      "message": "Cleanup suggestion: I think it\u0027s safe to make KeyedAccessStoreModeBits follow the LookupOnLookupStartObjectBits instead.",
+      "range": {
+        "startLine": 250,
+        "startChar": 6,
+        "endLine": 250,
+        "endChar": 20
+      },
+      "revId": "c903f48090171d6332bb08223869c1bb2521f18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
