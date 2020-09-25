@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "861f2696_363bf99f",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-09-25T13:21:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28eeddfb_07d1756f",
+      "range": {
+        "startLine": 173,
+        "startChar": 11,
+        "endLine": 173,
+        "endChar": 44
+      },
+      "revId": "5ef92b4a1f0041c649d272d63f0b8f18477745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56005465_259747df",
         "filename": "test/unittests/heap/cppgc/concurrent-marking-unittest.cc",
         "patchSetId": 2
@@ -70,6 +94,30 @@
       "writtenOn": "2020-09-24T08:29:55Z",
       "side": 1,
       "message": "Can we go lower without loosing too much coverage? We should make sure that unit tests run reasonably fast (also in debug modes).",
+      "range": {
+        "startLine": 103,
+        "startChar": 34,
+        "endLine": 103,
+        "endChar": 38
+      },
+      "revId": "5ef92b4a1f0041c649d272d63f0b8f18477745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5f9db53_10773d2f",
+        "filename": "test/unittests/heap/cppgc/concurrent-marking-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-09-25T13:21:12Z",
+      "side": 1,
+      "message": "I tried decreasing to 100 while working on it and did lose some coverage, so I\u0027d rather not go lower.\nAlso, these tests are only enabled for tsan builds, so it shouldn\u0027t affect the regular v8 CQ.",
+      "parentUuid": "56005465_259747df",
       "range": {
         "startLine": 103,
         "startChar": 34,
