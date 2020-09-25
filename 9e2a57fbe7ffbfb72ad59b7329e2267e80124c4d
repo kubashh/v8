@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "80fb450d_888a49ae",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afa1be62_102b9290",
+      "range": {
+        "startLine": 31,
+        "startChar": 28,
+        "endLine": 31,
+        "endChar": 55
+      },
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd8247ee_8b371a6c",
         "filename": "src/ic/handler-configuration.cc",
         "patchSetId": 1
@@ -56,6 +80,24 @@
       "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ba4cf1a_57dfbca0",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd8247ee_8b371a6c",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "a2f0aebb_f6618320",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Added CompactElementsKindToString",
+      "parentUuid": "b42abb41_0b974675",
+      "range": {
+        "startLine": 206,
+        "startChar": 27,
+        "endLine": 206,
+        "endChar": 52
+      },
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4adb5442_383a87d6",
         "filename": "src/ic/handler-configuration.cc",
         "patchSetId": 1
@@ -93,6 +159,24 @@
       "writtenOn": "2020-09-08T13:56:57Z",
       "side": 1,
       "message": "Maybe just \"in-object\" or \"out-of-object\" depending on this bit.",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f869c1eb_e0be1e81",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Leaving this out, there are several fields which could be printed nicely, but I\u0027m too lazy to go through all of them.",
+      "parentUuid": "4adb5442_383a87d6",
       "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -113,6 +197,24 @@
       "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "343e4095_0d481ad4",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "405588f2_037ccda3",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -156,6 +258,24 @@
     },
     {
       "key": {
+        "uuid": "e3c9152f_5656182a",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Planning to do it in parts like this:\n- LoadHandler::PrintHandler and StoreHandler::PrintHandler in this CL\n- LoadIC::PrintHandler, StoreIC::PrintHandler etc in a follow-up",
+      "parentUuid": "438b7f95_3dfce83f",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92f35e5a_b23a755e",
         "filename": "src/ic/handler-configuration.cc",
         "patchSetId": 1
@@ -170,6 +290,42 @@
       "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7eb3b48a_e16856be",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92f35e5a_b23a755e",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcfa1c9e_8a617dd5",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Using the ShortPrint (won\u0027t give a textual representation of valid / invalid but good enough imo)",
+      "parentUuid": "92f35e5a_b23a755e",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +346,24 @@
     },
     {
       "key": {
+        "uuid": "6524898f_f05fc98b",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "229d82d9_ce236f5d",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc385a43_72938276",
         "filename": "src/ic/handler-configuration.cc",
         "patchSetId": 1
@@ -201,6 +375,30 @@
       "writtenOn": "2020-09-08T13:56:57Z",
       "side": 1,
       "message": "data1 (holder) or just holder",
+      "range": {
+        "startLine": 270,
+        "startChar": 15,
+        "endLine": 270,
+        "endChar": 20
+      },
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79d8d795_f3aef3a2",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "It\u0027s not always the holder though, e.g., for kConstantForPrototype it\u0027s the constant. :/\n\n-\u003e leaving as is",
+      "parentUuid": "bc385a43_72938276",
       "range": {
         "startLine": 270,
         "startChar": 15,
@@ -236,6 +434,30 @@
     },
     {
       "key": {
+        "uuid": "fab4bde3_b2bd1dfe",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3689e1da_4556b573",
+      "range": {
+        "startLine": 184,
+        "startChar": 4,
+        "endLine": 184,
+        "endChar": 21
+      },
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da2534b6_c942237f",
         "filename": "src/ic/handler-configuration.h",
         "patchSetId": 1
@@ -250,6 +472,24 @@
       "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84f7cb67_1154f79f",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-09-25T15:01:50Z",
+      "side": 1,
+      "message": "Leaving this out of this CL, this can be added once we add a generic handler printing function (not only for LoadHandlers).",
+      "parentUuid": "da2534b6_c942237f",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
