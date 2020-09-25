@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "24806495_2c360248",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-25T15:49:56Z",
+      "side": 0,
+      "message": "We could still TNodify the functions in code-assembler couldn\u0027t we? Or maybe we could expose TNodified versions in code-stub-assembler instead? I thought the end goal was to avoid use of Node* anywhere outside of code-assembler so we would need to TNodify these anyway wouldn\u0027t we?",
+      "parentUuid": "5a0f119d_75241ae0",
+      "revId": "e241c6da39e214fe5e6fd8e07eea3f8e7322c08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d92f239_35c05353",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 5
