@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d257c0c_f7d25ad9",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-27T16:26:51Z",
+      "side": 1,
+      "message": "Hi guys, one more note on this. I am thinking that the NexusConfig returned should match the thread the broker is running on. At the moment, all of the FeedbackNexus instantiations are on the main thread, therefore the isolate\u0027s (mainthread) config should be used.\n\nI imagine we\u0027ll eventually be in a state where some work is still done on the main thread and other work on the background thread. This method should recognize where the broker is running and return the correct NexusConfig. Does that make sense to y\u0027all?",
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
