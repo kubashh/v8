@@ -250,6 +250,8 @@ bool IC::RecomputeHandlerForName(Handle<Object> name) {
 }
 
 void IC::UpdateState(Handle<Object> lookup_start_object, Handle<Object> name) {
+  printf("IC::UpdateState %d\n", state());
+  name->Print();
   if (state() == NO_FEEDBACK) return;
   update_lookup_start_object_map(lookup_start_object);
   if (!name->IsString()) return;
@@ -763,6 +765,9 @@ void LoadIC::UpdateCaches(LookupIterator* lookup) {
       }
     }
     code = ComputeHandler(lookup);
+    printf("Computed handler\n");
+    code->Print();
+    LoadHandler::PrintHandler(*code, std::cout);
   }
   // Can't use {lookup->name()} because the LookupIterator might be in
   // "elements" mode for keys that are strings representing integers above
@@ -2338,6 +2343,7 @@ RUNTIME_FUNCTION(Runtime_LoadIC_Miss) {
   // set up outside the IC, handle that here.
   FeedbackSlotKind kind = vector->GetKind(vector_slot);
   if (IsLoadICKind(kind)) {
+    printf("Runtime_LoadIC_Miss / IsLoadKind\n");
     LoadIC ic(isolate, vector, vector_slot, kind);
     ic.UpdateState(receiver, key);
     RETURN_RESULT_OR_FAILURE(isolate, ic.Load(receiver, key));
@@ -2371,6 +2377,8 @@ RUNTIME_FUNCTION(Runtime_LoadNoFeedbackIC_Miss) {
   // This function is only called after looking up in the ScriptContextTable so
   // it is safe to call LoadIC::Load for global loads as well.
   LoadIC ic(isolate, vector, vector_slot, kind);
+  printf("Runtime_LoadNoFeedbackIC_Miss");
+  key->Print();
   ic.UpdateState(receiver, key);
   RETURN_RESULT_OR_FAILURE(isolate, ic.Load(receiver, key));
 }

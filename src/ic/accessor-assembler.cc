@@ -68,6 +68,7 @@ TNode<MaybeObject> AccessorAssembler::TryMonomorphicCase(
     TNode<TaggedIndex> slot, TNode<FeedbackVector> vector,
     TNode<Map> lookup_start_object_map, Label* if_handler,
     TVariable<MaybeObject>* var_handler, Label* if_miss) {
+  Print("TryMonomorphicCase");
   Comment("TryMonomorphicCase");
   DCHECK_EQ(MachineRepresentation::kTagged, var_handler->rep());
 
@@ -91,6 +92,7 @@ TNode<MaybeObject> AccessorAssembler::TryMonomorphicCase(
       Load(MachineType::AnyTagged(), vector,
            IntPtrAdd(offset, IntPtrConstant(header_size + kTaggedSize))));
 
+  Print("TryMonomorphicCase / handler found");
   *var_handler = handler;
   Goto(if_handler);
   return feedback;
@@ -99,6 +101,7 @@ TNode<MaybeObject> AccessorAssembler::TryMonomorphicCase(
 void AccessorAssembler::HandlePolymorphicCase(
     TNode<Map> lookup_start_object_map, TNode<WeakFixedArray> feedback,
     Label* if_handler, TVariable<MaybeObject>* var_handler, Label* if_miss) {
+  Print("HandlePolymorphicCase");
   Comment("HandlePolymorphicCase");
   DCHECK_EQ(MachineRepresentation::kTagged, var_handler->rep());
 
@@ -126,6 +129,7 @@ void AccessorAssembler::HandlePolymorphicCase(
     // Found, now call handler.
     TNode<MaybeObject> handler =
         LoadWeakFixedArrayElement(feedback, var_index.value(), kTaggedSize);
+    Print("HandlePolymorphicCase / handler found");
     *var_handler = handler;
     Goto(if_handler);
 
@@ -141,6 +145,7 @@ void AccessorAssembler::HandleLoadICHandlerCase(
     const LazyLoadICParameters* p, TNode<Object> handler, Label* miss,
     ExitPoint* exit_point, ICMode ic_mode, OnNonExistent on_nonexistent,
     ElementSupport support_elements, LoadAccessMode access_mode) {
+  Print("HandleLoadICHandlerCase");
   Comment("have_handler");
 
   TVARIABLE(Object, var_holder, p->lookup_start_object());
@@ -313,6 +318,12 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
   TNode<IntPtrT> handler_word = SmiUntag(smi_handler);
   TNode<IntPtrT> handler_kind =
       Signed(DecodeWord<LoadHandler::KindBits>(handler_word));
+
+  if (support_elements == kSupportElements) {
+    Print("HandleLoadICSmiHandlerCase / support elements");
+  } else {
+    Print("HandleLoadICSmiHandlerCase / no support elements");
+  }
 
   if (support_elements == kSupportElements) {
     Label if_element(this), if_indexed_string(this), if_property(this),
@@ -2624,6 +2635,7 @@ void AccessorAssembler::TryProbeStubCacheTable(
            IntPtrAdd(entry_offset,
                      IntPtrConstant(offsetof(StubCache::Entry, value)))));
 
+  Print("TryProbeStubCacheTable / handler found");
   // We found the handler.
   *var_handler = handler;
   Goto(if_handler);
@@ -2673,6 +2685,8 @@ void AccessorAssembler::TryProbeStubCache(StubCache* stub_cache,
 void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
                                                ExitPoint* exit_point) {
   // Must be kept in sync with LoadIC.
+  Print("LoadIC_BytecodeHandler");
+  Print(p->name());
 
   // This function is hand-tuned to omit frame construction for common cases,
   // e.g.: monomorphic field and constant loads through smi handlers.
@@ -2702,6 +2716,7 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
         &var_handler, &try_polymorphic);
 
     BIND(&if_handler);
+    Print("LoadIC_BytecodeHandler / using the handler");
     HandleLoadICHandlerCase(p, CAST(var_handler.value()), &miss, exit_point);
 
     BIND(&try_polymorphic);
@@ -2716,6 +2731,7 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
 
   BIND(&stub_call);
   {
+    Print("LoadIC_BytecodeHandler / stub_call");
     Comment("LoadIC_BytecodeHandler_noninlined");
 
     // Call into the stub that implements the non-inlined parts of LoadIC.
@@ -2730,6 +2746,7 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
   BIND(&no_feedback);
   {
     Comment("LoadIC_BytecodeHandler_nofeedback");
+    Print("no_feedback");
     // Call into the stub that implements the non-inlined parts of LoadIC.
     exit_point->ReturnCallStub(
         Builtins::CallableFor(isolate(), Builtins::kLoadIC_NoFeedback),
@@ -2740,6 +2757,7 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
   BIND(&miss);
   {
     Comment("LoadIC_BytecodeHandler_miss");
+    Print("miss");
 
     exit_point->ReturnCallRuntime(Runtime::kLoadIC_Miss, p->context(),
                                   p->receiver(), p->name(), p->slot(),
@@ -2861,6 +2879,7 @@ void AccessorAssembler::LoadIC_Noninlined(const LoadICParameters* p,
 
   {
     // Check megamorphic case.
+    Print("LoadIC_Noninlined");
     GotoIfNot(TaggedEqual(feedback, MegamorphicSymbolConstant()), miss);
 
     TryProbeStubCache(isolate()->load_stub_cache(), p->lookup_start_object(),
@@ -3115,6 +3134,7 @@ void AccessorAssembler::LoadGlobalIC_NoFeedback(TNode<Context> context,
 
 void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p,
                                     LoadAccessMode access_mode) {
+  Print("KeyedLoadIC");
   ExitPoint direct_exit(this);
 
   TVARIABLE(MaybeObject, var_handler);
@@ -3776,6 +3796,7 @@ void AccessorAssembler::GenerateLoadIC_Megamorphic() {
 }
 
 void AccessorAssembler::GenerateLoadIC_Noninlined() {
+  Print("GenerateLoadIC_Noninlined");
   using Descriptor = LoadWithVectorDescriptor;
 
   TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
@@ -3798,6 +3819,7 @@ void AccessorAssembler::GenerateLoadIC_Noninlined() {
 
   BIND(&if_handler);
   {
+    Print("GenerateLoadIC_Noninlined / using the handler");
     LazyLoadICParameters lazy_p(&p);
     HandleLoadICHandlerCase(&lazy_p, CAST(var_handler.value()), &miss,
                             &direct_exit);
