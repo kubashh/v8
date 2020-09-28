@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "081939d6_d0cc014a",
+        "filename": "tools/system-analyzer/timeline.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-09-28T14:06:32Z",
+      "side": 1,
+      "message": "would be a nice place to use https://bugs.chromium.org/p/v8/issues/detail?id\u003d10961",
+      "revId": "fc756d5bfaba8a58f104e99f3fece356c8f066f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd6e18b2_46f585a6",
+        "filename": "tools/system-analyzer/timeline.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-09-28T14:06:32Z",
+      "side": 1,
+      "message": "should these be getters?",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 0
+      },
+      "revId": "fc756d5bfaba8a58f104e99f3fece356c8f066f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
