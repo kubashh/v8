@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11e6e02d_901ce90a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-28T17:37:38Z",
+      "side": 1,
+      "message": "PTAL.\n\nQ: Do we maybe lack an owner\u0027s check on the infra/config CQ config? I wonder how did all the CLs land that I didn\u0027t sign off?",
+      "revId": "48b053476e4b0212e6b411846d01867ef2134e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
