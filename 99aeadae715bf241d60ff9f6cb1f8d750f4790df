@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "6f12109b_96a7a5b6",
+        "filename": "src/heap/cppgc/heap-object-header.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-28T08:15:17Z",
+      "side": 1,
+      "message": "Mhm, I see, thanks!\n\nThere\u0027s some inconsistency here in Blink as well:\n- Release builds: Zero memory on free (including header) so the sweeper lock synchronizes all free memory as in-construction on a page\n- MSAN builds: We zap memory on free and memset zero on allocation -- that seems to be wrong to me.\n\nLibrary: Looking at the problem below with in-construction marking (other comment): The release store is not enough here as the write barrier (relaxed write) may be re-ordered even before the write of encoded_low_ (release store doesn\u0027t guard against that).\n\nThe original design in Blink used two properties:\na) Zero in sweeper which means that we are guaranteed to have in-construction bit set;\nb) Not mark in-construction objects;\n\nThat works as we only check in-construction bit concurrently.\n\nIn the Library we want to mark in-construction objects as well to prevent blowup.\n\nAlternatives:\n1) we would need a full fence on allocation to ensure that encoded_low_ is also published before any write barrier. I think that\u0027s too expensive.\n2) Assuming that there\u0027s only few in-construction objects: Out-of-line markbit in a hashmap and zeroing memory in the sweeper. This is probably the cheapest we can do.\n3) Going back to Blink behavior where we may blow up the in-construction worklist.\n\nI\u0027d go with (2).",
+      "parentUuid": "6867af03_423741a1",
+      "range": {
+        "startLine": 157,
+        "startChar": 10,
+        "endLine": 157,
+        "endChar": 30
+      },
+      "revId": "99aeadae715bf241d60ff9f6cb1f8d750f4790df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "10fdfe80_b5ebbb0d",
         "filename": "src/heap/cppgc/heap-page.h",
         "patchSetId": 2
@@ -234,6 +258,30 @@
       "revId": "99aeadae715bf241d60ff9f6cb1f8d750f4790df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cbb9ba8_6d2e31f3",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-28T08:15:17Z",
+      "side": 1,
+      "message": "I included this in the above comment as they are related.",
+      "parentUuid": "8e92229e_6f1aafcf",
+      "range": {
+        "startLine": 115,
+        "startChar": 5,
+        "endLine": 115,
+        "endChar": 12
+      },
+      "revId": "99aeadae715bf241d60ff9f6cb1f8d750f4790df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5af2a4f3_24fcfc32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-28T08:15:17Z",
+      "side": 1,
+      "message": "Unfortunately, it\u0027s even more complicated than you laid out here :) We can chat offline.",
+      "revId": "cc0997590a88ca1250b0e40706c29e08983a5dc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
