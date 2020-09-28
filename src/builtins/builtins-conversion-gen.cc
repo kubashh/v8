@@ -18,15 +18,15 @@ TF_BUILTIN(ToNumber, CodeStubAssembler) {
   // empty context. Context might not be needed, but it is propagated all over
   // the place and hard to pull out.
   Node* context = Parameter(Descriptor::kContext);
-  TNode<Object> input = CAST(Parameter(Descriptor::kArgument));
+  TNode<Object> input = Parameter(Descriptor::kArgument);
 
   Return(ToNumber(context, input));
 }
 
 // Like ToNumber, but also converts BigInts.
 TF_BUILTIN(ToNumberConvertBigInt, CodeStubAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> input = CAST(Parameter(Descriptor::kArgument));
+  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<Object> input = Parameter(Descriptor::kArgument);
 
   Return(ToNumber(context, input, BigIntHandling::kConvertToNumber));
 }
@@ -35,7 +35,7 @@ TF_BUILTIN(ToNumberConvertBigInt, CodeStubAssembler) {
 // Requires parameter on stack so that it can be used as a continuation from a
 // LAZY deopt.
 TF_BUILTIN(ToBooleanLazyDeoptContinuation, CodeStubAssembler) {
-  TNode<Object> value = CAST(Parameter(Descriptor::kArgument));
+  TNode<Object> value = Parameter(Descriptor::kArgument);
 
   Label return_true(this), return_false(this);
   BranchIfToBooleanIsTrue(value, &return_true, &return_false);
@@ -49,7 +49,7 @@ TF_BUILTIN(ToBooleanLazyDeoptContinuation, CodeStubAssembler) {
 
 // ES6 section 12.5.5 typeof operator
 TF_BUILTIN(Typeof, CodeStubAssembler) {
-  TNode<Object> object = CAST(Parameter(Descriptor::kObject));
+  TNode<Object> object = Parameter(Descriptor::kObject);
 
   Return(Typeof(object));
 }

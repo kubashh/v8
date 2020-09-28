@@ -16,13 +16,12 @@ namespace internal {
 
 #define DEF_BINOP(Name, Generator)                                            \
   TF_BUILTIN(Name, CodeStubAssembler) {                                       \
-    TNode<Object> lhs = CAST(Parameter(Descriptor::kLeft));                   \
-    TNode<Object> rhs = CAST(Parameter(Descriptor::kRight));                  \
-    TNode<Context> context = CAST(Parameter(Descriptor::kContext));           \
+    TNode<Object> lhs = Parameter(Descriptor::kLeft);                         \
+    TNode<Object> rhs = Parameter(Descriptor::kRight);                        \
+    TNode<Context> context = Parameter<Context>(Descriptor::kContext);        \
     TNode<HeapObject> maybe_feedback_vector =                                 \
-        CAST(Parameter(Descriptor::kMaybeFeedbackVector));                    \
-    TNode<UintPtrT> slot =                                                    \
-        UncheckedCast<UintPtrT>(Parameter(Descriptor::kSlot));                \
+        Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);              \
+    TNode<UintPtrT> slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);   \
                                                                               \
     BinaryOpAssembler binop_asm(state());                                     \
     TNode<Object> result = binop_asm.Generator(context, lhs, rhs, slot,       \
@@ -45,20 +44,19 @@ DEF_BINOP(ShiftRightLogical_WithFeedback,
           Generate_ShiftRightLogicalWithFeedback)
 #undef DEF_BINOP
 
-#define DEF_UNOP(Name, Generator)                                   \
-  TF_BUILTIN(Name, CodeStubAssembler) {                             \
-    TNode<Object> value = CAST(Parameter(Descriptor::kValue));      \
-    TNode<Context> context = CAST(Parameter(Descriptor::kContext)); \
-    TNode<HeapObject> maybe_feedback_vector =                       \
-        CAST(Parameter(Descriptor::kMaybeFeedbackVector));          \
-    TNode<UintPtrT> slot =                                          \
-        UncheckedCast<UintPtrT>(Parameter(Descriptor::kSlot));      \
-                                                                    \
-    UnaryOpAssembler a(state());                                    \
-    TNode<Object> result =                                          \
-        a.Generator(context, value, slot, maybe_feedback_vector);   \
-                                                                    \
-    Return(result);                                                 \
+#define DEF_UNOP(Name, Generator)                                           \
+  TF_BUILTIN(Name, CodeStubAssembler) {                                     \
+    TNode<Object> value = Parameter(Descriptor::kValue);                    \
+    TNode<Context> context = Parameter<Context>(Descriptor::kContext);      \
+    TNode<HeapObject> maybe_feedback_vector =                               \
+        Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);            \
+    TNode<UintPtrT> slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot); \
+                                                                            \
+    UnaryOpAssembler a(state());                                            \
+    TNode<Object> result =                                                  \
+        a.Generator(context, value, slot, maybe_feedback_vector);           \
+                                                                            \
+    Return(result);                                                         \
   }
 DEF_UNOP(BitwiseNot_WithFeedback, Generate_BitwiseNotWithFeedback)
 DEF_UNOP(Decrement_WithFeedback, Generate_DecrementWithFeedback)
@@ -68,13 +66,12 @@ DEF_UNOP(Negate_WithFeedback, Generate_NegateWithFeedback)
 
 #define DEF_COMPARE(Name)                                                      \
   TF_BUILTIN(Name##_WithFeedback, CodeStubAssembler) {                         \
-    TNode<Object> lhs = CAST(Parameter(Descriptor::kLeft));                    \
-    TNode<Object> rhs = CAST(Parameter(Descriptor::kRight));                   \
-    TNode<Context> context = CAST(Parameter(Descriptor::kContext));            \
+    TNode<Object> lhs = Parameter(Descriptor::kLeft);                          \
+    TNode<Object> rhs = Parameter(Descriptor::kRight);                         \
+    TNode<Context> context = Parameter<Context>(Descriptor::kContext);         \
     TNode<HeapObject> maybe_feedback_vector =                                  \
-        CAST(Parameter(Descriptor::kMaybeFeedbackVector));                     \
-    TNode<UintPtrT> slot =                                                     \
-        UncheckedCast<UintPtrT>(Parameter(Descriptor::kSlot));                 \
+        Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);               \
+    TNode<UintPtrT> slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);    \
                                                                                \
     TVARIABLE(Smi, var_type_feedback);                                         \
     TNode<Oddball> result = RelationalComparison(Operation::k##Name, lhs, rhs, \
@@ -90,12 +87,12 @@ DEF_COMPARE(GreaterThanOrEqual)
 #undef DEF_COMPARE
 
 TF_BUILTIN(Equal_WithFeedback, CodeStubAssembler) {
-  TNode<Object> lhs = CAST(Parameter(Descriptor::kLeft));
-  TNode<Object> rhs = CAST(Parameter(Descriptor::kRight));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> lhs = Parameter(Descriptor::kLeft);
+  TNode<Object> rhs = Parameter(Descriptor::kRight);
+  TNode<Context> context = Parameter<Context>(Descriptor::kContext);
   TNode<HeapObject> maybe_feedback_vector =
-      CAST(Parameter(Descriptor::kMaybeFeedbackVector));
-  TNode<UintPtrT> slot = UncheckedCast<UintPtrT>(Parameter(Descriptor::kSlot));
+      Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);
+  TNode<UintPtrT> slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
 
   TVARIABLE(Smi, var_type_feedback);
   TNode<Oddball> result = Equal(lhs, rhs, context, &var_type_feedback);
@@ -105,11 +102,11 @@ TF_BUILTIN(Equal_WithFeedback, CodeStubAssembler) {
 }
 
 TF_BUILTIN(StrictEqual_WithFeedback, CodeStubAssembler) {
-  TNode<Object> lhs = CAST(Parameter(Descriptor::kLeft));
-  TNode<Object> rhs = CAST(Parameter(Descriptor::kRight));
+  TNode<Object> lhs = Parameter(Descriptor::kLeft);
+  TNode<Object> rhs = Parameter(Descriptor::kRight);
   TNode<HeapObject> maybe_feedback_vector =
-      CAST(Parameter(Descriptor::kMaybeFeedbackVector));
-  TNode<UintPtrT> slot = UncheckedCast<UintPtrT>(Parameter(Descriptor::kSlot));
+      Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);
+  TNode<UintPtrT> slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
 
   TVARIABLE(Smi, var_type_feedback);
   TNode<Oddball> result = StrictEqual(lhs, rhs, &var_type_feedback);

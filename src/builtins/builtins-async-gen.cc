@@ -303,8 +303,8 @@ TNode<Context> AsyncBuiltinsAssembler::AllocateAsyncIteratorValueUnwrapContext(
 }
 
 TF_BUILTIN(AsyncIteratorValueUnwrap, AsyncBuiltinsAssembler) {
-  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> value = Parameter(Descriptor::kValue);
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   const TNode<Object> done =
       LoadContextElement(context, ValueUnwrapContext::kDoneSlot);

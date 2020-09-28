@@ -566,7 +566,17 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   static constexpr int kTargetParameterIndex = -1;
 
-  Node* Parameter(int value);
+  template <class T = Object>
+  TNode<T> Parameter(int value) {
+    return CAST(UntypedParameter(value));
+  }
+
+  template <class T>
+  TNode<T> UncheckedParameter(int value) {
+    return UncheckedCast<T>(UntypedParameter(value));
+  }
+
+  Node* UntypedParameter(int value);
 
   TNode<Context> GetJSContextParameter();
   void Return(TNode<Object> value);

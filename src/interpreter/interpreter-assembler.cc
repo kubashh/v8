@@ -30,19 +30,18 @@ InterpreterAssembler::InterpreterAssembler(CodeAssemblerState* state,
       bytecode_(bytecode),
       operand_scale_(operand_scale),
       TVARIABLE_CONSTRUCTOR(interpreted_frame_pointer_),
-      TVARIABLE_CONSTRUCTOR(
-          bytecode_array_,
-          CAST(Parameter(InterpreterDispatchDescriptor::kBytecodeArray))),
+      TVARIABLE_CONSTRUCTOR(bytecode_array_,
+                            Parameter<BytecodeArray>(
+                                InterpreterDispatchDescriptor::kBytecodeArray)),
       TVARIABLE_CONSTRUCTOR(
           bytecode_offset_,
-          UncheckedCast<IntPtrT>(
-              Parameter(InterpreterDispatchDescriptor::kBytecodeOffset))),
+          UncheckedParameter<IntPtrT>(
+              InterpreterDispatchDescriptor::kBytecodeOffset)),
+      TVARIABLE_CONSTRUCTOR(dispatch_table_,
+                            UncheckedParameter<ExternalReference>(
+                                InterpreterDispatchDescriptor::kDispatchTable)),
       TVARIABLE_CONSTRUCTOR(
-          dispatch_table_, UncheckedCast<ExternalReference>(Parameter(
-                               InterpreterDispatchDescriptor::kDispatchTable))),
-      TVARIABLE_CONSTRUCTOR(
-          accumulator_,
-          CAST(Parameter(InterpreterDispatchDescriptor::kAccumulator))),
+          accumulator_, Parameter(InterpreterDispatchDescriptor::kAccumulator)),
       accumulator_use_(AccumulatorUse::kNone),
       made_call_(false),
       reloaded_frame_ptr_(false),

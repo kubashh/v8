@@ -114,7 +114,7 @@ Handle<Code> BuildSetupFunction(Isolate* isolate,
   }
   params.push_back(state_out);
   // Then take each element of the initial state and pass them as arguments.
-  TNode<FixedArray> state_in = __ Cast(__ Parameter(2));
+  auto state_in = __ Parameter<FixedArray>(2);
   for (int i = 0; i < static_cast<int>(parameters.size()); i++) {
     Node* element = __ LoadFixedArrayElement(state_in, __ IntPtrConstant(i));
     // Unbox all elements before passing them as arguments.
@@ -203,10 +203,10 @@ Handle<Code> BuildTeardownFunction(Isolate* isolate,
                                    std::vector<AllocatedOperand> parameters) {
   CodeAssemblerTester tester(isolate, call_descriptor, "teardown");
   CodeStubAssembler assembler(tester.state());
-  TNode<FixedArray> result_array = __ Cast(__ Parameter(1));
+  auto result_array = __ Parameter<FixedArray>(1);
   for (int i = 0; i < static_cast<int>(parameters.size()); i++) {
     // The first argument is not used and the second is "result_array".
-    Node* param = __ Parameter(i + 2);
+    Node* param = __ UntypedParameter(i + 2);
     switch (parameters[i].representation()) {
       case MachineRepresentation::kTagged:
         __ StoreFixedArrayElement(result_array, i, param,

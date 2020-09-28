@@ -540,16 +540,16 @@ TNode<String> StringBuiltinsAssembler::DerefIndirectString(
 }
 
 TF_BUILTIN(StringAdd_CheckNone, StringBuiltinsAssembler) {
-  TNode<String> left = CAST(Parameter(Descriptor::kLeft));
-  TNode<String> right = CAST(Parameter(Descriptor::kRight));
+  auto left = Parameter<String>(Descriptor::kLeft);
+  auto right = Parameter<String>(Descriptor::kRight);
   Node* context = Parameter(Descriptor::kContext);
   Return(StringAdd(context, left, right));
 }
 
 TF_BUILTIN(SubString, StringBuiltinsAssembler) {
-  TNode<String> string = CAST(Parameter(Descriptor::kString));
-  TNode<Smi> from = CAST(Parameter(Descriptor::kFrom));
-  TNode<Smi> to = CAST(Parameter(Descriptor::kTo));
+  auto string = Parameter<String>(Descriptor::kString);
+  auto from = Parameter<Smi>(Descriptor::kFrom);
+  auto to = Parameter<Smi>(Descriptor::kTo);
   Return(SubString(string, SmiUntag(from), SmiUntag(to)));
 }
 
@@ -723,40 +723,39 @@ void StringBuiltinsAssembler::GenerateStringRelationalComparison(
 }
 
 TF_BUILTIN(StringEqual, StringBuiltinsAssembler) {
-  TNode<String> left = CAST(Parameter(Descriptor::kLeft));
-  TNode<String> right = CAST(Parameter(Descriptor::kRight));
+  auto left = Parameter<String>(Descriptor::kLeft);
+  auto right = Parameter<String>(Descriptor::kRight);
   GenerateStringEqual(left, right);
 }
 
 TF_BUILTIN(StringLessThan, StringBuiltinsAssembler) {
-  TNode<String> left = CAST(Parameter(Descriptor::kLeft));
-  TNode<String> right = CAST(Parameter(Descriptor::kRight));
+  auto left = Parameter<String>(Descriptor::kLeft);
+  auto right = Parameter<String>(Descriptor::kRight);
   GenerateStringRelationalComparison(left, right, Operation::kLessThan);
 }
 
 TF_BUILTIN(StringLessThanOrEqual, StringBuiltinsAssembler) {
-  TNode<String> left = CAST(Parameter(Descriptor::kLeft));
-  TNode<String> right = CAST(Parameter(Descriptor::kRight));
+  auto left = Parameter<String>(Descriptor::kLeft);
+  auto right = Parameter<String>(Descriptor::kRight);
   GenerateStringRelationalComparison(left, right, Operation::kLessThanOrEqual);
 }
 
 TF_BUILTIN(StringGreaterThan, StringBuiltinsAssembler) {
-  TNode<String> left = CAST(Parameter(Descriptor::kLeft));
-  TNode<String> right = CAST(Parameter(Descriptor::kRight));
+  auto left = Parameter<String>(Descriptor::kLeft);
+  auto right = Parameter<String>(Descriptor::kRight);
   GenerateStringRelationalComparison(left, right, Operation::kGreaterThan);
 }
 
 TF_BUILTIN(StringGreaterThanOrEqual, StringBuiltinsAssembler) {
-  TNode<String> left = CAST(Parameter(Descriptor::kLeft));
-  TNode<String> right = CAST(Parameter(Descriptor::kRight));
+  auto left = Parameter<String>(Descriptor::kLeft);
+  auto right = Parameter<String>(Descriptor::kRight);
   GenerateStringRelationalComparison(left, right,
                                      Operation::kGreaterThanOrEqual);
 }
 
 TF_BUILTIN(StringCodePointAt, StringBuiltinsAssembler) {
-  TNode<String> receiver = CAST(Parameter(Descriptor::kReceiver));
-  TNode<IntPtrT> position =
-      UncheckedCast<IntPtrT>(Parameter(Descriptor::kPosition));
+  auto receiver = Parameter<String>(Descriptor::kReceiver);
+  auto position = UncheckedParameter<IntPtrT>(Descriptor::kPosition);
 
   // TODO(sigurds) Figure out if passing length as argument pays off.
   TNode<IntPtrT> length = LoadStringLengthAsWord(receiver);
@@ -770,9 +769,8 @@ TF_BUILTIN(StringCodePointAt, StringBuiltinsAssembler) {
 }
 
 TF_BUILTIN(StringFromCodePointAt, StringBuiltinsAssembler) {
-  TNode<String> receiver = CAST(Parameter(Descriptor::kReceiver));
-  TNode<IntPtrT> position =
-      UncheckedCast<IntPtrT>(Parameter(Descriptor::kPosition));
+  auto receiver = Parameter<String>(Descriptor::kReceiver);
+  auto position = UncheckedParameter<IntPtrT>(Descriptor::kPosition);
 
   // TODO(sigurds) Figure out if passing length as argument pays off.
   TNode<IntPtrT> length = LoadStringLengthAsWord(receiver);
@@ -792,8 +790,8 @@ TF_BUILTIN(StringFromCharCode, StringBuiltinsAssembler) {
   // TODO(ishell): use constants from Descriptor once the JSFunction linkage
   // arguments are reordered.
   TNode<Int32T> argc =
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   CodeStubArguments arguments(this, argc);
   // Check if we have exactly one argument (plus the implicit receiver), i.e.
@@ -1064,9 +1062,9 @@ void StringBuiltinsAssembler::StringIndexOf(
 // #sec-string.prototype.indexof
 // Unchecked helper for builtins lowering.
 TF_BUILTIN(StringIndexOf, StringBuiltinsAssembler) {
-  TNode<String> receiver = CAST(Parameter(Descriptor::kReceiver));
-  TNode<String> search_string = CAST(Parameter(Descriptor::kSearchString));
-  TNode<Smi> position = CAST(Parameter(Descriptor::kPosition));
+  auto receiver = Parameter<String>(Descriptor::kReceiver);
+  auto search_string = Parameter<String>(Descriptor::kSearchString);
+  auto position = Parameter<Smi>(Descriptor::kPosition);
   StringIndexOf(receiver, search_string, position,
                 [this](TNode<Smi> result) { this->Return(result); });
 }
@@ -1075,8 +1073,8 @@ TF_BUILTIN(StringIndexOf, StringBuiltinsAssembler) {
 // #sec-string.prototype.includes
 TF_BUILTIN(StringPrototypeIncludes, StringIncludesIndexOfAssembler) {
   TNode<IntPtrT> argc = ChangeInt32ToIntPtr(
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount));
+  auto context = Parameter<Context>(Descriptor::kContext);
   Generate(kIncludes, argc, context);
 }
 
@@ -1084,8 +1082,8 @@ TF_BUILTIN(StringPrototypeIncludes, StringIncludesIndexOfAssembler) {
 // #sec-string.prototype.indexof
 TF_BUILTIN(StringPrototypeIndexOf, StringIncludesIndexOfAssembler) {
   TNode<IntPtrT> argc = ChangeInt32ToIntPtr(
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount));
+  auto context = Parameter<Context>(Descriptor::kContext);
   Generate(kIndexOf, argc, context);
 }
 
@@ -1276,10 +1274,10 @@ TNode<String> StringBuiltinsAssembler::GetSubstitution(
 TF_BUILTIN(StringPrototypeReplace, StringBuiltinsAssembler) {
   Label out(this);
 
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
-  const TNode<Object> search = CAST(Parameter(Descriptor::kSearch));
-  const TNode<Object> replace = CAST(Parameter(Descriptor::kReplace));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> receiver = Parameter(Descriptor::kReceiver);
+  const TNode<Object> search = Parameter(Descriptor::kSearch);
+  const TNode<Object> replace = Parameter(Descriptor::kReplace);
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   const TNode<Smi> smi_zero = SmiConstant(0);
 
@@ -1503,9 +1501,9 @@ class StringMatchSearchAssembler : public StringBuiltinsAssembler {
 
 // ES6 #sec-string.prototype.match
 TF_BUILTIN(StringPrototypeMatch, StringMatchSearchAssembler) {
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
-  TNode<Object> maybe_regexp = CAST(Parameter(Descriptor::kRegexp));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> receiver = Parameter(Descriptor::kReceiver);
+  TNode<Object> maybe_regexp = Parameter(Descriptor::kRegexp);
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   Generate(kMatch, "String.prototype.match", receiver, maybe_regexp, context);
 }
@@ -1514,9 +1512,9 @@ TF_BUILTIN(StringPrototypeMatch, StringMatchSearchAssembler) {
 TF_BUILTIN(StringPrototypeMatchAll, StringBuiltinsAssembler) {
   char const* method_name = "String.prototype.matchAll";
 
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> maybe_regexp = CAST(Parameter(Descriptor::kRegexp));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<Object> maybe_regexp = Parameter(Descriptor::kRegexp);
+  TNode<Object> receiver = Parameter(Descriptor::kReceiver);
   TNode<NativeContext> native_context = LoadNativeContext(context);
 
   // 1. Let O be ? RequireObjectCoercible(this value).
@@ -1611,9 +1609,9 @@ TF_BUILTIN(StringPrototypeMatchAll, StringBuiltinsAssembler) {
 
 // ES6 #sec-string.prototype.search
 TF_BUILTIN(StringPrototypeSearch, StringMatchSearchAssembler) {
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
-  TNode<Object> maybe_regexp = CAST(Parameter(Descriptor::kRegexp));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> receiver = Parameter(Descriptor::kReceiver);
+  TNode<Object> maybe_regexp = Parameter(Descriptor::kRegexp);
+  auto context = Parameter<Context>(Descriptor::kContext);
   Generate(kSearch, "String.prototype.search", receiver, maybe_regexp, context);
 }
 
@@ -1703,13 +1701,13 @@ TF_BUILTIN(StringPrototypeSplit, StringBuiltinsAssembler) {
   const int kLimitArg = 1;
 
   const TNode<IntPtrT> argc = ChangeInt32ToIntPtr(
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount));
   CodeStubArguments args(this, argc);
 
   TNode<Object> receiver = args.GetReceiver();
   const TNode<Object> separator = args.GetOptionalArgumentValue(kSeparatorArg);
   const TNode<Object> limit = args.GetOptionalArgumentValue(kLimitArg);
-  TNode<NativeContext> context = CAST(Parameter(Descriptor::kContext));
+  auto context = Parameter<NativeContext>(Descriptor::kContext);
 
   TNode<Smi> smi_zero = SmiConstant(0);
 
@@ -1800,9 +1798,9 @@ TF_BUILTIN(StringPrototypeSplit, StringBuiltinsAssembler) {
 }
 
 TF_BUILTIN(StringSubstring, StringBuiltinsAssembler) {
-  TNode<String> string = CAST(Parameter(Descriptor::kString));
-  TNode<IntPtrT> from = UncheckedCast<IntPtrT>(Parameter(Descriptor::kFrom));
-  TNode<IntPtrT> to = UncheckedCast<IntPtrT>(Parameter(Descriptor::kTo));
+  auto string = Parameter<String>(Descriptor::kString);
+  auto from = UncheckedParameter<IntPtrT>(Descriptor::kFrom);
+  auto to = UncheckedParameter<IntPtrT>(Descriptor::kTo);
 
   Return(SubString(string, from, to));
 }
@@ -1810,8 +1808,8 @@ TF_BUILTIN(StringSubstring, StringBuiltinsAssembler) {
 // ES6 #sec-string.prototype.trim
 TF_BUILTIN(StringPrototypeTrim, StringTrimAssembler) {
   TNode<IntPtrT> argc = ChangeInt32ToIntPtr(
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount));
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   Generate(String::kTrim, "String.prototype.trim", argc, context);
 }
@@ -1819,8 +1817,8 @@ TF_BUILTIN(StringPrototypeTrim, StringTrimAssembler) {
 // https://github.com/tc39/proposal-string-left-right-trim
 TF_BUILTIN(StringPrototypeTrimStart, StringTrimAssembler) {
   TNode<IntPtrT> argc = ChangeInt32ToIntPtr(
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount));
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   Generate(String::kTrimStart, "String.prototype.trimLeft", argc, context);
 }
@@ -1828,8 +1826,8 @@ TF_BUILTIN(StringPrototypeTrimStart, StringTrimAssembler) {
 // https://github.com/tc39/proposal-string-left-right-trim
 TF_BUILTIN(StringPrototypeTrimEnd, StringTrimAssembler) {
   TNode<IntPtrT> argc = ChangeInt32ToIntPtr(
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount));
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   Generate(String::kTrimEnd, "String.prototype.trimRight", argc, context);
 }

@@ -1031,10 +1031,10 @@ void KeyedStoreGenericAssembler::KeyedStoreGeneric(
 void KeyedStoreGenericAssembler::KeyedStoreGeneric() {
   using Descriptor = StoreDescriptor;
 
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
-  TNode<Object> name = CAST(Parameter(Descriptor::kName));
-  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> receiver = Parameter(Descriptor::kReceiver);
+  TNode<Object> name = Parameter(Descriptor::kName);
+  TNode<Object> value = Parameter(Descriptor::kValue);
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   KeyedStoreGeneric(context, receiver, name, value, Nothing<LanguageMode>());
 }
@@ -1050,11 +1050,11 @@ void KeyedStoreGenericAssembler::SetProperty(TNode<Context> context,
 void KeyedStoreGenericAssembler::StoreIC_NoFeedback() {
   using Descriptor = StoreDescriptor;
 
-  TNode<Object> receiver_maybe_smi = CAST(Parameter(Descriptor::kReceiver));
-  TNode<Object> name = CAST(Parameter(Descriptor::kName));
-  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
-  TNode<TaggedIndex> slot = CAST(Parameter(Descriptor::kSlot));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> receiver_maybe_smi = Parameter(Descriptor::kReceiver);
+  TNode<Object> name = Parameter(Descriptor::kName);
+  TNode<Object> value = Parameter(Descriptor::kValue);
+  auto slot = Parameter<TaggedIndex>(Descriptor::kSlot);
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   Label miss(this, Label::kDeferred), store_property(this);
 
