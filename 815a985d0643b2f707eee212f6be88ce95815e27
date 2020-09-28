@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "41c3c839_a9452c22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-28T09:54:04Z",
+      "side": 1,
+      "message": "Thanks Santiago! Comments below.",
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d257c0c_f7d25ad9",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 22
@@ -48,6 +65,24 @@
       "side": 1,
       "message": "I thought that was the idea behind the TODO comment above, that we said it would be addressed in a follow-up CL. What would be the change?",
       "parentUuid": "6d257c0c_f7d25ad9",
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92134862_0f49083e",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-28T09:54:04Z",
+      "side": 1,
+      "message": "Yeah, that is still correct! I am just saying that I have an idea about the *nature* of that change to come.\n\nYou see, at the moment, we look at the vector through the FeedbackNexus as we build those ProcessedFeedback objects. And at this moment, that is done during serialization. This process still occurs on the main thread. So it would be necessary to keep using the main thread NexusConfig. But we are gradually serializing less. At some point, I hope that we\u0027ll be constructing the ProcessedFeedback objects during native context specialization (again, as we used to).\n\nNow, that takes place on the background thread when concurrent inlining is on. My hope is that it remains there, and we build those objects from the background thread with direct reads. When FeedbackNexus objects are created in this context, they need a NexusConfig which is passed a LocalHeap and follows background thread semantics.\n\nI\u0027m not proposing any change to this CL, I\u0027m just talking about what comes next.",
+      "parentUuid": "ec18eda0_47ece69d",
       "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
