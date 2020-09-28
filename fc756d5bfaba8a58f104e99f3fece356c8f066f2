@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4d40ecee_d9a350c4",
+        "filename": "tools/system-analyzer/timeline.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-28T14:41:54Z",
+      "side": 1,
+      "message": "oh yeah!",
+      "parentUuid": "081939d6_d0cc014a",
+      "revId": "fc756d5bfaba8a58f104e99f3fece356c8f066f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd6e18b2_46f585a6",
         "filename": "tools/system-analyzer/timeline.mjs",
         "patchSetId": 2
@@ -39,6 +57,30 @@
       "revId": "fc756d5bfaba8a58f104e99f3fece356c8f066f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91d5463c_79ec1908",
+        "filename": "tools/system-analyzer/timeline.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-28T14:41:54Z",
+      "side": 1,
+      "message": "We should probably turn them all into getters.\nAdding a todo on my site.",
+      "parentUuid": "fd6e18b2_46f585a6",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 0
+      },
+      "revId": "fc756d5bfaba8a58f104e99f3fece356c8f066f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
