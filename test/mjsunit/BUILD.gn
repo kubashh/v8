@@ -12,9 +12,23 @@ group("v8_mjsunit") {
 
   data = [
     "./",
+    "../../tools/arguments.js",
     "../../tools/clusterfuzz/v8_mock.js",
     "../../tools/clusterfuzz/v8_mock_archs.js",
     "../../tools/clusterfuzz/v8_mock_webassembly.js",
+<<<<<<< HEAD
+    "../../tools/codemap.js",
+    "../../tools/consarray.js",
+    "../../tools/csvparser.js",
+    "../../tools/dumpcpp.js",
+    "../../tools/logreader.js",
+    "../../tools/profile.js",
+    "../../tools/profile_view.js",
+    "../../tools/splaytree.js",
+    "../../tools/system-analyzer/log/log.mjs",
+    "../../tools/system-analyzer/timeline.mjs",
+    "../../tools/tickprocessor.js",
+=======
     "../../tools/codemap.mjs",
     "../../tools/consarray.mjs",
     "../../tools/csvparser.mjs",
@@ -25,5 +39,6 @@ group("v8_mjsunit") {
     "../../tools/splaytree.mjs",
     "../../tools/tickprocessor.mjs",
     "../../tools/dumpcpp.mjs",
+>>>>>>> 94bce1dcaca3b42bbdca5ca8d3ca81abfcbc245b
   ]
 }
