@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "c9fcb7b5_794af1bf",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-28T09:58:49Z",
+      "side": 0,
+      "message": "Hm, so the idea would be to:\n1) Keep the code-assembler methods as Node*.\n2) Create code-stub-assembler methods with TNodes that call the Node* ones from code-assembler.\n3) Make the builtin here call the methods from CSA rather than from code-assembler directly.\n\nIs this reasoning correct? Or do we want to TNodify the methods from code-assembler\u0027s API too (i.e the ones called from outside compiler/)?",
+      "parentUuid": "cd0a2383_8118737d",
+      "revId": "e241c6da39e214fe5e6fd8e07eea3f8e7322c08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d92f239_35c05353",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 5
