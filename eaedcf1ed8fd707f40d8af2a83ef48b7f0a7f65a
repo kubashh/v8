@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "7a145b22_6f236368",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-28T08:37:11Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "4960e3ca_c7bf325d",
+      "range": {
+        "startLine": 108,
+        "startChar": 24,
+        "endLine": 109,
+        "endChar": 13
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4eb7e95_ddca37d3",
         "filename": "src/handles/maybe-handles.h",
         "patchSetId": 20
@@ -118,6 +142,30 @@
       "side": 1,
       "message": "I\u0027m definitely interested in that (unifying as we see fit). If it\u0027s alright I will not try that in this CL. But I\u0027d be happy to follow up later and do that.",
       "parentUuid": "e4eb7e95_ddca37d3",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "eaedcf1ed8fd707f40d8af2a83ef48b7f0a7f65a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a793751_d36398b6",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-28T08:37:11Z",
+      "side": 1,
+      "message": "As a follow-up SGTM.",
+      "parentUuid": "eaf411ad_03b0389c",
       "range": {
         "startLine": 47,
         "startChar": 0,

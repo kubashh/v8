@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fc654f59_92c26edf",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-28T08:37:11Z",
+      "side": 1,
+      "message": "Resolving since it is an outdated comment now.",
+      "parentUuid": "6d13ba32_5c041603",
+      "range": {
+        "startLine": 957,
+        "startChar": 0,
+        "endLine": 959,
+        "endChar": 50
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09f723a6_c6c37d30",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 4
@@ -537,6 +561,30 @@
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aca47a53_b79232ee",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-28T08:37:11Z",
+      "side": 1,
+      "message": "Resolving my own comment since it has been addressed in PS21",
+      "parentUuid": "b1b6bf33_18319804",
+      "range": {
+        "startLine": 116,
+        "startChar": 47,
+        "endLine": 116,
+        "endChar": 49
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -16,6 +16,29 @@
       "revId": "247d2fc148834d90b0fa00ba86e2a68ab517a0bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "757f1cf1_eb221322",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-28T08:37:11Z",
+      "side": 1,
+      "message": "non-blocker nit: We had a discussion in another CL regarding naming and we are planning on using acquire/release on names instead of synchronized. WDYT about changing this to AcquireSlot and ReleaseSetSlot?\n\nFor reference, this is the CL I am talking about https://chromium-review.googlesource.com/c/v8/v8/+/2424130\n\nFYI, even in that CL we are still having discussions regarding naming so I\u0027d say this is a non-blocker and something to keep in mind for a future cleanup",
+      "range": {
+        "startLine": 223,
+        "startChar": 21,
+        "endLine": 223,
+        "endChar": 36
+      },
+      "revId": "247d2fc148834d90b0fa00ba86e2a68ab517a0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
