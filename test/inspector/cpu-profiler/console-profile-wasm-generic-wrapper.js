@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 // TODO(v8:10266): Figure out why this fails on tsan with --always-opt.
-// Flags: --no-always-opt --no-wasm-generic-wrapper
+// Flags: --no-always-opt --wasm-generic-wrapper
 
 let {session, contextGroup, Protocol} = InspectorTest.start(
     'Test that console profiles contain wasm function names.');
@@ -62,8 +62,8 @@ function checkError(message) {
         e.params.profile.nodes.map(n => n.callFrame.functionName);
     // InspectorTest.log(function_names.join(', '));
     // Check for at least one full cycle of
-    // fib -> wasm-to-js -> imp -> js-to-wasm -> fib.
-    const expected = ['fib', 'wasm-to-js:i:i', 'imp', 'js-to-wasm:i:i', 'fib'];
+    // fib -> wasm-to-js -> imp -> GenericJSToWasmWrapper -> fib.
+    const expected = ['fib', 'wasm-to-js:i:i', 'imp', 'GenericJSToWasmWrapper', 'fib'];
     for (let i = 0; i <= function_names.length - expected.length; ++i) {
       if (expected.every((val, idx) => val == function_names[i + idx])) {
         found_good_profile = true;
