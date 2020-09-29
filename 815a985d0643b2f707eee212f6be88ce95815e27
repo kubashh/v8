@@ -121,6 +121,121 @@
       "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "91e8f851_60bea151",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-29T13:38:57Z",
+      "side": 1,
+      "message": "Looks like it could be simplified by having the cache_ itself being a std::pair, wdyt?",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 410,
+        "endChar": 44
+      },
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d93a719b_a269d830",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-29T13:38:57Z",
+      "side": 1,
+      "message": "Could it be worth attaching those to MaybeObject directly? E.g. 3 overloads for a MaybeObject::Create()?",
+      "range": {
+        "startLine": 415,
+        "startChar": 0,
+        "endLine": 419,
+        "endChar": 1
+      },
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89e1fdf3_bdd22a19",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-29T13:38:57Z",
+      "side": 1,
+      "message": "I think we should extract the assert\u0027s condition into a reusable trait, i.e.\n\n  template\u003ctypename T\u003e\n  struct IsValidFeedbackType\n    : public std::integral_constant\u003cbool, \n      std::is_base_of\u003cMaybeObject, T\u003e::value \n        || std::is_same\u003cT, Smi\u003e::value\n        || std::is_base_of\u003cObject, T\u003e::value\u003e \n  {};",
+      "range": {
+        "startLine": 422,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 67
+      },
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e849a4b7_6c3e5622",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-29T13:38:57Z",
+      "side": 1,
+      "message": "like that!",
+      "range": {
+        "startLine": 605,
+        "startChar": 0,
+        "endLine": 610,
+        "endChar": 31
+      },
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "78d8562f_bab63a09",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-29T13:38:57Z",
+      "side": 1,
+      "message": "Have you considered my comment about using a base::Optional\u003cMabyeObjectHandle\u003e here to avoid the additional bool flags? If so, please share why this is preferable. 😊",
+      "range": {
+        "startLine": 814,
+        "startChar": 0,
+        "endLine": 817,
+        "endChar": 29
+      },
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
