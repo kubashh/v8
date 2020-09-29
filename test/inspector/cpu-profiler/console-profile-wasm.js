@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 // TODO(v8:10266): Figure out why this fails on tsan with --always-opt.
-// Flags: --no-always-opt
+// Flags: --no-always-opt --no-wasm-generic-wrapper
 
 let {session, contextGroup, Protocol} = InspectorTest.start(
     'Test that console profiles contain wasm function names.');

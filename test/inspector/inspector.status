@@ -143,4 +143,10 @@
   'debugger/wasm-stepping-with-skiplist': [SKIP],
 }], # stress_js_bg_compile_wasm_code_gc
 
+##############################################################################
+['variant == nooptimization', {
+  # Skip test because of conflicting flags.
+  'cpu-profiler/console-profile-wasm': [SKIP],
+}], # nooptimization
+
 ]
