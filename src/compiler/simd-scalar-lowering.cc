@@ -976,20 +976,24 @@ void SimdScalarLowering::LowerConvertFromInt(Node* node,
   Node** rep = GetReplacementsWithType(node->InputAt(0), input_rep_type);
 
   int32_t mask = 0;
+  const Operator* sign_extend;
   if (input_rep_type == SimdType::kInt16x8) {
     DCHECK_EQ(output_rep_type, SimdType::kInt32x4);
     mask = kMask16;
+    sign_extend = machine()->SignExtendWord16ToInt32();
   } else {
     DCHECK_EQ(output_rep_type, SimdType::kInt16x8);
     DCHECK_EQ(input_rep_type, SimdType::kInt8x16);
     mask = kMask8;
+    sign_extend = machine()->SignExtendWord8ToInt32();
   }
 
   int num_lanes = NumLanes(output_rep_type);
   Node** rep_node = zone()->NewArray<Node*>(num_lanes);
   for (int i = 0; i < num_lanes; ++i) {
-    rep_node[i] =
-        is_signed ? rep[i + start_index] : Mask(rep[i + start_index], mask);
+    rep_node[i] = is_signed
+                      ? graph()->NewNode(sign_extend, rep[i + start_index])
+                      : Mask(rep[i + start_index], mask);
   }
 
   ReplaceNode(node, rep_node, num_lanes);
@@ -1010,7 +1014,7 @@ void SimdScalarLowering::LowerPack(Node* node, SimdType input_rep_type,
       min = mcgraph_->Int32Constant(std::numeric_limits<int16_t>::min());
       max = mcgraph_->Int32Constant(std::numeric_limits<int16_t>::max());
     } else {
-      min = mcgraph_->Int32Constant(std::numeric_limits<uint16_t>::min());
+      min = mcgraph_->Uint32Constant(std::numeric_limits<uint16_t>::min());
       max = mcgraph_->Uint32Constant(std::numeric_limits<uint16_t>::max());
     }
     phi_rep = MachineRepresentation::kWord16;
@@ -1021,7 +1025,7 @@ void SimdScalarLowering::LowerPack(Node* node, SimdType input_rep_type,
       min = mcgraph_->Int32Constant(std::numeric_limits<int8_t>::min());
       max = mcgraph_->Int32Constant(std::numeric_limits<int8_t>::max());
     } else {
-      min = mcgraph_->Int32Constant(std::numeric_limits<uint8_t>::min());
+      min = mcgraph_->Uint32Constant(std::numeric_limits<uint8_t>::min());
       max = mcgraph_->Uint32Constant(std::numeric_limits<uint8_t>::max());
     }
     phi_rep = MachineRepresentation::kWord8;
@@ -2255,7 +2259,7 @@ void SimdScalarLowering::Int32ToSmallerInt(Node** replacements, Node** result) {
       for (int j = 0; j < num_ints; j++) {
         result[num_ints * i + j] = graph()->NewNode(
             sign_extend,
-            graph()->NewNode(machine()->Word32Sar(), replacements[i],
+            graph()->NewNode(machine()->Word32Shr(), replacements[i],
                              mcgraph_->Int32Constant(j * bit_size)));
       }
     } else {
