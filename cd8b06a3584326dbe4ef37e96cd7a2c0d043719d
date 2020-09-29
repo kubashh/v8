@@ -93,6 +93,24 @@
     },
     {
       "key": {
+        "uuid": "37c08302_eb311ceb",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6809,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T15:28:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "869a090c_ace05373",
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c15911e9_cf1c2249",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 2
@@ -107,6 +125,24 @@
       "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26f95480_b7f46f45",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6814,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T15:28:50Z",
+      "side": 1,
+      "message": "Removed scope and remove indentation.",
+      "parentUuid": "c15911e9_cf1c2249",
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -147,6 +183,24 @@
       "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1abadb34_308f98ae",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6823,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T15:28:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11283bc5_bfd4df73",
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -220,6 +274,30 @@
     },
     {
       "key": {
+        "uuid": "2039f90e_f2e55af6",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6861,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T15:28:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66353b38_17e7bb42",
+      "range": {
+        "startLine": 6861,
+        "startChar": 4,
+        "endLine": 6861,
+        "endChar": 51
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5720d7f8_9464b0d4",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 2
@@ -231,6 +309,30 @@
       "writtenOn": "2020-09-29T08:29:10Z",
       "side": 1,
       "message": "Moved Oddball case up to avoid one extra branch.",
+      "range": {
+        "startLine": 6887,
+        "startChar": 0,
+        "endLine": 6891,
+        "endChar": 3
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a2aa65d9_a5f9e992",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6891,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T15:28:50Z",
+      "side": 1,
+      "message": "Removed scope and indentation here as well.",
+      "parentUuid": "5720d7f8_9464b0d4",
       "range": {
         "startLine": 6887,
         "startChar": 0,
@@ -263,6 +365,30 @@
       "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e124dc8_dfdf775f",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3662,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T15:28:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "293e1324_4d14d180",
+      "range": {
+        "startLine": 3662,
+        "startChar": 66,
+        "endLine": 3662,
+        "endChar": 69
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
