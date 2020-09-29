@@ -16,6 +16,23 @@
       "revId": "bdd66f9c5d95e733753a7e4c2462ec69104e9afc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6944c39_088dbd04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-09-29T16:02:24Z",
+      "side": 1,
+      "message": "rubber-stamp LGTM, maybe you want to wait for Yu Yin\u0027s review on the opcodes. Thanks!",
+      "revId": "bdd66f9c5d95e733753a7e4c2462ec69104e9afc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
