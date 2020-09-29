@@ -147,6 +147,30 @@
     },
     {
       "key": {
+        "uuid": "00889b3b_d6c7e06b",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-29T20:14:24Z",
+      "side": 1,
+      "message": "Thanks for the suggestion, I made the cache_ a bit better.",
+      "parentUuid": "91e8f851_60bea151",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 410,
+        "endChar": 44
+      },
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d93a719b_a269d830",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 22
@@ -170,6 +194,30 @@
     },
     {
       "key": {
+        "uuid": "87ec1f95_eb173821",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-29T20:14:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d93a719b_a269d830",
+      "range": {
+        "startLine": 415,
+        "startChar": 0,
+        "endLine": 419,
+        "endChar": 1
+      },
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89e1fdf3_bdd22a19",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 22
@@ -190,6 +238,30 @@
       "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be2c6d61_053c3b1e",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-29T20:14:24Z",
+      "side": 1,
+      "message": "Great idea!",
+      "parentUuid": "89e1fdf3_bdd22a19",
+      "range": {
+        "startLine": 422,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 67
+      },
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -236,6 +308,30 @@
       "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92db2fdc_72559ce0",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-29T20:14:24Z",
+      "side": 1,
+      "message": "Indeed (I am sorry that I apparently missed that comment).\nI think you\u0027ll find the new version to your liking!",
+      "parentUuid": "78d8562f_bab63a09",
+      "range": {
+        "startLine": 814,
+        "startChar": 0,
+        "endLine": 817,
+        "endChar": 29
+      },
+      "revId": "815a985d0643b2f707eee212f6be88ce95815e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
