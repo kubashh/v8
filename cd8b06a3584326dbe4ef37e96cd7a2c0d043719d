@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75070621_7291d60e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T08:29:10Z",
+      "side": 1,
+      "message": "Ross PTAL\nAdded some explanatory comments since the refactor to de-duplicate code moved things around.",
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea9cc055_9735c445",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6774,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T08:29:10Z",
+      "side": 1,
+      "message": "Moved this case to the top to avoid the loop.",
+      "range": {
+        "startLine": 6774,
+        "startChar": 8,
+        "endLine": 6774,
+        "endChar": 26
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c75a7_4692a92f",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6816,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T08:29:10Z",
+      "side": 1,
+      "message": "Ask first for String and Oddball.",
+      "range": {
+        "startLine": 6816,
+        "startChar": 4,
+        "endLine": 6816,
+        "endChar": 38
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7924ff51_9e2aa4ec",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6825,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T08:29:10Z",
+      "side": 1,
+      "message": "Rest of the cases.",
+      "range": {
+        "startLine": 6824,
+        "startChar": 2,
+        "endLine": 6825,
+        "endChar": 27
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b60899b9_9594a72d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6861,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T08:29:10Z",
+      "side": 1,
+      "message": "Not needed in String / Oddball case since we are guaranteed a Number.",
+      "range": {
+        "startLine": 6861,
+        "startChar": 4,
+        "endLine": 6861,
+        "endChar": 51
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5720d7f8_9464b0d4",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6891,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T08:29:10Z",
+      "side": 1,
+      "message": "Moved Oddball case up to avoid one extra branch.",
+      "range": {
+        "startLine": 6887,
+        "startChar": 0,
+        "endLine": 6891,
+        "endChar": 3
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

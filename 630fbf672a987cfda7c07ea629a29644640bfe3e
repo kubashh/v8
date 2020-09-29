@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5209cd46_a7ecf94f",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6875,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-29T08:29:10Z",
+      "side": 0,
+      "message": "Not needed due to the Object::Conversion enum being only two values.",
+      "range": {
+        "startLine": 6875,
+        "startChar": 4,
+        "endLine": 6875,
+        "endChar": 52
+      },
+      "revId": "630fbf672a987cfda7c07ea629a29644640bfe3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
