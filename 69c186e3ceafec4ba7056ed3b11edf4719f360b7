@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23e1c5b2_770b82c2",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-09-29T22:22:47Z",
+      "side": 1,
+      "message": "Have you considered macro-izing these? It seems likely that this pattern could be used for other F32/F32x4 operations too.",
+      "range": {
+        "startLine": 1033,
+        "startChar": 0,
+        "endLine": 1039,
+        "endChar": 0
+      },
+      "revId": "69c186e3ceafec4ba7056ed3b11edf4719f360b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
