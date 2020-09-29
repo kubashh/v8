@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c5d71c13_e812fa31",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-29T16:20:45Z",
+      "side": 1,
+      "message": "Nit: please break lines at 72 chars",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 76
+      },
+      "revId": "7e8df7ab6a8a48ecc0a7a013d62b2cc54ca310bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92a19b60_339136ba",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -13,6 +36,23 @@
       "writtenOn": "2020-09-29T16:03:55Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "7e8df7ab6a8a48ecc0a7a013d62b2cc54ca310bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dee13ebe_c877d3ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-29T16:20:45Z",
+      "side": 1,
+      "message": "Good catch, lgtm!",
       "revId": "7e8df7ab6a8a48ecc0a7a013d62b2cc54ca310bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
