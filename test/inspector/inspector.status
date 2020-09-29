@@ -67,6 +67,7 @@
   # https://crbug.com/v8/7777
   'cpu-profiler/coverage': [SKIP],
   'cpu-profiler/coverage-block': [SKIP],
+  'cpu-profiler/console-profile-wasm-generic-wrapper': [SKIP],
 }], # variant == jitless
 
 ##############################################################################
