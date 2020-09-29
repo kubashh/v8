@@ -280,10 +280,10 @@ namespace compiler {
   V(Arm64I16x8ShrS)                         \
   V(Arm64I16x8SConvertI32x4)                \
   V(Arm64I16x8Add)                          \
-  V(Arm64I16x8AddSaturateS)                 \
+  V(Arm64I16x8AddSatS)                      \
   V(Arm64I16x8AddHoriz)                     \
   V(Arm64I16x8Sub)                          \
-  V(Arm64I16x8SubSaturateS)                 \
+  V(Arm64I16x8SubSatS)                      \
   V(Arm64I16x8Mul)                          \
   V(Arm64I16x8Mla)                          \
   V(Arm64I16x8Mls)                          \
@@ -297,8 +297,8 @@ namespace compiler {
   V(Arm64I16x8UConvertI8x16High)            \
   V(Arm64I16x8ShrU)                         \
   V(Arm64I16x8UConvertI32x4)                \
-  V(Arm64I16x8AddSaturateU)                 \
-  V(Arm64I16x8SubSaturateU)                 \
+  V(Arm64I16x8AddSatU)                      \
+  V(Arm64I16x8SubSatU)                      \
   V(Arm64I16x8MinU)                         \
   V(Arm64I16x8MaxU)                         \
   V(Arm64I16x8GtU)                          \
@@ -315,9 +315,9 @@ namespace compiler {
   V(Arm64I8x16ShrS)                         \
   V(Arm64I8x16SConvertI16x8)                \
   V(Arm64I8x16Add)                          \
-  V(Arm64I8x16AddSaturateS)                 \
+  V(Arm64I8x16AddSatS)                      \
   V(Arm64I8x16Sub)                          \
-  V(Arm64I8x16SubSaturateS)                 \
+  V(Arm64I8x16SubSatS)                      \
   V(Arm64I8x16Mul)                          \
   V(Arm64I8x16Mla)                          \
   V(Arm64I8x16Mls)                          \
@@ -329,8 +329,8 @@ namespace compiler {
   V(Arm64I8x16GeS)                          \
   V(Arm64I8x16ShrU)                         \
   V(Arm64I8x16UConvertI16x8)                \
-  V(Arm64I8x16AddSaturateU)                 \
-  V(Arm64I8x16SubSaturateU)                 \
+  V(Arm64I8x16AddSatU)                      \
+  V(Arm64I8x16SubSatU)                      \
   V(Arm64I8x16MinU)                         \
   V(Arm64I8x16MaxU)                         \
   V(Arm64I8x16GtU)                          \
