@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3672045_9c040522",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6819,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-29T15:50:05Z",
+      "side": 1,
+      "message": "Drop this comment.",
+      "range": {
+        "startLine": 6819,
+        "startChar": 46,
+        "endLine": 6819,
+        "endChar": 49
+      },
+      "revId": "5b9784f7cd91e26a711630f6b95ca6811c47f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
