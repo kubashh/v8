@@ -8,9 +8,11 @@
 #include <initializer_list>
 #include <map>
 #include <memory>
+#include <sstream>
 
 // Clients of this interface shouldn't depend on lots of compiler internals.
 // Do not include anything from src/compiler here!
+#include "include/cppgc/source-location.h"
 #include "src/base/macros.h"
 #include "src/base/type-traits.h"
 #include "src/builtins/builtins.h"
@@ -566,7 +568,22 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   static constexpr int kTargetParameterIndex = -1;
 
-  Node* Parameter(int value);
+  template <class T>
+  TNode<T> Parameter(
+      int value, cppgc::SourceLocation loc = cppgc::SourceLocation::Current()) {
+    std::stringstream message;
+    message << "Parameter " << value << " at " << loc.FileName() << ":"
+            << loc.Line();
+
+    return Cast(UntypedParameter(value), message.str().c_str());
+  }
+
+  template <class T>
+  TNode<T> UncheckedParameter(int value) {
+    return UncheckedCast<T>(UntypedParameter(value));
+  }
+
+  Node* UntypedParameter(int value);
 
   TNode<Context> GetJSContextParameter();
   void Return(TNode<Object> value);

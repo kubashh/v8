@@ -138,12 +138,12 @@ TF_BUILTIN(AsyncModuleEvaluate, GeneratorBuiltinsAssembler) {
   const int kValueArg = 0;
 
   TNode<Int32T> argc =
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
   CodeStubArguments args(this, argc);
 
   TNode<Object> receiver = args.GetReceiver();
   TNode<Object> value = args.GetOptionalArgumentValue(kValueArg);
-  TNode<Context> context = Cast(Parameter(Descriptor::kContext));
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   // AsyncModules act like JSAsyncFunctions. Thus we check here
   // that the {receiver} is a JSAsyncFunction.
@@ -160,12 +160,12 @@ TF_BUILTIN(GeneratorPrototypeNext, GeneratorBuiltinsAssembler) {
   const int kValueArg = 0;
 
   TNode<Int32T> argc =
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
   CodeStubArguments args(this, argc);
 
   TNode<Object> receiver = args.GetReceiver();
   TNode<Object> value = args.GetOptionalArgumentValue(kValueArg);
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   GeneratorPrototypeResume(&args, receiver, value, context,
                            JSGeneratorObject::kNext,
@@ -177,12 +177,12 @@ TF_BUILTIN(GeneratorPrototypeReturn, GeneratorBuiltinsAssembler) {
   const int kValueArg = 0;
 
   TNode<Int32T> argc =
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
   CodeStubArguments args(this, argc);
 
   TNode<Object> receiver = args.GetReceiver();
   TNode<Object> value = args.GetOptionalArgumentValue(kValueArg);
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   GeneratorPrototypeResume(&args, receiver, value, context,
                            JSGeneratorObject::kReturn,
@@ -194,12 +194,12 @@ TF_BUILTIN(GeneratorPrototypeThrow, GeneratorBuiltinsAssembler) {
   const int kExceptionArg = 0;
 
   TNode<Int32T> argc =
-      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount));
+      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
   CodeStubArguments args(this, argc);
 
   TNode<Object> receiver = args.GetReceiver();
   TNode<Object> exception = args.GetOptionalArgumentValue(kExceptionArg);
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  auto context = Parameter<Context>(Descriptor::kContext);
 
   GeneratorPrototypeResume(&args, receiver, exception, context,
                            JSGeneratorObject::kThrow,
