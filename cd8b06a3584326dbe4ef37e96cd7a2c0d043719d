@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "a6d33e8f_a2eb8fcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-29T14:55:23Z",
+      "side": 1,
+      "message": "LGTM with some style comments. ",
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea9cc055_9735c445",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 2
@@ -59,6 +76,40 @@
     },
     {
       "key": {
+        "uuid": "869a090c_ace05373",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6809,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-29T14:55:23Z",
+      "side": 1,
+      "message": "Add a block here since it\u0027s a new basic block.",
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c15911e9_cf1c2249",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6814,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-29T14:55:23Z",
+      "side": 1,
+      "message": "Why is this indented, it isn\u0027t a different basic block from above.",
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a5c75a7_4692a92f",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 2
@@ -79,6 +130,23 @@
       "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "11283bc5_bfd4df73",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6823,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-29T14:55:23Z",
+      "side": 1,
+      "message": "ditto, new block here.",
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -128,6 +196,30 @@
     },
     {
       "key": {
+        "uuid": "66353b38_17e7bb42",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6861,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-29T14:55:23Z",
+      "side": 1,
+      "message": "I would just keep this as it was (with \u0026end being the only label here and always doing the CSA_ASSERT. Adding complexity just to avoid a CSA_ASSERT in debug mode seems unecessary.",
+      "parentUuid": "b60899b9_9594a72d",
+      "range": {
+        "startLine": 6861,
+        "startChar": 4,
+        "endLine": 6861,
+        "endChar": 51
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5720d7f8_9464b0d4",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 2
@@ -148,6 +240,29 @@
       "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "293e1324_4d14d180",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3662,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-29T14:55:23Z",
+      "side": 1,
+      "message": "nit - i.e.",
+      "range": {
+        "startLine": 3662,
+        "startChar": 66,
+        "endLine": 3662,
+        "endChar": 69
+      },
+      "revId": "cd8b06a3584326dbe4ef37e96cd7a2c0d043719d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
