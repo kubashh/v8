@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "e1d1330c_b468b869",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-09-30T15:03:23Z",
+      "side": 1,
+      "message": "Because the type is already there on the right hand side and writing it twice is unwieldy.\n\nIt\u0027s similar to how we write\n\nauto foo \u003d std::make_unique\u003cstd::vector\u003cint\u003e\u003e(...);",
+      "parentUuid": "0c719d43_5429e884",
+      "range": {
+        "startLine": 224,
+        "startChar": 2,
+        "endLine": 224,
+        "endChar": 6
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a46e6a6f_7b57cd98",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 7
@@ -62,6 +86,30 @@
       "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c5eead1_5999ef43",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-09-30T15:03:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a46e6a6f_7b57cd98",
+      "range": {
+        "startLine": 575,
+        "startChar": 4,
+        "endLine": 580,
+        "endChar": 5
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "4783acb6_82f1c277",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-09-30T15:03:23Z",
+      "side": 1,
+      "message": "vscode inserted them automatically I guess. They probably should be there in general, but I guess we usually skip them so I\u0027ll remove them.",
+      "parentUuid": "3a6fdf67_a04fb11f",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56b55a65_6b73555c",
         "filename": "test/cctest/test-code-stub-assembler.cc",
         "patchSetId": 7
@@ -108,6 +180,30 @@
       "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0971626_1cbafb67",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3672,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-09-30T15:03:23Z",
+      "side": 1,
+      "message": "Fair point. Sounds good.",
+      "parentUuid": "56b55a65_6b73555c",
+      "range": {
+        "startLine": 3672,
+        "startChar": 21,
+        "endLine": 3672,
+        "endChar": 39
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "ea563a9a_8cf4fec6",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3675,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-09-30T15:03:23Z",
+      "side": 1,
+      "message": "+bbudge, tebbi\nDefinitely out of scope for this CL but yeah it\u0027s a good question.",
+      "parentUuid": "7e69f496_758bb967",
+      "range": {
+        "startLine": 3675,
+        "startChar": 56,
+        "endLine": 3675,
+        "endChar": 63
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "056c3ef7_af322260",
         "filename": "test/cctest/test-code-stub-assembler.cc",
         "patchSetId": 7
@@ -157,6 +277,30 @@
     },
     {
       "key": {
+        "uuid": "db85191a_ff4c4b8d",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3764,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-09-30T15:03:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "056c3ef7_af322260",
+      "range": {
+        "startLine": 3764,
+        "startChar": 32,
+        "endLine": 3764,
+        "endChar": 52
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78b12a4d_6d5cacab",
         "filename": "test/cctest/test-code-stub-assembler.cc",
         "patchSetId": 7
@@ -177,6 +321,30 @@
       "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e59337e_5fa74613",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3807,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-09-30T15:03:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "78b12a4d_6d5cacab",
+      "range": {
+        "startLine": 3807,
+        "startChar": 32,
+        "endLine": 3807,
+        "endChar": 52
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
