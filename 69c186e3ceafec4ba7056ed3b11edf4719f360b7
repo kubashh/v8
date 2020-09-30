@@ -22,6 +22,30 @@
       "revId": "69c186e3ceafec4ba7056ed3b11edf4719f360b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de8ac760_48a8f7a1",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-09-30T02:08:19Z",
+      "side": 1,
+      "message": "Good idea, I created a templated function instead, trying to reduce macro usage if possible, they get a bit unwiedly :(",
+      "parentUuid": "23e1c5b2_770b82c2",
+      "range": {
+        "startLine": 1033,
+        "startChar": 0,
+        "endLine": 1039,
+        "endChar": 0
+      },
+      "revId": "69c186e3ceafec4ba7056ed3b11edf4719f360b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
