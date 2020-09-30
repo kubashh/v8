@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29b1f3d7_5c2ce901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T14:41:40Z",
+      "side": 1,
+      "message": "overall LGTM, I have some comments",
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c719d43_5429e884",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T14:41:40Z",
+      "side": 1,
+      "message": "Why are we changing all of these to auto?",
+      "range": {
+        "startLine": 224,
+        "startChar": 2,
+        "endLine": 224,
+        "endChar": 6
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a46e6a6f_7b57cd98",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T14:41:40Z",
+      "side": 1,
+      "message": "nit:\nmessage \u003c\u003c \"Parameter \" \u003c\u003c value;\nif (loc.FileName()) {\n  message \u003c\u003c \" at \" \u003c\u003c loc.FileName() \u003c\u003c \":\" \u003c\u003c loc.Line();\n}",
+      "range": {
+        "startLine": 575,
+        "startChar": 4,
+        "endLine": 580,
+        "endChar": 5
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a6fdf67_a04fb11f",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T14:41:40Z",
+      "side": 1,
+      "message": "Do you remember why were they needed?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56b55a65_6b73555c",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3672,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T14:41:40Z",
+      "side": 1,
+      "message": "If the context ends up being needed, WDYT about UntypedParameter here? If we have Untyped we will probably revisit it in the future. If it is Unchecked I think it may stay like this forever.",
+      "range": {
+        "startLine": 3672,
+        "startChar": 21,
+        "endLine": 3672,
+        "endChar": 39
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e69f496_758bb967",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3675,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T14:41:40Z",
+      "side": 1,
+      "message": "Do we need a context here? The builtin does not have an \u0027implicit: context\u0027 like the others do https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/wasm.tq;l\u003d61;drc\u003de241c6da39e214fe5e6fd8e07eea3f8e7322c08d. Removing context might be best left for a follow-up.\n\nMaybe Tobias will know better since it is defined in a Torque file.",
+      "range": {
+        "startLine": 3675,
+        "startChar": 56,
+        "endLine": 3675,
+        "endChar": 63
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "056c3ef7_af322260",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3764,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T14:41:40Z",
+      "side": 1,
+      "message": "Similar here, no context used https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-wasm-gen.cc;l\u003d46;drc\u003d0747681e41cb403f19fcf64444d37652d556b527",
+      "range": {
+        "startLine": 3764,
+        "startChar": 32,
+        "endLine": 3764,
+        "endChar": 52
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78b12a4d_6d5cacab",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3807,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T14:41:40Z",
+      "side": 1,
+      "message": "No context used again. Good things come in threes I guess :D https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-wasm-gen.cc;l\u003d51;drc\u003d0747681e41cb403f19fcf64444d37652d556b527",
+      "range": {
+        "startLine": 3807,
+        "startChar": 32,
+        "endLine": 3807,
+        "endChar": 52
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
