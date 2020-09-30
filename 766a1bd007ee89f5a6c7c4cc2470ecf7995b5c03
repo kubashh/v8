@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cded933_49271009",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-30T14:59:30Z",
+      "side": 1,
+      "message": "LGTM with a nit; you\u0027ll also need OWNERS review for DEPS.",
+      "revId": "766a1bd007ee89f5a6c7c4cc2470ecf7995b5c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9558b21d_d135d2f1",
+        "filename": "test/intl/regress-1107661.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-30T14:59:30Z",
+      "side": 1,
+      "message": "nit: 2-space indent; again below",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "766a1bd007ee89f5a6c7c4cc2470ecf7995b5c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
