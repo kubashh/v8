@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73cbcb3b_7302856e",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T10:54:02Z",
+      "side": 1,
+      "message": "I\u0027m not sure why so many things here get allocated dynamically.",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "719fdfcc_6e995727",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T10:54:02Z",
+      "side": 1,
+      "message": "Please add a comment here on the purpose.",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee4ad960_7ac7d1ed",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T10:54:02Z",
+      "side": 1,
+      "message": "I don\u0027t see a need for a macro, let\u0027s just define a function IsOfLegacyType and then do DCHECK(!IsOfLegacyType(value)).",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fabcc2a3_8afe340d",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T10:54:02Z",
+      "side": 1,
+      "message": "I think the convention is to repeat the condition of the #ifdef.",
+      "range": {
+        "startLine": 36,
+        "startChar": 11,
+        "endLine": 36,
+        "endChar": 17
+      },
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6480118_7ff8d110",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T10:54:02Z",
+      "side": 1,
+      "message": "I think we should make it very clear that one constructor is for main-thread mode and the other for background-mode. Can you add a comment here or provide static functions ForMainThread and ForBackgroundThread?\n\nBTW, there was the suggestion of calling the two modes Reader and Writer. Have you considered that?",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14340998_bc98547e",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T10:54:02Z",
+      "side": 1,
+      "message": "I find it confusing that the whole class is called NexusConfig and then this enum is also a Config. Let\u0027s call that mode perhaps?",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bfcc16c_9ad01634",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T10:54:02Z",
+      "side": 1,
+      "message": "Can they be const?",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c063bdb_a21885cd",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T10:54:02Z",
+      "side": 1,
+      "message": "It\u0027s unclear what config these end up with, please add a comment.",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5a3f3b8_e904f383",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T10:54:02Z",
+      "side": 1,
+      "message": "Please add a comment on the cache\u0027s purpose.\nE.g. When using the background-thread configuration, a cache is used to guarantee a consistent view of the feedback to FeedbackNexus methods.",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
