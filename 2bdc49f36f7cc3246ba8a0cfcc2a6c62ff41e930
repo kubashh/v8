@@ -16,6 +16,24 @@
       "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc388084_5e383d73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-30T13:03:01Z",
+      "side": 1,
+      "message": "Why no side data structure that is a plain std::unordered_set guarded by a lock for the whole thing? I don\u0027t see why we need to integrate this into Worklist.",
+      "parentUuid": "f16edaf1_5408c902",
+      "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
