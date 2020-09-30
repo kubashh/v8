@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "25558983_9fa51f95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-30T07:35:43Z",
+      "side": 1,
+      "message": "Do I understand correctly that we don\u0027t yet access the feedback vector from the background? Please mention that here.",
+      "revId": "e5d1edc3cd672b3c2100a4c8e774b5193c500b17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad5d71e0_3a5536af",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 23
