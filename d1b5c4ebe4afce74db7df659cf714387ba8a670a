@@ -33,6 +33,40 @@
       "revId": "d1b5c4ebe4afce74db7df659cf714387ba8a670a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "717d9a31_94220d32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T16:55:47Z",
+      "side": 1,
+      "message": "Thanks for the lengthy cleanup! LGTM % that comment regarding maybe adding static asserts.\n\nAs discussed offline, we will later have to track the UntypedParameters down to be able to eliminate that pesky Node*.",
+      "revId": "d1b5c4ebe4afce74db7df659cf714387ba8a670a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "13ef1565_89050981",
+        "filename": "src/builtins/builtins-utils-gen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T16:55:47Z",
+      "side": 1,
+      "message": "Double checking this. Do we want a static assert to only use this with std::is_base_of\u003cT, Object\u003e? Alternatively, it could be an enable_if instead of the static assert.\n\nSimilarly down with UncheckedParameter and UntaggedT.",
+      "revId": "d1b5c4ebe4afce74db7df659cf714387ba8a670a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

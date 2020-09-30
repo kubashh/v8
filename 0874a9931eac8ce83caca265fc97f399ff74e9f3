@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "d0c74846_b80216d0",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T16:55:47Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "e1d1330c_b468b869",
+      "range": {
+        "startLine": 224,
+        "startChar": 2,
+        "endLine": 224,
+        "endChar": 6
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a46e6a6f_7b57cd98",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 7
@@ -148,6 +172,30 @@
       "side": 1,
       "message": "vscode inserted them automatically I guess. They probably should be there in general, but I guess we usually skip them so I\u0027ll remove them.",
       "parentUuid": "3a6fdf67_a04fb11f",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "0874a9931eac8ce83caca265fc97f399ff74e9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea5bad5e_d9e45455",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-30T16:55:47Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "4783acb6_82f1c277",
       "range": {
         "startLine": 13,
         "startChar": 0,
