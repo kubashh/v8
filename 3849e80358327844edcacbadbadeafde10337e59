@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05f7057d_55098e53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-30T18:34:01Z",
+      "side": 1,
+      "message": "LGTM, thanks for updating these! \n\nI\u0027ve looked at the beginnings of the files in detail; rubber-stamping the meat of the implementations.",
+      "revId": "3849e80358327844edcacbadbadeafde10337e59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "88415864_eb189568",
+        "filename": "src/base/safe_conversions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-30T18:34:01Z",
+      "side": 1,
+      "message": "I think you mean `__aarch64__`?",
+      "range": {
+        "startLine": 24,
+        "startChar": 66,
+        "endLine": 24,
+        "endChar": 76
+      },
+      "revId": "3849e80358327844edcacbadbadeafde10337e59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
