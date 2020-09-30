@@ -39,6 +39,30 @@
       "revId": "3849e80358327844edcacbadbadeafde10337e59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6134299f_f44d5ef1",
+        "filename": "src/base/safe_conversions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-09-30T20:25:02Z",
+      "side": 1,
+      "message": "Oh nice good catch, seems like a upstream issue. I\u0027ll update this here and put up a patch for chromium.",
+      "parentUuid": "88415864_eb189568",
+      "range": {
+        "startLine": 24,
+        "startChar": 66,
+        "endLine": 24,
+        "endChar": 76
+      },
+      "revId": "3849e80358327844edcacbadbadeafde10337e59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
