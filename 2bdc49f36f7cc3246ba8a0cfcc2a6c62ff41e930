@@ -124,6 +124,24 @@
       "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "971f3960_e130db29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-30T14:26:46Z",
+      "side": 1,
+      "message": "Why are we optimizing this case?\n\nI think we should either\na. accept dupes during regular marking until it becomes a problem. I was wrong there in the initial review on the other CL because I didn\u0027t see that the write barrier (which is likely creates to create dupes) does use the regular markbit; or\nb. go with something really simple that doesn\u0027t blow up to O(n) in a worst case. I think we can even get away with sequentially processing \"previously in construction\" objects without seeing any difference.\n\nWe should have data for anything more complex 😊\n\n\u003e If we assume very few in-construction objects, then I would actually recommend adding a Contains method to the regular worklist implementation. The cost of querying by iterating over all items in a segment should be negligible if there are very few objects.\n\nHaving O(n) contains is always scary in corner cases.\n\n\u003e Yes, we bound by number of duplicates the amount of times an object can be pushed to the worklist, but since we actually mark it after popping from the worklist I think the live bytes accounting is safe.\n\nTrue!",
+      "parentUuid": "eb9f8b7e_ee2d4114",
+      "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
