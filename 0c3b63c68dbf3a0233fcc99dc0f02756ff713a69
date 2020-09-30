@@ -16,6 +16,92 @@
       "revId": "0c3b63c68dbf3a0233fcc99dc0f02756ff713a69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60fc5bf2_cb0080bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-30T18:38:45Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "0c3b63c68dbf3a0233fcc99dc0f02756ff713a69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2af8d57_b9686c50",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-30T18:38:45Z",
+      "side": 1,
+      "message": "nit: the style guide likes to have constructors (and static consts) first. So while you\u0027re reshuffling code here, please move this section up, before \"Type checks\".",
+      "range": {
+        "startLine": 217,
+        "startChar": 35,
+        "endLine": 217,
+        "endChar": 47
+      },
+      "revId": "0c3b63c68dbf3a0233fcc99dc0f02756ff713a69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cad54636_ec7a619d",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-30T18:38:45Z",
+      "side": 1,
+      "message": "accessors",
+      "range": {
+        "startLine": 250,
+        "startChar": 39,
+        "endLine": 250,
+        "endChar": 49
+      },
+      "revId": "0c3b63c68dbf3a0233fcc99dc0f02756ff713a69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72115760_70a647b4",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-30T18:38:45Z",
+      "side": 1,
+      "message": "related",
+      "range": {
+        "startLine": 309,
+        "startChar": 45,
+        "endLine": 309,
+        "endChar": 51
+      },
+      "revId": "0c3b63c68dbf3a0233fcc99dc0f02756ff713a69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
