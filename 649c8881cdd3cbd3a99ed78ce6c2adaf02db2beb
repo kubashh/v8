@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38c26c20_3c7edc3d",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-09-30T10:45:04Z",
+      "side": 1,
+      "message": "This could be simpler if you passed in two formats: a vector one to be used with SIMD registers, and a scalar one to be used otherwise. You could then have something like:\n\nVectorFormat f \u003d instr-\u003eInputAt(0)-\u003eIsSimd128Register() ? vector_f : scalar_f;\nVRegister output \u003d VRegister::Create(i.OutputDoubleRegister().code(), f);\nVRegister input \u003d VRegister::Create(i.InputDoubleRegister(0).code(), f);\n(tasm-\u003e*fn)(output, input);\n\nI think this would also make the fact that we don\u0027t always generate a vector instruction more obvious at the call site too.",
+      "revId": "649c8881cdd3cbd3a99ed78ce6c2adaf02db2beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
