@@ -106,6 +106,24 @@
       "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb9f8b7e_ee2d4114",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-09-30T14:11:42Z",
+      "side": 1,
+      "message": "If we assume very few in-construction objects, then I would actually recommend adding a Contains method to the regular worklist implementation. The cost of querying by iterating over all items in a segment should be negligible if there are very few objects.\n\nYes, we bound by number of duplicates the amount of times an object can be pushed to the worklist, but since we actually mark it after popping from the worklist I think the live bytes accounting is safe.",
+      "parentUuid": "daceba54_21e911c2",
+      "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
