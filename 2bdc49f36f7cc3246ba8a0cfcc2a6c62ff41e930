@@ -88,6 +88,24 @@
       "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daceba54_21e911c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-30T13:57:27Z",
+      "side": 1,
+      "message": "Another observation: We bound the duplicates by #tasks, because of the local segments, right? That means live bytes accounting can be off at some point.",
+      "parentUuid": "eb9987b6_7da5f4a1",
+      "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
