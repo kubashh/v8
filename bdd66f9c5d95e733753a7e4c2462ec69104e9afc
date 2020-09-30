@@ -33,6 +33,24 @@
       "revId": "bdd66f9c5d95e733753a7e4c2462ec69104e9afc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ed1f84de_54232578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1317343
+      },
+      "writtenOn": "2020-09-30T01:07:48Z",
+      "side": 1,
+      "message": "LGTM, Thank you.\nIn fact, we are in the same office with seats next to each other, and I read most of his submitted code before it was submitted :)\nand yes, we\u0027d better mark as reviewed at the different CL, thank you.",
+      "parentUuid": "e6944c39_088dbd04",
+      "revId": "bdd66f9c5d95e733753a7e4c2462ec69104e9afc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
