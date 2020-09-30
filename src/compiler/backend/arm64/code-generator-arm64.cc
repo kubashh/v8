@@ -418,6 +418,21 @@ void EmitMaybePoisonedFPLoad(CodeGenerator* codegen, InstructionCode opcode,
   }
 }
 
+// Handles instructions that work for NEON, float (scalar), or double (scalar).
+template <typename Fn>
+void EmitFpOrNeon(TurboAssembler* tasm, Fn fn, Instruction* instr,
+                  Arm64OperandConverter i, VectorFormat f) {
+  if (instr->InputAt(0)->IsSimd128Register()) {
+    (tasm->*fn)(i.OutputSimd128Register().Format(f),
+                i.InputSimd128Register(0).Format(f));
+  } else if (LaneCountFromFormat(f) == 4) {
+    (tasm->*fn)(i.OutputFloat32Register(), i.InputFloat32Register(0));
+  } else {
+    DCHECK_EQ(2, LaneCountFromFormat(f));
+    (tasm->*fn)(i.OutputDoubleRegister(), i.InputDoubleRegister(0));
+  }
+}
+
 }  // namespace
 
 #define ASSEMBLE_SHIFT(asm_instr, width)                                    \
@@ -1030,31 +1045,31 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       ASSEMBLE_IEEE754_UNOP(tanh);
       break;
     case kArm64Float32RoundDown:
-      __ Frintm(i.OutputFloat32Register(), i.InputFloat32Register(0));
+      EmitFpOrNeon(tasm(), &TurboAssembler::Frintm, instr, i, kFormat4S);
       break;
     case kArm64Float64RoundDown:
-      __ Frintm(i.OutputDoubleRegister(), i.InputDoubleRegister(0));
+      EmitFpOrNeon(tasm(), &TurboAssembler::Frintm, instr, i, kFormat2D);
       break;
     case kArm64Float32RoundUp:
-      __ Frintp(i.OutputFloat32Register(), i.InputFloat32Register(0));
+      EmitFpOrNeon(tasm(), &TurboAssembler::Frintp, instr, i, kFormat4S);
       break;
     case kArm64Float64RoundUp:
-      __ Frintp(i.OutputDoubleRegister(), i.InputDoubleRegister(0));
+      EmitFpOrNeon(tasm(), &TurboAssembler::Frintp, instr, i, kFormat2D);
       break;
     case kArm64Float64RoundTiesAway:
-      __ Frinta(i.OutputDoubleRegister(), i.InputDoubleRegister(0));
+      EmitFpOrNeon(tasm(), &TurboAssembler::Frinta, instr, i, kFormat2D);
       break;
     case kArm64Float32RoundTruncate:
-      __ Frintz(i.OutputFloat32Register(), i.InputFloat32Register(0));
+      EmitFpOrNeon(tasm(), &TurboAssembler::Frintz, instr, i, kFormat4S);
       break;
     case kArm64Float64RoundTruncate:
-      __ Frintz(i.OutputDoubleRegister(), i.InputDoubleRegister(0));
+      EmitFpOrNeon(tasm(), &TurboAssembler::Frintz, instr, i, kFormat2D);
       break;
     case kArm64Float32RoundTiesEven:
-      __ Frintn(i.OutputFloat32Register(), i.InputFloat32Register(0));
+      EmitFpOrNeon(tasm(), &TurboAssembler::Frintn, instr, i, kFormat4S);
       break;
     case kArm64Float64RoundTiesEven:
-      __ Frintn(i.OutputDoubleRegister(), i.InputDoubleRegister(0));
+      EmitFpOrNeon(tasm(), &TurboAssembler::Frintn, instr, i, kFormat2D);
       break;
     case kArm64Add:
       if (FlagsModeField::decode(opcode) != kFlags_none) {
@@ -1940,22 +1955,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Bsl(dst.V16B(), rhs.V16B(), lhs.V16B());
       break;
     }
-    case kArm64F64x2RoundUp:
-      __ Frintp(i.OutputSimd128Register().V2D(),
-                i.InputSimd128Register(0).V2D());
-      break;
-    case kArm64F64x2RoundDown:
-      __ Frintm(i.OutputSimd128Register().V2D(),
-                i.InputSimd128Register(0).V2D());
-      break;
-    case kArm64F64x2RoundTruncate:
-      __ Frintz(i.OutputSimd128Register().V2D(),
-                i.InputSimd128Register(0).V2D());
-      break;
-    case kArm64F64x2RoundTiesEven:
-      __ Frintn(i.OutputSimd128Register().V2D(),
-                i.InputSimd128Register(0).V2D());
-      break;
     case kArm64F32x4Splat: {
       __ Dup(i.OutputSimd128Register().V4S(), i.InputSimd128Register(0).S(), 0);
       break;
@@ -2029,22 +2028,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Bsl(dst.V16B(), rhs.V16B(), lhs.V16B());
       break;
     }
-    case kArm64F32x4RoundUp:
-      __ Frintp(i.OutputSimd128Register().V4S(),
-                i.InputSimd128Register(0).V4S());
-      break;
-    case kArm64F32x4RoundDown:
-      __ Frintm(i.OutputSimd128Register().V4S(),
-                i.InputSimd128Register(0).V4S());
-      break;
-    case kArm64F32x4RoundTruncate:
-      __ Frintz(i.OutputSimd128Register().V4S(),
-                i.InputSimd128Register(0).V4S());
-      break;
-    case kArm64F32x4RoundTiesEven:
-      __ Frintn(i.OutputSimd128Register().V4S(),
-                i.InputSimd128Register(0).V4S());
-      break;
     case kArm64I64x2Splat: {
       __ Dup(i.OutputSimd128Register().V2D(), i.InputRegister64(0));
       break;
