@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4f8ae1fb_ca208a4f",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "It\u0027s because the class definition of FeedbackNexus depends on isolate and other things, C++ can\u0027t lay out the storage for Isolate without it. That is the problem I ran into when I tried to do it early in the life of the CL.",
+      "parentUuid": "73cbcb3b_7302856e",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "719fdfcc_6e995727",
         "filename": "src/execution/isolate.h",
         "patchSetId": 24
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "dadc62f2_dfb69650",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "719fdfcc_6e995727",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee4ad960_7ac7d1ed",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 24
@@ -50,6 +86,24 @@
       "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb1d43a9_d89b00e9",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee4ad960_7ac7d1ed",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "3c6a44bf_5057f1f2",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fabcc2a3_8afe340d",
+      "range": {
+        "startLine": 36,
+        "startChar": 11,
+        "endLine": 36,
+        "endChar": 17
+      },
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6480118_7ff8d110",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 24
@@ -90,6 +168,24 @@
       "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ffc1d8f_04eff3e4",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "Done, and done.",
+      "parentUuid": "d6480118_7ff8d110",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "1c9e108a_cabbfadd",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14340998_bc98547e",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8bfcc16c_9ad01634",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 24
@@ -124,6 +238,24 @@
       "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e319273_c1972850",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bfcc16c_9ad01634",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -144,6 +276,24 @@
     },
     {
       "key": {
+        "uuid": "c6d51e6e_ae49e36d",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "Good idea, done.",
+      "parentUuid": "0c063bdb_a21885cd",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5a3f3b8_e904f383",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 24
@@ -158,6 +308,24 @@
       "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd7bf574_c19ade3c",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "Okay, that\u0027s a very good comment, thanks for it.",
+      "parentUuid": "c5a3f3b8_e904f383",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a7f07f3_370c7723",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-09-30T20:49:50Z",
+      "side": 1,
+      "message": "Thanks Georg for the excellent comments.\nI\u0027ve followed all suggestions in this case.\nAll the best,\n--Michael\n",
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
