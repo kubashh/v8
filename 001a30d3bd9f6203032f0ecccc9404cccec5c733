@@ -16,6 +16,23 @@
       "revId": "001a30d3bd9f6203032f0ecccc9404cccec5c733",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73c4b75b_31e737fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-09-30T18:00:33Z",
+      "side": 1,
+      "message": "I don\u0027t think Wasm builtins take a Context, so the code was probably correct by coincidence. Any change you make here lgtm.",
+      "revId": "001a30d3bd9f6203032f0ecccc9404cccec5c733",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
