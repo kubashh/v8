@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f16edaf1_5408c902",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-09-30T12:59:41Z",
+      "side": 1,
+      "message": "ptal.\n\nThis is the direction I want to go now for the external \"marking\" of in construction objects.\nPlease note that the object don\u0027t actually need to marked. Any mechanism that prevents us from pushing the same object multiple times to the worklist would suffice to prevent bloating the worklist (in this CL the Contains method is meant as that CL).\n\nWhatever mechanism we go with needs to work both the mutator thread and on concurrent threads. I started with having a standalone std::unordered_set that is accessed directly and is guarded by a lock. Wanting to avoid obtaining the lock for each object, lead me back to our worklist design.\n\nRight now I\u0027m using std::unordered_set in the Segments instead of the array we usually have. I see this as a trade-off between cost of insertion and cost of querying. Querying will happen for every in construction object, possibly multiple times although probably not often, while insertion should happen at most once per thread. Thus I think we need to prioritize faster querying.\nWe could also use a std::vector or the arrays we currently have which would mean faster insertion but would require iterating over the array for querying.\n(if we decide that the in-construction worklist is expected to remain small enough, it might be acceptable to use the existing arrays and add the Contains method to all worklists).",
+      "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
