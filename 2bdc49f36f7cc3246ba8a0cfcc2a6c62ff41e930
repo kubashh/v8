@@ -70,6 +70,24 @@
       "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb9987b6_7da5f4a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-09-30T13:45:32Z",
+      "side": 1,
+      "message": "Except for our degenerate corner cases we hardly encounter such objects in practice. [citation needed: last time I measured was some time ago]\n\nCases:\n- If we have few in-construction objects then the separate data structure keeps complexity where it is (in construction objects).\n- If we have many such in-construction objects, then the query becomes an issue because we have linear complexity for Contains().\n\nMoving over to a processable worklist is a bit slower with just having a std::unordered_set at the same time, we initially do not need to care about segments.\n\nI\u0027d generally say that we should go with the side data structure unless we have data showing otherwise to avoid blowing up Worklist.",
+      "parentUuid": "c9a2bc4a_095aa521",
+      "revId": "2bdc49f36f7cc3246ba8a0cfcc2a6c62ff41e930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
