@@ -1209,6 +1209,9 @@ std::ostream& operator<<(std::ostream& os, const InstructionOperandAsJSON& o) {
       break;
     }
     case InstructionOperand::PENDING:
+      os << "\"type\": \"pending\", ";
+      os << "\"text\": \"pending\"";
+      break;
     case InstructionOperand::INVALID:
       UNREACHABLE();
   }
