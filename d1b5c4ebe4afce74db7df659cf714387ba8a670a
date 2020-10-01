@@ -103,6 +103,24 @@
       "revId": "d1b5c4ebe4afce74db7df659cf714387ba8a670a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "86cddf58_45bcb6a6",
+        "filename": "src/builtins/builtins-utils-gen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-10-01T10:18:43Z",
+      "side": 1,
+      "message": "\u003e \u003e UncheckedParameter is used in places where previously people were writing UncheckedCast\u003c...\u003e(Parameter(...)). Sometimes they used types Object subtypes, so I\u0027m trying to preserve the behaviour there.\n\u003e \n\u003e Huh, I thought we only did that for UntaggedT derived classes.\n\nIt\u0027s perhaps something we should tighten up afterwards. I guess UncheckedCast couldn\u0027t do it but maybe it make UncheckedParameter should.",
+      "parentUuid": "638e1c08_057ebc0c",
+      "revId": "d1b5c4ebe4afce74db7df659cf714387ba8a670a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
