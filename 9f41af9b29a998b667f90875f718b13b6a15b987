@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ce1aa3d1_b660c1f7",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-01T15:24:05Z",
+      "side": 1,
+      "message": "Got it, thanks.",
+      "parentUuid": "4f8ae1fb_ca208a4f",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "719fdfcc_6e995727",
         "filename": "src/execution/isolate.h",
         "patchSetId": 24
@@ -183,6 +201,24 @@
       "side": 1,
       "message": "Done, and done.",
       "parentUuid": "d6480118_7ff8d110",
+      "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6ed82ec_db086e0c",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-01T15:24:05Z",
+      "side": 1,
+      "message": "My second question was actually not a rethorical one ;) I\u0027m not sure the Reader/Writer terminology fits perfectly as I don\u0027t have all the information paged into my head. In any case, let us not mix the terminology. That is, let us use either the main thread vs background thread naming or the reader vs writer naming, everywhere (including the factory methods here).",
+      "parentUuid": "3ffc1d8f_04eff3e4",
       "revId": "9f41af9b29a998b667f90875f718b13b6a15b987",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false

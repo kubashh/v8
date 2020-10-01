@@ -16,6 +16,80 @@
       "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "279d741b_329f9432",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-01T15:24:05Z",
+      "side": 1,
+      "message": "Since we are in the inl-header, it\u0027s probably cleaner to hide this in the FeedbackVector class.",
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a3428d8_b7fccc9f",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-01T15:24:05Z",
+      "side": 1,
+      "message": "I would have expected the FeedbackNexus-NexusConfig interaction to work in one of two ways:\n1) FeedbackNexus checks config (mode) to decide what to do and how to do it.\n2) FeedbackNexus does reads/writes/... by calling the respective method on NexusConfig, and it\u0027s up to those methods to decide how to do it.\n\nIt seems that in your CL we have something in-between. Was that a conscious decision?",
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f05e8281_25c011ab",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-01T15:24:05Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be needed, HeapObjectReference is a subclass of MaybeObject.",
+      "range": {
+        "startLine": 516,
+        "startChar": 10,
+        "endLine": 516,
+        "endChar": 34
+      },
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6c04ade_eddb2cfb",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-01T15:24:05Z",
+      "side": 1,
+      "message": "I think I haven\u0027t understood this part yet. Is this config always the main thread (\u003d writer) config? Why is it on the isolate?",
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
