@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "fa52e545_136d0f6a",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-01T13:07:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "903d2402_79b94a91",
+      "range": {
+        "startLine": 160,
+        "startChar": 13,
+        "endLine": 160,
+        "endChar": 28
+      },
+      "revId": "5f08e6f096e1746abaa67c216839554d006ddb47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb9e8ec6_4a09db79",
         "filename": "src/heap/cppgc/heap.cc",
         "patchSetId": 2
@@ -79,6 +103,30 @@
       "revId": "5f08e6f096e1746abaa67c216839554d006ddb47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "157aa436_d23b7778",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-01T13:07:06Z",
+      "side": 1,
+      "message": "Yeah, I noticed this as well but think it\u0027s safe. I added a comment.",
+      "parentUuid": "bb9e8ec6_4a09db79",
+      "range": {
+        "startLine": 157,
+        "startChar": 13,
+        "endLine": 157,
+        "endChar": 26
+      },
+      "revId": "5f08e6f096e1746abaa67c216839554d006ddb47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
