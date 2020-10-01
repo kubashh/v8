@@ -172,6 +172,30 @@
     },
     {
       "key": {
+        "uuid": "4be1a17e_d6a87b77",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-01T16:16:50Z",
+      "side": 1,
+      "message": "Thanks for pinging!\n\nThe current situation:\n- The current architecture is built in a way where V8 is allowed to depend on all of cppgc, but we try to put more general things in \"src/base\".\n- cppgc is generally not allowed to depend on V8 with include/v8config.h and include/v8-platform.h being the only exceptions AFAIK.\n\nWe want to minimize the exceptions but since include doesn\u0027t have a \"base\" that\u0027s hard.\n\nI am not super excited to move it to include/ since we actually allow V8 to grab into cppgc within e.g. src/heap/. Long story short, we can move to include/ even though I would prefer it if there\u0027s another way :)",
+      "parentUuid": "3e4a519f_097c1792",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "001a30d3bd9f6203032f0ecccc9404cccec5c733",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64a9c2e8_60dd6c14",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 9
