@@ -148,6 +148,30 @@
     },
     {
       "key": {
+        "uuid": "3e4a519f_097c1792",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-01T15:23:25Z",
+      "side": 1,
+      "message": "Doing it in a separate CL is fine.",
+      "parentUuid": "866061d9_80a2fb21",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "001a30d3bd9f6203032f0ecccc9404cccec5c733",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64a9c2e8_60dd6c14",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 9
