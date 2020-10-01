@@ -16,6 +16,23 @@
       "revId": "1cf0d4ef72e9a1d1583a96419ad99d0fec5ccd26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "976e417b_d72a583a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-01T11:27:37Z",
+      "side": 1,
+      "message": "Hi Santiago,\n\nI think this doesn\u0027t work because the field is mutable. Concretely what could happen is that the import_meta field might still be the-hole when serializing, but while we are compiling in the background it gets set to some JSObject and then we might see that JSObject in JSContextSpecialization.",
+      "revId": "1cf0d4ef72e9a1d1583a96419ad99d0fec5ccd26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
