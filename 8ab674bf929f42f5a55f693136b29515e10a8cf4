@@ -50,6 +50,23 @@
       "revId": "8ab674bf929f42f5a55f693136b29515e10a8cf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6477d409_53e0ad7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177474
+      },
+      "writtenOn": "2020-10-01T09:42:54Z",
+      "side": 1,
+      "message": "Cool, thanks for the reviews! ",
+      "revId": "8ab674bf929f42f5a55f693136b29515e10a8cf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
