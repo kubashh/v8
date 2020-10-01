@@ -85,6 +85,24 @@
       "revId": "d1b5c4ebe4afce74db7df659cf714387ba8a670a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "638e1c08_057ebc0c",
+        "filename": "src/builtins/builtins-utils-gen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-01T09:03:37Z",
+      "side": 1,
+      "message": "\u003e (Not sure if you were suggesting Parameter would use enable_if to select between a checked/unchecked implementation depending on whether the type was an Object subtype, but I think for now I\u0027d rather leave it explicit).\n\nI meant to keep them separate and have both with enable_if. static_assert sounds the better solution of the two though.\n\n\u003e UncheckedParameter is used in places where previously people were writing UncheckedCast\u003c...\u003e(Parameter(...)). Sometimes they used types Object subtypes, so I\u0027m trying to preserve the behaviour there.\n\nHuh, I thought we only did that for UntaggedT derived classes.\n\nPS 8..9 LGTM",
+      "parentUuid": "93c42a44_514bd339",
+      "revId": "d1b5c4ebe4afce74db7df659cf714387ba8a670a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
