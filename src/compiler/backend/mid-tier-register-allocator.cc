@@ -23,6 +23,8 @@ namespace internal {
 namespace compiler {
 
 class RegisterState;
+class PendingDeferredBlockSpills;
+class DeferredBlocksRegion;
 
 // BlockState stores details associated with a particular basic block.
 class BlockState final {
@@ -30,8 +32,10 @@ class BlockState final {
   BlockState(int block_count, Zone* zone)
       : general_registers_in_state_(nullptr),
         double_registers_in_state_(nullptr),
+        deferred_blocks_region_(nullptr),
         dominated_blocks_(block_count, zone),
-        successors_phi_index_(-1) {}
+        successors_phi_index_(-1),
+        is_deferred_block_boundary_(false) {}
 
   // Returns the RegisterState that applies to the input of this block. Can be
   // |nullptr| if the no registers of |kind| have been allocated up to this
@@ -51,14 +55,34 @@ class BlockState final {
     successors_phi_index_ = index;
   }
 
+  // If this block is deferred, this represents region of deferred blocks
+  // that are directly reachable from this block.
+  DeferredBlocksRegion* deferred_blocks_region() const {
+    return deferred_blocks_region_;
+  }
+  void set_deferred_spills(DeferredBlocksRegion* deferred_spills) {
+    DCHECK_NULL(deferred_blocks_region_);
+    deferred_blocks_region_ = deferred_spills;
+  }
+
+  // Returns true if this block represents either a transition from
+  // non-deferred to deferred or vice versa.
+  bool is_deferred_block_boundary() const {
+    return is_deferred_block_boundary_;
+  }
+  void MarkAsDeferredBlockBoundary() { is_deferred_block_boundary_ = true; }
+
   MOVE_ONLY_NO_DEFAULT_CONSTRUCTOR(BlockState);
 
  private:
   RegisterState* general_registers_in_state_;
   RegisterState* double_registers_in_state_;
 
+  DeferredBlocksRegion* deferred_blocks_region_;
+
   BitVector dominated_blocks_;
   int successors_phi_index_;
+  bool is_deferred_block_boundary_;
 };
 
 RegisterState* BlockState::register_in_state(RegisterKind kind) {
@@ -225,6 +249,88 @@ class Range {
   int end_;
 };
 
+// Represents a connected region of deferred basic blocks.
+class DeferredBlocksRegion final {
+ public:
+  explicit DeferredBlocksRegion(Zone* zone, int number_of_blocks)
+      : spilled_vregs_(zone), blocks_covered_(number_of_blocks, zone) {}
+
+  // Creates a single deferred_spills structure for the group of
+  // interconnected deferred blocks reachable from |initial_block|.
+  static void Populate(RpoNumber initial_block,
+                       MidTierRegisterAllocationData* data);
+
+  // Adds |vreg| to the list of variables to potentially defer their output to
+  // a spill slot until we enter this deferred block region.
+  void DeferSpillOutputUntilEntry(int vreg) { spilled_vregs_.insert(vreg); }
+
+  ZoneSet<int>::iterator begin() const { return spilled_vregs_.begin(); }
+  ZoneSet<int>::iterator end() const { return spilled_vregs_.end(); }
+
+  const BitVector* blocks_covered() const { return &blocks_covered_; }
+
+ private:
+  static bool IsDeferredBlockBoundary(const ZoneVector<RpoNumber>& blocks,
+                                      MidTierRegisterAllocationData* data) {
+    // To transition between deferred and non-deferred blocks
+    return blocks.size() == 1 && !data->GetBlock(blocks[0])->IsDeferred();
+  }
+
+  ZoneSet<int> spilled_vregs_;
+  BitVector blocks_covered_;
+};
+
+void DeferredBlocksRegion::Populate(RpoNumber initial_block,
+                                    MidTierRegisterAllocationData* data) {
+  DeferredBlocksRegion* deferred_spills =
+      data->allocation_zone()->New<DeferredBlocksRegion>(
+          data->allocation_zone(), data->code()->InstructionBlockCount());
+
+  ZoneQueue<RpoNumber> worklist(data->allocation_zone());
+  ZoneSet<RpoNumber> processed(data->allocation_zone());
+  worklist.push(initial_block);
+  processed.insert(initial_block);
+  while (!worklist.empty()) {
+    RpoNumber current = worklist.front();
+    worklist.pop();
+    DCHECK(data->GetBlock(current)->IsDeferred());
+
+    deferred_spills->blocks_covered_.Add(current.ToInt());
+    data->block_state(current).set_deferred_spills(deferred_spills);
+
+    const InstructionBlock* curr_block = data->GetBlock(current);
+    // Check for whether the predecessor blocks are still deferred.
+    if (IsDeferredBlockBoundary(curr_block->predecessors(), data)) {
+      // If not, mark the predecessor as having a deferred successor.
+      data->block_state(curr_block->predecessors()[0])
+          .MarkAsDeferredBlockBoundary();
+    } else {
+      // Otherwise process predecessors.
+      for (RpoNumber pred : curr_block->predecessors()) {
+        if (processed.count(pred) == 0) {
+          worklist.push(pred);
+          processed.insert(pred);
+        }
+      }
+    }
+
+    // Check for whether the successor blocks are still deferred.
+    // Process any unprocessed successors if we aren't at a boundary.
+    if (IsDeferredBlockBoundary(curr_block->successors(), data)) {
+      // If not, mark the predecessor as having a deferred successor.
+      data->block_state(current).MarkAsDeferredBlockBoundary();
+    } else {
+      // Otherwise process successors.
+      for (RpoNumber succ : curr_block->successors()) {
+        if (processed.count(succ) == 0) {
+          worklist.push(succ);
+          processed.insert(succ);
+        }
+      }
+    }
+  }
+}
+
 // VirtualRegisterData stores data specific to a particular virtual register,
 // and tracks spilled operands for that virtual register.
 class VirtualRegisterData final {
@@ -233,11 +339,15 @@ class VirtualRegisterData final {
 
   // Define VirtualRegisterData with the type of output that produces this
   // virtual register.
-  void DefineAsUnallocatedOperand(int virtual_register, int instr_index);
+  void DefineAsUnallocatedOperand(int virtual_register, int instr_index,
+                                  bool is_deferred_block);
   void DefineAsFixedSpillOperand(AllocatedOperand* operand,
-                                 int virtual_register, int instr_index);
-  void DefineAsConstantOperand(ConstantOperand* operand, int instr_index);
-  void DefineAsPhi(int virtual_register, int instr_index);
+                                 int virtual_register, int instr_index,
+                                 bool is_deferred_block);
+  void DefineAsConstantOperand(ConstantOperand* operand, int instr_index,
+                               bool is_deferred_block);
+  void DefineAsPhi(int virtual_register, int instr_index,
+                   bool is_deferred_block);
 
   // Spill an operand that is assigned to this virtual register.
   void SpillOperand(InstructionOperand* operand, int instr_index,
@@ -252,6 +362,12 @@ class VirtualRegisterData final {
                                         int instr_index,
                                         MidTierRegisterAllocationData* data);
   void EmitGapMoveToSpillSlot(AllocatedOperand from_operand, int instr_index,
+                              MidTierRegisterAllocationData* data);
+
+  // Adds pending spills for deferred-blocks.
+  void AddDeferredSpillUse(int instr_index,
+                           MidTierRegisterAllocationData* data);
+  void AddDeferredSpillOutput(AllocatedOperand allocated_op, int instr_index,
                               MidTierRegisterAllocationData* data);
 
   // Accessors for spill operand, which may still be pending allocation.
@@ -271,17 +387,48 @@ class VirtualRegisterData final {
     DCHECK_EQ(is_constant(), HasSpillOperand() && spill_operand_->IsConstant());
     return is_constant();
   }
-  bool NeedsSpillAtOutput() const;
 
+  // Returns true if the virtual register should be spilled when it is output.
+  bool NeedsSpillAtOutput() const { return needs_spill_at_output_; }
+  void MarkAsNeedsSpillAtOutput() {
+    if (is_constant()) return;
+    needs_spill_at_output_ = true;
+    if (HasSpillRange()) spill_range()->ClearDeferredBlockSpills();
+  }
+
+  // Returns true if the virtual register should be spilled at entry to deferred
+  // blocks in which it is spilled (to avoid spilling on output on
+  // non-deferred blocks).
+  bool NeedsSpillAtDeferredBlocks() const;
+  void EmitDeferredSpillOutputs(MidTierRegisterAllocationData* data);
+
+  bool IsSpilledAt(int instr_index, MidTierRegisterAllocationData* data) {
+    DCHECK_GE(instr_index, output_instr_index());
+    if (NeedsSpillAtOutput() || HasConstantSpillOperand()) return true;
+    if (HasSpillOperand() && data->GetBlock(instr_index)->IsDeferred()) {
+      return true;
+    }
+    return false;
+  }
   // Allocates pending spill operands to the |allocated| spill slot.
   void AllocatePendingSpillOperand(const AllocatedOperand& allocated);
 
   int vreg() const { return vreg_; }
   int output_instr_index() const { return output_instr_index_; }
   bool is_constant() const { return is_constant_; }
-
   bool is_phi() const { return is_phi_; }
-  void set_is_phi(bool value) { is_phi_ = value; }
+  bool is_deferred() const { return is_deferred_; }
+
+  struct DeferredSpillSlotOutput {
+   public:
+    explicit DeferredSpillSlotOutput(int instr, AllocatedOperand op,
+                                     const BitVector* blocks)
+        : instr_index(instr), operand(op), live_blocks(blocks) {}
+
+    int instr_index;
+    AllocatedOperand operand;
+    const BitVector* live_blocks;
+  };
 
   // Represents the range of instructions for which this virtual register needs
   // to be spilled on the stack.
@@ -290,15 +437,17 @@ class VirtualRegisterData final {
     // Defines a spill range for an output operand.
     SpillRange(int definition_instr_index, MidTierRegisterAllocationData* data)
         : live_range_(definition_instr_index, definition_instr_index),
-          live_blocks_(data->GetBlocksDominatedBy(definition_instr_index)) {}
+          live_blocks_(data->GetBlocksDominatedBy(definition_instr_index)),
+          deferred_spill_outputs_(nullptr) {}
 
     // Defines a spill range for a Phi variable.
     SpillRange(const InstructionBlock* phi_block,
                MidTierRegisterAllocationData* data)
         : live_range_(phi_block->first_instruction_index(),
                       phi_block->first_instruction_index()),
-          live_blocks_(data->GetBlocksDominatedBy(
-              phi_block->first_instruction_index())) {
+          live_blocks_(
+              data->GetBlocksDominatedBy(phi_block->first_instruction_index())),
+          deferred_spill_outputs_(nullptr) {
       // For phis, add the gap move instructions in the predecssor blocks to
       // the live range.
       for (RpoNumber pred_rpo : phi_block->predecessors()) {
@@ -308,17 +457,56 @@ class VirtualRegisterData final {
     }
 
     bool IsLiveAt(int instr_index, InstructionBlock* block) {
-      return live_range_.Contains(instr_index) &&
-             live_blocks_->Contains(block->rpo_number().ToInt());
+      if (!live_range_.Contains(instr_index)) return false;
+
+      int block_rpo = block->rpo_number().ToInt();
+      if (!live_blocks_->Contains(block_rpo)) return false;
+
+      if (!HasDeferredBlockSpills()) {
+        return true;
+      } else {
+        for (auto deferred_spill_output : *deferred_spill_outputs()) {
+          if (deferred_spill_output.live_blocks->Contains(block_rpo)) {
+            return true;
+          }
+        }
+        return false;
+      }
     }
 
     void ExtendRangeTo(int instr_index) { live_range_.AddInstr(instr_index); }
+
+    void AddDeferredSpillOutput(AllocatedOperand allocated_op, int instr_index,
+                                MidTierRegisterAllocationData* data) {
+      if (deferred_spill_outputs_ == nullptr) {
+        Zone* zone = data->allocation_zone();
+        deferred_spill_outputs_ =
+            zone->New<ZoneVector<DeferredSpillSlotOutput>>(zone);
+      }
+      const InstructionBlock* block = data->GetBlock(instr_index);
+      DCHECK_EQ(block->first_instruction_index(), instr_index);
+      BlockState& block_state = data->block_state(block->rpo_number());
+      const BitVector* deferred_blocks =
+          block_state.deferred_blocks_region()->blocks_covered();
+      deferred_spill_outputs_->emplace_back(instr_index, allocated_op,
+                                            deferred_blocks);
+    }
+
+    void ClearDeferredBlockSpills() { deferred_spill_outputs_ = nullptr; }
+    bool HasDeferredBlockSpills() const {
+      return deferred_spill_outputs_ != nullptr;
+    }
+    const ZoneVector<DeferredSpillSlotOutput>* deferred_spill_outputs() const {
+      DCHECK(HasDeferredBlockSpills());
+      return deferred_spill_outputs_;
+    }
 
     Range& live_range() { return live_range_; }
 
    private:
     Range live_range_;
     const BitVector* live_blocks_;
+    ZoneVector<DeferredSpillSlotOutput>* deferred_spill_outputs_;
 
     DISALLOW_COPY_AND_ASSIGN(SpillRange);
   };
@@ -331,11 +519,13 @@ class VirtualRegisterData final {
 
  private:
   void Initialize(int virtual_register, InstructionOperand* spill_operand,
-                  int instr_index, bool is_phi, bool is_constant);
+                  int instr_index, bool is_phi, bool is_constant,
+                  bool is_deferred);
 
-  void AddPendingSpillOperand(PendingOperand* pending_operand);
   void AddSpillUse(int instr_index, MidTierRegisterAllocationData* data);
+  void AddPendingSpillOperand(PendingOperand* pending_operand);
   void EnsureSpillRange(MidTierRegisterAllocationData* data);
+  bool CouldSpillOnEntryToDeferred(const InstructionBlock* block);
 
   InstructionOperand* spill_operand_;
   SpillRange* spill_range_;
@@ -344,6 +534,8 @@ class VirtualRegisterData final {
   int vreg_;
   bool is_phi_ : 1;
   bool is_constant_ : 1;
+  bool is_deferred_ : 1;
+  bool needs_spill_at_output_ : 1;
 };
 
 VirtualRegisterData& MidTierRegisterAllocationData::VirtualRegisterDataFor(
@@ -356,33 +548,43 @@ VirtualRegisterData& MidTierRegisterAllocationData::VirtualRegisterDataFor(
 void VirtualRegisterData::Initialize(int virtual_register,
                                      InstructionOperand* spill_operand,
                                      int instr_index, bool is_phi,
-                                     bool is_constant) {
+                                     bool is_constant, bool is_deferred) {
   vreg_ = virtual_register;
   spill_operand_ = spill_operand;
   spill_range_ = nullptr;
   output_instr_index_ = instr_index;
   is_phi_ = is_phi;
   is_constant_ = is_constant;
+  is_deferred_ = is_deferred;
+  needs_spill_at_output_ = !is_constant_ && spill_operand_ != nullptr;
 }
 
 void VirtualRegisterData::DefineAsConstantOperand(ConstantOperand* operand,
-                                                  int instr_index) {
-  Initialize(operand->virtual_register(), operand, instr_index, false, true);
+                                                  int instr_index,
+                                                  bool is_deferred_block) {
+  Initialize(operand->virtual_register(), operand, instr_index, false, true,
+             is_deferred_block);
 }
 
 void VirtualRegisterData::DefineAsFixedSpillOperand(AllocatedOperand* operand,
                                                     int virtual_register,
-                                                    int instr_index) {
-  Initialize(virtual_register, operand, instr_index, false, false);
+                                                    int instr_index,
+                                                    bool is_deferred_block) {
+  Initialize(virtual_register, operand, instr_index, false, false,
+             is_deferred_block);
 }
 
 void VirtualRegisterData::DefineAsUnallocatedOperand(int virtual_register,
-                                                     int instr_index) {
-  Initialize(virtual_register, nullptr, instr_index, false, false);
+                                                     int instr_index,
+                                                     bool is_deferred_block) {
+  Initialize(virtual_register, nullptr, instr_index, false, false,
+             is_deferred_block);
 }
 
-void VirtualRegisterData::DefineAsPhi(int virtual_register, int instr_index) {
-  Initialize(virtual_register, nullptr, instr_index, true, false);
+void VirtualRegisterData::DefineAsPhi(int virtual_register, int instr_index,
+                                      bool is_deferred_block) {
+  Initialize(virtual_register, nullptr, instr_index, true, false,
+             is_deferred_block);
 }
 
 void VirtualRegisterData::EnsureSpillRange(
@@ -407,8 +609,38 @@ void VirtualRegisterData::EnsureSpillRange(
 void VirtualRegisterData::AddSpillUse(int instr_index,
                                       MidTierRegisterAllocationData* data) {
   if (is_constant()) return;
+
   EnsureSpillRange(data);
   spill_range_->ExtendRangeTo(instr_index);
+
+  const InstructionBlock* block = data->GetBlock(instr_index);
+  if (CouldSpillOnEntryToDeferred(block)) {
+    data->block_state(block->rpo_number())
+        .deferred_blocks_region()
+        ->DeferSpillOutputUntilEntry(vreg());
+  } else {
+    MarkAsNeedsSpillAtOutput();
+  }
+}
+
+void VirtualRegisterData::AddDeferredSpillUse(
+    int instr_index, MidTierRegisterAllocationData* data) {
+  DCHECK(data->GetBlock(instr_index)->IsDeferred());
+  DCHECK(!is_deferred());
+  AddSpillUse(instr_index, data);
+}
+
+bool VirtualRegisterData::CouldSpillOnEntryToDeferred(
+    const InstructionBlock* block) {
+  return !NeedsSpillAtOutput() && block->IsDeferred() && !is_deferred() &&
+         !is_constant();
+}
+
+void VirtualRegisterData::AddDeferredSpillOutput(
+    AllocatedOperand allocated_op, int instr_index,
+    MidTierRegisterAllocationData* data) {
+  DCHECK(!NeedsSpillAtOutput());
+  spill_range_->AddDeferredSpillOutput(allocated_op, instr_index, data);
 }
 
 void VirtualRegisterData::SpillOperand(InstructionOperand* operand,
@@ -424,8 +656,17 @@ void VirtualRegisterData::SpillOperand(InstructionOperand* operand,
   }
 }
 
-bool VirtualRegisterData::NeedsSpillAtOutput() const {
-  return HasSpillOperand() && !is_constant();
+bool VirtualRegisterData::NeedsSpillAtDeferredBlocks() const {
+  return HasSpillRange() && spill_range()->HasDeferredBlockSpills();
+}
+
+void VirtualRegisterData::EmitDeferredSpillOutputs(
+    MidTierRegisterAllocationData* data) {
+  DCHECK(NeedsSpillAtDeferredBlocks());
+  for (auto deferred_spill : *spill_range()->deferred_spill_outputs()) {
+    EmitGapMoveToSpillSlot(deferred_spill.operand, deferred_spill.instr_index,
+                           data);
+  }
 }
 
 void VirtualRegisterData::EmitGapMoveToInputFromSpillSlot(
@@ -511,16 +752,36 @@ class RegisterState final : public ZoneObject {
   RegisterState(const RegisterState& other) V8_NOEXCEPT;
 
   bool IsAllocated(RegisterIndex reg);
+  bool IsShared(RegisterIndex reg);
   int VirtualRegisterForRegister(RegisterIndex reg);
 
   // Commit the |reg| with the |allocated| operand.
   void Commit(RegisterIndex reg, AllocatedOperand allocated,
-              InstructionOperand* operand, MidTierRegisterAllocationData* data);
+              InstructionOperand* operand,
+              PendingDeferredBlockSpills& pending_deferred_block_spills,
+              MidTierRegisterAllocationData* data);
+
   // Spill the contents of |reg| for an instruction in |current_block| using
   // the |allocated| operand to commit the spill gap move.
   void Spill(RegisterIndex reg, AllocatedOperand allocated,
              const InstructionBlock* current_block,
              MidTierRegisterAllocationData* data);
+
+  // Add a pending spill of the contents of |reg| at the exit point of a
+  // deferred block at |instr_index| using |allocated| operand to commit the
+  // spill gap move, if the register never gets spilled in a non-deferred block.
+  void SpillForDeferred(
+      RegisterIndex reg, AllocatedOperand allocated, int instr_index,
+      PendingDeferredBlockSpills& pending_deferred_block_spills,
+      MidTierRegisterAllocationData* data);
+
+  // Add a pending gap move from |reg| to |virtual_register|'s spill at the
+  // entry point of a deferred block at |instr_index|, if the |virtual_register|
+  // never spilled in a non-deferred block.
+  void MoveToSpillSlotOnDeferred(
+      RegisterIndex reg, int virtual_register, int instr_index,
+      PendingDeferredBlockSpills& pending_deferred_block_spills,
+      MidTierRegisterAllocationData* data);
 
   // Allocate |reg| to |virtual_register| for the instruction at |instr_index|.
   // If the register is later spilled, a gap move will be added immediately
@@ -574,7 +835,6 @@ class RegisterState final : public ZoneObject {
     return RegisterIndex::Iterator(num_allocatable_registers());
   }
 
- private:
   // Represents a particular register and details of what virtual_register it is
   // currently holding, and how it should be updated if committed or spilled.
   class Register final : public ZoneObject {
@@ -583,17 +843,33 @@ class RegisterState final : public ZoneObject {
     void Reset();
 
     // Operations for committing, spilling and allocating uses of the register.
-    void Commit(AllocatedOperand allocated_operand);
+    void Commit(AllocatedOperand allocated_operand,
+                PendingDeferredBlockSpills& pending_deferred_block_spills,
+                MidTierRegisterAllocationData* data);
     void Spill(AllocatedOperand allocated_op,
                const InstructionBlock* current_block,
                MidTierRegisterAllocationData* data);
     void Use(int virtual_register, int instr_index);
     void PendingUse(InstructionOperand* operand, int virtual_register,
                     int instr_index);
+    void SpillForDeferred(
+        AllocatedOperand allocated, int instr_index,
+        PendingDeferredBlockSpills& pending_deferred_block_spills,
+        MidTierRegisterAllocationData* data);
+    void MoveToSpillSlotOnDeferred(
+        int virtual_register, int instr_index,
+        PendingDeferredBlockSpills& pending_deferred_block_spills);
 
     // Mark register as holding a phi.
     void MarkAsPhiMove();
     bool is_phi_gap_move() const { return is_phi_gap_move_; }
+
+    // If the register has deferred block spills that will be emitted if the
+    // register is committed without being spilled in a non-deferred block.
+    void MarkAsHadDeferredBlocKSpills();
+    bool has_deferred_block_spills() const {
+      return has_deferred_block_spills_;
+    }
 
     // Operations related to dealing with a Register that is shared across
     // multiple basic blocks.
@@ -633,6 +909,7 @@ class RegisterState final : public ZoneObject {
                          MidTierRegisterAllocationData* data);
 
     bool needs_gap_move_on_spill_;
+    bool has_deferred_block_spills_;
     bool is_shared_;
     bool is_phi_gap_move_;
     int last_use_instr_index_;
@@ -642,6 +919,7 @@ class RegisterState final : public ZoneObject {
     PendingOperand* pending_uses_;
   };
 
+ private:
   void ResetDataFor(RegisterIndex reg);
 
   bool HasRegisterData(RegisterIndex reg);
@@ -657,11 +935,89 @@ class RegisterState final : public ZoneObject {
   Zone* zone_;
 };
 
+// Tracks registers that have been spilled in deferred blocks, but are still
+// unspilled in non-deferred blocks. If the register is committed then extra
+// gap moves are added on deferred block boundaries to avoid spills in
+// non-deferred blocks.
+class PendingDeferredBlockSpills final {
+ public:
+  explicit PendingDeferredBlockSpills(MidTierRegisterAllocationData* data);
+
+  // Add pending deferred spills on exit or entry to a deferred block.
+  void AddSpillOnExit(RegisterState::Register* reg, int instr_index);
+  void AddSpillOnEntry(RegisterState::Register* reg, int instr_index);
+
+  // OnCommit should be called a register is fully committed, in order to add
+  // the pending gap moves to limit spills to deferred blocks.
+  void OnCommit(RegisterState::Register* reg, int virtual_register,
+                AllocatedOperand allocated_op);
+
+ private:
+  struct DeferredSpill {
+    DeferredSpill(int instr, bool on_exit)
+        : instr_index(instr), on_deferred_exit(on_exit) {}
+
+    int instr_index;
+    bool on_deferred_exit;
+  };
+
+  void Add(RegisterState::Register* reg, DeferredSpill spill);
+
+  Zone* zone() const { return data_->allocation_zone(); }
+
+  MidTierRegisterAllocationData* data_;
+  ZoneUnorderedMap<RegisterState::Register*, ZoneVector<DeferredSpill>>
+      spills_map_;
+};
+
+PendingDeferredBlockSpills::PendingDeferredBlockSpills(
+    MidTierRegisterAllocationData* data)
+    : data_(data), spills_map_(data->allocation_zone()) {}
+
+void PendingDeferredBlockSpills::Add(RegisterState::Register* reg,
+                                     DeferredSpill spill) {
+  reg->MarkAsHadDeferredBlocKSpills();
+  auto entry =
+      spills_map_.emplace(std::piecewise_construct, std::forward_as_tuple(reg),
+                          std::forward_as_tuple(zone()));
+  entry.first->second.emplace_back(spill);
+}
+
+void PendingDeferredBlockSpills::AddSpillOnExit(RegisterState::Register* reg,
+                                                int instr_index) {
+  Add(reg, DeferredSpill(instr_index, true));
+}
+
+void PendingDeferredBlockSpills::AddSpillOnEntry(RegisterState::Register* reg,
+                                                 int instr_index) {
+  Add(reg, DeferredSpill(instr_index, false));
+}
+
+void PendingDeferredBlockSpills::OnCommit(RegisterState::Register* reg,
+                                          int virtual_register,
+                                          AllocatedOperand allocated_op) {
+  DCHECK(reg->has_deferred_block_spills());
+  VirtualRegisterData& vreg_data =
+      data_->VirtualRegisterDataFor(virtual_register);
+
+  auto spills = spills_map_.find(reg);
+  DCHECK_NE(spills, spills_map_.end());
+  for (DeferredSpill& spill : spills->second) {
+    if (spill.on_deferred_exit) {
+      vreg_data.EmitGapMoveToInputFromSpillSlot(allocated_op, spill.instr_index,
+                                                data_);
+    } else if (!vreg_data.NeedsSpillAtOutput()) {
+      vreg_data.AddDeferredSpillOutput(allocated_op, spill.instr_index, data_);
+    }
+  }
+}
+
 RegisterState::Register::Register() { Reset(); }
 
 void RegisterState::Register::Reset() {
   is_shared_ = false;
   is_phi_gap_move_ = false;
+  has_deferred_block_spills_ = false;
   needs_gap_move_on_spill_ = false;
   last_use_instr_index_ = -1;
   num_commits_required_ = 0;
@@ -701,19 +1057,32 @@ void RegisterState::Register::MarkAsPhiMove() {
   is_phi_gap_move_ = true;
 }
 
+void RegisterState::Register::MarkAsHadDeferredBlocKSpills() {
+  DCHECK(is_allocated());
+  has_deferred_block_spills_ = true;
+  // Mark Register as shared since it's address will be used as a key for
+  // PendingDeferredBlockSpills.
+  is_shared_ = true;
+}
+
 void RegisterState::Register::AddSharedUses(int shared_use_count) {
   is_shared_ = true;
   num_commits_required_ += shared_use_count;
 }
 
 void RegisterState::Register::CommitAtMerge() {
+  DCHECK(is_shared());
+  DCHECK(is_allocated());
   --num_commits_required_;
   // We should still have commits required that will be resolved in the merge
   // block.
   DCHECK_GT(num_commits_required_, 0);
 }
 
-void RegisterState::Register::Commit(AllocatedOperand allocated_op) {
+void RegisterState::Register::Commit(
+    AllocatedOperand allocated_op,
+    PendingDeferredBlockSpills& pending_deferred_block_spills,
+    MidTierRegisterAllocationData* data) {
   DCHECK(is_allocated());
   DCHECK_GT(num_commits_required_, 0);
 
@@ -728,6 +1097,18 @@ void RegisterState::Register::Commit(AllocatedOperand allocated_op) {
       pending_use = next;
     }
     pending_uses_ = nullptr;
+
+    VirtualRegisterData& vreg_data =
+        data->VirtualRegisterDataFor(virtual_register());
+    if (has_deferred_block_spills()) {
+      pending_deferred_block_spills.OnCommit(this, virtual_register(),
+                                             allocated_op);
+    }
+    if (is_phi_gap_move() && vreg_data.NeedsSpillAtDeferredBlocks()) {
+      // If this register was used as a phi gap move, then it being commited
+      // is the point at which we have output the Phi.
+      vreg_data.EmitDeferredSpillOutputs(data);
+    }
   }
   DCHECK_IMPLIES(num_commits_required_ > 0, is_shared());
 }
@@ -735,16 +1116,19 @@ void RegisterState::Register::Commit(AllocatedOperand allocated_op) {
 void RegisterState::Register::Spill(AllocatedOperand allocated_op,
                                     const InstructionBlock* current_block,
                                     MidTierRegisterAllocationData* data) {
+  VirtualRegisterData& vreg_data =
+      data->VirtualRegisterDataFor(virtual_register());
+  SpillPendingUses(data);
   if (is_phi_gap_move()) {
     SpillPhiGapMove(allocated_op, current_block, data);
   }
   if (needs_gap_move_on_spill()) {
-    VirtualRegisterData& vreg_data =
-        data->VirtualRegisterDataFor(virtual_register());
     vreg_data.EmitGapMoveToInputFromSpillSlot(allocated_op,
                                               last_use_instr_index(), data);
   }
-  SpillPendingUses(data);
+  if (has_deferred_block_spills() || !current_block->IsDeferred()) {
+    vreg_data.MarkAsNeedsSpillAtOutput();
+  }
   virtual_register_ = InstructionOperand::kInvalidVirtualRegister;
 }
 
@@ -784,6 +1168,31 @@ void RegisterState::Register::SpillPendingUses(
   pending_uses_ = nullptr;
 }
 
+void RegisterState::Register::SpillForDeferred(
+    AllocatedOperand allocated, int instr_index,
+    PendingDeferredBlockSpills& pending_deferred_block_spills,
+    MidTierRegisterAllocationData* data) {
+  DCHECK(is_allocated());
+  DCHECK(is_shared());
+  // Add a pending deferred spill, then commit the register (with the commit
+  // being fullfilled by the deferred spill if the register is fully commited).
+  data->VirtualRegisterDataFor(virtual_register())
+      .AddDeferredSpillUse(instr_index, data);
+  pending_deferred_block_spills.AddSpillOnExit(this, instr_index);
+  Commit(allocated, pending_deferred_block_spills, data);
+}
+
+void RegisterState::Register::MoveToSpillSlotOnDeferred(
+    int virtual_register, int instr_index,
+    PendingDeferredBlockSpills& pending_deferred_block_spills) {
+  if (!is_allocated()) {
+    virtual_register_ = virtual_register;
+    last_use_instr_index_ = instr_index;
+    num_commits_required_ = 1;
+  }
+  pending_deferred_block_spills.AddSpillOnEntry(this, instr_index);
+}
+
 RegisterState::RegisterState(RegisterKind kind, int num_allocatable_registers,
                              Zone* zone)
     : register_data_(num_allocatable_registers, zone), zone_(zone) {}
@@ -802,16 +1211,17 @@ int RegisterState::VirtualRegisterForRegister(RegisterIndex reg) {
 }
 
 bool RegisterState::IsPhiGapMove(RegisterIndex reg) {
-  DCHECK(RegisterState::IsAllocated(reg));
+  DCHECK(IsAllocated(reg));
   return reg_data(reg).is_phi_gap_move();
 }
 
-void RegisterState::Commit(RegisterIndex reg, AllocatedOperand allocated,
-                           InstructionOperand* operand,
-                           MidTierRegisterAllocationData* data) {
+void RegisterState::Commit(
+    RegisterIndex reg, AllocatedOperand allocated, InstructionOperand* operand,
+    PendingDeferredBlockSpills& pending_deferred_block_spills,
+    MidTierRegisterAllocationData* data) {
   InstructionOperand::ReplaceWith(operand, &allocated);
   if (IsAllocated(reg)) {
-    reg_data(reg).Commit(allocated);
+    reg_data(reg).Commit(allocated, pending_deferred_block_spills, data);
     ResetDataFor(reg);
   }
 }
@@ -822,6 +1232,25 @@ void RegisterState::Spill(RegisterIndex reg, AllocatedOperand allocated,
   DCHECK(IsAllocated(reg));
   reg_data(reg).Spill(allocated, current_block, data);
   ResetDataFor(reg);
+}
+
+void RegisterState::SpillForDeferred(
+    RegisterIndex reg, AllocatedOperand allocated, int instr_index,
+    PendingDeferredBlockSpills& pending_deferred_block_spills,
+    MidTierRegisterAllocationData* data) {
+  DCHECK(IsAllocated(reg));
+  reg_data(reg).SpillForDeferred(allocated, instr_index,
+                                 pending_deferred_block_spills, data);
+  ResetDataFor(reg);
+}
+
+void RegisterState::MoveToSpillSlotOnDeferred(
+    RegisterIndex reg, int virtual_register, int instr_index,
+    PendingDeferredBlockSpills& pending_deferred_block_spills,
+    MidTierRegisterAllocationData* data) {
+  EnsureRegisterData(reg);
+  reg_data(reg).MoveToSpillSlotOnDeferred(virtual_register, instr_index,
+                                          pending_deferred_block_spills);
 }
 
 void RegisterState::AllocateUse(RegisterIndex reg, int virtual_register,
@@ -846,6 +1275,10 @@ void RegisterState::UseForPhiGapMove(RegisterIndex reg) {
 RegisterState::Register& RegisterState::reg_data(RegisterIndex reg) {
   DCHECK(HasRegisterData(reg));
   return *register_data_[reg.ToInt()];
+}
+
+bool RegisterState::IsShared(RegisterIndex reg) {
+  return HasRegisterData(reg) && reg_data(reg).is_shared();
 }
 
 bool RegisterState::IsAllocated(RegisterIndex reg) {
@@ -953,6 +1386,11 @@ class SinglePassRegisterAllocator final {
   void EndBlock(const InstructionBlock* block);
   void EndInstruction();
 
+  void UpdateForDeferredBlock(int instr_index);
+  void AllocateDeferredBlockSpillOutput(int instr_index,
+                                        RpoNumber deferred_block,
+                                        int virtual_register);
+
   RegisterKind kind() const { return kind_; }
   BitVector* assigned_registers() const { return assigned_registers_; }
 
@@ -1017,6 +1455,10 @@ class SinglePassRegisterAllocator final {
   void SpillRegister(RegisterIndex reg);
   void SpillRegisterForVirtualRegister(int virtual_register);
 
+  // Pre-emptively spill the register at the exit of deferred blocks such that
+  // uses of this register in non-deferred blocks don't need to be spilled.
+  void SpillRegisterForDeferred(RegisterIndex reg, int instr_index);
+
   // Returns an AllocatedOperand corresponding to the use of |reg| for
   // |virtual_register|.
   AllocatedOperand AllocatedOperandForReg(RegisterIndex reg,
@@ -1031,8 +1473,8 @@ class SinglePassRegisterAllocator final {
 
   // Helper functions to choose the best register for a given operand.
   V8_INLINE RegisterIndex
-  ChooseRegisterFor(VirtualRegisterData& virtual_register, UsePosition pos,
-                    bool must_use_register);
+  ChooseRegisterFor(VirtualRegisterData& virtual_register, int instr_index,
+                    UsePosition pos, bool must_use_register);
   V8_INLINE RegisterIndex ChooseRegisterFor(MachineRepresentation rep,
                                             UsePosition pos,
                                             bool must_use_register);
@@ -1082,6 +1524,9 @@ class SinglePassRegisterAllocator final {
 
   int num_allocatable_registers() const { return num_allocatable_registers_; }
   const InstructionBlock* current_block() const { return current_block_; }
+  PendingDeferredBlockSpills& pending_deferred_block_spills() {
+    return pending_deferred_block_spills_;
+  }
   MidTierRegisterAllocationData* data() const { return data_; }
 
   // Virtual register to register mapping.
@@ -1089,6 +1534,10 @@ class SinglePassRegisterAllocator final {
 
   // Current register state during allocation.
   RegisterState* register_state_;
+
+  // A map from a register's's state to the list of instr_index to add gap moves
+  // for deferred->non-deferred block transitions if the register commits.
+  PendingDeferredBlockSpills pending_deferred_block_spills_;
 
   // The current block being processed.
   const InstructionBlock* current_block_;
@@ -1119,6 +1568,7 @@ SinglePassRegisterAllocator::SinglePassRegisterAllocator(
     : virtual_register_to_reg_(data->code()->VirtualRegisterCount(),
                                data->allocation_zone()),
       register_state_(nullptr),
+      pending_deferred_block_spills_(data),
       current_block_(nullptr),
       kind_(kind),
       num_allocatable_registers_(
@@ -1187,6 +1637,13 @@ RegisterIndex SinglePassRegisterAllocator::RegisterForVirtualRegister(
     int virtual_register) {
   DCHECK_NE(virtual_register, InstructionOperand::kInvalidVirtualRegister);
   return virtual_register_to_reg_[virtual_register];
+}
+
+void SinglePassRegisterAllocator::UpdateForDeferredBlock(int instr_index) {
+  if (!HasRegisterState()) return;
+  for (RegisterIndex reg : *register_state()) {
+    SpillRegisterForDeferred(reg, instr_index);
+  }
 }
 
 void SinglePassRegisterAllocator::EndInstruction() {
@@ -1449,14 +1906,15 @@ void SinglePassRegisterAllocator::FreeRegister(RegisterIndex reg,
 }
 
 RegisterIndex SinglePassRegisterAllocator::ChooseRegisterFor(
-    VirtualRegisterData& virtual_register, UsePosition pos,
+    VirtualRegisterData& virtual_register, int instr_index, UsePosition pos,
     bool must_use_register) {
   // If register is already allocated to the virtual register, use that.
   RegisterIndex reg = RegisterForVirtualRegister(virtual_register.vreg());
+
   // If we don't need a register, only try to allocate one if the virtual
   // register hasn't yet been spilled, to try to avoid spilling it.
-  if (!reg.is_valid() &&
-      (must_use_register || !virtual_register.HasSpillOperand())) {
+  if (!reg.is_valid() && (must_use_register ||
+                          !virtual_register.IsSpilledAt(instr_index, data()))) {
     reg = ChooseRegisterFor(RepresentationFor(virtual_register.vreg()), pos,
                             must_use_register);
   }
@@ -1577,7 +2035,8 @@ void SinglePassRegisterAllocator::CommitRegister(RegisterIndex reg,
   // Committing the output operation, and mark the register use in this
   // instruction, then mark it as free going forward.
   AllocatedOperand allocated = AllocatedOperandForReg(reg, virtual_register);
-  register_state()->Commit(reg, allocated, operand, data());
+  register_state()->Commit(reg, allocated, operand,
+                           pending_deferred_block_spills(), data());
   MarkRegisterUse(reg, RepresentationFor(virtual_register), pos);
   FreeRegister(reg, virtual_register);
   CheckConsistency();
@@ -1610,6 +2069,50 @@ void SinglePassRegisterAllocator::SpillRegisterForVirtualRegister(
   }
 }
 
+void SinglePassRegisterAllocator::SpillRegisterForDeferred(RegisterIndex reg,
+                                                           int instr_index) {
+  // Committing the output operation, and mark the register use in this
+  // instruction, then mark it as free going forward.
+  if (register_state()->IsAllocated(reg) && register_state()->IsShared(reg)) {
+    int virtual_register = VirtualRegisterForRegister(reg);
+    AllocatedOperand allocated = AllocatedOperandForReg(reg, virtual_register);
+    register_state()->SpillForDeferred(reg, allocated, instr_index,
+                                       pending_deferred_block_spills(), data());
+    FreeRegister(reg, virtual_register);
+  }
+  CheckConsistency();
+}
+
+void SinglePassRegisterAllocator::AllocateDeferredBlockSpillOutput(
+    int instr_index, RpoNumber deferred_block, int virtual_register) {
+  DCHECK(data()->GetBlock(deferred_block)->IsDeferred());
+  VirtualRegisterData& vreg_data =
+      data()->VirtualRegisterDataFor(virtual_register);
+  if (!vreg_data.NeedsSpillAtOutput() &&
+      !DefinedAfter(virtual_register, instr_index, UsePosition::kEnd)) {
+    // If the virtual register hasn't yet been defined, and still doesn't need
+    // to be spilled at it's output, try to allocate a register for it at the
+    // end of this block and add a move to spill slot for the deferred block.
+    RegisterIndex reg =
+        ChooseRegisterFor(vreg_data, instr_index, UsePosition::kEnd, false);
+    if (reg.is_valid()) {
+      EnsureRegisterState();
+      int deferred_block_start =
+          data()->GetBlock(deferred_block)->first_instruction_index();
+      register_state()->MoveToSpillSlotOnDeferred(
+          reg, virtual_register, deferred_block_start,
+          pending_deferred_block_spills(), data());
+      // Allocate with UsePosition::kNone to avoid blocking the register's use
+      // by other operands in this instruction.
+      AssignRegister(reg, virtual_register, UsePosition::kNone);
+      CheckConsistency();
+      return;
+    } else {
+      vreg_data.MarkAsNeedsSpillAtOutput();
+    }
+  }
+}
+
 AllocatedOperand SinglePassRegisterAllocator::AllocatedOperandForReg(
     RegisterIndex reg, int virtual_register) {
   MachineRepresentation rep = RepresentationFor(virtual_register);
@@ -1625,7 +2128,8 @@ void SinglePassRegisterAllocator::AllocateUse(RegisterIndex reg,
   DCHECK(IsFreeOrSameVirtualRegister(reg, virtual_register));
 
   AllocatedOperand allocated = AllocatedOperandForReg(reg, virtual_register);
-  register_state()->Commit(reg, allocated, operand, data());
+  register_state()->Commit(reg, allocated, operand,
+                           pending_deferred_block_spills(), data());
   register_state()->AllocateUse(reg, virtual_register, operand, instr_index,
                                 data());
   AssignRegister(reg, virtual_register, pos);
@@ -1709,7 +2213,8 @@ void SinglePassRegisterAllocator::AllocateInput(UnallocatedOperand* operand,
     bool must_use_register = operand->HasRegisterPolicy() ||
                              (vreg_data.is_constant() &&
                               !operand->HasRegisterOrSlotOrConstantPolicy());
-    RegisterIndex reg = ChooseRegisterFor(vreg_data, pos, must_use_register);
+    RegisterIndex reg =
+        ChooseRegisterFor(vreg_data, instr_index, pos, must_use_register);
 
     if (reg.is_valid()) {
       if (must_use_register) {
@@ -1731,7 +2236,8 @@ void SinglePassRegisterAllocator::AllocateGapMoveInput(
 
   // Gap move inputs should be unconstrained.
   DCHECK(operand->HasRegisterOrSlotPolicy());
-  RegisterIndex reg = ChooseRegisterFor(vreg_data, UsePosition::kStart, false);
+  RegisterIndex reg =
+      ChooseRegisterFor(vreg_data, instr_index, UsePosition::kStart, false);
   if (reg.is_valid()) {
     AllocatePendingUse(reg, virtual_register, operand, instr_index);
   } else {
@@ -1769,7 +2275,8 @@ RegisterIndex SinglePassRegisterAllocator::AllocateOutput(
     reg = FromRegCode(operand->fixed_register_index(),
                       RepresentationFor(virtual_register));
   } else {
-    reg = ChooseRegisterFor(vreg_data, pos, operand->HasRegisterPolicy());
+    reg = ChooseRegisterFor(vreg_data, instr_index, pos,
+                            operand->HasRegisterPolicy());
   }
 
   // TODO(rmcilroy): support secondary storage.
@@ -1797,6 +2304,8 @@ RegisterIndex SinglePassRegisterAllocator::AllocateOutput(
       vreg_data.EmitGapMoveFromOutputToSpillSlot(
           *AllocatedOperand::cast(operand), current_block(), instr_index,
           data());
+    } else if (vreg_data.NeedsSpillAtDeferredBlocks()) {
+      vreg_data.EmitDeferredSpillOutputs(data());
     }
   }
 
@@ -2013,8 +2522,13 @@ void MidTierOutputProcessor::InitializeBlockState(
     }
   }
 
-  // Mark this block as dominating itself.
   BlockState& block_state = data()->block_state(block->rpo_number());
+
+  if (block->IsDeferred() && !block_state.deferred_blocks_region()) {
+    DeferredBlocksRegion::Populate(block->rpo_number(), data());
+  }
+
+  // Mark this block as dominating itself.
   block_state.dominated_blocks()->Add(block->rpo_number().ToInt());
 
   if (block->dominator().IsValid()) {
@@ -2030,6 +2544,7 @@ void MidTierOutputProcessor::InitializeBlockState(
 
 void MidTierOutputProcessor::DefineOutputs(const InstructionBlock* block) {
   int block_start = block->first_instruction_index();
+  bool is_deferred = block->IsDeferred();
   for (int index = block->last_instruction_index(); index >= block_start;
        index--) {
     Instruction* instr = code()->InstructionAt(index);
@@ -2042,7 +2557,7 @@ void MidTierOutputProcessor::DefineOutputs(const InstructionBlock* block) {
         ConstantOperand* constant_operand = ConstantOperand::cast(output);
         int virtual_register = constant_operand->virtual_register();
         VirtualRegisterDataFor(virtual_register)
-            .DefineAsConstantOperand(constant_operand, index);
+            .DefineAsConstantOperand(constant_operand, index, is_deferred);
       } else {
         DCHECK(output->IsUnallocated());
         UnallocatedOperand* unallocated_operand =
@@ -2057,10 +2572,10 @@ void MidTierOutputProcessor::DefineOutputs(const InstructionBlock* block) {
               unallocated_operand->fixed_slot_index());
           VirtualRegisterDataFor(virtual_register)
               .DefineAsFixedSpillOperand(fixed_spill_operand, virtual_register,
-                                         index);
+                                         index, is_deferred);
         } else {
           VirtualRegisterDataFor(virtual_register)
-              .DefineAsUnallocatedOperand(virtual_register, index);
+              .DefineAsUnallocatedOperand(virtual_register, index, is_deferred);
         }
       }
     }
@@ -2076,7 +2591,8 @@ void MidTierOutputProcessor::DefineOutputs(const InstructionBlock* block) {
   for (PhiInstruction* phi : block->phis()) {
     int virtual_register = phi->virtual_register();
     VirtualRegisterDataFor(virtual_register)
-        .DefineAsPhi(virtual_register, block->first_instruction_index());
+        .DefineAsPhi(virtual_register, block->first_instruction_index(),
+                     is_deferred);
   }
 }
 
@@ -2142,8 +2658,29 @@ MidTierRegisterAllocator::MidTierRegisterAllocator(
 
 void MidTierRegisterAllocator::AllocateRegisters(
     const InstructionBlock* block) {
+  RpoNumber block_rpo = block->rpo_number();
+  bool is_deferred_block_boundary =
+      data()->block_state(block_rpo).is_deferred_block_boundary();
+
   general_reg_allocator().StartBlock(block);
   double_reg_allocator().StartBlock(block);
+
+  // If the block is not deferred but has deferred successors, then try to
+  // output spill slots for virtual_registers that are only spilled in the
+  // deferred blocks at the start of those deferred blocks to avoid spilling
+  // them at their output in non-deferred blocks.
+  if (is_deferred_block_boundary && !block->IsDeferred()) {
+    for (RpoNumber successor : block->successors()) {
+      if (!data()->GetBlock(successor)->IsDeferred()) continue;
+      DCHECK_GT(successor, block_rpo);
+      for (int virtual_register :
+           *data()->block_state(successor).deferred_blocks_region()) {
+        AllocatorFor(RepresentationFor(virtual_register))
+            .AllocateDeferredBlockSpillOutput(block->last_instruction_index(),
+                                              successor, virtual_register);
+      }
+    }
+  }
 
   // Allocate registers for instructions in reverse, from the end of the block
   // to the start.
@@ -2215,6 +2752,13 @@ void MidTierRegisterAllocator::AllocateRegisters(
     // phi gap move operations that are needed to resolve phis in our successor.
     if (instr_index == block->last_instruction_index()) {
       AllocatePhiGapMoves(block);
+
+      // If this block is deferred but it's successor isn't, update the state to
+      // limit spills to the deferred blocks where possible.
+      if (is_deferred_block_boundary && block->IsDeferred()) {
+        general_reg_allocator().UpdateForDeferredBlock(instr_index);
+        double_reg_allocator().UpdateForDeferredBlock(instr_index);
+      }
     }
 
     // Allocate any unallocated gap move inputs.
