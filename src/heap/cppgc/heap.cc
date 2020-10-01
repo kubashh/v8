@@ -155,7 +155,7 @@ void Heap::FinalizeGarbageCollection(Config::StackState stack_state) {
   {
     // Pre finalizers are forbidden from allocating objects.
     ObjectAllocator::NoAllocationScope no_allocation_scope_(object_allocator_);
-    marker_->ProcessWeakness();
+    marker_->FinishMarking(stack_state);
     prefinalizer_handler_->InvokePreFinalizers();
   }
   marker_.reset();
