@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6e492b2_8eacdf27",
+        "filename": "test/cctest/test-profile-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-10-01T06:48:10Z",
+      "side": 0,
+      "message": "Nice!",
+      "range": {
+        "startLine": 379,
+        "startChar": 1,
+        "endLine": 383,
+        "endChar": 30
+      },
+      "revId": "d17b83e5dfeb848a5730d75afd76dc871d8a11a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

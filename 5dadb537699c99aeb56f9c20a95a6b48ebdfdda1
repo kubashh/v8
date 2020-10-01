@@ -16,6 +16,92 @@
       "revId": "5dadb537699c99aeb56f9c20a95a6b48ebdfdda1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "99aa6d60_829870a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-10-01T06:48:10Z",
+      "side": 1,
+      "message": "lgtm % nits and a question",
+      "revId": "5dadb537699c99aeb56f9c20a95a6b48ebdfdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73bad886_c91e906b",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-10-01T06:48:10Z",
+      "side": 1,
+      "message": "optional nit: Could be extract into a `AddSymbolizedSampleToProfiles` helper (or similar), and re-used further down below.\n\n(Optional as its only two call sites and its just 5 lines)",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 225,
+        "endChar": 69
+      },
+      "revId": "5dadb537699c99aeb56f9c20a95a6b48ebdfdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee60d08e_826a458d",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-10-01T06:48:10Z",
+      "side": 1,
+      "message": "super-nit: I usually prefer:\n\n symbolizer_ \u003d std::make_unique\u003cSymbolizer\u003e(code_observer_.code_map());\n\nwdyt?",
+      "range": {
+        "startLine": 557,
+        "startChar": 4,
+        "endLine": 557,
+        "endChar": 65
+      },
+      "revId": "5dadb537699c99aeb56f9c20a95a6b48ebdfdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "482f0f86_d1f3a933",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-10-01T06:48:10Z",
+      "side": 1,
+      "message": "out of curiosity: Does each TEST run in a new process? As we leak these all over the place.",
+      "range": {
+        "startLine": 173,
+        "startChar": 2,
+        "endLine": 173,
+        "endChar": 68
+      },
+      "revId": "5dadb537699c99aeb56f9c20a95a6b48ebdfdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
