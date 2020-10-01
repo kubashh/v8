@@ -16,6 +16,23 @@
       "revId": "fa50b7e82586aa2fe6f863022cfef71cce67bf7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7663e709_81e7e510",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-01T11:42:31Z",
+      "side": 1,
+      "message": "Do you have any idea where the files are copied to android?\n\nI\u0027ve checked test/mjsunit/BUILD.gn which seems to contain the correct files.\nI\u0027m not 100% certain that /data/local/tmp/v8/tools/tickprocessor.mjs is the correct path, since locally we usually have v8/v8/tools.",
+      "revId": "fa50b7e82586aa2fe6f863022cfef71cce67bf7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
