@@ -51,6 +51,24 @@
       "revId": "1cf0d4ef72e9a1d1583a96419ad99d0fec5ccd26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e6ca76e_eee7c6dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-01T14:17:17Z",
+      "side": 1,
+      "message": "We would fail a CHECK when trying to create the Ref for that Object.\n\nWe could theoretically change the code to skip the optimization instead of aborting in that case.",
+      "parentUuid": "6ff3f56d_0ee9f2ab",
+      "revId": "1cf0d4ef72e9a1d1583a96419ad99d0fec5ccd26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
