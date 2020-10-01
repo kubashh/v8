@@ -124,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "866061d9_80a2fb21",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-10-01T14:30:50Z",
+      "side": 1,
+      "message": "I guess it could but even the location in include/cppgc is technically \"part\" of the API.\n\nA quick search shows that that file is not included directly in chromium outside of v8, so I think we could move it without issue. I\u0027d prefer to do it in a separate CL however.",
+      "parentUuid": "6eb99a6a_37417bdf",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "001a30d3bd9f6203032f0ecccc9404cccec5c733",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64a9c2e8_60dd6c14",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 9
