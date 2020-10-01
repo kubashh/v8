@@ -100,6 +100,30 @@
     },
     {
       "key": {
+        "uuid": "6eb99a6a_37417bdf",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-01T13:49:57Z",
+      "side": 1,
+      "message": "Could it be moved out of \"include/cppgc\" to \"include/\". It seems very strange for this code to depend on cppgc.",
+      "parentUuid": "02d89059_ceb30ff4",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "001a30d3bd9f6203032f0ecccc9404cccec5c733",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64a9c2e8_60dd6c14",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 9
@@ -129,6 +153,24 @@
       "side": 1,
       "message": "I was trying not to change the meaning of the original code. I assumed there\u0027s a reason that torque used UncheckedCast before (perhaps compile time worries?) and didn\u0027t want to unilaterally change that for every single torque builtin.\n\nSince this change is so large, I really don\u0027t want to have to roll it back for anything that could be done in a follow-up. Will check with Tobias about afterwards.",
       "parentUuid": "64a9c2e8_60dd6c14",
+      "revId": "001a30d3bd9f6203032f0ecccc9404cccec5c733",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec907464_c4a46f72",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-01T13:49:57Z",
+      "side": 1,
+      "message": "Following up with Tobias afterwards SGTM.",
+      "parentUuid": "674e7060_0c92afb5",
       "revId": "001a30d3bd9f6203032f0ecccc9404cccec5c733",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
