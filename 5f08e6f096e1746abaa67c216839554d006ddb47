@@ -16,6 +16,69 @@
       "revId": "5f08e6f096e1746abaa67c216839554d006ddb47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bdec96ba_c27acde3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-01T12:53:18Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "5f08e6f096e1746abaa67c216839554d006ddb47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "903d2402_79b94a91",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-01T12:53:18Z",
+      "side": 1,
+      "message": "Should we call ProcessWeakness from LeaveAtomicPause?\nThat way any lock that we had can be symmetrical between EnterAtomicPause and LeaveAtomicPause.\nAlso EnterAtomicPause already deals with in-construction objects, so I think it\u0027s ok if LeaveAtomicPause also does more than just leave.",
+      "range": {
+        "startLine": 160,
+        "startChar": 13,
+        "endLine": 160,
+        "endChar": 28
+      },
+      "revId": "5f08e6f096e1746abaa67c216839554d006ddb47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb9e8ec6_4a09db79",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-01T12:53:18Z",
+      "side": 1,
+      "message": "This means allocation is forbidden for the duration of the atomic marking pause. Since no user code is supposed to run during that time, I think it wouldn\u0027t cause issues. but I think it should be clearly stated somewhere.",
+      "range": {
+        "startLine": 157,
+        "startChar": 13,
+        "endLine": 157,
+        "endChar": 26
+      },
+      "revId": "5f08e6f096e1746abaa67c216839554d006ddb47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
