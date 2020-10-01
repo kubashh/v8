@@ -65,6 +65,7 @@ enum class OddballType : uint8_t {
   V(ArrayBoilerplateDescription)                    \
   V(CallHandlerInfo)                                \
   V(Cell)                                           \
+  V(SourceTextModule)                               \
   V(TemplateObjectDescription)
 
 // This list is sorted such that subtypes appear before their supertypes.
@@ -109,7 +110,6 @@ enum class OddballType : uint8_t {
   V(Name)                                     \
   V(PropertyCell)                             \
   V(SharedFunctionInfo)                       \
-  V(SourceTextModule)                         \
   /* Subtypes of Object */                    \
   V(HeapObject)
 

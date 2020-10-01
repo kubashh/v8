@@ -4349,9 +4349,13 @@ bool MapRef::serialized_prototype() const {
 }
 
 void SourceTextModuleRef::Serialize() {
-  if (data_->should_access_heap()) return;
-  CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  data()->AsSourceTextModule()->Serialize(broker());
+  if (data_->should_access_heap()) {
+    // TODO(solanes): Remove this case when ObjectRefs are kNeverSerialized.
+    broker()->GetOrCreateData(object()->import_meta());
+  } else {
+    CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
+    data()->AsSourceTextModule()->Serialize(broker());
+  }
 }
 
 void NativeContextRef::Serialize() {
