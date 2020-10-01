@@ -16,6 +16,23 @@
       "revId": "2470cd2c9d8acc0fbf69ddbdffac64c7f8093662",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5693ee90_e804b81b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-01T16:58:48Z",
+      "side": 1,
+      "message": "Wow, that\u0027s a pretty massive implementation. Rubber-stamp LGTM.",
+      "revId": "2470cd2c9d8acc0fbf69ddbdffac64c7f8093662",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
