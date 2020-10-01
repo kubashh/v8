@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dda7256e_4d74c559",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-10-01T07:15:45Z",
+      "side": 1,
+      "message": "Thanks for the review, this CL has been merged.",
+      "revId": "54536f4fa41e28a96842aa0188ffa8e7e1f81838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
