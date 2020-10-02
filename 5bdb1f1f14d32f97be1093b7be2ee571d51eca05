@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6efec69_37c8ca94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-02T16:49:56Z",
+      "side": 1,
+      "message": "LGTM with some comments.",
+      "revId": "5bdb1f1f14d32f97be1093b7be2ee571d51eca05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2197c422_02e33829",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-02T16:49:56Z",
+      "side": 1,
+      "message": "Any reason AtomicExchange is different?",
+      "revId": "5bdb1f1f14d32f97be1093b7be2ee571d51eca05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33f396eb_3dedd2fb",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-02T16:49:56Z",
+      "side": 1,
+      "message": "This comment should be above AtomicExchange. Any reason you moved these, I think they were fine where they were.",
+      "revId": "5bdb1f1f14d32f97be1093b7be2ee571d51eca05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
