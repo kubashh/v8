@@ -239,6 +239,22 @@ bool operator!=(CheckFloat64HoleParameters const& lhs,
   return !(lhs == rhs);
 }
 
+bool operator==(const CheckClosureParameters& lhs,
+                const CheckClosureParameters& rhs) {
+  return lhs.feedback_cell().address() == rhs.feedback_cell().address() &&
+         lhs.feedback_vector().address() == rhs.feedback_vector().address();
+}
+
+inline size_t hash_value(const CheckClosureParameters& p) {
+  return base::hash_combine(p.feedback_cell().address(),
+                            p.feedback_vector().address());
+}
+
+std::ostream& operator<<(std::ostream& os, const CheckClosureParameters& p) {
+  return os << p.feedback_cell().address() << ", "
+            << p.feedback_vector().address();
+}
+
 CheckForMinusZeroMode CheckMinusZeroModeOf(const Operator* op) {
   DCHECK(op->opcode() == IrOpcode::kChangeFloat64ToTagged ||
          op->opcode() == IrOpcode::kCheckedInt32Mul);
@@ -1574,18 +1590,20 @@ const Operator* SimplifiedOperatorBuilder::SpeculativeBigIntNegate(
 }
 
 const Operator* SimplifiedOperatorBuilder::CheckClosure(
-    const Handle<FeedbackCell>& feedback_cell) {
-  return zone()->New<Operator1<Handle<FeedbackCell>>>(  // --
-      IrOpcode::kCheckClosure,                          // opcode
-      Operator::kNoThrow | Operator::kNoWrite,          // flags
-      "CheckClosure",                                   // name
-      1, 1, 1, 1, 1, 0,                                 // counts
-      feedback_cell);                                   // parameter
+    const Handle<FeedbackCell>& feedback_cell,
+    const Handle<FeedbackVector>& feedback_vector) {
+  CheckClosureParameters const parameters(feedback_cell, feedback_vector);
+  return zone()->New<Operator1<CheckClosureParameters>>(  // --
+      IrOpcode::kCheckClosure,                            // opcode
+      Operator::kNoThrow | Operator::kNoWrite,            // flags
+      "CheckClosure",                                     // name
+      1, 1, 1, 1, 1, 0,                                   // counts
+      parameters);                                        // parameter
 }
 
-Handle<FeedbackCell> FeedbackCellOf(const Operator* op) {
+const CheckClosureParameters& CheckClosureParametersOf(const Operator* op) {
   DCHECK(IrOpcode::kCheckClosure == op->opcode());
-  return OpParameter<Handle<FeedbackCell>>(op);
+  return OpParameter<CheckClosureParameters>(op);
 }
 
 const Operator* SimplifiedOperatorBuilder::SpeculativeToNumber(

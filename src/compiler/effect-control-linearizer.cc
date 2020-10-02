@@ -1772,7 +1772,8 @@ Node* EffectControlLinearizer::LowerPoisonIndex(Node* node) {
 
 Node* EffectControlLinearizer::LowerCheckClosure(Node* node,
                                                  Node* frame_state) {
-  Handle<FeedbackCell> feedback_cell = FeedbackCellOf(node->op());
+  Handle<FeedbackCell> feedback_cell =
+      CheckClosureParametersOf(node->op()).feedback_cell();
   Node* value = node->InputAt(0);
 
   // Check that {value} is actually a JSFunction.

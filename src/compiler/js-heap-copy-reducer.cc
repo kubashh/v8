@@ -28,8 +28,8 @@ JSHeapBroker* JSHeapCopyReducer::broker() { return broker_; }
 Reduction JSHeapCopyReducer::Reduce(Node* node) {
   switch (node->opcode()) {
     case IrOpcode::kCheckClosure: {
-      FeedbackCellRef cell(broker(), FeedbackCellOf(node->op()));
-      FeedbackVectorRef feedback_vector = cell.value().AsFeedbackVector();
+      CheckClosureParameters const& p = CheckClosureParametersOf(node->op());
+      FeedbackVectorRef feedback_vector(broker(), p.feedback_vector());
       feedback_vector.Serialize();
       break;
     }

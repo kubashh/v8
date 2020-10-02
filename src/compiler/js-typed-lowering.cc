@@ -1740,8 +1740,9 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
         JSCreateClosureNode{target}.Parameters();
     shared = SharedFunctionInfoRef(broker(), ccp.shared_info());
   } else if (target->opcode() == IrOpcode::kCheckClosure) {
-    FeedbackCellRef cell(broker(), FeedbackCellOf(target->op()));
-    shared = cell.value().AsFeedbackVector().shared_function_info();
+    FeedbackVectorRef feedback_vector(
+        broker(), CheckClosureParametersOf(target->op()).feedback_vector());
+    shared = feedback_vector.shared_function_info();
   }
 
   if (shared.has_value()) {

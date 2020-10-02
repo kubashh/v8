@@ -320,8 +320,9 @@ base::Optional<SharedFunctionInfoRef> JSInliner::DetermineCallTarget(
     FeedbackCellRef cell = n.GetFeedbackCellRefChecked(broker());
     return cell.shared_function_info();
   } else if (match.IsCheckClosure()) {
-    FeedbackCellRef cell(broker(), FeedbackCellOf(match.op()));
-    return cell.shared_function_info();
+    FeedbackVectorRef feedback_vector(
+        broker(), CheckClosureParametersOf(match.op()).feedback_vector());
+    return feedback_vector.shared_function_info();
   }
 
   return base::nullopt;
@@ -358,7 +359,8 @@ FeedbackVectorRef JSInliner::DetermineCallContext(Node* node,
     *context_out = NodeProperties::GetContextInput(match.node());
     return cell.value().AsFeedbackVector();
   } else if (match.IsCheckClosure()) {
-    FeedbackCellRef cell(broker(), FeedbackCellOf(match.op()));
+    FeedbackVectorRef feedback_vector(
+        broker(), CheckClosureParametersOf(match.op()).feedback_vector());
 
     Node* effect = NodeProperties::GetEffectInput(node);
     Node* control = NodeProperties::GetControlInput(node);
@@ -367,7 +369,7 @@ FeedbackVectorRef JSInliner::DetermineCallContext(Node* node,
         match.node(), effect, control);
     NodeProperties::ReplaceEffectInput(node, effect);
 
-    return cell.value().AsFeedbackVector();
+    return feedback_vector;
   }
 
   // Must succeed.

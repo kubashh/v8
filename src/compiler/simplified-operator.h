@@ -313,7 +313,28 @@ bool operator!=(CheckFloat64HoleParameters const&,
                 CheckFloat64HoleParameters const&);
 
 // Parameter for CheckClosure node.
-Handle<FeedbackCell> FeedbackCellOf(const Operator* op);
+class CheckClosureParameters {
+ public:
+  CheckClosureParameters(const Handle<FeedbackCell>& feedback_cell,
+                         const Handle<FeedbackVector>& feedback_vector)
+      : feedback_cell_(feedback_cell), feedback_vector_(feedback_vector) {}
+
+  Handle<FeedbackCell> feedback_cell() const { return feedback_cell_; }
+  Handle<FeedbackVector> feedback_vector() const { return feedback_vector_; }
+
+ private:
+  Handle<FeedbackCell> feedback_cell_;
+  Handle<FeedbackVector> feedback_vector_;
+};
+
+bool operator==(const CheckClosureParameters&, const CheckClosureParameters&);
+
+inline size_t hash_value(const CheckClosureParameters&);
+
+std::ostream& operator<<(std::ostream&, const CheckClosureParameters&);
+
+const CheckClosureParameters& CheckClosureParametersOf(const Operator*)
+    V8_WARN_UNUSED_RESULT;
 
 enum class CheckTaggedInputMode : uint8_t {
   kNumber,
@@ -877,7 +898,8 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckedUint64Bounds(const FeedbackSource& feedback,
                                       CheckBoundsFlags flags);
 
-  const Operator* CheckClosure(const Handle<FeedbackCell>& feedback_cell);
+  const Operator* CheckClosure(const Handle<FeedbackCell>& feedback_cell,
+                               const Handle<FeedbackVector>& feedback_vector);
   const Operator* CheckEqualsInternalizedString();
   const Operator* CheckEqualsSymbol();
   const Operator* CheckFloat64Hole(CheckFloat64HoleMode, FeedbackSource const&);

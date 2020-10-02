@@ -4046,9 +4046,9 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
     CreateClosureParameters const& p = JSCreateClosureNode{target}.Parameters();
     return ReduceJSCall(node, SharedFunctionInfoRef(broker(), p.shared_info()));
   } else if (target->opcode() == IrOpcode::kCheckClosure) {
-    FeedbackCellRef cell(broker(), FeedbackCellOf(target->op()));
-    return ReduceJSCall(node,
-                        cell.value().AsFeedbackVector().shared_function_info());
+    FeedbackVectorRef feedback_vector(
+        broker(), CheckClosureParametersOf(target->op()).feedback_vector());
+    return ReduceJSCall(node, feedback_vector.shared_function_info());
   }
 
   // If {target} is the result of a JSCreateBoundFunction operation,
@@ -4144,7 +4144,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
       }
 
       Node* target_closure = effect =
-          graph()->NewNode(simplified()->CheckClosure(feedback_cell.object()),
+          graph()->NewNode(simplified()->CheckClosure(feedback_cell.object(),
+                                                      feedback_vector.object()),
                            target, effect, control);
 
       // Specialize the JSCall node to the {target_closure}.
