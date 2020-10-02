@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "d5329555_67ab0391",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-02T10:09:31Z",
+      "side": 1,
+      "message": "Thanks Georg, one question back to you...",
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7de49c1f_79d3ce40",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 26
@@ -30,6 +47,24 @@
       "writtenOn": "2020-10-02T07:36:23Z",
       "side": 1,
       "message": "One simplification would be to always cache the values, regardless of the configuration.\n\nIf we do that, we could also read (and cache) the feedback right in the FeedbackNexus constructor, thus getting rid of the GetFeedbackPair method. Or do we ever create a FeedbackNexus but then don\u0027t read the feedback?",
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03e5d305_9c50452a",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-02T10:09:31Z",
+      "side": 1,
+      "message": "The FeedbackNexus has at least 3 distinct usage patterns:\n1. By the IC subsystem, which creates 1 and uses it to write more than once (they have a predicate (bool vector_needs_update()).\n2. Same, but tolerating that a null vector was passed in case there is no feedback vector yet.\n3. JSHeapBroker which does a simple create/read/destroy pattern.\n\nI think case #3 works really well with your idea. Case #2 is trivially dealt with in that case. But case #1 would require me to set the cache values and push them through to the vector. For that case, I reckon the cache appears unnecessary. However, this might overall be a cleanup.\n\nGive me a thumbs up if you\u0027d like to see that and I\u0027ll upload a patchset with the change you suggest.",
+      "parentUuid": "7de49c1f_79d3ce40",
       "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

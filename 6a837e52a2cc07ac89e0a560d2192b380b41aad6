@@ -124,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "47cea836_e19e4a08",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-02T10:09:31Z",
+      "side": 1,
+      "message": "I think Nico and Santiago have done a fine job there, you don\u0027t need to go into that.",
+      "parentUuid": "e26ea4b1_71a23ba5",
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f05e8281_25c011ab",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 25
