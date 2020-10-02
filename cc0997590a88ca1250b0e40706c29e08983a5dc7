@@ -16,6 +16,23 @@
       "revId": "cc0997590a88ca1250b0e40706c29e08983a5dc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9f7948c_2e59fcac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-02T14:03:07Z",
+      "side": 1,
+      "message": "The fixes for in-construction objects is submitted.\nI updated this CL accordingly (mainly replaced release store in HeapObjectHeader ctor with relaxed store).\nptal.",
+      "revId": "cc0997590a88ca1250b0e40706c29e08983a5dc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

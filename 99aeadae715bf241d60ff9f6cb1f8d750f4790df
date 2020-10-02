@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "e7fbf6a5_af318437",
+        "filename": "src/heap/cppgc/heap-object-header.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-02T14:03:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f12109b_96a7a5b6",
+      "range": {
+        "startLine": 157,
+        "startChar": 10,
+        "endLine": 157,
+        "endChar": 30
+      },
+      "revId": "99aeadae715bf241d60ff9f6cb1f8d750f4790df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "10fdfe80_b5ebbb0d",
         "filename": "src/heap/cppgc/heap-page.h",
         "patchSetId": 2
