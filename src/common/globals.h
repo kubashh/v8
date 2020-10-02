@@ -1603,7 +1603,6 @@ enum class LoadSensitivity {
   V(TrapDivUnrepresentable)        \
   V(TrapRemByZero)                 \
   V(TrapFloatUnrepresentable)      \
-  V(TrapFuncInvalid)               \
   V(TrapFuncSigMismatch)           \
   V(TrapDataSegmentDropped)        \
   V(TrapElemSegmentDropped)        \
