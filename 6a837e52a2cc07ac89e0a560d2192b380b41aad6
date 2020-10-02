@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "200077a8_be241b9f",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-02T05:51:19Z",
+      "side": 1,
+      "message": "Right on, done.",
+      "parentUuid": "279d741b_329f9432",
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a3428d8_b7fccc9f",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 25
@@ -111,6 +129,30 @@
     },
     {
       "key": {
+        "uuid": "e21ee349_c950917b",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-02T05:51:19Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "f05e8281_25c011ab",
+      "range": {
+        "startLine": 516,
+        "startChar": 10,
+        "endLine": 516,
+        "endChar": 34
+      },
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6c04ade_eddb2cfb",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 25
@@ -125,6 +167,24 @@
       "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "771100df_94160280",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-02T05:51:19Z",
+      "side": 1,
+      "message": "There was a suggestion from Nico that we wanted to give the JSHeapBroker control over the mode in which it\u0027s usages of the FeedbackNexus could be easily set up for main thread or background. In an early version of the CL, I had awkward logic to instantiate the FeedbackNexus correctly, either with a LocalHeap or only the isolate retrieved from the vector. Nico suggested the elegant construct for those many usages:\n\n  FeedbackNexus nexus(vector, slot, nexus_config());\n\nThis way, all those usages don\u0027t have to be touched for a change in mode from MainThread to BackgroundThread.\n\nThe idea of having the default config pre-created in the isolate came downwind of that idea. I could eliminate that with the following idea:\n\n1. FeedbackNexus no longer contains a pointer to a NexusConfig, but instead a member.\n2. This member is initialized by copy constructor from one passed in (like the line above), or, if none is specified, by NexusConfig::FromMainThread(vector-\u003eGetIsolate()).\n\nI went ahead and did that in the CL, I hope that is a useful adjustment.",
+      "parentUuid": "e6c04ade_eddb2cfb",
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
