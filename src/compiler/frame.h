@@ -147,7 +147,9 @@ class V8_EXPORT_PRIVATE Frame : public ZoneObject {
   int AlignFrame(int alignment = kDoubleSize);
 
   int ReserveSpillSlots(size_t slot_count) {
-    DCHECK_EQ(0, spill_slot_count_);
+    printf("ReserveSpillSlots: %zu, before: %d\n", slot_count,
+           spill_slot_count_);
+    // DCHECK_EQ(0, spill_slot_count_);
     spill_slot_count_ += static_cast<int>(slot_count);
     frame_slot_count_ += static_cast<int>(slot_count);
     return frame_slot_count_ - 1;
