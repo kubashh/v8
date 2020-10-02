@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80d595a8_d8573152",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-02T12:25:52Z",
+      "side": 1,
+      "message": "Hi Georg, I\u0027ve extracted this from another CL.\nI think CheckClosure should carry a handle to\na) the feedback cell, as always, and\nb) the feedback vector which was discovered in that cell at node creation time\n\nThis way, if the feedback cell changes, we still have the vector. There are two \"customers\" of the opcode:\n\n1. The lowering step - which uses the FeedbackCell to verify it\u0027s safe to proceed with the now-inlined function, and\n2. Inlining - which uses the vector to do it\u0027s work.\n\nI think it makes sense for the node to have those two necessities directly, instead of reaching the vector always through the cell.",
+      "revId": "1771b6f0a86e6d2204bf1ad3df673213d14007ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
