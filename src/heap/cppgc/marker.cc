@@ -13,6 +13,7 @@
 #include "src/heap/cppgc/heap-visitor.h"
 #include "src/heap/cppgc/heap.h"
 #include "src/heap/cppgc/liveness-broker.h"
+#include "src/heap/cppgc/marker-utils.h"
 #include "src/heap/cppgc/marking-state.h"
 #include "src/heap/cppgc/marking-visitor.h"
 #include "src/heap/cppgc/stats-collector.h"
@@ -55,7 +56,8 @@ bool ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
 }
 
 // Visit remembered set that was recorded in the generational barrier.
-void VisitRememberedSlots(HeapBase& heap, MarkingState& marking_state) {
+void VisitRememberedSlots(HeapBase& heap,
+                          MutatorMarkingState& mutator_marking_state) {
 #if defined(CPPGC_YOUNG_GENERATION)
   for (void* slot : heap.remembered_slots()) {
     auto& slot_header = BasePage::FromInnerAddress(&heap, slot)
@@ -69,7 +71,7 @@ void VisitRememberedSlots(HeapBase& heap, MarkingState& marking_state) {
         !header.IsInConstruction<HeapObjectHeader::AccessMode::kNonAtomic>());
 
     void* value = *reinterpret_cast<void**>(slot);
-    marking_state.DynamicallyMarkAddress(static_cast<Address>(value));
+    mutator_marking_state.DynamicallyMarkAddress(static_cast<Address>(value));
   }
 #endif
 }
@@ -86,46 +88,18 @@ void ResetRememberedSet(HeapBase& heap) {
 static constexpr size_t kDefaultDeadlineCheckInterval = 150u;
 
 template <size_t kDeadlineCheckInterval = kDefaultDeadlineCheckInterval,
-          typename WorklistLocal, typename Callback, typename Predicate>
-bool DrainWorklistWithDeadline(Predicate should_yield,
-                               WorklistLocal& worklist_local,
-                               Callback callback) {
-  size_t processed_callback_count = 0;
-  typename WorklistLocal::ItemType item;
-  while (worklist_local.Pop(&item)) {
-    callback(item);
-    if (processed_callback_count-- == 0) {
-      if (should_yield()) {
-        return false;
-      }
-      processed_callback_count = kDeadlineCheckInterval;
-    }
-  }
-  return true;
-}
-
-template <size_t kDeadlineCheckInterval = kDefaultDeadlineCheckInterval,
           typename WorklistLocal, typename Callback>
-bool DrainWorklistWithBytesAndTimeDeadline(MarkingState& marking_state,
+bool DrainWorklistWithBytesAndTimeDeadline(MarkingStateBase& marking_state,
                                            size_t marked_bytes_deadline,
                                            v8::base::TimeTicks time_deadline,
                                            WorklistLocal& worklist_local,
                                            Callback callback) {
-  return DrainWorklistWithDeadline(
+  return DrainWorklistWithPredicate<kDeadlineCheckInterval>(
       [&marking_state, marked_bytes_deadline, time_deadline]() {
         return (marked_bytes_deadline <= marking_state.marked_bytes()) ||
                (time_deadline <= v8::base::TimeTicks::Now());
       },
       worklist_local, callback);
-}
-
-void TraceMarkedObject(Visitor* visitor, const HeapObjectHeader* header) {
-  DCHECK(header);
-  DCHECK(!header->IsInConstruction<HeapObjectHeader::AccessMode::kNonAtomic>());
-  DCHECK(header->IsMarked<HeapObjectHeader::AccessMode::kNonAtomic>());
-  const GCInfo& gcinfo =
-      GlobalGCInfoTable::GCInfoFromIndex(header->GetGCInfoIndex());
-  gcinfo.trace(visitor, header->Payload());
 }
 
 size_t GetNextIncrementalStepDuration(IncrementalMarkingSchedule& schedule,
@@ -204,6 +178,7 @@ MarkerBase::~MarkerBase() {
 }
 
 void MarkerBase::StartMarking() {
+  DCHECK(!is_marking_started_);
   heap().stats_collector()->NotifyMarkingStarted();
 
   is_marking_started_ = true;
@@ -213,12 +188,20 @@ void MarkerBase::StartMarking() {
     // Scanning the stack is expensive so we only do it at the atomic pause.
     VisitRoots(MarkingConfig::StackState::kNoHeapPointers);
     ScheduleIncrementalMarkingTask();
+    if (config_.marking_type ==
+        MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
+      concurrent_marker_ = CreateConcurrentMarker();
+    }
   }
 }
 
 void MarkerBase::EnterAtomicPause(MarkingConfig::StackState stack_state) {
   if (ExitIncrementalMarkingIfNeeded(config_, heap())) {
     // Cancel remaining incremental tasks.
+    if (concurrent_marker_) {
+      concurrent_marker_->Cancel();
+      concurrent_marker_.reset();
+    }
     if (incremental_marking_handle_) incremental_marking_handle_.Cancel();
   }
   config_.stack_state = stack_state;
@@ -246,8 +229,8 @@ void MarkerBase::LeaveAtomicPause() {
 void MarkerBase::FinishMarking(MarkingConfig::StackState stack_state) {
   DCHECK(is_marking_started_);
   EnterAtomicPause(stack_state);
-  ProcessWorklistsWithDeadline(std::numeric_limits<size_t>::max(),
-                               v8::base::TimeTicks::Max());
+  CHECK(ProcessWorklistsWithDeadline(std::numeric_limits<size_t>::max(),
+                                     v8::base::TimeTicks::Max()));
   mutator_marking_state_.Publish();
   LeaveAtomicPause();
 }
@@ -302,13 +285,11 @@ bool MarkerBase::IncrementalMarkingStep(MarkingConfig::StackState stack_state) {
   return AdvanceMarkingWithDeadline();
 }
 
-bool MarkerBase::AdvanceMarkingOnAllocation() {
-  bool is_done = AdvanceMarkingWithDeadline();
-  if (is_done) {
+void MarkerBase::AdvanceMarkingOnAllocation() {
+  if (AdvanceMarkingWithDeadline()) {
     // Schedule another incremental task for finalizing without a stack.
     ScheduleIncrementalMarkingTask();
   }
-  return is_done;
 }
 
 bool MarkerBase::AdvanceMarkingWithMaxDuration(
@@ -326,26 +307,29 @@ bool MarkerBase::AdvanceMarkingWithDeadline(v8::base::TimeDelta max_duration) {
         v8::base::TimeTicks::Now() + max_duration);
   }
   schedule_.UpdateIncrementalMarkedBytes(mutator_marking_state_.marked_bytes());
+  mutator_marking_state_.Publish();
   if (!is_done) {
     // If marking is atomic, |is_done| should always be true.
     DCHECK_NE(MarkingConfig::MarkingType::kAtomic, config_.marking_type);
     ScheduleIncrementalMarkingTask();
+    if (concurrent_marker_) {
+      DCHECK_EQ(MarkingConfig::MarkingType::kIncrementalAndConcurrent,
+                config_.marking_type);
+      concurrent_marker_->MutatorIncrementalStep();
+    }
   }
-  mutator_marking_state_.Publish();
   return is_done;
 }
 
 bool MarkerBase::ProcessWorklistsWithDeadline(
     size_t marked_bytes_deadline, v8::base::TimeTicks time_deadline) {
   do {
-    // Convert |previously_not_fully_constructed_worklist_| to
-    // |marking_worklist_|. This merely re-adds items with the proper
-    // callbacks.
     if (!DrainWorklistWithBytesAndTimeDeadline(
             mutator_marking_state_, marked_bytes_deadline, time_deadline,
             mutator_marking_state_.previously_not_fully_constructed_worklist(),
             [this](HeapObjectHeader* header) {
-              TraceMarkedObject(&visitor(), header);
+              TraceMarkedObject<HeapObjectHeader::AccessMode::kNonAtomic>(
+                  &visitor(), header);
               mutator_marking_state_.AccountMarkedBytes(*header);
             })) {
       return false;
@@ -371,7 +355,8 @@ bool MarkerBase::ProcessWorklistsWithDeadline(
             mutator_marking_state_, marked_bytes_deadline, time_deadline,
             mutator_marking_state_.write_barrier_worklist(),
             [this](HeapObjectHeader* header) {
-              TraceMarkedObject(&visitor(), header);
+              TraceMarkedObject<HeapObjectHeader::AccessMode::kNonAtomic>(
+                  &visitor(), header);
               mutator_marking_state_.AccountMarkedBytes(*header);
             })) {
       return false;
@@ -406,6 +391,11 @@ Marker::Marker(Key key, HeapBase& heap, cppgc::Platform* platform,
       marking_visitor_(heap, mutator_marking_state_),
       conservative_marking_visitor_(heap, mutator_marking_state_,
                                     marking_visitor_) {}
+
+std::unique_ptr<ConcurrentMarkerBase> Marker::CreateConcurrentMarker() {
+  return std::make_unique<ConcurrentMarker>(heap_, marking_worklists_,
+                                            schedule_, platform_);
+}
 
 }  // namespace internal
 }  // namespace cppgc
