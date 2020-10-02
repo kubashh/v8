@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70194ff5_8797b17a",
+        "filename": "test/cctest/test-js-weak-refs.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-02T06:59:06Z",
+      "side": 0,
+      "message": "Removing this as an implementation detail that should not be exposed outside heap. (The problem here is that local_weak_objects only exists during marking.)",
+      "range": {
+        "startLine": 915,
+        "startChar": 8,
+        "endLine": 915,
+        "endChar": 78
+      },
+      "revId": "be6ca3e5965aefa3559e7e2846fe5a19af127339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
