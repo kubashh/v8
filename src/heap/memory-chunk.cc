@@ -8,6 +8,7 @@
 #include "src/heap/code-object-registry.h"
 #include "src/heap/memory-allocator.h"
 #include "src/heap/memory-chunk-inl.h"
+#include "src/heap/memory-chunk-layout.h"
 #include "src/heap/spaces.h"
 #include "src/objects/heap-object.h"
 
@@ -334,7 +335,9 @@ void MemoryChunk::RegisterObjectWithInvalidatedSlots(HeapObject object) {
   bool skip_slot_recording;
 
   if (type == OLD_TO_NEW) {
-    skip_slot_recording = InYoungGeneration();
+    skip_slot_recording =
+        InYoungGeneration() ||
+        (FLAG_always_promote_young_mc && slot_set_[OLD_TO_NEW] == nullptr);
   } else {
     skip_slot_recording = ShouldSkipEvacuationSlotRecording();
   }
@@ -358,8 +361,11 @@ void MemoryChunk::InvalidateRecordedSlots(HeapObject object) {
     RegisterObjectWithInvalidatedSlots<OLD_TO_OLD>(object);
   }
 
-  if (!FLAG_always_promote_young_mc || slot_set_[OLD_TO_NEW] != nullptr)
-    RegisterObjectWithInvalidatedSlots<OLD_TO_NEW>(object);
+  if (FLAG_always_promote_young_mc && slot_set_[OLD_TO_NEW] == nullptr) {
+    return;
+  }
+
+  RegisterObjectWithInvalidatedSlots<OLD_TO_NEW>(object);
 }
 
 template bool MemoryChunk::RegisteredObjectWithInvalidatedSlots<OLD_TO_NEW>(
