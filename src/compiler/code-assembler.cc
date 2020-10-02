@@ -802,20 +802,24 @@ Node* CodeAssembler::AtomicStore(MachineRepresentation rep, Node* base,
   return raw_assembler()->AtomicStore(rep, base, offset, value, value_high);
 }
 
-#define ATOMIC_FUNCTION(name)                                       \
-  Node* CodeAssembler::Atomic##name(MachineType type, Node* base,   \
-                                    Node* offset, Node* value,      \
-                                    Node* value_high) {             \
-    return raw_assembler()->Atomic##name(type, base, offset, value, \
-                                         value_high);               \
+#define ATOMIC_FUNCTION(name)                                                 \
+  Node* CodeAssembler::Atomic##name(                                          \
+      MachineType type, TNode<RawPtrT> base, TNode<UintPtrT> offset,          \
+      Node* value, base::Optional<TNode<UintPtrT>> value_high) {              \
+    return raw_assembler()->Atomic##name(type, base, offset, value,           \
+                                         value_high ? *value_high : nullptr); \
   }
-ATOMIC_FUNCTION(Exchange)
 ATOMIC_FUNCTION(Add)
 ATOMIC_FUNCTION(Sub)
 ATOMIC_FUNCTION(And)
 ATOMIC_FUNCTION(Or)
 ATOMIC_FUNCTION(Xor)
 #undef ATOMIC_FUNCTION
+
+Node* CodeAssembler::AtomicExchange(MachineType type, Node* base, Node* offset,
+                                    Node* value, Node* value_high) {
+  return raw_assembler()->AtomicExchange(type, base, offset, value, value_high);
+}
 
 Node* CodeAssembler::AtomicCompareExchange(MachineType type, Node* base,
                                            Node* offset, Node* old_value,
