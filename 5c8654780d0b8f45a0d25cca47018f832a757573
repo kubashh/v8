@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8cc08709_5b70e45b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-10-02T06:41:47Z",
+      "side": 1,
+      "message": "The tests were failing because we had two redundant trap kinds for table out of bounds errors. I merged them into one. You may want to take another look.",
+      "revId": "5c8654780d0b8f45a0d25cca47018f832a757573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
