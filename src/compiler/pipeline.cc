@@ -2578,6 +2578,11 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
 
   data->BeginPhaseKind("V8.TFBlockBuilding");
 
+  // This call enables correct usage of StackSlots in later phases.
+  auto call_descriptor = linkage->GetIncomingDescriptor();
+  data->InitializeFrameData(call_descriptor);
+  if (info()->is_osr()) data->osr_helper()->SetupFrame(data->frame());
+
   // Run early optimization pass.
   Run<EarlyOptimizationPhase>();
   RunPrintAndVerify(EarlyOptimizationPhase::phase_name(), true);
@@ -3310,7 +3315,9 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
 
   data->InitializeInstructionSequence(call_descriptor);
 
-  data->InitializeFrameData(call_descriptor);
+  if (!data->frame()) {
+    data->InitializeFrameData(call_descriptor);
+  }
   // Select and schedule instructions covering the scheduled graph.
   Run<InstructionSelectionPhase>(linkage);
   if (data->compilation_failed()) {
@@ -3606,7 +3613,6 @@ void PipelineImpl::AllocateRegistersForTopTier(
     flags |= RegisterAllocationFlag::kTraceAllocation;
   }
   data->InitializeTopTierRegisterAllocationData(config, call_descriptor, flags);
-  if (info()->is_osr()) data->osr_helper()->SetupFrame(data->frame());
 
   Run<MeetRegisterConstraintsPhase>();
   Run<ResolvePhisPhase>();
