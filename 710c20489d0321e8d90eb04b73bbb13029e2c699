@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d08ccaa3_e1c15ecd",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-02T16:25:37Z",
+      "side": 1,
+      "message": "Return type from code-assembler\u0027s method. Not sure if we can find a common return type and we might need to template it.",
+      "range": {
+        "startLine": 23,
+        "startChar": 6,
+        "endLine": 23,
+        "endChar": 12
+      },
+      "revId": "710c20489d0321e8d90eb04b73bbb13029e2c699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "531cc9e9_faea99fa",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-02T16:25:37Z",
+      "side": 1,
+      "message": "Similar here: Can be either Word32T or UintPtrT, and between those two types we can\u0027t use UnionT.",
+      "range": {
+        "startLine": 24,
+        "startChar": 55,
+        "endLine": 24,
+        "endChar": 61
+      },
+      "revId": "710c20489d0321e8d90eb04b73bbb13029e2c699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
