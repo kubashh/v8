@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c00b9eb5_e2745710",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-02T14:17:38Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "0d66ce38ddf8b98677f1c4b9e00f642d643030a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "251f1f15_95eaab46",
+        "filename": "src/heap/cppgc/heap-object-header.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-02T14:17:38Z",
+      "side": 1,
+      "message": "nit: Add that it\u0027s okay to not observe this write and instead rely on the fact that the sweeper put a 0 in the location of the in-construction bit.",
+      "range": {
+        "startLine": 158,
+        "startChar": 5,
+        "endLine": 158,
+        "endChar": 17
+      },
+      "revId": "0d66ce38ddf8b98677f1c4b9e00f642d643030a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c3bee1f_23be59d0",
+        "filename": "src/heap/cppgc/object-allocator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-02T14:17:38Z",
+      "side": 1,
+      "message": "nit: Add a comment that the marker needs to find the object start concurrently.",
+      "range": {
+        "startLine": 133,
+        "startChar": 14,
+        "endLine": 133,
+        "endChar": 30
+      },
+      "revId": "0d66ce38ddf8b98677f1c4b9e00f642d643030a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
