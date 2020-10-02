@@ -104,7 +104,8 @@ class V8_EXPORT_PRIVATE Zone final {
   // associated with the T type.
   template <typename T, typename... Args>
   T* New(Args&&... args) {
-    void* memory = Allocate<T>(sizeof(T));
+    size_t size = RoundUp(sizeof(T), kAlignmentInBytes);
+    void* memory = Allocate<T>(size);
     return new (memory) T(std::forward<Args>(args)...);
   }
 

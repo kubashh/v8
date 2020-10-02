@@ -76,12 +76,6 @@
 }],  # (arch == arm or arch == arm64) and simulator_run
 
 ##############################################################################
-['(arch == ppc64) and simulator_run', {
-  # Slow test: https://crbug.com/v8/10965
-  'runtime/console-messages-limits': [PASS, SLOW],
-}],  # (arch == ppc64) and simulator_run
-
-##############################################################################
 ['variant == no_wasm_traps', {
   '*': [SKIP],
 }],  # variant == no_wasm_traps
@@ -99,12 +93,6 @@
   # Liftoff needs to be enabled before running these tests.
   'debugger/wasm-*': [SKIP],
 }],  # 'arch == s390 or arch == s390x'
-
-##############################################################################
-['(arch == mipsel or arch == mips64el) and not simd_mips', {
-  # Skip tests that fail on MIPS architectures that don't support SIMD.
-  'debugger/wasm-scope-info*': [SKIP],
-}],  # '(arch == mipsel or arch == mips64el) and not simd_mips'
 
 ################################################################################
 ['variant == stress_snapshot', {

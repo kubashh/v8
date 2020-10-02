@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <queue>
 
-#include "src/api/api-inl.h"
+#include "src/api/api.h"
 #include "src/asmjs/asm-js.h"
 #include "src/base/enum-set.h"
 #include "src/base/optional.h"
@@ -631,7 +631,7 @@ class CompilationStateImpl {
 
   int GetFreeCompileTaskId();
   int GetUnpublishedUnitsLimits(int task_id);
-  void OnCompilationStopped(const WasmFeatures& detected);
+  void OnCompilationStopped(int task_id, const WasmFeatures& detected);
   void PublishDetectedFeatures(Isolate*);
   // Ensure that a compilation job is running, and increase its concurrency if
   // needed.
@@ -1274,6 +1274,12 @@ CompilationExecutionResult ExecuteCompilationUnits(
 
   WasmFeatures detected_features = WasmFeatures::None();
 
+  auto stop = [&detected_features,
+               task_id](BackgroundCompileScope& compile_scope) {
+    compile_scope.compilation_state()->OnCompilationStopped(task_id,
+                                                            detected_features);
+  };
+
   // Preparation (synchronized): Initialize the fields above and get the first
   // compilation unit.
   {
@@ -1287,7 +1293,10 @@ CompilationExecutionResult ExecuteCompilationUnits(
     unpublished_units_limit =
         compilation_state->GetUnpublishedUnitsLimits(task_id);
     unit = compilation_state->GetNextCompilationUnit(task_id, baseline_only);
-    if (!unit) return kNoMoreUnits;
+    if (!unit) {
+      stop(compile_scope);
+      return kNoMoreUnits;
+    }
   }
   TRACE_COMPILE("ExecuteCompilationUnits (task id %d)\n", task_id);
 
@@ -1343,20 +1352,20 @@ CompilationExecutionResult ExecuteCompilationUnits(
     {
       BackgroundCompileScope compile_scope(token);
       if (compile_scope.cancelled()) return kNoMoreUnits;
-
       if (!results_to_publish.back().succeeded()) {
-        compilation_failed = true;
+        // Compile error.
         compile_scope.compilation_state()->SetError();
+        stop(compile_scope);
+        compilation_failed = true;
         break;
       }
 
-      // Yield or get next unit.
+      // Get next unit.
       if (yield ||
           !(unit = compile_scope.compilation_state()->GetNextCompilationUnit(
                 task_id, baseline_only))) {
         publish_results(&compile_scope);
-        compile_scope.compilation_state()->OnCompilationStopped(
-            detected_features);
+        stop(compile_scope);
         return yield ? kYield : kNoMoreUnits;
       }
 
@@ -1765,7 +1774,7 @@ void RecompileNativeModule(NativeModule* native_module,
 AsyncCompileJob::AsyncCompileJob(
     Isolate* isolate, const WasmFeatures& enabled,
     std::unique_ptr<byte[]> bytes_copy, size_t length, Handle<Context> context,
-    Handle<Context> incumbent_context, const char* api_method_name,
+    const char* api_method_name,
     std::shared_ptr<CompilationResultResolver> resolver)
     : isolate_(isolate),
       api_method_name_(api_method_name),
@@ -1784,7 +1793,6 @@ AsyncCompileJob::AsyncCompileJob(
   foreground_task_runner_ = platform->GetForegroundTaskRunner(v8_isolate);
   native_context_ =
       isolate->global_handles()->Create(context->native_context());
-  incumbent_context_ = isolate->global_handles()->Create(*incumbent_context);
   DCHECK(native_context_->IsNativeContext());
   context_id_ = isolate->GetOrRegisterRecorderContextId(native_context_);
   metrics_event_.async = true;
@@ -1878,7 +1886,6 @@ AsyncCompileJob::~AsyncCompileJob() {
   if (stream_) stream_->NotifyCompilationEnded();
   CancelPendingForegroundTask();
   isolate_->global_handles()->Destroy(native_context_.location());
-  isolate_->global_handles()->Destroy(incumbent_context_.location());
   if (!module_object_.is_null()) {
     isolate_->global_handles()->Destroy(module_object_.location());
   }
@@ -2027,11 +2034,6 @@ void AsyncCompileJob::AsyncCompileFailed() {
 void AsyncCompileJob::AsyncCompileSucceeded(Handle<WasmModuleObject> result) {
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
                "wasm.OnCompilationSucceeded");
-  // We have to make sure that an "incumbent context" is available in case
-  // the module's start function calls out to Blink.
-  Local<v8::Context> backup_incumbent_context =
-      Utils::ToLocal(incumbent_context_);
-  v8::Context::BackupIncumbentScope incumbent(backup_incumbent_context);
   resolver_->OnCompilationSucceeded(result);
 }
 
@@ -3228,7 +3230,9 @@ int CompilationStateImpl::GetUnpublishedUnitsLimits(int task_id) {
   return std::max(10, min + (min * task_id / max_compile_concurrency_));
 }
 
-void CompilationStateImpl::OnCompilationStopped(const WasmFeatures& detected) {
+void CompilationStateImpl::OnCompilationStopped(int task_id,
+                                                const WasmFeatures& detected) {
+  DCHECK_GE(max_compile_concurrency_, task_id);
   base::MutexGuard guard(&mutex_);
   detected_features_.Add(detected);
 }

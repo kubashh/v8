@@ -149,11 +149,10 @@ enum class GarbageCollectionReason {
   kTesting = 21,
   kExternalFinalize = 22,
   kGlobalAllocationLimit = 23,
-  kMeasureMemory = 24,
-  kBackgroundAllocationFailure = 25,
+  kMeasureMemory = 24
   // If you add new items here, then update the incremental_marking_reason,
   // mark_compact_reason, and scavenge_reason counters in counters.h.
-  // Also update src/tools/metrics/histograms/enums.xml in chromium.
+  // Also update src/tools/metrics/histograms/histograms.xml in chromium.
 };
 
 enum class YoungGenerationHandling {
@@ -667,8 +666,10 @@ class Heap {
   template <FindMementoMode mode>
   inline AllocationMemento FindAllocationMemento(Map map, HeapObject object);
 
-  // Requests collection and blocks until GC is finished.
-  void RequestCollectionBackground();
+  // Returns false if not able to reserve.
+  bool ReserveSpace(Reservation* reservations, std::vector<Address>* maps);
+
+  void RequestAndWaitForCollection();
 
   //
   // Support for the API.
@@ -769,15 +770,8 @@ class Heap {
   V8_EXPORT_PRIVATE bool ShouldOptimizeForMemoryUsage();
 
   bool HighMemoryPressure() {
-    return memory_pressure_level_.load(std::memory_order_relaxed) !=
-           MemoryPressureLevel::kNone;
+    return memory_pressure_level_ != MemoryPressureLevel::kNone;
   }
-
-  bool CollectionRequested() {
-    return collection_barrier_.CollectionRequested();
-  }
-
-  void CheckCollectionRequested();
 
   void RestoreHeapLimit(size_t heap_limit) {
     // Do not set the limit lower than the live size + some slack.
@@ -1066,6 +1060,10 @@ class Heap {
   // Synchronously finalizes incremental marking.
   V8_EXPORT_PRIVATE void FinalizeIncrementalMarkingAtomically(
       GarbageCollectionReason gc_reason);
+
+  void RegisterDeserializedObjectsForBlackAllocation(
+      Reservation* reservations, const std::vector<HeapObject>& large_objects,
+      const std::vector<Address>& maps);
 
   IncrementalMarking* incremental_marking() {
     return incremental_marking_.get();
@@ -1576,68 +1574,20 @@ class Heap {
     DISALLOW_COPY_AND_ASSIGN(ExternalStringTable);
   };
 
-  // This class stops and resumes all background threads waiting for GC.
   class CollectionBarrier {
     Heap* heap_;
     base::Mutex mutex_;
     base::ConditionVariable cond_;
-
-    enum class RequestState {
-      // Default state, no collection requested and tear down wasn't initated
-      // yet.
-      kDefault,
-
-      // Collection was already requested
-      kCollection,
-
-      // This state is reached after isolate starts to shut down. The main
-      // thread can't perform any GCs anymore, so all allocations need to be
-      // allowed from here on until background thread finishes.
-      kShutdown,
-    };
-
-    // The current state.
-    std::atomic<RequestState> state_;
-
-    void BlockUntilCollected();
-
-    // Request GC by activating stack guards and posting a task to perform the
-    // GC.
-    void ActivateStackGuardAndPostTask();
-
-    // Returns true when state was successfully updated from kDefault to
-    // kCollection.
-    bool FirstCollectionRequest() {
-      RequestState expected = RequestState::kDefault;
-      return state_.compare_exchange_strong(expected,
-                                            RequestState::kCollection);
-    }
-
-    // Sets state back to kDefault - invoked at end of GC.
-    void ClearCollectionRequested() {
-      RequestState old_state =
-          state_.exchange(RequestState::kDefault, std::memory_order_relaxed);
-      CHECK_NE(old_state, RequestState::kShutdown);
-    }
+    bool gc_requested_;
+    bool shutdown_requested_;
 
    public:
     explicit CollectionBarrier(Heap* heap)
-        : heap_(heap), state_(RequestState::kDefault) {}
+        : heap_(heap), gc_requested_(false), shutdown_requested_(false) {}
 
-    // Checks whether any background thread requested GC.
-    bool CollectionRequested() {
-      return state_.load(std::memory_order_relaxed) ==
-             RequestState::kCollection;
-    }
-
-    // Resumes threads waiting for collection.
-    void ResumeThreadsAwaitingCollection();
-
-    // Sets current state to kShutdown.
+    void CollectionPerformed();
     void ShutdownRequested();
-
-    // This is the method use by background threads to request and wait for GC.
-    void AwaitCollectionBackground();
+    void Wait();
   };
 
   struct StringTypeTable {
@@ -2122,7 +2072,7 @@ class Heap {
   // and reset by a mark-compact garbage collection.
   std::atomic<MemoryPressureLevel> memory_pressure_level_;
 
-  std::vector<std::pair<v8::NearHeapLimitCallback, void*>>
+  std::vector<std::pair<v8::NearHeapLimitCallback, void*> >
       near_heap_limit_callbacks_;
 
   // For keeping track of context disposals.
@@ -2397,7 +2347,6 @@ class Heap {
 
   // The allocator interface.
   friend class Factory;
-  friend class Deserializer;
 
   // The Isolate constructs us.
   friend class Isolate;

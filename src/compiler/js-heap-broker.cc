@@ -297,9 +297,7 @@ CallHandlerInfoData::CallHandlerInfoData(JSHeapBroker* broker,
                                          ObjectData** storage,
                                          Handle<CallHandlerInfo> object)
     : HeapObjectData(broker, storage, object),
-      callback_(v8::ToCData<Address>(object->callback())) {
-  DCHECK(!FLAG_turbo_direct_heap_access);
-}
+      callback_(v8::ToCData<Address>(object->callback())) {}
 
 // These definitions are here in order to please the linker, which in debug mode
 // sometimes requires static constants to be defined in .cc files.
@@ -330,12 +328,7 @@ void FunctionTemplateInfoData::SerializeCallCode(JSHeapBroker* broker) {
                     "FunctionTemplateInfoData::SerializeCallCode");
   auto function_template_info = Handle<FunctionTemplateInfo>::cast(object());
   call_code_ = broker->GetOrCreateData(function_template_info->call_code());
-  if (call_code_->should_access_heap()) {
-    // TODO(mvstanton): When ObjectRef is in the never serialized list, this
-    // code can be removed.
-    broker->GetOrCreateData(
-        Handle<CallHandlerInfo>::cast(call_code_->object())->data());
-  } else {
+  if (!call_code_->should_access_heap()) {
     call_code_->AsCallHandlerInfo()->Serialize(broker);
   }
 }
@@ -712,6 +705,7 @@ class HeapNumberData : public HeapObjectData {
   HeapNumberData(JSHeapBroker* broker, ObjectData** storage,
                  Handle<HeapNumber> object)
       : HeapObjectData(broker, storage, object), value_(object->value()) {
+    DCHECK(!FLAG_turbo_direct_heap_access);
   }
 
   double value() const { return value_; }
@@ -1027,6 +1021,7 @@ class BigIntData : public HeapObjectData {
   BigIntData(JSHeapBroker* broker, ObjectData** storage, Handle<BigInt> object)
       : HeapObjectData(broker, storage, object),
         as_uint64_(object->AsUint64(nullptr)) {
+    DCHECK(!FLAG_turbo_direct_heap_access);
   }
 
   uint64_t AsUint64() const { return as_uint64_; }
@@ -1572,6 +1567,7 @@ FixedDoubleArrayData::FixedDoubleArrayData(JSHeapBroker* broker,
                                            ObjectData** storage,
                                            Handle<FixedDoubleArray> object)
     : FixedArrayBaseData(broker, storage, object), contents_(broker->zone()) {
+  DCHECK(!FLAG_turbo_direct_heap_access);
 }
 
 void FixedDoubleArrayData::SerializeContents(JSHeapBroker* broker) {
@@ -2397,7 +2393,7 @@ SourceTextModuleRef ContextRef::GetModule(SerializationPolicy policy) const {
 
 JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
                            bool tracing_enabled, bool is_concurrent_inlining,
-                           CodeKind code_kind)
+                           bool is_native_context_independent)
     : isolate_(isolate),
       zone_(broker_zone),
       refs_(zone()->New<RefsMap>(kMinimalRefsBucketCount, AddressMatcher(),
@@ -2406,7 +2402,7 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
       array_and_object_prototypes_(zone()),
       tracing_enabled_(tracing_enabled),
       is_concurrent_inlining_(is_concurrent_inlining),
-      code_kind_(code_kind),
+      is_native_context_independent_(is_native_context_independent),
       local_heap_(base::nullopt),
       feedback_(zone()),
       bytecode_analyses_(zone()),
@@ -3357,7 +3353,7 @@ BIMODAL_ACCESSOR(JSBoundFunction, JSReceiver, bound_target_function)
 BIMODAL_ACCESSOR(JSBoundFunction, Object, bound_this)
 BIMODAL_ACCESSOR(JSBoundFunction, FixedArray, bound_arguments)
 
-BIMODAL_ACCESSOR_C(JSDataView, size_t, byte_length)
+BIMODAL_ACCESSOR_WITH_FLAG_C(JSDataView, size_t, byte_length)
 
 BIMODAL_ACCESSOR_C(JSFunction, bool, has_feedback_vector)
 BIMODAL_ACCESSOR_C(JSFunction, bool, has_initial_map)
@@ -3420,9 +3416,8 @@ BIMODAL_ACCESSOR_C(PropertyCell, PropertyDetails, property_details)
 
 base::Optional<CallHandlerInfoRef> FunctionTemplateInfoRef::call_code() const {
   if (data_->should_access_heap()) {
-    return CallHandlerInfoRef(broker(),
-                              broker()->CanonicalPersistentHandle(
-                                  object()->synchronized_call_code()));
+    return CallHandlerInfoRef(
+        broker(), broker()->CanonicalPersistentHandle(object()->call_code()));
   }
   ObjectData* call_code = data()->AsFunctionTemplateInfo()->call_code();
   if (!call_code) return base::nullopt;
@@ -4686,21 +4681,10 @@ void FilterRelevantReceiverMaps(Isolate* isolate, MapHandles* maps) {
 }
 
 MaybeObjectHandle TryGetMinimorphicHandler(
-    std::vector<MapAndHandler> const& maps_and_handlers, FeedbackSlotKind kind,
-    Handle<NativeContext> native_context) {
+    std::vector<MapAndHandler> const& maps_and_handlers,
+    FeedbackSlotKind kind) {
   if (!FLAG_dynamic_map_checks || !IsLoadICKind(kind))
     return MaybeObjectHandle();
-
-  // Don't use dynamic map checks when loading properties from Array.prototype.
-  // Using dynamic map checks prevents constant folding and hence does not
-  // inline the array builtins. We only care about monomorphic cases here. For
-  // polymorphic loads currently we don't inline the builtins even without
-  // dynamic map checks.
-  if (maps_and_handlers.size() == 1 &&
-      *maps_and_handlers[0].first ==
-          native_context->initial_array_prototype().map()) {
-    return MaybeObjectHandle();
-  }
 
   MaybeObjectHandle initial_handler;
   for (MapAndHandler map_and_handler : maps_and_handlers) {
@@ -4759,8 +4743,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
 
   base::Optional<NameRef> name =
       static_name.has_value() ? static_name : GetNameFeedback(nexus);
-  MaybeObjectHandle handler = TryGetMinimorphicHandler(
-      maps_and_handlers, kind, target_native_context().object());
+  MaybeObjectHandle handler = TryGetMinimorphicHandler(maps_and_handlers, kind);
   if (!handler.is_null()) {
     MaybeHandle<Map> maybe_map;
     if (nexus.ic_state() == MONOMORPHIC) {

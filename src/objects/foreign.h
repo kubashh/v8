@@ -6,7 +6,7 @@
 #define V8_OBJECTS_FOREIGN_H_
 
 #include "src/objects/heap-object.h"
-#include "torque-generated/class-definitions.h"
+#include "torque-generated/class-definitions-tq.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -42,8 +42,6 @@ class Foreign : public TorqueGeneratedForeign<Foreign, HeapObject> {
   friend class SerializerDeserializer;
   friend class StartupSerializer;
   friend class WasmTypeInfo;
-
-  inline void AllocateExternalPointerEntries(Isolate* isolate);
 
   inline void set_foreign_address(Isolate* isolate, Address value);
 

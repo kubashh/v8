@@ -7,8 +7,8 @@
 
 #include "src/objects/code-kind.h"
 #include "src/objects/js-objects.h"
-#include "torque-generated/class-definitions.h"
-#include "torque-generated/field-offsets.h"
+#include "torque-generated/class-definitions-tq.h"
+#include "torque-generated/field-offsets-tq.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -115,7 +115,6 @@ class JSFunction : public JSFunctionOrBoundFunction {
   V8_EXPORT_PRIVATE bool ActiveTierIsIgnition() const;
   bool ActiveTierIsTurbofan() const;
   bool ActiveTierIsNCI() const;
-  bool ActiveTierIsTurboprop() const;
 
   CodeKind NextTier() const;
 

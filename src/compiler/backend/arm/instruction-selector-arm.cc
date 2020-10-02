@@ -502,35 +502,35 @@ void InstructionSelector::VisitLoadTransform(Node* node) {
   LoadTransformParameters params = LoadTransformParametersOf(node->op());
   InstructionCode opcode = kArchNop;
   switch (params.transformation) {
-    case LoadTransformation::kS128Load8Splat:
-      opcode = kArmS128Load8Splat;
+    case LoadTransformation::kS8x16LoadSplat:
+      opcode = kArmS8x16LoadSplat;
       break;
-    case LoadTransformation::kS128Load16Splat:
-      opcode = kArmS128Load16Splat;
+    case LoadTransformation::kS16x8LoadSplat:
+      opcode = kArmS16x8LoadSplat;
       break;
-    case LoadTransformation::kS128Load32Splat:
-      opcode = kArmS128Load32Splat;
+    case LoadTransformation::kS32x4LoadSplat:
+      opcode = kArmS32x4LoadSplat;
       break;
-    case LoadTransformation::kS128Load64Splat:
-      opcode = kArmS128Load64Splat;
+    case LoadTransformation::kS64x2LoadSplat:
+      opcode = kArmS64x2LoadSplat;
       break;
-    case LoadTransformation::kS128Load8x8S:
-      opcode = kArmS128Load8x8S;
+    case LoadTransformation::kI16x8Load8x8S:
+      opcode = kArmI16x8Load8x8S;
       break;
-    case LoadTransformation::kS128Load8x8U:
-      opcode = kArmS128Load8x8U;
+    case LoadTransformation::kI16x8Load8x8U:
+      opcode = kArmI16x8Load8x8U;
       break;
-    case LoadTransformation::kS128Load16x4S:
-      opcode = kArmS128Load16x4S;
+    case LoadTransformation::kI32x4Load16x4S:
+      opcode = kArmI32x4Load16x4S;
       break;
-    case LoadTransformation::kS128Load16x4U:
-      opcode = kArmS128Load16x4U;
+    case LoadTransformation::kI32x4Load16x4U:
+      opcode = kArmI32x4Load16x4U;
       break;
-    case LoadTransformation::kS128Load32x2S:
-      opcode = kArmS128Load32x2S;
+    case LoadTransformation::kI64x2Load32x2S:
+      opcode = kArmI64x2Load32x2S;
       break;
-    case LoadTransformation::kS128Load32x2U:
-      opcode = kArmS128Load32x2U;
+    case LoadTransformation::kI64x2Load32x2U:
+      opcode = kArmI64x2Load32x2U;
       break;
     default:
       UNIMPLEMENTED();
@@ -2870,7 +2870,7 @@ void ArrangeShuffleTable(ArmOperandGenerator* g, Node* input0, Node* input1,
 
 }  // namespace
 
-void InstructionSelector::VisitI8x16Shuffle(Node* node) {
+void InstructionSelector::VisitS8x16Shuffle(Node* node) {
   uint8_t shuffle[kSimd128Size];
   bool is_swizzle;
   CanonicalizeShuffle(node, shuffle, &is_swizzle);
@@ -2923,18 +2923,18 @@ void InstructionSelector::VisitI8x16Shuffle(Node* node) {
   // Code generator uses vtbl, arrange sources to form a valid lookup table.
   InstructionOperand src0, src1;
   ArrangeShuffleTable(&g, input0, input1, &src0, &src1);
-  Emit(kArmI8x16Shuffle, g.DefineAsRegister(node), src0, src1,
+  Emit(kArmS8x16Shuffle, g.DefineAsRegister(node), src0, src1,
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle)),
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle + 4)),
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle + 8)),
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle + 12)));
 }
 
-void InstructionSelector::VisitI8x16Swizzle(Node* node) {
+void InstructionSelector::VisitS8x16Swizzle(Node* node) {
   ArmOperandGenerator g(this);
   // We don't want input 0 (the table) to be the same as output, since we will
   // modify output twice (low and high), and need to keep the table the same.
-  Emit(kArmI8x16Swizzle, g.DefineAsRegister(node),
+  Emit(kArmS8x16Swizzle, g.DefineAsRegister(node),
        g.UseUniqueRegister(node->InputAt(0)), g.UseRegister(node->InputAt(1)));
 }
 

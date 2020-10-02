@@ -15,16 +15,17 @@ namespace internal {
 
 void LazyBuiltinsAssembler::GenerateTailCallToJSCode(
     TNode<Code> code, TNode<JSFunction> function) {
-  auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
-  auto context = Parameter<Context>(Descriptor::kContext);
-  auto new_target = Parameter<Object>(Descriptor::kNewTarget);
+  TNode<Int32T> argc =
+      UncheckedCast<Int32T>(Parameter(Descriptor::kActualArgumentsCount));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> new_target = CAST(Parameter(Descriptor::kNewTarget));
 
   TailCallJSCode(code, context, function, new_target, argc);
 }
 
 void LazyBuiltinsAssembler::GenerateTailCallToReturnedCode(
     Runtime::FunctionId function_id, TNode<JSFunction> function) {
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
   TNode<Code> code = CAST(CallRuntime(function_id, context, function));
   GenerateTailCallToJSCode(code, function);
 }
@@ -155,13 +156,13 @@ void LazyBuiltinsAssembler::CompileLazy(TNode<JSFunction> function) {
 }
 
 TF_BUILTIN(CompileLazy, LazyBuiltinsAssembler) {
-  auto function = Parameter<JSFunction>(Descriptor::kTarget);
+  TNode<JSFunction> function = CAST(Parameter(Descriptor::kTarget));
 
   CompileLazy(function);
 }
 
 TF_BUILTIN(CompileLazyDeoptimizedCode, LazyBuiltinsAssembler) {
-  auto function = Parameter<JSFunction>(Descriptor::kTarget);
+  TNode<JSFunction> function = CAST(Parameter(Descriptor::kTarget));
 
   // Set the code slot inside the JSFunction to CompileLazy.
   TNode<Code> code = HeapConstant(BUILTIN_CODE(isolate(), CompileLazy));

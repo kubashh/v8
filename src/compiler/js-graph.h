@@ -85,7 +85,6 @@ class V8_EXPORT_PRIVATE JSGraph : public MachineGraph {
   V(BigIntMapConstant)                            \
   V(BooleanMapConstant)                           \
   V(ToNumberBuiltinConstant)                      \
-  V(PlainPrimitiveToNumberBuiltinConstant)        \
   V(EmptyFixedArrayConstant)                      \
   V(EmptyStringConstant)                          \
   V(FixedArrayMapConstant)                        \

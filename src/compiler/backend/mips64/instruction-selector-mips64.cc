@@ -386,35 +386,35 @@ void InstructionSelector::VisitLoadTransform(Node* node) {
 
   InstructionCode opcode = kArchNop;
   switch (params.transformation) {
-    case LoadTransformation::kS128Load8Splat:
-      opcode = kMips64S128Load8Splat;
+    case LoadTransformation::kS8x16LoadSplat:
+      opcode = kMips64S8x16LoadSplat;
       break;
-    case LoadTransformation::kS128Load16Splat:
-      opcode = kMips64S128Load16Splat;
+    case LoadTransformation::kS16x8LoadSplat:
+      opcode = kMips64S16x8LoadSplat;
       break;
-    case LoadTransformation::kS128Load32Splat:
-      opcode = kMips64S128Load32Splat;
+    case LoadTransformation::kS32x4LoadSplat:
+      opcode = kMips64S32x4LoadSplat;
       break;
-    case LoadTransformation::kS128Load64Splat:
-      opcode = kMips64S128Load64Splat;
+    case LoadTransformation::kS64x2LoadSplat:
+      opcode = kMips64S64x2LoadSplat;
       break;
-    case LoadTransformation::kS128Load8x8S:
-      opcode = kMips64S128Load8x8S;
+    case LoadTransformation::kI16x8Load8x8S:
+      opcode = kMips64I16x8Load8x8S;
       break;
-    case LoadTransformation::kS128Load8x8U:
-      opcode = kMips64S128Load8x8U;
+    case LoadTransformation::kI16x8Load8x8U:
+      opcode = kMips64I16x8Load8x8U;
       break;
-    case LoadTransformation::kS128Load16x4S:
-      opcode = kMips64S128Load16x4S;
+    case LoadTransformation::kI32x4Load16x4S:
+      opcode = kMips64I32x4Load16x4S;
       break;
-    case LoadTransformation::kS128Load16x4U:
-      opcode = kMips64S128Load16x4U;
+    case LoadTransformation::kI32x4Load16x4U:
+      opcode = kMips64I32x4Load16x4U;
       break;
-    case LoadTransformation::kS128Load32x2S:
-      opcode = kMips64S128Load32x2S;
+    case LoadTransformation::kI64x2Load32x2S:
+      opcode = kMips64I64x2Load32x2S;
       break;
-    case LoadTransformation::kS128Load32x2U:
-      opcode = kMips64S128Load32x2U;
+    case LoadTransformation::kI64x2Load32x2U:
+      opcode = kMips64I64x2Load32x2U;
       break;
     default:
       UNIMPLEMENTED();
@@ -1754,9 +1754,9 @@ void InstructionSelector::VisitUnalignedLoad(Node* node) {
     case MachineRepresentation::kFloat64:
       opcode = kMips64Uldc1;
       break;
+    case MachineRepresentation::kBit:  // Fall through.
     case MachineRepresentation::kWord8:
-      opcode = load_rep.IsUnsigned() ? kMips64Lbu : kMips64Lb;
-      break;
+      UNREACHABLE();
     case MachineRepresentation::kWord16:
       opcode = load_rep.IsUnsigned() ? kMips64Ulhu : kMips64Ulh;
       break;
@@ -1772,7 +1772,6 @@ void InstructionSelector::VisitUnalignedLoad(Node* node) {
     case MachineRepresentation::kSimd128:
       opcode = kMips64MsaLd;
       break;
-    case MachineRepresentation::kBit:                // Fall through.
     case MachineRepresentation::kCompressedPointer:  // Fall through.
     case MachineRepresentation::kCompressed:         // Fall through.
     case MachineRepresentation::kNone:
@@ -1807,9 +1806,9 @@ void InstructionSelector::VisitUnalignedStore(Node* node) {
     case MachineRepresentation::kFloat64:
       opcode = kMips64Usdc1;
       break;
+    case MachineRepresentation::kBit:  // Fall through.
     case MachineRepresentation::kWord8:
-      opcode = kMips64Sb;
-      break;
+      UNREACHABLE();
     case MachineRepresentation::kWord16:
       opcode = kMips64Ush;
       break;
@@ -1825,7 +1824,6 @@ void InstructionSelector::VisitUnalignedStore(Node* node) {
     case MachineRepresentation::kSimd128:
       opcode = kMips64MsaSt;
       break;
-    case MachineRepresentation::kBit:                // Fall through.
     case MachineRepresentation::kCompressedPointer:  // Fall through.
     case MachineRepresentation::kCompressed:         // Fall through.
     case MachineRepresentation::kNone:
@@ -3082,7 +3080,7 @@ bool TryMatchArchShuffle(const uint8_t* shuffle, const ShuffleEntry* table,
 
 }  // namespace
 
-void InstructionSelector::VisitI8x16Shuffle(Node* node) {
+void InstructionSelector::VisitS8x16Shuffle(Node* node) {
   uint8_t shuffle[kSimd128Size];
   bool is_swizzle;
   CanonicalizeShuffle(node, shuffle, &is_swizzle);
@@ -3108,7 +3106,7 @@ void InstructionSelector::VisitI8x16Shuffle(Node* node) {
          g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle32x4)));
     return;
   }
-  Emit(kMips64I8x16Shuffle, g.DefineAsRegister(node), g.UseRegister(input0),
+  Emit(kMips64S8x16Shuffle, g.DefineAsRegister(node), g.UseRegister(input0),
        g.UseRegister(input1),
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle)),
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle + 4)),
@@ -3116,14 +3114,15 @@ void InstructionSelector::VisitI8x16Shuffle(Node* node) {
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle + 12)));
 }
 
-void InstructionSelector::VisitI8x16Swizzle(Node* node) {
+void InstructionSelector::VisitS8x16Swizzle(Node* node) {
   Mips64OperandGenerator g(this);
   InstructionOperand temps[] = {g.TempSimd128Register()};
   // We don't want input 0 or input 1 to be the same as output, since we will
   // modify output before do the calculation.
-  Emit(kMips64I8x16Swizzle, g.DefineAsRegister(node),
+  Emit(kMips64S8x16Swizzle, g.DefineAsRegister(node),
        g.UseUniqueRegister(node->InputAt(0)),
-       g.UseUniqueRegister(node->InputAt(1)), arraysize(temps), temps);
+       g.UseUniqueRegister(node->InputAt(1)),
+       arraysize(temps), temps);
 }
 
 void InstructionSelector::VisitSignExtendWord8ToInt32(Node* node) {

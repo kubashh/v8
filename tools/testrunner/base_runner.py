@@ -186,7 +186,6 @@ class BuildConfig(object):
 
     self.asan = build_config['is_asan']
     self.cfi_vptr = build_config['is_cfi']
-    self.concurrent_marking = build_config['v8_enable_concurrent_marking']
     self.dcheck_always_on = build_config['dcheck_always_on']
     self.gcov_coverage = build_config['is_gcov_coverage']
     self.is_android = build_config['is_android']
@@ -243,24 +242,6 @@ class BuildConfig(object):
       detected_options.append('pointer_compression')
 
     return '\n'.join(detected_options)
-
-
-def _do_load_build_config(outdir, verbose=False):
-  build_config_path = os.path.join(outdir, "v8_build_config.json")
-  if not os.path.exists(build_config_path):
-    if verbose:
-      print("Didn't find build config: %s" % build_config_path)
-    raise TestRunnerError()
-
-  with open(build_config_path) as f:
-    try:
-      build_config_json = json.load(f)
-    except Exception:  # pragma: no cover
-      print("%s exists but contains invalid json. Is your build up-to-date?"
-            % build_config_path)
-      raise TestRunnerError()
-
-  return BuildConfig(build_config_json)
 
 
 class BaseTestRunner(object):
@@ -437,12 +418,7 @@ class BaseTestRunner(object):
   def _load_build_config(self, options):
     for outdir in self._possible_outdirs(options):
       try:
-        self.build_config = _do_load_build_config(outdir, options.verbose)
-
-        # In auto-detect mode the outdir is always where we found the build config.
-        # This ensures that we'll also take the build products from there.
-        self.outdir = outdir
-        break
+        self.build_config = self._do_load_build_config(outdir, options.verbose)
       except TestRunnerError:
         pass
 
@@ -474,20 +450,6 @@ class BaseTestRunner(object):
         return
 
       yield options.outdir
-
-      # TODO(machenbach): Temporary fallback to legacy outdir. The
-      # infrastructure switches to the canonical out/build location. But
-      # bisection will keep working with out/Release or out/Debug for a
-      # grace period.
-      if os.path.basename(options.outdir) == 'build':
-        base_dir = os.path.dirname(options.outdir)
-        release_dir = os.path.join(base_dir, 'Release')
-        debug_dir = os.path.join(base_dir, 'Debug')
-        if os.path.exists(release_dir) and not os.path.exists(debug_dir):
-          yield release_dir
-        if os.path.exists(debug_dir) and not os.path.exists(release_dir):
-          yield debug_dir
-
       if options.arch and options.mode:
         yield os.path.join(options.outdir,
                           '%s.%s' % (options.arch, options.mode))
@@ -513,6 +475,27 @@ class BaseTestRunner(object):
     if latest_config:
       print(">>> Latest GN build found: %s" % latest_config)
       return os.path.join(DEFAULT_OUT_GN, latest_config)
+
+  def _do_load_build_config(self, outdir, verbose=False):
+    build_config_path = os.path.join(outdir, "v8_build_config.json")
+    if not os.path.exists(build_config_path):
+      if verbose:
+        print("Didn't find build config: %s" % build_config_path)
+      raise TestRunnerError()
+
+    with open(build_config_path) as f:
+      try:
+        build_config_json = json.load(f)
+      except Exception:  # pragma: no cover
+        print("%s exists but contains invalid json. Is your build up-to-date?"
+              % build_config_path)
+        raise TestRunnerError()
+
+    # In auto-detect mode the outdir is always where we found the build config.
+    # This ensures that we'll also take the build products from there.
+    self.outdir = os.path.dirname(build_config_path)
+
+    return BuildConfig(build_config_json)
 
   def _process_default_options(self, options):
     # We don't use the mode for more path-magic.
@@ -703,7 +686,6 @@ class BaseTestRunner(object):
       "asan": self.build_config.asan,
       "byteorder": sys.byteorder,
       "cfi_vptr": self.build_config.cfi_vptr,
-      "concurrent_marking": self.build_config.concurrent_marking,
       "dcheck_always_on": self.build_config.dcheck_always_on,
       "deopt_fuzzer": False,
       "endurance_fuzzer": False,

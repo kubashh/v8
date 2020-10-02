@@ -27,15 +27,15 @@ bool Foreign::IsNormalized(Object value) {
 }
 
 DEF_GETTER(Foreign, foreign_address, Address) {
-  return ReadExternalPointerField(kForeignAddressOffset, isolate);
-}
-
-void Foreign::AllocateExternalPointerEntries(Isolate* isolate) {
-  InitExternalPointerField(kForeignAddressOffset, isolate);
+  ExternalPointer_t encoded_value =
+      ReadField<ExternalPointer_t>(kForeignAddressOffset);
+  Address value = DecodeExternalPointer(isolate, encoded_value);
+  return value;
 }
 
 void Foreign::set_foreign_address(Isolate* isolate, Address value) {
-  WriteExternalPointerField(kForeignAddressOffset, isolate, value);
+  ExternalPointer_t encoded_value = EncodeExternalPointer(isolate, value);
+  WriteField<ExternalPointer_t>(kForeignAddressOffset, encoded_value);
 }
 
 }  // namespace internal

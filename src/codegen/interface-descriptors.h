@@ -93,7 +93,6 @@ namespace internal {
   V(StringAtAsString)                    \
   V(StringSubstring)                     \
   V(TypeConversion)                      \
-  V(TypeConversionNoContext)             \
   V(TypeConversionStackParameter)        \
   V(Typeof)                              \
   V(UnaryOp_WithFeedback)                \
@@ -910,13 +909,6 @@ class TypeConversionDescriptor final : public CallInterfaceDescriptor {
   static const Register ArgumentRegister();
 };
 
-class TypeConversionNoContextDescriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kArgument)
-  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged())
-  DECLARE_DESCRIPTOR(TypeConversionNoContextDescriptor, CallInterfaceDescriptor)
-};
-
 class TypeConversionStackParameterDescriptor final
     : public CallInterfaceDescriptor {
  public:
@@ -1577,7 +1569,7 @@ BUILTIN_LIST_TFS(DEFINE_TFS_BUILTIN_DESCRIPTOR)
 // This file contains interface descriptor class definitions for builtins
 // defined in Torque. It is included here because the class definitions need to
 // precede the definition of name##Descriptor::key() below.
-#include "torque-generated/interface-descriptors.inc"
+#include "torque-generated/interface-descriptors-tq.inc"
 
 #undef DECLARE_DEFAULT_DESCRIPTOR
 #undef DECLARE_DESCRIPTOR_WITH_BASE

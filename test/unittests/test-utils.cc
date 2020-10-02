@@ -22,7 +22,8 @@ namespace {
 CounterMap* kCurrentCounterMap = nullptr;
 }  // namespace
 
-IsolateWrapper::IsolateWrapper(CountersMode counters_mode)
+IsolateWrapper::IsolateWrapper(CountersMode counters_mode,
+                               PointerCompressionMode pointer_compression_mode)
     : array_buffer_allocator_(
           v8::ArrayBuffer::Allocator::NewDefaultAllocator()) {
   CHECK_NULL(kCurrentCounterMap);
@@ -46,7 +47,13 @@ IsolateWrapper::IsolateWrapper(CountersMode counters_mode)
     };
   }
 
-  isolate_ = v8::Isolate::New(create_params);
+  if (pointer_compression_mode == kEnforcePointerCompression) {
+    isolate_ = reinterpret_cast<v8::Isolate*>(
+        i::Isolate::New(i::IsolateAllocationMode::kInV8Heap));
+    v8::Isolate::Initialize(isolate(), create_params);
+  } else {
+    isolate_ = v8::Isolate::New(create_params);
+  }
   CHECK_NOT_NULL(isolate());
 }
 

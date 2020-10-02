@@ -34,7 +34,6 @@
 #include "src/objects/objects-inl.h"
 #include "src/profiler/cpu-profiler.h"
 #include "src/profiler/profile-generator-inl.h"
-#include "src/profiler/symbolizer.h"
 #include "test/cctest/cctest.h"
 #include "test/cctest/profiler-extension.h"
 
@@ -377,14 +376,19 @@ class TestSetup {
 
 TEST(SymbolizeTickSample) {
   TestSetup test_setup;
+  i::Isolate* isolate = CcTest::i_isolate();
+  CpuProfilesCollection profiles(isolate);
+  CpuProfiler profiler(isolate);
+  profiles.set_cpu_profiler(&profiler);
+  profiles.StartProfiling("");
   CodeMap code_map;
-  Symbolizer symbolizer(&code_map);
+  ProfileGenerator generator(&profiles, &code_map);
   CodeEntry* entry1 = new CodeEntry(i::Logger::FUNCTION_TAG, "aaa");
   CodeEntry* entry2 = new CodeEntry(i::Logger::FUNCTION_TAG, "bbb");
   CodeEntry* entry3 = new CodeEntry(i::Logger::FUNCTION_TAG, "ccc");
-  symbolizer.code_map()->AddCode(ToAddress(0x1500), entry1, 0x200);
-  symbolizer.code_map()->AddCode(ToAddress(0x1700), entry2, 0x100);
-  symbolizer.code_map()->AddCode(ToAddress(0x1900), entry3, 0x50);
+  generator.code_map()->AddCode(ToAddress(0x1500), entry1, 0x200);
+  generator.code_map()->AddCode(ToAddress(0x1700), entry2, 0x100);
+  generator.code_map()->AddCode(ToAddress(0x1900), entry3, 0x50);
 
   // We are building the following calls tree:
   //      -> aaa         - sample1
@@ -395,13 +399,7 @@ TEST(SymbolizeTickSample) {
   sample1.tos = ToPointer(0x1500);
   sample1.stack[0] = ToPointer(0x1510);
   sample1.frames_count = 1;
-  Symbolizer::SymbolizedSample symbolized =
-      symbolizer.SymbolizeTickSample(sample1);
-  ProfileStackTrace& stack_trace = symbolized.stack_trace;
-  CHECK_EQ(2, stack_trace.size());
-  CHECK_EQ(entry1, stack_trace[0].entry.code_entry);
-  CHECK_EQ(entry1, stack_trace[1].entry.code_entry);
-
+  generator.SymbolizeTickSample(sample1);
   TickSample sample2;
   sample2.pc = ToPointer(0x1925);
   sample2.tos = ToPointer(0x1900);
@@ -409,26 +407,32 @@ TEST(SymbolizeTickSample) {
   sample2.stack[1] = ToPointer(0x10000);  // non-existent.
   sample2.stack[2] = ToPointer(0x1620);
   sample2.frames_count = 3;
-  symbolized = symbolizer.SymbolizeTickSample(sample2);
-  stack_trace = symbolized.stack_trace;
-  CHECK_EQ(4, stack_trace.size());
-  CHECK_EQ(entry3, stack_trace[0].entry.code_entry);
-  CHECK_EQ(entry2, stack_trace[1].entry.code_entry);
-  CHECK_EQ(nullptr, stack_trace[2].entry.code_entry);
-  CHECK_EQ(entry1, stack_trace[3].entry.code_entry);
-
+  generator.SymbolizeTickSample(sample2);
   TickSample sample3;
   sample3.pc = ToPointer(0x1510);
   sample3.tos = ToPointer(0x1500);
   sample3.stack[0] = ToPointer(0x1910);
   sample3.stack[1] = ToPointer(0x1610);
   sample3.frames_count = 2;
-  symbolized = symbolizer.SymbolizeTickSample(sample3);
-  stack_trace = symbolized.stack_trace;
-  CHECK_EQ(3, stack_trace.size());
-  CHECK_EQ(entry1, stack_trace[0].entry.code_entry);
-  CHECK_EQ(entry3, stack_trace[1].entry.code_entry);
-  CHECK_EQ(entry1, stack_trace[2].entry.code_entry);
+  generator.SymbolizeTickSample(sample3);
+
+  CpuProfile* profile = profiles.StopProfiling("");
+  CHECK(profile);
+  ProfileTreeTestHelper top_down_test_helper(profile->top_down());
+  CHECK(!top_down_test_helper.Walk(entry2));
+  CHECK(!top_down_test_helper.Walk(entry3));
+  ProfileNode* node1 = top_down_test_helper.Walk(entry1);
+  CHECK(node1);
+  CHECK_EQ(entry1, node1->entry());
+  ProfileNode* node2 = top_down_test_helper.Walk(entry1, entry1);
+  CHECK(node2);
+  CHECK_EQ(entry1, node2->entry());
+  ProfileNode* node3 = top_down_test_helper.Walk(entry1, entry2, entry3);
+  CHECK(node3);
+  CHECK_EQ(entry3, node3->entry());
+  ProfileNode* node4 = top_down_test_helper.Walk(entry1, entry3, entry1);
+  CHECK(node4);
+  CHECK_EQ(entry1, node4->entry());
 }
 
 static void CheckNodeIds(const ProfileNode* node, unsigned* expectedId) {
@@ -438,6 +442,7 @@ static void CheckNodeIds(const ProfileNode* node, unsigned* expectedId) {
   }
 }
 
+
 TEST(SampleIds) {
   TestSetup test_setup;
   i::Isolate* isolate = CcTest::i_isolate();
@@ -446,13 +451,13 @@ TEST(SampleIds) {
   profiles.set_cpu_profiler(&profiler);
   profiles.StartProfiling("", {CpuProfilingMode::kLeafNodeLineNumbers});
   CodeMap code_map;
-  Symbolizer symbolizer(&code_map);
+  ProfileGenerator generator(&profiles, &code_map);
   CodeEntry* entry1 = new CodeEntry(i::Logger::FUNCTION_TAG, "aaa");
   CodeEntry* entry2 = new CodeEntry(i::Logger::FUNCTION_TAG, "bbb");
   CodeEntry* entry3 = new CodeEntry(i::Logger::FUNCTION_TAG, "ccc");
-  symbolizer.code_map()->AddCode(ToAddress(0x1500), entry1, 0x200);
-  symbolizer.code_map()->AddCode(ToAddress(0x1700), entry2, 0x100);
-  symbolizer.code_map()->AddCode(ToAddress(0x1900), entry3, 0x50);
+  generator.code_map()->AddCode(ToAddress(0x1500), entry1, 0x200);
+  generator.code_map()->AddCode(ToAddress(0x1700), entry2, 0x100);
+  generator.code_map()->AddCode(ToAddress(0x1900), entry3, 0x50);
 
   // We are building the following calls tree:
   //                    -> aaa #3           - sample1
@@ -463,11 +468,7 @@ TEST(SampleIds) {
   sample1.pc = ToPointer(0x1600);
   sample1.stack[0] = ToPointer(0x1510);
   sample1.frames_count = 1;
-  auto symbolized = symbolizer.SymbolizeTickSample(sample1);
-  profiles.AddPathToCurrentProfiles(sample1.timestamp, symbolized.stack_trace,
-                                    symbolized.src_line, true,
-                                    base::TimeDelta());
-
+  generator.SymbolizeTickSample(sample1);
   TickSample sample2;
   sample2.timestamp = v8::base::TimeTicks::HighResolutionNow();
   sample2.pc = ToPointer(0x1925);
@@ -475,21 +476,14 @@ TEST(SampleIds) {
   sample2.stack[1] = ToPointer(0x10000);  // non-existent.
   sample2.stack[2] = ToPointer(0x1620);
   sample2.frames_count = 3;
-  symbolized = symbolizer.SymbolizeTickSample(sample2);
-  profiles.AddPathToCurrentProfiles(sample2.timestamp, symbolized.stack_trace,
-                                    symbolized.src_line, true,
-                                    base::TimeDelta());
-
+  generator.SymbolizeTickSample(sample2);
   TickSample sample3;
   sample3.timestamp = v8::base::TimeTicks::HighResolutionNow();
   sample3.pc = ToPointer(0x1510);
   sample3.stack[0] = ToPointer(0x1910);
   sample3.stack[1] = ToPointer(0x1610);
   sample3.frames_count = 2;
-  symbolized = symbolizer.SymbolizeTickSample(sample3);
-  profiles.AddPathToCurrentProfiles(sample3.timestamp, symbolized.stack_trace,
-                                    symbolized.src_line, true,
-                                    base::TimeDelta());
+  generator.SymbolizeTickSample(sample3);
 
   CpuProfile* profile = profiles.StopProfiling("");
   unsigned nodeId = 1;
@@ -503,6 +497,7 @@ TEST(SampleIds) {
   }
 }
 
+
 TEST(NoSamples) {
   TestSetup test_setup;
   i::Isolate* isolate = CcTest::i_isolate();
@@ -511,9 +506,9 @@ TEST(NoSamples) {
   profiles.set_cpu_profiler(&profiler);
   profiles.StartProfiling("");
   CodeMap code_map;
-  Symbolizer symbolizer(&code_map);
+  ProfileGenerator generator(&profiles, &code_map);
   CodeEntry* entry1 = new CodeEntry(i::Logger::FUNCTION_TAG, "aaa");
-  symbolizer.code_map()->AddCode(ToAddress(0x1500), entry1, 0x200);
+  generator.code_map()->AddCode(ToAddress(0x1500), entry1, 0x200);
 
   // We are building the following calls tree:
   // (root)#1 -> aaa #2 -> aaa #3 - sample1
@@ -521,18 +516,16 @@ TEST(NoSamples) {
   sample1.pc = ToPointer(0x1600);
   sample1.stack[0] = ToPointer(0x1510);
   sample1.frames_count = 1;
-  auto symbolized = symbolizer.SymbolizeTickSample(sample1);
-  profiles.AddPathToCurrentProfiles(v8::base::TimeTicks::HighResolutionNow(),
-                                    symbolized.stack_trace, symbolized.src_line,
-                                    true, base::TimeDelta());
+  generator.SymbolizeTickSample(sample1);
 
   CpuProfile* profile = profiles.StopProfiling("");
   unsigned nodeId = 1;
   CheckNodeIds(profile->top_down()->root(), &nodeId);
   CHECK_EQ(3u, nodeId - 1);
 
-  CHECK_EQ(1, profile->samples_count());
+  CHECK_EQ(0, profile->samples_count());
 }
+
 
 static const ProfileNode* PickChild(const ProfileNode* parent,
                                     const char* name) {
@@ -681,7 +674,7 @@ static const char* line_number_test_source_profile_time_functions =
 
 int GetFunctionLineNumber(CpuProfiler* profiler, LocalContext* env,
                           const char* name) {
-  CodeMap* code_map = profiler->symbolizer()->code_map();
+  CodeMap* code_map = profiler->generator()->code_map();
   i::Handle<i::JSFunction> func = i::Handle<i::JSFunction>::cast(
       v8::Utils::OpenHandle(*v8::Local<v8::Function>::Cast(
           (*env)->Global()->Get(env->local(), v8_str(name)).ToLocalChecked())));

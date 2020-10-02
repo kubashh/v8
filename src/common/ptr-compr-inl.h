@@ -12,7 +12,7 @@
 namespace v8 {
 namespace internal {
 
-#ifdef V8_COMPRESS_POINTERS
+#if V8_TARGET_ARCH_64_BIT
 // Compresses full-pointer representation of a tagged value to on-heap
 // representation.
 V8_INLINE Tagged_t CompressTagged(Address tagged) {
@@ -57,10 +57,14 @@ V8_INLINE Address DecompressTaggedAny(TOnHeapAddress on_heap_addr,
   return DecompressTaggedPointer(on_heap_addr, raw_value);
 }
 
+#ifdef V8_COMPRESS_POINTERS
+
 STATIC_ASSERT(kPtrComprHeapReservationSize ==
               Internals::kPtrComprHeapReservationSize);
 STATIC_ASSERT(kPtrComprIsolateRootAlignment ==
               Internals::kPtrComprIsolateRootAlignment);
+
+#endif  // V8_COMPRESS_POINTERS
 
 #else
 
@@ -84,7 +88,7 @@ V8_INLINE Address DecompressTaggedAny(TOnHeapAddress on_heap_addr,
   UNREACHABLE();
 }
 
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_TARGET_ARCH_64_BIT
 }  // namespace internal
 }  // namespace v8
 

@@ -60,6 +60,9 @@
   # BUG(v8:8169)
   'external-backing-store-gc': [SKIP],
 
+  # BUG(v8:9260)
+  'tools/profviz': [SKIP],
+
   # Issue 9380: Memory leaks of shared WebAssembly.Memory objects
   'wasm/shared-memory-worker-gc': [SKIP],
 
@@ -129,11 +132,10 @@
   'asm/poppler/*': [PASS, SLOW, NO_VARIANTS],
   'asm/sqlite3/*': [PASS, SLOW, NO_VARIANTS],
   'compiler/regress-9017': [PASS, SLOW],
-  'copy-on-write-assert': [PASS, SLOW],
   'es6/promise-all-overflow-2': [PASS, SLOW, ['arch != x64', SKIP]],
-  'es6/typedarray-construct-offset-not-smi': [PASS, SLOW],
   'harmony/promise-any-overflow-2': [PASS, SLOW, ['arch != x64', SKIP]],
-  'harmony/sharedarraybuffer-worker-gc-stress': [PASS, SLOW],
+  'copy-on-write-assert': [PASS, SLOW],
+  'es6/typedarray-construct-offset-not-smi': [PASS, SLOW],
   'harmony/futex': [PASS, SLOW],
   'harmony/regexp-property-script-extensions': [PASS, SLOW],
   'ignition/regress-672027': [PASS, SLOW],
@@ -308,6 +310,7 @@
   # Slow tests.
   'array-constructor': [PASS, SLOW],
   'json': [PASS, SLOW],
+  'harmony/sharedarraybuffer-worker-gc-stress': [PASS, SLOW],
 
   # BUG(v8:4779): Crashes flakily with stress mode on arm64.
   'array-splice': [PASS, SLOW, ['arch == arm64', NO_VARIANTS]],
@@ -984,9 +987,6 @@
 
   # BUG(v8:9975).
   'es6/typedarray-copywithin': [SKIP],
-
-  # BUG(https://crbug.com/v8/10966)
-  'tools/log_two_byte': [SKIP],
 }],  # 'predictable == True'
 
 ##############################################################################
@@ -1152,6 +1152,7 @@
 ##############################################################################
 ['variant == turboprop', {
   # Deopts differently than TurboFan.
+  'parallel-optimize-disabled': [SKIP],
   'compiler/native-context-specialization-hole-check': [SKIP],
   'compiler/number-comparison-truncations': [SKIP],
   'compiler/redundancy-elimination': [SKIP],
@@ -1393,6 +1394,7 @@
   'optimized-array-some': [SKIP],
   'optimized-filter': [SKIP],
   'optimized-map': [SKIP],
+  'parallel-optimize-disabled': [SKIP],
   'regress/regress-1016450': [SKIP],
   'regress/regress-1034449': [SKIP],
   'regress/regress-1073440': [SKIP],
@@ -1447,6 +1449,11 @@
   # Condition copied from cctest.status.
   'regress/wasm/regress-10831': [SKIP],
 }],  # ((arch == mipsel or arch == mips64el or arch == mips or arch == mips64) and not simd_mips) or (arch in [ppc64, s390x])
+
+##############################################################################
+['variant == stress_concurrent_allocation', {
+  'harmony/sharedarraybuffer-worker-gc-stress': [PASS, SLOW],
+}],  # variant == stress_concurrent_allocation
 
 ##############################################################################
 ['variant == stress_sampling', {

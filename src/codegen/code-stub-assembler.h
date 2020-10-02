@@ -15,7 +15,6 @@
 #include "src/compiler/code-assembler.h"
 #include "src/objects/arguments.h"
 #include "src/objects/bigint.h"
-#include "src/objects/feedback-vector.h"
 #include "src/objects/js-function.h"
 #include "src/objects/objects.h"
 #include "src/objects/promise.h"
@@ -23,7 +22,7 @@
 #include "src/objects/smi.h"
 #include "src/objects/tagged-index.h"
 #include "src/roots/roots.h"
-#include "torque-generated/exported-macros-assembler.h"
+#include "torque-generated/exported-macros-assembler-tq.h"
 
 namespace v8 {
 namespace internal {
@@ -248,16 +247,15 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
 #define CSA_ASSERT_BRANCH(csa, gen, ...) \
   (csa)->Assert(gen, #gen, __FILE__, __LINE__, CSA_ASSERT_ARGS(__VA_ARGS__))
 
-#define CSA_ASSERT_JS_ARGC_OP(csa, Op, op, expected)                    \
-  (csa)->Assert(                                                        \
-      [&]() -> TNode<BoolT> {                                           \
-        const TNode<Word32T> argc = (csa)->UncheckedParameter<Word32T>( \
-            Descriptor::kJSActualArgumentsCount);                       \
-        return (csa)->Op(argc, (csa)->Int32Constant(expected));         \
-      },                                                                \
-      "argc " #op " " #expected, __FILE__, __LINE__,                    \
-      {{SmiFromInt32((csa)->UncheckedParameter<Int32T>(                 \
-            Descriptor::kJSActualArgumentsCount)),                      \
+#define CSA_ASSERT_JS_ARGC_OP(csa, Op, op, expected)                         \
+  (csa)->Assert(                                                             \
+      [&]() -> TNode<BoolT> {                                                \
+        const TNode<Word32T> argc = UncheckedCast<Word32T>(                  \
+            (csa)->Parameter(Descriptor::kJSActualArgumentsCount));          \
+        return (csa)->Op(argc, (csa)->Int32Constant(expected));              \
+      },                                                                     \
+      "argc " #op " " #expected, __FILE__, __LINE__,                         \
+      {{SmiFromInt32((csa)->Parameter(Descriptor::kJSActualArgumentsCount)), \
         "argc"}})
 
 #define CSA_ASSERT_JS_ARGC_EQ(csa, expected) \
@@ -969,78 +967,29 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Works only with V8_ENABLE_FORCE_SLOW_PATH compile time flag. Nop otherwise.
   void GotoIfForceSlowPath(Label* if_true);
 
-  //
-  // ExternalPointerT-related functionality.
-  //
-
-  TNode<ExternalPointerT> ChangeUint32ToExternalPointer(TNode<Uint32T> value);
-  TNode<Uint32T> ChangeExternalPointerToUint32(TNode<ExternalPointerT> value);
-
-  // Initialize an external pointer field in an object.
-  void InitializeExternalPointerField(TNode<HeapObject> object, int offset) {
-    InitializeExternalPointerField(object, IntPtrConstant(offset));
-  }
-  void InitializeExternalPointerField(TNode<HeapObject> object,
-                                      TNode<IntPtrT> offset);
-
-  // Initialize an external pointer field in an object with given value.
-  void InitializeExternalPointerField(TNode<HeapObject> object, int offset,
-                                      TNode<RawPtrT> pointer) {
-    InitializeExternalPointerField(object, IntPtrConstant(offset), pointer);
+  // Convert external pointer from on-V8-heap representation to an actual
+  // external pointer value.
+  TNode<RawPtrT> DecodeExternalPointer(
+      TNode<ExternalPointerT> encoded_pointer) {
+    STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
+    TNode<RawPtrT> value = ReinterpretCast<RawPtrT>(encoded_pointer);
+    if (V8_HEAP_SANDBOX_BOOL) {
+      value = UncheckedCast<RawPtrT>(
+          WordXor(value, UintPtrConstant(kExternalPointerSalt)));
+    }
+    return value;
   }
 
-  void InitializeExternalPointerField(TNode<HeapObject> object,
-                                      TNode<IntPtrT> offset,
-                                      TNode<RawPtrT> pointer) {
-    InitializeExternalPointerField(object, offset);
-    StoreExternalPointerToObject(object, offset, pointer);
-  }
-
-  // Load an external pointer value from an object.
-  TNode<RawPtrT> LoadExternalPointerFromObject(TNode<HeapObject> object,
-                                               int offset) {
-    return LoadExternalPointerFromObject(object, IntPtrConstant(offset));
-  }
-
-  TNode<RawPtrT> LoadExternalPointerFromObject(TNode<HeapObject> object,
-                                               TNode<IntPtrT> offset);
-
-  // Store external object pointer to object.
-  void StoreExternalPointerToObject(TNode<HeapObject> object, int offset,
-                                    TNode<RawPtrT> pointer) {
-    StoreExternalPointerToObject(object, IntPtrConstant(offset), pointer);
-  }
-
-  void StoreExternalPointerToObject(TNode<HeapObject> object,
-                                    TNode<IntPtrT> offset,
-                                    TNode<RawPtrT> pointer);
-
-  TNode<RawPtrT> LoadForeignForeignAddressPtr(TNode<Foreign> object) {
-    return LoadExternalPointerFromObject(object,
-                                         Foreign::kForeignAddressOffset);
-  }
-
-  TNode<RawPtrT> LoadExternalStringResourcePtr(TNode<ExternalString> object) {
-    return LoadExternalPointerFromObject(object,
-                                         ExternalString::kResourceOffset);
-  }
-
-  TNode<RawPtrT> LoadExternalStringResourceDataPtr(
-      TNode<ExternalString> object) {
-    return LoadExternalPointerFromObject(object,
-                                         ExternalString::kResourceDataOffset);
-  }
-
-  TNode<RawPtrT> LoadJSTypedArrayExternalPointerPtr(
-      TNode<JSTypedArray> holder) {
-    return LoadExternalPointerFromObject(holder,
-                                         JSTypedArray::kExternalPointerOffset);
-  }
-
-  void StoreJSTypedArrayExternalPointerPtr(TNode<JSTypedArray> holder,
-                                           TNode<RawPtrT> value) {
-    StoreExternalPointerToObject(holder, JSTypedArray::kExternalPointerOffset,
-                                 value);
+  // Convert external pointer value to on-V8-heap representation.
+  // This should eventually become a call to a non-allocating runtime function.
+  TNode<ExternalPointerT> EncodeExternalPointer(TNode<RawPtrT> pointer) {
+    STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
+    TNode<RawPtrT> encoded_pointer = pointer;
+    if (V8_HEAP_SANDBOX_BOOL) {
+      encoded_pointer = UncheckedCast<RawPtrT>(
+          WordXor(encoded_pointer, UintPtrConstant(kExternalPointerSalt)));
+    }
+    return ReinterpretCast<ExternalPointerT>(encoded_pointer);
   }
 
   // Load value from current parent frame by given offset in bytes.
@@ -1069,21 +1018,18 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                          std::is_convertible<TNode<T>, TNode<Object>>::value,
                          int>::type = 0>
   TNode<T> LoadObjectField(TNode<HeapObject> object, int offset) {
-    return CAST(LoadFromObject(MachineTypeOf<T>::value, object,
-                               IntPtrConstant(offset - kHeapObjectTag)));
+    return CAST(LoadObjectField(object, offset, MachineTypeOf<T>::value));
   }
   template <class T, typename std::enable_if<
                          std::is_convertible<TNode<T>, TNode<UntaggedT>>::value,
                          int>::type = 0>
   TNode<T> LoadObjectField(TNode<HeapObject> object, int offset) {
     return UncheckedCast<T>(
-        LoadFromObject(MachineTypeOf<T>::value, object,
-                       IntPtrConstant(offset - kHeapObjectTag)));
+        LoadObjectField(object, offset, MachineTypeOf<T>::value));
   }
   TNode<Object> LoadObjectField(TNode<HeapObject> object, int offset) {
     return UncheckedCast<Object>(
-        LoadFromObject(MachineType::AnyTagged(), object,
-                       IntPtrConstant(offset - kHeapObjectTag)));
+        LoadObjectField(object, offset, MachineType::AnyTagged()));
   }
   TNode<Object> LoadObjectField(TNode<HeapObject> object,
                                 TNode<IntPtrT> offset) {
@@ -1108,7 +1054,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<MaybeObject> LoadMaybeWeakObjectField(SloppyTNode<HeapObject> object,
                                               int offset) {
-    return UncheckedCast<MaybeObject>(LoadObjectField(object, offset));
+    return UncheckedCast<MaybeObject>(
+        LoadObjectField(object, offset, MachineType::AnyTagged()));
   }
 
   TNode<Object> LoadConstructorOrBackPointer(TNode<Map> map) {
@@ -2515,23 +2462,20 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // Convert a Non-Number object to a Number.
   TNode<Number> NonNumberToNumber(
-      TNode<Context> context, SloppyTNode<HeapObject> input,
+      SloppyTNode<Context> context, SloppyTNode<HeapObject> input,
       BigIntHandling bigint_handling = BigIntHandling::kThrow);
   // Convert a Non-Number object to a Numeric.
-  TNode<Numeric> NonNumberToNumeric(TNode<Context> context,
+  TNode<Numeric> NonNumberToNumeric(SloppyTNode<Context> context,
                                     SloppyTNode<HeapObject> input);
   // Convert any object to a Number.
   // Conforms to ES#sec-tonumber if {bigint_handling} == kThrow.
   // With {bigint_handling} == kConvertToNumber, matches behavior of
   // tc39.github.io/proposal-bigint/#sec-number-constructor-number-value.
   TNode<Number> ToNumber(
-      TNode<Context> context, SloppyTNode<Object> input,
+      SloppyTNode<Context> context, SloppyTNode<Object> input,
       BigIntHandling bigint_handling = BigIntHandling::kThrow);
   TNode<Number> ToNumber_Inline(SloppyTNode<Context> context,
                                 SloppyTNode<Object> input);
-  // Convert any plain primitive to a Number. No need to handle BigInts since
-  // they are not plain primitives.
-  TNode<Number> PlainPrimitiveToNumber(TNode<Object> input);
 
   // Try to convert an object to a BigInt. Throws on failure (e.g. for Numbers).
   // https://tc39.github.io/proposal-bigint/#sec-to-bigint
@@ -3621,18 +3565,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       TNode<JSFinalizationRegistry> finalization_registry,
       TNode<WeakCell> weak_cell);
 
-  TNode<IntPtrT> FeedbackIteratorSizeFor(int number_of_entries) {
-    return IntPtrConstant(FeedbackIterator::SizeFor(number_of_entries));
-  }
-
-  TNode<IntPtrT> FeedbackIteratorMapIndexForEntry(int entry) {
-    return IntPtrConstant(FeedbackIterator::MapIndexForEntry(entry));
-  }
-
-  TNode<IntPtrT> FeedbackIteratorHandlerIndexForEntry(int entry) {
-    return IntPtrConstant(FeedbackIterator::HandlerIndexForEntry(entry));
-  }
-
  private:
   friend class CodeStubArguments;
 
@@ -3702,6 +3634,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                   TVariable<BigInt>* var_maybe_bigint = nullptr,
                                   TVariable<Smi>* var_feedback = nullptr);
 
+  Node* LoadObjectField(TNode<HeapObject> object, int offset, MachineType type);
+
   // Low-level accessors for Descriptor arrays.
   template <typename T>
   TNode<T> LoadDescriptorArrayElement(TNode<DescriptorArray> object,
@@ -3721,13 +3655,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       TNode<UnionT<FixedArray, PropertyArray>> array, TNode<TIndex> index,
       TNode<Object> value, WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
       int additional_offset = 0);
-
-  // Converts {input} to a number if {input} is a plain primitve (i.e. String or
-  // Oddball) and stores the result in {var_result}. Otherwise, it bails out to
-  // {if_bailout}.
-  void TryPlainPrimitiveNonNumberToNumber(TNode<HeapObject> input,
-                                          TVariable<Number>* var_result,
-                                          Label* if_bailout);
 };
 
 class V8_EXPORT_PRIVATE CodeStubArguments {

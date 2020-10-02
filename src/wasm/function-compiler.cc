@@ -280,8 +280,7 @@ bool UseGenericWrapper(const FunctionSig* sig) {
     return false;
   }
   for (ValueType type : sig->parameters()) {
-    if (type.kind() != ValueType::kI32 && type.kind() != ValueType::kI64 &&
-        type.kind() != ValueType::kF32 && type.kind() != ValueType::kF64) {
+    if (type.kind() != ValueType::kI32 && type.kind() != ValueType::kI64) {
       return false;
     }
   }

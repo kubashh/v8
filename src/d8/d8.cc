@@ -714,7 +714,7 @@ std::string ToSTLString(Isolate* isolate, Local<String> v8_str) {
 
 bool IsAbsolutePath(const std::string& path) {
 #if defined(_WIN32) || defined(_WIN64)
-  // This is an incorrect approximation, but should
+  // TODO(adamk): This is an incorrect approximation, but should
   // work for all our test-running cases.
   return path.find(':') != std::string::npos;
 #else
@@ -725,8 +725,7 @@ bool IsAbsolutePath(const std::string& path) {
 std::string GetWorkingDirectory() {
 #if defined(_WIN32) || defined(_WIN64)
   char system_buffer[MAX_PATH];
-  // Unicode paths are unsupported, which is fine as long as
-  // the test directory doesn't include any such paths.
+  // TODO(adamk): Support Unicode paths.
   DWORD len = GetCurrentDirectoryA(MAX_PATH, system_buffer);
   CHECK_GT(len, 0);
   return system_buffer;
@@ -849,7 +848,7 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Context> context,
     }
   }
   if (source_text.IsEmpty()) {
-    std::string msg = "d8: Error reading module from " + file_name;
+    std::string msg = "Error reading: " + file_name;
     Throw(isolate, msg.c_str());
     return MaybeLocal<Module>();
   }
@@ -1210,7 +1209,6 @@ int PerIsolateData::HandleUnhandledPromiseRejections() {
     Shell::ReportException(isolate_, message, value);
   }
   unhandled_promises_.clear();
-  ignore_unhandled_promises_ = false;
   return static_cast<int>(i);
 }
 
@@ -3604,9 +3602,6 @@ int Shell::RunMain(Isolate* isolate, bool last_run) {
     printf("%i pending unhandled Promise rejection(s) detected.\n",
            Shell::unhandled_promise_rejections_.load());
     success = false;
-    // RunMain may be executed multiple times, e.g. in REPRL mode, so we have to
-    // reset this counter.
-    Shell::unhandled_promise_rejections_.store(0);
   }
   // In order to finish successfully, success must be != expected_to_throw.
   return success == Shell::options.expected_to_throw ? 1 : 0;

@@ -20,6 +20,9 @@ function testFunctionWithFunnyName(o) {
   for (let i = 0; i < 1000; i++) {
     result += o[twoByteName](object);
   }
+  console.log(result);
+  console.log(twoByteName);
+
 })();
 
 var __v_3 = {};
@@ -28,6 +31,7 @@ eval('__v_3 = function foobar() { return foobar };');
 __v_3();
 
 const log = d8.log.getAndStop();
+console.log(log)
 // Check that we have a minimally working log file.
 assertTrue(log.length > 0);
 assertTrue(log.indexOf('v8-version') == 0);

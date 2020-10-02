@@ -274,12 +274,12 @@ AsyncFromSyncBuiltinsAssembler::LoadIteratorResult(
 // Section #sec-%asyncfromsynciteratorprototype%.next
 TF_BUILTIN(AsyncFromSyncIteratorPrototypeNext, AsyncFromSyncBuiltinsAssembler) {
   TNode<IntPtrT> argc = ChangeInt32ToIntPtr(
-      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount));
+      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)));
   CodeStubArguments args(this, argc);
 
   const TNode<Object> iterator = args.GetReceiver();
   const TNode<Object> value = args.GetOptionalArgumentValue(kValueOrReasonArg);
-  const auto context = Parameter<Context>(Descriptor::kContext);
+  const TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   auto get_method = [=](const TNode<JSReceiver> unused) {
     return LoadObjectField(CAST(iterator),
@@ -295,12 +295,12 @@ TF_BUILTIN(AsyncFromSyncIteratorPrototypeNext, AsyncFromSyncBuiltinsAssembler) {
 TF_BUILTIN(AsyncFromSyncIteratorPrototypeReturn,
            AsyncFromSyncBuiltinsAssembler) {
   TNode<IntPtrT> argc = ChangeInt32ToIntPtr(
-      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount));
+      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)));
   CodeStubArguments args(this, argc);
 
   const TNode<Object> iterator = args.GetReceiver();
   const TNode<Object> value = args.GetOptionalArgumentValue(kValueOrReasonArg);
-  const auto context = Parameter<Context>(Descriptor::kContext);
+  const TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   auto if_return_undefined = [=, &args](
                                  const TNode<NativeContext> native_context,
@@ -328,12 +328,12 @@ TF_BUILTIN(AsyncFromSyncIteratorPrototypeReturn,
 TF_BUILTIN(AsyncFromSyncIteratorPrototypeThrow,
            AsyncFromSyncBuiltinsAssembler) {
   TNode<IntPtrT> argc = ChangeInt32ToIntPtr(
-      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount));
+      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)));
   CodeStubArguments args(this, argc);
 
   const TNode<Object> iterator = args.GetReceiver();
   const TNode<Object> reason = args.GetOptionalArgumentValue(kValueOrReasonArg);
-  const auto context = Parameter<Context>(Descriptor::kContext);
+  const TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   auto if_throw_undefined = [=](const TNode<NativeContext> native_context,
                                 const TNode<JSPromise> promise,

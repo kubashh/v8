@@ -31,23 +31,26 @@ class MarkingStateBase {
   inline void RegisterWeakCallback(WeakCallback, const void*);
 
   inline void AccountMarkedBytes(const HeapObjectHeader&);
+  inline void AccountMarkedBytes(size_t);
   size_t marked_bytes() const { return marked_bytes_; }
 
   void Publish() {
     marking_worklist_.Publish();
+    not_fully_constructed_worklist_.Publish();
     previously_not_fully_constructed_worklist_.Publish();
     weak_callback_worklist_.Publish();
     write_barrier_worklist_.Publish();
+    concurrent_marking_bailout_worklist_.Publish();
   }
 
   MarkingWorklists::MarkingWorklist::Local& marking_worklist() {
     return marking_worklist_;
   }
-  MarkingWorklists::NotFullyConstructedWorklist&
+  MarkingWorklists::NotFullyConstructedWorklist::Local&
   not_fully_constructed_worklist() {
     return not_fully_constructed_worklist_;
   }
-  MarkingWorklists::PreviouslyNotFullyConstructedWorklist::Local&
+  MarkingWorklists::NotFullyConstructedWorklist::Local&
   previously_not_fully_constructed_worklist() {
     return previously_not_fully_constructed_worklist_;
   }
@@ -56,6 +59,10 @@ class MarkingStateBase {
   }
   MarkingWorklists::WriteBarrierWorklist::Local& write_barrier_worklist() {
     return write_barrier_worklist_;
+  }
+  MarkingWorklists::ConcurrentMarkingBailoutWorklist::Local&
+  concurrent_marking_bailout_worklist() {
+    return concurrent_marking_bailout_worklist_;
   }
 
  protected:
@@ -68,12 +75,14 @@ class MarkingStateBase {
 #endif  // DEBUG
 
   MarkingWorklists::MarkingWorklist::Local marking_worklist_;
-  MarkingWorklists::NotFullyConstructedWorklist&
+  MarkingWorklists::NotFullyConstructedWorklist::Local
       not_fully_constructed_worklist_;
-  MarkingWorklists::PreviouslyNotFullyConstructedWorklist::Local
+  MarkingWorklists::NotFullyConstructedWorklist::Local
       previously_not_fully_constructed_worklist_;
   MarkingWorklists::WeakCallbackWorklist::Local weak_callback_worklist_;
   MarkingWorklists::WriteBarrierWorklist::Local write_barrier_worklist_;
+  MarkingWorklists::ConcurrentMarkingBailoutWorklist::Local
+      concurrent_marking_bailout_worklist_;
 
   size_t marked_bytes_ = 0;
 };
@@ -86,11 +95,13 @@ MarkingStateBase::MarkingStateBase(HeapBase& heap,
 #endif  // DEBUG
       marking_worklist_(marking_worklists.marking_worklist()),
       not_fully_constructed_worklist_(
-          *marking_worklists.not_fully_constructed_worklist()),
+          marking_worklists.not_fully_constructed_worklist()),
       previously_not_fully_constructed_worklist_(
           marking_worklists.previously_not_fully_constructed_worklist()),
       weak_callback_worklist_(marking_worklists.weak_callback_worklist()),
-      write_barrier_worklist_(marking_worklists.write_barrier_worklist()) {
+      write_barrier_worklist_(marking_worklists.write_barrier_worklist()),
+      concurrent_marking_bailout_worklist_(
+          marking_worklists.concurrent_marking_bailout_worklist()) {
 }
 
 void MarkingStateBase::MarkAndPush(const void* object, TraceDescriptor desc) {
@@ -104,9 +115,16 @@ void MarkingStateBase::MarkAndPush(HeapObjectHeader& header,
                                    TraceDescriptor desc) {
   DCHECK_NOT_NULL(desc.callback);
 
-  if (header.IsInConstruction<HeapObjectHeader::AccessMode::kAtomic>()) {
+  // Loading the object's in-construction bit serves as the sync point for
+  // concurrent marking.
+  const bool object_is_in_construction =
+      header.IsInConstruction<HeapObjectHeader::AccessMode::kAtomic>();
+
+  if (!MarkNoPush(header)) return;
+
+  if (object_is_in_construction) {
     not_fully_constructed_worklist_.Push(&header);
-  } else if (MarkNoPush(header)) {
+  } else {
     marking_worklist_.Push(desc);
   }
 }
@@ -141,11 +159,15 @@ void MarkingStateBase::RegisterWeakReferenceIfNeeded(const void* object,
 }
 
 void MarkingStateBase::AccountMarkedBytes(const HeapObjectHeader& header) {
-  marked_bytes_ +=
+  AccountMarkedBytes(
       header.IsLargeObject<HeapObjectHeader::AccessMode::kAtomic>()
           ? reinterpret_cast<const LargePage*>(BasePage::FromPayload(&header))
                 ->PayloadSize()
-          : header.GetSize<HeapObjectHeader::AccessMode::kAtomic>();
+          : header.GetSize<HeapObjectHeader::AccessMode::kAtomic>());
+}
+
+void MarkingStateBase::AccountMarkedBytes(size_t marked_bytes) {
+  marked_bytes_ += marked_bytes;
 }
 
 class MutatorMarkingState : public MarkingStateBase {
@@ -206,6 +228,10 @@ class ConcurrentMarkingState : public MarkingStateBase {
 
   size_t RecentlyMarkedBytes() {
     return marked_bytes_ - std::exchange(last_marked_bytes_, marked_bytes_);
+  }
+
+  inline void AccountDeferredMarkedBytes(size_t deferred_bytes) {
+    marked_bytes_ -= deferred_bytes;
   }
 
  private:

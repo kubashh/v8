@@ -487,19 +487,13 @@ void EmitWordLoadPoisoningIfNeeded(CodeGenerator* codegen,
     }                                                       \
   } while (false)
 
-#define ASSEMBLE_SSE_BINOP(asm_instr)                                     \
-  do {                                                                    \
-    if (HasAddressingMode(instr)) {                                       \
-      size_t index = 1;                                                   \
-      Operand right = i.MemoryOperand(&index);                            \
-      __ asm_instr(i.InputDoubleRegister(0), right);                      \
-    } else {                                                              \
-      if (instr->InputAt(1)->IsFPRegister()) {                            \
-        __ asm_instr(i.InputDoubleRegister(0), i.InputDoubleRegister(1)); \
-      } else {                                                            \
-        __ asm_instr(i.InputDoubleRegister(0), i.InputOperand(1));        \
-      }                                                                   \
-    }                                                                     \
+#define ASSEMBLE_SSE_BINOP(asm_instr)                                   \
+  do {                                                                  \
+    if (instr->InputAt(1)->IsFPRegister()) {                            \
+      __ asm_instr(i.InputDoubleRegister(0), i.InputDoubleRegister(1)); \
+    } else {                                                            \
+      __ asm_instr(i.InputDoubleRegister(0), i.InputOperand(1));        \
+    }                                                                   \
   } while (false)
 
 #define ASSEMBLE_SSE_UNOP(asm_instr)                                    \
@@ -511,22 +505,16 @@ void EmitWordLoadPoisoningIfNeeded(CodeGenerator* codegen,
     }                                                                   \
   } while (false)
 
-#define ASSEMBLE_AVX_BINOP(asm_instr)                                          \
-  do {                                                                         \
-    CpuFeatureScope avx_scope(tasm(), AVX);                                    \
-    if (HasAddressingMode(instr)) {                                            \
-      size_t index = 1;                                                        \
-      Operand right = i.MemoryOperand(&index);                                 \
-      __ asm_instr(i.OutputDoubleRegister(), i.InputDoubleRegister(0), right); \
-    } else {                                                                   \
-      if (instr->InputAt(1)->IsFPRegister()) {                                 \
-        __ asm_instr(i.OutputDoubleRegister(), i.InputDoubleRegister(0),       \
-                     i.InputDoubleRegister(1));                                \
-      } else {                                                                 \
-        __ asm_instr(i.OutputDoubleRegister(), i.InputDoubleRegister(0),       \
-                     i.InputOperand(1));                                       \
-      }                                                                        \
-    }                                                                          \
+#define ASSEMBLE_AVX_BINOP(asm_instr)                                  \
+  do {                                                                 \
+    CpuFeatureScope avx_scope(tasm(), AVX);                            \
+    if (instr->InputAt(1)->IsFPRegister()) {                           \
+      __ asm_instr(i.OutputDoubleRegister(), i.InputDoubleRegister(0), \
+                   i.InputDoubleRegister(1));                          \
+    } else {                                                           \
+      __ asm_instr(i.OutputDoubleRegister(), i.InputDoubleRegister(0), \
+                   i.InputOperand(1));                                 \
+    }                                                                  \
   } while (false)
 
 #define ASSEMBLE_IEEE754_BINOP(name)                                     \
@@ -2296,16 +2284,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       int slot = MiscField::decode(instr->opcode());
       if (HasImmediateInput(instr, 0)) {
         __ movq(Operand(rsp, slot * kSystemPointerSize), i.InputImmediate(0));
-      } else if (instr->InputAt(0)->IsFPRegister()) {
-        LocationOperand* op = LocationOperand::cast(instr->InputAt(0));
-        if (op->representation() == MachineRepresentation::kFloat64) {
-          __ Movsd(Operand(rsp, slot * kSystemPointerSize),
-                   i.InputDoubleRegister(0));
-        } else {
-          DCHECK_EQ(MachineRepresentation::kFloat32, op->representation());
-          __ Movss(Operand(rsp, slot * kSystemPointerSize),
-                   i.InputFloatRegister(0));
-        }
       } else {
         __ movq(Operand(rsp, slot * kSystemPointerSize), i.InputRegister(0));
       }
@@ -2342,10 +2320,9 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kX64F64x2ReplaceLane: {
       if (instr->InputAt(2)->IsFPRegister()) {
         __ Movq(kScratchRegister, i.InputDoubleRegister(2));
-        __ Pinsrq(i.OutputSimd128Register(), kScratchRegister, i.InputUint8(1));
+        __ Pinsrq(i.OutputSimd128Register(), kScratchRegister, i.InputInt8(1));
       } else {
-        __ Pinsrq(i.OutputSimd128Register(), i.InputOperand(2),
-                  i.InputUint8(1));
+        __ Pinsrq(i.OutputSimd128Register(), i.InputOperand(2), i.InputInt8(1));
       }
       break;
     }
@@ -2710,10 +2687,9 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kX64I64x2ReplaceLane: {
       if (HasRegisterInput(instr, 2)) {
         __ Pinsrq(i.OutputSimd128Register(), i.InputRegister(2),
-                  i.InputUint8(1));
+                  i.InputInt8(1));
       } else {
-        __ Pinsrq(i.OutputSimd128Register(), i.InputOperand(2),
-                  i.InputUint8(1));
+        __ Pinsrq(i.OutputSimd128Register(), i.InputOperand(2), i.InputInt8(1));
       }
       break;
     }
@@ -2744,12 +2720,12 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       // lower quadword
       __ Pextrq(tmp, src, int8_t{0x0});
       __ sarq_cl(tmp);
-      __ Pinsrq(dst, tmp, uint8_t{0x0});
+      __ Pinsrq(dst, tmp, int8_t{0x0});
 
       // upper quadword
       __ Pextrq(tmp, src, int8_t{0x1});
       __ sarq_cl(tmp);
-      __ Pinsrq(dst, tmp, uint8_t{0x1});
+      __ Pinsrq(dst, tmp, int8_t{0x1});
       break;
     }
     case kX64I64x2Add: {
@@ -3690,7 +3666,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Andnps(dst, i.InputSimd128Register(1));
       break;
     }
-    case kX64I8x16Swizzle: {
+    case kX64S8x16Swizzle: {
       DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
       XMMRegister dst = i.OutputSimd128Register();
       XMMRegister mask = i.TempSimd128Register(0);
@@ -3703,7 +3679,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Pshufb(dst, mask);
       break;
     }
-    case kX64I8x16Shuffle: {
+    case kX64S8x16Shuffle: {
       XMMRegister dst = i.OutputSimd128Register();
       XMMRegister tmp_simd = i.TempSimd128Register(0);
       if (instr->InputCount() == 5) {  // only one input operand
@@ -3748,14 +3724,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     }
-    case kX64S128Load8Splat: {
+    case kX64S8x16LoadSplat: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Pinsrb(i.OutputSimd128Register(), i.MemoryOperand(), 0);
       __ Pxor(kScratchDoubleReg, kScratchDoubleReg);
       __ Pshufb(i.OutputSimd128Register(), kScratchDoubleReg);
       break;
     }
-    case kX64S128Load16Splat: {
+    case kX64S16x8LoadSplat: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Pinsrw(i.OutputSimd128Register(), i.MemoryOperand(), 0);
       __ Pshuflw(i.OutputSimd128Register(), i.OutputSimd128Register(),
@@ -3763,7 +3739,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Punpcklqdq(i.OutputSimd128Register(), i.OutputSimd128Register());
       break;
     }
-    case kX64S128Load32Splat: {
+    case kX64S32x4LoadSplat: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       if (CpuFeatures::IsSupported(AVX)) {
         CpuFeatureScope avx_scope(tasm(), AVX);
@@ -3775,37 +3751,37 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     }
-    case kX64S128Load64Splat: {
+    case kX64S64x2LoadSplat: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Movddup(i.OutputSimd128Register(), i.MemoryOperand());
       break;
     }
-    case kX64S128Load8x8S: {
+    case kX64I16x8Load8x8S: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Pmovsxbw(i.OutputSimd128Register(), i.MemoryOperand());
       break;
     }
-    case kX64S128Load8x8U: {
+    case kX64I16x8Load8x8U: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Pmovzxbw(i.OutputSimd128Register(), i.MemoryOperand());
       break;
     }
-    case kX64S128Load16x4S: {
+    case kX64I32x4Load16x4S: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Pmovsxwd(i.OutputSimd128Register(), i.MemoryOperand());
       break;
     }
-    case kX64S128Load16x4U: {
+    case kX64I32x4Load16x4U: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Pmovzxwd(i.OutputSimd128Register(), i.MemoryOperand());
       break;
     }
-    case kX64S128Load32x2S: {
+    case kX64I64x2Load32x2S: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Pmovsxdq(i.OutputSimd128Register(), i.MemoryOperand());
       break;
     }
-    case kX64S128Load32x2U: {
+    case kX64I64x2Load32x2U: {
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Pmovzxdq(i.OutputSimd128Register(), i.MemoryOperand());
       break;
@@ -4573,7 +4549,7 @@ void CodeGenerator::AssembleConstructFrame() {
   }
 }
 
-void CodeGenerator::AssembleReturn(InstructionOperand* additional_pop_count) {
+void CodeGenerator::AssembleReturn(InstructionOperand* pop) {
   auto call_descriptor = linkage()->GetIncomingDescriptor();
 
   // Restore registers.
@@ -4606,91 +4582,39 @@ void CodeGenerator::AssembleReturn(InstructionOperand* additional_pop_count) {
 
   unwinding_info_writer_.MarkBlockWillExit();
 
-  // We might need rcx and rdx for scratch.
+  // Might need rcx for scratch if pop_size is too big or if there is a variable
+  // pop count.
   DCHECK_EQ(0u, call_descriptor->CalleeSavedRegisters() & rcx.bit());
   DCHECK_EQ(0u, call_descriptor->CalleeSavedRegisters() & rdx.bit());
-  int parameter_count =
-      static_cast<int>(call_descriptor->StackParameterCount());
+  size_t pop_size = call_descriptor->StackParameterCount() * kSystemPointerSize;
   X64OperandConverter g(this, nullptr);
-  Register pop_reg = additional_pop_count->IsImmediate()
-                         ? rcx
-                         : g.ToRegister(additional_pop_count);
-  Register scratch_reg = pop_reg == rcx ? rdx : rcx;
-  Register argc_reg =
-      additional_pop_count->IsImmediate() ? pop_reg : scratch_reg;
-#ifdef V8_NO_ARGUMENTS_ADAPTOR
-  // Functions with JS linkage have at least one parameter (the receiver).
-  // If {parameter_count} == 0, it means it is a builtin with
-  // kDontAdaptArgumentsSentinel, which takes care of JS arguments popping
-  // itself.
-  const bool drop_jsargs = frame_access_state()->has_frame() &&
-                           call_descriptor->IsJSFunctionCall() &&
-                           parameter_count != 0;
-#else
-  const bool drop_jsargs = false;
-#endif
   if (call_descriptor->IsCFunctionCall()) {
     AssembleDeconstructFrame();
   } else if (frame_access_state()->has_frame()) {
-    if (additional_pop_count->IsImmediate() &&
-        g.ToConstant(additional_pop_count).ToInt32() == 0) {
+    if (pop->IsImmediate() && g.ToConstant(pop).ToInt32() == 0) {
       // Canonicalize JSFunction return sites for now.
       if (return_label_.is_bound()) {
         __ jmp(&return_label_);
         return;
       } else {
         __ bind(&return_label_);
-      }
-    }
-    if (drop_jsargs) {
-      // Get the actual argument count.
-      __ movq(argc_reg, Operand(rbp, StandardFrameConstants::kArgCOffset));
-    }
-    AssembleDeconstructFrame();
-  }
-
-  if (drop_jsargs) {
-    // In addition to the slots given by {additional_pop_count}, we must pop all
-    // arguments from the stack (including the receiver). This number of
-    // arguments is given by max(1 + argc_reg, parameter_count).
-    Label argc_reg_has_final_count;
-    // Exclude the receiver to simplify the computation. We'll account for it at
-    // the end.
-    int parameter_count_withouth_receiver = parameter_count - 1;
-    if (parameter_count_withouth_receiver != 0) {
-      __ cmpq(argc_reg, Immediate(parameter_count_withouth_receiver));
-      __ j(greater_equal, &argc_reg_has_final_count, Label::kNear);
-      __ movq(argc_reg, Immediate(parameter_count_withouth_receiver));
-      __ bind(&argc_reg_has_final_count);
-    }
-    // Add additional pop count.
-    if (additional_pop_count->IsImmediate()) {
-      DCHECK_EQ(pop_reg, argc_reg);
-      int additional_count = g.ToConstant(additional_pop_count).ToInt32();
-      if (additional_count != 0) {
-        __ addq(pop_reg, Immediate(additional_count));
+        AssembleDeconstructFrame();
       }
     } else {
-      __ addq(pop_reg, argc_reg);
+      AssembleDeconstructFrame();
     }
-    __ PopReturnAddressTo(scratch_reg);
-    __ leaq(rsp, Operand(rsp, pop_reg, times_system_pointer_size,
-                         kSystemPointerSize));  // Also pop the receiver.
-    // We use a return instead of a jump for better return address prediction.
-    __ PushReturnAddressFrom(scratch_reg);
-    __ Ret();
-  } else if (additional_pop_count->IsImmediate()) {
-    int additional_count = g.ToConstant(additional_pop_count).ToInt32();
-    size_t pop_size = (parameter_count + additional_count) * kSystemPointerSize;
-    CHECK_LE(pop_size, static_cast<size_t>(std::numeric_limits<int>::max()));
-    __ Ret(static_cast<int>(pop_size), scratch_reg);
+  }
+
+  if (pop->IsImmediate()) {
+    pop_size += g.ToConstant(pop).ToInt32() * kSystemPointerSize;
+    CHECK_LT(pop_size, static_cast<size_t>(std::numeric_limits<int>::max()));
+    __ Ret(static_cast<int>(pop_size), rcx);
   } else {
-    int pop_size = static_cast<int>(parameter_count * kSystemPointerSize);
-    __ PopReturnAddressTo(scratch_reg);
-    __ leaq(rsp, Operand(rsp, pop_reg, times_system_pointer_size,
-                         static_cast<int>(pop_size)));
-    __ PushReturnAddressFrom(scratch_reg);
-    __ Ret();
+    Register pop_reg = g.ToRegister(pop);
+    Register scratch_reg = pop_reg == rcx ? rdx : rcx;
+    __ popq(scratch_reg);
+    __ leaq(rsp, Operand(rsp, pop_reg, times_8, static_cast<int>(pop_size)));
+    __ jmp(scratch_reg);
   }
 }
 

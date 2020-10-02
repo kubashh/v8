@@ -205,9 +205,7 @@ void PerfJitLogger::LogRecordedBuffer(
     int length) {
   if (FLAG_perf_basic_prof_only_functions &&
       (abstract_code->kind() != CodeKind::INTERPRETED_FUNCTION &&
-       abstract_code->kind() != CodeKind::TURBOFAN &&
-       abstract_code->kind() != CodeKind::NATIVE_CONTEXT_INDEPENDENT &&
-       abstract_code->kind() != CodeKind::TURBOPROP)) {
+       abstract_code->kind() != CodeKind::OPTIMIZED_FUNCTION)) {
     return;
   }
 

@@ -9,7 +9,7 @@
 #include "src/ic/ic.h"
 #include "src/ic/keyed-store-generic.h"
 #include "src/objects/objects-inl.h"
-#include "torque-generated/exported-macros-assembler.h"
+#include "torque-generated/exported-macros-assembler-tq.h"
 
 namespace v8 {
 namespace internal {
@@ -43,12 +43,12 @@ class HandlerBuiltinsAssembler : public CodeStubAssembler {
 };
 
 TF_BUILTIN(LoadIC_StringLength, CodeStubAssembler) {
-  auto string = Parameter<String>(Descriptor::kReceiver);
+  TNode<String> string = CAST(Parameter(Descriptor::kReceiver));
   Return(LoadStringLengthAsSmi(string));
 }
 
 TF_BUILTIN(LoadIC_StringWrapperLength, CodeStubAssembler) {
-  auto value = Parameter<JSPrimitiveWrapper>(Descriptor::kReceiver);
+  TNode<JSPrimitiveWrapper> value = CAST(Parameter(Descriptor::kReceiver));
   TNode<String> string = CAST(LoadJSPrimitiveWrapperValue(value));
   Return(LoadStringLengthAsSmi(string));
 }
@@ -130,13 +130,13 @@ void HandlerBuiltinsAssembler::DispatchForElementsKindTransition(
 void HandlerBuiltinsAssembler::Generate_ElementsTransitionAndStore(
     KeyedAccessStoreMode store_mode) {
   using Descriptor = StoreTransitionDescriptor;
-  auto receiver = Parameter<JSObject>(Descriptor::kReceiver);
-  auto key = Parameter<Object>(Descriptor::kName);
-  auto value = Parameter<Object>(Descriptor::kValue);
-  auto map = Parameter<Map>(Descriptor::kMap);
-  auto slot = Parameter<Smi>(Descriptor::kSlot);
-  auto vector = Parameter<FeedbackVector>(Descriptor::kVector);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> key = CAST(Parameter(Descriptor::kName));
+  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
+  TNode<Map> map = CAST(Parameter(Descriptor::kMap));
+  TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
+  TNode<FeedbackVector> vector = CAST(Parameter(Descriptor::kVector));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   Comment("ElementsTransitionAndStore: store_mode=", store_mode);
 
@@ -262,12 +262,12 @@ void HandlerBuiltinsAssembler::DispatchByElementsKind(
 void HandlerBuiltinsAssembler::Generate_StoreFastElementIC(
     KeyedAccessStoreMode store_mode) {
   using Descriptor = StoreWithVectorDescriptor;
-  auto receiver = Parameter<JSObject>(Descriptor::kReceiver);
-  auto key = Parameter<Object>(Descriptor::kName);
-  auto value = Parameter<Object>(Descriptor::kValue);
-  auto slot = Parameter<Smi>(Descriptor::kSlot);
-  auto vector = Parameter<HeapObject>(Descriptor::kVector);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> key = CAST(Parameter(Descriptor::kName));
+  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
+  TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
+  TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   Comment("StoreFastElementStub: store_mode=", store_mode);
 
@@ -312,11 +312,11 @@ TF_BUILTIN(StoreFastElementIC_NoTransitionHandleCOW, HandlerBuiltinsAssembler) {
 }
 
 TF_BUILTIN(LoadIC_FunctionPrototype, CodeStubAssembler) {
-  auto receiver = Parameter<JSFunction>(Descriptor::kReceiver);
-  auto name = Parameter<Name>(Descriptor::kName);
-  auto slot = Parameter<Smi>(Descriptor::kSlot);
-  auto vector = Parameter<FeedbackVector>(Descriptor::kVector);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<JSFunction> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Name> name = CAST(Parameter(Descriptor::kName));
+  TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
+  TNode<FeedbackVector> vector = CAST(Parameter(Descriptor::kVector));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   Label miss(this, Label::kDeferred);
   Return(LoadJSFunctionPrototype(receiver, &miss));
@@ -326,12 +326,12 @@ TF_BUILTIN(LoadIC_FunctionPrototype, CodeStubAssembler) {
 }
 
 TF_BUILTIN(StoreGlobalIC_Slow, CodeStubAssembler) {
-  auto receiver = Parameter<Object>(Descriptor::kReceiver);
-  auto name = Parameter<Name>(Descriptor::kName);
-  auto value = Parameter<Object>(Descriptor::kValue);
-  auto slot = Parameter<Smi>(Descriptor::kSlot);
-  auto vector = Parameter<FeedbackVector>(Descriptor::kVector);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Name> name = CAST(Parameter(Descriptor::kName));
+  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
+  TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
+  TNode<FeedbackVector> vector = CAST(Parameter(Descriptor::kVector));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   // The slow case calls into the runtime to complete the store without causing
   // an IC miss that would otherwise cause a transition to the generic stub.
@@ -340,11 +340,11 @@ TF_BUILTIN(StoreGlobalIC_Slow, CodeStubAssembler) {
 }
 
 TF_BUILTIN(KeyedLoadIC_SloppyArguments, HandlerBuiltinsAssembler) {
-  auto receiver = Parameter<JSObject>(Descriptor::kReceiver);
-  auto key = Parameter<Object>(Descriptor::kName);
-  auto slot = Parameter<Smi>(Descriptor::kSlot);
-  auto vector = Parameter<HeapObject>(Descriptor::kVector);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> key = CAST(Parameter(Descriptor::kName));
+  TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
+  TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   Label miss(this);
 
@@ -361,12 +361,12 @@ TF_BUILTIN(KeyedLoadIC_SloppyArguments, HandlerBuiltinsAssembler) {
 
 void HandlerBuiltinsAssembler::Generate_KeyedStoreIC_SloppyArguments() {
   using Descriptor = StoreWithVectorDescriptor;
-  auto receiver = Parameter<JSObject>(Descriptor::kReceiver);
-  auto key = Parameter<Object>(Descriptor::kName);
-  auto value = Parameter<Object>(Descriptor::kValue);
-  auto slot = Parameter<Smi>(Descriptor::kSlot);
-  auto vector = Parameter<HeapObject>(Descriptor::kVector);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> key = CAST(Parameter(Descriptor::kName));
+  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
+  TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
+  TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   Label miss(this);
 
@@ -398,11 +398,11 @@ TF_BUILTIN(KeyedStoreIC_SloppyArguments_NoTransitionHandleCOW,
 }
 
 TF_BUILTIN(LoadIndexedInterceptorIC, CodeStubAssembler) {
-  auto receiver = Parameter<JSObject>(Descriptor::kReceiver);
-  auto key = Parameter<Object>(Descriptor::kName);
-  auto slot = Parameter<Smi>(Descriptor::kSlot);
-  auto vector = Parameter<HeapObject>(Descriptor::kVector);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> key = CAST(Parameter(Descriptor::kName));
+  TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
+  TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   Label if_keyispositivesmi(this), if_keyisinvalid(this);
   Branch(TaggedIsPositiveSmi(key), &if_keyispositivesmi, &if_keyisinvalid);
@@ -415,11 +415,11 @@ TF_BUILTIN(LoadIndexedInterceptorIC, CodeStubAssembler) {
 }
 
 TF_BUILTIN(KeyedHasIC_SloppyArguments, HandlerBuiltinsAssembler) {
-  auto receiver = Parameter<JSObject>(Descriptor::kReceiver);
-  auto key = Parameter<Object>(Descriptor::kName);
-  auto slot = Parameter<Smi>(Descriptor::kSlot);
-  auto vector = Parameter<HeapObject>(Descriptor::kVector);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> key = CAST(Parameter(Descriptor::kName));
+  TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
+  TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   Label miss(this);
 
@@ -435,11 +435,11 @@ TF_BUILTIN(KeyedHasIC_SloppyArguments, HandlerBuiltinsAssembler) {
 }
 
 TF_BUILTIN(HasIndexedInterceptorIC, CodeStubAssembler) {
-  auto receiver = Parameter<JSObject>(Descriptor::kReceiver);
-  auto key = Parameter<Object>(Descriptor::kName);
-  auto slot = Parameter<Smi>(Descriptor::kSlot);
-  auto vector = Parameter<HeapObject>(Descriptor::kVector);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> key = CAST(Parameter(Descriptor::kName));
+  TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
+  TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   Label if_keyispositivesmi(this), if_keyisinvalid(this);
   Branch(TaggedIsPositiveSmi(key), &if_keyispositivesmi, &if_keyisinvalid);

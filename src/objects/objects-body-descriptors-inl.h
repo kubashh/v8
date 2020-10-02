@@ -21,9 +21,9 @@
 #include "src/objects/synthetic-module.h"
 #include "src/objects/transitions.h"
 #include "src/wasm/wasm-objects-inl.h"
-#include "torque-generated/class-definitions-inl.h"
-#include "torque-generated/exported-class-definitions-inl.h"
-#include "torque-generated/internal-class-definitions-inl.h"
+#include "torque-generated/class-definitions-tq-inl.h"
+#include "torque-generated/exported-class-definitions-tq-inl.h"
+#include "torque-generated/internal-class-definitions-tq-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -947,7 +947,6 @@ ReturnType BodyDescriptorApply(InstanceType type, T1 p1, T2 p2, T3 p3, T4 p4) {
     case PROPERTY_ARRAY_TYPE:
       return Op::template apply<PropertyArray::BodyDescriptor>(p1, p2, p3, p4);
     case DESCRIPTOR_ARRAY_TYPE:
-    case STRONG_DESCRIPTOR_ARRAY_TYPE:
       return Op::template apply<DescriptorArray::BodyDescriptor>(p1, p2, p3,
                                                                  p4);
     case TRANSITION_ARRAY_TYPE:
@@ -1180,7 +1179,7 @@ class EphemeronHashTable::BodyDescriptor final : public BodyDescriptorBase {
   }
 };
 
-#include "torque-generated/objects-body-descriptors-inl.inc"
+#include "torque-generated/objects-body-descriptors-tq-inl.inc"
 
 }  // namespace internal
 }  // namespace v8

@@ -1095,8 +1095,7 @@ void Heap::DeoptMarkedAllocationSites() {
 
 void Heap::GarbageCollectionEpilogueInSafepoint(GarbageCollector collector) {
   if (collector == MARK_COMPACTOR) {
-    memory_pressure_level_.store(MemoryPressureLevel::kNone,
-                                 std::memory_order_relaxed);
+    memory_pressure_level_ = MemoryPressureLevel::kNone;
   }
 
   TRACE_GC(tracer(), GCTracer::Scope::HEAP_EPILOGUE_SAFEPOINT);
@@ -1152,9 +1151,6 @@ void Heap::GarbageCollectionEpilogueInSafepoint(GarbageCollector collector) {
     TRACE_GC(tracer(), GCTracer::Scope::HEAP_EPILOGUE_REDUCE_NEW_SPACE);
     ReduceNewSpaceSize();
   }
-
-  // Resume all threads waiting for the GC.
-  collection_barrier_.ResumeThreadsAwaitingCollection();
 }
 
 void Heap::GarbageCollectionEpilogue() {
@@ -1216,8 +1212,6 @@ void Heap::HandleGCRequest() {
   } else if (HighMemoryPressure()) {
     incremental_marking()->reset_request_type();
     CheckMemoryPressure();
-  } else if (CollectionRequested()) {
-    CheckCollectionRequested();
   } else if (incremental_marking()->request_type() ==
              IncrementalMarking::COMPLETE_MARKING) {
     incremental_marking()->reset_request_type();
@@ -1684,6 +1678,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
     isolate()->CountUsage(v8::Isolate::kForcedGC);
   }
 
+  collection_barrier_.CollectionPerformed();
+
   // Start incremental marking for the next cycle. We do this only for scavenger
   // to avoid a loop where mark-compact causes another mark-compact.
   if (IsYoungGenerationCollector(collector)) {
@@ -1882,6 +1878,125 @@ static void VerifyStringTable(Isolate* isolate) {
 }
 #endif  // VERIFY_HEAP
 
+bool Heap::ReserveSpace(Reservation* reservations, std::vector<Address>* maps) {
+  bool gc_performed = true;
+  int counter = 0;
+  static const int kThreshold = 20;
+  while (gc_performed && counter++ < kThreshold) {
+    gc_performed = false;
+    for (int space = FIRST_SPACE;
+         space < static_cast<int>(SnapshotSpace::kNumberOfHeapSpaces);
+         space++) {
+      DCHECK_NE(space, NEW_SPACE);
+      DCHECK_NE(space, NEW_LO_SPACE);
+      Reservation* reservation = &reservations[space];
+      DCHECK_LE(1, reservation->size());
+      if (reservation->at(0).size == 0) {
+        DCHECK_EQ(1, reservation->size());
+        continue;
+      }
+      bool perform_gc = false;
+      if (space == MAP_SPACE) {
+        // We allocate each map individually to avoid fragmentation.
+        maps->clear();
+        DCHECK_LE(reservation->size(), 2);
+        int reserved_size = 0;
+        for (const Chunk& c : *reservation) reserved_size += c.size;
+        DCHECK_EQ(0, reserved_size % Map::kSize);
+        int num_maps = reserved_size / Map::kSize;
+        for (int i = 0; i < num_maps; i++) {
+          AllocationResult allocation;
+#if V8_ENABLE_THIRD_PARTY_HEAP_BOOL
+          allocation = AllocateRaw(Map::kSize, AllocationType::kMap,
+                                   AllocationOrigin::kRuntime, kWordAligned);
+#else
+          allocation = map_space()->AllocateRawUnaligned(Map::kSize);
+#endif
+          HeapObject free_space;
+          if (allocation.To(&free_space)) {
+            // Mark with a free list node, in case we have a GC before
+            // deserializing.
+            Address free_space_address = free_space.address();
+            CreateFillerObjectAt(free_space_address, Map::kSize,
+                                 ClearRecordedSlots::kNo);
+            maps->push_back(free_space_address);
+          } else {
+            perform_gc = true;
+            break;
+          }
+        }
+      } else if (space == LO_SPACE) {
+        // Just check that we can allocate during deserialization.
+        DCHECK_LE(reservation->size(), 2);
+        int reserved_size = 0;
+        for (const Chunk& c : *reservation) reserved_size += c.size;
+        perform_gc = !CanExpandOldGeneration(reserved_size);
+      } else {
+        for (auto& chunk : *reservation) {
+          AllocationResult allocation;
+          int size = chunk.size;
+          DCHECK_LE(static_cast<size_t>(size),
+                    MemoryChunkLayout::AllocatableMemoryInMemoryChunk(
+                        static_cast<AllocationSpace>(space)));
+#if V8_ENABLE_THIRD_PARTY_HEAP_BOOL
+          AllocationType type = (space == CODE_SPACE)
+                                    ? AllocationType::kCode
+                                    : (space == RO_SPACE)
+                                          ? AllocationType::kReadOnly
+                                          : AllocationType::kYoung;
+          AllocationAlignment align =
+              (space == CODE_SPACE) ? kCodeAligned : kWordAligned;
+          allocation =
+              AllocateRaw(size, type, AllocationOrigin::kRuntime, align);
+#else
+          if (space == RO_SPACE) {
+            allocation = read_only_space()->AllocateRaw(
+                size, AllocationAlignment::kWordAligned);
+          } else {
+            // The deserializer will update the skip list.
+            allocation = paged_space(space)->AllocateRawUnaligned(size);
+          }
+#endif
+          HeapObject free_space;
+          if (allocation.To(&free_space)) {
+            // Mark with a free list node, in case we have a GC before
+            // deserializing.
+            Address free_space_address = free_space.address();
+            CreateFillerObjectAt(free_space_address, size,
+                                 ClearRecordedSlots::kNo);
+            DCHECK(IsPreAllocatedSpace(static_cast<SnapshotSpace>(space)));
+            chunk.start = free_space_address;
+            chunk.end = free_space_address + size;
+          } else {
+            perform_gc = true;
+            break;
+          }
+        }
+      }
+      if (perform_gc) {
+        // We cannot perfom a GC with an uninitialized isolate. This check
+        // fails for example if the max old space size is chosen unwisely,
+        // so that we cannot allocate space to deserialize the initial heap.
+        if (!deserialization_complete_) {
+          V8::FatalProcessOutOfMemory(
+              isolate(), "insufficient memory to create an Isolate");
+        }
+        if (counter > 1) {
+          CollectAllGarbage(kReduceMemoryFootprintMask,
+                            GarbageCollectionReason::kDeserializer);
+        } else {
+          CollectAllGarbage(kNoGCFlags, GarbageCollectionReason::kDeserializer);
+        }
+        gc_performed = true;
+        break;  // Abort for-loop over spaces and retry.
+      }
+    }
+  }
+
+  return !gc_performed;
+}
+
+
 void Heap::EnsureFromSpaceIsCommitted() {
   if (new_space_->CommitFromSpaceIfNeeded()) return;
 
@@ -1890,72 +2005,34 @@ void Heap::EnsureFromSpaceIsCommitted() {
   FatalProcessOutOfMemory("Committing semi space failed.");
 }
 
-void Heap::CollectionBarrier::ResumeThreadsAwaitingCollection() {
+void Heap::CollectionBarrier::CollectionPerformed() {
   base::MutexGuard guard(&mutex_);
-  ClearCollectionRequested();
+  gc_requested_ = false;
   cond_.NotifyAll();
 }
 
 void Heap::CollectionBarrier::ShutdownRequested() {
   base::MutexGuard guard(&mutex_);
-  state_.store(RequestState::kShutdown);
+  shutdown_requested_ = true;
   cond_.NotifyAll();
 }
 
-class BackgroundCollectionInterruptTask : public CancelableTask {
- public:
-  explicit BackgroundCollectionInterruptTask(Heap* heap)
-      : CancelableTask(heap->isolate()), heap_(heap) {}
-
-  ~BackgroundCollectionInterruptTask() override = default;
-
- private:
-  // v8::internal::CancelableTask overrides.
-  void RunInternal() override { heap_->CheckCollectionRequested(); }
-
-  Heap* heap_;
-  DISALLOW_COPY_AND_ASSIGN(BackgroundCollectionInterruptTask);
-};
-
-void Heap::CollectionBarrier::AwaitCollectionBackground() {
-  if (FirstCollectionRequest()) {
-    // This is the first background thread requesting collection, ask the main
-    // thread for GC.
-    ActivateStackGuardAndPostTask();
-  }
-
-  BlockUntilCollected();
-}
-
-void Heap::CollectionBarrier::ActivateStackGuardAndPostTask() {
-  Isolate* isolate = heap_->isolate();
-  ExecutionAccess access(isolate);
-  isolate->stack_guard()->RequestGC();
-  auto taskrunner = V8::GetCurrentPlatform()->GetForegroundTaskRunner(
-      reinterpret_cast<v8::Isolate*>(isolate));
-  taskrunner->PostTask(
-      std::make_unique<BackgroundCollectionInterruptTask>(heap_));
-}
-
-void Heap::CollectionBarrier::BlockUntilCollected() {
+void Heap::CollectionBarrier::Wait() {
   base::MutexGuard guard(&mutex_);
 
-  while (CollectionRequested()) {
+  if (shutdown_requested_) return;
+
+  if (!gc_requested_) {
+    heap_->MemoryPressureNotification(MemoryPressureLevel::kCritical, false);
+    gc_requested_ = true;
+  }
+
+  while (gc_requested_ && !shutdown_requested_) {
     cond_.Wait(&mutex_);
   }
 }
 
-void Heap::RequestCollectionBackground() {
-  collection_barrier_.AwaitCollectionBackground();
-}
-
-void Heap::CheckCollectionRequested() {
-  if (!collection_barrier_.CollectionRequested()) return;
-
-  CollectAllGarbage(current_gc_flags_,
-                    GarbageCollectionReason::kBackgroundAllocationFailure,
-                    current_gc_callback_flags_);
-}
+void Heap::RequestAndWaitForCollection() { collection_barrier_.Wait(); }
 
 void Heap::UpdateSurvivalStatistics(int start_new_space_size) {
   if (start_new_space_size == 0) return;
@@ -3461,6 +3538,47 @@ void Heap::FinalizeIncrementalMarkingIncrementally(
   InvokeIncrementalMarkingEpilogueCallbacks();
 }
 
+void Heap::RegisterDeserializedObjectsForBlackAllocation(
+    Reservation* reservations, const std::vector<HeapObject>& large_objects,
+    const std::vector<Address>& maps) {
+  // TODO(ulan): pause black allocation during deserialization to avoid
+  // iterating all these objects in one go.
+
+  if (!incremental_marking()->black_allocation()) return;
+
+  // Iterate black objects in old space, code space, map space, and large
+  // object space for side effects.
+  IncrementalMarking::MarkingState* marking_state =
+      incremental_marking()->marking_state();
+  for (int i = OLD_SPACE;
+       i < static_cast<int>(SnapshotSpace::kNumberOfHeapSpaces); i++) {
+    const Heap::Reservation& res = reservations[i];
+    for (auto& chunk : res) {
+      Address addr = chunk.start;
+      while (addr < chunk.end) {
+        HeapObject obj = HeapObject::FromAddress(addr);
+        // Objects can have any color because incremental marking can
+        // start in the middle of Heap::ReserveSpace().
+        if (marking_state->IsBlack(obj)) {
+          incremental_marking()->ProcessBlackAllocatedObject(obj);
+        }
+        addr += obj.Size();
+      }
+    }
+  }
+
+  // Large object space doesn't use reservations, so it needs custom handling.
+  for (HeapObject object : large_objects) {
+    incremental_marking()->ProcessBlackAllocatedObject(object);
+  }
+
+  // Map space doesn't use reservations, so it needs custom handling.
+  for (Address addr : maps) {
+    incremental_marking()->ProcessBlackAllocatedObject(
+        HeapObject::FromAddress(addr));
+  }
+}
+
 void Heap::NotifyObjectLayoutChange(
     HeapObject object, const DisallowHeapAllocation&,
     InvalidateRecordedSlots invalidate_recorded_slots) {
@@ -3694,11 +3812,11 @@ void Heap::CheckMemoryPressure() {
     // The optimizing compiler may be unnecessarily holding on to memory.
     isolate()->AbortConcurrentOptimization(BlockingBehavior::kDontBlock);
   }
+  MemoryPressureLevel memory_pressure_level = memory_pressure_level_;
   // Reset the memory pressure level to avoid recursive GCs triggered by
   // CheckMemoryPressure from AdjustAmountOfExternalMemory called by
   // the finalizers.
-  MemoryPressureLevel memory_pressure_level = memory_pressure_level_.exchange(
-      MemoryPressureLevel::kNone, std::memory_order_relaxed);
+  memory_pressure_level_ = MemoryPressureLevel::kNone;
   if (memory_pressure_level == MemoryPressureLevel::kCritical) {
     TRACE_EVENT0("devtools.timeline,v8", "V8.CheckMemoryPressure");
     CollectGarbageOnMemoryPressure();
@@ -3751,8 +3869,8 @@ void Heap::MemoryPressureNotification(MemoryPressureLevel level,
                                       bool is_isolate_locked) {
   TRACE_EVENT1("devtools.timeline,v8", "V8.MemoryPressureNotification", "level",
                static_cast<int>(level));
-  MemoryPressureLevel previous =
-      memory_pressure_level_.exchange(level, std::memory_order_relaxed);
+  MemoryPressureLevel previous = memory_pressure_level_;
+  memory_pressure_level_ = level;
   if ((previous != MemoryPressureLevel::kCritical &&
        level == MemoryPressureLevel::kCritical) ||
       (previous == MemoryPressureLevel::kNone &&
@@ -3930,8 +4048,6 @@ const char* Heap::GarbageCollectionReasonToString(
       return "measure memory";
     case GarbageCollectionReason::kUnknown:
       return "unknown";
-    case GarbageCollectionReason::kBackgroundAllocationFailure:
-      return "background allocation failure";
   }
   UNREACHABLE();
 }
@@ -4033,7 +4149,6 @@ void Heap::Verify() {
 
   // We have to wait here for the sweeper threads to have an iterable heap.
   mark_compact_collector()->EnsureSweepingCompleted();
-
   array_buffer_sweeper()->EnsureFinished();
 
   VerifyPointersVisitor visitor(this);
@@ -4044,12 +4159,6 @@ void Heap::Verify() {
     NormalizedMapCache::cast(*isolate()->normalized_map_cache())
         .NormalizedMapCacheVerify(isolate());
   }
-
-  // The heap verifier can't deal with partially deserialized objects, so
-  // disable it if a deserializer is active.
-  // TODO(leszeks): Enable verification during deserialization, e.g. by only
-  // blocklisting objects that are in a partially deserialized state.
-  if (isolate()->has_active_deserializer()) return;
 
   VerifySmisVisitor smis_visitor;
   IterateSmiRoots(&smis_visitor);
@@ -4821,9 +4930,6 @@ bool Heap::ShouldExpandOldGenerationOnSlowAllocation(LocalHeap* local_heap) {
   // Ensure that retry of allocation on background thread succeeds
   if (IsRetryOfFailedAllocation(local_heap)) return true;
 
-  // Background thread requested GC, allocation should fail
-  if (CollectionRequested()) return false;
-
   if (ShouldOptimizeForMemoryUsage()) return false;
 
   if (ShouldOptimizeForLoadTime()) return true;
@@ -5040,14 +5146,7 @@ HeapObject Heap::AllocateRawWithLightRetrySlowPath(
   HeapObject result;
   AllocationResult alloc = AllocateRaw(size, allocation, origin, alignment);
   if (alloc.To(&result)) {
-    // DCHECK that the successful allocation is not "exception". The one
-    // exception to this is when allocating the "exception" object itself, in
-    // which case this must be an ROSpace allocation and the exception object
-    // in the roots has to be unset.
-    DCHECK((CanAllocateInReadOnlySpace() &&
-            allocation == AllocationType::kReadOnly &&
-            ReadOnlyRoots(this).unchecked_exception() == Smi::zero()) ||
-           result != ReadOnlyRoots(this).exception());
+    DCHECK(result != ReadOnlyRoots(this).exception());
     return result;
   }
   // Two GCs before panicking. In newspace will almost always succeed.

@@ -212,7 +212,6 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kPPC_I32x4SConvertI16x8High:
     case kPPC_I32x4UConvertI16x8Low:
     case kPPC_I32x4UConvertI16x8High:
-    case kPPC_I32x4BitMask:
     case kPPC_I16x8Splat:
     case kPPC_I16x8ExtractLaneU:
     case kPPC_I16x8ExtractLaneS:
@@ -247,7 +246,6 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kPPC_I16x8AddSaturateU:
     case kPPC_I16x8SubSaturateU:
     case kPPC_I16x8RoundingAverageU:
-    case kPPC_I16x8BitMask:
     case kPPC_I8x16Splat:
     case kPPC_I8x16ExtractLaneU:
     case kPPC_I8x16ExtractLaneS:
@@ -277,9 +275,8 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kPPC_I8x16AddSaturateU:
     case kPPC_I8x16SubSaturateU:
     case kPPC_I8x16RoundingAverageU:
-    case kPPC_I8x16Shuffle:
-    case kPPC_I8x16Swizzle:
-    case kPPC_I8x16BitMask:
+    case kPPC_S8x16Shuffle:
+    case kPPC_S8x16Swizzle:
     case kPPC_V64x2AnyTrue:
     case kPPC_V32x4AnyTrue:
     case kPPC_V16x8AnyTrue:

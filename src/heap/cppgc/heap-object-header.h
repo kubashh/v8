@@ -155,13 +155,12 @@ HeapObjectHeader::HeapObjectHeader(size_t size, GCInfoIndex gc_info_index) {
   encoded_low_ = EncodeSize(size);
   // Objects may get published to the marker without any other synchronization
   // (e.g., write barrier) in which case the in-construction bit is read
-  // concurrently which requires reading encoded_high_ atomically. It is ok if
-  // this write is not observed by the marker, since the sweeper  sets the
-  // in-construction bit to 0 and we can rely on that to guarantee a correct
-  // answer when checking if objects are in-construction.
+  // concurrently which requires reading encoded_high_ atomically. This write
+  // cannot be relaxed because ObjectAllocator zaps the header
+  // (via SET_MEMORY_ACCESIBLE).
   v8::base::AsAtomicPtr(&encoded_high_)
       ->store(GCInfoIndexField::encode(gc_info_index),
-              std::memory_order_relaxed);
+              std::memory_order_release);
   DCHECK(IsInConstruction());
 #ifdef DEBUG
   CheckApiConstants();

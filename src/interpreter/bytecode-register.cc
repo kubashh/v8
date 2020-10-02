@@ -37,7 +37,7 @@ static const int kBytecodeOffsetRegisterIndex =
     kSystemPointerSize;
 static const int kCallerPCOffsetRegisterIndex =
     (InterpreterFrameConstants::kRegisterFileFromFp -
-     InterpreterFrameConstants::kCallerPCOffset) /
+     InterpreterFrameConstants::kCallerPCOffsetFromFp) /
     kSystemPointerSize;
 
 Register Register::FromParameterIndex(int index, int parameter_count) {

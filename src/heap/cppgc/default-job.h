@@ -72,6 +72,9 @@ class DefaultJobImpl {
 
   bool CanRun() const { return can_run_.load(std::memory_order_relaxed); }
 
+ protected:
+  virtual std::shared_ptr<Thread> CreateThread(DefaultJobImpl*) = 0;
+
   void RunJobTask() {
     DCHECK_NOT_NULL(job_task_);
     NotifyJobThreadStart();
@@ -79,9 +82,6 @@ class DefaultJobImpl {
     job_task_->Run(&delegate);
     NotifyJobThreadEnd();
   }
-
- protected:
-  virtual std::shared_ptr<Thread> CreateThread(DefaultJobImpl*) = 0;
 
   void NotifyJobThreadStart() {
     active_threads_.fetch_add(1, std::memory_order_relaxed);
@@ -101,7 +101,7 @@ class DefaultJobImpl {
   std::unique_ptr<cppgc::JobTask> job_task_;
   std::vector<std::shared_ptr<Thread>> job_threads_;
   std::atomic_bool can_run_{true};
-  std::atomic<uint8_t> active_threads_{0};
+  std::atomic_uint8_t active_threads_{0};
 
   // Task id management.
   v8::base::Mutex ids_lock_;

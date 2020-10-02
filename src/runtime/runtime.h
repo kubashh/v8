@@ -276,6 +276,7 @@ namespace internal {
   F(GetHoleNaNLower, 0, 1)               \
   F(GetHoleNaNUpper, 0, 1)               \
   I(IsSmi, 1, 1)                         \
+  F(IsValidSmi, 1, 1)                    \
   F(MaxSmi, 0, 1)                        \
   F(NumberToStringSlow, 1, 1)            \
   F(StringParseFloat, 1, 1)              \
@@ -341,7 +342,7 @@ namespace internal {
   I(ToNumber, 1, 1)                                             \
   F(ToNumeric, 1, 1)                                            \
   I(ToObject, 1, 1)                                             \
-  I(ToString, 1, 1)                                             \
+  I(ToStringRT, 1, 1)                                           \
   F(TryMigrateInstance, 1, 1)
 
 #define FOR_EACH_INTRINSIC_OPERATORS(F, I) \

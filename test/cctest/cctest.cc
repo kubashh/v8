@@ -269,7 +269,7 @@ i::Handle<i::JSFunction> Optimize(
   CHECK_NOT_NULL(zone);
 
   i::OptimizedCompilationInfo info(zone, isolate, shared, function,
-                                   i::CodeKind::TURBOFAN);
+                                   i::CodeKind::OPTIMIZED_FUNCTION);
 
   if (flags & i::OptimizedCompilationInfo::kInlining) {
     info.set_inlining();

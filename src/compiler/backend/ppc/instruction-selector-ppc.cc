@@ -2232,7 +2232,7 @@ void InstructionSelector::VisitInt64AbsWithOverflow(Node* node) {
   V(I8x16AddSaturateU)     \
   V(I8x16SubSaturateU)     \
   V(I8x16RoundingAverageU) \
-  V(I8x16Swizzle)          \
+  V(S8x16Swizzle)          \
   V(S128And)               \
   V(S128Or)                \
   V(S128Xor)               \
@@ -2378,21 +2378,9 @@ SIMD_SHIFT_LIST(SIMD_VISIT_SHIFT)
 SIMD_BOOL_LIST(SIMD_VISIT_BOOL)
 #undef SIMD_VISIT_BOOL
 #undef SIMD_BOOL_LIST
-
-#define SIMD_VISIT_BITMASK(Opcode)                                        \
-  void InstructionSelector::Visit##Opcode(Node* node) {                   \
-    PPCOperandGenerator g(this);                                          \
-    InstructionOperand temps[] = {g.TempRegister()};                      \
-    Emit(kPPC_##Opcode, g.DefineAsRegister(node),                         \
-         g.UseUniqueRegister(node->InputAt(0)), arraysize(temps), temps); \
-  }
-SIMD_VISIT_BITMASK(I8x16BitMask)
-SIMD_VISIT_BITMASK(I16x8BitMask)
-SIMD_VISIT_BITMASK(I32x4BitMask)
-#undef SIMD_VISIT_BITMASK
 #undef SIMD_TYPES
 
-void InstructionSelector::VisitI8x16Shuffle(Node* node) {
+void InstructionSelector::VisitS8x16Shuffle(Node* node) {
   uint8_t shuffle[kSimd128Size];
   bool is_swizzle;
   CanonicalizeShuffle(node, shuffle, &is_swizzle);
@@ -2409,7 +2397,7 @@ void InstructionSelector::VisitI8x16Shuffle(Node* node) {
                                ? max_index - current_index
                                : total_lane_count - current_index + max_index);
   }
-  Emit(kPPC_I8x16Shuffle, g.DefineAsRegister(node), g.UseUniqueRegister(input0),
+  Emit(kPPC_S8x16Shuffle, g.DefineAsRegister(node), g.UseUniqueRegister(input0),
        g.UseUniqueRegister(input1),
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle_remapped)),
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle_remapped + 4)),
@@ -2430,6 +2418,12 @@ void InstructionSelector::VisitS128Select(Node* node) {
 }
 
 void InstructionSelector::VisitS128Const(Node* node) { UNIMPLEMENTED(); }
+
+void InstructionSelector::VisitI8x16BitMask(Node* node) { UNIMPLEMENTED(); }
+
+void InstructionSelector::VisitI16x8BitMask(Node* node) { UNIMPLEMENTED(); }
+
+void InstructionSelector::VisitI32x4BitMask(Node* node) { UNIMPLEMENTED(); }
 
 void InstructionSelector::EmitPrepareResults(
     ZoneVector<PushParameter>* results, const CallDescriptor* call_descriptor,

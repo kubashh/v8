@@ -60,16 +60,16 @@ size_t hash_value(LoadKind);
 V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&, LoadKind);
 
 enum class LoadTransformation {
-  kS128Load8Splat,
-  kS128Load16Splat,
-  kS128Load32Splat,
-  kS128Load64Splat,
-  kS128Load8x8S,
-  kS128Load8x8U,
-  kS128Load16x4S,
-  kS128Load16x4U,
-  kS128Load32x2S,
-  kS128Load32x2U,
+  kS8x16LoadSplat,
+  kS16x8LoadSplat,
+  kS32x4LoadSplat,
+  kS64x2LoadSplat,
+  kI16x8Load8x8S,
+  kI16x8Load8x8U,
+  kI32x4Load16x4S,
+  kI32x4Load16x4U,
+  kI64x2Load32x2S,
+  kI64x2Load32x2U,
   kS128LoadMem32Zero,
   kS128LoadMem64Zero,
 };
@@ -765,8 +765,8 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   const Operator* S128Select();
   const Operator* S128AndNot();
 
-  const Operator* I8x16Swizzle();
-  const Operator* I8x16Shuffle(const uint8_t shuffle[16]);
+  const Operator* S8x16Swizzle();
+  const Operator* S8x16Shuffle(const uint8_t shuffle[16]);
 
   const Operator* V64x2AnyTrue();
   const Operator* V64x2AllTrue();

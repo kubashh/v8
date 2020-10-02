@@ -17,7 +17,7 @@
 #include "src/objects/objects-inl.h"
 #include "src/objects/ordered-hash-table.h"
 #include "src/objects/source-text-module.h"
-#include "torque-generated/exported-class-definitions.h"
+#include "torque-generated/exported-class-definitions-tq.h"
 
 namespace v8 {
 namespace internal {
@@ -1239,14 +1239,12 @@ FieldAccess AccessBuilder::ForFeedbackCellInterruptBudget() {
 }
 
 // static
-FieldAccess AccessBuilder::ForFeedbackVectorInvocationCount() {
-  FieldAccess access = {kTaggedBase,
-                        FeedbackVector::kInvocationCountOffset,
-                        Handle<Name>(),
-                        MaybeHandle<Map>(),
-                        TypeCache::Get()->kInt32,
-                        MachineType::Int32(),
-                        kNoWriteBarrier};
+FieldAccess AccessBuilder::ForFeedbackVectorClosureFeedbackCellArray() {
+  FieldAccess access = {
+      kTaggedBase,      FeedbackVector::kClosureFeedbackCellArrayOffset,
+      Handle<Name>(),   MaybeHandle<Map>(),
+      Type::Any(),      MachineType::TaggedPointer(),
+      kFullWriteBarrier};
   return access;
 }
 
@@ -1256,16 +1254,6 @@ FieldAccess AccessBuilder::ForFeedbackVectorOptimizedCodeWeakOrSmi() {
       kTaggedBase,      FeedbackVector::kOptimizedCodeWeakOrSmiOffset,
       Handle<Name>(),   MaybeHandle<Map>(),
       Type::Any(),      MachineType::AnyTagged(),
-      kFullWriteBarrier};
-  return access;
-}
-
-// static
-FieldAccess AccessBuilder::ForFeedbackVectorClosureFeedbackCellArray() {
-  FieldAccess access = {
-      kTaggedBase,      FeedbackVector::kClosureFeedbackCellArrayOffset,
-      Handle<Name>(),   MaybeHandle<Map>(),
-      Type::Any(),      MachineType::TaggedPointer(),
       kFullWriteBarrier};
   return access;
 }

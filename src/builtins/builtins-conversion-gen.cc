@@ -14,22 +14,19 @@ namespace internal {
 
 // ES6 section 7.1.3 ToNumber ( argument )
 TF_BUILTIN(ToNumber, CodeStubAssembler) {
-  auto context = Parameter<Context>(Descriptor::kContext);
-  auto input = Parameter<Object>(Descriptor::kArgument);
+  // TODO(solanes, v8:6949): Changing this to a TNode<Context> crashes with the
+  // empty context. Context might not be needed, but it is propagated all over
+  // the place and hard to pull out.
+  Node* context = Parameter(Descriptor::kContext);
+  TNode<Object> input = CAST(Parameter(Descriptor::kArgument));
 
   Return(ToNumber(context, input));
 }
 
-TF_BUILTIN(PlainPrimitiveToNumber, CodeStubAssembler) {
-  auto input = Parameter<Object>(Descriptor::kArgument);
-
-  Return(PlainPrimitiveToNumber(input));
-}
-
 // Like ToNumber, but also converts BigInts.
 TF_BUILTIN(ToNumberConvertBigInt, CodeStubAssembler) {
-  auto context = Parameter<Context>(Descriptor::kContext);
-  auto input = Parameter<Object>(Descriptor::kArgument);
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> input = CAST(Parameter(Descriptor::kArgument));
 
   Return(ToNumber(context, input, BigIntHandling::kConvertToNumber));
 }
@@ -38,7 +35,7 @@ TF_BUILTIN(ToNumberConvertBigInt, CodeStubAssembler) {
 // Requires parameter on stack so that it can be used as a continuation from a
 // LAZY deopt.
 TF_BUILTIN(ToBooleanLazyDeoptContinuation, CodeStubAssembler) {
-  auto value = Parameter<Object>(Descriptor::kArgument);
+  TNode<Object> value = CAST(Parameter(Descriptor::kArgument));
 
   Label return_true(this), return_false(this);
   BranchIfToBooleanIsTrue(value, &return_true, &return_false);
@@ -52,7 +49,7 @@ TF_BUILTIN(ToBooleanLazyDeoptContinuation, CodeStubAssembler) {
 
 // ES6 section 12.5.5 typeof operator
 TF_BUILTIN(Typeof, CodeStubAssembler) {
-  auto object = Parameter<Object>(Descriptor::kObject);
+  TNode<Object> object = CAST(Parameter(Descriptor::kObject));
 
   Return(Typeof(object));
 }

@@ -10,8 +10,8 @@
 #include "src/objects/internal-index.h"
 #include "src/objects/objects.h"
 #include "src/objects/property-array.h"
-#include "torque-generated/class-definitions.h"
-#include "torque-generated/field-offsets.h"
+#include "torque-generated/class-definitions-tq.h"
+#include "torque-generated/field-offsets-tq.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -567,7 +567,6 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
   static inline int GetEmbedderFieldCount(Map map);
   inline int GetEmbedderFieldCount() const;
   inline int GetEmbedderFieldOffset(int index);
-  inline void InitializeEmbedderField(Isolate* isolate, int index);
   inline Object GetEmbedderField(int index);
   inline void SetEmbedderField(int index, Object value);
   inline void SetEmbedderField(int index, Smi value);

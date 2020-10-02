@@ -425,7 +425,6 @@ DEFINE_BOOL(future, FUTURE_BOOL,
 
 DEFINE_WEAK_IMPLICATION(future, write_protect_code_memory)
 DEFINE_WEAK_IMPLICATION(future, finalize_streaming_on_background)
-DEFINE_WEAK_IMPLICATION(future, super_ic)
 
 // Flags for jitless
 DEFINE_BOOL(jitless, V8_LITE_BOOL,
@@ -597,6 +596,8 @@ DEFINE_BOOL(print_deopt_stress, false, "print number of possible deopt points")
 DEFINE_BOOL(opt, true, "use adaptive optimizations")
 DEFINE_BOOL(turbo_sp_frame_access, false,
             "use stack pointer-relative access to frame wherever possible")
+DEFINE_BOOL(turbo_control_flow_aware_allocation, true,
+            "consider control flow while allocating registers")
 DEFINE_BOOL(
     stress_turbo_late_spilling, false,
     "optimize placement of all spill instructions, not just loop-top phis")
@@ -1444,6 +1445,13 @@ DEFINE_BOOL(profile_deserialization, false,
             "Print the time it takes to deserialize the snapshot.")
 DEFINE_BOOL(serialization_statistics, false,
             "Collect statistics on serialized objects.")
+#ifdef V8_ENABLE_THIRD_PARTY_HEAP
+DEFINE_UINT_READONLY(serialization_chunk_size, 1,
+                     "Custom size for serialization chunks")
+#else
+DEFINE_UINT(serialization_chunk_size, 4096,
+            "Custom size for serialization chunks")
+#endif
 // Regexp
 DEFINE_BOOL(regexp_optimization, true, "generate optimized regexp code")
 DEFINE_BOOL(regexp_mode_modifiers, false, "enable inline flags in regexp.")

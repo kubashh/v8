@@ -4,7 +4,6 @@
 
 #include "src/wasm/module-instantiate.h"
 
-#include "src/api/api.h"
 #include "src/asmjs/asm-js.h"
 #include "src/logging/counters.h"
 #include "src/logging/metrics.h"
@@ -723,22 +722,6 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
     start_function_ = WasmExportedFunction::New(
         isolate_, instance, start_index,
         static_cast<int>(function.sig->parameter_count()), wrapper_code);
-
-    if (function.imported) {
-      ImportedFunctionEntry entry(instance, module_->start_function_index);
-      Object callable = entry.maybe_callable();
-      if (callable.IsJSFunction()) {
-        // If the start function was imported and calls into Blink, we have
-        // to pretend that the V8 API was used to enter its correct context.
-        // To get that context to {ExecuteStartFunction} below, we install it
-        // as the context of the wrapper we just compiled. That's a bit of a
-        // hack because it's not really the wrapper's context, only its wrapped
-        // target's context, but the end result is the same, and since the
-        // start function wrapper doesn't leak, neither does this
-        // implementation detail.
-        start_function_->set_context(JSFunction::cast(callable).context());
-      }
-    }
   }
 
   DCHECK(!isolate_->has_pending_exception());
@@ -757,18 +740,10 @@ bool InstanceBuilder::ExecuteStartFunction() {
   if (start_function_.is_null()) return true;  // No start function.
 
   HandleScope scope(isolate_);
-  // In case the start function calls out to Blink, we have to make sure that
-  // the correct "entered context" is available. This is the equivalent of
-  // v8::Context::Enter() and must happen in addition to the function call
-  // sequence doing the compiled version of "isolate->set_context(...)".
-  HandleScopeImplementer* hsi = isolate_->handle_scope_implementer();
-  hsi->EnterContext(start_function_->context());
-
   // Call the JS function.
   Handle<Object> undefined = isolate_->factory()->undefined_value();
   MaybeHandle<Object> retval =
       Execution::Call(isolate_, start_function_, undefined, 0, nullptr);
-  hsi->LeaveContext();
 
   if (retval.is_null()) {
     DCHECK(isolate_->has_pending_exception());
@@ -1074,9 +1049,8 @@ bool InstanceBuilder::ProcessImportedFunction(
       // The imported function is a callable.
 
       int expected_arity = static_cast<int>(expected_sig->parameter_count());
-      if (kind == compiler::WasmImportCallKind::kJSFunctionArityMismatch ||
-          kind == compiler::WasmImportCallKind::
-                      kJSFunctionArityMismatchSkipAdaptor) {
+      if (kind ==
+          compiler::WasmImportCallKind::kJSFunctionArityMismatchSkipAdaptor) {
         Handle<JSFunction> function = Handle<JSFunction>::cast(js_receiver);
         SharedFunctionInfo shared = function->shared();
         expected_arity = shared.internal_formal_parameter_count();
@@ -1451,9 +1425,7 @@ void InstanceBuilder::CompileImportWrappers(
 
     int expected_arity = static_cast<int>(sig->parameter_count());
     if (resolved.first ==
-            compiler::WasmImportCallKind::kJSFunctionArityMismatch ||
-        resolved.first ==
-            compiler::WasmImportCallKind::kJSFunctionArityMismatchSkipAdaptor) {
+        compiler::WasmImportCallKind::kJSFunctionArityMismatchSkipAdaptor) {
       Handle<JSFunction> function = Handle<JSFunction>::cast(resolved.second);
       SharedFunctionInfo shared = function->shared();
       expected_arity = shared.internal_formal_parameter_count();

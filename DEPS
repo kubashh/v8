@@ -82,15 +82,15 @@ vars = {
 
 deps = {
   'build':
-    Var('chromium_url') + '/chromium/src/build.git' + '@' + '9cc0704ecc2cc983dabf591ce728d9ca14774d1b',
+    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'c8dc0f5b6dac55d94ae9b47efac6bed3b3dc8a31',
   'third_party/depot_tools':
-    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + '69e30b23c45f22df585dc12f464479ca3deafb69',
+    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + 'd1580d53b7bc1f244d4eaf797aca0d066fad166c',
   'third_party/icu':
-    Var('chromium_url') + '/chromium/deps/icu.git' + '@' + 'aba3f0dfeeddc0c69730ec28ef423543b8a62693',
+    Var('chromium_url') + '/chromium/deps/icu.git' + '@' + '83b2ac66d1572c2357e1184d2c54d91e7e92c524',
   'third_party/instrumented_libraries':
-    Var('chromium_url') + '/chromium/src/third_party/instrumented_libraries.git' + '@' + '6ba978ccb754d270b6cd12da58c8269b617e4f6e',
+    Var('chromium_url') + '/chromium/src/third_party/instrumented_libraries.git' + '@' + '3c52ccdd3b9edf8fb7b3bd8ba945cce47d887ea8',
   'buildtools':
-    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + '4be464e050b3d05060471788f926b34c641db9fd',
+    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + '3ff4f5027b4b81a6c9c36d64d71444f2709a4896',
   'buildtools/clang_format/script':
     Var('chromium_url') + '/chromium/llvm-project/cfe/tools/clang-format.git' + '@' + '96636aa0e9f047f17447f2d45a094d0b59ed7917',
   'buildtools/linux64': {
@@ -178,7 +178,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'third_party/catapult': {
-    'url': Var('chromium_url') + '/catapult.git' + '@' + '8c88c750bd4516075f6879b4aed5e3bf22ef4424',
+    'url': Var('chromium_url') + '/catapult.git' + '@' + '0de9874718993c990ed13321720d6065a2f7dcaa',
     'condition': 'checkout_android',
   },
   'third_party/colorama/src': {
@@ -186,7 +186,7 @@ deps = {
     'condition': 'checkout_android',
   },
   'third_party/fuchsia-sdk': {
-    'url': Var('chromium_url') + '/chromium/src/third_party/fuchsia-sdk.git' + '@' + 'f8df9ff79b878d1998970cc04a197061069e48ce',
+    'url': Var('chromium_url') + '/chromium/src/third_party/fuchsia-sdk.git' + '@' + '6a38b0e1f1f4a6255959b259a681e46ee72dee58',
     'condition': 'checkout_fuchsia',
   },
   'third_party/googletest/src':
@@ -206,7 +206,7 @@ deps = {
   'test/mozilla/data':
     Var('chromium_url') + '/v8/deps/third_party/mozilla-tests.git' + '@' + 'f6c578a10ea707b1a8ab0b88943fe5115ce2b9be',
   'test/test262/data':
-    Var('chromium_url') + '/external/github.com/tc39/test262.git' + '@' + 'ad8a5e9940ee60d1ecb6e150b7aecf09b17545dd',
+    Var('chromium_url') + '/external/github.com/tc39/test262.git' + '@' + '63976020376c8c2b0ebabf37c364f25288d4b93b',
   'test/test262/harness':
     Var('chromium_url') + '/external/github.com/test262-utils/test262-harness-py.git' + '@' + '4555345a943d0c99a9461182705543fb171dda4b',
   'third_party/qemu-linux-x64': {
@@ -233,7 +233,7 @@ deps = {
       'packages': [
           {
               'package': 'fuchsia/third_party/aemu/linux-amd64',
-              'version': 'UABC8VAzZj56bPNLe3ou7AIlBjwHbiXOu6R9f5RbZWcC'
+              'version': 'laU2vAii09mMfCaTLtA8O6UYjPdUXy0B-0zzOR0OPekC'
           },
       ],
       'condition': 'host_os == "linux" and checkout_fuchsia',
@@ -250,7 +250,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'tools/clang':
-    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + '921f37180791fb9cf8e4bdeb3794a8d113c78340',
+    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + '3017edade60658a699be776d9e282509a902ffe9',
   'tools/luci-go': {
       'packages': [
         {
@@ -284,9 +284,9 @@ deps = {
   'third_party/protobuf':
     Var('chromium_url') + '/external/github.com/google/protobuf'+ '@' + 'b68a347f56137b4b1a746e8c7438495a6ac1bd91',
   'third_party/zlib':
-    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + '26211a5a8e7e28286fc28a84a0e102cc96bf0f0b',
+    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + 'f8517bd62931d7adb9bcefb0cbe3c2ca5cd8862c',
   'third_party/jsoncpp/source':
-    Var('chromium_url') + '/external/github.com/open-source-parsers/jsoncpp.git'+ '@' + '9059f5cad030ba11d37818847443a53918c327b1',
+    Var('chromium_url') + '/external/github.com/open-source-parsers/jsoncpp.git'+ '@' + '645250b6690785be60ab6780ce4b58698d884d11',
   'third_party/ittapi': {
     # Force checkout ittapi libraries to pass v8 header includes check on
     # bots that has check_v8_header_includes enabled.

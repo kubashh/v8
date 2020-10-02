@@ -857,7 +857,8 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Code> GetCodeFromOptimizedCodeCache(
     DCHECK(!code.marked_for_deoptimization());
     DCHECK(function->shared().is_compiled());
     DCHECK(CodeKindIsStoredInOptimizedCodeCache(code.kind()));
-    DCHECK_IMPLIES(!osr_offset.IsNone(), CodeKindCanOSR(code.kind()));
+    DCHECK_IMPLIES(!osr_offset.IsNone(),
+                   code.kind() == CodeKind::OPTIMIZED_FUNCTION);
     return Handle<Code>(code, isolate);
   }
   return MaybeHandle<Code>();
@@ -901,7 +902,7 @@ void InsertCodeIntoOptimizedCodeCache(
         handle(function->feedback_vector(), function->GetIsolate());
     FeedbackVector::SetOptimizedCode(vector, code);
   } else {
-    DCHECK(CodeKindCanOSR(kind));
+    DCHECK_EQ(kind, CodeKind::OPTIMIZED_FUNCTION);
     OSROptimizedCodeCache::AddOptimizedCode(native_context, shared, code,
                                             compilation_info->osr_offset());
   }
@@ -2603,13 +2604,10 @@ MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
   LanguageMode language_mode = construct_language_mode(FLAG_use_strict);
   CompilationCache* compilation_cache = isolate->compilation_cache();
 
-  // For extensions or REPL mode scripts neither do a compilation cache lookup,
-  // nor put the compilation result back into the cache.
-  const bool use_compilation_cache =
-      extension == nullptr && script_details.repl_mode == REPLMode::kNo;
+  // Do a lookup in the compilation cache but not for extensions.
   MaybeHandle<SharedFunctionInfo> maybe_result;
   IsCompiledScope is_compiled_scope;
-  if (use_compilation_cache) {
+  if (extension == nullptr) {
     bool can_consume_code_cache =
         compile_options == ScriptCompiler::kConsumeCodeCache;
     if (can_consume_code_cache) {
@@ -2675,7 +2673,7 @@ MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
 
     // Add the result to the isolate cache.
     Handle<SharedFunctionInfo> result;
-    if (use_compilation_cache && maybe_result.ToHandle(&result)) {
+    if (extension == nullptr && maybe_result.ToHandle(&result)) {
       DCHECK(is_compiled_scope.is_compiled());
       compilation_cache->PutScript(source, isolate->native_context(),
                                    language_mode, result);

@@ -39,12 +39,7 @@ using DecodeResult = VoidResult;
 // a buffer of bytes.
 class Decoder {
  public:
-  // {ValidateFlag} can be used in a boolean manner ({if (!validate) ...}).
-  enum ValidateFlag : int8_t {
-    kNoValidation = 0,   // Don't run validation, assume valid input.
-    kBooleanValidation,  // Run validation but only store a generic error.
-    kFullValidation      // Run full validation with error message and location.
-  };
+  enum ValidateFlag : bool { kValidate = true, kNoValidate = false };
 
   enum AdvancePCFlag : bool { kAdvancePc = true, kNoAdvancePc = false };
 
@@ -165,7 +160,7 @@ class Decoder {
         index = *(pc + 1);
         *length = 1;
       } else {
-        // If size validation fails.
+        // If kValidate and size validation fails.
         index = 0;
         *length = 0;
       }
@@ -191,22 +186,21 @@ class Decoder {
   // Reads a LEB128 variable-length unsigned 32-bit integer and advances {pc_}.
   uint32_t consume_u32v(const char* name = nullptr) {
     uint32_t length = 0;
-    return read_leb<uint32_t, kFullValidation, kAdvancePc, kTrace>(pc_, &length,
-                                                                   name);
+    return read_leb<uint32_t, kValidate, kAdvancePc, kTrace>(pc_, &length,
+                                                             name);
   }
 
   // Reads a LEB128 variable-length signed 32-bit integer and advances {pc_}.
   int32_t consume_i32v(const char* name = nullptr) {
     uint32_t length = 0;
-    return read_leb<int32_t, kFullValidation, kAdvancePc, kTrace>(pc_, &length,
-                                                                  name);
+    return read_leb<int32_t, kValidate, kAdvancePc, kTrace>(pc_, &length, name);
   }
 
   // Reads a LEB128 variable-length unsigned 64-bit integer and advances {pc_}.
   uint64_t consume_u64v(const char* name = nullptr) {
     uint32_t length = 0;
-    return read_leb<uint64_t, kFullValidation, kAdvancePc, kTrace>(pc_, &length,
-                                                                   name);
+    return read_leb<uint64_t, kValidate, kAdvancePc, kTrace>(pc_, &length,
+                                                             name);
   }
 
   // Consume {size} bytes and send them to the bit bucket, advancing {pc_}.
@@ -230,14 +224,6 @@ class Decoder {
     return true;
   }
 
-  // Use this for "boolean validation", i.e. if the error message is not used
-  // anyway.
-  void V8_NOINLINE MarkError() {
-    if (!ok()) return;
-    error_ = {0, "validation failed"};
-    onFirstError();
-  }
-
   // Do not inline error methods. This has measurable impact on validation time,
   // see https://crbug.com/910432.
   void V8_NOINLINE error(const char* msg) { errorf(pc_offset(), "%s", msg); }
@@ -246,13 +232,6 @@ class Decoder {
   }
   void V8_NOINLINE error(uint32_t offset, const char* msg) {
     errorf(offset, "%s", msg);
-  }
-
-  void V8_NOINLINE PRINTF_FORMAT(2, 3) errorf(const char* format, ...) {
-    va_list args;
-    va_start(args, format);
-    verrorf(pc_offset(), format, args);
-    va_end(args);
   }
 
   void V8_NOINLINE PRINTF_FORMAT(3, 4)
@@ -364,7 +343,7 @@ class Decoder {
     onFirstError();
   }
 
-  template <typename IntType, ValidateFlag validate>
+  template <typename IntType, bool validate>
   inline IntType read_little_endian(const byte* pc, const char* msg) {
     if (!validate) {
       DCHECK(validate_size(pc, sizeof(IntType), msg));
@@ -382,7 +361,7 @@ class Decoder {
       pc_ = end_;
       return IntType{0};
     }
-    IntType val = read_little_endian<IntType, kNoValidation>(pc_, name);
+    IntType val = read_little_endian<IntType, false>(pc_, name);
     traceByteRange(pc_, pc_ + sizeof(IntType));
     TRACE("= %d\n", val);
     pc_ += sizeof(IntType);
@@ -432,11 +411,7 @@ class Decoder {
     *length = byte_index + (at_end ? 0 : 1);
     if (validate && V8_UNLIKELY(at_end || (b & 0x80))) {
       TRACE_IF(trace, at_end ? "<end> " : "<length overflow> ");
-      if (validate == kFullValidation) {
-        errorf(pc, "expected %s", name);
-      } else {
-        MarkError();
-      }
+      errorf(pc, "expected %s", name);
       result = 0;
     }
     if (is_last_byte) {
@@ -456,11 +431,7 @@ class Decoder {
       if (!validate) {
         DCHECK(valid_extra_bits);
       } else if (V8_UNLIKELY(!valid_extra_bits)) {
-        if (validate == kFullValidation) {
-          error(pc, "extra bits in varint");
-        } else {
-          MarkError();
-        }
+        error(pc, "extra bits in varint");
         result = 0;
       }
     }

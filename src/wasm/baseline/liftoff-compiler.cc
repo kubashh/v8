@@ -258,9 +258,9 @@ class DebugSideTableBuilder {
 class LiftoffCompiler {
  public:
   // TODO(clemensb): Make this a template parameter.
-  static constexpr Decoder::ValidateFlag validate = Decoder::kBooleanValidation;
+  static constexpr Decoder::ValidateFlag validate = Decoder::kValidate;
 
-  using Value = ValueBase<validate>;
+  using Value = ValueBase;
 
   static constexpr auto kI32 = ValueType::kI32;
   static constexpr auto kI64 = ValueType::kI64;
@@ -273,7 +273,7 @@ class LiftoffCompiler {
     LiftoffAssembler::CacheState state;
   };
 
-  struct Control : public ControlBase<Value, validate> {
+  struct Control : public ControlBase<Value> {
     std::unique_ptr<ElseState> else_state;
     LiftoffAssembler::CacheState label_state;
     MovableLabel label;
@@ -843,8 +843,7 @@ class LiftoffCompiler {
 #ifdef DEBUG
     SLOW_DCHECK(__ ValidateCacheState());
     if (WasmOpcodes::IsPrefixOpcode(opcode)) {
-      opcode = decoder->read_prefixed_opcode<Decoder::kFullValidation>(
-          decoder->pc());
+      opcode = decoder->read_prefixed_opcode<Decoder::kValidate>(decoder->pc());
     }
     DEBUG_CODE_COMMENT(WasmOpcodes::OpcodeName(opcode));
 #endif
@@ -2520,8 +2519,8 @@ class LiftoffCompiler {
       return unsupported(decoder, kSimd, "simd");
     }
     switch (opcode) {
-      case wasm::kExprI8x16Swizzle:
-        return EmitBinOp<kS128, kS128>(&LiftoffAssembler::emit_i8x16_swizzle);
+      case wasm::kExprS8x16Swizzle:
+        return EmitBinOp<kS128, kS128>(&LiftoffAssembler::emit_s8x16_swizzle);
       case wasm::kExprI8x16Splat:
         return EmitUnOp<kI32, kS128>(&LiftoffAssembler::emit_i8x16_splat);
       case wasm::kExprI16x8Splat:
@@ -3045,7 +3044,7 @@ class LiftoffCompiler {
     if (needs_swap) {
       std::swap(lhs, rhs);
     }
-    __ LiftoffAssembler::emit_i8x16_shuffle(dst, lhs, rhs, shuffle, is_swizzle);
+    __ LiftoffAssembler::emit_s8x16_shuffle(dst, lhs, rhs, shuffle, is_swizzle);
     __ PushRegister(kWasmS128, dst);
   }
 
@@ -3239,14 +3238,7 @@ class LiftoffCompiler {
 
     uint32_t offset = imm.offset;
     index_reg = AddMemoryMasking(index_reg, &offset, &pinned);
-    Register index_plus_offset = index_reg;
-    if (offset) {
-      if (__ cache_state()->is_used(LiftoffRegister(index_reg))) {
-        index_plus_offset =
-            pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-      }
-      __ emit_i32_addi(index_plus_offset, index_reg, offset);
-    }
+    if (offset != 0) __ emit_i32_addi(index_reg, index_reg, offset);
 
     LiftoffAssembler::VarState timeout =
         __ cache_state()->stack_state.end()[-1];
@@ -3256,7 +3248,7 @@ class LiftoffCompiler {
 
     // We have to set the correct register for the index. It may have changed
     // above in {AddMemoryMasking}.
-    index.MakeRegister(LiftoffRegister(index_plus_offset));
+    index.MakeRegister(LiftoffRegister(index_reg));
 
     WasmCode::RuntimeStubId target;
     compiler::CallDescriptor* call_descriptor;
@@ -3304,40 +3296,38 @@ class LiftoffCompiler {
   void AtomicNotify(FullDecoder* decoder,
                     const MemoryAccessImmediate<validate>& imm) {
     LiftoffRegList pinned;
-    Register index_reg = pinned.set(__ PeekToRegister(1, pinned)).gp();
+    LiftoffRegister count = pinned.set(__ PopToRegister());
+    Register index = pinned.set(__ PopToRegister(pinned)).gp();
     if (BoundsCheckMem(decoder, kWasmI32.element_size_bytes(), imm.offset,
-                       index_reg, pinned, kDoForceCheck)) {
+                       index, pinned, kDoForceCheck)) {
       return;
     }
-    AlignmentCheckMem(decoder, kWasmI32.element_size_bytes(), imm.offset,
-                      index_reg, pinned);
+    AlignmentCheckMem(decoder, kWasmI32.element_size_bytes(), imm.offset, index,
+                      pinned);
 
     uint32_t offset = imm.offset;
-    index_reg = AddMemoryMasking(index_reg, &offset, &pinned);
-    Register index_plus_offset = index_reg;
+    index = AddMemoryMasking(index, &offset, &pinned);
+    Register index_plus_offset = index;
     if (offset) {
-      if (__ cache_state()->is_used(LiftoffRegister(index_reg))) {
+      if (__ cache_state()->is_used(LiftoffRegister(index))) {
         index_plus_offset =
             pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
       }
-      __ emit_i32_addi(index_plus_offset, index_reg, offset);
+      __ emit_i32_addi(index_plus_offset, index, offset);
     }
 
-    ValueType sig_reps[] = {kWasmI32, kWasmI32, kWasmI32};
-    FunctionSig sig(1, 2, sig_reps);
-    auto call_descriptor =
-        GetBuiltinCallDescriptor<WasmAtomicNotifyDescriptor>(compilation_zone_);
+    // TODO(ahaas): Use PrepareCall to prepare parameters.
+    __ SpillAllRegisters();
 
-    LiftoffAssembler::VarState count = __ cache_state()->stack_state.end()[-1];
-    LiftoffAssembler::VarState index = __ cache_state()->stack_state.end()[-2];
-    index.MakeRegister(LiftoffRegister(index_plus_offset));
+    WasmAtomicNotifyDescriptor descriptor;
+    DCHECK_EQ(0, descriptor.GetStackParameterCount());
+    DCHECK_EQ(2, descriptor.GetRegisterParameterCount());
+    __ ParallelRegisterMove(
+        {{descriptor.GetRegisterParameter(0), index_plus_offset, kWasmI32},
+         {descriptor.GetRegisterParameter(1), count, kWasmI32}});
 
-    __ PrepareBuiltinCall(&sig, call_descriptor, {index, count});
     __ CallRuntimeStub(WasmCode::kWasmAtomicNotify);
     DefineSafepoint();
-    // Pop parameters from the value stack.
-    __ cache_state()->stack_state.pop_back(2);
-
     RegisterDebugSideTableEntry(DebugSideTableBuilder::kDidSpill);
 
     __ PushRegister(kWasmI32, LiftoffRegister(kReturnRegister0));
@@ -4116,7 +4106,7 @@ WasmCompilationResult ExecuteLiftoffCompilation(
   if (debug_sidetable) {
     debug_sidetable_builder = std::make_unique<DebugSideTableBuilder>();
   }
-  WasmFullDecoder<Decoder::kBooleanValidation, LiftoffCompiler> decoder(
+  WasmFullDecoder<Decoder::kValidate, LiftoffCompiler> decoder(
       &zone, env->module, env->enabled_features, detected, func_body,
       call_descriptor, env, &zone, instruction_buffer->CreateView(),
       debug_sidetable_builder.get(), for_debugging, func_index, breakpoints,
@@ -4173,7 +4163,7 @@ std::unique_ptr<DebugSideTable> GenerateLiftoffDebugSideTable(
   auto call_descriptor = compiler::GetWasmCallDescriptor(&zone, func_body.sig);
   DebugSideTableBuilder debug_sidetable_builder;
   WasmFeatures detected;
-  WasmFullDecoder<Decoder::kBooleanValidation, LiftoffCompiler> decoder(
+  WasmFullDecoder<Decoder::kValidate, LiftoffCompiler> decoder(
       &zone, env->module, env->enabled_features, &detected, func_body,
       call_descriptor, env, &zone,
       NewAssemblerBuffer(AssemblerBase::kDefaultBufferSize),

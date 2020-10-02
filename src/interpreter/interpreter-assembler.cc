@@ -30,19 +30,19 @@ InterpreterAssembler::InterpreterAssembler(CodeAssemblerState* state,
       bytecode_(bytecode),
       operand_scale_(operand_scale),
       TVARIABLE_CONSTRUCTOR(interpreted_frame_pointer_),
-      TVARIABLE_CONSTRUCTOR(bytecode_array_,
-                            Parameter<BytecodeArray>(
-                                InterpreterDispatchDescriptor::kBytecodeArray)),
+      TVARIABLE_CONSTRUCTOR(
+          bytecode_array_,
+          CAST(Parameter(InterpreterDispatchDescriptor::kBytecodeArray))),
       TVARIABLE_CONSTRUCTOR(
           bytecode_offset_,
-          UncheckedParameter<IntPtrT>(
-              InterpreterDispatchDescriptor::kBytecodeOffset)),
-      TVARIABLE_CONSTRUCTOR(dispatch_table_,
-                            UncheckedParameter<ExternalReference>(
-                                InterpreterDispatchDescriptor::kDispatchTable)),
+          UncheckedCast<IntPtrT>(
+              Parameter(InterpreterDispatchDescriptor::kBytecodeOffset))),
+      TVARIABLE_CONSTRUCTOR(
+          dispatch_table_, UncheckedCast<ExternalReference>(Parameter(
+                               InterpreterDispatchDescriptor::kDispatchTable))),
       TVARIABLE_CONSTRUCTOR(
           accumulator_,
-          Parameter<Object>(InterpreterDispatchDescriptor::kAccumulator)),
+          CAST(Parameter(InterpreterDispatchDescriptor::kAccumulator))),
       accumulator_use_(AccumulatorUse::kNone),
       made_call_(false),
       reloaded_frame_ptr_(false),
@@ -83,8 +83,7 @@ TNode<RawPtrT> InterpreterAssembler::GetInterpretedFramePointer() {
 TNode<IntPtrT> InterpreterAssembler::BytecodeOffset() {
   if (Bytecodes::MakesCallAlongCriticalPath(bytecode_) && made_call_ &&
       (bytecode_offset_.value() ==
-       UncheckedParameter<IntPtrT>(
-           InterpreterDispatchDescriptor::kBytecodeOffset))) {
+       Parameter(InterpreterDispatchDescriptor::kBytecodeOffset))) {
     bytecode_offset_ = ReloadBytecodeOffset();
   }
   return bytecode_offset_.value();
@@ -141,8 +140,7 @@ TNode<BytecodeArray> InterpreterAssembler::BytecodeArrayTaggedPointer() {
 TNode<ExternalReference> InterpreterAssembler::DispatchTablePointer() {
   if (Bytecodes::MakesCallAlongCriticalPath(bytecode_) && made_call_ &&
       (dispatch_table_.value() ==
-       UncheckedParameter<ExternalReference>(
-           InterpreterDispatchDescriptor::kDispatchTable))) {
+       Parameter(InterpreterDispatchDescriptor::kDispatchTable))) {
     dispatch_table_ = ExternalConstant(
         ExternalReference::interpreter_dispatch_table_address(isolate()));
   }

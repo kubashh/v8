@@ -86,7 +86,8 @@ class Visitor {
       return;
     }
 
-    CPPGC_DCHECK(value != kSentinelPointer);
+    // TODO(chromium:1056170): DCHECK (or similar) for deleted values as they
+    // should come in at a different path.
     VisitWeak(value, TraceTrait<T>::GetTraceDescriptor(value),
               &HandleWeak<WeakMember<T>>, &weak_member);
   }
@@ -135,6 +136,11 @@ class Visitor {
   virtual void VisitRoot(const void*, TraceDescriptor) {}
   virtual void VisitWeakRoot(const void* self, TraceDescriptor, WeakCallback,
                              const void* weak_root) {}
+
+  // Returns true if tracing is deferred to mutator thread.
+  V8_EXPORT virtual bool DeferTraceToMutatorThreadIfConcurrent(const void*,
+                                                               TraceCallback,
+                                                               size_t);
 
  private:
   template <typename T, void (T::*method)(const LivenessBroker&)>

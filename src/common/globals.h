@@ -295,6 +295,7 @@ STATIC_ASSERT(kPointerSize == (1 << kPointerSizeLog2));
 
 // This type defines raw storage type for external (or off-V8 heap) pointers
 // stored on V8 heap.
+using ExternalPointer_t = Address;
 constexpr int kExternalPointerSize = sizeof(ExternalPointer_t);
 
 constexpr int kEmbedderDataSlotSize = kSystemPointerSize;
@@ -482,6 +483,20 @@ inline std::ostream& operator<<(std::ostream& os, DeoptimizeKind kind) {
   }
   UNREACHABLE();
 }
+
+enum class IsolateAllocationMode {
+  // Allocate Isolate in C++ heap using default new/delete operators.
+  kInCppHeap,
+
+  // Allocate Isolate in a committed region inside V8 heap reservation.
+  kInV8Heap,
+
+#ifdef V8_COMPRESS_POINTERS
+  kDefault = kInV8Heap,
+#else
+  kDefault = kInCppHeap,
+#endif
+};
 
 // Indicates whether the lookup is related to sloppy-mode block-scoped
 // function hoisting, and is a synthetic assignment for that.
@@ -780,7 +795,12 @@ inline std::ostream& operator<<(std::ostream& os, AllocationType kind) {
 }
 
 // TODO(ishell): review and rename kWordAligned to kTaggedAligned.
-enum AllocationAlignment { kWordAligned, kDoubleAligned, kDoubleUnaligned };
+enum AllocationAlignment {
+  kWordAligned,
+  kDoubleAligned,
+  kDoubleUnaligned,
+  kCodeAligned
+};
 
 enum class AccessMode { ATOMIC, NON_ATOMIC };
 
@@ -1674,12 +1694,6 @@ enum class TraceRetainingPathMode { kEnabled, kDisabled };
 // function expressions, and for the receiver. Must be declared here so that it
 // can be used in Torque.
 enum class VariableAllocationInfo { NONE, STACK, CONTEXT, UNUSED };
-
-enum class DynamicMapChecksStatus : uint8_t {
-  kSuccess = 0,
-  kBailout = 1,
-  kDeopt = 2
-};
 
 }  // namespace internal
 }  // namespace v8

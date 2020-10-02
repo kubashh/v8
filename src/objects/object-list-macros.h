@@ -5,7 +5,7 @@
 #ifndef V8_OBJECTS_OBJECT_LIST_MACROS_H_
 #define V8_OBJECTS_OBJECT_LIST_MACROS_H_
 
-#include "torque-generated/instance-types.h"
+#include "torque-generated/instance-types-tq.h"
 
 namespace v8 {
 namespace internal {
@@ -281,7 +281,6 @@ class ZoneForwardList;
   V(ModuleContext)                           \
   V(NonNullForeign)                          \
   V(ScriptContext)                           \
-  V(StrongDescriptorArray)                   \
   V(WithContext)
 
 #define HEAP_OBJECT_TYPE_LIST(V)    \

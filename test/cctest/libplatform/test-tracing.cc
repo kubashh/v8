@@ -477,7 +477,8 @@ class TraceWritingThread : public base::Thread {
         tracing_controller_(tracing_controller) {}
 
   void Run() override {
-    while (!stopped_.load()) {
+    running_.store(true);
+    while (running_.load()) {
       TRACE_EVENT0("v8", "v8.Test");
       tracing_controller_->AddTraceEvent('A', nullptr, "v8", "", 1, 1, 0,
                                          nullptr, nullptr, nullptr, nullptr, 0);
@@ -487,10 +488,10 @@ class TraceWritingThread : public base::Thread {
     }
   }
 
-  void Stop() { stopped_.store(true); }
+  void Stop() { running_.store(false); }
 
  private:
-  std::atomic_bool stopped_{false};
+  std::atomic_bool running_{false};
   v8::platform::tracing::TracingController* tracing_controller_;
 };
 

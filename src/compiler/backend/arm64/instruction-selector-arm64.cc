@@ -606,43 +606,43 @@ void InstructionSelector::VisitLoadTransform(Node* node) {
   InstructionCode opcode = kArchNop;
   bool require_add = false;
   switch (params.transformation) {
-    case LoadTransformation::kS128Load8Splat:
+    case LoadTransformation::kS8x16LoadSplat:
       opcode = kArm64LoadSplat;
       opcode |= MiscField::encode(8);
       require_add = true;
       break;
-    case LoadTransformation::kS128Load16Splat:
+    case LoadTransformation::kS16x8LoadSplat:
       opcode = kArm64LoadSplat;
       opcode |= MiscField::encode(16);
       require_add = true;
       break;
-    case LoadTransformation::kS128Load32Splat:
+    case LoadTransformation::kS32x4LoadSplat:
       opcode = kArm64LoadSplat;
       opcode |= MiscField::encode(32);
       require_add = true;
       break;
-    case LoadTransformation::kS128Load64Splat:
+    case LoadTransformation::kS64x2LoadSplat:
       opcode = kArm64LoadSplat;
       opcode |= MiscField::encode(64);
       require_add = true;
       break;
-    case LoadTransformation::kS128Load8x8S:
-      opcode = kArm64S128Load8x8S;
+    case LoadTransformation::kI16x8Load8x8S:
+      opcode = kArm64I16x8Load8x8S;
       break;
-    case LoadTransformation::kS128Load8x8U:
-      opcode = kArm64S128Load8x8U;
+    case LoadTransformation::kI16x8Load8x8U:
+      opcode = kArm64I16x8Load8x8U;
       break;
-    case LoadTransformation::kS128Load16x4S:
-      opcode = kArm64S128Load16x4S;
+    case LoadTransformation::kI32x4Load16x4S:
+      opcode = kArm64I32x4Load16x4S;
       break;
-    case LoadTransformation::kS128Load16x4U:
-      opcode = kArm64S128Load16x4U;
+    case LoadTransformation::kI32x4Load16x4U:
+      opcode = kArm64I32x4Load16x4U;
       break;
-    case LoadTransformation::kS128Load32x2S:
-      opcode = kArm64S128Load32x2S;
+    case LoadTransformation::kI64x2Load32x2S:
+      opcode = kArm64I64x2Load32x2S;
       break;
-    case LoadTransformation::kS128Load32x2U:
-      opcode = kArm64S128Load32x2U;
+    case LoadTransformation::kI64x2Load32x2U:
+      opcode = kArm64I64x2Load32x2U;
       break;
     case LoadTransformation::kS128LoadMem32Zero:
       opcode = kArm64S128LoadMem32Zero;
@@ -1379,14 +1379,14 @@ void InstructionSelector::VisitWord64Ror(Node* node) {
   V(Float64ExtractLowWord32, kArm64Float64ExtractLowWord32)   \
   V(Float64ExtractHighWord32, kArm64Float64ExtractHighWord32) \
   V(Float64SilenceNaN, kArm64Float64SilenceNaN)               \
-  V(F32x4Ceil, kArm64Float32RoundUp)                          \
-  V(F32x4Floor, kArm64Float32RoundDown)                       \
-  V(F32x4Trunc, kArm64Float32RoundTruncate)                   \
-  V(F32x4NearestInt, kArm64Float32RoundTiesEven)              \
-  V(F64x2Ceil, kArm64Float64RoundUp)                          \
-  V(F64x2Floor, kArm64Float64RoundDown)                       \
-  V(F64x2Trunc, kArm64Float64RoundTruncate)                   \
-  V(F64x2NearestInt, kArm64Float64RoundTiesEven)
+  V(F32x4Ceil, kArm64F32x4RoundUp)                            \
+  V(F32x4Floor, kArm64F32x4RoundDown)                         \
+  V(F32x4Trunc, kArm64F32x4RoundTruncate)                     \
+  V(F32x4NearestInt, kArm64F32x4RoundTiesEven)                \
+  V(F64x2Ceil, kArm64F64x2RoundUp)                            \
+  V(F64x2Floor, kArm64F64x2RoundDown)                         \
+  V(F64x2Trunc, kArm64F64x2RoundTruncate)                     \
+  V(F64x2NearestInt, kArm64F64x2RoundTiesEven)
 
 #define RRR_OP_LIST(V)            \
   V(Int32Div, kArm64Idiv32)       \
@@ -1407,7 +1407,7 @@ void InstructionSelector::VisitWord64Ror(Node* node) {
   V(Float64Max, kArm64Float64Max) \
   V(Float32Min, kArm64Float32Min) \
   V(Float64Min, kArm64Float64Min) \
-  V(I8x16Swizzle, kArm64I8x16Swizzle)
+  V(S8x16Swizzle, kArm64S8x16Swizzle)
 
 #define RR_VISITOR(Name, opcode)                      \
   void InstructionSelector::Visit##Name(Node* node) { \
@@ -3611,7 +3611,7 @@ void ArrangeShuffleTable(Arm64OperandGenerator* g, Node* input0, Node* input1,
 
 }  // namespace
 
-void InstructionSelector::VisitI8x16Shuffle(Node* node) {
+void InstructionSelector::VisitS8x16Shuffle(Node* node) {
   uint8_t shuffle[kSimd128Size];
   bool is_swizzle;
   CanonicalizeShuffle(node, shuffle, &is_swizzle);
@@ -3661,7 +3661,7 @@ void InstructionSelector::VisitI8x16Shuffle(Node* node) {
   // Code generator uses vtbl, arrange sources to form a valid lookup table.
   InstructionOperand src0, src1;
   ArrangeShuffleTable(&g, input0, input1, &src0, &src1);
-  Emit(kArm64I8x16Shuffle, g.DefineAsRegister(node), src0, src1,
+  Emit(kArm64S8x16Shuffle, g.DefineAsRegister(node), src0, src1,
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle)),
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle + 4)),
        g.UseImmediate(wasm::SimdShuffle::Pack4Lanes(shuffle + 8)),

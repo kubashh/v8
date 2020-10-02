@@ -1370,108 +1370,15 @@ void CodeStubAssembler::BranchIfToBooleanIsTrue(SloppyTNode<Object> value,
   }
 }
 
-TNode<ExternalPointerT> CodeStubAssembler::ChangeUint32ToExternalPointer(
-    TNode<Uint32T> value) {
-  STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-  return ReinterpretCast<ExternalPointerT>(ChangeUint32ToWord(value));
-}
-
-TNode<Uint32T> CodeStubAssembler::ChangeExternalPointerToUint32(
-    TNode<ExternalPointerT> value) {
-  STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-  return Unsigned(TruncateWordToInt32(ReinterpretCast<UintPtrT>(value)));
-}
-
-void CodeStubAssembler::InitializeExternalPointerField(TNode<HeapObject> object,
-                                                       TNode<IntPtrT> offset) {
-#ifdef V8_HEAP_SANDBOX
-  TNode<ExternalReference> external_pointer_table_address = ExternalConstant(
-      ExternalReference::external_pointer_table_address(isolate()));
-  TNode<Uint32T> table_length = UncheckedCast<Uint32T>(
-      Load(MachineType::Uint32(), external_pointer_table_address,
-           UintPtrConstant(Internals::kExternalPointerTableLengthOffset)));
-  TNode<Uint32T> table_capacity = UncheckedCast<Uint32T>(
-      Load(MachineType::Uint32(), external_pointer_table_address,
-           UintPtrConstant(Internals::kExternalPointerTableCapacityOffset)));
-
-  Label grow_table(this, Label::kDeferred), finish(this);
-
-  TNode<BoolT> compare = Uint32LessThan(table_length, table_capacity);
-  Branch(compare, &finish, &grow_table);
-
-  BIND(&grow_table);
-  {
-    TNode<ExternalReference> table_grow_function = ExternalConstant(
-        ExternalReference::external_pointer_table_grow_table_function());
-    CallCFunction(
-        table_grow_function, MachineType::Pointer(),
-        std::make_pair(MachineType::Pointer(), external_pointer_table_address));
-    Goto(&finish);
-  }
-  BIND(&finish);
-
-  TNode<Uint32T> new_table_length = Uint32Add(table_length, Uint32Constant(1));
-  StoreNoWriteBarrier(
-      MachineRepresentation::kWord32, external_pointer_table_address,
-      UintPtrConstant(Internals::kExternalPointerTableLengthOffset),
-      new_table_length);
-
-  TNode<Uint32T> index = table_length;
-  TNode<ExternalPointerT> encoded = ChangeUint32ToExternalPointer(index);
-  StoreObjectFieldNoWriteBarrier<ExternalPointerT>(object, offset, encoded);
-#endif
-}
-
-TNode<RawPtrT> CodeStubAssembler::LoadExternalPointerFromObject(
-    TNode<HeapObject> object, TNode<IntPtrT> offset) {
-#ifdef V8_HEAP_SANDBOX
-  TNode<ExternalReference> external_pointer_table_address = ExternalConstant(
-      ExternalReference::external_pointer_table_address(isolate()));
-  TNode<RawPtrT> table = UncheckedCast<RawPtrT>(
-      Load(MachineType::Pointer(), external_pointer_table_address,
-           UintPtrConstant(Internals::kExternalPointerTableBufferOffset)));
-
-  TNode<ExternalPointerT> encoded =
-      LoadObjectField<ExternalPointerT>(object, offset);
-  TNode<Word32T> index = ChangeExternalPointerToUint32(encoded);
-  // TODO(v8:10391, saelo): bounds check if table is not caged
-  TNode<IntPtrT> table_offset = ElementOffsetFromIndex(
-      ChangeUint32ToWord(index), SYSTEM_POINTER_ELEMENTS, 0);
-
-  return UncheckedCast<RawPtrT>(
-      Load(MachineType::Pointer(), table, table_offset));
-#else
-  return LoadObjectField<RawPtrT>(object, offset);
-#endif  // V8_HEAP_SANDBOX
-}
-
-void CodeStubAssembler::StoreExternalPointerToObject(TNode<HeapObject> object,
-                                                     TNode<IntPtrT> offset,
-                                                     TNode<RawPtrT> pointer) {
-#ifdef V8_HEAP_SANDBOX
-  TNode<ExternalReference> external_pointer_table_address = ExternalConstant(
-      ExternalReference::external_pointer_table_address(isolate()));
-  TNode<RawPtrT> table = UncheckedCast<RawPtrT>(
-      Load(MachineType::Pointer(), external_pointer_table_address,
-           UintPtrConstant(Internals::kExternalPointerTableBufferOffset)));
-
-  TNode<ExternalPointerT> encoded =
-      LoadObjectField<ExternalPointerT>(object, offset);
-  TNode<Word32T> index = ChangeExternalPointerToUint32(encoded);
-  // TODO(v8:10391, saelo): bounds check if table is not caged
-  TNode<IntPtrT> table_offset = ElementOffsetFromIndex(
-      ChangeUint32ToWord(index), SYSTEM_POINTER_ELEMENTS, 0);
-
-  StoreNoWriteBarrier(MachineType::PointerRepresentation(), table, table_offset,
-                      pointer);
-#else
-  StoreObjectFieldNoWriteBarrier<RawPtrT>(object, offset, pointer);
-#endif  // V8_HEAP_SANDBOX
-}
-
 TNode<Object> CodeStubAssembler::LoadFromParentFrame(int offset) {
   TNode<RawPtrT> frame_pointer = LoadParentFramePointer();
   return LoadFullTagged(frame_pointer, IntPtrConstant(offset));
+}
+
+Node* CodeStubAssembler::LoadObjectField(TNode<HeapObject> object, int offset,
+                                         MachineType type) {
+  CSA_ASSERT(this, IsStrong(object));
+  return LoadFromObject(type, object, IntPtrConstant(offset - kHeapObjectTag));
 }
 
 TNode<IntPtrT> CodeStubAssembler::LoadAndUntagObjectField(
@@ -1482,7 +1389,8 @@ TNode<IntPtrT> CodeStubAssembler::LoadAndUntagObjectField(
 #endif
     return ChangeInt32ToIntPtr(LoadObjectField<Int32T>(object, offset));
   } else {
-    return SmiToIntPtr(LoadObjectField<Smi>(object, offset));
+    return SmiToIntPtr(
+        LoadObjectField(object, offset, MachineType::TaggedSigned()));
   }
 }
 
@@ -1492,9 +1400,11 @@ TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ObjectField(
 #if V8_TARGET_LITTLE_ENDIAN
     offset += 4;
 #endif
-    return LoadObjectField<Int32T>(object, offset);
+    return UncheckedCast<Int32T>(
+        LoadObjectField(object, offset, MachineType::Int32()));
   } else {
-    return SmiToInt32(LoadObjectField<Smi>(object, offset));
+    return SmiToInt32(
+        LoadObjectField(object, offset, MachineType::TaggedSigned()));
   }
 }
 
@@ -1502,7 +1412,8 @@ TNode<Float64T> CodeStubAssembler::LoadHeapNumberValue(
     SloppyTNode<HeapObject> object) {
   CSA_ASSERT(this, Word32Or(IsHeapNumber(object), IsOddball(object)));
   STATIC_ASSERT(HeapNumber::kValueOffset == Oddball::kToNumberRawOffset);
-  return LoadObjectField<Float64T>(object, HeapNumber::kValueOffset);
+  return TNode<Float64T>::UncheckedCast(LoadObjectField(
+      object, HeapNumber::kValueOffset, MachineType::Float64()));
 }
 
 TNode<Map> CodeStubAssembler::GetInstanceTypeMap(InstanceType instance_type) {
@@ -1637,8 +1548,9 @@ TNode<IntPtrT> CodeStubAssembler::LoadAndUntagWeakFixedArrayLength(
 
 TNode<Int32T> CodeStubAssembler::LoadNumberOfDescriptors(
     TNode<DescriptorArray> array) {
-  return UncheckedCast<Int32T>(LoadObjectField<Int16T>(
-      array, DescriptorArray::kNumberOfDescriptorsOffset));
+  return UncheckedCast<Int32T>(
+      LoadObjectField(array, DescriptorArray::kNumberOfDescriptorsOffset,
+                      MachineType::Int16()));
 }
 
 TNode<Int32T> CodeStubAssembler::LoadNumberOfOwnDescriptors(TNode<Map> map) {
@@ -1650,18 +1562,19 @@ TNode<Int32T> CodeStubAssembler::LoadNumberOfOwnDescriptors(TNode<Map> map) {
 TNode<Int32T> CodeStubAssembler::LoadMapBitField(SloppyTNode<Map> map) {
   CSA_SLOW_ASSERT(this, IsMap(map));
   return UncheckedCast<Int32T>(
-      LoadObjectField<Uint8T>(map, Map::kBitFieldOffset));
+      LoadObjectField(map, Map::kBitFieldOffset, MachineType::Uint8()));
 }
 
 TNode<Int32T> CodeStubAssembler::LoadMapBitField2(SloppyTNode<Map> map) {
   CSA_SLOW_ASSERT(this, IsMap(map));
   return UncheckedCast<Int32T>(
-      LoadObjectField<Uint8T>(map, Map::kBitField2Offset));
+      LoadObjectField(map, Map::kBitField2Offset, MachineType::Uint8()));
 }
 
 TNode<Uint32T> CodeStubAssembler::LoadMapBitField3(SloppyTNode<Map> map) {
   CSA_SLOW_ASSERT(this, IsMap(map));
-  return LoadObjectField<Uint32T>(map, Map::kBitField3Offset);
+  return UncheckedCast<Uint32T>(
+      LoadObjectField(map, Map::kBitField3Offset, MachineType::Uint32()));
 }
 
 TNode<Uint16T> CodeStubAssembler::LoadMapInstanceType(SloppyTNode<Map> map) {
@@ -2103,9 +2016,10 @@ TNode<IntPtrT> CodeStubAssembler::LoadPropertyArrayLength(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSTypedArrayDataPtr(
     TNode<JSTypedArray> typed_array) {
-  // Data pointer = external_pointer + static_cast<Tagged_t>(base_pointer).
+  // Data pointer = DecodeExternalPointer(external_pointer) +
+  //                static_cast<Tagged_t>(base_pointer).
   TNode<RawPtrT> external_pointer =
-      LoadJSTypedArrayExternalPointerPtr(typed_array);
+      DecodeExternalPointer(LoadJSTypedArrayExternalPointer(typed_array));
 
   TNode<IntPtrT> base_pointer;
   if (COMPRESS_POINTERS_BOOL) {
@@ -2642,9 +2556,9 @@ TNode<BoolT> CodeStubAssembler::IsGeneratorFunction(
           function, JSFunction::kSharedFunctionInfoOffset);
 
   const TNode<Uint32T> function_kind =
-      DecodeWord32<SharedFunctionInfo::FunctionKindBits>(
-          LoadObjectField<Uint32T>(shared_function_info,
-                                   SharedFunctionInfo::kFlagsOffset));
+      DecodeWord32<SharedFunctionInfo::FunctionKindBits>(LoadObjectField(
+          shared_function_info, SharedFunctionInfo::kFlagsOffset,
+          MachineType::Uint32()));
 
   // See IsGeneratorFunction(FunctionKind kind).
   return IsInRange(function_kind, FunctionKind::kAsyncConciseGeneratorMethod,
@@ -3133,16 +3047,18 @@ void CodeStubAssembler::StoreBigIntDigit(TNode<BigInt> bigint,
 
 TNode<Word32T> CodeStubAssembler::LoadBigIntBitfield(TNode<BigInt> bigint) {
   return UncheckedCast<Word32T>(
-      LoadObjectField<Uint32T>(bigint, BigInt::kBitfieldOffset));
+      LoadObjectField(bigint, BigInt::kBitfieldOffset, MachineType::Uint32()));
 }
 
 TNode<UintPtrT> CodeStubAssembler::LoadBigIntDigit(TNode<BigInt> bigint,
                                                    intptr_t digit_index) {
   CHECK_LE(0, digit_index);
   CHECK_LT(digit_index, BigInt::kMaxLength);
-  return LoadObjectField<UintPtrT>(
-      bigint, BigInt::kDigitsOffset +
-                  static_cast<int>(digit_index) * kSystemPointerSize);
+  return UncheckedCast<UintPtrT>(
+      LoadObjectField(bigint,
+                      BigInt::kDigitsOffset +
+                          static_cast<int>(digit_index) * kSystemPointerSize,
+                      MachineType::UintPtr()));
 }
 
 TNode<UintPtrT> CodeStubAssembler::LoadBigIntDigit(TNode<BigInt> bigint,
@@ -6687,7 +6603,8 @@ TNode<RawPtrT> ToDirectStringAssembler::TryToSequential(
            if_bailout);
 
     TNode<String> string = var_string_.value();
-    TNode<RawPtrT> result = LoadExternalStringResourceDataPtr(CAST(string));
+    TNode<RawPtrT> result =
+        DecodeExternalPointer(LoadExternalStringResourceData(CAST(string)));
     if (ptr_kind == PTR_TO_STRING) {
       result = RawPtrSub(result, IntPtrConstant(SeqOneByteString::kHeaderSize -
                                                 kHeapObjectTag));
@@ -6857,144 +6774,127 @@ TNode<Numeric> CodeStubAssembler::NonNumberToNumberOrNumeric(
     BigIntHandling bigint_handling) {
   CSA_ASSERT(this, Word32BinaryNot(IsHeapNumber(input)));
 
+  // We might need to loop once here due to ToPrimitive conversions.
   TVARIABLE(HeapObject, var_input, input);
   TVARIABLE(Numeric, var_result);
-  TVARIABLE(Uint16T, instance_type, LoadInstanceType(var_input.value()));
-  Label end(this), if_inputisreceiver(this, Label::kDeferred),
-      if_inputisnotreceiver(this);
-
-  // We need to handle JSReceiver first since we might need to do two
-  // conversions due to ToPritmive.
-  Branch(IsJSReceiverInstanceType(instance_type.value()), &if_inputisreceiver,
-         &if_inputisnotreceiver);
-
-  BIND(&if_inputisreceiver);
+  Label loop(this, &var_input);
+  Label end(this);
+  Goto(&loop);
+  BIND(&loop);
   {
-    // The {var_input.value()} is a JSReceiver, we need to convert it to a
-    // Primitive first using the ToPrimitive type conversion, preferably
-    // yielding a Number.
-    Callable callable = CodeFactory::NonPrimitiveToPrimitive(
-        isolate(), ToPrimitiveHint::kNumber);
-    TNode<Object> result = CallStub(callable, context, var_input.value());
+    // Load the current {input} value (known to be a HeapObject).
+    TNode<HeapObject> input = var_input.value();
 
-    // Check if the {result} is already a Number/Numeric.
-    Label if_done(this), if_notdone(this);
-    Branch(mode == Object::Conversion::kToNumber ? IsNumber(result)
-                                                 : IsNumeric(result),
-           &if_done, &if_notdone);
+    // Dispatch on the {input} instance type.
+    TNode<Uint16T> input_instance_type = LoadInstanceType(input);
+    Label if_inputisstring(this), if_inputisoddball(this),
+        if_inputisbigint(this), if_inputisreceiver(this, Label::kDeferred),
+        if_inputisother(this, Label::kDeferred);
+    GotoIf(IsStringInstanceType(input_instance_type), &if_inputisstring);
+    GotoIf(IsBigIntInstanceType(input_instance_type), &if_inputisbigint);
+    GotoIf(InstanceTypeEqual(input_instance_type, ODDBALL_TYPE),
+           &if_inputisoddball);
+    Branch(IsJSReceiverInstanceType(input_instance_type), &if_inputisreceiver,
+           &if_inputisother);
 
-    BIND(&if_done);
+    BIND(&if_inputisstring);
     {
-      // The ToPrimitive conversion already gave us a Number/Numeric, so
-      // we're done.
-      var_result = CAST(result);
+      // The {input} is a String, use the fast stub to convert it to a Number.
+      TNode<String> string_input = CAST(input);
+      var_result = StringToNumber(string_input);
       Goto(&end);
     }
 
-    BIND(&if_notdone);
-    {
-      // We now have a Primitive {result}, but it's not yet a
-      // Number/Numeric.
-      var_input = CAST(result);
-      // We have a new input. Redo the check and reload instance_type.
-      CSA_ASSERT(this, Word32BinaryNot(IsHeapNumber(var_input.value())));
-      instance_type = LoadInstanceType(var_input.value());
-      Goto(&if_inputisnotreceiver);
-    }
-  }
-
-  BIND(&if_inputisnotreceiver);
-  {
-    Label not_plain_primitive(this), if_inputisbigint(this),
-        if_inputisother(this, Label::kDeferred);
-
-    // String and Oddball cases.
-    TVARIABLE(Number, var_result_number);
-    TryPlainPrimitiveNonNumberToNumber(var_input.value(), &var_result_number,
-                                       &not_plain_primitive);
-    var_result = var_result_number.value();
-    Goto(&end);
-
-    BIND(&not_plain_primitive);
-    {
-      Branch(IsBigIntInstanceType(instance_type.value()), &if_inputisbigint,
-             &if_inputisother);
-
-      BIND(&if_inputisbigint);
-      {
-        if (mode == Object::Conversion::kToNumeric) {
-          var_result = CAST(var_input.value());
-          Goto(&end);
-        } else {
-          DCHECK_EQ(mode, Object::Conversion::kToNumber);
-          if (bigint_handling == BigIntHandling::kThrow) {
-            Goto(&if_inputisother);
-          } else {
-            DCHECK_EQ(bigint_handling, BigIntHandling::kConvertToNumber);
-            var_result = CAST(CallRuntime(Runtime::kBigIntToNumber, context,
-                                          var_input.value()));
-            Goto(&end);
-          }
-        }
-      }
-
-      BIND(&if_inputisother);
-      {
-        // The {var_input.value()} is something else (e.g. Symbol), let the
-        // runtime figure out the correct exception. Note: We cannot tail call
-        // to the runtime here, as js-to-wasm trampolines also use this code
-        // currently, and they declare all outgoing parameters as untagged,
-        // while we would push a tagged object here.
-        auto function_id = mode == Object::Conversion::kToNumber
-                               ? Runtime::kToNumber
-                               : Runtime::kToNumeric;
-        var_result = CAST(CallRuntime(function_id, context, var_input.value()));
+    BIND(&if_inputisbigint);
+    CSA_ASSERT(this, Word32And(TaggedIsNotSmi(context), IsContext(context)));
+    if (mode == Object::Conversion::kToNumeric) {
+      var_result = CAST(input);
+      Goto(&end);
+    } else {
+      DCHECK_EQ(mode, Object::Conversion::kToNumber);
+      if (bigint_handling == BigIntHandling::kThrow) {
+        Goto(&if_inputisother);
+      } else {
+        DCHECK_EQ(bigint_handling, BigIntHandling::kConvertToNumber);
+        var_result =
+            CAST(CallRuntime(Runtime::kBigIntToNumber, context, input));
         Goto(&end);
       }
+    }
+
+    BIND(&if_inputisoddball);
+    {
+      // The {input} is an Oddball, we just need to load the Number value of it.
+      var_result = LoadObjectField<Number>(input, Oddball::kToNumberOffset);
+      Goto(&end);
+    }
+
+    BIND(&if_inputisreceiver);
+    {
+      CSA_ASSERT(this, Word32And(TaggedIsNotSmi(context), IsContext(context)));
+      // The {input} is a JSReceiver, we need to convert it to a Primitive first
+      // using the ToPrimitive type conversion, preferably yielding a Number.
+      Callable callable = CodeFactory::NonPrimitiveToPrimitive(
+          isolate(), ToPrimitiveHint::kNumber);
+      TNode<Object> result = CallStub(callable, context, input);
+
+      // Check if the {result} is already a Number/Numeric.
+      Label if_done(this), if_notdone(this);
+      Branch(mode == Object::Conversion::kToNumber ? IsNumber(result)
+                                                   : IsNumeric(result),
+             &if_done, &if_notdone);
+
+      BIND(&if_done);
+      {
+        // The ToPrimitive conversion already gave us a Number/Numeric, so we're
+        // done.
+        var_result = CAST(result);
+        Goto(&end);
+      }
+
+      BIND(&if_notdone);
+      {
+        // We now have a Primitive {result}, but it's not yet a Number/Numeric.
+        var_input = CAST(result);
+        Goto(&loop);
+      }
+    }
+
+    BIND(&if_inputisother);
+    {
+      CSA_ASSERT(this, Word32And(TaggedIsNotSmi(context), IsContext(context)));
+      // The {input} is something else (e.g. Symbol), let the runtime figure
+      // out the correct exception.
+      // Note: We cannot tail call to the runtime here, as js-to-wasm
+      // trampolines also use this code currently, and they declare all
+      // outgoing parameters as untagged, while we would push a tagged
+      // object here.
+      auto function_id = mode == Object::Conversion::kToNumber
+                             ? Runtime::kToNumber
+                             : Runtime::kToNumeric;
+      var_result = CAST(CallRuntime(function_id, context, input));
+      Goto(&end);
     }
   }
 
   BIND(&end);
   if (mode == Object::Conversion::kToNumber) {
     CSA_ASSERT(this, IsNumber(var_result.value()));
+  } else {
+    DCHECK_EQ(mode, Object::Conversion::kToNumeric);
   }
   return var_result.value();
 }
 
 TNode<Number> CodeStubAssembler::NonNumberToNumber(
-    TNode<Context> context, SloppyTNode<HeapObject> input,
+    SloppyTNode<Context> context, SloppyTNode<HeapObject> input,
     BigIntHandling bigint_handling) {
   return CAST(NonNumberToNumberOrNumeric(
       context, input, Object::Conversion::kToNumber, bigint_handling));
 }
 
-void CodeStubAssembler::TryPlainPrimitiveNonNumberToNumber(
-    TNode<HeapObject> input, TVariable<Number>* var_result, Label* if_bailout) {
-  CSA_ASSERT(this, Word32BinaryNot(IsHeapNumber(input)));
-  Label done(this);
-
-  // Dispatch on the {input} instance type.
-  TNode<Uint16T> input_instance_type = LoadInstanceType(input);
-  Label if_inputisstring(this);
-  GotoIf(IsStringInstanceType(input_instance_type), &if_inputisstring);
-  GotoIfNot(InstanceTypeEqual(input_instance_type, ODDBALL_TYPE), if_bailout);
-
-  // The {input} is an Oddball, we just need to load the Number value of it.
-  *var_result = LoadObjectField<Number>(input, Oddball::kToNumberOffset);
-  Goto(&done);
-
-  BIND(&if_inputisstring);
-  {
-    // The {input} is a String, use the fast stub to convert it to a Number.
-    *var_result = StringToNumber(CAST(input));
-    Goto(&done);
-  }
-
-  BIND(&done);
-}
-
 TNode<Numeric> CodeStubAssembler::NonNumberToNumeric(
-    TNode<Context> context, SloppyTNode<HeapObject> input) {
+    SloppyTNode<Context> context, SloppyTNode<HeapObject> input) {
   return NonNumberToNumberOrNumeric(context, input,
                                     Object::Conversion::kToNumeric);
 }
@@ -7023,7 +6923,7 @@ TNode<Number> CodeStubAssembler::ToNumber_Inline(SloppyTNode<Context> context,
   return var_result.value();
 }
 
-TNode<Number> CodeStubAssembler::ToNumber(TNode<Context> context,
+TNode<Number> CodeStubAssembler::ToNumber(SloppyTNode<Context> context,
                                           SloppyTNode<Object> input,
                                           BigIntHandling bigint_handling) {
   TVARIABLE(Number, var_result);
@@ -7049,39 +6949,6 @@ TNode<Number> CodeStubAssembler::ToNumber(TNode<Context> context,
     {
       var_result = NonNumberToNumber(context, input_ho, bigint_handling);
       Goto(&end);
-    }
-  }
-
-  BIND(&end);
-  return var_result.value();
-}
-
-TNode<Number> CodeStubAssembler::PlainPrimitiveToNumber(TNode<Object> input) {
-  TVARIABLE(Number, var_result);
-  Label end(this), fallback(this);
-
-  Label not_smi(this, Label::kDeferred);
-  GotoIfNot(TaggedIsSmi(input), &not_smi);
-  TNode<Smi> input_smi = CAST(input);
-  var_result = input_smi;
-  Goto(&end);
-
-  BIND(&not_smi);
-  {
-    Label not_heap_number(this, Label::kDeferred);
-    TNode<HeapObject> input_ho = CAST(input);
-    GotoIfNot(IsHeapNumber(input_ho), &not_heap_number);
-
-    TNode<HeapNumber> input_hn = CAST(input_ho);
-    var_result = input_hn;
-    Goto(&end);
-
-    BIND(&not_heap_number);
-    {
-      TryPlainPrimitiveNonNumberToNumber(input_ho, &var_result, &fallback);
-      Goto(&end);
-      BIND(&fallback);
-      Unreachable();
     }
   }
 
@@ -12665,8 +12532,7 @@ void CodeStubAssembler::ThrowIfArrayBufferViewBufferIsDetached(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSArrayBufferBackingStorePtr(
     TNode<JSArrayBuffer> array_buffer) {
-  return LoadExternalPointerFromObject(array_buffer,
-                                       JSArrayBuffer::kBackingStoreOffset);
+  return DecodeExternalPointer(LoadJSArrayBufferBackingStore(array_buffer));
 }
 
 TNode<JSArrayBuffer> CodeStubAssembler::LoadJSArrayBufferViewBuffer(

@@ -402,14 +402,6 @@ let kExprRefCast = 0x41;
 let kExprI31New = 0x20;
 
 // Numeric opcodes.
-let kExprI32SConvertSatF32 = 0x00;
-let kExprI32UConvertSatF32 = 0x01;
-let kExprI32SConvertSatF64 = 0x02;
-let kExprI32UConvertSatF64 = 0x03;
-let kExprI64SConvertSatF32 = 0x04;
-let kExprI64UConvertSatF32 = 0x05;
-let kExprI64SConvertSatF64 = 0x06;
-let kExprI64UConvertSatF64 = 0x07;
 let kExprMemoryInit = 0x08;
 let kExprDataDrop = 0x09;
 let kExprMemoryCopy = 0x0a;
@@ -505,9 +497,9 @@ let kExprS128Load64Splat = 0x0a;
 let kExprS128StoreMem = 0x0b;
 
 let kExprS128Const = 0x0c;
-let kExprI8x16Shuffle = 0x0d;
+let kExprS8x16Shuffle = 0x0d;
 
-let kExprI8x16Swizzle = 0x0e;
+let kExprS8x16Swizzle = 0x0e;
 let kExprI8x16Splat = 0x0f;
 let kExprI16x8Splat = 0x10;
 let kExprI32x4Splat = 0x11;

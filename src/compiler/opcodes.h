@@ -952,8 +952,8 @@
   V(S128Xor)                    \
   V(S128Select)                 \
   V(S128AndNot)                 \
-  V(I8x16Swizzle)               \
-  V(I8x16Shuffle)               \
+  V(S8x16Swizzle)               \
+  V(S8x16Shuffle)               \
   V(V64x2AnyTrue)               \
   V(V64x2AllTrue)               \
   V(V32x4AnyTrue)               \

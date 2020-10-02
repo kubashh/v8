@@ -3097,7 +3097,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
               i.InputSimd128Register(1), i.InputInt4(2));
       break;
     }
-    case kArmI8x16Swizzle: {
+    case kArmS8x16Swizzle: {
       Simd128Register dst = i.OutputSimd128Register(),
                       tbl = i.InputSimd128Register(0),
                       src = i.InputSimd128Register(1);
@@ -3106,7 +3106,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ vtbl(dst.high(), table, src.high());
       break;
     }
-    case kArmI8x16Shuffle: {
+    case kArmS8x16Shuffle: {
       Simd128Register dst = i.OutputSimd128Register(),
                       src0 = i.InputSimd128Register(0),
                       src1 = i.InputSimd128Register(1);
@@ -3210,58 +3210,58 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ mov(i.OutputRegister(), Operand(1), LeaveCC, ne);
       break;
     }
-    case kArmS128Load8Splat: {
+    case kArmS8x16LoadSplat: {
       __ vld1r(Neon8, NeonListOperand(i.OutputSimd128Register()),
                i.NeonInputOperand(0));
       break;
     }
-    case kArmS128Load16Splat: {
+    case kArmS16x8LoadSplat: {
       __ vld1r(Neon16, NeonListOperand(i.OutputSimd128Register()),
                i.NeonInputOperand(0));
       break;
     }
-    case kArmS128Load32Splat: {
+    case kArmS32x4LoadSplat: {
       __ vld1r(Neon32, NeonListOperand(i.OutputSimd128Register()),
                i.NeonInputOperand(0));
       break;
     }
-    case kArmS128Load64Splat: {
+    case kArmS64x2LoadSplat: {
       Simd128Register dst = i.OutputSimd128Register();
       __ vld1(Neon32, NeonListOperand(dst.low()), i.NeonInputOperand(0));
       __ Move(dst.high(), dst.low());
       break;
     }
-    case kArmS128Load8x8S: {
+    case kArmI16x8Load8x8S: {
       Simd128Register dst = i.OutputSimd128Register();
       __ vld1(Neon8, NeonListOperand(dst.low()), i.NeonInputOperand(0));
       __ vmovl(NeonS8, dst, dst.low());
       break;
     }
-    case kArmS128Load8x8U: {
+    case kArmI16x8Load8x8U: {
       Simd128Register dst = i.OutputSimd128Register();
       __ vld1(Neon8, NeonListOperand(dst.low()), i.NeonInputOperand(0));
       __ vmovl(NeonU8, dst, dst.low());
       break;
     }
-    case kArmS128Load16x4S: {
+    case kArmI32x4Load16x4S: {
       Simd128Register dst = i.OutputSimd128Register();
       __ vld1(Neon16, NeonListOperand(dst.low()), i.NeonInputOperand(0));
       __ vmovl(NeonS16, dst, dst.low());
       break;
     }
-    case kArmS128Load16x4U: {
+    case kArmI32x4Load16x4U: {
       Simd128Register dst = i.OutputSimd128Register();
       __ vld1(Neon16, NeonListOperand(dst.low()), i.NeonInputOperand(0));
       __ vmovl(NeonU16, dst, dst.low());
       break;
     }
-    case kArmS128Load32x2S: {
+    case kArmI64x2Load32x2S: {
       Simd128Register dst = i.OutputSimd128Register();
       __ vld1(Neon32, NeonListOperand(dst.low()), i.NeonInputOperand(0));
       __ vmovl(NeonS32, dst, dst.low());
       break;
     }
-    case kArmS128Load32x2U: {
+    case kArmI64x2Load32x2U: {
       Simd128Register dst = i.OutputSimd128Register();
       __ vld1(Neon32, NeonListOperand(dst.low()), i.NeonInputOperand(0));
       __ vmovl(NeonU32, dst, dst.low());

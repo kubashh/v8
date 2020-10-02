@@ -42,6 +42,9 @@ class TestJob final : public DefaultJobImpl<TestJobThread> {
     DCHECK(thread_started);
     return thread;
   }
+
+ private:
+  friend class TestJobThread;
 };
 
 void TestJobThread::Run() {

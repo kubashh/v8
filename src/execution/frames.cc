@@ -181,14 +181,6 @@ void StackTraceFrameIterator::Advance() {
   } while (!done() && !IsValidFrame(iterator_.frame()));
 }
 
-int StackTraceFrameIterator::FrameFunctionCount() const {
-  DCHECK(!done());
-  if (!iterator_.frame()->is_optimized()) return 1;
-  std::vector<SharedFunctionInfo> infos;
-  OptimizedFrame::cast(iterator_.frame())->GetFunctions(&infos);
-  return static_cast<int>(infos.size());
-}
-
 bool StackTraceFrameIterator::IsValidFrame(StackFrame* frame) const {
   if (frame->is_java_script()) {
     JavaScriptFrame* js_frame = static_cast<JavaScriptFrame*>(frame);
@@ -589,9 +581,8 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
               return OPTIMIZED;
             }
             return BUILTIN;
-          case CodeKind::TURBOFAN:
+          case CodeKind::OPTIMIZED_FUNCTION:
           case CodeKind::NATIVE_CONTEXT_INDEPENDENT:
-          case CodeKind::TURBOPROP:
             return OPTIMIZED;
           case CodeKind::JS_TO_WASM_FUNCTION:
             return JS_TO_WASM;

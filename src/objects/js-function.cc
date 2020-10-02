@@ -87,11 +87,8 @@ namespace {
 // otherwise returns true and sets highest_tier.
 bool HighestTierOf(CodeKinds kinds, CodeKind* highest_tier) {
   DCHECK_EQ((kinds & ~kJSFunctionCodeKindsMask), 0);
-  if ((kinds & CodeKindFlag::TURBOFAN) != 0) {
-    *highest_tier = CodeKind::TURBOFAN;
-    return true;
-  } else if ((kinds & CodeKindFlag::TURBOPROP) != 0) {
-    *highest_tier = CodeKind::TURBOPROP;
+  if ((kinds & CodeKindFlag::OPTIMIZED_FUNCTION) != 0) {
+    *highest_tier = CodeKind::OPTIMIZED_FUNCTION;
     return true;
   } else if ((kinds & CodeKindFlag::NATIVE_CONTEXT_INDEPENDENT) != 0) {
     *highest_tier = CodeKind::NATIVE_CONTEXT_INDEPENDENT;
@@ -122,7 +119,7 @@ bool JSFunction::ActiveTierIsIgnition() const {
 bool JSFunction::ActiveTierIsTurbofan() const {
   CodeKind highest_tier;
   if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
-  return highest_tier == CodeKind::TURBOFAN;
+  return highest_tier == CodeKind::OPTIMIZED_FUNCTION;
 }
 
 bool JSFunction::ActiveTierIsNCI() const {
@@ -131,19 +128,10 @@ bool JSFunction::ActiveTierIsNCI() const {
   return highest_tier == CodeKind::NATIVE_CONTEXT_INDEPENDENT;
 }
 
-bool JSFunction::ActiveTierIsTurboprop() const {
-  CodeKind highest_tier;
-  if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
-  return highest_tier == CodeKind::TURBOPROP;
-}
-
 CodeKind JSFunction::NextTier() const {
-  if (V8_UNLIKELY(FLAG_turbo_nci_as_midtier && ActiveTierIsIgnition())) {
-    return CodeKind::NATIVE_CONTEXT_INDEPENDENT;
-  } else if (V8_UNLIKELY(FLAG_turboprop)) {
-    return CodeKind::TURBOPROP;
-  }
-  return CodeKind::TURBOFAN;
+  return (FLAG_turbo_nci_as_midtier && ActiveTierIsIgnition())
+             ? CodeKind::NATIVE_CONTEXT_INDEPENDENT
+             : CodeKind::OPTIMIZED_FUNCTION;
 }
 
 bool JSFunction::CanDiscardCompiled() const {
@@ -156,7 +144,7 @@ bool JSFunction::CanDiscardCompiled() const {
   //
   // Note that when the function has not yet been compiled we also return
   // false; that's fine, since nothing must be discarded in that case.
-  if (CodeKindIsOptimizedJSFunction(code().kind())) return true;
+  if (code().kind() == CodeKind::OPTIMIZED_FUNCTION) return true;
   CodeKinds result = GetAvailableCodeKinds();
   return (result & kJSFunctionCodeKindsMask) != 0;
 }

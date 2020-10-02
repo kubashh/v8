@@ -1129,7 +1129,6 @@ void InstructionSelector::VisitBlock(BasicBlock* block) {
         node->opcode() == IrOpcode::kCall ||
         node->opcode() == IrOpcode::kProtectedLoad ||
         node->opcode() == IrOpcode::kProtectedStore ||
-        node->opcode() == IrOpcode::kLoadTransform ||
 #define ADD_EFFECT_FOR_ATOMIC_OP(Opcode) \
   node->opcode() == IrOpcode::k##Opcode ||
         MACHINE_ATOMIC_OP_LIST(ADD_EFFECT_FOR_ATOMIC_OP)
@@ -2220,10 +2219,10 @@ void InstructionSelector::VisitNode(Node* node) {
       return MarkAsSimd128(node), VisitS128Select(node);
     case IrOpcode::kS128AndNot:
       return MarkAsSimd128(node), VisitS128AndNot(node);
-    case IrOpcode::kI8x16Swizzle:
-      return MarkAsSimd128(node), VisitI8x16Swizzle(node);
-    case IrOpcode::kI8x16Shuffle:
-      return MarkAsSimd128(node), VisitI8x16Shuffle(node);
+    case IrOpcode::kS8x16Swizzle:
+      return MarkAsSimd128(node), VisitS8x16Swizzle(node);
+    case IrOpcode::kS8x16Shuffle:
+      return MarkAsSimd128(node), VisitS8x16Shuffle(node);
     case IrOpcode::kV64x2AnyTrue:
       return MarkAsWord32(node), VisitV64x2AnyTrue(node);
     case IrOpcode::kV64x2AllTrue:

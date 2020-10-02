@@ -18,7 +18,6 @@
 #include "src/ast/ast-value-factory.h"
 #include "src/ast/scopes.h"
 #include "src/base/hashmap.h"
-#include "src/base/logging.h"
 #include "src/base/platform/platform.h"
 #include "src/base/sys-info.h"
 #include "src/base/utils/random-number-generator.h"
@@ -1804,7 +1803,7 @@ Object Isolate::UnwindAndFindHandler() {
                             code.stack_slots() * kSystemPointerSize;
 
         // TODO(bmeurer): Turbofanned BUILTIN frames appear as OPTIMIZED,
-        // but do not have a code kind of TURBOFAN.
+        // but do not have a code kind of OPTIMIZED_FUNCTION.
         if (CodeKindCanDeoptimize(code.kind()) &&
             code.marked_for_deoptimization()) {
           // If the target code is lazy deoptimized, we jump to the original
@@ -2858,16 +2857,18 @@ std::atomic<size_t> Isolate::non_disposed_isolates_;
 #endif  // DEBUG
 
 // static
-Isolate* Isolate::New() {
+Isolate* Isolate::New(IsolateAllocationMode mode) {
   // IsolateAllocator allocates the memory for the Isolate object according to
   // the given allocation mode.
   std::unique_ptr<IsolateAllocator> isolate_allocator =
-      std::make_unique<IsolateAllocator>();
+      std::make_unique<IsolateAllocator>(mode);
   // Construct Isolate object in the allocated memory.
   void* isolate_ptr = isolate_allocator->isolate_memory();
   Isolate* isolate = new (isolate_ptr) Isolate(std::move(isolate_allocator));
-#ifdef V8_COMPRESS_POINTERS
-  DCHECK(IsAligned(isolate->isolate_root(), kPtrComprIsolateRootAlignment));
+#if V8_TARGET_ARCH_64_BIT
+  DCHECK_IMPLIES(
+      mode == IsolateAllocationMode::kInV8Heap,
+      IsAligned(isolate->isolate_root(), kPtrComprIsolateRootAlignment));
 #endif
 
 #ifdef DEBUG
@@ -2932,9 +2933,6 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator)
       id_(isolate_counter.fetch_add(1, std::memory_order_relaxed)),
       allocator_(new TracingAccountingAllocator(this)),
       builtins_(this),
-#if defined(DEBUG) || defined(VERIFY_HEAP)
-      num_active_deserializers_(0),
-#endif
       rail_mode_(PERFORMANCE_ANIMATION),
       code_event_dispatcher_(new CodeEventDispatcher()),
       persistent_handles_list_(new PersistentHandlesList()),
@@ -2984,15 +2982,6 @@ void Isolate::CheckIsolateLayout() {
            Internals::kIsolateStackGuardOffset);
   CHECK_EQ(static_cast<int>(OFFSET_OF(Isolate, isolate_data_.roots_)),
            Internals::kIsolateRootsOffset);
-
-#ifdef V8_HEAP_SANDBOX
-  CHECK_EQ(static_cast<int>(OFFSET_OF(ExternalPointerTable, buffer_)),
-           Internals::kExternalPointerTableBufferOffset);
-  CHECK_EQ(static_cast<int>(OFFSET_OF(ExternalPointerTable, length_)),
-           Internals::kExternalPointerTableLengthOffset);
-  CHECK_EQ(static_cast<int>(OFFSET_OF(ExternalPointerTable, capacity_)),
-           Internals::kExternalPointerTableCapacityOffset);
-#endif
 }
 
 void Isolate::ClearSerializerData() {

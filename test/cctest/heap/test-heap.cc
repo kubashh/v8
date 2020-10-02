@@ -206,9 +206,8 @@ HEAP_TEST(TestNewSpaceRefsInCopiedCode) {
 
   CodeDesc desc;
   masm.GetCode(isolate, &desc);
-  Handle<Code> code = Factory::CodeBuilder(
-                          isolate, desc, CodeKind::DEOPT_ENTRIES_OR_FOR_TESTING)
-                          .Build();
+  Handle<Code> code =
+      Factory::CodeBuilder(isolate, desc, CodeKind::STUB).Build();
 
   Handle<Code> copy;
   {
@@ -231,9 +230,8 @@ static void CheckFindCodeObject(Isolate* isolate) {
 
   CodeDesc desc;
   assm.GetCode(isolate, &desc);
-  Handle<Code> code = Factory::CodeBuilder(
-                          isolate, desc, CodeKind::DEOPT_ENTRIES_OR_FOR_TESTING)
-                          .Build();
+  Handle<Code> code =
+      Factory::CodeBuilder(isolate, desc, CodeKind::STUB).Build();
   CHECK(code->IsCode());
 
   HeapObject obj = HeapObject::cast(*code);
@@ -244,9 +242,8 @@ static void CheckFindCodeObject(Isolate* isolate) {
     CHECK_EQ(*code, found);
   }
 
-  Handle<Code> copy = Factory::CodeBuilder(
-                          isolate, desc, CodeKind::DEOPT_ENTRIES_OR_FOR_TESTING)
-                          .Build();
+  Handle<Code> copy =
+      Factory::CodeBuilder(isolate, desc, CodeKind::STUB).Build();
   HeapObject obj_copy = HeapObject::cast(*copy);
   Object not_right =
       isolate->FindCodeObject(obj_copy.address() + obj_copy.Size() / 2);
@@ -4493,9 +4490,10 @@ static Handle<Code> DummyOptimizedCode(Isolate* isolate) {
   masm.Push(isolate->factory()->undefined_value());
   masm.Drop(2);
   masm.GetCode(isolate, &desc);
-  Handle<Code> code = Factory::CodeBuilder(isolate, desc, CodeKind::TURBOFAN)
-                          .set_self_reference(masm.CodeObject())
-                          .Build();
+  Handle<Code> code =
+      Factory::CodeBuilder(isolate, desc, CodeKind::OPTIMIZED_FUNCTION)
+          .set_self_reference(masm.CodeObject())
+          .Build();
   CHECK(code->IsCode());
   return code;
 }
@@ -6536,8 +6534,7 @@ Handle<Code> GenerateDummyImmovableCode(Isolate* isolate) {
 
   CodeDesc desc;
   assm.GetCode(isolate, &desc);
-  Handle<Code> code = Factory::CodeBuilder(
-                          isolate, desc, CodeKind::DEOPT_ENTRIES_OR_FOR_TESTING)
+  Handle<Code> code = Factory::CodeBuilder(isolate, desc, CodeKind::STUB)
                           .set_immovable()
                           .Build();
   CHECK(code->IsCode());
@@ -7240,7 +7237,8 @@ HEAP_TEST(CodeLargeObjectSpace) {
   heap->AddHeapObjectAllocationTracker(&allocation_tracker);
 
   AllocationResult allocation = heap->AllocateRaw(
-      size_in_bytes, AllocationType::kCode, AllocationOrigin::kGeneratedCode);
+      size_in_bytes, AllocationType::kCode, AllocationOrigin::kGeneratedCode,
+      AllocationAlignment::kCodeAligned);
 
   CHECK(allocation.ToAddress() == allocation_tracker.address());
   heap->CreateFillerObjectAt(allocation.ToAddress(), size_in_bytes,
@@ -7261,9 +7259,8 @@ TEST(Regress10900) {
   masm.Push(ReadOnlyRoots(heap).undefined_value_handle());
   CodeDesc desc;
   masm.GetCode(isolate, &desc);
-  Handle<Code> code = Factory::CodeBuilder(
-                          isolate, desc, CodeKind::DEOPT_ENTRIES_OR_FOR_TESTING)
-                          .Build();
+  Handle<Code> code =
+      Factory::CodeBuilder(isolate, desc, CodeKind::STUB).Build();
   {
     // Generate multiple code pages.
     CodeSpaceMemoryModificationScope modification_scope(isolate->heap());

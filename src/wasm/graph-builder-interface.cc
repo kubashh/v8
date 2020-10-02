@@ -74,11 +74,11 @@ constexpr uint32_t kNullCatch = static_cast<uint32_t>(-1);
 
 class WasmGraphBuildingInterface {
  public:
-  static constexpr Decoder::ValidateFlag validate = Decoder::kFullValidation;
+  static constexpr Decoder::ValidateFlag validate = Decoder::kValidate;
   using FullDecoder = WasmFullDecoder<validate, WasmGraphBuildingInterface>;
   using CheckForNull = compiler::WasmGraphBuilder::CheckForNull;
 
-  struct Value : public ValueBase<validate> {
+  struct Value : public ValueBase {
     TFNode* node = nullptr;
 
     template <typename... Args>
@@ -97,7 +97,7 @@ class WasmGraphBuildingInterface {
     explicit TryInfo(SsaEnv* c) : catch_env(c) {}
   };
 
-  struct Control : public ControlBase<Value, validate> {
+  struct Control : public ControlBase<Value> {
     SsaEnv* end_env = nullptr;    // end environment for the construct.
     SsaEnv* false_env = nullptr;  // false environment (only for if).
     TryInfo* try_info = nullptr;  // information about try statements.
@@ -1200,7 +1200,7 @@ DecodeResult BuildTFGraph(AccountingAllocator* allocator,
                           WasmFeatures* detected, const FunctionBody& body,
                           compiler::NodeOriginTable* node_origins) {
   Zone zone(allocator, ZONE_NAME);
-  WasmFullDecoder<Decoder::kFullValidation, WasmGraphBuildingInterface> decoder(
+  WasmFullDecoder<Decoder::kValidate, WasmGraphBuildingInterface> decoder(
       &zone, module, enabled, detected, body, builder);
   if (node_origins) {
     builder->AddBytecodePositionDecorator(node_origins, &decoder);

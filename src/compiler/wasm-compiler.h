@@ -361,9 +361,6 @@ class WasmGraphBuilder {
 
   enum CallOrigin { kCalledFromWasm, kCalledFromJS };
 
-  // Overload for when we want to provide a specific signature, rather than
-  // build one using sig_, for example after scalar lowering.
-  V8_EXPORT_PRIVATE void LowerInt64(Signature<MachineRepresentation>* sig);
   V8_EXPORT_PRIVATE void LowerInt64(CallOrigin origin);
 
   V8_EXPORT_PRIVATE void SimdScalarLoweringForTesting();
@@ -470,7 +467,7 @@ class WasmGraphBuilder {
   // partially out-of-bounds, traps if it is completely out-of-bounds.
   Node* BoundsCheckMemRange(Node** start, Node** size, wasm::WasmCodePosition);
 
-  Node* CheckBoundsAndAlignment(int8_t access_size, Node* index,
+  Node* CheckBoundsAndAlignment(uint8_t access_size, Node* index,
                                 uint32_t offset, wasm::WasmCodePosition);
 
   Node* Uint32ToUintptr(Node*);

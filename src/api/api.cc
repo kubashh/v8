@@ -1560,7 +1560,7 @@ void FunctionTemplate::SetCallHandler(FunctionCallback callback,
         isolate, info,
         i::handle(*FromCData(isolate, c_function->GetTypeInfo()), isolate));
   }
-  info->set_synchronized_call_code(*obj);
+  info->set_call_code(*obj);
 }
 
 namespace {
@@ -3661,11 +3661,6 @@ MaybeLocal<Uint32> Value::ToUint32(Local<Context> context) const {
       !ToLocal<Uint32>(i::Object::ToUint32(isolate, obj), &result);
   RETURN_ON_FAILED_EXECUTION(Uint32);
   RETURN_ESCAPED(result);
-}
-
-i::Address i::DecodeExternalPointerImpl(const Isolate* isolate,
-                                        i::ExternalPointer_t encoded_pointer) {
-  return i::DecodeExternalPointer(isolate, encoded_pointer);
 }
 
 i::Isolate* i::IsolateFromNeverReadOnlySpaceObject(i::Address obj) {
@@ -10287,12 +10282,6 @@ debug::PostponeInterruptsScope::PostponeInterruptsScope(v8::Isolate* isolate)
                                          i::StackGuard::API_INTERRUPT)) {}
 
 debug::PostponeInterruptsScope::~PostponeInterruptsScope() = default;
-
-debug::DisableBreakScope::DisableBreakScope(v8::Isolate* isolate)
-    : scope_(std::make_unique<i::DisableBreak>(
-          reinterpret_cast<i::Isolate*>(isolate)->debug())) {}
-
-debug::DisableBreakScope::~DisableBreakScope() = default;
 
 Local<String> CpuProfileNode::GetFunctionName() const {
   const i::ProfileNode* node = reinterpret_cast<const i::ProfileNode*>(this);

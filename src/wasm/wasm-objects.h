@@ -16,7 +16,7 @@
 #include "src/objects/objects.h"
 #include "src/wasm/struct-types.h"
 #include "src/wasm/value-type.h"
-#include "torque-generated/class-definitions.h"
+#include "torque-generated/class-definitions-tq.h"
 
 // Has to be the last include (doesn't have include guards)
 #include "src/objects/object-macros.h"
@@ -108,7 +108,6 @@ class ImportedFunctionEntry {
 
   WasmInstanceObject instance();
   JSReceiver callable();
-  Object maybe_callable();
   Object object_ref();
   Address target();
 
@@ -665,9 +664,6 @@ class WasmExportedFunction : public JSFunction {
   Address GetWasmCallTarget();
 
   V8_EXPORT_PRIVATE const wasm::FunctionSig* sig();
-
-  bool MatchesSignature(const wasm::WasmModule* other_module,
-                        const wasm::FunctionSig* other_sig);
 
   DECL_CAST(WasmExportedFunction)
   OBJECT_CONSTRUCTORS(WasmExportedFunction, JSFunction);

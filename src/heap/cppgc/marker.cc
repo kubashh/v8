@@ -168,9 +168,12 @@ MarkerBase::~MarkerBase() {
   if (!marking_worklists_.not_fully_constructed_worklist()->IsEmpty()) {
 #if DEBUG
     DCHECK_NE(MarkingConfig::StackState::kNoHeapPointers, config_.stack_state);
-    std::unordered_set<HeapObjectHeader*> objects =
-        mutator_marking_state_.not_fully_constructed_worklist().Extract();
-    for (HeapObjectHeader* object : objects) DCHECK(object->IsMarked());
+    HeapObjectHeader* header;
+    MarkingWorklists::NotFullyConstructedWorklist::Local& local =
+        mutator_marking_state_.not_fully_constructed_worklist();
+    while (local.Pop(&header)) {
+      DCHECK(header->IsMarked());
+    }
 #else
     marking_worklists_.not_fully_constructed_worklist()->Clear();
 #endif
@@ -222,8 +225,6 @@ void MarkerBase::LeaveAtomicPause() {
   heap().stats_collector()->NotifyMarkingCompleted(
       // GetOverallMarkedBytes also includes concurrently marked bytes.
       schedule_.GetOverallMarkedBytes());
-  is_marking_started_ = false;
-  ProcessWeakness();
 }
 
 void MarkerBase::FinishMarking(MarkingConfig::StackState stack_state) {
@@ -233,6 +234,7 @@ void MarkerBase::FinishMarking(MarkingConfig::StackState stack_state) {
                                      v8::base::TimeTicks::Max()));
   mutator_marking_state_.Publish();
   LeaveAtomicPause();
+  is_marking_started_ = false;
 }
 
 void MarkerBase::ProcessWeakness() {
@@ -324,6 +326,17 @@ bool MarkerBase::AdvanceMarkingWithDeadline(v8::base::TimeDelta max_duration) {
 bool MarkerBase::ProcessWorklistsWithDeadline(
     size_t marked_bytes_deadline, v8::base::TimeTicks time_deadline) {
   do {
+    if (!DrainWorklistWithBytesAndTimeDeadline<kDefaultDeadlineCheckInterval /
+                                               5>(
+            mutator_marking_state_, marked_bytes_deadline, time_deadline,
+            mutator_marking_state_.concurrent_marking_bailout_worklist(),
+            [this](const MarkingWorklists::ConcurrentMarkingBailoutItem& item) {
+              item.callback(&visitor(), item.parameter);
+              mutator_marking_state_.AccountMarkedBytes(item.bailedout_size);
+            })) {
+      return false;
+    }
+
     if (!DrainWorklistWithBytesAndTimeDeadline(
             mutator_marking_state_, marked_bytes_deadline, time_deadline,
             mutator_marking_state_.previously_not_fully_constructed_worklist(),
@@ -366,14 +379,15 @@ bool MarkerBase::ProcessWorklistsWithDeadline(
 }
 
 void MarkerBase::MarkNotFullyConstructedObjects() {
-  std::unordered_set<HeapObjectHeader*> objects =
-      mutator_marking_state_.not_fully_constructed_worklist().Extract();
-  for (HeapObjectHeader* object : objects) {
-    DCHECK(object);
-    DCHECK(object->IsMarked<HeapObjectHeader::AccessMode::kNonAtomic>());
+  HeapObjectHeader* header;
+  MarkingWorklists::NotFullyConstructedWorklist::Local& local =
+      mutator_marking_state_.not_fully_constructed_worklist();
+  while (local.Pop(&header)) {
+    DCHECK(header);
+    DCHECK(header->IsMarked<HeapObjectHeader::AccessMode::kNonAtomic>());
     // TraceConservativelyIfNeeded will either push to a worklist
     // or trace conservatively and call AccountMarkedBytes.
-    conservative_visitor().TraceConservativelyIfNeeded(*object);
+    conservative_visitor().TraceConservativelyIfNeeded(*header);
   }
 }
 

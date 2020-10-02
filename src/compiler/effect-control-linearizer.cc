@@ -45,7 +45,7 @@ class EffectControlLinearizer {
         maintain_schedule_(maintain_schedule),
         source_positions_(source_positions),
         node_origins_(node_origins),
-        graph_assembler_(js_graph, temp_zone, base::nullopt,
+        graph_assembler_(js_graph, temp_zone,
                          should_maintain_schedule() ? schedule : nullptr),
         frame_state_zapper_(nullptr) {}
 
@@ -284,14 +284,9 @@ class EffectControlLinearizer {
                               DeoptimizeReason reason);
 
   // Helper functions used in LowerDynamicCheckMaps
-  void PerformPolymorphicCheckInline(Node* expected_polymorphic_array,
-                                     Node* actual_map, Node* actual_handler,
-                                     GraphAssemblerLabel<0>* done,
-                                     Node* frame_state);
-  void PerformPolymorphicCheckInBuiltin(Node* expected_polymorphic_array,
-                                        Node* actual_map, Node* actual_handler,
-                                        GraphAssemblerLabel<0>* done,
-                                        Node* frame_state);
+  void CheckPolymorphic(Node* expected_polymorphic_array, Node* actual_map,
+                        Node* actual_handler, GraphAssemblerLabel<0>* done,
+                        Node* frame_state);
   void ProcessMonomorphic(Node* handler, GraphAssemblerLabel<0>* done,
                           Node* frame_state, int slot, Node* vector);
   void BranchOnICState(int slot_index, Node* vector, Node* value_map,
@@ -1892,33 +1887,11 @@ void EffectControlLinearizer::LowerCheckMaps(Node* node, Node* frame_state) {
   }
 }
 
-void EffectControlLinearizer::PerformPolymorphicCheckInBuiltin(
-    Node* expected_polymorphic_array, Node* actual_map, Node* actual_handler,
-    GraphAssemblerLabel<0>* done, Node* frame_state) {
-  Operator::Properties properties = Operator::kNoDeopt | Operator::kNoThrow;
-  Node* result =
-      CallBuiltin(Builtins::kDynamicMapChecks, properties,
-                  expected_polymorphic_array, actual_map, actual_handler);
-  __ GotoIf(__ WordEqual(result, __ IntPtrConstant(static_cast<int>(
-                                     DynamicMapChecksStatus::kSuccess))),
-            done);
-  __ DeoptimizeIf(DeoptimizeKind::kBailout, DeoptimizeReason::kMissingMap,
-                  FeedbackSource(),
-                  __ WordEqual(result, __ IntPtrConstant(static_cast<int>(
-                                           DynamicMapChecksStatus::kBailout))),
-                  frame_state, IsSafetyCheck::kCriticalSafetyCheck);
-  __ DeoptimizeIf(DeoptimizeReason::kWrongHandler, FeedbackSource(),
-                  __ WordEqual(result, __ IntPtrConstant(static_cast<int>(
-                                           DynamicMapChecksStatus::kDeopt))),
-                  frame_state, IsSafetyCheck::kCriticalSafetyCheck);
-  __ Unreachable(done);
-}
-
-void EffectControlLinearizer::PerformPolymorphicCheckInline(
-    Node* expected_polymorphic_array, Node* actual_map, Node* actual_handler,
-    GraphAssemblerLabel<0>* done, Node* frame_state) {
-  // Note: This function must stay in sync with
-  // Builtin:kDynamicMapChecks.
+void EffectControlLinearizer::CheckPolymorphic(Node* expected_polymorphic_array,
+                                               Node* actual_map,
+                                               Node* actual_handler,
+                                               GraphAssemblerLabel<0>* done,
+                                               Node* frame_state) {
   Node* expected_polymorphic_array_map =
       __ LoadField(AccessBuilder::ForMap(), expected_polymorphic_array);
   Node* is_weak_fixed_array = __ TaggedEqual(expected_polymorphic_array_map,
@@ -2084,7 +2057,7 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
   // monomorphic start, we will deopt and reoptimize the code.
   if (p.state() == DynamicCheckMapsParameters::kMonomorphic) {
     auto monomorphic_map_match = __ MakeLabel();
-    auto maybe_poly = __ MakeDeferredLabel();
+    auto maybe_poly = __ MakeLabel();
     Node* strong_feedback;
     Node* poly_array;
 
@@ -2120,11 +2093,10 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
 
     __ Bind(&maybe_poly);
     // TODO(mythria): ICs don't drop deprecated maps from feedback vector.
-    // So it is not required to migrate the instance for polymorphic case.
+    // So it is not equired to migrate the instance for polymorphic case.
     // When we change dynamic map checks to check only four maps re-evaluate
     // if this is required.
-    PerformPolymorphicCheckInBuiltin(poly_array, value_map, handler, &done,
-                                     frame_state);
+    CheckPolymorphic(poly_array, value_map, handler, &done, frame_state);
   } else {
     DCHECK_EQ(p.state(), DynamicCheckMapsParameters::kPolymorphic);
     Node* feedback_slot = __ LoadField(
@@ -2137,8 +2109,7 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
     __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMonomorphicIC,
                        FeedbackSource(), is_poly_or_megamorphic, frame_state,
                        IsSafetyCheck::kCriticalSafetyCheck);
-    PerformPolymorphicCheckInline(feedback_slot, value_map, handler, &done,
-                                  frame_state);
+    CheckPolymorphic(feedback_slot, value_map, handler, &done, frame_state);
   }
   __ Bind(&done);
 }
@@ -3879,14 +3850,6 @@ Node* EffectControlLinearizer::LowerToBoolean(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerArgumentsLength(Node* node) {
-#ifdef V8_NO_ARGUMENTS_ADAPTOR
-  return ChangeIntPtrToSmi(
-      __ Load(MachineType::Pointer(), __ LoadFramePointer(),
-              __ IntPtrConstant(StandardFrameConstants::kArgCOffset)));
-#else
-  auto done = __ MakeLabel(MachineRepresentation::kTaggedSigned);
-  Node* frame = __ LoadFramePointer();
-
   Node* arguments_frame = NodeProperties::GetValueInput(node, 0);
   int formal_parameter_count = FormalParameterCountOf(node->op());
   DCHECK_LE(0, formal_parameter_count);
@@ -3895,6 +3858,9 @@ Node* EffectControlLinearizer::LowerArgumentsLength(Node* node) {
   // We have to distinguish the case when there is an arguments adaptor frame
   // (i.e., arguments_frame != LoadFramePointer()).
   auto if_adaptor_frame = __ MakeLabel();
+  auto done = __ MakeLabel(MachineRepresentation::kTaggedSigned);
+
+  Node* frame = __ LoadFramePointer();
   __ GotoIf(__ TaggedEqual(arguments_frame, frame), &done,
             __ SmiConstant(formal_parameter_count));
   __ Goto(&if_adaptor_frame);
@@ -3904,30 +3870,24 @@ Node* EffectControlLinearizer::LowerArgumentsLength(Node* node) {
       MachineType::Pointer(), arguments_frame,
       __ IntPtrConstant(ArgumentsAdaptorFrameConstants::kLengthOffset)));
   __ Goto(&done, arguments_length);
+
   __ Bind(&done);
   return done.PhiAt(0);
-#endif
 }
 
 Node* EffectControlLinearizer::LowerRestLength(Node* node) {
+  Node* arguments_frame = NodeProperties::GetValueInput(node, 0);
   int formal_parameter_count = FormalParameterCountOf(node->op());
   DCHECK_LE(0, formal_parameter_count);
-
-  auto done = __ MakeLabel(MachineRepresentation::kTaggedSigned);
-  Node* frame = __ LoadFramePointer();
-
-#ifdef V8_NO_ARGUMENTS_ADAPTOR
-  Node* arguments_length = ChangeIntPtrToSmi(
-      __ Load(MachineType::Pointer(), frame,
-              __ IntPtrConstant(StandardFrameConstants::kArgCOffset)));
-#else
-  Node* arguments_frame = NodeProperties::GetValueInput(node, 0);
 
   // The RestLength node is computing the number of rest parameters,
   // which is max(0, actual_parameter_count - formal_parameter_count).
   // We have to distinguish the case, when there is an arguments adaptor frame
   // (i.e., arguments_frame != LoadFramePointer()).
   auto if_adaptor_frame = __ MakeLabel();
+  auto done = __ MakeLabel(MachineRepresentation::kTaggedSigned);
+
+  Node* frame = __ LoadFramePointer();
   __ GotoIf(__ TaggedEqual(arguments_frame, frame), &done, __ SmiConstant(0));
   __ Goto(&if_adaptor_frame);
 
@@ -3935,7 +3895,6 @@ Node* EffectControlLinearizer::LowerRestLength(Node* node) {
   Node* arguments_length = __ BitcastWordToTaggedSigned(__ Load(
       MachineType::Pointer(), arguments_frame,
       __ IntPtrConstant(ArgumentsAdaptorFrameConstants::kLengthOffset)));
-#endif
 
   Node* rest_length =
       __ SmiSub(arguments_length, __ SmiConstant(formal_parameter_count));
@@ -5283,23 +5242,16 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
   }
   builder.AddParam(MachineType::Pointer());  // has_error
 
-  CallDescriptor* call_descriptor =
-      Linkage::GetSimplifiedCDescriptor(graph()->zone(), builder.Build());
+  CallDescriptor* call_descriptor = Linkage::GetSimplifiedCDescriptor(
+      graph()->zone(), builder.Build(), CallDescriptor::kNoFlags);
 
   call_descriptor->SetCFunctionInfo(c_signature);
 
   Node** const inputs = graph()->zone()->NewArray<Node*>(
       c_arg_count + FastApiCallNode::kFastCallExtraInputCount);
-  inputs[0] = NodeProperties::GetValueInput(node, 0);  // the target
-  for (int i = FastApiCallNode::kFastTargetInputCount;
-       i < c_arg_count + FastApiCallNode::kFastTargetInputCount; ++i) {
-    if (c_signature->ArgumentInfo(i - 1).GetType() ==
-        CTypeInfo::Type::kFloat32) {
-      inputs[i] =
-          __ TruncateFloat64ToFloat32(NodeProperties::GetValueInput(node, i));
-    } else {
-      inputs[i] = NodeProperties::GetValueInput(node, i);
-    }
+  for (int i = 0; i < c_arg_count + FastApiCallNode::kFastTargetInputCount;
+       ++i) {
+    inputs[i] = NodeProperties::GetValueInput(node, i);
   }
   inputs[c_arg_count + 1] = has_error;
   inputs[c_arg_count + 2] = __ effect();

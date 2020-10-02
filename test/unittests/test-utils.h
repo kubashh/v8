@@ -27,10 +27,20 @@ using CounterMap = std::map<std::string, int>;
 
 enum CountersMode { kNoCounters, kEnableCounters };
 
+// When PointerCompressionMode is kEnforcePointerCompression, the Isolate is
+// created with pointer compression force enabled. When it's
+// kDefaultPointerCompression then the Isolate is created with the default
+// pointer compression state for the current build.
+enum PointerCompressionMode {
+  kDefaultPointerCompression,
+  kEnforcePointerCompression
+};
+
 // RAII-like Isolate instance wrapper.
 class IsolateWrapper final {
  public:
-  explicit IsolateWrapper(CountersMode counters_mode);
+  explicit IsolateWrapper(CountersMode counters_mode,
+                          PointerCompressionMode pointer_compression_mode);
   ~IsolateWrapper();
 
   v8::Isolate* isolate() const { return isolate_; }
@@ -46,16 +56,23 @@ class IsolateWrapper final {
 //
 // A set of mixins from which the test fixtures will be constructed.
 //
-template <typename TMixin, CountersMode kCountersMode = kNoCounters>
+template <typename TMixin, CountersMode kCountersMode = kNoCounters,
+          PointerCompressionMode kPointerCompressionMode =
+              kDefaultPointerCompression>
 class WithIsolateMixin : public TMixin {
  public:
-  WithIsolateMixin() : isolate_wrapper_(kCountersMode) {}
+  WithIsolateMixin()
+      : isolate_wrapper_(kCountersMode, kPointerCompressionMode) {}
 
   v8::Isolate* v8_isolate() const { return isolate_wrapper_.isolate(); }
 
  private:
   v8::IsolateWrapper isolate_wrapper_;
 };
+
+template <typename TMixin, CountersMode kCountersMode = kNoCounters>
+using WithPointerCompressionIsolateMixin =
+    WithIsolateMixin<TMixin, kCountersMode, kEnforcePointerCompression>;
 
 template <typename TMixin>
 class WithIsolateScopeMixin : public TMixin {
@@ -133,6 +150,12 @@ using TestWithContext =         //
     WithContextMixin<           //
         WithIsolateScopeMixin<  //
             WithIsolateMixin<   //
+                ::testing::Test>>>;
+
+using TestWithIsolateAndPointerCompression =     //
+    WithContextMixin<                            //
+        WithIsolateScopeMixin<                   //
+            WithPointerCompressionIsolateMixin<  //
                 ::testing::Test>>>;
 
 namespace internal {

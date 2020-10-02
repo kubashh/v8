@@ -53,7 +53,6 @@ transitioning macro AllocateTypedArray(implicit context: Context)(
   typedArray.byte_offset = byteOffset;
   typedArray.byte_length = byteLength;
   typedArray.length = length;
-  typed_array::AllocateJSTypedArrayExternalPointerEntry(typedArray);
   if constexpr (isOnHeap) {
     typed_array::SetJSTypedArrayOnHeapDataPtr(typedArray, elements, byteOffset);
   } else {

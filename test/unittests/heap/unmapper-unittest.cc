@@ -289,15 +289,18 @@ TEST_F(SequentialUnmapperTest, UnmapOnTeardownAfterAlreadyFreeingPooled) {
   tracking_page_allocator()->CheckPagePermissions(page->address(), page_size,
                                                   PageAllocator::kNoAccess);
   unmapper()->TearDown();
-#ifdef V8_COMPRESS_POINTERS
-  // In this mode Isolate uses bounded page allocator which allocates pages
-  // inside prereserved region. Thus these pages are kept reserved until
-  // the Isolate dies.
-  tracking_page_allocator()->CheckPagePermissions(page->address(), page_size,
-                                                  PageAllocator::kNoAccess);
-#else
-  tracking_page_allocator()->CheckIsFree(page->address(), page_size);
-#endif  // V8_COMPRESS_POINTERS
+  if (i_isolate()->isolate_allocation_mode() ==
+      IsolateAllocationMode::kInV8Heap) {
+    // In this mode Isolate uses bounded page allocator which allocates pages
+    // inside prereserved region. Thus these pages are kept reserved until
+    // the Isolate dies.
+    tracking_page_allocator()->CheckPagePermissions(page->address(), page_size,
+                                                    PageAllocator::kNoAccess);
+  } else {
+    CHECK_EQ(IsolateAllocationMode::kInCppHeap,
+             i_isolate()->isolate_allocation_mode());
+    tracking_page_allocator()->CheckIsFree(page->address(), page_size);
+  }
 }
 
 // See v8:5945.
@@ -315,15 +318,18 @@ TEST_F(SequentialUnmapperTest, UnmapOnTeardown) {
   tracking_page_allocator()->CheckPagePermissions(page->address(), page_size,
                                                   PageAllocator::kReadWrite);
   unmapper()->TearDown();
-#ifdef V8_COMPRESS_POINTERS
-  // In this mode Isolate uses bounded page allocator which allocates pages
-  // inside prereserved region. Thus these pages are kept reserved until
-  // the Isolate dies.
-  tracking_page_allocator()->CheckPagePermissions(page->address(), page_size,
-                                                  PageAllocator::kNoAccess);
-#else
-  tracking_page_allocator()->CheckIsFree(page->address(), page_size);
-#endif  // V8_COMPRESS_POINTERS
+  if (i_isolate()->isolate_allocation_mode() ==
+      IsolateAllocationMode::kInV8Heap) {
+    // In this mode Isolate uses bounded page allocator which allocates pages
+    // inside prereserved region. Thus these pages are kept reserved until
+    // the Isolate dies.
+    tracking_page_allocator()->CheckPagePermissions(page->address(), page_size,
+                                                    PageAllocator::kNoAccess);
+  } else {
+    CHECK_EQ(IsolateAllocationMode::kInCppHeap,
+             i_isolate()->isolate_allocation_mode());
+    tracking_page_allocator()->CheckIsFree(page->address(), page_size);
+  }
 }
 
 }  // namespace internal

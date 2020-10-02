@@ -721,8 +721,6 @@ class ExternalString : public String {
   static const int kUncachedSize =
       kResourceOffset + FIELD_SIZE(kResourceOffset);
 
-  inline void AllocateExternalPointerEntries(Isolate* isolate);
-
   // Return whether the external string data pointer is not cached.
   inline bool is_uncached() const;
   // Size in bytes of the external payload.
@@ -731,8 +729,8 @@ class ExternalString : public String {
   // Used in the serializer/deserializer.
   DECL_GETTER(resource_as_address, Address)
   inline void set_address_as_resource(Isolate* isolate, Address address);
-  inline uint32_t GetResourceRefForDeserialization();
-  inline void SetResourceRefForSerialization(uint32_t ref);
+  inline uint32_t resource_as_uint32();
+  inline void set_uint32_as_resource(Isolate* isolate, uint32_t value);
 
   // Disposes string's resource object if it has not already been disposed.
   inline void DisposeResource(Isolate* isolate);
@@ -757,7 +755,6 @@ class ExternalOneByteString : public ExternalString {
   // It is assumed that the previous resource is null. If it is not null, then
   // it is the responsability of the caller the handle the previous resource.
   inline void SetResource(Isolate* isolate, const Resource* buffer);
-
   // Used only during serialization.
   inline void set_resource(Isolate* isolate, const Resource* buffer);
 
@@ -799,7 +796,6 @@ class ExternalTwoByteString : public ExternalString {
   // It is assumed that the previous resource is null. If it is not null, then
   // it is the responsability of the caller the handle the previous resource.
   inline void SetResource(Isolate* isolate, const Resource* buffer);
-
   // Used only during serialization.
   inline void set_resource(Isolate* isolate, const Resource* buffer);
 

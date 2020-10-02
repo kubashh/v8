@@ -42,17 +42,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
       margin-top: 0px;
     }
   </style>
-  <script type="module">
-    import {
-      TickProcessor, UnixCppEntriesProvider, MacCppEntriesProvider,
-      WindowsCppEntriesProvider
-    } from "./tickprocessor.mjs";
+
+  <script src="splaytree.js"></script>
+  <script src="codemap.js"></script>
+  <script src="csvparser.js"></script>
+  <script src="consarray.js"></script>
+  <script src="profile.js"></script>
+  <script src="profile_view.js"></script>
+  <script src="logreader.js"></script>
+  <script src="arguments.js"></script>
+  <script src="tickprocessor.js"></script>
+
+  <script>
 
 var v8log_content;
-globalThis.textout;
+var textout;
 
-globalThis.load_logfile = function(evt) {
-  globalThis.textout.value = "";
+function load_logfile(evt) {
+  textout.value = "";
   var f = evt.target.files[0];
   if (f) {
     var reader = new FileReader();
@@ -70,7 +77,7 @@ globalThis.load_logfile = function(evt) {
 }
 
 function print(arg) {
-  globalThis.textout.value+=arg+"\n";
+  textout.value+=arg+"\n";
 }
 
 function start_process() {
@@ -101,12 +108,11 @@ function start_process() {
   tickProcessor.processLogChunk(v8log_content);
   tickProcessor.printStatistics();
 }
-</script>
-<script>
+
 function Load() {
   document.getElementById('fileinput').addEventListener(
-      'change', globalThis.load_logfile, false);
-  globalThis.textout = document.getElementById('textout');
+      'change', load_logfile, false);
+  textout = document.getElementById('textout');
 }
 </script>
 </head>

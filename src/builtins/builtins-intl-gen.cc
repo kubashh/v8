@@ -40,7 +40,7 @@ class IntlBuiltinsAssembler : public CodeStubAssembler {
 };
 
 TF_BUILTIN(StringToLowerCaseIntl, IntlBuiltinsAssembler) {
-  const auto string = Parameter<String>(Descriptor::kString);
+  const TNode<String> string = CAST(Parameter(Descriptor::kString));
 
   Label call_c(this), return_string(this), runtime(this, Label::kDeferred);
 
@@ -136,8 +136,8 @@ TF_BUILTIN(StringToLowerCaseIntl, IntlBuiltinsAssembler) {
 }
 
 TF_BUILTIN(StringPrototypeToLowerCaseIntl, IntlBuiltinsAssembler) {
-  auto maybe_string = Parameter<Object>(Descriptor::kReceiver);
-  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<Object> maybe_string = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   TNode<String> string =
       ToThisString(context, maybe_string, "String.prototype.toLowerCase");
@@ -183,15 +183,15 @@ TNode<JSArray> IntlBuiltinsAssembler::AllocateEmptyJSArray(
 
 TF_BUILTIN(ListFormatPrototypeFormat, IntlBuiltinsAssembler) {
   ListFormatCommon(
-      Parameter<Context>(Descriptor::kContext),
-      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount),
+      CAST(Parameter(Descriptor::kContext)),
+      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)),
       Runtime::kFormatList, "Intl.ListFormat.prototype.format");
 }
 
 TF_BUILTIN(ListFormatPrototypeFormatToParts, IntlBuiltinsAssembler) {
   ListFormatCommon(
-      Parameter<Context>(Descriptor::kContext),
-      UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount),
+      CAST(Parameter(Descriptor::kContext)),
+      UncheckedCast<Int32T>(Parameter(Descriptor::kJSActualArgumentsCount)),
       Runtime::kFormatListToParts, "Intl.ListFormat.prototype.formatToParts");
 }
 

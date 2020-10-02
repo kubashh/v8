@@ -23,7 +23,6 @@
 #include "src/common/globals.h"
 #include "src/debug/interface-types.h"
 #include "src/execution/execution.h"
-#include "src/execution/external-pointer-table.h"
 #include "src/execution/futex-emulation.h"
 #include "src/execution/isolate-data.h"
 #include "src/execution/messages.h"
@@ -525,7 +524,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   // Creates Isolate object. Must be used instead of constructing Isolate with
   // new operator.
-  static Isolate* New();
+  static Isolate* New(
+      IsolateAllocationMode mode = IsolateAllocationMode::kDefault);
 
   // Deletes Isolate object. Must be used instead of delete operator.
   // Destroys the non-default isolates.
@@ -536,6 +536,9 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   void SetUpFromReadOnlyArtifacts(std::shared_ptr<ReadOnlyArtifacts> artifacts,
                                   ReadOnlyHeap* ro_heap);
   void set_read_only_heap(ReadOnlyHeap* ro_heap) { read_only_heap_ = ro_heap; }
+
+  // Returns allocation mode of this isolate.
+  V8_INLINE IsolateAllocationMode isolate_allocation_mode();
 
   // Page allocator that must be used for allocating V8 heap pages.
   v8::PageAllocator* page_allocator();
@@ -693,27 +696,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   inline Address* c_function_address() {
     return &thread_local_top()->c_function_;
   }
-
-#if defined(DEBUG) || defined(VERIFY_HEAP)
-  // Count the number of active deserializers, so that the heap verifier knows
-  // whether there is currently an active deserialization happening.
-  //
-  // This is needed as the verifier currently doesn't support verifying objects
-  // which are partially deserialized.
-  //
-  // TODO(leszeks): Make the verifier a bit more deserialization compatible.
-  void RegisterDeserializerStarted() { ++num_active_deserializers_; }
-  void RegisterDeserializerFinished() {
-    CHECK_GE(--num_active_deserializers_, 0);
-  }
-  bool has_active_deserializer() const {
-    return num_active_deserializers_.load(std::memory_order_acquire) > 0;
-  }
-#else
-  void RegisterDeserializerStarted() {}
-  void RegisterDeserializerFinished() {}
-  bool has_active_deserializer() const { UNREACHABLE(); }
-#endif
 
   // Bottom JS entry.
   Address js_entry_sp() { return thread_local_top()->js_entry_sp_; }
@@ -1578,20 +1560,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   MaybeLocal<v8::Context> GetContextFromRecorderContextId(
       v8::metrics::Recorder::ContextId id);
 
-#ifdef V8_HEAP_SANDBOX
-  ExternalPointerTable& external_pointer_table() {
-    return isolate_data_.external_pointer_table_;
-  }
-
-  const ExternalPointerTable& external_pointer_table() const {
-    return isolate_data_.external_pointer_table_;
-  }
-
-  Address external_pointer_table_address() {
-    return reinterpret_cast<Address>(&isolate_data_.external_pointer_table_);
-  }
-#endif
-
  private:
   explicit Isolate(std::unique_ptr<IsolateAllocator> isolate_allocator);
   ~Isolate();
@@ -1736,9 +1704,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   RuntimeState runtime_state_;
   Builtins builtins_;
   SetupIsolateDelegate* setup_delegate_ = nullptr;
-#if defined(DEBUG) || defined(VERIFY_HEAP)
-  std::atomic<int> num_active_deserializers_;
-#endif
 #ifndef V8_INTL_SUPPORT
   unibrow::Mapping<unibrow::Ecma262UnCanonicalize> jsregexp_uncanonicalize_;
   unibrow::Mapping<unibrow::CanonicalizationRange> jsregexp_canonrange_;

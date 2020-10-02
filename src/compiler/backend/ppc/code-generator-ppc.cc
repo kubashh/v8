@@ -3229,7 +3229,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
                  i.InputSimd128Register(1));
       break;
     }
-    case kPPC_I8x16Shuffle: {
+    case kPPC_S8x16Shuffle: {
       Simd128Register dst = i.OutputSimd128Register(),
                       src0 = i.InputSimd128Register(0),
                       src1 = i.InputSimd128Register(1);
@@ -3288,7 +3288,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
                  i.InputSimd128Register(1));
       break;
     }
-    case kPPC_I8x16Swizzle: {
+    case kPPC_S8x16Swizzle: {
       // Reverse the input to match IBM lane numbering.
       Simd128Register tempFPReg1 = i.ToSimd128Register(instr->TempAt(0));
       __ addi(sp, sp, Operand(-16));
@@ -3436,36 +3436,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kPPC_F32x4NearestInt: {
       __ xvrspi(i.OutputSimd128Register(), i.InputSimd128Register(0));
-      break;
-    }
-    case kPPC_I32x4BitMask: {
-      __ mov(kScratchReg,
-             Operand(0x8080808000204060));  // Select 0 for the high bits.
-      __ mtvsrd(kScratchDoubleReg, kScratchReg);
-      __ vbpermq(kScratchDoubleReg, i.InputSimd128Register(0),
-                 kScratchDoubleReg);
-      __ vextractub(kScratchDoubleReg, kScratchDoubleReg, Operand(6));
-      __ mfvsrd(i.OutputRegister(), kScratchDoubleReg);
-      break;
-    }
-    case kPPC_I16x8BitMask: {
-      __ mov(kScratchReg, Operand(0x10203040506070));
-      __ mtvsrd(kScratchDoubleReg, kScratchReg);
-      __ vbpermq(kScratchDoubleReg, i.InputSimd128Register(0),
-                 kScratchDoubleReg);
-      __ vextractub(kScratchDoubleReg, kScratchDoubleReg, Operand(6));
-      __ mfvsrd(i.OutputRegister(), kScratchDoubleReg);
-      break;
-    }
-    case kPPC_I8x16BitMask: {
-      Register temp = i.ToRegister(instr->TempAt(0));
-      __ mov(temp, Operand(0x8101820283038));
-      __ mov(ip, Operand(0x4048505860687078));
-      __ mtvsrdd(kScratchDoubleReg, temp, ip);
-      __ vbpermq(kScratchDoubleReg, i.InputSimd128Register(0),
-                 kScratchDoubleReg);
-      __ vextractuh(kScratchDoubleReg, kScratchDoubleReg, Operand(6));
-      __ mfvsrd(i.OutputRegister(), kScratchDoubleReg);
       break;
     }
     case kPPC_StoreCompressTagged: {

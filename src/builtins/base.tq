@@ -166,9 +166,6 @@ type LayoutDescriptor extends ByteArray
     generates 'TNode<LayoutDescriptor>';
 extern class TransitionArray extends WeakFixedArray;
 
-extern operator '.length_intptr' macro LoadAndUntagWeakFixedArrayLength(
-    WeakFixedArray): intptr;
-
 type InstanceType extends uint16 constexpr 'InstanceType';
 
 type NoSharedNameSentinel extends Smi;
@@ -281,7 +278,6 @@ extern enum MessageTemplate {
   kFirstArgumentNotRegExp,
   kBigIntMixedTypes,
   kTypedArrayTooShort,
-  kTypedArrayTooLargeToSort,
   kInvalidCountValue,
   kConstructorNotFunction,
   kSymbolToString,
@@ -1707,9 +1703,3 @@ struct ConstantIterator<T: type> {
 macro ConstantIterator<T: type>(value: T): ConstantIterator<T> {
   return ConstantIterator{value};
 }
-
-extern macro FeedbackIteratorSizeFor(constexpr int32): intptr;
-extern macro FeedbackIteratorMapIndexForEntry(constexpr int32): intptr;
-extern macro FeedbackIteratorHandlerIndexForEntry(constexpr int32): intptr;
-extern operator '[]' macro LoadWeakFixedArrayElement(
-    WeakFixedArray, intptr): MaybeObject;

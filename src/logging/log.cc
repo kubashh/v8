@@ -78,13 +78,11 @@ static v8::CodeEventType GetCodeEventTypeForTag(
   }
 
 static const char* ComputeMarker(SharedFunctionInfo shared, AbstractCode code) {
-  // TODO(mythria,jgruber): Use different markers for Turboprop/NCI.
   switch (code.kind()) {
     case CodeKind::INTERPRETED_FUNCTION:
       return shared.optimization_disabled() ? "" : "~";
-    case CodeKind::TURBOFAN:
+    case CodeKind::OPTIMIZED_FUNCTION:
     case CodeKind::NATIVE_CONTEXT_INDEPENDENT:
-    case CodeKind::TURBOPROP:
       return "*";
     default:
       return "";
@@ -2164,13 +2162,12 @@ void ExistingCodeLogger::LogCodeObject(Object object) {
   const char* description = "Unknown code from before profiling";
   switch (abstract_code->kind()) {
     case CodeKind::INTERPRETED_FUNCTION:
-    case CodeKind::TURBOFAN:
+    case CodeKind::OPTIMIZED_FUNCTION:
     case CodeKind::NATIVE_CONTEXT_INDEPENDENT:
-    case CodeKind::TURBOPROP:
       return;  // We log this later using LogCompiledFunctions.
     case CodeKind::BYTECODE_HANDLER:
       return;  // We log it later by walking the dispatch table.
-    case CodeKind::DEOPT_ENTRIES_OR_FOR_TESTING:
+    case CodeKind::STUB:
       description = "STUB code";
       tag = CodeEventListener::STUB_TAG;
       break;

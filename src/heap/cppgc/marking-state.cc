@@ -4,19 +4,16 @@
 
 #include "src/heap/cppgc/marking-state.h"
 
-#include <unordered_set>
-
 namespace cppgc {
 namespace internal {
 
 void MutatorMarkingState::FlushNotFullyConstructedObjects() {
-  std::unordered_set<HeapObjectHeader*> objects =
-      not_fully_constructed_worklist_.Extract();
-  for (HeapObjectHeader* object : objects) {
-    if (MarkNoPush(*object))
-      previously_not_fully_constructed_worklist_.Push(object);
+  not_fully_constructed_worklist().Publish();
+  if (!not_fully_constructed_worklist_.IsGlobalEmpty()) {
+    previously_not_fully_constructed_worklist_.Merge(
+        &not_fully_constructed_worklist_);
   }
-  DCHECK(not_fully_constructed_worklist_.IsEmpty());
+  DCHECK(not_fully_constructed_worklist_.IsGlobalEmpty());
 }
 
 }  // namespace internal

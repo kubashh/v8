@@ -1141,21 +1141,12 @@ void ImportedFunctionEntry::SetWasmToWasm(WasmInstanceObject instance,
 WasmInstanceObject ImportedFunctionEntry::instance() {
   // The imported reference entry is either a target instance or a tuple
   // of this instance and the target callable.
-  Object value = object_ref();
+  Object value = instance_->imported_function_refs().get(index_);
   if (value.IsWasmInstanceObject()) {
     return WasmInstanceObject::cast(value);
   }
   Tuple2 tuple = Tuple2::cast(value);
   return WasmInstanceObject::cast(tuple.value1());
-}
-
-// Returns an empty Object() if no callable is available, a JSReceiver
-// otherwise.
-Object ImportedFunctionEntry::maybe_callable() {
-  Object value = object_ref();
-  if (!value.IsTuple2()) return Object();
-  Tuple2 tuple = Tuple2::cast(value);
-  return JSReceiver::cast(tuple.value2());
 }
 
 JSReceiver ImportedFunctionEntry::callable() {
@@ -1674,7 +1665,6 @@ Handle<WasmExceptionObject> WasmExceptionObject::New(
   return exception;
 }
 
-// TODO(9495): Update this if function type variance is introduced.
 bool WasmExceptionObject::MatchesSignature(const wasm::FunctionSig* sig) {
   DCHECK_EQ(0, sig->return_count());
   DCHECK_LE(sig->parameter_count(), std::numeric_limits<int>::max());
@@ -1688,7 +1678,6 @@ bool WasmExceptionObject::MatchesSignature(const wasm::FunctionSig* sig) {
   return true;
 }
 
-// TODO(9495): Update this if function type variance is introduced.
 bool WasmCapiFunction::MatchesSignature(const wasm::FunctionSig* sig) const {
   // TODO(jkummerow): Unify with "SignatureHelper" in c-api.cc.
   int param_count = static_cast<int>(sig->parameter_count());
@@ -1950,23 +1939,6 @@ const wasm::FunctionSig* WasmExportedFunction::sig() {
   return instance().module()->functions[function_index()].sig;
 }
 
-bool WasmExportedFunction::MatchesSignature(
-    const WasmModule* other_module, const wasm::FunctionSig* other_sig) {
-  const wasm::FunctionSig* sig = this->sig();
-  if (sig->parameter_count() != other_sig->parameter_count() ||
-      sig->return_count() != other_sig->return_count()) {
-    return false;
-  }
-
-  for (int i = 0; i < sig->all().size(); i++) {
-    if (!wasm::EquivalentTypes(sig->all()[i], other_sig->all()[i],
-                               this->instance().module(), other_module)) {
-      return false;
-    }
-  }
-  return true;
-}
-
 // static
 bool WasmJSFunction::IsWasmJSFunction(Object object) {
   if (!object.IsJSFunction()) return false;
@@ -2031,7 +2003,6 @@ const wasm::FunctionSig* WasmJSFunction::GetSignature(Zone* zone) {
   return zone->New<wasm::FunctionSig>(return_count, parameter_count, types);
 }
 
-// TODO(9495): Update this if function type variance is introduced.
 bool WasmJSFunction::MatchesSignature(const wasm::FunctionSig* sig) {
   DCHECK_LE(sig->all().size(), kMaxInt);
   int sig_size = static_cast<int>(sig->all().size());

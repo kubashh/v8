@@ -159,7 +159,7 @@ Address LocalHeap::PerformCollectionAndAllocateAgain(
   for (int i = 0; i < kMaxNumberOfRetries; i++) {
     {
       ParkedScope scope(this);
-      heap_->RequestCollectionBackground();
+      heap_->RequestAndWaitForCollection();
     }
 
     AllocationResult result = AllocateRaw(object_size, type, origin, alignment);
