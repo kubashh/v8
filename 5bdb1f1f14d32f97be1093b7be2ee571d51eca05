@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "bf6414e6_d1558ae1",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-02T17:24:12Z",
+      "side": 1,
+      "message": "But you are explicitly separating it out of the ATOMIC_FUNCTION list. I\u0027m not sure what you mean by having it merged into the builtins file? I think we should update the API of AtomicExchange to be the same as the others (and add it back to ATOMIC_FUNCTION list), but if it will touch a lot of other code I\u0027m fine with adding a TODO here and doing that in a followup CL.",
+      "parentUuid": "0d33f810_cea3be99",
+      "revId": "5bdb1f1f14d32f97be1093b7be2ee571d51eca05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33f396eb_3dedd2fb",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 8
