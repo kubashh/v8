@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "120d1ac7_e835d0b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-02T14:57:59Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "eee6b76566eade6177bdc04759d7e2e8004b7639",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f3415a5_ae071d85",
+        "filename": "src/common/ptr-compr-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-02T14:57:59Z",
+      "side": 1,
+      "message": "While you are here, please remove this outdated comment. It was relevant when we had base in the middle of the reservation.",
+      "revId": "eee6b76566eade6177bdc04759d7e2e8004b7639",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
