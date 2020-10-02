@@ -28348,3 +28348,35 @@ TEST(TriggerThreadSafeMetricsEvent) {
   CHECK_EQ(recorder->count_, 1);  // Increased.
   CHECK_EQ(recorder->module_count_, 42);
 }
+
+UNINITIALIZED_TEST(SingleThreadedDefaultPlatform) {
+  v8::V8::SetFlagsFromString("--single-threaded");
+  auto old_platform = i::V8::GetCurrentPlatform();
+  std::unique_ptr<v8::Platform> new_platform(
+      v8::platform::NewSingleThreadedDefaultPlatform());
+  i::V8::SetPlatformForTesting(new_platform.get());
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  isolate->Enter();
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  {
+    i::HandleScope scope(i_isolate);
+    v8::Local<Context> env = Context::New(isolate);
+    env->Enter();
+
+    CompileRunChecked(isolate,
+                      "function f() {"
+                      "  for (let i = 0; i < 10; i++)"
+                      "    (new Array(10)).fill(0);"
+                      "  return 0;"
+                      "}"
+                      "f();");
+    env->Exit();
+  }
+  CcTest::CollectGarbage(i::NEW_SPACE, i_isolate);
+  CcTest::CollectAllAvailableGarbage(i_isolate);
+  isolate->Exit();
+  isolate->Dispose();
+  i::V8::SetPlatformForTesting(old_platform);
+}
