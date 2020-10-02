@@ -106,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "e26ea4b1_71a23ba5",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-02T07:31:16Z",
+      "side": 1,
+      "message": "Thanks, that makes sense.\n\nI need more time to read the feedback vector changes carefully ...unless someone else has done that already?",
+      "parentUuid": "19e8d93a_8c2f09e8",
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f05e8281_25c011ab",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 25
