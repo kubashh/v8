@@ -16,6 +16,23 @@
       "revId": "ee598ea2de8cfc4bb618079700f814792c1a0093",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2fd8b61b_a4cab98d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-10-02T17:01:54Z",
+      "side": 1,
+      "message": "@Tobias: Please do an OWNERS review for common-operator.cc.",
+      "revId": "ee598ea2de8cfc4bb618079700f814792c1a0093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
