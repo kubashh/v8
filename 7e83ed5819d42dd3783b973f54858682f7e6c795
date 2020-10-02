@@ -16,6 +16,23 @@
       "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7de49c1f_79d3ce40",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-02T07:36:23Z",
+      "side": 1,
+      "message": "One simplification would be to always cache the values, regardless of the configuration.\n\nIf we do that, we could also read (and cache) the feedback right in the FeedbackNexus constructor, thus getting rid of the GetFeedbackPair method. Or do we ever create a FeedbackNexus but then don\u0027t read the feedback?",
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
