@@ -33,6 +33,24 @@
       "revId": "fa50b7e82586aa2fe6f863022cfef71cce67bf7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7fe3348f_1719e1a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-04T17:07:50Z",
+      "side": 1,
+      "message": "So, the file tools/android-sync.sh has nothing to do with our test framework. I don\u0027t know what that is. I think the test framework has code around here https://source.chromium.org/chromium/chromium/src/+/master:v8/tools/testrunner/local/command.py;l\u003d280 to push all the files to a device that were listed as argument to d8. With https://chromium-review.googlesource.com/c/v8/v8/+/2431045 this explicit listing is removed it seems.\n\nTo make the builder green for now you could use https://source.chromium.org/search?q\u003d_get_resources\u0026sq\u003d\u0026ss\u003dchromium%2Fchromium%2Fsrc:v8%2F and overwrite _get_resources in mjsunit\u0027s testcfg.py and list all the required files from v8/tools.\n\nOr we could dump the list from https://source.chromium.org/chromium/chromium/src/+/master:v8/test/mjsunit/BUILD.gn;l\u003d15?q\u003dtools%2Fcodemap.mjs\u0026ss\u003dchromium%2Fchromium%2Fsrc:v8%2F somewhere so that the test runner reads it and also pushes it to the device. But I could look into that at some point after you provide the quick fix above.",
+      "parentUuid": "7663e709_81e7e510",
+      "revId": "fa50b7e82586aa2fe6f863022cfef71cce67bf7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
