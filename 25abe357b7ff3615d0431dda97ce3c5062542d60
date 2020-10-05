@@ -16,6 +16,63 @@
       "revId": "25abe357b7ff3615d0431dda97ce3c5062542d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef10a061_e75b7d9b",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T14:48:21Z",
+      "side": 1,
+      "message": "You can do\n  if (osr_helper().has_value()) ...\nand get rid of the is_osr argument.",
+      "revId": "25abe357b7ff3615d0431dda97ce3c5062542d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c877f7c_aed160c9",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3319,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T14:48:21Z",
+      "side": 1,
+      "message": "Maybe add a comment above the if, a la\n// Depending on how we got here, the frame may or may not have been\n// initialized. If it hasn\u0027t yet, do so now.",
+      "revId": "25abe357b7ff3615d0431dda97ce3c5062542d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "464b7a0e_6b29fe9b",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 27546,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T14:48:21Z",
+      "side": 1,
+      "message": "Since the value that gets written matters very much, how about kRequestFallback and kDontRequestFallback?",
+      "range": {
+        "startLine": 27546,
+        "startChar": 2,
+        "endLine": 27546,
+        "endChar": 18
+      },
+      "revId": "25abe357b7ff3615d0431dda97ce3c5062542d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
