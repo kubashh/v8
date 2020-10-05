@@ -111,6 +111,13 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
     return is_native_context_independent();
   }
 
+  NexusConfig feedback_nexus_config() const {
+    // TODO(mvstanton): when the broker gathers feedback on the background
+    // thread, this should return a local NexusConfig object which points
+    // to the associated LocalHeap.
+    return NexusConfig::FromMainThread(isolate());
+  }
+
   enum BrokerMode { kDisabled, kSerializing, kSerialized, kRetired };
   BrokerMode mode() const { return mode_; }
   // Initialize the local heap with the persistent and canonical handles
