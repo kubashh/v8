@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "29ffd0a7_a0a13587",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-05T09:05:42Z",
+      "side": 1,
+      "message": "My point is that in the src/builtins/builtins-sharedarraybuffer-gen.cc file we have atomic exchange [1] separated from the others in the macro [2]. I think it is because of this if guard [3] so I think it makes sense to keep them separated in that builtins file.\n\nHaving said that, I merged the definition with the other atomic functions. At least with the partial TNodification it wasn\u0027t that much work.\n\n[1]: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-sharedarraybuffer-gen.cc;l\u003d362;drc\u003d74a9b9c4d8dbddabdbb2df4bceb9e0d4b4369898\n[2]: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-sharedarraybuffer-gen.cc;l\u003d643;drc\u003d74a9b9c4d8dbddabdbb2df4bceb9e0d4b4369898\n[3]: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-sharedarraybuffer-gen.cc;l\u003d382;drc\u003d74a9b9c4d8dbddabdbb2df4bceb9e0d4b4369898",
+      "parentUuid": "bf6414e6_d1558ae1",
+      "revId": "5bdb1f1f14d32f97be1093b7be2ee571d51eca05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33f396eb_3dedd2fb",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 8
