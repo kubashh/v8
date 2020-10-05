@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f63986c_e6f90b36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-05T15:28:19Z",
+      "side": 1,
+      "message": "Thanks Georg and Santiago for the comments. Only small changes.\n\nIgor, could you have a look at \nsrc/init/*       (removed a constant)\nsrc/execution/*  (added a lock to the isolate)\nsrc/handles/*    (MaybeHandles constructors)\n",
+      "revId": "a55eb7555f4dbbfa5befa30c68cc1174137f1327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

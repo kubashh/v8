@@ -76,6 +76,30 @@
     },
     {
       "key": {
+        "uuid": "eef20a89_2d040930",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-05T15:28:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2fa92d2_1bbfea27",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 9
+      },
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7de49c1f_79d3ce40",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 26
@@ -129,6 +153,24 @@
     },
     {
       "key": {
+        "uuid": "a353c632_e2ec2664",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-05T15:28:19Z",
+      "side": 1,
+      "message": "Okay thanks...I\u0027ll keep it this way for the moment, but I like the direction. The cache is now simpler.",
+      "parentUuid": "7ea53f50_2c1f0df3",
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0abeaa35_c50c2780",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 26
@@ -152,6 +194,30 @@
     },
     {
       "key": {
+        "uuid": "52936595_e2dc6673",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-05T15:28:19Z",
+      "side": 1,
+      "message": "Yes, because this constructor is only used by the compiler, which creates the FeedbackNexus in order to query information from the vector.\n\nThe other constructors are used by some runtime functions that sometimes need a kind of \"dummy\" FeedbackNexus. I don\u0027t particularly like that, and it\u0027s an area for cleanup. However this CL already has quite a bit of refactoring/cleanup of the tree and I\u0027d rather not tackle that now.",
+      "parentUuid": "0abeaa35_c50c2780",
+      "range": {
+        "startLine": 503,
+        "startChar": 0,
+        "endLine": 503,
+        "endChar": 35
+      },
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8de5f24_e7415fa5",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 26
@@ -172,6 +238,30 @@
       "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28527c1b_db79b43e",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-05T15:28:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8de5f24_e7415fa5",
+      "range": {
+        "startLine": 836,
+        "startChar": 6,
+        "endLine": 836,
+        "endChar": 12
+      },
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
