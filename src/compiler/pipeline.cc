@@ -478,7 +478,8 @@ class PipelineData {
     }
   }
 
-  void InitializeFrameData(CallDescriptor* call_descriptor) {
+  void InitializeFrameData(CallDescriptor* call_descriptor,
+                           bool is_osr = false) {
     DCHECK_NULL(frame_);
     int fixed_frame_size = 0;
     if (call_descriptor != nullptr) {
@@ -486,6 +487,7 @@ class PipelineData {
           call_descriptor->CalculateFixedFrameSize(info()->code_kind());
     }
     frame_ = codegen_zone()->New<Frame>(fixed_frame_size);
+    if (is_osr) osr_helper()->SetupFrame(frame());
   }
 
   void InitializeTopTierRegisterAllocationData(
@@ -2578,6 +2580,8 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
 
   data->BeginPhaseKind("V8.TFBlockBuilding");
 
+  data->InitializeFrameData(linkage->GetIncomingDescriptor(), info()->is_osr());
+
   // Run early optimization pass.
   Run<EarlyOptimizationPhase>();
   RunPrintAndVerify(EarlyOptimizationPhase::phase_name(), true);
@@ -2670,6 +2674,8 @@ bool PipelineImpl::OptimizeGraphForMidTier(Linkage* linkage) {
   RunPrintAndVerify(GenericLoweringPhase::phase_name(), true);
 
   data->BeginPhaseKind("V8.TFBlockBuilding");
+
+  data->InitializeFrameData(linkage->GetIncomingDescriptor(), info()->is_osr());
 
   ComputeScheduledGraph();
 
@@ -3310,7 +3316,9 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
 
   data->InitializeInstructionSequence(call_descriptor);
 
-  data->InitializeFrameData(call_descriptor);
+  if (!data->frame()) {
+    data->InitializeFrameData(call_descriptor, info()->is_osr());
+  }
   // Select and schedule instructions covering the scheduled graph.
   Run<InstructionSelectionPhase>(linkage);
   if (data->compilation_failed()) {
@@ -3606,7 +3614,6 @@ void PipelineImpl::AllocateRegistersForTopTier(
     flags |= RegisterAllocationFlag::kTraceAllocation;
   }
   data->InitializeTopTierRegisterAllocationData(config, call_descriptor, flags);
-  if (info()->is_osr()) data->osr_helper()->SetupFrame(data->frame());
 
   Run<MeetRegisterConstraintsPhase>();
   Run<ResolvePhisPhase>();
