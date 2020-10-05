@@ -80,6 +80,11 @@ class Module : public HeapObject {
   static Handle<JSModuleNamespace> GetModuleNamespace(Isolate* isolate,
                                                       Handle<Module> module);
 
+  // Returns if this module or any transitively requested module is [[Async]],
+  // i.e. has a top-level await.
+  V8_WARN_UNUSED_RESULT static bool IsGraphAsync(Isolate* isolate,
+                                                 Handle<Module> module);
+
   // Layout description.
   DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
                                 TORQUE_GENERATED_MODULE_FIELDS)
