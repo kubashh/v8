@@ -34,6 +34,24 @@
       "revId": "1771b6f0a86e6d2204bf1ad3df673213d14007ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d64c077b_85522896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-05T15:40:04Z",
+      "side": 1,
+      "message": "The feedback cell can have the vector in it replaced because of bytecode flushing. It would then contain an array of feedback cells for the closures created in the function.\n\nMy argument that this belongs in the graph is based on the centrality of inlining as one of our major decisions. It seems odd to allow inlining to \"fall apart\" because the feedback cell changed. I think this is worth an extra handle in the graph.\n\nIf the case were either extremely unlikely, or the effect was more limited in scope, I\u0027d welcome the direct read at any time with corresponding loss of certainty about the optimization.",
+      "parentUuid": "93826a84_b4e8c45f",
+      "revId": "1771b6f0a86e6d2204bf1ad3df673213d14007ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
