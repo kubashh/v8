@@ -27538,8 +27538,10 @@ T* GetInternalField(v8::Object* wrapper) {
 template <typename T>
 struct ApiNumberChecker : BasicApiChecker<T, ApiNumberChecker<T>> {
   explicit ApiNumberChecker(T value, bool raise_exception = false,
-                            int args_count = 1)
-      : raise_exception_(raise_exception), args_count_(args_count) {}
+                            bool write_to_fallback = false, int args_count = 1)
+      : raise_exception_(raise_exception),
+        write_to_fallback_(write_to_fallback),
+        args_count_(args_count) {}
 
   static void FastCallback(v8::ApiObject receiver, T argument, int* fallback) {
     v8::Object* receiver_obj = reinterpret_cast<v8::Object*>(&receiver);
@@ -27552,8 +27554,8 @@ struct ApiNumberChecker : BasicApiChecker<T, ApiNumberChecker<T>> {
             receiver_obj);
     receiver_ptr->result_ |= ApiCheckerResult::kFastCalled;
     receiver_ptr->fast_value_ = argument;
-    if (receiver_ptr->raise_exception_) {
-      *fallback = 1;
+    if (receiver_ptr->write_to_fallback_) {
+      *fallback = 32;
     }
   }
 
@@ -27573,6 +27575,7 @@ struct ApiNumberChecker : BasicApiChecker<T, ApiNumberChecker<T>> {
     checker->slow_value_ = ConvertJSValue<T>::Get(info[0], env.local());
 
     if (checker->raise_exception_) {
+      CHECK(checker->write_to_fallback_);
       info.GetIsolate()->ThrowException(v8_str("Callback error"));
     }
   }
@@ -27580,6 +27583,7 @@ struct ApiNumberChecker : BasicApiChecker<T, ApiNumberChecker<T>> {
   T fast_value_ = T();
   Maybe<T> slow_value_ = v8::Nothing<T>();
   bool raise_exception_ = false;
+  bool write_to_fallback_ = false;
   int args_count_ = 1;
 };
 
@@ -27674,7 +27678,7 @@ void CallAndCheck(T expected_value, Behavior expected_behavior,
                   v8::Local<v8::Value> initial_value,
                   bool raise_exception = false) {
   LocalContext env;
-  ApiNumberChecker<T> checker(expected_value, raise_exception);
+  ApiNumberChecker<T> checker(expected_value, raise_exception, raise_exception);
 
   bool has_caught = SetupTest<T, ApiNumberChecker<T>>(
       initial_value, &env, &checker,
@@ -27765,7 +27769,7 @@ void CallNoConvertReceiver(int32_t expected_value) {
 void CallWithLessArguments() {
   LocalContext env;
   v8::Local<v8::Value> initial_value(v8_num(42));
-  ApiNumberChecker<int32_t> checker(42, false, 0);
+  ApiNumberChecker<int32_t> checker(42, false, false, 0);
   SetupTest(initial_value, &env, &checker,
             "function func() { return receiver.api_func(); }"
             "%PrepareFunctionForOptimization(func);"
@@ -27780,7 +27784,7 @@ void CallWithLessArguments() {
 void CallWithMoreArguments() {
   LocalContext env;
   v8::Local<v8::Value> initial_value(v8_num(42));
-  ApiNumberChecker<int32_t> checker(42, false, 2);
+  ApiNumberChecker<int32_t> checker(42, false, false, 2);
   SetupTest(initial_value, &env, &checker,
             "function func(arg) { receiver.api_func(arg, arg); }"
             "%PrepareFunctionForOptimization(func);"
@@ -27859,6 +27863,56 @@ void CheckDynamicTypeInfo() {
 }
 }  // namespace
 #endif  // V8_LITE_MODE
+
+TEST(FastApiStackSlot) {
+#ifndef V8_LITE_MODE
+  if (i::FLAG_jitless) return;
+  if (i::FLAG_turboprop) return;
+
+  i::FLAG_turbo_fast_api_calls = true;
+  i::FLAG_opt = true;
+  i::FLAG_allow_natives_syntax = true;
+  // Disable --always_opt, otherwise we haven't generated the necessary
+  // feedback to go down the "best optimization" path for the fast call.
+  i::FLAG_always_opt = false;
+
+  v8::Isolate* isolate = CcTest::isolate();
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  i_isolate->set_embedder_wrapper_type_index(kV8WrapperTypeIndex);
+  i_isolate->set_embedder_wrapper_object_index(kV8WrapperObjectIndex);
+
+  v8::HandleScope scope(isolate);
+  LocalContext env;
+
+  ApiNumberChecker<int32_t> checker(42, false, true);
+
+  bool has_caught = SetupTest<int32_t, ApiNumberChecker<int32_t>>(
+      v8_num(42), &env, &checker,
+      "function func(arg) {"
+      " let foo = 128;"
+      " for (let i = 0; i < 100; ++i) {"
+      "  let bar = true;"
+      "  if (i == 10) %OptimizeOsr();"
+      "  try { receiver.api_func(arg) } catch(_) {};"
+      "  try { receiver.api_func(arg) } catch(_) {};"
+      " };"
+      " return foo;"
+      "};");
+  checker.result_ = ApiCheckerResult::kNotCalled;
+
+  v8::TryCatch try_catch(isolate);
+  v8::Local<v8::Value> foo =
+      CompileRun("%PrepareFunctionForOptimization(func); func(value);");
+  CHECK(foo->IsNumber());
+  CHECK_EQ(128, foo->ToInt32(env.local()).ToLocalChecked()->Value());
+
+  CHECK(checker.DidCallFast() && checker.DidCallSlow());
+  CHECK_EQ(false, has_caught);
+  int32_t slow_value_typed = checker.slow_value_.ToChecked();
+  CHECK_EQ(slow_value_typed, 42);
+  CHECK_EQ(checker.fast_value_, 42);
+#endif
+}
 
 TEST(FastApiCalls) {
 #ifndef V8_LITE_MODE
