@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5e0894cc_4c7a99b5",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-05T10:59:57Z",
+      "side": 1,
+      "message": "Resolving to submit.",
+      "parentUuid": "d08ccaa3_e1c15ecd",
+      "range": {
+        "startLine": 23,
+        "startChar": 6,
+        "endLine": 23,
+        "endChar": 12
+      },
+      "revId": "710c20489d0321e8d90eb04b73bbb13029e2c699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "531cc9e9_faea99fa",
         "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "710c20489d0321e8d90eb04b73bbb13029e2c699",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5e8f299_9602beda",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-05T10:59:57Z",
+      "side": 1,
+      "message": "Resolving to submit.",
+      "parentUuid": "531cc9e9_faea99fa",
+      "range": {
+        "startLine": 24,
+        "startChar": 55,
+        "endLine": 24,
+        "endChar": 61
+      },
+      "revId": "710c20489d0321e8d90eb04b73bbb13029e2c699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

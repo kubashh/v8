@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "49475532_693993a3",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-05T10:59:57Z",
+      "side": 1,
+      "message": "Resolving to submit.",
+      "parentUuid": "29ffd0a7_a0a13587",
+      "revId": "5bdb1f1f14d32f97be1093b7be2ee571d51eca05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33f396eb_3dedd2fb",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 8
