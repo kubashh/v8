@@ -36,6 +36,63 @@
     },
     {
       "key": {
+        "uuid": "5c8625b5_65213965",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2581,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T12:37:04Z",
+      "side": 1,
+      "message": "It\u0027s unclear what that means. I\u0027d drop the comment.",
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5bbe251_b364b0b6",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2582,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T12:37:04Z",
+      "side": 1,
+      "message": "Just inline this.",
+      "range": {
+        "startLine": 2582,
+        "startChar": 7,
+        "endLine": 2582,
+        "endChar": 22
+      },
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2703a989_dd004746",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2584,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T12:37:04Z",
+      "side": 1,
+      "message": "Hmm, can you try to move the osr stuff into InitializeFrameData?",
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "36a8758e_ab2d1e2f",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 3
@@ -110,6 +167,24 @@
       "writtenOn": "2020-10-05T11:32:27Z",
       "side": 1,
       "message": "Please use a FlagScope here, so that the flag is reset after the test, e.g. like in https://source.chromium.org/chromium/chromium/src/+/master:v8/test/cctest/wasm/test-run-wasm-simd.cc;l\u003d2266;drc\u003d6b00afd4ac52963ce04d6f29a0ebe0ca6ddfc9dd",
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a4fb4c3_382958fc",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 27872,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T12:37:04Z",
+      "side": 1,
+      "message": "Maybe this should be in a more general location (it\u0027s in some wasm directory).",
+      "parentUuid": "fb30c238_0ba646d4",
       "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
