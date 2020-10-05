@@ -16,6 +16,24 @@
       "revId": "1771b6f0a86e6d2204bf1ad3df673213d14007ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93826a84_b4e8c45f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T08:01:38Z",
+      "side": 1,
+      "message": "Do I understand correctly that you are concerned about getting different results when reading the same feedback cell at different times during compilation? Perhaps making the feedback vector a parameter is the right thing to do, but I first want to understand how the feedback cell can change at all. Taken to the extreme, moving things into the parameter every time there is potential for inconsistent views is not very different from serializing.",
+      "parentUuid": "80d595a8_d8573152",
+      "revId": "1771b6f0a86e6d2204bf1ad3df673213d14007ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
