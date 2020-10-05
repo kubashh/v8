@@ -68,6 +68,24 @@
       "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ea53f50_2c1f0df3",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T06:58:44Z",
+      "side": 1,
+      "message": "No strong opinion, I\u0027ll let you decide.",
+      "parentUuid": "03e5d305_9c50452a",
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

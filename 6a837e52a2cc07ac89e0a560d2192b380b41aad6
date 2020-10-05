@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "06b60c55_a08bbeb9",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-05T06:58:44Z",
+      "side": 1,
+      "message": "OK. lgtm then from my side. THanks",
+      "parentUuid": "47cea836_e19e4a08",
+      "revId": "6a837e52a2cc07ac89e0a560d2192b380b41aad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f05e8281_25c011ab",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 25
