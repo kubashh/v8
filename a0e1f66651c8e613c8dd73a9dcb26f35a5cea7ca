@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "36b91189_71e57d2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-10-05T11:32:27Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36a8758e_ab2d1e2f",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 3
@@ -30,6 +47,92 @@
       "writtenOn": "2020-10-05T10:59:19Z",
       "side": 1,
       "message": "I made a couple of attempts to move the following line to a more generic place and doing it unconditionally, in order to avoid duplicating the call I\u0027ve now placed in OptimizeGraph[ForMidTier]. My best attempt was to place the InitializeFrameData call in SelectInstructionsAndAssemble (which calls SelectInstructions in most configurations) and replace this line with a \n\n    CHECK(data-\u003eframe())\n\nBut that still fails for WebAssembly, which calls SelectInstructions from GenerateCodeForWasmFunction, so I decided to leave the conditional call here, closest to the place where the frame is being used. Please let me know if you can think of a better solution.",
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79126d19_b8d8492b",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 27541,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-10-05T11:32:27Z",
+      "side": 1,
+      "message": "As a nit that you can easily ignore. It turned out to be good practice to add a small enum for the values of write_to_fallback, instead of adding the parameter as bool. It makes calls to ApiNumberChecker so much more readable when you read ApiNumberChecker(..., kWriteToFallback, ...) instead of ApiNumberChecker(..., true, ...).\n\nIf you think consistency with the other parameters is more important, feel free to ignore this comment.",
+      "range": {
+        "startLine": 27541,
+        "startChar": 28,
+        "endLine": 27541,
+        "endChar": 32
+      },
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da166006_85556c31",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 27558,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-10-05T11:32:27Z",
+      "side": 1,
+      "message": "Could you define a constant that gives this magic value \"32\" a name? Or add a comment where this constant is coming from?",
+      "range": {
+        "startLine": 27558,
+        "startChar": 18,
+        "endLine": 27558,
+        "endChar": 20
+      },
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb30c238_0ba646d4",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 27872,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-10-05T11:32:27Z",
+      "side": 1,
+      "message": "Please use a FlagScope here, so that the flag is reset after the test, e.g. like in https://source.chromium.org/chromium/chromium/src/+/master:v8/test/cctest/wasm/test-run-wasm-simd.cc;l\u003d2266;drc\u003d6b00afd4ac52963ce04d6f29a0ebe0ca6ddfc9dd",
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc514778_f21e705b",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 27887,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-10-05T11:32:27Z",
+      "side": 1,
+      "message": "Could you define a constant for this value? It would make the code much more readable.",
+      "range": {
+        "startLine": 27887,
+        "startChar": 36,
+        "endLine": 27887,
+        "endChar": 38
+      },
       "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
