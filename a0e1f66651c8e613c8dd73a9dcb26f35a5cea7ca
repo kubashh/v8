@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de55ea6d_4b3b5077",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-10-05T10:59:19Z",
+      "side": 1,
+      "message": "Hi Georg, PTAL at this attempt to fix the stack slot + OSR incompatibility. As we talked, the test is robust (as you can see in PS1, it fails everywhere), while the fix is not ideal. I\u0027ve spent some more hours trying to do it in a more cleaner manner, but after observing pipeline.cc and running different configurations, I can\u0027t find a better solution. Any suggestions are welcome!\n\nAndreas, PTAL if this fix makes sense regarding the original design of the Stack slots feature, thanks!",
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "36a8758e_ab2d1e2f",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3323,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-10-05T10:59:19Z",
+      "side": 1,
+      "message": "I made a couple of attempts to move the following line to a more generic place and doing it unconditionally, in order to avoid duplicating the call I\u0027ve now placed in OptimizeGraph[ForMidTier]. My best attempt was to place the InitializeFrameData call in SelectInstructionsAndAssemble (which calls SelectInstructions in most configurations) and replace this line with a \n\n    CHECK(data-\u003eframe())\n\nBut that still fails for WebAssembly, which calls SelectInstructions from GenerateCodeForWasmFunction, so I decided to leave the conditional call here, closest to the place where the frame is being used. Please let me know if you can think of a better solution.",
+      "revId": "a0e1f66651c8e613c8dd73a9dcb26f35a5cea7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
