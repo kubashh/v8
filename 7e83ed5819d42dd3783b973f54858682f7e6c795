@@ -36,6 +36,46 @@
     },
     {
       "key": {
+        "uuid": "7b70c11c_f626a012",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-05T10:13:40Z",
+      "side": 1,
+      "message": "Did another pass at the CL and I have a couple of comments.\nOverall approach LGTM",
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2fa92d2_1bbfea27",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-05T10:13:40Z",
+      "side": 1,
+      "message": "remove?",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 9
+      },
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7de49c1f_79d3ce40",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 26
@@ -83,6 +123,52 @@
       "side": 1,
       "message": "No strong opinion, I\u0027ll let you decide.",
       "parentUuid": "03e5d305_9c50452a",
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0abeaa35_c50c2780",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-05T10:13:40Z",
+      "side": 1,
+      "message": "Can we assume that the vector won\u0027t be null here? This is the only case where we assume that.",
+      "range": {
+        "startLine": 503,
+        "startChar": 0,
+        "endLine": 503,
+        "endChar": 35
+      },
+      "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8de5f24_e7415fa5",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-05T10:13:40Z",
+      "side": 1,
+      "message": "nit: a more descriptive name? e.g. feedback_cache_?",
+      "range": {
+        "startLine": 836,
+        "startChar": 6,
+        "endLine": 836,
+        "endChar": 12
+      },
       "revId": "7e83ed5819d42dd3783b973f54858682f7e6c795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

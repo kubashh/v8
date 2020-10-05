@@ -630,6 +630,30 @@
     },
     {
       "key": {
+        "uuid": "bee1f59e_cb0c3d08",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-05T10:13:40Z",
+      "side": 1,
+      "message": "Ack. Keeping it for a follow-up sgtm.",
+      "parentUuid": "a62f8133_a65c0ea3",
+      "range": {
+        "startLine": 784,
+        "startChar": 2,
+        "endLine": 784,
+        "endChar": 42
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a1bc10a_832cea76",
         "filename": "src/objects/feedback-vector.h",
         "patchSetId": 10
