@@ -267,7 +267,8 @@ void WasmCompilationUnit::CompileWasmFunction(Isolate* isolate,
 
 namespace {
 bool UseGenericWrapper(const FunctionSig* sig) {
-// Work only for int32 parameters and 1 or 0 return value for now.
+// For now, work only for int32, int64, f32 and f64 parameters and 1 or 0 return
+// value on platform x64.
 #if V8_TARGET_ARCH_X64
   if (sig->returns().size() > 1) {
     return false;
