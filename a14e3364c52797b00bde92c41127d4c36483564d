@@ -46,6 +46,30 @@
       "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "244cc1a0_fa23e478",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-06T12:30:39Z",
+      "side": 1,
+      "message": "Context: I am trying to work around the Unmark() (Black-\u003eWhite transition) which has caused issues every now and then.\n\nObservation: We are bound by 2 times processing (in-construction + regular). Whether the markbit is set or not doesn\u0027t matter for here.\n\nSince we anyways have the potential double processing, we may as well change the extraction in [1] to \n  // ...\n  MarkNoPush(*object);\n  previously_not_fully_constructed_worklist_.Push(object);\n  // ...\n\nDo you see any issues with that?\n\n[1] https://source.chromium.org/chromium/chromium/src/+/master:v8/src/heap/cppgc/marking-state.cc;l\u003d16?q\u003dMarkingState::FlushNotFullyConstructedObjects\u0026ss\u003dchromium",
+      "parentUuid": "edcb1650_5ecc72da",
+      "range": {
+        "startLine": 44,
+        "startChar": 11,
+        "endLine": 44,
+        "endChar": 17
+      },
+      "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
