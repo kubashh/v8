@@ -52,6 +52,23 @@
       "revId": "1771b6f0a86e6d2204bf1ad3df673213d14007ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9880e9b7_c22641bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-06T09:42:41Z",
+      "side": 1,
+      "message": "Per discussion offline, I close this CL.",
+      "revId": "1771b6f0a86e6d2204bf1ad3df673213d14007ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
