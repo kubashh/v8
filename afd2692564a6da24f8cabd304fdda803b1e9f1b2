@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05ab2f4e_54eee53c",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-06T12:20:17Z",
+      "side": 0,
+      "message": "I think this is a holdover from makefile times. gm.py doesn\u0027t pass the --mode parameter.",
+      "range": {
+        "startLine": 136,
+        "startChar": 3,
+        "endLine": 136,
+        "endChar": 11
+      },
+      "revId": "afd2692564a6da24f8cabd304fdda803b1e9f1b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb13d05d_134362f7",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-06T12:20:17Z",
+      "side": 0,
+      "message": "This check made sense when mode could be passed. But now this can\u0027t go wrong any longer.",
+      "range": {
+        "startLine": 528,
+        "startChar": 5,
+        "endLine": 528,
+        "endChar": 65
+      },
+      "revId": "afd2692564a6da24f8cabd304fdda803b1e9f1b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30769d26_54d7445f",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-06T12:20:17Z",
+      "side": 0,
+      "message": "This is now baked into the status_mode as DEBUG_MODE and TRY_RELEASE_MODE.",
+      "range": {
+        "startLine": 718,
+        "startChar": 14,
+        "endLine": 719,
+        "endChar": 27
+      },
+      "revId": "afd2692564a6da24f8cabd304fdda803b1e9f1b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

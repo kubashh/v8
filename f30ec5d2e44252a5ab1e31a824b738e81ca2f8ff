@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2df48ff6_846c957c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-06T12:20:17Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "f30ec5d2e44252a5ab1e31a824b738e81ca2f8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e8bfc01_d1e9be61",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-06T12:20:17Z",
+      "side": 1,
+      "message": "I\u0027ll work on this in a follow up. It might require another infra change to remove this.",
+      "range": {
+        "startLine": 764,
+        "startChar": 5,
+        "endLine": 766,
+        "endChar": 62
+      },
+      "revId": "f30ec5d2e44252a5ab1e31a824b738e81ca2f8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
