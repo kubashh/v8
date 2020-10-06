@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a3b9224_8328aa87",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-10-06T14:32:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "936d82be_e3bd98ec",
+      "revId": "3b56ed3b33e42c4bf6048707fc3cdf736cd61e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d3f5472_4e5c9702",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f63ca73_70a24cc1",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3647,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-10-06T14:32:28Z",
+      "side": 1,
+      "message": "Done, except that I used\n\n    !HasFPParamsInSignature(...)",
+      "parentUuid": "3d3f5472_4e5c9702",
+      "revId": "3b56ed3b33e42c4bf6048707fc3cdf736cd61e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d9bf3cc_f533fd62",
@@ -65,6 +101,24 @@
       "writtenOn": "2020-10-06T14:12:33Z",
       "side": 1,
       "message": "Nice!",
+      "revId": "3b56ed3b33e42c4bf6048707fc3cdf736cd61e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4943e9b5_b5d23abc",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28031,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-10-06T14:32:28Z",
+      "side": 1,
+      "message": "Thanks :)",
+      "parentUuid": "5d9bf3cc_f533fd62",
       "revId": "3b56ed3b33e42c4bf6048707fc3cdf736cd61e7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
