@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6392409_24cb201d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-10-06T13:59:24Z",
+      "side": 1,
+      "message": "Hi Georg, PTAL at this small change enabling graceful fallback for fast calls containing FP params on platforms that don\u0027t support them.",
+      "revId": "3b56ed3b33e42c4bf6048707fc3cdf736cd61e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
