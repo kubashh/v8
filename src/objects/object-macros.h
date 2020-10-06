@@ -82,14 +82,14 @@
 // parameter.
 #define DECL_GETTER(name, type) \
   inline type name() const;     \
-  inline type name(const Isolate* isolate) const;
+  inline type name(IsolateRoot isolate) const;
 
-#define DEF_GETTER(holder, name, type)                     \
-  type holder::name() const {                              \
-    const Isolate* isolate = GetIsolateForPtrCompr(*this); \
-    return holder::name(isolate);                          \
-  }                                                        \
-  type holder::name(const Isolate* isolate) const
+#define DEF_GETTER(holder, name, type)                  \
+  type holder::name() const {                           \
+    IsolateRoot isolate = GetIsolateForPtrCompr(*this); \
+    return holder::name(isolate);                       \
+  }                                                     \
+  type holder::name(IsolateRoot isolate) const
 
 #define DECL_ACCESSORS(name, type)   \
   DECL_GETTER(name, type)            \
