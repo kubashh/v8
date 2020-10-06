@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "120d1ac7_e835d0b8",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "lgtm with a nit",
       "revId": "eee6b76566eade6177bdc04759d7e2e8004b7639",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "1f3415a5_ae071d85",
         "filename": "src/common/ptr-compr-inl.h",
@@ -31,8 +32,25 @@
       "side": 1,
       "message": "While you are here, please remove this outdated comment. It was relevant when we had base in the middle of the reservation.",
       "revId": "eee6b76566eade6177bdc04759d7e2e8004b7639",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f5a37fa_ecf37f3c",
+        "filename": "src/common/ptr-compr-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-06T14:16:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f3415a5_ae071d85",
+      "revId": "eee6b76566eade6177bdc04759d7e2e8004b7639",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
