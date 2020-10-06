@@ -22,6 +22,30 @@
       },
       "revId": "32bb9876f440cf94dc897cd798bb20d8ac28b0ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b351f5_5ad753eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-06T16:44:26Z",
+      "side": 1,
+      "message": "Yes that\u0027s right.",
+      "parentUuid": "07c99285_c0ffd375",
+      "range": {
+        "startLine": 17,
+        "startChar": 9,
+        "endLine": 17,
+        "endChar": 15
+      },
+      "revId": "32bb9876f440cf94dc897cd798bb20d8ac28b0ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

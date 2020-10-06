@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "64c95801_239ffab9",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-06T16:44:26Z",
+      "side": 1,
+      "message": "Yes exactly. Renamed to is_defined_in_deferred_block - does that make it clearer?",
+      "parentUuid": "782237b6_5f754ab7",
+      "revId": "5fc2a62205ee61612542dd0fdbefa38591e569d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee38ef79_3c8c9550",
         "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
         "patchSetId": 9
@@ -48,6 +66,30 @@
       "writtenOn": "2020-10-06T14:57:58Z",
       "side": 1,
       "message": "I don\u0027t understand the logic of this. So if {block} is contained in {live_blocks_} and there are {deferred_spill_outputs}, but they don\u0027t contain {block}, then we return false? In other words, if there are deferred spill blocks, then a register can only be live in deferred spill blocks?",
+      "range": {
+        "startLine": 407,
+        "startChar": 6,
+        "endLine": 407,
+        "endChar": 59
+      },
+      "revId": "5fc2a62205ee61612542dd0fdbefa38591e569d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28091d2d_eaec4265",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-06T16:44:26Z",
+      "side": 1,
+      "message": "Right, this isn\u0027t about the liveness of the register (or the virtual register) but the liveness of the SpillSlot. If we have deferred spill blocks then we deferred the spilling of this virtual register until the entry of the deferred blocks in which the spill slot is used, so the spill slot is only alive in those deferred blocks. I\u0027ve added a comment to this effect, does that clarify it?",
+      "parentUuid": "ee38ef79_3c8c9550",
       "range": {
         "startLine": 407,
         "startChar": 6,
