@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "5abd1a3b_aabbd287",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "lgtm, thanks for the explanations",
       "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "49430652_54a5ed87",
         "filename": "src/heap/cppgc/write-barrier.cc",
@@ -37,10 +38,10 @@
         "endChar": 17
       },
       "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "edcb1650_5ecc72da",
         "filename": "src/heap/cppgc/write-barrier.cc",
@@ -61,10 +62,10 @@
         "endChar": 17
       },
       "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "244cc1a0_fa23e478",
         "filename": "src/heap/cppgc/write-barrier.cc",
@@ -85,10 +86,10 @@
         "endChar": 17
       },
       "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "1edbc0e2_e44074d1",
         "filename": "src/heap/cppgc/write-barrier.cc",
@@ -109,10 +110,10 @@
         "endChar": 17
       },
       "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "a308801b_3df007f7",
         "filename": "src/heap/cppgc/write-barrier.cc",
@@ -133,8 +134,31 @@
         "endChar": 17
       },
       "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3be9de95_59d43af1",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-06T14:06:01Z",
+      "side": 1,
+      "message": "Resolved offline and decided to keep unmarking to avoid double processing of objects.",
+      "parentUuid": "a308801b_3df007f7",
+      "range": {
+        "startLine": 44,
+        "startChar": 11,
+        "endLine": 44,
+        "endChar": 17
+      },
+      "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
