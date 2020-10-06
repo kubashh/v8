@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49430652_54a5ed87",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-06T11:45:34Z",
+      "side": 1,
+      "message": "The reason for introducing all of the complexity around in-construction objects was so that the write barrier cannot blow up any in construction list. E.g.,\n\n  struct GCed : ... {\n   GCed() { global_data_structure.push(this); }\n  }\n\nThe in-construction worklist we have right now does not allow bailing out on duplicates.\n\nCan we get what we initially wanted: An external data structure to do a containments check that allows us to filter dupes, so that we can do:\n\n  if (IsInConstruction(header) \u0026\u0026 MarkExternalBit(header)) {\n    in_construction_object.Push(header);\n  } else if (MarkNoPush(header)) {\n    marking_worklist_.Push(descriptor);\n  }\n\nThis way we bound processing an object by 2 times as in the worst case we have it in the regular worklist and in the in-construction worklist.",
+      "range": {
+        "startLine": 44,
+        "startChar": 11,
+        "endLine": 44,
+        "endChar": 17
+      },
+      "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
