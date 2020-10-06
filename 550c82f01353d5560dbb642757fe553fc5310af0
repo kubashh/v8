@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfa4c4c2_080f2b0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1447863
+      },
+      "writtenOn": "2020-10-06T18:08:02Z",
+      "side": 1,
+      "message": "I\u0027m not sure how to proceed here to get all tryjobs green.  When we receive an interrupt request from JS, we abort the execution, return to JS and let JS call into the interpreter again. (This is indicated by returning kInternalRegExpRetry.)  This is entirely analogous to what the irregexp interpreter does.  But for the experimental engine this will trigger an infinite loop sometimes, where we can never finish the execution before JS requests an interrupt.  My guess is that irregexp doesn\u0027t suffer from this because it\u0027s much faster.  So how do we solve this?  The only idea I have is to enter the interpreter via CEntry instead of the trampoline, but I\u0027m not sure this would really solve the issue.",
+      "revId": "550c82f01353d5560dbb642757fe553fc5310af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
