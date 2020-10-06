@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "0f0a81be_ef308922",
+        "filename": "src/objects/module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-06T08:23:27Z",
+      "side": 1,
+      "message": "Traversal order doesn\u0027t really matter here, no?\nWe could simplify this with a ZoneVector instead (less memory overhead, same performance with push_back and pop_back)",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 379,
+        "endChar": 50
+      },
+      "revId": "df43b737ab1ac91e392bcb12bcd91a5eb19e2bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04067af3_fe5798f2",
         "filename": "src/objects/module.cc",
         "patchSetId": 2
@@ -30,6 +53,23 @@
       "writtenOn": "2020-10-06T04:48:03Z",
       "side": 1,
       "message": "Nit: DCHECK_GE",
+      "revId": "df43b737ab1ac91e392bcb12bcd91a5eb19e2bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eb7854b_22b784b5",
+        "filename": "src/objects/module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-06T08:23:27Z",
+      "side": 1,
+      "message": "I guess this should be a DCHECK no?\nWe bail out early when entering, and we only add IsSourceTextModule to the worklist.",
       "revId": "df43b737ab1ac91e392bcb12bcd91a5eb19e2bac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
