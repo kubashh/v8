@@ -16,6 +16,57 @@
       "message": "Hi Georg, PTAL at this small change enabling graceful fallback for fast calls containing FP params on platforms that don\u0027t support them.",
       "revId": "3b56ed3b33e42c4bf6048707fc3cdf736cd61e7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "936d82be_e3bd98ec",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-06T14:12:33Z",
+      "side": 1,
+      "message": "Please put this in an anonymous namespace.",
+      "revId": "3b56ed3b33e42c4bf6048707fc3cdf736cd61e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d3f5472_4e5c9702",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3647,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-06T14:12:33Z",
+      "side": 1,
+      "message": "optimize_to_fast_call \u003d optimize_to_fast_call \u0026\u0026\n    (c_signature !\u003d nullptr) \u0026\u0026 HasFPParamsInSignature(c_signature);\n\nThen the signature is ignored if optimize_to_fast_call is already false.",
+      "revId": "3b56ed3b33e42c4bf6048707fc3cdf736cd61e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d9bf3cc_f533fd62",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28031,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-06T14:12:33Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "3b56ed3b33e42c4bf6048707fc3cdf736cd61e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
