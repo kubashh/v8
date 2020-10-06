@@ -370,5 +370,38 @@ Maybe<PropertyAttributes> JSModuleNamespace::GetPropertyAttributes(
   return Just(it->property_attributes());
 }
 
+// static
+bool Module::IsGraphAsync(Isolate* isolate, Handle<Module> module) {
+  if (!module->IsSourceTextModule()) return false;
+
+  Zone zone(isolate->allocator(), ZONE_NAME);
+  UnorderedModuleSet visited(&zone);
+  ZoneVector<Handle<SourceTextModule>> worklist(&zone);
+  visited.insert(module);
+  worklist.push_back(Handle<SourceTextModule>::cast(module));
+
+  do {
+    Handle<SourceTextModule> current = worklist.back();
+    worklist.pop_back();
+    DCHECK_GE(current->status(), kInstantiated);
+
+    // Only SourceTextModules may be async.
+    if (current->async()) return true;
+    Handle<FixedArray> requested_modules(current->requested_modules(), isolate);
+    for (int i = 0, length = requested_modules->length(); i < length; ++i) {
+      Handle<Module> descendant(Module::cast(requested_modules->get(i)),
+                                isolate);
+      if (descendant->IsSourceTextModule()) {
+        const bool cycle = !visited.insert(descendant).second;
+        if (!cycle) {
+          worklist.push_back(Handle<SourceTextModule>::cast(descendant));
+        }
+      }
+    }
+  } while (!worklist.empty());
+
+  return false;
+}
+
 }  // namespace internal
 }  // namespace v8
