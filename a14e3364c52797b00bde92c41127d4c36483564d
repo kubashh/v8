@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5abd1a3b_aabbd287",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-06T13:56:14Z",
+      "side": 1,
+      "message": "lgtm, thanks for the explanations",
+      "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49430652_54a5ed87",
         "filename": "src/heap/cppgc/write-barrier.cc",
         "patchSetId": 1
@@ -85,6 +102,30 @@
       "side": 1,
       "message": "I was actually going to suggest that once I understood what your concern was. I think it\u0027s better than having 2 data structures that hold the same data.\nThere are 2 possible downsides:\n(1) We might trace the same object twice, but that should be negligible in terms of performance.\n(2) Our marked bytes accounting will be off since we account after tracing (and as (1) mentioned we might trace twice).\n\nRegarding (2), we already might be slightly off if two concurrent markers trace the same object. This case will be easier to \"exploit\" but given that in-construction should be very rare, maybe the impact will be minimal. We can try to address that by accounting when marking instead of accounting when tracing. wdyt?",
       "parentUuid": "244cc1a0_fa23e478",
+      "range": {
+        "startLine": 44,
+        "startChar": 11,
+        "endLine": 44,
+        "endChar": 17
+      },
+      "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a308801b_3df007f7",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-06T13:56:14Z",
+      "side": 1,
+      "message": "Ugh, I think we should avoid double processing if somehow possible as we generally assume our counters are exact at some point.\n\nIf we unmark here we actually do not have double-processing, right? If the object is later on fully constructed it will be added to a regular worklist and the extraction will bail out, no?",
+      "parentUuid": "1edbc0e2_e44074d1",
       "range": {
         "startLine": 44,
         "startChar": 11,
