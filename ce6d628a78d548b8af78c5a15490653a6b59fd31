@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0489b41d_621ae5a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-10-06T15:15:04Z",
+      "side": 1,
+      "message": "Actually deleted the comment and updated the CL\u0027s description.",
+      "revId": "ce6d628a78d548b8af78c5a15490653a6b59fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

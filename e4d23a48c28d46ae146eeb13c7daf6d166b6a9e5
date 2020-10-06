@@ -51,6 +51,24 @@
       "message": "LGTM with nit.",
       "revId": "e4d23a48c28d46ae146eeb13c7daf6d166b6a9e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f077b0b5_ab633028",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-10-06T15:15:04Z",
+      "side": 1,
+      "message": "I deleted the comment.",
+      "parentUuid": "9c7bec60_3cf9c71d",
+      "revId": "e4d23a48c28d46ae146eeb13c7daf6d166b6a9e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
