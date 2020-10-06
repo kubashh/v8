@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "c4471f10_e6bf5e84",
+        "filename": "src/objects/module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-06T15:44:08Z",
+      "side": 1,
+      "message": "Good idea. Done.",
+      "parentUuid": "0f0a81be_ef308922",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 379,
+        "endChar": 50
+      },
+      "revId": "df43b737ab1ac91e392bcb12bcd91a5eb19e2bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04067af3_fe5798f2",
         "filename": "src/objects/module.cc",
         "patchSetId": 2
@@ -76,6 +100,24 @@
     },
     {
       "key": {
+        "uuid": "7b3b0b71_2fec6c60",
+        "filename": "src/objects/module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-06T15:44:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04067af3_fe5798f2",
+      "revId": "df43b737ab1ac91e392bcb12bcd91a5eb19e2bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9eb7854b_22b784b5",
         "filename": "src/objects/module.cc",
         "patchSetId": 2
@@ -90,6 +132,24 @@
       "revId": "df43b737ab1ac91e392bcb12bcd91a5eb19e2bac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "910f9c9d_2dae50c7",
+        "filename": "src/objects/module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-06T15:44:08Z",
+      "side": 1,
+      "message": "Removed. Changed the worklist to a ZoneVector\u003cHandle\u003cSourceTextModule\u003e\u003e.",
+      "parentUuid": "9eb7854b_22b784b5",
+      "revId": "df43b737ab1ac91e392bcb12bcd91a5eb19e2bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
