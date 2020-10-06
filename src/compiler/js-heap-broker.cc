@@ -851,6 +851,25 @@ class SymbolData : public NameData {
   }
 };
 
+namespace {
+
+// String to double helper without heap allocation.
+base::Optional<double> StringToDouble(Handle<String> object) {
+  const int kMaxLengthForDoubleConversion = 23;
+  String string = *object;
+  int length = string.length();
+  if (length <= kMaxLengthForDoubleConversion) {
+    const int flags = ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY;
+    uc16 buffer[kMaxLengthForDoubleConversion];
+    String::WriteToFlat(*object, buffer, 0, length);
+    Vector<const uc16> v(buffer, length);
+    return StringToDouble(v, flags);
+  }
+  return base::nullopt;
+}
+
+}  // namespace
+
 StringData::StringData(JSHeapBroker* broker, ObjectData** storage,
                        Handle<String> object)
     : NameData(broker, storage, object),
@@ -859,13 +878,7 @@ StringData::StringData(JSHeapBroker* broker, ObjectData** storage,
       is_external_string_(object->IsExternalString()),
       is_seq_string_(object->IsSeqString()),
       chars_as_strings_(broker->zone()) {
-  if (length_ <= kMaxLengthForDoubleConversion) {
-    const int flags = ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY;
-    uc16 buffer[kMaxLengthForDoubleConversion];
-    String::WriteToFlat(*object, buffer, 0, length_);
-    Vector<const uc16> v(buffer, length_);
-    to_number_ = StringToDouble(v, flags);
-  }
+  to_number_ = StringToDouble(object);
 }
 
 class InternalizedStringData : public StringData {
@@ -987,7 +1000,6 @@ bool IsInlinableFastLiteral(Handle<JSObject> boilerplate) {
   return IsFastLiteralHelper(boilerplate, kMaxFastLiteralDepth,
                              &max_properties);
 }
-
 }  // namespace
 
 class AccessorInfoData : public HeapObjectData {
@@ -3177,10 +3189,7 @@ base::Optional<double> StringRef::ToNumber() {
                                                             broker()->mode());
     AllowHandleAllocationIfNeeded allow_handle_allocation(data()->kind(),
                                                           broker()->mode());
-    AllowHeapAllocationIfNeeded allow_heap_allocation(data()->kind(),
-                                                      broker()->mode());
-    int flags = ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY;
-    return StringToDouble(broker()->isolate(), object(), flags);
+    return StringToDouble(object());
   }
   return data()->AsString()->to_number();
 }
