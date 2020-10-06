@@ -67,7 +67,7 @@ def temp_base(baseroot='testroot1'):
   """
   basedir = os.path.join(TEST_DATA_ROOT, baseroot)
   with temp_dir() as tempbase:
-    builddir = os.path.join(tempbase, 'out', 'Release')
+    builddir = os.path.join(tempbase, 'out', 'build')
     testroot = os.path.join(tempbase, 'test')
     os.makedirs(builddir)
     shutil.copy(os.path.join(basedir, 'v8_build_config.json'), builddir)
@@ -112,7 +112,7 @@ def run_tests(basedir, *args, **kwargs):
 
 def override_build_config(basedir, **kwargs):
   """Override the build config with new values provided as kwargs."""
-  path = os.path.join(basedir, 'out', 'Release', 'v8_build_config.json')
+  path = os.path.join(basedir, 'out', 'build', 'v8_build_config.json')
   with open(path) as f:
     config = json.load(f)
     config.update(kwargs)
@@ -171,7 +171,6 @@ class SystemTest(unittest.TestCase):
     with temp_base() as basedir:
       result = run_tests(
           basedir,
-          '--mode=Release',
           '--progress=verbose',
           '--variants=default,stress',
           '--time',
@@ -189,7 +188,6 @@ class SystemTest(unittest.TestCase):
       for shard in [1, 2]:
         result = run_tests(
             basedir,
-            '--mode=Release',
             '--progress=verbose',
             '--variants=default,stress',
             '--shard-count=2',
@@ -237,7 +235,6 @@ class SystemTest(unittest.TestCase):
     with temp_base() as basedir:
       result = run_tests(
           basedir,
-          '--mode=Release',
           '--progress=verbose',
           '--variants=default,stress',
           'sweet/strawberries',
