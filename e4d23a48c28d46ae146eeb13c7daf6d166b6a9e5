@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f3acd65_7d68657e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-10-06T13:51:16Z",
+      "side": 1,
+      "message": "A comment that duplicates the function\u0027s behavior is likely to get stale again, but... LGTM for now.",
+      "revId": "e4d23a48c28d46ae146eeb13c7daf6d166b6a9e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
