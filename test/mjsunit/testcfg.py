@@ -45,6 +45,31 @@ ENV_PATTERN = re.compile(r"//\s+Environment Variables:(.*)")
 SELF_SCRIPT_PATTERN = re.compile(r"//\s+Env: TEST_FILE_NAME")
 NO_HARNESS_PATTERN = re.compile(r"^// NO HARNESS$", flags=re.MULTILINE)
 
+TOOLS_RESOURCES = (
+  'tools/arguments.mjs',
+  'tools/codemap.mjs',
+  'tools/consarray.mjs',
+  'tools/csvparser.mjs',
+  'tools/dumpcpp.mjs',
+  'tools/ic-processor.mj',
+  'tools/map-processor.mjs',
+  'tools/parse-processor.mjs',
+  'tools/profile.mjs',
+  'tools/profile_view.mjs',
+  'tools/sourcemap.mjs',
+  'tools/splaytree.mjs',
+  'tools/system-analyzer/events.mjs',
+  'tools/system-analyzer/helper.mjs',
+  'tools/system-analyzer/ic-model.mjs',
+  'tools/system-analyzer/index.mjs',
+  'tools/system-analyzer/log/ic.mjs',
+  'tools/system-analyzer/log/log.mjs',
+  'tools/system-analyzer/log/map.mjs',
+  'tools/system-analyzer/processor.mjs',
+  'tools/system-analyzer/timeline.mjs',
+  'tools/tickprocessor.mjs',
+)
+
 
 # Flags known to misbehave when combining arbitrary mjsunit tests. Can also
 # be compiled regular expressions.
@@ -96,8 +121,7 @@ class TestCase(testcase.D8TestCase):
         files_match = FILES_PATTERN.search(source, files_match.end())
       else:
         break
-    files = [ os.path.normpath(os.path.join(self.suite.root, '..', '..', f))
-              for f in files_list ]
+    files = [ self._normalize_v8_file(f) for f in files_list ]
     testfilename = self._get_source_path()
     if SELF_SCRIPT_PATTERN.search(source):
       files = (
@@ -117,6 +141,9 @@ class TestCase(testcase.D8TestCase):
     self._mjsunit_files = mjsunit_files
     self._files_suffix = [testfilename]
     self._env = self._parse_source_env(source)
+
+  def _normalize_v8_file(self, file):
+    return os.path.normpath(os.path.join(self.suite.root, '..', '..', file))
 
   def _parse_source_env(self, source):
     env_match = ENV_PATTERN.search(source)
@@ -139,6 +166,15 @@ class TestCase(testcase.D8TestCase):
       files += ['--isolate'] + files
 
     return files
+
+  def _get_resources(self):
+    # test/mjsunit/tools/**.mjs tests require extra modules files from
+    # /tools on Android.
+    parts = self.name.split('/')
+    resources = []
+    if parts[0] == 'tools':
+      resources = [ self._normalize_v8_file(f) for f in TOOLS_RESOURCES ]
+    return resources
 
   def _get_cmd_env(self):
     return self._env
