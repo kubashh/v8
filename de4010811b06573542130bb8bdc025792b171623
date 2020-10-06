@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "437e9967_f0a7346c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-06T19:25:58Z",
+      "side": 1,
+      "message": "cbruni@ noticed that we don\u0027t need to use handles since Zones are allocated off-heap, so here\u0027s a new revision that uses raw pointers.",
+      "revId": "de4010811b06573542130bb8bdc025792b171623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
