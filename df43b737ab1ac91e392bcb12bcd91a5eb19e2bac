@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "760fed44_54cd7571",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-06T11:58:27Z",
+      "side": 1,
+      "message": "api lgtm",
+      "revId": "df43b737ab1ac91e392bcb12bcd91a5eb19e2bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f0a81be_ef308922",
         "filename": "src/objects/module.cc",
         "patchSetId": 2
