@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "282b7735_14ee97cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-06T14:57:58Z",
+      "side": 1,
+      "message": "LGTM, but I can\u0027t say I fully understand it.",
+      "revId": "5fc2a62205ee61612542dd0fdbefa38591e569d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "782237b6_5f754ab7",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-06T14:57:58Z",
+      "side": 1,
+      "message": "It\u0027s not clear to me what it means for a virtual register to be deferred. Does it mean that it\u0027s definition location is within a deferred block?",
+      "revId": "5fc2a62205ee61612542dd0fdbefa38591e569d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee38ef79_3c8c9550",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-06T14:57:58Z",
+      "side": 1,
+      "message": "I don\u0027t understand the logic of this. So if {block} is contained in {live_blocks_} and there are {deferred_spill_outputs}, but they don\u0027t contain {block}, then we return false? In other words, if there are deferred spill blocks, then a register can only be live in deferred spill blocks?",
+      "range": {
+        "startLine": 407,
+        "startChar": 6,
+        "endLine": 407,
+        "endChar": 59
+      },
+      "revId": "5fc2a62205ee61612542dd0fdbefa38591e569d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

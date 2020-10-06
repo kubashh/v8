@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07c99285_c0ffd375",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-06T14:57:58Z",
+      "side": 1,
+      "message": "Is this the definition location of the SSA value?",
+      "range": {
+        "startLine": 17,
+        "startChar": 9,
+        "endLine": 17,
+        "endChar": 15
+      },
+      "revId": "32bb9876f440cf94dc897cd798bb20d8ac28b0ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
