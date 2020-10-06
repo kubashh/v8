@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f54e336d_730d4098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-06T13:11:43Z",
+      "side": 1,
+      "message": "Nico PTAL",
+      "revId": "a1e1bcb510b67a903f626fd04c903f826ace501c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0426364c_547d82a7",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-06T13:11:43Z",
+      "side": 1,
+      "message": "There are several anonymous namespaces in the file. What I gathered is that we define the helpers as late as we can in order to pollute as little as possible.",
+      "range": {
+        "startLine": 852,
+        "startChar": 0,
+        "endLine": 852,
+        "endChar": 11
+      },
+      "revId": "a1e1bcb510b67a903f626fd04c903f826ace501c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
