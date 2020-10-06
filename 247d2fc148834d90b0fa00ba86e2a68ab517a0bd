@@ -63,6 +63,30 @@
       "revId": "247d2fc148834d90b0fa00ba86e2a68ab517a0bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b66f934_5c7673bd",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-06T13:23:12Z",
+      "side": 1,
+      "message": "We discussed this a little more today and it would be nice to revisit in the future. Again, non-blocker so I am resolving this comment.",
+      "parentUuid": "286fe0ae_4bb424f7",
+      "range": {
+        "startLine": 223,
+        "startChar": 21,
+        "endLine": 223,
+        "endChar": 36
+      },
+      "revId": "247d2fc148834d90b0fa00ba86e2a68ab517a0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
