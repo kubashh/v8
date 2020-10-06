@@ -22,6 +22,30 @@
       "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edcb1650_5ecc72da",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-06T12:05:16Z",
+      "side": 1,
+      "message": "The in-construction worklist (following [1]) is already an std::unordered_set which would eliminate duplicates implicitly. Processing is already bound by 2 times (1 in in-construction worklist and 1 in regular worklist).\n\n[1] https://chromium-review.googlesource.com/c/v8/v8/+/2437388",
+      "parentUuid": "49430652_54a5ed87",
+      "range": {
+        "startLine": 44,
+        "startChar": 11,
+        "endLine": 44,
+        "endChar": 17
+      },
+      "revId": "a14e3364c52797b00bde92c41127d4c36483564d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
