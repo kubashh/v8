@@ -16,6 +16,41 @@
       "message": "A comment that duplicates the function\u0027s behavior is likely to get stale again, but... LGTM for now.",
       "revId": "e4d23a48c28d46ae146eeb13c7daf6d166b6a9e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c7bec60_3cf9c71d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-10-06T14:38:49Z",
+      "side": 1,
+      "message": "Indeed, maybe it would be best to just delete the comment. It\u0027s obvious from the code anyways.",
+      "parentUuid": "4f3acd65_7d68657e",
+      "revId": "e4d23a48c28d46ae146eeb13c7daf6d166b6a9e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fe43e29_a9bc6019",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-10-06T14:38:49Z",
+      "side": 1,
+      "message": "LGTM with nit.",
+      "revId": "e4d23a48c28d46ae146eeb13c7daf6d166b6a9e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
