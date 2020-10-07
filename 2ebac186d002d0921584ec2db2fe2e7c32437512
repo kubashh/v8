@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "affcb46a_3deffaab",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-07T11:19:56Z",
+      "side": 1,
+      "message": "We\u0027ve discussed this before for blink but never reached a conclusion.\n\nOne issue I see is that of \"partial\" deferrals, such as in [1]. We generally trace WTF::Vector concurrently since it\u0027s just the backing store that is unsafe. For vectors with inlined buffers we defer just the tracing of the buffer. That would not be possible with type-based deferral.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/platform/wtf/vector.h;drc\u003d29b0ea0b2982c5b2e5ee394df430ab5267dfcea0;l\u003d2169",
+      "parentUuid": "e0eae23e_849b90a5",
+      "range": {
+        "startLine": 140,
+        "startChar": 25,
+        "endLine": 140,
+        "endChar": 62
+      },
+      "revId": "2ebac186d002d0921584ec2db2fe2e7c32437512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c8881f5_91c99031",
         "filename": "src/heap/cppgc-js/unified-heap-marking-visitor.h",
         "patchSetId": 8
