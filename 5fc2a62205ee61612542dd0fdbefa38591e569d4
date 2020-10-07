@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c892941e_723cd6ed",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-07T07:32:57Z",
+      "side": 1,
+      "message": "Yes, thanks!",
+      "parentUuid": "64c95801_239ffab9",
+      "revId": "5fc2a62205ee61612542dd0fdbefa38591e569d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee38ef79_3c8c9550",
@@ -90,6 +108,30 @@
       "side": 1,
       "message": "Right, this isn\u0027t about the liveness of the register (or the virtual register) but the liveness of the SpillSlot. If we have deferred spill blocks then we deferred the spilling of this virtual register until the entry of the deferred blocks in which the spill slot is used, so the spill slot is only alive in those deferred blocks. I\u0027ve added a comment to this effect, does that clarify it?",
       "parentUuid": "ee38ef79_3c8c9550",
+      "range": {
+        "startLine": 407,
+        "startChar": 6,
+        "endLine": 407,
+        "endChar": 59
+      },
+      "revId": "5fc2a62205ee61612542dd0fdbefa38591e569d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b557063b_f8a74e30",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-07T07:32:57Z",
+      "side": 1,
+      "message": "Makes sense, thanks for the explanation.",
+      "parentUuid": "28091d2d_eaec4265",
       "range": {
         "startLine": 407,
         "startChar": 6,
