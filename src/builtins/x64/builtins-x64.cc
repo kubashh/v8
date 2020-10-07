@@ -2514,12 +2514,19 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
 
   // ES6 section 9.2.1 [[Call]] ( thisArgument, argumentsList)
   // Check that the function is not a "classConstructor".
-  Label class_constructor;
+  Label not_class_constructor;
   __ LoadTaggedPointerField(
       rdx, FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
   __ testl(FieldOperand(rdx, SharedFunctionInfo::kFlagsOffset),
            Immediate(SharedFunctionInfo::IsClassConstructorBit::kMask));
-  __ j(not_zero, &class_constructor);
+  __ j(zero, &not_class_constructor, Label::kNear);
+
+  // The function is a "classConstructor", need to raise an exception.
+  {
+    FrameScope frame(masm, StackFrame::INTERNAL);
+    __ Push(rdi);
+    __ CallRuntime(Runtime::kThrowConstructorNonCallableError);
+  }
 
   // ----------- S t a t e -------------
   //  -- rax : the number of arguments (not including the receiver)
@@ -2527,6 +2534,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
   //  -- rdi : the function to call (checked to be a JSFunction)
   // -----------------------------------
 
+  __ bind(&not_class_constructor);
   // Enter the context of the function; ToObject has to run in the function
   // context, and we also need to take the global proxy from the function
   // context in case of conversion.
@@ -2606,14 +2614,6 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
       rbx, FieldOperand(rdx, SharedFunctionInfo::kFormalParameterCountOffset));
 
   __ InvokeFunctionCode(rdi, no_reg, rbx, rax, JUMP_FUNCTION);
-
-  // The function is a "classConstructor", need to raise an exception.
-  __ bind(&class_constructor);
-  {
-    FrameScope frame(masm, StackFrame::INTERNAL);
-    __ Push(rdi);
-    __ CallRuntime(Runtime::kThrowConstructorNonCallableError);
-  }
 }
 
 namespace {
