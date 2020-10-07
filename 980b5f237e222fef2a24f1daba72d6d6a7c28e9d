@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d027d39_98e8b489",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T10:02:40Z",
+      "side": 1,
+      "message": "Clarified offline: this DCHECK is being hit when compiling NCI code (non-OSR), but triggered by a TF OSR compilation.",
+      "parentUuid": "d4a095ea_c8c03c54",
+      "revId": "980b5f237e222fef2a24f1daba72d6d6a7c28e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "939c6fac_7cd31421",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 1
