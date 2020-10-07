@@ -114,6 +114,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f35a034f_0bfd453d",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-07T21:00:11Z",
+      "side": 1,
+      "message": "I implemented the type-based bailout you suggested in [2].\nI found 2 drawbacks of this approach:\n(1) No partial bailout (e.g. the case in [1[ above), although partial bailouts can be seen as an optimization.\n(2) Almost all worklists need to be duplicated which I think makes the code more messy.\n\nOn the other hand, the type based approach saves us the need to adjust the marked bytes accounting.\n\nptal.\n\n[2] https://chromium-review.googlesource.com/c/v8/v8/+/2459366",
+      "parentUuid": "affcb46a_3deffaab",
+      "range": {
+        "startLine": 140,
+        "startChar": 25,
+        "endLine": 140,
+        "endChar": 62
+      },
+      "revId": "2ebac186d002d0921584ec2db2fe2e7c32437512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c8881f5_91c99031",
         "filename": "src/heap/cppgc-js/unified-heap-marking-visitor.h",
         "patchSetId": 8
