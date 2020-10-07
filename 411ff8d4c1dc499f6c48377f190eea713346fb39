@@ -70,6 +70,24 @@
       "parentUuid": "e196a4d3_be9a95b3",
       "revId": "411ff8d4c1dc499f6c48377f190eea713346fb39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5323f3f9_71e79d7b",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T09:09:14Z",
+      "side": 1,
+      "message": "Personally I think every bit helps, even if we don\u0027t do everything at once (that\u0027d be a huge CL). We\u0027re also taking an incremental approach with node wrappers in TF for example.\n\nBut no strong opinion here and I\u0027ll just revert this part 👍",
+      "parentUuid": "a7dc26a0_7a52606a",
+      "revId": "411ff8d4c1dc499f6c48377f190eea713346fb39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
