@@ -471,6 +471,9 @@ enum class Bytecode : uint8_t {
 #undef COUNT_BYTECODE
 };
 
+constexpr int kForInPrepareFeedbackSlotOperand = 1;
+constexpr int kForInNextFeedbackSlotOperand = 3;
+
 class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
  public:
   // The maximum number of operands a bytecode may have.
