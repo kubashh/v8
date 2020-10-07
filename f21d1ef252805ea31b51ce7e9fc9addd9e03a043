@@ -1,0 +1,301 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d0274b9_9a4dee89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "looks good, mostly nits",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71a93c8d_89afd0d0",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "It would be nice to guard against negative values here too by doing an unsigned comparison here (static_cast\u003cunsigned\u003e(i), static_cast\u003cunsigned\u003e(length)).",
+      "range": {
+        "startLine": 175,
+        "startChar": 12,
+        "endLine": 175,
+        "endChar": 13
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a609a37b_8d32cdc6",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "357e8c69_7c3ead77",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "I think this case is already covered by the next condition.",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a5d3295_4139ff85",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "Maybe also DCHECK against OOB access here.",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9521cba5_505bef34",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "I wonder if the NexusConfig object will be useful in case of null isolate? Do we actually pass empty handles here?",
+      "range": {
+        "startLine": 487,
+        "startChar": 29,
+        "endLine": 487,
+        "endChar": 36
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "011c98fe_64b3be28",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 495,
+        "startChar": 29,
+        "endLine": 495,
+        "endChar": 36
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ecba1e1_4e3a10b9",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "Given that the first parameter is a template, it\u0027ll be happy with a Smi too.\nHowever, it seems that all the use cases pass MaybeObject as feedback and extra, so maybe templatizing the method is actually not that necessary.",
+      "range": {
+        "startLine": 569,
+        "startChar": 18,
+        "endLine": 569,
+        "endChar": 39
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55e23df6_9c00f894",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "It seems it\u0027s always safe to do\n  std::tie(feedback, extra) \u003d GetFeedbackPair();\nbecause it does the slot size check anyway.\n\nNot sure how big performance issue it\u0027s going to be, but it would be nice to avoid the need to check the the slot size multiple times. For example, we can move the GetFeedbackPair()/GetFeedback() calls into the cases below instead of defining feedback/extra variables outside of the switch.",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50a224b1_57a02abd",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "Leftover?",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "563965ed_ebb0e9bd",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "FYI, you can just say\n  friend NexusConfig;\nwithout specifying whether it\u0027s a class or struct.",
+      "range": {
+        "startLine": 330,
+        "startChar": 9,
+        "endLine": 330,
+        "endChar": 14
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b153310_bc8252ed",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "Here and below... It might be nicer to define a simple struct FeedbackItem with feedback and feedback_extra fields just to have nicer names instead of first/second. WDYT?",
+      "range": {
+        "startLine": 654,
+        "startChar": 2,
+        "endLine": 654,
+        "endChar": 37
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e79e1ecd_98c95dab",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "Please consider passing config by const reference or by pointer instead of by-value.",
+      "range": {
+        "startLine": 681,
+        "startChar": 16,
+        "endLine": 681,
+        "endChar": 34
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ded85ca_a3d9e116",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "I think using optional is not necessary here since std::function type has an empty value (default-constructed or constructed from nullptr), see AccessorAssembler::HandleProtoHandler().",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28d76497_e7c06c79",
+        "filename": "test/cctest/test-concurrent-feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-07T19:42:12Z",
+      "side": 1,
+      "message": "It might be useful to ensure somehow that the exploration thread had a chance to \"see\" all IC states. Maybe by cycling until it sees all the states instead of just 5 cycles.",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
