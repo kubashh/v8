@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c0d7188_abb3a4c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T08:24:46Z",
+      "side": 1,
+      "message": "Hey Mythri, I hit this issue with NCI as well (I think we looked at this related to TP tierup). PTAL.",
+      "revId": "980b5f237e222fef2a24f1daba72d6d6a7c28e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
