@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2403a13_979264b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-07T08:21:20Z",
+      "side": 1,
+      "message": "The design aligns with what we have in Blink. See a suggestion below on how we could improve this. (I think we have discussed this already at some point.)\n\n+Anton for the GCInfo bit.",
+      "revId": "2ebac186d002d0921584ec2db2fe2e7c32437512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec5a0cea_adf23fb5",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-07T08:21:20Z",
+      "side": 1,
+      "message": "Let\u0027s inline the default implementation here. (The whole class can be V8_EXPORT btw.)",
+      "range": {
+        "startLine": 140,
+        "startChar": 2,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "2ebac186d002d0921584ec2db2fe2e7c32437512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0eae23e_849b90a5",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-07T08:21:20Z",
+      "side": 1,
+      "message": "IIUC, the current design requires that the users put a DeferTraceToMutatorThreadIfConcurrent() call into trace that does the right thing. This allows us to push the Trace() callback to the regular worklist as it will re-organize itself upon first execution.\n\nWe may have discussed this already, but I\u0027d suggest a slightly different design:\n- Use TraceTraits\u003cT\u003e to specify something like kCanTraceConcurrently.\n- Introduce Visitor::VisitOnOwningThread() and decide in Trace(T*) which Visit() method to call. (This avoids blowing up TraceDescriptor for the fast case.)\n- Adjust the write barrier (see below)\n\nThe tricky part is adjusting the write barrier to push to the right queue directly. AFAICS, we can add a bit to GCInfo that tells us whether concurrent tracing of an object is supported. \n\nAt some point we need to bring GCInfo merging back to the library. We can just avoid merging if we see that we need non-concurrent tracing. In practice all the Blink use cases for non-concurrent tracing are leaf objects without big hierarchies, so there\u0027s anyways no merging.\n\nThe big benefits are that users don\u0027t care and that we don\u0027t need to re-organize our worklists internally.\n\nwdyt?",
+      "range": {
+        "startLine": 140,
+        "startChar": 25,
+        "endLine": 140,
+        "endChar": 62
+      },
+      "revId": "2ebac186d002d0921584ec2db2fe2e7c32437512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c8881f5_91c99031",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-visitor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-07T08:21:20Z",
+      "side": 1,
+      "message": "nit: final",
+      "range": {
+        "startLine": 64,
+        "startChar": 24,
+        "endLine": 64,
+        "endChar": 59
+      },
+      "revId": "2ebac186d002d0921584ec2db2fe2e7c32437512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
