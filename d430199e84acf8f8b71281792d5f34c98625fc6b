@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12b1b7e5_35faef91",
+        "filename": "src/regexp/experimental/experimental-interpreter.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1447863
+      },
+      "writtenOn": "2020-10-07T08:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc8b33b6_59234f83",
+      "revId": "d430199e84acf8f8b71281792d5f34c98625fc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e202e03d_aa870231",
@@ -31,6 +49,24 @@
       "writtenOn": "2020-10-07T07:03:20Z",
       "side": 1,
       "message": "A named constant please, and 16 seems a bit low. Intuitively I\u0027d go more in the direction of 50/100. Or was there a reason for picking 16?",
+      "revId": "d430199e84acf8f8b71281792d5f34c98625fc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6608f5cb_58bff794",
+        "filename": "src/regexp/experimental/experimental-interpreter.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1447863
+      },
+      "writtenOn": "2020-10-07T08:32:14Z",
+      "side": 1,
+      "message": "Not really, I just wanted it to be a power of 2 so that the modulo operation is cheap. I\u0027ve changed it to 64.",
+      "parentUuid": "e202e03d_aa870231",
       "revId": "d430199e84acf8f8b71281792d5f34c98625fc6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0313a2c_d883e9e7",
+        "filename": "src/regexp/experimental/experimental-interpreter.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1447863
+      },
+      "writtenOn": "2020-10-07T08:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c967b86_cedc2ff2",
+      "revId": "d430199e84acf8f8b71281792d5f34c98625fc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d91feae8_ae188875",
@@ -65,6 +119,30 @@
       "writtenOn": "2020-10-07T07:03:20Z",
       "side": 1,
       "message": "nit: typo",
+      "range": {
+        "startLine": 24,
+        "startChar": 46,
+        "endLine": 24,
+        "endChar": 56
+      },
+      "revId": "d430199e84acf8f8b71281792d5f34c98625fc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1cce942_8bfe7985",
+        "filename": "src/regexp/experimental/experimental-interpreter.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1447863
+      },
+      "writtenOn": "2020-10-07T08:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d91feae8_ae188875",
       "range": {
         "startLine": 24,
         "startChar": 46,
