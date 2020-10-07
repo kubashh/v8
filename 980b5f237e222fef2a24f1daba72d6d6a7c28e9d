@@ -16,6 +16,40 @@
       "message": "Hey Mythri, I hit this issue with NCI as well (I think we looked at this related to TP tierup). PTAL.",
       "revId": "980b5f237e222fef2a24f1daba72d6d6a7c28e9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4a095ea_c8c03c54",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-07T08:59:04Z",
+      "side": 1,
+      "message": "Actually, thinking about it again, we shouldn\u0027t hit this path for OSR. Currently we only do non-concurrent compilations for OSR, so we should call GetOptimizedCodeNow for OSR and not GetOptimizedCodeLater.",
+      "revId": "980b5f237e222fef2a24f1daba72d6d6a7c28e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "939c6fac_7cd31421",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-07T08:59:04Z",
+      "side": 1,
+      "message": "Maybe we can move the DCHECK here. Something like  DCHECK(function-\u003eActiveTierIsIgnition() || function-\u003eActiveTierIsNCI() || !osr_offset.IsNone());",
+      "revId": "980b5f237e222fef2a24f1daba72d6d6a7c28e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
