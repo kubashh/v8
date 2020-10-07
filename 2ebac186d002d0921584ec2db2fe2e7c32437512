@@ -88,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57486c5a_606624ef",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-07T11:27:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec5a0cea_adf23fb5",
+      "range": {
+        "startLine": 140,
+        "startChar": 2,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "2ebac186d002d0921584ec2db2fe2e7c32437512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c8881f5_91c99031",
@@ -101,6 +125,30 @@
       "writtenOn": "2020-10-07T08:21:20Z",
       "side": 1,
       "message": "nit: final",
+      "range": {
+        "startLine": 64,
+        "startChar": 24,
+        "endLine": 64,
+        "endChar": 59
+      },
+      "revId": "2ebac186d002d0921584ec2db2fe2e7c32437512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "848740fb_054c2092",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-visitor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-07T11:27:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c8881f5_91c99031",
       "range": {
         "startLine": 64,
         "startChar": 24,
