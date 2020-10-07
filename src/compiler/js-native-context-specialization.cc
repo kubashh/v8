@@ -2008,18 +2008,17 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadPropertyWithEnumeratedKey(
 
   DCHECK_EQ(IrOpcode::kJSLoadProperty, node->opcode());
   Node* receiver = NodeProperties::GetValueInput(node, 0);
-  Node* name = NodeProperties::GetValueInput(node, 1);
-  DCHECK_EQ(IrOpcode::kJSForInNext, name->opcode());
+  JSForInNextNode name(NodeProperties::GetValueInput(node, 1));
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
 
-  if (ForInModeOf(name->op()) != ForInMode::kUseEnumCacheKeysAndIndices) {
+  if (name.Parameters().mode() != ForInMode::kUseEnumCacheKeysAndIndices) {
     return NoChange();
   }
 
-  Node* object = NodeProperties::GetValueInput(name, 0);
-  Node* enumerator = NodeProperties::GetValueInput(name, 2);
-  Node* key = NodeProperties::GetValueInput(name, 3);
+  Node* object = name.receiver();
+  Node* enumerator = name.cache_type();
+  Node* key = name.index();
   if (object->opcode() == IrOpcode::kJSToObject) {
     object = NodeProperties::GetValueInput(object, 0);
   }
