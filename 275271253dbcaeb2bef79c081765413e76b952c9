@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a42f8d_6967fd10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T09:25:13Z",
+      "side": 1,
+      "message": "Submitting now since interpreter/ changes were reverted. Thanks all!",
+      "revId": "275271253dbcaeb2bef79c081765413e76b952c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
