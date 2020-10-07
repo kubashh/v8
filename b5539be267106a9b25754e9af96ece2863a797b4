@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6348eb5_f76b2e2d",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-07T08:11:41Z",
+      "side": 1,
+      "message": "Why this change?",
+      "range": {
+        "startLine": 3626,
+        "startChar": 2,
+        "endLine": 3629,
+        "endChar": 47
+      },
+      "revId": "b5539be267106a9b25754e9af96ece2863a797b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe385e70_c4887e12",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1914,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-07T08:11:41Z",
+      "side": 1,
+      "message": "Just a suggestion: We might consider changing the parameter types of functions like this to a specific node type, that is, JSForInNextNode in this case.",
+      "range": {
+        "startLine": 1914,
+        "startChar": 45,
+        "endLine": 1914,
+        "endChar": 50
+      },
+      "revId": "b5539be267106a9b25754e9af96ece2863a797b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
