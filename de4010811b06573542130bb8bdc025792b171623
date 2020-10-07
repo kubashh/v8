@@ -16,6 +16,57 @@
       "message": "cbruni@ noticed that we don\u0027t need to use handles since Zones are allocated off-heap, so here\u0027s a new revision that uses raw pointers.",
       "revId": "de4010811b06573542130bb8bdc025792b171623",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb212585_7727b730",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-07T04:20:06Z",
+      "side": 1,
+      "message": "lgtm with two comments.",
+      "revId": "de4010811b06573542130bb8bdc025792b171623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e153f15a_6dcadbac",
+        "filename": "src/objects/module.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-07T04:20:06Z",
+      "side": 1,
+      "message": "DisallowHeapAccess is a bit misleading here since we do access the heap. Please use DisallowGarbageCollection (which is a bit stronger than DisallowHeapAllocation).",
+      "revId": "de4010811b06573542130bb8bdc025792b171623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "279ef919_216acff5",
+        "filename": "src/objects/module.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-07T04:20:06Z",
+      "side": 1,
+      "message": "It can now be a proper method (non-static).",
+      "revId": "de4010811b06573542130bb8bdc025792b171623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
