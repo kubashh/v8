@@ -2838,7 +2838,8 @@ IGNITION_HANDLER(ForInEnumerate, InterpreterAssembler) {
 IGNITION_HANDLER(ForInPrepare, InterpreterAssembler) {
   // The {enumerator} is either a Map or a FixedArray.
   TNode<HeapObject> enumerator = CAST(GetAccumulator());
-  TNode<UintPtrT> vector_index = BytecodeOperandIdx(1);
+  TNode<UintPtrT> vector_index =
+      BytecodeOperandIdx(kForInPrepareFeedbackSlotOperand);
   TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
 
   // Check if we're using an enum cache.
@@ -2903,7 +2904,8 @@ IGNITION_HANDLER(ForInNext, InterpreterAssembler) {
   TNode<Object> cache_type;
   TNode<Object> cache_array;
   std::tie(cache_type, cache_array) = LoadRegisterPairAtOperandIndex(2);
-  TNode<UintPtrT> vector_index = BytecodeOperandIdx(3);
+  TNode<UintPtrT> vector_index =
+      BytecodeOperandIdx(kForInNextFeedbackSlotOperand);
   TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
 
   // Load the next key from the enumeration array.
