@@ -44,7 +44,7 @@ using WeakCallback = void (*)(const LivenessBroker&, const void*);
  * };
  * \endcode
  */
-class Visitor {
+class V8_EXPORT Visitor {
  public:
   class Key {
    private:
@@ -136,6 +136,13 @@ class Visitor {
   virtual void VisitWeakRoot(const void* self, TraceDescriptor, WeakCallback,
                              const void* weak_root) {}
 
+  // Returns true if tracing is deferred to mutator thread.
+  virtual bool DeferTraceToMutatorThreadIfConcurrent(const void*, TraceCallback,
+                                                     size_t) {
+    // By default tracing is not deferred.
+    return false;
+  }
+
  private:
   template <typename T, void (T::*method)(const LivenessBroker&)>
   static void WeakCallbackMethodDelegate(const LivenessBroker& info,
@@ -197,7 +204,7 @@ class Visitor {
   }
 
 #if V8_ENABLE_CHECKS
-  V8_EXPORT void CheckObjectNotInConstruction(const void* address);
+  void CheckObjectNotInConstruction(const void* address);
 #endif  // V8_ENABLE_CHECKS
 
   template <typename T, typename WeaknessPolicy, typename LocationPolicy,
