@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab84a695_f1e65f08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T08:29:30Z",
+      "side": 1,
+      "message": "Thanks! Leszek ptal at interpreter/.",
+      "revId": "b5539be267106a9b25754e9af96ece2863a797b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6348eb5_f76b2e2d",
@@ -24,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb3af756_bc801c3c",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T08:29:30Z",
+      "side": 1,
+      "message": "Thanks, not intended, introduced by accident when rebasing.",
+      "parentUuid": "a6348eb5_f76b2e2d",
+      "range": {
+        "startLine": 3626,
+        "startChar": 2,
+        "endLine": 3629,
+        "endChar": 47
+      },
+      "revId": "b5539be267106a9b25754e9af96ece2863a797b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe385e70_c4887e12",
@@ -37,6 +78,30 @@
       "writtenOn": "2020-10-07T08:11:41Z",
       "side": 1,
       "message": "Just a suggestion: We might consider changing the parameter types of functions like this to a specific node type, that is, JSForInNextNode in this case.",
+      "range": {
+        "startLine": 1914,
+        "startChar": 45,
+        "endLine": 1914,
+        "endChar": 50
+      },
+      "revId": "b5539be267106a9b25754e9af96ece2863a797b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6c0c96e_313cda51",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1914,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T08:29:30Z",
+      "side": 1,
+      "message": "Yep agreed, at some point we should do this in one cleanup CL. May make sense to wait a bit though until more node wrappers are added.",
+      "parentUuid": "fe385e70_c4887e12",
       "range": {
         "startLine": 1914,
         "startChar": 45,
