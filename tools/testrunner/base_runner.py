@@ -352,6 +352,9 @@ class BaseTestRunner(object):
                            "color, mono)")
     parser.add_option("--json-test-results",
                       help="Path to a file for storing json results.")
+    # TODO(machenbach): Switch infrastructure to new test results.
+    parser.add_option("--deprecated-json-test-results",
+                      help="Path to a file for storing json results.")
     parser.add_option('--slow-tests-cutoff', type="int", default=100,
                       help='Collect N slowest tests')
     parser.add_option("--exit-after-n-failures", type="int", default=100,
@@ -760,6 +763,9 @@ class BaseTestRunner(object):
 
   def _create_progress_indicators(self, test_count, options):
     procs = [PROGRESS_INDICATORS[options.progress]()]
+    # TODO(machenbach): Temporary flag to prepare the infrastructure.
+    options.json_test_results = (
+        options.json_test_results or options.deprecated_json_test_results)
     if options.json_test_results:
       # TODO(machenbach): Deprecate the execution mode. Previously it was meant
       # to differentiate several records in the json output. But there is now
