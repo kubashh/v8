@@ -16,6 +16,23 @@
       "message": "PTAL again",
       "revId": "e7fd4e28eb127fef4d3585626d1b71973f0688a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cb144e6_4e314a6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-07T12:43:32Z",
+      "side": 1,
+      "message": "Nice! This was simpler than I thought.",
+      "revId": "e7fd4e28eb127fef4d3585626d1b71973f0688a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
