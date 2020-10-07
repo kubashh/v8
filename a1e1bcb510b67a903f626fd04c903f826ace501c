@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "f54e336d_730d4098",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,27 @@
       "side": 1,
       "message": "Nico PTAL",
       "revId": "a1e1bcb510b67a903f626fd04c903f826ace501c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b54e17d9_e00e25ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-10-07T12:55:32Z",
+      "side": 1,
+      "message": "LGTM\n",
+      "revId": "a1e1bcb510b67a903f626fd04c903f826ace501c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
       "key": {
         "uuid": "0426364c_547d82a7",
         "filename": "src/compiler/js-heap-broker.cc",
@@ -37,8 +55,7 @@
         "endChar": 11
       },
       "revId": "a1e1bcb510b67a903f626fd04c903f826ace501c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
