@@ -33,6 +33,24 @@
       "message": "It would be nice to have something more readable here, e.g. DECL_ACQUIRE_GETTER.",
       "revId": "6efa93868f890ac4d90b96d5f8bfad31a237eb57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "357beea0_56e9d71d",
+        "filename": "src/objects/map.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-07T10:44:30Z",
+      "side": 1,
+      "message": "Added the extra macros. WDYT?",
+      "parentUuid": "f3804793_433c0cbc",
+      "revId": "6efa93868f890ac4d90b96d5f8bfad31a237eb57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
