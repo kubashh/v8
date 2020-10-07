@@ -44,7 +44,7 @@ using WeakCallback = void (*)(const LivenessBroker&, const void*);
  * };
  * \endcode
  */
-class Visitor {
+class V8_EXPORT Visitor {
  public:
   class Key {
    private:
@@ -135,6 +135,13 @@ class Visitor {
   virtual void VisitRoot(const void*, TraceDescriptor) {}
   virtual void VisitWeakRoot(const void* self, TraceDescriptor, WeakCallback,
                              const void* weak_root) {}
+
+  // Returns true if tracing is deferred to mutator thread.
+  virtual bool DeferTraceToMutatorThreadIfConcurrent(const void*, TraceCallback,
+                                                     size_t) {
+    // By default tracing is not deferred.
+    return false;
+  }
 
  private:
   template <typename T, void (T::*method)(const LivenessBroker&)>
