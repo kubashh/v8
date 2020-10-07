@@ -52,6 +52,24 @@
       "parentUuid": "1379a9bd_0908022b",
       "revId": "411ff8d4c1dc499f6c48377f190eea713346fb39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7dc26a0_7a52606a",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-07T08:52:44Z",
+      "side": 1,
+      "message": "Agreed, we should either do this across the board with some automated approach (e.g., similar to Parameters in CSA), or not at all.",
+      "parentUuid": "e196a4d3_be9a95b3",
+      "revId": "411ff8d4c1dc499f6c48377f190eea713346fb39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
