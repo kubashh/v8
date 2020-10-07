@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc8b33b6_59234f83",
+        "filename": "src/regexp/experimental/experimental-interpreter.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T07:03:20Z",
+      "side": 1,
+      "message": "Returns what?",
+      "revId": "d430199e84acf8f8b71281792d5f34c98625fc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e202e03d_aa870231",
+        "filename": "src/regexp/experimental/experimental-interpreter.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T07:03:20Z",
+      "side": 1,
+      "message": "A named constant please, and 16 seems a bit low. Intuitively I\u0027d go more in the direction of 50/100. Or was there a reason for picking 16?",
+      "revId": "d430199e84acf8f8b71281792d5f34c98625fc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c967b86_cedc2ff2",
+        "filename": "src/regexp/experimental/experimental-interpreter.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T07:03:20Z",
+      "side": 1,
+      "message": "nit: let\u0027s make all these const please.",
+      "revId": "d430199e84acf8f8b71281792d5f34c98625fc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d91feae8_ae188875",
+        "filename": "src/regexp/experimental/experimental-interpreter.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-07T07:03:20Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 24,
+        "startChar": 46,
+        "endLine": 24,
+        "endChar": 56
+      },
+      "revId": "d430199e84acf8f8b71281792d5f34c98625fc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
