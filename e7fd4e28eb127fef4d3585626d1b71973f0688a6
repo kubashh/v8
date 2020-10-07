@@ -33,6 +33,24 @@
       "message": "Nice! This was simpler than I thought.",
       "revId": "e7fd4e28eb127fef4d3585626d1b71973f0688a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af351d91_002491c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-07T18:05:05Z",
+      "side": 1,
+      "message": "As usual, our infra is in good shape 😊",
+      "parentUuid": "5cb144e6_4e314a6c",
+      "revId": "e7fd4e28eb127fef4d3585626d1b71973f0688a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
