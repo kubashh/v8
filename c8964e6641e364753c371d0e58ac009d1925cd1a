@@ -22,6 +22,30 @@
       },
       "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f66b82e1_ae4f72a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T11:32:05Z",
+      "side": 1,
+      "message": "You\u0027re right.\n\nWhen I was working on test for the type-based bailout option I noticed I had to reimplement GetTraceDescriptor for every TraceTrait because I didn\u0027t have a base trait to extend.\nI mistakenly assumed we would the same issue here.\n\nI still think we need to introduce TraceTraitBase (or something similar) for usability, but we don\u0027t need to change the trait for JSMembers.",
+      "parentUuid": "2ad609e1_66637b40",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
