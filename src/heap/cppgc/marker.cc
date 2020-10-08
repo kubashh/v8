@@ -189,6 +189,7 @@ void MarkerBase::StartMarking() {
     ScheduleIncrementalMarkingTask();
     if (config_.marking_type ==
         MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
+      mutator_marking_state_.Publish();
       concurrent_marker_->Start();
     }
   }
@@ -319,6 +320,17 @@ bool MarkerBase::AdvanceMarkingWithDeadline(v8::base::TimeDelta max_duration) {
 bool MarkerBase::ProcessWorklistsWithDeadline(
     size_t marked_bytes_deadline, v8::base::TimeTicks time_deadline) {
   do {
+    if (!DrainWorklistWithBytesAndTimeDeadline<kDefaultDeadlineCheckInterval /
+                                               5>(
+            mutator_marking_state_, marked_bytes_deadline, time_deadline,
+            mutator_marking_state_.concurrent_marking_bailout_worklist(),
+            [this](const MarkingWorklists::ConcurrentMarkingBailoutItem& item) {
+              item.callback(&visitor(), item.parameter);
+              mutator_marking_state_.AccountMarkedBytes(item.bailedout_size);
+            })) {
+      return false;
+    }
+
     if (!DrainWorklistWithBytesAndTimeDeadline(
             mutator_marking_state_, marked_bytes_deadline, time_deadline,
             mutator_marking_state_.previously_not_fully_constructed_worklist(),
@@ -378,6 +390,10 @@ void MarkerBase::ClearAllWorklistsForTesting() {
 
 void MarkerBase::DisableIncrementalMarkingForTesting() {
   incremental_marking_disabled_for_testing_ = true;
+}
+
+void MarkerBase::WaitForConcurrentMarkingForTesting() {
+  concurrent_marker_->JoinForTesting();
 }
 
 Marker::Marker(Key key, HeapBase& heap, cppgc::Platform* platform,
