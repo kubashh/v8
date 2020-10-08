@@ -227,9 +227,10 @@ class JSVisitor : public cppgc::Visitor {
 namespace cppgc {
 
 template <typename T>
-struct TraceTrait<v8::JSMember<T>> {
-  static void Trace(Visitor* visitor, const v8::JSMember<T>* self) {
-    static_cast<v8::JSVisitor*>(visitor)->Trace(*self);
+struct TraceTrait<v8::JSMember<T>> : internal::TraceTraitBase<v8::JSMember<T>> {
+  static void Trace(Visitor* visitor, const void* self) {
+    static_cast<v8::JSVisitor*>(visitor)->Trace(
+        *static_cast<const v8::JSMember<T>*>(self));
   }
 };
 
