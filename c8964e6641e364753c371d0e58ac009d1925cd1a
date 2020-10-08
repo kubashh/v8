@@ -70,6 +70,30 @@
       },
       "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ece697d7_3b305140",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T13:03:57Z",
+      "side": 1,
+      "message": "Usability as in not having to redefine GetTraceDescriptor every time.\n\nFor example:\nclass GCed : public GarbageCollected\u003cGCed\u003e {}\n\ntemplate \u003c\u003e\nstruct TraceTrait\u003cGCed\u003e : internal::TraceTraitBase\u003cGCed\u003e {\n  static void Trace(Visitor* visitor, const void* self) {\n    // Do something\n  }\n};\n\nIn this case I override the Trace method but I get GetTraceDescriptor from TraceTraitBase.",
+      "parentUuid": "4af0761f_1fb3ad08",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
