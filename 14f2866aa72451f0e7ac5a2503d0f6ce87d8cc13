@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5f9f5b_28d01241",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-08T09:31:19Z",
+      "side": 1,
+      "message": "lgtm with comments, thanks!",
+      "revId": "14f2866aa72451f0e7ac5a2503d0f6ce87d8cc13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cddb3e43_1b322e49",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-08T09:31:19Z",
+      "side": 1,
+      "message": "what, no std::accumulate? ;)",
+      "revId": "14f2866aa72451f0e7ac5a2503d0f6ce87d8cc13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b21cc498_a5ecf517",
+        "filename": "src/snapshot/snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-08T09:31:19Z",
+      "side": 1,
+      "message": "Please mention Memory.json, it\u0027s easy to break the test without realizing it otherwise.",
+      "revId": "14f2866aa72451f0e7ac5a2503d0f6ce87d8cc13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7beb8505_df1c5124",
+        "filename": "src/snapshot/snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-08T09:31:19Z",
+      "side": 1,
+      "message": "q: Should we include RO space here? It\u0027s not a per-isolate cost, so I\u0027d actually prefer just startup_serializer, wdyt?",
+      "range": {
+        "startLine": 376,
+        "startChar": 11,
+        "endLine": 376,
+        "endChar": 55
+      },
+      "revId": "14f2866aa72451f0e7ac5a2503d0f6ce87d8cc13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
