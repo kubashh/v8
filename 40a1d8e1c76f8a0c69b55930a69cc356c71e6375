@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "40a1d8e1c76f8a0c69b55930a69cc356c71e6375",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a6c61be_e5e26305",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-08T16:15:19Z",
+      "side": 1,
+      "message": "LGTM with a question / request for TODO.",
+      "revId": "40a1d8e1c76f8a0c69b55930a69cc356c71e6375",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef622f8f_109a061a",
+        "filename": "test/inspector/cpu-profiler/console-profile-wasm.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-08T16:15:19Z",
+      "side": 1,
+      "message": "Is the goal to eventually fix this test to work with the generic wrapper? I thought the only difference (after my fix) is that \"GenericJSToWasmWrapper\" is being shown instead of \"js-to-wasm:i:i\".\nShould we leave a TODO, or investigate right away?",
+      "revId": "40a1d8e1c76f8a0c69b55930a69cc356c71e6375",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
