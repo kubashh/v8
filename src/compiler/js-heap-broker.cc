@@ -3711,6 +3711,33 @@ bool StringRef::IsSeqString() const {
   return data()->AsString()->is_seq_string();
 }
 
+base::Optional<ObjectRef> StringRef::GetOwnConstantElementIfInCache(
+    uint32_t index, SerializationPolicy policy) {
+  uint16_t char_to_check;
+  if (data_->should_access_heap()) {
+    // TODO(neis, solanes): Remove the CHECK once we can safely read from the
+    // background thread.
+    CHECK_NE(data_->kind(), ObjectDataKind::kNeverSerializedHeapObject);
+    Handle<String> str = object();
+    if (static_cast<int>(index) >= str->length()) return base::nullopt;
+
+    char_to_check = str->Get(index);
+  } else {
+    ObjectData* element =
+        data()->AsString()->GetCharAsString(broker(), index, policy);
+    if (element == nullptr) return base::nullopt;
+    DCHECK(element->IsString());
+    char_to_check = element->AsString()->first_char();
+  }
+
+  Factory* factory = broker()->isolate()->factory();
+  Object value = factory->single_character_string_cache()->get(char_to_check);
+  if (value != *factory->undefined_value()) {
+    return ObjectRef(broker(), broker()->CanonicalPersistentHandle(value));
+  }
+  return base::nullopt;
+}
+
 ScopeInfoRef NativeContextRef::scope_info() const {
   if (data_->should_access_heap()) {
     AllowHandleAllocationIfNeeded allow_handle_allocation(data()->kind(),
@@ -3835,32 +3862,23 @@ Maybe<double> ObjectRef::OddballToNumber() const {
 
 base::Optional<ObjectRef> ObjectRef::GetOwnConstantElement(
     uint32_t index, SerializationPolicy policy) const {
-  if (!(IsJSObject() || IsString())) return base::nullopt;
-  if (data_->should_access_heap()) {
-    // TODO(neis): Once the CHECK_NE below is eliminated, i.e. once we can
-    // safely read from the background thread, the special branch for read-only
-    // objects can be removed as well.
-    if (data_->kind() == ObjectDataKind::kUnserializedReadOnlyHeapObject) {
-      DCHECK(IsString());
-      // TODO(mythria): For ReadOnly strings, currently we cannot access data
-      // from heap without creating handles since we use LookupIterator. We
-      // should have a custom implementation for read only strings that doesn't
-      // create handles. Till then it is OK to disable this optimization since
-      // this only impacts keyed accesses on read only strings.
-      return base::nullopt;
-    }
+  if (IsString()) {
+    // TODO(neis, solanes): Remove the CHECK once we can safely read from the
+    // background thread.
     CHECK_NE(data_->kind(), ObjectDataKind::kNeverSerializedHeapObject);
-    return GetOwnElementFromHeap(broker(), object(), index, true);
-  }
-  ObjectData* element = nullptr;
-  if (IsJSObject()) {
-    element =
+    return AsString().GetOwnConstantElementIfInCache(index, policy);
+  } else if (IsJSObject()) {
+    if (data_->should_access_heap()) {
+      return GetOwnElementFromHeap(broker(), object(), index, true);
+    }
+
+    ObjectData* element =
         data()->AsJSObject()->GetOwnConstantElement(broker(), index, policy);
-  } else if (IsString()) {
-    element = data()->AsString()->GetCharAsString(broker(), index, policy);
+    if (element == nullptr) return base::nullopt;
+    return ObjectRef(broker(), element);
+  } else {
+    return base::nullopt;
   }
-  if (element == nullptr) return base::nullopt;
-  return ObjectRef(broker(), element);
 }
 
 base::Optional<ObjectRef> JSObjectRef::GetOwnDataProperty(
