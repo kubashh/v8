@@ -16,6 +16,23 @@
       "message": "Georg PTAL",
       "revId": "b1bfb71d971452937d947298a40ed745b3f7f576",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "395c8474_04aa6e9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-08T12:47:40Z",
+      "side": 1,
+      "message": "Thanks!\n\nCould you restrict the optimization in this way for all configurations? I.e. independent of whether we\u0027re running with --concurrent-inlining.",
+      "revId": "b1bfb71d971452937d947298a40ed745b3f7f576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
