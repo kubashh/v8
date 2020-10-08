@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "59687b08_a8beafd0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T09:07:30Z",
+      "side": 1,
+      "message": "Add that we use a dynamic mechanism that is named Defer...",
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1e1e3799_3d2a4765",
@@ -31,6 +48,139 @@
       "writtenOn": "2020-10-08T08:32:49Z",
       "side": 1,
       "message": "ah, would be great to have the bailout covered in a test, if possible",
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2e04dcf_cbb1fa61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T09:07:30Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "45c2fcec_100c8f1d",
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbf27643_8b0c795b",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T09:07:30Z",
+      "side": 1,
+      "message": "We need a doxygen method comment for this one as it should be public.",
+      "range": {
+        "startLine": 139,
+        "startChar": 3,
+        "endLine": 139,
+        "endChar": 4
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "922c4d9e_d996bba5",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T09:07:30Z",
+      "side": 1,
+      "message": "I think this needs to be public as it should also be used by Blink.",
+      "range": {
+        "startLine": 140,
+        "startChar": 15,
+        "endLine": 140,
+        "endChar": 52
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d8042e5_28eeab7d",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T09:07:30Z",
+      "side": 1,
+      "message": "Since that subtracts bytes, we may end up with an underflow?\n\nScenario:\n1. First object traced is being deferred.\n2. We call AccountDferredMarkedBytes() that subtracts the deferred size\n3. We only call AccountMarkedBytes() after invoking Trace() which would add the size.\n\nMaybe I am wrong here but it looks to me that if we want to keep that approach, we need to have a separate deferred_size counter and\n  real_marked_bytes \u003d marked_bytes - deferred_size\n\nAfter marking the deferred part we would then subtract the bailout size from deferred_size",
+      "range": {
+        "startLine": 85,
+        "startChar": 7,
+        "endLine": 85,
+        "endChar": 33
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7033a74d_4521f7b5",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T09:07:30Z",
+      "side": 1,
+      "message": "What\u0027s the reason behind choosing a different interval?",
+      "range": {
+        "startLine": 322,
+        "startChar": 47,
+        "endLine": 322,
+        "endChar": 76
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea9cd19f_c94cffaf",
+        "filename": "src/heap/cppgc/marking-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T09:07:30Z",
+      "side": 1,
+      "message": "We need to use that in MarkingVisitorBase?",
+      "range": {
+        "startLine": 70,
+        "startChar": 31,
+        "endLine": 70,
+        "endChar": 68
+      },
       "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
