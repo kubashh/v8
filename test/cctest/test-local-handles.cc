@@ -122,7 +122,9 @@ TEST(DereferenceLocalHandle) {
     ph = phs->NewHandle(number);
   }
   {
-    LocalHeap local_heap(isolate->heap(), std::move(phs));
+    LocalHeap local_heap(isolate->heap(),
+                         LocalHeap::InitialThreadState::Running,
+                         std::move(phs));
     LocalHandleScope scope(&local_heap);
     Handle<HeapNumber> local_number = handle(*ph, &local_heap);
     CHECK_EQ(42, local_number->value());
