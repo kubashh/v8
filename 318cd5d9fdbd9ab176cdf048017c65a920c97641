@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b475551d_de41a9f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-10-08T14:31:01Z",
+      "side": 1,
+      "message": "Hello,\n\nThis is fixing building V8 on systems with 64k OS pages, as reported here https://groups.google.com/g/v8-users/c/4fqKPZddyMw/m/jwI3HLeyBwAJ . As well as making sure that we don\u0027t fill the regular code pages with a small number of large objects.\n\nWDYT? \n\nOriginally, I was going to fix this by switching to 512k heap pages for Arm64 linux, but it\u0027s really a shame to make regular linux different from ChromeOS and Android. Systems with 64k OS pages are less common than those with 4k, and will typically have a lot of memory available so it shouldn\u0027t be an issue to stick to 256k V8 code pages, even if only 64k can be used for allocation.\n\nThanks,\nPierre",
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
