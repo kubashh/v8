@@ -25,9 +25,12 @@ thread_local LocalHeap* current_local_heap = nullptr;
 LocalHeap* LocalHeap::Current() { return current_local_heap; }
 
 LocalHeap::LocalHeap(Heap* heap,
+                     LocalHeap::InitialThreadState initial_thread_state,
                      std::unique_ptr<PersistentHandles> persistent_handles)
     : heap_(heap),
-      state_(ThreadState::Running),
+      state_(initial_thread_state == LocalHeap::InitialThreadState::Parked
+                 ? ThreadState::Parked
+                 : ThreadState::Running),
       safepoint_requested_(false),
       allocation_failed_(false),
       prev_(nullptr),
@@ -53,10 +56,7 @@ LocalHeap::LocalHeap(Heap* heap,
 
 LocalHeap::~LocalHeap() {
   // TODO(ulan): Ensure that LocalHeap cannot be created without --local-heaps.
-  if (FLAG_local_heaps) {
-    marking_barrier_->Publish();
-    WriteBarrier::ClearForThread(marking_barrier_.get());
-  }
+
   // Give up LAB before parking thread
   old_space_allocator_.FreeLinearAllocationArea();
 
@@ -75,6 +75,13 @@ void LocalHeap::EnsurePersistentHandles() {
         heap_->isolate()->NewPersistentHandles().release());
     persistent_handles_->Attach(this);
   }
+}
+
+void LocalHeap::AttachPersistentHandles(
+    std::unique_ptr<PersistentHandles> persistent_handles) {
+  DCHECK_NULL(persistent_handles_);
+  persistent_handles_ = std::move(persistent_handles);
+  persistent_handles_->Attach(this);
 }
 
 std::unique_ptr<PersistentHandles> LocalHeap::DetachPersistentHandles() {
@@ -119,6 +126,11 @@ void LocalHeap::EnsureParkedBeforeDestruction() {
   base::MutexGuard guard(&state_mutex_);
   state_ = ThreadState::Parked;
   state_change_.NotifyAll();
+
+  if (FLAG_local_heaps) {
+    marking_barrier_->Publish();
+    WriteBarrier::ClearForThread(marking_barrier_.get());
+  }
 }
 
 void LocalHeap::RequestSafepoint() {

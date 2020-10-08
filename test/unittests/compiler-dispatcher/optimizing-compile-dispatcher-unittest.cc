@@ -11,6 +11,7 @@
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/execution/isolate.h"
 #include "src/handles/handles.h"
+#include "src/heap/local-heap.h"
 #include "src/objects/objects-inl.h"
 #include "src/parsing/parse-info.h"
 #include "test/unittests/test-helpers.h"
@@ -42,7 +43,8 @@ class BlockingCompilationJob : public OptimizedCompilationJob {
   // OptimiziedCompilationJob implementation.
   Status PrepareJobImpl(Isolate* isolate) override { UNREACHABLE(); }
 
-  Status ExecuteJobImpl(RuntimeCallStats* stats) override {
+  Status ExecuteJobImpl(RuntimeCallStats* stats,
+                        LocalHeap* local_heap) override {
     blocking_.SetValue(true);
     semaphore_.Wait();
     blocking_.SetValue(false);

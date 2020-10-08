@@ -9,6 +9,7 @@
 #include <memory>
 #include <sstream>
 
+#include "src/base/logging.h"
 #include "src/base/optional.h"
 #include "src/base/platform/elapsed-timer.h"
 #include "src/builtins/profile-data-reader.h"
@@ -83,6 +84,7 @@
 #include "src/diagnostics/code-tracer.h"
 #include "src/diagnostics/disassembler.h"
 #include "src/execution/isolate-inl.h"
+#include "src/heap/local-heap.h"
 #include "src/init/bootstrapper.h"
 #include "src/logging/counters.h"
 #include "src/objects/shared-function-info.h"
@@ -768,9 +770,10 @@ class PipelineRunScope {
 // LocalHeapScope encapsulates the liveness of the brokers's LocalHeap.
 class LocalHeapScope {
  public:
-  explicit LocalHeapScope(JSHeapBroker* broker, OptimizedCompilationInfo* info)
+  explicit LocalHeapScope(JSHeapBroker* broker, OptimizedCompilationInfo* info,
+                          LocalHeap* local_heap)
       : broker_(broker), info_(info) {
-    broker_->InitializeLocalHeap(info_);
+    broker_->InitializeLocalHeap(info_, local_heap);
     info_->tick_counter().AttachLocalHeap(broker_->local_heap());
   }
 
@@ -1030,7 +1033,7 @@ class PipelineCompilationJob final : public OptimizedCompilationJob {
 
  protected:
   Status PrepareJobImpl(Isolate* isolate) final;
-  Status ExecuteJobImpl(RuntimeCallStats* stats) final;
+  Status ExecuteJobImpl(RuntimeCallStats* stats, LocalHeap* local_heap) final;
   Status FinalizeJobImpl(Isolate* isolate) final;
 
   // Registers weak object to optimized code dependencies.
@@ -1176,12 +1179,13 @@ PipelineCompilationJob::Status PipelineCompilationJob::PrepareJobImpl(
 }
 
 PipelineCompilationJob::Status PipelineCompilationJob::ExecuteJobImpl(
-    RuntimeCallStats* stats) {
+    RuntimeCallStats* stats, LocalHeap* local_heap) {
   // Ensure that the RuntimeCallStats table is only available during execution
   // and not during finalization as that might be on a different thread.
   PipelineJobScope scope(&data_, stats);
   {
-    LocalHeapScope local_heap_scope(data_.broker(), data_.info());
+    DCHECK_NOT_NULL(local_heap);
+    LocalHeapScope local_heap_scope(data_.broker(), data_.info(), local_heap);
     if (data_.broker()->is_concurrent_inlining()) {
       if (!pipeline_.CreateGraph()) {
         return AbortOptimization(BailoutReason::kGraphBuildingFailed);
@@ -1282,7 +1286,7 @@ class WasmHeapStubCompilationJob final : public OptimizedCompilationJob {
 
  protected:
   Status PrepareJobImpl(Isolate* isolate) final;
-  Status ExecuteJobImpl(RuntimeCallStats* stats) final;
+  Status ExecuteJobImpl(RuntimeCallStats* stats, LocalHeap* local_heap) final;
   Status FinalizeJobImpl(Isolate* isolate) final;
 
  private:
@@ -1317,7 +1321,7 @@ CompilationJob::Status WasmHeapStubCompilationJob::PrepareJobImpl(
 }
 
 CompilationJob::Status WasmHeapStubCompilationJob::ExecuteJobImpl(
-    RuntimeCallStats* stats) {
+    RuntimeCallStats* stats, LocalHeap* local_heap) {
   std::unique_ptr<PipelineStatistics> pipeline_statistics;
   if (FLAG_turbo_stats || FLAG_turbo_stats_nvp) {
     pipeline_statistics.reset(new PipelineStatistics(
@@ -3021,7 +3025,9 @@ MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
   }
 
   {
-    LocalHeapScope local_heap_scope(data.broker(), info);
+    LocalHeap local_heap(isolate->heap(),
+                         LocalHeap::InitialThreadState::Parked);
+    LocalHeapScope local_heap_scope(data.broker(), info, &local_heap);
     if (data.broker()->is_concurrent_inlining()) {
       if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
     }

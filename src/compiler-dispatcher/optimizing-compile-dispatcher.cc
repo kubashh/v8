@@ -8,6 +8,7 @@
 #include "src/codegen/compiler.h"
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/execution/isolate.h"
+#include "src/heap/local-heap.h"
 #include "src/init/v8.h"
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
@@ -56,6 +57,8 @@ class OptimizingCompileDispatcher::CompileTask : public CancelableTask {
  private:
   // v8::Task overrides.
   void RunInternal() override {
+    LocalHeap local_heap(isolate_->heap(),
+                         LocalHeap::InitialThreadState::Parked);
     DisallowHeapAllocation no_allocation;
     DisallowHandleAllocation no_handles;
     DisallowHandleDereference no_deref;
@@ -76,8 +79,8 @@ class OptimizingCompileDispatcher::CompileTask : public CancelableTask {
             dispatcher_->recompilation_delay_));
       }
 
-      dispatcher_->CompileNext(dispatcher_->NextInput(true),
-                               runtime_call_stats_scope.Get());
+      dispatcher_->CompileNext(dispatcher_->NextInput(&local_heap, true),
+                               runtime_call_stats_scope.Get(), &local_heap);
     }
     {
       base::MutexGuard lock_guard(&dispatcher_->ref_count_mutex_);
@@ -106,7 +109,7 @@ OptimizingCompileDispatcher::~OptimizingCompileDispatcher() {
 }
 
 OptimizedCompilationJob* OptimizingCompileDispatcher::NextInput(
-    bool check_if_flushing) {
+    LocalHeap* local_heap, bool check_if_flushing) {
   base::MutexGuard access_input_queue_(&input_queue_mutex_);
   if (input_queue_length_ == 0) return nullptr;
   OptimizedCompilationJob* job = input_queue_[InputQueueIndex(0)];
@@ -115,6 +118,7 @@ OptimizedCompilationJob* OptimizingCompileDispatcher::NextInput(
   input_queue_length_--;
   if (check_if_flushing) {
     if (mode_ == FLUSH) {
+      UnparkedScope scope(local_heap);
       AllowHandleDereference allow_handle_dereference;
       DisposeCompilationJob(job, true);
       return nullptr;
@@ -124,11 +128,12 @@ OptimizedCompilationJob* OptimizingCompileDispatcher::NextInput(
 }
 
 void OptimizingCompileDispatcher::CompileNext(OptimizedCompilationJob* job,
-                                              RuntimeCallStats* stats) {
+                                              RuntimeCallStats* stats,
+                                              LocalHeap* local_heap) {
   if (!job) return;
 
   // The function may have already been optimized by OSR.  Simply continue.
-  CompilationJob::Status status = job->ExecuteJob(stats);
+  CompilationJob::Status status = job->ExecuteJob(stats, local_heap);
   USE(status);  // Prevent an unused-variable error.
 
   {

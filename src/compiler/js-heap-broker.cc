@@ -2425,7 +2425,7 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
       tracing_enabled_(tracing_enabled),
       is_concurrent_inlining_(is_concurrent_inlining),
       code_kind_(code_kind),
-      local_heap_(base::nullopt),
+      local_heap_(nullptr),
       feedback_(zone()),
       bytecode_analyses_(zone()),
       property_access_infos_(zone()),
@@ -2470,18 +2470,23 @@ std::string JSHeapBroker::Trace() const {
   return oss.str();
 }
 
-void JSHeapBroker::InitializeLocalHeap(OptimizedCompilationInfo* info) {
+void JSHeapBroker::InitializeLocalHeap(OptimizedCompilationInfo* info,
+                                       LocalHeap* local_heap) {
   set_persistent_handles(info->DetachPersistentHandles());
   set_canonical_handles(info->DetachCanonicalHandles());
-  DCHECK(!local_heap_);
-  local_heap_.emplace(isolate_->heap(), std::move(ph_));
+  DCHECK_NULL(local_heap_);
+  DCHECK_NOT_NULL(local_heap);
+  local_heap_ = local_heap;
+  local_heap_->AttachPersistentHandles(std::move(ph_));
+  local_heap_->Unpark();
 }
 
 void JSHeapBroker::TearDownLocalHeap(OptimizedCompilationInfo* info) {
   DCHECK_NULL(ph_);
   DCHECK(local_heap_);
   ph_ = local_heap_->DetachPersistentHandles();
-  local_heap_.reset();
+  local_heap_->Park();
+  local_heap_ = nullptr;
   info->set_canonical_handles(DetachCanonicalHandles());
   info->set_persistent_handles(DetachPersistentHandles());
 }

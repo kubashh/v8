@@ -24,8 +24,18 @@ class LocalHandles;
 
 class V8_EXPORT_PRIVATE LocalHeap {
  public:
+  enum class InitialThreadState {
+    // Threads in this state need to be stopped in a safepoint.
+    Running,
+    // Thread was parked, which means that the thread is not allowed to access
+    // or manipulate the heap in any way.
+    Parked
+  };
+
   explicit LocalHeap(
       Heap* heap,
+      InitialThreadState initial_thread_state =
+          LocalHeap::InitialThreadState::Running,
       std::unique_ptr<PersistentHandles> persistent_handles = nullptr);
   ~LocalHeap();
 
@@ -70,6 +80,8 @@ class V8_EXPORT_PRIVATE LocalHeap {
     return kNullMaybeHandle;
   }
 
+  void AttachPersistentHandles(
+      std::unique_ptr<PersistentHandles> persistent_handles);
   std::unique_ptr<PersistentHandles> DetachPersistentHandles();
 #ifdef DEBUG
   bool ContainsPersistentHandle(Address* location);
@@ -115,6 +127,9 @@ class V8_EXPORT_PRIVATE LocalHeap {
       AllocationOrigin origin = AllocationOrigin::kRuntime,
       AllocationAlignment alignment = kWordAligned);
 
+  void Park();
+  void Unpark();
+
  private:
   enum class ThreadState {
     // Threads in this state need to be stopped in a safepoint.
@@ -133,8 +148,6 @@ class V8_EXPORT_PRIVATE LocalHeap {
                                             AllocationOrigin origin,
                                             AllocationAlignment alignment);
 
-  void Park();
-  void Unpark();
   void EnsureParkedBeforeDestruction();
 
   void EnsurePersistentHandles();

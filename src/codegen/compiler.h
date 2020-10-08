@@ -14,6 +14,7 @@
 #include "src/execution/isolate.h"
 #include "src/execution/local-isolate.h"
 #include "src/handles/persistent-handles.h"
+#include "src/heap/local-heap.h"
 #include "src/logging/code-events.h"
 #include "src/objects/contexts.h"
 #include "src/parsing/parse-info.h"
@@ -332,7 +333,8 @@ class OptimizedCompilationJob : public CompilationJob {
 
   // Executes the compile job. Can be called on a background thread if
   // can_execute_on_background_thread() returns true.
-  V8_WARN_UNUSED_RESULT Status ExecuteJob(RuntimeCallStats* stats);
+  V8_WARN_UNUSED_RESULT Status ExecuteJob(RuntimeCallStats* stats,
+                                          LocalHeap* local_heap);
 
   // Finalizes the compile job. Must be called on the main thread.
   V8_WARN_UNUSED_RESULT Status FinalizeJob(Isolate* isolate);
@@ -357,7 +359,8 @@ class OptimizedCompilationJob : public CompilationJob {
  protected:
   // Overridden by the actual implementation.
   virtual Status PrepareJobImpl(Isolate* isolate) = 0;
-  virtual Status ExecuteJobImpl(RuntimeCallStats* stats) = 0;
+  virtual Status ExecuteJobImpl(RuntimeCallStats* stats,
+                                LocalHeap* local_heap) = 0;
   virtual Status FinalizeJobImpl(Isolate* isolate) = 0;
 
  private:
