@@ -13,6 +13,7 @@
 #include "src/base/platform/platform.h"
 #include "src/common/globals.h"
 #include "src/flags/flags.h"
+#include "src/heap/local-heap.h"
 #include "src/utils/allocation.h"
 
 namespace v8 {
@@ -58,8 +59,10 @@ class V8_EXPORT_PRIVATE OptimizingCompileDispatcher {
   enum ModeFlag { COMPILE, FLUSH };
 
   void FlushOutputQueue(bool restore_function_code);
-  void CompileNext(OptimizedCompilationJob* job, RuntimeCallStats* stats);
-  OptimizedCompilationJob* NextInput(bool check_if_flushing = false);
+  void CompileNext(OptimizedCompilationJob* job, RuntimeCallStats* stats,
+                   LocalHeap* local_heap);
+  OptimizedCompilationJob* NextInput(LocalHeap* local_heap,
+                                     bool check_if_flushing = false);
 
   inline int InputQueueIndex(int i) {
     int result = (i + input_queue_shift_) % input_queue_capacity_;
