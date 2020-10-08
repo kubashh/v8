@@ -46,6 +46,30 @@
       },
       "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4af0761f_1fb3ad08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T12:41:06Z",
+      "side": 1,
+      "message": "For what usability? If you re-define TraceTrait then it\u0027s because TraceTraitBase is not working, so you cannot rely on it.\n\nCan you give an example, as I cannot see it.",
+      "parentUuid": "f66b82e1_ae4f72a4",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
