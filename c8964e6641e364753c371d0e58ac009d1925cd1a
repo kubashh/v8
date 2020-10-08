@@ -141,6 +141,30 @@
       },
       "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c57bf50_62b23897",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T18:01:20Z",
+      "side": 1,
+      "message": "Yes, this is not needed. I removed it.",
+      "parentUuid": "164a7853_492cd681",
+      "range": {
+        "startLine": 230,
+        "startChar": 47,
+        "endLine": 230,
+        "endChar": 61
+      },
+      "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
