@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6a6e2355_23701771",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T09:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59687b08_a8beafd0",
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1e1e3799_3d2a4765",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -70,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4ba9077_6dd7a310",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T09:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2e04dcf_cbb1fa61",
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbf27643_8b0c795b",
@@ -93,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0537fbe4_aad5553d",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T09:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbf27643_8b0c795b",
+      "range": {
+        "startLine": 139,
+        "startChar": 3,
+        "endLine": 139,
+        "endChar": 4
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "922c4d9e_d996bba5",
@@ -106,6 +166,30 @@
       "writtenOn": "2020-10-08T09:07:30Z",
       "side": 1,
       "message": "I think this needs to be public as it should also be used by Blink.",
+      "range": {
+        "startLine": 140,
+        "startChar": 15,
+        "endLine": 140,
+        "endChar": 52
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87bef3f2_8297ad67",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T09:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "922c4d9e_d996bba5",
       "range": {
         "startLine": 140,
         "startChar": 15,
@@ -153,6 +237,30 @@
       "side": 1,
       "message": "Yes, an underflow here is possible, but:\n(1) The behavior is well defined\n(2) We would always call AccountMarkedBytes to \"fix\" the underflow before we report marked_bytes_.\n(3) It\u0027s the same as what we have in blink.\n\nSubtracting the deferred size after tracing is not possible since the count is marking-state specific and the concurrent one doesn\u0027t know when the deferred part is actually traced.\n\nWe can still split the counts though.",
       "parentUuid": "4d8042e5_28eeab7d",
+      "range": {
+        "startLine": 85,
+        "startChar": 7,
+        "endLine": 85,
+        "endChar": 33
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38690ee5_f76f7913",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T09:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57bba9bc_6c951fd3",
       "range": {
         "startLine": 85,
         "startChar": 7,
