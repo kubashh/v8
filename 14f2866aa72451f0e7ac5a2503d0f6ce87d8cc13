@@ -73,6 +73,30 @@
       },
       "revId": "14f2866aa72451f0e7ac5a2503d0f6ce87d8cc13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6a5e272_11ea9f91",
+        "filename": "src/snapshot/snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-08T09:54:54Z",
+      "side": 1,
+      "message": "It was in the old one, and it can be a per-isolate cost depending on whether shared RO space is enabled or not",
+      "parentUuid": "7beb8505_df1c5124",
+      "range": {
+        "startLine": 376,
+        "startChar": 11,
+        "endLine": 376,
+        "endChar": 55
+      },
+      "revId": "14f2866aa72451f0e7ac5a2503d0f6ce87d8cc13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
