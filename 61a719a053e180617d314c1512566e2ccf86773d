@@ -16,6 +16,24 @@
       "message": "PTAL. These prints were removed as part of the handlification work (since there were no more reservations to count)",
       "revId": "61a719a053e180617d314c1512566e2ccf86773d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73a11fdf_0a4ae60c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-08T09:06:51Z",
+      "side": 1,
+      "message": "I missed that part during review - ReservedMemory{Isolate,Context} is a useful stat (even though the name is misleading now that reservations no longer exist). It\u0027s essentially the initial heap size. Could we keep this as part of memory.json and bring back printf\u0027s during tracing?",
+      "parentUuid": "326cd3e7_ee084913",
+      "revId": "61a719a053e180617d314c1512566e2ccf86773d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
