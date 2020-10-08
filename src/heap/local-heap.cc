@@ -25,9 +25,12 @@ thread_local LocalHeap* current_local_heap = nullptr;
 LocalHeap* LocalHeap::Current() { return current_local_heap; }
 
 LocalHeap::LocalHeap(Heap* heap,
+                     LocalHeap::InitialThreadState initial_thread_state,
                      std::unique_ptr<PersistentHandles> persistent_handles)
     : heap_(heap),
-      state_(ThreadState::Running),
+      state_(initial_thread_state == LocalHeap::InitialThreadState::Parked
+                 ? ThreadState::Parked
+                 : ThreadState::Running),
       safepoint_requested_(false),
       allocation_failed_(false),
       prev_(nullptr),
@@ -75,6 +78,13 @@ void LocalHeap::EnsurePersistentHandles() {
         heap_->isolate()->NewPersistentHandles().release());
     persistent_handles_->Attach(this);
   }
+}
+
+void LocalHeap::AttachPersistentHandles(
+    std::unique_ptr<PersistentHandles> persistent_handles) {
+  DCHECK_NULL(persistent_handles_);
+  persistent_handles_ = std::move(persistent_handles);
+  persistent_handles_->Attach(this);
 }
 
 std::unique_ptr<PersistentHandles> LocalHeap::DetachPersistentHandles() {
