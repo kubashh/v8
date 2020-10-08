@@ -497,6 +497,9 @@ DEFINE_BOOL_READONLY(string_slices, true, "use string slices")
 
 DEFINE_INT(interrupt_budget, 144 * KB,
            "interrupt budget which should be used for the profiler counter")
+DEFINE_INT(interrupt_budget_for_midtier, 15 * KB,
+           "interrupt budget which should be used for the profiler counter"
+           "when tiering up to mid-tier")
 
 // Flags for inline caching and feedback vectors.
 DEFINE_BOOL(use_ic, true, "use inline caching")
@@ -548,12 +551,15 @@ DEFINE_BOOL(trace_migration, false, "trace object migration")
 DEFINE_BOOL(trace_generalization, false, "trace map generalization")
 
 // Flags for TurboProp.
-DEFINE_BOOL(turboprop, false, "enable experimental turboprop mid-tier compiler")
+DEFINE_BOOL(turboprop, false,
+            "enable experimental turboprop mid-tier compiler without tier up")
+DEFINE_BOOL(turboprop_as_mid_tier, false,
+            "enable experimental turboprop mid-tier compiler")
+DEFINE_IMPLICATION(turboprop_as_mid_tier, turboprop)
 DEFINE_BOOL(turboprop_mid_tier_reg_alloc, false,
             "enable experimental mid-tier register allocator")
 DEFINE_NEG_IMPLICATION(turboprop, turbo_inlining)
 DEFINE_IMPLICATION(turboprop, concurrent_inlining)
-DEFINE_VALUE_IMPLICATION(turboprop, interrupt_budget, 15 * KB)
 DEFINE_VALUE_IMPLICATION(turboprop, reuse_opt_code_count, 2)
 DEFINE_IMPLICATION(turboprop, dynamic_map_checks)
 DEFINE_UINT_READONLY(max_minimorphic_map_checks, 4,

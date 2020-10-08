@@ -78,7 +78,8 @@ inline constexpr bool CodeKindCanOSR(CodeKind kind) {
 
 inline constexpr bool CodeKindChecksOptimizationMarker(CodeKind kind) {
   return kind == CodeKind::INTERPRETED_FUNCTION ||
-         kind == CodeKind::NATIVE_CONTEXT_INDEPENDENT;
+         kind == CodeKind::NATIVE_CONTEXT_INDEPENDENT ||
+         kind == CodeKind::TURBOPROP;
 }
 
 // The optimization marker field on the feedback vector has a dual purpose of

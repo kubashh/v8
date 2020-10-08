@@ -140,6 +140,9 @@ bool JSFunction::ActiveTierIsTurboprop() const {
 CodeKind JSFunction::NextTier() const {
   if (V8_UNLIKELY(FLAG_turbo_nci_as_midtier && ActiveTierIsIgnition())) {
     return CodeKind::NATIVE_CONTEXT_INDEPENDENT;
+  } else if (V8_UNLIKELY(FLAG_turboprop_as_mid_tier &&
+                         ActiveTierIsTurboprop())) {
+    return CodeKind::TURBOFAN;
   } else if (V8_UNLIKELY(FLAG_turboprop)) {
     return CodeKind::TURBOPROP;
   }
@@ -296,7 +299,12 @@ void JSFunction::EnsureFeedbackVector(Handle<JSFunction> function,
   DCHECK(function->raw_feedback_cell() !=
          isolate->heap()->many_closures_cell());
   function->raw_feedback_cell().set_value(*feedback_vector);
-  function->raw_feedback_cell().SetInterruptBudget();
+  // We are creating a new feedback vector here. So, it is safe
+  // to assume there is no optimized code and hence start with a budget for
+  // midtier where needed.
+  int interrupt_budget = FLAG_turboprop ? FLAG_interrupt_budget_for_midtier
+                                        : FLAG_interrupt_budget;
+  function->raw_feedback_cell().SetInterruptBudget(interrupt_budget);
 }
 
 // static
