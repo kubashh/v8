@@ -47,12 +47,14 @@ void FeedbackCell::SetInitialInterruptBudget() {
   if (FLAG_lazy_feedback_allocation) {
     set_interrupt_budget(FLAG_budget_for_feedback_vector_allocation);
   } else {
-    set_interrupt_budget(FLAG_interrupt_budget);
+    int interrupt_budget = FLAG_turboprop ? FLAG_interrupt_budget_for_midtier
+                                          : FLAG_interrupt_budget;
+    set_interrupt_budget(interrupt_budget);
   }
 }
 
-void FeedbackCell::SetInterruptBudget() {
-  set_interrupt_budget(FLAG_interrupt_budget);
+void FeedbackCell::SetInterruptBudget(int interrupt_budget) {
+  set_interrupt_budget(interrupt_budget);
 }
 
 }  // namespace internal

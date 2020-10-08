@@ -35,7 +35,7 @@ class BytecodeGraphBuilder {
   BytecodeGraphBuilder(JSHeapBroker* broker, Zone* local_zone,
                        NativeContextRef const& native_context,
                        SharedFunctionInfoRef const& shared_info,
-                       FeedbackVectorRef const& feedback_vector,
+                       FeedbackCellRef const& feedback_cell,
                        BailoutId osr_offset, JSGraph* jsgraph,
                        CallFrequency const& invocation_frequency,
                        SourcePositionTable* source_positions, int inlining_id,
@@ -422,6 +422,7 @@ class BytecodeGraphBuilder {
   // The native context for which we optimize.
   NativeContextRef const native_context_;
   SharedFunctionInfoRef const shared_info_;
+  FeedbackCellRef const feedback_cell_;
   FeedbackVectorRef const feedback_vector_;
   CallFrequency const invocation_frequency_;
   JSTypeHintLowering const type_hint_lowering_;
@@ -987,7 +988,7 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
     JSHeapBroker* broker, Zone* local_zone,
     NativeContextRef const& native_context,
     SharedFunctionInfoRef const& shared_info,
-    FeedbackVectorRef const& feedback_vector, BailoutId osr_offset,
+    FeedbackCellRef const& feedback_cell, BailoutId osr_offset,
     JSGraph* jsgraph, CallFrequency const& invocation_frequency,
     SourcePositionTable* source_positions, int inlining_id, CodeKind code_kind,
     BytecodeGraphBuilderFlags flags, TickCounter* tick_counter)
@@ -996,10 +997,11 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
       jsgraph_(jsgraph),
       native_context_(native_context),
       shared_info_(shared_info),
-      feedback_vector_(feedback_vector),
+      feedback_cell_(feedback_cell),
+      feedback_vector_(feedback_cell.value().AsFeedbackVector()),
       invocation_frequency_(invocation_frequency),
       type_hint_lowering_(
-          broker, jsgraph, feedback_vector,
+          broker, jsgraph, feedback_cell.value().AsFeedbackVector(),
           (flags & BytecodeGraphBuilderFlag::kBailoutOnUninitialized)
               ? JSTypeHintLowering::kBailoutOnUninitialized
               : JSTypeHintLowering::kNoFlags),
@@ -1051,13 +1053,14 @@ Node* BytecodeGraphBuilder::GetFunctionClosure() {
 
 void BytecodeGraphBuilder::CreateFeedbackCellNode() {
   DCHECK_NULL(feedback_cell_node_);
-  if (native_context_independent()) {
-    feedback_cell_node_ = BuildLoadFeedbackCell();
-  }
+  if (!CodeKindChecksOptimizationMarker(code_kind())) return;
+  feedback_cell_node_ = BuildLoadFeedbackCell();
+  // feedback_cell_node_ = native_context_independent() ?
+  // BuildLoadFeedbackCell(): jsgraph()->Constant();
 }
 
 Node* BytecodeGraphBuilder::BuildLoadFeedbackCell() {
-  DCHECK(native_context_independent());
+  // DCHECK(native_context_independent());
   DCHECK_NULL(feedback_cell_node_);
   return NewNode(
       simplified()->LoadField(AccessBuilder::ForJSFunctionFeedbackCell()),
@@ -4048,13 +4051,12 @@ void BytecodeGraphBuilder::BuildJumpIfJSReceiver() {
 }
 
 void BytecodeGraphBuilder::BuildUpdateInterruptBudget(int delta) {
-  if (native_context_independent()) {
-    // Keep uses of this in sync with Ignition's UpdateInterruptBudget.
-    int delta_with_current_bytecode =
-        delta - bytecode_iterator().current_bytecode_size();
-    NewNode(simplified()->UpdateInterruptBudget(delta_with_current_bytecode),
-            feedback_cell_node());
-  }
+  if (!CodeKindChecksOptimizationMarker(code_kind())) return;
+  // Keep uses of this in sync with Ignition's UpdateInterruptBudget.
+  int delta_with_current_bytecode =
+      delta - bytecode_iterator().current_bytecode_size();
+  NewNode(simplified()->UpdateInterruptBudget(delta_with_current_bytecode),
+          feedback_cell_node());
 }
 
 JSTypeHintLowering::LoweringResult
@@ -4449,17 +4451,18 @@ void BytecodeGraphBuilder::UpdateSourcePosition(int offset) {
 
 void BuildGraphFromBytecode(JSHeapBroker* broker, Zone* local_zone,
                             SharedFunctionInfoRef const& shared_info,
-                            FeedbackVectorRef const& feedback_vector,
+                            FeedbackCellRef const& feedback_cell,
                             BailoutId osr_offset, JSGraph* jsgraph,
                             CallFrequency const& invocation_frequency,
                             SourcePositionTable* source_positions,
                             int inlining_id, CodeKind code_kind,
                             BytecodeGraphBuilderFlags flags,
                             TickCounter* tick_counter) {
-  DCHECK(broker->IsSerializedForCompilation(shared_info, feedback_vector));
+  DCHECK(broker->IsSerializedForCompilation(
+      shared_info, feedback_cell.value().AsFeedbackVector()));
   BytecodeGraphBuilder builder(
       broker, local_zone, broker->target_native_context(), shared_info,
-      feedback_vector, osr_offset, jsgraph, invocation_frequency,
+      feedback_cell, osr_offset, jsgraph, invocation_frequency,
       source_positions, inlining_id, code_kind, flags, tick_counter);
   builder.CreateGraph();
 }

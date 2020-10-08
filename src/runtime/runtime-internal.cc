@@ -330,7 +330,9 @@ RUNTIME_FUNCTION(Runtime_BytecodeBudgetInterruptFromBytecode) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
-  function->raw_feedback_cell().set_interrupt_budget(FLAG_interrupt_budget);
+  int interrupt_budget = FLAG_turboprop ? FLAG_interrupt_budget_for_midtier
+                                        : FLAG_interrupt_budget;
+  function->raw_feedback_cell().set_interrupt_budget(interrupt_budget);
   if (!function->has_feedback_vector()) {
     IsCompiledScope is_compiled_scope(
         function->shared().is_compiled_scope(isolate));
