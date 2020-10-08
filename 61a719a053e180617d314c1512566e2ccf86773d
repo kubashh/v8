@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "326cd3e7_ee084913",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-08T08:19:54Z",
+      "side": 1,
+      "message": "PTAL. These prints were removed as part of the handlification work (since there were no more reservations to count)",
+      "revId": "61a719a053e180617d314c1512566e2ccf86773d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
