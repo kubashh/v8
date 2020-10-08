@@ -141,6 +141,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57bba9bc_6c951fd3",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T09:44:45Z",
+      "side": 1,
+      "message": "Yes, an underflow here is possible, but:\n(1) The behavior is well defined\n(2) We would always call AccountMarkedBytes to \"fix\" the underflow before we report marked_bytes_.\n(3) It\u0027s the same as what we have in blink.\n\nSubtracting the deferred size after tracing is not possible since the count is marking-state specific and the concurrent one doesn\u0027t know when the deferred part is actually traced.\n\nWe can still split the counts though.",
+      "parentUuid": "4d8042e5_28eeab7d",
+      "range": {
+        "startLine": 85,
+        "startChar": 7,
+        "endLine": 85,
+        "endChar": 33
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7033a74d_4521f7b5",
         "filename": "src/heap/cppgc/marker.cc",
         "patchSetId": 10
@@ -164,6 +188,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9349e06_60bf3a8a",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T09:44:45Z",
+      "side": 1,
+      "message": "To align it with blink. In blink the bailout is only backing stores. Those maybe large and might take awhile to trace. We saw in traces that draining the bailout worklist could exceed the deadline by ~5X and addressed that by checking the deadline more often.",
+      "parentUuid": "7033a74d_4521f7b5",
+      "range": {
+        "startLine": 322,
+        "startChar": 47,
+        "endLine": 322,
+        "endChar": 76
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea9cd19f_c94cffaf",
         "filename": "src/heap/cppgc/marking-visitor.cc",
         "patchSetId": 10
@@ -175,6 +223,30 @@
       "writtenOn": "2020-10-08T09:07:30Z",
       "side": 1,
       "message": "We need to use that in MarkingVisitorBase?",
+      "range": {
+        "startLine": 70,
+        "startChar": 31,
+        "endLine": 70,
+        "endChar": 68
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f21c10_0925a5ab",
+        "filename": "src/heap/cppgc/marking-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-08T09:44:45Z",
+      "side": 1,
+      "message": "MarkingVisitorBase should use the default version that always returns false.",
+      "parentUuid": "ea9cd19f_c94cffaf",
       "range": {
         "startLine": 70,
         "startChar": 31,
