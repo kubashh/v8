@@ -117,7 +117,8 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   BrokerMode mode() const { return mode_; }
   // Initialize the local heap with the persistent and canonical handles
   // provided by {info}.
-  void InitializeLocalHeap(OptimizedCompilationInfo* info);
+  void InitializeLocalHeap(OptimizedCompilationInfo* info,
+                           LocalHeap* local_heap);
   // Tear down the local heap and pass the persistent and canonical handles
   // provided back to {info}. {info} is responsible for disposing of them.
   void TearDownLocalHeap(OptimizedCompilationInfo* info);
@@ -227,9 +228,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   bool IsSerializedForCompilation(const SharedFunctionInfoRef& shared,
                                   const FeedbackVectorRef& feedback) const;
 
-  LocalHeap* local_heap() {
-    return local_heap_.has_value() ? &(*local_heap_) : nullptr;
-  }
+  LocalHeap* local_heap() { return local_heap_; }
 
   // Return the corresponding canonical persistent handle for {object}. Create
   // one if it does not exist.
@@ -361,7 +360,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   bool const is_concurrent_inlining_;
   CodeKind const code_kind_;
   std::unique_ptr<PersistentHandles> ph_;
-  base::Optional<LocalHeap> local_heap_;
+  LocalHeap* local_heap_;
   std::unique_ptr<CanonicalHandlesMap> canonical_handles_;
   unsigned trace_indentation_ = 0;
   PerIsolateCompilerCache* compiler_cache_ = nullptr;
