@@ -94,6 +94,53 @@
       },
       "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c983cb7_0a446a1f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T14:27:16Z",
+      "side": 1,
+      "message": "sgtm, if we think about specializing Trace() for GCed types.",
+      "parentUuid": "ece697d7_3b305140",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "164a7853_492cd681",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-08T14:27:16Z",
+      "side": 1,
+      "message": "Then I think this one is a bit misleading. While it makes GetTraceDescriptor() work, it only does so because it\u0027s *not* a mixin.\n\nSince, we don\u0027t want/need a TraceDescriptor for JSMember I\u0027d remove it.",
+      "range": {
+        "startLine": 230,
+        "startChar": 47,
+        "endLine": 230,
+        "endChar": 61
+      },
+      "revId": "c8964e6641e364753c371d0e58ac009d1925cd1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
