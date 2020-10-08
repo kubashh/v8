@@ -16,6 +16,23 @@
       "message": "LGTM!",
       "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45c2fcec_100c8f1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-10-08T08:32:49Z",
+      "side": 1,
+      "message": "ah, would be great to have the bailout covered in a test, if possible",
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
