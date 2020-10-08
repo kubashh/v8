@@ -3711,6 +3711,19 @@ bool StringRef::IsSeqString() const {
   return data()->AsString()->is_seq_string();
 }
 
+base::Optional<ObjectRef> StringRef::GetOwnConstantElement(uint32_t index) {
+  DCHECK(data_->should_access_heap());
+  Handle<String> str = object();
+  if (static_cast<int>(index) >= str->length()) return base::nullopt;
+
+  Factory* factory = broker()->isolate()->factory();
+  Object value = factory->single_character_string_cache()->get(str->Get(index));
+  if (value != *factory->undefined_value()) {
+    return ObjectRef(broker(), broker()->CanonicalPersistentHandle(value));
+  }
+  return base::nullopt;
+}
+
 ScopeInfoRef NativeContextRef::scope_info() const {
   if (data_->should_access_heap()) {
     AllowHandleAllocationIfNeeded allow_handle_allocation(data()->kind(),
@@ -3837,19 +3850,12 @@ base::Optional<ObjectRef> ObjectRef::GetOwnConstantElement(
     uint32_t index, SerializationPolicy policy) const {
   if (!(IsJSObject() || IsString())) return base::nullopt;
   if (data_->should_access_heap()) {
-    // TODO(neis): Once the CHECK_NE below is eliminated, i.e. once we can
-    // safely read from the background thread, the special branch for read-only
-    // objects can be removed as well.
-    if (data_->kind() == ObjectDataKind::kUnserializedReadOnlyHeapObject) {
-      DCHECK(IsString());
-      // TODO(mythria): For ReadOnly strings, currently we cannot access data
-      // from heap without creating handles since we use LookupIterator. We
-      // should have a custom implementation for read only strings that doesn't
-      // create handles. Till then it is OK to disable this optimization since
-      // this only impacts keyed accesses on read only strings.
-      return base::nullopt;
-    }
+    // TODO(neis, solanes): Remove the CHECK once we can safely read from the
+    // background thread.
     CHECK_NE(data_->kind(), ObjectDataKind::kNeverSerializedHeapObject);
+    if (IsString()) {
+      return AsString().GetOwnConstantElement(index);
+    }
     return GetOwnElementFromHeap(broker(), object(), index, true);
   }
   ObjectData* element = nullptr;
