@@ -187,7 +187,8 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationType type,
 
   size_t large_object_threshold =
       AllocationType::kCode == type
-          ? std::min(kMaxRegularHeapObjectSize, code_space()->AreaSize())
+          ? std::min(MemoryChunkLayout::MaxRegularCodeObjectSize(),
+                     code_space()->AreaSize())
           : kMaxRegularHeapObjectSize;
   bool large_object =
       static_cast<size_t>(size_in_bytes) > large_object_threshold;

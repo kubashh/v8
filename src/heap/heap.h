@@ -543,7 +543,7 @@ class Heap {
 
   bool IsImmovable(HeapObject object);
 
-  static bool IsLargeObject(HeapObject object);
+  V8_EXPORT_PRIVATE static bool IsLargeObject(HeapObject object);
 
   // This method supports the deserialization allocator.  All allocations
   // are word-aligned.  The method should never fail to allocate since the
