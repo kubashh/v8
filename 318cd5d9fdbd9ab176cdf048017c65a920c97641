@@ -3,6 +3,29 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8263a374_c0dd057d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-08T17:40:11Z",
+      "side": 1,
+      "message": "Sounds reasonable.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 37
+      },
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b475551d_de41a9f7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -14,6 +37,92 @@
       "writtenOn": "2020-10-08T14:31:01Z",
       "side": 1,
       "message": "Hello,\n\nThis is fixing building V8 on systems with 64k OS pages, as reported here https://groups.google.com/g/v8-users/c/4fqKPZddyMw/m/jwI3HLeyBwAJ . As well as making sure that we don\u0027t fill the regular code pages with a small number of large objects.\n\nWDYT? \n\nOriginally, I was going to fix this by switching to 512k heap pages for Arm64 linux, but it\u0027s really a shame to make regular linux different from ChromeOS and Android. Systems with 64k OS pages are less common than those with 4k, and will typically have a lot of memory available so it shouldn\u0027t be an issue to stick to 256k V8 code pages, even if only 64k can be used for allocation.\n\nThanks,\nPierre",
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "911c18f4_4f4e13a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-08T17:40:11Z",
+      "side": 1,
+      "message": "Thanks! lgtm with comments",
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14e25608_6f0fa55a",
+        "filename": "src/compiler/allocation-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-08T17:40:11Z",
+      "side": 1,
+      "message": "It seems worthwhile to introduce a helper function for this.\nE.g. Heap::MaxRegularHeapObjectSize(AllocationType). Then we wouldn\u0027t need the code special case below.",
+      "range": {
+        "startLine": 31,
+        "startChar": 20,
+        "endLine": 31,
+        "endChar": 45
+      },
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c137c46_0766cdb4",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-08T17:40:11Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 139,
+        "startChar": 21,
+        "endLine": 139,
+        "endChar": 46
+      },
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31789d88_059853d7",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-08T17:40:11Z",
+      "side": 1,
+      "message": "This could be simplified using the helper function suggested above.",
+      "range": {
+        "startLine": 189,
+        "startChar": 5,
+        "endLine": 192,
+        "endChar": 38
+      },
       "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
