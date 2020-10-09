@@ -342,6 +342,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc4ca2f5_b6e793a9",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-09T12:30:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42818b85_f8067d87",
+      "range": {
+        "startLine": 322,
+        "startChar": 47,
+        "endLine": 322,
+        "endChar": 76
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea9cd19f_c94cffaf",
