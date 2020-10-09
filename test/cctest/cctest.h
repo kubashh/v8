@@ -703,8 +703,8 @@ class TestPlatform : public v8::Platform {
   }
 
   std::shared_ptr<v8::TaskRunner> GetForegroundTaskRunner(
-      v8::Isolate* isolate) override {
-    return old_platform_->GetForegroundTaskRunner(isolate);
+      const v8::ForegroundTaskRunnerKey* foreground_task_runner_key) override {
+    return old_platform_->GetForegroundTaskRunner(foreground_task_runner_key);
   }
 
   void CallOnWorkerThread(std::unique_ptr<v8::Task> task) override {
@@ -730,8 +730,9 @@ class TestPlatform : public v8::Platform {
     return old_platform_->CurrentClockTimeMillis();
   }
 
-  bool IdleTasksEnabled(v8::Isolate* isolate) override {
-    return old_platform_->IdleTasksEnabled(isolate);
+  bool IdleTasksEnabled(
+      const v8::ForegroundTaskRunnerKey* foreground_task_runner_key) override {
+    return old_platform_->IdleTasksEnabled(foreground_task_runner_key);
   }
 
   v8::TracingController* GetTracingController() override {

@@ -64,7 +64,8 @@ V8_PLATFORM_EXPORT std::unique_ptr<v8::JobHandle> NewDefaultJobHandle(
  * |platform| has to be created using |NewDefaultPlatform|.
  */
 V8_PLATFORM_EXPORT bool PumpMessageLoop(
-    v8::Platform* platform, v8::Isolate* isolate,
+    v8::Platform* platform,
+    const ForegroundTaskRunnerKey* foreground_task_runner_key,
     MessageLoopBehavior behavior = MessageLoopBehavior::kDoNotWait);
 
 /**
@@ -74,9 +75,10 @@ V8_PLATFORM_EXPORT bool PumpMessageLoop(
  * This call does not block if no task is pending. The |platform| has to be
  * created using |NewDefaultPlatform|.
  */
-V8_PLATFORM_EXPORT void RunIdleTasks(v8::Platform* platform,
-                                     v8::Isolate* isolate,
-                                     double idle_time_in_seconds);
+V8_PLATFORM_EXPORT void RunIdleTasks(
+    v8::Platform* platform,
+    const ForegroundTaskRunnerKey* foreground_task_runner_key,
+    double idle_time_in_seconds);
 
 /**
  * Attempts to set the tracing controller for the given platform.
@@ -97,8 +99,9 @@ V8_PLATFORM_EXPORT void SetTracingController(
  * The |platform| has to be created using |NewDefaultPlatform|.
  *
  */
-V8_PLATFORM_EXPORT void NotifyIsolateShutdown(v8::Platform* platform,
-                                              Isolate* isolate);
+V8_PLATFORM_EXPORT void NotifyForegroundTaskRunnerKeyDiscarded(
+    v8::Platform* platform,
+    const ForegroundTaskRunnerKey* foreground_task_runner_key);
 
 }  // namespace platform
 }  // namespace v8

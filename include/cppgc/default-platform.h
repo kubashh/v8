@@ -39,7 +39,7 @@ class V8_EXPORT DefaultPlatform : public Platform {
     // V8's default platform creates a new task runner when passed the
     // v8::Isolate pointer the first time. For non-default platforms this will
     // require getting the appropriate task runner.
-    return v8_platform_->GetForegroundTaskRunner(kNoIsolate);
+    return v8_platform_->GetForegroundTaskRunner(kNoKey);
   }
 
   std::unique_ptr<cppgc::JobHandle> PostJob(
@@ -49,7 +49,7 @@ class V8_EXPORT DefaultPlatform : public Platform {
   }
 
  protected:
-  static constexpr v8::Isolate* kNoIsolate = nullptr;
+  static constexpr v8::ForegroundTaskRunnerKey* kNoKey = nullptr;
 
   std::unique_ptr<v8::Platform> v8_platform_;
 };

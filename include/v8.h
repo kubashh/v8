@@ -28,6 +28,7 @@
 
 #include "cppgc/common.h"
 #include "v8-internal.h"  // NOLINT(build/include_directory)
+#include "v8-platform.h"  // NOLINT(build/include_directory)
 #include "v8-version.h"   // NOLINT(build/include_directory)
 #include "v8config.h"     // NOLINT(build/include_directory)
 
@@ -8215,7 +8216,7 @@ class V8_EXPORT MeasureMemoryDelegate {
  * thread at any given time.  The Locker/Unlocker API must be used to
  * synchronize.
  */
-class V8_EXPORT Isolate {
+class V8_EXPORT Isolate : public ForegroundTaskRunnerKey {
  public:
   /**
    * Initial configuration parameters for a new Isolate.

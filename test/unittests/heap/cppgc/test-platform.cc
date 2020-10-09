@@ -22,9 +22,9 @@ std::unique_ptr<cppgc::JobHandle> TestPlatform::PostJob(
 }
 
 void TestPlatform::RunAllForegroundTasks() {
-  v8::platform::PumpMessageLoop(v8_platform_.get(), kNoIsolate);
+  v8::platform::PumpMessageLoop(v8_platform_.get(), kNoKey);
   if (GetForegroundTaskRunner()->IdleTasksEnabled()) {
-    v8::platform::RunIdleTasks(v8_platform_.get(), kNoIsolate,
+    v8::platform::RunIdleTasks(v8_platform_.get(), kNoKey,
                                std::numeric_limits<double>::max());
   }
 }

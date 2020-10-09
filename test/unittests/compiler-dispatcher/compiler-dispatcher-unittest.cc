@@ -125,7 +125,7 @@ class MockPlatform : public v8::Platform {
   int NumberOfWorkerThreads() override { return 1; }
 
   std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
-      v8::Isolate* isolate) override {
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) override {
     return std::make_shared<MockForegroundTaskRunner>(this);
   }
 
@@ -139,7 +139,10 @@ class MockPlatform : public v8::Platform {
     UNREACHABLE();
   }
 
-  bool IdleTasksEnabled(v8::Isolate* isolate) override { return true; }
+  bool IdleTasksEnabled(
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) override {
+    return true;
+  }
 
   std::unique_ptr<JobHandle> PostJob(
       TaskPriority priority, std::unique_ptr<JobTask> job_state) override {

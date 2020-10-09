@@ -48,13 +48,16 @@ double DefaultPlatformWithMockTime::mock_time_ = 0.0;
 template <typename Platform>
 class PlatformTest : public ::testing::Test {
  public:
-  Isolate* isolate() { return reinterpret_cast<Isolate*>(dummy_); }
+  const ForegroundTaskRunnerKey* foreground_task_runner_key() {
+    return reinterpret_cast<ForegroundTaskRunnerKey*>(dummy_);
+  }
 
   Platform* platform() { return &platform_; }
 
   std::shared_ptr<TaskRunner> task_runner() {
     if (!task_runner_) {
-      task_runner_ = platform_.GetForegroundTaskRunner(isolate());
+      task_runner_ =
+          platform_.GetForegroundTaskRunner(foreground_task_runner_key());
     }
     DCHECK_NOT_NULL(task_runner_);
     return task_runner_;
@@ -76,7 +79,9 @@ class PlatformTest : public ::testing::Test {
     task_runner()->PostIdleTask(std::unique_ptr<IdleTask>(task));
   }
 
-  bool PumpMessageLoop() { return platform_.PumpMessageLoop(isolate()); }
+  bool PumpMessageLoop() {
+    return platform_.PumpMessageLoop(foreground_task_runner_key());
+  }
 
  private:
   Platform platform_;
@@ -93,7 +98,7 @@ class DefaultPlatformTestWithMockTime
 }  // namespace
 
 TEST_F(DefaultPlatformTest, PumpMessageLoop) {
-  EXPECT_FALSE(platform()->PumpMessageLoop(isolate()));
+  EXPECT_FALSE(platform()->PumpMessageLoop(foreground_task_runner_key()));
 
   StrictMock<MockTask>* task = new StrictMock<MockTask>;
   CallOnForegroundThread(task);
@@ -105,7 +110,7 @@ TEST_F(DefaultPlatformTest, PumpMessageLoop) {
 
 TEST_F(DefaultPlatformTest, PumpMessageLoopWithTaskRunner) {
   std::shared_ptr<TaskRunner> taskrunner =
-      platform()->GetForegroundTaskRunner(isolate());
+      platform()->GetForegroundTaskRunner(foreground_task_runner_key());
   EXPECT_FALSE(PumpMessageLoop());
 
   StrictMock<MockTask>* task = new StrictMock<MockTask>;
@@ -207,7 +212,7 @@ TEST_F(DefaultPlatformTestWithMockTime, RunIdleTasks) {
   EXPECT_CALL(*task, Run(42.0 + 23.0));
   EXPECT_CALL(*task, Die());
   platform()->IncreaseTime(23.0);
-  platform()->RunIdleTasks(isolate(), 42.0);
+  platform()->RunIdleTasks(foreground_task_runner_key(), 42.0);
 }
 
 TEST_F(DefaultPlatformTestWithMockTime,
@@ -258,9 +263,11 @@ TEST(CustomDefaultPlatformTest, PostForegroundTaskAfterPlatformTermination) {
     DefaultPlatformWithMockTime platform(1);
 
     int dummy;
-    Isolate* isolate = reinterpret_cast<Isolate*>(&dummy);
+    const ForegroundTaskRunnerKey* foreground_task_runner_key =
+        reinterpret_cast<ForegroundTaskRunnerKey*>(&dummy);
 
-    foreground_taskrunner = platform.GetForegroundTaskRunner(isolate);
+    foreground_taskrunner =
+        platform.GetForegroundTaskRunner(foreground_task_runner_key);
   }
   // It should still be possible to post foreground tasks, even when the
   // platform does not exist anymore.

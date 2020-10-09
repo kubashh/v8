@@ -15,7 +15,7 @@
 
 namespace v8 {
 
-class Isolate;
+class ForegroundTaskRunnerKey {};
 
 // Valid priorities supported by the task scheduling infrastructure.
 enum class TaskPriority : uint8_t {
@@ -560,7 +560,7 @@ class Platform {
    * should only be called from a foreground thread.
    */
   virtual std::shared_ptr<v8::TaskRunner> GetForegroundTaskRunner(
-      Isolate* isolate) = 0;
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) = 0;
 
   /**
    * Schedules a task to be invoked on a worker thread.
@@ -596,7 +596,10 @@ class Platform {
   /**
    * Returns true if idle tasks are enabled for the given |isolate|.
    */
-  virtual bool IdleTasksEnabled(Isolate* isolate) { return false; }
+  virtual bool IdleTasksEnabled(
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) {
+    return false;
+  }
 
   /**
    * Posts |job_task| to run in parallel. Returns a JobHandle associated with

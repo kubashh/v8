@@ -139,7 +139,7 @@ class MockPlatform : public TestPlatform {
   }
 
   std::shared_ptr<v8::TaskRunner> GetForegroundTaskRunner(
-      v8::Isolate*) override {
+      const ForegroundTaskRunnerKey*) override {
     return mock_task_runner_;
   }
 

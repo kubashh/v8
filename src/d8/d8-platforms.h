@@ -10,8 +10,8 @@
 
 namespace v8 {
 
-class Isolate;
 class Platform;
+class ForegroundTaskRunnerKey;
 
 // Returns a predictable v8::Platform implementation.
 // orker threads are disabled, idle tasks are disallowed, and the time reported
@@ -30,7 +30,8 @@ std::unique_ptr<Platform> MakeDelayedTasksPlatform(
 // valid value for the isolate. If this ever changes, we either have to allocate
 // a core isolate, or refactor the implementation of worker tasks in the
 // {PredictablePlatform}.
-constexpr Isolate* kProcessGlobalPredictablePlatformWorkerTaskQueue = nullptr;
+constexpr ForegroundTaskRunnerKey*
+    kProcessGlobalPredictablePlatformWorkerTaskQueue = nullptr;
 
 }  // namespace v8
 

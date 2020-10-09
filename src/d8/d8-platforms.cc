@@ -36,8 +36,8 @@ class PredictablePlatform final : public Platform {
   }
 
   std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
-      v8::Isolate* isolate) override {
-    return platform_->GetForegroundTaskRunner(isolate);
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) override {
+    return platform_->GetForegroundTaskRunner(foreground_task_runner_key);
   }
 
   int NumberOfWorkerThreads() override { return 0; }
@@ -61,7 +61,10 @@ class PredictablePlatform final : public Platform {
     // Never run delayed tasks.
   }
 
-  bool IdleTasksEnabled(Isolate* isolate) override { return false; }
+  bool IdleTasksEnabled(
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) override {
+    return false;
+  }
 
   std::unique_ptr<JobHandle> PostJob(
       TaskPriority priority, std::unique_ptr<JobTask> job_task) override {
@@ -125,9 +128,9 @@ class DelayedTasksPlatform final : public Platform {
   }
 
   std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
-      v8::Isolate* isolate) override {
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) override {
     std::shared_ptr<TaskRunner> runner =
-        platform_->GetForegroundTaskRunner(isolate);
+        platform_->GetForegroundTaskRunner(foreground_task_runner_key);
 
     base::MutexGuard lock_guard(&mutex_);
     // Check if we can re-materialize the weak ptr in our map.
@@ -160,8 +163,9 @@ class DelayedTasksPlatform final : public Platform {
                                          delay_in_seconds);
   }
 
-  bool IdleTasksEnabled(Isolate* isolate) override {
-    return platform_->IdleTasksEnabled(isolate);
+  bool IdleTasksEnabled(
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) override {
+    return platform_->IdleTasksEnabled(foreground_task_runner_key);
   }
 
   std::unique_ptr<JobHandle> PostJob(

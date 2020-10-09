@@ -41,7 +41,7 @@ class MockPlatform final : public TestPlatform {
   }
 
   std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
-      v8::Isolate* isolate) override {
+      const ForegroundTaskRunnerKey*) override {
     return task_runner_;
   }
 
@@ -49,7 +49,9 @@ class MockPlatform final : public TestPlatform {
     task_runner_->PostTask(std::move(task));
   }
 
-  bool IdleTasksEnabled(v8::Isolate* isolate) override { return false; }
+  bool IdleTasksEnabled(const ForegroundTaskRunnerKey*) override {
+    return false;
+  }
 
   void ExecuteTasks() {
     for (auto* job_handle : job_handles_) {

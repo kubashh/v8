@@ -38,10 +38,11 @@ class V8_PLATFORM_EXPORT DefaultPlatform : public NON_EXPORTED_BASE(Platform) {
   void EnsureBackgroundTaskRunnerInitialized();
 
   bool PumpMessageLoop(
-      v8::Isolate* isolate,
+      const ForegroundTaskRunnerKey* foreground_task_runner_key,
       MessageLoopBehavior behavior = MessageLoopBehavior::kDoNotWait);
 
-  void RunIdleTasks(v8::Isolate* isolate, double idle_time_in_seconds);
+  void RunIdleTasks(const ForegroundTaskRunnerKey* foreground_task_runner_key,
+                    double idle_time_in_seconds);
 
   void SetTracingController(
       std::unique_ptr<v8::TracingController> tracing_controller);
@@ -53,11 +54,12 @@ class V8_PLATFORM_EXPORT DefaultPlatform : public NON_EXPORTED_BASE(Platform) {
   // v8::Platform implementation.
   int NumberOfWorkerThreads() override;
   std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
-      v8::Isolate* isolate) override;
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) override;
   void CallOnWorkerThread(std::unique_ptr<Task> task) override;
   void CallDelayedOnWorkerThread(std::unique_ptr<Task> task,
                                  double delay_in_seconds) override;
-  bool IdleTasksEnabled(Isolate* isolate) override;
+  bool IdleTasksEnabled(
+      const ForegroundTaskRunnerKey* foreground_task_runner_key) override;
   std::unique_ptr<JobHandle> PostJob(
       TaskPriority priority, std::unique_ptr<JobTask> job_state) override;
   double MonotonicallyIncreasingTime() override;
@@ -66,14 +68,16 @@ class V8_PLATFORM_EXPORT DefaultPlatform : public NON_EXPORTED_BASE(Platform) {
   StackTracePrinter GetStackTracePrinter() override;
   v8::PageAllocator* GetPageAllocator() override;
 
-  void NotifyIsolateShutdown(Isolate* isolate);
+  void NotifyForegroundTaskRunnerKeyDiscarded(
+      const ForegroundTaskRunnerKey* foreground_task_runner_key);
 
  private:
   base::Mutex lock_;
   const int thread_pool_size_;
   IdleTaskSupport idle_task_support_;
   std::shared_ptr<DefaultWorkerThreadsTaskRunner> worker_threads_task_runner_;
-  std::map<v8::Isolate*, std::shared_ptr<DefaultForegroundTaskRunner>>
+  std::map<const ForegroundTaskRunnerKey*,
+           std::shared_ptr<DefaultForegroundTaskRunner>>
       foreground_task_runner_map_;
 
   std::unique_ptr<TracingController> tracing_controller_;

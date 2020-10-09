@@ -38,7 +38,9 @@ class MockPlatformForUnmapper : public TestPlatform {
     worker_tasks_.push_back(std::move(task));
   }
 
-  bool IdleTasksEnabled(v8::Isolate* isolate) override { return false; }
+  bool IdleTasksEnabled(const ForegroundTaskRunnerKey*) override {
+    return false;
+  }
 
   int NumberOfWorkerThreads() override {
     return old_platform_->NumberOfWorkerThreads();

@@ -3281,7 +3281,8 @@ void Worker::ExecuteInThread() {
     task_manager_ = nullptr;
   }
   context_.Reset();
-  platform::NotifyIsolateShutdown(g_default_platform, isolate_);
+  platform::NotifyForegroundTaskRunnerKeyDiscarded(g_default_platform,
+                                                   isolate_);
   isolate_->Dispose();
   isolate_ = nullptr;
 

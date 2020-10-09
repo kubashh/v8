@@ -52,16 +52,18 @@ V8_PLATFORM_EXPORT std::unique_ptr<JobHandle> NewDefaultJobHandle(
       platform, std::move(job_task), priority, num_worker_threads));
 }
 
-bool PumpMessageLoop(v8::Platform* platform, v8::Isolate* isolate,
+bool PumpMessageLoop(v8::Platform* platform,
+                     const ForegroundTaskRunnerKey* foreground_task_runner_key,
                      MessageLoopBehavior behavior) {
-  return static_cast<DefaultPlatform*>(platform)->PumpMessageLoop(isolate,
-                                                                  behavior);
+  return static_cast<DefaultPlatform*>(platform)->PumpMessageLoop(
+      foreground_task_runner_key, behavior);
 }
 
-void RunIdleTasks(v8::Platform* platform, v8::Isolate* isolate,
+void RunIdleTasks(v8::Platform* platform,
+                  const ForegroundTaskRunnerKey* foreground_task_runner_key,
                   double idle_time_in_seconds) {
-  static_cast<DefaultPlatform*>(platform)->RunIdleTasks(isolate,
-                                                        idle_time_in_seconds);
+  static_cast<DefaultPlatform*>(platform)->RunIdleTasks(
+      foreground_task_runner_key, idle_time_in_seconds);
 }
 
 void SetTracingController(
@@ -71,8 +73,11 @@ void SetTracingController(
       std::unique_ptr<v8::TracingController>(tracing_controller));
 }
 
-void NotifyIsolateShutdown(v8::Platform* platform, Isolate* isolate) {
-  static_cast<DefaultPlatform*>(platform)->NotifyIsolateShutdown(isolate);
+void NotifyForegroundTaskRunnerKeyDiscarded(
+    v8::Platform* platform,
+    const ForegroundTaskRunnerKey* foreground_task_runner_key) {
+  static_cast<DefaultPlatform*>(platform)
+      ->NotifyForegroundTaskRunnerKeyDiscarded(foreground_task_runner_key);
 }
 
 namespace {
@@ -139,13 +144,14 @@ void DefaultPlatform::SetTimeFunctionForTesting(
   DCHECK(foreground_task_runner_map_.empty());
 }
 
-bool DefaultPlatform::PumpMessageLoop(v8::Isolate* isolate,
-                                      MessageLoopBehavior wait_for_work) {
+bool DefaultPlatform::PumpMessageLoop(
+    const ForegroundTaskRunnerKey* foreground_task_runner_key,
+    MessageLoopBehavior wait_for_work) {
   bool failed_result = wait_for_work == MessageLoopBehavior::kWaitForWork;
   std::shared_ptr<DefaultForegroundTaskRunner> task_runner;
   {
     base::MutexGuard guard(&lock_);
-    auto it = foreground_task_runner_map_.find(isolate);
+    auto it = foreground_task_runner_map_.find(foreground_task_runner_key);
     if (it == foreground_task_runner_map_.end()) return failed_result;
     task_runner = it->second;
   }
@@ -158,17 +164,18 @@ bool DefaultPlatform::PumpMessageLoop(v8::Isolate* isolate,
   return true;
 }
 
-void DefaultPlatform::RunIdleTasks(v8::Isolate* isolate,
-                                   double idle_time_in_seconds) {
+void DefaultPlatform::RunIdleTasks(
+    const ForegroundTaskRunnerKey* foreground_task_runner_key,
+    double idle_time_in_seconds) {
   DCHECK_EQ(IdleTaskSupport::kEnabled, idle_task_support_);
   std::shared_ptr<DefaultForegroundTaskRunner> task_runner;
   {
     base::MutexGuard guard(&lock_);
-    if (foreground_task_runner_map_.find(isolate) ==
+    if (foreground_task_runner_map_.find(foreground_task_runner_key) ==
         foreground_task_runner_map_.end()) {
       return;
     }
-    task_runner = foreground_task_runner_map_[isolate];
+    task_runner = foreground_task_runner_map_[foreground_task_runner_key];
   }
   double deadline_in_seconds =
       MonotonicallyIncreasingTime() + idle_time_in_seconds;
@@ -182,17 +189,18 @@ void DefaultPlatform::RunIdleTasks(v8::Isolate* isolate,
 }
 
 std::shared_ptr<TaskRunner> DefaultPlatform::GetForegroundTaskRunner(
-    v8::Isolate* isolate) {
+    const ForegroundTaskRunnerKey* foreground_task_runner_key) {
   base::MutexGuard guard(&lock_);
-  if (foreground_task_runner_map_.find(isolate) ==
+  if (foreground_task_runner_map_.find(foreground_task_runner_key) ==
       foreground_task_runner_map_.end()) {
-    foreground_task_runner_map_.insert(std::make_pair(
-        isolate, std::make_shared<DefaultForegroundTaskRunner>(
-                     idle_task_support_, time_function_for_testing_
-                                             ? time_function_for_testing_
-                                             : DefaultTimeFunction)));
+    foreground_task_runner_map_.insert(
+        std::make_pair(foreground_task_runner_key,
+                       std::make_shared<DefaultForegroundTaskRunner>(
+                           idle_task_support_, time_function_for_testing_
+                                                   ? time_function_for_testing_
+                                                   : DefaultTimeFunction)));
   }
-  return foreground_task_runner_map_[isolate];
+  return foreground_task_runner_map_[foreground_task_runner_key];
 }
 
 void DefaultPlatform::CallOnWorkerThread(std::unique_ptr<Task> task) {
@@ -207,7 +215,8 @@ void DefaultPlatform::CallDelayedOnWorkerThread(std::unique_ptr<Task> task,
                                                delay_in_seconds);
 }
 
-bool DefaultPlatform::IdleTasksEnabled(Isolate* isolate) {
+bool DefaultPlatform::IdleTasksEnabled(
+    const ForegroundTaskRunnerKey* foreground_task_runner_key) {
   return idle_task_support_ == IdleTaskSupport::kEnabled;
 }
 
@@ -250,9 +259,10 @@ v8::PageAllocator* DefaultPlatform::GetPageAllocator() {
   return page_allocator_.get();
 }
 
-void DefaultPlatform::NotifyIsolateShutdown(Isolate* isolate) {
+void DefaultPlatform::NotifyForegroundTaskRunnerKeyDiscarded(
+    const ForegroundTaskRunnerKey* foreground_task_runner_key) {
   base::MutexGuard guard(&lock_);
-  auto it = foreground_task_runner_map_.find(isolate);
+  auto it = foreground_task_runner_map_.find(foreground_task_runner_key);
   if (it != foreground_task_runner_map_.end()) {
     it->second->Terminate();
     foreground_task_runner_map_.erase(it);
