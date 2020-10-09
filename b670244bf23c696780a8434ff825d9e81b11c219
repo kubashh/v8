@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96faf522_7d542f61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-09T14:53:29Z",
+      "side": 1,
+      "message": "Tobias, PTAL\nGeorg and Victor, FYI",
+      "revId": "b670244bf23c696780a8434ff825d9e81b11c219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16d6713c_67851738",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-09T14:53:29Z",
+      "side": 1,
+      "message": "This is here just to avoid calling ActiveTierIsIgnition() for functions created by FunctionTester. Otherwise printing fails at DCHECK inside ActiveTierIsIgnition.",
+      "revId": "b670244bf23c696780a8434ff825d9e81b11c219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
