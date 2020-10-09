@@ -444,6 +444,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a353060b_dc84a952",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T15:44:36Z",
+      "side": 1,
+      "message": "T will be std::function\u003cvoid()\u003e in the current only use, right? So we are not doing anything different.\n\nMy question is: why do we need to template this if the only use is with T \u003d std::function\u003cvoid()\u003e?",
+      "parentUuid": "d2661008_ae871705",
+      "range": {
+        "startLine": 66,
+        "startChar": 43,
+        "endLine": 66,
+        "endChar": 44
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ba9a226_c246ab65",
         "filename": "src/heap/safepoint.h",
         "patchSetId": 9
