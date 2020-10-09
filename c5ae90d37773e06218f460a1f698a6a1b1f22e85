@@ -263,6 +263,24 @@
       "parentUuid": "40609d58_d616603e",
       "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "289b4626_c9217d1e",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3030,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T08:52:04Z",
+      "side": 1,
+      "message": "Thanks for the clarification, will remove it!",
+      "parentUuid": "bcad69de_feed7daa",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
