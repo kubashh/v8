@@ -159,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f7a85f6_1261a0d8",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-09T12:48:29Z",
+      "side": 1,
+      "message": "By reordering AccountMarkBytes and trace callbacks, we can avoid underflows entirely. Updated the code accordingly.",
+      "parentUuid": "b5d2a78d_2e670ae3",
+      "range": {
+        "startLine": 87,
+        "startChar": 9,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "b5ef086cef9ba59a2601c6e5f50825d68c8e5f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6f72c68_3406a410",
