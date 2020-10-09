@@ -51,6 +51,24 @@
       "parentUuid": "fbc073aa_58dd1657",
       "revId": "fc427e0e2dd0495164f0875d25fbccb06967d13c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2705698_3dc4e63d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-09T16:16:07Z",
+      "side": 1,
+      "message": "btw, we could also rename v8::platform to v8::base::platform or something like that and make v8::platform a translation layer between the 2 and then we might get by without deprecating anything.",
+      "parentUuid": "ad35f04d_e5896c5a",
+      "revId": "fc427e0e2dd0495164f0875d25fbccb06967d13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
