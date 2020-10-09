@@ -560,7 +560,7 @@ Handle<HeapObject> Deserializer::ReadObject(SnapshotSpace space) {
 
   DCHECK(!obj->IsThinString(isolate()));
 
-#ifdef DEBUG
+#if defined(DEBUG) && !defined(V8_ENABLE_THIRD_PARTY_HEAP)
   if (obj->IsCode()) {
     DCHECK(space == SnapshotSpace::kCode ||
            space == SnapshotSpace::kReadOnlyHeap);
