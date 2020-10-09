@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a25f3f7_7df719f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-10-09T16:10:34Z",
+      "side": 1,
+      "message": "Hi Clemens,\n\nThis is a quick fix to allow the jump-table-assembler tests to run on Arm64 systems configured with 64k OS pages.\n\nThanks!\nPierre",
+      "revId": "0eed52d8e35eb0d71bac547a1424248cdae5d61e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
