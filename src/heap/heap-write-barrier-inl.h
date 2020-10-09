@@ -172,6 +172,7 @@ inline void GenerationalBarrierForCode(Code host, RelocInfo* rinfo,
 
 inline WriteBarrierMode GetWriteBarrierModeForObject(
     HeapObject object, const DisallowHeapAllocation* promise) {
+  if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return SKIP_WRITE_BARRIER;
   if (FLAG_disable_write_barriers) return SKIP_WRITE_BARRIER;
   DCHECK(Heap_PageFlagsAreConsistent(object));
   heap_internals::MemoryChunk* chunk =
@@ -182,6 +183,7 @@ inline WriteBarrierMode GetWriteBarrierModeForObject(
 }
 
 inline bool ObjectInYoungGeneration(Object object) {
+  if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return false;
   // TODO(rong): Fix caller of this function when we deploy
   // v8_use_third_party_heap.
   if (FLAG_single_generation) return false;
@@ -191,6 +193,7 @@ inline bool ObjectInYoungGeneration(Object object) {
 }
 
 inline bool IsReadOnlyHeapObject(HeapObject object) {
+  if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return ReadOnlyHeap::Contains(object);
   heap_internals::MemoryChunk* chunk =
       heap_internals::MemoryChunk::FromHeapObject(object);
   return chunk->InReadOnlySpace();
