@@ -396,6 +396,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd8d4739_6d7c3a64",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T14:56:04Z",
+      "side": 1,
+      "message": "Does that prohibit us from typing it/not having a template?",
+      "parentUuid": "d7c838fb_1b85d384",
+      "range": {
+        "startLine": 66,
+        "startChar": 43,
+        "endLine": 66,
+        "endChar": 44
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ba9a226_c246ab65",
         "filename": "src/heap/safepoint.h",
         "patchSetId": 9
