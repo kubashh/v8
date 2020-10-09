@@ -420,6 +420,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d2661008_ae871705",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T15:21:23Z",
+      "side": 1,
+      "message": "No, we could switch to std::function if you want. std::function might require a dynamic memory allocation though (although right now I think we are fine) when we don\u0027t need its flexibility.",
+      "parentUuid": "fd8d4739_6d7c3a64",
+      "range": {
+        "startLine": 66,
+        "startChar": 43,
+        "endLine": 66,
+        "endChar": 44
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ba9a226_c246ab65",
         "filename": "src/heap/safepoint.h",
         "patchSetId": 9
