@@ -168,7 +168,13 @@ void ConcurrentMarkerBase::Start() {
 }
 
 void ConcurrentMarkerBase::Cancel() {
-  if (concurrent_marking_handle_) concurrent_marking_handle_->Cancel();
+  if (concurrent_marking_handle_ && concurrent_marking_handle_->IsRunning())
+    concurrent_marking_handle_->Cancel();
+}
+
+void ConcurrentMarkerBase::JoinForTesting() {
+  if (concurrent_marking_handle_ && concurrent_marking_handle_->IsRunning())
+    concurrent_marking_handle_->Join();
 }
 
 ConcurrentMarkerBase::~ConcurrentMarkerBase() {
