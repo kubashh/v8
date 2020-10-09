@@ -2153,8 +2153,8 @@ WASM_SIMD_TEST(I16x8Add) {
                     base::AddWithWraparound);
 }
 
-WASM_SIMD_TEST(I16x8AddSaturateS) {
-  RunI16x8BinOpTest(execution_tier, lower_simd, kExprI16x8AddSaturateS,
+WASM_SIMD_TEST(I16x8AddSatS) {
+  RunI16x8BinOpTest(execution_tier, lower_simd, kExprI16x8AddSatS,
                     SaturateAdd<int16_t>);
 }
 
@@ -2163,8 +2163,8 @@ WASM_SIMD_TEST(I16x8Sub) {
                     base::SubWithWraparound);
 }
 
-WASM_SIMD_TEST(I16x8SubSaturateS) {
-  RunI16x8BinOpTest(execution_tier, lower_simd, kExprI16x8SubSaturateS,
+WASM_SIMD_TEST(I16x8SubSatS) {
+  RunI16x8BinOpTest(execution_tier, lower_simd, kExprI16x8SubSatS,
                     SaturateSub<int16_t>);
 }
 
@@ -2181,13 +2181,13 @@ WASM_SIMD_TEST(I16x8MaxS) {
   RunI16x8BinOpTest(execution_tier, lower_simd, kExprI16x8MaxS, Maximum);
 }
 
-WASM_SIMD_TEST(I16x8AddSaturateU) {
-  RunI16x8BinOpTest(execution_tier, lower_simd, kExprI16x8AddSaturateU,
+WASM_SIMD_TEST(I16x8AddSatU) {
+  RunI16x8BinOpTest(execution_tier, lower_simd, kExprI16x8AddSatU,
                     SaturateAdd<uint16_t>);
 }
 
-WASM_SIMD_TEST(I16x8SubSaturateU) {
-  RunI16x8BinOpTest(execution_tier, lower_simd, kExprI16x8SubSaturateU,
+WASM_SIMD_TEST(I16x8SubSatU) {
+  RunI16x8BinOpTest(execution_tier, lower_simd, kExprI16x8SubSatU,
                     SaturateSub<uint16_t>);
 }
 
@@ -2428,8 +2428,8 @@ WASM_SIMD_TEST(I8x16Add) {
                     base::AddWithWraparound);
 }
 
-WASM_SIMD_TEST(I8x16AddSaturateS) {
-  RunI8x16BinOpTest(execution_tier, lower_simd, kExprI8x16AddSaturateS,
+WASM_SIMD_TEST(I8x16AddSatS) {
+  RunI8x16BinOpTest(execution_tier, lower_simd, kExprI8x16AddSatS,
                     SaturateAdd<int8_t>);
 }
 
@@ -2438,8 +2438,8 @@ WASM_SIMD_TEST(I8x16Sub) {
                     base::SubWithWraparound);
 }
 
-WASM_SIMD_TEST(I8x16SubSaturateS) {
-  RunI8x16BinOpTest(execution_tier, lower_simd, kExprI8x16SubSaturateS,
+WASM_SIMD_TEST(I8x16SubSatS) {
+  RunI8x16BinOpTest(execution_tier, lower_simd, kExprI8x16SubSatS,
                     SaturateSub<int8_t>);
 }
 
@@ -2451,13 +2451,13 @@ WASM_SIMD_TEST(I8x16MaxS) {
   RunI8x16BinOpTest(execution_tier, lower_simd, kExprI8x16MaxS, Maximum);
 }
 
-WASM_SIMD_TEST(I8x16AddSaturateU) {
-  RunI8x16BinOpTest(execution_tier, lower_simd, kExprI8x16AddSaturateU,
+WASM_SIMD_TEST(I8x16AddSatU) {
+  RunI8x16BinOpTest(execution_tier, lower_simd, kExprI8x16AddSatU,
                     SaturateAdd<uint8_t>);
 }
 
-WASM_SIMD_TEST(I8x16SubSaturateU) {
-  RunI8x16BinOpTest(execution_tier, lower_simd, kExprI8x16SubSaturateU,
+WASM_SIMD_TEST(I8x16SubSatU) {
+  RunI8x16BinOpTest(execution_tier, lower_simd, kExprI8x16SubSatU,
                     SaturateSub<uint8_t>);
 }
 

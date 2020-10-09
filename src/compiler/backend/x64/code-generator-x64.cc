@@ -3255,7 +3255,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Paddw(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
-    case kX64I16x8AddSaturateS: {
+    case kX64I16x8AddSatS: {
       __ Paddsw(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
@@ -3267,7 +3267,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Psubw(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
-    case kX64I16x8SubSaturateS: {
+    case kX64I16x8SubSatS: {
       __ Psubsw(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
@@ -3325,11 +3325,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Packusdw(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
-    case kX64I16x8AddSaturateU: {
+    case kX64I16x8AddSatU: {
       __ Paddusw(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
-    case kX64I16x8SubSaturateU: {
+    case kX64I16x8SubSatU: {
       __ Psubusw(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
@@ -3492,7 +3492,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Paddb(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
-    case kX64I8x16AddSaturateS: {
+    case kX64I8x16AddSatS: {
       __ Paddsb(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
@@ -3500,7 +3500,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Psubb(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
-    case kX64I8x16SubSaturateS: {
+    case kX64I8x16SubSatS: {
       __ Psubsb(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
@@ -3605,11 +3605,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     }
-    case kX64I8x16AddSaturateU: {
+    case kX64I8x16AddSatU: {
       __ Paddusb(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
-    case kX64I8x16SubSaturateU: {
+    case kX64I8x16SubSatU: {
       __ Psubusb(i.OutputSimd128Register(), i.InputSimd128Register(1));
       break;
     }
