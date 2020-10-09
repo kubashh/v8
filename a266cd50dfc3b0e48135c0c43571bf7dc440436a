@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64d3135c_e2ada1bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-09T07:54:55Z",
+      "side": 1,
+      "message": "BTW, Santiago had written a note somewhere on the ownership and life time of the local heap in TF. It may need to be updated to reflect your change, but I can\u0027t find it anymore.",
+      "revId": "a266cd50dfc3b0e48135c0c43571bf7dc440436a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
