@@ -50,6 +50,24 @@
       "message": "Is the goal to eventually fix this test to work with the generic wrapper? I thought the only difference (after my fix) is that \"GenericJSToWasmWrapper\" is being shown instead of \"js-to-wasm:i:i\".\nShould we leave a TODO, or investigate right away?",
       "revId": "40a1d8e1c76f8a0c69b55930a69cc356c71e6375",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd51b769_2050b0bc",
+        "filename": "test/inspector/cpu-profiler/console-profile-wasm.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-10-09T10:48:13Z",
+      "side": 1,
+      "message": "I changed the test now to allow both GenericJSToWasmWrapper as well as js-to-wasm:i:i. Does this look good to you?",
+      "parentUuid": "ef622f8f_109a061a",
+      "revId": "40a1d8e1c76f8a0c69b55930a69cc356c71e6375",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
