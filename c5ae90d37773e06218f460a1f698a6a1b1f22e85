@@ -16,6 +16,74 @@
       "message": "PTAL",
       "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f2a46fb_7689434b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-09T06:27:10Z",
+      "side": 1,
+      "message": "The set_persistent_handles call seems unnecessary if the container is moved into the local heap right after.",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9057539_27b0f7c1",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-09T06:27:10Z",
+      "side": 1,
+      "message": "NIt: Please initialize to nullptr here instead of in the constructor.",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43ccfb50_e308a5a8",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-09T06:27:10Z",
+      "side": 1,
+      "message": "I\u0027m wondering if we should instead move this into CreateGraph() and AssembleCode(), to align with OptimizeGraph*().",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf030f2b_20d7460f",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3030,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-09T06:27:10Z",
+      "side": 1,
+      "message": "Do we now ever create it unparked?",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
