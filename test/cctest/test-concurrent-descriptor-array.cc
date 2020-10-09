@@ -33,7 +33,8 @@ class ConcurrentSearchThread final : public v8::base::Thread {
         sema_started_(sema_started) {}
 
   void Run() override {
-    LocalHeap local_heap(heap_, std::move(ph_));
+    LocalHeap local_heap(heap_, LocalHeap::InitialThreadState::Running,
+                         std::move(ph_));
     LocalHandleScope scope(&local_heap);
 
     for (int i = 0; i < kNumHandles; i++) {
