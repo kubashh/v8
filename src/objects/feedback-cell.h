@@ -32,7 +32,7 @@ class FeedbackCell : public TorqueGeneratedFeedbackCell<FeedbackCell, Struct> {
                                         HeapObject target)>>
           gc_notify_updated_slot = base::nullopt);
   inline void SetInitialInterruptBudget();
-  inline void SetInterruptBudget();
+  inline void SetInterruptBudget(int interrupt_budget);
 
   using BodyDescriptor =
       FixedBodyDescriptor<kValueOffset, kInterruptBudgetOffset, kAlignedSize>;
