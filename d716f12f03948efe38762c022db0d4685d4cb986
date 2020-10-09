@@ -320,6 +320,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "42818b85_f8067d87",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-09T08:14:15Z",
+      "side": 1,
+      "message": "Add as a comment that bailout objects may be complicated to trace and thus take long which means we want less of them in a single go.",
+      "parentUuid": "d9349e06_60bf3a8a",
+      "range": {
+        "startLine": 322,
+        "startChar": 47,
+        "endLine": 322,
+        "endChar": 76
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea9cd19f_c94cffaf",
         "filename": "src/heap/cppgc/marking-visitor.cc",
         "patchSetId": 10
@@ -355,6 +379,30 @@
       "side": 1,
       "message": "MarkingVisitorBase should use the default version that always returns false.",
       "parentUuid": "ea9cd19f_c94cffaf",
+      "range": {
+        "startLine": 70,
+        "startChar": 31,
+        "endLine": 70,
+        "endChar": 68
+      },
+      "revId": "d716f12f03948efe38762c022db0d4685d4cb986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07b96553_1b1fc07d",
+        "filename": "src/heap/cppgc/marking-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-09T08:14:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "10f21c10_0925a5ab",
       "range": {
         "startLine": 70,
         "startChar": 31,

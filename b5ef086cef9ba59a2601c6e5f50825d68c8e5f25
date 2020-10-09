@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10b75aff_afac43f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-09T08:14:15Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "b5ef086cef9ba59a2601c6e5f50825d68c8e5f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb1d44ae_0f2ab701",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-09T08:14:15Z",
+      "side": 1,
+      "message": "thread",
+      "range": {
+        "startLine": 132,
+        "startChar": 48,
+        "endLine": 132,
+        "endChar": 55
+      },
+      "revId": "b5ef086cef9ba59a2601c6e5f50825d68c8e5f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1779e042_6e5a1fdd",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-09T08:14:15Z",
+      "side": 1,
+      "message": "As a follow up from the last comment: You said we don\u0027t expect querying marked_bytes() in the inconsistent state (time frame is also very small).\n\nIf that\u0027s true we should add\n  DCHECK_GT(marked_bytes_, deferred_marked_bytes_);",
+      "range": {
+        "startLine": 35,
+        "startChar": 32,
+        "endLine": 35,
+        "endChar": 38
+      },
+      "revId": "b5ef086cef9ba59a2601c6e5f50825d68c8e5f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c37e3ddc_3052421b",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-09T08:14:15Z",
+      "side": 1,
+      "message": "Either here or in the marked_bytes() getter we need to add a comment mentioning the overflow and why it is benign.",
+      "range": {
+        "startLine": 87,
+        "startChar": 9,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "b5ef086cef9ba59a2601c6e5f50825d68c8e5f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6f72c68_3406a410",
+        "filename": "test/unittests/heap/cppgc/concurrent-marking-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-09T08:14:15Z",
+      "side": 1,
+      "message": "Either in this CL or as a followup:\n- Let\u0027s have kNumStep below depend on whether we are in THREAD_SANITIZER or not\n- Let\u0027s also execute the test for a low # of iterations in non-THREAD_SANITIZER configs\n\nThis way we ensure that the tests (a) compile, and (b) have some coverage (even though way worse).",
+      "range": {
+        "startLine": 61,
+        "startChar": 12,
+        "endLine": 61,
+        "endChar": 28
+      },
+      "revId": "b5ef086cef9ba59a2601c6e5f50825d68c8e5f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
