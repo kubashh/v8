@@ -39,6 +39,30 @@
       },
       "revId": "e63e655af4f0b9592f639b2048605795a8c6d3d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75bd0020_804db2e0",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-09T08:33:54Z",
+      "side": 1,
+      "message": "Right, I solved this in my next commit",
+      "parentUuid": "a049c8a1_7afeccab",
+      "range": {
+        "startLine": 369,
+        "startChar": 48,
+        "endLine": 369,
+        "endChar": 75
+      },
+      "revId": "e63e655af4f0b9592f639b2048605795a8c6d3d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
