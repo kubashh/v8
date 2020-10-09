@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94b7585e_120278de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-09T08:29:32Z",
+      "side": 1,
+      "message": "Thanks! I added more details to the commit message.",
+      "revId": "e63e655af4f0b9592f639b2048605795a8c6d3d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a049c8a1_7afeccab",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-09T08:29:32Z",
+      "side": 1,
+      "message": "I think this will not compile. We need to use underscores: allocation_site_pretenuring because it is expanded into a variable name FLAG_allocation_site_pretenuring.",
+      "range": {
+        "startLine": 369,
+        "startChar": 48,
+        "endLine": 369,
+        "endChar": 75
+      },
+      "revId": "e63e655af4f0b9592f639b2048605795a8c6d3d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
