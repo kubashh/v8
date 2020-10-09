@@ -160,6 +160,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ccb4271a_e0c375ec",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T08:25:05Z",
+      "side": 1,
+      "message": "Unfortunately HeapBroker doesn\u0027t hold a reference to the LocalHeap at that point anymore. LocalHeapScope in ExecuteJobImpl sets the LocalHeap and in the destructor resets it to null for the broker. I didn\u0027t want to change that tbh, so passing it as argument seemed like the simpler solution.\n\nWhat do you think about conditionally (on FLAG_code_comments) using UnparkedScope right before AssembleCode() in ExecuteJobImpl() for now? This would avoid regressions and we could clean this up in a subsequent CL.",
+      "parentUuid": "9cab17a1_d5092e29",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf030f2b_20d7460f",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 7
@@ -207,6 +225,24 @@
       "side": 1,
       "message": "Starting in the parked mode sounds like a good default for me. That way the use doesn\u0027t have to worry about entering safepoints.",
       "parentUuid": "0a07995b_173e7c66",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40609d58_d616603e",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3030,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T08:25:05Z",
+      "side": 1,
+      "message": "Do you mean just changing the default value for the initial_thread_state argument (Parked for Running) or removing the argument altogether?",
+      "parentUuid": "f13331ac_367cd739",
       "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

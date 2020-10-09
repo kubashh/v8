@@ -33,6 +33,24 @@
       "message": "Nice! lgtm from my side",
       "revId": "a266cd50dfc3b0e48135c0c43571bf7dc440436a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4afcdef_9e6f549e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T08:25:05Z",
+      "side": 1,
+      "message": "Thanks for the reminder! I chatted with Santiago about that yesterday and I assumed that I didn\u0027t change it, but turns out I have slightly changed the behavior. I updated the comment.",
+      "parentUuid": "64d3135c_e2ada1bd",
+      "revId": "a266cd50dfc3b0e48135c0c43571bf7dc440436a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
