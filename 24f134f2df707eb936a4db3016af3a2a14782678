@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86540532_47dd16b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "Thanks! I have a couple of comments regarding implementation",
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2bbf63f_eb4ee1e6",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2479,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "nit: What about ...\n  DCHECK_NULL(local_heap_);\n  local_heap_ \u003d local_heap;\n  DCHECK_NOT_NULL(local_heap_);\n\nWe had this pattern somewhere else if the code (can\u0027t remember where though).",
+      "range": {
+        "startLine": 2477,
+        "startChar": 0,
+        "endLine": 2479,
+        "endChar": 27
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6111282_6fbccc55",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "Is there a reason we want a raw pointer here?\nI\u0027d prefer it if we could have a std::unique_ptr or similar in order to guarantee the singular ownership of the LocalHeap",
+      "range": {
+        "startLine": 363,
+        "startChar": 2,
+        "endLine": 363,
+        "endChar": 13
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7193aef9_dcdfb387",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "Now a LocalHeapScope scopes the LocalHeap inside of the brokers, but its liveness is actually bigger than this scope right? Please update this comment to reflect this.",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 71
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61c4b0c7_595bdbec",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7576,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "Make it an ExecuteJob\u0027s optional argument? Maybe with\n  LocalHeap* local_heap \u003d nullptr",
+      "range": {
+        "startLine": 7576,
+        "startChar": 65,
+        "endLine": 7576,
+        "endChar": 72
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b371713_ea537ad2",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "q: Is this TODO still relevant? (there\u0027s a similar one below)",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 0
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb57f154_94c37687",
+        "filename": "src/heap/local-heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "If this class goes away and LocalHeaps start parked, can we add a comment that states that they started as Parked and we need to unpark to use them?",
+      "range": {
+        "startLine": 27,
+        "startChar": 13,
+        "endLine": 27,
+        "endChar": 31
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f9482a8_4755a480",
+        "filename": "src/heap/local-heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "This DCHECK and below I don\u0027t think they are necessary because it would fail on the very next line if they are null.\nIf you want to keep them, nit: I\u0027d do \n  DCHECK_NOT_NULL(local_heap_);\nwith an underscore since that\u0027s the variable that we are using.",
+      "range": {
+        "startLine": 192,
+        "startChar": 4,
+        "endLine": 192,
+        "endChar": 32
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "966bcc78_2e1cd8b7",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "Should this be std::function? This way, we ensure that it is a function that we can call in line 72\n\nAlso I am not sure why we even have this method templatized since I see only one use. Are we planning on using this somewhere else?",
+      "range": {
+        "startLine": 66,
+        "startChar": 43,
+        "endLine": 66,
+        "endChar": 44
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ba9a226_c246ab65",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-09T10:08:16Z",
+      "side": 1,
+      "message": "Similar here.",
+      "range": {
+        "startLine": 82,
+        "startChar": 48,
+        "endLine": 82,
+        "endChar": 56
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
