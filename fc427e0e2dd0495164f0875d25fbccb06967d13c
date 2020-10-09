@@ -16,6 +16,23 @@
       "message": "ulan ptal.\n(will add a tracking bug if and when we\u0027re ready to move forward with this)",
       "revId": "fc427e0e2dd0495164f0875d25fbccb06967d13c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc073aa_58dd1657",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-09T15:03:31Z",
+      "side": 1,
+      "message": "We need to preserve API compatibility. Here is the API deprecation process: https://v8.dev/docs/api\n\nI don\u0027t see a good solution here. Let\u0027s discuss offline.\n\n",
+      "revId": "fc427e0e2dd0495164f0875d25fbccb06967d13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
