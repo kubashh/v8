@@ -70,6 +70,8 @@ class V8_EXPORT_PRIVATE LocalHeap {
     return kNullMaybeHandle;
   }
 
+  void AttachPersistentHandles(
+      std::unique_ptr<PersistentHandles> persistent_handles);
   std::unique_ptr<PersistentHandles> DetachPersistentHandles();
 #ifdef DEBUG
   bool ContainsPersistentHandle(Address* location);
@@ -177,6 +179,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
 class ParkedScope {
  public:
   explicit ParkedScope(LocalHeap* local_heap) : local_heap_(local_heap) {
+    DCHECK_NOT_NULL(local_heap);
     local_heap_->Park();
   }
 
@@ -191,6 +194,7 @@ class ParkedScope {
 class UnparkedScope {
  public:
   explicit UnparkedScope(LocalHeap* local_heap) : local_heap_(local_heap) {
+    DCHECK_NOT_NULL(local_heap);
     local_heap_->Unpark();
   }
 
