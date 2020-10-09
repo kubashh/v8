@@ -7573,7 +7573,7 @@ MaybeHandle<Code> CompileJSToJSWrapper(Isolate* isolate,
           CodeKind::JS_TO_JS_FUNCTION, std::move(name_buffer),
           AssemblerOptions::Default(isolate)));
 
-  if (job->ExecuteJob(isolate->counters()->runtime_call_stats()) ==
+  if (job->ExecuteJob(isolate->counters()->runtime_call_stats(), nullptr) ==
           CompilationJob::FAILED ||
       job->FinalizeJob(isolate) == CompilationJob::FAILED) {
     return {};
@@ -7628,7 +7628,7 @@ Handle<Code> CompileCWasmEntry(Isolate* isolate, const wasm::FunctionSig* sig,
           CodeKind::C_WASM_ENTRY, std::move(name_buffer),
           AssemblerOptions::Default(isolate)));
 
-  CHECK_NE(job->ExecuteJob(isolate->counters()->runtime_call_stats()),
+  CHECK_NE(job->ExecuteJob(isolate->counters()->runtime_call_stats(), nullptr),
            CompilationJob::FAILED);
   CHECK_NE(job->FinalizeJob(isolate), CompilationJob::FAILED);
 
