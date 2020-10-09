@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "f8b3e6b4_833161ce",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Camillo, Toon: Any more feedback on this? Does this approach work okay?",
       "revId": "25c7b2ee9aac42d610234d5d2cadfb6ce8da6f83",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "3aa5c7f8_705e5c89",
         "filename": "/PATCHSET_LEVEL",
@@ -31,8 +32,24 @@
       "side": 1,
       "message": "I\u0027m fine and will probably land a partial optimisation for it soonish.",
       "revId": "25c7b2ee9aac42d610234d5d2cadfb6ce8da6f83",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e6810f7_5441f683",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-10-09T14:45:36Z",
+      "side": 1,
+      "message": "Toon: Any update? I\u0027d like to proceed with this, and would need to know whether the current approach is okay.",
+      "revId": "25c7b2ee9aac42d610234d5d2cadfb6ce8da6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
