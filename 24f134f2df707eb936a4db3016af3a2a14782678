@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba89350_bbcba15f",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2479,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2bbf63f_eb4ee1e6",
+      "range": {
+        "startLine": 2477,
+        "startChar": 0,
+        "endLine": 2479,
+        "endChar": 27
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6111282_6fbccc55",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-09T10:08:16Z",
       "side": 1,
       "message": "Is there a reason we want a raw pointer here?\nI\u0027d prefer it if we could have a std::unique_ptr or similar in order to guarantee the singular ownership of the LocalHeap",
+      "range": {
+        "startLine": 363,
+        "startChar": 2,
+        "endLine": 363,
+        "endChar": 13
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d22e615_8caddbc9",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "LocalHeap is stack-allocated now, so there is no ownership of LocalHeap anymore.",
+      "parentUuid": "b6111282_6fbccc55",
       "range": {
         "startLine": 363,
         "startChar": 2,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3aad80b_66a836ae",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7193aef9_dcdfb387",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 71
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61c4b0c7_595bdbec",
@@ -100,6 +172,30 @@
       "writtenOn": "2020-10-09T10:08:16Z",
       "side": 1,
       "message": "Make it an ExecuteJob\u0027s optional argument? Maybe with\n  LocalHeap* local_heap \u003d nullptr",
+      "range": {
+        "startLine": 7576,
+        "startChar": 65,
+        "endLine": 7576,
+        "endChar": 72
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c58160c_e6ad017e",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7576,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61c4b0c7_595bdbec",
       "range": {
         "startLine": 7576,
         "startChar": 65,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6e8a149_a21b534f",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b371713_ea537ad2",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 0
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb57f154_94c37687",
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3896005c_15f8ea0b",
+        "filename": "src/heap/local-heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb57f154_94c37687",
+      "range": {
+        "startLine": 27,
+        "startChar": 13,
+        "endLine": 27,
+        "endChar": 31
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f9482a8_4755a480",
@@ -169,6 +313,30 @@
       "writtenOn": "2020-10-09T10:08:16Z",
       "side": 1,
       "message": "This DCHECK and below I don\u0027t think they are necessary because it would fail on the very next line if they are null.\nIf you want to keep them, nit: I\u0027d do \n  DCHECK_NOT_NULL(local_heap_);\nwith an underscore since that\u0027s the variable that we are using.",
+      "range": {
+        "startLine": 192,
+        "startChar": 4,
+        "endLine": 192,
+        "endChar": 32
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0e825e1_c2df5f7f",
+        "filename": "src/heap/local-heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f9482a8_4755a480",
       "range": {
         "startLine": 192,
         "startChar": 4,
@@ -204,6 +372,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7c838fb_1b85d384",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "I solved this with a callback to avoid locking the mutex twice in each constructor and destructor. IMHO the callback operation belongs more to LocalHeap, while AddLocalHeap belongs to GlobalSafepoint. That\u0027s why I refrained from doing all work directly in GlobalSafepoint::AddLocalHeap/RemoveLocalHeap.",
+      "parentUuid": "966bcc78_2e1cd8b7",
+      "range": {
+        "startLine": 66,
+        "startChar": 43,
+        "endLine": 66,
+        "endChar": 44
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ba9a226_c246ab65",
         "filename": "src/heap/safepoint.h",
         "patchSetId": 9
@@ -215,6 +407,30 @@
       "writtenOn": "2020-10-09T10:08:16Z",
       "side": 1,
       "message": "Similar here.",
+      "range": {
+        "startLine": 82,
+        "startChar": 48,
+        "endLine": 82,
+        "endChar": 56
+      },
+      "revId": "24f134f2df707eb936a4db3016af3a2a14782678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a9cd49c_92d00ebb",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ba9a226_c246ab65",
       "range": {
         "startLine": 82,
         "startChar": 48,

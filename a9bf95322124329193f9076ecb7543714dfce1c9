@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feef5f4f_ffad0fda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T14:52:41Z",
+      "side": 1,
+      "message": "I think I\u0027ve addressed all comments now except for the one with AssembleCode().",
+      "revId": "a9bf95322124329193f9076ecb7543714dfce1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
