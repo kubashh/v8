@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01535989_639d348c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T07:24:07Z",
+      "side": 1,
+      "message": "Thanks for the review!",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f2a46fb_7689434b",
@@ -35,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74803307_363e4f62",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T07:24:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f2a46fb_7689434b",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9057539_27b0f7c1",
@@ -48,6 +83,24 @@
       "writtenOn": "2020-10-09T06:27:10Z",
       "side": 1,
       "message": "NIt: Please initialize to nullptr here instead of in the constructor.",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fee6fb6_108242b9",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T07:24:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9057539_27b0f7c1",
       "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +124,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65ae02dc_39abe8fe",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T07:24:07Z",
+      "side": 1,
+      "message": "Agreed, I moved the UnparkedScope as UnparkedScopeIfNeeded into CreateGraph(). Note it\u0027s still different from OptimizeGraph*() because they unpark only for specific passes.\n\nI actually tried to move the UnparkedScope further down the call-chain for AssembleCode(), problem was that I did have to pass the LocalHeap* as argument to AssembleCode() and in there (or in AssembleCodePhase) I would need to create the UnparkedScope conditionally. Also can\u0027t use UnparkedScopeIfNeeded because that expects a broker. It\u0027s especially unfortunate since I would assume we don\u0027t need to unpark most of the time (only with FLAG_code_comments).\n\nI guess I could pass LocalHeap as argument to AssembleCode() and AssembleCodePhase and add another constructor for UnparkedScopeIfNeeded which takes a LocalHeap and a bool/condition (we could use FLAG_code_comments). What do you think?",
+      "parentUuid": "43ccfb50_e308a5a8",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf030f2b_20d7460f",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 7
@@ -82,6 +153,24 @@
       "writtenOn": "2020-10-09T06:27:10Z",
       "side": 1,
       "message": "Do we now ever create it unparked?",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a07995b_173e7c66",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3030,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-09T07:24:07Z",
+      "side": 1,
+      "message": "Not in Turbofan but other users probably do (e.g. Leszek\u0027s off-thread streaming finalization).\n\n@all: Do you think we should simply start LocalHeaps in parked mode and remove the ctor argument (right now the default for that one is Running/Unparked)?",
+      "parentUuid": "bf030f2b_20d7460f",
       "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
