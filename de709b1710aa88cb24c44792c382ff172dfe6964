@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "068d1ae5_ac42b012",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-09T07:07:40Z",
+      "side": 1,
+      "message": "Added new Runtime flags for TPH,\nAdded 3 new TPH API calls",
+      "revId": "de709b1710aa88cb24c44792c382ff172dfe6964",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
