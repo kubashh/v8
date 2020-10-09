@@ -841,6 +841,12 @@ class StringRef : public NameRef {
   base::Optional<double> ToNumber();
   bool IsSeqString() const;
   bool IsExternalString() const;
+
+  // GetOwnConstantElement without allocation. Returns nullopt if the character
+  // is not in the single character string cache, or if the index is larger than
+  // the string. {policy} only used for the case where we can't access the heap.
+  base::Optional<ObjectRef> GetOwnConstantElementIfInCache(
+      uint32_t index, SerializationPolicy policy);
 };
 
 class SymbolRef : public NameRef {
