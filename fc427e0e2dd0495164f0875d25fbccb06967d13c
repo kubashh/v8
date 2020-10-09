@@ -33,6 +33,24 @@
       "message": "We need to preserve API compatibility. Here is the API deprecation process: https://v8.dev/docs/api\n\nI don\u0027t see a good solution here. Let\u0027s discuss offline.\n\n",
       "revId": "fc427e0e2dd0495164f0875d25fbccb06967d13c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad35f04d_e5896c5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-09T16:12:06Z",
+      "side": 1,
+      "message": "Sorry for the confusion. I\u0027m worry we will need to go through a deprecation process for this change. This CL is supposed to be the final outcome after deprecation so that we can reach a consensus on what we\u0027re aiming for.",
+      "parentUuid": "fbc073aa_58dd1657",
+      "revId": "fc427e0e2dd0495164f0875d25fbccb06967d13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
