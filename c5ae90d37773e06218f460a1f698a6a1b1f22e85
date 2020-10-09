@@ -191,6 +191,24 @@
       "parentUuid": "bf030f2b_20d7460f",
       "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f13331ac_367cd739",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3030,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-09T07:55:12Z",
+      "side": 1,
+      "message": "Starting in the parked mode sounds like a good default for me. That way the use doesn\u0027t have to worry about entering safepoints.",
+      "parentUuid": "0a07995b_173e7c66",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
