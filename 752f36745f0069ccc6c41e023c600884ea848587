@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "4a1d8656_2abff94c",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "LGTM",
       "revId": "752f36745f0069ccc6c41e023c600884ea848587",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "238fe464_17e84ddf",
         "filename": "/PATCHSET_LEVEL",
@@ -31,10 +32,28 @@
       "side": 1,
       "message": "LGTM, thanks!\nFYI there\u0027s a couple of unresolved comments which I think you addressed but just didn\u0027t resolve in Gerrit.\nAlso, after resolving the merge conflict do you mind running the v8 tsan cq try bots? The non-concurrent marking one will be red since it is already red but the other two should be green.",
       "revId": "752f36745f0069ccc6c41e023c600884ea848587",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8727c6d_7ec48587",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Great, I went through the whole set, and each comment has been dealt with.",
+      "parentUuid": "238fe464_17e84ddf",
+      "revId": "752f36745f0069ccc6c41e023c600884ea848587",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
       "key": {
         "uuid": "d1b55a95_0323f8a9",
         "filename": "src/objects/feedback-vector-inl.h",
@@ -54,8 +73,7 @@
         "endChar": 64
       },
       "revId": "752f36745f0069ccc6c41e023c600884ea848587",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

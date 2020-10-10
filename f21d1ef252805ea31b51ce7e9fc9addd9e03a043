@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a381c4a2_296e9fa6",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71a93c8d_89afd0d0",
+      "range": {
+        "startLine": 175,
+        "startChar": 12,
+        "endLine": 175,
+        "endChar": 13
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a609a37b_8d32cdc6",
@@ -54,6 +78,24 @@
       "writtenOn": "2020-10-07T19:42:12Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a55a97d6_b7b3524b",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a609a37b_8d32cdc6",
       "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca4dca93_a3aab36e",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Okay, thanks, removed the Smi case and sure enough it compiles :).",
+      "parentUuid": "357e8c69_7c3ead77",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a5d3295_4139ff85",
@@ -92,6 +152,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e71a32f0_87c91f7b",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "I think here I\u0027d rather let the vector take care of it. At this level they are \"slots,\" and not integers -- I\u0027d need to break open the abstraction. At the lower level\n\nTorqueGeneratedFeedbackVector\u003cD, P\u003e::raw_feedback_slots(..., int i) {...\n\nthere are DCHECKS, so we have coverage.",
+      "parentUuid": "6a5d3295_4139ff85",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9521cba5_505bef34",
@@ -105,6 +183,30 @@
       "writtenOn": "2020-10-07T19:42:12Z",
       "side": 1,
       "message": "I wonder if the NexusConfig object will be useful in case of null isolate? Do we actually pass empty handles here?",
+      "range": {
+        "startLine": 487,
+        "startChar": 29,
+        "endLine": 487,
+        "endChar": 36
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03a2014f_faab30d6",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "We do. I rather wish we didn\u0027t, and am interesting in pursuing a refactoring to stop doing that. But this CL is so big and old I\u0027d like to leave it.\n\nThe empty handle case is for some IC functions that want an isolate, but we don\u0027t yet have a feedback vector. I\u0027ll mark this comment resolved, please reopen if there is something I should do.",
+      "parentUuid": "9521cba5_505bef34",
       "range": {
         "startLine": 487,
         "startChar": 29,
@@ -138,6 +240,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1f029e7_10de4b89",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "I\u0027ll keep the null vector support for the moment.",
+      "parentUuid": "011c98fe_64b3be28",
+      "range": {
+        "startLine": 495,
+        "startChar": 29,
+        "endLine": 495,
+        "endChar": 36
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ecba1e1_4e3a10b9",
@@ -151,6 +277,30 @@
       "writtenOn": "2020-10-07T19:42:12Z",
       "side": 1,
       "message": "Given that the first parameter is a template, it\u0027ll be happy with a Smi too.\nHowever, it seems that all the use cases pass MaybeObject as feedback and extra, so maybe templatizing the method is actually not that necessary.",
+      "range": {
+        "startLine": 569,
+        "startChar": 18,
+        "endLine": 569,
+        "endChar": 39
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38fd06ce_73ff1747",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Thanks! I\u0027ve removed the unnecessary MaybeObject::FromSmi(). There are many cases where we pass an Object (I see WeakFixedArray, SimpleNumberDictionary, etc....many compilation errors if I remove the template. Santiago suggested the template for ease of use, and I\u0027d like to keep it for the flexibility it provides.",
+      "parentUuid": "2ecba1e1_4e3a10b9",
       "range": {
         "startLine": 569,
         "startChar": 18,
@@ -178,6 +328,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bc9a841_d186ffa6",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Good catch, thanks! On the second point, I\u0027d really prefer to do the read at once if there are two slots to minimize the chance of reading inconsistent state. I\u0027d like the code to reflect that in general, we should read our feedback and then act on it.",
+      "parentUuid": "55e23df6_9c00f894",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50a224b1_57a02abd",
@@ -195,6 +363,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d018525d_014ec2c3",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Oh gosh! Thank you. 😊",
+      "parentUuid": "50a224b1_57a02abd",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "563965ed_ebb0e9bd",
@@ -208,6 +394,30 @@
       "writtenOn": "2020-10-07T19:42:12Z",
       "side": 1,
       "message": "FYI, you can just say\n  friend NexusConfig;\nwithout specifying whether it\u0027s a class or struct.",
+      "range": {
+        "startLine": 330,
+        "startChar": 9,
+        "endLine": 330,
+        "endChar": 14
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee5ac07b_3fbdc9d5",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "563965ed_ebb0e9bd",
       "range": {
         "startLine": 330,
         "startChar": 9,
@@ -241,6 +451,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f763fc_0735008f",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "I think I\u0027d rather go with the pair syntax at this point. That whole thing has been through many rounds of comment/iteration, and I\u0027d like to move forward.",
+      "parentUuid": "6b153310_bc8252ed",
+      "range": {
+        "startLine": 654,
+        "startChar": 2,
+        "endLine": 654,
+        "endChar": 37
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e79e1ecd_98c95dab",
@@ -254,6 +488,30 @@
       "writtenOn": "2020-10-07T19:42:12Z",
       "side": 1,
       "message": "Please consider passing config by const reference or by pointer instead of by-value.",
+      "range": {
+        "startLine": 681,
+        "startChar": 16,
+        "endLine": 681,
+        "endChar": 34
+      },
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ce5c506_e6a835ab",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Yep, done, thanks!",
+      "parentUuid": "e79e1ecd_98c95dab",
       "range": {
         "startLine": 681,
         "startChar": 16,
@@ -281,6 +539,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c60ef9_73796eee",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "Wow, that\u0027s fantastic, done!",
+      "parentUuid": "3ded85ca_a3d9e116",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28d76497_e7c06c79",
@@ -294,6 +570,24 @@
       "writtenOn": "2020-10-07T19:42:12Z",
       "side": 1,
       "message": "It might be useful to ensure somehow that the exploration thread had a chance to \"see\" all IC states. Maybe by cycling until it sees all the states instead of just 5 cycles.",
+      "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bfc9c38_ac441e5a",
+        "filename": "test/cctest/test-concurrent-feedback-vector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "That is a great idea, thanks. I upped it to 1000 cycles, with early exit on the background thread once it saw all states. It also asserts if it doesn\u0027t see them after all cycles. On local machine seems like between 5 and 30 cycles are enough.",
+      "parentUuid": "28d76497_e7c06c79",
       "revId": "f21d1ef252805ea31b51ce7e9fc9addd9e03a043",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

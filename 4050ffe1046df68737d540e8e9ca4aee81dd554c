@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "d7e82978_2728eca5",
         "filename": "src/objects/feedback-vector.cc",
@@ -20,10 +21,10 @@
         "endChar": 50
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "6d13ba32_5c041603",
         "filename": "src/objects/feedback-vector.cc",
@@ -44,10 +45,10 @@
         "endChar": 50
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "fc654f59_92c26edf",
         "filename": "src/objects/feedback-vector.cc",
@@ -68,10 +69,10 @@
         "endChar": 50
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "09f723a6_c6c37d30",
         "filename": "src/objects/feedback-vector.cc",
@@ -85,10 +86,10 @@
       "side": 1,
       "message": "Let\u0027s also mention that this is safe to run from a background thread. (And maybe move the comment to the header because it\u0027s really something you want to know as a client).",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "340017eb_a0c77780",
         "filename": "src/objects/feedback-vector.cc",
@@ -103,10 +104,10 @@
       "message": "Function removed.",
       "parentUuid": "09f723a6_c6c37d30",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "3a904d20_b1c78e94",
         "filename": "src/objects/feedback-vector.cc",
@@ -126,10 +127,10 @@
         "endChar": 47
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "1cc8ef80_87a1468c",
         "filename": "src/objects/feedback-vector.cc",
@@ -150,10 +151,10 @@
         "endChar": 47
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "d10021ff_24c29333",
         "filename": "src/objects/feedback-vector.cc",
@@ -167,10 +168,10 @@
       "side": 1,
       "message": "Maybe also put a DisallowHeapAllocation scope here.",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "09246e76_300df18f",
         "filename": "src/objects/feedback-vector.cc",
@@ -185,10 +186,10 @@
       "message": "Function removed.",
       "parentUuid": "d10021ff_24c29333",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "de00f6d1_4f088f84",
         "filename": "src/objects/feedback-vector.cc",
@@ -208,10 +209,34 @@
         "endChar": 51
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e919c9e4_85f1256b",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-10T12:29:02Z",
+      "side": 1,
+      "message": "This was addressed.",
+      "parentUuid": "de00f6d1_4f088f84",
+      "range": {
+        "startLine": 993,
+        "startChar": 4,
+        "endLine": 993,
+        "endChar": 51
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "e14c77e6_0411fa64",
         "filename": "src/objects/feedback-vector.cc",
@@ -225,10 +250,10 @@
       "side": 1,
       "message": "Please add a CHECK that length % 2 \u003d\u003d 0.",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "21237f24_f29e0dfd",
         "filename": "src/objects/feedback-vector.cc",
@@ -243,10 +268,10 @@
       "message": "Function removed.",
       "parentUuid": "e14c77e6_0411fa64",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "bfff6d4a_8b0dda54",
         "filename": "src/objects/feedback-vector.cc",
@@ -260,10 +285,10 @@
       "side": 1,
       "message": "Do I understand correctly that these two loads of the i\u0027th element are guaranteed to produce the same value because the first {length} array elements are constant?",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "048a6868_85f1ebe8",
         "filename": "src/objects/feedback-vector.cc",
@@ -278,10 +303,10 @@
       "message": "Function removed.",
       "parentUuid": "bfff6d4a_8b0dda54",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "f6a25114_dda23102",
         "filename": "src/objects/feedback-vector.cc",
@@ -295,10 +320,10 @@
       "side": 1,
       "message": "Please split into two CHECKs.",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "fa4a85b1_8340ec3e",
         "filename": "src/objects/feedback-vector.cc",
@@ -313,10 +338,10 @@
       "message": "Function removed.",
       "parentUuid": "f6a25114_dda23102",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "01cd0117_2995d009",
         "filename": "src/objects/feedback-vector.cc",
@@ -330,10 +355,10 @@
       "side": 1,
       "message": "Is there any hope that we can remove some old code in favour of this implementation?",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "76178843_e16a3cf3",
         "filename": "src/objects/feedback-vector.cc",
@@ -348,10 +373,10 @@
       "message": "Happily, function removed.",
       "parentUuid": "01cd0117_2995d009",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "f893715f_16e032c4",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -365,10 +390,10 @@
       "side": 1,
       "message": "Please add a short summary of what this thread does.",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "f8791e2b_ea485d50",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -383,10 +408,10 @@
       "message": "Done",
       "parentUuid": "f893715f_16e032c4",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "6c23070a_c7498dad",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -406,10 +431,10 @@
         "endChar": 68
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "370ba293_9967850c",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -430,10 +455,10 @@
         "endChar": 68
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "c2178422_5a7d82da",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -447,10 +472,10 @@
       "side": 1,
       "message": "Please remove the debug code here and below.",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "27452071_35a4124d",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -465,10 +490,10 @@
       "message": "Done",
       "parentUuid": "c2178422_5a7d82da",
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "ef685ca9_1f93bbad",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -488,10 +513,10 @@
         "endChar": 61
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "94efbd4a_0f1901cf",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -512,10 +537,10 @@
         "endChar": 61
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "bed3af07_8aa691fd",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -536,10 +561,10 @@
         "endChar": 61
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "b1b6bf33_18319804",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -559,10 +584,10 @@
         "endChar": 49
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "aca47a53_b79232ee",
         "filename": "test/cctest/test-concurrent-vector.cc",
@@ -583,8 +608,7 @@
         "endChar": 49
       },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
