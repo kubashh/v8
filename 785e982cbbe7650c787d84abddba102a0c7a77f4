@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8d61baa_28a77b7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-11T23:36:00Z",
+      "side": 1,
+      "message": "updated the typos",
+      "revId": "785e982cbbe7650c787d84abddba102a0c7a77f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
