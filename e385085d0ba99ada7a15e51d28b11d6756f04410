@@ -16,6 +16,149 @@
       "message": "Thanks Jakob, I addressed most of the comments and added replies to others. PTAL.\n\nThanks,\nMythri",
       "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5582fcd_256a517d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-12T17:41:11Z",
+      "side": 1,
+      "message": "Looking good overall, a couple of comments.",
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21534efd_4678b672",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2998,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-12T17:41:11Z",
+      "side": 1,
+      "message": "Hmm could we keep interrupt budgets the same and instead use different profiler ticks for each tier? That way we wouldn\u0027t need to do this scaling here. We would need to interrupt code 10 times as much as currently, but if I remember correctly, we tried that before and didn\u0027t have much perf impact.",
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "997c4496_c04471b2",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4059,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-12T17:41:11Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem like the right check - updating the interrupt budget isn\u0027t really about whether it checks the optimization marker. Can we make this CodeKindCanTierUp or something similar?",
+      "range": {
+        "startLine": 4059,
+        "startChar": 7,
+        "endLine": 4059,
+        "endChar": 39
+      },
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c49229e3_fe1cb2bd",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-12T17:41:11Z",
+      "side": 1,
+      "message": "It seems strange to have specific tracing for NCI code here. Can\u0027t we have some context in trace-opt that allows us to extra the same data?",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 107,
+        "endChar": 3
+      },
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "782f589c_a480f2f7",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-12T17:41:11Z",
+      "side": 1,
+      "message": "DCHECK(CodeKindCanTierUp(code_kind));",
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bca552d_fe28bdf7",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-12T17:41:11Z",
+      "side": 1,
+      "message": "Can we use the similar CodeKindCanTierUp function here?",
+      "range": {
+        "startLine": 303,
+        "startChar": 8,
+        "endLine": 304,
+        "endChar": 40
+      },
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67df88c9_dcbca9fc",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-12T17:41:11Z",
+      "side": 1,
+      "message": "It would be great if we could keep the logic for FLAG_interrupt_budget_for_midtier vs FLAG_interrupt_budget in one place - i.e., maybe we pass an enum to SetInterruptBudget to determine what we use there?",
+      "range": {
+        "startLine": 306,
+        "startChar": 51,
+        "endLine": 306,
+        "endChar": 52
+      },
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
