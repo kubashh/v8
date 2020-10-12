@@ -16,6 +16,24 @@
       "message": "still lgtm, thanks",
       "revId": "55e514d3a34998f93fe67ed61cde879c56ec0895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfd56431_704fa810",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-12T15:39:49Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "99118b91_026326dd",
+      "revId": "55e514d3a34998f93fe67ed61cde879c56ec0895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
