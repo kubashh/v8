@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a36e6f1d_506a7b06",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-12T10:15:17Z",
+      "side": 1,
+      "message": "I think this assertion should work for TPH as well. What error do you get here?",
+      "range": {
+        "startLine": 563,
+        "startChar": 22,
+        "endLine": 563,
+        "endChar": 58
+      },
+      "revId": "4c62a268fd84a31f1b4696eb739b653c9a6f1092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
