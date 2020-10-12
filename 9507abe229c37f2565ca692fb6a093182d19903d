@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d82bf4e1_ce6753c3",
+        "filename": "src/compiler/raw-machine-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-12T10:37:47Z",
+      "side": 1,
+      "message": "So it is allowed for stub linkage builtins without stack parameters? Do we use this? I would consider this a bit worrisome because it would mean the builtin has to be called from a JS frame, which might be quite surprising.",
+      "range": {
+        "startLine": 647,
+        "startChar": 5,
+        "endLine": 648,
+        "endChar": 71
+      },
+      "revId": "9507abe229c37f2565ca692fb6a093182d19903d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2256a8b_850cf4a4",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-10-12T10:37:47Z",
+      "side": 1,
+      "message": "I don\u0027t understand how the loop makes a difference.",
+      "range": {
+        "startLine": 2021,
+        "startChar": 24,
+        "endLine": 2021,
+        "endChar": 45
+      },
+      "revId": "9507abe229c37f2565ca692fb6a093182d19903d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
