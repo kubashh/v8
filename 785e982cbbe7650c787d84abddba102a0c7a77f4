@@ -16,6 +16,23 @@
       "message": "updated the typos",
       "revId": "785e982cbbe7650c787d84abddba102a0c7a77f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66cd8780_e0bb62ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-12T10:05:49Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "785e982cbbe7650c787d84abddba102a0c7a77f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
