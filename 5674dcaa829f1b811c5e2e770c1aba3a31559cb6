@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80844996_7373c0e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-12T10:15:40Z",
+      "side": 1,
+      "message": "I can\u0027t land this cl before we add an extra slot in the feedback vector for storing optimization marker. This doesn\u0027t change the behaviour of Turboprop but with the new flag (--turboprop_as_mid_tier) this causes an infinite loop in turboprop tier up check code and IET. I am working on cl to add this extra slot and hopefully would be ready by tomorrow. I thought I can get your reviews in the meantime. PTAL.\n\nThanks,\nMythri",
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
