@@ -16,6 +16,92 @@
       "message": "I\u0027ve now also addressed the issue with AssembleCode. Could you PTALA?",
       "revId": "fdc7b78de00bfadb40bdf236747b8659825b5532",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34b6ef93_0dc97f92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-12T14:13:40Z",
+      "side": 1,
+      "message": "LGTM % comments. Thanks!",
+      "revId": "fdc7b78de00bfadb40bdf236747b8659825b5532",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9437eca_8cd2f542",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-12T14:13:40Z",
+      "side": 1,
+      "message": "Please update this description with the new condition.",
+      "range": {
+        "startLine": 453,
+        "startChar": 0,
+        "endLine": 453,
+        "endChar": 2
+      },
+      "revId": "fdc7b78de00bfadb40bdf236747b8659825b5532",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c48cee5b_0b5e31aa",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-12T14:13:40Z",
+      "side": 1,
+      "message": "nit: `extra_condition` or similar? It is not the main condition that we use to decide where to unpark or not.",
+      "range": {
+        "startLine": 461,
+        "startChar": 60,
+        "endLine": 461,
+        "endChar": 69
+      },
+      "revId": "fdc7b78de00bfadb40bdf236747b8659825b5532",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d6e4300_912d1c81",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-12T14:13:40Z",
+      "side": 1,
+      "message": "nit: I\u0027d ask for condition first since it if it is false we can do an early return (instead of going for broker\u0027s local heap and so on)",
+      "range": {
+        "startLine": 462,
+        "startChar": 1,
+        "endLine": 462,
+        "endChar": 2
+      },
+      "revId": "fdc7b78de00bfadb40bdf236747b8659825b5532",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
