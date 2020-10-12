@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "268a67ef_7ce5d5e8",
+        "filename": "src/compiler/raw-machine-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-12T14:26:32Z",
+      "side": 1,
+      "message": "Yes, that was the idea. Sometimes we tail call from JS builtins with kDontAdaptArgumentsSentinel to helper (TFC/TFS) builtins with additional arguments. The tailcall doesn\u0027t modify the stack, so it\u0027s totally fine to let the TFC builtin PopAndReturn if it needs to.\nI didn\u0027t check if we currently use PopAndReturn from TFC builtins but even if we don\u0027t, why not?",
+      "parentUuid": "d82bf4e1_ce6753c3",
+      "range": {
+        "startLine": 647,
+        "startChar": 5,
+        "endLine": 648,
+        "endChar": 71
+      },
+      "revId": "9507abe229c37f2565ca692fb6a093182d19903d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2256a8b_850cf4a4",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-12T10:37:47Z",
       "side": 1,
       "message": "I don\u0027t understand how the loop makes a difference.",
+      "range": {
+        "startLine": 2021,
+        "startChar": 24,
+        "endLine": 2021,
+        "endChar": 45
+      },
+      "revId": "9507abe229c37f2565ca692fb6a093182d19903d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa9cd02_8a051dd9",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-12T14:26:32Z",
+      "side": 1,
+      "message": "Didn\u0027t check other archs, but on x64 we align sp to 16 before the call this means that we\u0027ll get the same \"SP\" value from C function for both unaligned sp and aligned sp+8 values. Thus, off-by-one arguments pop will not be caught. If we call 10 times, then an off-by-one error becomes an off-by-ten one and thus it becomes detectable for C function machinery.",
+      "parentUuid": "d2256a8b_850cf4a4",
       "range": {
         "startLine": 2021,
         "startChar": 24,
