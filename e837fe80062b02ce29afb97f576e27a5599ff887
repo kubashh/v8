@@ -33,6 +33,24 @@
       "message": "lgtm but the description doesn\u0027t make sense to me. I think none of these functions is called from the background thread, and this won\u0027t change except perhaps for CallOptimization::AnalyzePossibleApiFunction.",
       "revId": "e837fe80062b02ce29afb97f576e27a5599ff887",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "458708ba_e3d6fcd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-12T09:26:26Z",
+      "side": 1,
+      "message": "Ack. Updated description.",
+      "parentUuid": "daf5e9bd_60dab94e",
+      "revId": "e837fe80062b02ce29afb97f576e27a5599ff887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
