@@ -178,6 +178,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e645f730_31dc65d8",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-12T07:32:32Z",
+      "side": 1,
+      "message": "Fine with me except that I\u0027d move it into AssembleCode (using base::Optional) so that ExecuteJobImpl doesn\u0027t have to care at all about parking/unparking.",
+      "parentUuid": "ccb4271a_e0c375ec",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf030f2b_20d7460f",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 7
