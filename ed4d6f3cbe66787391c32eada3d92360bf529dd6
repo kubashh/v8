@@ -16,6 +16,23 @@
       "message": "PTAL. This time I think this is the right fix :D",
       "revId": "ed4d6f3cbe66787391c32eada3d92360bf529dd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c74d1605_317ed8e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-12T20:27:06Z",
+      "side": 1,
+      "message": "Oh, good find! Any chance for a useful (i.e. reliable and somewhat \"stable\") reproducer?",
+      "revId": "ed4d6f3cbe66787391c32eada3d92360bf529dd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
