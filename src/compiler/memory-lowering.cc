@@ -133,6 +133,9 @@ Reduction MemoryLowering::ReduceAllocateRaw(
   // Check if we can fold this allocation into a previous allocation represented
   // by the incoming {state}.
   IntPtrMatcher m(size);
+  // Code objects may have a smaller maximum size due to guard pages, and
+  // so would need to be read at runtime.
+  DCHECK_NE(allocation_type, AllocationType::kCode);
   if (m.IsInRange(0, kMaxRegularHeapObjectSize) && FLAG_inline_new &&
       allocation_folding_ == AllocationFolding::kDoAllocationFolding) {
     intptr_t const object_size = m.Value();
