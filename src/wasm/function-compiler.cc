@@ -309,7 +309,7 @@ void JSToWasmWrapperCompilationUnit::Execute() {
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
                "wasm.CompileJSToWasmWrapper");
   if (!use_generic_wrapper_) {
-    CompilationJob::Status status = job_->ExecuteJob(nullptr);
+    CompilationJob::Status status = job_->ExecuteJob(nullptr, nullptr);
     CHECK_EQ(status, CompilationJob::SUCCEEDED);
   }
 }
