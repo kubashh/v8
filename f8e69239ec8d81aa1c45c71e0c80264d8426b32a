@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fdec245_c4e64189",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-12T14:21:12Z",
+      "side": 1,
+      "message": "leszeks: src/interpreter\nahaas: src/wasm\ntebbi: src/compiler and src/deoptimizer\nmachenbach: infra/\nishell: the rest 😊 (src/builtins, src/codegen and src/execution)",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
