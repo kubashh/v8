@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79faf672_6d17a415",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-12T16:27:16Z",
+      "side": 1,
+      "message": "Thanks Jakob, I addressed most of the comments and added replies to others. PTAL.\n\nThanks,\nMythri",
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

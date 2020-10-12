@@ -16,6 +16,24 @@
       "message": "q: Why change the location of this? Is it intended that it happens less often now than before (e.g. not on failure, not on success for NCI-as-midtier).",
       "revId": "977b77a332c77a57f75f2b7aa086d5562d398434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeba4bc0_aa44254a",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-12T16:27:16Z",
+      "side": 0,
+      "message": "No, it\u0027s just that I need the current profiler ticks for adjusting the interrupt budget when going from TP -\u003e TF. So I don\u0027t want to reset the profiler ticks here.",
+      "parentUuid": "3102ee73_e6e46655",
+      "revId": "977b77a332c77a57f75f2b7aa086d5562d398434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
