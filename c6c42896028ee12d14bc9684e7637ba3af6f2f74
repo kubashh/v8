@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e08200_70ab78e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-12T18:47:15Z",
+      "side": 1,
+      "message": "PTAL. It\u0027s far from perfect but I think it\u0027s an improvement and I\u0027ve already spent too much time on trying to make it perfect.",
+      "revId": "c6c42896028ee12d14bc9684e7637ba3af6f2f74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
