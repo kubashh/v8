@@ -196,6 +196,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e766358c_1944102e",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-12T13:55:34Z",
+      "side": 1,
+      "message": "It was actually pretty easy to increase the scope of LocalHeapScope. That way we can now load the local_heap from the broker and can use UnparkedScopeIfNeeded like you suggested. I also added an optional condition to UnparkedScopeIfNeeded such that we only unpark if FLAG_code_comments is true.",
+      "parentUuid": "e645f730_31dc65d8",
+      "revId": "c5ae90d37773e06218f460a1f698a6a1b1f22e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf030f2b_20d7460f",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 7
