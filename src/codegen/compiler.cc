@@ -2977,6 +2977,38 @@ MaybeHandle<Code> Compiler::GetOptimizedCodeForOSR(Handle<JSFunction> function,
                           CodeKindForTopTier(), osr_offset, osr_frame);
 }
 
+namespace {
+void AdjustInterruptBudgetAndProfilerTicks(Handle<JSFunction> closure,
+                                           CodeKind code_kind) {
+  if (!CodeKindChecksOptimizationMarker(code_kind)) {
+    closure->feedback_vector().set_profiler_ticks(0);
+    return;
+  }
+  // We are installing the code for next tier, so adjust the interrupt budget
+  // taking into account the code executed after marking the function for
+  // optimization.
+  int current_ticks = closure->feedback_vector().profiler_ticks();
+  int current_budget = closure->raw_feedback_cell().interrupt_budget();
+  int current_tier_budget = code_kind == CodeKind::TURBOPROP
+                                ? FLAG_interrupt_budget_for_midtier
+                                : FLAG_interrupt_budget;
+  // Since the profiler ticks are counted based on the existing interrupt budget
+  // we need to scale them based on the ratio of interrupt budgets of existing
+  // tier and the next tier. For ex: 10 ticks on lower tier might correspond to
+  // 1 tick on higher tier.
+  int profiler_ticks =
+      current_ticks * current_tier_budget / FLAG_interrupt_budget;
+  // When updating interrupt budget also look at number of profiler ticks to
+  // actually compute the amount of code executed.
+  int interrupt_budget = std::max(
+      0, FLAG_interrupt_budget -
+             (current_ticks * current_tier_budget) % FLAG_interrupt_budget -
+             current_budget);
+  closure->feedback_vector().set_profiler_ticks(profiler_ticks);
+  closure->raw_feedback_cell().SetInterruptBudget(interrupt_budget);
+}
+}  // namespace
+
 // static
 bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
                                                Isolate* isolate) {
@@ -2996,10 +3028,6 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
   CodeKind code_kind = compilation_info->code_kind();
   const bool should_install_code_on_function =
       !IsForNativeContextIndependentCachingOnly(code_kind);
-  if (should_install_code_on_function) {
-    // Reset profiler ticks, function is no longer considered hot.
-    compilation_info->closure()->feedback_vector().set_profiler_ticks(0);
-  }
 
   DCHECK(!shared->HasBreakInfo());
 
@@ -3011,6 +3039,10 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
   if (job->state() == CompilationJob::State::kReadyToFinalize) {
     if (shared->optimization_disabled()) {
       job->RetryOptimization(BailoutReason::kOptimizationDisabled);
+      if (should_install_code_on_function) {
+        // Reset profiler ticks, function is no longer considered hot.
+        compilation_info->closure()->feedback_vector().set_profiler_ticks(0);
+      }
     } else if (job->FinalizeJob(isolate) == CompilationJob::SUCCEEDED) {
       job->RecordCompilationStats(OptimizedCompilationJob::kConcurrent,
                                   isolate);
@@ -3021,6 +3053,8 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
       CompilerTracer::TraceCompletedJob(isolate, compilation_info);
       if (should_install_code_on_function) {
         compilation_info->closure()->set_code(*compilation_info->code());
+        AdjustInterruptBudgetAndProfilerTicks(compilation_info->closure(),
+                                              code_kind);
       }
       return CompilationJob::SUCCEEDED;
     }
