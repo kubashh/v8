@@ -20,6 +20,149 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1dba004a_84c48b2e",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2987,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 1,
+      "message": "nit: executed.\n\nAlso, please explain the scaling going on below.",
+      "range": {
+        "startLine": 2987,
+        "startChar": 62,
+        "endLine": 2987,
+        "endChar": 70
+      },
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ec06023_06abfc33",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2991,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 1,
+      "message": "q: Why is the FLAG check needed here? Is it enough to check the code kind?",
+      "range": {
+        "startLine": 2991,
+        "startChar": 29,
+        "endLine": 2991,
+        "endChar": 43
+      },
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8d73e5a_d5bdee61",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 1,
+      "message": "Could you use feedback_vector_ here?",
+      "range": {
+        "startLine": 1004,
+        "startChar": 27,
+        "endLine": 1004,
+        "endChar": 67
+      },
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "949a9b62_23065395",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1056,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 1,
+      "message": "Please explicitly list NCI/TP here. For NCI, the feedback_cell_node() is needed to load the feedback_vector_node(), which is needed in many different spots unrelated to the optimization marker. Why not:\n\n if (NCI) {\n  feedback_cell_node_ \u003d BuildLoadFeedbackCell();\n } else if (TP) {\n  feedback_cell_node_ \u003d jsgraph()-\u003eConstant(feedback_cell_);\n }",
+      "range": {
+        "startLine": 1056,
+        "startChar": 7,
+        "endLine": 1056,
+        "endChar": 39
+      },
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "493b058c_b36d6b9c",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 1,
+      "message": "Short comment about OSR please, also below.",
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99918e55_64c855ec",
+        "filename": "src/objects/feedback-cell-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 1,
+      "message": "In the TP midtier case, how do you set the budget for tiering up from TP to TF, after having tiered up to TP?",
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9cf2608_e1da25de",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 1,
+      "message": "There could be NCI code.",
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff7184fe_7090cc55",
         "filename": "src/runtime/runtime-internal.cc",
         "patchSetId": 11
@@ -31,6 +174,47 @@
       "writtenOn": "2020-10-12T10:22:17Z",
       "side": 1,
       "message": "I forgot to mention earlier, I was considering using min(FLAG_interrupt_budget_for_midtier, FLAG_interrupt_budget) here and other places so FLAG_interrupt_budget override also impacts midtier if the value is small (mostly for tests). I wasn\u0027t quite sure if that\u0027s what we want though. Any suggestions?",
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03fad010_f7dce6a4",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 1,
+      "message": "Similar q as on another spot, how is the budget set after tiering up to TP? I think the answer here depends on that.",
+      "parentUuid": "ff7184fe_7090cc55",
+      "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47134f2f_26923034",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 11
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 1,
+      "message": "nit: trigger",
+      "range": {
+        "startLine": 1207,
+        "startChar": 45,
+        "endLine": 1207,
+        "endChar": 52
+      },
       "revId": "5674dcaa829f1b811c5e2e770c1aba3a31559cb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

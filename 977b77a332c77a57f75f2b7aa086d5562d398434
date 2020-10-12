@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3102ee73_e6e46655",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-12T10:44:10Z",
+      "side": 0,
+      "message": "q: Why change the location of this? Is it intended that it happens less often now than before (e.g. not on failure, not on success for NCI-as-midtier).",
+      "revId": "977b77a332c77a57f75f2b7aa086d5562d398434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
