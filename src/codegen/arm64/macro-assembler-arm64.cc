@@ -2185,14 +2185,6 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
   Bind(&done);
 }
 
-Operand MacroAssembler::ReceiverOperand(Register arg_count) {
-#ifdef V8_REVERSE_JSARGS
-  return Operand(0);
-#else
-  return Operand(arg_count, LSL, kXRegSizeLog2);
-#endif
-}
-
 void MacroAssembler::InvokeFunctionWithNewTarget(
     Register function, Register new_target, Register actual_parameter_count,
     InvokeFlag flag) {

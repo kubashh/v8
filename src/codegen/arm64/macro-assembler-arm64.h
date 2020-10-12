@@ -1781,9 +1781,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
     DecodeField<Field>(reg, reg);
   }
 
-  // TODO(victorgomes): inline this function once we remove V8_REVERSE_JSARGS
-  // flag.
-  Operand ReceiverOperand(const Register arg_count);
+  inline Operand ReceiverOperand(const Register arg_count) {
+    return Operand(0);
+  }
 
   // ---- SMI and Number Utilities ----
 
