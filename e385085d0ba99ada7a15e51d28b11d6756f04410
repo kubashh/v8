@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6496ec46_157571d1",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2998,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-13T13:22:08Z",
+      "side": 1,
+      "message": "I like the idea of using different increments. I slightly prefer using x/10 for TP so we don\u0027t have to use wide / extra wide opcodes when not needed. Though using x/10 would have rounding off errors, so won\u0027t be as accurate as earlier but I guess that should be OK? WDYT?\n\nFor now, I am just removing this and simply not resetting the profiler ticks when we need to tier up. In a follow up cl, I will implement either scaling interrupt budget or using different profiler ticks for each tier.",
+      "parentUuid": "be67ad4a_8370730a",
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "997c4496_c04471b2",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 13
@@ -83,6 +101,30 @@
       "writtenOn": "2020-10-12T17:41:11Z",
       "side": 1,
       "message": "This doesn\u0027t seem like the right check - updating the interrupt budget isn\u0027t really about whether it checks the optimization marker. Can we make this CodeKindCanTierUp or something similar?",
+      "range": {
+        "startLine": 4059,
+        "startChar": 7,
+        "endLine": 4059,
+        "endChar": 39
+      },
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b208b82e_7e50af2e",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4059,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-13T13:22:08Z",
+      "side": 1,
+      "message": "I renamed the function. Let me know if you meant adding another function.",
+      "parentUuid": "997c4496_c04471b2",
       "range": {
         "startLine": 4059,
         "startChar": 7,
@@ -142,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68a6e9fa_20f3eac7",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-13T13:22:08Z",
+      "side": 1,
+      "message": "I am leaving this as is. Let me know if it\u0027s better to move it back to MaybeOptimizeFrame just before Optimize call (on line 192)",
+      "parentUuid": "f628c066_84e26656",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 107,
+        "endChar": 3
+      },
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "782f589c_a480f2f7",
         "filename": "src/execution/runtime-profiler.cc",
         "patchSetId": 13
@@ -153,6 +219,24 @@
       "writtenOn": "2020-10-12T17:41:11Z",
       "side": 1,
       "message": "DCHECK(CodeKindCanTierUp(code_kind));",
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9578173b_026066e1",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-13T13:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "782f589c_a480f2f7",
       "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -180,6 +264,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21f1e7a5_caf4c60c",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-13T13:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bca552d_fe28bdf7",
+      "range": {
+        "startLine": 303,
+        "startChar": 8,
+        "endLine": 304,
+        "endChar": 40
+      },
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67df88c9_dcbca9fc",
@@ -193,6 +301,30 @@
       "writtenOn": "2020-10-12T17:41:11Z",
       "side": 1,
       "message": "It would be great if we could keep the logic for FLAG_interrupt_budget_for_midtier vs FLAG_interrupt_budget in one place - i.e., maybe we pass an enum to SetInterruptBudget to determine what we use there?",
+      "range": {
+        "startLine": 306,
+        "startChar": 51,
+        "endLine": 306,
+        "endChar": 52
+      },
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d67578c_8ab3b12d",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-13T13:22:08Z",
+      "side": 1,
+      "message": "Done. We no longer need different budgets.",
+      "parentUuid": "67df88c9_dcbca9fc",
       "range": {
         "startLine": 306,
         "startChar": 51,
