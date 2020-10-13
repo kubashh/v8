@@ -405,9 +405,15 @@ template <typename T, T (*float_round_op)(T)>
 void simd_float_round_wrapper(Address data) {
   constexpr int n = kSimd128Size / sizeof(T);
   for (int i = 0; i < n; i++) {
-    WriteUnalignedValue<T>(
-        data + (i * sizeof(T)),
-        float_round_op(ReadUnalignedValue<T>(data + (i * sizeof(T)))));
+    T input = ReadUnalignedValue<T>(data + (i * sizeof(T)));
+    T value = float_round_op(input);
+#if V8_OS_AIX
+    // glibc on aix has a bug when using ceil, trunc or nearbyint:
+    // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97086
+    if (/*if -*/ signbit(input) && value == 0.0 && /*if +*/ !signbit(value))
+      value = -0.0;
+#endif
+    WriteUnalignedValue<T>(data + (i * sizeof(T)), value);
   }
 }
 
