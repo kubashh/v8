@@ -16,6 +16,23 @@
       "message": "PTAL. It\u0027s far from perfect but I think it\u0027s an improvement and I\u0027ve already spent too much time on trying to make it perfect.",
       "revId": "c6c42896028ee12d14bc9684e7637ba3af6f2f74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c035b7a0_9614ea23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-13T10:14:40Z",
+      "side": 1,
+      "message": "thanks, lgtm",
+      "revId": "c6c42896028ee12d14bc9684e7637ba3af6f2f74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
