@@ -81,6 +81,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a419780_c76b74a6",
+        "filename": "src/compiler/allocation-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-10-13T13:55:12Z",
+      "side": 1,
+      "message": "Good idea!\nDone",
+      "parentUuid": "14e25608_6f0fa55a",
+      "range": {
+        "startLine": 31,
+        "startChar": 20,
+        "endLine": 31,
+        "endChar": 45
+      },
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c137c46_0766cdb4",
@@ -106,6 +130,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e1032da_71cd6a1d",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-10-13T13:55:12Z",
+      "side": 1,
+      "message": "Here I thought it would be better to stick to using the constant so that we don\u0027t give the illusion that allocating code objects is supported here, hence the DCHECK.\n\nWDYT?",
+      "parentUuid": "4c137c46_0766cdb4",
+      "range": {
+        "startLine": 139,
+        "startChar": 21,
+        "endLine": 139,
+        "endChar": 46
+      },
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "31789d88_059853d7",
         "filename": "src/heap/heap-inl.h",
         "patchSetId": 2
@@ -117,6 +165,30 @@
       "writtenOn": "2020-10-08T17:40:11Z",
       "side": 1,
       "message": "This could be simplified using the helper function suggested above.",
+      "range": {
+        "startLine": 189,
+        "startChar": 5,
+        "endLine": 192,
+        "endChar": 38
+      },
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38411a2a_f6147619",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-10-13T13:55:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31789d88_059853d7",
       "range": {
         "startLine": 189,
         "startChar": 5,
