@@ -33,6 +33,24 @@
       "message": "Oh, good find! Any chance for a useful (i.e. reliable and somewhat \"stable\") reproducer?",
       "revId": "ed4d6f3cbe66787391c32eada3d92360bf529dd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f9a8e8e_e2e7c7d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-10-13T08:51:58Z",
+      "side": 1,
+      "message": "Thanks, I added a reliable repro, ptal. The way it works is that it exhausts all allocatable registers with the parameters, so that the function entry stack check does not have a choice but to steal one of the registers for the limit address.",
+      "parentUuid": "c74d1605_317ed8e9",
+      "revId": "ed4d6f3cbe66787391c32eada3d92360bf529dd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
