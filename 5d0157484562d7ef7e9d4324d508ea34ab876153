@@ -33,6 +33,24 @@
       "message": "Please see the compile error on 64-bit.",
       "revId": "5d0157484562d7ef7e9d4324d508ea34ab876153",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1cc77a1_6e5cc231",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2020-10-13T07:19:12Z",
+      "side": 1,
+      "message": "Sorry about that, I made a small and wrong change just before commit, now I have updated the patch.\n\nPTAL again, thanks!",
+      "parentUuid": "976a2e99_f8f8146f",
+      "revId": "5d0157484562d7ef7e9d4324d508ea34ab876153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
