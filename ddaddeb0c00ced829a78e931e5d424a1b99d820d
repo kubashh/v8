@@ -33,6 +33,23 @@
       "message": "Thanks Ulan for the review! Georg, Igor, could you take a look at the changes in compiler/ and base/?\n\nThanks!\nPierre",
       "revId": "ddaddeb0c00ced829a78e931e5d424a1b99d820d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5165651_2e53eeee",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-13T14:46:48Z",
+      "side": 1,
+      "message": "I believe you mean the max size would need to be read at runtime, not the code object?  Also, please move this to the top.",
+      "revId": "ddaddeb0c00ced829a78e931e5d424a1b99d820d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
