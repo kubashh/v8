@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "953059af_f991d683",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-13T23:49:52Z",
+      "side": 1,
+      "message": "Three out of four comments are resolved according to our chat.\nFor the fourth comment, I\u0027ve pushed a new patchset",
+      "revId": "0621e46a96a6adb6be085b6ebfe87676112d3a15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

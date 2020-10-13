@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdca941a_e19b983d",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-13T23:49:52Z",
+      "side": 0,
+      "message": "Heap::SetUpSpaces will not work if we keep it",
+      "parentUuid": "788c1f9c_23cccea6",
+      "range": {
+        "startLine": 286,
+        "startChar": 3,
+        "endLine": 286,
+        "endChar": 45
+      },
+      "revId": "921af3380a75dbded48f019fb7b30c88ff6725e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74fec974_d6973d03",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6618f99d_d1222734",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-13T23:49:52Z",
+      "side": 0,
+      "message": "Heap::SetUpSpaces will not work if we keep it",
+      "parentUuid": "74fec974_d6973d03",
+      "range": {
+        "startLine": 292,
+        "startChar": 2,
+        "endLine": 292,
+        "endChar": 45
+      },
+      "revId": "921af3380a75dbded48f019fb7b30c88ff6725e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6ebe341_9a3a0e32",
@@ -60,6 +108,30 @@
       "writtenOn": "2020-10-12T10:15:17Z",
       "side": 0,
       "message": "Can we keep this assertion? It seems that we should never try to get an memory chunk from an object when running with TPH",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 45
+      },
+      "revId": "921af3380a75dbded48f019fb7b30c88ff6725e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b50289db_a3ae6ac4",
+        "filename": "src/heap/memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-13T23:49:52Z",
+      "side": 0,
+      "message": "Heap::SetUpSpaces will not work if we keep it",
+      "parentUuid": "a6ebe341_9a3a0e32",
       "range": {
         "startLine": 62,
         "startChar": 4,

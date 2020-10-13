@@ -22,6 +22,30 @@
       },
       "revId": "4c62a268fd84a31f1b4696eb739b653c9a6f1092",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "856b85d5_5d3ae0fc",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-13T23:49:52Z",
+      "side": 1,
+      "message": "The DCHECK at line 565 failed.\n\nI did some debugging and found a solution, which I\u0027m sending as a new patchset",
+      "parentUuid": "a36e6f1d_506a7b06",
+      "range": {
+        "startLine": 563,
+        "startChar": 22,
+        "endLine": 563,
+        "endChar": 58
+      },
+      "revId": "4c62a268fd84a31f1b4696eb739b653c9a6f1092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
