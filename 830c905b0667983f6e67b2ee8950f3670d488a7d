@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61c0ab32_d2e26a11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1170114
+      },
+      "writtenOn": "2020-10-13T02:12:22Z",
+      "side": 1,
+      "message": "This is the first CL I uploaded to v8. git cl upload complained about C++ lint errors (i had to --bypass-hooks to upload) but didn\u0027t give any detail. git cl format and git cl lint didn\u0027t do anything.\n\nLMK how to resolve that!\n\nThis is a prereq to this change https://chromium-review.googlesource.com/c/chromium/src/+/2466978\n\nSimply marks classes with final dtors as final themselves so that the warning can be enabled and better error messages can be provided.",
+      "revId": "830c905b0667983f6e67b2ee8950f3670d488a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
