@@ -1203,6 +1203,12 @@
 
   # https://crbug.com/v8/10894
   'math-floor-of-div': [SLOW],
+
+  # These tests override interrupt_budget to trigger optimization. Turboprop
+  # uses interrupt_budget_for_midtier so lowering interrupt_budget has no
+  # effect.
+  'never-optimize': [FAIL],
+  'interrupt-budget-override': [FAIL],
 }],  # variant == turboprop
 
 ##############################################################################
