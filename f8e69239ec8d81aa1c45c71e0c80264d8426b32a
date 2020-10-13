@@ -50,6 +50,74 @@
       "message": "interpreter lgtm!",
       "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b62a9fa_a11c8ab0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-13T17:02:02Z",
+      "side": 1,
+      "message": "lgtm with nits\nI love red-only CLs ))",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c684f25_89072024",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-13T17:02:02Z",
+      "side": 1,
+      "message": "5.",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c2b45e8_b1910bc2",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-13T17:02:02Z",
+      "side": 1,
+      "message": "Please fix identation.",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96314ec5_7755dc48",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-13T17:02:02Z",
+      "side": 1,
+      "message": "5.",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
