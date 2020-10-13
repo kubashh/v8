@@ -86,6 +86,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da1dc2bd_7027b47f",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-13T17:43:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c684f25_89072024",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c2b45e8_b1910bc2",
@@ -103,6 +121,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac134dbf_31f3aeb1",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-13T17:43:15Z",
+      "side": 1,
+      "message": "That\u0027s weird that \u0027git cl format\u0027 did not change that! 😕",
+      "parentUuid": "8c2b45e8_b1910bc2",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96314ec5_7755dc48",
@@ -116,6 +152,24 @@
       "writtenOn": "2020-10-13T17:02:02Z",
       "side": 1,
       "message": "5.",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61dabf4b_7edf147a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-13T17:43:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96314ec5_7755dc48",
       "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
