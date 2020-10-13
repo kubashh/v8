@@ -2996,8 +2996,9 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
   CodeKind code_kind = compilation_info->code_kind();
   const bool should_install_code_on_function =
       !IsForNativeContextIndependentCachingOnly(code_kind);
-  if (should_install_code_on_function) {
-    // Reset profiler ticks, function is no longer considered hot.
+  if (should_install_code_on_function && !CodeKindCanTierUp(code_kind)) {
+    // For NCI caching compilation or if the code kind can tier up don't reset
+    // profiler ticks.
     compilation_info->closure()->feedback_vector().set_profiler_ticks(0);
   }
 
