@@ -152,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa1c243c_66248ec4",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-13T14:00:09Z",
+      "side": 1,
+      "message": "Looks good!",
+      "parentUuid": "5e1032da_71cd6a1d",
+      "range": {
+        "startLine": 139,
+        "startChar": 21,
+        "endLine": 139,
+        "endChar": 46
+      },
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31789d88_059853d7",
