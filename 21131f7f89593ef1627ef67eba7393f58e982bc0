@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de91d50_d4f8f557",
+        "filename": "test/inspector/debugger/regress-10957.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-10-13T09:42:01Z",
+      "side": 1,
+      "message": "It is, I added it now.",
+      "parentUuid": "5a4abc32_43a1f605",
+      "revId": "21131f7f89593ef1627ef67eba7393f58e982bc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8519893_23f1188b",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18c70540_54decdd4",
+        "filename": "test/inspector/debugger/regress-10957.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-10-13T09:42:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8519893_23f1188b",
+      "range": {
+        "startLine": 14,
+        "startChar": 28,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "21131f7f89593ef1627ef67eba7393f58e982bc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "928fd19a_6be75a36",
@@ -71,6 +113,30 @@
       "writtenOn": "2020-10-13T08:59:18Z",
       "side": 1,
       "message": "Is this on purpose, that you use param 2 two times, and not param 6?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 23
+      },
+      "revId": "21131f7f89593ef1627ef67eba7393f58e982bc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7257a7a_437804f3",
+        "filename": "test/inspector/debugger/regress-10957.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-10-13T09:42:01Z",
+      "side": 1,
+      "message": "Copy-paste error, fixed.",
+      "parentUuid": "928fd19a_6be75a36",
       "range": {
         "startLine": 18,
         "startChar": 0,
