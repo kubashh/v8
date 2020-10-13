@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be67ad4a_8370730a",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2998,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-13T05:11:42Z",
+      "side": 1,
+      "message": "Budget increments could also differ, e.g. bytecode could inc/dec by x*10 while TP could inc/dec by x (where x is the amount that ignition currently incs/decs by).",
+      "parentUuid": "21534efd_4678b672",
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "997c4496_c04471b2",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 13
@@ -88,6 +106,30 @@
       "writtenOn": "2020-10-12T17:41:11Z",
       "side": 1,
       "message": "It seems strange to have specific tracing for NCI code here. Can\u0027t we have some context in trace-opt that allows us to extra the same data?",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 107,
+        "endChar": 3
+      },
+      "revId": "e385085d0ba99ada7a15e51d28b11d6756f04410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f628c066_84e26656",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-13T05:11:42Z",
+      "side": 1,
+      "message": "Something similar to tracing in compiler.cc would work, there we print the code kind: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/compiler.cc;l\u003d98;drc\u003de5ea75ba76df2c306f03373a1ca6332898f5b37b\n\nThat said, I\u0027d kinda prefer we keep the dedicated NCI tracing at this spot at least temporarily, since it means I don\u0027t have to dig through a (still fairly noisy) --trace-opt output to reconstruct NCI lifecycles.",
+      "parentUuid": "c49229e3_fe1cb2bd",
       "range": {
         "startLine": 105,
         "startChar": 2,
