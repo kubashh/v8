@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c7c3422_50852bb7",
+        "filename": "src/wasm/wasm-external-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-10-13T20:47:21Z",
+      "side": 1,
+      "message": "Can we extract this into a function somewhere in utils, maybe call it FpOpWorkaround (guard the definition with V8_OS_AIX)? We can then keep this check and comment in a single place.",
+      "range": {
+        "startLine": 413,
+        "startChar": 4,
+        "endLine": 414,
+        "endChar": 19
+      },
+      "revId": "f859fe2f0e01f718ee5f390ca471b5b2fe223fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
