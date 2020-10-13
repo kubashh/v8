@@ -214,6 +214,24 @@
       "message": "Note to self: This needs to use the new function, here and in one other place in this test.",
       "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c77e8b1_445cde4c",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7069,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-10-13T13:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c6ad3be_92da1773",
+      "revId": "318cd5d9fdbd9ab176cdf048017c65a920c97641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
