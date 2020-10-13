@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6db448e0_2ba5f9d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-13T08:59:18Z",
+      "side": 1,
+      "message": "Thanks, the test looks good, with comments.",
+      "revId": "21131f7f89593ef1627ef67eba7393f58e982bc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a4abc32_43a1f605",
+        "filename": "test/inspector/debugger/regress-10957.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-13T08:59:18Z",
+      "side": 1,
+      "message": "Is the expected output file missing for this test?",
+      "revId": "21131f7f89593ef1627ef67eba7393f58e982bc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8519893_23f1188b",
+        "filename": "test/inspector/debugger/regress-10957.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-13T08:59:18Z",
+      "side": 1,
+      "message": "nit: surrounding code uses single quotes.",
+      "range": {
+        "startLine": 14,
+        "startChar": 28,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "21131f7f89593ef1627ef67eba7393f58e982bc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "928fd19a_6be75a36",
+        "filename": "test/inspector/debugger/regress-10957.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-13T08:59:18Z",
+      "side": 1,
+      "message": "Is this on purpose, that you use param 2 two times, and not param 6?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 23
+      },
+      "revId": "21131f7f89593ef1627ef67eba7393f58e982bc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
