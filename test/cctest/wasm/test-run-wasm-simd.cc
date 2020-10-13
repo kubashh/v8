@@ -586,6 +586,13 @@ void RunF32x4UnOpTest(TestExecutionTier execution_tier, LowerSimd lower_simd,
     // Extreme values have larger errors so skip them for approximation tests.
     if (!exact && IsExtreme(x)) continue;
     float expected = expected_op(x);
+#if V8_OS_AIX
+    // glibc on aix has a bug when using ceil, trunc or nearbyint:
+    // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97086
+    if (/*if -*/ std::signbit(x) && expected == 0.0 &&
+        /*if +*/ !std::signbit(expected))
+      expected = -0.0;
+#endif
     if (!PlatformCanRepresent(expected)) continue;
     r.Call(x);
     for (int i = 0; i < 4; i++) {
