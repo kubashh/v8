@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25067ebd_4fdc00a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-14T10:22:28Z",
+      "side": 1,
+      "message": "lgtm from my side.\n\nJakob ptal at the serialize change (I added a comment there proposing a follow-up refactoring).",
+      "revId": "b66ec8e1be33bcd587d26f6d5752ed43f8448f29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e25a440e_e0245422",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-14T10:22:28Z",
+      "side": 1,
+      "message": "Not related to your CL, but this function seems fragile because TPH and V8 version can easily diverge.\n\nI will follow up with another CL that refactors this function:\n1) Split this function into two functions:\n   - GetSnapshotSpaceFromType\n   - GetSnapshotSpaceFromHeapSize\n2) This function would use GetSnapshotFromType() and assert that the result of it matches GetSnapshotSpaceFromHeapSpace (if running without TPH).",
+      "range": {
+        "startLine": 699,
+        "startChar": 14,
+        "endLine": 699,
+        "endChar": 30
+      },
+      "revId": "b66ec8e1be33bcd587d26f6d5752ed43f8448f29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
