@@ -33,6 +33,29 @@
       "message": "lgtm, thanks",
       "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f172d50_e0c9926a",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-14T10:50:03Z",
+      "side": 1,
+      "message": "Is this comment still valid after the local isolate change? Do we need to update it?",
+      "range": {
+        "startLine": 302,
+        "startChar": 2,
+        "endLine": 302,
+        "endChar": 4
+      },
+      "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
