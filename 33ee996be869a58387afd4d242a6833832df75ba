@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14f0a956_7c9efd88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-10-14T17:56:37Z",
+      "side": 1,
+      "message": "Hi Bill, thanks for reviewing https://chromium-review.googlesource.com/c/v8/v8/+/2470203, it is dependent on this change, do you mind taking a look at this too? Thanks!",
+      "revId": "33ee996be869a58387afd4d242a6833832df75ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
