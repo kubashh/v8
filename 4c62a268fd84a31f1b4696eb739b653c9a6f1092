@@ -46,6 +46,30 @@
       },
       "revId": "4c62a268fd84a31f1b4696eb739b653c9a6f1092",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "185686c3_f2b73c51",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-14T01:59:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "856b85d5_5d3ae0fc",
+      "range": {
+        "startLine": 563,
+        "startChar": 22,
+        "endLine": 563,
+        "endChar": 58
+      },
+      "revId": "4c62a268fd84a31f1b4696eb739b653c9a6f1092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

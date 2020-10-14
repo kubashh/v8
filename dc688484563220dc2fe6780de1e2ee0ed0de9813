@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37271133_f74a6ac2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-14T01:59:54Z",
+      "side": 1,
+      "message": "removed the unnecessary TPH guard",
+      "revId": "dc688484563220dc2fe6780de1e2ee0ed0de9813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
