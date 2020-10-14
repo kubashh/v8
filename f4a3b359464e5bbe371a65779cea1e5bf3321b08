@@ -104,6 +104,30 @@
       },
       "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "624628cd_cf7a9d5b",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-14T11:29:30Z",
+      "side": 1,
+      "message": "I don\u0027t think so, this was just the boundary where I stopped transitioning to LocalIsolate. From the LocalIsolate, we always get to the LocalHeap so we should still be able to do everything we currently do.",
+      "parentUuid": "a7284f85_698e97c5",
+      "range": {
+        "startLine": 302,
+        "startChar": 2,
+        "endLine": 302,
+        "endChar": 4
+      },
+      "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
