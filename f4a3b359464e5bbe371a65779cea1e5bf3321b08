@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5368cda5_d90a55bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-14T11:39:06Z",
+      "side": 1,
+      "message": "still lgtm, with minor suggestions/nits",
+      "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f172d50_e0c9926a",
@@ -125,6 +142,52 @@
         "startChar": 2,
         "endLine": 302,
         "endChar": 4
+      },
+      "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d4cd23_8ed7bbaa",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-14T11:39:06Z",
+      "side": 1,
+      "message": "not necessarily this CL, but should this scope have a LocalIsolate overload for convenience?",
+      "range": {
+        "startLine": 121,
+        "startChar": 26,
+        "endLine": 121,
+        "endChar": 47
+      },
+      "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "077cda85_1741607e",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-14T11:39:06Z",
+      "side": 1,
+      "message": "nit: no longer needed?",
+      "range": {
+        "startLine": 21,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 15
       },
       "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
