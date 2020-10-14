@@ -22,6 +22,30 @@
       },
       "revId": "f859fe2f0e01f718ee5f390ca471b5b2fe223fde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2632b28e_ed421380",
+        "filename": "src/wasm/wasm-external-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-10-14T14:34:04Z",
+      "side": 1,
+      "message": "I\u0027ve added a new function under utils guarded with V8_OS_AIX. Thanks for reviewing.",
+      "parentUuid": "8c7c3422_50852bb7",
+      "range": {
+        "startLine": 413,
+        "startChar": 4,
+        "endLine": 414,
+        "endChar": 19
+      },
+      "revId": "f859fe2f0e01f718ee5f390ca471b5b2fe223fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
