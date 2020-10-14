@@ -210,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d333fc87_ad9472d1",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-14T12:23:14Z",
+      "side": 1,
+      "message": "Agree we should just remove the whole ability to look at multiple frames, I don\u0027t think we\u0027ve ever used it.",
+      "parentUuid": "5ffe0502_cef381a7",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2607cc77_ede92dc3",
