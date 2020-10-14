@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02d87573_739189e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-14T08:12:27Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "d5d8f0ffc55c2bc1d4f41be9007d1c66b38b0b29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2603e8bd_e5d4a0e8",
@@ -126,6 +143,30 @@
       "side": 1,
       "message": "My initial solution did this but we decided in one of the discussion threads that we should just start LocalHeaps parked and manually unpark afterwards. We could change this back, I would prefer to do this in a subsequent CL though.",
       "parentUuid": "9e90f9ed_00aa6474",
+      "range": {
+        "startLine": 30,
+        "startChar": 13,
+        "endLine": 30,
+        "endChar": 32
+      },
+      "revId": "d5d8f0ffc55c2bc1d4f41be9007d1c66b38b0b29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67400f13_6493eb2b",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-14T08:12:27Z",
+      "side": 1,
+      "message": "If it was discussed and so decided that\u0027s fine by me.",
+      "parentUuid": "b84453bb_ab94627b",
       "range": {
         "startLine": 30,
         "startChar": 13,
