@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "86a22edf_3787ec02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-14T14:53:31Z",
+      "side": 1,
+      "message": "Thanks, landing.",
+      "revId": "b66ec8e1be33bcd587d26f6d5752ed43f8448f29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e25a440e_e0245422",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 7
