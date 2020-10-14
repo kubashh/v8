@@ -39,6 +39,30 @@
       },
       "revId": "b66ec8e1be33bcd587d26f6d5752ed43f8448f29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11c933bf_4fb15ef3",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-14T11:19:17Z",
+      "side": 1,
+      "message": "SGTM.",
+      "parentUuid": "e25a440e_e0245422",
+      "range": {
+        "startLine": 699,
+        "startChar": 14,
+        "endLine": 699,
+        "endChar": 30
+      },
+      "revId": "b66ec8e1be33bcd587d26f6d5752ed43f8448f29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
