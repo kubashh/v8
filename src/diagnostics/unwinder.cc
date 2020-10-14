@@ -105,6 +105,24 @@ bool AddressIsInStack(const void* address, const void* stack_base,
   return address <= stack_base && address >= stack_top;
 }
 
+#ifdef V8_TARGET_ARCH_ARM
+void RestoreCalleeSavedRegisters(void* fp, RegisterState* register_state) {
+  static constexpr int kStartingIndex =
+      /* bad frame pointer (-1) */
+      i::kPointerSize +
+      /* d8...d15 */
+      i::kNumDoubleCalleeSaved * i::kDoubleSize;
+  // Restore r4, ..., r10
+  for (int i = 0; i < 7; ++i) {
+    i::Address addr = reinterpret_cast<i::Address>(fp) + kStartingIndex +
+                      i * i::kSystemPointerSize;
+    register_state->callee_saved.r[i] = reinterpret_cast<void*>(Load(addr));
+  }
+}
+#else
+void RestoreCalleeSavedRegisters(void* fp, RegisterState* register_state) {}
+#endif  // V8_TARGET_ARCH_ARM
+
 }  // namespace
 
 bool Unwinder::TryUnwindV8Frames(const JSEntryStubs& entry_stubs,
@@ -145,6 +163,10 @@ bool Unwinder::TryUnwindV8Frames(const JSEntryStubs& entry_stubs,
 
     // Link register no longer valid after unwinding.
     register_state->lr = nullptr;
+
+    if (IsInJSEntryRange(entry_stubs, pc)) {
+      RestoreCalleeSavedRegisters(current_fp, register_state);
+    }
     return true;
   }
   return false;
