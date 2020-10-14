@@ -1626,6 +1626,12 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       CheckValueInputIs(node, 0, Type::ExternalPointer());  // callee
       CheckValueInputIs(node, 1, Type::Any());              // receiver
       break;
+    case IrOpcode::kObserveNode:
+      CHECK_EQ(1, value_count);
+      if (typing == TYPED) {
+        CheckValueInputIs(node, 0, NodeProperties::GetType(node));
+      }
+      break;
 
     // Machine operators
     // -----------------------

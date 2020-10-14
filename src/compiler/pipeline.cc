@@ -1409,7 +1409,8 @@ struct GraphBuilderPhase {
         data->broker(), temp_zone, closure.shared(), closure.feedback_vector(),
         data->info()->osr_offset(), data->jsgraph(), frequency,
         data->source_positions(), SourcePosition::kNotInlined,
-        data->info()->code_kind(), flags, &data->info()->tick_counter());
+        data->info()->code_kind(), flags, &data->info()->tick_counter(),
+        data->info()->node_observer());
   }
 };
 

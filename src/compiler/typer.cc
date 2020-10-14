@@ -1491,6 +1491,8 @@ Type Typer::Visitor::TypeJSObjectIsArray(Node* node) { return Type::Boolean(); }
 
 Type Typer::Visitor::TypeDateNow(Node* node) { return Type::Number(); }
 
+Type Typer::Visitor::TypeObserveNode(Node* node) { return Operand(node, 0); }
+
 Type Typer::Visitor::JSCallTyper(Type fun, Typer* t) {
   if (!fun.IsHeapConstant() || !fun.AsHeapConstant()->Ref().IsJSFunction()) {
     return Type::NonInternal();
