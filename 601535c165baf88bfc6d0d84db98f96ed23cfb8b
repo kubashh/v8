@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15c070cd_f3ceff18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-14T09:06:38Z",
+      "side": 1,
+      "message": "LGTM with same comments as Jakob.",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "671eb3a5_0c05fb13",
@@ -48,6 +65,40 @@
       "writtenOn": "2020-10-14T05:25:59Z",
       "side": 1,
       "message": "Still not sure I understand this change; why not reset ticks for midtier? The intent is that we keep running for a while in midtier code, before the function is *again* considered hot and we re-optimize, right?\n\nWouldn\u0027t keeping profiler ticks mean that the next profiler interrupt will immediately request optimization?",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc60691d_d663ed56",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4059,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-14T09:06:38Z",
+      "side": 1,
+      "message": "nit - newline after",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cd2d9ff_62e1c797",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-14T09:06:38Z",
+      "side": 1,
+      "message": "Can we add a TODO for Jakob to remove this and roll the tracing into --trace-opt once it doesn\u0027t need to be seperate.",
       "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
