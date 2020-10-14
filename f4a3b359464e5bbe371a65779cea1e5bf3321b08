@@ -16,6 +16,23 @@
       "message": "Switched to LocalIsolate. If the CL still looks good to you, I will submit the CL.",
       "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "649e24f0_c47f8da5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-14T10:42:31Z",
+      "side": 1,
+      "message": "lgtm, thanks",
+      "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
