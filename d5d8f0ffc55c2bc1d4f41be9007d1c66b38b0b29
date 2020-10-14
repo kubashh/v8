@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3360fae2_a66e67b4",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-14T07:58:07Z",
+      "side": 1,
+      "message": "I was thinking of following up with such a change in order to implement a stack limit for background compilation. But if Dominik can do it in this CL, even better.",
+      "parentUuid": "2603e8bd_e5d4a0e8",
+      "range": {
+        "startLine": 964,
+        "startChar": 25,
+        "endLine": 964,
+        "endChar": 35
+      },
+      "revId": "d5d8f0ffc55c2bc1d4f41be9007d1c66b38b0b29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9e90f9ed_00aa6474",
         "filename": "src/heap/local-heap.cc",
         "patchSetId": 19
