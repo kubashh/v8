@@ -656,8 +656,6 @@ StackFrame::Type StackFrame::GetCallerState(State* state) const {
   return ComputeType(iterator_, state);
 }
 
-Address StackFrame::UnpaddedFP() const { return fp(); }
-
 Code NativeFrame::unchecked_code() const { return Code(); }
 
 void NativeFrame::ComputeCallerState(State* state) const {
