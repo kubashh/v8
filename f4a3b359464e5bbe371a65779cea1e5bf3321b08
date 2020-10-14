@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1ed223a_f17a6a63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-10-14T10:35:50Z",
+      "side": 1,
+      "message": "Switched to LocalIsolate. If the CL still looks good to you, I will submit the CL.",
+      "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
