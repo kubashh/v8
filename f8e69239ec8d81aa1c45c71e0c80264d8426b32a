@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb58d1c_353ebfd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-14T08:14:26Z",
+      "side": 1,
+      "message": "unless it\u0027s bots!",
+      "parentUuid": "1b62a9fa_a11c8ab0",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c684f25_89072024",
@@ -135,6 +153,24 @@
       "side": 1,
       "message": "That\u0027s weird that \u0027git cl format\u0027 did not change that! 😕",
       "parentUuid": "8c2b45e8_b1910bc2",
+      "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6be65df_7e32b02f",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-14T08:14:26Z",
+      "side": 1,
+      "message": "git cl format only updates lines with changes, so sometimes it can miss indentation if you just remove braces",
+      "parentUuid": "ac134dbf_31f3aeb1",
       "revId": "f8e69239ec8d81aa1c45c71e0c80264d8426b32a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
