@@ -16,6 +16,108 @@
       "message": "Thanks, I addressed your comments. PTAL.\n\nThanks,\nMythri",
       "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65936c70_41596fbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-14T05:25:59Z",
+      "side": 1,
+      "message": "lgtm with final comments, thanks!",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "671eb3a5_0c05fb13",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3000,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-14T05:25:59Z",
+      "side": 1,
+      "message": "Still not sure I understand this change; why not reset ticks for midtier? The intent is that we keep running for a while in midtier code, before the function is *again* considered hot and we re-optimize, right?\n\nWouldn\u0027t keeping profiler ticks mean that the next profiler interrupt will immediately request optimization?",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85fddd58_308cf770",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-14T05:25:59Z",
+      "side": 1,
+      "message": "Looking at this again, I\u0027m curious what this is intended to achieve.. The top frame is guaranteed to be the expected type, right? \n\nIf so, this logic is only for cases where FLAG_frame_count \u003e 1 and we actually want to look at other frames as well. In that case the function (and the other one above) should be able to handle both Code and Bytecode.\n\nNot for this CL, just noticed it now.",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2607cc77_ede92dc3",
+        "filename": "src/objects/code-kind.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-14T05:25:59Z",
+      "side": 1,
+      "message": "nit: INTERPRETED_FUNCTION || CodeKindIsOptimizedAndCanTierUp",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db0053ca_3d125316",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-14T05:25:59Z",
+      "side": 1,
+      "message": "Wdyt of also adding ActiveTierIsIgnition() here? May avoid confusion in the future, in case we start combining TP/NCI configs.",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "029d9134_ea4d1963",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 15
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-14T05:25:59Z",
+      "side": 1,
+      "message": "Still valid?",
+      "revId": "601535c165baf88bfc6d0d84db98f96ed23cfb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
