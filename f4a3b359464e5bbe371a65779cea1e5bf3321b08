@@ -80,6 +80,30 @@
       },
       "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7284f85_698e97c5",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-14T11:22:54Z",
+      "side": 1,
+      "message": "Do you see an issue with changing that? \u0027cause I\u0027m planning to do so.",
+      "parentUuid": "d2a1b6a8_33a12f0a",
+      "range": {
+        "startLine": 302,
+        "startChar": 2,
+        "endLine": 302,
+        "endChar": 4
+      },
+      "revId": "f4a3b359464e5bbe371a65779cea1e5bf3321b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
