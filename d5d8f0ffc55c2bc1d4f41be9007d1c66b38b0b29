@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2603e8bd_e5d4a0e8",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-14T07:53:50Z",
+      "side": 1,
+      "message": "should we initialise/pass around LocalIsolate rather than LocalHeap, to keep the latter more of an implementation detail of the former?",
+      "range": {
+        "startLine": 964,
+        "startChar": 25,
+        "endLine": 964,
+        "endChar": 35
+      },
+      "revId": "d5d8f0ffc55c2bc1d4f41be9007d1c66b38b0b29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e90f9ed_00aa6474",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-14T07:53:50Z",
+      "side": 1,
+      "message": "should this be a param to the LocalHeap constructor, so that callers don\u0027t have to remember to unpark it?",
+      "range": {
+        "startLine": 30,
+        "startChar": 13,
+        "endLine": 30,
+        "endChar": 32
+      },
+      "revId": "d5d8f0ffc55c2bc1d4f41be9007d1c66b38b0b29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
