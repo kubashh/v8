@@ -27,6 +27,7 @@
 
 [
 [ALWAYS, {
+  'regress-1074578': [SKIP],
 # TODO(jochen): The following test is flaky.
   'overrides/caching': [PASS, FAIL],
 }],  # ALWAYS
