@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03d01287_d246c55b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-15T17:28:33Z",
+      "side": 1,
+      "message": "Georg, PTAL thanks. Most of the changes outside the allocator involve moving HasCallDescriptorFlag(...) so it can be used outside the code generator.",
+      "revId": "3e36224e50347b9f1afc1f2498cba42ca00cd105",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
