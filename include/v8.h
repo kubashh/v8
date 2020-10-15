@@ -2272,6 +2272,15 @@ enum StateTag {
   IDLE
 };
 
+#ifdef V8_TARGET_ARCH_ARM
+// Arm32 needs to keep track of r4, ..., r10.
+struct CalleeSavedRegisterState {
+  void* r[7];
+};
+#else
+struct CalleeSavedRegisterState {};
+#endif  // V8_TARGET_ARCH_ARM
+
 // A RegisterState represents the current state of registers used
 // by the sampling profiler API.
 struct RegisterState {
@@ -2280,6 +2289,8 @@ struct RegisterState {
   void* sp;  // Stack pointer.
   void* fp;  // Frame pointer.
   void* lr;  // Link register (or nullptr on platforms without a link register).
+  // Callee saved registers, dependent on architecture.
+  CalleeSavedRegisterState callee_saved;
 };
 
 // The output structure filled up by GetStackSample API function.
