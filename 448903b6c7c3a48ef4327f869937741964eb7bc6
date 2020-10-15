@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "155cb3b3_07c18f45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-10-15T12:37:57Z",
+      "side": 1,
+      "message": "Hello Javad,\n\nI\u0027ve just rebased on top of your third-party heap patches, let me know if you see any issues!\n\nThanks,\nPierre",
+      "revId": "448903b6c7c3a48ef4327f869937741964eb7bc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
