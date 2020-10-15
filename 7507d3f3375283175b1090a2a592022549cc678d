@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cafe36c_4dc90915",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-15T08:09:30Z",
+      "side": 1,
+      "message": "Ptal. Just noticed en passant that this code is old and dead! :)",
+      "revId": "7507d3f3375283175b1090a2a592022549cc678d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
