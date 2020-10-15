@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3865fdad_1c0c5566",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-15T07:49:55Z",
+      "side": 1,
+      "message": "Right, I should have paid more attention to these.\nFixed it in the new patch set",
+      "parentUuid": "ebac950d_e3a88faf",
+      "range": {
+        "startLine": 175,
+        "startChar": 6,
+        "endLine": 175,
+        "endChar": 37
+      },
+      "revId": "0a5ff1d8688e669714c1c84586be498fea01cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f856ffe8_38f1d32e",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-15T07:36:43Z",
       "side": 1,
       "message": "This should not be needed with the v8_enable_single_generation\u003dtrue GN flag",
+      "range": {
+        "startLine": 186,
+        "startChar": 6,
+        "endLine": 186,
+        "endChar": 37
+      },
+      "revId": "0a5ff1d8688e669714c1c84586be498fea01cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9401c17e_6a0536ef",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1459577
+      },
+      "writtenOn": "2020-10-15T07:49:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f856ffe8_38f1d32e",
       "range": {
         "startLine": 186,
         "startChar": 6,
