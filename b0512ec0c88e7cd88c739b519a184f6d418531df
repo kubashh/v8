@@ -18,6 +18,74 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5d3b6fc_b7ba5d1e",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2281,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-15T17:03:59Z",
+      "side": 1,
+      "message": "As discussed below, let\u0027s avoid making this architecture specific. We try to avoid architecture specific differences in the API. I think this could just be an array of the callee saved registers rather than making it arch specific.",
+      "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "481f7011_8ecd47a4",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2293,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-15T17:03:59Z",
+      "side": 1,
+      "message": "I think we should just make this an architecture-independent array of callee-saved registers that is dynamically allocated (so we don\u0027t have this array on every RegisterState even though it\u0027s only allocated for top-level frames), that way it\u0027s clear when it has been populated (i.e., when there is a non-null array).",
+      "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "431b0a2c_a643da3a",
+        "filename": "src/diagnostics/unwinder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-15T17:03:59Z",
+      "side": 1,
+      "message": "Can this be something defined in i::EntryFrameConstants and DCHECKED in the JSEntry routine?",
+      "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afb22d44_161a2ac6",
+        "filename": "src/diagnostics/unwinder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-15T17:03:59Z",
+      "side": 1,
+      "message": "I\u0027m thinking this should start living in arch specific files, e.g. maybe frames-\u003carch\u003e. We try to avoid architecture specific code in non-arch files.",
+      "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "53b513a0_e5332c35",
