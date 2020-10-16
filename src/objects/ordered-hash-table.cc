@@ -22,7 +22,8 @@ MaybeHandle<Derived> OrderedHashTable<Derived, entrysize>::Allocate(
   // from number of buckets. If we decide to change kLoadFactor
   // to something other than 2, capacity should be stored as another
   // field of this object.
-  capacity = base::bits::RoundUpToPowerOfTwo32(Max(kMinCapacity, capacity));
+  capacity =
+      base::bits::RoundUpToPowerOfTwo32(Max(kMinNonZeroCapacity, capacity));
   if (capacity > MaxCapacity()) {
     return MaybeHandle<Derived>();
   }
@@ -42,6 +43,24 @@ MaybeHandle<Derived> OrderedHashTable<Derived, entrysize>::Allocate(
 }
 
 template <class Derived, int entrysize>
+MaybeHandle<Derived> OrderedHashTable<Derived, entrysize>::AllocateEmpty(
+    Isolate* isolate, AllocationType allocation, RootIndex root_index) {
+  // This is only supposed to be used to create the canonical empty versions
+  // of each ordered structure, and should not be used afterwards.
+  // Requires that the map has already been set up in the roots table.
+  DCHECK(ReadOnlyRoots(isolate).at(root_index) == kNullAddress);
+
+  Handle<FixedArray> backing_store = isolate->factory()->NewFixedArrayWithMap(
+      Derived::GetMap(ReadOnlyRoots(isolate)), HashTableStartIndex(),
+      allocation);
+  Handle<Derived> table = Handle<Derived>::cast(backing_store);
+  table->SetNumberOfBuckets(0);
+  table->SetNumberOfElements(0);
+  table->SetNumberOfDeletedElements(0);
+  return table;
+}
+
+template <class Derived, int entrysize>
 MaybeHandle<Derived> OrderedHashTable<Derived, entrysize>::EnsureGrowable(
     Isolate* isolate, Handle<Derived> table) {
   DCHECK(!table->IsObsolete());
@@ -50,11 +69,21 @@ MaybeHandle<Derived> OrderedHashTable<Derived, entrysize>::EnsureGrowable(
   int nod = table->NumberOfDeletedElements();
   int capacity = table->Capacity();
   if ((nof + nod) < capacity) return table;
-  // Don't need to grow if we can simply clear out deleted entries instead.
-  // Note that we can't compact in place, though, so we always allocate
-  // a new table.
-  return Derived::Rehash(isolate, table,
-                         (nod < (capacity >> 1)) ? capacity << 1 : capacity);
+
+  int new_capacity;
+  if (capacity == 0) {
+    // step from empty to minimum proper size
+    new_capacity = kMinNonZeroCapacity;
+  } else if (nod >= (capacity >> 1)) {
+    // Don't need to grow if we can simply clear out deleted entries instead.
+    // Note that we can't compact in place, though, so we always allocate
+    // a new table.
+    new_capacity = capacity;
+  } else {
+    new_capacity = capacity << 1;
+  }
+
+  return Derived::Rehash(isolate, table, new_capacity);
 }
 
 template <class Derived, int entrysize>
@@ -78,10 +107,14 @@ Handle<Derived> OrderedHashTable<Derived, entrysize>::Clear(
                                        : AllocationType::kOld;
 
   Handle<Derived> new_table =
-      Allocate(isolate, kMinCapacity, allocation_type).ToHandleChecked();
+      Allocate(isolate, kMinNonZeroCapacity, allocation_type).ToHandleChecked();
 
-  table->SetNextTable(*new_table);
-  table->SetNumberOfDeletedElements(kClearedTableSentinel);
+  if (table->NumberOfBuckets() > 0) {
+    // FIXME: This seems a bit unfortunate. The idea is not to modify an
+    // empty table, which may reside in RO memory
+    table->SetNextTable(*new_table);
+    table->SetNumberOfDeletedElements(kClearedTableSentinel);
+  }
 
   return new_table;
 }
@@ -99,6 +132,12 @@ bool OrderedHashTable<Derived, entrysize>::HasKey(Isolate* isolate,
 template <class Derived, int entrysize>
 int OrderedHashTable<Derived, entrysize>::FindEntry(Isolate* isolate,
                                                     Object key) {
+  if (NumberOfElements() == 0) {
+    // This is not just an optimization but also ensures that we do the right
+    // thing if Capacity() == 0
+    return kNotFound;
+  }
+
   int entry;
   // This special cases for Smi, so that we avoid the HandleScope
   // creation below.
@@ -127,13 +166,16 @@ MaybeHandle<OrderedHashSet> OrderedHashSet::Add(Isolate* isolate,
                                                 Handle<OrderedHashSet> table,
                                                 Handle<Object> key) {
   int hash = key->GetOrCreateHash(isolate).value();
-  int entry = table->HashToEntry(hash);
-  // Walk the chain of the bucket and try finding the key.
-  while (entry != kNotFound) {
-    Object candidate_key = table->KeyAt(entry);
-    // Do not add if we have the key already
-    if (candidate_key.SameValueZero(*key)) return table;
-    entry = table->NextChainEntry(entry);
+  // FIXME: Just replace this with call to FindEntry?
+  if (table->NumberOfElements() > 0) {
+    int entry = table->HashToEntry(hash);
+    // Walk the chain of the bucket and try finding the key.
+    while (entry != kNotFound) {
+      Object candidate_key = table->KeyAt(entry);
+      // Do not add if we have the key already
+      if (candidate_key.SameValueZero(*key)) return table;
+      entry = table->NextChainEntry(entry);
+    }
   }
 
   MaybeHandle<OrderedHashSet> table_candidate =
@@ -245,7 +287,11 @@ MaybeHandle<Derived> OrderedHashTable<Derived, entrysize>::Rehash(
   DCHECK_EQ(nod, removed_holes_index);
 
   new_table->SetNumberOfElements(nof);
-  table->SetNextTable(*new_table);
+  if (table->NumberOfBuckets() > 0) {
+    // FIXME: This seems a bit unfortunate. The idea is not to modify an
+    // empty table, which may reside in RO memory
+    table->SetNextTable(*new_table);
+  }
 
   return new_table_candidate;
 }
@@ -328,16 +374,19 @@ MaybeHandle<OrderedHashMap> OrderedHashMap::Add(Isolate* isolate,
                                                 Handle<Object> key,
                                                 Handle<Object> value) {
   int hash = key->GetOrCreateHash(isolate).value();
-  int entry = table->HashToEntry(hash);
-  // Walk the chain of the bucket and try finding the key.
-  {
-    DisallowHeapAllocation no_gc;
-    Object raw_key = *key;
-    while (entry != kNotFound) {
-      Object candidate_key = table->KeyAt(entry);
-      // Do not add if we have the key already
-      if (candidate_key.SameValueZero(raw_key)) return table;
-      entry = table->NextChainEntry(entry);
+  // FIXME: Just replace this with call to FindEntry?
+  if (table->NumberOfElements() > 0) {
+    int entry = table->HashToEntry(hash);
+    // Walk the chain of the bucket and try finding the key.
+    {
+      DisallowHeapAllocation no_gc;
+      Object raw_key = *key;
+      while (entry != kNotFound) {
+        Object candidate_key = table->KeyAt(entry);
+        // Do not add if we have the key already
+        if (candidate_key.SameValueZero(raw_key)) return table;
+        entry = table->NextChainEntry(entry);
+      }
     }
   }
 
@@ -369,6 +418,12 @@ V8_EXPORT_PRIVATE int OrderedHashTable<OrderedNameDictionary, 3>::FindEntry(
 
   DCHECK(key.IsUniqueName());
   Name raw_key = Name::cast(key);
+
+  if (NumberOfElements() == 0) {
+    // This is not just an optimization but also ensures that we do the right
+    // thing if Capacity() == 0
+    return kNotFound;
+  }
 
   int entry = HashToEntry(raw_key.Hash());
   while (entry != kNotFound) {
@@ -474,6 +529,34 @@ MaybeHandle<OrderedNameDictionary> OrderedNameDictionary::Allocate(
   return table_candidate;
 }
 
+MaybeHandle<OrderedHashSet> OrderedHashSet::AllocateEmpty(
+    Isolate* isolate, AllocationType allocation) {
+  RootIndex ri = RootIndex::kEmptyOrderedHashSet;
+  return OrderedHashTable<OrderedHashSet, 1>::AllocateEmpty(isolate, allocation,
+                                                            ri);
+}
+
+MaybeHandle<OrderedHashMap> OrderedHashMap::AllocateEmpty(
+    Isolate* isolate, AllocationType allocation) {
+  RootIndex ri = RootIndex::kEmptyOrderedHashMap;
+  return OrderedHashTable<OrderedHashMap, 2>::AllocateEmpty(isolate, allocation,
+                                                            ri);
+}
+
+MaybeHandle<OrderedNameDictionary> OrderedNameDictionary::AllocateEmpty(
+    Isolate* isolate, AllocationType allocation) {
+  RootIndex ri = RootIndex::kEmptyOrderedPropertyDictionary;
+  MaybeHandle<OrderedNameDictionary> table_candidate =
+      OrderedHashTable<OrderedNameDictionary, 3>::AllocateEmpty(isolate,
+                                                                allocation, ri);
+  Handle<OrderedNameDictionary> table;
+  if (table_candidate.ToHandle(&table)) {
+    table->SetHash(PropertyArray::kNoHashSentinel);
+  }
+
+  return table_candidate;
+}
+
 template V8_EXPORT_PRIVATE MaybeHandle<OrderedHashSet>
 OrderedHashTable<OrderedHashSet, 1>::EnsureGrowable(
     Isolate* isolate, Handle<OrderedHashSet> table);
@@ -516,7 +599,7 @@ template V8_EXPORT_PRIVATE bool OrderedHashTable<OrderedHashMap, 2>::Delete(
 template V8_EXPORT_PRIVATE int OrderedHashTable<OrderedHashMap, 2>::FindEntry(
     Isolate* isolate, Object key);
 
-template Handle<OrderedNameDictionary>
+template V8_EXPORT_PRIVATE Handle<OrderedNameDictionary>
 OrderedHashTable<OrderedNameDictionary, 3>::Shrink(
     Isolate* isolate, Handle<OrderedNameDictionary> table);
 
@@ -898,6 +981,12 @@ template <class Derived>
 int SmallOrderedHashTable<Derived>::FindEntry(Isolate* isolate, Object key) {
   DisallowHeapAllocation no_gc;
   Object hash = key.GetHash();
+
+  if (NumberOfElements() == 0) {
+    // This is not just an optimization but also ensures that we do the right
+    // thing if Capacity() == 0
+    return kNotFound;
+  }
 
   if (hash.IsUndefined(isolate)) return kNotFound;
   int entry = HashToFirstEntry(Smi::ToInt(hash));
