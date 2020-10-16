@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca32e483_4f730f0b",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-16T09:14:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83c33448_ef0f010a",
+      "revId": "3e36224e50347b9f1afc1f2498cba42ca00cd105",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a117da6d_34758dd8",
@@ -65,6 +83,30 @@
       "writtenOn": "2020-10-16T05:36:49Z",
       "side": 1,
       "message": "Here and below: s/Is/If/",
+      "range": {
+        "startLine": 562,
+        "startChar": 65,
+        "endLine": 562,
+        "endChar": 74
+      },
+      "revId": "3e36224e50347b9f1afc1f2498cba42ca00cd105",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bc81ac8_c6f8b823",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-16T09:14:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a117da6d_34758dd8",
       "range": {
         "startLine": 562,
         "startChar": 65,
