@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66f131d3_ba86d224",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "By looking at the code, it should work: calling Transition on the zero-sized versions does nothing as it cannot be obsolete. Similarly, HasMore calls Transition and then finds out that the table is empty in this case, returning false.\n\nOf course it would be nicer to actually test this, but I can\u0027t immediately find where OrderedHashTableIterator (or its subclasses JSMapIterator and JSSetIterator) are tested. Do you have a pointer for that?",
+      "parentUuid": "b0b05546_951d7cda",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4da9e9d_892d27f7",
         "filename": "src/objects/ordered-hash-table.cc",
         "patchSetId": 9
@@ -48,6 +66,24 @@
       "writtenOn": "2020-10-16T14:04:06Z",
       "side": 1,
       "message": "I think your code is fine. FindEntry() will try to compute the hash again which is unnecessary.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031e3c37_d2d1517d",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d4da9e9d_892d27f7",
       "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bbe7a45_e4c348e7",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "62fcd58c_0aac3b9d",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c0eacb2_8171ee97",
@@ -82,6 +136,24 @@
       "writtenOn": "2020-10-16T14:04:06Z",
       "side": 1,
       "message": "Same as above. I think your code is fine.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bde871c_6bb87fa9",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5c0eacb2_8171ee97",
       "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -134,6 +206,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "61bb4f5a_750298c6",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Okay, I did this and used the new Base type in some other methods, like Rehash and Allocate, too.",
+      "parentUuid": "a125757e_d066187c",
+      "range": {
+        "startLine": 535,
+        "startChar": 9,
+        "endLine": 535,
+        "endChar": 44
+      },
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a42ee3e3_d0d168d9",
         "filename": "src/objects/ordered-hash-table.cc",
         "patchSetId": 9
@@ -145,6 +241,30 @@
       "writtenOn": "2020-10-16T14:04:06Z",
       "side": 1,
       "message": "Ditto.",
+      "range": {
+        "startLine": 542,
+        "startChar": 9,
+        "endLine": 542,
+        "endChar": 45
+      },
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e27574c_b5a7dc8c",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a42ee3e3_d0d168d9",
       "range": {
         "startLine": 542,
         "startChar": 9,
@@ -178,6 +298,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43d78f94_7605e858",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "719429ad_1f1e2bf1",
+      "range": {
+        "startLine": 550,
+        "startChar": 6,
+        "endLine": 550,
+        "endChar": 48
+      },
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b791a01_7effc681",
@@ -197,6 +341,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a1790b6_36e5bd2d",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "I removed this new code completely because I haven\u0027t generally touched the Small* versions so far, changing this function was an accident. Allocation for the small versions works slightly different (they are created in Factory) and we are not using them, yet.",
+      "parentUuid": "5b791a01_7effc681",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "187bfd0a_3d9abed3",
         "filename": "test/cctest/test-orderedhashtable.cc",
         "patchSetId": 9
@@ -208,6 +370,24 @@
       "writtenOn": "2020-10-16T14:04:06Z",
       "side": 1,
       "message": "Nice! ))",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8300578d_6f7f1c91",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "187bfd0a_3d9abed3",
       "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -231,6 +411,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d1466722_ac65a7f2",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2294,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Indeed, I tested it specifically here because I wanted to ensure that adding something to the zero-sized version is okay. TestEmptyOrderedHashTable is supposed to be just some arbitrary sequence of operations with sanity checks to ensure that the result is a well-behaved set/map/dict. For example, we should be able to swap it with the in-depth well-formedness check we discussed without needing further changes.\nOf course I\u0027m nevertheless happy to remove this here if you prefer.",
+      "parentUuid": "30fbbe4f_5b58d3f0",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6550691a_97954ded",
         "filename": "test/cctest/test-orderedhashtable.cc",
         "patchSetId": 9
@@ -242,6 +440,24 @@
       "writtenOn": "2020-10-16T14:04:06Z",
       "side": 1,
       "message": "True, there\u0027s nothing to test here. Just remove the comment.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08fd66e7_748029dc",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2424,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6550691a_97954ded",
       "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -263,6 +479,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b756fe6d_c612607b",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2449,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "578b0690_6338c2b3",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f28b4e52_128f5de7",
@@ -276,6 +510,24 @@
       "writtenOn": "2020-10-16T14:04:06Z",
       "side": 1,
       "message": "It seems you are testing this case already in TestEmptyOrderedHashTable. Maybe just move this comment to Delete\u003cOrderedNameDictionary\u003e() helper.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00ec419b_f80ab766",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2474,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T15:47:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f28b4e52_128f5de7",
       "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
