@@ -16,6 +16,63 @@
       "message": "Georg, PTAL thanks. Most of the changes outside the allocator involve moving HasCallDescriptorFlag(...) so it can be used outside the code generator.",
       "revId": "3e36224e50347b9f1afc1f2498cba42ca00cd105",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8323fc7_0c92bc05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-16T05:36:49Z",
+      "side": 1,
+      "message": "Please add ",
+      "revId": "3e36224e50347b9f1afc1f2498cba42ca00cd105",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83c33448_ef0f010a",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-16T05:36:49Z",
+      "side": 1,
+      "message": "These can be const.",
+      "revId": "3e36224e50347b9f1afc1f2498cba42ca00cd105",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a117da6d_34758dd8",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-16T05:36:49Z",
+      "side": 1,
+      "message": "Here and below: s/Is/If/",
+      "range": {
+        "startLine": 562,
+        "startChar": 65,
+        "endLine": 562,
+        "endChar": 74
+      },
+      "revId": "3e36224e50347b9f1afc1f2498cba42ca00cd105",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
