@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea506e88_1fd1c710",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2293,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-16T11:31:39Z",
+      "side": 1,
+      "message": "Ahh I missed how this API was used, I thought it was used to unwind each frame, not all frames. In that case I agree this should be static.\n\nAs discussed offline, we shouldn\u0027t have V8_TARGET_ARCH_X in the v8.h since we can\u0027t guarantee it is set by the embedder including v8.h. Let\u0027s move this definition to a seperate file, and also make it very specifically arch specific by making each register a different field rather than using an ordered array.",
+      "parentUuid": "28f737ab_c7b43b5d",
+      "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "431b0a2c_a643da3a",
         "filename": "src/diagnostics/unwinder.cc",
         "patchSetId": 5
