@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbf680a5_1d0c86f0",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-16T07:56:30Z",
+      "side": 1,
+      "message": "Minor: I stared at this code longer than I\u0027ll admit ;) I think it would be more readable this way:\n\n  int new_capacity;\n  if (capacity \u003d\u003d 0) {\n    // step from empty to minimum proper size\n    new_capacity \u003d kMinNonZeroCapacity;\n  } else if (nod \u003e\u003d (capacity \u003e\u003e 1)) {\n    // Don\u0027t need to grow if we can simply clear out deleted entries instead.\n    // Note that we can\u0027t compact in place, though, so we always allocate\n    // a new table.\n    new_capacity \u003d capacity;\n  } else {\n    new_capacity \u003d capacity \u003c\u003c 1;\n  }\n\n(But I don\u0027t feel strongly about this.)",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 3
+      },
+      "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af8724e8_bf786d1b",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-16T07:56:30Z",
+      "side": 1,
+      "message": "Nit: if (foo \u003e 0) is more common than if (0 \u003c foo)",
+      "range": {
+        "startLine": 110,
+        "startChar": 6,
+        "endLine": 110,
+        "endChar": 33
+      },
+      "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1332a47b_7530adb9",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-16T07:56:30Z",
+      "side": 1,
+      "message": "Do you mean the check \"is this the empty canonical one\" is ugly, or the whole \"don\u0027t do stuff here so that we don\u0027t change the empty one\" is ugly?",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 13
+      },
+      "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
