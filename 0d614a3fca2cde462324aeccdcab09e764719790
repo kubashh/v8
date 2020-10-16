@@ -1,0 +1,283 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "063366af_ac513375",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "overall looks good, mostly nits",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0b05546_951d7cda",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "Probably clearing the empty hash table should be a no-op returning itself.\nIt\u0027s also worth testing how OrderedHashTableIterator handles empty case.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4da9e9d_892d27f7",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "I think your code is fine. FindEntry() will try to compute the hash again which is unnecessary.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62fcd58c_0aac3b9d",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "Looks reasonable, no FIXME is needed here.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c0eacb2_8171ee97",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "Same as above. I think your code is fine.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f0dbabc_5ac2ea78",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "Maybe if you remove V8_EXPORT_PRIVATE it will fix the windows component build issue?",
+      "range": {
+        "startLine": 415,
+        "startChar": 0,
+        "endLine": 415,
+        "endChar": 17
+      },
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a125757e_d066187c",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "In order to simplify things you can define Base type in each derived class and use it here:\n  return Base::AllocateEmpty(...);\n\nSee https://source.chromium.org/chromium/chromium/src/+/master:v8/src/base/hashmap.h;l\u003d427?q\u003dfile:hashmap.h\u0026ss\u003dchromium for example.",
+      "range": {
+        "startLine": 535,
+        "startChar": 9,
+        "endLine": 535,
+        "endChar": 44
+      },
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a42ee3e3_d0d168d9",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 542,
+        "startChar": 9,
+        "endLine": 542,
+        "endChar": 45
+      },
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "719429ad_1f1e2bf1",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 550,
+        "startChar": 6,
+        "endLine": 550,
+        "endChar": 48
+      },
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b791a01_7effc681",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "I think it\u0027s better to avoid key\u0027s hash computation for the empty case.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "187bfd0a_3d9abed3",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "Nice! ))",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30fbbe4f_5b58d3f0",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2294,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "This case seems to be covered by TestEmptyOrderedHashTable.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6550691a_97954ded",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2424,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "True, there\u0027s nothing to test here. Just remove the comment.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "578b0690_6338c2b3",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2449,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "True. There\u0027s nothing to test here.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f28b4e52_128f5de7",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2474,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T14:04:06Z",
+      "side": 1,
+      "message": "It seems you are testing this case already in TestEmptyOrderedHashTable. Maybe just move this comment to Delete\u003cOrderedNameDictionary\u003e() helper.",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
