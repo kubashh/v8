@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86cbec3e_96ba1112",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2281,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-16T10:45:36Z",
+      "side": 1,
+      "message": "Resolving to keep only one thread open on this topic",
+      "parentUuid": "c5d3b6fc_b7ba5d1e",
+      "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "481f7011_8ecd47a4",
@@ -89,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f315fab_9043d826",
+        "filename": "src/diagnostics/unwinder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-16T10:45:36Z",
+      "side": 1,
+      "message": "Moved the constexpr to the EntryFrameConstants.\nWe do have a static_assert for the whole frame [1]. Do we want one for the intermediate steps too?\n\n[1]: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/arm/builtins-arm.cc;l\u003d498;drc\u003d50ddb12d2c3ca29c0f906efe78c4299fdf6ef490",
+      "parentUuid": "431b0a2c_a643da3a",
+      "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "afb22d44_161a2ac6",
         "filename": "src/diagnostics/unwinder.cc",
         "patchSetId": 5
@@ -100,6 +136,24 @@
       "writtenOn": "2020-10-15T17:03:59Z",
       "side": 1,
       "message": "I\u0027m thinking this should start living in arch specific files, e.g. maybe frames-\u003carch\u003e. We try to avoid architecture specific code in non-arch files.",
+      "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2550307_ec2be4ad",
+        "filename": "src/diagnostics/unwinder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-16T10:45:36Z",
+      "side": 1,
+      "message": "Done. I created unwinder-\u003carch\u003e files for these methods.",
+      "parentUuid": "afb22d44_161a2ac6",
       "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

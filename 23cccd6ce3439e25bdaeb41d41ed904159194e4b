@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de5feb62_1a54ca8b",
+        "filename": "src/diagnostics/unwinder.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-16T10:45:36Z",
+      "side": 1,
+      "message": "When doing the split, I moved this to a common .h file since they are methods common to all archs. However, since these methods are now in an .h file I had to remove the anonymous namespace. Would this be a good compromise?",
+      "range": {
+        "startLine": 17,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 9
+      },
+      "revId": "23cccd6ce3439e25bdaeb41d41ed904159194e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
