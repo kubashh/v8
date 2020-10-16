@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2c89338_5182f977",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2275,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-16T16:31:06Z",
+      "side": 1,
+      "message": "This still remains to be done before it is ready to merge. The idea is to forward declare CalleeSavedRegisters and then define it properly in another header separate from v8.h.\nHowever, RegisterState needs to know the size of CalleeSavedRegisters even when just declaring it with a std::unique_ptr.",
+      "range": {
+        "startLine": 2275,
+        "startChar": 0,
+        "endLine": 2275,
+        "endChar": 61
+      },
+      "revId": "ee86e57eef1db2237fcc2b22938e8763573e9436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
