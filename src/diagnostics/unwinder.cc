@@ -2,17 +2,30 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include <algorithm>
+// This is the only place allowed to include the platform-specific headers.
+#define INCLUDED_FROM_UNWINDER_H
+#if V8_TARGET_ARCH_IA32
+#include "src/diagnostics/ia32/unwinder-ia32.h"
+#elif V8_TARGET_ARCH_X64
+#include "src/diagnostics/x64/unwinder-x64.h"
+#elif V8_TARGET_ARCH_ARM64
+#include "src/diagnostics/arm64/unwinder-arm64.h"
+#elif V8_TARGET_ARCH_ARM
+#include "src/diagnostics/arm/unwinder-arm.h"
+#else
+#error Unsupported target architecture.
+#endif
+#undef INCLUDED_FROM_UNWINDER_H
 
-#include "include/v8.h"
-#include "src/common/globals.h"
-#include "src/execution/frame-constants.h"
-#include "src/execution/pointer-authentication.h"
+// Satisfy cpplint check, but don't include the header. It is included
+// recursively via the arch specific files.
+#if 0
+#include "src/diagnostics/unwinder.h"
+#endif
 
 namespace v8 {
 
-namespace {
-
+// Helper methods, common to all archs
 const i::byte* CalculateEnd(const void* start, size_t length_in_bytes) {
   // Given that the length of the memory range is in bytes and it is not
   // necessarily aligned, we need to do the pointer arithmetic in byte* here.
@@ -68,6 +81,7 @@ i::Address Load(i::Address address) {
 void* GetReturnAddressFromFP(void* fp, void* pc,
                              const JSEntryStubs& entry_stubs) {
   int caller_pc_offset = i::CommonFrameConstants::kCallerPCOffset;
+// TODO(solanes): Move this if guard and below into arch specific files.
 #if V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_ARM
   if (IsInJSEntryRange(entry_stubs, pc)) {
     caller_pc_offset = i::EntryFrameConstants::kDirectCallerPCOffset;
@@ -104,8 +118,6 @@ bool AddressIsInStack(const void* address, const void* stack_base,
                       const void* stack_top) {
   return address <= stack_base && address >= stack_top;
 }
-
-}  // namespace
 
 bool Unwinder::TryUnwindV8Frames(const JSEntryStubs& entry_stubs,
                                  size_t code_pages_length,
@@ -145,6 +157,10 @@ bool Unwinder::TryUnwindV8Frames(const JSEntryStubs& entry_stubs,
 
     // Link register no longer valid after unwinding.
     register_state->lr = nullptr;
+
+    if (IsInJSEntryRange(entry_stubs, pc)) {
+      RestoreCalleeSavedRegisters(current_fp, register_state);
+    }
     return true;
   }
   return false;
