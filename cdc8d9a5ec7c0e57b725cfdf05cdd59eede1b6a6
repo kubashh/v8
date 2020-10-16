@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c3845f4_252c9216",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2734,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-16T11:00:59Z",
+      "side": 1,
+      "message": "Note: This makes gcc unhappy (see https://ci.chromium.org/p/v8/builders/ci/V8%20Linux64%20gcc%20-%20debug/9528).\n\nIt has to be wrapped in a \"#if V8_HAS_CXX14_CONSTEXPR\" until we switch to a more recent gcc version.",
+      "revId": "cdc8d9a5ec7c0e57b725cfdf05cdd59eede1b6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
