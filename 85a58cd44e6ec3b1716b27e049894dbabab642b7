@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73ebe882_a780a6aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-16T13:05:08Z",
+      "side": 1,
+      "message": "Somehow I was not added to CC, even though you added the TBR line. Strange.",
+      "revId": "85a58cd44e6ec3b1716b27e049894dbabab642b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
