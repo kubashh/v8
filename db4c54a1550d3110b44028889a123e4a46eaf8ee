@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62dfa1f1_3f977483",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T12:05:24Z",
+      "side": 1,
+      "message": "Adding this V8_EXPORT_PRIVATE makes this template instantiation equivalent to the ones on OrderedHashSet::Shrink and OrderedHashMap::Shrink, but calling it from cctest still yields a link error. Note that the situation here is a bit different from the Rehash function of OrderedHashSet, OrderedHashMap, and OrderedDictionary, because Rehash is defined explicitly as a member of these three classes, rather than just inherting Rehash from the OrderedHashTable\u003c...\u003e.",
+      "revId": "db4c54a1550d3110b44028889a123e4a46eaf8ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e559588c_2a7be1d6",
+        "filename": "src/objects/ordered-hash-table.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T12:05:24Z",
+      "side": 1,
+      "message": "This new V8_EXPORT_PRIVATE made the linking error regarding OrderedNameDictionary::Rehash go away. Note that here, the static function Rehash of the superclass OrderedHashTable\u003c...\u003e is redeclared as a member of sublcass OrderedNameDictionary here, and the definition just calls the version from the superclass.",
+      "revId": "db4c54a1550d3110b44028889a123e4a46eaf8ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
