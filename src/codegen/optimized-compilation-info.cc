@@ -22,6 +22,7 @@ OptimizedCompilationInfo::OptimizedCompilationInfo(
     Handle<JSFunction> closure, CodeKind code_kind)
     : code_kind_(code_kind),
       zone_(zone),
+      node_observer_(nullptr),
       optimization_id_(isolate->NextOptimizationId()) {
   DCHECK_EQ(*shared, closure->shared());
   DCHECK(shared->is_compiled());
@@ -44,6 +45,7 @@ OptimizedCompilationInfo::OptimizedCompilationInfo(
     Vector<const char> debug_name, Zone* zone, CodeKind code_kind)
     : code_kind_(code_kind),
       zone_(zone),
+      node_observer_(nullptr),
       optimization_id_(kNoOptimizationId),
       debug_name_(debug_name) {
   SetTracingFlags(
