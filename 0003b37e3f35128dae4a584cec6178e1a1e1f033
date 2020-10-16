@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92446f0f_7a2403c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-16T16:50:21Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "0003b37e3f35128dae4a584cec6178e1a1e1f033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a35407b9_191293be",
@@ -43,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a39c2e0f_734495c1",
+        "filename": "src/execution/local-isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-16T16:50:21Z",
+      "side": 1,
+      "message": "GetStackStart would be the most accurate, but GetCurrentStackPosition is simpler/faster and should be close to the actual start.\n\nGetCurrentStackPosition() seems preferable to me.",
+      "parentUuid": "a35407b9_191293be",
+      "range": {
+        "startLine": 21,
+        "startChar": 19,
+        "endLine": 21,
+        "endChar": 44
+      },
+      "revId": "0003b37e3f35128dae4a584cec6178e1a1e1f033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "df6cf816_d4f6a1b7",
         "filename": "src/execution/local-isolate.cc",
         "patchSetId": 6
@@ -54,6 +95,24 @@
       "writtenOn": "2020-10-16T16:38:36Z",
       "side": 1,
       "message": "One point I\u0027m fuzzy about is the use of LocalIsolate on the main thread. Even if we decide to always use FLAG_stack_size for background threads, it would perhaps be confusing if stack_limit of a LocalIsolate ON THE MAIN THREAD is anything other than the proper isolate\u0027s real_climit.",
+      "revId": "0003b37e3f35128dae4a584cec6178e1a1e1f033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fa58e16_a387896a",
+        "filename": "src/execution/local-isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-16T16:50:21Z",
+      "side": 1,
+      "message": "Dominik has a CL that adds Main/Background indication to LocalIsolate. We can use that to set the proper limit for the main isolate.",
+      "parentUuid": "df6cf816_d4f6a1b7",
       "revId": "0003b37e3f35128dae4a584cec6178e1a1e1f033",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
