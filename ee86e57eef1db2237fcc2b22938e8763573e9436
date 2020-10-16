@@ -22,6 +22,30 @@
       },
       "revId": "ee86e57eef1db2237fcc2b22938e8763573e9436",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78a71cdb_0facb486",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2275,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-16T16:35:20Z",
+      "side": 1,
+      "message": "Right, you will need to move the RegisterState copy constructor declaration to api.cc",
+      "parentUuid": "e2c89338_5182f977",
+      "range": {
+        "startLine": 2275,
+        "startChar": 0,
+        "endLine": 2275,
+        "endChar": 61
+      },
+      "revId": "ee86e57eef1db2237fcc2b22938e8763573e9436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
