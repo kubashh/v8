@@ -2272,6 +2272,22 @@ enum StateTag {
   IDLE
 };
 
+// TODO(solanes): Move this declaration to the correct place.
+#ifdef V8_TARGET_ARCH_ARM
+// Arm32 needs to keep track of r4, ..., r10.
+struct CalleeSavedRegisters {
+  void* arm_r4;
+  void* arm_r5;
+  void* arm_r6;
+  void* arm_r7;
+  void* arm_r8;
+  void* arm_r9;
+  void* arm_r10;
+};
+#else
+struct CalleeSavedRegisters {};
+#endif  // V8_TARGET_ARCH_ARM
+
 // A RegisterState represents the current state of registers used
 // by the sampling profiler API.
 struct RegisterState {
@@ -2280,6 +2296,19 @@ struct RegisterState {
   void* sp;  // Stack pointer.
   void* fp;  // Frame pointer.
   void* lr;  // Link register (or nullptr on platforms without a link register).
+  // Callee saved registers.
+  std::unique_ptr<CalleeSavedRegisters> callee_saved;
+
+  RegisterState(const RegisterState& other) {
+    pc = other.pc;
+    sp = other.sp;
+    fp = other.fp;
+    lr = other.lr;
+    if (other.callee_saved) {
+      callee_saved =
+          std::make_unique<CalleeSavedRegisters>(*(other.callee_saved));
+    }
+  }
 };
 
 // The output structure filled up by GetStackSample API function.
