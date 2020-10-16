@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50670fc0_17a93f6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-16T16:32:58Z",
+      "side": 1,
+      "message": "PTAL.\n\nSummary of status quo:\n\n  The stack limit for the main thread is determined by taking the current stack address and subtracting FLAG_stack_size (see StackGuard::ThreadLocal::Iinitialize). However, the embedder can explicitly provide a limit (in the form of an address, see SetStackLimit) when creating an isolate, in which case it replaces the computed one.\n\n  There is no notion of stack limit for background threads. The idea of the CL is to provide such a stack limit via LocalIsolate.\n\nFor now I\u0027m just using FLAG_stack_size for that. In the case where the embedder explicitly provided a limit address we could reconstruct the intended stack size and apply it to background threads as well by computing the corresponding limit address there, but I\u0027m not sure we actually want to do that.\n\nBTW, there are already various places across the code base where we implement ad-hoc ways of carrying around and checking against a stack limit in background threads, e.g. grep for stack_limit in ast.h and in compiler.h (UnoptimizedCompilationJob). My hope is that we can switch them all over to using LocalIsolate eventually.",
+      "revId": "0003b37e3f35128dae4a584cec6178e1a1e1f033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
