@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab6b3c4f_bc0d2578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T12:08:08Z",
+      "side": 1,
+      "message": "There\u0027s a merge conflict again so we won\u0027t get test results, but the remaining linking error has the following error message:\nninja: Entering directory `out/x64.component_build\u0027\n[20/20] LINK ./cctest\nFAILED: cctest\npython \"../../build/toolchain/gcc_link_wrapper.py\" --output\u003d\"./cctest\" -- ../../third_party/llvm-build/Release+Asserts/bin/clang++ -pie -Wl,--fatal-warnings -Wl,--build-id -fPIC -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,defs -Wl,--as-needed -fuse-ld\u003dlld -Wl,--icf\u003dall -Wl,--color-diagnostics -Wl,--no-call-graph-profile-sort -m64 -Werror -rdynamic -nostdlib++ --sysroot\u003d../../build/linux/debian_sid_amd64-sysroot -L../../build/linux/debian_sid_amd64-sysroot/usr/local/lib/x86_64-linux-gnu -L../../build/linux/debian_sid_amd64-sysroot/lib/x86_64-linux-gnu -L../../build/linux/debian_sid_amd64-sysroot/usr/lib/x86_64-linux-gnu -pie -Wl,--disable-new-dtags -Wl,-rpath\u003d\\$ORIGIN -Wl,-O2 -Wl,--gc-sections -o \"./cctest\" -Wl,--start-group @\"./cctest.rsp\" ./libv8_for_testing.so ./libv8_libbase.so ./libicui18n.so ./libicuuc.so ./libv8_libplatform.so ./libv8_debug_helper.so ./libc++.so -Wl,--end-group  -ldl -lpthread -lrt\nld.lld: error: undefined symbol: v8::internal::OrderedHashTable\u003cv8::internal::OrderedNameDictionary, 3\u003e::Shrink(v8::internal::Isolate*, v8::internal::Handle\u003cv8::internal::OrderedNameDictionary\u003e)\n\u003e\u003e\u003e referenced by test-orderedhashtable.cc\n\u003e\u003e\u003e               obj/test/cctest/cctest_sources/test-orderedhashtable.o:(v8::internal::test_orderedhashtable::TestZeroSizeOrderedNameDictionary())\nclang: error: linker command failed with exit code 1 (use -v to see invocation)\nninja: build stopped: subcommand failed.",
+      "revId": "d26578ac4fadad3b88a6602c62f2d9d11a5f7727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
