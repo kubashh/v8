@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35dc9d95_54a9f6e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-10-16T21:19:32Z",
+      "side": 1,
+      "message": "Pretty mechanical change, the diff in output looks like:\n\n-0x2dfb000846fb   6bb  f20f70d403     pshuflw xmm2, xmm4, 3\n-0x2dfb00084700   6c0  f3410f70c906   pshufhw xmm1, xmm9, 6\n+0x2dfb000846fb   6bb  f20f70d403     pshuflw xmm2,xmm4,3\n+0x2dfb00084700   6c0  f3410f70c906   pshufhw xmm1,xmm9, 6\n...\n-0x2dfb00084aa8   a68  66450f3a22c900 pinsrd  xmm9,r9,0\n-0x2dfb00084aaf   a6f  660f3a22680401 pinsrd  xmm5,[rax+0x4],1\n-0x2dfb00084ab6   a76  664d0f3a22c900 REX.W pinsrq  xmm9,r9,0\n-0x2dfb00084abd   a7d  66480f3a22680401 REX.W pinsrq  xmm5,[rax+0x4],1\n+0x2dfb00084aa8   a68  66450f3a22c900 pinsrd xmm9,r9,0\n+0x2dfb00084aaf   a6f  660f3a22680401 pinsrd xmm5,[rax+0x4],1\n+0x2dfb00084ab6   a76  664d0f3a22c900 REX.W pinsrq xmm9,r9,0\n+0x2dfb00084abd   a7d  66480f3a22680401 REX.W pinsrq xmm5,[rax+0x4],1\n\nSo all whitespace fixes.",
+      "revId": "3cc82e8c8fc4c294eecd7cadc73a6a2daa7c301e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
