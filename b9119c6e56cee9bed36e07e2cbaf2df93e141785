@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "defeb3fa_65ea5873",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T08:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbf680a5_1d0c86f0",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 3
+      },
+      "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af8724e8_bf786d1b",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-16T07:56:30Z",
       "side": 1,
       "message": "Nit: if (foo \u003e 0) is more common than if (0 \u003c foo)",
+      "range": {
+        "startLine": 110,
+        "startChar": 6,
+        "endLine": 110,
+        "endChar": 33
+      },
+      "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4da73968_d844b681",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T08:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af8724e8_bf786d1b",
       "range": {
         "startLine": 110,
         "startChar": 6,
@@ -66,6 +114,47 @@
         "endLine": 111,
         "endChar": 13
       },
+      "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41d34d20_51e07815",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T08:11:06Z",
+      "side": 1,
+      "message": "The latter: It seems like there is an invariant that clearing and rehashing a table will leave a reference to the new one, which is broken for the empty one. On the other hand, there\u0027s not really a way around it anyway.",
+      "parentUuid": "1332a47b_7530adb9",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 13
+      },
+      "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3acbec52_0c5832cc",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2458,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-10-16T08:11:06Z",
+      "side": 1,
+      "message": "There is currently a link error while building the tests that I can\u0027t reproduce locally: It seems like using OrderedNameDictionary::Rehash and OrderedNameDictionary::Shrink fails, even though it works for OrderedHashSet and OrderedHashMap. To me it looks as if those functions are defined by OrderedNameDictionary, too.\nIn the case of OrderedNameDictionary::Rehash, it isn\u0027t annotated with V8_EXPORT_PRIVATE, while the versions of OrderedHashSet and OrderedHashMap are.\nI don\u0027t know what the problem with OrderedNameDictionary::Shrink is, though.",
       "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
