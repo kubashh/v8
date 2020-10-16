@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b20d47e0_e4f42617",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T16:39:50Z",
+      "side": 1,
+      "message": "Ah, I didn\u0027t notice the OrderedHashTableIterator is actually a part of JS objects hierarchy. I also didn\u0027t find tests for the iterator.\nOk, I agree that current implementation of iterators will be fine with empty versions, so let\u0027s treat this comment as resolved.",
+      "parentUuid": "66f131d3_ba86d224",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4da9e9d_892d27f7",
         "filename": "src/objects/ordered-hash-table.cc",
         "patchSetId": 9
@@ -181,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55e3b3e6_047ba5c9",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T16:39:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2f0dbabc_5ac2ea78",
+      "range": {
+        "startLine": 415,
+        "startChar": 0,
+        "endLine": 415,
+        "endChar": 17
+      },
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a125757e_d066187c",
@@ -218,6 +260,30 @@
       "side": 1,
       "message": "Okay, I did this and used the new Base type in some other methods, like Rehash and Allocate, too.",
       "parentUuid": "a125757e_d066187c",
+      "range": {
+        "startLine": 535,
+        "startChar": 9,
+        "endLine": 535,
+        "endChar": 44
+      },
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f22eaf85_09ef4e1f",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T16:39:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "61bb4f5a_750298c6",
       "range": {
         "startLine": 535,
         "startChar": 9,
@@ -357,6 +423,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5a8b4c3_3a1dbbe0",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T16:39:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6a1790b6_36e5bd2d",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "187bfd0a_3d9abed3",
@@ -423,6 +507,24 @@
       "side": 1,
       "message": "Indeed, I tested it specifically here because I wanted to ensure that adding something to the zero-sized version is okay. TestEmptyOrderedHashTable is supposed to be just some arbitrary sequence of operations with sanity checks to ensure that the result is a well-behaved set/map/dict. For example, we should be able to swap it with the in-depth well-formedness check we discussed without needing further changes.\nOf course I\u0027m nevertheless happy to remove this here if you prefer.",
       "parentUuid": "30fbbe4f_5b58d3f0",
+      "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43493aa1_fb715bcd",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2294,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T16:39:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d1466722_ac65a7f2",
       "revId": "0d614a3fca2cde462324aeccdcab09e764719790",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

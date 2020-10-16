@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2b093c2_b6b77de9",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T16:39:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "62dfa1f1_3f977483",
+      "revId": "db4c54a1550d3110b44028889a123e4a46eaf8ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e559588c_2a7be1d6",
@@ -31,6 +49,24 @@
       "writtenOn": "2020-10-16T12:05:24Z",
       "side": 1,
       "message": "This new V8_EXPORT_PRIVATE made the linking error regarding OrderedNameDictionary::Rehash go away. Note that here, the static function Rehash of the superclass OrderedHashTable\u003c...\u003e is redeclared as a member of sublcass OrderedNameDictionary here, and the definition just calls the version from the superclass.",
+      "revId": "db4c54a1550d3110b44028889a123e4a46eaf8ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0b9ef75_96b57160",
+        "filename": "src/objects/ordered-hash-table.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T16:39:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e559588c_2a7be1d6",
       "revId": "db4c54a1550d3110b44028889a123e4a46eaf8ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

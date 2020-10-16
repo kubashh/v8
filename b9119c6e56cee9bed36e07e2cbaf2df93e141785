@@ -142,6 +142,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c1fac19_8fb81f8f",
+        "filename": "src/objects/ordered-hash-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T16:39:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "41d34d20_51e07815",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 13
+      },
+      "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3acbec52_0c5832cc",
@@ -155,6 +179,24 @@
       "writtenOn": "2020-10-16T08:11:06Z",
       "side": 1,
       "message": "There is currently a link error while building the tests that I can\u0027t reproduce locally: It seems like using OrderedNameDictionary::Rehash and OrderedNameDictionary::Shrink fails, even though it works for OrderedHashSet and OrderedHashMap. To me it looks as if those functions are defined by OrderedNameDictionary, too.\nIn the case of OrderedNameDictionary::Rehash, it isn\u0027t annotated with V8_EXPORT_PRIVATE, while the versions of OrderedHashSet and OrderedHashMap are.\nI don\u0027t know what the problem with OrderedNameDictionary::Shrink is, though.",
+      "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fed888ee_3acc08b5",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2458,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-16T16:39:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3acbec52_0c5832cc",
       "revId": "b9119c6e56cee9bed36e07e2cbaf2df93e141785",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
