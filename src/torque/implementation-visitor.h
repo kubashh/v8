@@ -556,6 +556,8 @@ class ImplementationVisitor {
   void EndCSAFiles();
   void BeginRuntimeMacrosFile();
   void EndRuntimeMacrosFile();
+  void BeginDebugMacrosFile();
+  void EndDebugMacrosFile();
 
   void GenerateImplementation(const std::string& dir);
 
@@ -763,15 +765,19 @@ class ImplementationVisitor {
 
   std::ostream& source_out() {
     if (auto* streams = CurrentFileStreams::Get()) {
-      return output_type_ == OutputType::kCSA ? streams->csa_ccfile
-                                              : runtime_macros_cc_;
+      return output_type_ == OutputType::kCSA
+                 ? streams->csa_ccfile
+                 : output_type_ == OutputType::kCC ? runtime_macros_cc_
+                                                   : debug_macros_cc_;
     }
     return null_stream_;
   }
   std::ostream& header_out() {
     if (auto* streams = CurrentFileStreams::Get()) {
-      return output_type_ == OutputType::kCSA ? streams->csa_headerfile
-                                              : runtime_macros_h_;
+      return output_type_ == OutputType::kCSA
+                 ? streams->csa_headerfile
+                 : output_type_ == OutputType::kCC ? runtime_macros_h_
+                                                   : debug_macros_h_;
     }
     return null_stream_;
   }
@@ -829,6 +835,14 @@ class ImplementationVisitor {
   // contents.
   std::stringstream runtime_macros_cc_;
   std::stringstream runtime_macros_h_;
+
+  // The contents of the debug macros output files. These contain all Torque
+  // macros that have been generated using the C++ backend with debug purpose.
+  // They're not yet split per source file like CSA macros, but eventually we
+  // should change them to generate -inl.inc files so that callers can easily
+  // inline their contents.
+  std::stringstream debug_macros_cc_;
+  std::stringstream debug_macros_h_;
 
   OutputType output_type_ = OutputType::kCSA;
 };

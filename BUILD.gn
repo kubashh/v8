@@ -1362,6 +1362,8 @@ template("run_torque") {
       "$target_gen_dir/torque-generated/exported-class-definitions-inl.h",
       "$target_gen_dir/torque-generated/runtime-macros.cc",
       "$target_gen_dir/torque-generated/runtime-macros.h",
+      "$target_gen_dir/torque-generated/debug-macros.cc",
+      "$target_gen_dir/torque-generated/debug-macros.h",
     ]
 
     outputs = []
