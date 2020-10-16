@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dffed12_82051713",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-16T09:52:49Z",
+      "side": 1,
+      "message": "PTAL. Goma shouldn\u0027t be needed here, so let\u0027s drop some loc.",
+      "revId": "8a8eaad9a149265a302b1c1f611e3a08748a0652",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
