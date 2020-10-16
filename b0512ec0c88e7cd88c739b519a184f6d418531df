@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28f737ab_c7b43b5d",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2293,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-16T08:45:03Z",
+      "side": 1,
+      "message": "We only have one register state that we reuse, created in v8_unwinder[1]. There isn\u0027t one register state per frame.\n\n[1]: https://source.chromium.org/chromium/chromium/src/+/master:chrome/renderer/v8_unwinder.cc;l\u003d144;drc\u003d9099ab87f63a1e37bfb949c617a9c1d1d5031f6c\n\nBy dynamically allocated do you mean new/delete? Or something like std::vector?",
+      "parentUuid": "481f7011_8ecd47a4",
+      "revId": "b0512ec0c88e7cd88c739b519a184f6d418531df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "431b0a2c_a643da3a",
         "filename": "src/diagnostics/unwinder.cc",
         "patchSetId": 5
