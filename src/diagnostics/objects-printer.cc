@@ -941,12 +941,10 @@ void FeedbackVector::FeedbackVectorPrint(std::ostream& os) {  // NOLINT
   }
 
   os << "\n - shared function info: " << Brief(shared_function_info());
-  os << "\n - optimized code/marker: ";
   if (has_optimized_code()) {
-    os << Brief(optimized_code());
-  } else {
-    os << optimization_marker();
+    os << "\n - optimized code: " << Brief(optimized_code());
   }
+  os << "\n - optimization marker: " << optimization_marker();
   os << "\n - invocation count: " << invocation_count();
   os << "\n - profiler ticks: " << profiler_ticks();
 

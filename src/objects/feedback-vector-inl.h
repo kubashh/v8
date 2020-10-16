@@ -98,8 +98,6 @@ Handle<FeedbackCell> ClosureFeedbackCellArray::GetFeedbackCell(int index) {
   return handle(FeedbackCell::cast(get(index)), GetIsolate());
 }
 
-void FeedbackVector::clear_padding() { set_padding(0); }
-
 bool FeedbackVector::is_empty() const { return length() == 0; }
 
 FeedbackMetadata FeedbackVector::metadata() const {
@@ -109,17 +107,15 @@ FeedbackMetadata FeedbackVector::metadata() const {
 void FeedbackVector::clear_invocation_count() { set_invocation_count(0); }
 
 Code FeedbackVector::optimized_code() const {
-  MaybeObject slot = optimized_code_weak_or_smi();
-  DCHECK(slot->IsSmi() || slot->IsWeakOrCleared());
+  MaybeObject slot = maybe_optimized_code();
+  DCHECK(slot->IsWeakOrCleared());
   HeapObject heap_object;
   return slot->GetHeapObject(&heap_object) ? Code::cast(heap_object) : Code();
 }
 
 OptimizationMarker FeedbackVector::optimization_marker() const {
-  MaybeObject slot = optimized_code_weak_or_smi();
-  Smi value;
-  if (!slot->ToSmi(&value)) return OptimizationMarker::kNone;
-  return static_cast<OptimizationMarker>(value.value());
+  int32_t marker = raw_optimization_marker();
+  return static_cast<OptimizationMarker>(marker);
 }
 
 bool FeedbackVector::has_optimized_code() const {
@@ -127,8 +123,8 @@ bool FeedbackVector::has_optimized_code() const {
 }
 
 bool FeedbackVector::has_optimization_marker() const {
-  return optimization_marker() != OptimizationMarker::kLogFirstExecution &&
-         optimization_marker() != OptimizationMarker::kNone;
+  return IsInOptimizationQueueMarker(optimization_marker()) ||
+         IsCompileOptimizedMarker(optimization_marker());
 }
 
 // Conversion from an integer index to either a slot or an ic slot.

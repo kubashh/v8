@@ -1010,7 +1010,11 @@ bool GetOptimizedCodeLater(std::unique_ptr<OptimizedCompilationJob> job,
   }
 
   if (CodeKindIsStoredInOptimizedCodeCache(code_kind)) {
-    function->SetOptimizationMarker(OptimizationMarker::kInOptimizationQueue);
+    OptimizationMarker marker =
+        (function->feedback_vector().has_optimized_code())
+            ? OptimizationMarker::kInOptimizationQueueMayHaveCachedCode
+            : OptimizationMarker::kInOptimizationQueueNoCachedCode;
+    function->SetOptimizationMarker(marker);
   }
 
   // Note: Usually the active tier is expected to be Ignition or NCI at this

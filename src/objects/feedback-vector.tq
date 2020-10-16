@@ -8,12 +8,12 @@ extern class FeedbackVector extends HeapObject {
   const length: int32;
   invocation_count: int32;
   profiler_ticks: int32;
-  // TODO(v8:9287) The padding is not necessary on platforms with 4 bytes
-  // tagged pointers, we should make it conditional; however, platform-specific
-  // interacts badly with GCMole, so we need to address that first.
-  padding: uint32;
+  // TODO(turboprop, v8:11010): This field could be removed by changing the
+  // tier up checks for Turboprop. If removing this field also check v8:9287.
+  // Padding was necessary for GCMole.
+  raw_optimization_marker: uint32;
   shared_function_info: SharedFunctionInfo;
-  optimized_code_weak_or_smi: Weak<Code>|Smi;
+  maybe_optimized_code: Weak<Code>;
   closure_feedback_cell_array: ClosureFeedbackCellArray;
   raw_feedback_slots[length]: MaybeObject;
 }

@@ -4073,7 +4073,9 @@ TEST(WeakReference) {
           .Build();
   CHECK(code->IsCode());
 
-  fv->set_optimized_code_weak_or_smi(i::HeapObjectReference::Weak(*code));
+  fv->set_maybe_optimized_code(i::HeapObjectReference::Weak(*code));
+  fv->set_raw_optimization_marker(
+      i::OptimizationMarker::kHasTopTierOptimizedCode);
 
   v8::HeapProfiler* heap_profiler = isolate->GetHeapProfiler();
   const v8::HeapSnapshot* snapshot = heap_profiler->TakeHeapSnapshot();

@@ -1517,13 +1517,31 @@ inline std::ostream& operator<<(std::ostream& os,
 
 using FileAndLine = std::pair<const char*, int>;
 
-enum class OptimizationMarker {
-  kLogFirstExecution,
+enum OptimizationMarker : int32_t {
   kNone,
+  kLogFirstExecution,
   kCompileOptimized,
   kCompileOptimizedConcurrent,
-  kInOptimizationQueue
+  kInOptimizationQueueNoCachedCode,
+  kInOptimizationQueueMayHaveCachedCode,
+  kHasMidTierOptimizedCode,
+  kHasTopTierOptimizedCode,
+  kLastMarker = kHasTopTierOptimizedCode
 };
+
+inline bool IsOptimizedCodeMarker(OptimizationMarker marker) {
+  return marker == kHasMidTierOptimizedCode ||
+         marker == kHasTopTierOptimizedCode;
+}
+
+inline bool IsInOptimizationQueueMarker(OptimizationMarker marker) {
+  return marker == kInOptimizationQueueNoCachedCode ||
+         marker == kInOptimizationQueueMayHaveCachedCode;
+}
+
+inline bool IsCompileOptimizedMarker(OptimizationMarker marker) {
+  return marker == kCompileOptimized || marker == kCompileOptimizedConcurrent;
+}
 
 inline std::ostream& operator<<(std::ostream& os,
                                 const OptimizationMarker& marker) {
@@ -1536,8 +1554,14 @@ inline std::ostream& operator<<(std::ostream& os,
       return os << "OptimizationMarker::kCompileOptimized";
     case OptimizationMarker::kCompileOptimizedConcurrent:
       return os << "OptimizationMarker::kCompileOptimizedConcurrent";
-    case OptimizationMarker::kInOptimizationQueue:
-      return os << "OptimizationMarker::kInOptimizationQueue";
+    case OptimizationMarker::kInOptimizationQueueNoCachedCode:
+      return os << "OptimizationMarker::kInOptimizationQueueNoCachedCode";
+    case OptimizationMarker::kHasMidTierOptimizedCode:
+      return os << "OptimizationMarker::kHasOptimizedCodeMidTier";
+    case OptimizationMarker::kHasTopTierOptimizedCode:
+      return os << "OptimizationMarker::kHasOptimizedCodeTopTier";
+    case OptimizationMarker::kInOptimizationQueueMayHaveCachedCode:
+      return os << "OptimizationMarker::kInOptimizationQueueMayHaveCachedCode";
   }
   UNREACHABLE();
   return os;

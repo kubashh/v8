@@ -30,36 +30,45 @@ void LazyBuiltinsAssembler::GenerateTailCallToReturnedCode(
 }
 
 void LazyBuiltinsAssembler::TailCallRuntimeIfMarkerEquals(
-    TNode<Smi> marker, OptimizationMarker expected_marker,
+    TNode<Int32T> marker, OptimizationMarker expected_marker,
     Runtime::FunctionId function_id, TNode<JSFunction> function) {
   Label no_match(this);
-  GotoIfNot(SmiEqual(marker, SmiConstant(expected_marker)), &no_match);
+  GotoIfNot(Word32Equal(marker, Int32Constant(expected_marker)), &no_match);
   GenerateTailCallToReturnedCode(function_id, function);
   BIND(&no_match);
 }
 
 void LazyBuiltinsAssembler::MaybeTailCallOptimizedCodeSlot(
     TNode<JSFunction> function, TNode<FeedbackVector> feedback_vector) {
-  Label fallthrough(this);
+  Label fallthrough(this), may_have_optimized_code(this);
 
-  TNode<MaybeObject> maybe_optimized_code_entry = LoadMaybeWeakObjectField(
-      feedback_vector, FeedbackVector::kOptimizedCodeWeakOrSmiOffset);
+  TNode<Int32T> marker = LoadObjectField<Int32T>(
+      feedback_vector, FeedbackVector::kRawOptimizationMarkerOffset);
 
-  // Check if the code entry is a Smi. If yes, we interpret it as an
-  // optimisation marker. Otherwise, interpret it as a weak reference to a code
-  // object.
-  Label optimized_code_slot_is_smi(this), optimized_code_slot_is_weak_ref(this);
-  Branch(TaggedIsSmi(maybe_optimized_code_entry), &optimized_code_slot_is_smi,
-         &optimized_code_slot_is_weak_ref);
-
-  BIND(&optimized_code_slot_is_smi);
   {
-    // Optimized code slot is a Smi optimization marker.
-    TNode<Smi> marker = CAST(maybe_optimized_code_entry);
-
     // Fall through if no optimization trigger.
-    GotoIf(SmiEqual(marker, SmiConstant(OptimizationMarker::kNone)),
+    GotoIf(Word32Equal(marker, Int32Constant(OptimizationMarker::kNone)),
            &fallthrough);
+
+    // When tiering up from midtier -> toptier we would have optimized code and
+    // still have the function in optimization queue. We represent this case
+    // using kInOptimizationQueueMayHaveCachedCode. So when marker is
+    // kHas*OptimizedCode or kInOptimizationQueueMayHaveCachedCode we need to
+    // check the optimized code slot. We combine these checks by just
+    // checking if marker > InOptimizationQueueMayHaveCachedCode. These static
+    // asserts ensure it is safe to do so.
+    STATIC_ASSERT(OptimizationMarker::kHasMidTierOptimizedCode ==
+                  OptimizationMarker::kInOptimizationQueueMayHaveCachedCode +
+                      1);
+    STATIC_ASSERT(OptimizationMarker::kHasTopTierOptimizedCode ==
+                  OptimizationMarker::kHasMidTierOptimizedCode + 1);
+    STATIC_ASSERT(OptimizationMarker::kHasTopTierOptimizedCode ==
+                  OptimizationMarker::kLastMarker);
+    GotoIf(Int32GreaterThanOrEqual(
+               marker,
+               Int32Constant(
+                   OptimizationMarker::kInOptimizationQueueMayHaveCachedCode)),
+           &may_have_optimized_code);
 
     // TODO(ishell): introduce Runtime::kHandleOptimizationMarker and check
     // all these marker values there.
@@ -75,21 +84,28 @@ void LazyBuiltinsAssembler::MaybeTailCallOptimizedCodeSlot(
 
     // Otherwise, the marker is InOptimizationQueue, so fall through hoping
     // that an interrupt will eventually update the slot with optimized code.
-    CSA_ASSERT(this,
-               SmiEqual(marker,
-                        SmiConstant(OptimizationMarker::kInOptimizationQueue)));
+    CSA_ASSERT(
+        this,
+        Word32Equal(marker,
+                    Int32Constant(
+                        OptimizationMarker::kInOptimizationQueueNoCachedCode)));
+    CSA_ASSERT(
+        this, IsCleared(LoadMaybeWeakObjectField(
+                  feedback_vector, FeedbackVector::kMaybeOptimizedCodeOffset)));
     Goto(&fallthrough);
   }
 
-  BIND(&optimized_code_slot_is_weak_ref);
+  BIND(&may_have_optimized_code);
   {
+    Label heal_optimized_code_slot(this);
+    TNode<MaybeObject> maybe_optimized_code_entry = LoadMaybeWeakObjectField(
+        feedback_vector, FeedbackVector::kMaybeOptimizedCodeOffset);
     // Optimized code slot is a weak reference.
-    TNode<Code> optimized_code =
-        CAST(GetHeapObjectAssumeWeak(maybe_optimized_code_entry, &fallthrough));
+    TNode<Code> optimized_code = CAST(GetHeapObjectAssumeWeak(
+        maybe_optimized_code_entry, &heal_optimized_code_slot));
 
     // Check if the optimized code is marked for deopt. If it is, call the
     // runtime to clear it.
-    Label found_deoptimized_code(this);
     TNode<CodeDataContainer> code_data_container =
         CAST(LoadObjectField(optimized_code, Code::kCodeDataContainerOffset));
 
@@ -97,17 +113,18 @@ void LazyBuiltinsAssembler::MaybeTailCallOptimizedCodeSlot(
         code_data_container, CodeDataContainer::kKindSpecificFlagsOffset);
     GotoIf(IsSetWord32<Code::MarkedForDeoptimizationField>(
                code_kind_specific_flags),
-           &found_deoptimized_code);
+           &heal_optimized_code_slot);
 
     // Optimized code is good, get it into the closure and link the closure into
     // the optimized functions list, then tail call the optimized code.
     StoreObjectField(function, JSFunction::kCodeOffset, optimized_code);
     GenerateTailCallToJSCode(optimized_code, function);
 
-    // Optimized code slot contains deoptimized code, evict it and re-enter the
-    // closure's code.
-    BIND(&found_deoptimized_code);
-    GenerateTailCallToReturnedCode(Runtime::kEvictOptimizedCodeSlot, function);
+    // Optimized code slot contains deoptimized code or code is cleared and
+    // optimized code marker isn't updated. Evict the code, updated the marker
+    // and re-enter the closure's code.
+    BIND(&heal_optimized_code_slot);
+    GenerateTailCallToReturnedCode(Runtime::kHealOptimizedCodeSlot, function);
   }
 
   // Fall-through if the optimized code cell is clear and there is no

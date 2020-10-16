@@ -193,15 +193,13 @@ class FeedbackVector
   // Increment profiler ticks, saturating at the maximal value.
   void SaturatingIncrementProfilerTicks();
 
-  // Initialize the padding if necessary.
-  inline void clear_padding();
-
   inline void clear_invocation_count();
 
   inline Code optimized_code() const;
-  inline OptimizationMarker optimization_marker() const;
   inline bool has_optimized_code() const;
   inline bool has_optimization_marker() const;
+  inline OptimizationMarker optimization_marker() const;
+  void ClearHasOptimizedCodeInMarker();
   void ClearOptimizedCode();
   void EvictOptimizedCodeMarkedForDeoptimization(SharedFunctionInfo shared,
                                                  const char* reason);

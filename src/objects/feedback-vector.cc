@@ -251,13 +251,12 @@ Handle<FeedbackVector> FeedbackVector::New(
   DCHECK_EQ(vector->length(), slot_count);
 
   DCHECK_EQ(vector->shared_function_info(), *shared);
-  DCHECK_EQ(
-      vector->optimized_code_weak_or_smi(),
-      MaybeObject::FromSmi(Smi::FromEnum(
-          FLAG_log_function_events ? OptimizationMarker::kLogFirstExecution
-                                   : OptimizationMarker::kNone)));
+  DCHECK_EQ(vector->optimization_marker(),
+            FLAG_log_function_events ? OptimizationMarker::kLogFirstExecution
+                                     : OptimizationMarker::kNone);
   DCHECK_EQ(vector->invocation_count(), 0);
   DCHECK_EQ(vector->profiler_ticks(), 0);
+  DCHECK(vector->maybe_optimized_code()->IsCleared());
 
   // Ensure we can skip the write barrier
   Handle<Object> uninitialized_sentinel = UninitializedSentinel(isolate);
@@ -382,32 +381,69 @@ void FeedbackVector::SaturatingIncrementProfilerTicks() {
 void FeedbackVector::SetOptimizedCode(Handle<FeedbackVector> vector,
                                       Handle<Code> code) {
   DCHECK(CodeKindIsOptimizedJSFunction(code->kind()));
-  vector->set_optimized_code_weak_or_smi(HeapObjectReference::Weak(*code));
+  vector->set_maybe_optimized_code(HeapObjectReference::Weak(*code));
+  // It isn't really possible that we mark for optimization for next tier before
+  // we install the code for the current tier. So it is safe to just to
+  // overwrite optimization marker with HasOptimizedCode. SetOptimizedCode is
+  // called when optimization finishes. So the marker should either be
+  // kInOptimizationQueue* (for concurrent) or kNone (for midtier
+  // non-concurrent) or kHasMidTierOptimizedCode (for toptier non-concurrent)
+  // compilations.
+  DCHECK(vector->optimization_marker() ==
+             OptimizationMarker::kHasMidTierOptimizedCode ||
+         IsInOptimizationQueueMarker(vector->optimization_marker()) ||
+         vector->optimization_marker() == OptimizationMarker::kNone);
+  OptimizationMarker marker =
+      vector->optimized_code().kind() == CodeKind::TURBOFAN
+          ? OptimizationMarker::kHasTopTierOptimizedCode
+          : OptimizationMarker::kHasMidTierOptimizedCode;
+  vector->SetOptimizationMarker(marker);
+}
+
+void FeedbackVector::ClearHasOptimizedCodeInMarker() {
+  // For eager / soft deopts it is possible that the optimization marker is
+  // kInOptimizationQueueMayHaveCachedCode. Reset the marker to
+  // InOptimizationQueueNoCachedCode. The marker would be cleared once the
+  // compilation job finishes.
+  if (optimization_marker() ==
+      OptimizationMarker::kInOptimizationQueueMayHaveCachedCode) {
+    SetOptimizationMarker(OptimizationMarker::kInOptimizationQueueNoCachedCode);
+  } else if (IsOptimizedCodeMarker(optimization_marker())) {
+    SetOptimizationMarker(OptimizationMarker::kNone);
+  }
 }
 
 void FeedbackVector::ClearOptimizedCode() {
   DCHECK(has_optimized_code());
-  SetOptimizationMarker(OptimizationMarker::kNone);
+  DCHECK(IsOptimizedCodeMarker(optimization_marker()) ||
+         optimization_marker() ==
+             OptimizationMarker::kInOptimizationQueueMayHaveCachedCode ||
+         optimization_marker() ==
+             OptimizationMarker::kCompileOptimizedConcurrent ||
+         optimization_marker() == OptimizationMarker::kCompileOptimized);
+  set_maybe_optimized_code(HeapObjectReference::ClearedValue(GetIsolate()));
+  ClearHasOptimizedCodeInMarker();
 }
 
 void FeedbackVector::ClearOptimizationMarker() {
-  DCHECK(!has_optimized_code());
-  SetOptimizationMarker(OptimizationMarker::kNone);
+  OptimizationMarker marker = OptimizationMarker::kNone;
+  if (has_optimized_code()) {
+    marker = optimized_code().kind() == CodeKind::TURBOFAN
+                 ? OptimizationMarker::kHasTopTierOptimizedCode
+                 : OptimizationMarker::kHasMidTierOptimizedCode;
+  }
+  SetOptimizationMarker(marker);
 }
 
 void FeedbackVector::SetOptimizationMarker(OptimizationMarker marker) {
-  set_optimized_code_weak_or_smi(MaybeObject::FromSmi(Smi::FromEnum(marker)));
+  set_raw_optimization_marker(marker);
 }
 
 void FeedbackVector::EvictOptimizedCodeMarkedForDeoptimization(
     SharedFunctionInfo shared, const char* reason) {
-  MaybeObject slot = optimized_code_weak_or_smi();
-  if (slot->IsSmi()) {
-    return;
-  }
-
+  MaybeObject slot = maybe_optimized_code();
   if (slot->IsCleared()) {
-    ClearOptimizationMarker();
+    ClearHasOptimizedCodeInMarker();
     return;
   }
 
