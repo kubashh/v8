@@ -94,7 +94,7 @@ class JSTypedLoweringTester : public HandleAndZoneScope {
     JSGraph jsgraph(main_isolate(), &graph, &common, &javascript, &simplified,
                     &machine);
     GraphReducer graph_reducer(main_zone(), &graph, &tick_counter,
-                               &js_heap_broker);
+                               &js_heap_broker, nullptr);
     JSTypedLowering reducer(&graph_reducer, &jsgraph, &js_heap_broker,
                             main_zone());
     Reduction reduction = reducer.Reduce(node);

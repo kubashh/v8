@@ -458,6 +458,7 @@
   V(ObjectIsString)                     \
   V(ObjectIsSymbol)                     \
   V(ObjectIsUndetectable)               \
+  V(ObserveNode)                        \
   V(PlainPrimitiveToFloat64)            \
   V(PlainPrimitiveToNumber)             \
   V(PlainPrimitiveToWord32)             \
