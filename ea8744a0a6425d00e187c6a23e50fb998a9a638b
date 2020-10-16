@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afc2b84d_8b626348",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-16T09:49:44Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "ea8744a0a6425d00e187c6a23e50fb998a9a638b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "638e1f97_2cab6d59",
+        "filename": "builders/auto.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-16T09:49:44Z",
+      "side": 1,
+      "message": "We don\u0027t need goma here... but I keep this to not change the generated files for now. Will switch in a follow up.",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 32
+      },
+      "revId": "ea8744a0a6425d00e187c6a23e50fb998a9a638b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
