@@ -16,6 +16,24 @@
       "message": "There\u0027s probably a better spot to add the \\n. It should be emitted by the previous statement. Could you paste the emitted failing code here? What OS is affected?",
       "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95be328d_d67dbd54",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1333583
+      },
+      "writtenOn": "2020-10-19T06:37:01Z",
+      "side": 1,
+      "message": "I want the related link to commit msg. It affected on msvc win64 arm64.\n\nFailing build with:\n\n```console\nC:\\Users\\runneradmin\\Desktop\\node\\out\\Release\\obj\\v8_snapshot\\embedded.S(278): error A2034: unknown opcode: Builtins_RecordWrite [C:\\Users\\runner\nadmin\\Desktop\\node\\tools\\v8_gypfiles\\v8_snapshot.vcxproj]\nC:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Microsoft\\VC\\v160\\BuildCustomizations\\marmasm.targets(70,5): error MSB3721\n: The command \"armasm64.exe ..\\..\\out\\Release\\obj\\v8_snapshot\\\\embedded.S -o \"..\\..\\out\\Release\\obj\\v8_snapshot\\embedded.obj\" \" exited with code\n1. [C:\\Users\\runneradmin\\Desktop\\node\\tools\\v8_gypfiles\\v8_snapshot.vcxproj]\n```",
+      "parentUuid": "c07b881a_24ffa7ac",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
