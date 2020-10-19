@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "375d54b3_fb41875f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T05:53:12Z",
+      "side": 1,
+      "message": "fyi multiple bugs are usually in comma-separated lists.",
+      "revId": "9ce00cd985f0ad509dba4493cd5b12841a362124",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3c132b1_b8ab8e64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T05:53:12Z",
+      "side": 1,
+      "message": "Thanks, lgtm.",
+      "revId": "9ce00cd985f0ad509dba4493cd5b12841a362124",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
