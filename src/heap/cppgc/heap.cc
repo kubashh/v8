@@ -10,6 +10,7 @@
 #include "src/heap/cppgc/heap-object-header.h"
 #include "src/heap/cppgc/heap-visitor.h"
 #include "src/heap/cppgc/marker.h"
+#include "src/heap/cppgc/marking-verifier.h"
 #include "src/heap/cppgc/prefinalizer-handler.h"
 
 namespace cppgc {
@@ -162,7 +163,7 @@ void Heap::FinalizeGarbageCollection(Config::StackState stack_state) {
   marker_.reset();
   // TODO(chromium:1056170): replace build flag with dedicated flag.
 #if DEBUG
-  VerifyMarking(stack_state);
+  MarkingVerifier verifier(*this, stack_state);
 #endif
   {
     NoGCScope no_gc(*this);
