@@ -69,6 +69,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f66c5c7_8d582253",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T08:34:19Z",
+      "side": 1,
+      "message": "h ",
+      "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f28bdc58_9bf02376",
@@ -100,6 +117,24 @@
       "side": 1,
       "message": "StackGuard is surprisingly complex. All this complexity is needed only for the main isolate/thread. On a background thread all we need is a single value, and we don\u0027t want to offer any functionality beyond checking against that value.\n\nIn the case of a local isolate on the main thread, we do take this value from the stack guard.",
       "parentUuid": "f28bdc58_9bf02376",
+      "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f1f2232_fa919dcb",
+        "filename": "src/execution/local-isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T08:34:19Z",
+      "side": 1,
+      "message": "Ah sorry I was thinking of the StackLimitCheck class. That one seems very easy to extend for LocalIsolate support. IMO adding support there would reduce surprises a lot. Wdyt?\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/execution/isolate.h;l\u003d2060;drc\u003dee41b15784bd941a97716581e516e117bb11bcfd",
+      "parentUuid": "5d8ca665_ebfe95f5",
       "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
