@@ -16,6 +16,115 @@
       "message": "ptal",
       "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60ccded9_6479068f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-19T12:35:58Z",
+      "side": 1,
+      "message": "Generally I think the direction is good.\nI think we can and should avoid creating/duplicating multiple states.",
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93471649_a1288b00",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-verifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-19T12:35:58Z",
+      "side": 1,
+      "message": "VerificationState\u0026",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 36
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46dea624_8bc79c78",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-verifier.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-19T12:35:58Z",
+      "side": 1,
+      "message": "I don\u0027t think you really need this here. Since the visitors only take a reference to the state, but don\u0027t actually use it during construction, I think you can pass the state from MarkingVerifierBase and it will be safe.",
+      "range": {
+        "startLine": 21,
+        "startChar": 37,
+        "endLine": 21,
+        "endChar": 43
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6982c3c5_890a1534",
+        "filename": "src/heap/cppgc/marking-verifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-19T12:35:58Z",
+      "side": 1,
+      "message": "If we avoid duplicating states, I think we can replace this with a scope that sets/unsets the parent. Unsetting the parent is not required for correctness imo, but it still makes sense.",
+      "range": {
+        "startLine": 61,
+        "startChar": 9,
+        "endLine": 61,
+        "endChar": 25
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c94df657_3c839580",
+        "filename": "src/heap/cppgc/marking-verifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-19T12:35:58Z",
+      "side": 1,
+      "message": "VerificationState\u0026",
+      "range": {
+        "startLine": 93,
+        "startChar": 2,
+        "endLine": 93,
+        "endChar": 19
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
