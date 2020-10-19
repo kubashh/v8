@@ -137,6 +137,24 @@
       "parentUuid": "5d8ca665_ebfe95f5",
       "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5b0850c_8925b507",
+        "filename": "src/execution/local-isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-19T14:01:49Z",
+      "side": 1,
+      "message": "Hmm, how? One way would be to make that class hold both an Isolate* and a LocalIsolate* (mutually exclusive) and have the HasOverflowed method check them to see which case it\u0027s in. The other methods there should then (D)CHECK against being called in the LocalIsolate case.\n\nI don\u0027t find that attractive.\n\nAnother option would be a static HasOverflowed(LocalIsolate*) function in that class.\n\nDoes anyone have a better idea?",
+      "parentUuid": "3f1f2232_fa919dcb",
+      "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
