@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbc3714a_b8d00c54",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2288,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-19T11:00:43Z",
+      "side": 1,
+      "message": "Can you specify that this can be null if no callee saved registers were stored.",
+      "revId": "2cc5ba42375d8aa412f451720ef36be07098b64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d25b509_ea0eee6e",
+        "filename": "src/diagnostics/saved-registers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-19T11:00:43Z",
+      "side": 1,
+      "message": "This needs to live in include/ otherwise it won\u0027t be accessible as part of the API for embedders.",
+      "revId": "2cc5ba42375d8aa412f451720ef36be07098b64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ca44497_c62eda3c",
+        "filename": "src/diagnostics/saved-registers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-19T11:00:43Z",
+      "side": 1,
+      "message": "Can you do \n#ifdef V8_TARGET_ARCH_ARM\n...\n#else if defined(..x64/arm64/ia32/ppc/etc.)\n // Dummy version\n struct CalleeSavedRegisters {};\n#else \n# error V8_TARGET_ARCH must be set based on target architecture.\n\nTo ensure the embedder sets the target arch define if they are using this file.",
+      "revId": "2cc5ba42375d8aa412f451720ef36be07098b64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbce5ce0_fff9f46b",
+        "filename": "src/diagnostics/unwinder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-19T11:00:43Z",
+      "side": 1,
+      "message": "Rather than including .h arch files, why not just have the arch files be .cc files, then you won\u0027t need to do this hack or have #ifdefs here (instead it will just be part of the BUILD.gn file that chooses the correct .cc file for the architecture, like most other arch specific files).",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 6
+      },
+      "revId": "2cc5ba42375d8aa412f451720ef36be07098b64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
