@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05ca4e76_d95d1a7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T16:39:26Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "338e27eb_38d777aa",
+      "revId": "73568e089961ef4dadd68759b943f0f2d353b566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be1560ce_82a045a9",
@@ -31,6 +49,24 @@
       "writtenOn": "2020-10-19T16:32:46Z",
       "side": 1,
       "message": "nit - please add a comment, and mention it is declared in v8-unwinder-state.h",
+      "revId": "73568e089961ef4dadd68759b943f0f2d353b566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fc22b6f_4104d0c3",
+        "filename": "include/v8.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2275,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T16:39:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be1560ce_82a045a9",
       "revId": "73568e089961ef4dadd68759b943f0f2d353b566",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18af99fe_aa3d8e1b",
+        "filename": "src/diagnostics/unwinder.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T16:39:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f693fd0e_634d29c8",
+      "revId": "73568e089961ef4dadd68759b943f0f2d353b566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "240ce68c_eb17e320",
@@ -65,6 +119,24 @@
       "writtenOn": "2020-10-19T16:32:46Z",
       "side": 1,
       "message": "I think actually we just want to run this code on all architectures (since as we determined, x64 is currently wrong except for fp/pc by chance). I\u0027m fine with having a todo for now though.",
+      "revId": "73568e089961ef4dadd68759b943f0f2d353b566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd66203a_eb1d1347",
+        "filename": "src/diagnostics/unwinder.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T16:39:26Z",
+      "side": 1,
+      "message": "Ack. Slightly reworded to take this into account.",
+      "parentUuid": "240ce68c_eb17e320",
       "revId": "73568e089961ef4dadd68759b943f0f2d353b566",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
