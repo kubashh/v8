@@ -88,6 +88,24 @@
       "parentUuid": "693c3b78_7b85f166",
       "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f75d891_8ae3cd32",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T07:10:38Z",
+      "side": 1,
+      "message": "Right, so my point is the newline should be added at the end of\n\n v8_Default_embedded_blob_code_data_\n\nnot at the beginning of \n\n Builtins_RecordWrite FUNCTION",
+      "parentUuid": "e9a33017_4897f2e3",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
