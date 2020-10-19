@@ -50,6 +50,40 @@
       "message": "Jakob ptal at execution/",
       "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7436d3cc_2070d6ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T08:07:54Z",
+      "side": 1,
+      "message": "The const drive-bys all lgtm, one comment about StackGuard.",
+      "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f28bdc58_9bf02376",
+        "filename": "src/execution/local-isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T08:07:54Z",
+      "side": 1,
+      "message": "This feels a bit weird, given that we currently use StackGuard for such checks: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/execution/stack-guard.h;l\u003d23;drc\u003d61d496a656302df23a5ae740d775daef919fbe9d\n\nIdeally we should continue to use one mechanism. Would it be possible to extend StackGuard to handle local isolates?",
+      "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
