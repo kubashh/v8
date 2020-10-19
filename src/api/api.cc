@@ -39,6 +39,7 @@
 #include "src/debug/liveedit.h"
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/diagnostics/gdb-jit.h"
+#include "src/diagnostics/saved-registers.h"
 #include "src/execution/execution.h"
 #include "src/execution/frames-inl.h"
 #include "src/execution/isolate-inl.h"
@@ -11145,6 +11146,21 @@ CFunction::CFunction(const void* address, const CFunctionInfo* type_info)
           break;
       }
     }
+  }
+}
+
+RegisterState::RegisterState()
+    : pc(nullptr), sp(nullptr), fp(nullptr), lr(nullptr) {}
+RegisterState::~RegisterState() = default;
+
+RegisterState::RegisterState(const RegisterState& other) V8_NOEXCEPT {
+  pc = other.pc;
+  sp = other.sp;
+  fp = other.fp;
+  lr = other.lr;
+  if (other.callee_saved) {
+    callee_saved =
+        std::make_unique<CalleeSavedRegisters>(*(other.callee_saved));
   }
 }
 
