@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd6f981f_06dc93da",
+        "filename": "src/execution/local-isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-19T07:41:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a39c2e0f_734495c1",
+      "range": {
+        "startLine": 21,
+        "startChar": 19,
+        "endLine": 21,
+        "endChar": 44
+      },
+      "revId": "0003b37e3f35128dae4a584cec6178e1a1e1f033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df6cf816_d4f6a1b7",
@@ -113,6 +137,24 @@
       "side": 1,
       "message": "Dominik has a CL that adds Main/Background indication to LocalIsolate. We can use that to set the proper limit for the main isolate.",
       "parentUuid": "df6cf816_d4f6a1b7",
+      "revId": "0003b37e3f35128dae4a584cec6178e1a1e1f033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5c3627_7a75eaf9",
+        "filename": "src/execution/local-isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-19T07:41:21Z",
+      "side": 1,
+      "message": "I have done this now. Please have another look.\n(Dominik, I think you have already seen that change.)",
+      "parentUuid": "5fa58e16_a387896a",
       "revId": "0003b37e3f35128dae4a584cec6178e1a1e1f033",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
