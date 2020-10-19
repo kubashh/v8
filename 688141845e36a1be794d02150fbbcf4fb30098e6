@@ -160,6 +160,24 @@
       "parentUuid": "c4b31ee0_9d3b26f4",
       "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5facfa4f_c6a584de",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T08:36:04Z",
+      "side": 1,
+      "message": "By \u0027current change\u0027 you mean \u0027change \\t to \\n\u0027? No, our CI doesn\u0027t test arm64/windows.\n\nAnyways, please take that approach and verify it works for node.",
+      "parentUuid": "95c7ca21_a6f47080",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
