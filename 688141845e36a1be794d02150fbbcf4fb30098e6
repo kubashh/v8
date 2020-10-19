@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c07b881a_24ffa7ac",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T05:51:09Z",
+      "side": 1,
+      "message": "There\u0027s probably a better spot to add the \\n. It should be emitted by the previous statement. Could you paste the emitted failing code here? What OS is affected?",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
