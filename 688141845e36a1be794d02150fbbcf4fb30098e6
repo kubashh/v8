@@ -142,6 +142,24 @@
       "parentUuid": "aad4ac65_cb7e09bb",
       "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95c7ca21_a6f47080",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1333583
+      },
+      "writtenOn": "2020-10-19T08:17:55Z",
+      "side": 1,
+      "message": "\u003e Does changing \\t to \\n break anything? It may have been introduced by mistake.\n\nTBH, I am not sure. Current change works on all platforms tested on Node.js.\nDoes V8 has CI build arm64 on windows ?",
+      "parentUuid": "c4b31ee0_9d3b26f4",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
