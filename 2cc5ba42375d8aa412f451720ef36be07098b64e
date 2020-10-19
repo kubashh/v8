@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "831451bd_08add31b",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2288,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T13:05:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbc3714a_b8d00c54",
+      "revId": "2cc5ba42375d8aa412f451720ef36be07098b64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d25b509_ea0eee6e",
@@ -31,6 +49,24 @@
       "writtenOn": "2020-10-19T11:00:43Z",
       "side": 1,
       "message": "This needs to live in include/ otherwise it won\u0027t be accessible as part of the API for embedders.",
+      "revId": "2cc5ba42375d8aa412f451720ef36be07098b64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79a22f66_f2a167ff",
+        "filename": "src/diagnostics/saved-registers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T13:05:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d25b509_ea0eee6e",
       "revId": "2cc5ba42375d8aa412f451720ef36be07098b64e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1b41067_13b06f61",
+        "filename": "src/diagnostics/saved-registers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T13:05:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ca44497_c62eda3c",
+      "revId": "2cc5ba42375d8aa412f451720ef36be07098b64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bbce5ce0_fff9f46b",
@@ -65,6 +119,30 @@
       "writtenOn": "2020-10-19T11:00:43Z",
       "side": 1,
       "message": "Rather than including .h arch files, why not just have the arch files be .cc files, then you won\u0027t need to do this hack or have #ifdefs here (instead it will just be part of the BUILD.gn file that chooses the correct .cc file for the architecture, like most other arch specific files).",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 6
+      },
+      "revId": "2cc5ba42375d8aa412f451720ef36be07098b64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1dddca7_6a1820c4",
+        "filename": "src/diagnostics/unwinder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T13:05:37Z",
+      "side": 1,
+      "message": "Done, looks cleaner.\nFYI I copied the structure (.h, #if 0, etc) from macro-assembler",
+      "parentUuid": "bbce5ce0_fff9f46b",
       "range": {
         "startLine": 20,
         "startChar": 0,
