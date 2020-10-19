@@ -2826,14 +2826,57 @@ IGNITION_HANDLER(ForInPrepare, InterpreterAssembler) {
   TNode<UintPtrT> vector_index = BytecodeOperandIdx(1);
   TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
 
-  TNode<HeapObject> cache_type = enumerator;  // Just to clarify the rename.
-  TNode<FixedArray> cache_array;
-  TNode<Smi> cache_length;
-  ForInPrepare(enumerator, vector_index, maybe_feedback_vector, &cache_array,
-               &cache_length);
+  // Check if we're using an enum cache.
+  Label if_fast(this), if_slow(this);
+  Branch(IsMap(enumerator), &if_fast, &if_slow);
 
-  StoreRegisterTripleAtOperandIndex(cache_type, cache_array, cache_length, 0);
-  Dispatch();
+  BIND(&if_fast);
+  {
+    // Load the enumeration length and cache from the {enumerator}.
+    TNode<Map> map_enumerator = CAST(enumerator);
+    TNode<WordT> enum_length = LoadMapEnumLength(map_enumerator);
+    CSA_ASSERT(this, WordNotEqual(enum_length,
+                                  IntPtrConstant(kInvalidEnumCacheSentinel)));
+    TNode<DescriptorArray> descriptors = LoadMapDescriptors(map_enumerator);
+    TNode<EnumCache> enum_cache = LoadObjectField<EnumCache>(
+        descriptors, DescriptorArray::kEnumCacheOffset);
+    TNode<FixedArray> enum_keys =
+        LoadObjectField<FixedArray>(enum_cache, EnumCache::kKeysOffset);
+
+    // Check if we have enum indices available.
+    TNode<FixedArray> enum_indices =
+        LoadObjectField<FixedArray>(enum_cache, EnumCache::kIndicesOffset);
+    TNode<IntPtrT> enum_indices_length =
+        LoadAndUntagFixedArrayBaseLength(enum_indices);
+    TNode<Smi> feedback = SelectSmiConstant(
+        IntPtrLessThanOrEqual(enum_length, enum_indices_length),
+        ForInFeedback::kEnumCacheKeysAndIndices, ForInFeedback::kEnumCacheKeys);
+    UpdateFeedback(feedback, maybe_feedback_vector, vector_index);
+
+    // Construct the cache info triple.
+    TNode<Map> cache_type = map_enumerator;
+    TNode<FixedArray> cache_array = enum_keys;
+    TNode<Smi> cache_length = SmiTag(Signed(enum_length));
+    StoreRegisterTripleAtOperandIndex(cache_type, cache_array, cache_length, 0);
+    Dispatch();
+  }
+
+  BIND(&if_slow);
+  {
+    // The {enumerator} is a FixedArray with all the keys to iterate.
+    TNode<FixedArray> array_enumerator = CAST(enumerator);
+
+    // Record the fact that we hit the for-in slow-path.
+    UpdateFeedback(SmiConstant(ForInFeedback::kAny), maybe_feedback_vector,
+                   vector_index);
+
+    // Construct the cache info triple.
+    TNode<FixedArray> cache_type = array_enumerator;
+    TNode<FixedArray> cache_array = array_enumerator;
+    TNode<Smi> cache_length = LoadFixedArrayBaseLength(array_enumerator);
+    StoreRegisterTripleAtOperandIndex(cache_type, cache_array, cache_length, 0);
+    Dispatch();
+  }
 }
 
 // ForInNext <receiver> <index> <cache_info_pair>
