@@ -52,6 +52,24 @@
       "parentUuid": "95be328d_d67dbd54",
       "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "693c3b78_7b85f166",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T06:55:20Z",
+      "side": 1,
+      "message": "So it looks like the relevant bit is this screenshot: https://github.com/nodejs/node/pull/35415#issuecomment-705952423\n\nWhat I meant is, we should understand where exactly the newline is missing, and fix it at the correct spot.\n\nFrom the screenshot, it looks to be missing *after* the v8_Default_embedded_blob_metadata_data_ symbol, and there\u0027s no function declaration anywhere. So I still don\u0027t understand how CL fixes anything.\n\nPlease show the problematic part of the generated embedded.S (or embedded.cc) file.",
+      "parentUuid": "55d3571b_20eb40fb",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
