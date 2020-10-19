@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2675c542_afbb3498",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-10-19T17:31:34Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "4f2b2f3615b8dc47d5979803f3dee63816f255ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f12598ad_6b8c2dd0",
+        "filename": "tools/system-analyzer/app-model.mjs",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-10-19T17:31:34Z",
+      "side": 1,
+      "message": "nit: whitespace",
+      "range": {
+        "startLine": 26,
+        "startChar": 31,
+        "endLine": 26,
+        "endChar": 32
+      },
+      "revId": "4f2b2f3615b8dc47d5979803f3dee63816f255ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b94841e_036706c3",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 7
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-10-19T17:31:34Z",
+      "side": 1,
+      "message": "is this dead code?",
+      "range": {
+        "startLine": 124,
+        "startChar": 3,
+        "endLine": 131,
+        "endChar": 3
+      },
+      "revId": "4f2b2f3615b8dc47d5979803f3dee63816f255ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
