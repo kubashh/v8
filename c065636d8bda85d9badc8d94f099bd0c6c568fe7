@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5a1c023_f62cf750",
+        "filename": "include/v8-saved-registers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T14:39:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "609d5200_d083d6fd",
+      "revId": "c065636d8bda85d9badc8d94f099bd0c6c568fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e4fed56_13ccdb4a",
@@ -48,6 +66,30 @@
       "writtenOn": "2020-10-19T14:07:19Z",
       "side": 1,
       "message": "INCLUDE_V8_SAVED_REGISTERS_H_",
+      "range": {
+        "startLine": 6,
+        "startChar": 8,
+        "endLine": 6,
+        "endChar": 41
+      },
+      "revId": "c065636d8bda85d9badc8d94f099bd0c6c568fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4addc52f_ca167e55",
+        "filename": "include/v8-saved-registers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T14:39:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e4fed56_13ccdb4a",
       "range": {
         "startLine": 6,
         "startChar": 8,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad324934_50240c2a",
+        "filename": "src/diagnostics/arm/unwinder-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T14:39:32Z",
+      "side": 1,
+      "message": "Done. Added a \u0027FromStack\u0027 at the end (i.e. GetCalleeSavedRegistersFromStack)",
+      "parentUuid": "96ab8619_5ca68d8e",
+      "range": {
+        "startLine": 10,
+        "startChar": 5,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "c065636d8bda85d9badc8d94f099bd0c6c568fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7838c3b7_3b147963",
@@ -94,6 +160,24 @@
       "writtenOn": "2020-10-19T14:07:19Z",
       "side": 1,
       "message": "Do we need all of these? It looks like we only need Load. I don\u0027t think we should expose all of these functions in the v8 namespace where possible.",
+      "revId": "c065636d8bda85d9badc8d94f099bd0c6c568fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c3147ad_a8f23c1a",
+        "filename": "src/diagnostics/unwinder.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-19T14:39:32Z",
+      "side": 1,
+      "message": "Ack. Moving the rest back into the .cc",
+      "parentUuid": "7838c3b7_3b147963",
       "revId": "c065636d8bda85d9badc8d94f099bd0c6c568fe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
