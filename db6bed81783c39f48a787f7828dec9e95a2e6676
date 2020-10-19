@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e6787ce_86c01277",
+        "filename": "include/v8.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 1002120
+      },
+      "writtenOn": "2020-10-19T19:14:36Z",
+      "side": 1,
+      "message": "Copyable classes should define both operator\u003d and the copy constructor: https://google.github.io/styleguide/cppguide.html#Copyable_Movable_Types\n\nWith the suggested change below to Optional, these can both be \u003ddefault however.",
+      "revId": "db6bed81783c39f48a787f7828dec9e95a2e6676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d73d7205_d0628c88",
+        "filename": "include/v8.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2292,
+      "author": {
+        "id": 1002120
+      },
+      "writtenOn": "2020-10-19T19:14:36Z",
+      "side": 1,
+      "message": "base::Optional\u003cCalleeSavedRegisters\u003e to avoid the memory allocation.",
+      "revId": "db6bed81783c39f48a787f7828dec9e95a2e6676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
