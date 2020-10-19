@@ -33,6 +33,24 @@
       "message": "base::Optional\u003cCalleeSavedRegisters\u003e to avoid the memory allocation.",
       "revId": "db6bed81783c39f48a787f7828dec9e95a2e6676",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc79fdab_ce75a146",
+        "filename": "include/v8.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2292,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-19T19:21:03Z",
+      "side": 1,
+      "message": "This was one of our original ideas but we can\u0027t use base::Optional unfortunately since base is internal and not part of V8\u0027s external API.",
+      "parentUuid": "d73d7205_d0628c88",
+      "revId": "db6bed81783c39f48a787f7828dec9e95a2e6676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
