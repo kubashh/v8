@@ -34,6 +34,24 @@
       "parentUuid": "c07b881a_24ffa7ac",
       "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55d3571b_20eb40fb",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1333583
+      },
+      "writtenOn": "2020-10-19T06:37:57Z",
+      "side": 1,
+      "message": "Typo: want -\u003e add. Full info: https://github.com/nodejs/node/pull/35415#issuecomment-707828213",
+      "parentUuid": "95be328d_d67dbd54",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
