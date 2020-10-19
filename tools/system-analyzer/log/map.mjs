@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import { typeToColor } from '../helper.mjs';
 import { Event } from './log.mjs';
 
 // ===========================================================================
@@ -183,10 +182,6 @@ class Edge {
     this.time = time;
     this.from = from;
     this.to = to;
-  }
-
-  getColor() {
-    return typeToColor(this.type);
   }
 
   finishSetup() {

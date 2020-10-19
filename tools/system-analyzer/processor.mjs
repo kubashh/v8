@@ -10,7 +10,6 @@ import { Profile } from "../profile.mjs";
 
 // ===========================================================================
 
-
 class Processor extends LogReader {
   #profile = new Profile();
   #mapTimeline = new Timeline();

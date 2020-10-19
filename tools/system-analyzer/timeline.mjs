@@ -75,6 +75,10 @@ class Timeline {
     return this.#values.length;
   }
 
+  get length() {
+    return this.#values.length;
+  }
+
   first() {
     return this.#values[0];
   }
