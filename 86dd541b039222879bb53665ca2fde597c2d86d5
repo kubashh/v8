@@ -84,6 +84,24 @@
       "message": "This feels a bit weird, given that we currently use StackGuard for such checks: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/execution/stack-guard.h;l\u003d23;drc\u003d61d496a656302df23a5ae740d775daef919fbe9d\n\nIdeally we should continue to use one mechanism. Would it be possible to extend StackGuard to handle local isolates?",
       "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d8ca665_ebfe95f5",
+        "filename": "src/execution/local-isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-19T08:17:12Z",
+      "side": 1,
+      "message": "StackGuard is surprisingly complex. All this complexity is needed only for the main isolate/thread. On a background thread all we need is a single value, and we don\u0027t want to offer any functionality beyond checking against that value.\n\nIn the case of a local isolate on the main thread, we do take this value from the stack guard.",
+      "parentUuid": "f28bdc58_9bf02376",
+      "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
