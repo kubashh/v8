@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a9ad31a_aeb56bac",
+        "filename": "src/heap/cppgc/heap-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-19T09:50:13Z",
+      "side": 0,
+      "message": "UBSAN didn\u0027t like running unified heap with a regular cppgc::Visitor, because we cast it to JSVisitor (UB) when encountering a Trace() for JSMemberBase.",
+      "range": {
+        "startLine": 92,
+        "startChar": 2,
+        "endLine": 92,
+        "endChar": 17
+      },
+      "revId": "853c17a96631ed63a4c918c415c1631a85e49a80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
