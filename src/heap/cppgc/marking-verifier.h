@@ -8,6 +8,7 @@
 #include <unordered_set>
 
 #include "src/heap/base/stack.h"
+#include "src/heap/cppgc/heap-object-header.h"
 #include "src/heap/cppgc/heap-visitor.h"
 #include "src/heap/cppgc/heap.h"
 #include "src/heap/cppgc/visitor.h"
@@ -15,34 +16,55 @@
 namespace cppgc {
 namespace internal {
 
-class V8_EXPORT_PRIVATE MarkingVerifier final
-    : private HeapVisitor<MarkingVerifier>,
-      public cppgc::Visitor,
-      public ConservativeTracingVisitor,
-      public heap::base::StackVisitor {
-  friend class HeapVisitor<MarkingVerifier>;
-
+class VerificationState {
  public:
-  explicit MarkingVerifier(HeapBase&, Heap::Config::StackState);
-
-  void Visit(const void*, TraceDescriptor) final;
-  void VisitWeak(const void*, TraceDescriptor, WeakCallback, const void*) final;
+  void VerifyMarked(const void*) const;
+  void SetCurrentParent(const HeapObjectHeader* header) { parent_ = header; }
 
  private:
-  void VerifyChild(const void*);
+  const HeapObjectHeader* parent_ = nullptr;
+};
 
+class V8_EXPORT_PRIVATE MarkingVerifierBase
+    : private HeapVisitor<MarkingVerifierBase>,
+      public ConservativeTracingVisitor,
+      public heap::base::StackVisitor {
+  friend class HeapVisitor<MarkingVerifierBase>;
+
+ public:
+  ~MarkingVerifierBase() override = default;
+
+  MarkingVerifierBase(const MarkingVerifierBase&) = delete;
+  MarkingVerifierBase& operator=(const MarkingVerifierBase&) = delete;
+
+ protected:
+  MarkingVerifierBase(HeapBase&, Heap::Config::StackState,
+                      VerificationState& state,
+                      std::unique_ptr<cppgc::Visitor>);
+
+ private:
   void VisitConservatively(HeapObjectHeader&,
                            TraceConservativelyCallback) final;
   void VisitPointer(const void*) final;
 
   bool VisitHeapObjectHeader(HeapObjectHeader*);
 
-  HeapObjectHeader* parent_ = nullptr;
+  VerificationState& state_;
+  std::unique_ptr<cppgc::Visitor> visitor_;
 
   std::unordered_set<const HeapObjectHeader*> in_construction_objects_heap_;
   std::unordered_set<const HeapObjectHeader*> in_construction_objects_stack_;
   std::unordered_set<const HeapObjectHeader*>* in_construction_objects_ =
       &in_construction_objects_heap_;
+};
+
+class V8_EXPORT_PRIVATE MarkingVerifier final : public MarkingVerifierBase {
+ public:
+  MarkingVerifier(HeapBase&, Heap::Config::StackState);
+  ~MarkingVerifier() final = default;
+
+ private:
+  VerificationState state_;
 };
 
 }  // namespace internal
