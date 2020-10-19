@@ -124,6 +124,24 @@
       "parentUuid": "6f75d891_8ae3cd32",
       "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4b31ee0_9d3b26f4",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-19T07:23:07Z",
+      "side": 1,
+      "message": "Looks like this is the spot: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/snapshot/embedded/platform-embedded-file-writer-win.cc;l\u003d488;drc\u003d84197c7c159c87a1891581b3c8fab87a394557ea\n\nDoes changing \\t to \\n break anything? It may have been introduced by mistake.",
+      "parentUuid": "aad4ac65_cb7e09bb",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
