@@ -106,6 +106,24 @@
       "parentUuid": "e9a33017_4897f2e3",
       "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aad4ac65_cb7e09bb",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1333583
+      },
+      "writtenOn": "2020-10-19T07:16:15Z",
+      "side": 1,
+      "message": "I see. \n\nI am quite familiar with this part. Where should this put or you prefer you fix this on your side ?",
+      "parentUuid": "6f75d891_8ae3cd32",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
