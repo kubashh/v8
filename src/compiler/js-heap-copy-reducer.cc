@@ -172,10 +172,13 @@ Reduction JSHeapCopyReducer::Reduce(Node* node) {
       break;
     }
     case IrOpcode::kJSLoadNamedFromSuper: {
-      // TODO(marja, v8:9237): Process feedback once it's added to the byte
-      // code.
       NamedAccess const& p = NamedAccessOf(node->op());
       NameRef name(broker(), p.name());
+      if (p.feedback().IsValid()) {
+        // FIXME: does this do the right thing?
+        broker()->ProcessFeedbackForPropertyAccess(p.feedback(),
+                                                   AccessMode::kLoad, name);
+      }
       break;
     }
     case IrOpcode::kJSStoreNamed: {

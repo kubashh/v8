@@ -2028,10 +2028,13 @@ void BytecodeGraphBuilder::VisitLdaNamedPropertyFromSuper() {
   Node* home_object = environment()->LookupAccumulator();
   NameRef name(broker(),
                bytecode_iterator().GetConstantForIndexOperand(1, isolate()));
-  const Operator* op = javascript()->LoadNamedFromSuper(name.object());
-  // TODO(marja, v8:9237): Use lowering.
 
-  Node* node = NewNode(op, receiver, home_object);
+  FeedbackSource feedback =
+    CreateFeedbackSource(bytecode_iterator().GetIndexOperand(2));
+  const Operator* op = javascript()->LoadNamedFromSuper(name.object(), feedback);
+  DCHECK(IrOpcode::IsFeedbackCollectingOpcode(op->opcode()));
+  // Input 2 (home object's proto) will be filled in later. TODO(marja, v8:9237): once we no longer delegate to the runtime call, we don't need home object and home object proto separately.
+  Node* node = NewNode(op, receiver, home_object, jsgraph()->Dead(), feedback_vector_node());
   environment()->BindAccumulator(node, Environment::kAttachFrameState);
 }
 

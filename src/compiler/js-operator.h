@@ -935,7 +935,7 @@ class V8_EXPORT_PRIVATE JSOperatorBuilder final
 
   const Operator* LoadProperty(FeedbackSource const& feedback);
   const Operator* LoadNamed(Handle<Name> name, FeedbackSource const& feedback);
-  const Operator* LoadNamedFromSuper(Handle<Name> name);
+  const Operator* LoadNamedFromSuper(Handle<Name> name, FeedbackSource const& feedback);
 
   const Operator* StoreProperty(LanguageMode language_mode,
                                 FeedbackSource const& feedback);
@@ -1415,7 +1415,9 @@ class JSLoadNamedFromSuperNode final : public JSNodeWrapperBase {
 
 #define INPUTS(V)                  \
   V(Receiver, receiver, 0, Object) \
-  V(Object, home_object, 1, Object)
+  V(HomeObject, home_object, 1, Object) \
+  V(HomeObjectProto, home_object_proto, 2, Object) \
+  V(FeedbackVector, feedback_vector, 3, HeapObject)
   INPUTS(DEFINE_INPUT_ACCESSORS)
 #undef INPUTS
 };
