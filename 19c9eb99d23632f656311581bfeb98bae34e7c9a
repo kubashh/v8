@@ -50,6 +50,24 @@
       "message": "Ross- can you run a pinpoint for this on Linux?",
       "revId": "19c9eb99d23632f656311581bfeb98bae34e7c9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e68d70f2_ed872f2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-20T08:39:09Z",
+      "side": 1,
+      "message": "So essentially this is trading code size vs. slow path perf? lgtm if you\u0027re fine with whatever perf effect this has.",
+      "parentUuid": "44b0c1e8_ebd5a950",
+      "revId": "19c9eb99d23632f656311581bfeb98bae34e7c9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
