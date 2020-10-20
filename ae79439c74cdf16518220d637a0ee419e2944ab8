@@ -179,6 +179,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "17288356_0daf3121",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-verifier.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-20T20:40:00Z",
+      "side": 1,
+      "message": "Adding a Run method sgtm, but in practice I think you are still passing an un-constructed ref when creating the visitors so I don\u0027t fully understand why it\u0027s better.\nI think both approaches (what you suggested and splitting VerificationState to VerificationState and UnifiedHeapVerificationState similarly to what we have for MarkingState) suffer from the same issues, so I leave the decision up to you.",
+      "parentUuid": "c54ee278_ef457915",
+      "range": {
+        "startLine": 21,
+        "startChar": 37,
+        "endLine": 21,
+        "endChar": 43
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6982c3c5_890a1534",
         "filename": "src/heap/cppgc/marking-verifier.cc",
         "patchSetId": 5
