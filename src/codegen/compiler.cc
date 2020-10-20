@@ -253,7 +253,8 @@ CompilationJob::Status OptimizedCompilationJob::ExecuteJob(
   // Delegate to the underlying implementation.
   DCHECK_EQ(state(), State::kReadyToExecute);
   ScopedTimer t(&time_taken_to_execute_);
-  return UpdateState(ExecuteJobImpl(stats), State::kReadyToFinalize);
+  auto result = UpdateState(ExecuteJobImpl(stats), State::kReadyToFinalize);
+  return result;
 }
 
 CompilationJob::Status OptimizedCompilationJob::FinalizeJob(Isolate* isolate) {
@@ -263,7 +264,8 @@ CompilationJob::Status OptimizedCompilationJob::FinalizeJob(Isolate* isolate) {
   // Delegate to the underlying implementation.
   DCHECK_EQ(state(), State::kReadyToFinalize);
   ScopedTimer t(&time_taken_to_finalize_);
-  return UpdateState(FinalizeJobImpl(isolate), State::kSucceeded);
+  auto result = UpdateState(FinalizeJobImpl(isolate), State::kSucceeded);
+  return result;
 }
 
 CompilationJob::Status OptimizedCompilationJob::RetryOptimization(
@@ -631,7 +633,9 @@ bool IterativelyExecuteAndFinalizeUnoptimizedCompilationJobs(
     std::unique_ptr<UnoptimizedCompilationJob> job =
         ExecuteSingleUnoptimizedCompilationJob(parse_info, literal, allocator,
                                                &functions_to_compile);
-    if (!job) return false;
+    if (!job) {
+      return false;
+    }
 
     if (FinalizeSingleUnoptimizedCompilationJob(
             job.get(), shared_info, isolate,

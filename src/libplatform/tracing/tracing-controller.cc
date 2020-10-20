@@ -12,6 +12,8 @@
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/time.h"
 
+#include "src/libplatform/tracing/v8-provider.h"
+
 #ifdef V8_USE_PERFETTO
 #include "perfetto/ext/trace_processor/export_json.h"
 #include "perfetto/trace_processor/trace_processor.h"
@@ -120,6 +122,9 @@ uint64_t TracingController::AddTraceEvent(
     const uint64_t* arg_values,
     std::unique_ptr<v8::ConvertableToTraceFormat>* arg_convertables,
     unsigned int flags) {
+  tracing::v8Provider.AddTraceEvent(id, name, num_args, arg_names,
+                                                  arg_types, arg_values);
+
   int64_t now_us = CurrentTimestampMicroseconds();
 
   return AddTraceEventWithTimestamp(

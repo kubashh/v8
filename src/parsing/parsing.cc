@@ -58,7 +58,10 @@ bool ParseProgram(ParseInfo* info, Handle<Script> script,
   DCHECK(parser.parsing_on_main_thread_);
   parser.ParseProgram(isolate, script, info, maybe_outer_scope_info);
   MaybeReportErrorsAndStatistics(info, script, isolate, &parser, mode);
-  return info->literal() != nullptr;
+
+  auto result = info->literal();
+
+  return result != nullptr;
 }
 
 bool ParseProgram(ParseInfo* info, Handle<Script> script, Isolate* isolate,
