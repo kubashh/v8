@@ -233,13 +233,27 @@ assertSame(Object.assign(o, {}), o);
     get global2() { return "global2" },
   };
   let result = Object.assign(globalThis, source);
+  %HeapObjectVerify(result);
   assertTrue(result === globalThis);
   assertTrue(result.global1 === source.global1);
   assertTrue(result.global2 === source.global2);
 
   let target = {};
   result = Object.assign(target, globalThis);
+  %HeapObjectVerify(result);
   assertTrue(result === target);
   assertTrue(result.global1 === source.global1);
   assertTrue(result.global2 === source.global2);
+
+  for (let i = 0; i < 2000; i++) {
+    source["property" + i] = i;
+  }
+  result = Object.assign(globalThis, source);
+  %HeapObjectVerify(result);
+  assertTrue(result === globalThis);
+  for (let i = 0; i < 2000; i++) {
+    const key = "property" + i;
+    assertEquals(result[key], i);
+  }
+
 })();
