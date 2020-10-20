@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af0c3f5_f15233a1",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 11164,
+      "author": {
+        "id": 1002120
+      },
+      "writtenOn": "2020-10-20T16:22:44Z",
+      "side": 1,
+      "message": "nit: the copy constructor implementation can be replaced by *this \u003d other;",
+      "range": {
+        "startLine": 11157,
+        "startChar": 0,
+        "endLine": 11164,
+        "endChar": 3
+      },
+      "revId": "d6c586f756ffe25884d55d4f6f76b0318871662d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "787df92c_c4836deb",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 11177,
+      "author": {
+        "id": 1002120
+      },
+      "writtenOn": "2020-10-20T16:22:44Z",
+      "side": 1,
+      "message": "The callee_saved check will incorrectly retain a non-null pointer if other.callee_saved is null but this-\u003ecallee_saved is non-null.",
+      "range": {
+        "startLine": 11174,
+        "startChar": 0,
+        "endLine": 11177,
+        "endChar": 5
+      },
+      "revId": "d6c586f756ffe25884d55d4f6f76b0318871662d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
