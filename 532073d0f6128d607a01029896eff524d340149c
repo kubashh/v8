@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74e0b3e2_8ebf93cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2020-10-20T22:20:39Z",
+      "side": 1,
+      "message": "Maybe add \", step 1 of ~3\" or some-such?\n\nI really look forward to the change that gets JS names on the ETW call stacks!",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c455711_65d1dac5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2020-10-20T22:20:39Z",
+      "side": 1,
+      "message": "This URL doesn\u0027t seem to exist. Please double check?",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c66362f7_18364b8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2020-10-20T22:20:39Z",
+      "side": 1,
+      "message": "Git commit messages should be wrapped at 72 columns instead of 80 wherever possible (longer URLs are fine).",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4920fc61_fdbcc199",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2020-10-20T22:20:39Z",
+      "side": 1,
+      "message": "Ah. This URL works. It looks like there was an accidental edit on the first character after document/d/ in the previous URL. If there is just supposed to be the one document then it is best to link to it just once, to avoid confusion and redundancy and confusion.",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cf4ce28_49222238",
+        "filename": "BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2020-10-20T22:20:39Z",
+      "side": 1,
+      "message": "Why is this needed? You\u0027ll probably need a comment explaining why. I assume this is to handle some of the generated code. Can you push to get the generated code so that it avoids the need for disabling this warning?",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
