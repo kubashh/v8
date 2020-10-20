@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c9a7416_8047882f",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-verifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-20T09:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93471649_a1288b00",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 36
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46dea624_8bc79c78",
@@ -71,6 +95,30 @@
       "writtenOn": "2020-10-19T12:35:58Z",
       "side": 1,
       "message": "I don\u0027t think you really need this here. Since the visitors only take a reference to the state, but don\u0027t actually use it during construction, I think you can pass the state from MarkingVerifierBase and it will be safe.",
+      "range": {
+        "startLine": 21,
+        "startChar": 37,
+        "endLine": 21,
+        "endChar": 43
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a0116d6_61b962c4",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-verifier.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-20T09:26:11Z",
+      "side": 1,
+      "message": "This will in the end work like marking:\n- UnifiedHeapMarkingVerifier: UnifiedHeapVerificationState\n- MarkingVerifier: MarkingState (C++ only)\n- MarkingVerifierBase: MarkingState\u0026 (to support C++ only)\n\nI added a TODO here to make this clear.",
+      "parentUuid": "46dea624_8bc79c78",
       "range": {
         "startLine": 21,
         "startChar": 37,
@@ -106,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "978f1fe6_fe026e53",
+        "filename": "src/heap/cppgc/marking-verifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-20T09:26:11Z",
+      "side": 1,
+      "message": "See other comment. Where would that scope store the parent?",
+      "parentUuid": "6982c3c5_890a1534",
+      "range": {
+        "startLine": 61,
+        "startChar": 9,
+        "endLine": 61,
+        "endChar": 25
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c94df657_3c839580",
         "filename": "src/heap/cppgc/marking-verifier.cc",
         "patchSetId": 5
@@ -117,6 +189,30 @@
       "writtenOn": "2020-10-19T12:35:58Z",
       "side": 1,
       "message": "VerificationState\u0026",
+      "range": {
+        "startLine": 93,
+        "startChar": 2,
+        "endLine": 93,
+        "endChar": 19
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10106277_9972a00d",
+        "filename": "src/heap/cppgc/marking-verifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-20T09:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c94df657_3c839580",
       "range": {
         "startLine": 93,
         "startChar": 2,

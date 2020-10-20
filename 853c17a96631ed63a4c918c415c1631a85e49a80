@@ -46,6 +46,30 @@
       },
       "revId": "853c17a96631ed63a4c918c415c1631a85e49a80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63b9fbe1_894b213b",
+        "filename": "src/heap/cppgc/heap-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-20T09:26:11Z",
+      "side": 0,
+      "message": "I am not sure I can follow.\n\nIn the API\u0027s Trace method we cast to JSVisitor, which means that we must have invoked the visitation pass with an instance of JSVisitor. The current version on TOT invokes it with a regular Visitor which is why we invoke a random method.",
+      "parentUuid": "27bddff3_174e4ab8",
+      "range": {
+        "startLine": 92,
+        "startChar": 2,
+        "endLine": 92,
+        "endChar": 17
+      },
+      "revId": "853c17a96631ed63a4c918c415c1631a85e49a80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
