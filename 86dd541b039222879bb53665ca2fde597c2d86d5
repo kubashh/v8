@@ -173,6 +173,24 @@
       "parentUuid": "d5b0850c_8925b507",
       "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f22add7e_957354fe",
+        "filename": "src/execution/local-isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-20T06:42:50Z",
+      "side": 1,
+      "message": "Done. PTAL.\n\nFor the future, though, I\u0027m tempted to remove this whole StackLimitCheck class and put the methods directly on Isolate/LocalIsolate. The class doesn\u0027t make a lot of sense to me.",
+      "parentUuid": "cd3020fa_af242928",
+      "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
