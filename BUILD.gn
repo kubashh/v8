@@ -1,5 +1,5 @@
-# Copyright 2014 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
+# Copyright 2014 The Chromium Authors.All rights reserved.
+# Use of this source code is governed by a BSD - style license that can be
 # found in the LICENSE file.
 
 import("//build/config/android/config.gni")
@@ -17,38 +17,38 @@ if (is_android) {
 import("gni/snapshot_toolchain.gni")
 import("gni/v8.gni")
 
-# Specifies if the target build is a simulator build. Comparing target cpu
-# with v8 target cpu to not affect simulator builds for making cross-compile
+# Specifies if the target build is a simulator build.Comparing target cpu
+# with v8 target cpu to not affect simulator builds for making cross - compile
 # snapshots.
 target_is_simulator = (target_cpu != v8_target_cpu && !v8_multi_arch_build) ||
                       (current_cpu != v8_current_cpu && v8_multi_arch_build)
 
-# For faster Windows builds. See https://crbug.com/v8/8475.
+# For faster Windows builds.See https://crbug.com/v8/8475.
 emit_builtins_as_inline_asm = is_win && is_clang
 
 declare_args() {
   # Print to stdout on Android.
   v8_android_log_stdout = false
 
-  # Dynamically set an additional dependency from v8/custom_deps.
+  # Dynamically set an additional dependency from v8 / custom_deps.
   v8_custom_deps = ""
 
-  # Turns on all V8 debug features. Enables running V8 in a pseudo debug mode
+  # Turns on all V8 debug features.Enables running V8 in a pseudo debug mode
   # within a release Chrome.
   v8_enable_debugging_features = is_debug
 
-  # Sets -DV8_ENABLE_FUTURE.
+  # Sets - DV8_ENABLE_FUTURE.
   v8_enable_future = false
 
   # Lite mode disables a number of performance optimizations to reduce memory
   # at the cost of performance.
-  # Sets --DV8_LITE_MODE.
+  # Sets--DV8_LITE_MODE.
   v8_enable_lite_mode = false
 
-  # Sets -DVERIFY_HEAP.
+  # Sets - DVERIFY_HEAP.
   v8_enable_verify_heap = ""
 
-  # Sets -DVERIFY_PREDICTABLE
+  # Sets - DVERIFY_PREDICTABLE
   v8_enable_verify_predictable = false
 
   # Enable compiler warnings when using V8_DEPRECATED apis.
@@ -63,22 +63,22 @@ declare_args() {
   # Allows the embedder to add a custom suffix to the version string.
   v8_embedder_string = ""
 
-  # Sets -dENABLE_DISASSEMBLER.
+  # Sets - dENABLE_DISASSEMBLER.
   v8_enable_disassembler = ""
 
   # Sets the number of internal fields on promise objects.
   v8_promise_internal_field_count = 0
 
-  # Sets -dENABLE_GDB_JIT_INTERFACE.
+  # Sets - dENABLE_GDB_JIT_INTERFACE.
   v8_enable_gdbjit = ""
 
-  # Sets -dENABLE_VTUNE_JIT_INTERFACE.
+  # Sets - dENABLE_VTUNE_JIT_INTERFACE.
   v8_enable_vtunejit = false
 
-  # Sets -dENABLE_VTUNE_TRACEMARK.
+  # Sets - dENABLE_VTUNE_TRACEMARK.
   v8_enable_vtunetracemark = false
 
-  # Sets -dENABLE_HANDLE_ZAPPING.
+  # Sets - dENABLE_HANDLE_ZAPPING.
   v8_enable_handle_zapping = true
 
   # Enable slow dchecks.
@@ -93,52 +93,52 @@ declare_args() {
   # Enable the registration of unwinding info for Windows x64 and ARM64.
   v8_win64_unwinding_info = true
 
-  # Enable code comments for builtins in the snapshot (impacts performance).
+  # Enable code comments for builtins in the snapshot(impacts performance).
   v8_enable_snapshot_code_comments = false
 
-  # Enable native counters from the snapshot (impacts performance, sets
-  # -dV8_SNAPSHOT_NATIVE_CODE_COUNTERS).
+  # Enable native counters from the snapshot(impacts performance, sets
+  # - dV8_SNAPSHOT_NATIVE_CODE_COUNTERS).
   # This option will generate extra code in the snapshot to increment counters,
-  # as per the --native-code-counters flag.
+  # as per the--native - code - counters flag.
   v8_enable_snapshot_native_code_counters = ""
 
-  # Enable code-generation-time checking of types in the CodeStubAssembler.
+  # Enable code - generation - time checking of types in the CodeStubAssembler.
   v8_enable_verify_csa = false
 
-  # Enable pointer compression (sets -dV8_COMPRESS_POINTERS).
+  # Enable pointer compression(sets - dV8_COMPRESS_POINTERS).
   v8_enable_pointer_compression = ""
   v8_enable_31bit_smis_on_64bit_arch = false
 
-  # Reverse JS arguments order in the stack (sets -dV8_REVERSE_JSARGS).
+  # Reverse JS arguments order in the stack(sets - dV8_REVERSE_JSARGS).
   v8_enable_reverse_jsargs = false
 
-  # Sets -dOBJECT_PRINT.
+  # Sets - dOBJECT_PRINT.
   v8_enable_object_print = ""
 
-  # Sets -dV8_TRACE_MAPS.
+  # Sets - dV8_TRACE_MAPS.
   v8_enable_trace_maps = ""
 
-  # Sets -dV8_ENABLE_CHECKS.
+  # Sets - dV8_ENABLE_CHECKS.
   v8_enable_v8_checks = ""
 
-  # Sets -dV8_TRACE_IGNITION.
+  # Sets - dV8_TRACE_IGNITION.
   v8_enable_trace_ignition = false
 
-  # Sets -dV8_TRACE_FEEDBACK_UPDATES.
+  # Sets - dV8_TRACE_FEEDBACK_UPDATES.
   v8_enable_trace_feedback_updates = false
 
-  # Sets -dV8_CONCURRENT_MARKING
+  # Sets - dV8_CONCURRENT_MARKING
   v8_enable_concurrent_marking = true
 
-  # Sets -dV8_ARRAY_BUFFER_EXTENSION
+  # Sets - dV8_ARRAY_BUFFER_EXTENSION
   v8_enable_array_buffer_extension = true
 
-  # Runs mksnapshot with --turbo-profiling. After building in this
+  # Runs mksnapshot with --turbo - profiling.After building in this
   # configuration, any subsequent run of d8 will output information about usage
   # of basic blocks in builtins.
   v8_enable_builtins_profiling = false
 
-  # Runs mksnapshot with --turbo-profiling-verbose. After building in this
+  # Runs mksnapshot with --turbo - profiling - verbose.After building in this
   # configuration, any subsequent run of d8 will output information about usage
   # of basic blocks in builtins, including the schedule and disassembly of all
   # used builtins.
@@ -164,8 +164,8 @@ declare_args() {
   v8_enable_test_features = ""
 
   # With post mortem support enabled, metadata is embedded into libv8 that
-  # describes various parameters of the VM for use by debuggers. See
-  # tools/gen-postmortem-metadata.py for details.
+  # describes various parameters of the VM for use by debuggers.See
+  # tools / gen - postmortem - metadata.py for details.
   v8_postmortem_support = false
 
   # Use Siphash as added protection against hash flooding attacks.
@@ -183,7 +183,7 @@ declare_args() {
   # Similar to the ARM hard float ABI but on MIPS.
   v8_use_mips_abi_hardfloat = true
 
-  # Controls the threshold for on-heap/off-heap Typed Arrays.
+  # Controls the threshold for on - heap / off - heap Typed Arrays.
   v8_typed_array_max_size_in_heap = 64
 
   v8_enable_gdbjit =
@@ -196,8 +196,8 @@ declare_args() {
 
   # Enable mitigations for executing untrusted code.
   # Disabled by default on ia32 due to conflicting requirements with embedded
-  # builtins. Enabled by default on Android since it doesn't support
-  # site-isolation in Chrome and on simulator builds which test code generation
+  # builtins.Enabled by default on Android since it doesn't support
+  # site - isolation in Chrome and on simulator builds which test code generation
   # on these platforms.
   v8_untrusted_code_mitigations =
       v8_current_cpu != "x86" && (is_android || target_is_simulator)
@@ -205,13 +205,13 @@ declare_args() {
   # Enable minor mark compact.
   v8_enable_minor_mc = true
 
-  # Check that each header can be included in isolation (requires also
+  # Check that each header can be included in isolation(requires also
   # setting the "check_v8_header_includes" gclient variable to run a
   # specific hook).
   v8_check_header_includes = false
 
-  # Enable sharing read-only space across isolates.
-  # Sets -DV8_SHARED_RO_HEAP.
+  # Enable sharing read - only space across isolates.
+  # Sets - DV8_SHARED_RO_HEAP.
   v8_enable_shared_ro_heap = ""
 
   # Enable lazy source positions by default.
@@ -226,7 +226,7 @@ declare_args() {
   # Source code used by third party heap
   v8_third_party_heap_files = []
 
-  # Disable write barriers when GCs are non-incremental and
+  # Disable write barriers when GCs are non - incremental and
   # heap has single generation.
   v8_disable_write_barriers = false
 
@@ -249,14 +249,14 @@ declare_args() {
   # Disable all snapshot compression.
   v8_enable_snapshot_compression = true
 
-  # Enable control-flow integrity features, such as pointer authentication for
+  # Enable control - flow integrity features, such as pointer authentication for
   # ARM64.
   v8_control_flow_integrity = false
 
   # Enable object names in cppgc for debug purposes.
   cppgc_enable_object_names = false
 
-  # Enable heap reservation of size 4GB. Only possible for 64bit archs.
+  # Enable heap reservation of size 4GB.Only possible for 64bit archs.
   cppgc_enable_caged_heap = v8_current_cpu == "x64" || v8_current_cpu == "arm64"
 
   # Enable young generation in cppgc.
@@ -267,7 +267,7 @@ declare_args() {
   v8_enable_zone_compression = ""
 
   # Enable V8 heap sandbox experimental feature.
-  # Sets -DV8_HEAP_SANDBOX.
+  # Sets - DV8_HEAP_SANDBOX.
   v8_enable_heap_sandbox = ""
 
   # Experimental feature for collecting per-class zone memory stats.
@@ -319,7 +319,7 @@ if (v8_enable_single_generation == "") {
 }
 
 # Toggle pointer compression for correctness fuzzing when building the
-# clang_x64_pointer_compression toolchain. We'll correctness-compare the
+# clang_x64_pointer_compression toolchain.We'll correctness-compare the
 # default build with the clang_x64_pointer_compression build.
 if (v8_multi_arch_build &&
     rebase_path(get_label_info(":d8", "root_out_dir"), root_build_dir) ==
@@ -503,7 +503,7 @@ config("v8_header_features") {
 }
 
 # Put defines here that are only used in our internal files and NEVER in
-# external headers that embedders (such as chromium and node) might include.
+# external headers that embedders(such as chromium and node) might include.
 config("features") {
   visibility = [ ":*" ]  # Only targets in this file can depend on this.
 
@@ -678,14 +678,14 @@ config("toolchain") {
   if (v8_current_cpu == "arm64") {
     defines += [ "V8_TARGET_ARCH_ARM64" ]
     if (v8_control_flow_integrity) {
-      # TODO(v8:10026): Enable this in src/build.
+      # TODO(v8: 10026): Enable this in src / build.
       if (current_cpu == "arm64") {
         cflags += [ "-mbranch-protection=standard" ]
       }
     }
   }
 
-  # Mips64el/mipsel simulators.
+  # Mips64el / mipsel simulators.
   if (target_is_simulator &&
       (v8_current_cpu == "mipsel" || v8_current_cpu == "mips64el")) {
     defines += [ "_MIPS_TARGET_SIMULATOR" ]
@@ -800,7 +800,7 @@ config("toolchain") {
   if (v8_current_cpu == "x64") {
     defines += [ "V8_TARGET_ARCH_X64" ]
     if (is_win) {
-      # Increase the initial stack size. The default is 1MB, this is 2MB. This
+      # Increase the initial stack size.The default is 1MB, this is 2MB.This
       # applies only to executables and shared libraries produced by V8 since
       # ldflags are not pushed to dependants.
       ldflags += [ "/STACK:2097152" ]
@@ -810,10 +810,10 @@ config("toolchain") {
     defines += [ "V8_ANDROID_LOG_STDOUT" ]
   }
 
-  # V8_TARGET_OS_ defines. The target OS may differ from host OS e.g. in
-  # mksnapshot. We additionally set V8_HAVE_TARGET_OS to determine that a
+  # V8_TARGET_OS_ defines.The target OS may differ from host OS e.g.in
+  # mksnapshot.We additionally set V8_HAVE_TARGET_OS to determine that a
   # target OS has in fact been set; otherwise we internally assume that target
-  # OS == host OS (see v8config.h).
+  # OS == host OS(see v8config.h).
   if (target_os == "android") {
     defines += [ "V8_HAVE_TARGET_OS" ]
     defines += [ "V8_TARGET_OS_ANDROID" ]
@@ -870,7 +870,10 @@ config("toolchain") {
   }
 
   if (is_clang) {
-    cflags += [ "-Wmissing-field-initializers" ]
+    cflags += [
+      "-Wmissing-field-initializers",
+      "-Wno-c++98-compat-extra-semi",
+    ]
 
     if (v8_current_cpu != "mips" && v8_current_cpu != "mipsel") {
       # We exclude MIPS because the IsMipsArchVariant macro causes trouble.
@@ -885,24 +888,26 @@ config("toolchain") {
 
   if (is_win) {
     cflags += [
-      "/wd4245",  # Conversion with signed/unsigned mismatch.
+      "/wd4245",  # Conversion with signed / unsigned mismatch.
       "/wd4267",  # Conversion with possible loss of data.
       "/wd4324",  # Padding structure due to alignment.
       "/wd4701",  # Potentially uninitialized local variable.
       "/wd4702",  # Unreachable code.
       "/wd4703",  # Potentially uninitialized local pointer variable.
-      "/wd4709",  # Comma operator within array index expr (bugged).
+      "/wd4709",  # Comma operator within array index expr(bugged).
       "/wd4714",  # Function marked forceinline not inlined.
 
       # MSVC assumes that control can get past an exhaustive switch and then
       # warns if there's no return there (see https://crbug.com/v8/7658)
       "/wd4715",  # Not all control paths return a value.
 
-      "/wd4718",  # Recursive call has no side-effect.
+      "/wd4718",  # Recursive call has no side - effect.
       "/wd4723",  # https://crbug.com/v8/7771
       "/wd4724",  # https://crbug.com/v8/7771
       "/wd4800",  # Forcing value to bool.
     ]
+
+    libs = [ "advapi32.lib" ]  # Needed for TraceLoggingProvider.h
   }
 
   if (!is_clang && is_win) {
@@ -912,7 +917,7 @@ config("toolchain") {
   if (!is_clang && !is_win) {
     cflags += [
       # Disable gcc warnings for optimizations based on the assumption that
-      # signed overflow does not occur. Generates false positives (see
+      # signed overflow does not occur.Generates false positives(see
       # http://crbug.com/v8/6341).
       "-Wno-strict-overflow",
 
@@ -922,18 +927,18 @@ config("toolchain") {
     ]
   }
 
-  # Chromium uses a hand-picked subset of UBSan coverage. We want everything.
+  # Chromium uses a hand - picked subset of UBSan coverage.We want everything.
   if (is_ubsan) {
     cflags += [ "-fsanitize=undefined" ]
   }
 }
 
-# For code that is hot during mksnapshot. In fast-mksnapshot builds, we
+# For code that is hot during mksnapshot.In fast - mksnapshot builds, we
 # optimize some files even in debug builds to speed up mksnapshot times.
 config("always_optimize") {
   configs = [ ":internal_config" ]
 
-  # TODO(crbug.com/621335) Rework this so that we don't have the confusion
+  # TODO(crbug.com / 621335) Rework this so that we don't have the confusion
   # between "optimize_speed" and "optimize_max".
   if (((is_posix && !is_android) || is_fuchsia) && !using_sanitizer) {
     configs += [ "//build/config/compiler:optimize_speed" ]
@@ -942,8 +947,8 @@ config("always_optimize") {
   }
 }
 
-# Configs for code coverage with gcov. Separate configs for cflags and ldflags
-# to selectively influde cflags in non-test targets only.
+# Configs for code coverage with gcov.Separate configs for cflags and ldflags
+# to selectively influde cflags in non - test targets only.
 config("v8_gcov_coverage_cflags") {
   cflags = [
     "-fprofile-arcs",
@@ -959,7 +964,7 @@ config("v8_gcov_coverage_ldflags") {
 # Actions
 #
 
-# Only for Windows clang builds. Converts the embedded.S file produced by
+# Only for Windows clang builds.Converts the embedded.S file produced by
 # mksnapshot into an embedded.cc file with corresponding inline assembly.
 template("asm_to_inline_asm") {
   name = target_name
@@ -1005,7 +1010,7 @@ if (is_android && enable_java_templates) {
 }
 
 action("postmortem-metadata") {
-  # Only targets in this file and the top-level visibility target can
+  # Only targets in this file and the top - level visibility target can
   # depend on this.
   visibility = [
     ":*",
@@ -1265,7 +1270,7 @@ if (!v8_enable_i18n_support) {
 }
 
 # Template for running torque
-# When building with v8_verify_torque_generation_invariance=true we need
+# When building with v8_verify_torque_generation_invariance = true we need
 # to be able to run torque for both 32 and 64 bits in the same build
 template("run_torque") {
   if (target_name == "") {
@@ -1569,7 +1574,7 @@ template("run_mksnapshot") {
     if (v8_enable_snapshot_native_code_counters) {
       args += [ "--native-code-counters" ]
     } else {
-      # --native-code-counters is the default in debug mode so make sure we can
+      #--native-code-counters is the default in debug mode so make sure we can
       # unset it.
       args += [ "--no-native-code-counters" ]
     }
@@ -3439,6 +3444,9 @@ v8_source_set("v8_base_without_compiler") {
       sources += [
         "src/diagnostics/unwinding-info-win64.cc",
         "src/diagnostics/unwinding-info-win64.h",
+        "src/libplatform/tracing/etw-metadata.h",
+        "src/libplatform/tracing/provider-win.cc",
+        "src/libplatform/tracing/provider-win.h",
         "src/trap-handler/handler-inside-win.cc",
         "src/trap-handler/handler-inside-win.h",
         "src/trap-handler/handler-outside-win.cc",
@@ -4128,6 +4136,7 @@ v8_component("v8_libplatform") {
     "src/libplatform/delayed-task-queue.h",
     "src/libplatform/task-queue.cc",
     "src/libplatform/task-queue.h",
+    "src/libplatform/tracing/provider.h",
     "src/libplatform/tracing/trace-buffer.cc",
     "src/libplatform/tracing/trace-buffer.h",
     "src/libplatform/tracing/trace-config.cc",
@@ -4135,6 +4144,8 @@ v8_component("v8_libplatform") {
     "src/libplatform/tracing/trace-writer.cc",
     "src/libplatform/tracing/trace-writer.h",
     "src/libplatform/tracing/tracing-controller.cc",
+    "src/libplatform/tracing/v8-provider.cc",
+    "src/libplatform/tracing/v8-provider.h",
     "src/libplatform/worker-thread.cc",
     "src/libplatform/worker-thread.h",
   ]
@@ -5112,7 +5123,7 @@ group("v8_generated_cc_files") {
 # Protobuf targets, used only when building outside of chromium.
 
 if (!build_with_chromium && v8_use_perfetto) {
-  # This config is applied to the autogenerated .pb.{cc,h} files in
+  # This config is applied to the autogenerated .pb.{cc, h} files in
   # proto_library.gni. This config is propagated up to the source sets
   # that depend on generated proto headers.
   config("protobuf_gen_config") {
