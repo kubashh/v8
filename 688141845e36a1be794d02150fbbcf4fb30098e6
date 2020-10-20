@@ -178,6 +178,24 @@
       "parentUuid": "95c7ca21_a6f47080",
       "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f010a4e7_8a4bb862",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1333583
+      },
+      "writtenOn": "2020-10-20T00:22:09Z",
+      "side": 1,
+      "message": "The patch you suggested works for Node.js, PTAL.\n\nVerified in https://github.com/gengjiawen/node/commit/b744410d116e9db6d43a76128d9764ce826b4fb0.",
+      "parentUuid": "5facfa4f_c6a584de",
+      "revId": "688141845e36a1be794d02150fbbcf4fb30098e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
