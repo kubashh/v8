@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98babf90_357891c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-20T22:51:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "74e0b3e2_8ebf93cc",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c455711_65d1dac5",
@@ -31,6 +49,24 @@
       "writtenOn": "2020-10-20T22:20:39Z",
       "side": 1,
       "message": "This URL doesn\u0027t seem to exist. Please double check?",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "166fd07f_8b169360",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-20T22:51:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6c455711_65d1dac5",
       "revId": "532073d0f6128d607a01029896eff524d340149c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63d502f2_206d5977",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-20T22:51:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c66362f7_18364b8a",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4920fc61_fdbcc199",
@@ -69,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9485be5_9b6a67b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-20T22:51:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4920fc61_fdbcc199",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cf4ce28_49222238",
@@ -82,6 +154,24 @@
       "writtenOn": "2020-10-20T22:20:39Z",
       "side": 1,
       "message": "Why is this needed? You\u0027ll probably need a comment explaining why. I assume this is to handle some of the generated code. Can you push to get the generated code so that it avoids the need for disabling this warning?",
+      "revId": "532073d0f6128d607a01029896eff524d340149c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "931b4d9e_1b1db87a",
+        "filename": "BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-20T22:51:19Z",
+      "side": 1,
+      "message": "I run into the same issue as the one you did from a while back (issue:753169):\n\nerror: extra \u0027;\u0027 outside of a function is incompatible with C++98 [-Werror,-Wc++98-compat-extra-semi]\nTRACELOGGING_DEFINE_PROVIDER(\n^\n\nFrom your CL last year, https://chromium-review.googlesource.com/c/chromium/src/+/1757736, I noticed that you used a #pragma to ignore the warning from within the offending file instead of  adding the flag in the BUILD.gn. Do you think I should do that as well?",
+      "parentUuid": "8cf4ce28_49222238",
       "revId": "532073d0f6128d607a01029896eff524d340149c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
