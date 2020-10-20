@@ -907,7 +907,10 @@ config("toolchain") {
   }
 
   if (is_clang) {
-    cflags += [ "-Wmissing-field-initializers" ]
+    cflags += [
+      "-Wmissing-field-initializers",
+      "-Wno-c++98-compat-extra-semi",
+    ]
 
     if (v8_current_cpu != "mips" && v8_current_cpu != "mipsel") {
       # We exclude MIPS because the IsMipsArchVariant macro causes trouble.
@@ -940,7 +943,10 @@ config("toolchain") {
       "/wd4724",  # https://crbug.com/v8/7771
       "/wd4800",  # Forcing value to bool.
     ]
+
+    libs = [ "advapi32.lib" ]  # Needed for TraceLoggingProvider.h
   }
+
 
   if (!is_clang && is_win) {
     cflags += [ "/wd4506" ]  # Benign "no definition for inline function"
@@ -3527,6 +3533,8 @@ v8_source_set("v8_base_without_compiler") {
       sources += [
         "src/diagnostics/unwinding-info-win64.cc",
         "src/diagnostics/unwinding-info-win64.h",
+        "src/libplatform/tracing/provider-win.cc",
+        "src/libplatform/tracing/provider-win.h",
         "src/trap-handler/handler-inside-win.cc",
         "src/trap-handler/handler-inside-win.h",
         "src/trap-handler/handler-outside-win.cc",
@@ -4224,6 +4232,7 @@ v8_component("v8_libplatform") {
     "src/libplatform/delayed-task-queue.h",
     "src/libplatform/task-queue.cc",
     "src/libplatform/task-queue.h",
+    "src/libplatform/tracing/provider.h",
     "src/libplatform/tracing/trace-buffer.cc",
     "src/libplatform/tracing/trace-buffer.h",
     "src/libplatform/tracing/trace-config.cc",
@@ -4231,6 +4240,8 @@ v8_component("v8_libplatform") {
     "src/libplatform/tracing/trace-writer.cc",
     "src/libplatform/tracing/trace-writer.h",
     "src/libplatform/tracing/tracing-controller.cc",
+    "src/libplatform/tracing/v8-provider.cc",
+    "src/libplatform/tracing/v8-provider.h",
     "src/libplatform/worker-thread.cc",
     "src/libplatform/worker-thread.h",
   ]
