@@ -155,6 +155,24 @@
       "parentUuid": "3f1f2232_fa919dcb",
       "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd3020fa_af242928",
+        "filename": "src/execution/local-isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-20T04:54:16Z",
+      "side": 1,
+      "message": "The static method sounds reasonable to me; it at least keeps the stack check logic on the same class.",
+      "parentUuid": "d5b0850c_8925b507",
+      "revId": "86dd541b039222879bb53665ca2fde597c2d86d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
