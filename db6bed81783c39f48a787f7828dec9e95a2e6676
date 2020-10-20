@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6336aeda_b575f451",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-20T08:23:38Z",
+      "side": 1,
+      "message": "lgtm from my side once Mike\u0027s comment is addressed.",
+      "revId": "db6bed81783c39f48a787f7828dec9e95a2e6676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e6787ce_86c01277",
