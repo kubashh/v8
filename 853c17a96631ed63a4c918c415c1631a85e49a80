@@ -70,6 +70,30 @@
       },
       "revId": "853c17a96631ed63a4c918c415c1631a85e49a80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a086bb7_fd4760a4",
+        "filename": "src/heap/cppgc/heap-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-20T16:18:52Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "63b9fbe1_894b213b",
+      "range": {
+        "startLine": 92,
+        "startChar": 2,
+        "endLine": 92,
+        "endChar": 17
+      },
+      "revId": "853c17a96631ed63a4c918c415c1631a85e49a80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

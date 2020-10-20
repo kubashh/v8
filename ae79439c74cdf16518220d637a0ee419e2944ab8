@@ -131,6 +131,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11dd71b6_0c2fc15b",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-verifier.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-20T16:18:52Z",
+      "side": 1,
+      "message": "In that case, and since we\u0027re already \"duplicating\" the marking structure, I think we can duplicate the structure of MarkingState as well. That means MarkingVerifierBase will hold a VerificationState (not a reference) and UnifiedHeapMarkingVerifier/UnifiedHeapVerificationVisitor will additionally hold a UnifiedHeapVerificationState specifically for handling JSMembers. wdyt?\n\n(I don\u0027t like that the base class holds a reference to a field of the subclass, which I think is not necessary in this case, so I\u0027m trying to avoid it.)",
+      "parentUuid": "0a0116d6_61b962c4",
+      "range": {
+        "startLine": 21,
+        "startChar": 37,
+        "endLine": 21,
+        "endChar": 43
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6982c3c5_890a1534",
         "filename": "src/heap/cppgc/marking-verifier.cc",
         "patchSetId": 5
@@ -166,6 +190,30 @@
       "side": 1,
       "message": "See other comment. Where would that scope store the parent?",
       "parentUuid": "6982c3c5_890a1534",
+      "range": {
+        "startLine": 61,
+        "startChar": 9,
+        "endLine": 61,
+        "endChar": 25
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39330720_0f9cda4b",
+        "filename": "src/heap/cppgc/marking-verifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-20T16:18:52Z",
+      "side": 1,
+      "message": "nit: The scope will wrap the rest of this method and will store the parent in the VerificationState held by MarkingVerifierBase. The only diff between having the scope and not having it (i.e. current code) is unsetting the parent. Since unsetting the parent is not needed for correctness, I\u0027m downgrading this comment to a nit.",
+      "parentUuid": "978f1fe6_fe026e53",
       "range": {
         "startLine": 61,
         "startChar": 9,
