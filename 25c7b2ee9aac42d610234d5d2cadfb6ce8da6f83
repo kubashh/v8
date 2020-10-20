@@ -50,6 +50,40 @@
       "message": "Toon: Any update? I\u0027d like to proceed with this, and would need to know whether the current approach is okay.",
       "revId": "25c7b2ee9aac42d610234d5d2cadfb6ce8da6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3710864d_51b22204",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-10-20T15:10:34Z",
+      "side": 1,
+      "message": "lgtm with comment. Take it as you want.",
+      "revId": "25c7b2ee9aac42d610234d5d2cadfb6ce8da6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aa4ec9b_8cbefacd",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2038,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-10-20T15:10:34Z",
+      "side": 1,
+      "message": "Why don\u0027t you simple get the template from the constructor and check that instead? I\u0027m fine with landing it this way but it seems less efficient and the alternative doesn\u0027t seem very complicated?",
+      "revId": "25c7b2ee9aac42d610234d5d2cadfb6ce8da6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
