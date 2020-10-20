@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cd30d47_00f4f3da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-20T11:45:39Z",
+      "side": 1,
+      "message": "All: the 1-line fix is in PS5:\n\n -  Call(EntryFromBuiltinIndexAsOperand(target));\n +  call(EntryFromBuiltinIndexAsOperand(target));\n\n`Call` (upper-case) has atom-specific perf tuning that changes the emitted instr sequence. That of course breaks assumptions about the size of deopt exits on x64. The trivial fix is to use raw `call` instead.\n\nI also added a few tests. \n\nTBRing + landing now to avoid having to rebase this but feel free to comment.",
+      "revId": "dd72e6e9376f8b5e688cc0e604d373c306f652e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
