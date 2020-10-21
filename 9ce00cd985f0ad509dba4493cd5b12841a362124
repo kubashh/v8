@@ -33,6 +33,23 @@
       "message": "Thanks, lgtm.",
       "revId": "9ce00cd985f0ad509dba4493cd5b12841a362124",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea49d161_98bc0b0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-21T05:49:34Z",
+      "side": 1,
+      "message": "Any blockers here? Reports are showing e.g. 80% regression on some benchmarks without the changed limit: https://chromeperf.appspot.com/group_report?rev\u003d818936, https://chromeperf.appspot.com/report?sid\u003d1c1cda978bd71d2a2df7a3e388c875a0dd449bae0e5aec55ced2c1d7f51dff0c\u0026start_rev\u003d816969\u0026end_rev\u003d819225.",
+      "revId": "9ce00cd985f0ad509dba4493cd5b12841a362124",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
