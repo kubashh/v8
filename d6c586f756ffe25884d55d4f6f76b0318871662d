@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ea9ecdb_af84f53a",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 11164,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-21T09:00:41Z",
+      "side": 1,
+      "message": "Creating a new CL (https://chromium-review.googlesource.com/c/v8/v8/+/2488686) for this and below.",
+      "parentUuid": "0af0c3f5_f15233a1",
+      "range": {
+        "startLine": 11157,
+        "startChar": 0,
+        "endLine": 11164,
+        "endChar": 3
+      },
+      "revId": "d6c586f756ffe25884d55d4f6f76b0318871662d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "787df92c_c4836deb",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-20T16:22:44Z",
       "side": 1,
       "message": "The callee_saved check will incorrectly retain a non-null pointer if other.callee_saved is null but this-\u003ecallee_saved is non-null.",
+      "range": {
+        "startLine": 11174,
+        "startChar": 0,
+        "endLine": 11177,
+        "endChar": 5
+      },
+      "revId": "d6c586f756ffe25884d55d4f6f76b0318871662d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b10b9e02_261beb5a",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 11177,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-21T09:00:41Z",
+      "side": 1,
+      "message": "Ack. Resolving in that other CL.",
+      "parentUuid": "787df92c_c4836deb",
       "range": {
         "startLine": 11174,
         "startChar": 0,
