@@ -2040,6 +2040,19 @@ bool JSReceiver::HasProxyInPrototype(Isolate* isolate) {
   return false;
 }
 
+bool JSReceiver::IsCodeKind(Isolate* isolate, Handle<JSReceiver> receiver) {
+  MaybeHandle<JSFunction> constructor = JSReceiver::GetConstructor(receiver);
+  if (constructor.is_null()) return false;
+  if (!constructor.ToHandleChecked()->shared().IsApiFunction()) return false;
+  Handle<Object> instance_template(constructor.ToHandleChecked()
+                                       ->shared()
+                                       .get_api_func_data()
+                                       .GetInstanceTemplate(),
+                                   isolate);
+  if (instance_template->IsUndefined(isolate)) return false;
+  return Handle<ObjectTemplateInfo>::cast(instance_template)->code_kind();
+}
+
 // static
 MaybeHandle<JSObject> JSObject::New(Handle<JSFunction> constructor,
                                     Handle<JSReceiver> new_target,
