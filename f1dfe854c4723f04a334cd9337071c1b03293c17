@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3d48eca_53d4e36b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-21T12:45:01Z",
+      "side": 1,
+      "message": "Prefer using some infra hashtags in V8 to separate the work easily from other changes. E.g. [MB] or [infra]",
+      "revId": "f1dfe854c4723f04a334cd9337071c1b03293c17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebf37526_8379d9ed",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-21T12:45:01Z",
+      "side": 1,
+      "message": "We should drop this sorting here, as it is already wrong in many places. Maybe we should once auto-sort it alphabetically, and from then on check this via presubmit...",
+      "range": {
+        "startLine": 89,
+        "startChar": 6,
+        "endLine": 89,
+        "endChar": 12
+      },
+      "revId": "f1dfe854c4723f04a334cd9337071c1b03293c17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
