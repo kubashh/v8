@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b60d00d_0812fe9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-21T08:50:19Z",
+      "side": 1,
+      "message": "Nice to see progress on this!",
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95380588_ca73da04",
+        "filename": "BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 4244,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-21T08:50:19Z",
+      "side": 1,
+      "message": "a) Tracing is more linked to the specific chrome tracing.\nb) libplatform is for things that are overwritten or change depending on where V8 is included (I don\u0027t think that is the case here)\n\nLet\u0027s add a new src/instrumentation directory since this is quite a different component since it closely interacts with OS specific tracing / instrumentation infrastructure.",
+      "range": {
+        "startLine": 4243,
+        "startChar": 0,
+        "endLine": 4244,
+        "endChar": 44
+      },
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eee0384_1d4287c7",
+        "filename": "src/libplatform/tracing/provider-win.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-21T08:50:19Z",
+      "side": 1,
+      "message": "nit: directly return bool\n  \n  return TraceLoggingProviderEnabled(state.traceProvider, 0, 0);",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 16
+      },
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53d2c1e_f889841b",
+        "filename": "src/libplatform/tracing/provider.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-21T08:50:19Z",
+      "side": 1,
+      "message": "I presume we will have maximally one platform-specific Provider active at a time. This means that we don\u0027t have to use virtual here but simply rely on #ifdef and including the platform-specific provider in tracing-controller.cc.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8497783_294e4f5a",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-21T08:50:19Z",
+      "side": 1,
+      "message": "Just to confirm: \n- this will only trigger if the corresponding tracing category has been enabled with v8 tracing.\n- this is currently only working if perfetto is not enabled.\n\nMaybe I go in circles for now, but I think we should probably these calls to the existing TRACE macros in trace-event.h until we have the rewrite of our tracing structs finished.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 48
+      },
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bd8bf04_0fd61af7",
+        "filename": "src/libplatform/tracing/v8-provider.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-21T08:50:19Z",
+      "side": 1,
+      "message": "Could you explain why we have V8Provider and WinProvider as separate units?\n\nI would imagine that we only ever need V8Provider (which is overwritten by platform specific implementations). Maybe I miss something here.\n\nAnd v8-provider.h contains the public interface:\n  \n  class V8Provider {\n    AddTraceEvent(...);\n    ..\n  }\n   \n\nAnd the v8-provider.cc contains the includes for the platform specific code:\n\n  #ifdef V8_TARGET_OS_WIN\n  #include \"src/libplatform/tracing/provider-win.cc\"\n  #else\n  #include \"src/libplatform/tracing/provider-default.cc\"\n  #endif // V8_TARGET_OS_WIN",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 18
+      },
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e67394ef_1a1be12c",
+        "filename": "src/libplatform/tracing/v8-provider.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-21T08:50:19Z",
+      "side": 1,
+      "message": "I\u0027m not too much of a fan of the global variable approach to keep the V8Provider alive.\n\nGiven that this is currently depending tracing:\n- I think we should solve it similarly to the tracing-cpu-profiler.cc if you stay dependent on the tracing approach\n- The other option would be to store it as unique_ptr on the Isolate",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 3
+      },
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
