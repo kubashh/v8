@@ -201,6 +201,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca4d6c05_5b9cdc1d",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-verifier.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-21T12:07:13Z",
+      "side": 1,
+      "message": "Indeed.\n\nI am leaving as is now. I slightly prefer the version where we don\u0027t add the VerificationState to the MarkingVerifierBase. As you said, it has similar issues though.",
+      "parentUuid": "17288356_0daf3121",
+      "range": {
+        "startLine": 21,
+        "startChar": 37,
+        "endLine": 21,
+        "endChar": 43
+      },
+      "revId": "ae79439c74cdf16518220d637a0ee419e2944ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6982c3c5_890a1534",
