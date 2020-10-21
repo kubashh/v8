@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0290384b_1577060a",
+        "filename": "builders/experiments.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-21T12:42:15Z",
+      "side": 1,
+      "message": "Such steps don\u0027t exist on the gcc builder. These are specific to the fyi builder. I think you can just notify on any step failure here.",
+      "range": {
+        "startLine": 61,
+        "startChar": 30,
+        "endLine": 61,
+        "endChar": 107
+      },
+      "revId": "b11c5b5aeb5ec056aa4f7389fd8ce65a29e75be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83aef135_5a9ffe87",
+        "filename": "builders/experiments.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-21T12:42:15Z",
+      "side": 1,
+      "message": "Don\u0027t we need to set this explicitly here now? I assume the abstraction used in multibranch somehow sets this to a default value?",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 48
+      },
+      "revId": "b11c5b5aeb5ec056aa4f7389fd8ce65a29e75be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
