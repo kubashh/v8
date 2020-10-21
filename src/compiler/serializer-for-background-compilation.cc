@@ -3265,9 +3265,12 @@ void SerializerForBackgroundCompilation::VisitLdaNamedProperty(
 
 void SerializerForBackgroundCompilation::VisitLdaNamedPropertyFromSuper(
     BytecodeArrayIterator* iterator) {
-  NameRef(broker(),
-          iterator->GetConstantForIndexOperand(1, broker()->isolate()));
-  // TODO(marja, v8:9237): Process feedback once it's added to the byte code.
+  NameRef name(broker(),
+               iterator->GetConstantForIndexOperand(1, broker()->isolate()));
+  FeedbackSlot slot = iterator->GetSlotOperand(3);
+  // FIXME: this is probably not correct... receiver vs lookup start...
+  Hints* receiver = &register_hints(iterator->GetRegisterOperand(0));
+  ProcessNamedPropertyAccess(receiver, name, slot, AccessMode::kLoad);
 }
 
 // TODO(neis): Do feedback-independent serialization also for *NoFeedback
