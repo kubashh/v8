@@ -55,6 +55,7 @@ class ConservativeTracingVisitor {
                                            const HeapObjectHeader&);
   virtual void VisitConservatively(HeapObjectHeader&,
                                    TraceConservativelyCallback) {}
+  virtual void VisitTracedObjectConservatively(HeapObjectHeader&) {}
 
   HeapBase& heap_;
   PageBackend& page_backend_;

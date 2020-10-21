@@ -68,6 +68,11 @@ void ConservativeTracingVisitor::TraceConservativelyIfNeeded(
 
 void ConservativeTracingVisitor::TraceConservativelyIfNeeded(
     HeapObjectHeader& header) {
+  if (header.IsMarked()) {
+    VisitTracedObjectConservatively(header);
+    return;
+  }
+
   if (!header.IsInConstruction<HeapObjectHeader::AccessMode::kNonAtomic>()) {
     visitor_.Visit(
         header.Payload(),
