@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65ef3906_0e8b5928",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-21T23:39:20Z",
+      "side": 1,
+      "message": "ptal. This should align the library with blink for weak containers.\n\n(I don\u0027t love the name TraceWeakContainer because it feels super specific and doesn\u0027t match our other Trace methods but I can\u0027t think of a better name; Let me know if you have an idea.)",
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
