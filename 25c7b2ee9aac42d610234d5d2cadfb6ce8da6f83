@@ -84,6 +84,24 @@
       "message": "Why don\u0027t you simple get the template from the constructor and check that instead? I\u0027m fine with landing it this way but it seems less efficient and the alternative doesn\u0027t seem very complicated?",
       "revId": "25c7b2ee9aac42d610234d5d2cadfb6ce8da6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b70ca7bf_72b643cb",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2038,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-10-21T21:09:06Z",
+      "side": 1,
+      "message": "Thanks. Tried this in the current version, and it indeed looks nicer.\n\nThe logic to get the object template from the JSReceiver in JSReceiver::IsCodeKind is totally cargo culted; I hope that\u0027s the proper way.\n\n(Also, I need to adapt the ccunit tests, because with the simplistic setup I used there the object don\u0027t \"know\" their constructor. (JsReceiver::GetConstructor fails).)",
+      "parentUuid": "7aa4ec9b_8cbefacd",
+      "revId": "25c7b2ee9aac42d610234d5d2cadfb6ce8da6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
