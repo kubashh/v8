@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09dcf7fd_be91940b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-10-21T18:14:29Z",
+      "side": 1,
+      "message": "Hi Bill, you had a comment on the commit message, which has been fixed. Not sure if you had any other comments. Ptal, thanks!",
+      "revId": "79b92e0414e9d4a501d779f517c89cadb4411cfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
