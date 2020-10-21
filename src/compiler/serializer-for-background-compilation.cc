@@ -3256,18 +3256,20 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
 
 void SerializerForBackgroundCompilation::VisitLdaNamedProperty(
     BytecodeArrayIterator* iterator) {
-  Hints* receiver = &register_hints(iterator->GetRegisterOperand(0));
-  NameRef name(broker(),
-               iterator->GetConstantForIndexOperand(1, broker()->isolate()));
-  FeedbackSlot slot = iterator->GetSlotOperand(2);
-  ProcessNamedPropertyAccess(receiver, name, slot, AccessMode::kLoad);
+  NameRef(broker(),
+          iterator->GetConstantForIndexOperand(1, broker()->isolate()));
+  // TODO(marja, v8:9237): Process feedback.
 }
 
 void SerializerForBackgroundCompilation::VisitLdaNamedPropertyFromSuper(
     BytecodeArrayIterator* iterator) {
-  NameRef(broker(),
-          iterator->GetConstantForIndexOperand(1, broker()->isolate()));
-  // TODO(marja, v8:9237): Process feedback once it's added to the byte code.
+  NameRef name(broker(),
+               iterator->GetConstantForIndexOperand(1, broker()->isolate()));
+  FeedbackSlot slot = iterator->GetSlotOperand(3);
+  // FIXME: this is not correct; the feedback maps are about the lookup start
+  // object (home object's proto), not  about the receiver.
+  Hints* receiver = &register_hints(iterator->GetRegisterOperand(0));
+  ProcessNamedPropertyAccess(receiver, name, slot, AccessMode::kLoad);
 }
 
 // TODO(neis): Do feedback-independent serialization also for *NoFeedback
