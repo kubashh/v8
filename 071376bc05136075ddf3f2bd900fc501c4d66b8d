@@ -1,6 +1,92 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18cb956d_a7b44503",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-22T11:09:01Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6936daaf_8a1b2af0",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-22T11:09:01Z",
+      "side": 1,
+      "message": "That sentence is correct, but why would it go here? :)",
+      "range": {
+        "startLine": 164,
+        "startChar": 39,
+        "endLine": 166,
+        "endChar": 31
+      },
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "570cb21e_908a1d37",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-22T11:09:01Z",
+      "side": 1,
+      "message": "nit: Spurious edit?",
+      "range": {
+        "startLine": 462,
+        "startChar": 7,
+        "endLine": 462,
+        "endChar": 16
+      },
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "415a0756_9a4cbd6d",
+        "filename": "src/heap/cppgc/marking-visitor.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-22T11:09:01Z",
+      "side": 1,
+      "message": "nit: I\u0027d move IsMarked() into IsMarkedWeakContainer()",
+      "range": {
+        "startLine": 53,
+        "startChar": 13,
+        "endLine": 53,
+        "endChar": 21
+      },
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df7bc250_1c4426a4",
@@ -14,6 +100,30 @@
       "writtenOn": "2020-10-22T10:58:37Z",
       "side": 1,
       "message": "no need to check is header is marked here since in construction objects are not marked.",
+      "range": {
+        "startLine": 61,
+        "startChar": 33,
+        "endLine": 61,
+        "endChar": 66
+      },
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6b85029_e16d2c22",
+        "filename": "src/heap/cppgc/marking-visitor.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-22T11:09:01Z",
+      "side": 1,
+      "message": "DCHECK then?",
+      "parentUuid": "df7bc250_1c4426a4",
       "range": {
         "startLine": 61,
         "startChar": 33,
