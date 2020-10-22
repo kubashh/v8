@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e73c4a34_5931bb23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-22T16:39:51Z",
+      "side": 1,
+      "message": "Hi Igor,\nI finally got the test working correctly. There are two modes:\n\nMode 1: loop in both threads searching for states. When found, exit.\nMode 2: If Mode 1 fails, then both threads go into a handshaking mode and ensure desired states are read.\n\nThis takes care of the annoying failures!\n\nSantiago, Nico, Georg, only the test file changed since your last look, if you want to have another look. The test is simply stronger now, it should meet existing criteria.\nThanks all,\n--Michael",
+      "revId": "11c795f2ac6392f3b169204c65394dee38212ae1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
