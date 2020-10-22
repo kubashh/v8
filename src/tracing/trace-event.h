@@ -13,6 +13,7 @@
 #include "src/tracing/trace-categories.h"
 #else
 #include "base/trace_event/common/trace_event_common.h"
+#include "src/instrumentation/v8-provider.h"
 #endif  // !defined(V8_USE_PERFETTO)
 
 #include "include/v8-platform.h"
@@ -384,6 +385,10 @@ static V8_INLINE uint64_t AddTraceEventImpl(
         static_cast<intptr_t>(arg_values[1])));
   }
   DCHECK_LE(num_args, 2);
+
+  instrumentation::v8Provider.AddTraceEvent(phase, name, num_args, arg_names,
+                                            arg_types, arg_values);
+
   v8::TracingController* controller =
       v8::internal::tracing::TraceEventHelper::GetTracingController();
   return controller->AddTraceEvent(phase, category_group_enabled, name, scope,
