@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea5e326e_9a207c21",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-22T09:32:01Z",
+      "side": 1,
+      "message": "V8_REVERSE_JSARGS is dead. You should probably rebase!",
+      "range": {
+        "startLine": 2024,
+        "startChar": 0,
+        "endLine": 2030,
+        "endChar": 6
+      },
+      "revId": "9d34c5b34fdf9c1f7c9fc41be5d04f8dda826e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
