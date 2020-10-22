@@ -16,6 +16,133 @@
       "message": "Thanks for the advice! I\u0027m trying to compile on Mac and I\u0027ve been running into some problems with the testing infra. I\u0027ve put my notes in the CL description but I\u0027ll re-iterate here:\n\nI\u0027m getting \"undefined symbols\" for v8Provider+related things inside cctest/libplatform/test-tracing.cc. I tried including the v8-provider.h at the top of the test file, but I\u0027m still getting the same message, so I\u0027m wondering if I\u0027m misunderstanding how the testing infrastructure works. Any resources I can look at?",
       "revId": "15b2a5136ee2b4d2c8eae7c6edd29288eb62a4b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "113ba57e_860cc0f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-22T10:18:55Z",
+      "side": 1,
+      "message": "Adde some more comments (also see my separate request for a meeting to discuss a few things if possible)",
+      "revId": "15b2a5136ee2b4d2c8eae7c6edd29288eb62a4b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bc07ec5_719bdac4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-22T10:18:55Z",
+      "side": 1,
+      "message": "We have the V8_EXPORT_PRIVATE helper macro for exposing symbols internally, I think that should help here.",
+      "parentUuid": "7fc881fc_af6303fb",
+      "revId": "15b2a5136ee2b4d2c8eae7c6edd29288eb62a4b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "269464f1_5d20a904",
+        "filename": "src/instrumentation/v8-provider-win.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-22T10:18:55Z",
+      "side": 1,
+      "message": "nit: instrumentation",
+      "range": {
+        "startLine": 33,
+        "startChar": 10,
+        "endLine": 33,
+        "endChar": 17
+      },
+      "revId": "15b2a5136ee2b4d2c8eae7c6edd29288eb62a4b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fdbf5c2_d968b326",
+        "filename": "src/instrumentation/v8-provider.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-22T10:18:55Z",
+      "side": 1,
+      "message": "nit: instrumentation",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 17
+      },
+      "revId": "15b2a5136ee2b4d2c8eae7c6edd29288eb62a4b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15332eec_634335c2",
+        "filename": "src/instrumentation/v8-provider.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-22T10:18:55Z",
+      "side": 1,
+      "message": "For code-navigation purposes (I don\u0027t particularly like to grep build files :P) could you add #includes for the platform specific code here?\n\n ...\n instrumentation {\n\n  #if V8_OS_WIN\n  #include src/instrumentation/v8-provider-win.cc\n  #else\n  #include src/instrumentation/v8-provider-default.cc\n  #endif\n } // namespace instrumentation",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 61
+      },
+      "revId": "15b2a5136ee2b4d2c8eae7c6edd29288eb62a4b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c530458a_03eb58d1",
+        "filename": "src/instrumentation/v8-provider.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-22T10:18:55Z",
+      "side": 1,
+      "message": "nit: I guess we should come up with a different name here, repeating V8 in the name is a bit superfluous. Provider is probably good enough WDYT?",
+      "range": {
+        "startLine": 14,
+        "startChar": 6,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "15b2a5136ee2b4d2c8eae7c6edd29288eb62a4b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
