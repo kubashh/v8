@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a019211_e4d299ef",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T12:18:35Z",
+      "side": 1,
+      "message": "Removed from the api (moved to marking-state.h)\n\n(I wanted the documentation to explain why we have a special trace method just for weak container; If I saw that I think I would wonder why it\u0027s needed.)",
+      "parentUuid": "6936daaf_8a1b2af0",
+      "range": {
+        "startLine": 164,
+        "startChar": 39,
+        "endLine": 166,
+        "endChar": 31
+      },
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "570cb21e_908a1d37",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f8a6a1_d8a5d6e3",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T12:18:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "570cb21e_908a1d37",
+      "range": {
+        "startLine": 462,
+        "startChar": 7,
+        "endLine": 462,
+        "endChar": 16
+      },
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "415a0756_9a4cbd6d",
@@ -77,6 +125,30 @@
       "writtenOn": "2020-10-22T11:09:01Z",
       "side": 1,
       "message": "nit: I\u0027d move IsMarked() into IsMarkedWeakContainer()",
+      "range": {
+        "startLine": 53,
+        "startChar": 13,
+        "endLine": 53,
+        "endChar": 21
+      },
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55d9c46a_9348caa4",
+        "filename": "src/heap/cppgc/marking-visitor.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T12:18:35Z",
+      "side": 1,
+      "message": "We don\u0027t want to retrace marked objects (unless they are weak containers), so we need to keep the checks separate.",
+      "parentUuid": "415a0756_9a4cbd6d",
       "range": {
         "startLine": 53,
         "startChar": 13,
@@ -124,6 +196,30 @@
       "side": 1,
       "message": "DCHECK then?",
       "parentUuid": "df7bc250_1c4426a4",
+      "range": {
+        "startLine": 61,
+        "startChar": 33,
+        "endLine": 61,
+        "endChar": 66
+      },
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2f41b7d_0175dab3",
+        "filename": "src/heap/cppgc/marking-visitor.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T12:18:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6b85029_e16d2c22",
       "range": {
         "startLine": 61,
         "startChar": 33,
