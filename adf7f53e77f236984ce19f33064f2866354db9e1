@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f95609bd_2842ffab",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T10:26:36Z",
+      "side": 1,
+      "message": "Added VisitWeakContainer to MarkingVerifier and HeapSnapshot.",
+      "parentUuid": "1d8bf793_8e5fa425",
+      "range": {
+        "startLine": 176,
+        "startChar": 46,
+        "endLine": 176,
+        "endChar": 68
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8501bdea_a064768d",
