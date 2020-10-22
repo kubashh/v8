@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f82951b_2b9d0b5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-22T07:18:18Z",
+      "side": 1,
+      "message": "Looks like this caused some huge regressions:\nhttps://chromeperf.appspot.com/group_report?keys\u003dagxzfmNocm9tZXBlcmZyFAsSB0Fub21hbHkYgIDI0vaijQoM",
+      "revId": "517a306933234ed7d9f4106f99b3cbaa7418584c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
