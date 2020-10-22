@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d8bf793_8e5fa425",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T09:36:06Z",
+      "side": 1,
+      "message": "Good point. I focused on the marking case and forgot about MarkingVerifier and HeapSnapshot. Thanks.",
+      "parentUuid": "88bd0ef1_52131d71",
+      "range": {
+        "startLine": 176,
+        "startChar": 46,
+        "endLine": 176,
+        "endChar": 68
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8501bdea_a064768d",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-22T07:29:16Z",
       "side": 1,
       "message": "Maybe not for this CL: We should make AccessMode a global thing and not refer to local versions of it.",
+      "range": {
+        "startLine": 217,
+        "startChar": 71,
+        "endLine": 217,
+        "endChar": 78
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb447c99_7778c7bf",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T09:36:06Z",
+      "side": 1,
+      "message": "I will address that in a followup",
+      "parentUuid": "8501bdea_a064768d",
       "range": {
         "startLine": 217,
         "startChar": 71,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9130977d_1b50bd76",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T09:36:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb0d0c83_97692428",
+      "range": {
+        "startLine": 154,
+        "startChar": 22,
+        "endLine": 154,
+        "endChar": 26
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6151ab03_2111b90e",
@@ -100,6 +172,30 @@
       "writtenOn": "2020-10-22T07:29:16Z",
       "side": 1,
       "message": "nit: mention ephemeron handling",
+      "range": {
+        "startLine": 230,
+        "startChar": 39,
+        "endLine": 230,
+        "endChar": 46
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f60b4713_99699187",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T09:36:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6151ab03_2111b90e",
       "range": {
         "startLine": 230,
         "startChar": 39,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "295d4f5a_a3a3bdf7",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T09:36:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b53013d5_1213a00d",
+      "range": {
+        "startLine": 288,
+        "startChar": 2,
+        "endLine": 288,
+        "endChar": 27
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d0d87dd_2784e64a",
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f875032a_8080f39a",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T09:36:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d0d87dd_2784e64a",
+      "range": {
+        "startLine": 321,
+        "startChar": 35,
+        "endLine": 321,
+        "endChar": 43
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4fd8064_d8cb1bc2",
@@ -169,6 +313,30 @@
       "writtenOn": "2020-10-22T07:29:16Z",
       "side": 1,
       "message": "ConservativeTracingVisitor should not know about mark bits. The branch should go into ConservativeMarkingVisitor::VisitConservatively() to avoid binding a visitor to marking information.",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 71,
+        "endChar": 21
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ef61562_dfaf9c09",
+        "filename": "src/heap/cppgc/visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T09:36:06Z",
+      "side": 1,
+      "message": "We have 2 options here:\n1) Always retrace objects. This is essentially what we had before this CL since we never checked whether the object is marked or not. This is less efficient.\n2) Only retrace weak containers, in which case the branch needs to happen before checking IsInConstruction.\n\nI think that option 2 is preferable.\nInstead of moving the IsMarked check to VisitConservatively (which would mean the IsInConstruction check also needs to move there), I suggest replacing the new VisitTracedObjectConservatively method with a WasObjectVisited method that would tell conservative tracing whether to bail on an object or not. The default implementation would return false and for marking visitor it will return true for marked objects. This is still not perfect because WasObjectVisited now has a side-effect for marking visitor of pushing weak containers back to the marking worklist.\n\nSee updates to the code. edyt?",
+      "parentUuid": "d4fd8064_d8cb1bc2",
       "range": {
         "startLine": 71,
         "startChar": 13,
