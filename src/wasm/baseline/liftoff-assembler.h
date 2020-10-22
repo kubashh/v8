@@ -385,8 +385,9 @@ class LiftoffAssembler : public TurboAssembler {
 
   void MaterializeMergedConstants(uint32_t arity);
 
-  void MergeFullStackWith(const CacheState& target, const CacheState& source);
-  void MergeStackWith(const CacheState& target, uint32_t arity);
+  void MergeFullStackWith(CacheState* target, CacheState* source);
+  void MergeFullStack(const CacheState& source);
+  void MergeStackWith(CacheState* target, uint32_t arity);
 
   void Spill(VarState* slot);
   void SpillLocals();
