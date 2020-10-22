@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a947300_6026d346",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-22T13:57:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11009a89_74627149",
+      "revId": "43d024330c4efe2b8b734f0c4895863dbd928d1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58b3eabb_afd85930",
@@ -48,6 +66,24 @@
       "writtenOn": "2020-10-21T15:23:06Z",
       "side": 1,
       "message": "Why is this needed here now, and why not on Intel?",
+      "revId": "43d024330c4efe2b8b734f0c4895863dbd928d1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456e1cc3_2cf4384a",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1604,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-22T13:57:26Z",
+      "side": 1,
+      "message": "We need for intel as well: https://chromium-review.googlesource.com/c/v8/v8/+/2491039",
+      "parentUuid": "58b3eabb_afd85930",
       "revId": "43d024330c4efe2b8b734f0c4895863dbd928d1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
