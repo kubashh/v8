@@ -161,6 +161,24 @@ class V8_EXPORT Visitor {
   }
 
   /**
+   * Trace method for weak containers. Weak containers are special in that they
+   * may require re-tracing if reachable through stack, even if the container
+   * was already traced before.
+   *
+   * \param object reference of the weak container.
+   * \param callback to be invoked.
+   * \param data custom data that is passed to the callback.
+   */
+  template <typename T>
+  void TraceWeakContainer(const T* object, WeakCallback callback,
+                          const void* data) {
+    if (!object) return;
+    VisitWeakContainer(object, TraceTrait<T>::GetTraceDescriptor(object),
+                       TraceTrait<T>::GetWeakTraceDescriptor(object), callback,
+                       data);
+  }
+
+  /**
    * Registers a weak callback that is invoked during garbage collection.
    *
    * \param callback to be invoked.
@@ -195,6 +213,9 @@ class V8_EXPORT Visitor {
   virtual void VisitWeakRoot(const void* self, TraceDescriptor, WeakCallback,
                              const void* weak_root, const SourceLocation&) {}
   virtual void VisitEphemeron(const void* key, TraceDescriptor value_desc) {}
+  virtual void VisitWeakContainer(const void* self, TraceDescriptor strong_desc,
+                                  TraceDescriptor weak_desc,
+                                  WeakCallback callback, const void* data) {}
 
  private:
   template <typename T, void (T::*method)(const LivenessBroker&)>
