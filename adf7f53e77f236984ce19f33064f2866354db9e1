@@ -369,6 +369,30 @@
       },
       "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c79ef6b7_e03cc561",
+        "filename": "src/heap/cppgc/visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T10:22:34Z",
+      "side": 1,
+      "message": "VisitConservatively is for in construction object. If the object is not in construction it is traced precisely with the trace method from GCInfo.\n\nKeeping this part is option 1 I mentioned above which retraces all objects.",
+      "parentUuid": "e9da500a_4679449b",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 71,
+        "endChar": 21
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
