@@ -19,6 +19,7 @@
 #include "src/execution/runtime-profiler.h"
 #include "src/execution/simulator.h"
 #include "src/init/bootstrapper.h"
+#include "src/instrumentation/v8-provider.h"
 #include "src/libsampler/sampler.h"
 #include "src/objects/elements.h"
 #include "src/objects/objects-inl.h"
@@ -124,6 +125,7 @@ void V8::InitializeOncePerProcess() {
 }
 
 void V8::InitializePlatform(v8::Platform* platform) {
+  v8::internal::tracing::v8Provider.RegisterProvider();
   CHECK(!platform_);
   CHECK(platform);
   platform_ = platform;
@@ -136,6 +138,7 @@ void V8::ShutdownPlatform() {
   v8::tracing::TracingCategoryObserver::TearDown();
   v8::base::SetPrintStackTrace(nullptr);
   platform_ = nullptr;
+  v8::internal::tracing::v8Provider.UnregisterProvider();
 }
 
 v8::Platform* V8::GetCurrentPlatform() {
