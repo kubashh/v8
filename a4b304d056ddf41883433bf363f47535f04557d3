@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e37efd2_66293bce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-22T03:41:35Z",
+      "side": 1,
+      "message": "Thanks :)",
+      "parentUuid": "3b60d00d_0812fe9f",
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95380588_ca73da04",
@@ -31,6 +49,30 @@
       "writtenOn": "2020-10-21T08:50:19Z",
       "side": 1,
       "message": "a) Tracing is more linked to the specific chrome tracing.\nb) libplatform is for things that are overwritten or change depending on where V8 is included (I don\u0027t think that is the case here)\n\nLet\u0027s add a new src/instrumentation directory since this is quite a different component since it closely interacts with OS specific tracing / instrumentation infrastructure.",
+      "range": {
+        "startLine": 4243,
+        "startChar": 0,
+        "endLine": 4244,
+        "endChar": 44
+      },
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f96815a_59aa5e43",
+        "filename": "BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 4244,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-22T03:41:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "95380588_ca73da04",
       "range": {
         "startLine": 4243,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a8a0fad_f23b041f",
+        "filename": "src/libplatform/tracing/provider-win.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-22T03:41:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9eee0384_1d4287c7",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 16
+      },
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d53d2c1e_f889841b",
@@ -77,6 +143,30 @@
       "writtenOn": "2020-10-21T08:50:19Z",
       "side": 1,
       "message": "I presume we will have maximally one platform-specific Provider active at a time. This means that we don\u0027t have to use virtual here but simply rely on #ifdef and including the platform-specific provider in tracing-controller.cc.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "a4b304d056ddf41883433bf363f47535f04557d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfd0f0a1_79786ec4",
+        "filename": "src/libplatform/tracing/provider.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-22T03:41:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d53d2c1e_f889841b",
       "range": {
         "startLine": 14,
         "startChar": 0,

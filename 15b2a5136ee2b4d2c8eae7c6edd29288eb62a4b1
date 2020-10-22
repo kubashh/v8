@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fc881fc_af6303fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-22T03:41:35Z",
+      "side": 1,
+      "message": "Thanks for the advice! I\u0027m trying to compile on Mac and I\u0027ve been running into some problems with the testing infra. I\u0027ve put my notes in the CL description but I\u0027ll re-iterate here:\n\nI\u0027m getting \"undefined symbols\" for v8Provider+related things inside cctest/libplatform/test-tracing.cc. I tried including the v8-provider.h at the top of the test file, but I\u0027m still getting the same message, so I\u0027m wondering if I\u0027m misunderstanding how the testing infrastructure works. Any resources I can look at?",
+      "revId": "15b2a5136ee2b4d2c8eae7c6edd29288eb62a4b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
