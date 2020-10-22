@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df7bc250_1c4426a4",
+        "filename": "src/heap/cppgc/marking-visitor.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-10-22T10:58:37Z",
+      "side": 1,
+      "message": "no need to check is header is marked here since in construction objects are not marked.",
+      "range": {
+        "startLine": 61,
+        "startChar": 33,
+        "endLine": 61,
+        "endChar": 66
+      },
+      "revId": "071376bc05136075ddf3f2bd900fc501c4d66b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
