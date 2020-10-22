@@ -34,6 +34,24 @@
       "parentUuid": "1b882b83_7d4ccfb9",
       "revId": "1e0b92aea9b112e2198cef0be20f6570fd8f39ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63e064fa_dd0d276f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-22T05:01:06Z",
+      "side": 1,
+      "message": "arm\u0027s cmp(Operand) seems fine, it emits different sequences depending on the operand size:\n\n0x3fd4430c   2cc  e51b001c       ldr r0, [fp, #-28]\n0x3fd44310   2d0  e2800001       add r0, r0, #1\n0x3fd44314   2d4  e50b001c       str r0, [fp, #-28]\n0x3fd44318   2d8  e3500001       cmp r0, #1\n\n0x5fc84310   2d0  e2800001       add r0, r0, #1\n0x5fc84314   2d4  e50b001c       str r0, [fp, #-28]\n0x5fc84318   2d8  e302c710       movw ip, #10000\n0x5fc8431c   2dc  e150000c       cmp r0, ip\n\n0x3b5c430c   2cc  e51b001c       ldr r0, [fp, #-28]\n0x3b5c4310   2d0  e2800001       add r0, r0, #1\n0x3b5c4314   2d4  e50b001c       str r0, [fp, #-28]\n0x3b5c4318   2d8  e304cb40       movw ip, #19264\n0x3b5c431c   2dc  e340c04c       movt ip, #76\n0x3b5c4320   2e0  e150000c       cmp r0, ip",
+      "parentUuid": "dd64d29e_ef94a086",
+      "revId": "1e0b92aea9b112e2198cef0be20f6570fd8f39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
