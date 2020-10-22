@@ -90,6 +90,19 @@ class VerificationVisitor final : public cppgc::Visitor {
     state_.VerifyMarked(desc.base_object_payload);
   }
 
+  void VisitWeakContainer(const void* object, TraceDescriptor,
+                          TraceDescriptor weak_desc, WeakCallback,
+                          const void*) {
+    if (!object) return;
+
+    // Contents of weak backing stores are found themselves through page
+    // iteration and are treated strongly that way, similar to how they are
+    // treated strongly when found through stack scanning. The verification
+    // here only makes sure that the backing itself is properly marked. Weak
+    // backing stores found through
+    state_.VerifyMarked(weak_desc.base_object_payload);
+  }
+
  private:
   VerificationState& state_;
 };
