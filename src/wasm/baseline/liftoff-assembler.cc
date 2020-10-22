@@ -629,39 +629,69 @@ void LiftoffAssembler::MaterializeMergedConstants(uint32_t arity) {
   }
 }
 
-void LiftoffAssembler::MergeFullStackWith(const CacheState& target,
-                                          const CacheState& source) {
-  DCHECK_EQ(source.stack_height(), target.stack_height());
+void LiftoffAssembler::MergeFullStack(const CacheState& source) {
+  DCHECK_EQ(cache_state_.stack_height(), source.stack_height());
   // TODO(clemensb): Reuse the same StackTransferRecipe object to save some
   // allocations.
   StackTransferRecipe transfers(this);
   for (uint32_t i = 0, e = source.stack_height(); i < e; ++i) {
-    transfers.TransferStackSlot(target.stack_state[i], source.stack_state[i]);
+    transfers.TransferStackSlot(cache_state_.stack_state[i],
+                                source.stack_state[i]);
   }
 }
 
-void LiftoffAssembler::MergeStackWith(const CacheState& target,
-                                      uint32_t arity) {
+void LiftoffAssembler::MergeFullStackWith(CacheState* target,
+                                          CacheState* source) {
+  // As TransferStackSlot might have side effect on cache_state_ on some
+  // platforms. E.g arm can spill register inside, changing var state of
+  // cache_state_, while it should be done on target CacheState.
+  // We have to set target as current cache_state_ and revert operation
+  // after transfering all slots.
+  bool is_target_current = &cache_state_ == target;
+  bool is_source_current = &cache_state_ == source;
+
+  if (!is_target_current && is_source_current) {
+    std::swap(*source, *target);
+    MergeFullStack(*target);
+    std::swap(*source, *target);
+  } else if (!is_target_current && !is_source_current) {
+    std::swap(cache_state_, *target);
+    MergeFullStack(*source);
+    std::swap(cache_state_, *target);
+  } else {
+    MergeFullStack(*source);
+  }
+}
+
+void LiftoffAssembler::MergeStackWith(CacheState* target, uint32_t arity) {
   // Before: ----------------|----- (discarded) ----|--- arity ---|
   //                         ^target_stack_height   ^stack_base   ^stack_height
   // After:  ----|-- arity --|
   //             ^           ^target_stack_height
   //             ^target_stack_base
   uint32_t stack_height = cache_state_.stack_height();
-  uint32_t target_stack_height = target.stack_height();
+  uint32_t target_stack_height = target->stack_height();
   DCHECK_LE(target_stack_height, stack_height);
   DCHECK_LE(arity, target_stack_height);
   uint32_t stack_base = stack_height - arity;
   uint32_t target_stack_base = target_stack_height - arity;
   StackTransferRecipe transfers(this);
+
+  // As TransferStackSlot might have side effect on cache_state_ on some
+  // platforms. E.g arm can spill register inside, changing var state of
+  // cache_state_, while it should be done on target CacheState.
+  // We have to set target as current cache_state_ and revert operation
+  // after transfering all slots.
+  std::swap(cache_state_, *target);
   for (uint32_t i = 0; i < target_stack_base; ++i) {
-    transfers.TransferStackSlot(target.stack_state[i],
-                                cache_state_.stack_state[i]);
+    transfers.TransferStackSlot(cache_state_.stack_state[i],
+                                target->stack_state[i]);
   }
   for (uint32_t i = 0; i < arity; ++i) {
-    transfers.TransferStackSlot(target.stack_state[target_stack_base + i],
-                                cache_state_.stack_state[stack_base + i]);
+    transfers.TransferStackSlot(cache_state_.stack_state[stack_base + i],
+                                target->stack_state[target_stack_base + i]);
   }
+  std::swap(cache_state_, *target);
 }
 
 void LiftoffAssembler::Spill(VarState* slot) {
