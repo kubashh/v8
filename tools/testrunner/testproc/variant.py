@@ -48,7 +48,7 @@ class VariantProc(base.TestProcProducer):
 
   def _try_send_new_subtest(self, test, variants_gen):
     for variant, flags, suffix in variants_gen:
-      subtest = self._create_subtest(test, '%s-%s' % (variant, suffix),
+      subtest = self._create_subtest(test, str(suffix),
                                      variant=variant, flags=flags)
       if self._send_test(subtest):
         return True
