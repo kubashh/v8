@@ -3265,9 +3265,9 @@ void SerializerForBackgroundCompilation::VisitLdaNamedProperty(
 
 void SerializerForBackgroundCompilation::VisitLdaNamedPropertyFromSuper(
     BytecodeArrayIterator* iterator) {
-  NameRef(broker(),
-          iterator->GetConstantForIndexOperand(1, broker()->isolate()));
-  // TODO(marja, v8:9237): Process feedback once it's added to the byte code.
+  NameRef name(broker(),
+               iterator->GetConstantForIndexOperand(1, broker()->isolate()));
+  // TODO(marja, v8:9237): Process feedback.
 }
 
 // TODO(neis): Do feedback-independent serialization also for *NoFeedback
