@@ -29,6 +29,9 @@ class V8_EXPORT_PRIVATE MarkingVisitorBase : public VisitorBase {
   void Visit(const void*, TraceDescriptor) final;
   void VisitWeak(const void*, TraceDescriptor, WeakCallback, const void*) final;
   void VisitEphemeron(const void*, TraceDescriptor) final;
+  void VisitWeakContainer(const void* self, TraceDescriptor strong_desc,
+                          TraceDescriptor weak_desc, WeakCallback callback,
+                          const void* data) final;
   void RegisterWeakCallback(WeakCallback, const void*) final;
 
   MarkingStateBase& marking_state_;
@@ -73,6 +76,7 @@ class ConservativeMarkingVisitor : public ConservativeTracingVisitor,
  private:
   void VisitConservatively(HeapObjectHeader&,
                            TraceConservativelyCallback) final;
+  bool WasObjectVisited(HeapObjectHeader&) final;
   void VisitPointer(const void*) final;
 
   MutatorMarkingState& marking_state_;

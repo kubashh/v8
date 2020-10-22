@@ -55,6 +55,9 @@ class ConservativeTracingVisitor {
                                            const HeapObjectHeader&);
   virtual void VisitConservatively(HeapObjectHeader&,
                                    TraceConservativelyCallback) {}
+  // Tells the conservative visitor whether an object was already visited and
+  // doesn't require visiting again.
+  virtual bool WasObjectVisited(HeapObjectHeader&) { return false; }
 
   HeapBase& heap_;
   PageBackend& page_backend_;
