@@ -417,6 +417,30 @@
       },
       "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f8b963f_8b2c2dc1",
+        "filename": "src/heap/cppgc/visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-22T10:28:13Z",
+      "side": 1,
+      "message": "Then we should add a dispatch for the fully constructed visitation case which we then override in the marker.\n\nWe should not consider mark bits here to allow reusing visitors in other scenarios.",
+      "parentUuid": "c79ef6b7_e03cc561",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 71,
+        "endChar": 21
+      },
+      "revId": "adf7f53e77f236984ce19f33064f2866354db9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
