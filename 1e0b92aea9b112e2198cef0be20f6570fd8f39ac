@@ -16,6 +16,24 @@
       "message": "Hello,\n\nI noticed a problem on PPC where cmpi (compare immediate) was being used to compare the \"regexp_backtracks_before_fallback\" input. cmpi takes in a 16 bit signed integer and \nwith this change, backtrack_limit no longer fits in the instruction, here is a patch for ppc:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/2490460\n\nJust wanted to point out if Arm also needs a similar fix as the immediate Operand for cmp on Arm is only 8 bits?\nhttps://github.com/v8/v8/blob/master/src/regexp/arm/regexp-macro-assembler-arm.cc#L165\n",
       "revId": "1e0b92aea9b112e2198cef0be20f6570fd8f39ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd64d29e_ef94a086",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-22T04:36:38Z",
+      "side": 1,
+      "message": "Thanks! We should add dchecks for that.",
+      "parentUuid": "1b882b83_7d4ccfb9",
+      "revId": "1e0b92aea9b112e2198cef0be20f6570fd8f39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
