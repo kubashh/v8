@@ -16,6 +16,24 @@
       "message": "I think you just want to use receiver-\u003emap().GetConstructor(); otherwise you can accidentally get unrelated JS-originating constructors.",
       "revId": "28cdfec708ac0d4d2431bfdd6df1ebcfa6a4ed70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d766ecf_92a5ed78",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-10-23T17:32:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9b05624_7160c826",
+      "revId": "28cdfec708ac0d4d2431bfdd6df1ebcfa6a4ed70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
