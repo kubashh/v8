@@ -33,6 +33,24 @@
       "message": "Thanks for the CL. This is quite a lot of special casing for CFI, I think we should probably discuss the reasoning and pros/cons of this at the Arm sync next week, would that be possible?  Do you have any performance numbers on how much this impacts performance on CFI/non-CFI builds?\n\nGeorg / Michael - do you know if Intel\u0027s CFI approach will have similar overheads on interpreter bytecode dispatch tail-calls? If so I\u0027d like to make sure we design something that works on all architectures.",
       "revId": "84174c0587c66535f08cb124dd79aac85f3217c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1640437_86c446fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1434130
+      },
+      "writtenOn": "2020-10-23T09:49:34Z",
+      "side": 1,
+      "message": "Sure we can discuss this next week. I also ran some benchmarks (octane, ares-6, typescript and web-tooling) and did not noticed any particular regression, in both cfi and non-cfi builds.",
+      "parentUuid": "c2aa13f6_ec7a012a",
+      "revId": "84174c0587c66535f08cb124dd79aac85f3217c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
