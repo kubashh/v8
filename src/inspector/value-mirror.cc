@@ -1738,6 +1738,34 @@ String16 descriptionForNode(v8::Local<v8::Context> context,
   return description;
 }
 
+String16 descriptionForTrustedType(v8::Local<v8::Context> context,
+                                   v8::Local<v8::Value> value) {
+  if (!value->IsObject()) return String16();
+  v8::Local<v8::Object> object = value.As<v8::Object>();
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::TryCatch tryCatch(isolate);
+
+  v8::Local<v8::Value> constructor;
+  if (!object->Get(context, toV8String(isolate, "constructor"))
+           .ToLocal(&constructor) ||
+      !constructor->IsObject()) {
+    return String16();
+  }
+  v8::Local<v8::Value> name;
+  if (!constructor.As<v8::Object>()
+           ->Get(context, toV8String(isolate, "name"))
+           .ToLocal(&name) ||
+      !name->IsString()) {
+    return String16();
+  }
+
+  v8::Local<v8::String> description;
+  if (!object->ToString(context).ToLocal(&description))
+    return toProtocolString(isolate, name.As<v8::String>());
+  return String16::concat(toProtocolString(isolate, name.As<v8::String>()), " ",
+                          toProtocolString(isolate, description));
+}
+
 std::unique_ptr<ValueMirror> clientMirror(v8::Local<v8::Context> context,
                                           v8::Local<v8::Value> value,
                                           const String16& subtype) {
@@ -1745,6 +1773,10 @@ std::unique_ptr<ValueMirror> clientMirror(v8::Local<v8::Context> context,
   if (subtype == "node") {
     return std::make_unique<ObjectMirror>(value, subtype,
                                           descriptionForNode(context, value));
+  }
+  if (subtype == "trustedtype") {
+    return std::make_unique<ObjectMirror>(
+        value, subtype, descriptionForTrustedType(context, value));
   }
   if (subtype == "error") {
     return std::make_unique<ObjectMirror>(
