@@ -51,6 +51,41 @@
       "parentUuid": "c2aa13f6_ec7a012a",
       "revId": "84174c0587c66535f08cb124dd79aac85f3217c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c767c947_b5c8e787",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-23T10:03:04Z",
+      "side": 1,
+      "message": "Is there a perf improvement in CFI? Otherwise I\u0027m not entirely sure that this is worth the complexity if it is just about saving ~8KB in the binary.",
+      "parentUuid": "f1640437_86c446fb",
+      "revId": "84174c0587c66535f08cb124dd79aac85f3217c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "413ac539_15f04ff7",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-10-23T10:03:04Z",
+      "side": 1,
+      "message": "I don\u0027t think this should be an on-heap builtin - is there any reason it can\u0027t always be generated at build time like most builtins?",
+      "revId": "84174c0587c66535f08cb124dd79aac85f3217c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
