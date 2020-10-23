@@ -928,7 +928,7 @@ class V8_EXPORT_PRIVATE Instruction final {
   }
 
   static constexpr bool IsCallWithDescriptorFlags(InstructionCode arch_opcode) {
-    return arch_opcode <= ArchOpcode::kArchCallBuiltinPointer;
+    return arch_opcode <= ArchOpcode::kArchPrepareTailCall;
   }
   bool IsCallWithDescriptorFlags() const {
     return IsCallWithDescriptorFlags(arch_opcode());

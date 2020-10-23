@@ -1067,7 +1067,8 @@ void CodeAssembler::TailCallStubThenBytecodeDispatchImpl(
   int stack_parameter_count = argc - descriptor.GetRegisterParameterCount();
   DCHECK_LE(descriptor.GetStackParameterCount(), stack_parameter_count);
   auto call_descriptor = Linkage::GetStubCallDescriptor(
-      zone(), descriptor, stack_parameter_count, CallDescriptor::kNoFlags,
+      zone(), descriptor, stack_parameter_count,
+      CallDescriptor::kTailCallBuiltinFromBytecodeHandler,
       Operator::kNoProperties);
 
   NodeArray<kMaxNumArgs + 2> inputs;

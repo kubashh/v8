@@ -121,6 +121,7 @@ namespace internal {
                                                                                \
   /* Interpreter */                                                            \
   ASM(InterpreterEntryTrampoline, JSTrampoline)                                \
+  ASM(InterpreterBytecodeHandlerTrampoline, JSTrampoline)                      \
   ASM(InterpreterPushArgsThenCall, InterpreterPushArgsThenCall)                \
   ASM(InterpreterPushUndefinedAndArgsThenCall, InterpreterPushArgsThenCall)    \
   ASM(InterpreterPushArgsThenCallWithFinalSpread, InterpreterPushArgsThenCall) \

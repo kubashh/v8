@@ -222,10 +222,9 @@ class V8_EXPORT_PRIVATE CallDescriptor final
     // Use the kJavaScriptCallCodeStartRegister (fixed) register for the
     // indirect target address when calling.
     kFixedTargetRegister = 1u << 6,
-    kCallerSavedRegisters = 1u << 7,
-    // The kCallerSavedFPRegisters only matters (and set) when the more general
-    // flag for kCallerSavedRegisters above is also set.
-    kCallerSavedFPRegisters = 1u << 8,
+    // Restores the LR if the handler tail calls a builtin and then returns to
+    // the interpreter in Arm64.
+    kTailCallBuiltinFromBytecodeHandler = 1u << 7,
     // Tail calls for tier up are special (in fact they are different enough
     // from normal tail calls to warrant a dedicated opcode; but they also have
     // enough similar aspects that reusing the TailCall opcode is pragmatic).
@@ -241,15 +240,20 @@ class V8_EXPORT_PRIVATE CallDescriptor final
     //
     // In other words, behavior is identical to a jmp instruction prior caller
     // frame construction.
-    kIsTailCallForTierUp = 1u << 9,
+    kIsTailCallForTierUp = 1u << 8,
+    kCallerSavedRegisters = 1u << 9,
 
     // Flags past here are *not* encoded in InstructionCode and are thus not
     // accessible from the code generator. See also
     // kFlagsBitsEncodedInInstructionCode.
 
+    // The kCallerSavedFPRegisters only matters (and set) when the more general
+    // flag for kCallerSavedRegisters above is also set.
+    kCallerSavedFPRegisters = 1u << 10,
+
     // AIX has a function descriptor by default but it can be disabled for a
     // certain CFunction call (only used for Kind::kCallAddress).
-    kNoFunctionDescriptor = 1u << 10,
+    kNoFunctionDescriptor = 1u << 11,
   };
   using Flags = base::Flags<Flag>;
 

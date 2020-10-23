@@ -905,6 +905,13 @@ void Builtins::Generate_MemMove(MacroAssembler* masm) {
 }
 #endif  // V8_TARGET_ARCH_IA32
 
+#ifndef V8_TARGET_ARCH_ARM64
+void Builtins::Generate_InterpreterBytecodeHandlerTrampoline(
+    MacroAssembler* masm) {
+  masm->Trap();
+}
+#endif
+
 // ES6 [[Get]] operation.
 TF_BUILTIN(GetProperty, CodeStubAssembler) {
   auto object = Parameter<Object>(Descriptor::kObject);

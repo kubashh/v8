@@ -250,6 +250,14 @@ bool SafeStackFrameIterator::IsNoFrameBytecodeHandlerPc(Isolate* isolate,
   EmbeddedData d = EmbeddedData::FromBlob();
   if (pc < d.InstructionStartOfBytecodeHandlers() ||
       pc >= d.InstructionEndOfBytecodeHandlers()) {
+    // If we're not in a bytecode handler but in the trampoline that sets the
+    // lr, then the situation is the same as if we were in a frameless bytecode
+    // handler.
+    Code bytecode_trampoline = isolate->builtins()->builtin(
+        Builtins::kInterpreterBytecodeHandlerTrampoline);
+    if (bytecode_trampoline.contains(pc)) {
+      return true;
+    }
     // Not a bytecode handler pc address.
     return false;
   }

@@ -2959,8 +2959,9 @@ void InstructionSelector::VisitTailCall(Node* node) {
     }
   }
   opcode = EncodeCallDescriptorFlags(opcode, call_descriptor->flags());
-
-  Emit(kArchPrepareTailCall, g.NoOutput());
+  Emit(
+      EncodeCallDescriptorFlags(kArchPrepareTailCall, call_descriptor->flags()),
+      g.NoOutput());
 
   // Add an immediate operand that represents the first slot that is unused
   // with respect to the stack pointer that has been updated for the tail call

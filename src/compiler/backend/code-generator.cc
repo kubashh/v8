@@ -114,7 +114,8 @@ void CodeGenerator::AddProtectedInstructionLanding(uint32_t instr_offset,
 
 void CodeGenerator::CreateFrameAccessState(Frame* frame) {
   FinishFrame(frame);
-  frame_access_state_ = zone()->New<FrameAccessState>(frame);
+  frame_access_state_ = zone()->New<FrameAccessState>(
+      frame, info()->code_kind() == CodeKind::BYTECODE_HANDLER);
 }
 
 bool CodeGenerator::ShouldApplyOffsetToStackCheck(Instruction* instr,

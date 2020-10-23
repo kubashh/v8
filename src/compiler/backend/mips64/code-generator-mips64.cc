@@ -501,7 +501,7 @@ void CodeGenerator::AssembleDeconstructFrame() {
   __ Pop(ra, fp);
 }
 
-void CodeGenerator::AssemblePrepareTailCall() {
+void CodeGenerator::AssemblePrepareTailCall(Instruction* instr) {
   if (frame_access_state()->has_frame()) {
     __ Ld(ra, MemOperand(fp, StandardFrameConstants::kCallerPCOffset));
     __ Ld(fp, MemOperand(fp, StandardFrameConstants::kCallerFPOffset));
@@ -757,7 +757,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArchPrepareTailCall:
-      AssemblePrepareTailCall();
+      AssemblePrepareTailCall(instr);
       break;
     case kArchCallCFunction: {
       int const num_parameters = MiscField::decode(instr->opcode());

@@ -550,7 +550,7 @@ void CodeGenerator::AssembleDeconstructFrame() {
   unwinding_info_writer_.MarkFrameDeconstructed(__ pc_offset());
 }
 
-void CodeGenerator::AssemblePrepareTailCall() {
+void CodeGenerator::AssemblePrepareTailCall(Instruction* instr) {
   if (frame_access_state()->has_frame()) {
     __ ldm(ia, fp, lr.bit() | fp.bit());
   }
@@ -884,7 +884,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArchPrepareTailCall:
-      AssemblePrepareTailCall();
+      AssemblePrepareTailCall(instr);
       break;
     case kArchCallCFunction: {
       int const num_parameters = MiscField::decode(instr->opcode());

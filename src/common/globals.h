@@ -192,6 +192,16 @@ constexpr int kElidedFrameSlots = kPCOnStackSize / kSystemPointerSize;
 constexpr int kElidedFrameSlots = 0;
 #endif
 
+// On Arm64, the LR is set before calling the first bytecode handler (to avoid
+// repeatedly signing and authenticating the LR), and remains untouched until we
+// return to the interpreter. So even if a bytecode handler has no frame, there
+// are still two slots for the LR (and some padding).
+#if V8_TARGET_ARCH_ARM64
+constexpr int kElidedBytecodeFrameSlots = 2;
+#else
+constexpr int kElidedBytecodeFrameSlots = kElidedFrameSlots;
+#endif
+
 constexpr int kDoubleSizeLog2 = 3;
 
 // Total wasm code space per engine (i.e. per process) is limited to make

@@ -207,8 +207,9 @@ class FrameOffset {
 // current function's frame.
 class FrameAccessState : public ZoneObject {
  public:
-  explicit FrameAccessState(const Frame* const frame)
+  explicit FrameAccessState(const Frame* const frame, bool is_bytecode_handler)
       : frame_(frame),
+        is_bytecode_handler_(is_bytecode_handler),
         access_frame_with_fp_(false),
         sp_delta_(0),
         has_frame_(false) {}
@@ -231,8 +232,10 @@ class FrameAccessState : public ZoneObject {
   void SetFrameAccessToSP() { access_frame_with_fp_ = false; }
 
   int GetSPToFPSlotCount() const {
+    int elided_slots =
+        is_bytecode_handler_ ? kElidedBytecodeFrameSlots : kElidedFrameSlots;
     int frame_slot_count =
-        (has_frame() ? frame()->GetTotalFrameSlotCount() : kElidedFrameSlots) -
+        (has_frame() ? frame()->GetTotalFrameSlotCount() : elided_slots) -
         StandardFrameConstants::kFixedSlotCountAboveFp;
     return frame_slot_count + sp_delta();
   }
@@ -248,6 +251,7 @@ class FrameAccessState : public ZoneObject {
 
  private:
   const Frame* const frame_;
+  bool is_bytecode_handler_;
   bool access_frame_with_fp_;
   int sp_delta_;
   bool has_frame_;

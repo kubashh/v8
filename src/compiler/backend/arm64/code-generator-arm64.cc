@@ -548,15 +548,45 @@ void EmitFpOrNeonUnop(TurboAssembler* tasm, Fn fn, Instruction* instr,
 
 void CodeGenerator::AssembleDeconstructFrame() {
   __ Mov(sp, fp);
-  __ Pop<TurboAssembler::kAuthLR>(fp, lr);
-
+  if (info()->code_kind() == CodeKind::BYTECODE_HANDLER) {
+    __ Ldr(fp, MemOperand(sp));
+  } else {
+    __ Pop<TurboAssembler::kAuthLR>(fp, lr);
+  }
   unwinding_info_writer_.MarkFrameDeconstructed(__ pc_offset());
 }
 
-void CodeGenerator::AssemblePrepareTailCall() {
+void CodeGenerator::AssemblePrepareTailCall(Instruction* instr) {
+  auto flag = MiscField::decode(instr->opcode());
   if (frame_access_state()->has_frame()) {
-    __ RestoreFPAndLR();
+    if ((info()->code_kind() == CodeKind::BYTECODE_HANDLER) &&
+        !(flag & CallDescriptor::kTailCallBuiltinFromBytecodeHandler)) {
+      // If the bytecode dispatches into another bytecode, then we don't need to
+      // load the lr.
+      __ Ldr(fp, MemOperand(fp));
+    } else {
+      __ RestoreFPAndLR();
+    }
+  } else if ((info()->code_kind() == CodeKind::BYTECODE_HANDLER) &&
+             (flag & CallDescriptor::kTailCallBuiltinFromBytecodeHandler)) {
+    // Even without a frame there are two slots in the stack for the LR and some
+    // padding (or an old fp). If we are tail calling a builtin and then
+    // returning to the interpreter, we need to restore this LR.
+#ifdef V8_ENABLE_CONTROL_FLOW_INTEGRITY
+    // We need to restore the LR.
+    // Make sure we can use x16 and x17.
+    __ Add(x16, sp, 2 * kSystemPointerSize);
+    UseScratchRegisterScope temps(tasm());
+    temps.Exclude(x16, x17);
+    // We can load the return address directly into x17.
+    __ Ldr(x17, MemOperand(sp, kSystemPointerSize));
+    __ Autib1716();
+    __ Mov(lr, x17);
+#else
+    __ Ldr(lr, MemOperand(sp, kSystemPointerSize));
+#endif
   }
+
   frame_access_state()->SetFrameAccessToSP();
 }
 
@@ -586,18 +616,26 @@ void CodeGenerator::AssemblePopArgumentsAdaptorFrame(Register args_reg,
 
 namespace {
 
+enum ShrinkageMode { kAllowShrinkage, kNoShrinkage };
+enum DispatchMode { kDispatch, kNoDispatch };
+
 void AdjustStackPointerForTailCall(TurboAssembler* tasm,
                                    FrameAccessState* state,
                                    int new_slot_above_sp,
-                                   bool allow_shrinkage = true) {
+                                   ShrinkageMode allow_shrinkage,
+                                   DispatchMode dispatch) {
   int current_sp_offset = state->GetSPToFPSlotCount() +
                           StandardFrameConstants::kFixedSlotCountAboveFp;
+  // Don't drop the lr (and the stale fp above) when dispatching to a bytecode
+  // handler.
+  if (dispatch == kDispatch)
+    current_sp_offset = current_sp_offset - kElidedBytecodeFrameSlots;
   int stack_slot_delta = new_slot_above_sp - current_sp_offset;
   DCHECK_EQ(stack_slot_delta % 2, 0);
   if (stack_slot_delta > 0) {
     tasm->Claim(stack_slot_delta);
     state->IncreaseSPDelta(stack_slot_delta);
-  } else if (allow_shrinkage && stack_slot_delta < 0) {
+  } else if (allow_shrinkage == kAllowShrinkage && stack_slot_delta < 0) {
     tasm->Drop(-stack_slot_delta);
     state->IncreaseSPDelta(stack_slot_delta);
   }
@@ -607,15 +645,28 @@ void AdjustStackPointerForTailCall(TurboAssembler* tasm,
 
 void CodeGenerator::AssembleTailCallBeforeGap(Instruction* instr,
                                               int first_unused_stack_slot) {
+  auto flag = MiscField::decode(instr->opcode());
+  DispatchMode mode = kNoDispatch;
+  if (info()->code_kind() == CodeKind::BYTECODE_HANDLER &&
+      !(flag & CallDescriptor::kTailCallBuiltinFromBytecodeHandler)) {
+    mode = kDispatch;
+  }
   AdjustStackPointerForTailCall(tasm(), frame_access_state(),
-                                first_unused_stack_slot, false);
+                                first_unused_stack_slot, kNoShrinkage, mode);
 }
 
 void CodeGenerator::AssembleTailCallAfterGap(Instruction* instr,
                                              int first_unused_stack_slot) {
   DCHECK_EQ(first_unused_stack_slot % 2, 0);
+
+  auto flag = MiscField::decode(instr->opcode());
+  DispatchMode mode = kNoDispatch;
+  if (info()->code_kind() == CodeKind::BYTECODE_HANDLER &&
+      !(flag & CallDescriptor::kTailCallBuiltinFromBytecodeHandler)) {
+    mode = kDispatch;
+  }
   AdjustStackPointerForTailCall(tasm(), frame_access_state(),
-                                first_unused_stack_slot);
+                                first_unused_stack_slot, kAllowShrinkage, mode);
   DCHECK(instr->IsTailCall());
   InstructionOperandConverter g(this, instr);
   int optional_padding_slot = g.InputInt32(instr->InputCount() - 2);
@@ -826,7 +877,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArchPrepareTailCall:
-      AssemblePrepareTailCall();
+      AssemblePrepareTailCall(instr);
       break;
     case kArchCallCFunction: {
       int const num_parameters = MiscField::decode(instr->opcode());
@@ -2891,7 +2942,11 @@ void CodeGenerator::AssembleConstructFrame() {
       STATIC_ASSERT(TurboAssembler::kExtraSlotClaimedByPrologue == 1);
       required_slots -= TurboAssembler::kExtraSlotClaimedByPrologue;
     } else {
-      __ Push<TurboAssembler::kSignLR>(lr, fp);
+      if (info()->code_kind() != CodeKind::BYTECODE_HANDLER) {
+        __ Push<TurboAssembler::kSignLR>(lr, fp);
+      } else {
+        __ Str(fp, MemOperand(sp));
+      }
       __ Mov(fp, sp);
     }
     unwinding_info_writer_.MarkFrameConstructed(__ pc_offset());
@@ -3080,6 +3135,10 @@ void CodeGenerator::AssembleReturn(InstructionOperand* pop) {
     } else {
       AssembleDeconstructFrame();
     }
+  }
+
+  if (info()->code_kind() == CodeKind::BYTECODE_HANDLER) {
+    __ Pop<TurboAssembler::kAuthLR>(padreg, lr);
   }
 
   if (pop->IsImmediate()) {

@@ -1153,6 +1153,17 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
   __ Bind(&end);
 }
 
+// Push the LR to InterpreterEntryTrampoline and dispatch to the bytecode
+// handler.
+void Builtins::Generate_InterpreterBytecodeHandlerTrampoline(
+    MacroAssembler* masm) {
+  __ Push<TurboAssembler::kSignLR>(lr, padreg);
+  UseScratchRegisterScope temps(masm);
+  temps.Exclude(x17);
+  __ Mov(x17, kJavaScriptCallCodeStartRegister);
+  __ Jump(x17);
+}
+
 // Generate code for entering a JS function with the interpreter.
 // On entry to the function the receiver and arguments have been pushed on the
 // stack left to right.
@@ -1320,7 +1331,9 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ Mov(x1, Operand(x23, LSL, kSystemPointerSizeLog2));
   __ Ldr(kJavaScriptCallCodeStartRegister,
          MemOperand(kInterpreterDispatchTableRegister, x1));
-  __ Call(kJavaScriptCallCodeStartRegister);
+  Handle<Code> bytecode_trampoline =
+      BUILTIN_CODE(masm->isolate(), InterpreterBytecodeHandlerTrampoline);
+  __ Call(bytecode_trampoline, RelocInfo::CODE_TARGET);
   masm->isolate()->heap()->SetInterpreterEntryReturnPCOffset(masm->pc_offset());
 
   // Any returns to the entry trampoline are either due to the return bytecode
@@ -1621,10 +1634,9 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
   __ Ldr(kJavaScriptCallCodeStartRegister,
          MemOperand(kInterpreterDispatchTableRegister, x1));
 
-  UseScratchRegisterScope temps(masm);
-  temps.Exclude(x17);
-  __ Mov(x17, kJavaScriptCallCodeStartRegister);
-  __ Jump(x17);
+  // Push the LR before entering the bytecode.
+  __ Jump(BUILTIN_CODE(masm->isolate(), InterpreterBytecodeHandlerTrampoline),
+          RelocInfo::CODE_TARGET);
 }
 
 void Builtins::Generate_InterpreterEnterBytecodeAdvance(MacroAssembler* masm) {

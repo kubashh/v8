@@ -293,7 +293,7 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   void AssembleDeconstructFrame();
 
   // Generates code to manipulate the stack in preparation for a tail call.
-  void AssemblePrepareTailCall();
+  void AssemblePrepareTailCall(Instruction* instr);
 
   // Generates code to pop current frame if it is an arguments adaptor frame.
   void AssemblePopArgumentsAdaptorFrame(Register args_reg, Register scratch1,
