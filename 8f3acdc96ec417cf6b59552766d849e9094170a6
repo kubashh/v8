@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbcb2cdb_59bfaa30",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-23T11:35:36Z",
+      "side": 1,
+      "message": "Please introduce a predicate IsSuperPropertyAccess on operators and use that here.\nAlso please move the receiver assignment out of the branches to the declaration above, it\u0027s always the first input.",
+      "revId": "8f3acdc96ec417cf6b59552766d849e9094170a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
