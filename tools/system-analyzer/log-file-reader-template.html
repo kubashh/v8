@@ -71,12 +71,14 @@ found in the LICENSE file. -->
     }
   }
 </style>
-<div id="fileReader" class="panel" tabindex=1>
-  <span id="label">
-    Drag and drop a v8.log file into this area, or click to choose from disk.
-  </span>
-  <input id="file" type="file" name="file">
+<div id="container">
+  <div id="fileReader" class="panel" tabindex=1>
+    <span id="label">
+      Drag and drop a v8.log file into this area, or click to choose from disk.
+    </span>
+    <input id="file" type="file" name="file">
+  </div>
+  <div id="loader">
+    <div id="spinner"></div>
 </div>
-<div id="loader">
-  <div id="spinner"></div>
 </div>

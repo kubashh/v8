@@ -50,7 +50,7 @@ defineCustomElement('log-file-reader', (templateText) =>
         return;
       }
       this.$('#fileReader').blur();
-      this.shadowRoot.className = 'loading';
+      this.$("#container").className = 'loading';
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
@@ -63,11 +63,11 @@ defineCustomElement('log-file-reader', (templateText) =>
             bubbles: true, composed: true,
             detail: dataModel
           }));
-          this.shadowRoot.className = 'success';
+          this.$("#container").className = 'success';
           this.$('#fileReader').classList.add('done');
         } catch (err) {
           console.error(err);
-          this.shadowRoot.className = 'failure';
+          this.$("#container").className = 'failure';
         }
       };
       // Delay the loading a bit to allow for CSS animations to happen.
