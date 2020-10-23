@@ -4121,7 +4121,7 @@ v8_component("v8_libbase") {
 
   deps = [ ":v8_headers" ]
 
-  public_deps = []
+  public_deps = [ ":v8_abseil" ]
 
   data = []
 
