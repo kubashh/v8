@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f0d50c2_b7bc1748",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-10-26T13:04:00Z",
+      "side": 1,
+      "message": "looks good (with nit). Thanks!",
+      "revId": "da9aac2593c46303ebe9f78dff90838ccb4077ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9c4def2_8a87a2e6",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-10-26T13:04:00Z",
+      "side": 1,
+      "message": "For multiline please use {}.",
+      "revId": "da9aac2593c46303ebe9f78dff90838ccb4077ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
