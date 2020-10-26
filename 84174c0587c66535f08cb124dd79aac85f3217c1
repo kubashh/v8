@@ -73,6 +73,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "99484613_6a75ca8e",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-26T06:27:22Z",
+      "side": 1,
+      "message": "Why not the Illegal call to stay consistent with the above?",
+      "revId": "84174c0587c66535f08cb124dd79aac85f3217c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "675a58ae_064c42d8",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-26T06:27:22Z",
+      "side": 1,
+      "message": "You could check d.InstructionStartOfBuiltin(Builtins::kInterpreterBytecodeHandlerTrampoline), this would be more consistent with surrounding code.",
+      "revId": "84174c0587c66535f08cb124dd79aac85f3217c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "413ac539_15f04ff7",
         "filename": "src/snapshot/startup-serializer.cc",
         "patchSetId": 1
