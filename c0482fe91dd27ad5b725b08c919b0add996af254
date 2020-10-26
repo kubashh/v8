@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e1daa85_8a551c13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2020-10-26T10:59:08Z",
+      "side": 1,
+      "message": "As discussed offline, this is fine as an intermediate step.\n\nWe should aim for moving this implementation to Blink so that we can call e.g. TrustedHTML::toString directly, which also avoids monkey-patching.",
+      "revId": "c0482fe91dd27ad5b725b08c919b0add996af254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
