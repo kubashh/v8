@@ -86,6 +86,24 @@
       "message": "I don\u0027t think this should be an on-heap builtin - is there any reason it can\u0027t always be generated at build time like most builtins?",
       "revId": "84174c0587c66535f08cb124dd79aac85f3217c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8ed2581_fa566808",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-26T06:19:22Z",
+      "side": 1,
+      "message": "+1 I don\u0027t think this is necessary with a drive-by look over other changes. In any case we should not introduce any new on-heap builtins.",
+      "parentUuid": "413ac539_15f04ff7",
+      "revId": "84174c0587c66535f08cb124dd79aac85f3217c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
