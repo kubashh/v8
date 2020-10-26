@@ -459,8 +459,14 @@ class SerializerForBackgroundCompilation {
                                   bool honor_bailout_on_uninitialized);
   void ProcessNamedPropertyAccess(Hints* receiver, NameRef const& name,
                                   FeedbackSlot slot, AccessMode access_mode);
+  void ProcessNamedSuperPropertyAccess(Hints* receiver, NameRef const& name,
+                                       FeedbackSlot slot,
+                                       AccessMode access_mode);
   void ProcessNamedAccess(Hints* receiver, NamedAccessFeedback const& feedback,
                           AccessMode access_mode, Hints* result_hints);
+  void ProcessNamedSuperAccess(Hints* receiver,
+                               NamedAccessFeedback const& feedback,
+                               AccessMode access_mode, Hints* result_hints);
   void ProcessElementAccess(Hints const& receiver, Hints const& key,
                             ElementAccessFeedback const& feedback,
                             AccessMode access_mode);
@@ -494,9 +500,9 @@ class SerializerForBackgroundCompilation {
                                      bool honor_bailout_on_uninitialized);
 
   PropertyAccessInfo ProcessMapForNamedPropertyAccess(
-      Hints* receiver, MapRef receiver_map, NameRef const& name,
-      AccessMode access_mode, base::Optional<JSObjectRef> concrete_receiver,
-      Hints* result_hints);
+      Hints* receiver, MapRef receiver_map, MapRef lookup_start_object_map,
+      NameRef const& name, AccessMode access_mode,
+      base::Optional<JSObjectRef> concrete_receiver, Hints* result_hints);
 
   void ProcessCreateContext(interpreter::BytecodeArrayIterator* iterator,
                             int scopeinfo_operand_index);
@@ -2962,18 +2968,18 @@ void SerializerForBackgroundCompilation::ProcessUnaryOrBinaryOperation(
 
 PropertyAccessInfo
 SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
-    Hints* receiver, MapRef receiver_map, NameRef const& name,
-    AccessMode access_mode, base::Optional<JSObjectRef> concrete_receiver,
-    Hints* result_hints) {
+    Hints* receiver, MapRef receiver_map, MapRef lookup_start_object_map,
+    NameRef const& name, AccessMode access_mode,
+    base::Optional<JSObjectRef> concrete_receiver, Hints* result_hints) {
   // For JSNativeContextSpecialization::InferReceiverRootMap
-  receiver_map.SerializeRootMap();
+  lookup_start_object_map.SerializeRootMap();
 
   // For JSNativeContextSpecialization::ReduceNamedAccess.
   JSGlobalProxyRef global_proxy =
       broker()->target_native_context().global_proxy_object();
   JSGlobalObjectRef global_object =
       broker()->target_native_context().global_object();
-  if (receiver_map.equals(global_proxy.map())) {
+  if (lookup_start_object_map.equals(global_proxy.map())) {
     base::Optional<PropertyCellRef> cell = global_object.GetPropertyCell(
         name, SerializationPolicy::kSerializeIfNeeded);
     if (access_mode == AccessMode::kLoad && cell.has_value()) {
@@ -2982,7 +2988,7 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
   }
 
   PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
-      receiver_map, name, access_mode, dependencies(),
+      lookup_start_object_map, name, access_mode, dependencies(),
       SerializationPolicy::kSerializeIfNeeded);
 
   // For JSNativeContextSpecialization::InlinePropertySetterCall
@@ -3053,6 +3059,7 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
       break;
     case AccessMode::kStore:
     case AccessMode::kStoreInLiteral:
+      // DCHECK_EQ(receiver_map, lookup_start_object_map);
       // For MapInference (StoreField case).
       if (access_info.IsDataField() || access_info.IsDataConstant()) {
         Handle<Map> transition_map;
@@ -3151,6 +3158,38 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
   }
 }
 
+void SerializerForBackgroundCompilation::ProcessNamedSuperPropertyAccess(
+    Hints* receiver, NameRef const& name, FeedbackSlot slot,
+    AccessMode access_mode) {
+  if (slot.IsInvalid() || feedback_vector().is_null()) return;
+  FeedbackSource source(feedback_vector(), slot);
+  ProcessedFeedback const& feedback =
+      broker()->ProcessFeedbackForPropertyAccess(source, access_mode, name);
+  if (BailoutOnUninitialized(feedback)) return;
+
+  Hints new_accumulator_hints;
+  switch (feedback.kind()) {
+    case ProcessedFeedback::kNamedAccess:
+      DCHECK(name.equals(feedback.AsNamedAccess().name()));
+      ProcessNamedSuperAccess(receiver, feedback.AsNamedAccess(), access_mode,
+                              &new_accumulator_hints);
+      break;
+    case ProcessedFeedback::kMinimorphicPropertyAccess:
+      DCHECK(name.equals(feedback.AsMinimorphicPropertyAccess().name()));
+      ProcessMinimorphicPropertyAccess(feedback.AsMinimorphicPropertyAccess(),
+                                       source);
+      break;
+    case ProcessedFeedback::kInsufficient:
+      break;
+    default:
+      UNREACHABLE();
+  }
+
+  if (access_mode == AccessMode::kLoad) {
+    environment()->accumulator_hints() = new_accumulator_hints;
+  }
+}
+
 void SerializerForBackgroundCompilation::ProcessNamedAccess(
     Hints* receiver, NamedAccessFeedback const& feedback,
     AccessMode access_mode, Hints* result_hints) {
@@ -3164,17 +3203,18 @@ void SerializerForBackgroundCompilation::ProcessNamedAccess(
   for (Handle<Map> map :
        GetRelevantReceiverMaps(broker()->isolate(), receiver->maps())) {
     MapRef map_ref(broker(), map);
-    ProcessMapForNamedPropertyAccess(receiver, map_ref, feedback.name(),
-                                     access_mode, base::nullopt, result_hints);
+    ProcessMapForNamedPropertyAccess(receiver, map_ref, map_ref,
+                                     feedback.name(), access_mode,
+                                     base::nullopt, result_hints);
   }
 
   for (Handle<Object> hint : receiver->constants()) {
     ObjectRef object(broker(), hint);
     if (access_mode == AccessMode::kLoad && object.IsJSObject()) {
       MapRef map_ref = object.AsJSObject().map();
-      ProcessMapForNamedPropertyAccess(receiver, map_ref, feedback.name(),
-                                       access_mode, object.AsJSObject(),
-                                       result_hints);
+      ProcessMapForNamedPropertyAccess(receiver, map_ref, map_ref,
+                                       feedback.name(), access_mode,
+                                       object.AsJSObject(), result_hints);
     }
     // For JSNativeContextSpecialization::ReduceJSLoadNamed.
     if (access_mode == AccessMode::kLoad && object.IsJSFunction() &&
@@ -3189,6 +3229,23 @@ void SerializerForBackgroundCompilation::ProcessNamedAccess(
     }
     // TODO(neis): Also record accumulator hint for string.length and maybe
     // more?
+  }
+}
+
+void SerializerForBackgroundCompilation::ProcessNamedSuperAccess(
+    Hints* receiver, NamedAccessFeedback const& feedback,
+    AccessMode access_mode, Hints* result_hints) {
+  for (Handle<Map> receiver_map :
+       GetRelevantReceiverMaps(broker()->isolate(), receiver->maps())) {
+    MapRef receiver_map_ref(broker(), receiver_map);
+
+    for (Handle<Map> feedback_map : feedback.maps()) {
+      MapRef feedback_map_ref(broker(), feedback_map);
+
+      ProcessMapForNamedPropertyAccess(
+          receiver, receiver_map_ref, feedback_map_ref, feedback.name(),
+          access_mode, base::nullopt, result_hints);
+    }
   }
 }
 
@@ -3265,9 +3322,11 @@ void SerializerForBackgroundCompilation::VisitLdaNamedProperty(
 
 void SerializerForBackgroundCompilation::VisitLdaNamedPropertyFromSuper(
     BytecodeArrayIterator* iterator) {
-  NameRef(broker(),
-          iterator->GetConstantForIndexOperand(1, broker()->isolate()));
-  // TODO(marja, v8:9237): Process feedback once it's added to the byte code.
+  Hints* receiver = &register_hints(iterator->GetRegisterOperand(0));
+  NameRef name(broker(),
+               iterator->GetConstantForIndexOperand(1, broker()->isolate()));
+  FeedbackSlot slot = iterator->GetSlotOperand(2);
+  ProcessNamedSuperPropertyAccess(receiver, name, slot, AccessMode::kLoad);
 }
 
 // TODO(neis): Do feedback-independent serialization also for *NoFeedback
