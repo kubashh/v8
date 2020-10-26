@@ -16,6 +16,23 @@
       "message": "Since GetSuperConstructor used to have the IsConstructor check builtin, in the case of the super constructor being a HeapConstant, the compiler could omit the check and throw entirely. With splitting out the error check, however, we now have to work harder to eliminate the check and throw.\n\nThis CL recovers the ability to optimize the check and throw away, but adds a new type to a pretty narrow case. Do you think this is worth it, neis@?",
       "revId": "d27d478bc10694dc5ea725bc476fb7213648d61a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70a1c256_64f5a6a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-26T23:53:12Z",
+      "side": 1,
+      "message": "Hm, actually, this CL is wrong.\n\nObjectIsConstructor constrains its input register to a general constructor type, not necessarily a constructor ordinary function. Since the compiler type system is entirely based on union types, that means we need split every callable thing into CallableConstructor and CallableNonConstructor variants.  (I think the spec actually technically allows non-callable constructors, but no JS values or platform-provided objects actually are like that.) There aren\u0027t enough bits for that. ",
+      "revId": "d27d478bc10694dc5ea725bc476fb7213648d61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
