@@ -1339,11 +1339,12 @@ void LiftoffAssembler::Spill(int offset, WasmValue value) {
   RecordUsedSpillOffset(offset);
   MemOperand dst = liftoff::GetStackSlot(offset);
   UseScratchRegisterScope temps(this);
+  UseTemporaryRegisterScope tempr(this);
   Register src = no_reg;
   // The scratch register will be required by str if multiple instructions
   // are required to encode the offset, and so we cannot use it in that case.
   if (!ImmediateFitsAddrMode2Instruction(dst.offset())) {
-    src = GetUnusedRegister(kGpReg, {}).gp();
+    src = tempr.Acquire(kGpReg).gp();
   } else {
     src = temps.Acquire();
   }
@@ -3744,6 +3745,14 @@ void LiftoffAssembler::PopRegisters(LiftoffRegList regs) {
     ldm(ia_w, sp, core_regs);
   }
 }
+
+void LiftoffAssembler::PushRegister(Register reg) { push(reg); }
+
+void LiftoffAssembler::PopRegister(Register reg) { pop(reg); }
+
+void LiftoffAssembler::PushRegister(DoubleRegister reg) { vpush(reg); }
+
+void LiftoffAssembler::PopRegister(DoubleRegister reg) { vpop(reg); }
 
 void LiftoffAssembler::DropStackSlotsAndRet(uint32_t num_stack_slots) {
   Drop(num_stack_slots);

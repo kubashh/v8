@@ -1101,6 +1101,10 @@ class LiftoffAssembler : public TurboAssembler {
 
   inline void PushRegisters(LiftoffRegList);
   inline void PopRegisters(LiftoffRegList);
+  inline void PushRegister(Register);
+  inline void PopRegister(Register);
+  inline void PushRegister(DoubleRegister);
+  inline void PopRegister(DoubleRegister);
 
   inline void DropStackSlotsAndRet(uint32_t num_stack_slots);
 
@@ -1324,6 +1328,68 @@ class LiftoffStackSlots {
   LiftoffAssembler* const asm_;
 
   DISALLOW_COPY_AND_ASSIGN(LiftoffStackSlots);
+};
+
+class UseTemporaryRegisterScope {
+ public:
+  explicit UseTemporaryRegisterScope(LiftoffAssembler* wasm_asm)
+      : asm_(wasm_asm) {}
+
+  ~UseTemporaryRegisterScope() {
+    if (!register_.has_value()) {
+      return;
+    }
+
+    if (register_.value().is_gp()) {
+      asm_->PopRegister(register_.value().gp());
+    } else if (register_.value().is_fp()) {
+      asm_->PopRegister(register_.value().fp());
+    } else if (register_.value().is_gp_pair()) {
+      asm_->PopRegister(register_.value().high_gp());
+      asm_->PopRegister(register_.value().low_gp());
+    } else if (register_.value().is_fp_pair()) {
+      asm_->PopRegister(register_.value().high_fp());
+      asm_->PopRegister(register_.value().low_fp());
+    }
+  }
+
+  LiftoffRegister Acquire(RegClass rc) {
+    if (asm_->cache_state()->has_unused_register(rc)) {
+      return asm_->cache_state()->unused_register(rc);
+    }
+
+    if (kNeedI64RegPair && rc == kGpRegPair) {
+      LiftoffRegister low = GetCacheRegList(rc).GetFirstRegSet();
+      Register high = GetCacheRegList(rc)
+                          .MaskOut(LiftoffRegList::ForRegs(low))
+                          .GetFirstRegSet()
+                          .gp();
+      register_ = LiftoffRegister::ForPair(low.gp(), high);
+
+      asm_->PushRegister(low.gp());
+      asm_->PushRegister(high);
+    } else if (kNeedS128RegPair && rc == kFpRegPair) {
+      register_ = LiftoffRegister::ForFpPair(
+          GetCacheRegList(rc).GetAdjacentFpRegsSet().GetFirstRegSet().fp());
+
+      asm_->PushRegister(register_.value().low_fp());
+      asm_->PushRegister(register_.value().high_fp());
+    } else if (rc == kGpReg) {
+      register_ = GetCacheRegList(rc).GetFirstRegSet();
+      asm_->PushRegister(register_.value().gp());
+    } else if (rc == kFpReg) {
+      register_ = GetCacheRegList(rc).GetFirstRegSet();
+      asm_->PushRegister(register_.value().fp());
+    }
+
+    return register_.value();
+  }
+
+ private:
+  base::Optional<LiftoffRegister> register_;
+  LiftoffAssembler* const asm_;
+
+  DISALLOW_COPY_AND_ASSIGN(UseTemporaryRegisterScope);
 };
 
 }  // namespace wasm
