@@ -2146,8 +2146,12 @@ struct InstructionSelectionPhase {
         data->info()->trace_turbo_json()
             ? InstructionSelector::kEnableTraceTurboJson
             : InstructionSelector::kDisableTraceTurboJson);
-    if (!selector.SelectInstructions()) {
-      data->set_compilation_failed();
+    {
+      // TODO(syg) make local for VisitStaticAssert
+      UnparkedScopeIfNeeded scope(data->broker());
+      if (!selector.SelectInstructions()) {
+        data->set_compilation_failed();
+      }
     }
     if (data->info()->trace_turbo_json()) {
       TurboJsonFile json_of(data->info(), std::ios_base::app);
