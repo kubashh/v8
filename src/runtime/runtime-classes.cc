@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "src/runtime/runtime-utils.h"
-
 #include <stdlib.h>
+
 #include <limits>
 
 #include "src/builtins/accessors.h"
 #include "src/common/message-template.h"
 #include "src/debug/debug.h"
 #include "src/execution/arguments-inl.h"
+#include "src/execution/frames-inl.h"
 #include "src/execution/isolate-inl.h"
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
@@ -20,6 +20,7 @@
 #include "src/objects/lookup-inl.h"
 #include "src/objects/smi.h"
 #include "src/objects/struct-inl.h"
+#include "src/runtime/runtime-utils.h"
 #include "src/runtime/runtime.h"
 
 namespace v8 {
@@ -72,8 +73,7 @@ RUNTIME_FUNCTION(Runtime_ThrowSuperNotCalled) {
 
 namespace {
 
-Object ThrowNotSuperConstructor(Isolate* isolate, Handle<Object> constructor,
-                                Handle<JSFunction> function) {
+Object ThrowNotSuperConstructor(Isolate* isolate, Handle<Object> constructor) {
   Handle<String> super_name;
   if (constructor->IsJSFunction()) {
     super_name =
@@ -88,6 +88,10 @@ Object ThrowNotSuperConstructor(Isolate* isolate, Handle<Object> constructor,
   if (super_name->length() == 0) {
     super_name = isolate->factory()->null_string();
   }
+  // super() is always called from a derived class constructor, so it is
+  // guaranteed that there is a JS frame on the top of the stack.
+  JavaScriptFrameIterator frame_iter(isolate);
+  Handle<JSFunction> function(frame_iter.frame()->function(), isolate);
   Handle<String> function_name(function->shared().Name(), isolate);
   // anonymous class
   if (function_name->length() == 0) {
@@ -105,10 +109,9 @@ Object ThrowNotSuperConstructor(Isolate* isolate, Handle<Object> constructor,
 
 RUNTIME_FUNCTION(Runtime_ThrowNotSuperConstructor) {
   HandleScope scope(isolate);
-  DCHECK_EQ(2, args.length());
+  DCHECK_EQ(1, args.length());
   CONVERT_ARG_HANDLE_CHECKED(Object, constructor, 0);
-  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 1);
-  return ThrowNotSuperConstructor(isolate, constructor, function);
+  return ThrowNotSuperConstructor(isolate, constructor);
 }
 
 RUNTIME_FUNCTION(Runtime_HomeObjectSymbol) {

@@ -1434,7 +1434,7 @@ Type Typer::Visitor::JSOrdinaryHasInstanceTyper(Type lhs, Type rhs, Typer* t) {
 }
 
 Type Typer::Visitor::TypeJSGetSuperConstructor(Node* node) {
-  return Type::Callable();
+  return Type::NonInternal();
 }
 
 // JS context operators.

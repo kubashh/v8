@@ -88,7 +88,7 @@ namespace internal {
   F(StoreKeyedToSuper, 4, 1)                \
   F(StoreToSuper, 4, 1)                     \
   F(ThrowConstructorNonCallableError, 1, 1) \
-  F(ThrowNotSuperConstructor, 2, 1)         \
+  F(ThrowNotSuperConstructor, 1, 1)         \
   F(ThrowStaticPrototypeError, 0, 1)        \
   F(ThrowSuperAlreadyCalledError, 0, 1)     \
   F(ThrowSuperNotCalled, 0, 1)              \
