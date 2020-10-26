@@ -11,6 +11,7 @@
 #include "src/base/compiler-specific.h"
 #include "src/codegen/external-reference.h"
 #include "src/common/globals.h"
+#include "src/compiler/common-operator.h"
 #include "src/compiler/node.h"
 #include "src/compiler/operator.h"
 #include "src/numbers/double.h"
@@ -55,12 +56,8 @@ struct ValueMatcher : public NodeMatcher {
   using ValueType = T;
 
   explicit ValueMatcher(Node* node) : NodeMatcher(node) {
-    static_assert(kOpcode != IrOpcode::kFoldConstant, "unsupported opcode");
-    if (node->opcode() == IrOpcode::kFoldConstant) {
-      node = node->InputAt(1);
-    }
-    DCHECK_NE(node->opcode(), IrOpcode::kFoldConstant);
-    has_value_ = opcode() == kOpcode;
+    node = SkipWrapperNodes(node);
+    has_value_ = node->opcode() == kOpcode;
     if (has_value_) {
       value_ = OpParameter<T>(node->op());
     }
@@ -72,31 +69,57 @@ struct ValueMatcher : public NodeMatcher {
     return value_;
   }
 
+ protected:
+  // Neither FoldConstant nor TypeGuard operators affect whether a node can be
+  // considered a value constant.
+  static Node* SkipWrapperNodes(Node* node) {
+    static_assert(kOpcode != IrOpcode::kFoldConstant, "unsupported opcode");
+    static_assert(kOpcode != IrOpcode::kTypeGuard, "unsupported opcode");
+
+#ifdef DEBUG
+    bool seen_fold_constant = false;
+#endif
+    while (true) {
+      if (node->opcode() == IrOpcode::kTypeGuard) {
+        node = NodeProperties::GetValueInput(node, 0);
+      } else if (node->opcode() == IrOpcode::kFoldConstant) {
+#ifdef DEBUG
+        DCHECK(!seen_fold_constant);
+        seen_fold_constant = true;
+#endif
+        node = node->InputAt(1);
+      } else {
+        break;
+      }
+    }
+    DCHECK_NOT_NULL(node);
+    return node;
+  }
+
  private:
   T value_;
   bool has_value_;
 };
 
-
 template <>
 inline ValueMatcher<uint32_t, IrOpcode::kInt32Constant>::ValueMatcher(
     Node* node)
-    : NodeMatcher(node),
-      value_(),
-      has_value_(opcode() == IrOpcode::kInt32Constant) {
+    : NodeMatcher(node), value_(), has_value_(false) {
+  node = SkipWrapperNodes(node);
+  has_value_ = node->opcode() == IrOpcode::kInt32Constant;
   if (has_value_) {
     value_ = static_cast<uint32_t>(OpParameter<int32_t>(node->op()));
   }
 }
 
-
 template <>
 inline ValueMatcher<int64_t, IrOpcode::kInt64Constant>::ValueMatcher(Node* node)
     : NodeMatcher(node), value_(), has_value_(false) {
-  if (opcode() == IrOpcode::kInt32Constant) {
+  node = SkipWrapperNodes(node);
+  if (node->opcode() == IrOpcode::kInt32Constant) {
     value_ = OpParameter<int32_t>(node->op());
     has_value_ = true;
-  } else if (opcode() == IrOpcode::kInt64Constant) {
+  } else if (node->opcode() == IrOpcode::kInt64Constant) {
     value_ = OpParameter<int64_t>(node->op());
     has_value_ = true;
   }
@@ -107,39 +130,16 @@ template <>
 inline ValueMatcher<uint64_t, IrOpcode::kInt64Constant>::ValueMatcher(
     Node* node)
     : NodeMatcher(node), value_(), has_value_(false) {
-  if (opcode() == IrOpcode::kInt32Constant) {
+  node = SkipWrapperNodes(node);
+  if (node->opcode() == IrOpcode::kInt32Constant) {
     value_ = static_cast<uint32_t>(OpParameter<int32_t>(node->op()));
     has_value_ = true;
-  } else if (opcode() == IrOpcode::kInt64Constant) {
+  } else if (node->opcode() == IrOpcode::kInt64Constant) {
     value_ = static_cast<uint64_t>(OpParameter<int64_t>(node->op()));
     has_value_ = true;
   }
 }
 
-template <>
-inline ValueMatcher<double, IrOpcode::kNumberConstant>::ValueMatcher(Node* node)
-    : NodeMatcher(node), value_(), has_value_(false) {
-  if (node->opcode() == IrOpcode::kNumberConstant) {
-    value_ = OpParameter<double>(node->op());
-    has_value_ = true;
-  } else if (node->opcode() == IrOpcode::kFoldConstant) {
-    node = node->InputAt(1);
-    DCHECK_NE(node->opcode(), IrOpcode::kFoldConstant);
-  }
-}
-
-template <>
-inline ValueMatcher<Handle<HeapObject>, IrOpcode::kHeapConstant>::ValueMatcher(
-    Node* node)
-    : NodeMatcher(node), value_(), has_value_(false) {
-  if (node->opcode() == IrOpcode::kHeapConstant) {
-    value_ = OpParameter<Handle<HeapObject>>(node->op());
-    has_value_ = true;
-  } else if (node->opcode() == IrOpcode::kFoldConstant) {
-    node = node->InputAt(1);
-    DCHECK_NE(node->opcode(), IrOpcode::kFoldConstant);
-  }
-}
 
 // A pattern matcher for integer constants.
 template <typename T, IrOpcode::Value kOpcode>
