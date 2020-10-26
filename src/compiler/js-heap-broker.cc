@@ -3983,12 +3983,14 @@ HeapObjectType HeapObjectRef::GetHeapObjectType() const {
     HeapObjectType::Flags flags(0);
     if (map.is_undetectable()) flags |= HeapObjectType::kUndetectable;
     if (map.is_callable()) flags |= HeapObjectType::kCallable;
+    if (map.is_constructor()) flags |= HeapObjectType::kConstructor;
     return HeapObjectType(map.instance_type(), flags,
                           GetOddballType(broker()->isolate(), map));
   }
   HeapObjectType::Flags flags(0);
   if (map().is_undetectable()) flags |= HeapObjectType::kUndetectable;
   if (map().is_callable()) flags |= HeapObjectType::kCallable;
+  if (map().is_constructor()) flags |= HeapObjectType::kConstructor;
   return HeapObjectType(map().instance_type(), flags, map().oddball_type());
 }
 base::Optional<JSObjectRef> AllocationSiteRef::boilerplate() const {

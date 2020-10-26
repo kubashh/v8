@@ -205,7 +205,11 @@ class V8_EXPORT_PRIVATE ObjectRef {
 // function and this class should eventually be removed.
 class HeapObjectType {
  public:
-  enum Flag : uint8_t { kUndetectable = 1 << 0, kCallable = 1 << 1 };
+  enum Flag : uint8_t {
+    kUndetectable = 1 << 0,
+    kCallable = 1 << 1,
+    kConstructor = 1 << 2
+  };
 
   using Flags = base::Flags<Flag>;
 
@@ -223,6 +227,7 @@ class HeapObjectType {
   Flags flags() const { return flags_; }
 
   bool is_callable() const { return flags_ & kCallable; }
+  bool is_constructor() const { return flags_ & kConstructor; }
   bool is_undetectable() const { return flags_ & kUndetectable; }
 
  private:
