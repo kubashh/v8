@@ -2040,6 +2040,20 @@ bool JSReceiver::HasProxyInPrototype(Isolate* isolate) {
   return false;
 }
 
+bool JSReceiver::IsCodeKind(Isolate* isolate, Handle<JSReceiver> receiver) {
+  Object maybe_constructor = receiver->map().GetConstructor();
+  if (!maybe_constructor.IsJSFunction()) return false;
+  if (!JSFunction::cast(maybe_constructor).shared().IsApiFunction()) {
+    return false;
+  }
+  Object instance_template = JSFunction::cast(maybe_constructor)
+                                 .shared()
+                                 .get_api_func_data()
+                                 .GetInstanceTemplate();
+  if (instance_template.IsUndefined(isolate)) return false;
+  return ObjectTemplateInfo::cast(instance_template).code_kind();
+}
+
 // static
 MaybeHandle<JSObject> JSObject::New(Handle<JSFunction> constructor,
                                     Handle<JSReceiver> new_target,
