@@ -33,6 +33,24 @@
       "message": "For multiline please use {}.",
       "revId": "da9aac2593c46303ebe9f78dff90838ccb4077ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35aa2927_2e7df8ee",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-10-26T14:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9c4def2_8a87a2e6",
+      "revId": "da9aac2593c46303ebe9f78dff90838ccb4077ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
