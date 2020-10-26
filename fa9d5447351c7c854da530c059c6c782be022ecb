@@ -16,6 +16,23 @@
       "message": "Igor, PTAL",
       "revId": "fa9d5447351c7c854da530c059c6c782be022ecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73757ebf_52d0607a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-26T10:28:32Z",
+      "side": 1,
+      "message": "ping",
+      "revId": "fa9d5447351c7c854da530c059c6c782be022ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
