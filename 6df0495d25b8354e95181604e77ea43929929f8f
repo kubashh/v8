@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "095cef65_78530c0a",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1459972
+      },
+      "writtenOn": "2020-10-26T10:04:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b6eff9a_a2752edf",
+      "range": {
+        "startLine": 1748,
+        "startChar": 0,
+        "endLine": 1760,
+        "endChar": 3
+      },
+      "revId": "6df0495d25b8354e95181604e77ea43929929f8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba2c4544_a8a9568e",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-26T09:55:55Z",
       "side": 1,
       "message": "We should return the empty string here.",
+      "range": {
+        "startLine": 1764,
+        "startChar": 11,
+        "endLine": 1764,
+        "endChar": 60
+      },
+      "revId": "6df0495d25b8354e95181604e77ea43929929f8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "274bc852_f85aa8af",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1459972
+      },
+      "writtenOn": "2020-10-26T10:04:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba2c4544_a8a9568e",
       "range": {
         "startLine": 1764,
         "startChar": 11,
