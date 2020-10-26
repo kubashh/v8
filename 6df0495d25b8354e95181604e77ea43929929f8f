@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b6eff9a_a2752edf",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-10-26T09:55:04Z",
+      "side": 1,
+      "message": "This is dead code.",
+      "range": {
+        "startLine": 1748,
+        "startChar": 0,
+        "endLine": 1760,
+        "endChar": 3
+      },
+      "revId": "6df0495d25b8354e95181604e77ea43929929f8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
