@@ -262,7 +262,8 @@ Type::bitset BitsetType::Lub(const MapRefLike& map) {
       return kBoundFunction;
     case JS_FUNCTION_TYPE:
       DCHECK(!map.is_undetectable());
-      return kFunction;
+      if (map.is_constructor()) return kConstructorFunction;
+      return kNonConstructorFunction;
     case JS_PROXY_TYPE:
       DCHECK(!map.is_undetectable());
       if (map.is_callable()) return kCallableProxy;

@@ -574,8 +574,13 @@ Type Typer::Visitor::ObjectIsCallable(Type type, Typer* t) {
 }
 
 Type Typer::Visitor::ObjectIsConstructor(Type type, Typer* t) {
-  // TODO(turbofan): Introduce a Type::Constructor?
+  // Only ordinary JS functions (non-bound, non-exotic) that are constructible
+  // are modeled by the type system.
+  //
+  // TODO(turbofan): Determine if it's worthwhile to model all constructibles,
+  // like callable.
   CHECK(!type.IsNone());
+  if (type.Is(Type::ConstructorFunction())) return t->singleton_true_;
   if (!type.Maybe(Type::Callable())) return t->singleton_false_;
   return Type::Boolean();
 }

@@ -2903,7 +2903,8 @@ void BytecodeGraphBuilder::VisitThrowNotSuperConstructorIfNotConstructor() {
   }
   NewIfTrue();
 
-  constructor = NewNode(common()->TypeGuard(Type::Callable()), constructor);
+  constructor =
+      NewNode(common()->TypeGuard(Type::ConstructorFunction()), constructor);
   environment()->BindRegister(bytecode_iterator().GetRegisterOperand(0),
                               constructor);
 }

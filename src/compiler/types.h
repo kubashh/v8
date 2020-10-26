@@ -122,16 +122,17 @@ namespace compiler {
   V(OtherUndetectable,        1u << 18)  \
   V(CallableProxy,            1u << 19)  \
   V(OtherProxy,               1u << 20)  \
-  V(Function,                 1u << 21)  \
-  V(BoundFunction,            1u << 22)  \
-  V(Hole,                     1u << 23)  \
-  V(OtherInternal,            1u << 24)  \
-  V(ExternalPointer,          1u << 25)  \
-  V(Array,                    1u << 26)  \
-  V(BigInt,                   1u << 27)  \
+  V(ConstructorFunction,      1u << 21)  \
+  V(NonConstructorFunction,   1u << 22)  \
+  V(BoundFunction,            1u << 23)  \
+  V(Hole,                     1u << 24)  \
+  V(OtherInternal,            1u << 25)  \
+  V(ExternalPointer,          1u << 26)  \
+  V(Array,                    1u << 27)  \
+  V(BigInt,                   1u << 28)  \
   /* TODO(v8:10391): Remove this type once all ExternalPointer usages are */ \
   /* sandbox-ready. */                   \
-  V(SandboxedExternalPointer, 1u << 28)  \
+  V(SandboxedExternalPointer, 1u << 29)  \
   \
   V(Signed31,                     kUnsigned30 | kNegative31) \
   V(Signed32,                     kSigned31 | kOtherUnsigned31 | \
@@ -178,6 +179,8 @@ namespace compiler {
   V(Proxy,                        kCallableProxy | kOtherProxy) \
   V(ArrayOrOtherObject,           kArray | kOtherObject) \
   V(ArrayOrProxy,                 kArray | kProxy) \
+  V(Function,                     kConstructorFunction | \
+                                  kNonConstructorFunction) \
   V(DetectableCallable,           kFunction | kBoundFunction | \
                                   kOtherCallable | kCallableProxy) \
   V(Callable,                     kDetectableCallable | kOtherUndetectable) \
