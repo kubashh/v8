@@ -16,6 +16,29 @@
       "message": "Thx for kicking off the tsan trybot, Igor. I\u0027ve solved the problem by using a std::atomic\u003cbool\u003e for the variable which lets the main thread know that all states have been seen.\n\nKicked off another tsan bot, too 😊\nAll the best,\n--Michael",
       "revId": "7c61f0340d1bd696319f73e7287442a9c6bffd9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78fcaecf_a0151c8e",
+        "filename": "test/cctest/test-concurrent-feedback-vector.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-10-27T09:03:53Z",
+      "side": 1,
+      "message": "As a fly-by I think this is the first test where we set something on the background thread but read it on the main thread with release/acquire right?",
+      "range": {
+        "startLine": 129,
+        "startChar": 6,
+        "endLine": 129,
+        "endChar": 61
+      },
+      "revId": "7c61f0340d1bd696319f73e7287442a9c6bffd9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
