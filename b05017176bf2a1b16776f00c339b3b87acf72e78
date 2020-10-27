@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e41d63e_d6ffcdcf",
+        "filename": "src/objects/objects.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-27T12:43:24Z",
+      "side": 1,
+      "message": "argh, I forgot to comment here, same as JSReceiver:IsCodeKind: const + no_gc (then, we\u0027re good to go!)",
+      "range": {
+        "startLine": 590,
+        "startChar": 0,
+        "endLine": 590,
+        "endChar": 66
+      },
+      "revId": "b05017176bf2a1b16776f00c339b3b87acf72e78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
