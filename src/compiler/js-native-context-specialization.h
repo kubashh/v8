@@ -81,6 +81,7 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
   Reduction ReduceJSLoadGlobal(Node* node);
   Reduction ReduceJSStoreGlobal(Node* node);
   Reduction ReduceJSLoadNamed(Node* node);
+  Reduction ReduceJSLoadNamedFromSuper(Node* node);
   Reduction ReduceJSGetIterator(Node* node);
   Reduction ReduceJSStoreNamed(Node* node);
   Reduction ReduceJSHasProperty(Node* node);
@@ -100,7 +101,7 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
                                  Node* value, FeedbackSource const& source,
                                  AccessMode access_mode);
   Reduction ReduceNamedAccess(Node* node, Node* value,
-                              NamedAccessFeedback const& processed,
+                              NamedAccessFeedback const& feedback,
                               AccessMode access_mode, Node* key = nullptr);
   Reduction ReduceMinimorphicPropertyAccess(
       Node* node, Node* value,
@@ -144,14 +145,13 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
   };
 
   // Construct the appropriate subgraph for property access.
-  ValueEffectControl BuildPropertyAccess(Node* receiver, Node* value,
-                                         Node* context, Node* frame_state,
-                                         Node* effect, Node* control,
-                                         NameRef const& name,
-                                         ZoneVector<Node*>* if_exceptions,
-                                         PropertyAccessInfo const& access_info,
-                                         AccessMode access_mode);
-  ValueEffectControl BuildPropertyLoad(Node* receiver, Node* context,
+  ValueEffectControl BuildPropertyAccess(
+      Node* lookup_start_object, Node* receiver, Node* value, Node* context,
+      Node* frame_state, Node* effect, Node* control, NameRef const& name,
+      ZoneVector<Node*>* if_exceptions, PropertyAccessInfo const& access_info,
+      AccessMode access_mode);
+  ValueEffectControl BuildPropertyLoad(Node* lookup_start_object,
+                                       Node* receiver, Node* context,
                                        Node* frame_state, Node* effect,
                                        Node* control, NameRef const& name,
                                        ZoneVector<Node*>* if_exceptions,
@@ -217,13 +217,15 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
       ElementAccessFeedback const& feedback, Node* receiver,
       Node* effect) const;
 
-  // Try to infer maps for the given {receiver} at the current {effect}.
-  bool InferReceiverMaps(Node* receiver, Node* effect,
-                         ZoneVector<Handle<Map>>* receiver_maps) const;
+  // Try to infer maps for the given {lookup_start_object} at the current
+  // {effect}.
+  bool InferLookupStartObjectMaps(Node* lookup_start_object, Node* effect,
+                                  ZoneVector<Handle<Map>>* receiver_maps) const;
 
-  // Try to infer a root map for the {receiver} independent of the current
-  // program location.
-  base::Optional<MapRef> InferReceiverRootMap(Node* receiver) const;
+  // Try to infer a root map for the {lookup_start_object} independent of the
+  // current program location.
+  base::Optional<MapRef> InferLookupStartObjectRootMap(
+      Node* lookup_start_object) const;
 
   // Checks if we know at compile time that the {receiver} either definitely
   // has the {prototype} in it's prototype chain, or the {receiver} definitely
