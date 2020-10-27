@@ -1812,6 +1812,11 @@ bool Object::IterationHasObservableEffects() {
   return true;
 }
 
+bool Object::IsCodeKind(Isolate* isolate, Handle<Object> object) {
+  if (!object->IsJSReceiver()) return false;
+  return Handle<JSReceiver>::cast(object)->IsCodeKind(isolate);
+}
+
 void Object::ShortPrint(FILE* out) const {
   OFStream os(out);
   os << Brief(*this);
