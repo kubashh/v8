@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f1ce59d_b8c6450f",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 2043,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-10-27T11:04:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2ee2db5_55da3043",
+      "range": {
+        "startLine": 2043,
+        "startChar": 0,
+        "endLine": 2043,
+        "endChar": 76
+      },
+      "revId": "42b1c423cbb78bc20cd657a4553b0702a801a0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5deed375_9820652c",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-27T09:07:07Z",
       "side": 1,
       "message": "nit: this is no longer needed now.",
+      "range": {
+        "startLine": 288,
+        "startChar": 0,
+        "endLine": 288,
+        "endChar": 73
+      },
+      "revId": "42b1c423cbb78bc20cd657a4553b0702a801a0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f64790de_f1cdb35a",
+        "filename": "src/objects/js-objects.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-10-27T11:04:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5deed375_9820652c",
       "range": {
         "startLine": 288,
         "startChar": 0,
