@@ -39,6 +39,30 @@
       },
       "revId": "7c61f0340d1bd696319f73e7287442a9c6bffd9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03b77c8b_072d84a3",
+        "filename": "test/cctest/test-concurrent-feedback-vector.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-27T09:20:50Z",
+      "side": 1,
+      "message": "I guess so. It\u0027s the first time we have a test where it\u0027s necessary to exhaustively \"see\" every possibility on the background thread...and therefore it means a potentially very long loop (which creates a need to notify that we are finished).",
+      "parentUuid": "78fcaecf_a0151c8e",
+      "range": {
+        "startLine": 129,
+        "startChar": 6,
+        "endLine": 129,
+        "endChar": 61
+      },
+      "revId": "7c61f0340d1bd696319f73e7287442a9c6bffd9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
