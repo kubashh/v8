@@ -39,6 +39,30 @@
       },
       "revId": "b05017176bf2a1b16776f00c339b3b87acf72e78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9506ab9d_3c60463c",
+        "filename": "src/objects/objects.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-10-27T17:09:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e41d63e_d6ffcdcf",
+      "range": {
+        "startLine": 590,
+        "startChar": 0,
+        "endLine": 590,
+        "endChar": 66
+      },
+      "revId": "b05017176bf2a1b16776f00c339b3b87acf72e78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
