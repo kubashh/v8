@@ -16,6 +16,23 @@
       "message": "Found this when another CL I was working on tripped a TF static assert.",
       "revId": "dabde8e4029db69cc35f29a7085146bf2734f37c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d871c377_d88e7d6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-27T13:21:18Z",
+      "side": 1,
+      "message": "Thanks, sorry that you had to deal with that.",
+      "revId": "dabde8e4029db69cc35f29a7085146bf2734f37c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
