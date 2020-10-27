@@ -2154,7 +2154,7 @@ void SerializerForBackgroundCompilation::ProcessCallOrConstruct(
     arguments->insert(arguments->begin(), result_hints_from_new_target);
   }
 
-  // For JSNativeContextSpecialization::InferReceiverRootMap
+  // For JSNativeContextSpecialization::InferRootMap
   Hints new_accumulator_hints = result_hints_from_new_target.Copy(zone());
 
   ProcessCallOrConstructRecursive(callee, new_target, *arguments,
@@ -2965,7 +2965,7 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
     Hints* receiver, MapRef receiver_map, NameRef const& name,
     AccessMode access_mode, base::Optional<JSObjectRef> concrete_receiver,
     Hints* result_hints) {
-  // For JSNativeContextSpecialization::InferReceiverRootMap
+  // For JSNativeContextSpecialization::InferRootMap
   receiver_map.SerializeRootMap();
 
   // For JSNativeContextSpecialization::ReduceNamedAccess.
@@ -3216,7 +3216,7 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
   for (Handle<Object> hint : receiver.constants()) {
     ObjectRef receiver_ref(broker(), hint);
 
-    // For JSNativeContextSpecialization::InferReceiverRootMap
+    // For JSNativeContextSpecialization::InferRootMap
     if (receiver_ref.IsHeapObject()) {
       receiver_ref.AsHeapObject().map().SerializeRootMap();
     }
@@ -3247,7 +3247,7 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
     }
   }
 
-  // For JSNativeContextSpecialization::InferReceiverRootMap
+  // For JSNativeContextSpecialization::InferRootMap
   for (Handle<Map> map : receiver.maps()) {
     MapRef map_ref(broker(), map);
     map_ref.SerializeRootMap();
@@ -3265,9 +3265,9 @@ void SerializerForBackgroundCompilation::VisitLdaNamedProperty(
 
 void SerializerForBackgroundCompilation::VisitLdaNamedPropertyFromSuper(
     BytecodeArrayIterator* iterator) {
-  NameRef(broker(),
-          iterator->GetConstantForIndexOperand(1, broker()->isolate()));
-  // TODO(marja, v8:9237): Process feedback once it's added to the byte code.
+  NameRef name(broker(),
+               iterator->GetConstantForIndexOperand(1, broker()->isolate()));
+  // TODO(marja, v8:9237): Process feedback.
 }
 
 // TODO(neis): Do feedback-independent serialization also for *NoFeedback

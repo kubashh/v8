@@ -1112,6 +1112,7 @@ class V8_EXPORT_PRIVATE IrOpcode {
       case kJSInstanceOf:
       case kJSLoadGlobal:
       case kJSLoadNamed:
+      case kJSLoadNamedFromSuper:
       case kJSLoadProperty:
       case kJSStoreDataPropertyInLiteral:
       case kJSStoreGlobal:
