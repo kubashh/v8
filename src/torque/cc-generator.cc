@@ -365,15 +365,28 @@ void CCGenerator::EmitInstruction(const LoadReferenceInstruction& instruction,
   stack->Push(result_name);
 
   std::string result_type = instruction.type->GetRuntimeType();
-  decls() << "  " << result_type << " " << result_name << "{}; USE("
-          << result_name << ");\n";
-  out() << "  " << result_name << " = ";
-  if (instruction.type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
-    out() << "TaggedField<" << result_type << ">::load(isolate, " << object
-          << ", static_cast<int>(" << offset << "));\n";
+  if (!is_cc_debug_) {
+    decls() << "  " << result_type << " " << result_name << "{}; USE("
+            << result_name << ");\n";
+    out() << "  " << result_name << " = ";
+    if (instruction.type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+      out() << "TaggedField<" << result_type << ">::load(isolate, " << object
+            << ", static_cast<int>(" << offset << "));\n";
+    } else {
+      out() << "(" << object << ").ReadField<" << result_type << ">(" << offset
+            << ");\n";
+    }
   } else {
-    out() << "(" << object << ").ReadField<" << result_type << ">(" << offset
-          << ");\n";
+    decls() << "  " << result_type << " " << result_name << "{}; USE("
+            << result_name << ");\n";
+    if (instruction.type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+      out() << "READ_TAGGED_FIELD_OR_FAIL(" << result_name << ", accessor, "
+            << object << ", static_cast<int>(" << offset << "));\n";
+    } else {
+      out() << "  " << result_name << " = ";
+      out() << "(" << object << ").ReadField<" << result_type << ">(" << offset
+            << ");\n";
+    }
   }
 }
 

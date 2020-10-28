@@ -189,6 +189,47 @@ void ImplementationVisitor::EndRuntimeMacrosFile() {
   header << "#endif  // V8_GEN_TORQUE_GENERATED_RUNTIME_MACROS_H_\n";
 }
 
+void ImplementationVisitor::BeginDebugMacrosFile() {
+  std::ostream& source = debug_macros_cc_;
+  std::ostream& header = debug_macros_h_;
+
+  source << "#include \"torque-generated/debug-macros.h\"\n\n";
+  source << "#include \"src/torque/runtime-macro-shims.h\"\n";
+  for (const std::string& include_path : GlobalContext::CppIncludes()) {
+    source << "#include " << StringLiteralQuote(include_path) << "\n";
+  }
+  source << "\n";
+
+  source << "namespace v8 {\n"
+         << "namespace internal {\n"
+         << "\n";
+
+  const char* kHeaderDefine = "V8_GEN_TORQUE_GENERATED_DEBUG_MACROS_H_";
+  header << "#ifndef " << kHeaderDefine << "\n";
+  header << "#define " << kHeaderDefine << "\n\n";
+  header << "#include \"src/builtins/torque-csa-header-includes.h\"\n";
+  header << "#include \"tools/debug_helper/debug-helper-internal.h\"\n";
+  header << "\n";
+
+  header << "namespace v8 {\n"
+         << "namespace internal {\n"
+         << "\n";
+}
+
+void ImplementationVisitor::EndDebugMacrosFile() {
+  std::ostream& source = debug_macros_cc_;
+  std::ostream& header = debug_macros_h_;
+
+  source << "}  // namespace internal\n"
+         << "}  // namespace v8\n"
+         << "\n";
+
+  header << "\n}  // namespace internal\n"
+         << "}  // namespace v8\n"
+         << "\n";
+  header << "#endif  // V8_GEN_TORQUE_GENERATED_DEBUG_MACROS_H_\n";
+}
+
 void ImplementationVisitor::Visit(NamespaceConstant* decl) {
   Signature signature{{}, base::nullopt, {{}, false}, 0, decl->type(),
                       {}, false};
@@ -453,6 +494,10 @@ void ImplementationVisitor::VisitMacroCommon(Macro* macro) {
   if (output_type_ == OutputType::kCC) {
     CCGenerator cc_generator{assembler().Result(), csa_ccfile()};
     values = cc_generator.EmitGraph(lowered_parameters);
+  } else if (output_type_ == OutputType::kCCDebug) {
+    // TODO(duongn): Use correct generator.
+    CCGenerator cc_generator{assembler().Result(), csa_ccfile(), true};
+    values = cc_generator.EmitGraph(lowered_parameters);
   } else {
     CSAGenerator csa_generator{assembler().Result(), csa_ccfile()};
     values = csa_generator.EmitGraph(lowered_parameters);
@@ -462,7 +507,8 @@ void ImplementationVisitor::VisitMacroCommon(Macro* macro) {
 
   if (has_return_value) {
     csa_ccfile() << "  return ";
-    if (output_type_ == OutputType::kCC) {
+    if (output_type_ == OutputType::kCC ||
+        output_type_ == OutputType::kCCDebug) {
       CCGenerator::EmitCCValue(return_value, *values, csa_ccfile());
     } else {
       CSAGenerator::EmitCSAValue(return_value, *values, csa_ccfile());
@@ -1703,14 +1749,20 @@ void ImplementationVisitor::GenerateImplementation(const std::string& dir) {
 
   WriteFile(dir + "/runtime-macros.h", runtime_macros_h_.str());
   WriteFile(dir + "/runtime-macros.cc", runtime_macros_cc_.str());
+
+  WriteFile(dir + "/debug-macros.h", debug_macros_h_.str());
+  WriteFile(dir + "/debug-macros.cc", debug_macros_cc_.str());
 }
 
 void ImplementationVisitor::GenerateMacroFunctionDeclaration(std::ostream& o,
                                                              Macro* macro) {
-  GenerateFunctionDeclaration(
-      o, "",
-      output_type_ == OutputType::kCC ? macro->CCName() : macro->ExternalName(),
-      macro->signature(), macro->parameter_names());
+  GenerateFunctionDeclaration(o, "",
+                              output_type_ == OutputType::kCC
+                                  ? macro->CCName()
+                                  : output_type_ == OutputType::kCCDebug
+                                        ? macro->CCDebugName()
+                                        : macro->ExternalName(),
+                              macro->signature(), macro->parameter_names());
 }
 
 std::vector<std::string> ImplementationVisitor::GenerateFunctionDeclaration(
@@ -1721,7 +1773,8 @@ std::vector<std::string> ImplementationVisitor::GenerateFunctionDeclaration(
   if (signature.return_type->IsVoidOrNever()) {
     o << "void";
   } else {
-    o << (output_type_ == OutputType::kCC
+    o << (output_type_ == OutputType::kCC ||
+                  output_type_ == OutputType::kCCDebug
               ? signature.return_type->GetRuntimeType()
               : signature.return_type->GetGeneratedTypeName());
   }
@@ -1731,6 +1784,9 @@ std::vector<std::string> ImplementationVisitor::GenerateFunctionDeclaration(
   if (output_type_ == OutputType::kCC) {
     first = false;
     o << "Isolate* isolate";
+  } else if (output_type_ == OutputType::kCCDebug) {
+    first = false;
+    o << "d::MemoryAccessor accessor";
   } else if (pass_code_assembler_state) {
     first = false;
     o << "compiler::CodeAssemblerState* state_";
@@ -1742,7 +1798,7 @@ std::vector<std::string> ImplementationVisitor::GenerateFunctionDeclaration(
     first = false;
     const Type* parameter_type = signature.types()[i];
     const std::string& generated_type_name =
-        output_type_ == OutputType::kCC
+        output_type_ == OutputType::kCC || output_type_ == OutputType::kCCDebug
             ? parameter_type->GetRuntimeType()
             : parameter_type->GetGeneratedTypeName();
 
@@ -1753,7 +1809,8 @@ std::vector<std::string> ImplementationVisitor::GenerateFunctionDeclaration(
   }
 
   for (const LabelDeclaration& label_info : signature.labels) {
-    if (output_type_ == OutputType::kCC) {
+    if (output_type_ == OutputType::kCC ||
+        output_type_ == OutputType::kCCDebug) {
       ReportError("Macros that generate runtime code can't have label exits");
     }
     if (!first) o << ", ";
@@ -3177,6 +3234,17 @@ void ImplementationVisitor::VisitAllDeclarables() {
   output_type_ = OutputType::kCC;
   const std::vector<TorqueMacro*>& cc_macros =
       GlobalContext::AllMacrosForCCOutput();
+  for (size_t i = 0; i < cc_macros.size(); ++i) {
+    try {
+      Visit(static_cast<Declarable*>(cc_macros[i]));
+    } catch (TorqueAbortCompilation&) {
+      // Recover from compile errors here. The error is recorded already.
+    }
+  }
+
+  // Do the same for macros which generate C++ debug code.
+  // The set of macros is the same as C++ macros.
+  output_type_ = OutputType::kCCDebug;
   for (size_t i = 0; i < cc_macros.size(); ++i) {
     try {
       Visit(static_cast<Declarable*>(cc_macros[i]));

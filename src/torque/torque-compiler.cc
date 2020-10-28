@@ -77,6 +77,7 @@ void CompileCurrentAst(TorqueCompilerOptions options) {
   implementation_visitor.GenerateInstanceTypes(output_directory);
   implementation_visitor.BeginGeneratedFiles();
   implementation_visitor.BeginRuntimeMacrosFile();
+  implementation_visitor.BeginDebugMacrosFile();
 
   implementation_visitor.VisitAllDeclarables();
 
@@ -97,6 +98,7 @@ void CompileCurrentAst(TorqueCompilerOptions options) {
 
   implementation_visitor.EndGeneratedFiles();
   implementation_visitor.EndRuntimeMacrosFile();
+  implementation_visitor.EndDebugMacrosFile();
   implementation_visitor.GenerateImplementation(output_directory);
 
   if (GlobalContext::collect_language_server_data()) {
