@@ -430,7 +430,6 @@ DEFINE_BOOL(future, FUTURE_BOOL,
 
 DEFINE_WEAK_IMPLICATION(future, write_protect_code_memory)
 DEFINE_WEAK_IMPLICATION(future, finalize_streaming_on_background)
-DEFINE_WEAK_IMPLICATION(future, super_ic)
 
 // Flags for jitless
 DEFINE_BOOL(jitless, V8_LITE_BOOL,
