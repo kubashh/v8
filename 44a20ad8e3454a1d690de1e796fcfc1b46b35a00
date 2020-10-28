@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acb9d859_e34a9fe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-28T15:21:01Z",
+      "side": 1,
+      "message": "Mhm, I cannot see how the change is related to the wasm failures. They also recovered on their own without the revert being in the blame list, no?",
+      "revId": "44a20ad8e3454a1d690de1e796fcfc1b46b35a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
