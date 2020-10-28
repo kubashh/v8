@@ -19,6 +19,7 @@
 #include "src/execution/runtime-profiler.h"
 #include "src/execution/simulator.h"
 #include "src/init/bootstrapper.h"
+#include "src/instrumentation/v8-provider.h"
 #include "src/libsampler/sampler.h"
 #include "src/objects/elements.h"
 #include "src/objects/objects-inl.h"
