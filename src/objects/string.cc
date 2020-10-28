@@ -1515,15 +1515,8 @@ FlatStringReader::FlatStringReader(Isolate* isolate, Handle<String> str)
   PostGarbageCollection();
 }
 
-FlatStringReader::FlatStringReader(Isolate* isolate, Vector<const char> input)
-    : Relocatable(isolate),
-      str_(nullptr),
-      is_one_byte_(true),
-      length_(input.length()),
-      start_(input.begin()) {}
-
 void FlatStringReader::PostGarbageCollection() {
-  if (str_ == nullptr) return;
+  DCHECK_NOT_NULL(str_);
   Handle<String> str(str_);
   DCHECK(str->IsFlat());
   DisallowHeapAllocation no_gc;

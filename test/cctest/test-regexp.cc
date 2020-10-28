@@ -57,9 +57,12 @@ namespace internal {
 namespace test_regexp {
 
 static bool CheckParse(const char* input) {
+  Isolate* isolate = CcTest::i_isolate();
+
   v8::HandleScope scope(CcTest::isolate());
-  Zone zone(CcTest::i_isolate()->allocator(), ZONE_NAME);
-  FlatStringReader reader(CcTest::i_isolate(), CStrVector(input));
+  Zone zone(isolate->allocator(), ZONE_NAME);
+  Handle<String> str = isolate->factory()->NewStringFromAsciiChecked(input);
+  FlatStringReader reader(isolate, str);
   RegExpCompileData result;
   return v8::internal::RegExpParser::ParseRegExp(
       CcTest::i_isolate(), &zone, &reader, JSRegExp::kNone, &result);
@@ -68,9 +71,12 @@ static bool CheckParse(const char* input) {
 
 static void CheckParseEq(const char* input, const char* expected,
                          bool unicode = false) {
+  Isolate* isolate = CcTest::i_isolate();
+
   v8::HandleScope scope(CcTest::isolate());
-  Zone zone(CcTest::i_isolate()->allocator(), ZONE_NAME);
-  FlatStringReader reader(CcTest::i_isolate(), CStrVector(input));
+  Zone zone(isolate->allocator(), ZONE_NAME);
+  Handle<String> str = isolate->factory()->NewStringFromAsciiChecked(input);
+  FlatStringReader reader(isolate, str);
   RegExpCompileData result;
   JSRegExp::Flags flags = JSRegExp::kNone;
   if (unicode) flags |= JSRegExp::kUnicode;
@@ -88,9 +94,12 @@ static void CheckParseEq(const char* input, const char* expected,
 
 
 static bool CheckSimple(const char* input) {
+  Isolate* isolate = CcTest::i_isolate();
+
   v8::HandleScope scope(CcTest::isolate());
-  Zone zone(CcTest::i_isolate()->allocator(), ZONE_NAME);
-  FlatStringReader reader(CcTest::i_isolate(), CStrVector(input));
+  Zone zone(isolate->allocator(), ZONE_NAME);
+  Handle<String> str = isolate->factory()->NewStringFromAsciiChecked(input);
+  FlatStringReader reader(isolate, str);
   RegExpCompileData result;
   CHECK(v8::internal::RegExpParser::ParseRegExp(
       CcTest::i_isolate(), &zone, &reader, JSRegExp::kNone, &result));
@@ -106,9 +115,12 @@ struct MinMaxPair {
 
 
 static MinMaxPair CheckMinMaxMatch(const char* input) {
+  Isolate* isolate = CcTest::i_isolate();
+
   v8::HandleScope scope(CcTest::isolate());
-  Zone zone(CcTest::i_isolate()->allocator(), ZONE_NAME);
-  FlatStringReader reader(CcTest::i_isolate(), CStrVector(input));
+  Zone zone(isolate->allocator(), ZONE_NAME);
+  Handle<String> str = isolate->factory()->NewStringFromAsciiChecked(input);
+  FlatStringReader reader(isolate, str);
   RegExpCompileData result;
   CHECK(v8::internal::RegExpParser::ParseRegExp(
       CcTest::i_isolate(), &zone, &reader, JSRegExp::kNone, &result));
@@ -422,7 +434,8 @@ static void ExpectError(const char* input, const char* expected,
 
   v8::HandleScope scope(CcTest::isolate());
   Zone zone(isolate->allocator(), ZONE_NAME);
-  FlatStringReader reader(isolate, CStrVector(input));
+  Handle<String> str = isolate->factory()->NewStringFromAsciiChecked(input);
+  FlatStringReader reader(isolate, str);
   RegExpCompileData result;
   JSRegExp::Flags flags = JSRegExp::kNone;
   if (unicode) flags |= JSRegExp::kUnicode;
@@ -524,7 +537,8 @@ TEST(CharacterClassEscapes) {
 static RegExpNode* Compile(const char* input, bool multiline, bool unicode,
                            bool is_one_byte, Zone* zone) {
   Isolate* isolate = CcTest::i_isolate();
-  FlatStringReader reader(isolate, CStrVector(input));
+  Handle<String> str = isolate->factory()->NewStringFromAsciiChecked(input);
+  FlatStringReader reader(isolate, str);
   RegExpCompileData compile_data;
   compile_data.compilation_target = RegExpCompilationTarget::kNative;
   JSRegExp::Flags flags = JSRegExp::kNone;

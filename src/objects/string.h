@@ -836,7 +836,6 @@ class ExternalTwoByteString : public ExternalString {
 class V8_EXPORT_PRIVATE FlatStringReader : public Relocatable {
  public:
   FlatStringReader(Isolate* isolate, Handle<String> str);
-  FlatStringReader(Isolate* isolate, Vector<const char> input);
   void PostGarbageCollection() override;
   inline uc32 Get(int index);
   template <typename Char>
