@@ -69,11 +69,6 @@ void HeapProfiler::SetGetDetachednessCallback(
   get_detachedness_callback_ = {callback, data};
 }
 
-void HeapProfiler::ClearGetDetachednessCallback(
-    v8::HeapProfiler::GetDetachednessCallback callback, void* data) {
-  get_detachedness_callback_ = {nullptr, nullptr};
-}
-
 v8::EmbedderGraph::Node::Detachedness HeapProfiler::GetDetachedness(
     const v8::Local<v8::Value> v8_value, uint16_t class_id) {
   DCHECK(HasGetDetachednessCallback());

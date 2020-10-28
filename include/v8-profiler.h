@@ -980,8 +980,6 @@ class V8_EXPORT HeapProfiler {
                                         void* data);
 
   void SetGetDetachednessCallback(GetDetachednessCallback callback, void* data);
-  void ClearGetDetachednessCallback(GetDetachednessCallback callback,
-                                    void* data);
 
   /**
    * Default value of persistent handle class ID. Must not be used to

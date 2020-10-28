@@ -74,8 +74,6 @@ class HeapProfiler : public HeapObjectAllocationTracker {
 
   void SetGetDetachednessCallback(
       v8::HeapProfiler::GetDetachednessCallback callback, void* data);
-  void ClearGetDetachednessCallback(
-      v8::HeapProfiler::GetDetachednessCallback callback, void* data);
   bool HasGetDetachednessCallback() const {
     return get_detachedness_callback_.first != nullptr;
   }
