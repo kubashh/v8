@@ -5239,6 +5239,23 @@ v8_source_set("wasm_compile_fuzzer") {
 v8_fuzzer("wasm_compile_fuzzer") {
 }
 
+v8_source_set("inspector_fuzzer") {
+  sources = [ "test/fuzzer/inspector-fuzzer.cc" ]
+
+  deps = [
+    ":fuzzer_support",
+    "test/inspector:inspector_test",
+  ]
+
+  configs = [
+    ":external_config",
+    ":internal_config_base",
+  ]
+}
+
+v8_fuzzer("inspector_fuzzer") {
+}
+
 # Target to build all generated .cc files.
 group("v8_generated_cc_files") {
   testonly = true
