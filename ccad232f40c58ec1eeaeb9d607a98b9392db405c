@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b0b45fb_5ea89de9",
+        "filename": "src/objects/string.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-28T15:09:16Z",
+      "side": 1,
+      "message": "nit: change to Handle\u003cString\u003e",
+      "range": {
+        "startLine": 846,
+        "startChar": 2,
+        "endLine": 846,
+        "endChar": 15
+      },
+      "revId": "ccad232f40c58ec1eeaeb9d607a98b9392db405c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
