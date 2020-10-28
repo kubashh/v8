@@ -147,6 +147,57 @@
       "message": "Please split into two lines.",
       "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a39f64d_9bd4be4e",
+        "filename": "test/mjsunit/es6/super-ic-opt-no-turboprop.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T15:29:00Z",
+      "side": 1,
+      "message": "Better say why they are disabled for Turboprop.",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17d323d0_34329001",
+        "filename": "test/mjsunit/es6/super-ic-opt.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T15:29:00Z",
+      "side": 1,
+      "message": "Please split into two lines.",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "442003a5_570029a2",
+        "filename": "test/mjsunit/es6/super-ic-opt.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T15:29:00Z",
+      "side": 1,
+      "message": "BTW, we don\u0027t have premonomorphic feedback anymore, so one time will do.\n\nassertEquals(\"correct value\", o.foo());",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
