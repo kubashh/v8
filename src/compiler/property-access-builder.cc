@@ -164,10 +164,11 @@ Node* PropertyAccessBuilder::TryBuildLoadConstantDataField(
     // Let us make sure the actual map of the constant receiver is among
     // the maps in {access_info}.
     MapRef receiver_map = m.Ref(broker()).map();
-    if (std::find_if(access_info.receiver_maps().begin(),
-                     access_info.receiver_maps().end(), [&](Handle<Map> map) {
+    if (std::find_if(access_info.lookup_start_object_maps().begin(),
+                     access_info.lookup_start_object_maps().end(),
+                     [&](Handle<Map> map) {
                        return MapRef(broker(), map).equals(receiver_map);
-                     }) == access_info.receiver_maps().end()) {
+                     }) == access_info.lookup_start_object_maps().end()) {
       // The map of the receiver is not in the feedback, let us bail out.
       return nullptr;
     }
