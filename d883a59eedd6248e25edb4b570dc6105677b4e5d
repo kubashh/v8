@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9c66938_7a0717bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:04:51Z",
+      "side": 1,
+      "message": "I started turning the V8Provider into a derived class of Recorder. In doing so, I changed V8Provider from being a global into a shared_ptr that lives in the Isolate and is initialized from within Isolate::Initialize. I also added a sample logging event (the Compile event) so we can have an idea of what add events looks like in the source code. Here are some notes (don\u0027t know if I should include this in the Issue, so I\u0027ll do both):\n  - The Isolate already had a SetMetricsRecorder member, so I used that to initialize the recorder. However, this implies that an Isolate can ever only have one recorder, and I can imagine scenarios where we would want more than one. For example, we may want to turn on both ETW and v8.log logging.\n  - I don\u0027t understand the difference between V8::Isolate and V8::internal::Isolate. On the one hand, I see them being used differently (see src/api/api.cc, Isolate::Initialize), where some things are initialized on the V8::Isolate and some things are initialized on the internal one. On the other hand, I also see them being cast back and forth (see src/logging/metrics.cc, Recorder::SetRecorder and the function that calls it, src/api/api.cc Isolate::SetMetricsRecorder).\n  - This kind of follows up from the previous point, but when we call AddMainThreadEvent from src/compiler/compile.cc, we\u0027re doing a lot of work before we actually do the function call: grabbing the context ID, creating the event, etc. I\u0027m open to ideas for how to make this part of the code more streamlined.",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
