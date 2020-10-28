@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a0ce5bb_bce9af95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-28T18:06:47Z",
+      "side": 1,
+      "message": "Addressed a comment of the other CL where clearing can be done by using Set(null, null). I removed the Clear API.\n\nTrying to reland now.",
+      "revId": "fed76a947f8d751f1f242d32bbf2897627589a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
