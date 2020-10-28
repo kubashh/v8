@@ -16,6 +16,159 @@
       "message": "I started turning the V8Provider into a derived class of Recorder. In doing so, I changed V8Provider from being a global into a shared_ptr that lives in the Isolate and is initialized from within Isolate::Initialize. I also added a sample logging event (the Compile event) so we can have an idea of what add events looks like in the source code. Here are some notes (don\u0027t know if I should include this in the Issue, so I\u0027ll do both):\n  - The Isolate already had a SetMetricsRecorder member, so I used that to initialize the recorder. However, this implies that an Isolate can ever only have one recorder, and I can imagine scenarios where we would want more than one. For example, we may want to turn on both ETW and v8.log logging.\n  - I don\u0027t understand the difference between V8::Isolate and V8::internal::Isolate. On the one hand, I see them being used differently (see src/api/api.cc, Isolate::Initialize), where some things are initialized on the V8::Isolate and some things are initialized on the internal one. On the other hand, I also see them being cast back and forth (see src/logging/metrics.cc, Recorder::SetRecorder and the function that calls it, src/api/api.cc Isolate::SetMetricsRecorder).\n  - This kind of follows up from the previous point, but when we call AddMainThreadEvent from src/compiler/compile.cc, we\u0027re doing a lot of work before we actually do the function call: grabbing the context ID, creating the event, etc. I\u0027m open to ideas for how to make this part of the code more streamlined.",
       "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1b20330_e81684f8",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:17:36Z",
+      "side": 1,
+      "message": "I cribbed these events from a v8_trace.json that used the \"v8.compile\" category group. But I don\u0027t know if I\u0027m missing any other events.",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee81afd0_8f64862c",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:17:36Z",
+      "side": 1,
+      "message": "I don\u0027t know which events should be MAIN_THREAD and which should be THREAD_SAFE. So I put them all under MAIN_THREAD 😊",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e38b95ff_985a3bc1",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:17:36Z",
+      "side": 1,
+      "message": "This is a lot of code just to add one event. I\u0027m open to ideas for how to streamline this into a single line or two, similar to the TRACE_EVENT macro above.\n\nAlso I don\u0027t understand why some things live in V8::Isolate and some things live in V8::internal::Isolate",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c87938d6_2c8b49c6",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4181,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:17:36Z",
+      "side": 1,
+      "message": "Currently, only one metrics_recorder can be instantiated per isolate. I\u0027m not sure if that\u0027s going to be the intention moving forward, considering how we may want multiple Recorders working simultaneously. (e.g. the logger that outputs v8.log runs at the same time as V8Provider)",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cc68ac0_e387e13d",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:17:36Z",
+      "side": 1,
+      "message": "nit: get rid of this",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8aef75f_87d6a572",
+        "filename": "src/instrumentation/v8-provider-win.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:17:36Z",
+      "side": 1,
+      "message": "I couldn\u0027t find a good place to call RegisterProvider, so I moved the functionality to within the constructor. Good idea? Bad idea?",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f093b163_8911c699",
+        "filename": "src/instrumentation/v8-provider-win.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:17:36Z",
+      "side": 1,
+      "message": "This used to be called in V8::InitializePlatform, but not anymore because (I don\u0027t think) the isolate is alive at this point in the code?\n\nI don\u0027t know where to call it anymore (perhaps in the V8Provider destructor?), or if I even need to.",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ae3c29d_18fa79da",
+        "filename": "src/instrumentation/v8-provider-win.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:17:36Z",
+      "side": 1,
+      "message": "nit: uncomment this. But also I don\u0027t understand what it\u0027s doing. Just copying the impl from test-api.cc",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eef0a33_7db50e42",
+        "filename": "src/instrumentation/v8-provider.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-10-28T21:17:36Z",
+      "side": 1,
+      "message": "Not sure if V8_EXPORT is the right macro to use here: without it we run into linker errors in the Windows DLL bc V8Provider is being instantiated in d8.cc",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
