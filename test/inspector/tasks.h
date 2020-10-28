@@ -113,6 +113,31 @@ class ExecuteStringTask : public TaskRunner::Task {
   DISALLOW_COPY_AND_ASSIGN(ExecuteStringTask);
 };
 
+class SetTimeoutTask : public TaskRunner::Task {
+ public:
+  SetTimeoutTask(int context_group_id, v8::Isolate* isolate,
+                 v8::Local<v8::Function> function)
+      : function_(isolate, function), context_group_id_(context_group_id) {}
+  ~SetTimeoutTask() override = default;
+  bool is_priority_task() final { return false; }
+
+ private:
+  void Run(IsolateData* data) override {
+    v8::MicrotasksScope microtasks_scope(data->isolate(),
+                                         v8::MicrotasksScope::kRunMicrotasks);
+    v8::HandleScope handle_scope(data->isolate());
+    v8::Local<v8::Context> context = data->GetDefaultContext(context_group_id_);
+    v8::Context::Scope context_scope(context);
+
+    v8::Local<v8::Function> function = function_.Get(data->isolate());
+    v8::MaybeLocal<v8::Value> result;
+    result = function->Call(context, context->Global(), 0, nullptr);
+  }
+
+  v8::Global<v8::Function> function_;
+  int context_group_id_;
+};
+
 }  // namespace internal
 }  // namespace v8
 
