@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b343bc57_b4052974",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-10-28T06:22:10Z",
+      "side": 1,
+      "message": "stress_snapshot disagrees with this test for some reason, filed https://bugs.chromium.org/p/v8/issues/detail?id\u003d11073 - ptal.",
+      "revId": "fa1fbc8b34b413377326330f2f4685d7a2d58981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
