@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c3f7af2_b38b450b",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T14:07:23Z",
+      "side": 1,
+      "message": "Please move the receiver assignment out of the branches to the declaration above, it\u0027s always the first input.",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8e1d42b9_3f5f49d7",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 23
@@ -14,6 +31,120 @@
       "writtenOn": "2020-10-28T13:36:50Z",
       "side": 1,
       "message": "I don\u0027t think this is guaranteed?\nclass A {}\nclass B extends A {\n  m() { return super.document }\n}\nB.prototype.__proto__ \u003d window;\n...",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "909f9a20_977e4b06",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T14:07:23Z",
+      "side": 1,
+      "message": "Are you sure that this holds?",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ca7daec_a09804bb",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T14:07:23Z",
+      "side": 1,
+      "message": "a JSReceiver",
+      "range": {
+        "startLine": 1194,
+        "startChar": 30,
+        "endLine": 1194,
+        "endChar": 39
+      },
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbfc3504_9c37a508",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T14:07:23Z",
+      "side": 1,
+      "message": "Let\u0027s save one level of indentation by doing\n\nif (receiver !\u003d lookup_start_object) {\n  // Super property access.\n  ...\n} else if (!access_builder.TryBuildStringCheck(...) \u0026\u0026 !...) {\n  ...\n} else {\n  ...\n}",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31f4ed20_a92cc971",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T14:07:23Z",
+      "side": 1,
+      "message": "Please put that on one line and remove the empty line, just like above.",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c92db09f_1dcf8fa1",
+        "filename": "src/compiler/js-native-context-specialization.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T14:07:23Z",
+      "side": 1,
+      "message": "Please keep this name or change it elsewhere too (e.g. ReduceElementAccess above).",
+      "range": {
+        "startLine": 104,
+        "startChar": 57,
+        "endLine": 104,
+        "endChar": 65
+      },
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68b6bd08_1e1e2fd6",
+        "filename": "test/mjsunit/es6/super-ic-opt-no-turboprop.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T14:07:23Z",
+      "side": 1,
+      "message": "Please split into two lines.",
       "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
