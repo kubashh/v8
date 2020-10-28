@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e1d42b9_3f5f49d7",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-10-28T13:36:50Z",
+      "side": 1,
+      "message": "I don\u0027t think this is guaranteed?\nclass A {}\nclass B extends A {\n  m() { return super.document }\n}\nB.prototype.__proto__ \u003d window;\n...",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
