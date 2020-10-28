@@ -16,6 +16,80 @@
       "message": "PTAL again!",
       "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a80c142_dc482d11",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-28T17:39:49Z",
+      "side": 1,
+      "message": "INTERNAL? MANUAL is for the cases when the code below will generate a code to setup a frame.",
+      "range": {
+        "startLine": 1638,
+        "startChar": 39,
+        "endLine": 1638,
+        "endChar": 45
+      },
+      "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66f4bdb9_dcf31fdd",
+        "filename": "src/codegen/arm/macro-assembler-arm.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-28T17:39:49Z",
+      "side": 1,
+      "message": "Same comments as for Intel-related changes.",
+      "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62d50392_619cf6fb",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3851,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-28T17:39:49Z",
+      "side": 1,
+      "message": "The emit_debug_code above guarantees that only one of the Drops is necessary.",
+      "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72e49258_78ef4d1a",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-10-28T17:39:49Z",
+      "side": 1,
+      "message": "I\u0027m not sure I follow. Why did it work before?",
+      "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
