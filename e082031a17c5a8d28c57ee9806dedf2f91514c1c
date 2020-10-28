@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39e65395_2895b16c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-28T17:50:37Z",
+      "side": 1,
+      "message": "PTAL.\n\nThanks",
+      "revId": "e082031a17c5a8d28c57ee9806dedf2f91514c1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04a1dac2_5fab7854",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-10-28T17:50:37Z",
+      "side": 1,
+      "message": "I changed this to mask to avoid another check in maybe_has_optimized_code. If it\u0027s better we could still keep this as 0 and add an additional test in maybe_has_optimized_code.",
+      "revId": "e082031a17c5a8d28c57ee9806dedf2f91514c1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
