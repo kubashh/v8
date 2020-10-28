@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74c5a449_3c90477c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2020-10-28T13:55:29Z",
+      "side": 1,
+      "message": "PTAL\nI think v8_linux64_tsan_no_cm_rel_ng_triggered failure is unrelated (fails without patch)",
+      "revId": "698396b48a25c3aea5eb8a2c3437f09b402bdde8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
