@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c6b1114d_74b5d494",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T16:35:21Z",
+      "side": 1,
+      "message": "Please make this fit the column limit and add some explanation of how things work (basically: generalize existing machinery to allow for receiver and lookup start to be distinct).",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3c3f7af2_b38b450b",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 23
@@ -128,6 +145,23 @@
         "endLine": 104,
         "endChar": 65
       },
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "494b7af0_7373db3c",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 3164,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-28T16:35:21Z",
+      "side": 1,
+      "message": "I was hoping that we can generalize ProcessNamedPropertyAccess instead of adding another function. Let me think about it.",
       "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
