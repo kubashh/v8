@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c900d882_5a96f97c",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-29T14:44:06Z",
+      "side": 1,
+      "message": "I think we can clean up a few metrics here and divide them generally into Compile and Parse, the rest should then be properties on the structs themselves.\n\n\nAs a rough outline (we have to iterate on this):\n\n Compile {\n   int script_id,\n   bool is_toplevel, \n   bool is_module\n   type \u003d kScript, kModule\n   thread \u003d kMain | kBackground\n   int64_t duration_us\n }\n Parse { ... }\n Deoptimize { ... }\n Execute { ... }\n\n\nLet\u0027s start with a single one and make it work well, then we can expand.",
+      "parentUuid": "a1b20330_e81684f8",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee81afd0_8f64862c",
         "filename": "include/v8-metrics.h",
         "patchSetId": 15
@@ -83,6 +101,24 @@
       "writtenOn": "2020-10-28T21:17:36Z",
       "side": 1,
       "message": "I don\u0027t know which events should be MAIN_THREAD and which should be THREAD_SAFE. So I put them all under MAIN_THREAD 😊",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e38b6ad8_318e755f",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-29T14:44:06Z",
+      "side": 1,
+      "message": "Any compilation related events can happen on the background thread (we do streaming parsing and compilation), so they are fine here.",
+      "parentUuid": "ee81afd0_8f64862c",
       "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -118,6 +154,24 @@
       "side": 1,
       "message": "The compiler is living in v8::internal this code should not use external API. (more comments will follow)",
       "parentUuid": "e38b95ff_985a3bc1",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23c04654_223f4a6e",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-29T14:44:06Z",
+      "side": 1,
+      "message": "We should probably extend the metrics::TimedScope and take a recorder as parameter. The current TimedScope is not that nice to use.\n\nExample that is currently quite tricky to accomplish:\n\n  metrics::TimedScope\u003cv8::metrics::Compile\u003e timed_scope(\n      isolate-\u003erecorder());\n  ...\n  if (condition) return result;\n  ...\n  return result;\n\n\nBasically we would have to manually stop the timed_scope on every return, something that is easy forgotten.\n\nInstead I propose the following:\n\n- TimedScope would contain the metric as a member\n- The constructor starts the timer if recorder!\u003dnullptr\n- The destructor stops the timer and does AddMainThreadEvent(\u0026metric) if recorder!\u003dnullptr\n\nI hope this is somewhat understandable.",
+      "parentUuid": "e45fbdb1_7115a637",
       "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
