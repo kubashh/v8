@@ -16,6 +16,23 @@
       "message": "PTAL (an easy one :P)",
       "revId": "00875b604bcc169d0ddc21ea568c3bfde62ff8a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c626ca86_4b93f726",
+        "filename": "tools/system-analyzer/timeline.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-29T23:47:36Z",
+      "side": 1,
+      "message": "Nit: This could use a more descriptive name, like findFirstIndexBefore.",
+      "revId": "00875b604bcc169d0ddc21ea568c3bfde62ff8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
