@@ -73,6 +73,12 @@ export class Script {
     this.sourcePositions.push(sourcePosition);
     columnToSourcePosition.set(column, sourcePosition);
   }
+
+  *entries() {
+    for (let sourcePosition of this.sourcePositions) {
+      yield* sourcePosition.entries;
+    }
+  }
 }
 
 /**
