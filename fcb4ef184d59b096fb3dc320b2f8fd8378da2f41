@@ -39,6 +39,30 @@
       },
       "revId": "fcb4ef184d59b096fb3dc320b2f8fd8378da2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ad4545f_73bf49e7",
+        "filename": "tools/system-analyzer/map-panel/map-transitions.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-29T21:13:29Z",
+      "side": 1,
+      "message": "But _showMaps ensures that this._displayedMapsInTree is a Set. When would it be undefined (and need the ?.)?",
+      "parentUuid": "8d521a6f_a2cac2ff",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 44
+      },
+      "revId": "fcb4ef184d59b096fb3dc320b2f8fd8378da2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
