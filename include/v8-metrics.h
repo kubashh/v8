@@ -10,6 +10,32 @@
 namespace v8 {
 namespace metrics {
 
+struct CompileScript {};
+
+struct CompileCode {};
+
+struct ParseFunction {};
+
+struct ParseProgram {};
+
+struct PreParse {};
+
+struct Compile {};
+
+struct CompileIgnition {};
+
+struct CompileIgnitionFinalization {};
+
+struct MarkCandidatesForOptimization {};
+
+struct OptimizeCode {};
+
+struct OptimizeNonConcurrent {};
+
+struct DeoptimizeCode {};
+
+struct Execute {};
+
 struct WasmModuleDecoded {
   bool async = false;
   bool streamed = false;
@@ -52,7 +78,20 @@ struct WasmModulesPerIsolate {
   V(WasmModuleDecoded)                   \
   V(WasmModuleCompiled)                  \
   V(WasmModuleInstantiated)              \
-  V(WasmModuleTieredUp)
+  V(WasmModuleTieredUp)                  \
+  V(CompileScript)                       \
+  V(CompileCode)                         \
+  V(ParseFunction)                       \
+  V(ParseProgram)                        \
+  V(PreParse)                            \
+  V(Compile)                             \
+  V(CompileIgnition)                     \
+  V(CompileIgnitionFinalization)         \
+  V(MarkCandidatesForOptimization)       \
+  V(OptimizeCode)                        \
+  V(OptimizeNonConcurrent)               \
+  V(DeoptimizeCode)                      \
+  V(Execute)
 
 #define V8_THREAD_SAFE_METRICS_EVENTS(V) V(WasmModulesPerIsolate)
 
