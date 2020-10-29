@@ -8,6 +8,7 @@
 #include <limits>
 #include <type_traits>
 
+#include "base/platform/wrappers.h"
 #include "src/base/compiler-specific.h"
 #include "src/base/logging.h"
 
@@ -104,7 +105,7 @@ V8_INLINE Dest bit_cast(Source const& source) {
   static_assert(sizeof(Dest) == sizeof(Source),
                 "source and dest must be same size");
   Dest dest;
-  memcpy(&dest, &source, sizeof(dest));
+  base::Memcpy(&dest, &source, sizeof(dest));
   return dest;
 }
 

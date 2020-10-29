@@ -5,8 +5,10 @@
 #include <errno.h>
 #include <signal.h>
 #include <stdio.h>
+
 #include <iomanip>
 
+#include "base/platform/wrappers.h"
 #include "include/libplatform/libplatform.h"
 #include "src/base/platform/platform.h"
 #include "src/codegen/assembler-arch.h"
@@ -47,7 +49,7 @@ class SnapshotFileWriter {
 
     FILE* fp = GetFileDescriptorOrDie(snapshot_blob_path_);
     size_t written = fwrite(blob.begin(), 1, blob.length(), fp);
-    fclose(fp);
+    base::Fclose(fp);
     if (written != static_cast<size_t>(blob.length())) {
       i::PrintF("Writing snapshot file failed.. Aborting.\n");
       remove(snapshot_blob_path_);
@@ -64,7 +66,7 @@ class SnapshotFileWriter {
     WriteSnapshotFileData(fp, blob);
     WriteSnapshotFileSuffix(fp);
 
-    fclose(fp);
+    base::Fclose(fp);
   }
 
   static void WriteSnapshotFilePrefix(FILE* fp) {
@@ -139,7 +141,7 @@ char* GetExtraCode(char* filename, const char* description) {
     }
     i += read;
   }
-  fclose(file);
+  base::Fclose(file);
   return chars;
 }
 

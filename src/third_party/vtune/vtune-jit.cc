@@ -56,6 +56,8 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "vtune-jit.h"
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -65,8 +67,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "base/platform/wrappers.h"
 #include "v8-vtune.h"
-#include "vtune-jit.h"
 
 namespace vTune {
 namespace internal {
@@ -235,7 +237,7 @@ void VTUNEJITInterface::event_handler(const v8::JitCodeEvent* event) {
               event->wasm_source_info->line_number_table_size;
 
           temp_file_name.reset(new char[filename_size + 1]);
-          memcpy(temp_file_name.get(), filename, filename_size);
+          base::Memcpy(temp_file_name.get(), filename, filename_size);
           temp_file_name[filename_size] = '\0';
           jmethod.source_file_name = temp_file_name.get();
 

@@ -9,6 +9,7 @@
 #include <memory>
 #include <sstream>
 
+#include "base/platform/wrappers.h"
 #include "src/api/api-inl.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/platform.h"
@@ -311,7 +312,7 @@ PerfBasicLogger::PerfBasicLogger(Isolate* isolate)
 }
 
 PerfBasicLogger::~PerfBasicLogger() {
-  fclose(perf_output_handle_);
+  base::Fclose(perf_output_handle_);
   perf_output_handle_ = nullptr;
 }
 
@@ -575,7 +576,7 @@ LowLevelLogger::LowLevelLogger(Isolate* isolate, const char* name)
 }
 
 LowLevelLogger::~LowLevelLogger() {
-  fclose(ll_output_handle_);
+  base::Fclose(ll_output_handle_);
   ll_output_handle_ = nullptr;
 }
 

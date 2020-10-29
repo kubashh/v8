@@ -10,6 +10,7 @@
 
 #include <cmath>
 
+#include "base/platform/wrappers.h"
 #include "src/ast/ast-value-factory.h"
 #include "src/numbers/conversions-inl.h"
 #include "src/objects/bigint.h"
@@ -1050,7 +1051,7 @@ const char* Scanner::CurrentLiteralAsCString(Zone* zone) const {
   Vector<const uint8_t> vector = literal_one_byte_string();
   int length = vector.length();
   char* buffer = zone->NewArray<char>(length + 1);
-  memcpy(buffer, vector.begin(), length);
+  base::Memcpy(buffer, vector.begin(), length);
   buffer[length] = '\0';
   return buffer;
 }

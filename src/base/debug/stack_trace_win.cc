@@ -14,14 +14,15 @@
 #define NOMINMAX
 #endif
 
-#include <windows.h>
 #include <dbghelp.h>
 #include <stddef.h>
+#include <windows.h>
 
 #include <iostream>
 #include <memory>
 #include <string>
 
+#include "base/platform/wrappers.h"
 #include "src/base/logging.h"
 #include "src/base/macros.h"
 
@@ -185,7 +186,7 @@ void StackTrace::InitTrace(const CONTEXT* context_record) {
   // context may have had more register state (YMM, etc) than we need to unwind
   // the stack. Typically StackWalk64 only needs integer and control registers.
   CONTEXT context_copy;
-  memcpy(&context_copy, context_record, sizeof(context_copy));
+  base::Memcpy(&context_copy, context_record, sizeof(context_copy));
   context_copy.ContextFlags = CONTEXT_INTEGER | CONTEXT_CONTROL;
 
   // When walking an exception stack, we need to use StackWalk64().

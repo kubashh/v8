@@ -9,6 +9,7 @@
 
 #include <algorithm>
 
+#include "base/platform/wrappers.h"
 #include "src/base/logging.h"
 #include "src/base/macros.h"
 
@@ -62,7 +63,7 @@ class DetachableVector : public DetachableVectorBase {
   }
 
   // Free the backing store and clear our reference to it.
-  void free() {
+  void base::Free() {
     delete[] data();
     data_ = nullptr;
     capacity_ = 0;

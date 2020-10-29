@@ -4,6 +4,7 @@
 
 #include "src/base/page-allocator.h"
 
+#include "base/platform/wrappers.h"
 #include "src/base/platform/platform.h"
 
 namespace v8 {
@@ -104,7 +105,7 @@ PageAllocator::AllocateSharedPages(size_t size, const void* original_address) {
   void* ptr =
       base::OS::AllocateShared(size, base::OS::MemoryPermission::kReadWrite);
   CHECK_NOT_NULL(ptr);
-  memcpy(ptr, original_address, size);
+  base::Memcpy(ptr, original_address, size);
   bool success = base::OS::SetPermissions(
       ptr, size, base::OS::MemoryPermission::kReadWrite);
   CHECK(success);

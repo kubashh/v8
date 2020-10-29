@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "base/platform/wrappers.h"
 #include "src/base/bits.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/compiler/backend/instruction-selector-impl.h"
@@ -3403,7 +3404,7 @@ void InstructionSelector::VisitS128Const(Node* node) {
   static const int kUint32Immediates = 4;
   uint32_t val[kUint32Immediates];
   STATIC_ASSERT(sizeof(val) == kSimd128Size);
-  memcpy(val, S128ImmediateParameterOf(node->op()).data(), kSimd128Size);
+  base::Memcpy(val, S128ImmediateParameterOf(node->op()).data(), kSimd128Size);
   // If all bytes are zeros, avoid emitting code for generic constants
   bool all_zeros = !(val[0] || val[1] || val[2] || val[3]);
   InstructionOperand dst = g.DefineAsRegister(node);

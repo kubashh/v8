@@ -5,6 +5,7 @@
 #ifndef V8_DIAGNOSTICS_CODE_TRACER_H_
 #define V8_DIAGNOSTICS_CODE_TRACER_H_
 
+#include "base/platform/wrappers.h"
 #include "src/base/optional.h"
 #include "src/common/globals.h"
 #include "src/flags/flags.h"
@@ -91,7 +92,7 @@ class CodeTracer final : public Malloced {
 
     if (--scope_depth_ == 0) {
       DCHECK_NOT_NULL(file_);
-      fclose(file_);
+      base::Fclose(file_);
       file_ = nullptr;
     }
   }

@@ -14,6 +14,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "base/platform/wrappers.h"
 #include "src/base/once.h"
 #include "src/base/platform/time.h"
 #include "src/d8/async-hooks-wrapper.h"
@@ -135,7 +136,7 @@ class SerializationData {
 
  private:
   struct DataDeleter {
-    void operator()(uint8_t* p) const { free(p); }
+    void operator()(uint8_t* p) const { base::Free(p); }
   };
 
   std::unique_ptr<uint8_t, DataDeleter> data_;

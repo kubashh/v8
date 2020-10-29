@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <sstream>
 
+#include "base/platform/wrappers.h"
 #include "src/base/macros.h"
 
 namespace v8 {
@@ -17,7 +18,7 @@ namespace debug {
 
 StackTrace::StackTrace(const void* const* trace, size_t count) {
   count = std::min(count, arraysize(trace_));
-  if (count) memcpy(trace_, trace, count * sizeof(trace_[0]));
+  if (count) base::Memcpy(trace_, trace, count * sizeof(trace_[0]));
   count_ = count;
 }
 

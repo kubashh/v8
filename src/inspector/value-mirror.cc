@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include "base/platform/wrappers.h"
 #include "src/base/optional.h"
 #include "src/debug/debug-interface.h"
 #include "src/inspector/v8-debugger.h"
@@ -50,7 +51,7 @@ ResultType unpackWasmValue(v8::Local<v8::Context> context,
         array->Get(context, i).ToLocalChecked().As<v8::Int32>();
     buffer[i] = static_cast<uint8_t>(i32->Value());
   }
-  memcpy(&result, buffer, kSize);
+  base::Memcpy(&result, buffer, kSize);
   return result;
 }
 

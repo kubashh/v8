@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <limits>
 
+#include "base/platform/wrappers.h"
 #include "src/api/api-inl.h"
 #include "src/codegen/machine-type.h"
 #include "src/compiler/wasm-compiler.h"
@@ -228,7 +229,7 @@ class DebugEvaluatorProxy {
                               evaluator_->memory_size(), &thrower)) {
       return;
     }
-    memcpy(&evaluator_->memory_start()[result_offset], &val, sizeof(T));
+    base::Memcpy(&evaluator_->memory_start()[result_offset], &val, sizeof(T));
   }
 
   void WriteResult(const WasmValue& result, uint32_t result_offset) {

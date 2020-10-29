@@ -13,6 +13,7 @@
 #include "src/base/platform/time.h"
 
 #ifdef V8_USE_PERFETTO
+#include "base/platform/wrappers.h"
 #include "perfetto/ext/trace_processor/export_json.h"
 #include "perfetto/trace_processor/trace_processor.h"
 #include "perfetto/tracing/tracing.h"
@@ -82,7 +83,7 @@ TracingController::~TracingController() {
     for (size_t i = g_category_index - 1; i >= g_num_builtin_categories; --i) {
       const char* group = g_category_groups[i];
       g_category_groups[i] = nullptr;
-      free(const_cast<char*>(group));
+      base::Free(const_cast<char*>(group));
     }
     g_category_index = g_num_builtin_categories;
   }

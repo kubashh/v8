@@ -5,6 +5,7 @@
 #ifndef V8_BASE_MEMORY_H_
 #define V8_BASE_MEMORY_H_
 
+#include "base/platform/wrappers.h"
 #include "src/base/macros.h"
 
 namespace v8 {
@@ -31,14 +32,14 @@ template <typename V>
 static inline V ReadUnalignedValue(Address p) {
   ASSERT_TRIVIALLY_COPYABLE(V);
   V r;
-  memcpy(&r, reinterpret_cast<void*>(p), sizeof(V));
+  base::Memcpy(&r, reinterpret_cast<void*>(p), sizeof(V));
   return r;
 }
 
 template <typename V>
 static inline void WriteUnalignedValue(Address p, V value) {
   ASSERT_TRIVIALLY_COPYABLE(V);
-  memcpy(reinterpret_cast<void*>(p), &value, sizeof(V));
+  base::Memcpy(reinterpret_cast<void*>(p), &value, sizeof(V));
 }
 
 template <typename V>

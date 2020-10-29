@@ -5,6 +5,7 @@
 #ifndef V8_ZONE_ZONE_LIST_INL_H_
 #define V8_ZONE_ZONE_LIST_INL_H_
 
+#include "base/platform/wrappers.h"
 #include "src/base/macros.h"
 #include "src/base/platform/platform.h"
 #include "src/utils/memcopy.h"
@@ -35,7 +36,7 @@ void ZoneList<T>::AddAll(const Vector<const T>& other, Zone* zone) {
   int result_length = length_ + length;
   if (capacity_ < result_length) Resize(result_length, zone);
   if (std::is_trivially_copyable<T>::value) {
-    memcpy(&data_[length_], other.begin(), sizeof(T) * length);
+    base::Memcpy(&data_[length_], other.begin(), sizeof(T) * length);
   } else {
     std::copy(other.begin(), other.end(), &data_[length_]);
   }

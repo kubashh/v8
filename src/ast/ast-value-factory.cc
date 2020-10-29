@@ -27,6 +27,7 @@
 
 #include "src/ast/ast-value-factory.h"
 
+#include "base/platform/wrappers.h"
 #include "src/base/hashmap-entry.h"
 #include "src/base/logging.h"
 #include "src/common/globals.h"
@@ -357,7 +358,7 @@ const AstRawString* AstValueFactory::GetString(
         // Copy literal contents for later comparison.
         int length = literal_bytes.length();
         byte* new_literal_bytes = zone()->NewArray<byte>(length);
-        memcpy(new_literal_bytes, literal_bytes.begin(), length);
+        base::Memcpy(new_literal_bytes, literal_bytes.begin(), length);
         AstRawString* new_string = zone()->New<AstRawString>(
             is_one_byte, Vector<const byte>(new_literal_bytes, length),
             hash_field);

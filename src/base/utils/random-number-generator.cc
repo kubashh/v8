@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <new>
 
+#include "base/platform/wrappers.h"
 #include "src/base/bits.h"
 #include "src/base/macros.h"
 #include "src/base/platform/mutex.h"
@@ -60,11 +61,11 @@ RandomNumberGenerator::RandomNumberGenerator() {
   SetSeed(seed);
 #else
   // Gather entropy from /dev/urandom if available.
-  FILE* fp = fopen("/dev/urandom", "rb");
+  FILE* fp = base::Fopen("/dev/urandom", "rb");
   if (fp != nullptr) {
     int64_t seed;
     size_t n = fread(&seed, sizeof(seed), 1, fp);
-    fclose(fp);
+    base::Fclose(fp);
     if (n == 1) {
       SetSeed(seed);
       return;
