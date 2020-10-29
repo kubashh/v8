@@ -18,6 +18,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a557f510_2b6d955c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-29T09:39:53Z",
+      "side": 1,
+      "message": "Some initial comments, more to follow",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fa57f50_f8fa8916",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-29T09:39:53Z",
+      "side": 1,
+      "message": "# Re SetMetricsRecorder:\nYes currently we only support one recorder at the time (I think we should eventually add a group-recorder which dispatches to multiple recorders)\n\n# Re Isolate:\nv8:internal is the namespace for the \"internal\" V8 components, v8:* is the public interface. The naming is a bit confusing at times. Outside of V8 (as an API owner) you only have only access to v8::Isolate, within the API (in api.cc) you can cross over to v8::internal::Isolate. (I hope this helps!) (Feel free to follow-up via email or schedule a VC)\n\n# Re compile.cc:\nPretty sure this can benefit from some optimizations since the code is quite new. I will have a look at it as well.",
+      "parentUuid": "a9c66938_7a0717bb",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1b20330_e81684f8",
@@ -71,6 +106,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e45fbdb1_7115a637",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-29T09:39:53Z",
+      "side": 1,
+      "message": "The compiler is living in v8::internal this code should not use external API. (more comments will follow)",
+      "parentUuid": "e38b95ff_985a3bc1",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c87938d6_2c8b49c6",
         "filename": "src/d8/d8.cc",
         "patchSetId": 15
@@ -82,6 +135,24 @@
       "writtenOn": "2020-10-28T21:17:36Z",
       "side": 1,
       "message": "Currently, only one metrics_recorder can be instantiated per isolate. I\u0027m not sure if that\u0027s going to be the intention moving forward, considering how we may want multiple Recorders working simultaneously. (e.g. the logger that outputs v8.log runs at the same time as V8Provider)",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3d772cf_f3e71abb",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4181,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-29T09:39:53Z",
+      "side": 1,
+      "message": "We probably need a group-recorder that dispatches internally to multiple recorders. For now this is probably good enough.",
+      "parentUuid": "c87938d6_2c8b49c6",
       "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -167,6 +238,24 @@
       "writtenOn": "2020-10-28T21:17:36Z",
       "side": 1,
       "message": "Not sure if V8_EXPORT is the right macro to use here: without it we run into linker errors in the Windows DLL bc V8Provider is being instantiated in d8.cc",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98a400f0_0db2143d",
+        "filename": "src/instrumentation/v8-provider.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-29T09:39:53Z",
+      "side": 1,
+      "message": "If it\u0027s not visible externally (via the API) you can just use V8_EXPORT_PRIVATE.",
+      "parentUuid": "4eef0a33_7db50e42",
       "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
