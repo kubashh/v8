@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f6c98ec_ae812540",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-29T09:19:27Z",
+      "side": 1,
+      "message": "Thanks Igor!",
+      "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a80c142_dc482d11",
@@ -31,6 +48,30 @@
       "writtenOn": "2020-10-28T17:39:49Z",
       "side": 1,
       "message": "INTERNAL? MANUAL is for the cases when the code below will generate a code to setup a frame.",
+      "range": {
+        "startLine": 1638,
+        "startChar": 39,
+        "endLine": 1638,
+        "endChar": 45
+      },
+      "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "578d55de_de152761",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-29T09:19:27Z",
+      "side": 1,
+      "message": "Yes, that\u0027s wrong. I changed that before Intel\u0027s CL. Thanks for pointing it out! 😊",
+      "parentUuid": "0a80c142_dc482d11",
       "range": {
         "startLine": 1638,
         "startChar": 39,
@@ -58,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f36b0f9a_be01bbd2",
+        "filename": "src/codegen/arm/macro-assembler-arm.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-29T09:19:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66f4bdb9_dcf31fdd",
+      "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62d50392_619cf6fb",
@@ -75,6 +134,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58d7e8da_b7228d42",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3851,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-29T09:19:27Z",
+      "side": 1,
+      "message": "You\u0027re right! 😊",
+      "parentUuid": "62d50392_619cf6fb",
+      "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72e49258_78ef4d1a",
@@ -88,6 +165,24 @@
       "writtenOn": "2020-10-28T17:39:49Z",
       "side": 1,
       "message": "I\u0027m not sure I follow. Why did it work before?",
+      "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d4ba9b8_f318d269",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-10-29T09:19:27Z",
+      "side": 1,
+      "message": "This bug was introduced by me when I changed the hierarchy of Frames.\nWhy was this bug not caught then? Two reasons (I think):\n1. It is not a common path. Only if inside an exception is thrown inside a BuiltinFrame.\n2. This bug can only be caught by UB sanitiser, since the call will succeed, JavaScriptFrame and BuiltinFrame are both CommonFrameWithJSLinkage where the function LookupExceptionHandlerInTable is declared.",
+      "parentUuid": "72e49258_78ef4d1a",
       "revId": "c1a353897d4b01cbd171342f6781778a2215a410",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
