@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "11382f0d0838d13d5738d7c2a3d2b3d182ee6706",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "593d2bfb_ffe2cf85",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3852,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-29T10:07:36Z",
+      "side": 1,
+      "message": "additional_...\nguaranteed",
+      "range": {
+        "startLine": 3852,
+        "startChar": 8,
+        "endLine": 3852,
+        "endChar": 27
+      },
+      "revId": "11382f0d0838d13d5738d7c2a3d2b3d182ee6706",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78eedfb1_751284f0",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3854,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-10-29T10:07:36Z",
+      "side": 1,
+      "message": "Would it make sense to make a similar simplification on Intel?",
+      "revId": "11382f0d0838d13d5738d7c2a3d2b3d182ee6706",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
