@@ -34,9 +34,8 @@ class Timeline {
     this._selection = value;
   }
 
-  selectTimeRange(start, end) {
-    this._selection = this.filter(
-      e => e.time >= start && e.time <= end);
+  selectTimeRange(startTime, endTime) {
+    this._selection = this.range(startTime, endTime);
   }
 
   getChunks(windowSizeMs) {
@@ -135,30 +134,30 @@ class Timeline {
     return chunks;
   }
 
-  range(start, end) {
-    const first = this.find(start);
-    if (first < 0) return [];
-    const last = this.find(end, first);
-    return this._values.slice(first, last);
+  range(startTime, endTime) {
+    const firstIndex = this.find(startTime);
+    if (firstIndex < 0) return [];
+    const lastIndex = this.find(endTime, firstIndex);
+    return this._values.slice(firstIndex, lastIndex);
   }
 
   find(time, offset = 0) {
     return this._find(this._values, each => each.time - time, offset);
   }
 
-  _find(array, cmp, offset = 0) {
-    let min = offset;
-    let max = array.length;
-    while (min < max) {
-      let mid = min + Math.floor((max - min) / 2);
-      let result = cmp(array[mid]);
+  _find(array, compareFn, offset = 0) {
+    let minIndex = offset;
+    let maxIndex = array.length;
+    while (minIndex < maxIndex) {
+      let midIndex = minIndex + Math.floor((maxIndex - minIndex) / 2);
+      let result = compareFn(array[midIndex]);
       if (result > 0) {
-        max = mid - 1;
+        maxIndex = midIndex - 1;
       } else {
-        min = mid + 1;
+        minIndex = midIndex + 1;
       }
     }
-    return min;
+    return minIndex;
   }
 
   initializeTypes() {
