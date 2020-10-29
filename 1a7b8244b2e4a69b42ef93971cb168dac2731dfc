@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b05a381_4c41a008",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003006
+      },
+      "writtenOn": "2020-10-29T23:03:17Z",
+      "side": 1,
+      "message": "Thanks, looks good to me, although I am not a reviewer. Your multimap is the way to go. I tried to come up with a version that subtracted the stack_start_ from the real stack offset, and then shifted it left to free up some bits to add in the fake frame offset. It was hard to reason about, and it was probably incorrect and would\u0027ve had collisions in 32-bit asan builds. Then again, 32-bit asan builds are deprecated.",
+      "revId": "1a7b8244b2e4a69b42ef93971cb168dac2731dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "312b1420_fba2ce6e",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1003006
+      },
+      "writtenOn": "2020-10-29T23:03:17Z",
+      "side": 1,
+      "message": "Looks like ASan will return nullptr here if the fake stack is disabled, so lgtm.",
+      "revId": "1a7b8244b2e4a69b42ef93971cb168dac2731dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a64a3c4a_266b4b4d",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1003006
+      },
+      "writtenOn": "2020-10-29T23:03:17Z",
+      "side": 1,
+      "message": "If the fake stack is disabled, this will fall through, so we should be all set.",
+      "revId": "1a7b8244b2e4a69b42ef93971cb168dac2731dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
