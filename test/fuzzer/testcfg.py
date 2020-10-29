@@ -8,6 +8,7 @@ from testrunner.local import testsuite
 from testrunner.objects import testcase
 
 SUB_TESTS = [
+  'inspector',
   'json',
   'parser',
   'regexp_builtins',
