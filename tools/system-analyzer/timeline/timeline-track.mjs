@@ -90,7 +90,7 @@ defineCustomElement('./timeline/timeline-track', (templateText) =>
 
     set timeSelection(selection) {
       this._timeSelection.start = selection.start;
-      this._timeSelection.end= selection.end;
+      this._timeSelection.end = selection.end;
       this.updateSelection();
     }
 
