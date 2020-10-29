@@ -33,6 +33,24 @@
       "message": "See also these tsan failures:\nhttps://ci.chromium.org/p/v8/builders/ci/V8%20Linux64%20TSAN%20-%20stress-incremental-marking/620\n\nMaybe related?",
       "revId": "b16c7e5b1c71af7c0f3bdcbc9fee551cdf87264d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9bc5802_49a12f65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-10-29T07:48:26Z",
+      "side": 1,
+      "message": "Both the tsan problems and the GPU bot crashes stopped after the revert.",
+      "parentUuid": "f6ca35c1_7cc0bffe",
+      "revId": "b16c7e5b1c71af7c0f3bdcbc9fee551cdf87264d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
