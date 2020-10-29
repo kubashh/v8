@@ -185,6 +185,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f0a81eb_4fcd3d19",
+        "filename": "src/compiler/js-operator.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-29T09:19:58Z",
+      "side": 1,
+      "message": "Toon pointed out that in spec-language receiver is often last/optional. Feel free to ignore my comment.",
+      "parentUuid": "4e444425_b5b1bd3e",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "494b7af0_7373db3c",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 23
