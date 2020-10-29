@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6016a349_97734c86",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 3270,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-29T08:55:21Z",
+      "side": 1,
+      "message": "Don\u0027t you need to do this for it to work with --concurrent-inlining?",
+      "revId": "123500b87a56413706d5a4cbc4c4f002a6ada242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

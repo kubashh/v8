@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0083d0b0_710fa0db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-29T08:55:21Z",
+      "side": 1,
+      "message": "lgtm from my side.",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c3f7af2_b38b450b",
@@ -151,6 +168,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4e444425_b5b1bd3e",
+        "filename": "src/compiler/js-operator.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-29T08:55:21Z",
+      "side": 1,
+      "message": "It strikes me as more intuitive to keep receiver first. \"HomeObject\" is concept dependent on first having a receiver, right?",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "494b7af0_7373db3c",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 23
@@ -230,6 +264,23 @@
       "writtenOn": "2020-10-28T15:29:00Z",
       "side": 1,
       "message": "BTW, we don\u0027t have premonomorphic feedback anymore, so one time will do.\n\nassertEquals(\"correct value\", o.foo());",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45e1f664_6318cca2",
+        "filename": "test/mjsunit/es6/super-ic-opt.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-10-29T08:55:21Z",
+      "side": 1,
+      "message": "This is such a great idea (runtime function call count query).",
       "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
