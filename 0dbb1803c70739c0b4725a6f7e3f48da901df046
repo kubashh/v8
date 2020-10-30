@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bdb3e3f7_55c7570f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6b1114d_74b5d494",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0083d0b0_710fa0db",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 23
@@ -48,6 +66,24 @@
       "writtenOn": "2020-10-28T14:07:23Z",
       "side": 1,
       "message": "Please move the receiver assignment out of the branches to the declaration above, it\u0027s always the first input.",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f72e17a_63420ed1",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c3f7af2_b38b450b",
       "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b1b181d_7196d2e3",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "No :) (Fixed.)",
+      "parentUuid": "909f9a20_977e4b06",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c620cc3d_a3ef3df0",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Fixed, thanks for pointing it out!",
+      "parentUuid": "8e1d42b9_3f5f49d7",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ca7daec_a09804bb",
@@ -99,6 +171,30 @@
       "writtenOn": "2020-10-28T14:07:23Z",
       "side": 1,
       "message": "a JSReceiver",
+      "range": {
+        "startLine": 1194,
+        "startChar": 30,
+        "endLine": 1194,
+        "endChar": 39
+      },
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0d2ba31_12cea906",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ca7daec_a09804bb",
       "range": {
         "startLine": 1194,
         "startChar": 30,
@@ -126,6 +222,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ece9593_dd567ed2",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbfc3504_9c37a508",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31f4ed20_a92cc971",
@@ -143,6 +257,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85e8c276_6574d1d6",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31f4ed20_a92cc971",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c92db09f_1dcf8fa1",
@@ -156,6 +288,30 @@
       "writtenOn": "2020-10-28T14:07:23Z",
       "side": 1,
       "message": "Please keep this name or change it elsewhere too (e.g. ReduceElementAccess above).",
+      "range": {
+        "startLine": 104,
+        "startChar": 57,
+        "endLine": 104,
+        "endChar": 65
+      },
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6db21032_9b54b92e",
+        "filename": "src/compiler/js-native-context-specialization.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "The name is already \"feedback\" in the .cc, this is a drive-by fix. Changed the name in ReducePropertyAccess above too.",
+      "parentUuid": "c92db09f_1dcf8fa1",
       "range": {
         "startLine": 104,
         "startChar": 57,
@@ -201,6 +357,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fab3cd6_c572c07d",
+        "filename": "src/compiler/js-operator.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Yea, and we only need the receiver if we\u0027re accessing a getter, whereas we always need the home object, so the home object is more fundamental / important.",
+      "parentUuid": "4f0a81eb_4fcd3d19",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "494b7af0_7373db3c",
@@ -214,6 +388,24 @@
       "writtenOn": "2020-10-28T16:35:21Z",
       "side": 1,
       "message": "I was hoping that we can generalize ProcessNamedPropertyAccess instead of adding another function. Let me think about it.",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b49c065_a288f590",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 3164,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "ProcessNamedSuperAccess seemed to do sufficiently different things than ProcessNamedAccess that I thought code sharing there would\u0027ve been confusing.",
+      "parentUuid": "494b7af0_7373db3c",
       "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -235,6 +427,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f542cd2_1bc18aa2",
+        "filename": "test/mjsunit/es6/super-ic-opt-no-turboprop.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68b6bd08_1e1e2fd6",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a39f64d_9bd4be4e",
@@ -248,6 +458,24 @@
       "writtenOn": "2020-10-28T15:29:00Z",
       "side": 1,
       "message": "Better say why they are disabled for Turboprop.",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f2b8fc8_1628edea",
+        "filename": "test/mjsunit/es6/super-ic-opt-no-turboprop.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a39f64d_9bd4be4e",
       "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -269,6 +497,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cd96264_2e130193",
+        "filename": "test/mjsunit/es6/super-ic-opt.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17d323d0_34329001",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "442003a5_570029a2",
@@ -286,6 +532,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d6ae4a2_687e6fe7",
+        "filename": "test/mjsunit/es6/super-ic-opt.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "442003a5_570029a2",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45e1f664_6318cca2",
@@ -299,6 +563,24 @@
       "writtenOn": "2020-10-29T08:55:21Z",
       "side": 1,
       "message": "This is such a great idea (runtime function call count query).",
+      "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d24736d_a7ec54e2",
+        "filename": "test/mjsunit/es6/super-ic-opt.js",
+        "patchSetId": 23
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "45e1f664_6318cca2",
       "revId": "0dbb1803c70739c0b4725a6f7e3f48da901df046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

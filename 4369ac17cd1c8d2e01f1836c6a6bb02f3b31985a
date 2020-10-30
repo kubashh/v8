@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a971c60_8c365d73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-10-30T14:38:54Z",
+      "side": 1,
+      "message": "thanks for having a look!\n\nthere are 2 substantial changes:\n\n1) fixing the \"home object\u0027s proto is global object\" case + tests\n2) noticed a problem with the minimorphic loads (they were unimplemented), added a failing test + implemented the support\n\nptal",
+      "revId": "4369ac17cd1c8d2e01f1836c6a6bb02f3b31985a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
