@@ -8688,6 +8688,9 @@ class V8_EXPORT Isolate {
    */
   void DumpAndResetStats();
 
+  void WriteIgnitionDispatchCountersFile();
+  void WriteBuiltinCallCountersFile();
+
   /**
    * Discards all V8 thread-specific data for the Isolate. Should be used
    * if a thread is terminating and it has used an Isolate that will outlive

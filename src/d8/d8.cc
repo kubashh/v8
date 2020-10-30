@@ -2435,6 +2435,19 @@ void Shell::WriteIgnitionDispatchCountersFile(v8::Isolate* isolate) {
       isolate, JSON::Stringify(context, dispatch_counters).ToLocalChecked());
 }
 
+void Shell::WriteBuiltinCallCountersFile(v8::Isolate* isolate) {
+  HandleScope handle_scope(isolate);
+  Local<Context> context = Context::New(isolate);
+  Context::Scope context_scope(context);
+
+  Local<Object> call_counters = reinterpret_cast<i::Isolate*>(isolate)
+                                    ->interpreter()
+                                    ->GetBuiltinCallCountersObject();
+  std::ofstream call_counters_stream(i::FLAG_trace_builtin_call_output_file);
+  call_counters_stream << *String::Utf8Value(
+      isolate, JSON::Stringify(context, call_counters).ToLocalChecked());
+}
+
 namespace {
 int LineFromOffset(Local<debug::Script> script, int offset) {
   debug::Location location = script->GetSourceLocation(offset);
@@ -4284,6 +4297,11 @@ int Shell::Main(int argc, char* argv[]) {
       if (i::FLAG_trace_ignition_dispatches &&
           i::FLAG_trace_ignition_dispatches_output_file != nullptr) {
         WriteIgnitionDispatchCountersFile(isolate);
+      }
+
+      if (i::FLAG_trace_builtin_call &&
+          i::FLAG_trace_builtin_call_output_file != nullptr) {
+        WriteBuiltinCallCountersFile(isolate);
       }
 
       if (options.cpu_profiler) {

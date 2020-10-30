@@ -30,6 +30,7 @@ class StatsCounter;
   V(address_of_interpreter_entry_trampoline_instruction_start,                 \
     "Address of the InterpreterEntryTrampoline instruction start")             \
   V(interpreter_dispatch_counters, "Interpreter::dispatch_counters")           \
+  V(builtin_call_counters, "Interpreter::builtin_call_counters")               \
   V(interpreter_dispatch_table_address, "Interpreter::dispatch_table_address") \
   V(date_cache_stamp, "date_cache_stamp")                                      \
   V(stress_deopt_count, "Isolate::stress_deopt_count_address()")               \

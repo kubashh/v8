@@ -1469,6 +1469,7 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
 
   const char* name() const { return name_; }
   int parameter_count() const;
+  int builtin_index() const { return (builtin_index_); }
 
 #if DEBUG
   void PrintCurrentBlock(std::ostream& os);

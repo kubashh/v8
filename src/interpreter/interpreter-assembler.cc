@@ -1324,9 +1324,11 @@ void InterpreterAssembler::TraceBytecode(Runtime::FunctionId function_id) {
 void InterpreterAssembler::TraceBytecodeDispatch(TNode<WordT> target_bytecode) {
   TNode<ExternalReference> counters_table = ExternalConstant(
       ExternalReference::interpreter_dispatch_counters(isolate()));
-  TNode<IntPtrT> source_bytecode_table_index = IntPtrConstant(
-      static_cast<int>(bytecode_) * (static_cast<int>(Bytecode::kLast) + 1));
-
+  TNode<IntPtrT> source_bytecode_table_index =
+      IntPtrConstant((static_cast<int>(bytecode_) +
+                      (static_cast<int>(Bytecode::kLast) + 1) *
+                          (static_cast<int>(operand_scale_) / 2)) *
+                     (static_cast<int>(Bytecode::kLast) + 1));
   TNode<WordT> counter_offset = TimesSystemPointerSize(
       IntPtrAdd(source_bytecode_table_index, target_bytecode));
   TNode<IntPtrT> old_counter = Load<IntPtrT>(counters_table, counter_offset);

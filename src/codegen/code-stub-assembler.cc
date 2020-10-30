@@ -40,6 +40,35 @@ CodeStubAssembler::CodeStubAssembler(compiler::CodeAssemblerState* state)
   }
 }
 
+void CodeStubAssembler::TraceBuiltinCall(int builtin_index) {
+  CHECK(FLAG_trace_builtin_call);
+  TNode<ExternalReference> counters_table =
+      ExternalConstant(ExternalReference::builtin_call_counters(isolate()));
+  TNode<IntPtrT> current_builtin = IntPtrConstant(state()->builtin_index());
+
+  Label counter_ok(this), counter_saturated(this, Label::kDeferred);
+
+  TNode<IntPtrT> source_builtin_table_index =
+      IntPtrMul(current_builtin, IntPtrConstant(Builtins::builtin_count));
+  TNode<WordT> counter_offset = TimesSystemPointerSize(
+      IntPtrAdd(source_builtin_table_index, IntPtrConstant(builtin_index)));
+  TNode<IntPtrT> old_counter = Load<IntPtrT>(counters_table, counter_offset);
+
+  TNode<BoolT> counter_reached_max = WordEqual(
+      old_counter, IntPtrConstant(std::numeric_limits<uintptr_t>::max()));
+  Branch(counter_reached_max, &counter_saturated, &counter_ok);
+
+  BIND(&counter_ok);
+  {
+    TNode<IntPtrT> new_counter = IntPtrAdd(old_counter, IntPtrConstant(1));
+    StoreNoWriteBarrier(MachineType::PointerRepresentation(), counters_table,
+                        counter_offset, new_counter);
+    Goto(&counter_saturated);
+  }
+
+  BIND(&counter_saturated);
+}
+
 void CodeStubAssembler::HandleBreakOnNode() {
   // FLAG_csa_trap_on_node should be in a form "STUB,NODE" where STUB is a
   // string specifying the name of a stub and NODE is number specifying node id.

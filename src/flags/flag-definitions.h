@@ -545,6 +545,11 @@ DEFINE_STRING(trace_ignition_dispatches_output_file, nullptr,
               "the file to which the bytecode handler dispatch table is "
               "written (by default, the table is not written to a file)")
 
+DEFINE_BOOL(trace_builtin_call, false, "traces the call between builtins")
+DEFINE_STRING(trace_builtin_call_output_file, nullptr,
+              "the file to which the builtin call counters table is "
+              "written (by default, the table is not written to a file)")
+
 DEFINE_BOOL(fast_math, true, "faster (but maybe less accurate) math functions")
 DEFINE_BOOL(trace_track_allocation_sites, false,
             "trace the tracking of allocation sites")

@@ -67,6 +67,7 @@ class Interpreter {
   V8_EXPORT_PRIVATE const char* LookupNameOfBytecodeHandler(const Code code);
 
   V8_EXPORT_PRIVATE Local<v8::Object> GetDispatchCountersObject();
+  V8_EXPORT_PRIVATE Local<v8::Object> GetBuiltinCallCountersObject();
 
   void ForEachBytecode(const std::function<void(Bytecode, OperandScale)>& f);
 
@@ -82,6 +83,10 @@ class Interpreter {
     return reinterpret_cast<Address>(bytecode_dispatch_counters_table_.get());
   }
 
+  Address builtin_call_counters_table() {
+    return reinterpret_cast<Address>(builtin_call_counters_table_.get());
+  }
+
   Address address_of_interpreter_entry_trampoline_instruction_start() const {
     return reinterpret_cast<Address>(
         &interpreter_entry_trampoline_instruction_start_);
@@ -91,7 +96,8 @@ class Interpreter {
   friend class SetupInterpreter;
   friend class v8::internal::SetupIsolateDelegate;
 
-  uintptr_t GetDispatchCounter(Bytecode from, Bytecode to) const;
+  uintptr_t GetDispatchCounter(Bytecode from, Bytecode to,
+                               int from_scale) const;
 
   // Get dispatch table index of bytecode.
   static size_t GetDispatchTableIndex(Bytecode bytecode,
@@ -104,6 +110,7 @@ class Interpreter {
   Isolate* isolate_;
   Address dispatch_table_[kDispatchTableSize];
   std::unique_ptr<uintptr_t[]> bytecode_dispatch_counters_table_;
+  std::unique_ptr<uintptr_t[]> builtin_call_counters_table_;
   Address interpreter_entry_trampoline_instruction_start_;
 
   DISALLOW_COPY_AND_ASSIGN(Interpreter);
