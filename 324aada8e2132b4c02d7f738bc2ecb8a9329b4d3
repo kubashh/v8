@@ -34,6 +34,24 @@
       "parentUuid": "e26aabdf_2bec305c",
       "revId": "324aada8e2132b4c02d7f738bc2ecb8a9329b4d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc5355a0_60a41e14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-10-30T08:56:31Z",
+      "side": 1,
+      "message": "Since the patch is safe, I\u0027ll try to backmerge it.",
+      "parentUuid": "f7ac93c4_8d7e90ce",
+      "revId": "324aada8e2132b4c02d7f738bc2ecb8a9329b4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
