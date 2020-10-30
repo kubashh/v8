@@ -33,6 +33,24 @@
       "message": "Nit: This could use a more descriptive name, like findFirstIndexBefore.",
       "revId": "00875b604bcc169d0ddc21ea568c3bfde62ff8a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac3b9f7d_332746ed",
+        "filename": "tools/system-analyzer/timeline.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-30T09:00:48Z",
+      "side": 1,
+      "message": "added a comment for now since this is used in multiple places.",
+      "parentUuid": "c626ca86_4b93f726",
+      "revId": "00875b604bcc169d0ddc21ea568c3bfde62ff8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
