@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4370bb0c_bc51629b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-30T00:31:47Z",
+      "side": 1,
+      "message": "lgtm with exception of the drive-by fix",
+      "revId": "04eaaab3c69ee40324b991fee399684bde1ef46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9712af38_3156d6c8",
+        "filename": "tools/system-analyzer/helper.mjs",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-30T00:31:47Z",
+      "side": 1,
+      "message": "Nit: missing semicolon",
+      "revId": "04eaaab3c69ee40324b991fee399684bde1ef46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8249b49a_86ebe2c5",
+        "filename": "tools/system-analyzer/map-panel/map-transitions.mjs",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-10-30T00:31:47Z",
+      "side": 1,
+      "message": "The current code does seem broken but this fix doesn\u0027t seem right to me.\n\nWhen you toggle the subtree, don\u0027t you need to re-initialize _displayedMapsInTree to a new Set to avoid processing the same Map multiple times? Actually, how does this work for deduplicating across the initial _showMaps() and subsequent toggles if the set is cleared after the initial _showMaps() call?",
+      "revId": "04eaaab3c69ee40324b991fee399684bde1ef46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
