@@ -4683,6 +4683,7 @@ void FilterRelevantReceiverMaps(Isolate* isolate, MapHandles* maps) {
 MaybeObjectHandle TryGetMinimorphicHandler(
     std::vector<MapAndHandler> const& maps_and_handlers, FeedbackSlotKind kind,
     Handle<NativeContext> native_context) {
+  // TODO(marja, v8:9237): Enable minimorphic handlers for super properties.
   if (!FLAG_dynamic_map_checks || !IsLoadICKind(kind))
     return MaybeObjectHandle();
 
