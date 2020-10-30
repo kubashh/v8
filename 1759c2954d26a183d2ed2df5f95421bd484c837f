@@ -16,6 +16,23 @@
       "message": "The cleanup we discussed.",
       "revId": "1759c2954d26a183d2ed2df5f95421bd484c837f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d818cd8_8ab6803a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-10-30T07:38:55Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "1759c2954d26a183d2ed2df5f95421bd484c837f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
