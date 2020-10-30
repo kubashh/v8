@@ -8,8 +8,10 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+
 #include <type_traits>
 
+#include "src/base/platform/wrappers.h"
 #include "v8-version.h"  // NOLINT(build/include_directory)
 #include "v8config.h"    // NOLINT(build/include_directory)
 
@@ -345,7 +347,7 @@ class Internals {
       // kTaggedSize aligned so we have to use unaligned pointer friendly way of
       // accessing them in order to avoid undefined behavior in C++ code.
       T r;
-      memcpy(&r, reinterpret_cast<void*>(addr), sizeof(T));
+      base::Memcpy(&r, reinterpret_cast<void*>(addr), sizeof(T));
       return r;
     }
 #endif

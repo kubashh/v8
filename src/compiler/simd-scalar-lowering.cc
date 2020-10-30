@@ -4,6 +4,7 @@
 
 #include "src/compiler/simd-scalar-lowering.h"
 
+#include "src/base/platform/wrappers.h"
 #include "src/codegen/machine-type.h"
 #include "src/common/globals.h"
 #include "src/compiler/diamond.h"
@@ -1273,7 +1274,7 @@ void SimdScalarLowering::LowerNode(Node* node) {
         }
         case SimdType::kInt16x8: {
           int16_t val[kNumLanes16];
-          memcpy(val, params.data(), kSimd128Size);
+          base::Memcpy(val, params.data(), kSimd128Size);
           for (int i = 0; i < num_lanes; ++i) {
             rep_node[i] = mcgraph_->Int32Constant(static_cast<int32_t>(
                 base::ReadLittleEndianValue<int16_t>(&val[i])));
@@ -1282,7 +1283,7 @@ void SimdScalarLowering::LowerNode(Node* node) {
         }
         case SimdType::kInt32x4: {
           uint32_t val[kNumLanes32];
-          memcpy(val, params.data(), kSimd128Size);
+          base::Memcpy(val, params.data(), kSimd128Size);
           for (int i = 0; i < num_lanes; ++i) {
             rep_node[i] = mcgraph_->Int32Constant(
                 base::ReadLittleEndianValue<uint32_t>(&val[i]));
@@ -1291,7 +1292,7 @@ void SimdScalarLowering::LowerNode(Node* node) {
         }
         case SimdType::kInt64x2: {
           uint64_t val[kNumLanes64];
-          memcpy(val, params.data(), kSimd128Size);
+          base::Memcpy(val, params.data(), kSimd128Size);
           for (int i = 0; i < num_lanes; ++i) {
             rep_node[i] = mcgraph_->Int64Constant(
                 base::ReadLittleEndianValue<uint64_t>(&val[i]));
@@ -1300,7 +1301,7 @@ void SimdScalarLowering::LowerNode(Node* node) {
         }
         case SimdType::kFloat32x4: {
           float val[kNumLanes32];
-          memcpy(val, params.data(), kSimd128Size);
+          base::Memcpy(val, params.data(), kSimd128Size);
           for (int i = 0; i < num_lanes; ++i) {
             rep_node[i] = mcgraph_->Float32Constant(
                 base::ReadLittleEndianValue<float>(&val[i]));
@@ -1309,7 +1310,7 @@ void SimdScalarLowering::LowerNode(Node* node) {
         }
         case SimdType::kFloat64x2: {
           double val[kNumLanes64];
-          memcpy(val, params.data(), kSimd128Size);
+          base::Memcpy(val, params.data(), kSimd128Size);
           for (int i = 0; i < num_lanes; ++i) {
             rep_node[i] = mcgraph_->Float64Constant(
                 base::ReadLittleEndianValue<double>(&val[i]));
