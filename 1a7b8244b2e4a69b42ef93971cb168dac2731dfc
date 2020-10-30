@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "769b4831_b7d6c38d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-30T09:28:19Z",
+      "side": 1,
+      "message": "I think since this is ASAN only it\u0027s fine to leave as is.\n\nWe want to replace the mechanism anyways to do real conservative scanning for such references which doesn\u0027t require keeping track of nodes. This has quite a few other dependencies though which is why it will not happen soon.",
+      "parentUuid": "7b05a381_4c41a008",
+      "revId": "1a7b8244b2e4a69b42ef93971cb168dac2731dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "312b1420_fba2ce6e",
         "filename": "src/handles/global-handles.cc",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2020-10-29T23:03:17Z",
       "side": 1,
       "message": "Looks like ASan will return nullptr here if the fake stack is disabled, so lgtm.",
+      "revId": "1a7b8244b2e4a69b42ef93971cb168dac2731dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f691a2b_3c6db09d",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-10-30T09:28:19Z",
+      "side": 1,
+      "message": "Thanks for double-checking. This is how I interpreted the comment on __asan_addr_is_in_fake_stack().",
+      "parentUuid": "312b1420_fba2ce6e",
       "revId": "1a7b8244b2e4a69b42ef93971cb168dac2731dfc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
