@@ -1235,11 +1235,16 @@ CompilationExecutionResult ExecuteCompilationUnits(
   std::vector<WasmCompilationResult> results_to_publish;
   while (true) {
     ExecutionTier current_tier = unit->tier();
-    const char* event_name = current_tier == ExecutionTier::kLiftoff
-                                 ? "wasm.BaselineCompilation"
-                                 : current_tier == ExecutionTier::kTurbofan
-                                       ? "wasm.TopTierCompilation"
-                                       : "wasm.OtherCompilation";
+    const char* event_name =
+        current_tier == ExecutionTier::kLiftoff
+            ? "wasm.BaselineCompilation"
+            : current_tier == ExecutionTier::kTurbofan
+                  ? "wasm.TopTierCompilation"
+                  : unit->func_index() <
+                            static_cast<int>(
+                                env->module->num_imported_functions)
+                        ? "wasm.WasmToJSWrapperCompilation"
+                        : "wasm.OtherCompilation";
     TRACE_EVENT0("v8.wasm", event_name);
     while (unit->tier() == current_tier) {
       // (asynchronous): Execute the compilation.
