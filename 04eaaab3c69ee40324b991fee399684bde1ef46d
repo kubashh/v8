@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ddd214f_20d71845",
+        "filename": "tools/system-analyzer/helper.mjs",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-30T22:10:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9712af38_3156d6c8",
+      "revId": "04eaaab3c69ee40324b991fee399684bde1ef46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8249b49a_86ebe2c5",
@@ -48,6 +66,24 @@
       "writtenOn": "2020-10-30T00:31:47Z",
       "side": 1,
       "message": "The current code does seem broken but this fix doesn\u0027t seem right to me.\n\nWhen you toggle the subtree, don\u0027t you need to re-initialize _displayedMapsInTree to a new Set to avoid processing the same Map multiple times? Actually, how does this work for deduplicating across the initial _showMaps() and subsequent toggles if the set is cleared after the initial _showMaps() call?",
+      "revId": "04eaaab3c69ee40324b991fee399684bde1ef46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0134152_34a4918b",
+        "filename": "tools/system-analyzer/map-panel/map-transitions.mjs",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-10-30T22:10:05Z",
+      "side": 1,
+      "message": "It\u0027s bad heuristic mostly:\n- On initial showMaps I don\u0027t want a separate line (full transition tree to the initial map) for every map if it\u0027s already contained in a previous transition tree\n- For subsequent toggling (showing sub transitions at points where we branch the transition tree) I always want to show subtree (even if it is already included in the top-level list)\n\nI planned to to use modified preorder tree traversal (with left and right ids) to efficiently deduplicate the initial showMaps and actually open up sub-transitions if possible.\n\nFor now I put this cache in place to limit a bit the number of maps displayed (it seems to be a perfect stress test for chrome\u0027s layouting system :P)",
+      "parentUuid": "8249b49a_86ebe2c5",
       "revId": "04eaaab3c69ee40324b991fee399684bde1ef46d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
