@@ -122,7 +122,8 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) FactoryBase {
   Handle<Script> NewScriptWithId(Handle<String> source, int script_id);
 
   Handle<SharedFunctionInfo> NewSharedFunctionInfoForLiteral(
-      FunctionLiteral* literal, Handle<Script> script, bool is_toplevel);
+      FunctionLiteral* literal, Handle<Script> script, bool is_toplevel,
+      bool is_asm = false);
 
   Handle<PreparseData> NewPreparseData(int data_length, int children_length);
 

@@ -241,7 +241,8 @@ Handle<Script> FactoryBase<Impl>::NewScriptWithId(Handle<String> source,
 
 template <typename Impl>
 Handle<SharedFunctionInfo> FactoryBase<Impl>::NewSharedFunctionInfoForLiteral(
-    FunctionLiteral* literal, Handle<Script> script, bool is_toplevel) {
+    FunctionLiteral* literal, Handle<Script> script, bool is_toplevel,
+    bool is_asm) {
   FunctionKind kind = literal->kind();
   Handle<SharedFunctionInfo> shared =
       NewSharedFunctionInfo(literal->GetName(isolate()), MaybeHandle<Code>(),
@@ -249,7 +250,7 @@ Handle<SharedFunctionInfo> FactoryBase<Impl>::NewSharedFunctionInfoForLiteral(
   SharedFunctionInfo::InitFromFunctionLiteral(isolate(), shared, literal,
                                               is_toplevel);
   shared->SetScript(read_only_roots(), *script, literal->function_literal_id(),
-                    false);
+                    false, is_asm);
   return shared;
 }
 

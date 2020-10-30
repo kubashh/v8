@@ -155,7 +155,8 @@ void SharedFunctionInfo::ScriptIterator::Reset(Isolate* isolate,
 void SharedFunctionInfo::SetScript(ReadOnlyRoots roots,
                                    HeapObject script_object,
                                    int function_literal_id,
-                                   bool reset_preparsed_scope_data) {
+                                   bool reset_preparsed_scope_data,
+                                   bool is_asm) {
   DisallowHeapAllocation no_gc;
 
   if (script() == script_object) return;
@@ -176,11 +177,16 @@ void SharedFunctionInfo::SetScript(ReadOnlyRoots roots,
     DCHECK_LT(function_literal_id, list.length());
     MaybeObject maybe_object = list.Get(function_literal_id);
     HeapObject heap_object;
-    if (maybe_object->GetHeapObjectIfWeak(&heap_object)) {
+    if (maybe_object->GetHeapObject(&heap_object) &&
+        !heap_object.IsUndefined()) {
       DCHECK_EQ(heap_object, *this);
     }
 #endif
-    list.Set(function_literal_id, HeapObjectReference::Weak(*this));
+    if (is_asm) {
+      list.Set(function_literal_id, HeapObjectReference::Strong(*this));
+    } else {
+      list.Set(function_literal_id, HeapObjectReference::Weak(*this));
+    }
   } else {
     DCHECK(script().IsScript());
 
@@ -194,7 +200,7 @@ void SharedFunctionInfo::SetScript(ReadOnlyRoots roots,
       MaybeObject raw =
           old_script.shared_function_infos().Get(function_literal_id);
       HeapObject heap_object;
-      if (raw->GetHeapObjectIfWeak(&heap_object) && heap_object == *this) {
+      if (raw->GetHeapObject(&heap_object) && heap_object == *this) {
         old_script.shared_function_infos().Set(
             function_literal_id,
             HeapObjectReference::Strong(roots.undefined_value()));

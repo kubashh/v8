@@ -718,7 +718,8 @@ class BytecodeArray : public FixedArrayBase {
     kFirstBytecodeAge = kNoAgeBytecodeAge,
     kLastBytecodeAge = kAfterLastBytecodeAge - 1,
     kBytecodeAgeCount = kAfterLastBytecodeAge - kFirstBytecodeAge - 1,
-    kIsOldBytecodeAge = kSexagenarianBytecodeAge
+    kIsOldBytecodeAge = kSexagenarianBytecodeAge,
+    kIsExtremetelyOldBytecodeAge = kOctogenarianBytecodeAge
   };
 
   static constexpr int SizeFor(int length) {
@@ -806,6 +807,7 @@ class BytecodeArray : public FixedArrayBase {
 
   // Bytecode aging
   V8_EXPORT_PRIVATE bool IsOld() const;
+  V8_EXPORT_PRIVATE bool IsExtremetelyOld() const;
   V8_EXPORT_PRIVATE void MakeOlder();
 
   // Clear uninitialized padding space. This ensures that the snapshot content

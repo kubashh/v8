@@ -2979,8 +2979,8 @@ Handle<SharedFunctionInfo> Compiler::GetSharedFunctionInfo(
 
   // Allocate a shared function info object which will be compiled lazily.
   Handle<SharedFunctionInfo> result =
-      isolate->factory()->NewSharedFunctionInfoForLiteral(literal, script,
-                                                          false);
+      isolate->factory()->NewSharedFunctionInfoForLiteral(
+          literal, script, false, literal->scope()->IsAsmModule());
   return result;
 }
 

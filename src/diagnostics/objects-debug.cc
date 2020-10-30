@@ -1566,16 +1566,7 @@ void AllocationSite::AllocationSiteVerify(Isolate* isolate) {
   CHECK(nested_site().IsAllocationSite() || nested_site() == Smi::zero());
 }
 
-void Script::ScriptVerify(Isolate* isolate) {
-  TorqueGeneratedClassVerifiers::ScriptVerify(*this, isolate);
-  for (int i = 0; i < shared_function_infos().length(); ++i) {
-    MaybeObject maybe_object = shared_function_infos().Get(i);
-    HeapObject heap_object;
-    CHECK(maybe_object->IsWeak() || maybe_object->IsCleared() ||
-          (maybe_object->GetHeapObjectIfStrong(&heap_object) &&
-           heap_object.IsUndefined(isolate)));
-  }
-}
+USE_TORQUE_VERIFIER(Script)
 
 void NormalizedMapCache::NormalizedMapCacheVerify(Isolate* isolate) {
   WeakFixedArray::cast(*this).WeakFixedArrayVerify(isolate);

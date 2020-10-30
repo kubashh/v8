@@ -6229,10 +6229,30 @@ void CompilationCacheTable::Age() {
     } else if (get(entry_index).IsFixedArray()) {
       SharedFunctionInfo info = SharedFunctionInfo::cast(get(value_index));
       if (info.IsInterpreted() && info.GetBytecodeArray().IsOld()) {
-        for (int i = 0; i < kEntrySize; i++) {
-          NoWriteBarrierSet(*this, entry_index + i, the_hole_value);
+        bool should_remove = true;
+        if (!info.GetBytecodeArray().IsExtremetelyOld() &&
+            info.script().IsScript()) {
+          Script script = Script::cast(info.script());
+          WeakFixedArray list = script.shared_function_infos();
+          for (int i = 0; i < list.length(); ++i) {
+            MaybeObject raw = list.Get(i);
+            HeapObject heap_object;
+            if (raw->GetHeapObjectIfStrong(&heap_object) &&
+                !heap_object.IsUndefined()) {
+              SharedFunctionInfo inner = SharedFunctionInfo::cast(heap_object);
+              if (inner.HasAsmWasmData()) {
+                should_remove = false;
+                break;
+              }
+            }
+          }
         }
-        ElementRemoved();
+        if (should_remove) {
+          for (int i = 0; i < kEntrySize; i++) {
+            NoWriteBarrierSet(*this, entry_index + i, the_hole_value);
+          }
+          ElementRemoved();
+        }
       }
     }
   }
