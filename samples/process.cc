@@ -35,6 +35,8 @@
 #include <map>
 #include <string>
 
+#include "src/base/platform/wrappers.h"
+
 using std::map;
 using std::pair;
 using std::string;
@@ -633,7 +635,7 @@ void ParseOptions(int argc,
 
 // Reads a file into a v8 string.
 MaybeLocal<String> ReadFile(Isolate* isolate, const string& name) {
-  FILE* file = fopen(name.c_str(), "rb");
+  FILE* file = base::Fopen(name.c_str(), "rb");
   if (file == NULL) return MaybeLocal<String>();
 
   fseek(file, 0, SEEK_END);
@@ -645,11 +647,11 @@ MaybeLocal<String> ReadFile(Isolate* isolate, const string& name) {
   for (size_t i = 0; i < size;) {
     i += fread(&chars.get()[i], 1, size - i, file);
     if (ferror(file)) {
-      fclose(file);
+      base::Fclose(file);
       return MaybeLocal<String>();
     }
   }
-  fclose(file);
+  base::Fclose(file);
   MaybeLocal<String> result = String::NewFromUtf8(
       isolate, chars.get(), NewStringType::kNormal, static_cast<int>(size));
   return result;

@@ -27,6 +27,7 @@
 #include <atomic>
 #include <limits>
 
+#include "src/base/platform/wrappers.h"
 #include "src/trap-handler/trap-handler-internal.h"
 #include "src/trap-handler/trap-handler.h"
 
@@ -114,7 +115,7 @@ CodeProtectionInfo* CreateHandlerData(
     const ProtectedInstructionData* protected_instructions) {
   const size_t alloc_size = HandlerDataSize(num_protected_instructions);
   CodeProtectionInfo* data =
-      reinterpret_cast<CodeProtectionInfo*>(malloc(alloc_size));
+      reinterpret_cast<CodeProtectionInfo*>(base::Malloc(alloc_size));
 
   if (data == nullptr) {
     return nullptr;
@@ -124,7 +125,7 @@ CodeProtectionInfo* CreateHandlerData(
   data->size = size;
   data->num_protected_instructions = num_protected_instructions;
 
-  memcpy(data->instructions, protected_instructions,
+  base::Memcpy(data->instructions, protected_instructions,
          num_protected_instructions * sizeof(ProtectedInstructionData));
 
   return data;
@@ -167,14 +168,14 @@ int RegisterHandlerData(
       new_size = int_max;
     }
     if (new_size == gNumCodeObjects) {
-      free(data);
+      base::Free(data);
       return kInvalidIndex;
     }
 
     // Now that we know our new size is valid, we can go ahead and realloc the
     // array.
     gCodeObjects = static_cast<CodeProtectionInfoListEntry*>(
-        realloc(gCodeObjects, sizeof(*gCodeObjects) * new_size));
+        base::Realloc(gCodeObjects, sizeof(*gCodeObjects) * new_size));
 
     if (gCodeObjects == nullptr) {
       abort();
@@ -202,7 +203,7 @@ int RegisterHandlerData(
 
     return static_cast<int>(i);
   } else {
-    free(data);
+    base::Free(data);
     return kInvalidIndex;
   }
 }
@@ -231,7 +232,7 @@ void ReleaseHandlerData(int index) {
   // TODO(eholk): on debug builds, ensure there are no more copies in
   // the list.
   DCHECK_NOT_NULL(data);  // make sure we're releasing legitimate handler data.
-  free(data);
+  base::Free(data);
 }
 
 int* GetThreadInWasmThreadLocalAddress() { return &g_thread_in_wasm_code; }

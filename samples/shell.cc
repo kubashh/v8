@@ -35,6 +35,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "src/base/platform/wrappers.h"
+
 /**
  * This sample program shows how to implement a simple javascript shell
  * based on V8.  This includes initializing V8 with command line options,
@@ -216,7 +218,7 @@ void Version(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
 // Reads a file into a v8 string.
 v8::MaybeLocal<v8::String> ReadFile(v8::Isolate* isolate, const char* name) {
-  FILE* file = fopen(name, "rb");
+  FILE* file = base::Fopen(name, "rb");
   if (file == NULL) return v8::MaybeLocal<v8::String>();
 
   fseek(file, 0, SEEK_END);
@@ -228,11 +230,11 @@ v8::MaybeLocal<v8::String> ReadFile(v8::Isolate* isolate, const char* name) {
   for (size_t i = 0; i < size;) {
     i += fread(&chars[i], 1, size - i, file);
     if (ferror(file)) {
-      fclose(file);
+      base::Fclose(file);
       return v8::MaybeLocal<v8::String>();
     }
   }
-  fclose(file);
+  base::Fclose(file);
   v8::MaybeLocal<v8::String> result = v8::String::NewFromUtf8(
       isolate, chars, v8::NewStringType::kNormal, static_cast<int>(size));
   delete[] chars;

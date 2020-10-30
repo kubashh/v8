@@ -28,6 +28,7 @@
 
 #include "include/libplatform/libplatform.h"
 #include "src/api/api-inl.h"
+#include "src/base/platform/wrappers.h"
 #include "src/compiler/wasm-compiler.h"
 #include "src/objects/js-collection-inl.h"
 #include "src/objects/managed.h"
@@ -2220,7 +2221,7 @@ struct borrowed_vec {
                              const wasm_##name##_t data[]) {        \
     auto v2 = wasm::vec<Name>::make_uninitialized(size);            \
     if (v2.size() != 0) {                                           \
-      memcpy(v2.get(), data, size * sizeof(wasm_##name##_t));       \
+      base::Memcpy(v2.get(), data, size * sizeof(wasm_##name##_t));       \
     }                                                               \
     *out = release_##name##_vec(std::move(v2));                     \
   }                                                                 \

@@ -95,6 +95,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
+#include "src/base/platform/wrappers.h"
+
 /* Nb: this file might be included in a file compiled with -ansi.  So
    we can't use C++ style "//" comments nor the "asm" keyword (instead
    use "__asm__"). */
@@ -3609,7 +3611,7 @@ typedef
           VG_USERREQ__GDB_MONITOR_COMMAND = 0x1202,
 
           /* These are useful and can be interpreted by any tool that
-             tracks malloc() et al, by using vg_replace_malloc.c. */
+             tracks base::Malloc() et al, by using vg_replace_base::Malloc.c. */
           VG_USERREQ__MALLOCLIKE_BLOCK = 0x1301,
           VG_USERREQ__RESIZEINPLACE_BLOCK = 0x130b,
           VG_USERREQ__FREELIKE_BLOCK   = 0x1302,
@@ -3818,7 +3820,7 @@ VALGRIND_PRINTF_BACKTRACE(const char *format, ...)
 /* Several Valgrind tools (Memcheck, Massif, Helgrind, DRD) rely on knowing
    when heap blocks are allocated in order to give accurate results.  This
    happens automatically for the standard allocator functions such as
-   malloc(), calloc(), realloc(), memalign(), new, new[], free(), delete,
+   base::Malloc(), base::Calloc(), base::Realloc(), memalign(), new, new[], base::Free(), delete,
    delete[], etc.
 
    But if your program uses a custom allocator, this doesn't automatically
@@ -3834,7 +3836,7 @@ VALGRIND_PRINTF_BACKTRACE(const char *format, ...)
    that it can be handled accurately by Valgrind.
 
    VALGRIND_MALLOCLIKE_BLOCK marks a region of memory as having been allocated
-   by a malloc()-like function.  For Memcheck (an illustrative case), this
+   by a base::Malloc()-like function.  For Memcheck (an illustrative case), this
    does two things:
 
    - It records that the block has been allocated.  This means any addresses
@@ -3852,7 +3854,7 @@ VALGRIND_PRINTF_BACKTRACE(const char *format, ...)
    each block.  Adding redzones is recommended as it makes it much more likely
    Valgrind will spot block overruns.  `is_zeroed' indicates if the memory is
    zeroed (or filled with another predictable value), as is the case for
-   calloc().
+   base::Calloc().
 
    VALGRIND_MALLOCLIKE_BLOCK should be put immediately after the point where a
    heap block -- that will be used by the client program -- is allocated.

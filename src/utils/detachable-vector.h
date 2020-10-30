@@ -11,6 +11,7 @@
 
 #include "src/base/logging.h"
 #include "src/base/macros.h"
+#include "src/base/platform/wrappers.h"
 
 namespace v8 {
 namespace internal {
@@ -62,7 +63,7 @@ class DetachableVector : public DetachableVectorBase {
   }
 
   // Free the backing store and clear our reference to it.
-  void free() {
+  void base::Free() {
     delete[] data();
     data_ = nullptr;
     capacity_ = 0;

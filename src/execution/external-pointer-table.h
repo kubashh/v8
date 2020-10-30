@@ -5,6 +5,7 @@
 #ifndef V8_EXECUTION_EXTERNAL_POINTER_TABLE_H_
 #define V8_EXECUTION_EXTERNAL_POINTER_TABLE_H_
 
+#include "src/base/platform/wrappers.h"
 #include "src/common/external-pointer.h"
 #include "src/utils/utils.h"
 
@@ -17,7 +18,7 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
 
   ExternalPointerTable()
       : buffer_(reinterpret_cast<Address*>(
-            calloc(kExternalPointerTableInitialCapacity, sizeof(Address)))),
+            base::Calloc(kExternalPointerTableInitialCapacity, sizeof(Address)))),
         length_(1),
         capacity_(kExternalPointerTableInitialCapacity),
         freelist_head_(0) {
@@ -48,7 +49,7 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
     return index;
   }
 
-  void free(uint32_t index) {
+  void base::Free(uint32_t index) {
     // TODO(v8:10391, saelo): implement simple free list here, i.e. set
     // buffer_[index] to freelist_head_ and set freelist_head
     // to index

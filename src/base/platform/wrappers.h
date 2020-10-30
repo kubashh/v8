@@ -7,6 +7,7 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stddef.h>
 
 namespace v8 {
 namespace base {

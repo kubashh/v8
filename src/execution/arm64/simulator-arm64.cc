@@ -13,6 +13,7 @@
 
 #include "src/base/lazy-instance.h"
 #include "src/base/overflowing-math.h"
+#include "src/base/platform/wrappers.h"
 #include "src/codegen/arm64/decoder-arm64-inl.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/macro-assembler.h"
@@ -140,7 +141,7 @@ void Simulator::CallImpl(Address entry, CallArgument* args) {
   char* stack = reinterpret_cast<char*>(entry_stack);
   std::vector<int64_t>::const_iterator it;
   for (it = stack_args.begin(); it != stack_args.end(); it++) {
-    memcpy(stack, &(*it), sizeof(*it));
+    base::Memcpy(stack, &(*it), sizeof(*it));
     stack += sizeof(*it);
   }
 
@@ -263,9 +264,9 @@ uintptr_t Simulator::PushAddress(uintptr_t address) {
   DCHECK(sizeof(uintptr_t) < 2 * kXRegSize);
   intptr_t new_sp = sp() - 2 * kXRegSize;
   uintptr_t* alignment_slot = reinterpret_cast<uintptr_t*>(new_sp + kXRegSize);
-  memcpy(alignment_slot, &kSlotsZapValue, kSystemPointerSize);
+  base::Memcpy(alignment_slot, &kSlotsZapValue, kSystemPointerSize);
   uintptr_t* stack_slot = reinterpret_cast<uintptr_t*>(new_sp);
-  memcpy(stack_slot, &address, kSystemPointerSize);
+  base::Memcpy(stack_slot, &address, kSystemPointerSize);
   set_sp(new_sp);
   return new_sp;
 }
@@ -3591,8 +3592,8 @@ void Simulator::VisitException(Instruction* instr) {
         uint32_t code;
         uint32_t parameters;
 
-        memcpy(&code, pc_->InstructionAtOffset(kDebugCodeOffset), sizeof(code));
-        memcpy(&parameters, pc_->InstructionAtOffset(kDebugParamsOffset),
+        base::Memcpy(&code, pc_->InstructionAtOffset(kDebugCodeOffset), sizeof(code));
+        base::Memcpy(&parameters, pc_->InstructionAtOffset(kDebugParamsOffset),
                sizeof(parameters));
         char const* message = reinterpret_cast<char const*>(
             pc_->InstructionAtOffset(kDebugMessageOffset));
@@ -5812,8 +5813,8 @@ void Simulator::DoPrintf(Instruction* instr) {
   uint32_t arg_count;
   uint32_t arg_pattern_list;
   STATIC_ASSERT(sizeof(*instr) == 1);
-  memcpy(&arg_count, instr + kPrintfArgCountOffset, sizeof(arg_count));
-  memcpy(&arg_pattern_list, instr + kPrintfArgPatternListOffset,
+  base::Memcpy(&arg_count, instr + kPrintfArgCountOffset, sizeof(arg_count));
+  base::Memcpy(&arg_pattern_list, instr + kPrintfArgPatternListOffset,
          sizeof(arg_pattern_list));
 
   DCHECK_LE(arg_count, kPrintfMaxArgCount);
