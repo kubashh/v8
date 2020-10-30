@@ -206,7 +206,8 @@ class SharedFunctionInfo : public HeapObject {
   V8_EXPORT_PRIVATE void SetScript(ReadOnlyRoots roots,
                                    HeapObject script_object,
                                    int function_literal_id,
-                                   bool reset_preparsed_scope_data = true);
+                                   bool reset_preparsed_scope_data = true,
+                                   bool is_asm = false);
 
   // Layout description of the optimized code map.
   static const int kEntriesStart = 0;

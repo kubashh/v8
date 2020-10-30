@@ -915,6 +915,10 @@ bool BytecodeArray::IsOld() const {
   return bytecode_age() >= kIsOldBytecodeAge;
 }
 
+bool BytecodeArray::IsExtremetelyOld() const {
+  return bytecode_age() >= kIsExtremetelyOldBytecodeAge;
+}
+
 DependentCode DependentCode::GetDependentCode(Handle<HeapObject> object) {
   if (object->IsMap()) {
     return Handle<Map>::cast(object)->dependent_code();
