@@ -16,6 +16,24 @@
       "message": "LGTM\n\nDo we need to backport this?",
       "revId": "324aada8e2132b4c02d7f738bc2ecb8a9329b4d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7ac93c4_8d7e90ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1227502
+      },
+      "writtenOn": "2020-10-30T08:16:35Z",
+      "side": 1,
+      "message": "The backporting question might not have been directed at me but just in case, for Node.js we can float this patch until it is included in a V8 release. Thanks",
+      "parentUuid": "e26aabdf_2bec305c",
+      "revId": "324aada8e2132b4c02d7f738bc2ecb8a9329b4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
