@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "08bc9a8f_4474f624",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-30T08:42:06Z",
+      "side": 1,
+      "message": "\"event\", not \"category\"",
+      "revId": "19a4a74182bab70dd1db15293dbbfe64d84cde5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5bb6c45f_ede1d21b",
@@ -14,6 +31,40 @@
       "writtenOn": "2020-10-30T07:53:42Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "19a4a74182bab70dd1db15293dbbfe64d84cde5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70e187ca_7f010e39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-30T08:42:06Z",
+      "side": 1,
+      "message": "LGTM with comments.",
+      "revId": "19a4a74182bab70dd1db15293dbbfe64d84cde5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "864a420f_b0bbcbb8",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-10-30T08:42:06Z",
+      "side": 1,
+      "message": "I think this extension made this too long now to keep it as a ternary. Maybe extract into a little helper (\"const char* GetCompilationEventName(const WasmCompilationUnit\u0026 unit) {...}\").",
       "revId": "19a4a74182bab70dd1db15293dbbfe64d84cde5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
