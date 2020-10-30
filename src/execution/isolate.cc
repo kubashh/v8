@@ -3831,6 +3831,30 @@ void Isolate::DumpAndResetStats() {
   }
 }
 
+void Isolate::WriteIgnitionDispatchCountersFile() {
+  v8::Isolate* isolate = reinterpret_cast<v8::Isolate*>(this);
+  v8::Local<v8::Object> dispatch_counters =
+      this->interpreter()->GetDispatchCountersObject();
+  v8::Local<v8::Context> context = v8::Context::New(isolate);
+  std::ofstream dispatch_counters_stream(
+      FLAG_trace_ignition_dispatches_output_file);
+  dispatch_counters_stream << *v8::String::Utf8Value(
+      isolate,
+      v8::JSON::Stringify(context, dispatch_counters).ToLocalChecked());
+  return;
+}
+
+void Isolate::WriteBuiltinCallCountersFile() {
+  v8::Isolate* isolate = reinterpret_cast<v8::Isolate*>(this);
+  v8::Local<v8::Object> call_counters =
+      this->interpreter()->GetBuiltinCallCountersObject();
+  v8::Local<v8::Context> context = v8::Context::New(isolate);
+  std::ofstream call_counters_stream(FLAG_trace_builtin_call_output_file);
+  call_counters_stream << *v8::String::Utf8Value(
+      isolate, v8::JSON::Stringify(context, call_counters).ToLocalChecked());
+  return;
+}
+
 void Isolate::AbortConcurrentOptimization(BlockingBehavior behavior) {
   if (concurrent_recompilation_enabled()) {
     DisallowHeapAllocation no_recursive_gc;

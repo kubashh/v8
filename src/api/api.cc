@@ -8434,6 +8434,16 @@ void Isolate::DumpAndResetStats() {
   isolate->DumpAndResetStats();
 }
 
+void Isolate::WriteIgnitionDispatchCountersFile() {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
+  isolate->WriteIgnitionDispatchCountersFile();
+}
+
+void Isolate::WriteBuiltinCallCountersFile() {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
+  isolate->WriteBuiltinCallCountersFile();
+}
+
 void Isolate::DiscardThreadSpecificMetadata() {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   isolate->DiscardPerThreadDataForThisThread();

@@ -1561,7 +1561,11 @@ template("run_mksnapshot") {
     ]
 
     if (v8_enable_builtins_profiling) {
-      args += [ "--turbo-profiling" ]
+      args += [
+        "--turbo-profiling",
+        "--trace-ignition-dispatches",
+        "--trace-builtin-call",
+      ]
     }
     if (v8_enable_builtins_profiling_verbose) {
       args += [ "--turbo-profiling-verbose" ]

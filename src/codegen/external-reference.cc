@@ -139,6 +139,11 @@ ExternalReference ExternalReference::interpreter_dispatch_counters(
       isolate->interpreter()->bytecode_dispatch_counters_table());
 }
 
+ExternalReference ExternalReference::builtin_call_counters(Isolate* isolate) {
+  return ExternalReference(
+      isolate->interpreter()->builtin_call_counters_table());
+}
+
 ExternalReference
 ExternalReference::address_of_interpreter_entry_trampoline_instruction_start(
     Isolate* isolate) {

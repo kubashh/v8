@@ -1293,6 +1293,9 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   void DumpAndResetStats();
 
+  void WriteIgnitionDispatchCountersFile();
+  void WriteBuiltinCallCountersFile();
+
   void* stress_deopt_count_address() { return &stress_deopt_count_; }
 
   void set_force_slow_path(bool v) { force_slow_path_ = v; }

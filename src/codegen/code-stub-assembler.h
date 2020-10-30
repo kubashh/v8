@@ -327,6 +327,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   using AllocationFlags = base::Flags<AllocationFlag>;
 
+  void TraceBuiltinCall(int builtin_index);
+
   TNode<IntPtrT> ParameterToIntPtr(TNode<Smi> value) { return SmiUntag(value); }
   TNode<IntPtrT> ParameterToIntPtr(TNode<IntPtrT> value) { return value; }
   TNode<IntPtrT> ParameterToIntPtr(TNode<UintPtrT> value) {
@@ -2988,6 +2990,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   template <class... TArgs>
   TNode<Object> CallBuiltin(Builtins::Name id, SloppyTNode<Object> context,
                             TArgs... args) {
+    if (FLAG_trace_builtin_call) {
+      TraceBuiltinCall(id);
+    }
     return CallStub<Object>(Builtins::CallableFor(isolate(), id), context,
                             args...);
   }
@@ -2995,6 +3000,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   template <class... TArgs>
   void TailCallBuiltin(Builtins::Name id, SloppyTNode<Object> context,
                        TArgs... args) {
+    if (FLAG_trace_builtin_call) {
+      TraceBuiltinCall(id);
+    }
     return TailCallStub(Builtins::CallableFor(isolate(), id), context, args...);
   }
 

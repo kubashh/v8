@@ -69,9 +69,16 @@ Interpreter::Interpreter(Isolate* isolate)
   if (FLAG_trace_ignition_dispatches) {
     static const int kBytecodeCount = static_cast<int>(Bytecode::kLast) + 1;
     bytecode_dispatch_counters_table_.reset(
-        new uintptr_t[kBytecodeCount * kBytecodeCount]);
+        new uintptr_t[kBytecodeCount * 3 * kBytecodeCount]);
     memset(bytecode_dispatch_counters_table_.get(), 0,
-           sizeof(uintptr_t) * kBytecodeCount * kBytecodeCount);
+           sizeof(uintptr_t) * kBytecodeCount * 3 * kBytecodeCount);
+  }
+  if (FLAG_trace_builtin_call) {
+    static const int kBuiltinCount = static_cast<int>(Builtins::builtin_count);
+    builtin_call_counters_table_.reset(
+        new uintptr_t[kBuiltinCount * kBuiltinCount]);
+    memset(builtin_call_counters_table_.get(), 0,
+           sizeof(uintptr_t) * (kBuiltinCount * kBuiltinCount));
   }
 }
 
@@ -347,10 +354,13 @@ const char* Interpreter::LookupNameOfBytecodeHandler(const Code code) {
   return nullptr;
 }
 
-uintptr_t Interpreter::GetDispatchCounter(Bytecode from, Bytecode to) const {
+uintptr_t Interpreter::GetDispatchCounter(Bytecode from, Bytecode to,
+                                          int from_scale) const {
   int from_index = Bytecodes::ToByte(from);
   int to_index = Bytecodes::ToByte(to);
-  return bytecode_dispatch_counters_table_[from_index * kNumberOfBytecodes +
+  return bytecode_dispatch_counters_table_[(from_index +
+                                            kNumberOfBytecodes * from_scale) *
+                                               kNumberOfBytecodes +
                                            to_index];
 }
 
@@ -371,13 +381,16 @@ Local<v8::Object> Interpreter::GetDispatchCountersObject() {
   // object is always present, even if the value is empty because all counters
   // for that source are zero.
 
-  for (int from_index = 0; from_index < kNumberOfBytecodes; ++from_index) {
-    Bytecode from_bytecode = Bytecodes::FromByte(from_index);
+  for (int from_index = 0; from_index < kNumberOfBytecodes * 3; ++from_index) {
+    int bytecode_index = from_index % kNumberOfBytecodes;
+    int scale = from_index / kNumberOfBytecodes;
+    CHECK_LE(scale, 2);
+    Bytecode from_bytecode = Bytecodes::FromByte(bytecode_index);
     Local<v8::Object> counters_row = v8::Object::New(isolate);
 
     for (int to_index = 0; to_index < kNumberOfBytecodes; ++to_index) {
       Bytecode to_bytecode = Bytecodes::FromByte(to_index);
-      uintptr_t counter = GetDispatchCounter(from_bytecode, to_bytecode);
+      uintptr_t counter = GetDispatchCounter(from_bytecode, to_bytecode, scale);
 
       if (counter > 0) {
         std::string to_name = Bytecodes::ToString(to_bytecode);
@@ -391,6 +404,10 @@ Local<v8::Object> Interpreter::GetDispatchCountersObject() {
     }
 
     std::string from_name = Bytecodes::ToString(from_bytecode);
+    if (scale == 1)
+      from_name += std::string("Wide");
+    else if (scale == 2)
+      from_name += std::string("ExtraWide");
     Local<v8::String> from_name_object =
         v8::String::NewFromUtf8(isolate, from_name.c_str()).ToLocalChecked();
 
@@ -399,6 +416,42 @@ Local<v8::Object> Interpreter::GetDispatchCountersObject() {
             .IsJust());
   }
 
+  return counters_map;
+}
+
+Local<v8::Object> Interpreter::GetBuiltinCallCountersObject() {
+  v8::Isolate* isolate = reinterpret_cast<v8::Isolate*>(isolate_);
+  Local<v8::Context> context = isolate->GetCurrentContext();
+
+  Local<v8::Object> counters_map = v8::Object::New(isolate);
+
+  for (int from_index = 0; from_index < Builtins::builtin_count; ++from_index) {
+    Local<v8::Object> counters_row = v8::Object::New(isolate);
+
+    for (int to_index = 0; to_index < Builtins::builtin_count; ++to_index) {
+      uintptr_t counter =
+          builtin_call_counters_table_[from_index * Builtins::builtin_count +
+                                       to_index];
+
+      if (counter > 0) {
+        std::string to_name = std::string(Builtins::name(to_index));
+        Local<v8::String> to_name_object =
+            v8::String::NewFromUtf8(isolate, to_name.c_str()).ToLocalChecked();
+        Local<v8::Number> counter_object = v8::Number::New(isolate, counter);
+        CHECK(counters_row
+                  ->DefineOwnProperty(context, to_name_object, counter_object)
+                  .IsJust());
+      }
+    }
+
+    std::string from_name = std::string(Builtins::name(from_index));
+    Local<v8::String> from_name_object =
+        v8::String::NewFromUtf8(isolate, from_name.c_str()).ToLocalChecked();
+
+    CHECK(
+        counters_map->DefineOwnProperty(context, from_name_object, counters_row)
+            .IsJust());
+  }
   return counters_map;
 }
 
