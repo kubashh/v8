@@ -80,9 +80,9 @@ class GlobalHandles::NodeBlock final {
 template <class NodeType>
 const GlobalHandles::NodeBlock<NodeType>*
 GlobalHandles::NodeBlock<NodeType>::From(const NodeType* node) {
-  uintptr_t ptr = reinterpret_cast<const uintptr_t>(node) -
-                  sizeof(NodeType) * node->index();
-  const BlockType* block = reinterpret_cast<const BlockType*>(ptr);
+  STATIC_ASSERT(offsetof(BlockType, nodes_) == 0);
+  const NodeType* firstNode = node - node->index();
+  const BlockType* block = reinterpret_cast<const BlockType*>(firstNode);
   DCHECK_EQ(node, block->at(node->index()));
   return block;
 }
@@ -90,9 +90,9 @@ GlobalHandles::NodeBlock<NodeType>::From(const NodeType* node) {
 template <class NodeType>
 GlobalHandles::NodeBlock<NodeType>* GlobalHandles::NodeBlock<NodeType>::From(
     NodeType* node) {
-  uintptr_t ptr =
-      reinterpret_cast<uintptr_t>(node) - sizeof(NodeType) * node->index();
-  BlockType* block = reinterpret_cast<BlockType*>(ptr);
+  STATIC_ASSERT(offsetof(BlockType, nodes_) == 0);
+  NodeType* firstNode = node - node->index();
+  BlockType* block = reinterpret_cast<BlockType*>(firstNode);
   DCHECK_EQ(node, block->at(node->index()));
   return block;
 }
