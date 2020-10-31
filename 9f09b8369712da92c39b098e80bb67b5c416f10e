@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c259cb9c_c26085a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002927
+      },
+      "writtenOn": "2020-10-31T15:32:42Z",
+      "side": 1,
+      "message": "I was driving by, and had to scratch my head a little before realizing that the code is really just trying to index back to the beginning of the nodes_ array.\n\nAt least for me, doing the pointer arithmetic directly instead of going via uintptr_t and computing the address manually seems simpler.\n\nWhat do you think??",
+      "revId": "9f09b8369712da92c39b098e80bb67b5c416f10e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
