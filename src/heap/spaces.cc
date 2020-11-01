@@ -380,13 +380,6 @@ void SpaceWithLinearArea::AdvanceAllocationObservers() {
 
 void SpaceWithLinearArea::MarkLabStartInitialized() {
   allocation_info_.MoveStartToTop();
-  if (identity() == NEW_SPACE) {
-    heap()->new_space()->MoveOriginalTopForward();
-
-#if DEBUG
-    heap()->VerifyNewSpaceTop();
-#endif
-  }
 }
 
 // Perform an allocation step when the step is reached. size_in_bytes is the

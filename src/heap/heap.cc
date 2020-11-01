@@ -191,12 +191,11 @@ class ScavengeTaskObserver : public AllocationObserver {
 };
 
 Heap::Heap()
-    : isolate_(isolate()),
-      memory_pressure_level_(MemoryPressureLevel::kNone),
-      global_pretenuring_feedback_(kInitialFeedbackCapacity),
-      safepoint_(new GlobalSafepoint(this)),
-      external_string_table_(this),
-      collection_barrier_(new CollectionBarrier(this)) {
+    : isolate_(isolate()), new_space_allocator(nullptr, 0, Page::kPageSize);
+memory_pressure_level_(MemoryPressureLevel::kNone),
+    global_pretenuring_feedback_(kInitialFeedbackCapacity),
+    safepoint_(new GlobalSafepoint(this)), external_string_table_(this),
+    collection_barrier_(new CollectionBarrier(this)) {
   // Ensure old_generation_size_ is a multiple of kPageSize.
   DCHECK_EQ(0, max_old_generation_size() & (Page::kPageSize - 1));
 
@@ -2256,8 +2255,7 @@ void Heap::EvacuateYoungGeneration() {
   if (!new_space()->Rebalance()) {
     FatalProcessOutOfMemory("NewSpace::Rebalance");
   }
-  new_space()->ResetLinearAllocationArea();
-  new_space()->set_age_mark(new_space()->top());
+  new_space()->Reset();
 
   for (auto it = new_lo_space()->begin(); it != new_lo_space()->end();) {
     LargePage* page = *it;
@@ -2312,7 +2310,7 @@ void Heap::Scavenge() {
   // Flip the semispaces.  After flipping, to space is empty, from space has
   // live objects.
   new_space()->Flip();
-  new_space()->ResetLinearAllocationArea();
+  new_space()->Reset();
 
   // We also flip the young generation large object space. All large objects
   // will be in the from space.
@@ -5132,6 +5130,7 @@ void Heap::SetUpSpaces() {
   space_[NEW_SPACE] = new_space_ =
       new NewSpace(this, memory_allocator_->data_page_allocator(),
                    initial_semispace_size_, max_semi_space_size_);
+  new_space_allocator->set_space(new_space_);
   space_[OLD_SPACE] = old_space_ = new OldSpace(this);
   space_[CODE_SPACE] = code_space_ = new CodeSpace(this);
   space_[MAP_SPACE] = map_space_ = new MapSpace(this);
@@ -5430,6 +5429,8 @@ void Heap::TearDown() {
   external_string_table_.TearDown();
 
   tracer_.reset();
+
+  new_space_allocator->FreeLab();
 
   for (int i = FIRST_MUTABLE_SPACE; i <= LAST_MUTABLE_SPACE; i++) {
     delete space_[i];
@@ -6663,6 +6664,10 @@ void Heap::IncrementObjectCounters() {
   isolate_->counters()->objs_since_last_young()->Increment();
 }
 #endif  // DEBUG
+
+void Heap::PublishPendingAllocations() {
+  new_space_allocator_.PublishAllocations();
+}
 
 // StrongRootBlocks are allocated as a block of addresses, prefixed with a
 // StrongRootsEntry pointer:

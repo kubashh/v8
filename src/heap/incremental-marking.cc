@@ -942,6 +942,7 @@ StepResult IncrementalMarking::Step(double max_step_size_in_ms,
       // It is safe to merge back all objects that were on hold to the shared
       // work list at Step because we are at a safepoint where all objects
       // are properly initialized.
+      heap_->PublishPendingAllocations();
       local_marking_worklists()->MergeOnHold();
     }
 

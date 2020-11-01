@@ -6,10 +6,10 @@
 #define V8_HEAP_LOCAL_ALLOCATOR_H_
 
 #include "src/common/globals.h"
-#include "src/heap/heap.h"
-#include "src/heap/new-spaces.h"
-#include "src/heap/paged-spaces.h"
-#include "src/heap/spaces.h"
+#include "src/heap/allocator.h"
+#include "src/objects/heap-object.h"
+#include "src/objects/objects.h"
+#include "src/roots/roots.h"
 
 namespace v8 {
 namespace internal {
@@ -25,18 +25,16 @@ class EvacuationAllocator {
       : heap_(heap),
         new_space_(heap->new_space()),
         compaction_spaces_(heap, local_space_kind),
-        new_space_lab_(LocalAllocationBuffer::InvalidBuffer()),
-        lab_allocation_will_fail_(false) {}
+        new_space_small_allocator_(new_space_, kLabSize, kLabSize),
+        new_space_medium_allocator_(new_space_, 0, 0) {}
 
   // Needs to be called from the main thread to finalize this
   // EvacuationAllocator.
   void Finalize() {
     heap_->old_space()->MergeLocalSpace(compaction_spaces_.Get(OLD_SPACE));
     heap_->code_space()->MergeLocalSpace(compaction_spaces_.Get(CODE_SPACE));
-    // Give back remaining LAB space if this EvacuationAllocator's new space LAB
-    // sits right next to new space allocation top.
-    const LinearAllocationArea info = new_space_lab_.CloseAndMakeIterable();
-    new_space_->MaybeFreeUnusedLab(info);
+    new_space_small_allocator_.FreeLab();
+    new_space_medium_allocator_.FreeLab();
   }
 
   inline AllocationResult Allocate(AllocationSpace space, int object_size,
@@ -49,17 +47,14 @@ class EvacuationAllocator {
   inline AllocationResult AllocateInNewSpace(int object_size,
                                              AllocationOrigin origin,
                                              AllocationAlignment alignment);
-  inline bool NewLocalAllocationBuffer();
-  inline AllocationResult AllocateInLAB(int object_size,
-                                        AllocationAlignment alignment);
   inline void FreeLastInNewSpace(HeapObject object, int object_size);
   inline void FreeLastInOldSpace(HeapObject object, int object_size);
 
   Heap* const heap_;
   NewSpace* const new_space_;
   CompactionSpaceCollection compaction_spaces_;
-  LocalAllocationBuffer new_space_lab_;
-  bool lab_allocation_will_fail_;
+  Allocator<NewSpace, ThreadKind::kBackground> new_space_small_allocator_;
+  Allocator<NewSpace, ThreadKind::kBackground> new_space_medium_allocator_;
 };
 
 }  // namespace internal
