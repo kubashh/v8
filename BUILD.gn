@@ -2664,6 +2664,7 @@ v8_source_set("v8_base_without_compiler") {
     "src/heap/large-spaces.h",
     "src/heap/list.h",
     "src/heap/local-allocator-inl.h",
+    "src/heap/local-allocator.cc",
     "src/heap/local-allocator.h",
     "src/heap/local-factory.cc",
     "src/heap/local-factory.h",

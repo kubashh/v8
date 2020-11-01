@@ -2825,7 +2825,7 @@ void MarkCompactCollector::EvacuatePrologue() {
     new_space_evacuation_pages_.push_back(p);
   }
   new_space->Flip();
-  new_space->ResetLinearAllocationArea();
+  new_space->Reset();
 
   DCHECK_EQ(new_space->Size(), 0);
 
@@ -2842,7 +2842,7 @@ void MarkCompactCollector::EvacuatePrologue() {
 void MarkCompactCollector::EvacuateEpilogue() {
   aborted_evacuation_candidates_.clear();
   // New space.
-  heap()->new_space()->set_age_mark(heap()->new_space()->top());
+  heap()->new_space()->SetAgeMark();
   DCHECK_IMPLIES(FLAG_always_promote_young_mc,
                  heap()->new_space()->Size() == 0);
   // Deallocate unmarked large objects.
@@ -4692,14 +4692,14 @@ void MinorMarkCompactCollector::EvacuatePrologue() {
   }
 
   new_space->Flip();
-  new_space->ResetLinearAllocationArea();
+  new_space->ClearMarkbits();
 
   heap()->new_lo_space()->Flip();
   heap()->new_lo_space()->ResetPendingObject();
 }
 
 void MinorMarkCompactCollector::EvacuateEpilogue() {
-  heap()->new_space()->set_age_mark(heap()->new_space()->top());
+  heap()->new_space()->SetAgeMark();
   // Give pages that are queued to be freed back to the OS.
   heap()->memory_allocator()->unmapper()->FreeQueuedChunks();
 }

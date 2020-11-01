@@ -2256,8 +2256,7 @@ void Heap::EvacuateYoungGeneration() {
   if (!new_space()->Rebalance()) {
     FatalProcessOutOfMemory("NewSpace::Rebalance");
   }
-  new_space()->ResetLinearAllocationArea();
-  new_space()->set_age_mark(new_space()->top());
+  new_space()->Reset();
 
   for (auto it = new_lo_space()->begin(); it != new_lo_space()->end();) {
     LargePage* page = *it;
@@ -2312,7 +2311,7 @@ void Heap::Scavenge() {
   // Flip the semispaces.  After flipping, to space is empty, from space has
   // live objects.
   new_space()->Flip();
-  new_space()->ResetLinearAllocationArea();
+  new_space()->Reset();
 
   // We also flip the young generation large object space. All large objects
   // will be in the from space.
