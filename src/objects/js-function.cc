@@ -143,7 +143,8 @@ CodeKind JSFunction::NextTier() const {
   } else if (V8_UNLIKELY(FLAG_turboprop_as_midtier &&
                          ActiveTierIsTurboprop())) {
     return CodeKind::TURBOFAN;
-  } else if (V8_UNLIKELY(FLAG_turboprop) && ActiveTierIsIgnition()) {
+  } else if (V8_UNLIKELY(FLAG_turboprop)) {
+    DCHECK(ActiveTierIsIgnition());
     return CodeKind::TURBOPROP;
   }
   return CodeKind::TURBOFAN;
