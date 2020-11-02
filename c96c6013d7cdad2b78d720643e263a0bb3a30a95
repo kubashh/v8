@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ce90969_2e682722",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-11-02T06:37:09Z",
+      "side": 1,
+      "message": "Cursory comparison with inspector-test.cc. Did I understand this right that inspector-fuzzer.cc basically removed some functions from `UtilsExtension`, stripped out error printfs and instead of loading files we execute the generated string?\n\nlgtm",
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "198e64f3_05763d24",
+        "filename": "test/fuzzer/inspector-fuzzer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-11-02T06:37:09Z",
+      "side": 1,
+      "message": "I am not very familiar with fuzzer binaries, is V8 itself initialized in the caller of `LLVMFuzzerTestOneInput`?",
+      "range": {
+        "startLine": 549,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 54
+      },
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
