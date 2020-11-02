@@ -160,6 +160,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f0d4325_6f496394",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 4777,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-02T13:06:47Z",
+      "side": 1,
+      "message": "Thanks for investigating!\n\nI found test/fuzzer/BUILD.gn, where it was still missing. Updated that, let\u0027s see if swarming runs it now.",
+      "parentUuid": "24e240dc_be3791ea",
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "198e64f3_05763d24",
