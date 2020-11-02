@@ -26,7 +26,7 @@ namespace internal {
 
 class IsCompiledScope;
 
-enum class FeedbackSlotKind {
+enum class FeedbackSlotKind : uint8_t {
   // This kind means that the slot points to the middle of other slot
   // which occupies more than one feedback vector element.
   // There must be no such slots in the system.
@@ -345,20 +345,17 @@ class FeedbackVector
 
 class V8_EXPORT_PRIVATE FeedbackVectorSpec {
  public:
-  explicit FeedbackVectorSpec(Zone* zone)
-      : slot_kinds_(zone), num_closure_feedback_cells_(0) {
+  explicit FeedbackVectorSpec(Zone* zone) : slot_kinds_(zone) {
     slot_kinds_.reserve(16);
   }
 
-  int slots() const { return static_cast<int>(slot_kinds_.size()); }
-  int closure_feedback_cells() const { return num_closure_feedback_cells_; }
+  int slot_count() const { return static_cast<int>(slot_kinds_.size()); }
+  int feedback_cell_count() const { return feedback_cell_count_; }
 
-  int AddFeedbackCellForCreateClosure() {
-    return num_closure_feedback_cells_++;
-  }
+  int AddFeedbackCellForCreateClosure() { return feedback_cell_count_++; }
 
   FeedbackSlotKind GetKind(FeedbackSlot slot) const {
-    return static_cast<FeedbackSlotKind>(slot_kinds_.at(slot.ToInt()));
+    return slot_kinds_.at(slot.ToInt());
   }
 
   bool HasTypeProfileSlot() const;
@@ -459,12 +456,11 @@ class V8_EXPORT_PRIVATE FeedbackVectorSpec {
  private:
   FeedbackSlot AddSlot(FeedbackSlotKind kind);
 
-  void append(FeedbackSlotKind kind) {
-    slot_kinds_.push_back(static_cast<unsigned char>(kind));
-  }
+  void append(FeedbackSlotKind kind) { slot_kinds_.push_back(kind); }
 
-  ZoneVector<unsigned char> slot_kinds_;
-  unsigned int num_closure_feedback_cells_;
+  STATIC_ASSERT(sizeof(FeedbackSlotKind) == sizeof(uint8_t));
+  ZoneVector<FeedbackSlotKind> slot_kinds_;
+  int feedback_cell_count_ = 0;
 
   friend class SharedFeedbackSlot;
 };
