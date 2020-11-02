@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76ca8d46_b89c8a53",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-02T11:17:38Z",
+      "side": 1,
+      "message": "suggest DCHECK(maps_count \u003e 1)",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfcc2a86_62b2afcf",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-02T11:17:38Z",
+      "side": 1,
+      "message": "In this case the `check` value goes unused. Looks like we\u0027re missing the final equality check.\n\nAlso, suggestion: Could we tell the builtin to start checking at a particular slot?",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59549b7a_33eaf461",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-02T11:17:38Z",
+      "side": 1,
+      "message": "This compares the entire set in O(n), no? Is that intended?",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a253975b_d0c42fb1",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-02T11:17:38Z",
+      "side": 1,
+      "message": "Likewise here this copies the set, right? Could we instead store a pointer to the set?",
+      "range": {
+        "startLine": 450,
+        "startChar": 42,
+        "endLine": 450,
+        "endChar": 53
+      },
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
