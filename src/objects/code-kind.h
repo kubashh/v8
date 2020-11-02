@@ -94,7 +94,10 @@ inline constexpr bool CodeKindIsStoredInOptimizedCodeCache(CodeKind kind) {
 
 inline OptimizationTier GetTierForCodeKind(CodeKind kind) {
   if (kind == CodeKind::TURBOFAN) return OptimizationTier::kTopTier;
-  if (kind == CodeKind::TURBOPROP) return OptimizationTier::kTopTier;
+  if (kind == CodeKind::TURBOPROP) {
+    return FLAG_turboprop_as_midtier ? OptimizationTier::kMidTier
+                                     : OptimizationTier::kTopTier;
+  }
   if (kind == CodeKind::NATIVE_CONTEXT_INDEPENDENT) {
     return FLAG_turbo_nci_as_midtier ? OptimizationTier::kMidTier
                                      : OptimizationTier::kTopTier;
@@ -103,7 +106,10 @@ inline OptimizationTier GetTierForCodeKind(CodeKind kind) {
 }
 
 inline CodeKind CodeKindForTopTier() {
-  return V8_UNLIKELY(FLAG_turboprop) ? CodeKind::TURBOPROP : CodeKind::TURBOFAN;
+  if (V8_UNLIKELY(FLAG_turboprop)) {
+    return FLAG_turboprop_as_midtier ? CodeKind::TURBOFAN : CodeKind::TURBOPROP;
+  }
+  return CodeKind::TURBOFAN;
 }
 
 // The dedicated CodeKindFlag enum represents all code kinds in a format

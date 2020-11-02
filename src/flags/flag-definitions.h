@@ -502,6 +502,8 @@ DEFINE_BOOL_READONLY(string_slices, true, "use string slices")
 
 DEFINE_INT(interrupt_budget, 144 * KB,
            "interrupt budget which should be used for the profiler counter")
+DEFINE_INT(budget_scale_factor_for_top_tier, 10,
+           "scale factor for interrupt budget when tiering up from midtier")
 
 // Flags for inline caching and feedback vectors.
 DEFINE_BOOL(use_ic, true, "use inline caching")
@@ -559,7 +561,7 @@ DEFINE_BOOL(turboprop_mid_tier_reg_alloc, true,
 DEFINE_BOOL(turboprop_dynamic_map_checks, true,
             "use dynamic map checks when generating code for property accesses "
             "if all handlers in an IC are the same for turboprop")
-DEFINE_BOOL(turboprop_as_midtier, false,
+DEFINE_BOOL(turboprop_as_midtier, true,
             "enable experimental turboprop mid-tier compiler")
 DEFINE_IMPLICATION(turboprop_as_midtier, turboprop)
 DEFINE_NEG_IMPLICATION(turboprop, turbo_inlining)

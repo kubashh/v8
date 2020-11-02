@@ -226,8 +226,8 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction function,
   if (function.ActiveTierIsTurbofan()) {
     return OptimizationReason::kDoNotOptimize;
   }
-  if (V8_UNLIKELY(FLAG_turboprop) && function.ActiveTierIsTurboprop()) {
-    // TODO(turboprop): Implement tier up from Turboprop.
+  if (V8_UNLIKELY(FLAG_turboprop) &&
+      (function.ActiveTierIsTurboprop() && !FLAG_turboprop_as_midtier)) {
     return OptimizationReason::kDoNotOptimize;
   }
   int ticks = function.feedback_vector().profiler_ticks();

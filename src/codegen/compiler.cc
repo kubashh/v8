@@ -152,10 +152,12 @@ class CompilerTracer : public AllStatic {
 
   static void TraceOptimizedCodeCacheHit(Isolate* isolate,
                                          Handle<JSFunction> function,
-                                         BailoutId osr_offset) {
+                                         BailoutId osr_offset,
+                                         CodeKind code_kind) {
     if (!FLAG_trace_opt) return;
     CodeTracer::Scope scope(isolate->GetCodeTracer());
     PrintTracePrefix(scope, "found optimized code for", function);
+    PrintF(scope.file(), " (target %s)", CodeKindToString(code_kind));
     if (!osr_offset.IsNone()) {
       PrintF(scope.file(), " at OSR AST id %d", osr_offset.ToInt());
     }
@@ -821,7 +823,7 @@ bool FinalizeDeferredUnoptimizedCompilationJobs(
 }
 
 V8_WARN_UNUSED_RESULT MaybeHandle<Code> GetCodeFromOptimizedCodeCache(
-    Handle<JSFunction> function, BailoutId osr_offset) {
+    Handle<JSFunction> function, BailoutId osr_offset, CodeKind code_kind) {
   RuntimeCallTimerScope runtimeTimer(
       function->GetIsolate(),
       RuntimeCallCounterId::kCompileGetFromOptimizedCodeMap);
@@ -840,7 +842,7 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Code> GetCodeFromOptimizedCodeCache(
                .GetOSROptimizedCodeCache()
                .GetOptimizedCode(shared, osr_offset, isolate);
   }
-  if (!code.is_null()) {
+  if (!code.is_null() && code.kind() == code_kind) {
     // Caching of optimized code enabled and optimized code found.
     DCHECK(!code.marked_for_deoptimization());
     DCHECK(function->shared().is_compiled());
@@ -1032,6 +1034,17 @@ Handle<Code> ContinuationForConcurrentOptimization(
     // Tiering up to Turbofan and cached optimized code exists. Continue
     // execution there until TF optimization has finished.
     return cached_code;
+  } else if (FLAG_turboprop_as_midtier &&
+             function->HasAvailableOptimizedCode()) {
+    DCHECK(function->NextTier() == CodeKind::TURBOFAN);
+    Code optimized_code;
+    if (function->HasAttachedOptimizedCode()) {
+      optimized_code = function->code();
+    } else {
+      DCHECK(function->feedback_vector().has_optimized_code());
+      optimized_code = function->feedback_vector().optimized_code();
+    }
+    return handle(optimized_code, isolate);
   }
   return BUILTIN_CODE(isolate, InterpreterEntryTrampoline);
 }
@@ -1078,9 +1091,10 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   // Check the optimized code cache (stored on the SharedFunctionInfo).
   if (CodeKindIsStoredInOptimizedCodeCache(code_kind)) {
     Handle<Code> cached_code;
-    if (GetCodeFromOptimizedCodeCache(function, osr_offset)
+    if (GetCodeFromOptimizedCodeCache(function, osr_offset, code_kind)
             .ToHandle(&cached_code)) {
-      CompilerTracer::TraceOptimizedCodeCacheHit(isolate, function, osr_offset);
+      CompilerTracer::TraceOptimizedCodeCacheHit(isolate, function, osr_offset,
+                                                 code_kind);
       return cached_code;
     }
   }

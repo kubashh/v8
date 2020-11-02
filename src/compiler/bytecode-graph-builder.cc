@@ -4103,8 +4103,13 @@ void BytecodeGraphBuilder::BuildUpdateInterruptBudget(int delta) {
 
   // Keep uses of this in sync with Ignition's UpdateInterruptBudget.
   int delta_with_current_bytecode =
-      delta - bytecode_iterator().current_bytecode_size();
-  NewNode(simplified()->UpdateInterruptBudget(delta_with_current_bytecode),
+      (delta - bytecode_iterator().current_bytecode_size());
+  int scaled_delta = ceil(fabs(static_cast<float>(delta_with_current_bytecode) /
+                               FLAG_budget_scale_factor_for_top_tier));
+  if (delta_with_current_bytecode < 0) {
+    scaled_delta = scaled_delta * -1;
+  }
+  NewNode(simplified()->UpdateInterruptBudget(scaled_delta),
           feedback_cell_node());
 }
 
