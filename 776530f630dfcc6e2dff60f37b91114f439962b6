@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd782f51_7ba2b493",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-02T14:22:19Z",
+      "side": 1,
+      "message": "Can you open another tracking bug for the long-term solution, and also link it from here?",
+      "revId": "776530f630dfcc6e2dff60f37b91114f439962b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ad45c889_1e788a87",
@@ -14,6 +31,40 @@
       "writtenOn": "2020-11-02T13:41:30Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "776530f630dfcc6e2dff60f37b91114f439962b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc41ef94_d04d1f6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-02T14:22:19Z",
+      "side": 1,
+      "message": "Thanks, LGTM as a short-term mitigation.",
+      "revId": "776530f630dfcc6e2dff60f37b91114f439962b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "821dc4c3_fc70e605",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-02T14:22:19Z",
+      "side": 1,
+      "message": "nit: newline after this field.",
       "revId": "776530f630dfcc6e2dff60f37b91114f439962b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
