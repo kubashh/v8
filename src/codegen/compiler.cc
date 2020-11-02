@@ -40,6 +40,7 @@
 #include "src/init/bootstrapper.h"
 #include "src/interpreter/interpreter.h"
 #include "src/logging/log-inl.h"
+#include "src/logging/metrics.h"
 #include "src/objects/feedback-cell-inl.h"
 #include "src/objects/js-function-inl.h"
 #include "src/objects/map.h"
@@ -1307,6 +1308,12 @@ MaybeHandle<SharedFunctionInfo> CompileToplevel(
   HistogramTimerScope timer(rate);
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                parse_info->flags().is_eval() ? "V8.CompileEval" : "V8.Compile");
+
+  v8::metrics::Compile event;
+  auto context_id = v8::metrics::Recorder::ContextId::Empty();
+  internal::metrics::TimedScope<v8::metrics::Compile> timed_scope(
+      &event, &v8::metrics::Compile::wall_clock_time_in_us,
+      isolate->metrics_recorder(), &context_id);
 
   // Prepare and execute compilation of the outer-most function.
 

@@ -85,10 +85,41 @@ template <class T, int64_t (base::TimeDelta::*precision)() const =
                        &base::TimeDelta::InMicroseconds>
 class TimedScope {
  public:
-  TimedScope(T* event, int64_t T::*time) : event_(event), time_(time) {
+  TimedScope(T* event, int64_t T::*time)
+      : event_(event), time_(time), recorder_(nullptr), context_id_(nullptr) {
     Start();
   }
-  ~TimedScope() { Stop(); }
+
+  TimedScope(T* event, int64_t T::*time,
+             const std::shared_ptr<Recorder> recorder)
+      : event_(event), time_(time), recorder_(recorder), context_id_(nullptr) {
+    if (recorder_) {
+      Start();
+    }
+  }
+
+  TimedScope(T* event, int64_t T::*time,
+             const std::shared_ptr<Recorder> recorder,
+             v8::metrics::Recorder::ContextId* context_id)
+      : event_(event),
+        time_(time),
+        recorder_(recorder),
+        context_id_(context_id) {
+    if (recorder_) {
+      Start();
+    }
+  }
+
+  ~TimedScope() {
+    if (recorder_) {
+      Stop();
+      if (context_id_) {
+        recorder_->AddMainThreadEvent(*event_, *context_id_);
+      } else {
+        recorder_->AddThreadSafeEvent(*event_);
+      }
+    }
+  }
 
   void Start() { start_time_ = base::TimeTicks::Now(); }
 
@@ -102,6 +133,8 @@ class TimedScope {
  private:
   T* event_;
   int64_t T::*time_;
+  const std::shared_ptr<Recorder> recorder_;
+  v8::metrics::Recorder::ContextId* context_id_;
   base::TimeTicks start_time_;
 };
 
