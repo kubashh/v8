@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce5a0a67_00a7560a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2020-11-02T13:28:06Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "60e3513d70041a1c090c27caccbb2175db55c25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89f29fde_d59aebf3",
@@ -52,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "172c587e_7a234ee2",
+        "filename": "generated/cr-buildbucket.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2020-11-02T13:28:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "89f29fde_d59aebf3",
+      "revId": "60e3513d70041a1c090c27caccbb2175db55c25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdaa12d4_169e597e",
@@ -65,6 +100,47 @@
       "writtenOn": "2020-11-02T12:17:33Z",
       "side": 1,
       "message": "This is copy/pasta from chromium: https://source.chromium.org/chromium/chromium/src/+/master:infra/config/recipes.star;l\u003d7?q\u003duse_bbagent\u0026ss\u003dchromium%2Fchromium%2Fsrc:infra%2Fconfig%2F",
+      "revId": "60e3513d70041a1c090c27caccbb2175db55c25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1592c8e2_14e95675",
+        "filename": "lib/recipes.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2020-11-02T13:28:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cdaa12d4_169e597e",
+      "revId": "60e3513d70041a1c090c27caccbb2175db55c25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c457f364_3b395cf3",
+        "filename": "lib/recipes.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2020-11-02T13:28:06Z",
+      "side": 1,
+      "message": "is lucicfg fmt creating such a LOC waste?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 1
+      },
       "revId": "60e3513d70041a1c090c27caccbb2175db55c25c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
