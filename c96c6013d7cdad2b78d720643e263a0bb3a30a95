@@ -142,6 +142,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24e240dc_be3791ea",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 4777,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-11-02T12:22:31Z",
+      "side": 1,
+      "message": "Confirmed that this is missing on swarming. I followed the instructions to download the isolate on https://chromium-swarm.appspot.com/task?id\u003d4fa15e4e55bf5810\n\nLocally I checked:\nmachenbach@machenbach3:~/foo3/test/fuzzer  $ ls\nfuzzer.status  json  multi_return  parser  regexp  regexp_builtins  testcfg.py  wasm  wasm_async  wasm_code  wasm_compile\n\nSo, inspector is missing. Can you check one of the other fuzzers who are in this list, to check what might be missing?",
+      "parentUuid": "00fccad2_07774ea2",
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "198e64f3_05763d24",
