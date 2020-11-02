@@ -129,13 +129,16 @@ class V8_EXPORT_PRIVATE Space : public BaseSpace {
     external_backing_store_bytes_ = nullptr;
   }
 
+  virtual bool RefillLab(ThreadKind, int min_size, int max_size,
+                         AllocationAlignment alignment, AllocationOrigin origin,
+                         Address* top, Address* limit) {
+    return false;
+  }
+  virtual void FreeLab(ThreadKind, Address* top, Address* limit) {}
+
   virtual void AddAllocationObserver(AllocationObserver* observer);
 
   virtual void RemoveAllocationObserver(AllocationObserver* observer);
-
-  virtual void PauseAllocationObservers();
-
-  virtual void ResumeAllocationObservers();
 
   virtual void StartNextInlineAllocationStep() {}
 
@@ -504,8 +507,6 @@ class SpaceWithLinearArea : public Space {
       AllocationObserver* observer) override;
   V8_EXPORT_PRIVATE void RemoveAllocationObserver(
       AllocationObserver* observer) override;
-  V8_EXPORT_PRIVATE void ResumeAllocationObservers() override;
-  V8_EXPORT_PRIVATE void PauseAllocationObservers() override;
 
   V8_EXPORT_PRIVATE void AdvanceAllocationObservers();
   V8_EXPORT_PRIVATE void InvokeAllocationObservers(Address soon_object,

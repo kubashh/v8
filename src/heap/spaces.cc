@@ -246,10 +246,6 @@ void Space::RemoveAllocationObserver(AllocationObserver* observer) {
   allocation_counter_.RemoveAllocationObserver(observer);
 }
 
-void Space::PauseAllocationObservers() { allocation_counter_.Pause(); }
-
-void Space::ResumeAllocationObservers() { allocation_counter_.Resume(); }
-
 Address SpaceWithLinearArea::ComputeLimit(Address start, Address end,
                                           size_t min_size) {
   DCHECK_GE(end - start, min_size);
@@ -358,17 +354,6 @@ void SpaceWithLinearArea::RemoveAllocationObserver(
   }
 }
 
-void SpaceWithLinearArea::PauseAllocationObservers() {
-  AdvanceAllocationObservers();
-  Space::PauseAllocationObservers();
-}
-
-void SpaceWithLinearArea::ResumeAllocationObservers() {
-  Space::ResumeAllocationObservers();
-  MarkLabStartInitialized();
-  UpdateInlineAllocationLimit(0);
-}
-
 void SpaceWithLinearArea::AdvanceAllocationObservers() {
   if (allocation_info_.top() &&
       allocation_info_.start() != allocation_info_.top()) {
@@ -380,13 +365,6 @@ void SpaceWithLinearArea::AdvanceAllocationObservers() {
 
 void SpaceWithLinearArea::MarkLabStartInitialized() {
   allocation_info_.MoveStartToTop();
-  if (identity() == NEW_SPACE) {
-    heap()->new_space()->MoveOriginalTopForward();
-
-#if DEBUG
-    heap()->VerifyNewSpaceTop();
-#endif
-  }
 }
 
 // Perform an allocation step when the step is reached. size_in_bytes is the

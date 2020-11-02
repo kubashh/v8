@@ -408,7 +408,6 @@ void GCTracer::NotifySweepingCompleted() {
     heap_->PrintFreeListsStats();
   }
   if (FLAG_trace_allocations_origins) {
-    heap_->new_space()->PrintAllocationsOrigins();
     heap_->old_space()->PrintAllocationsOrigins();
     heap_->code_space()->PrintAllocationsOrigins();
     heap_->map_space()->PrintAllocationsOrigins();

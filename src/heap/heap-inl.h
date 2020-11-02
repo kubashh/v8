@@ -14,6 +14,7 @@
 #include "src/base/atomicops.h"
 #include "src/base/platform/platform.h"
 #include "src/common/assert-scope.h"
+#include "src/heap/allocator-inl.h"
 #include "src/heap/heap-write-barrier.h"
 #include "src/heap/heap.h"
 #include "src/heap/third-party/heap-api.h"
@@ -134,11 +135,11 @@ PagedSpace* Heap::paged_space(int idx) {
 Space* Heap::space(int idx) { return space_[idx]; }
 
 Address* Heap::NewSpaceAllocationTopAddress() {
-  return new_space_->allocation_top_address();
+  return new_space_allocator_.top_address();
 }
 
 Address* Heap::NewSpaceAllocationLimitAddress() {
-  return new_space_->allocation_limit_address();
+  return new_space_allocator_.limit_address();
 }
 
 Address* Heap::OldSpaceAllocationTopAddress() {
@@ -211,7 +212,8 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationType type,
           allocation = lo_space_->AllocateRaw(size_in_bytes);
         }
       } else {
-        allocation = new_space_->AllocateRaw(size_in_bytes, alignment, origin);
+        allocation =
+            new_space_allocator_.Allocate(size_in_bytes, alignment, origin);
       }
     } else if (AllocationType::kOld == type) {
       if (large_object) {
@@ -302,6 +304,10 @@ HeapObject Heap::AllocateRawWith(int size, AllocationType allocation,
   UNREACHABLE();
 }
 
+bool Heap::IsPendingAllocation(HeapObject object) {
+  return new_space_allocator_.IsPendingAllocation(object);
+}
+
 Address Heap::DeserializerAllocate(AllocationType type, int size_in_bytes) {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
     AllocationResult allocation = tp_heap_->Allocate(
@@ -382,7 +388,7 @@ void Heap::FinalizeExternalString(String string) {
   ext_string.DisposeResource(isolate());
 }
 
-Address Heap::NewSpaceTop() { return new_space_->top(); }
+Address Heap::NewSpaceTop() { return *NewSpaceAllocationTopAddress(); }
 
 bool Heap::InYoungGeneration(Object object) {
   DCHECK(!HasWeakHeapObjectTag(object));
