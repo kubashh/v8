@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4e28cff_c2d6f2c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-02T12:35:00Z",
+      "side": 1,
+      "message": "Importing with modules is annoying :P, it\u0027s much simpler to use a single class.",
+      "parentUuid": "1d41a861_11951391",
+      "revId": "361ae783b874fb6ccedd12bfe8953c510446e0f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d47d751e_28f7b59f",
@@ -65,6 +83,30 @@
       "writtenOn": "2020-11-02T09:54:00Z",
       "side": 1,
       "message": "why?",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 21
+      },
+      "revId": "361ae783b874fb6ccedd12bfe8953c510446e0f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a25c4226_d44e1025",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-02T12:35:00Z",
+      "side": 1,
+      "message": "This moves it to a separate microtask queue and makes the UI slightly more responsive.",
+      "parentUuid": "d1de61e9_17b73024",
       "range": {
         "startLine": 53,
         "startChar": 0,
