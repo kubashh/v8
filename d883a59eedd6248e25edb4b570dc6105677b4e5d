@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ed02e61_7a58801a",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c900d882_5a96f97c",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee81afd0_8f64862c",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "Any compilation related events can happen on the background thread (we do streaming parsing and compilation), so they are fine here.",
       "parentUuid": "ee81afd0_8f64862c",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab0d75a5_9c1ddb20",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e38b6ad8_318e755f",
       "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -178,6 +214,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68da27ce_ad6e7878",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "I understand what you want to do with TimedScope, I gave it my best shot 😊. One thing to note is that TimedScope (and the Recorder interface) is currently being used by src\\wasm\\[module-decoder.cc|module-instantiate.cc] and I don\u0027t want to break their integration.\n\nIt also ended up cutting down the set-up code in compiler.cc, so that\u0027s promising.",
+      "parentUuid": "23c04654_223f4a6e",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c87938d6_2c8b49c6",
         "filename": "src/d8/d8.cc",
         "patchSetId": 15
@@ -207,6 +261,24 @@
       "side": 1,
       "message": "We probably need a group-recorder that dispatches internally to multiple recorders. For now this is probably good enough.",
       "parentUuid": "c87938d6_2c8b49c6",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4295748_ee776f08",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4181,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a3d772cf_f3e71abb",
       "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -297,6 +369,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f89065e8_f5cb7bbd",
+        "filename": "src/instrumentation/v8-provider-win.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d005ff4d_d1126f0f",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4eef0a33_7db50e42",
@@ -328,6 +418,24 @@
       "side": 1,
       "message": "If it\u0027s not visible externally (via the API) you can just use V8_EXPORT_PRIVATE.",
       "parentUuid": "4eef0a33_7db50e42",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8801ec81_9f3c95af",
+        "filename": "src/instrumentation/v8-provider.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "98a400f0_0db2143d",
       "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

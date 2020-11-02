@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15249d60_4b558d7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "First attempt at modifying TimedScope so that we write events from within the destructor. Please look through the CL for my changes, but I guess the my main question is that I don\u0027t know a reliable way to distinguish between MainThreadEvents and ThreadSafeEvents from within TimedScope.",
+      "revId": "fcdcf2946d0d270da38c084a8a46029ce63887d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "162239b8_7042ad55",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "Initially, the if-statement in ~TimedScope that calls Add*Event would fail at compile-time bc each event is only defined for one of AddMainThreadEvent/AddThreadSafeEvent.\n\nThe workaround I landed on was to define both AddMainThreadEvent and AddThreadSafeEvent for all events, but throw an error for the one we don\u0027t expect. Unfortunately, I don\u0027t know how to throw errors in /include so help would be greatly appreciated.\n\nAnd also open to other ideas on how to get the Add*Event working from within ~TimedScope.",
+      "revId": "fcdcf2946d0d270da38c084a8a46029ce63887d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f877401f_8cf1cc8c",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "I had to overload the constructor to cover:\n  - the initial case because it\u0027s used for WASM event tracing\n  - the AddMainThreadEvent case which has a context_id_\n  - the AddThreadSafeEvent case which does not have a context_id_\n\nlmk if you\u0027d like this to be explained in the source code.",
+      "revId": "fcdcf2946d0d270da38c084a8a46029ce63887d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99fd7e54_d72d01c7",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-02T23:13:49Z",
+      "side": 1,
+      "message": "I think this is the most problematic part of writing events in the destructor: differentiating between when to write to AddMainThreadEvent and AddThreadSafeEvent.",
+      "revId": "fcdcf2946d0d270da38c084a8a46029ce63887d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
