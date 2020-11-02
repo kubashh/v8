@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ecc9032_d19bf59b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-11-02T12:17:33Z",
+      "side": 1,
+      "message": "PTAL\n\n(One of) infra folks, please pre-review, since liviurau@ is on vacation.\n\nTamer, please do a committers review after someone from infra looked at this.\n\nThis prepares http://shortn/_YQsmJjawZq",
+      "revId": "60e3513d70041a1c090c27caccbb2175db55c25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89f29fde_d59aebf3",
+        "filename": "generated/cr-buildbucket.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-11-02T12:17:33Z",
+      "side": 1,
+      "message": "This switches to the same format Chromium uses. E.g. see: https://source.chromium.org/chromium/chromium/src/+/master:infra/config/generated/cr-buildbucket.cfg;l\u003d11579\n\nThe recipe name becomes a property. All other properties in properties_j move to the generic dict. I found the old way more readable, but whatever... it\u0027s generated.",
+      "revId": "60e3513d70041a1c090c27caccbb2175db55c25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdaa12d4_169e597e",
+        "filename": "lib/recipes.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-11-02T12:17:33Z",
+      "side": 1,
+      "message": "This is copy/pasta from chromium: https://source.chromium.org/chromium/chromium/src/+/master:infra/config/recipes.star;l\u003d7?q\u003duse_bbagent\u0026ss\u003dchromium%2Fchromium%2Fsrc:infra%2Fconfig%2F",
+      "revId": "60e3513d70041a1c090c27caccbb2175db55c25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
