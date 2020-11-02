@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4811fb49_ab4554a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-02T07:46:38Z",
+      "side": 1,
+      "message": "Lutz, ptal. Ross, Michael, the intent here is to turn on --turbo-nci behind --future temporarily to see how bots react. ",
+      "revId": "d9262ec504b7cd758a20818bf9ea42f2e8ebc775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
