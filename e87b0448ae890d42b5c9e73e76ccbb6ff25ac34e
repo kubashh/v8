@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73e2ba76_adce121f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-02T12:01:49Z",
+      "side": 1,
+      "message": "Thanks Sathya! overall lg. Just a couple of comments.",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76ca8d46_b89c8a53",
@@ -37,6 +54,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd2b39c6_3760dcef",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-02T12:01:49Z",
+      "side": 1,
+      "message": "+1 for the equality check. \n\nJakob, IIUC your suggestion is to also specify where to start checking right? like if we see two maps here, start checking from 3rd. Unfortunately we still might have to check 1st and second slots too, so I think that might complicate the builtin a bit.",
+      "parentUuid": "dfcc2a86_62b2afcf",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19a1bbca_a962f038",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-02T12:01:49Z",
+      "side": 1,
+      "message": "I don\u0027t think it is required since we only use maps for generating code. We don\u0027t use it to lookup anything from the map.",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59549b7a_33eaf461",
         "filename": "src/compiler/simplified-operator.cc",
         "patchSetId": 6
@@ -65,6 +117,30 @@
       "writtenOn": "2020-11-02T11:17:38Z",
       "side": 1,
       "message": "Likewise here this copies the set, right? Could we instead store a pointer to the set?",
+      "range": {
+        "startLine": 450,
+        "startChar": 42,
+        "endLine": 450,
+        "endChar": 53
+      },
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9518fb7c_a81294db",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-02T12:01:49Z",
+      "side": 1,
+      "message": "Actually, I think instead of plumbing all this information through, we can just get this from the broker. So dynamic map checks parameters will only have FeedbackSource and in effect-control-linearizer we can simply get this information from the broker by something like this:\n\nFeedbackSource const\u0026 feedback_source \u003d DynamicCheckMapsParametersOf(node-\u003eop());\nMinimorphicLoadPropertyAccessFeedback feedback \u003d  broker()-\u003eGetFeedback(feedback_source).AsMinimorphicPropertyAccess();\n\nThat way we could avoid plumbing this information through and any unnecessary copies too.",
+      "parentUuid": "a253975b_d0c42fb1",
       "range": {
         "startLine": 450,
         "startChar": 42,
