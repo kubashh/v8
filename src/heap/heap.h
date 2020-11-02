@@ -24,6 +24,7 @@
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
 #include "src/heap/allocation-observer.h"
+#include "src/heap/allocator.h"
 #include "src/init/heap-symbols.h"
 #include "src/objects/allocation-site.h"
 #include "src/objects/fixed-array.h"
@@ -116,15 +117,6 @@ enum ExternalBackingStoreType { kArrayBuffer, kExternalString, kNumTypes };
 
 enum class RetainingPathOption { kDefault, kTrackEphemeronPath };
 
-enum class AllocationOrigin {
-  kGeneratedCode = 0,
-  kRuntime = 1,
-  kGC = 2,
-  kFirstAllocationOrigin = kGeneratedCode,
-  kLastAllocationOrigin = kGC,
-  kNumberOfAllocationOrigins = kLastAllocationOrigin + 1
-};
-
 enum class GarbageCollectionReason {
   kUnknown = 0,
   kAllocationFailure = 1,
@@ -190,44 +182,6 @@ class StrongRootsEntry {
 
   friend class Heap;
 };
-
-class AllocationResult {
- public:
-  static inline AllocationResult Retry(AllocationSpace space = NEW_SPACE) {
-    return AllocationResult(space);
-  }
-
-  // Implicit constructor from Object.
-  AllocationResult(Object object)  // NOLINT
-      : object_(object) {
-    // AllocationResults can't return Smis, which are used to represent
-    // failure and the space to retry in.
-    CHECK(!object.IsSmi());
-  }
-
-  AllocationResult() : object_(Smi::FromInt(NEW_SPACE)) {}
-
-  inline bool IsRetry() { return object_.IsSmi(); }
-  inline HeapObject ToObjectChecked();
-  inline HeapObject ToObject();
-  inline Address ToAddress();
-  inline AllocationSpace RetrySpace();
-
-  template <typename T>
-  bool To(T* obj) {
-    if (IsRetry()) return false;
-    *obj = T::cast(object_);
-    return true;
-  }
-
- private:
-  explicit AllocationResult(AllocationSpace space)
-      : object_(Smi::FromInt(static_cast<int>(space))) {}
-
-  Object object_;
-};
-
-STATIC_ASSERT(sizeof(AllocationResult) == kSystemPointerSize);
 
 #ifdef DEBUG
 struct CommentStatistic {
@@ -700,8 +654,6 @@ class Heap {
 
   V8_EXPORT_PRIVATE double MonotonicallyIncreasingTimeInMs();
 
-  void VerifyNewSpaceTop();
-
   void RecordStats(HeapStats* stats, bool take_snapshot = false);
 
   bool MeasureMemory(std::unique_ptr<v8::MeasureMemoryDelegate> delegate,
@@ -830,6 +782,7 @@ class Heap {
   inline Address NewSpaceTop();
 
   NewSpace* new_space() { return new_space_; }
+  Allocator* new_space_allocator() { return &new_space_allocator_; }
   OldSpace* old_space() { return old_space_; }
   CodeSpace* code_space() { return code_space_; }
   MapSpace* map_space() { return map_space_; }
@@ -1986,6 +1939,9 @@ class Heap {
   V8_WARN_UNUSED_RESULT AllocationResult
   AllocatePartialMap(InstanceType instance_type, int instance_size);
 
+  inline bool IsPendingAllocation(HeapObject object);
+  void PublishPendingAllocations();
+
   void FinalizePartialMap(Map map);
 
   void set_force_oom(bool value) { force_oom_ = value; }
@@ -2013,13 +1969,19 @@ class Heap {
   std::vector<WeakArrayList> FindAllRetainedMaps();
   MemoryMeasurement* memory_measurement() { return memory_measurement_.get(); }
 
-  // The amount of memory that has been freed concurrently.
-  std::atomic<uintptr_t> external_memory_concurrently_freed_{0};
-  ExternalMemoryAccounting external_memory_;
 
   // This can be calculated directly from a pointer to the heap; however, it is
   // more expedient to get at the isolate directly from within Heap methods.
   Isolate* isolate_ = nullptr;
+
+  Allocator new_space_allocator_;
+  Allocator old_space_allocator_;
+  Allocator code_space_allocator_;
+  Allocator map_space_allocator_;
+
+  // The amount of memory that has been freed concurrently.
+  std::atomic<uintptr_t> external_memory_concurrently_freed_{0};
+  ExternalMemoryAccounting external_memory_;
 
   // These limits are initialized in Heap::ConfigureHeap based on the resource
   // constraints and flags.
@@ -2307,6 +2269,7 @@ class Heap {
   std::unique_ptr<third_party_heap::Heap> tp_heap_;
 
   // Classes in "heap" can be friends.
+  friend class Allocator;
   friend class AlwaysAllocateScope;
   friend class ArrayBufferCollector;
   friend class ArrayBufferSweeper;

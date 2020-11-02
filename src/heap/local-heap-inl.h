@@ -6,7 +6,8 @@
 #define V8_HEAP_LOCAL_HEAP_INL_H_
 
 #include "src/handles/persistent-handles.h"
-#include "src/heap/concurrent-allocator-inl.h"
+#include "src/heap/allocator-inl.h"
+#include "src/heap/large-spaces.h"
 #include "src/heap/local-heap.h"
 
 namespace v8 {
@@ -31,8 +32,15 @@ AllocationResult LocalHeap::AllocateRaw(int size_in_bytes, AllocationType type,
 
   if (large_object)
     return heap()->lo_space()->AllocateRawBackground(this, size_in_bytes);
-  else
-    return old_space_allocator()->AllocateRaw(size_in_bytes, alignment, origin);
+  else {
+    if (size_in_bytes > kMaxLabObjectSize) {
+      return old_space_medium_allocator_.Allocate(size_in_bytes, alignment,
+                                                  origin);
+    } else {
+      return old_space_small_allocator_.Allocate(size_in_bytes, alignment,
+                                                 origin);
+    }
+  }
 }
 
 Address LocalHeap::AllocateRawOrFail(int object_size, AllocationType type,

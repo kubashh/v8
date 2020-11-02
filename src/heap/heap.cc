@@ -192,6 +192,14 @@ class ScavengeTaskObserver : public AllocationObserver {
 
 Heap::Heap()
     : isolate_(isolate()),
+      new_space_allocator_(ThreadKind::kMain, nullptr, kTaggedSize, 0,
+                           Page::kPageSize, ReadOnlyRoots(isolate())),
+      old_space_allocator_(ThreadKind::kMain, nullptr, kTaggedSize, 0,
+                           Page::kPageSize, ReadOnlyRoots(isolate())),
+      code_space_allocator_(ThreadKind::kMain, nullptr, kCodeAlignment, 0,
+                            Page::kPageSize, ReadOnlyRoots(isolate())),
+      map_space_allocator_(ThreadKind::kMain, nullptr, Map::kSize, 0,
+                           Page::kPageSize, ReadOnlyRoots(isolate())),
       memory_pressure_level_(MemoryPressureLevel::kNone),
       global_pretenuring_feedback_(kInitialFeedbackCapacity),
       safepoint_(new GlobalSafepoint(this)),
@@ -1482,12 +1490,7 @@ void Heap::EnsureFillerObjectAtTop() {
   // evacuation of a non-full new space (or if we are on the last page) there
   // may be uninitialized memory behind top. We fill the remainder of the page
   // with a filler.
-  Address to_top = new_space_->top();
-  Page* page = Page::FromAddress(to_top - kTaggedSize);
-  if (page->Contains(to_top)) {
-    int remaining_in_page = static_cast<int>(page->area_end() - to_top);
-    CreateFillerObjectAt(to_top, remaining_in_page, ClearRecordedSlots::kNo);
-  }
+  new_space_allocator_.FreeLab();
 }
 
 Heap::DevToolsTraceEventScope::DevToolsTraceEventScope(Heap* heap,
@@ -2134,8 +2137,6 @@ void Heap::CallGCEpilogueCallbacks(GCType gc_type, GCCallbackFlags flags) {
 
 
 void Heap::MarkCompact() {
-  PauseAllocationObserversScope pause_observers(this);
-
   SetGCState(MARK_COMPACT);
 
   LOG(isolate_, ResourceEvent("markcompact", "begin"));
@@ -2174,7 +2175,6 @@ void Heap::MinorMarkCompact() {
 #ifdef ENABLE_MINOR_MC
   DCHECK(FLAG_minor_mc);
 
-  PauseAllocationObserversScope pause_observers(this);
   SetGCState(MINOR_MARK_COMPACT);
   LOG(isolate_, ResourceEvent("MinorMarkCompact", "begin"));
 
@@ -2243,7 +2243,8 @@ void Heap::EvacuateYoungGeneration() {
   LOG(isolate_, ResourceEvent("scavenge", "begin"));
 
   // Move pages from new->old generation.
-  PageRange range(new_space()->first_allocatable_address(), new_space()->top());
+  PageRange range(new_space()->first_allocatable_address(),
+                  new_space()->from_space().current_top());
   for (auto it = range.begin(); it != range.end();) {
     Page* p = (*++it)->prev_page();
     new_space()->from_space().RemovePage(p);
@@ -2256,8 +2257,7 @@ void Heap::EvacuateYoungGeneration() {
   if (!new_space()->Rebalance()) {
     FatalProcessOutOfMemory("NewSpace::Rebalance");
   }
-  new_space()->ResetLinearAllocationArea();
-  new_space()->set_age_mark(new_space()->top());
+  new_space()->Reset();
 
   for (auto it = new_lo_space()->begin(); it != new_lo_space()->end();) {
     LargePage* page = *it;
@@ -2300,7 +2300,6 @@ void Heap::Scavenge() {
 
   // Bump-pointer allocations done during scavenge are not real allocations.
   // Pause the inline allocation steps.
-  PauseAllocationObserversScope pause_observers(this);
   IncrementalMarking::PauseBlackAllocationScope pause_black_allocation(
       incremental_marking());
 
@@ -2312,7 +2311,7 @@ void Heap::Scavenge() {
   // Flip the semispaces.  After flipping, to space is empty, from space has
   // live objects.
   new_space()->Flip();
-  new_space()->ResetLinearAllocationArea();
+  new_space()->Reset();
 
   // We also flip the young generation large object space. All large objects
   // will be in the from space.
@@ -3207,9 +3206,8 @@ void Heap::MakeHeapIterable() {
 
 void Heap::MakeLocalHeapLabsIterable() {
   if (!FLAG_local_heaps) return;
-  safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
-    local_heap->MakeLinearAllocationAreaIterable();
-  });
+  safepoint()->IterateLocalHeaps(
+      [](LocalHeap* local_heap) { local_heap->MakeLabsIterable(); });
 }
 
 namespace {
@@ -3603,8 +3601,6 @@ double Heap::MonotonicallyIncreasingTimeInMs() {
   return V8::GetCurrentPlatform()->MonotonicallyIncreasingTime() *
          static_cast<double>(base::Time::kMillisecondsPerSecond);
 }
-
-void Heap::VerifyNewSpaceTop() { new_space()->VerifyTop(); }
 
 bool Heap::IdleNotification(int idle_time_in_ms) {
   return IdleNotification(
@@ -4965,10 +4961,10 @@ bool Heap::ShouldStressCompaction() const {
 void Heap::EnableInlineAllocation() {
   if (!inline_allocation_disabled_) return;
   inline_allocation_disabled_ = false;
-
-  // Update inline allocation limit for new space.
-  new_space()->AdvanceAllocationObservers();
-  new_space()->UpdateInlineAllocationLimit(0);
+  new_space_allocator_.EnableInlineAllocation();
+  old_space_allocator_.EnableInlineAllocation();
+  code_space_allocator_.EnableInlineAllocation();
+  map_space_allocator_.EnableInlineAllocation();
 }
 
 
@@ -4976,17 +4972,10 @@ void Heap::DisableInlineAllocation() {
   if (inline_allocation_disabled_) return;
   inline_allocation_disabled_ = true;
 
-  // Update inline allocation limit for new space.
-  new_space()->UpdateInlineAllocationLimit(0);
-
-  // Update inline allocation limit for old spaces.
-  PagedSpaceIterator spaces(this);
-  CodeSpaceMemoryModificationScope modification_scope(this);
-  for (PagedSpace* space = spaces.Next(); space != nullptr;
-       space = spaces.Next()) {
-    base::MutexGuard guard(space->mutex());
-    space->FreeLinearAllocationArea();
-  }
+  new_space_allocator_.DisableInlineAllocation();
+  old_space_allocator_.DisableInlineAllocation();
+  code_space_allocator_.DisableInlineAllocation();
+  map_space_allocator_.DisableInlineAllocation();
 }
 
 HeapObject Heap::AllocateRawWithLightRetrySlowPath(
@@ -5135,6 +5124,11 @@ void Heap::SetUpSpaces() {
   space_[OLD_SPACE] = old_space_ = new OldSpace(this);
   space_[CODE_SPACE] = code_space_ = new CodeSpace(this);
   space_[MAP_SPACE] = map_space_ = new MapSpace(this);
+  new_space_allocator_.set_space(new_space_);
+  old_space_allocator_.set_space(old_space_);
+  code_space_allocator_.set_space(code_space_);
+  map_space_allocator_.set_space(map_space_);
+
   space_[LO_SPACE] = lo_space_ = new OldLargeObjectSpace(this);
   space_[NEW_LO_SPACE] = new_lo_space_ =
       new NewLargeObjectSpace(this, new_space_->Capacity());
@@ -5430,6 +5424,11 @@ void Heap::TearDown() {
   external_string_table_.TearDown();
 
   tracer_.reset();
+
+  new_space_allocator_.FreeLab();
+  old_space_allocator_.FreeLab();
+  code_space_allocator_.FreeLab();
+  map_space_allocator_.FreeLab();
 
   for (int i = FIRST_MUTABLE_SPACE; i <= LAST_MUTABLE_SPACE; i++) {
     delete space_[i];
@@ -6663,6 +6662,14 @@ void Heap::IncrementObjectCounters() {
   isolate_->counters()->objs_since_last_young()->Increment();
 }
 #endif  // DEBUG
+
+void Heap::PublishPendingAllocations() {
+  new_lo_space()->ResetPendingObject();
+  new_space_allocator_.PublishAllocations();
+  old_space_allocator_.PublishAllocations();
+  code_space_allocator_.PublishAllocations();
+  map_space_allocator_.PublishAllocations();
+}
 
 // StrongRootBlocks are allocated as a block of addresses, prefixed with a
 // StrongRootsEntry pointer:

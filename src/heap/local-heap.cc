@@ -36,7 +36,11 @@ LocalHeap::LocalHeap(Heap* heap, ThreadKind kind,
       handles_(new LocalHandles),
       persistent_handles_(std::move(persistent_handles)),
       marking_barrier_(new MarkingBarrier(this)),
-      old_space_allocator_(this, heap->old_space()) {
+      old_space_small_allocator_(ThreadKind::kBackground, heap->old_space(),
+                                 kTaggedSize, kLabSize, kMaxLabSize,
+                                 ReadOnlyRoots(heap)),
+      old_space_medium_allocator_(ThreadKind::kBackground, heap->old_space(),
+                                  kTaggedSize, 0, 0, ReadOnlyRoots(heap)) {
   heap_->safepoint()->AddLocalHeap(this, [this] {
     if (FLAG_local_heaps) {
       WriteBarrier::SetForThread(marking_barrier_.get());
@@ -59,7 +63,8 @@ LocalHeap::~LocalHeap() {
   EnsureParkedBeforeDestruction();
 
   heap_->safepoint()->RemoveLocalHeap(this, [this] {
-    old_space_allocator_.FreeLinearAllocationArea();
+    old_space_small_allocator_.FreeLab();
+    old_space_medium_allocator_.FreeLab();
 
     if (FLAG_local_heaps) {
       marking_barrier_->Publish();
@@ -144,20 +149,24 @@ void LocalHeap::EnterSafepoint() {
   if (state_ == ThreadState::Running) heap_->safepoint()->EnterFromThread(this);
 }
 
-void LocalHeap::FreeLinearAllocationArea() {
-  old_space_allocator_.FreeLinearAllocationArea();
+void LocalHeap::FreeLabs() {
+  old_space_small_allocator_.FreeLab();
+  old_space_medium_allocator_.FreeLab();
 }
 
-void LocalHeap::MakeLinearAllocationAreaIterable() {
-  old_space_allocator_.MakeLinearAllocationAreaIterable();
+void LocalHeap::MakeLabsIterable() {
+  old_space_small_allocator_.MakeLabIterable();
+  old_space_medium_allocator_.MakeLabIterable();
 }
 
-void LocalHeap::MarkLinearAllocationAreaBlack() {
-  old_space_allocator_.MarkLinearAllocationAreaBlack();
+void LocalHeap::StartBlackAllocation() {
+  old_space_small_allocator_.StartBlackAllocation();
+  old_space_medium_allocator_.StartBlackAllocation();
 }
 
-void LocalHeap::UnmarkLinearAllocationArea() {
-  old_space_allocator_.UnmarkLinearAllocationArea();
+void LocalHeap::StopBlackAllocation() {
+  old_space_small_allocator_.StopBlackAllocation();
+  old_space_medium_allocator_.StopBlackAllocation();
 }
 
 Address LocalHeap::PerformCollectionAndAllocateAgain(

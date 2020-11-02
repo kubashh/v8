@@ -14,6 +14,7 @@
 #include "src/base/atomicops.h"
 #include "src/base/platform/platform.h"
 #include "src/common/assert-scope.h"
+#include "src/heap/allocator-inl.h"
 #include "src/heap/heap-write-barrier.h"
 #include "src/heap/heap.h"
 #include "src/heap/third-party/heap-api.h"
@@ -52,25 +53,6 @@
 namespace v8 {
 namespace internal {
 
-AllocationSpace AllocationResult::RetrySpace() {
-  DCHECK(IsRetry());
-  return static_cast<AllocationSpace>(Smi::ToInt(object_));
-}
-
-HeapObject AllocationResult::ToObjectChecked() {
-  CHECK(!IsRetry());
-  return HeapObject::cast(object_);
-}
-
-HeapObject AllocationResult::ToObject() {
-  DCHECK(!IsRetry());
-  return HeapObject::cast(object_);
-}
-
-Address AllocationResult::ToAddress() {
-  DCHECK(!IsRetry());
-  return HeapObject::cast(object_).address();
-}
 
 Isolate* Heap::isolate() {
   return reinterpret_cast<Isolate*>(
@@ -134,19 +116,19 @@ PagedSpace* Heap::paged_space(int idx) {
 Space* Heap::space(int idx) { return space_[idx]; }
 
 Address* Heap::NewSpaceAllocationTopAddress() {
-  return new_space_->allocation_top_address();
+  return new_space_allocator_.top_address();
 }
 
 Address* Heap::NewSpaceAllocationLimitAddress() {
-  return new_space_->allocation_limit_address();
+  return new_space_allocator_.limit_address();
 }
 
 Address* Heap::OldSpaceAllocationTopAddress() {
-  return old_space_->allocation_top_address();
+  return old_space_allocator_.top_address();
 }
 
 Address* Heap::OldSpaceAllocationLimitAddress() {
-  return old_space_->allocation_limit_address();
+  return old_space_allocator_.limit_address();
 }
 
 void Heap::UpdateNewSpaceAllocationCounter() {
@@ -211,23 +193,27 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationType type,
           allocation = lo_space_->AllocateRaw(size_in_bytes);
         }
       } else {
-        allocation = new_space_->AllocateRaw(size_in_bytes, alignment, origin);
+        allocation =
+            new_space_allocator_.Allocate(size_in_bytes, alignment, origin);
       }
     } else if (AllocationType::kOld == type) {
       if (large_object) {
         allocation = lo_space_->AllocateRaw(size_in_bytes);
       } else {
-        allocation = old_space_->AllocateRaw(size_in_bytes, alignment, origin);
+        allocation =
+            old_space_allocator_.Allocate(size_in_bytes, alignment, origin);
       }
     } else if (AllocationType::kCode == type) {
       DCHECK(AllowCodeAllocation::IsAllowed());
       if (large_object) {
         allocation = code_lo_space_->AllocateRaw(size_in_bytes);
       } else {
-        allocation = code_space_->AllocateRawUnaligned(size_in_bytes);
+        allocation =
+            code_space_allocator_.Allocate(size_in_bytes, alignment, origin);
       }
     } else if (AllocationType::kMap == type) {
-      allocation = map_space_->AllocateRawUnaligned(size_in_bytes);
+      allocation =
+          map_space_allocator_.Allocate(size_in_bytes, alignment, origin);
     } else if (AllocationType::kReadOnly == type) {
       DCHECK(!large_object);
       DCHECK(CanAllocateInReadOnlySpace());
@@ -300,6 +286,11 @@ HeapObject Heap::AllocateRawWith(int size, AllocationType allocation,
                                                 alignment);
   }
   UNREACHABLE();
+}
+
+bool Heap::IsPendingAllocation(HeapObject object) {
+  // TODO(ulan): Add other spaces.
+  return new_space_allocator_.IsPendingAllocation(object);
 }
 
 Address Heap::DeserializerAllocate(AllocationType type, int size_in_bytes) {
@@ -382,7 +373,7 @@ void Heap::FinalizeExternalString(String string) {
   ext_string.DisposeResource(isolate());
 }
 
-Address Heap::NewSpaceTop() { return new_space_->top(); }
+Address Heap::NewSpaceTop() { return *NewSpaceAllocationTopAddress(); }
 
 bool Heap::InYoungGeneration(Object object) {
   DCHECK(!HasWeakHeapObjectTag(object));
