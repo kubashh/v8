@@ -124,6 +124,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00fccad2_07774ea2",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 4777,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-11-02T11:52:16Z",
+      "side": 1,
+      "message": "I actually still don\u0027t see fuzzer/inspector in the test output. Could you check locally if it runs?\n\nThough, even if it does, I wonder if it is just not added on swarming. And when an executable is not present in the isolate, it\u0027s just not executed.",
+      "parentUuid": "6d7b3ef6_60443f8f",
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "198e64f3_05763d24",
