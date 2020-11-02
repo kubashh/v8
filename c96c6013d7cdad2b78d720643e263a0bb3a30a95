@@ -35,6 +35,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "930a2c3d_c85205f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-02T10:36:22Z",
+      "side": 1,
+      "message": "Yes, exactly. I removed everything that should not be needed to produce errors, or that would be bad to have for a fuzzer (like filesystem access). The input string is just being executed as the single input.\n\nI will add some timeout mechanism in a follow-up, because otherwise most tests just run into timeouts. But we can fix this after adding the fuzzer to chromium, which will give us nice statistics about the percentage of timeouts.",
+      "parentUuid": "3ce90969_2e682722",
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7e312ba_4f9431eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-02T10:36:22Z",
+      "side": 1,
+      "message": "Good idea. +ahaas",
+      "parentUuid": "fc6e12c7_9cb43856",
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e11f2ff9_ec32839d",
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5376fc24_e86262f7",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 4777,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-02T10:36:22Z",
+      "side": 1,
+      "message": "Done. Even though I tested it before, and the foo test was executed also without this change.",
+      "parentUuid": "e11f2ff9_ec32839d",
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "198e64f3_05763d24",
@@ -65,6 +119,30 @@
       "writtenOn": "2020-11-02T06:37:09Z",
       "side": 1,
       "message": "I am not very familiar with fuzzer binaries, is V8 itself initialized in the caller of `LLVMFuzzerTestOneInput`?",
+      "range": {
+        "startLine": 549,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 54
+      },
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df3dd1f9_b6071ac0",
+        "filename": "test/fuzzer/inspector-fuzzer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-02T10:36:22Z",
+      "side": 1,
+      "message": "Yes, that\u0027s all being set up in \"LLVMFuzzerInitialize\", defined in test/fuzzer/fuzzer-support.cc.",
+      "parentUuid": "198e64f3_05763d24",
       "range": {
         "startLine": 549,
         "startChar": 0,
