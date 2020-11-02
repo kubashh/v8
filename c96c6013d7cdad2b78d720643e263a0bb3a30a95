@@ -196,6 +196,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3263ada8_8aac15c4",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 4777,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-11-02T14:40:31Z",
+      "side": 1,
+      "message": "Yes, lg!",
+      "parentUuid": "a036445b_ca14002e",
+      "revId": "c96c6013d7cdad2b78d720643e263a0bb3a30a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "198e64f3_05763d24",
