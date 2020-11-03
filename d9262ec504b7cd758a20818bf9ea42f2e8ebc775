@@ -16,6 +16,23 @@
       "message": "Lutz, ptal. Ross, Michael, the intent here is to turn on --turbo-nci behind --future temporarily to see how bots react. ",
       "revId": "d9262ec504b7cd758a20818bf9ea42f2e8ebc775",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01c94541_e3c1b1c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396747
+      },
+      "writtenOn": "2020-11-03T13:57:26Z",
+      "side": 1,
+      "message": "LGTM timing wise.\nPlease revert latest on Fri 2020-11-06 that we\u0027ll have a clean backup candidate for the upcoming M88 branch cut",
+      "revId": "d9262ec504b7cd758a20818bf9ea42f2e8ebc775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
