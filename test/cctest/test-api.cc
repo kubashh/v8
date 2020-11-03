@@ -28547,7 +28547,7 @@ TEST(TriggerMainThreadMetricsEvent) {
     // Check that event submission works.
     {
       i::metrics::TimedScope<v8::metrics::WasmModuleDecoded> timed_scope(
-          &event, &v8::metrics::WasmModuleDecoded::wall_clock_time_in_us);
+          &event);
       v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(100));
     }
     i_iso->metrics_recorder()->AddMainThreadEvent(event, context_id);
@@ -28586,7 +28586,7 @@ TEST(TriggerDelayedMainThreadMetricsEvent) {
     // Check that event submission works.
     {
       i::metrics::TimedScope<v8::metrics::WasmModuleDecoded> timed_scope(
-          &event, &v8::metrics::WasmModuleDecoded::wall_clock_time_in_us);
+          &event);
       v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(100));
     }
     i_iso->metrics_recorder()->DelayMainThreadEvent(event, context_id);

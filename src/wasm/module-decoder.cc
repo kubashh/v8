@@ -2178,7 +2178,7 @@ ModuleResult DecodeWasmModule(
   ModuleDecoderImpl decoder(enabled, module_start, module_end, origin);
   v8::metrics::WasmModuleDecoded metrics_event;
   metrics::TimedScope<v8::metrics::WasmModuleDecoded> metrics_event_scope(
-      &metrics_event, &v8::metrics::WasmModuleDecoded::wall_clock_time_in_us);
+      &metrics_event);
   ModuleResult result =
       decoder.DecodeModule(counters, allocator, verify_functions);
 

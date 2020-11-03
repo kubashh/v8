@@ -418,9 +418,7 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
       isolate_->counters(), module_->origin, wasm_instantiate, module_time));
   v8::metrics::WasmModuleInstantiated wasm_module_instantiated;
   metrics::TimedScope<v8::metrics::WasmModuleInstantiated>
-      wasm_module_instantiated_timed_scope(
-          &wasm_module_instantiated,
-          &v8::metrics::WasmModuleInstantiated::wall_clock_time_in_us);
+      wasm_module_instantiated_timed_scope(&wasm_module_instantiated);
   NativeModule* native_module = module_object_->native_module();
 
   //--------------------------------------------------------------------------
