@@ -21,6 +21,7 @@
 #include "protos/perfetto/config/track_event/track_event_config.gen.h"
 #include "src/base/platform/platform.h"
 #include "src/base/platform/semaphore.h"
+#include "src/base/platform/wrappers.h"
 #include "src/libplatform/tracing/trace-event-listener.h"
 #endif  // V8_USE_PERFETTO
 
@@ -82,7 +83,7 @@ TracingController::~TracingController() {
     for (size_t i = g_category_index - 1; i >= g_num_builtin_categories; --i) {
       const char* group = g_category_groups[i];
       g_category_groups[i] = nullptr;
-      free(const_cast<char*>(group));
+      base::Free(const_cast<char*>(group));
     }
     g_category_index = g_num_builtin_categories;
   }

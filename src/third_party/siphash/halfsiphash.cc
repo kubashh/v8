@@ -20,6 +20,7 @@
 #include "src/third_party/siphash/halfsiphash.h"
 
 #include "src/base/logging.h"
+#include "src/base/platform/wrappers.h"
 #include "src/base/v8-fallthrough.h"
 
 #define ROTL(x, b) (uint32_t)(((x) << (b)) | ((x) >> (32 - (b))))
@@ -49,7 +50,7 @@ uint32_t halfsiphash(const uint32_t value, const uint64_t seed) {
   uint32_t v2 = 0x6c796765;
   uint32_t v3 = 0x74656462;
   uint32_t k[2];
-  memcpy(k, &seed, sizeof(seed));
+  v8::base::Memcpy(k, &seed, sizeof(seed));
   uint32_t b = 4 << 24;
   v3 ^= k[1];
   v2 ^= k[0];

@@ -10,6 +10,7 @@
 #include <unordered_set>
 
 #include "include/cppgc/macros.h"
+#include "src/base/platform/wrappers.h"
 #include "src/heap/cppgc/compaction-worklists.h"
 #include "src/heap/cppgc/globals.h"
 #include "src/heap/cppgc/heap-base.h"
@@ -252,7 +253,7 @@ class CompactionState final {
       if (current_page_ == page)
         memmove(compact_frontier, header, size);
       else
-        memcpy(compact_frontier, header, size);
+        v8::base::Memcpy(compact_frontier, header, size);
       movable_references_.Relocate(header + sizeof(HeapObjectHeader),
                                    compact_frontier + sizeof(HeapObjectHeader));
     }
