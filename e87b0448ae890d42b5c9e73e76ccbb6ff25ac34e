@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6f4e6b8_db562295",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-03T11:17:22Z",
+      "side": 1,
+      "message": "So maps in the FV can be added and/or reordered but never removed?",
+      "parentUuid": "a048ce49_3904a9c8",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19a1bbca_a962f038",
@@ -260,6 +278,30 @@
       "writtenOn": "2020-11-03T11:15:02Z",
       "side": 1,
       "message": "I think for CheckMaps, there is no one place where we can get the list of all maps. We store the PropertyAccessInfo per each receiver_map + access_type and when we build check maps we combine all these and come up with a list of receiver_maps: \nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-native-context-specialization.cc;l\u003d1155\n\nWhere as for dyanmic map checks we already have all this info just in one place.",
+      "parentUuid": "8664a235_e462dba0",
+      "range": {
+        "startLine": 450,
+        "startChar": 42,
+        "endLine": 450,
+        "endChar": 53
+      },
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f94c9e1_59d8e4f7",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-03T11:17:22Z",
+      "side": 1,
+      "message": "Nope, wasn\u0027t aware of CMP. That also seems like something we should fix.",
       "parentUuid": "8664a235_e462dba0",
       "range": {
         "startLine": 450,
