@@ -19,15 +19,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "src/wasm/c-api.h"
+
 #include <cstring>
 #include <iostream>
 
-#include "src/wasm/c-api.h"
-
-#include "third_party/wasm-api/wasm.h"
-
 #include "include/libplatform/libplatform.h"
 #include "src/api/api-inl.h"
+#include "src/base/platform/wrappers.h"
 #include "src/compiler/wasm-compiler.h"
 #include "src/objects/js-collection-inl.h"
 #include "src/objects/managed.h"
@@ -39,6 +38,7 @@
 #include "src/wasm/wasm-objects.h"
 #include "src/wasm/wasm-result.h"
 #include "src/wasm/wasm-serialization.h"
+#include "third_party/wasm-api/wasm.h"
 
 #ifdef WASM_API_DEBUG
 #error "WASM_API_DEBUG is unsupported"
@@ -2220,7 +2220,7 @@ struct borrowed_vec {
                              const wasm_##name##_t data[]) {        \
     auto v2 = wasm::vec<Name>::make_uninitialized(size);            \
     if (v2.size() != 0) {                                           \
-      memcpy(v2.get(), data, size * sizeof(wasm_##name##_t));       \
+      base::Memcpy(v2.get(), data, size * sizeof(wasm_##name##_t)); \
     }                                                               \
     *out = release_##name##_vec(std::move(v2));                     \
   }                                                                 \

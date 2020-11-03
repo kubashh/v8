@@ -95,6 +95,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
+#include "src/base/platform/wrappers.h"
+
 /* Nb: this file might be included in a file compiled with -ansi.  So
    we can't use C++ style "//" comments nor the "asm" keyword (instead
    use "__asm__"). */
@@ -3585,68 +3587,68 @@ typedef
    This enum comprises an ABI exported by Valgrind to programs
    which use client requests.  DO NOT CHANGE THE ORDER OF THESE
    ENTRIES, NOR DELETE ANY -- add new ones at the end. */
-typedef
-   enum { VG_USERREQ__RUNNING_ON_VALGRIND  = 0x1001,
-          VG_USERREQ__DISCARD_TRANSLATIONS = 0x1002,
+typedef enum {
+  VG_USERREQ__RUNNING_ON_VALGRIND = 0x1001,
+  VG_USERREQ__DISCARD_TRANSLATIONS = 0x1002,
 
-          /* These allow any function to be called from the simulated
-             CPU but run on the real CPU.  Nb: the first arg passed to
-             the function is always the ThreadId of the running
-             thread!  So CLIENT_CALL0 actually requires a 1 arg
-             function, etc. */
-          VG_USERREQ__CLIENT_CALL0 = 0x1101,
-          VG_USERREQ__CLIENT_CALL1 = 0x1102,
-          VG_USERREQ__CLIENT_CALL2 = 0x1103,
-          VG_USERREQ__CLIENT_CALL3 = 0x1104,
+  /* These allow any function to be called from the simulated
+     CPU but run on the real CPU.  Nb: the first arg passed to
+     the function is always the ThreadId of the running
+     thread!  So CLIENT_CALL0 actually requires a 1 arg
+     function, etc. */
+  VG_USERREQ__CLIENT_CALL0 = 0x1101,
+  VG_USERREQ__CLIENT_CALL1 = 0x1102,
+  VG_USERREQ__CLIENT_CALL2 = 0x1103,
+  VG_USERREQ__CLIENT_CALL3 = 0x1104,
 
-          /* Can be useful in regression testing suites -- eg. can
-             send Valgrind's output to /dev/null and still count
-             errors. */
-          VG_USERREQ__COUNT_ERRORS = 0x1201,
+  /* Can be useful in regression testing suites -- eg. can
+     send Valgrind's output to /dev/null and still count
+     errors. */
+  VG_USERREQ__COUNT_ERRORS = 0x1201,
 
-          /* Allows a string (gdb monitor command) to be passed to the tool
-             Used for interaction with vgdb/gdb */
-          VG_USERREQ__GDB_MONITOR_COMMAND = 0x1202,
+  /* Allows a string (gdb monitor command) to be passed to the tool
+     Used for interaction with vgdb/gdb */
+  VG_USERREQ__GDB_MONITOR_COMMAND = 0x1202,
 
-          /* These are useful and can be interpreted by any tool that
-             tracks malloc() et al, by using vg_replace_malloc.c. */
-          VG_USERREQ__MALLOCLIKE_BLOCK = 0x1301,
-          VG_USERREQ__RESIZEINPLACE_BLOCK = 0x130b,
-          VG_USERREQ__FREELIKE_BLOCK   = 0x1302,
-          /* Memory pool support. */
-          VG_USERREQ__CREATE_MEMPOOL   = 0x1303,
-          VG_USERREQ__DESTROY_MEMPOOL  = 0x1304,
-          VG_USERREQ__MEMPOOL_ALLOC    = 0x1305,
-          VG_USERREQ__MEMPOOL_FREE     = 0x1306,
-          VG_USERREQ__MEMPOOL_TRIM     = 0x1307,
-          VG_USERREQ__MOVE_MEMPOOL     = 0x1308,
-          VG_USERREQ__MEMPOOL_CHANGE   = 0x1309,
-          VG_USERREQ__MEMPOOL_EXISTS   = 0x130a,
+  /* These are useful and can be interpreted by any tool that
+     tracks base::Malloc() et al, by using vg_replace_base::Malloc.c. */
+  VG_USERREQ__MALLOCLIKE_BLOCK = 0x1301,
+  VG_USERREQ__RESIZEINPLACE_BLOCK = 0x130b,
+  VG_USERREQ__FREELIKE_BLOCK = 0x1302,
+  /* Memory pool support. */
+  VG_USERREQ__CREATE_MEMPOOL = 0x1303,
+  VG_USERREQ__DESTROY_MEMPOOL = 0x1304,
+  VG_USERREQ__MEMPOOL_ALLOC = 0x1305,
+  VG_USERREQ__MEMPOOL_FREE = 0x1306,
+  VG_USERREQ__MEMPOOL_TRIM = 0x1307,
+  VG_USERREQ__MOVE_MEMPOOL = 0x1308,
+  VG_USERREQ__MEMPOOL_CHANGE = 0x1309,
+  VG_USERREQ__MEMPOOL_EXISTS = 0x130a,
 
-          /* Allow printfs to valgrind log. */
-          /* The first two pass the va_list argument by value, which
-             assumes it is the same size as or smaller than a UWord,
-             which generally isn't the case.  Hence are deprecated.
-             The second two pass the vargs by reference and so are
-             immune to this problem. */
-          /* both :: char* fmt, va_list vargs (DEPRECATED) */
-          VG_USERREQ__PRINTF           = 0x1401,
-          VG_USERREQ__PRINTF_BACKTRACE = 0x1402,
-          /* both :: char* fmt, va_list* vargs */
-          VG_USERREQ__PRINTF_VALIST_BY_REF = 0x1403,
-          VG_USERREQ__PRINTF_BACKTRACE_VALIST_BY_REF = 0x1404,
+  /* Allow printfs to valgrind log. */
+  /* The first two pass the va_list argument by value, which
+     assumes it is the same size as or smaller than a UWord,
+     which generally isn't the case.  Hence are deprecated.
+     The second two pass the vargs by reference and so are
+     immune to this problem. */
+  /* both :: char* fmt, va_list vargs (DEPRECATED) */
+  VG_USERREQ__PRINTF = 0x1401,
+  VG_USERREQ__PRINTF_BACKTRACE = 0x1402,
+  /* both :: char* fmt, va_list* vargs */
+  VG_USERREQ__PRINTF_VALIST_BY_REF = 0x1403,
+  VG_USERREQ__PRINTF_BACKTRACE_VALIST_BY_REF = 0x1404,
 
-          /* Stack support. */
-          VG_USERREQ__STACK_REGISTER   = 0x1501,
-          VG_USERREQ__STACK_DEREGISTER = 0x1502,
-          VG_USERREQ__STACK_CHANGE     = 0x1503,
+  /* Stack support. */
+  VG_USERREQ__STACK_REGISTER = 0x1501,
+  VG_USERREQ__STACK_DEREGISTER = 0x1502,
+  VG_USERREQ__STACK_CHANGE = 0x1503,
 
-          /* Wine support */
-          VG_USERREQ__LOAD_PDB_DEBUGINFO = 0x1601,
+  /* Wine support */
+  VG_USERREQ__LOAD_PDB_DEBUGINFO = 0x1601,
 
-          /* Querying of debug info. */
-          VG_USERREQ__MAP_IP_TO_SRCLOC = 0x1701
-   } Vg_ClientRequest;
+  /* Querying of debug info. */
+  VG_USERREQ__MAP_IP_TO_SRCLOC = 0x1701
+} Vg_ClientRequest;
 
 #if !defined(__GNUC__)
 #  define __extension__ /* */
@@ -3818,8 +3820,8 @@ VALGRIND_PRINTF_BACKTRACE(const char *format, ...)
 /* Several Valgrind tools (Memcheck, Massif, Helgrind, DRD) rely on knowing
    when heap blocks are allocated in order to give accurate results.  This
    happens automatically for the standard allocator functions such as
-   malloc(), calloc(), realloc(), memalign(), new, new[], free(), delete,
-   delete[], etc.
+   base::Malloc(), base::Calloc(), base::Realloc(), memalign(), new, new[],
+   base::Free(), delete, delete[], etc.
 
    But if your program uses a custom allocator, this doesn't automatically
    happen, and Valgrind will not do as well.  For example, if you allocate
@@ -3834,7 +3836,7 @@ VALGRIND_PRINTF_BACKTRACE(const char *format, ...)
    that it can be handled accurately by Valgrind.
 
    VALGRIND_MALLOCLIKE_BLOCK marks a region of memory as having been allocated
-   by a malloc()-like function.  For Memcheck (an illustrative case), this
+   by a base::Malloc()-like function.  For Memcheck (an illustrative case), this
    does two things:
 
    - It records that the block has been allocated.  This means any addresses
@@ -3852,7 +3854,7 @@ VALGRIND_PRINTF_BACKTRACE(const char *format, ...)
    each block.  Adding redzones is recommended as it makes it much more likely
    Valgrind will spot block overruns.  `is_zeroed' indicates if the memory is
    zeroed (or filled with another predictable value), as is the case for
-   calloc().
+   base::Calloc().
 
    VALGRIND_MALLOCLIKE_BLOCK should be put immediately after the point where a
    heap block -- that will be used by the client program -- is allocated.
