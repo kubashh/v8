@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "efaadd9078691d280e34d22333c86f1f9860a9b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ac3b813_d16753f0",
+        "filename": "test/common/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2077,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-11-03T11:18:03Z",
+      "side": 1,
+      "message": "Missing negation?",
+      "revId": "efaadd9078691d280e34d22333c86f1f9860a9b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
