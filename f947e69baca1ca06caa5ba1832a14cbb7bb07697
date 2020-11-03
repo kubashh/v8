@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91e5480b_c361d2d2",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-03T12:50:17Z",
+      "side": 1,
+      "message": "{receiver} is not used except for your DCHECKs, you can remove it.",
+      "range": {
+        "startLine": 797,
+        "startChar": 49,
+        "endLine": 797,
+        "endChar": 57
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b261fc7_de4b2fbd",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-03T12:50:17Z",
+      "side": 1,
+      "message": "(if any)",
+      "range": {
+        "startLine": 1147,
+        "startChar": 42,
+        "endLine": 1147,
+        "endChar": 50
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1ebe8dc_78b7eb0d",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3483,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-03T12:50:17Z",
+      "side": 1,
+      "message": "return",
+      "range": {
+        "startLine": 3483,
+        "startChar": 2,
+        "endLine": 3483,
+        "endChar": 28
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7596c3e4_3f4faa4f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3050,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-03T12:50:17Z",
+      "side": 1,
+      "message": "I don\u0027t see why this should be safe, i.e. why receiver_map should contain a value here.",
+      "range": {
+        "startLine": 3050,
+        "startChar": 56,
+        "endLine": 3050,
+        "endChar": 69
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d18084a8_d209150f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3245,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-03T12:50:17Z",
+      "side": 1,
+      "message": "Please delete these empty lines here and below, they make the code harder to read.",
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78c5f995_534b11a3",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-03T12:50:17Z",
+      "side": 1,
+      "message": "empty()",
+      "range": {
+        "startLine": 3254,
+        "startChar": 20,
+        "endLine": 3254,
+        "endChar": 31
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e870d0bf_eb43eb4e",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3260,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-03T12:50:17Z",
+      "side": 1,
+      "message": "Please directly pass base::nullopt here.",
+      "range": {
+        "startLine": 3260,
+        "startChar": 20,
+        "endLine": 3260,
+        "endChar": 42
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
