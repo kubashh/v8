@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ea17620_09e8bbef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-03T14:18:26Z",
+      "side": 1,
+      "message": "FYI I limited to x64-only, since other architectures haven\u0027t had testing coverage so far and still need work. I also temporarily enabled nci test skips for the future variant.",
+      "revId": "d3c30662ff9696e7c2b135c5a3a22de18a765564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
