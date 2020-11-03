@@ -34,6 +34,24 @@
       "parentUuid": "139fe866_eef5cf4f",
       "revId": "f726981954c2343b650fe89ff205b75d03372c22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77405e32_9cff5e8d",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6232,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-03T08:53:01Z",
+      "side": 1,
+      "message": "fyi I added the --isolate-script-cache-ageing flag recently; passing \u0027--no-isolate-script-cache-ageing --no-flush-bytecode\u0027 should behave like the hack you mentioned.",
+      "parentUuid": "ae92d09d_34922857",
+      "revId": "f726981954c2343b650fe89ff205b75d03372c22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
