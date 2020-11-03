@@ -17,4 +17,6 @@
 // (Boolean macro values are not supported by all preprocessors.)
 #define V8_IS_CANDIDATE_VERSION 0
 
+#define V8_LTS_TAG
+
 #endif  // V8_INCLUDE_VERSION_H_
