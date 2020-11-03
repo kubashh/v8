@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16a857b4_1357771f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-11-03T06:50:27Z",
+      "side": 1,
+      "message": "Hi Michael, Ulan, do you think these replacements are acceptable?",
+      "revId": "ae3786c56612c67a5287c54e6c3348b076de87eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
