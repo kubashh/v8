@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2195fc0_3896379a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-03T10:51:08Z",
+      "side": 1,
+      "message": "Hey Mythri, ptal as well, renamed as per your suggestions.",
+      "revId": "3fdcf1814d44b75a5a89ac55a5550e9cad853bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
