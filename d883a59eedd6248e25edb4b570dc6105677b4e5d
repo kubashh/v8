@@ -232,6 +232,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a9ec8aa_395e6234",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-03T11:07:09Z",
+      "side": 1,
+      "message": "I\u0027m fine with changing that code as well, since they just implemented the minimal interface necessary for them.\n\nThe most important part for me are:\n1) make sure we have only the most minimal overhead if the timer\u0027s are not active\n2) Make sure we have low additional overhead if they are active\n3) Make a very reasonable default interface (like for instance, I\u0027m not too much a fan that we have to manually pass in an additional reference to where we want to store the time, I prefer just using a templatized default {duration_us} which works for 90% of the cases.",
+      "parentUuid": "68da27ce_ad6e7878",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c87938d6_2c8b49c6",
         "filename": "src/d8/d8.cc",
         "patchSetId": 15
