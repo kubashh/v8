@@ -3838,6 +3838,32 @@ void Simulator::DecodeType6CoprocessorIns(Instruction* instr) {
   }
 }
 
+// Helper functions for implemeting NEON ops. Unop applies a unary op to each
+// lane. Binop applies a binary operation to matching input lanes.
+template <typename T>
+void Unop(Simulator* simulator, int Vd, int Vm, std::function<T(T)> unop) {
+  static const int kLanes = 16 / sizeof(T);
+  T src[kLanes];
+  simulator->get_neon_register(Vm, src);
+  for (int i = 0; i < kLanes; i++) {
+    src[i] = unop(src[i]);
+  }
+  simulator->set_neon_register(Vd, src);
+}
+
+template <typename T>
+void Binop(Simulator* simulator, int Vd, int Vm, int Vn,
+           std::function<T(T, T)> binop) {
+  static const int kLanes = 16 / sizeof(T);
+  T src1[kLanes], src2[kLanes];
+  simulator->get_neon_register(Vn, src1);
+  simulator->get_neon_register(Vm, src2);
+  for (int i = 0; i < kLanes; i++) {
+    src1[i] = binop(src1[i], src2[i]);
+  }
+  simulator->set_neon_register(Vd, src1);
+}
+
 // Templated operations for NEON instructions.
 template <typename T, typename U>
 U Widen(T value) {
@@ -3859,15 +3885,6 @@ U Narrow(T value) {
   return static_cast<U>(value);
 }
 
-template <typename T>
-T Clamp(int64_t value) {
-  static_assert(sizeof(int64_t) > sizeof(T), "T must be int32_t or smaller");
-  int64_t min = static_cast<int64_t>(std::numeric_limits<T>::min());
-  int64_t max = static_cast<int64_t>(std::numeric_limits<T>::max());
-  int64_t clamped = std::max(min, std::min(max, value));
-  return static_cast<T>(clamped);
-}
-
 template <typename T, typename U>
 void Widen(Simulator* simulator, int Vd, int Vm) {
   static const int kLanes = 8 / sizeof(T);
@@ -3882,28 +3899,15 @@ void Widen(Simulator* simulator, int Vd, int Vm) {
 
 template <typename T, int SIZE>
 void Abs(Simulator* simulator, int Vd, int Vm) {
-  static const int kElems = SIZE / sizeof(T);
-  T src[kElems];
-  simulator->get_neon_register<T, SIZE>(Vm, src);
-  for (int i = 0; i < kElems; i++) {
-    src[i] = std::abs(src[i]);
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src);
+  Unop<T>(simulator, Vd, Vm, [](T x) { return std::abs(x); });
 }
 
 template <typename T, int SIZE>
 void Neg(Simulator* simulator, int Vd, int Vm) {
-  static const int kElems = SIZE / sizeof(T);
-  T src[kElems];
-  simulator->get_neon_register<T, SIZE>(Vm, src);
-  for (int i = 0; i < kElems; i++) {
-    if (src[i] != std::numeric_limits<T>::min()) {
-      src[i] = -src[i];
-    } else {
-      // The respective minimum (negative) value maps to itself.
-    }
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src);
+  Unop<T>(simulator, Vd, Vm, [](T x) {
+    // The respective minimum (negative) value maps to itself.
+    return x == std::numeric_limits<T>::min() ? x : -x;
+  });
 }
 
 template <typename T, typename U>
@@ -3913,7 +3917,7 @@ void SaturatingNarrow(Simulator* simulator, int Vd, int Vm) {
   U dst[kLanes];
   simulator->get_neon_register(Vm, src);
   for (int i = 0; i < kLanes; i++) {
-    dst[i] = Narrow<T, U>(Clamp<U>(src[i]));
+    dst[i] = Narrow<T, U>(Saturate<U>(src[i]));
   }
   simulator->set_neon_register<U, kDoubleSize>(Vd, dst);
 }
@@ -3925,33 +3929,19 @@ void SaturatingUnsignedNarrow(Simulator* simulator, int Vd, int Vm) {
   U dst[kLanes];
   simulator->get_neon_register(Vm, src);
   for (int i = 0; i < kLanes; i++) {
-    dst[i] = Clamp<U>(src[i]);
+    dst[i] = Saturate<U>(src[i]);
   }
   simulator->set_neon_register<U, kDoubleSize>(Vd, dst);
 }
 
 template <typename T>
 void AddSat(Simulator* simulator, int Vd, int Vm, int Vn) {
-  static const int kLanes = 16 / sizeof(T);
-  T src1[kLanes], src2[kLanes];
-  simulator->get_neon_register(Vn, src1);
-  simulator->get_neon_register(Vm, src2);
-  for (int i = 0; i < kLanes; i++) {
-    src1[i] = Clamp<T>(Widen<T, int64_t>(src1[i]) + Widen<T, int64_t>(src2[i]));
-  }
-  simulator->set_neon_register(Vd, src1);
+  Binop<T>(simulator, Vd, Vm, Vn, SaturateAdd<T>);
 }
 
 template <typename T>
 void SubSat(Simulator* simulator, int Vd, int Vm, int Vn) {
-  static const int kLanes = 16 / sizeof(T);
-  T src1[kLanes], src2[kLanes];
-  simulator->get_neon_register(Vn, src1);
-  simulator->get_neon_register(Vm, src2);
-  for (int i = 0; i < kLanes; i++) {
-    src1[i] = SaturateSub<T>(src1[i], src2[i]);
-  }
-  simulator->set_neon_register(Vd, src1);
+  Binop<T>(simulator, Vd, Vm, Vn, SaturateSub<T>);
 }
 
 template <typename T, int SIZE>
@@ -4004,38 +3994,18 @@ void Transpose(Simulator* simulator, int Vd, int Vm) {
 
 template <typename T, int SIZE>
 void Test(Simulator* simulator, int Vd, int Vm, int Vn) {
-  static const int kElems = SIZE / sizeof(T);
-  T src1[kElems], src2[kElems];
-  simulator->get_neon_register<T, SIZE>(Vn, src1);
-  simulator->get_neon_register<T, SIZE>(Vm, src2);
-  for (int i = 0; i < kElems; i++) {
-    src1[i] = (src1[i] & src2[i]) != 0 ? -1 : 0;
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src1);
+  auto test = [](T x, T y) { return (x & y) ? -1 : 0; };
+  Binop<T>(simulator, Vd, Vm, Vn, test);
 }
 
 template <typename T, int SIZE>
 void Add(Simulator* simulator, int Vd, int Vm, int Vn) {
-  static const int kElems = SIZE / sizeof(T);
-  T src1[kElems], src2[kElems];
-  simulator->get_neon_register<T, SIZE>(Vn, src1);
-  simulator->get_neon_register<T, SIZE>(Vm, src2);
-  for (int i = 0; i < kElems; i++) {
-    src1[i] += src2[i];
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src1);
+  Binop<T>(simulator, Vd, Vm, Vn, std::plus<T>());
 }
 
 template <typename T, int SIZE>
 void Sub(Simulator* simulator, int Vd, int Vm, int Vn) {
-  static const int kElems = SIZE / sizeof(T);
-  T src1[kElems], src2[kElems];
-  simulator->get_neon_register<T, SIZE>(Vn, src1);
-  simulator->get_neon_register<T, SIZE>(Vm, src2);
-  for (int i = 0; i < kElems; i++) {
-    src1[i] -= src2[i];
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src1);
+  Binop<T>(simulator, Vd, Vm, Vn, std::minus<T>());
 }
 
 namespace {
@@ -4097,35 +4067,19 @@ void Mul(Simulator* simulator, int Vd, int Vm, int Vn) {
 
 template <typename T, int SIZE>
 void ShiftLeft(Simulator* simulator, int Vd, int Vm, int shift) {
-  static const int kElems = SIZE / sizeof(T);
-  T src[kElems];
-  simulator->get_neon_register<T, SIZE>(Vm, src);
-  for (int i = 0; i < kElems; i++) {
-    src[i] <<= shift;
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src);
+  Unop<T>(simulator, Vd, Vm, [shift](T x) { return x << shift; });
 }
 
 template <typename T, int SIZE>
 void ShiftRight(Simulator* simulator, int Vd, int Vm, int shift) {
-  static const int kElems = SIZE / sizeof(T);
-  T src[kElems];
-  simulator->get_neon_register<T, SIZE>(Vm, src);
-  for (int i = 0; i < kElems; i++) {
-    src[i] >>= shift;
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src);
+  Unop<T>(simulator, Vd, Vm, [shift](T x) { return x >> shift; });
 }
 
 template <typename T, int SIZE>
 void ArithmeticShiftRight(Simulator* simulator, int Vd, int Vm, int shift) {
-  static const int kElems = SIZE / sizeof(T);
-  T src[kElems];
-  simulator->get_neon_register<T, SIZE>(Vm, src);
-  for (int i = 0; i < kElems; i++) {
-    src[i] = ArithmeticShiftRight(src[i], shift);
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src);
+  auto shift_fn =
+      std::bind(ArithmeticShiftRight<T>, std::placeholders::_1, shift);
+  Unop<T>(simulator, Vd, Vm, shift_fn);
 }
 
 template <typename T, int SIZE>
@@ -4192,29 +4146,16 @@ void ShiftByRegister(Simulator* simulator, int Vd, int Vm, int Vn) {
 
 template <typename T, int SIZE>
 void CompareEqual(Simulator* simulator, int Vd, int Vm, int Vn) {
-  static const int kElems = SIZE / sizeof(T);
-  T src1[kElems], src2[kElems];
-  simulator->get_neon_register<T, SIZE>(Vn, src1);
-  simulator->get_neon_register<T, SIZE>(Vm, src2);
-  for (int i = 0; i < kElems; i++) {
-    src1[i] = src1[i] == src2[i] ? -1 : 0;
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src1);
+  Binop<T>(simulator, Vd, Vm, Vn, [](T x, T y) { return x == y ? -1 : 0; });
 }
 
 template <typename T, int SIZE>
 void CompareGreater(Simulator* simulator, int Vd, int Vm, int Vn, bool ge) {
-  static const int kElems = SIZE / sizeof(T);
-  T src1[kElems], src2[kElems];
-  simulator->get_neon_register<T, SIZE>(Vn, src1);
-  simulator->get_neon_register<T, SIZE>(Vm, src2);
-  for (int i = 0; i < kElems; i++) {
-    if (ge)
-      src1[i] = src1[i] >= src2[i] ? -1 : 0;
-    else
-      src1[i] = src1[i] > src2[i] ? -1 : 0;
+  if (ge) {
+    Binop<T>(simulator, Vd, Vm, Vn, [](T x, T y) { return x >= y ? -1 : 0; });
+  } else {
+    Binop<T>(simulator, Vd, Vm, Vn, [](T x, T y) { return x > y ? -1 : 0; });
   }
-  simulator->set_neon_register<T, SIZE>(Vd, src1);
 }
 
 float MinMax(float a, float b, bool is_min) {
@@ -4224,17 +4165,16 @@ template <typename T>
 T MinMax(T a, T b, bool is_min) {
   return is_min ? std::min(a, b) : std::max(a, b);
 }
+template <>
+float MinMax(float a, float b, bool is_min) {
+  return is_min ? JSMin(a, b) : JSMax(a, b);
+}
 
 template <typename T, int SIZE>
 void MinMax(Simulator* simulator, int Vd, int Vm, int Vn, bool min) {
-  static const int kElems = SIZE / sizeof(T);
-  T src1[kElems], src2[kElems];
-  simulator->get_neon_register<T, SIZE>(Vn, src1);
-  simulator->get_neon_register<T, SIZE>(Vm, src2);
-  for (int i = 0; i < kElems; i++) {
-    src1[i] = MinMax(src1[i], src2[i], min);
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src1);
+  auto min_or_max =
+      std::bind(MinMax<T>, std::placeholders::_1, std::placeholders::_2, min);
+  Binop<T>(simulator, Vd, Vm, Vn, min_or_max);
 }
 
 template <typename T>
@@ -4269,14 +4209,7 @@ template <typename T, int SIZE = kSimd128Size>
 void RoundingAverageUnsigned(Simulator* simulator, int Vd, int Vm, int Vn) {
   static_assert(std::is_unsigned<T>::value,
                 "Implemented only for unsigned types.");
-  static const int kElems = SIZE / sizeof(T);
-  T src1[kElems], src2[kElems];
-  simulator->get_neon_register<T, SIZE>(Vn, src1);
-  simulator->get_neon_register<T, SIZE>(Vm, src2);
-  for (int i = 0; i < kElems; i++) {
-    src1[i] = base::RoundingAverageUnsigned(src1[i], src2[i]);
-  }
-  simulator->set_neon_register<T, SIZE>(Vd, src1);
+  Binop<T>(simulator, Vd, Vm, Vn, base::RoundingAverageUnsigned<T>);
 }
 
 template <typename NarrowType, typename WideType>
