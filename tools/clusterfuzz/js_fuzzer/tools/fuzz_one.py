@@ -17,13 +17,13 @@ import sys
 import time
 
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_DIR = os.path.join(BASE_PATH, 'workdir', 'app_dir')
-FUZZ_EXE = os.path.join(BASE_PATH, 'workdir', 'fuzzer', 'ochang_js_fuzzer')
-INPUT_DIR = os.path.join(BASE_PATH, 'workdir', 'input')
-TEST_CASES = os.path.join(BASE_PATH, 'workdir', 'output')
+APP_DIR = os.path.join(BASE_PATH, 'workdir2', 'app_dir')
+FUZZ_EXE = os.path.join(BASE_PATH, 'workdir2', 'fuzzer', 'ochang_js_fuzzer')
+INPUT_DIR = os.path.join(BASE_PATH, 'workdir2', 'input')
+TEST_CASES = os.path.join(BASE_PATH, 'workdir2', 'output')
 
 COUNT = 64
-FUZZ = ('FUZZ_MODE=foozzie APP_NAME=d8 APP_DIR=%s %s -o %%s -n %s -i %s > %%s'
+FUZZ = ('FUZZ_MODE=default APP_NAME=d8 APP_DIR=%s %s -o %%s -n %s -i %s > %%s'
         % (APP_DIR, FUZZ_EXE, COUNT, INPUT_DIR))
 
 assert(len(sys.argv) > 1)

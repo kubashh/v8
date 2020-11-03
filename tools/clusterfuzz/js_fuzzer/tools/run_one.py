@@ -18,9 +18,44 @@ import re
 import subprocess
 import sys
 
+from v8_commands import Execute
+
+STACKTRACE_TOOL_MARKERS = [
+    ' runtime error: ',
+    'AddressSanitizer',
+    'ASAN:',
+    'CFI: Most likely a control flow integrity violation;',
+    'ERROR: libFuzzer',
+    'KASAN:',
+    'LeakSanitizer',
+    'MemorySanitizer',
+    'ThreadSanitizer',
+    'UndefinedBehaviorSanitizer',
+    'UndefinedSanitizer',
+]
+STACKTRACE_END_MARKERS = [
+    'ABORTING',
+    'END MEMORY TOOL REPORT',
+    'End of process memory map.',
+    'END_KASAN_OUTPUT',
+    'SUMMARY:',
+    'Shadow byte and word',
+    '[end of stack trace]',
+    '\nExiting',
+    'minidump has been written',
+]
+CHECK_FAILURE_MARKERS = [
+    'Check failed:',
+    'Device rebooted',
+    'Fatal error in',
+    'FATAL EXCEPTION',
+    'JNI DETECTED ERROR IN APPLICATION:',
+    'Sanitizer CHECK failed:',
+]
+
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FOOZZIE = os.path.join(BASE_PATH, 'workdir', 'app_dir', 'v8_foozzie.py')
-TEST_CASES = os.path.join(BASE_PATH, 'workdir', 'output')
+FOOZZIE = os.path.join(BASE_PATH, 'workdir2', 'app_dir', 'd8')
+TEST_CASES = os.path.join(BASE_PATH, 'workdir2', 'output')
 
 # Output pattern from foozzie.py when it finds a failure.
 FAILURE_RE = re.compile(
@@ -29,6 +64,8 @@ FAILURE_RE = re.compile(
     r'# V8 correctness sources: (?P<source>.*).'
     r'# V8 correctness suppression:.*', re.S)
 
+ARGS = '--fuzzing --expose-gc --allow-natives-syntax --debug-code --es-staging --wasm-staging --disable-abortjs --omit-quit --disable-in-process-stack-traces --invoke-weak-callbacks --enable-slow-asserts --verify-heap'.split()
+
 assert(len(sys.argv) > 1)
 dir_number = int(sys.argv[1])
 assert(dir_number >= 0)
@@ -36,8 +73,8 @@ assert(dir_number >= 0)
 test_dir = os.path.join(TEST_CASES, 'dir-%d' % dir_number)
 assert os.path.exists(test_dir)
 
-def failure_state(command, stdout):
-  return dict(FAILURE_RE.search(stdout).groupdict(), command=command)
+def failure_state(command, marker):
+  return dict(marker=marker, command=command, dupes=0)
 
 def random_seed():
   """Returns random, non-zero seed."""
@@ -48,15 +85,17 @@ def random_seed():
 
 def run(fuzz_file, flag_file):
   """Executes the differential-fuzzing harness foozzie with one fuzz test."""
-  with open(flag_file) as f:
-    flags = f.read().split(' ')
-  args = [FOOZZIE, '--random-seed=%d' % random_seed()] + flags + [fuzz_file]
-  cmd = ' '.join(args)
   try:
-    output = subprocess.check_output(cmd, stderr=subprocess.PIPE, shell=True)
-    return (cmd, output)
-  except Exception as e:
-    return (cmd, e.output)
+    with open(flag_file) as f:
+      flags = f.read().split(' ')
+  except:
+    flags = []
+  cmd = [FOOZZIE, '--random-seed=%d' % random_seed()] + ARGS + flags + [fuzz_file]
+  # print(' '.join(cmd))
+  output = Execute(
+      cmd, cwd=os.path.dirname(os.path.abspath(fuzz_file)), timeout=10)
+
+  return ' '.join(cmd), output
 
 def list_tests():
   """Iterates all fuzz tests and corresponding flags in the given base dir."""
@@ -66,10 +105,17 @@ def list_tests():
       ff = 'flags-%d.js' % n
       yield (os.path.join(test_dir, f), os.path.join(test_dir, ff))
 
+def has_marker(stacktrace, marker_list):
+  """Return true if the stacktrace has atleast one marker
+  in the marker list."""
+  for marker in marker_list:
+    if marker in stacktrace:
+      return marker
+  return None
+
 # Some counters for the statistics.
 count = 0
 count_timeout = 0
-count_crash = 0
 count_failure = 0
 failures = []
 
@@ -78,16 +124,25 @@ failures = []
 for fuzz_file, flag_file in list_tests():
   cmd, output = run(fuzz_file, flag_file)
   count += 1
-  if '# V8 correctness - pass' in output:
-    continue
-  if '# V8 correctness - T-I-M-E-O-U-T' in output:
+  if output.timeout:
     count_timeout += 1
     continue
-  if '# V8 correctness - C-R-A-S-H' in output:
-    count_crash += 1
-    continue
-  count_failure += 1
-  failures.append(failure_state(cmd, output))
+
+  error = None
+  tool = has_marker(output.stdout, STACKTRACE_TOOL_MARKERS)
+  end = has_marker(output.stdout, STACKTRACE_END_MARKERS)
+  check = has_marker(output.stdout, CHECK_FAILURE_MARKERS)
+  if 'Fatal javascript OOM' in output.stdout:
+    error = 'OOM'
+  elif check:
+    error = check
+  elif tool and end:
+    error = tool + '_' + end
+  elif output.HasCrashed():
+    error = 'crash'
+  if error:
+    count_failure += 1
+    failures.append(failure_state(cmd, error))
 
 with open(os.path.join(test_dir, 'failures.json'), 'w') as f:
   json.dump(failures, f)
@@ -95,7 +150,6 @@ with open(os.path.join(test_dir, 'failures.json'), 'w') as f:
 stats = {
   'total': count,
   'timeout': count_timeout,
-  'crash': count_crash,
   'failure': count_failure,
 }
 

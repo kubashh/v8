@@ -31,7 +31,7 @@ import sys
 
 PROCESSES = cpu_count()
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEST_CASES = os.path.join(BASE_PATH, 'workdir', 'output')
+TEST_CASES = os.path.join(BASE_PATH, 'workdir2', 'output')
 FUZZ_ONE = os.path.join(BASE_PATH, 'tools', 'fuzz_one.py')
 RUN_ONE = os.path.join(BASE_PATH, 'tools', 'run_one.py')
 
@@ -65,34 +65,32 @@ def run(n):
 class Stats(object):
   def __init__(self):
     self.total = 0
-    self.crash = 0
     self.timeout = 0
     self.failure = 0
     self.dupe = 0
     self.failures = []
-    self.known_states = set()
+    self.failures = {}
 
   def add(self, stats, failures):
     # Aggregate common stats.
     self.total += stats['total']
-    self.crash += stats['crash']
     self.timeout += stats['timeout']
 
     # Dedupe failures.
     for failure in failures:
-      if failure['source'] in self.known_states:
+      f = self.failures.get(failure['marker'])
+      if f:
         self.dupe += 1
+        f['dupes'] = f.get('dupes', 0) + 1
         continue
 
-      self.known_states.add(failure['source'])
       self.failure += 1
-      self.failures.append(failure)
+      self.failures[failure['marker']] = failure
 
   @property
   def stats(self):
     return {
       'total': self.total,
-      'crash': self.crash,
       'failure': self.failure,
       'dupe': self.dupe,
       'timeout': self.timeout,
@@ -117,7 +115,7 @@ for stats, failures in pool.imap_unordered(run, range(RUNS)):
     json.dump(all_stats.failures, f)
 
 print('Ran %(total)d test cases (%(timeout)d timeouts, '
-      '%(crash)d crashes, %(failure)d failures, %(dupe)d dupes)'
+      '%(failure)d failures, %(dupe)d dupes)'
       % all_stats.stats)
 
 for failure in all_stats.failures:
