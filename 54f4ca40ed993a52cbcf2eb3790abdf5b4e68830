@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc931fa0_23a20112",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-03T13:51:56Z",
+      "side": 1,
+      "message": "Overall this looks good to me.\n\nAdding owners of various V8 components.\nClemens: ptal at wasm changes.\nJakob: ptal at serializer changes.\nMichael: ptal at compiler and codegen changes.\nToon: ptal at runtime changes.\n",
+      "revId": "54f4ca40ed993a52cbcf2eb3790abdf5b4e68830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b1ff7ca_15ace0a7",
+        "filename": "src/third_party/siphash/halfsiphash.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-03T13:51:56Z",
+      "side": 1,
+      "message": "Not sure about this change since it is in third_party.\n\nI see that the code was already adjusted for V8, so it is probably okay.",
+      "range": {
+        "startLine": 53,
+        "startChar": 1,
+        "endLine": 53,
+        "endChar": 43
+      },
+      "revId": "54f4ca40ed993a52cbcf2eb3790abdf5b4e68830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46faf597_b001c986",
+        "filename": "src/third_party/valgrind/valgrind.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-03T13:51:56Z",
+      "side": 1,
+      "message": "Can we disable valgrind and vtune in Cobalt to avoid patching third_party code?",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 39
+      },
+      "revId": "54f4ca40ed993a52cbcf2eb3790abdf5b4e68830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
