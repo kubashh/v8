@@ -33,6 +33,23 @@
       "message": "lgtm, thank you for trying 😊",
       "revId": "f6d77e344554f43beb55a459855ac6a60d61555c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13f77368_9a63af5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-11-03T13:13:26Z",
+      "side": 1,
+      "message": "Friendly ping, Tamer.",
+      "revId": "f6d77e344554f43beb55a459855ac6a60d61555c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
