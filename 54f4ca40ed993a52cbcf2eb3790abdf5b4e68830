@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfebc877_b5f4be6e",
+        "filename": "src/third_party/siphash/halfsiphash.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-11-03T14:38:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b1ff7ca_15ace0a7",
+      "range": {
+        "startLine": 53,
+        "startChar": 1,
+        "endLine": 53,
+        "endChar": 43
+      },
+      "revId": "54f4ca40ed993a52cbcf2eb3790abdf5b4e68830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46faf597_b001c986",
@@ -71,6 +95,30 @@
       "writtenOn": "2020-11-03T13:51:56Z",
       "side": 1,
       "message": "Can we disable valgrind and vtune in Cobalt to avoid patching third_party code?",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 39
+      },
+      "revId": "54f4ca40ed993a52cbcf2eb3790abdf5b4e68830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e6475f9_409b1774",
+        "filename": "src/third_party/valgrind/valgrind.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-11-03T14:38:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46faf597_b001c986",
       "range": {
         "startLine": 98,
         "startChar": 0,
