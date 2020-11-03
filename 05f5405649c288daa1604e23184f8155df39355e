@@ -16,6 +16,23 @@
       "message": "Ross, PTAL.\n\nThanks,\nMythri",
       "revId": "05f5405649c288daa1604e23184f8155df39355e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8633187e_951f550f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-03T13:33:42Z",
+      "side": 1,
+      "message": "LGTM thanks for the fix!",
+      "revId": "05f5405649c288daa1604e23184f8155df39355e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
