@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4f7f438_7b037290",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2020-11-03T15:33:11Z",
+      "side": 1,
+      "message": "Drive-by",
+      "revId": "a7e8c320c6f6f173e1c05421d40163a46b942ee4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be6d04e0_4da9a37f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3228,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2020-11-03T15:33:11Z",
+      "side": 1,
+      "message": "Note: current_compile_job_ is set only once (and cleared when compilation is canceled). On subsequent calls to ScheduleCompileJobForNewUnits, the NotifyConcurrencyIncrease code path is executed instead. This means the job will remain with kUserBlocking for the entire compilation if initially set.\n\nAs an alternative, current_compile_job_-\u003eUpdatePriority can be used. I would suggest calling it directly after CompileNativeModule() to lower the priority.",
+      "range": {
+        "startLine": 3228,
+        "startChar": 2,
+        "endLine": 3228,
+        "endChar": 15
+      },
+      "revId": "a7e8c320c6f6f173e1c05421d40163a46b942ee4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
