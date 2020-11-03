@@ -25,15 +25,15 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <include/v8.h>
-
 #include <include/libplatform/libplatform.h>
-
+#include <include/v8.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <map>
 #include <string>
+
+#include "src/base/platform/wrappers.h"
 
 using std::map;
 using std::pair;
@@ -633,7 +633,7 @@ void ParseOptions(int argc,
 
 // Reads a file into a v8 string.
 MaybeLocal<String> ReadFile(Isolate* isolate, const string& name) {
-  FILE* file = fopen(name.c_str(), "rb");
+  FILE* file = v8::base::Fopen(name.c_str(), "rb");
   if (file == NULL) return MaybeLocal<String>();
 
   fseek(file, 0, SEEK_END);
@@ -645,11 +645,11 @@ MaybeLocal<String> ReadFile(Isolate* isolate, const string& name) {
   for (size_t i = 0; i < size;) {
     i += fread(&chars.get()[i], 1, size - i, file);
     if (ferror(file)) {
-      fclose(file);
+      v8::base::Fclose(file);
       return MaybeLocal<String>();
     }
   }
-  fclose(file);
+  base::Fclose(file);
   MaybeLocal<String> result = String::NewFromUtf8(
       isolate, chars.get(), NewStringType::kNormal, static_cast<int>(size));
   return result;
