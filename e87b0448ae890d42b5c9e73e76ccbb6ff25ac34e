@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a387037_b0f16a2b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-11-03T10:48:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76ca8d46_b89c8a53",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfcc2a86_62b2afcf",
@@ -70,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a048ce49_3904a9c8",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-11-03T10:48:43Z",
+      "side": 1,
+      "message": "Done\n\n\u003e Also, suggestion: Could we tell the builtin to start checking at a particular slot?\n\nWe could but the initial maps could change in the feedback vector so we need to check all the maps.",
+      "parentUuid": "dd2b39c6_3760dcef",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19a1bbca_a962f038",
@@ -87,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f4b2782_17fef080",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-11-03T10:48:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19a1bbca_a962f038",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59549b7a_33eaf461",
@@ -100,6 +154,24 @@
       "writtenOn": "2020-11-02T11:17:38Z",
       "side": 1,
       "message": "This compares the entire set in O(n), no? Is that intended?",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a8f8b5b_41cb42f6",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-11-03T10:48:43Z",
+      "side": 1,
+      "message": "Yes, I think so? It\u0027s similar to CheckMapsParameters##maps() which seems to do the same O(n) comparison",
+      "parentUuid": "59549b7a_33eaf461",
       "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -140,6 +212,30 @@
       "writtenOn": "2020-11-02T12:01:49Z",
       "side": 1,
       "message": "Actually, I think instead of plumbing all this information through, we can just get this from the broker. So dynamic map checks parameters will only have FeedbackSource and in effect-control-linearizer we can simply get this information from the broker by something like this:\n\nFeedbackSource const\u0026 feedback_source \u003d DynamicCheckMapsParametersOf(node-\u003eop());\nMinimorphicLoadPropertyAccessFeedback feedback \u003d  broker()-\u003eGetFeedback(feedback_source).AsMinimorphicPropertyAccess();\n\nThat way we could avoid plumbing this information through and any unnecessary copies too.",
+      "parentUuid": "a253975b_d0c42fb1",
+      "range": {
+        "startLine": 450,
+        "startChar": 42,
+        "endLine": 450,
+        "endChar": 53
+      },
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8664a235_e462dba0",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-11-03T10:48:43Z",
+      "side": 1,
+      "message": "Mostly just copied from CheckMapsParameters that does this as well. Do you know why CheckMapParameters does this?",
       "parentUuid": "a253975b_d0c42fb1",
       "range": {
         "startLine": 450,
