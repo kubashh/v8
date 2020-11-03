@@ -846,14 +846,13 @@ void FeedbackVectorSpec::Print() {
 }
 
 void FeedbackVectorSpec::FeedbackVectorSpecPrint(std::ostream& os) {  // NOLINT
-  int slot_count = slots();
-  os << " - slot_count: " << slot_count;
-  if (slot_count == 0) {
+  os << " - slot_count: " << slot_count();
+  if (slot_count() == 0) {
     os << " (empty)\n";
     return;
   }
 
-  for (int slot = 0; slot < slot_count;) {
+  for (int slot = 0; slot < slot_count();) {
     FeedbackSlotKind kind = GetKind(FeedbackSlot(slot));
     int entry_size = FeedbackMetadata::GetSlotSize(kind);
     DCHECK_LT(0, entry_size);
