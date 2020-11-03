@@ -270,13 +270,12 @@ void IncrementalMarking::StartBlackAllocation() {
   DCHECK(!black_allocation_);
   DCHECK(IsMarking());
   black_allocation_ = true;
-  heap()->old_space()->MarkLinearAllocationAreaBlack();
-  heap()->map_space()->MarkLinearAllocationAreaBlack();
-  heap()->code_space()->MarkLinearAllocationAreaBlack();
+  heap()->old_space_allocator_.StartBlackAllocation();
+  heap()->map_space_allocator_.StartBlackAllocation();
+  heap()->code_space_allocator_.StartBlackAllocation();
   if (FLAG_local_heaps) {
-    heap()->safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
-      local_heap->MarkLinearAllocationAreaBlack();
-    });
+    heap()->safepoint()->IterateLocalHeaps(
+        [](LocalHeap* local_heap) { local_heap->StartBlackAllocation(); });
   }
   if (FLAG_trace_incremental_marking) {
     heap()->isolate()->PrintWithTimestamp(
@@ -286,13 +285,12 @@ void IncrementalMarking::StartBlackAllocation() {
 
 void IncrementalMarking::PauseBlackAllocation() {
   DCHECK(IsMarking());
-  heap()->old_space()->UnmarkLinearAllocationArea();
-  heap()->map_space()->UnmarkLinearAllocationArea();
-  heap()->code_space()->UnmarkLinearAllocationArea();
+  heap()->old_space_allocator_.StopBlackAllocation();
+  heap()->map_space_allocator_.StopBlackAllocation();
+  heap()->code_space_allocator_.StopBlackAllocation();
   if (FLAG_local_heaps) {
-    heap()->safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
-      local_heap->UnmarkLinearAllocationArea();
-    });
+    heap()->safepoint()->IterateLocalHeaps(
+        [](LocalHeap* local_heap) { local_heap->StopBlackAllocation(); });
   }
   if (FLAG_trace_incremental_marking) {
     heap()->isolate()->PrintWithTimestamp(
@@ -835,7 +833,7 @@ size_t IncrementalMarking::StepSizeToMakeProgress() {
   const size_t kMaxStepSizeInByte = 256 * KB;
   size_t oom_slack = heap()->new_space()->Capacity() + 64 * MB;
 
-  if (!heap()->CanExpandOldGeneration(oom_slack)) {
+  if (!heap()->CanExpandOldGeneration(ThreadKind::kMain, oom_slack)) {
     return heap()->OldGenerationSizeOfObjects() / kTargetStepCountAtOOM;
   }
 
@@ -942,6 +940,7 @@ StepResult IncrementalMarking::Step(double max_step_size_in_ms,
       // It is safe to merge back all objects that were on hold to the shared
       // work list at Step because we are at a safepoint where all objects
       // are properly initialized.
+      heap_->PublishPendingAllocations();
       local_marking_worklists()->MergeOnHold();
     }
 

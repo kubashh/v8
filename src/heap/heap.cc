@@ -395,27 +395,27 @@ size_t Heap::Available() {
   return total;
 }
 
-bool Heap::CanExpandOldGeneration(size_t size) {
+bool Heap::CanExpandOldGeneration(ThreadKind thread_kind, size_t size) {
+  if (gc_state() == TEAR_DOWN) {
+    // When the heap is tearing down, then GC requests from background threads
+    // are not served and the threads are allowed to expand the heap to avoid
+    // OOM.
+    return true;
+  }
   if (force_oom_ || force_gc_on_next_allocation_) return false;
-  if (OldGenerationCapacity() + size > max_old_generation_size()) return false;
+  if (thread_kind == ThreadKind::kMain &&
+      OldGenerationCapacity() + size > max_old_generation_size())
+    return false;
   // The OldGenerationCapacity does not account compaction spaces used
   // during evacuation. Ensure that expanding the old generation does push
   // the total allocated memory size over the maximum heap size.
   return memory_allocator()->Size() + size <= MaxReserved();
 }
 
-bool Heap::CanExpandOldGenerationBackground(size_t size) {
-  if (force_oom_) return false;
-  // When the heap is tearing down, then GC requests from background threads
-  // are not served and the threads are allowed to expand the heap to avoid OOM.
-  return gc_state() == TEAR_DOWN ||
-         memory_allocator()->Size() + size <= MaxReserved();
-}
-
 bool Heap::CanPromoteYoungAndExpandOldGeneration(size_t size) {
   // Over-estimate the new space size using capacity to allow some slack.
-  return CanExpandOldGeneration(size + new_space_->Capacity() +
-                                new_lo_space_->Size());
+  return CanExpandOldGeneration(
+      ThreadKind::kMain, size + new_space_->Capacity() + new_lo_space_->Size());
 }
 
 bool Heap::HasBeenSetUp() const {
@@ -1477,18 +1477,6 @@ void Heap::ReportExternalMemoryPressure() {
 
 int64_t Heap::external_memory_limit() { return external_memory_.limit(); }
 
-void Heap::EnsureFillerObjectAtTop() {
-  // There may be an allocation memento behind objects in new space. Upon
-  // evacuation of a non-full new space (or if we are on the last page) there
-  // may be uninitialized memory behind top. We fill the remainder of the page
-  // with a filler.
-  Address to_top = new_space_->top();
-  Page* page = Page::FromAddress(to_top - kTaggedSize);
-  if (page->Contains(to_top)) {
-    int remaining_in_page = static_cast<int>(page->area_end() - to_top);
-    CreateFillerObjectAt(to_top, remaining_in_page, ClearRecordedSlots::kNo);
-  }
-}
 
 Heap::DevToolsTraceEventScope::DevToolsTraceEventScope(Heap* heap,
                                                        const char* event_name,
@@ -1537,8 +1525,6 @@ bool Heap::CollectGarbage(AllocationSpace space,
     allocation_timeout_ = Max(6, NextAllocationTimeout(allocation_timeout_));
   }
 #endif
-
-  EnsureFillerObjectAtTop();
 
   if (IsYoungGenerationCollector(collector) &&
       !incremental_marking()->IsStopped()) {
@@ -1691,9 +1677,9 @@ bool Heap::CollectGarbage(AllocationSpace space,
         kGCCallbackScheduleIdleGarbageCollection);
   }
 
-  if (!CanExpandOldGeneration(0)) {
+  if (!CanExpandOldGeneration(ThreadKind::kMain, 0)) {
     InvokeNearHeapLimitCallback();
-    if (!CanExpandOldGeneration(0)) {
+    if (!CanExpandOldGeneration(ThreadKind::kMain, 0)) {
       FatalProcessOutOfMemory("Reached heap limit");
     }
   }
@@ -1750,21 +1736,31 @@ void Heap::StartIncrementalMarkingIfAllocationLimitIsReached(
   }
 }
 
-void Heap::StartIncrementalMarkingIfAllocationLimitIsReachedBackground() {
+bool Heap::CheckIncrementalMarkingLimitOnSlowAllocation(
+    ThreadKind thread_kind) {
   if (!incremental_marking()->IsStopped() ||
       !incremental_marking()->CanBeActivated()) {
-    return;
+    return true;
   }
+  if (thread_kind == ThreadKind::kMain) {
+    IncrementalMarkingLimit reached_limit = IncrementalMarkingLimitReached();
+    if (reached_limit == IncrementalMarkingLimit::kSoftLimit) {
+      incremental_marking()->incremental_marking_job()->ScheduleTask(this);
+    } else if (reached_limit == IncrementalMarkingLimit::kHardLimit) {
+      return false;
+    }
+  } else {
+    const size_t old_generation_space_available = OldGenerationSpaceAvailable();
+    const base::Optional<size_t> global_memory_available =
+        GlobalMemoryAvailable();
 
-  const size_t old_generation_space_available = OldGenerationSpaceAvailable();
-  const base::Optional<size_t> global_memory_available =
-      GlobalMemoryAvailable();
-
-  if (old_generation_space_available < new_space_->Capacity() ||
-      (global_memory_available &&
-       *global_memory_available < new_space_->Capacity())) {
-    incremental_marking()->incremental_marking_job()->ScheduleTask(this);
+    if (old_generation_space_available < new_space_->Capacity() ||
+        (global_memory_available &&
+         *global_memory_available < new_space_->Capacity())) {
+      incremental_marking()->incremental_marking_job()->ScheduleTask(this);
+    }
   }
+  return true;
 }
 
 void Heap::StartIdleIncrementalMarking(
@@ -2134,8 +2130,6 @@ void Heap::CallGCEpilogueCallbacks(GCType gc_type, GCCallbackFlags flags) {
 
 
 void Heap::MarkCompact() {
-  PauseAllocationObserversScope pause_observers(this);
-
   SetGCState(MARK_COMPACT);
 
   LOG(isolate_, ResourceEvent("markcompact", "begin"));
@@ -2174,7 +2168,6 @@ void Heap::MinorMarkCompact() {
 #ifdef ENABLE_MINOR_MC
   DCHECK(FLAG_minor_mc);
 
-  PauseAllocationObserversScope pause_observers(this);
   SetGCState(MINOR_MARK_COMPACT);
   LOG(isolate_, ResourceEvent("MinorMarkCompact", "begin"));
 
@@ -2243,7 +2236,8 @@ void Heap::EvacuateYoungGeneration() {
   LOG(isolate_, ResourceEvent("scavenge", "begin"));
 
   // Move pages from new->old generation.
-  PageRange range(new_space()->first_allocatable_address(), new_space()->top());
+  PageRange range(new_space()->first_allocatable_address(),
+                  new_space()->from_space().current_top());
   for (auto it = range.begin(); it != range.end();) {
     Page* p = (*++it)->prev_page();
     new_space()->from_space().RemovePage(p);
@@ -2256,8 +2250,7 @@ void Heap::EvacuateYoungGeneration() {
   if (!new_space()->Rebalance()) {
     FatalProcessOutOfMemory("NewSpace::Rebalance");
   }
-  new_space()->ResetLinearAllocationArea();
-  new_space()->set_age_mark(new_space()->top());
+  new_space()->Reset();
 
   for (auto it = new_lo_space()->begin(); it != new_lo_space()->end();) {
     LargePage* page = *it;
@@ -2300,7 +2293,6 @@ void Heap::Scavenge() {
 
   // Bump-pointer allocations done during scavenge are not real allocations.
   // Pause the inline allocation steps.
-  PauseAllocationObserversScope pause_observers(this);
   IncrementalMarking::PauseBlackAllocationScope pause_black_allocation(
       incremental_marking());
 
@@ -2312,7 +2304,7 @@ void Heap::Scavenge() {
   // Flip the semispaces.  After flipping, to space is empty, from space has
   // live objects.
   new_space()->Flip();
-  new_space()->ResetLinearAllocationArea();
+  new_space()->Reset();
 
   // We also flip the young generation large object space. All large objects
   // will be in the from space.
@@ -2709,8 +2701,7 @@ STATIC_ASSERT(IsAligned(ByteArray::kHeaderSize, kDoubleAlignment));
 STATIC_ASSERT((HeapNumber::kValueOffset & kDoubleAlignmentMask) == kTaggedSize);
 #endif
 
-
-int Heap::GetMaximumFillToAlign(AllocationAlignment alignment) {
+size_t Heap::GetMaximumFillToAlign(AllocationAlignment alignment) {
   switch (alignment) {
     case kWordAligned:
       return 0;
@@ -2724,7 +2715,7 @@ int Heap::GetMaximumFillToAlign(AllocationAlignment alignment) {
 }
 
 // static
-int Heap::GetFillToAlign(Address address, AllocationAlignment alignment) {
+size_t Heap::GetFillToAlign(Address address, AllocationAlignment alignment) {
   if (alignment == kDoubleAligned && (address & kDoubleAlignmentMask) != 0)
     return kTaggedSize;
   if (alignment == kDoubleUnaligned && (address & kDoubleAlignmentMask) == 0)
@@ -2750,7 +2741,8 @@ HeapObject Heap::AlignWithFiller(ReadOnlyRoots roots, HeapObject object,
                                  AllocationAlignment alignment) {
   int filler_size = allocation_size - object_size;
   DCHECK_LT(0, filler_size);
-  int pre_filler = GetFillToAlign(object.address(), alignment);
+  int pre_filler =
+      static_cast<int>(GetFillToAlign(object.address(), alignment));
   if (pre_filler) {
     object = PrecedeWithFiller(roots, object, pre_filler);
     filler_size -= pre_filler;
@@ -3207,9 +3199,8 @@ void Heap::MakeHeapIterable() {
 
 void Heap::MakeLocalHeapLabsIterable() {
   if (!FLAG_local_heaps) return;
-  safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
-    local_heap->MakeLinearAllocationAreaIterable();
-  });
+  safepoint()->IterateLocalHeaps(
+      [](LocalHeap* local_heap) { local_heap->MakeLabsIterable(); });
 }
 
 namespace {
@@ -3325,7 +3316,7 @@ bool Heap::ShouldOptimizeForMemoryUsage() {
   const size_t kOldGenerationSlack = max_old_generation_size() / 8;
   return FLAG_optimize_for_size || isolate()->IsIsolateInBackground() ||
          isolate()->IsMemorySavingsModeActive() || HighMemoryPressure() ||
-         !CanExpandOldGeneration(kOldGenerationSlack);
+         !CanExpandOldGeneration(ThreadKind::kMain, kOldGenerationSlack);
 }
 
 void Heap::ActivateMemoryReducerIfNeeded() {
@@ -3603,8 +3594,6 @@ double Heap::MonotonicallyIncreasingTimeInMs() {
   return V8::GetCurrentPlatform()->MonotonicallyIncreasingTime() *
          static_cast<double>(base::Time::kMillisecondsPerSecond);
 }
-
-void Heap::VerifyNewSpaceTop() { new_space()->VerifyTop(); }
 
 bool Heap::IdleNotification(int idle_time_in_ms) {
   return IdleNotification(
@@ -4792,7 +4781,7 @@ bool Heap::ShouldOptimizeForLoadTime() {
 // major GC. It happens when the old generation allocation limit is reached and
 // - either we need to optimize for memory usage,
 // - or the incremental marking is not in progress and we cannot start it.
-bool Heap::ShouldExpandOldGenerationOnSlowAllocation(LocalHeap* local_heap) {
+bool Heap::ShouldExpandOldGenerationOnSlowAllocation(ThreadKind thread_kind) {
   if (always_allocate() || OldGenerationSpaceAvailable() > 0) return true;
   // We reached the old generation allocation limit.
 
@@ -4800,25 +4789,21 @@ bool Heap::ShouldExpandOldGenerationOnSlowAllocation(LocalHeap* local_heap) {
   // was initiated.
   if (gc_state() == TEAR_DOWN) return true;
 
-  // Ensure that retry of allocation on background thread succeeds
-  if (IsRetryOfFailedAllocation(local_heap)) return true;
-
   // Background thread requested GC, allocation should fail
-  if (CollectionRequested()) return false;
-
-  if (ShouldOptimizeForMemoryUsage()) return false;
-
-  if (ShouldOptimizeForLoadTime()) return true;
-
-  if (incremental_marking()->NeedsFinalization()) {
-    return !AllocationLimitOvershotByLargeMargin();
+  if (thread_kind == ThreadKind::kMain) {
+    if (CollectionRequested()) return false;
+    if (ShouldOptimizeForMemoryUsage()) return false;
+    if (ShouldOptimizeForLoadTime()) return true;
+    if (incremental_marking()->NeedsFinalization()) {
+      return !AllocationLimitOvershotByLargeMargin();
+    }
+    if (incremental_marking()->IsStopped() &&
+        IncrementalMarkingLimitReached() == IncrementalMarkingLimit::kNoLimit) {
+      // We cannot start incremental marking.
+      return false;
+    }
   }
 
-  if (incremental_marking()->IsStopped() &&
-      IncrementalMarkingLimitReached() == IncrementalMarkingLimit::kNoLimit) {
-    // We cannot start incremental marking.
-    return false;
-  }
   return true;
 }
 
@@ -4965,10 +4950,9 @@ bool Heap::ShouldStressCompaction() const {
 void Heap::EnableInlineAllocation() {
   if (!inline_allocation_disabled_) return;
   inline_allocation_disabled_ = false;
-
-  // Update inline allocation limit for new space.
-  new_space()->AdvanceAllocationObservers();
-  new_space()->UpdateInlineAllocationLimit(0);
+  for (Allocator& allocator : allocator_) {
+    allocator.EnableInlineAllocation();
+  }
 }
 
 
@@ -4976,16 +4960,8 @@ void Heap::DisableInlineAllocation() {
   if (inline_allocation_disabled_) return;
   inline_allocation_disabled_ = true;
 
-  // Update inline allocation limit for new space.
-  new_space()->UpdateInlineAllocationLimit(0);
-
-  // Update inline allocation limit for old spaces.
-  PagedSpaceIterator spaces(this);
-  CodeSpaceMemoryModificationScope modification_scope(this);
-  for (PagedSpace* space = spaces.Next(); space != nullptr;
-       space = spaces.Next()) {
-    base::MutexGuard guard(space->mutex());
-    space->FreeLinearAllocationArea();
+  for (Allocator& allocator : allocator_) {
+    allocator.DisableInlineAllocation();
   }
 }
 
@@ -5135,10 +5111,34 @@ void Heap::SetUpSpaces() {
   space_[OLD_SPACE] = old_space_ = new OldSpace(this);
   space_[CODE_SPACE] = code_space_ = new CodeSpace(this);
   space_[MAP_SPACE] = map_space_ = new MapSpace(this);
-  space_[LO_SPACE] = lo_space_ = new OldLargeObjectSpace(this);
   space_[NEW_LO_SPACE] = new_lo_space_ =
       new NewLargeObjectSpace(this, new_space_->Capacity());
+  space_[LO_SPACE] = lo_space_ = new OldLargeObjectSpace(this);
   space_[CODE_LO_SPACE] = code_lo_space_ = new CodeLargeObjectSpace(this);
+
+  allocator_[NEW_SPACE].Initialize(ThreadKind::kMain, new_space_, kTaggedSize,
+                                   0, Page::kPageSize, ReadOnlyRoots(this));
+  allocator_[OLD_SPACE].Initialize(ThreadKind::kMain, old_space_, kTaggedSize,
+                                   0, Page::kPageSize, ReadOnlyRoots(this));
+  allocator_[CODE_SPACE].Initialize(ThreadKind::kMain, code_space_,
+                                    kCodeAlignment, 0, Page::kPageSize,
+                                    ReadOnlyRoots(this));
+  allocator_[MAP_SPACE].Initialize(ThreadKind::kMain, code_space_, Map::kSize,
+                                   0, Page::kPageSize, ReadOnlyRoots(this));
+  allocator_[NEW_LO_SPACE].Initialize(ThreadKind::kMain, new_lo_space_,
+                                      kTaggedSize, 0, 0, ReadOnlyRoots(this));
+  allocator_[LO_SPACE].Initialize(ThreadKind::kMain, lo_space_, kTaggedSize, 0,
+                                  0, ReadOnlyRoots(this));
+  allocator_[CODE_LO_SPACE].Initialize(ThreadKind::kMain, code_lo_space_,
+                                       kCodeAlignment, 0, 0,
+                                       ReadOnlyRoots(this));
+  DCHECK_EQ(NEW_SPACE, AllocatorIndex(AllocationType::kYoung, false));
+  DCHECK_EQ(OLD_SPACE, AllocatorIndex(AllocationType::kOld, false));
+  DCHECK_EQ(CODE_SPACE, AllocatorIndex(AllocationType::kCode, false));
+  DCHECK_EQ(MAP_SPACE, AllocatorIndex(AllocationType::kMap, false));
+  DCHECK_EQ(NEW_LO_SPACE, AllocatorIndex(AllocationType::kYoung, true));
+  DCHECK_EQ(LO_SPACE, AllocatorIndex(AllocationType::kOld, true));
+  DCHECK_EQ(CODE_LO_SPACE, AllocatorIndex(AllocationType::kCode, true));
 
   for (int i = 0; i < static_cast<int>(v8::Isolate::kUseCounterFeatureCount);
        i++) {
@@ -5430,6 +5430,10 @@ void Heap::TearDown() {
   external_string_table_.TearDown();
 
   tracer_.reset();
+
+  for (Allocator& allocator : allocator_) {
+    allocator.FreeLab();
+  }
 
   for (int i = FIRST_MUTABLE_SPACE; i <= LAST_MUTABLE_SPACE; i++) {
     delete space_[i];
@@ -6663,6 +6667,12 @@ void Heap::IncrementObjectCounters() {
   isolate_->counters()->objs_since_last_young()->Increment();
 }
 #endif  // DEBUG
+
+void Heap::PublishPendingAllocations() {
+  for (Allocator& allocator : allocator_) {
+    allocator.PublishAllocations();
+  }
+}
 
 // StrongRootBlocks are allocated as a block of addresses, prefixed with a
 // StrongRootsEntry pointer:
