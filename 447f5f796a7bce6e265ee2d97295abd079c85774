@@ -33,6 +33,23 @@
       "message": "Dominik ptal at heap",
       "revId": "447f5f796a7bce6e265ee2d97295abd079c85774",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c64efa_13158ad1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-11-03T11:36:29Z",
+      "side": 1,
+      "message": "Nice, LGTM!",
+      "revId": "447f5f796a7bce6e265ee2d97295abd079c85774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
