@@ -16,6 +16,24 @@
       "message": "IMO we should separate the asm.js issue from the general problem of the CompilationCacheScript contents dying too early. \n\nMy current understanding of the latter is that heuristics here are incomplete: they only consider the bytecode age of the script-level bytecode, which of course is only executed once per native context and thus reaches old age quickly. So the script entry may be removed, even if a SFI belonging to this script is hot.\n\nAnother q is if `BytecodeArray::IsOld` is even the correct indicator, given that contents of this cache should survive until the next native context is created.\n\nThese are difficult questions, since any increase in cache lifetimes is also a memory regression. We\u0027d have to look at behavior across important benchmarks and real-world perf.\n\nFor the asm.js issue: I guess this is motivated by a particular benchmark? I don\u0027t know this part well enough to comment, except that a weak-to-strong change should be discussed with gc/asm.js owners.",
       "revId": "f726981954c2343b650fe89ff205b75d03372c22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae92d09d_34922857",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6232,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2020-11-03T06:35:50Z",
+      "side": 1,
+      "message": "Yes, agree that we can separate the asm.js issue and handle it differently, and I think it can also be the starting point of our experiments in the general problem of cache. The asm.js code needs more time to compile than JS bytecodes because it uses Turbofan, so keeping the compilation result of asm.js in the cache can save compilation time a lot and the memory regression may be worth paying.\n\nFor the general problem of the CompilationCacheScript contents dying too early, we tried a hack to disable both cache removing and bytecode flushing, and the performance improvement for Speedometer is a little hard to measure precisely (roughly about 1%). As you have said, we need to tune the behavior of cache very carefully to avoid big unnecessary memory regression.",
+      "parentUuid": "139fe866_eef5cf4f",
+      "revId": "f726981954c2343b650fe89ff205b75d03372c22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
