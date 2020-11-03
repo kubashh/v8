@@ -250,6 +250,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "89e24a53_f88616b2",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-03T22:35:34Z",
+      "side": 1,
+      "message": "I haven\u0027t landed on a unified way to use TimedScope yet, mostly because I haven\u0027t figured out when is the best time to populate the fields in each event.\n\nFor example, in the case for Compile, I believe I can populate the event before we start the timer. So the order of operations looks like:\n  - Declare event\n  - Populate event\n  - Start timer\n  - Stop timer\n  - Add event\n\nBut for wasm things, it looks like there are fields that are known only after the function has finished running. So the order of operations looks like:\n  - Declare event\n  - Start timer\n  - Stop timer\n  - Populate event\n  - Add event\n\nWhich means in the wasm case, we can\u0027t use ~TimedScope to stop the timer + add the event, because there is an in-between step of populating the event.",
+      "parentUuid": "4a9ec8aa_395e6234",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c87938d6_2c8b49c6",
         "filename": "src/d8/d8.cc",
         "patchSetId": 15

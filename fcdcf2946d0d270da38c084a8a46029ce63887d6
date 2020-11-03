@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b1cdad_a51dff98",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-03T22:35:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f62a16b8_d62daa4f",
+      "revId": "fcdcf2946d0d270da38c084a8a46029ce63887d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99fd7e54_d72d01c7",

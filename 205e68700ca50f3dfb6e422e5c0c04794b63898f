@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58fbf112_9a109163",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-03T22:35:34Z",
+      "side": 1,
+      "message": "In addition to (partially) populating the Compile event, I also removed the time member from the TimedScope.\n\nI think the Recorder interface is in a reasonable enough state to start adding the Parse, Optimize, Deoptimize, and Execute events. Just need some pointers on what fields we want to add (in addition to wall_clock_time_in_us 😊).",
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30641258_1e6b2402",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-03T22:35:34Z",
+      "side": 1,
+      "message": "I need some help finding the values to populate the type and thread fields.",
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
