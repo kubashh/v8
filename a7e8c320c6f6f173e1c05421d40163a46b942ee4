@@ -39,6 +39,30 @@
       },
       "revId": "a7e8c320c6f6f173e1c05421d40163a46b942ee4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c1fc9fe_f68c85bd",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3228,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-04T14:13:21Z",
+      "side": 1,
+      "message": "Addressed in https://chromium-review.googlesource.com/c/v8/v8/+/2519559",
+      "parentUuid": "be6d04e0_4da9a37f",
+      "range": {
+        "startLine": 3228,
+        "startChar": 2,
+        "endLine": 3228,
+        "endChar": 15
+      },
+      "revId": "a7e8c320c6f6f173e1c05421d40163a46b942ee4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
