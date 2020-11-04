@@ -91,6 +91,52 @@
       "parentUuid": "30641258_1e6b2402",
       "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aaaaf0c_780572ed",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T10:10:02Z",
+      "side": 1,
+      "message": "nit: add a TODO to remove this case.\nWe do have already ElapsedTimer which fulfill this use-case.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 0
+      },
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b170c22d_7b6aa028",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T10:10:02Z",
+      "side": 1,
+      "message": "We only have to stop if we started.\n  \n ...\n if (!recorder_) return;\n Stop();\n ...",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 20
+      },
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
