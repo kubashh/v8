@@ -479,6 +479,30 @@
       },
       "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f18d725_3579e53a",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-04T16:28:58Z",
+      "side": 1,
+      "message": "No, that summarizes it. It\u0027s just to avoid plumbing. It\u0027s more or less the same information that is stored in MinimorphicPropertyAccess. As I said, not important for this cl though. Next time we want to change or add any additional stuff we can do this to avoid. I am happy to land this as is.",
+      "parentUuid": "73c942c7_d52bef32",
+      "range": {
+        "startLine": 450,
+        "startChar": 42,
+        "endLine": 450,
+        "endChar": 53
+      },
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
