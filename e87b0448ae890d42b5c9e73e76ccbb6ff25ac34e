@@ -142,6 +142,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39d0068a_6711ef9c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-04T13:41:02Z",
+      "side": 1,
+      "message": "If they can be removed, what does that mean for inlined map checks? Is the code invalidated?",
+      "parentUuid": "78cd7c09_0441ca12",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19a1bbca_a962f038",
