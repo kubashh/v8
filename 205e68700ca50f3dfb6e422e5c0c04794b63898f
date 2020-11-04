@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41e865ea_393ff0aa",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-04T18:43:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2a9cc917_a36897b3",
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c355ce01_e9c83e5f",
@@ -48,6 +66,30 @@
       "writtenOn": "2020-11-04T09:59:55Z",
       "side": 1,
       "message": "should we just start with a single event for now, to keep the API exposed changes to a minimum?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 0
+      },
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9790d1f4_6a44c754",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-04T18:43:33Z",
+      "side": 1,
+      "message": "What should we do next? I don\u0027t mind leaving just the single event for now. Personally, I want to move onto the nest step of the ETW instrumentation, which is to emit stack-walking events for JIT-ted code.",
+      "parentUuid": "c355ce01_e9c83e5f",
       "range": {
         "startLine": 30,
         "startChar": 0,
@@ -116,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d6ad5b_cb6b5edb",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-04T18:43:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1aaaaf0c_780572ed",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 0
+      },
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b170c22d_7b6aa028",
@@ -129,6 +195,30 @@
       "writtenOn": "2020-11-04T10:10:02Z",
       "side": 1,
       "message": "We only have to stop if we started.\n  \n ...\n if (!recorder_) return;\n Stop();\n ...",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 20
+      },
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4294d4b2_dfadf163",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-04T18:43:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b170c22d_7b6aa028",
       "range": {
         "startLine": 109,
         "startChar": 0,
