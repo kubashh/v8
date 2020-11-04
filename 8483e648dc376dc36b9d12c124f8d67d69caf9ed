@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "949a8965_c5a2f113",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-04T19:31:31Z",
+      "side": 1,
+      "message": "Could you point me to where the wasm stuff is being used in chrome so I can have a better idea of what I need to put in the separate CL?",
+      "parentUuid": "5757b9ca_35625f5d",
+      "range": {
+        "startLine": 78,
+        "startChar": 10,
+        "endLine": 78,
+        "endChar": 24
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69f2404e_57d2481d",
         "filename": "include/v8-metrics.h",
         "patchSetId": 19
@@ -54,6 +78,30 @@
       "writtenOn": "2020-11-04T19:02:12Z",
       "side": 1,
       "message": "what do you mean by \"should throw errors\"?\n\nV8 does not support C++ exceptions, and I think the instrumentation errors should not be surfaced directly in V8 execution.\n\nI think the only way is printing to std error.\n\nWhat kind of errors do you think would appear?",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 19
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fa22323_3f6a1b06",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-04T19:31:31Z",
+      "side": 1,
+      "message": "I was imagining something like UNREACHABLE() because we never want a MainThreadEvent to be called into AddThreadSafeEvent.",
+      "parentUuid": "69f2404e_57d2481d",
       "range": {
         "startLine": 167,
         "startChar": 0,
