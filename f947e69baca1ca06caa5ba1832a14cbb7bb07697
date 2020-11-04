@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b47fe5d_1436b34e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-04T12:48:13Z",
+      "side": 1,
+      "message": "thanks for looking!",
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91e5480b_c361d2d2",
@@ -14,6 +31,30 @@
       "writtenOn": "2020-11-03T12:50:17Z",
       "side": 1,
       "message": "{receiver} is not used except for your DCHECKs, you can remove it.",
+      "range": {
+        "startLine": 797,
+        "startChar": 49,
+        "endLine": 797,
+        "endChar": 57
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a07c27bf_d3455230",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-04T12:48:13Z",
+      "side": 1,
+      "message": "As discussed offline, this was on purpose (to make sure the super property access doesn\u0027t hit the code which doesn\u0027t support it); added a comment.",
+      "parentUuid": "91e5480b_c361d2d2",
       "range": {
         "startLine": 797,
         "startChar": 49,
@@ -47,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab3f72c4_1e0e00b8",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-04T12:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b261fc7_de4b2fbd",
+      "range": {
+        "startLine": 1147,
+        "startChar": 42,
+        "endLine": 1147,
+        "endChar": 50
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1ebe8dc_78b7eb0d",
@@ -60,6 +125,30 @@
       "writtenOn": "2020-11-03T12:50:17Z",
       "side": 1,
       "message": "return",
+      "range": {
+        "startLine": 3483,
+        "startChar": 2,
+        "endLine": 3483,
+        "endChar": 28
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "847b2f7b_4d2810ff",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3483,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-04T12:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1ebe8dc_78b7eb0d",
       "range": {
         "startLine": 3483,
         "startChar": 2,
@@ -95,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "484e2185_80a4213b",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3050,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-04T12:48:13Z",
+      "side": 1,
+      "message": "Looking at the callers, whenever concrete_receiver is non-null, receiver_map has value.",
+      "parentUuid": "7596c3e4_3f4faa4f",
+      "range": {
+        "startLine": 3050,
+        "startChar": 56,
+        "endLine": 3050,
+        "endChar": 69
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d18084a8_d209150f",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 32
@@ -106,6 +219,24 @@
       "writtenOn": "2020-11-03T12:50:17Z",
       "side": 1,
       "message": "Please delete these empty lines here and below, they make the code harder to read.",
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e831d77_92f84ea1",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3245,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-04T12:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d18084a8_d209150f",
       "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -133,6 +264,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b081c30_5d6cff1c",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-04T12:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78c5f995_534b11a3",
+      "range": {
+        "startLine": 3254,
+        "startChar": 20,
+        "endLine": 3254,
+        "endChar": 31
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e870d0bf_eb43eb4e",
@@ -146,6 +301,30 @@
       "writtenOn": "2020-11-03T12:50:17Z",
       "side": 1,
       "message": "Please directly pass base::nullopt here.",
+      "range": {
+        "startLine": 3260,
+        "startChar": 20,
+        "endLine": 3260,
+        "endChar": 42
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f45d966_bc786e71",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3260,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-04T12:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e870d0bf_eb43eb4e",
       "range": {
         "startLine": 3260,
         "startChar": 20,
