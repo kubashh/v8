@@ -69,6 +69,24 @@
       "parentUuid": "676887ac_8eb9bcd6",
       "revId": "89360b958106c4afa0abf2661d75217e72108567",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6befa8b_eec8dfa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-04T18:08:41Z",
+      "side": 1,
+      "message": "I guess the magic is the walk backwards and forwards of the stack that is not present test/mjsunit/regress/regress-353058.js. In the previous test, the code would hit the stackoverflow check from InterpreterEntry. The current one makes sure to hit both code paths.",
+      "parentUuid": "5ee9def2_3bb8b0e0",
+      "revId": "89360b958106c4afa0abf2661d75217e72108567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
