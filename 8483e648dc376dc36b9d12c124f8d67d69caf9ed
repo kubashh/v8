@@ -16,6 +16,144 @@
       "message": "Renamed the wall_clock field to duration_in_us. I also replaced the TimedScope in the wasm code with an ElapsedTimer, which let me remove the TimedScope(Event* event) constructor.\n\nIs it time to move onto step 2 of the ETW instrumentation?",
       "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5757b9ca_35625f5d",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T19:02:12Z",
+      "side": 1,
+      "message": "Sorry, I was too fuzzy about this.\nWe currently cannot change it, it\u0027s already used by chrome, it requires a two step refactoring (let\u0027s postpone this and just add a TODO)\n\nIf we first refactor the WASM code in a separate CL we can use the duration_us in this CL for the newly added Compile events.",
+      "range": {
+        "startLine": 78,
+        "startChar": 10,
+        "endLine": 78,
+        "endChar": 24
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69f2404e_57d2481d",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T19:02:12Z",
+      "side": 1,
+      "message": "what do you mean by \"should throw errors\"?\n\nV8 does not support C++ exceptions, and I think the instrumentation errors should not be surfaced directly in V8 execution.\n\nI think the only way is printing to std error.\n\nWhat kind of errors do you think would appear?",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 19
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93722392_22c690cb",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 4182,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T19:02:12Z",
+      "side": 1,
+      "message": "This is something we should initialise on demand only to minimize the performance impact.\n\n #if V8_OS_WIN\n   if (options.platform_instrumentation) {\n     create_params.metrics_recorder \u003d\n      ...\n   }\n #endif\n\n\nSee options.enable_inspector in d8.cc for an example on how to do this.",
+      "range": {
+        "startLine": 4181,
+        "startChar": 0,
+        "endLine": 4182,
+        "endChar": 55
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57953664_753b7400",
+        "filename": "src/instrumentation/provider-win.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T19:02:12Z",
+      "side": 1,
+      "message": "we should definitely clean this up before landing.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 6
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e149583_d23fcbb6",
+        "filename": "src/instrumentation/provider.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T19:02:12Z",
+      "side": 1,
+      "message": "Let\u0027s rename this to Recorder as well. The namespace should be good enough for distinctions.",
+      "range": {
+        "startLine": 17,
+        "startChar": 24,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cca5951f_ae2998cd",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T19:02:12Z",
+      "side": 1,
+      "message": "Could you make a separate CL with just the wasm changes?\n\nThen we can have the cleaner TimerScopes in the current CL.",
+      "range": {
+        "startLine": 420,
+        "startChar": 2,
+        "endLine": 421,
+        "endChar": 16
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
