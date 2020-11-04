@@ -16,6 +16,24 @@
       "message": "Please format this properly.",
       "revId": "1fb59d5980ee61d538426f35df7f027ccfe6288c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "777bb3fc_452b2b39",
+        "filename": "test/mjsunit/stackoverflow-underapplication.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-04T17:26:18Z",
+      "side": 1,
+      "message": "Not needed anymore.",
+      "parentUuid": "b98cd54a_e676a215",
+      "revId": "1fb59d5980ee61d538426f35df7f027ccfe6288c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

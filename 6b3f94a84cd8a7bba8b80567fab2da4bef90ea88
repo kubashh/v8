@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a196ab04_4a5fa3bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-04T17:26:18Z",
+      "side": 1,
+      "message": "Thanks Igor for the developing a new and better test! 😊\nPTAL.",
+      "revId": "6b3f94a84cd8a7bba8b80567fab2da4bef90ea88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
