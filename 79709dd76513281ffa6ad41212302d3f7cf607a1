@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "79709dd76513281ffa6ad41212302d3f7cf607a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67972647_83c7cd52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-04T11:11:12Z",
+      "side": 1,
+      "message": "Self-approving since pthier@ doesn\u0027t have permissions yet.",
+      "revId": "79709dd76513281ffa6ad41212302d3f7cf607a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
