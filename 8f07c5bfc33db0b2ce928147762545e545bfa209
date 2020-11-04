@@ -16,6 +16,23 @@
       "message": "lgtm overall with a note to fix parameter encodings mentioned below.",
       "revId": "8f07c5bfc33db0b2ce928147762545e545bfa209",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac5a4939_29345041",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-04T14:35:30Z",
+      "side": 1,
+      "message": "Thanks Sathya! lgtm.",
+      "revId": "8f07c5bfc33db0b2ce928147762545e545bfa209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
