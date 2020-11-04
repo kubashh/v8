@@ -16,6 +16,23 @@
       "message": "lgtm, but please ensure that the bots that failed last time work with the new test",
       "revId": "89360b958106c4afa0abf2661d75217e72108567",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ef64f37_e73196a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-04T17:32:24Z",
+      "side": 1,
+      "message": "Are you sure that this still fails with the original bug?",
+      "revId": "89360b958106c4afa0abf2661d75217e72108567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
