@@ -20,6 +20,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a9cc917_a36897b3",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T09:59:55Z",
+      "side": 1,
+      "message": "I\u0027m not too much of a fan of the initial naming choice,\nwall_clock_time_in_us can be both in my head: start of the event, or the duration.\n\nI\u0027d prefer duration_in_us here",
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c355ce01_e9c83e5f",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T09:59:55Z",
+      "side": 1,
+      "message": "should we just start with a single event for now, to keep the API exposed changes to a minimum?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 0
+      },
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "30641258_1e6b2402",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 18
@@ -31,6 +71,24 @@
       "writtenOn": "2020-11-03T22:35:34Z",
       "side": 1,
       "message": "I need some help finding the values to populate the type and thread fields.",
+      "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afdd0835_ac06fe27",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T09:59:55Z",
+      "side": 1,
+      "message": "We probably want the is_eval bit in there as well (see above)",
+      "parentUuid": "30641258_1e6b2402",
       "revId": "205e68700ca50f3dfb6e422e5c0c04794b63898f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

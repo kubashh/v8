@@ -268,6 +268,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f345345c_56b2c10a",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-04T09:59:55Z",
+      "side": 1,
+      "message": "Thanks for the investigation. \n\nI think in the WASM case the TimedScope doesn\u0027t add much benefit over a manual timer since there are no exit points in-between.",
+      "parentUuid": "89e24a53_f88616b2",
+      "revId": "d883a59eedd6248e25edb4b570dc6105677b4e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c87938d6_2c8b49c6",
         "filename": "src/d8/d8.cc",
         "patchSetId": 15
