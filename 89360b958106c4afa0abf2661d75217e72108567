@@ -87,6 +87,24 @@
       "parentUuid": "5ee9def2_3bb8b0e0",
       "revId": "89360b958106c4afa0abf2661d75217e72108567",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d769f7a9_9e058ef3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-04T18:10:43Z",
+      "side": 1,
+      "message": "There were two keys:\n1) we needed --no-opt to avoid stack overflows caused by OSR compilation\n2) when we try to call f() near the stack limit (as in regress-353058.js) the interpreter trampoline catches the SO case, but in the new test we return from recursion and keep calling f(), so that eventually the interpreter trampoline gets enough stack space while the new stack check in InvokePrologue() still triggers (or in case of non-fixed version it\u0027ll try to access memory beyond the stack limit, which should be catchable by ASAN).",
+      "parentUuid": "5ee9def2_3bb8b0e0",
+      "revId": "89360b958106c4afa0abf2661d75217e72108567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
