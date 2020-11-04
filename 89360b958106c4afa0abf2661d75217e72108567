@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73587948_264a9b17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-04T17:30:08Z",
+      "side": 1,
+      "message": "lgtm, but please ensure that the bots that failed last time work with the new test",
+      "revId": "89360b958106c4afa0abf2661d75217e72108567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
