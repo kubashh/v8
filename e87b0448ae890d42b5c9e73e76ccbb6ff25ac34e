@@ -124,6 +124,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78cd7c09_0441ca12",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-11-04T13:38:19Z",
+      "side": 1,
+      "message": "They can be added, reordered and removed.",
+      "parentUuid": "d6f4e6b8_db562295",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19a1bbca_a962f038",
@@ -327,6 +345,30 @@
       "side": 1,
       "message": "Anyways, if the original set were zone-allocated, we could easily store a ptr here instead of a copy.",
       "parentUuid": "8f94c9e1_59d8e4f7",
+      "range": {
+        "startLine": 450,
+        "startChar": 42,
+        "endLine": 450,
+        "endChar": 53
+      },
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01ea3251_4d877ed7",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-11-04T13:38:19Z",
+      "side": 1,
+      "message": "Actually, ZoneHandleSet is a thin wrapper around a zone vector so I don\u0027t think there\u0027s any copying of the underlying zone vector happening here.",
+      "parentUuid": "e53e374a_878faded",
       "range": {
         "startLine": 450,
         "startChar": 42,
