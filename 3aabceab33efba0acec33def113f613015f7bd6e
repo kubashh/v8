@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a352d987_9ddae00e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-11-04T13:56:08Z",
+      "side": 1,
+      "message": "LGTM. I\u0027m not a huge fan of passing functions around (relatively high compile time cost, and the impact on readability/debuggability is a mixed bag), but I suppose in this case the simplification is worth it.",
+      "revId": "3aabceab33efba0acec33def113f613015f7bd6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "144a3b90_5d0c5e0d",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3841,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-11-04T13:56:08Z",
+      "side": 1,
+      "message": "nit: implementing",
+      "range": {
+        "startLine": 3841,
+        "startChar": 24,
+        "endLine": 3841,
+        "endChar": 35
+      },
+      "revId": "3aabceab33efba0acec33def113f613015f7bd6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e524f07_03f296b0",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4176,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-11-04T13:56:08Z",
+      "side": 1,
+      "message": "(Optional) idea for simplification: pull out the `min` condition, roughly:\n\n  if (min) {\n    Binop\u003cT\u003e(..., Min);\n  } else {\n    Binop\u003cT\u003e(..., Max);\n  }\n\n`Min` and `Max` already exist in utils.h, but I think you\u0027ll have to provide `template\u003c\u003e float Min(...) { return JSMin(...); }` here (instead of adding lines 4168-4171).",
+      "range": {
+        "startLine": 4175,
+        "startChar": 2,
+        "endLine": 4176,
+        "endChar": 15
+      },
+      "revId": "3aabceab33efba0acec33def113f613015f7bd6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
