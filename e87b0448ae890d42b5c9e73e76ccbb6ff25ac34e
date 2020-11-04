@@ -455,6 +455,30 @@
       },
       "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73c942c7_d52bef32",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-11-04T15:45:12Z",
+      "side": 1,
+      "message": "I\u0027m happy to make the change but I\u0027m curious to understand the reasoning for future reference. \n\nThe way I see it, plumbing it through the operator makes it clear what the operator depends on (ie, more explicit) which simplifies other operations such as equality checking of the operator (which now needs to look at the broker to get the maps?). On the other hand, if we do this, there\u0027s no need for this extra plumbing code. \n\nIs there anything else I missed?",
+      "parentUuid": "b3bddd3b_8075afda",
+      "range": {
+        "startLine": 450,
+        "startChar": 42,
+        "endLine": 450,
+        "endChar": 53
+      },
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
