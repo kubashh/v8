@@ -160,6 +160,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e61575d3_51714dda",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-11-04T13:45:10Z",
+      "side": 1,
+      "message": "In the builtin, we check the map as well as the handler -- the handler will be different if the new map invalidates the code. \n\nThe inlined map checks can never in an incorrect state because for those maps, our code can not be incorrect.",
+      "parentUuid": "39d0068a_6711ef9c",
+      "revId": "e87b0448ae890d42b5c9e73e76ccbb6ff25ac34e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19a1bbca_a962f038",
