@@ -51,6 +51,24 @@
       "parentUuid": "8ef64f37_e73196a4",
       "revId": "89360b958106c4afa0abf2661d75217e72108567",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ee9def2_3bb8b0e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-04T17:51:09Z",
+      "side": 1,
+      "message": "Ah I see, ASAN is the key. So what was wrong with the old test which also used a small stack limit but only failed on ARM, not on Intel IIRC? test/mjsunit/regress/regress-353058.js",
+      "parentUuid": "676887ac_8eb9bcd6",
+      "revId": "89360b958106c4afa0abf2661d75217e72108567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
