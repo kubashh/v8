@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7801289e_ee3d2bd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-11-05T05:30:57Z",
+      "side": 1,
+      "message": "Hi Tobias, this is similar to the x64 one you reviewed. Ptal, thanks!",
+      "revId": "3fb12bab799b2085a6206c25430b04616ea807c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
