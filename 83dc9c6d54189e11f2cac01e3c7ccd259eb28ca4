@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "340c5210_e8a6c193",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-05T01:24:53Z",
+      "side": 1,
+      "message": "The wasm-only CL. If the CL looks good, could you please give me TryJob + TryBot access? Thanks!",
+      "revId": "83dc9c6d54189e11f2cac01e3c7ccd259eb28ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
