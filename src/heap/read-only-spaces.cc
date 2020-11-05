@@ -683,7 +683,7 @@ AllocationResult ReadOnlySpace::AllocateRaw(int size_in_bytes,
   AllocationResult result = AllocateRawUnaligned(size_in_bytes);
 #endif
   HeapObject heap_obj;
-  if (!result.IsRetry() && result.To(&heap_obj)) {
+  if (!result.IsFailure() && result.To(&heap_obj)) {
     DCHECK(heap()->incremental_marking()->marking_state()->IsBlack(heap_obj));
   }
   return result;

@@ -13,6 +13,7 @@
 #include "src/common/assert-scope.h"
 #include "src/execution/isolate.h"
 #include "src/handles/persistent-handles.h"
+#include "src/heap/allocator.h"
 #include "src/heap/concurrent-allocator.h"
 
 namespace v8 {
@@ -93,18 +94,17 @@ class V8_EXPORT_PRIVATE LocalHeap {
   Heap* heap() { return heap_; }
 
   MarkingBarrier* marking_barrier() { return marking_barrier_.get(); }
-  ConcurrentAllocator* old_space_allocator() { return &old_space_allocator_; }
 
-  // Mark/Unmark linear allocation areas black. Used for black allocation.
-  void MarkLinearAllocationAreaBlack();
-  void UnmarkLinearAllocationArea();
+  void StartBlackAllocation();
+  void StopBlackAllocation();
 
-  // Give up linear allocation areas. Used for mark-compact GC.
-  void FreeLinearAllocationArea();
+  void FreeLabs();
 
   // Create filler object in linear allocation areas. Verifying requires
   // iterable heap.
-  void MakeLinearAllocationAreaIterable();
+  void MakeLabsIterable();
+
+  bool AreLabsEmpty();
 
   // Fetches a pointer to the local heap from the thread local storage.
   // It is intended to be used in handle and write barrier code where it is
@@ -117,7 +117,8 @@ class V8_EXPORT_PRIVATE LocalHeap {
   V8_WARN_UNUSED_RESULT inline AllocationResult AllocateRaw(
       int size_in_bytes, AllocationType allocation,
       AllocationOrigin origin = AllocationOrigin::kRuntime,
-      AllocationAlignment alignment = kWordAligned);
+      AllocationAlignment alignment = kWordAligned,
+      HeapLimitHandling heap_limit_handling = HeapLimitHandling::kRespect);
 
   // Allocates an uninitialized object and crashes when object
   // cannot be allocated.
@@ -138,6 +139,9 @@ class V8_EXPORT_PRIVATE LocalHeap {
     // Thread was stopped in a safepoint.
     Safepoint
   };
+  static const int kLabSize = 4 * KB;
+  static const int kMaxLabSize = 32 * KB;
+  static const int kMaxLabObjectSize = 2 * KB;
 
   // Slow path of allocation that performs GC and then retries allocation in
   // loop.
@@ -177,7 +181,9 @@ class V8_EXPORT_PRIVATE LocalHeap {
   std::unique_ptr<PersistentHandles> persistent_handles_;
   std::unique_ptr<MarkingBarrier> marking_barrier_;
 
-  ConcurrentAllocator old_space_allocator_;
+  Allocator old_space_small_allocator_;
+  Allocator old_space_medium_allocator_;
+  Allocator lo_space_allocator_;
 
   friend class Heap;
   friend class GlobalSafepoint;

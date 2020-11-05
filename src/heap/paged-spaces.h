@@ -62,8 +62,7 @@ class V8_EXPORT_PRIVATE PagedSpaceObjectIterator : public ObjectIterator {
   PageRange::iterator current_page_;
 };
 
-class V8_EXPORT_PRIVATE PagedSpace
-    : NON_EXPORTED_BASE(public SpaceWithLinearArea) {
+class V8_EXPORT_PRIVATE PagedSpace : NON_EXPORTED_BASE(public Space) {
  public:
   using iterator = PageIterator;
   using const_iterator = ConstPageIterator;
@@ -120,23 +119,6 @@ class V8_EXPORT_PRIVATE PagedSpace
   // due to being too small to use for allocation.
   virtual size_t Waste() { return free_list_->wasted_bytes(); }
 
-  // Allocate the requested number of bytes in the space if possible, return a
-  // failure object if not.
-  V8_WARN_UNUSED_RESULT inline AllocationResult AllocateRawUnaligned(
-      int size_in_bytes, AllocationOrigin origin = AllocationOrigin::kRuntime);
-
-  // Allocate the requested number of bytes in the space double aligned if
-  // possible, return a failure object if not.
-  V8_WARN_UNUSED_RESULT inline AllocationResult AllocateRawAligned(
-      int size_in_bytes, AllocationAlignment alignment,
-      AllocationOrigin origin = AllocationOrigin::kRuntime);
-
-  // Allocate the requested number of bytes in the space and consider allocation
-  // alignment if needed.
-  V8_WARN_UNUSED_RESULT inline AllocationResult AllocateRaw(
-      int size_in_bytes, AllocationAlignment alignment,
-      AllocationOrigin origin = AllocationOrigin::kRuntime);
-
   // Allocate the requested number of bytes in the space from a background
   // thread.
   V8_WARN_UNUSED_RESULT base::Optional<std::pair<Address, size_t>>
@@ -178,14 +160,6 @@ class V8_EXPORT_PRIVATE PagedSpace
   inline bool TryFreeLast(HeapObject object, int object_size);
 
   void ResetFreeList();
-
-  // Empty space linear allocation area, returning unused area to free list.
-  void FreeLinearAllocationArea();
-
-  void MakeLinearAllocationAreaIterable();
-
-  void MarkLinearAllocationAreaBlack();
-  void UnmarkLinearAllocationArea();
 
   void DecreaseAllocatedBytes(size_t bytes, Page* page) {
     accounting_stats_.DecreaseAllocatedBytes(bytes, page);
@@ -298,35 +272,6 @@ class V8_EXPORT_PRIVATE PagedSpace
 
   std::unique_ptr<ObjectIterator> GetObjectIterator(Heap* heap) override;
 
-  void SetLinearAllocationArea(Address top, Address limit);
-
- private:
-  class ConcurrentAllocationMutex {
-   public:
-    explicit ConcurrentAllocationMutex(PagedSpace* space) {
-      if (space->SupportsConcurrentAllocation()) {
-        guard_.emplace(&space->space_mutex_);
-      }
-    }
-
-    base::Optional<base::MutexGuard> guard_;
-  };
-
-  bool SupportsConcurrentAllocation() {
-    return FLAG_concurrent_allocation && !is_local_space();
-  }
-
-  // Set space linear allocation area.
-  void SetTopAndLimit(Address top, Address limit);
-  void DecreaseLimit(Address new_limit);
-  void UpdateInlineAllocationLimit(size_t min_size) override;
-  bool SupportsAllocationObserver() override { return !is_local_space(); }
-
-  // Slow path of allocation function
-  V8_WARN_UNUSED_RESULT AllocationResult
-  AllocateRawSlow(int size_in_bytes, AllocationAlignment alignment,
-                  AllocationOrigin origin);
-
  protected:
   // PagedSpaces that should be included in snapshots have different, i.e.,
   // smaller, initial pages.
@@ -342,52 +287,25 @@ class V8_EXPORT_PRIVATE PagedSpace
   // it cannot allocate requested number of pages from OS, or if the hard heap
   // size limit has been hit.
   virtual Page* Expand();
-  Page* ExpandBackground(LocalHeap* local_heap);
   Page* AllocatePage();
 
-  // Sets up a linear allocation area that fits the given number of bytes.
-  // Returns false if there is not enough space and the caller has to retry
-  // after collecting garbage.
-  inline bool EnsureLabMain(int size_in_bytes, AllocationOrigin origin);
-  // Allocates an object from the linear allocation area. Assumes that the
-  // linear allocation area is large enought to fit the object.
-  inline AllocationResult AllocateFastUnaligned(int size_in_bytes);
-  // Tries to allocate an aligned object from the linear allocation area.
-  // Returns nullptr if the linear allocation area does not fit the object.
-  // Otherwise, returns the object pointer and writes the allocation size
-  // (object size + alignment filler size) to the size_in_bytes.
-  inline AllocationResult AllocateFastAligned(int size_in_bytes,
-                                              int* aligned_size_in_bytes,
-                                              AllocationAlignment alignment);
+  V8_WARN_UNUSED_RESULT bool RefillLabFromFreeList(size_t min_size,
+                                                   size_t max_size,
+                                                   AllocationOrigin origin,
+                                                   Address* top,
+                                                   Address* limit);
 
-  V8_WARN_UNUSED_RESULT bool TryAllocationFromFreeListMain(
-      size_t size_in_bytes, AllocationOrigin origin);
+  V8_WARN_UNUSED_RESULT bool ContributeToSweeping(size_t required_freed_bytes,
+                                                  int max_pages);
 
-  V8_WARN_UNUSED_RESULT bool ContributeToSweepingMain(int required_freed_bytes,
-                                                      int max_pages,
-                                                      int size_in_bytes,
-                                                      AllocationOrigin origin);
+  bool RefillLab(ThreadKind, size_t min_size, size_t max_size,
+                 AllocationAlignment alignment, AllocationOrigin origin,
+                 HeapLimitHandling heap_limit_handling, Address* top,
+                 Address* limit, AllocationFailure* failure) override;
+  void FreeLab(ThreadKind, Address* top, Address* limit) override;
+  void FreeLabImpl(Address* top, Address* limit);
 
-  // Refills LAB for EnsureLabMain. This function is space-dependent. Returns
-  // false if there is not enough space and the caller has to retry after
-  // collecting garbage.
-  V8_WARN_UNUSED_RESULT virtual bool RefillLabMain(int size_in_bytes,
-                                                   AllocationOrigin origin);
-
-  // Actual implementation of refilling LAB. Returns false if there is not
-  // enough space and the caller has to retry after collecting garbage.
-  V8_WARN_UNUSED_RESULT bool RawRefillLabMain(int size_in_bytes,
-                                              AllocationOrigin origin);
-
-  V8_WARN_UNUSED_RESULT base::Optional<std::pair<Address, size_t>>
-  TryAllocationFromFreeListBackground(LocalHeap* local_heap,
-                                      size_t min_size_in_bytes,
-                                      size_t max_size_in_bytes,
-                                      AllocationAlignment alignment,
-                                      AllocationOrigin origin);
-
-  V8_WARN_UNUSED_RESULT bool TryExpand(int size_in_bytes,
-                                       AllocationOrigin origin);
+  bool TryExpand(ThreadKind);
 
   Executability executable_;
 
@@ -441,10 +359,6 @@ class V8_EXPORT_PRIVATE CompactionSpace : public LocalSpace {
       : LocalSpace(heap, id, executable, local_space_kind) {
     DCHECK(is_compaction_space());
   }
-
- protected:
-  V8_WARN_UNUSED_RESULT bool RefillLabMain(int size_in_bytes,
-                                           AllocationOrigin origin) override;
 };
 
 // A collection of |CompactionSpace|s used by a single compaction task.
@@ -517,14 +431,6 @@ class MapSpace : public PagedSpace {
   explicit MapSpace(Heap* heap)
       : PagedSpace(heap, MAP_SPACE, NOT_EXECUTABLE,
                    FreeList::CreateFreeList()) {}
-
-  int RoundSizeDownToObjectAlignment(int size) override {
-    if (base::bits::IsPowerOfTwo(Map::kSize)) {
-      return RoundDown(size, Map::kSize);
-    } else {
-      return (size / Map::kSize) * Map::kSize;
-    }
-  }
 
   void SortFreeList();
 
