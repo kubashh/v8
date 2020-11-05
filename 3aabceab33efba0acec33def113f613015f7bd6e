@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d87bffa_49a3127a",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3841,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-11-05T05:32:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "144a3b90_5d0c5e0d",
+      "range": {
+        "startLine": 3841,
+        "startChar": 24,
+        "endLine": 3841,
+        "endChar": 35
+      },
+      "revId": "3aabceab33efba0acec33def113f613015f7bd6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e524f07_03f296b0",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-11-04T13:56:08Z",
       "side": 1,
       "message": "(Optional) idea for simplification: pull out the `min` condition, roughly:\n\n  if (min) {\n    Binop\u003cT\u003e(..., Min);\n  } else {\n    Binop\u003cT\u003e(..., Max);\n  }\n\n`Min` and `Max` already exist in utils.h, but I think you\u0027ll have to provide `template\u003c\u003e float Min(...) { return JSMin(...); }` here (instead of adding lines 4168-4171).",
+      "range": {
+        "startLine": 4175,
+        "startChar": 2,
+        "endLine": 4176,
+        "endChar": 15
+      },
+      "revId": "3aabceab33efba0acec33def113f613015f7bd6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b90e9b_c8c28d19",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4176,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-11-05T05:32:44Z",
+      "side": 1,
+      "message": "Min and Max will be removed from utils.h soon (in a cleanup friday), so I\u0027ll directly call std::min and std::max. But have to wrap them in a lambda, i think due to the const refs in the signatures of std::min/std::max.",
+      "parentUuid": "6e524f07_03f296b0",
       "range": {
         "startLine": 4175,
         "startChar": 2,
