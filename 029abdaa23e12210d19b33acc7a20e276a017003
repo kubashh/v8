@@ -16,6 +16,69 @@
       "message": "Hi Georg, this is the x86 fix for fast calls with 64-bit arguments. I\u0027ve added a minimal set of tests that only test the \"interesting\" cases for int64/uint64 (where the behaviour on x86 differs from x64). Please let me know if you prefer to have the full int64/uint64 test suite.",
       "revId": "029abdaa23e12210d19b33acc7a20e276a017003",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e6ee2d1_3f558ce9",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3472,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-05T16:31:15Z",
+      "side": 1,
+      "message": "IntegerParams?\nFloat64 is 64 bit too.",
+      "range": {
+        "startLine": 3472,
+        "startChar": 13,
+        "endLine": 3472,
+        "endChar": 19
+      },
+      "revId": "029abdaa23e12210d19b33acc7a20e276a017003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54a58253_917ef006",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3664,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-05T16:31:15Z",
+      "side": 1,
+      "message": "Why do the check on e.g. ARM64 but not on X64?",
+      "range": {
+        "startLine": 3664,
+        "startChar": 8,
+        "endLine": 3664,
+        "endChar": 26
+      },
+      "revId": "029abdaa23e12210d19b33acc7a20e276a017003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f56ec80_975ad855",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28266,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-05T16:31:15Z",
+      "side": 1,
+      "message": "Remember that the convention is to merely repeat the condition in this comment.\n\nBut: Not-X64 doesn\u0027t mean X86.",
+      "revId": "029abdaa23e12210d19b33acc7a20e276a017003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
