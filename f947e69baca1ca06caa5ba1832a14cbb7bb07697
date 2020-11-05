@@ -230,6 +230,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eae0c660_905fc23e",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 3050,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-05T10:57:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c78ca4cc_f78d8ffd",
+      "range": {
+        "startLine": 3050,
+        "startChar": 56,
+        "endLine": 3050,
+        "endChar": 69
+      },
+      "revId": "f947e69baca1ca06caa5ba1832a14cbb7bb07697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d18084a8_d209150f",
