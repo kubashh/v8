@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "035e2bd5_28c37791",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-11-05T14:50:35Z",
+      "side": 1,
+      "message": "lgtm (But I don\u0027t know the code well. Sigurd/Yang should have the last word.)",
+      "revId": "8df32b8d197ba8919e32f1f580d3371740af2ae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
