@@ -254,6 +254,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa497896_18b38024",
+        "filename": "src/instrumentation/provider-win.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-05T19:27:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "57953664_753b7400",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 6
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e149583_d23fcbb6",
