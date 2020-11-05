@@ -89,6 +89,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6394427_62c014f0",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-05T18:21:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eb5a9303_6fae92bf",
+      "range": {
+        "startLine": 78,
+        "startChar": 10,
+        "endLine": 78,
+        "endChar": 24
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afaf2ff8_106a03ae",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-05T18:21:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eb5a9303_6fae92bf",
+      "range": {
+        "startLine": 78,
+        "startChar": 10,
+        "endLine": 78,
+        "endChar": 24
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69f2404e_57d2481d",
@@ -161,6 +209,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e47d94c_47fefe18",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 4182,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-05T18:21:46Z",
+      "side": 1,
+      "message": "If possible, I\u0027d really like to have the ETW provider initialized by default. Even after initialization, the provider is not enabled until an external program turns it on (like Windows Performance Recorder). So there should be little performance impact by default.\n\nI\u0027d be happy to run some performance checks to confirm if you\u0027d like. I believe our perf lab runs the same metrics as the Chromium one.",
+      "parentUuid": "93722392_22c690cb",
+      "range": {
+        "startLine": 4181,
+        "startChar": 0,
+        "endLine": 4182,
+        "endChar": 55
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "57953664_753b7400",
         "filename": "src/instrumentation/provider-win.cc",
         "patchSetId": 19
@@ -195,6 +267,30 @@
       "writtenOn": "2020-11-04T19:02:12Z",
       "side": 1,
       "message": "Let\u0027s rename this to Recorder as well. The namespace should be good enough for distinctions.",
+      "range": {
+        "startLine": 17,
+        "startChar": 24,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b042c693_cffc6e95",
+        "filename": "src/instrumentation/provider.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-05T18:21:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0e149583_d23fcbb6",
       "range": {
         "startLine": 17,
         "startChar": 24,
@@ -242,6 +338,30 @@
       "side": 1,
       "message": "wasm changes CL: https://chromium-review.googlesource.com/c/v8/v8/+/2518619",
       "parentUuid": "cca5951f_ae2998cd",
+      "range": {
+        "startLine": 420,
+        "startChar": 2,
+        "endLine": 421,
+        "endChar": 16
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eba49c3_d922a988",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-05T18:21:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "618d0645_a67784f3",
       "range": {
         "startLine": 420,
         "startChar": 2,
