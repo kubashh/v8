@@ -454,6 +454,8 @@ size_t WasmSerializer::GetSerializedNativeModuleSize() const {
 }
 
 bool WasmSerializer::SerializeNativeModule(Vector<byte> buffer) const {
+  TRACE_EVENT1("v8.wasm", "wasm.SerializeNativeModule", "bufferSize",
+               buffer.size());
   NativeModuleSerializer serializer(native_module_, VectorOf(code_table_));
   size_t measured_size = kHeaderSize + serializer.Measure();
   if (buffer.size() < measured_size) return false;
