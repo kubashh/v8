@@ -170,6 +170,15 @@ class CompilerTracer : public AllStatic {
     PrintF(scope.file(), " because --always-opt");
     PrintTraceSuffix(scope);
   }
+
+  static void TraceMarkForAlwaysOpt(Isolate* isolate,
+                                    Handle<JSFunction> function) {
+    if (!FLAG_trace_opt) return;
+    CodeTracer::Scope scope(isolate->GetCodeTracer());
+    PrintTracePrefix(scope, "marking", function);
+    PrintF(scope.file(), " because --always-opt");
+    PrintTraceSuffix(scope);
+  }
 };
 
 }  // namespace
@@ -3083,6 +3092,7 @@ void Compiler::PostInstantiation(Handle<JSFunction> function) {
     if (FLAG_always_opt && shared->allows_lazy_compilation() &&
         !shared->optimization_disabled() &&
         !function->HasAvailableOptimizedCode()) {
+      CompilerTracer::TraceMarkForAlwaysOpt(isolate, function);
       JSFunction::EnsureFeedbackVector(function, &is_compiled_scope);
       function->MarkForOptimization(ConcurrencyMode::kNotConcurrent);
     }
