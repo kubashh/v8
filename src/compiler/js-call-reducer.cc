@@ -3467,6 +3467,20 @@ bool HasFPParamsInSignature(const CFunctionInfo* c_signature) {
 }  // namespace
 #endif
 
+#ifndef V8_TARGET_ARCH_X64
+namespace {
+bool Has64BitParamsInSignature(const CFunctionInfo* c_signature) {
+  for (unsigned int i = 0; i < c_signature->ArgumentCount(); ++i) {
+    if (c_signature->ArgumentInfo(i).GetType() == CTypeInfo::Type::kInt64 ||
+        c_signature->ArgumentInfo(i).GetType() == CTypeInfo::Type::kUint64) {
+      return true;
+    }
+  }
+  return false;
+}
+}  // namespace
+#endif
+
 Reduction JSCallReducer::ReduceCallApiFunction(
     Node* node, const SharedFunctionInfoRef& shared) {
   DisallowHeapAccessIf no_heap_access(should_disallow_heap_access());
@@ -3646,6 +3660,10 @@ Reduction JSCallReducer::ReduceCallApiFunction(
 #ifndef V8_ENABLE_FP_PARAMS_IN_C_LINKAGE
   optimize_to_fast_call =
       optimize_to_fast_call && !HasFPParamsInSignature(c_signature);
+#endif
+#ifndef V8_TARGET_ARCH_X64
+  optimize_to_fast_call =
+      optimize_to_fast_call && !Has64BitParamsInSignature(c_signature);
 #endif
   if (optimize_to_fast_call) {
     FastApiCallReducerAssembler a(this, node, c_function, c_signature,
