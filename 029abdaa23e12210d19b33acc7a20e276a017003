@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c24a71c9_22a67a22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-05T16:06:31Z",
+      "side": 1,
+      "message": "Hi Georg, this is the x86 fix for fast calls with 64-bit arguments. I\u0027ve added a minimal set of tests that only test the \"interesting\" cases for int64/uint64 (where the behaviour on x86 differs from x64). Please let me know if you prefer to have the full int64/uint64 test suite.",
+      "revId": "029abdaa23e12210d19b33acc7a20e276a017003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
