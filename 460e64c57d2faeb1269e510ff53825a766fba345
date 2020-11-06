@@ -16,6 +16,41 @@
       "message": "Aha, I suspected that I was missing something. Thanks for clarifying!\nInstead of removing the limit, I increased it by a factor of two now. Not sure how much the stack size limitation really tests what it is supposed to test, since in 64kB you can fit a lot of non-return-call frames. And we don\u0027t have a test with *that* many recursive calls. I only call 24 in the factorial :/ ",
       "revId": "460e64c57d2faeb1269e510ff53825a766fba345",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5973b945_3b599005",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-11-06T15:28:21Z",
+      "side": 1,
+      "message": "Maybe we should add a test in this file with more recursive calls, just to test this. But I think it\u0027s very low priority, there are already tests that do exactly this in cctest, see test-run-wasm/ReturnCall*. In these the stack is even smaller and we run thousands of recursive calls.",
+      "parentUuid": "dd70c53c_bc7088b8",
+      "revId": "460e64c57d2faeb1269e510ff53825a766fba345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e68d2663_a85feaa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-11-06T15:28:21Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "460e64c57d2faeb1269e510ff53825a766fba345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
