@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "431c2f81_d750d349",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-06T13:05:04Z",
+      "side": 1,
+      "message": "Dan, PTAL.\n\nThanks,\nMythri",
+      "revId": "1fb60a4a2f5012c165e2343cc851dab2c72f9253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
