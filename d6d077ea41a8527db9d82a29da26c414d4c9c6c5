@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79f4cb1a_269c5e62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:06:11Z",
+      "side": 1,
+      "message": "looks good, but while you are here, I\u0027m adding more suggestions",
+      "revId": "d6d077ea41a8527db9d82a29da26c414d4c9c6c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7c06ae0_d2ca0275",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:06:11Z",
+      "side": 1,
+      "message": "Maybe just PrintDictionaryContents or something. In this form it can also be used for printing NameDictionary and GlobalDictionary.",
+      "range": {
+        "startLine": 69,
+        "startChar": 5,
+        "endLine": 69,
+        "endChar": 34
+      },
+      "revId": "d6d077ea41a8527db9d82a29da26c414d4c9c6c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b16e3c_8748f806",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:06:11Z",
+      "side": 1,
+      "message": "This Print function might need another mode/flag to not print enumeration order if the dictionary is already ordered.",
+      "range": {
+        "startLine": 84,
+        "startChar": 23,
+        "endLine": 84,
+        "endChar": 36
+      },
+      "revId": "d6d077ea41a8527db9d82a29da26c414d4c9c6c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a0c182c_4f803b8a",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:06:11Z",
+      "side": 1,
+      "message": "Here and below: we might want to skip the deleted entries here.\nAnd 2 or 3 spaces at the beginning of each line would be nice.",
+      "range": {
+        "startLine": 1354,
+        "startChar": 63,
+        "endLine": 1354,
+        "endChar": 68
+      },
+      "revId": "d6d077ea41a8527db9d82a29da26c414d4c9c6c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6adbc542_ea06c19f",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5182,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:06:11Z",
+      "side": 1,
+      "message": "I think you can use the opportunity to move Print functions to objects-printer.cc and use the same (but probably renamed) PrintOrderedHashTableMappings for printing Dictionaries.\n\nThe comment above might be outdated or the problem could be solvable by the macros from export-template.h.",
+      "revId": "d6d077ea41a8527db9d82a29da26c414d4c9c6c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c378ee3_a3b46d3c",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5201,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:06:11Z",
+      "side": 1,
+      "message": "And this one you can probably remove, as the Object::Print() seems to be doing the job.",
+      "revId": "d6d077ea41a8527db9d82a29da26c414d4c9c6c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
