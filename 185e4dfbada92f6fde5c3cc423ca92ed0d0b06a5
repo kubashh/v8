@@ -16,6 +16,23 @@
       "message": "Saw this flying by. Emanuel, since this is your code, you should take a look.",
       "revId": "185e4dfbada92f6fde5c3cc423ca92ed0d0b06a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc71684b_f70d47d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-11-06T14:43:59Z",
+      "side": 1,
+      "message": "Could you elaborate the need for changing the field name? wall_clock_time_in_us was chosen to distinguish it from a potential cpu_time_in_us to be added in the future. I\u0027m not seeing how duration_in_us adds any better explanation of what the field means and since it requires a 2-step change, I think there should be a good motivation for that.",
+      "revId": "185e4dfbada92f6fde5c3cc423ca92ed0d0b06a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
