@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0406573_73a00d59",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3472,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-06T09:51:01Z",
+      "side": 1,
+      "message": "Good point, done.",
+      "parentUuid": "4e6ee2d1_3f558ce9",
+      "range": {
+        "startLine": 3472,
+        "startChar": 13,
+        "endLine": 3472,
+        "endChar": 19
+      },
+      "revId": "029abdaa23e12210d19b33acc7a20e276a017003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54a58253_917ef006",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ed5c16a_501364c2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3664,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-06T09:51:01Z",
+      "side": 1,
+      "message": "As discussed offline, adding the checks on arm64 too.",
+      "parentUuid": "54a58253_917ef006",
+      "range": {
+        "startLine": 3664,
+        "startChar": 8,
+        "endLine": 3664,
+        "endChar": 26
+      },
+      "revId": "029abdaa23e12210d19b33acc7a20e276a017003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f56ec80_975ad855",
@@ -77,6 +125,24 @@
       "writtenOn": "2020-11-05T16:31:15Z",
       "side": 1,
       "message": "Remember that the convention is to merely repeat the condition in this comment.\n\nBut: Not-X64 doesn\u0027t mean X86.",
+      "revId": "029abdaa23e12210d19b33acc7a20e276a017003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ace4f6_e8fc51df",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28266,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-06T09:51:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f56ec80_975ad855",
       "revId": "029abdaa23e12210d19b33acc7a20e276a017003",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
