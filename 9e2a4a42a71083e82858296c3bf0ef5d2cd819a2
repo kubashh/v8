@@ -16,6 +16,23 @@
       "message": "PTAL, thanks!",
       "revId": "9e2a4a42a71083e82858296c3bf0ef5d2cd819a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78d6c6f8_9f310417",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-11-06T00:24:16Z",
+      "side": 1,
+      "message": "LGTM, great effort, and you updated the spreadsheet too, thank you!",
+      "revId": "9e2a4a42a71083e82858296c3bf0ef5d2cd819a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
