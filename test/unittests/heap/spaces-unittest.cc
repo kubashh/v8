@@ -44,9 +44,13 @@ TEST_F(SpacesTest, CompactionSpaceMerge) {
       compaction_space->AreaSize() / kMaxRegularHeapObjectSize;
   const int kExpectedPages =
       (kNumObjects + kNumObjectsPerPage - 1) / kNumObjectsPerPage;
+  Allocator allocator(heap, ThreadKind::kMain, compaction_space, kTaggedSize, 0,
+                      Page::kPageSize);
   for (int i = 0; i < kNumObjects; i++) {
     HeapObject object =
-        compaction_space->AllocateRawUnaligned(kMaxRegularHeapObjectSize)
+        allocator
+            .Allocate(kMaxRegularHeapObjectSize, kWordAligned,
+                      AllocationOrigin::kRuntime, HeapLimitHandling::kIgnore)
             .ToObjectChecked();
     heap->CreateFillerObjectAt(object.address(), kMaxRegularHeapObjectSize,
                                ClearRecordedSlots::kNo);

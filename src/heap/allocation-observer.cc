@@ -11,6 +11,7 @@ namespace v8 {
 namespace internal {
 
 void AllocationCounter::AddAllocationObserver(AllocationObserver* observer) {
+  active_ = true;
 #if DEBUG
   auto it = std::find_if(observers_.begin(), observers_.end(),
                          [observer](const AllocationObserverCounter& aoc) {
@@ -57,6 +58,7 @@ void AllocationCounter::RemoveAllocationObserver(AllocationObserver* observer) {
 
   if (observers_.size() == 0) {
     current_counter_ = next_counter_ = 0;
+    active_ = false;
   } else {
     size_t step_size = 0;
 
@@ -160,20 +162,6 @@ void AllocationCounter::InvokeAllocationObservers(Address soon_object,
   step_in_progress_ = false;
 }
 
-PauseAllocationObserversScope::PauseAllocationObserversScope(Heap* heap)
-    : heap_(heap) {
-  DCHECK_EQ(heap->gc_state(), Heap::NOT_IN_GC);
-
-  for (SpaceIterator it(heap_); it.HasNext();) {
-    it.Next()->PauseAllocationObservers();
-  }
-}
-
-PauseAllocationObserversScope::~PauseAllocationObserversScope() {
-  for (SpaceIterator it(heap_); it.HasNext();) {
-    it.Next()->ResumeAllocationObservers();
-  }
-}
 
 }  // namespace internal
 }  // namespace v8
