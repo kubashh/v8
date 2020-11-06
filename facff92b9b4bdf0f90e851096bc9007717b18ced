@@ -16,6 +16,29 @@
       "message": "Can someone please run a commit-queue for me again? Thank you!!",
       "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca97433d_ddbf9a6d",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-06T21:36:26Z",
+      "side": 1,
+      "message": "FYI: I\u0027ve discussed with Sara that changing the TimedScope slightly might be useful.\n\n1) Dropping the explicit member pointer in favor of a simpler interface (can be re-added later if we ever end up having ambiguities)\n\n2) In the future TimedScope should probably add the event directly to the recorder. The parser and compiler scopes on the JS-side set precedence for it. They usually have early returns and no single entry point.\n\n3) For the places in WASM code, where you create the events after doing the work, we can rely on the ElapsedTimer directly (with the upside of having nice DCHECKs)\n\nFor the JS runtime it would make sense to get very close to the behavior of RuntimeCallTimerScope so we can have a drop-in replacement in the future in the not-so performance critical places.",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 0
+      },
+      "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -69,6 +69,24 @@
       "parentUuid": "6344d35a_903ce74a",
       "revId": "185e4dfbada92f6fde5c3cc423ca92ed0d0b06a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef4263e_41716ce4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-06T21:36:26Z",
+      "side": 1,
+      "message": "Sorry, I was planning on adding you, was trying to get it off draft state first 😊",
+      "parentUuid": "10e4efe1_a9fc1346",
+      "revId": "185e4dfbada92f6fde5c3cc423ca92ed0d0b06a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
