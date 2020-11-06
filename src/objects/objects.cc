@@ -5185,7 +5185,7 @@ void Dictionary<Derived, Shape>::Print(std::ostream& os) {
   ReadOnlyRoots roots = this->GetReadOnlyRoots(isolate);
   Derived dictionary = Derived::cast(*this);
   for (InternalIndex i : dictionary.IterateEntries()) {
-    Object k = dictionary.KeyAt(isolate, i);
+    Object k;
     if (!dictionary.ToKey(roots, i, &k)) continue;
     os << "\n   ";
     if (k.IsString()) {
