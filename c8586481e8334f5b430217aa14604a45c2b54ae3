@@ -33,6 +33,24 @@
       "message": "I would argue that this event belongs into the API function, like most of the other v8.wasm events, i.e. into CompiledWasmModule::Serialize. If you think the bufferSize is interesting, we could add this event here as a second event.",
       "revId": "c8586481e8334f5b430217aa14604a45c2b54ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9d8a016_2ec3046a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-06T10:46:18Z",
+      "side": 1,
+      "message": "Interesting, I checked before and found that most events are in fact emitted on such internal methods, thus I put it here instead of in api.cc.\nI don\u0027t really care where it is, but if we move it to api.cc, it would be the first v8.wasm event emitted in that file. So should I move it?",
+      "parentUuid": "53de9a76_fde8b501",
+      "revId": "c8586481e8334f5b430217aa14604a45c2b54ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
