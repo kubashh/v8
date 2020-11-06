@@ -51,6 +51,24 @@
       "parentUuid": "53de9a76_fde8b501",
       "revId": "c8586481e8334f5b430217aa14604a45c2b54ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c932bdc8_d58fc54f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-06T15:07:37Z",
+      "side": 1,
+      "message": "I added events to all API-like functions in wasm-engine.cc, and also to the streaming compilation API functions. The wasm-engine functions may not be real API functions, but I would still argue that they are close to it.\n\nYes, I think you should change it. We could think about moving that function from api.cc to wasm-js.cc.",
+      "parentUuid": "a9d8a016_2ec3046a",
+      "revId": "c8586481e8334f5b430217aa14604a45c2b54ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
