@@ -16,6 +16,26 @@
 namespace v8 {
 namespace internal {
 
+namespace {
+template <typename Callback>
+void ForAllSweepingSpaces(Callback callback) {
+  PagedSpaceIterator::ForAllPagedSpaces(callback);
+}
+bool IsValidSweepingSpace(AllocationSpace space) {
+  return PagedSpaceIterator::IsValidPagedSpace(space);
+}
+
+int GetSweepSpaceIndex(AllocationSpace space) {
+  DCHECK(IsValidSweepingSpace(space));
+  return PagedSpaceIterator::IndexOf(space);
+}
+
+AllocationSpace GetSweepSpaceByIndex(int index) {
+  return PagedSpaceIterator::PagedSpaceByIndex(index);
+}
+
+}  // namespace
+
 Sweeper::Sweeper(Heap* heap, MajorNonAtomicMarkingState* marking_state)
     : heap_(heap),
       marking_state_(marking_state),
@@ -28,7 +48,10 @@ Sweeper::Sweeper(Heap* heap, MajorNonAtomicMarkingState* marking_state)
       iterability_task_semaphore_(0),
       iterability_in_progress_(false),
       iterability_task_started_(false),
-      should_reduce_memory_(false) {}
+      should_reduce_memory_(false) {
+  STATIC_ASSERT(kNumberOfSweepingSpaces ==
+                PagedSpaceIterator::kNumberOfPagedSpaces);
+}
 
 Sweeper::PauseOrCompleteScope::PauseOrCompleteScope(Sweeper* sweeper)
     : sweeper_(sweeper) {
@@ -98,11 +121,10 @@ class Sweeper::SweeperTask final : public CancelableTask {
     TRACE_BACKGROUND_GC(tracer_,
                         GCTracer::BackgroundScope::MC_BACKGROUND_SWEEPING);
     DCHECK(IsValidSweepingSpace(space_to_start_));
-    const int offset = space_to_start_ - FIRST_GROWABLE_PAGED_SPACE;
+    const int offset = GetSweepSpaceIndex(space_to_start_);
     for (int i = 0; i < kNumberOfSweepingSpaces; i++) {
-      const AllocationSpace space_id = static_cast<AllocationSpace>(
-          FIRST_GROWABLE_PAGED_SPACE +
-          ((i + offset) % kNumberOfSweepingSpaces));
+      const AllocationSpace space_id =
+          GetSweepSpaceByIndex((i + offset) % kNumberOfSweepingSpaces);
       // Do not sweep code space concurrently.
       if (space_id == CODE_SPACE) continue;
       DCHECK(IsValidSweepingSpace(space_id));
@@ -146,6 +168,18 @@ class Sweeper::IncrementalSweeperTask final : public CancelableTask {
   Sweeper* const sweeper_;
   DISALLOW_COPY_AND_ASSIGN(IncrementalSweeperTask);
 };
+
+Sweeper::SweepingList* Sweeper::old_space_sweeping_list() {
+  return &sweeping_list_[GetSweepSpaceIndex(OLD_SPACE)];
+}
+
+bool Sweeper::IsDoneSweeping() const {
+  bool is_done = true;
+  ForAllSweepingSpaces([this, &is_done](AllocationSpace space) {
+    if (!sweeping_list_[GetSweepSpaceIndex(space)].empty()) is_done = false;
+  });
+  return is_done;
+}
 
 void Sweeper::StartSweeping() {
   CHECK(!stop_sweeper_tasks_);

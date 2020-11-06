@@ -37,7 +37,6 @@ namespace internal {
 static void SetUpNewSpaceWithPoisonedMementoAtTop() {
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
-  NewSpace* new_space = heap->new_space();
 
   // Make sure we can allocate some objects without causing a GC later.
   CcTest::CollectAllGarbage();
@@ -50,7 +49,7 @@ static void SetUpNewSpaceWithPoisonedMementoAtTop() {
   // Create an allocation memento behind the string with a garbage allocation
   // site pointer.
   AllocationMemento memento = AllocationMemento::unchecked_cast(
-      Object(new_space->top() + kHeapObjectTag));
+      Object(*heap->NewSpaceAllocationTopAddress() + kHeapObjectTag));
   memento.set_map_after_allocation(ReadOnlyRoots(heap).allocation_memento_map(),
                                    SKIP_WRITE_BARRIER);
   memento.set_allocation_site(
@@ -79,9 +78,10 @@ TEST(Regress470390) {
 
   SetUpNewSpaceWithPoisonedMementoAtTop();
 
+  Heap* heap = CcTest::i_isolate()->heap();
   // Set the new space limit to be equal to the top.
-  Address top = CcTest::i_isolate()->heap()->new_space()->top();
-  *(CcTest::i_isolate()->heap()->new_space()->allocation_limit_address()) = top;
+  Address top = *heap->NewSpaceAllocationTopAddress();
+  *heap->NewSpaceAllocationLimitAddress() = top;
 
   // Call GC to see if we can handle a poisonous memento right after the
   // current new space top pointer.

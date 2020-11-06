@@ -265,6 +265,15 @@ TEST(ComputeDiscardMemoryAreas) {
   CHECK_EQ(memory_area.size(), page_size * 2);
 }
 
+bool HeapTester::RefillLab(Space* space, ThreadKind kind, size_t min_size,
+                           size_t max_size, AllocationAlignment alignment,
+                           AllocationOrigin origin,
+                           HeapLimitHandling heap_limit_handling, Address* top,
+                           Address* limit, AllocationFailure* failure) {
+  return space->RefillLab(kind, min_size, max_size, alignment, origin,
+                          heap_limit_handling, top, limit, failure);
+}
+
 TEST(NewSpace) {
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
@@ -277,11 +286,21 @@ TEST(NewSpace) {
                      CcTest::heap()->InitialSemiSpaceSize());
   CHECK(new_space.MaximumCapacity());
 
-  while (new_space.Available() >= kMaxRegularHeapObjectSize) {
-    CHECK(new_space.Contains(new_space
-                                 .AllocateRaw(kMaxRegularHeapObjectSize,
-                                              AllocationAlignment::kWordAligned)
-                                 .ToObjectChecked()));
+  Address top = kNullAddress;
+  Address limit = kNullAddress;
+  AllocationFailure failure;
+
+  size_t object_size = kMaxRegularHeapObjectSize;
+  while (new_space.Available() >= object_size) {
+    CHECK(HeapTester::RefillLab(
+        &new_space, ThreadKind::kMain, object_size, Page::kPageSize,
+        AllocationAlignment::kWordAligned, AllocationOrigin::kRuntime,
+        HeapLimitHandling::kIgnore, &top, &limit, &failure));
+    CHECK_LE(object_size, limit - top);
+    heap->CreateFillerObjectAt(top, static_cast<int>(object_size),
+                               ClearRecordedSlots::kNo);
+    CHECK(new_space.Contains(HeapObject::FromAddress(top)));
+    top += object_size;
   }
 
   new_space.TearDown();
@@ -295,46 +314,50 @@ TEST(OldSpace) {
   TestMemoryAllocatorScope test_allocator_scope(isolate, heap->MaxReserved(),
                                                 0);
 
-  OldSpace* s = new OldSpace(heap);
-  CHECK_NOT_NULL(s);
+  OldSpace old_space(heap);
 
-  while (s->Available() > 0) {
-    s->AllocateRawUnaligned(kMaxRegularHeapObjectSize).ToObjectChecked();
+  Address top = kNullAddress;
+  Address limit = kNullAddress;
+  AllocationFailure failure;
+
+  size_t object_size = kMaxRegularHeapObjectSize;
+  while (old_space.Available() >= object_size) {
+    CHECK(HeapTester::RefillLab(
+        &old_space, ThreadKind::kMain, object_size, Page::kPageSize,
+        AllocationAlignment::kWordAligned, AllocationOrigin::kRuntime,
+        HeapLimitHandling::kIgnore, &top, &limit, &failure));
+    CHECK_LE(object_size, limit - top);
+    heap->CreateFillerObjectAt(top, static_cast<int>(object_size),
+                               ClearRecordedSlots::kNo);
+    CHECK(old_space.Contains(HeapObject::FromAddress(top)));
+    top += object_size;
   }
-
-  delete s;
 }
 
 TEST(OldLargeObjectSpace) {
-  // This test does not initialize allocated objects, which confuses the
-  // incremental marker.
-  FLAG_incremental_marking = false;
-  v8::V8::Initialize();
+  Isolate* isolate = CcTest::i_isolate();
+  Heap* heap = isolate->heap();
+  TestMemoryAllocatorScope test_allocator_scope(isolate, heap->MaxReserved(),
+                                                0);
 
-  OldLargeObjectSpace* lo = CcTest::heap()->lo_space();
-  CHECK_NOT_NULL(lo);
+  OldLargeObjectSpace lo_space(heap);
 
-  int lo_size = Page::kPageSize;
+  Address top = kNullAddress;
+  Address limit = kNullAddress;
+  AllocationFailure failure;
 
-  Object obj = lo->AllocateRaw(lo_size).ToObjectChecked();
-  CHECK(obj.IsHeapObject());
-
-  HeapObject ho = HeapObject::cast(obj);
-
-  CHECK(lo->Contains(HeapObject::cast(obj)));
-
-  CHECK(lo->Contains(ho));
-
-  while (true) {
-    {
-      AllocationResult allocation = lo->AllocateRaw(lo_size);
-      if (allocation.IsRetry()) break;
-    }
+  size_t object_size = 2 * kMaxRegularHeapObjectSize;
+  while (lo_space.Available() >= object_size) {
+    CHECK(HeapTester::RefillLab(
+        &lo_space, ThreadKind::kMain, object_size, object_size,
+        AllocationAlignment::kWordAligned, AllocationOrigin::kRuntime,
+        HeapLimitHandling::kIgnore, &top, &limit, &failure));
+    CHECK_EQ(object_size, limit - top);
+    heap->CreateFillerObjectAt(top, static_cast<int>(object_size),
+                               ClearRecordedSlots::kNo);
+    CHECK(lo_space.Contains(HeapObject::FromAddress(top)));
+    top += object_size;
   }
-
-  CHECK(!lo->IsEmpty());
-
-  CHECK(lo->AllocateRaw(lo_size).IsRetry());
 }
 
 #ifndef DEBUG
@@ -375,13 +398,12 @@ TEST(SizeOfInitialHeap) {
   // Freshly initialized VM gets by with the snapshot size (which is below
   // kMaxInitialSizePerSpace per space).
   Heap* heap = isolate->heap();
-  for (int i = FIRST_GROWABLE_PAGED_SPACE; i <= LAST_GROWABLE_PAGED_SPACE;
-       i++) {
+  PagedSpaceIterator it(heap);
+  for (PagedSpace* space = it.Next(); space; space = it.Next()) {
     // Debug code can be very large, so skip CODE_SPACE if we are generating it.
-    if (i == CODE_SPACE && i::FLAG_debug_code) continue;
-
+    if (space->identity() == CODE_SPACE && i::FLAG_debug_code) continue;
     // Check that the initial heap is also below the limit.
-    CHECK_LE(heap->paged_space(i)->CommittedMemory(), kMaxInitialSizePerSpace);
+    CHECK_LE(space->CommittedMemory(), kMaxInitialSizePerSpace);
   }
 
   CompileRun("/*empty*/");
@@ -394,7 +416,7 @@ TEST(SizeOfInitialHeap) {
 
 static HeapObject AllocateUnaligned(NewSpace* space, int size) {
   AllocationResult allocation = space->AllocateRaw(size, kWordAligned);
-  CHECK(!allocation.IsRetry());
+  CHECK(!allocation.IsFailure());
   HeapObject filler;
   CHECK(allocation.To(&filler));
   space->heap()->CreateFillerObjectAt(filler.address(), size,
@@ -404,7 +426,7 @@ static HeapObject AllocateUnaligned(NewSpace* space, int size) {
 
 static HeapObject AllocateUnaligned(PagedSpace* space, int size) {
   AllocationResult allocation = space->AllocateRaw(size, kWordAligned);
-  CHECK(!allocation.IsRetry());
+  CHECK(!allocation.IsFailure());
   HeapObject filler;
   CHECK(allocation.To(&filler));
   space->heap()->CreateFillerObjectAt(filler.address(), size,
@@ -414,7 +436,7 @@ static HeapObject AllocateUnaligned(PagedSpace* space, int size) {
 
 static HeapObject AllocateUnaligned(OldLargeObjectSpace* space, int size) {
   AllocationResult allocation = space->AllocateRaw(size);
-  CHECK(!allocation.IsRetry());
+  CHECK(!allocation.IsFailure());
   HeapObject filler;
   CHECK(allocation.To(&filler));
   return filler;
@@ -433,73 +455,61 @@ class Observer : public AllocationObserver {
   int count_;
 };
 
-template <typename T>
-void testAllocationObserver(Isolate* i_isolate, T* space) {
+void TestAllocationObserver(Heap* heap, AllocationSpace space) {
   Observer observer1(128);
-  space->AddAllocationObserver(&observer1);
+  heap->AddAllocationObserver(space, &observer1);
 
   // The observer should not get notified if we have only allocated less than
   // 128 bytes.
-  AllocateUnaligned(space, 64);
+  AllocateUnaligned(heap, space, 64);
   CHECK_EQ(observer1.count(), 0);
 
   // The observer should get called when we have allocated exactly 128 bytes.
-  AllocateUnaligned(space, 64);
+  AllocateUnaligned(heap, space, 64);
   CHECK_EQ(observer1.count(), 1);
 
   // Another >128 bytes should get another notification.
-  AllocateUnaligned(space, 136);
+  AllocateUnaligned(heap, space, 136);
   CHECK_EQ(observer1.count(), 2);
 
   // Allocating a large object should get only one notification.
-  AllocateUnaligned(space, 1024);
+  AllocateUnaligned(heap, space, 1024);
   CHECK_EQ(observer1.count(), 3);
 
   // Allocating another 2048 bytes in small objects should get 16
   // notifications.
   for (int i = 0; i < 64; ++i) {
-    AllocateUnaligned(space, 32);
+    AllocateUnaligned(heap, space, 32);
   }
   CHECK_EQ(observer1.count(), 19);
 
   // Multiple observers should work.
   Observer observer2(96);
-  space->AddAllocationObserver(&observer2);
+  heap->AddAllocationObserver(space, &observer2);
 
-  AllocateUnaligned(space, 2048);
+  AllocateUnaligned(heap, space, 2048);
   CHECK_EQ(observer1.count(), 20);
   CHECK_EQ(observer2.count(), 1);
 
-  AllocateUnaligned(space, 104);
+  AllocateUnaligned(heap, space, 104);
   CHECK_EQ(observer1.count(), 20);
   CHECK_EQ(observer2.count(), 2);
 
   // Callback should stop getting called after an observer is removed.
-  space->RemoveAllocationObserver(&observer1);
+  heap->RemoveAllocationObserver(space, &observer1);
 
-  AllocateUnaligned(space, 384);
+  AllocateUnaligned(heap, space, 384);
   CHECK_EQ(observer1.count(), 20);  // no more notifications.
   CHECK_EQ(observer2.count(), 3);   // this one is still active.
 
   // Ensure that PauseInlineAllocationObserversScope work correctly.
-  AllocateUnaligned(space, 48);
+  AllocateUnaligned(heap, space, 48);
   CHECK_EQ(observer2.count(), 3);
-  {
-    PauseAllocationObserversScope pause_observers(i_isolate->heap());
-    CHECK_EQ(observer2.count(), 3);
-    AllocateUnaligned(space, 384);
-    CHECK_EQ(observer2.count(), 3);
-  }
-  CHECK_EQ(observer2.count(), 3);
-  // Coupled with the 48 bytes allocated before the pause, another 48 bytes
-  // allocated here should trigger a notification.
-  AllocateUnaligned(space, 48);
-  CHECK_EQ(observer2.count(), 4);
 
-  space->RemoveAllocationObserver(&observer2);
-  AllocateUnaligned(space, 384);
+  heap->RemoveAllocationObserver(space, &observer2);
+  AllocateUnaligned(heap, space, 384);
   CHECK_EQ(observer1.count(), 20);
-  CHECK_EQ(observer2.count(), 4);
+  CHECK_EQ(observer2.count(), 3);
 }
 
 UNINITIALIZED_TEST(AllocationObserver) {
@@ -513,13 +523,9 @@ UNINITIALIZED_TEST(AllocationObserver) {
 
     Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
 
-    testAllocationObserver<NewSpace>(i_isolate, i_isolate->heap()->new_space());
-    // Old space is used but the code path is shared for all
-    // classes inheriting from PagedSpace.
-    testAllocationObserver<PagedSpace>(i_isolate,
-                                       i_isolate->heap()->old_space());
-    testAllocationObserver<OldLargeObjectSpace>(i_isolate,
-                                                i_isolate->heap()->lo_space());
+    for (AllocationSpace space = FIRST_SPACE; space <= LAST_SPACE; space++) {
+      TestAllocationObserver(i_isolate->heap, space);
+    }
   }
   isolate->Dispose();
 }
@@ -534,24 +540,23 @@ UNINITIALIZED_TEST(InlineAllocationObserverCadence) {
     v8::Context::New(isolate)->Enter();
 
     Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
+    Heap* heap = i_isolate->heap();
 
     // Clear out any pre-existing garbage to make the test consistent
     // across snapshot/no-snapshot builds.
     CcTest::CollectAllGarbage(i_isolate);
 
-    NewSpace* new_space = i_isolate->heap()->new_space();
-
     Observer observer1(512);
-    new_space->AddAllocationObserver(&observer1);
+    heap->AddAllocationObserver(NEW_SPACE, &observer1);
     Observer observer2(576);
-    new_space->AddAllocationObserver(&observer2);
+    heap->AddAllocationObserver(NEW_SPACE, &observer1);
 
     for (int i = 0; i < 512; ++i) {
-      AllocateUnaligned(new_space, 32);
+      AllocateUnaligned(heap, NEW_SPACE, 32);
     }
 
-    new_space->RemoveAllocationObserver(&observer1);
-    new_space->RemoveAllocationObserver(&observer2);
+    heap->RemoveAllocationObserver(NEW_SPACE, &observer1);
+    heap->RemoveAllocationObserver(NEW_SPACE, &observer2);
 
     CHECK_EQ(observer1.count(), 32);
     CHECK_EQ(observer2.count(), 28);

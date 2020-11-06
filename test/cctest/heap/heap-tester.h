@@ -116,6 +116,17 @@ class HeapTester {
   static AllocationResult AllocateFixedArrayForTest(Heap* heap, int length,
                                                     AllocationType allocation);
 
+  static HeapObject Allocate(Heap*, int size, AllocationType,
+                             AllocationAlignment);
+  static AllocationResult TryAllocate(Heap*, int size, AllocationType,
+                                      AllocationAlignment);
+
+  static bool RefillLab(Space*, ThreadKind, size_t min_size, size_t max_size,
+                        AllocationAlignment alignment, AllocationOrigin origin,
+                        HeapLimitHandling heap_limit_handling, Address* top,
+                        Address* limit, AllocationFailure* failure);
+  static void FreeLabs(Heap*);
+
   static void UncommitFromSpace(Heap* heap);
 };
 
