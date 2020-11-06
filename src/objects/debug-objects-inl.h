@@ -34,10 +34,23 @@ BIT_FIELD_ACCESSORS(DebugInfo, debugger_hints, computed_debug_is_blackboxed,
 BIT_FIELD_ACCESSORS(DebugInfo, debugger_hints, debugging_id,
                     DebugInfo::DebuggingIdBits)
 
+// TODO(nicohartmann@, v8:11122): Remove once Torque can generate them.
+RELEASE_ACQUIRE_ACCESSORS(DebugInfo, synchronized_debug_bytecode_array,
+                          HeapObject, kDebugBytecodeArrayOffset)
+RELEASE_ACQUIRE_ACCESSORS(DebugInfo, synchronized_original_bytecode_array,
+                          HeapObject, kOriginalBytecodeArrayOffset)
+
 bool DebugInfo::HasInstrumentedBytecodeArray() {
-  DCHECK_EQ(debug_bytecode_array().IsBytecodeArray(),
-            original_bytecode_array().IsBytecodeArray());
-  return debug_bytecode_array().IsBytecodeArray();
+  const bool is_instrumented =
+      synchronized_debug_bytecode_array(kAcquireLoad).IsBytecodeArray();
+  // If this function is called off main thread, we may see DebugInfo in the mid
+  // of the transaction setting up debug bytecode. However, if
+  // debug_bytecode_array has been released, original_bytecode_array is set,
+  // too.
+  DCHECK_IMPLIES(
+      is_instrumented,
+      synchronized_original_bytecode_array(kAcquireLoad).IsBytecodeArray());
+  return is_instrumented;
 }
 
 BytecodeArray DebugInfo::OriginalBytecodeArray() {

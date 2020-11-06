@@ -3342,8 +3342,17 @@ int BytecodeArrayRef::handler_table_size() const {
     return BitField::decode(ObjectRef::data()->As##holder()->field()); \
   }
 
-// Like IF_ACCESS_FROM_HEAP_C but we also allow direct heap access for
+// Like IF_ACCESS_FROM_HEAP[_C] but we also allow direct heap access for
 // kSerialized only for methods that we identified to be safe.
+#define IF_ACCESS_FROM_HEAP_WITH_FLAG(result, name)                            \
+  if (data_->should_access_heap() || FLAG_turbo_direct_heap_access) {          \
+    AllowHandleAllocationIfNeeded handle_allocation(                           \
+        data_->kind(), broker()->mode(), FLAG_turbo_direct_heap_access);       \
+    AllowHandleDereferenceIfNeeded allow_handle_dereference(                   \
+        data_->kind(), broker()->mode(), FLAG_turbo_direct_heap_access);       \
+    return result##Ref(broker(),                                               \
+                       broker()->CanonicalPersistentHandle(object()->name())); \
+  }
 #define IF_ACCESS_FROM_HEAP_WITH_FLAG_C(name)                            \
   if (data_->should_access_heap() || FLAG_turbo_direct_heap_access) {    \
     AllowHandleAllocationIfNeeded handle_allocation(                     \
@@ -3353,10 +3362,15 @@ int BytecodeArrayRef::handler_table_size() const {
     return object()->name();                                             \
   }
 
-// Like BIMODAL_ACCESSOR_C except that we force a direct heap access if
+// Like BIMODAL_ACCESSOR[_C] except that we force a direct heap access if
 // FLAG_turbo_direct_heap_access is true (even for kSerialized). This is because
 // we identified the method to be safe to use direct heap access, but the
 // holder##Data class still needs to be serialized.
+#define BIMODAL_ACCESSOR_WITH_FLAG(holder, result, name)                   \
+  result##Ref holder##Ref::name() const {                                  \
+    IF_ACCESS_FROM_HEAP_WITH_FLAG(result, name);                           \
+    return result##Ref(broker(), ObjectRef::data()->As##holder()->name()); \
+  }
 #define BIMODAL_ACCESSOR_WITH_FLAG_C(holder, result, name) \
   result holder##Ref::name() const {                       \
     IF_ACCESS_FROM_HEAP_WITH_FLAG_C(name);                 \
@@ -3563,7 +3577,7 @@ BIMODAL_ACCESSOR_C(ScopeInfo, bool, HasOuterScopeInfo)
 BIMODAL_ACCESSOR(ScopeInfo, ScopeInfo, OuterScopeInfo)
 
 BIMODAL_ACCESSOR_C(SharedFunctionInfo, int, builtin_id)
-BIMODAL_ACCESSOR(SharedFunctionInfo, BytecodeArray, GetBytecodeArray)
+BIMODAL_ACCESSOR_WITH_FLAG(SharedFunctionInfo, BytecodeArray, GetBytecodeArray)
 #define DEF_SFI_ACCESSOR(type, name) \
   BIMODAL_ACCESSOR_C(SharedFunctionInfo, type, name)
 BROKER_SFI_FIELDS(DEF_SFI_ACCESSOR)
