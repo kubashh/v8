@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfeee3ff_7b22b98b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-06T12:47:43Z",
+      "side": 1,
+      "message": "Thibaud, PTAL.\nIf anyone has any idea why that flag was there, please let me know.",
+      "revId": "107658ac6b87d3c141c9bdaa8bf85f35562819e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
