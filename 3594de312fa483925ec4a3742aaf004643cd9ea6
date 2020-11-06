@@ -156,6 +156,24 @@
       "parentUuid": "7032b55a_058849de",
       "revId": "3594de312fa483925ec4a3742aaf004643cd9ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50631306_e387978d",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 28206,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-06T16:08:54Z",
+      "side": 1,
+      "message": "I think you misunderstood me. You are testing two different things. You should test with both inputs in both cases.",
+      "parentUuid": "b93a5cc0_00a07269",
+      "revId": "3594de312fa483925ec4a3742aaf004643cd9ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
