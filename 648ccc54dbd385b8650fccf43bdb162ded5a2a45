@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e715930_b9827715",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:31:14Z",
+      "side": 1,
+      "message": "Maybe \n  Preparing ordered hash tables for using as ...",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "648ccc54dbd385b8650fccf43bdb162ded5a2a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b1642ea_c76d6821",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:31:14Z",
+      "side": 1,
+      "message": "Suggestion: changes 1 and 2 seems to be too trivial to be mentioned, unlike the LocalIsolate-related changes which are worth mentioning.",
+      "revId": "648ccc54dbd385b8650fccf43bdb162ded5a2a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a368025_c2216429",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:31:14Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "648ccc54dbd385b8650fccf43bdb162ded5a2a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdf90019_9be75dc9",
+        "filename": "src/objects/ordered-hash-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-06T18:31:14Z",
+      "side": 1,
+      "message": "Please remove ||s around class and method names. We usually use ||s for refering to function\u0027s parameter names which are often just short lower case words.",
+      "range": {
+        "startLine": 774,
+        "startChar": 39,
+        "endLine": 774,
+        "endChar": 40
+      },
+      "revId": "648ccc54dbd385b8650fccf43bdb162ded5a2a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
