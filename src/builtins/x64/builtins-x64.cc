@@ -92,7 +92,6 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
 
     // Preserve the incoming parameters on the stack.
     __ SmiTag(rcx, rax);
-    __ Push(rsi);
     __ Push(rcx);
 
     // TODO(victorgomes): When the arguments adaptor is completely removed, we
@@ -155,18 +154,14 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
 
   // Preserve the incoming parameters on the stack.
   __ SmiTag(rcx, rax);
-  __ Push(rsi);
   __ Push(rcx);
   __ Push(rdi);
-  __ PushRoot(RootIndex::kTheHoleValue);
   __ Push(rdx);
 
   // ----------- S t a t e -------------
   //  --         sp[0*kSystemPointerSize]: new target
-  //  --         sp[1*kSystemPointerSize]: padding
-  //  -- rdi and sp[2*kSystemPointerSize]: constructor function
-  //  --         sp[3*kSystemPointerSize]: argument count
-  //  --         sp[4*kSystemPointerSize]: context
+  //  -- rdi and sp[1*kSystemPointerSize]: constructor function
+  //  --         sp[2*kSystemPointerSize]: argument count
   // -----------------------------------
 
   __ LoadTaggedPointerField(
@@ -187,11 +182,9 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
 
   // ----------- S t a t e -------------
   //  -- rax                          implicit receiver
-  //  -- Slot 4 / sp[0*kSystemPointerSize]  new target
-  //  -- Slot 3 / sp[1*kSystemPointerSize]  padding
-  //  -- Slot 2 / sp[2*kSystemPointerSize]  constructor function
-  //  -- Slot 1 / sp[3*kSystemPointerSize]  number of arguments (tagged)
-  //  -- Slot 0 / sp[4*kSystemPointerSize]  context
+  //  -- Slot 2 / sp[0*kSystemPointerSize]  new target
+  //  -- Slot 1 / sp[1*kSystemPointerSize]  constructor function
+  //  -- Slot 0 / sp[2*kSystemPointerSize]  number of arguments (tagged)
   // -----------------------------------
   // Deoptimizer enters here.
   masm->isolate()->heap()->SetConstructStubCreateDeoptPCOffset(
@@ -249,10 +242,8 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   // ----------- S t a t e -------------
   //  -- rax                 constructor result
   //  -- sp[0*kSystemPointerSize]  implicit receiver
-  //  -- sp[1*kSystemPointerSize]  padding
-  //  -- sp[2*kSystemPointerSize]  constructor function
-  //  -- sp[3*kSystemPointerSize]  number of arguments
-  //  -- sp[4*kSystemPointerSize]  context
+  //  -- sp[1*kSystemPointerSize]  constructor function
+  //  -- sp[2*kSystemPointerSize]  number of arguments
   // -----------------------------------
 
   // Store offset of return address for deoptimizer.
@@ -299,8 +290,14 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   __ jmp(&use_receiver);
 
   __ bind(&do_throw);
-  // Restore context from the frame.
-  __ movq(rsi, Operand(rbp, ConstructFrameConstants::kContextOffset));
+  // Restore context from the first parent frame that has one.
+  __ movq(rdi, rbp);
+  Label load_context_from_parent;
+  __ bind(&load_context_from_parent);
+  __ movq(rdi, Operand(rdi, StandardFrameConstants::kCallerFPOffset));
+  __ movq(rsi, Operand(rdi, CommonFrameConstants::kContextOrFrameTypeOffset));
+  __ JumpIfSmi(rsi, &load_context_from_parent);
+
   __ CallRuntime(Runtime::kThrowConstructorReturnedNonObject);
   // We don't return here.
   __ int3();
