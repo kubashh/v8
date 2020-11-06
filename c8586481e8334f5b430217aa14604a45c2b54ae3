@@ -69,6 +69,24 @@
       "parentUuid": "a9d8a016_2ec3046a",
       "revId": "c8586481e8334f5b430217aa14604a45c2b54ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1ccfaaf_1b103509",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-06T15:23:48Z",
+      "side": 1,
+      "message": "I don\u0027t think that API belongs in wasm-js.cc, since it\u0027s not the JS API, but the embedder API.\n\nI added the tracing to api.cc now.",
+      "parentUuid": "c932bdc8_d58fc54f",
+      "revId": "c8586481e8334f5b430217aa14604a45c2b54ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
