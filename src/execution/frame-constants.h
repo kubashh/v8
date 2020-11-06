@@ -216,13 +216,11 @@ class BuiltinFrameConstants : public TypedFrameConstants {
 class ConstructFrameConstants : public TypedFrameConstants {
  public:
   // FP-relative.
-  static constexpr int kContextOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
-  static constexpr int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
-  static constexpr int kConstructorOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(2);
-  static constexpr int kPaddingOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(3);
+  static constexpr int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+  static constexpr int kConstructorOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
   static constexpr int kNewTargetOrImplicitReceiverOffset =
-      TYPED_FRAME_PUSHED_VALUE_OFFSET(4);
-  DEFINE_TYPED_FRAME_SIZES(5);
+      TYPED_FRAME_PUSHED_VALUE_OFFSET(3);
+  DEFINE_TYPED_FRAME_SIZES(3);
 };
 
 class CWasmEntryFrameConstants : public TypedFrameConstants {
