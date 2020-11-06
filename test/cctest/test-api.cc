@@ -28123,7 +28123,7 @@ TEST(FastApiCalls) {
                          ApiCheckerResult::kFastCalled, v8_num(3.14));
 
   // Corner cases - int64
-#ifdef V8_TARGET_ARCH_X64
+#ifdef V8_TARGET_ARCH_64_BIT
   CallAndCheck<int64_t>(static_cast<int64_t>(i::Smi::kMaxValue) + 1,
                         Behavior::kNoException, ApiCheckerResult::kFastCalled,
                         v8_num(static_cast<int64_t>(i::Smi::kMaxValue) + 1));
@@ -28143,12 +28143,11 @@ TEST(FastApiCalls) {
                         v8_num((1ull << 63) - 1024));
   // TODO(mslekova): We deopt for unsafe integers, but ultimately we want to
   // stay on the fast path.
-  CallAndCheck<int64_t>(std::numeric_limits<int64_t>::min(),
-                        Behavior::kNoException, ApiCheckerResult::kSlowCalled,
-                        v8_num(static_cast<double>(1ull << 63)));
+#ifdef V8_TARGET_ARCH_X64
   CallAndCheck<int64_t>(std::numeric_limits<int64_t>::min(),
                         Behavior::kNoException, ApiCheckerResult::kSlowCalled,
                         v8_num(1ull << 63));
+#endif
   CallAndCheck<int64_t>(0, Behavior::kNoException,
                         ApiCheckerResult::kSlowCalled, v8_num(std::pow(2, 65)));
   CallAndCheck<int64_t>(8192, Behavior::kNoException,
@@ -28179,20 +28178,22 @@ TEST(FastApiCalls) {
                         v8::BigInt::New(isolate, 42));
   CallAndCheck<int64_t>(3, Behavior::kNoException,
                         ApiCheckerResult::kSlowCalled, v8_num(3.14));
+#ifdef V8_TARGET_ARCH_X64
   CallAndCheck<int64_t>(
       std::numeric_limits<int64_t>::min(), Behavior::kNoException,
       ApiCheckerResult::kSlowCalled,
       v8_num(static_cast<double>(std::numeric_limits<int64_t>::max()) + 3.14));
-  CallAndCheck<int64_t>(
-      0, Behavior::kNoException, ApiCheckerResult::kSlowCalled,
-      v8_num(static_cast<double>(std::numeric_limits<int64_t>::max()) * 2 +
-             3.14));
   CallAndCheck<int64_t>(std::numeric_limits<int64_t>::min(),
                         Behavior::kNoException, ApiCheckerResult::kSlowCalled,
                         v8_num(static_cast<double>(1ull << 63)));
   CallAndCheck<int64_t>(std::numeric_limits<int64_t>::min(),
                         Behavior::kNoException, ApiCheckerResult::kSlowCalled,
                         v8_num(-static_cast<double>(1ll << 63)));
+#endif
+  CallAndCheck<int64_t>(
+      0, Behavior::kNoException, ApiCheckerResult::kSlowCalled,
+      v8_num(static_cast<double>(std::numeric_limits<int64_t>::max()) * 2 +
+             3.14));
   CallAndCheck<int64_t>(0, Behavior::kNoException,
                         ApiCheckerResult::kSlowCalled,
                         v8_num(static_cast<double>(1ull << 63) * 2));
@@ -28223,9 +28224,11 @@ TEST(FastApiCalls) {
       std::numeric_limits<uint64_t>::max() - (i::kMaxSafeIntegerUint64 - 1),
       Behavior::kNoException, ApiCheckerResult::kFastCalled,
       v8_num(-i::kMaxSafeInteger));
+#ifdef V8_TARGET_ARCH_X64
   CallAndCheck<uint64_t>(1ull << 63, Behavior::kNoException,
                          ApiCheckerResult::kSlowCalled,
                          v8_num(static_cast<double>(1ull << 63)));
+#endif
   CallAndCheck<uint64_t>(static_cast<double>(1ull << 63) * 2 - 2048,
                          Behavior::kNoException, ApiCheckerResult::kSlowCalled,
                          v8_num(static_cast<double>(1ull << 63) * 2 - 2048));
@@ -28263,7 +28266,48 @@ TEST(FastApiCalls) {
   CallAndCheck<uint64_t>(static_cast<double>(1ull << 63) + 4096,
                          Behavior::kNoException, ApiCheckerResult::kSlowCalled,
                          v8_num(static_cast<double>(1ull << 63) * 3 + 4096));
-#endif  // V8_TARGET_ARCH_X64
+#else   // V8_TARGET_ARCH_64_BIT
+  CallAndCheck<int64_t>(static_cast<int64_t>(i::Smi::kMaxValue) + 1,
+                        Behavior::kNoException, ApiCheckerResult::kSlowCalled,
+                        v8_num(static_cast<int64_t>(i::Smi::kMaxValue) + 1));
+  CallAndCheck<int64_t>(std::numeric_limits<int64_t>::min(),
+                        Behavior::kNoException, ApiCheckerResult::kSlowCalled,
+                        v8_num(std::numeric_limits<int64_t>::min()));
+  CallAndCheck<int64_t>(1ll << 62, Behavior::kNoException,
+                        ApiCheckerResult::kSlowCalled, v8_num(1ll << 62));
+  CallAndCheck<int64_t>(i::kMaxSafeInteger, Behavior::kNoException,
+                        ApiCheckerResult::kSlowCalled,
+                        v8_num(i::kMaxSafeInteger));
+  CallAndCheck<int64_t>(-i::kMaxSafeInteger, Behavior::kNoException,
+                        ApiCheckerResult::kSlowCalled,
+                        v8_num(-i::kMaxSafeInteger));
+  CallAndCheck<int64_t>((1ull << 63) - 1024, Behavior::kNoException,
+                        ApiCheckerResult::kSlowCalled,
+                        v8_num((1ull << 63) - 1024));
+  CallAndCheck<int64_t>(0, Behavior::kNoException,
+                        ApiCheckerResult::kSlowCalled, v8_num(-0.0));
+  CallAndCheck<uint64_t>(static_cast<uint64_t>(i::Smi::kMaxValue) + 1,
+                         Behavior::kNoException, ApiCheckerResult::kSlowCalled,
+                         v8_num(static_cast<uint64_t>(i::Smi::kMaxValue) + 1));
+  CallAndCheck<uint64_t>(std::numeric_limits<uint64_t>::min(),
+                         Behavior::kNoException, ApiCheckerResult::kSlowCalled,
+                         v8_num(std::numeric_limits<uint64_t>::min()));
+  CallAndCheck<uint64_t>(1ll << 62, Behavior::kNoException,
+                         ApiCheckerResult::kSlowCalled, v8_num(1ll << 62));
+  CallAndCheck<uint64_t>(
+      std::numeric_limits<uint64_t>::max() - ((1ll << 62) - 1),
+      Behavior::kNoException, ApiCheckerResult::kSlowCalled,
+      v8_num(-(1ll << 62)));
+  CallAndCheck<uint64_t>(i::kMaxSafeIntegerUint64, Behavior::kNoException,
+                         ApiCheckerResult::kSlowCalled,
+                         v8_num(i::kMaxSafeInteger));
+  CallAndCheck<uint64_t>(
+      std::numeric_limits<uint64_t>::max() - (i::kMaxSafeIntegerUint64 - 1),
+      Behavior::kNoException, ApiCheckerResult::kSlowCalled,
+      v8_num(-i::kMaxSafeInteger));
+  CallAndCheck<uint64_t>(0, Behavior::kNoException,
+                         ApiCheckerResult::kSlowCalled, v8_num(-0.0));
+#endif  // V8_TARGET_ARCH_64_BIT
 
   // Corner cases - float and double
 #ifdef V8_ENABLE_FP_PARAMS_IN_C_LINKAGE
