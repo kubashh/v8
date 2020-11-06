@@ -1474,7 +1474,8 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   intptr_t marker = StackFrame::TypeToMarker(StackFrame::CONSTRUCT);
   frame_writer.PushRawValue(marker, "context (construct stub sentinel)\n");
 
-  frame_writer.PushTranslatedValue(value_iterator++, "context");
+  // TODO(verwaest): Make this unnecessary
+  value_iterator++;
 
   // Number of incoming arguments.
   const uint32_t parameters_count_without_receiver = parameters_count - 1;
@@ -1486,10 +1487,7 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   frame_writer.PushTranslatedValue(function_iterator, "constructor function\n");
 
   // The deopt info contains the implicit receiver or the new target at the
-  // position of the receiver. Copy it to the top of stack, with the hole value
-  // as padding to maintain alignment.
-
-  frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
+  // position of the receiver. Copy it to the top of stack.
 
   CHECK(bailout_id == BailoutId::ConstructStubCreate() ||
         bailout_id == BailoutId::ConstructStubInvoke());
