@@ -16,6 +16,74 @@
       "message": "Trying new set of tests that should comply with arm64. Let\u0027s see if any of the bots complain.",
       "revId": "3594de312fa483925ec4a3742aaf004643cd9ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a716094_1064d21c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3667,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-06T10:55:33Z",
+      "side": 1,
+      "message": "Let\u0027s define a CanOptimizeFastCall(FunctionTemplateInfo) that does all this stuff (up to line 3655) and use that as the condition in line 3668.\n\nAlso, FastApiCallReducerAssembler doesn\u0027t need to take c_function and c_signature, it can get them from function_template_info.",
+      "revId": "3594de312fa483925ec4a3742aaf004643cd9ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c95592_3938367d",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 28152,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-06T10:55:33Z",
+      "side": 1,
+      "message": "This test is identical to the one above.",
+      "revId": "3594de312fa483925ec4a3742aaf004643cd9ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4831f7fa_092a910e",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 28156,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-06T10:55:33Z",
+      "side": 1,
+      "message": "It\u0027s okay (actually good) to take the fast path instead of the slow path but it\u0027s not okay to produce a different number in doing so. This is a bug. Somehow we don\u0027t don\u0027t handle the saturation semantics of ARM\u0027s floating point conversion. First step is to find out if this is an issue with fast API calls only. I know that we have code somewhere that does check if saturation happened.",
+      "revId": "3594de312fa483925ec4a3742aaf004643cd9ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7032b55a_058849de",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 28206,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-06T10:55:33Z",
+      "side": 1,
+      "message": "The value that you test with should not depend on the architecture.",
+      "revId": "3594de312fa483925ec4a3742aaf004643cd9ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
