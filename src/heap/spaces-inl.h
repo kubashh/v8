@@ -135,56 +135,6 @@ MemoryChunk* OldGenerationMemoryChunkIterator::next() {
   UNREACHABLE();
 }
 
-AllocationResult LocalAllocationBuffer::AllocateRawAligned(
-    int size_in_bytes, AllocationAlignment alignment) {
-  Address current_top = allocation_info_.top();
-  int filler_size = Heap::GetFillToAlign(current_top, alignment);
-
-  Address new_top = current_top + filler_size + size_in_bytes;
-  if (new_top > allocation_info_.limit()) return AllocationResult::Retry();
-
-  allocation_info_.set_top(new_top);
-  if (filler_size > 0) {
-    return Heap::PrecedeWithFiller(ReadOnlyRoots(heap_),
-                                   HeapObject::FromAddress(current_top),
-                                   filler_size);
-  }
-
-  return AllocationResult(HeapObject::FromAddress(current_top));
-}
-
-LocalAllocationBuffer LocalAllocationBuffer::FromResult(Heap* heap,
-                                                        AllocationResult result,
-                                                        intptr_t size) {
-  if (result.IsRetry()) return InvalidBuffer();
-  HeapObject obj;
-  bool ok = result.To(&obj);
-  USE(ok);
-  DCHECK(ok);
-  Address top = HeapObject::cast(obj).address();
-  return LocalAllocationBuffer(heap, LinearAllocationArea(top, top + size));
-}
-
-
-bool LocalAllocationBuffer::TryMerge(LocalAllocationBuffer* other) {
-  if (allocation_info_.top() == other->allocation_info_.limit()) {
-    allocation_info_.set_top(other->allocation_info_.top());
-    other->allocation_info_.Reset(kNullAddress, kNullAddress);
-    return true;
-  }
-  return false;
-}
-
-bool LocalAllocationBuffer::TryFreeLast(HeapObject object, int object_size) {
-  if (IsValid()) {
-    const Address object_address = object.address();
-    if ((allocation_info_.top() - object_size) == object_address) {
-      allocation_info_.set_top(object_address);
-      return true;
-    }
-  }
-  return false;
-}
 
 }  // namespace internal
 }  // namespace v8
