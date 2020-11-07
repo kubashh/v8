@@ -1976,6 +1976,8 @@ v8_header_set("v8_headers") {
     # platforms.
     "include/v8-wasm-trap-handler-posix.h",
     "include/v8-wasm-trap-handler-win.h",
+    "src/base/platform/wrappers.h",
+    "src/base/platform/wrappers_std.cc",
   ]
 
   deps = [ ":v8_version" ]
@@ -4255,6 +4257,8 @@ v8_component("v8_libplatform") {
     "include/libplatform/libplatform-export.h",
     "include/libplatform/libplatform.h",
     "include/libplatform/v8-tracing.h",
+    "src/base/platform/wrappers.h",
+    "src/base/platform/wrappers_std.cc",
     "src/libplatform/default-foreground-task-runner.cc",
     "src/libplatform/default-foreground-task-runner.h",
     "src/libplatform/default-job.cc",
