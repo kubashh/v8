@@ -6,7 +6,8 @@
 #define V8_HEAP_LOCAL_HEAP_INL_H_
 
 #include "src/handles/persistent-handles.h"
-#include "src/heap/concurrent-allocator-inl.h"
+#include "src/heap/allocator-inl.h"
+#include "src/heap/large-spaces.h"
 #include "src/heap/local-heap.h"
 
 namespace v8 {
@@ -14,7 +15,8 @@ namespace internal {
 
 AllocationResult LocalHeap::AllocateRaw(int size_in_bytes, AllocationType type,
                                         AllocationOrigin origin,
-                                        AllocationAlignment alignment) {
+                                        AllocationAlignment alignment,
+                                        HeapLimitHandling heap_limit_handling) {
 #if DEBUG
   DCHECK_EQ(LocalHeap::Current(), this);
   DCHECK(AllowHandleAllocation::IsAllowed());
@@ -30,16 +32,26 @@ AllocationResult LocalHeap::AllocateRaw(int size_in_bytes, AllocationType type,
   CHECK_EQ(type, AllocationType::kOld);
 
   if (large_object)
-    return heap()->lo_space()->AllocateRawBackground(this, size_in_bytes);
-  else
-    return old_space_allocator()->AllocateRaw(size_in_bytes, alignment, origin);
+    return lo_space_allocator_.Allocate(size_in_bytes, alignment, origin,
+                                        heap_limit_handling);
+  else {
+    if (size_in_bytes > kMaxLabObjectSize) {
+      return old_space_medium_allocator_.Allocate(size_in_bytes, alignment,
+                                                  origin, heap_limit_handling);
+    } else {
+      return old_space_small_allocator_.Allocate(size_in_bytes, alignment,
+                                                 origin, heap_limit_handling);
+    }
+  }
 }
 
 Address LocalHeap::AllocateRawOrFail(int object_size, AllocationType type,
                                      AllocationOrigin origin,
                                      AllocationAlignment alignment) {
   AllocationResult result = AllocateRaw(object_size, type, origin, alignment);
-  if (!result.IsRetry()) return result.ToObject().address();
+  if (!result.IsFailure()) return result.ToObject().address();
+  // Starting of incremental marking and young GC is not supported yet.
+  DCHECK_EQ(result.Failure(), AllocationFailure::kRetryAfterFullGC);
   return PerformCollectionAndAllocateAgain(object_size, type, origin,
                                            alignment);
 }
