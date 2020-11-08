@@ -1762,19 +1762,46 @@ TEST(TestAlignmentCalculations) {
   CHECK_EQ(0, fill);
 }
 
-static HeapObject NewSpaceAllocateAligned(int size,
-                                          AllocationAlignment alignment) {
-  Heap* heap = CcTest::heap();
-  AllocationResult allocation = heap->new_space()->AllocateRaw(size, alignment);
+void HeapTester::FreeLabs(Heap* heap) {
+  SafepointScope safepoint_scope(heap);
+  heap->FreeLabs();
+}
+
+HeapObject HeapTester::Allocate(Heap* heap, int size, AllocationType type,
+                                AllocationAlignment alignment) {
+  AllocationResult allocation =
+      heap->AllocateRaw(size, type, AllocationOrigin::kRuntime, alignment);
   HeapObject obj;
-  allocation.To(&obj);
+  if (!allocation.To(&obj)) {
+    heap->CollectAllGarbage(i::Heap::kNoGCFlags,
+                            i::GarbageCollectionReason::kTesting);
+    allocation =
+        heap->AllocateRaw(size, type, AllocationOrigin::kRuntime, alignment);
+    CHECK(allocation.To(&obj));
+  }
   heap->CreateFillerObjectAt(obj.address(), size, ClearRecordedSlots::kNo);
   return obj;
 }
 
+AllocationResult HeapTester::TryAllocate(Heap* heap, int size,
+                                         AllocationType type,
+                                         AllocationAlignment alignment) {
+  return heap->AllocateRaw(size, type, AllocationOrigin::kRuntime, alignment);
+}
+
+HeapObject NewSpaceAllocateAligned(int size, AllocationAlignment alignment) {
+  return HeapTester::Allocate(CcTest::heap(), size, AllocationType::kYoung,
+                              alignment);
+}
+
+HeapObject OldSpaceAllocateAligned(int size, AllocationAlignment alignment) {
+  return HeapTester::Allocate(CcTest::heap(), size, AllocationType::kOld,
+                              alignment);
+}
+
 // Get new space allocation into the desired alignment.
 static Address AlignNewSpace(AllocationAlignment alignment, int offset) {
-  Address* top_addr = CcTest::heap()->new_space()->allocation_top_address();
+  Address* top_addr = CcTest::heap()->NewSpaceAllocationTopAddress();
   int fill = Heap::GetFillToAlign(*top_addr, alignment);
   int allocation = fill + offset;
   if (allocation) {
@@ -1788,10 +1815,15 @@ TEST(TestAlignedAllocation) {
   // Double misalignment is 4 on 32-bit platforms or when pointer compression
   // is enabled, 0 on 64-bit ones when pointer compression is disabled.
   const intptr_t double_misalignment = kDoubleSize - kTaggedSize;
-  Address* top_addr = CcTest::heap()->new_space()->allocation_top_address();
+  Address* top_addr = CcTest::heap()->NewSpaceAllocationTopAddress();
   Address start;
   HeapObject obj;
   HeapObject filler;
+  // Allocate a dummy object to properly set up the linear allocation info.
+  AllocationResult dummy = NewSpaceAllocateAligned(kTaggedSize, kWordAligned);
+  CHECK(!dummy.IsFailure());
+  CcTest::heap()->CreateFillerObjectAt(dummy.ToObjectChecked().address(),
+                                       kTaggedSize, ClearRecordedSlots::kNo);
   if (double_misalignment) {
     // Allocate a pointer sized object that must be double aligned at an
     // aligned address.
@@ -1828,28 +1860,16 @@ TEST(TestAlignedAllocation) {
   }
 }
 
-static HeapObject OldSpaceAllocateAligned(int size,
-                                          AllocationAlignment alignment) {
-  Heap* heap = CcTest::heap();
-  AllocationResult allocation =
-      heap->old_space()->AllocateRawAligned(size, alignment);
-  HeapObject obj;
-  allocation.To(&obj);
-  heap->CreateFillerObjectAt(obj.address(), size, ClearRecordedSlots::kNo);
-  return obj;
-}
-
 // Get old space allocation into the desired alignment.
 static Address AlignOldSpace(AllocationAlignment alignment, int offset) {
-  Address* top_addr = CcTest::heap()->old_space()->allocation_top_address();
+  Address* top_addr = CcTest::heap()->OldSpaceAllocationTopAddress();
   int fill = Heap::GetFillToAlign(*top_addr, alignment);
   int allocation = fill + offset;
   if (allocation) {
     OldSpaceAllocateAligned(allocation, kWordAligned);
   }
   Address top = *top_addr;
-  // Now force the remaining allocation onto the free list.
-  CcTest::heap()->old_space()->FreeLinearAllocationArea();
+  HeapTester::FreeLabs(CcTest::heap());
   return top;
 }
 
@@ -1864,8 +1884,9 @@ TEST(TestAlignedOverAllocation) {
   // page and empty free list.
   heap::AbandonCurrentlyFreeMemory(heap->old_space());
   // Allocate a dummy object to properly set up the linear allocation info.
-  AllocationResult dummy = heap->old_space()->AllocateRawUnaligned(kTaggedSize);
-  CHECK(!dummy.IsRetry());
+  AllocationResult dummy = OldSpaceAllocateAligned(kTaggedSize, kWordAligned);
+  CHECK(!dummy.IsFailure());
+  CHECK(!dummy.IsFailure());
   heap->CreateFillerObjectAt(dummy.ToObjectChecked().address(), kTaggedSize,
                              ClearRecordedSlots::kNo);
 
@@ -3699,9 +3720,9 @@ TEST(Regress169928) {
   // We need filler the size of AllocationMemento object, plus an extra
   // fill pointer value.
   HeapObject obj;
-  AllocationResult allocation = CcTest::heap()->new_space()->AllocateRaw(
-      AllocationMemento::kSize + kTaggedSize,
-      AllocationAlignment::kWordAligned);
+  AllocationResult allocation =
+      NewSpaceAllocateAligned(AllocationMemento::kSize + kTaggedSize,
+                              AllocationAlignment::kWordAligned);
   CHECK(allocation.To(&obj));
   Address addr_obj = obj.address();
   CcTest::heap()->CreateFillerObjectAt(addr_obj,
@@ -4965,8 +4986,9 @@ HEAP_TEST(Regress538257) {
     const int kMaxObjects = 10000;
     const int kFixedArrayLen = 512;
     Handle<FixedArray> objects[kMaxObjects];
-    for (int i = 0; (i < kMaxObjects) &&
-                    heap->CanExpandOldGeneration(old_space->AreaSize());
+    for (int i = 0;
+         (i < kMaxObjects) &&
+         heap->CanExpandOldGeneration(ThreadKind::kMain, old_space->AreaSize());
          i++) {
       objects[i] = i_isolate->factory()->NewFixedArray(kFixedArrayLen,
                                                        AllocationType::kOld);
@@ -5504,12 +5526,6 @@ AllocationResult HeapTester::AllocateByteArrayForTest(
   return result;
 }
 
-bool HeapTester::CodeEnsureLinearAllocationArea(Heap* heap, int size_in_bytes) {
-  bool result = heap->code_space()->EnsureLabMain(size_in_bytes,
-                                                  AllocationOrigin::kRuntime);
-  heap->code_space()->UpdateInlineAllocationLimit(0);
-  return result;
-}
 
 HEAP_TEST(Regress587004) {
   if (FLAG_single_generation) return;
@@ -5773,15 +5789,13 @@ Handle<FixedArray> ShrinkArrayAndCheckSize(Heap* heap, int length) {
     CcTest::CollectAllGarbage();
   }
   heap->mark_compact_collector()->EnsureSweepingCompleted();
-  // Disable LAB, such that calculations with SizeOfObjects() and object size
-  // are correct.
-  heap->DisableInlineAllocation();
   size_t size_before_allocation = heap->SizeOfObjects();
   Handle<FixedArray> array =
       heap->isolate()->factory()->NewFixedArray(length, AllocationType::kOld);
   size_t size_after_allocation = heap->SizeOfObjects();
   CHECK_EQ(size_after_allocation, size_before_allocation + array->Size());
   array->Shrink(heap->isolate(), 1);
+
   size_t size_after_shrinking = heap->SizeOfObjects();
   // Shrinking does not change the space size immediately.
   CHECK_EQ(size_after_allocation, size_after_shrinking);
@@ -6996,9 +7010,8 @@ TEST(CodeObjectRegistry) {
   HandleScope outer_scope(heap->isolate());
   Address code2_address;
   {
-    // Ensure that both code objects end up on the same page.
-    CHECK(HeapTester::CodeEnsureLinearAllocationArea(
-        heap, MemoryChunkLayout::MaxRegularCodeObjectSize()));
+    heap::SealCurrentObjects(heap);
+    AlwaysAllocateScopeForTesting always_allocate(heap);
     code1 = DummyOptimizedCode(isolate);
     Handle<Code> code2 = DummyOptimizedCode(isolate);
     code2_address = code2->address();

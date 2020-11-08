@@ -155,7 +155,7 @@ HEAP_TEST(MarkCompactCollector) {
     do {
       allocation =
           AllocateFixedArrayForTest(heap, arraysize, AllocationType::kYoung);
-    } while (!allocation.IsRetry());
+    } while (!allocation.IsFailure());
     CcTest::CollectGarbage(NEW_SPACE);
     AllocateFixedArrayForTest(heap, arraysize, AllocationType::kYoung)
         .ToObjectChecked();
@@ -164,7 +164,7 @@ HEAP_TEST(MarkCompactCollector) {
   // keep allocating maps until it fails
   do {
     allocation = AllocateMapForTest(isolate);
-  } while (!allocation.IsRetry());
+  } while (!allocation.IsFailure());
   CcTest::CollectGarbage(MAP_SPACE);
   AllocateMapForTest(isolate).ToObjectChecked();
 
@@ -452,7 +452,7 @@ TEST(Regress5829) {
   array->set_length(9);
   heap->CreateFillerObjectAt(old_end - kTaggedSize, kTaggedSize,
                              ClearRecordedSlots::kNo);
-  heap->old_space()->FreeLinearAllocationArea();
+  HeapTester::FreeLabs(heap);
   Page* page = Page::FromAddress(array->address());
   IncrementalMarking::MarkingState* marking_state = marking->marking_state();
   for (auto object_and_size :
