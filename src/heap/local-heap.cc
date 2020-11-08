@@ -36,7 +36,13 @@ LocalHeap::LocalHeap(Heap* heap, ThreadKind kind,
       handles_(new LocalHandles),
       persistent_handles_(std::move(persistent_handles)),
       marking_barrier_(new MarkingBarrier(this)),
-      old_space_allocator_(this, heap->old_space()) {
+      old_space_small_allocator_(heap, ThreadKind::kBackground,
+                                 heap->old_space(), kTaggedSize, kLabSize,
+                                 kMaxLabSize),
+      old_space_medium_allocator_(heap, ThreadKind::kBackground,
+                                  heap->old_space(), kTaggedSize, 0, 0),
+      lo_space_allocator_(heap, ThreadKind::kBackground, heap->lo_space(),
+                          kTaggedSize, 0, 0) {
   heap_->safepoint()->AddLocalHeap(this, [this] {
     if (FLAG_local_heaps) {
       WriteBarrier::SetForThread(marking_barrier_.get());
@@ -59,8 +65,7 @@ LocalHeap::~LocalHeap() {
   EnsureParkedBeforeDestruction();
 
   heap_->safepoint()->RemoveLocalHeap(this, [this] {
-    old_space_allocator_.FreeLinearAllocationArea();
-
+    FreeLabs();
     if (FLAG_local_heaps) {
       marking_barrier_->Publish();
       WriteBarrier::ClearForThread(marking_barrier_.get());
@@ -144,26 +149,39 @@ void LocalHeap::EnterSafepoint() {
   if (state_ == ThreadState::Running) heap_->safepoint()->EnterFromThread(this);
 }
 
-void LocalHeap::FreeLinearAllocationArea() {
-  old_space_allocator_.FreeLinearAllocationArea();
+void LocalHeap::FreeLabs() {
+  old_space_small_allocator_.FreeLab();
+  old_space_medium_allocator_.FreeLab();
+  lo_space_allocator_.FreeLab();
 }
 
-void LocalHeap::MakeLinearAllocationAreaIterable() {
-  old_space_allocator_.MakeLinearAllocationAreaIterable();
+void LocalHeap::MakeLabsIterable() {
+  old_space_small_allocator_.MakeLabIterable();
+  old_space_medium_allocator_.MakeLabIterable();
+  lo_space_allocator_.MakeLabIterable();
 }
 
-void LocalHeap::MarkLinearAllocationAreaBlack() {
-  old_space_allocator_.MarkLinearAllocationAreaBlack();
+bool LocalHeap::AreLabsEmpty() {
+  return old_space_small_allocator_.IsLabEmpty() &&
+         old_space_medium_allocator_.IsLabEmpty() &&
+         lo_space_allocator_.IsLabEmpty();
 }
 
-void LocalHeap::UnmarkLinearAllocationArea() {
-  old_space_allocator_.UnmarkLinearAllocationArea();
+void LocalHeap::StartBlackAllocation() {
+  old_space_small_allocator_.StartBlackAllocation();
+  old_space_medium_allocator_.StartBlackAllocation();
+  lo_space_allocator_.StartBlackAllocation();
+}
+
+void LocalHeap::StopBlackAllocation() {
+  old_space_small_allocator_.StopBlackAllocation();
+  old_space_medium_allocator_.StopBlackAllocation();
+  lo_space_allocator_.StopBlackAllocation();
 }
 
 Address LocalHeap::PerformCollectionAndAllocateAgain(
     int object_size, AllocationType type, AllocationOrigin origin,
     AllocationAlignment alignment) {
-  allocation_failed_ = true;
   static const int kMaxNumberOfRetries = 3;
 
   for (int i = 0; i < kMaxNumberOfRetries; i++) {
@@ -172,11 +190,13 @@ Address LocalHeap::PerformCollectionAndAllocateAgain(
       heap_->RequestCollectionBackground(this);
     }
 
-    AllocationResult result = AllocateRaw(object_size, type, origin, alignment);
-    if (!result.IsRetry()) {
-      allocation_failed_ = false;
+    AllocationResult result = AllocateRaw(object_size, type, origin, alignment,
+                                          HeapLimitHandling::kIgnore);
+    if (!result.IsFailure()) {
       return result.ToObjectChecked().address();
     }
+    // Starting of incremental marking and young GC is not supported yet.
+    DCHECK_EQ(result.Failure(), AllocationFailure::kRetryAfterFullGC);
   }
 
   heap_->FatalProcessOutOfMemory("LocalHeap: allocation failed");

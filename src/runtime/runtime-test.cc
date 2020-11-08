@@ -705,50 +705,31 @@ RUNTIME_FUNCTION(Runtime_SetAllocationTimeout) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
-namespace {
-
-int FixedArrayLenFromSize(int size) {
-  return Min((size - FixedArray::kHeaderSize) / kTaggedSize,
-             FixedArray::kMaxRegularLength);
-}
-
-void FillUpOneNewSpacePage(Isolate* isolate, Heap* heap) {
-  PauseAllocationObserversScope pause_observers(heap);
-  NewSpace* space = heap->new_space();
-  // We cannot rely on `space->limit()` to point to the end of the current page
-  // in the case where inline allocations are disabled, it actually points to
-  // the current allocation pointer.
-  DCHECK_IMPLIES(space->heap()->inline_allocation_disabled(),
-                 space->limit() == space->top());
-  int space_remaining =
-      static_cast<int>(space->to_space().page_high() - space->top());
-  while (space_remaining > 0) {
-    int length = FixedArrayLenFromSize(space_remaining);
-    if (length > 0) {
-      Handle<FixedArray> padding =
-          isolate->factory()->NewFixedArray(length, AllocationType::kYoung);
-      DCHECK(heap->new_space()->Contains(*padding));
-      space_remaining -= padding->Size();
-    } else {
-      // Not enough room to create another fixed array. Create a filler.
-      heap->CreateFillerObjectAt(*heap->new_space()->allocation_top_address(),
-                                 space_remaining, ClearRecordedSlots::kNo);
-      break;
-    }
-  }
-}
-
-}  // namespace
-
 RUNTIME_FUNCTION(Runtime_SimulateNewspaceFull) {
   HandleScope scope(isolate);
   Heap* heap = isolate->heap();
-  NewSpace* space = heap->new_space();
-  AlwaysAllocateScopeForTesting always_allocate(heap);
-  do {
-    FillUpOneNewSpacePage(isolate, heap);
-  } while (space->AddFreshPage());
-
+  Allocator* allocator = heap->new_space_allocator();
+  Address* top = allocator->top_address();
+  Address* limit = allocator->limit_address();
+  while (true) {
+    int lab_size = static_cast<int>(*limit - *top);
+    if (lab_size == 0) {
+      int kMinHeapObjectSize = 2 * kTaggedSize;
+      AllocationResult result = allocator->Allocate(
+          kMinHeapObjectSize, kWordAligned, AllocationOrigin::kRuntime,
+          HeapLimitHandling::kIgnore);
+      if (result.IsFailure()) break;
+      heap->CreateFillerObjectAt(result.ToAddress(), kMinHeapObjectSize,
+                                 ClearRecordedSlots::kNo);
+    } else {
+      AllocationResult result = allocator->Allocate(lab_size, kWordAligned,
+                                                    AllocationOrigin::kRuntime,
+                                                    HeapLimitHandling::kIgnore);
+      DCHECK(!result.IsFailure());
+      heap->CreateFillerObjectAt(result.ToAddress(), lab_size,
+                                 ClearRecordedSlots::kNo);
+    }
+  }
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
