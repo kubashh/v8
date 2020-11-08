@@ -1976,6 +1976,8 @@ v8_header_set("v8_headers") {
     # platforms.
     "include/v8-wasm-trap-handler-posix.h",
     "include/v8-wasm-trap-handler-win.h",
+    "src/base/platform/wrappers.h",
+    "src/base/platform/wrappers_std.cc",
   ]
 
   deps = [ ":v8_version" ]
@@ -4105,8 +4107,6 @@ v8_component("v8_libbase") {
     "src/base/platform/semaphore.h",
     "src/base/platform/time.cc",
     "src/base/platform/time.h",
-    "src/base/platform/wrappers.h",
-    "src/base/platform/wrappers_std.cc",
     "src/base/region-allocator.cc",
     "src/base/region-allocator.h",
     "src/base/ring-buffer.h",
