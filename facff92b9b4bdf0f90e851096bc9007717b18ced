@@ -196,6 +196,30 @@
       },
       "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3452d29_a865c432",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-09T12:11:16Z",
+      "side": 1,
+      "message": "To be clear: this change looks good to me. I was objecting to the potential future changes where we make TimedScope a requirement for recording events IIUC.",
+      "parentUuid": "edf52f85_269e4fb9",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 0
+      },
+      "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
