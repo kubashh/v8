@@ -33,6 +33,24 @@
       "message": "LGTM (rubber-stamp)",
       "revId": "cb0ebcf434e40293a2916ae71c2ff2071a87ffa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc9cbd98_493548ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2020-11-09T11:13:36Z",
+      "side": 1,
+      "message": "Hi Clemens,\n\nWhat do you think about my request to be v8 committer in my last reply? Or should I ask someone who particularly handles such kind of requests?\n\nThanks!",
+      "parentUuid": "0251d0b6_344d2e51",
+      "revId": "cb0ebcf434e40293a2916ae71c2ff2071a87ffa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
