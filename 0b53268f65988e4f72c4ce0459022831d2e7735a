@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63c27453_d5dc55cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-09T10:15:45Z",
+      "side": 1,
+      "message": "Hi Georg, just to let you know this is ready for a next round of comments. Thanks for discussing it offline, hope my latest refactoring made it easier to read.",
+      "revId": "0b53268f65988e4f72c4ce0459022831d2e7735a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
