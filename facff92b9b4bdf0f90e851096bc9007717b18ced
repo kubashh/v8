@@ -103,6 +103,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3919cf9_b7acd09a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-11-09T12:53:45Z",
+      "side": 1,
+      "message": "Also fine by me. We might consider using a combination of an auto-submitting TimedScope implementation and ElapsedTimer in a future refactoring.",
+      "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca97433d_ddbf9a6d",
