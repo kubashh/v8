@@ -16,6 +16,23 @@
       "message": "Ross PTAL",
       "revId": "dfa7dc05e7cf1115930b20dc7df2e66a576e4553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8db0b548_5f1090b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-09T14:19:20Z",
+      "side": 1,
+      "message": "LGTM thanks!",
+      "revId": "dfa7dc05e7cf1115930b20dc7df2e66a576e4553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
