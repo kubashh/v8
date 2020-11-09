@@ -90,6 +90,30 @@
       },
       "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbff4d0e_60502f8b",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-11-09T10:49:35Z",
+      "side": 1,
+      "message": "Point 2) was actually the originally planned functionality, but ulan@ had requested the option to have timings independent of submissions because they wanted to time different parts of their  code within the same event.\n\nMaybe they will be fine with using ElapsedTimer instead, but I\u0027m not sure. It can definitely be assumed that not all events will have a wall_clock_duration_in_us field and potentially have multiple different timers.\n\nIn the current state of TimedScope, it\u0027s too specific to be of general interest and I think we should either remove it for the time being or replace it by the original measure and submit mechanism. Other places that require it can then use the ElapsedTimer instead.",
+      "parentUuid": "ca97433d_ddbf9a6d",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 0
+      },
+      "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
