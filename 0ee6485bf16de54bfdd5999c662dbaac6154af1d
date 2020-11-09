@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdaa1858_935cde99",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T19:38:01Z",
+      "side": 1,
+      "message": "nit: let\u0027s keep the flags as temp variable here and above",
+      "range": {
+        "startLine": 1329,
+        "startChar": 6,
+        "endLine": 1329,
+        "endChar": 25
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9fae369_b5a128df",
+        "filename": "src/instrumentation/recorder-win.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T19:38:01Z",
+      "side": 1,
+      "message": "I guess this is something that should be defined as a compiled-time constant via gn FLAGs, so it can be easily changed by embedders.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 71
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c50f4bc5_92718a36",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T19:38:01Z",
+      "side": 1,
+      "message": "we can use delegate constructors here https://stackoverflow.com/questions/308276/can-i-call-a-constructor-from-another-constructor-do-constructor-chaining-in-c",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 3
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "021bb1d5_2ac0ac7c",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T19:38:01Z",
+      "side": 1,
+      "message": "not needed anymore once embedded in the destructor.",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 36
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "377484f7_a6bdbaaa",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T19:38:01Z",
+      "side": 1,
+      "message": "those methods are no longer needed.",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 3
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e88a569c_4d9bd8b8",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T19:38:01Z",
+      "side": 1,
+      "message": "this should not be pointer, you can use `Recorder::ContextId::Empty()` as replacement for nullptr.",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 48
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
