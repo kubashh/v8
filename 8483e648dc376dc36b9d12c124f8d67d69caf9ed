@@ -257,6 +257,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4c37dde_8fb319c8",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 4182,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-09T15:40:31Z",
+      "side": 1,
+      "message": "Results came back over the weekend, there is actually a significant perf impact for some of the V8 tests, in particular these three:\n  - v8.browsing_desktop-future/browse:news:reddit:2018/Compile-Background:duration (55ms vs 39ms)\n  - v8.browsing_desktop-future/browse:tech:discourse_infinite_scroll:2018/JavaScript:duration (4400ms vs 3800ms)\n  - v8.browsing_desktop-future/browse:tech:discourse_infinite_scroll:2018/Total:duration (13000ms vs 11000ms)\n\nSo I\u0027ll have to look into what\u0027s causing that, because without a controller the ETW provider shouldn\u0027t be doing any work.\n\nIn the mean time, I\u0027ll put everything behind a compile-time flag like you suggested.",
+      "parentUuid": "fd84fd6b_6c7851e1",
+      "range": {
+        "startLine": 4181,
+        "startChar": 0,
+        "endLine": 4182,
+        "endChar": 55
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "57953664_753b7400",
         "filename": "src/instrumentation/provider-win.cc",
         "patchSetId": 19
