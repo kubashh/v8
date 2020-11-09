@@ -72,6 +72,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "01e5dee2_252bb74a",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T20:14:32Z",
+      "side": 1,
+      "message": "I just realised that this is not the platform specific recorder, but rather the one on the isolate (the name is a bit confusing here, so this will never be nullptr) since the isolate always has a live instance.\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/execution/isolate.cc;drc\u003d2ac4fdcdc1247f058a77900dc4af2b597a3a60d1;bpv\u003d1;bpt\u003d1;l\u003d3526",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 21
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f8f2d95_bd689d97",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T20:14:32Z",
+      "side": 1,
+      "message": "nit: !context_id_.IsEmpty()",
+      "range": {
+        "startLine": 124,
+        "startChar": 8,
+        "endLine": 124,
+        "endChar": 19
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "021bb1d5_2ac0ac7c",
         "filename": "src/logging/metrics.h",
         "patchSetId": 24
