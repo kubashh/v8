@@ -119,6 +119,29 @@
       "message": "And this one you can probably remove, as the Object::Print() seems to be doing the job.",
       "revId": "d6d077ea41a8527db9d82a29da26c414d4c9c6c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf4a2fee_166cf804",
+        "filename": "src/objects/ordered-hash-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-09T11:51:09Z",
+      "side": 1,
+      "message": "Nit: Number of elements\n\nThinking about it... you can remove this comment altogether, the term \"capacity\" for data structures is pretty well understood. (Ok, this data structure uses it in a slightly different meaning, because of the load factor? So if you want to write a comment about that, fine, but this comment doesn\u0027t describe what it does...)",
+      "range": {
+        "startLine": 111,
+        "startChar": 17,
+        "endLine": 111,
+        "endChar": 31
+      },
+      "revId": "d6d077ea41a8527db9d82a29da26c414d4c9c6c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
