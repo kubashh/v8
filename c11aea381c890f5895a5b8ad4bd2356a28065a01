@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f762c0_665c9ec9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-09T12:52:30Z",
+      "side": 1,
+      "message": "+1 to ishell@\u0027s comments",
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "621fd471_ad37f396",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-09T12:52:30Z",
+      "side": 1,
+      "message": "Should this say OrderedNameDictionary?",
+      "range": {
+        "startLine": 101,
+        "startChar": 5,
+        "endLine": 101,
+        "endChar": 22
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72657cba_b6618e6f",
@@ -36,6 +76,29 @@
         "startChar": 19,
         "endLine": 118,
         "endChar": 23
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58a8215a_e6b22e63",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-09T12:52:30Z",
+      "side": 1,
+      "message": "Style nit: we don\u0027t use the \"underscore suffix for unused params\" style. (This comment is obsolete if you do ishell@\u0027s suggestion below.)",
+      "range": {
+        "startLine": 170,
+        "startChar": 34,
+        "endLine": 170,
+        "endChar": 35
       },
       "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -169,6 +232,30 @@
       "writtenOn": "2020-11-09T10:04:26Z",
       "side": 1,
       "message": "Please use postfix ++ here instead of ++ing above.",
+      "range": {
+        "startLine": 391,
+        "startChar": 45,
+        "endLine": 391,
+        "endChar": 68
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "535639f7_ce6e7892",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-09T12:52:30Z",
+      "side": 1,
+      "message": "Yep, looks like the enumeration indices are off-by-one in this CL (in the !V8_DICT_MODE.. case). Why didn\u0027t anything break? Isn\u0027t that observable?",
+      "parentUuid": "957b85af_5984eaa7",
       "range": {
         "startLine": 391,
         "startChar": 45,
