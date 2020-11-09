@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cddf953_ae9c4c64",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 28211,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-09T12:03:27Z",
+      "side": 1,
+      "message": "\"don\u0027t have the necessary hardware support\" sounds like we can never implement this for 32bit platforms.\nHow about \"because Turbofan currently doesn\u0027t support 64-bit integers on 32-bit architectures.\"",
+      "revId": "d62d83215407a951044c9f5af2099e20f41f76eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
