@@ -172,6 +172,30 @@
       },
       "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf52f85_269e4fb9",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T11:51:02Z",
+      "side": 1,
+      "message": "Ok, maybe we should move this discussion to the design doc.\n\nWe will definitely need something like the proposed TimedScope from this CL. RuntimeCallTimerScope and trace-events in the runtime are placed in functions with early returns, so you don\u0027t have a clean entry and exit point. That means you currently cannot easily use the existing TimedScope.\n\nFrom the existing usage of TimedScope, I don\u0027t see much advantages over using directly the ElapsedTimer, but I\u0027ve not followed the development process close enough to know other use-cases.",
+      "parentUuid": "b2b788dd_919485c2",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 0
+      },
+      "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
