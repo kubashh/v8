@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25e48e44_44e4853f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-09T11:44:10Z",
+      "side": 1,
+      "message": "Thanks! lgtm.",
+      "revId": "37ea3b12d1475306d1f37e617ec84e61a6ad263e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f97c438d_6ba1d1a1",
@@ -31,6 +48,30 @@
       "writtenOn": "2020-11-06T16:44:35Z",
       "side": 1,
       "message": "Not sure how to TNodify this one since it gets set to `vector` below that it is a result of an AddNode",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 17
+      },
+      "revId": "37ea3b12d1475306d1f37e617ec84e61a6ad263e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d388ef0_6ec5fc16",
+        "filename": "test/cctest/compiler/test-code-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-09T11:44:10Z",
+      "side": 1,
+      "message": "Hmm..not sure. We have a lot of other Node* in compiler right? Do we want to Tnodify them too? the params array takes both tagged pointer and untagged values like float 32 etc.,So not sure how we want to fix it. We could change the code so element is TNode\u003cObject\u003e and instead of assigning the updated value to element we could directly push it to params. Though as long as params is taking Node* I don\u0027t think it makes much difference to change it.",
+      "parentUuid": "f97c438d_6ba1d1a1",
       "range": {
         "startLine": 119,
         "startChar": 4,
