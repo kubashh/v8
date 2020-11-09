@@ -942,6 +942,8 @@ config("toolchain") {
       "/wd4724",  # https://crbug.com/v8/7771
       "/wd4800",  # Forcing value to bool.
     ]
+
+    libs = [ "advapi32.lib" ]  # Needed for TraceLoggingProvider.h
   }
 
   if (!is_clang && is_win) {
@@ -2761,6 +2763,8 @@ v8_source_set("v8_base_without_compiler") {
     "src/init/startup-data-util.h",
     "src/init/v8.cc",
     "src/init/v8.h",
+    "src/instrumentation/recorder-default.cc",
+    "src/instrumentation/recorder.h",
     "src/interpreter/block-coverage-builder.h",
     "src/interpreter/bytecode-array-accessor.cc",
     "src/interpreter/bytecode-array-accessor.h",
@@ -3564,10 +3568,12 @@ v8_source_set("v8_base_without_compiler") {
       sources += [
         "src/diagnostics/unwinding-info-win64.cc",
         "src/diagnostics/unwinding-info-win64.h",
+        "src/instrumentation/recorder-win.cc",
         "src/trap-handler/handler-inside-win.cc",
         "src/trap-handler/handler-inside-win.h",
         "src/trap-handler/handler-outside-win.cc",
       ]
+      sources -= [ "src/instrumentation/recorder-default.cc" ]
     }
   } else if (v8_current_cpu == "arm") {
     sources += [  ### gcmole(arch:arm) ###
