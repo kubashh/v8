@@ -281,6 +281,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa504086_c45f2648",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 4182,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T15:50:04Z",
+      "side": 1,
+      "message": "yeah, these tests have quite some variance too.\n\nWhat\u0027s speaking against lazily initialising the recorder?\nThis is d8, so that\u0027s still independent of any potential embedder.",
+      "parentUuid": "b4c37dde_8fb319c8",
+      "range": {
+        "startLine": 4181,
+        "startChar": 0,
+        "endLine": 4182,
+        "endChar": 55
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "57953664_753b7400",
         "filename": "src/instrumentation/provider-win.cc",
         "patchSetId": 19
