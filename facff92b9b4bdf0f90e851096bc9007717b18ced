@@ -137,6 +137,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "733a84c7_7610882a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T14:09:13Z",
+      "side": 1,
+      "message": "+1.",
+      "parentUuid": "c3919cf9_b7acd09a",
+      "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca97433d_ddbf9a6d",
@@ -246,6 +264,30 @@
       "side": 1,
       "message": "To be clear: this change looks good to me. I was objecting to the potential future changes where we make TimedScope a requirement for recording events IIUC.",
       "parentUuid": "edf52f85_269e4fb9",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 0
+      },
+      "revId": "facff92b9b4bdf0f90e851096bc9007717b18ced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c841431_6312c83c",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T14:09:13Z",
+      "side": 1,
+      "message": "+1, we definitely want to keep the \"raw\" interface for adding events in the existing, explicit way.",
+      "parentUuid": "a3452d29_a865c432",
       "range": {
         "startLine": 86,
         "startChar": 0,
