@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6303254a_d23799ee",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 28207,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-09T11:27:12Z",
+      "side": 1,
+      "message": "Ack, will explain in the comment. PTAL again.",
+      "parentUuid": "99b16bcb_1e7d63d4",
+      "revId": "0b53268f65988e4f72c4ce0459022831d2e7735a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "982ee264_9ce072e6",
         "filename": "test/cctest/test-api.cc",
         "patchSetId": 5
@@ -48,6 +66,24 @@
       "writtenOn": "2020-11-09T10:24:40Z",
       "side": 1,
       "message": "Why are these tests not run on 32bit platforms?",
+      "revId": "0b53268f65988e4f72c4ce0459022831d2e7735a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5f92344_78ecc737",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 28276,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-09T11:27:12Z",
+      "side": 1,
+      "message": "My omission, will guard them behind \"#ifndef V8_TARGET_ARCH_ARM64\".",
+      "parentUuid": "982ee264_9ce072e6",
       "revId": "0b53268f65988e4f72c4ce0459022831d2e7735a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
