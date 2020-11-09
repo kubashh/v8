@@ -398,6 +398,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   }
 
   TNode<String> TaggedToDirectString(TNode<Object> value, Label* fail);
+  TorqueStructDirectStringWrapper ToDirectStringWrapper(TNode<Object> value,
+                                                        Label* fail);
 
   TNode<HeapObject> TaggedToHeapObject(TNode<Object> value, Label* fail) {
     GotoIf(TaggedIsSmi(value), fail);
@@ -2503,6 +2505,15 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   }
 
   // String helpers.
+  TNode<Uint8T> LoadUint8(TNode<RawPtrT> data_pointer, TNode<UintPtrT> offset) {
+    return Load<Uint8T>(data_pointer, offset);
+  }
+
+  TNode<Uint16T> LoadUint16(TNode<RawPtrT> data_pointer,
+                            TNode<UintPtrT> offset) {
+    return Load<Uint16T>(data_pointer, offset);
+  }
+
   // Load a character from a String (might flatten a ConsString).
   TNode<Int32T> StringCharCodeAt(TNode<String> string, TNode<UintPtrT> index);
   // Return the single character string with only {code}.
