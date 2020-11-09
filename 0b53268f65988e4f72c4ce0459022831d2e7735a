@@ -16,6 +16,40 @@
       "message": "Hi Georg, just to let you know this is ready for a next round of comments. Thanks for discussing it offline, hope my latest refactoring made it easier to read.",
       "revId": "0b53268f65988e4f72c4ce0459022831d2e7735a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99b16bcb_1e7d63d4",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 28207,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-09T10:24:40Z",
+      "side": 1,
+      "message": "That is easy to see, more interesting would be the reason :)",
+      "revId": "0b53268f65988e4f72c4ce0459022831d2e7735a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "982ee264_9ce072e6",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 28276,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-09T10:24:40Z",
+      "side": 1,
+      "message": "Why are these tests not run on 32bit platforms?",
+      "revId": "0b53268f65988e4f72c4ce0459022831d2e7735a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
