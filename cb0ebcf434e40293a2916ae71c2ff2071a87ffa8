@@ -16,6 +16,23 @@
       "message": "Hi Clemens,\n\nThis CL fix a bug in long branch optimization on mips, PTAL, thanks!\n\nBesides, since our company, Loongson Technology is the main if not only maintainer of mips ports, I wonder if I could request to be a v8 committer? If so, our only mips related work will be much more convenient.\n\nAccording to v8.dev\u0027s docs, I need a committer to nominate me, and you have reviewd a large part of my CLs, could you help to do that? Thanks in advance!",
       "revId": "cb0ebcf434e40293a2916ae71c2ff2071a87ffa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0251d0b6_344d2e51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-09T10:55:57Z",
+      "side": 1,
+      "message": "LGTM (rubber-stamp)",
+      "revId": "cb0ebcf434e40293a2916ae71c2ff2071a87ffa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
