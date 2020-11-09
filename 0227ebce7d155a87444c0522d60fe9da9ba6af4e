@@ -33,6 +33,98 @@
       "message": "I ",
       "revId": "0227ebce7d155a87444c0522d60fe9da9ba6af4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba1e590e_893634cc",
+        "filename": "BUILD.gn",
+        "patchSetId": 21
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T14:10:16Z",
+      "side": 1,
+      "message": "v8_component(\"v8_libbase\") maybe a better place for this.\n\nMaybe we should put this behind a compile-time flag for now, until we can write proper tests for it under windows. See for instance v8_enable_lite_mode for adding defines.\n\n- Let\u0027s add a v8_enable_system_instrumentation flag\n- Conditionally add the advapi32.lib under is_win for the v8_libbase component\n- Make sure v8_enable_system_instrumentation sets a define\n- Ifdef based on the define to add d8 support",
+      "range": {
+        "startLine": 944,
+        "startChar": 0,
+        "endLine": 944,
+        "endChar": 66
+      },
+      "revId": "0227ebce7d155a87444c0522d60fe9da9ba6af4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a768f08_4bc69872",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T14:10:16Z",
+      "side": 1,
+      "message": "I feel like we should stick with bools for now, changing names in the API is a cumbersome process.\n\n- {type} is not needed if we have is_module already",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 24
+      },
+      "revId": "0227ebce7d155a87444c0522d60fe9da9ba6af4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "156efd88_819b65fe",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T14:10:16Z",
+      "side": 1,
+      "message": "Let\u0027s remove these for now and add only what we need.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 0
+      },
+      "revId": "0227ebce7d155a87444c0522d60fe9da9ba6af4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db46aaa7_24407667",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-09T14:10:16Z",
+      "side": 1,
+      "message": "nit: could you use the ElapsedTimer here for better debug checks?",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 68
+      },
+      "revId": "0227ebce7d155a87444c0522d60fe9da9ba6af4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
