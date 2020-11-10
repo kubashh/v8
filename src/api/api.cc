@@ -8405,6 +8405,10 @@ void Isolate::Initialize(Isolate* isolate,
   i_isolate->set_embedder_wrapper_object_index(
       params.embedder_wrapper_object_index);
 
+  if (params.metrics_recorder) {
+    isolate->SetMetricsRecorder(params.metrics_recorder);
+  }
+
   if (!i::V8::GetCurrentPlatform()
            ->GetForegroundTaskRunner(isolate)
            ->NonNestableTasksEnabled()) {

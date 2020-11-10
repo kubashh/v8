@@ -28589,10 +28589,9 @@ TEST(TriggerMainThreadMetricsEvent) {
     // Check that event submission works.
     {
       i::metrics::TimedScope<v8::metrics::WasmModuleDecoded> timed_scope(
-          &event);
+          event, i_iso->metrics_recorder(), context_id);
       v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(100));
     }
-    i_iso->metrics_recorder()->AddMainThreadEvent(event, context_id);
     CHECK_EQ(recorder->count_, 1);  // Increased.
     CHECK_GT(recorder->time_in_us_, 100);
   }
@@ -28628,10 +28627,9 @@ TEST(TriggerDelayedMainThreadMetricsEvent) {
     // Check that event submission works.
     {
       i::metrics::TimedScope<v8::metrics::WasmModuleDecoded> timed_scope(
-          &event);
+          event, i_iso->metrics_recorder(), context_id, true);
       v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(100));
     }
-    i_iso->metrics_recorder()->DelayMainThreadEvent(event, context_id);
     CHECK_EQ(recorder->count_, 0);        // Unchanged.
     CHECK_EQ(recorder->time_in_us_, -1);  // Unchanged.
     v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(1100));
