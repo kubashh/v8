@@ -16,6 +16,23 @@
       "message": "PTAL, thanks.",
       "revId": "d8ffc74b9648ca23817607d5a27726cdfd94875f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e674d0d7_522b2ad3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-10T21:27:57Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1:\n\u003e \n\u003e (1 comment)\n\u003e \n\u003e This change is ready for review.\n\nLGTM 😊",
+      "revId": "d8ffc74b9648ca23817607d5a27726cdfd94875f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
