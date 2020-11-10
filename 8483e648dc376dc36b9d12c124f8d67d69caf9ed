@@ -210,6 +210,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0bd7bf7_f09c142f",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-10T21:51:51Z",
+      "side": 1,
+      "message": "Sorry, I silently agreed to this :P UNREACHABLE is the way to go.",
+      "parentUuid": "c2374f50_ff0f720e",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 19
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93722392_22c690cb",
         "filename": "src/d8/d8.cc",
         "patchSetId": 19
@@ -365,6 +389,30 @@
       "side": 1,
       "message": "I\u0027m a bit confused. Do we want to hide this change behind both a build-time flag (v8_enable_system_instrumentation) and a command-line one?",
       "parentUuid": "aa7af166_32894e05",
+      "range": {
+        "startLine": 4181,
+        "startChar": 0,
+        "endLine": 4182,
+        "endChar": 55
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c50a3d9c_c8a23301",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 4182,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-10T21:51:51Z",
+      "side": 1,
+      "message": "I thought: \n- Build time for embedders and until we\u0027re sure it\u0027s stable and doesn\u0027t have any negative impact.\n- run-time command-line flag for testing with d8\n\nI\u0027m not super strict about this at this point, probably it\u0027s good enough to just have the latter",
+      "parentUuid": "04d4351f_c07f58d1",
       "range": {
         "startLine": 4181,
         "startChar": 0,

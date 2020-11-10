@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7d084cf_01264db7",
+        "filename": "src/instrumentation/recorder-win.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-10T21:51:51Z",
+      "side": 1,
+      "message": "This doesn\u0027t have to be a string, right?\n\n  TRACELOGGING_DEFINE_PROVIDER(g_v8Provider, \"V8.js\", (ETW_GUID);\n\nwhere \n\n #define ETW_GUID 0x57277741, 0x3638, ...., 0x6C\n\nThe gn Flags just set an -D define, see for instance v8_embedder_string in BUILD.gn.",
+      "parentUuid": "66dd1bc9_b421c63e",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 71
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c50f4bc5_92718a36",
         "filename": "src/logging/metrics.h",
         "patchSetId": 24
