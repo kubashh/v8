@@ -57,6 +57,30 @@
       },
       "revId": "71854b7b14ea35a3fb1d1061fdb74f8ec563e7a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "434db641_5f4490f3",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-10T21:31:46Z",
+      "side": 1,
+      "message": "I am having trouble to create Slice\u003c\u003e from Direct String. Slice needs {HeapObject, offset, length} while for Direct String we have {StringData: RawPtr} where HeapObject and RawPtr doesn\u0027t have common supertype. I\u0027m not sure Slices are appropriate in that case, since they require a HeapObject, and PointerToData can return a pointer outside the heap for external strings. Should I create a new Slice-ish type for RawPtr?",
+      "parentUuid": "3ec03098_15717235",
+      "range": {
+        "startLine": 106,
+        "startChar": 20,
+        "endLine": 106,
+        "endChar": 34
+      },
+      "revId": "71854b7b14ea35a3fb1d1061fdb74f8ec563e7a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
