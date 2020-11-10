@@ -671,6 +671,16 @@ Node* CodeAssembler::AtomicLoad(MachineType type, Node* base, Node* offset) {
   return raw_assembler()->AtomicLoad(type, base, offset);
 }
 
+template <class Type>
+TNode<Type> CodeAssembler::AtomicLoad64(Node* base, Node* offset) {
+  return UncheckedCast<Type>(raw_assembler()->AtomicLoad64(base, offset));
+}
+
+template TNode<AtomicInt64> CodeAssembler::AtomicLoad64<AtomicInt64>(
+    Node* base, Node* offset);
+template TNode<AtomicUint64> CodeAssembler::AtomicLoad64<AtomicUint64>(
+    Node* base, Node* offset);
+
 Node* CodeAssembler::LoadFromObject(MachineType type, TNode<HeapObject> object,
                                     TNode<IntPtrT> offset) {
   return raw_assembler()->LoadFromObject(type, object, offset);
