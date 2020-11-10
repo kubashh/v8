@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b117443_6d2f7e98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-10T18:52:27Z",
+      "side": 1,
+      "message": "Santiago, PTAL thanks.",
+      "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa1c14e5_bc69e270",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-10T18:52:27Z",
+      "side": 1,
+      "message": "I\u0027m not super keen on having to have these two functions passed, would be interested in any thoughts you might have to avoid it?",
+      "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
