@@ -43,6 +43,8 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
   // Set the details for entry.
   inline void DetailsAtPut(InternalIndex entry, PropertyDetails value);
 
+  static const bool kIsOrderedDictionaryType = false;
+
   // Delete a property from the dictionary.
   V8_WARN_UNUSED_RESULT static Handle<Derived> DeleteEntry(
       Isolate* isolate, Handle<Derived> dictionary, InternalIndex entry);
@@ -55,12 +57,6 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
 
   int NumberOfEnumerableProperties();
 
-#ifdef OBJECT_PRINT
-  // For our gdb macros, we should perhaps change these in the future.
-  void Print();
-
-  void Print(std::ostream& os);  // NOLINT
-#endif
   // Returns the key (slow).
   Object SlowReverseLookup(Object value);
 
@@ -130,8 +126,6 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) BaseNameDictionary
       HashTableBase::kPrefixStartIndex;
   static const int kObjectHashIndex = kNextEnumerationIndexIndex + 1;
   static const int kEntryValueIndex = 1;
-
-  static const bool kIsOrderedDictionaryType = false;
 
   inline void SetHash(int hash);
   inline int Hash() const;

@@ -352,7 +352,7 @@ class PropertyDetails {
 
 #ifdef OBJECT_PRINT
   // For our gdb macros, we should perhaps change these in the future.
-  void Print(bool dictionary_mode);
+  void Print(bool dictionary_mode, bool print_dict_index);
 #endif
 
   enum PrintMode {
@@ -365,7 +365,7 @@ class PropertyDetails {
     kForTransitions = kPrintAttributes,
     kPrintFull = -1,
   };
-  void PrintAsSlowTo(std::ostream& out);
+  void PrintAsSlowTo(std::ostream& out, bool print_dict_index);
   void PrintAsFastTo(std::ostream& out, PrintMode mode = kPrintFull);
 
  private:
