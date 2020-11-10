@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11cf5c47_ea3d3ab0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-10T11:45:42Z",
+      "side": 1,
+      "message": ".. and refactors printing of unordered name dictionaries.",
+      "revId": "43e5106ec50077267f841e86c4acf178be77ffe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a5b3824_4bef4d4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-10T11:45:42Z",
+      "side": 1,
+      "message": "lgtm with final nits",
+      "revId": "43e5106ec50077267f841e86c4acf178be77ffe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ba91de1_109ac265",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-10T11:45:42Z",
+      "side": 1,
+      "message": "Let\u0027s use PrintHeapObjectHeaderWithoutMap because map doesn\u0027t add anything to the type name.",
+      "range": {
+        "startLine": 92,
+        "startChar": 8,
+        "endLine": 92,
+        "endChar": 19
+      },
+      "revId": "43e5106ec50077267f841e86c4acf178be77ffe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e95bdb0_d0baceed",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-10T11:45:42Z",
+      "side": 1,
+      "message": "While you are here, could you please add print functions (with PrintHeapObjectHeaderWithoutMap) for these two dictionaries too.",
+      "revId": "43e5106ec50077267f841e86c4acf178be77ffe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "284a5576_95919aed",
+        "filename": "src/objects/property.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-10T11:45:42Z",
+      "side": 1,
+      "message": "Please remove this parameter and always print enumeration index to simplify things. This Print() function is supposed to be used from gdb when one wants to see a decoded property details:\n  gdb\u003e p details.Print(false)\nHaving additional argument would require passing two args to Print call.",
+      "range": {
+        "startLine": 137,
+        "startChar": 48,
+        "endLine": 137,
+        "endChar": 71
+      },
+      "revId": "43e5106ec50077267f841e86c4acf178be77ffe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
