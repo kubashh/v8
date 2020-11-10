@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b27d534_f0c80d46",
+        "filename": "src/objects/ordered-hash-table.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-11-10T19:40:51Z",
+      "side": 0,
+      "message": "I don\u0027t understand why this is wrong, which field is misalgined? Isn\u0027t sizeof(int32)+4*sizeof(uint8) \u003d 8, which is already our maximal alignment?",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 17
+      },
+      "revId": "4d4f716b9cc3fb696117a096a131908ec8f26049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
