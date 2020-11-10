@@ -22,7 +22,7 @@ class UnusedObserver : public AllocationObserver {
 }  // namespace
 
 TEST(AllocationObserverTest, AddAndRemoveUnusedObservers) {
-  AllocationCounter counter;
+  AllocationCounter counter(1);
   CHECK(!counter.IsActive());
 
   UnusedObserver observer100(100);
@@ -76,7 +76,7 @@ class VerifyStepObserver : public AllocationObserver {
 }  // namespace
 
 TEST(AllocationObserverTest, Step) {
-  AllocationCounter counter;
+  AllocationCounter counter(1);
   CHECK(!counter.IsActive());
   const Address kSomeObjectAddress = 8;
 
@@ -125,7 +125,7 @@ class RecursiveAddObserver : public AllocationObserver {
 }  // namespace
 
 TEST(AllocationObserverTest, RecursiveAdd) {
-  AllocationCounter counter;
+  AllocationCounter counter(1);
   const Address kSomeObjectAddress = 8;
 
   UnusedObserver observer50(50);
@@ -159,7 +159,7 @@ class RecursiveRemoveObserver : public AllocationObserver {
 }  // namespace
 
 TEST(AllocationObserverTest, RecursiveRemove) {
-  AllocationCounter counter;
+  AllocationCounter counter(1);
   const Address kSomeObjectAddress = 8;
 
   UnusedObserver observer75(75);

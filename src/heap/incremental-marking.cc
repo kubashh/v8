@@ -197,16 +197,12 @@ void IncrementalMarking::Start(GarbageCollectionReason gc_reason) {
              GCTracer::Scope::MC_INCREMENTAL_SWEEP_ARRAY_BUFFERS);
     heap_->array_buffer_sweeper()->EnsureFinished();
   }
-
-  if (!collector_->sweeping_in_progress()) {
-    StartMarking();
-  } else {
-    if (FLAG_trace_incremental_marking) {
-      heap()->isolate()->PrintWithTimestamp(
-          "[IncrementalMarking] Start sweeping.\n");
-    }
-    SetState(SWEEPING);
-  }
+  collector_->EnsureSweepingCompleted();
+  DCHECK(!collector_->sweeping_in_progress());
+#ifdef DEBUG
+  heap_->VerifyCountersAfterSweeping();
+#endif
+  StartMarking();
 
   heap_->AddAllocationObserversToAllSpaces(&old_generation_observer_,
                                            &new_generation_observer_);
@@ -270,13 +266,10 @@ void IncrementalMarking::StartBlackAllocation() {
   DCHECK(!black_allocation_);
   DCHECK(IsMarking());
   black_allocation_ = true;
-  heap()->old_space()->MarkLinearAllocationAreaBlack();
-  heap()->map_space()->MarkLinearAllocationAreaBlack();
-  heap()->code_space()->MarkLinearAllocationAreaBlack();
+  heap()->StartBlackAllocation();
   if (FLAG_local_heaps) {
-    heap()->safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
-      local_heap->MarkLinearAllocationAreaBlack();
-    });
+    heap()->safepoint()->IterateLocalHeaps(
+        [](LocalHeap* local_heap) { local_heap->StartBlackAllocation(); });
   }
   if (FLAG_trace_incremental_marking) {
     heap()->isolate()->PrintWithTimestamp(
@@ -286,13 +279,10 @@ void IncrementalMarking::StartBlackAllocation() {
 
 void IncrementalMarking::PauseBlackAllocation() {
   DCHECK(IsMarking());
-  heap()->old_space()->UnmarkLinearAllocationArea();
-  heap()->map_space()->UnmarkLinearAllocationArea();
-  heap()->code_space()->UnmarkLinearAllocationArea();
+  heap()->StopBlackAllocation();
   if (FLAG_local_heaps) {
-    heap()->safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
-      local_heap->UnmarkLinearAllocationArea();
-    });
+    heap()->safepoint()->IterateLocalHeaps(
+        [](LocalHeap* local_heap) { local_heap->StopBlackAllocation(); });
   }
   if (FLAG_trace_incremental_marking) {
     heap()->isolate()->PrintWithTimestamp(
@@ -597,15 +587,8 @@ void IncrementalMarking::Stop() {
         Max(0, old_generation_size_mb - old_generation_limit_mb));
   }
 
-  SpaceIterator it(heap_);
-  while (it.HasNext()) {
-    Space* space = it.Next();
-    if (space == heap_->new_space()) {
-      space->RemoveAllocationObserver(&new_generation_observer_);
-    } else {
-      space->RemoveAllocationObserver(&old_generation_observer_);
-    }
-  }
+  heap_->RemoveAllocationObserversFromAllSpaces(&old_generation_observer_,
+                                                &new_generation_observer_);
 
   heap_->isolate()->stack_guard()->ClearGC();
   SetState(STOPPED);
@@ -791,36 +774,6 @@ StepResult IncrementalMarking::AdvanceWithDeadline(
   return Step(kStepSizeInMs, completion_action, step_origin);
 }
 
-void IncrementalMarking::FinalizeSweeping() {
-  DCHECK(state_ == SWEEPING);
-  if (ContinueConcurrentSweeping()) {
-    if (FLAG_stress_incremental_marking) {
-      // To start concurrent marking a bit earlier, support concurrent sweepers
-      // from main thread by sweeping some pages.
-      SupportConcurrentSweeping();
-    }
-    return;
-  }
-
-  SafepointScope scope(heap());
-  collector_->EnsureSweepingCompleted();
-  DCHECK(!collector_->sweeping_in_progress());
-#ifdef DEBUG
-  heap_->VerifyCountersAfterSweeping();
-#endif
-  StartMarking();
-}
-
-bool IncrementalMarking::ContinueConcurrentSweeping() {
-  if (!collector_->sweeping_in_progress()) return false;
-  return FLAG_concurrent_sweeping &&
-         collector_->sweeper()->AreSweeperTasksRunning();
-}
-
-void IncrementalMarking::SupportConcurrentSweeping() {
-  collector_->sweeper()->SupportConcurrentSweeping();
-}
-
 size_t IncrementalMarking::StepSizeToKeepUpWithAllocations() {
   // Update bytes_allocated_ based on the allocation counter.
   size_t current_counter = heap_->OldGenerationAllocationCounter();
@@ -835,7 +788,7 @@ size_t IncrementalMarking::StepSizeToMakeProgress() {
   const size_t kMaxStepSizeInByte = 256 * KB;
   size_t oom_slack = heap()->new_space()->Capacity() + 64 * MB;
 
-  if (!heap()->CanExpandOldGeneration(oom_slack)) {
+  if (!heap()->CanExpandOldGeneration(ThreadKind::kMain, oom_slack)) {
     return heap()->OldGenerationSizeOfObjects() / kTargetStepCountAtOOM;
   }
 
@@ -911,7 +864,7 @@ void IncrementalMarking::AdvanceOnAllocation() {
   // Code using an AlwaysAllocateScope assumes that the GC state does not
   // change; that implies that no marking steps must be performed.
   if (heap_->gc_state() != Heap::NOT_IN_GC || !FLAG_incremental_marking ||
-      (state_ != SWEEPING && state_ != MARKING) || heap_->always_allocate()) {
+      state_ != MARKING || heap_->always_allocate()) {
     return;
   }
   HistogramTimerScope incremental_marking_scope(
@@ -927,11 +880,6 @@ StepResult IncrementalMarking::Step(double max_step_size_in_ms,
                                     StepOrigin step_origin) {
   double start = heap_->MonotonicallyIncreasingTimeInMs();
 
-  if (state_ == SWEEPING) {
-    TRACE_GC(heap_->tracer(), GCTracer::Scope::MC_INCREMENTAL_SWEEPING);
-    FinalizeSweeping();
-  }
-
   StepResult combined_result = StepResult::kMoreWorkRemaining;
   size_t bytes_to_process = 0;
   size_t v8_bytes_processed = 0;
@@ -942,6 +890,7 @@ StepResult IncrementalMarking::Step(double max_step_size_in_ms,
       // It is safe to merge back all objects that were on hold to the shared
       // work list at Step because we are at a safepoint where all objects
       // are properly initialized.
+      heap_->PublishPendingAllocations();
       local_marking_worklists()->MergeOnHold();
     }
 

@@ -738,27 +738,29 @@ using WeakSlotCallbackWithHeap = bool (*)(Heap* heap, FullObjectSlot pointer);
 
 // NOTE: SpaceIterator depends on AllocationSpace enumeration values being
 // consecutive.
+// The order of spaces is important here and should match that of
+// AllocationType. See Heap::AllocatorIndex().
 enum AllocationSpace {
-  RO_SPACE,       // Immortal, immovable and immutable objects,
-  OLD_SPACE,      // Old generation regular object space.
-  CODE_SPACE,     // Old generation code object space, marked executable.
-  MAP_SPACE,      // Old generation map object space, non-movable.
+  NEW_SPACE,   // Young generation semispaces for regular objects collected with
+               // Scavenger.
+  OLD_SPACE,   // Old generation regular object space.
+  CODE_SPACE,  // Old generation code object space, marked executable.
+  MAP_SPACE,   // Old generation map object space, non-movable.
+  NEW_LO_SPACE,   // Young generation large object space.
   LO_SPACE,       // Old generation large object space.
   CODE_LO_SPACE,  // Old generation large code object space.
-  NEW_LO_SPACE,   // Young generation large object space.
-  NEW_SPACE,  // Young generation semispaces for regular objects collected with
-              // Scavenger.
+  RO_SPACE,       // Immortal, immovable and immutable objects,
 
-  FIRST_SPACE = RO_SPACE,
-  LAST_SPACE = NEW_SPACE,
-  FIRST_MUTABLE_SPACE = OLD_SPACE,
-  LAST_MUTABLE_SPACE = NEW_SPACE,
-  FIRST_GROWABLE_PAGED_SPACE = OLD_SPACE,
-  LAST_GROWABLE_PAGED_SPACE = MAP_SPACE
+  FIRST_SPACE = NEW_SPACE,
+  LAST_SPACE = RO_SPACE,
+  FIRST_MUTABLE_SPACE = NEW_SPACE,
+  LAST_MUTABLE_SPACE = CODE_LO_SPACE,
 };
 constexpr int kSpaceTagSize = 4;
 STATIC_ASSERT(FIRST_SPACE == 0);
 
+// The order is important here and should match that of AllocationSpace.
+// See Heap::AllocatorIndex.
 enum class AllocationType : uint8_t {
   kYoung,    // Regular object allocated in NEW_SPACE or NEW_LO_SPACE
   kOld,      // Regular object allocated in OLD_SPACE or LO_SPACE

@@ -17,7 +17,6 @@
 #include "src/handles/handles.h"
 #include "src/handles/local-handles-inl.h"
 #include "src/handles/persistent-handles.h"
-#include "src/heap/concurrent-allocator-inl.h"
 #include "src/heap/heap.h"
 #include "src/heap/local-heap-inl.h"
 #include "src/heap/safepoint.h"
@@ -152,7 +151,7 @@ class LargeObjectConcurrentAllocationThread final : public v8::base::Thread {
       AllocationResult result = local_heap.AllocateRaw(
           kLargeObjectSize, AllocationType::kOld, AllocationOrigin::kRuntime,
           AllocationAlignment::kWordAligned);
-      if (result.IsRetry()) {
+      if (result.IsFailure()) {
         local_heap.PerformCollection();
       } else {
         Address address = result.ToAddress();

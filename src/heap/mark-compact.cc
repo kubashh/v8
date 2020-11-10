@@ -145,7 +145,7 @@ void MarkingVerifier::VerifyMarkingOnPage(const Page* page, Address start,
 }
 
 void MarkingVerifier::VerifyMarking(NewSpace* space) {
-  Address end = space->top();
+  Address end = space->to_space().current_top();
   // The bottom position is at the start of its page. Allows us to use
   // page->area_start() as start of range on all pages.
   CHECK_EQ(space->first_allocatable_address(),
@@ -301,12 +301,13 @@ void EvacuationVerifier::VerifyEvacuationOnPage(Address start, Address end) {
 }
 
 void EvacuationVerifier::VerifyEvacuation(NewSpace* space) {
-  PageRange range(space->first_allocatable_address(), space->top());
+  Address top = space->to_space().current_top();
+  PageRange range(space->first_allocatable_address(), top);
   for (auto it = range.begin(); it != range.end();) {
     Page* page = *(it++);
     Address current = page->area_start();
-    Address limit = it != range.end() ? page->area_end() : space->top();
-    CHECK(limit == space->top() || !page->Contains(space->top()));
+    Address limit = it != range.end() ? page->area_end() : top;
+    CHECK(limit == top || !page->Contains(top));
     VerifyEvacuationOnPage(current, limit);
   }
 }
@@ -314,12 +315,6 @@ void EvacuationVerifier::VerifyEvacuation(NewSpace* space) {
 void EvacuationVerifier::VerifyEvacuation(PagedSpace* space) {
   for (Page* p : *space) {
     if (p->IsEvacuationCandidate()) continue;
-    if (p->Contains(space->top())) {
-      CodePageMemoryModificationScope memory_modification_scope(p);
-      heap_->CreateFillerObjectAt(
-          space->top(), static_cast<int>(space->limit() - space->top()),
-          ClearRecordedSlots::kNo);
-    }
     VerifyEvacuationOnPage(p->area_start(), p->area_end());
   }
 }
@@ -460,6 +455,7 @@ static void TraceFragmentation(PagedSpace* space) {
 
 bool MarkCompactCollector::StartCompaction() {
   if (!compacting_) {
+    heap()->FreeLabs();
     DCHECK(evacuation_candidates_.empty());
 
     if (FLAG_gc_experiment_less_compaction && !heap_->ShouldReduceMemory())
@@ -546,7 +542,8 @@ void MarkCompactCollector::VerifyMarkbitsAreClean(PagedSpace* space) {
 }
 
 void MarkCompactCollector::VerifyMarkbitsAreClean(NewSpace* space) {
-  for (Page* p : PageRange(space->first_allocatable_address(), space->top())) {
+  for (Page* p : PageRange(space->first_allocatable_address(),
+                           space->to_space().current_top())) {
     CHECK(non_atomic_marking_state()->bitmap(p)->IsClean());
     CHECK_EQ(0, non_atomic_marking_state()->live_bytes(p));
   }
@@ -687,14 +684,8 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
   pages.reserve(number_of_pages);
 
   DCHECK(!sweeping_in_progress());
-  Page* owner_of_linear_allocation_area =
-      space->top() == space->limit()
-          ? nullptr
-          : Page::FromAllocationAreaAddress(space->top());
   for (Page* p : *space) {
-    if (p->NeverEvacuate() || (p == owner_of_linear_allocation_area) ||
-        !p->CanAllocate())
-      continue;
+    if (p->NeverEvacuate() || !p->CanAllocate()) continue;
 
     if (p->IsPinned()) {
       DCHECK(
@@ -846,10 +837,6 @@ void MarkCompactCollector::Prepare() {
     heap_->array_buffer_sweeper()->EnsureFinished();
   }
 
-  if (heap()->incremental_marking()->IsSweeping()) {
-    heap()->incremental_marking()->Stop();
-  }
-
   if (!was_marked_incrementally_) {
     {
       TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_EMBEDDER_PROLOGUE);
@@ -868,16 +855,7 @@ void MarkCompactCollector::Prepare() {
     space->PrepareForMarkCompact();
   }
 
-  if (FLAG_local_heaps) {
-    // Fill and reset all background thread LABs
-    heap_->safepoint()->IterateLocalHeaps(
-        [](LocalHeap* local_heap) { local_heap->FreeLinearAllocationArea(); });
-  }
-
-  // All objects are guaranteed to be initialized in atomic pause
-  heap()->new_lo_space()->ResetPendingObject();
-  DCHECK_EQ(heap()->new_space()->top(),
-            heap()->new_space()->original_top_acquire());
+  DCHECK(heap_->AreLabsEmpty());
 }
 
 void MarkCompactCollector::FinishConcurrentMarking() {
@@ -1398,7 +1376,6 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
       Heap::PretenuringFeedbackMap* local_pretenuring_feedback,
       bool always_promote_young)
       : EvacuateVisitorBase(heap, local_allocator, record_visitor),
-        buffer_(LocalAllocationBuffer::InvalidBuffer()),
         promoted_size_(0),
         semispace_copied_size_(0),
         local_pretenuring_feedback_(local_pretenuring_feedback),
@@ -1466,7 +1443,7 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
     AllocationSpace space_allocated_in = NEW_SPACE;
     AllocationResult allocation = local_allocator_->Allocate(
         NEW_SPACE, size, AllocationOrigin::kGC, alignment);
-    if (allocation.IsRetry()) {
+    if (allocation.IsFailure()) {
       allocation = AllocateInOldSpace(size, alignment);
       space_allocated_in = OLD_SPACE;
     }
@@ -1480,14 +1457,13 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
                                              AllocationAlignment alignment) {
     AllocationResult allocation = local_allocator_->Allocate(
         OLD_SPACE, size_in_bytes, AllocationOrigin::kGC, alignment);
-    if (allocation.IsRetry()) {
+    if (allocation.IsFailure()) {
       heap_->FatalProcessOutOfMemory(
           "MarkCompactCollector: semi-space copy, fallback in old gen");
     }
     return allocation;
   }
 
-  LocalAllocationBuffer buffer_;
   intptr_t promoted_size_;
   intptr_t semispace_copied_size_;
   Heap::PretenuringFeedbackMap* local_pretenuring_feedback_;
@@ -2820,12 +2796,12 @@ void MarkCompactCollector::EvacuatePrologue() {
   // New space.
   NewSpace* new_space = heap()->new_space();
   // Append the list of new space pages to be processed.
-  for (Page* p :
-       PageRange(new_space->first_allocatable_address(), new_space->top())) {
+  for (Page* p : PageRange(new_space->first_allocatable_address(),
+                           new_space->to_space().current_top())) {
     new_space_evacuation_pages_.push_back(p);
   }
   new_space->Flip();
-  new_space->ResetLinearAllocationArea();
+  new_space->Reset();
 
   DCHECK_EQ(new_space->Size(), 0);
 
@@ -2842,7 +2818,7 @@ void MarkCompactCollector::EvacuatePrologue() {
 void MarkCompactCollector::EvacuateEpilogue() {
   aborted_evacuation_candidates_.clear();
   // New space.
-  heap()->new_space()->set_age_mark(heap()->new_space()->top());
+  heap()->new_space()->SetAgeMark();
   DCHECK_IMPLIES(FLAG_always_promote_young_mc,
                  heap()->new_space()->Size() == 0);
   // Deallocate unmarked large objects.
@@ -3211,7 +3187,7 @@ bool MarkCompactCollectorBase::ShouldMovePage(Page* p, intptr_t live_bytes,
   return !reduce_memory && !p->NeverEvacuate() &&
          (live_bytes > Evacuator::NewSpacePageEvacuationThreshold()) &&
          (always_promote_young || !p->Contains(age_mark)) &&
-         heap()->CanExpandOldGeneration(live_bytes);
+         heap()->CanExpandOldGeneration(ThreadKind::kMain, live_bytes);
 }
 
 void MarkCompactCollector::EvacuatePagesInParallel() {
@@ -3800,7 +3776,7 @@ int MarkCompactCollectorBase::CollectToSpaceUpdatingItems(
     std::vector<std::unique_ptr<UpdatingItem>>* items) {
   // Seed to space pages.
   const Address space_start = heap()->new_space()->first_allocatable_address();
-  const Address space_end = heap()->new_space()->top();
+  const Address space_end = heap()->new_space()->to_space().current_top();
   int pages = 0;
   for (Page* page : PageRange(space_start, space_end)) {
     Address start =
@@ -4686,20 +4662,20 @@ void MinorMarkCompactCollector::ClearNonLiveReferences() {
 void MinorMarkCompactCollector::EvacuatePrologue() {
   NewSpace* new_space = heap()->new_space();
   // Append the list of new space pages to be processed.
-  for (Page* p :
-       PageRange(new_space->first_allocatable_address(), new_space->top())) {
+  for (Page* p : PageRange(new_space->first_allocatable_address(),
+                           new_space->to_space().current_top())) {
     new_space_evacuation_pages_.push_back(p);
   }
 
   new_space->Flip();
-  new_space->ResetLinearAllocationArea();
+  new_space->Reset();
 
   heap()->new_lo_space()->Flip();
   heap()->new_lo_space()->ResetPendingObject();
 }
 
 void MinorMarkCompactCollector::EvacuateEpilogue() {
-  heap()->new_space()->set_age_mark(heap()->new_space()->top());
+  heap()->new_space()->SetAgeMark();
   // Give pages that are queued to be freed back to the OS.
   heap()->memory_allocator()->unmapper()->FreeQueuedChunks();
 }
@@ -5000,10 +4976,6 @@ void MinorMarkCompactCollector::MarkLiveObjects() {
         &root_visitor, &IsUnmarkedObjectForYoungGeneration);
     DrainMarkingWorklist();
   }
-
-  if (FLAG_minor_mc_trace_fragmentation) {
-    TraceFragmentation();
-  }
 }
 
 void MinorMarkCompactCollector::DrainMarkingWorklist() {
@@ -5017,57 +4989,6 @@ void MinorMarkCompactCollector::DrainMarkingWorklist() {
     main_marking_visitor()->Visit(object);
   }
   DCHECK(marking_worklist.IsLocalEmpty());
-}
-
-void MinorMarkCompactCollector::TraceFragmentation() {
-  NewSpace* new_space = heap()->new_space();
-  const std::array<size_t, 4> free_size_class_limits = {0, 1024, 2048, 4096};
-  size_t free_bytes_of_class[free_size_class_limits.size()] = {0};
-  size_t live_bytes = 0;
-  size_t allocatable_bytes = 0;
-  for (Page* p :
-       PageRange(new_space->first_allocatable_address(), new_space->top())) {
-    Address free_start = p->area_start();
-    for (auto object_and_size : LiveObjectRange<kGreyObjects>(
-             p, non_atomic_marking_state()->bitmap(p))) {
-      HeapObject const object = object_and_size.first;
-      Address free_end = object.address();
-      if (free_end != free_start) {
-        size_t free_bytes = free_end - free_start;
-        int free_bytes_index = 0;
-        for (auto free_size_class_limit : free_size_class_limits) {
-          if (free_bytes >= free_size_class_limit) {
-            free_bytes_of_class[free_bytes_index] += free_bytes;
-          }
-          free_bytes_index++;
-        }
-      }
-      Map map = object.synchronized_map();
-      int size = object.SizeFromMap(map);
-      live_bytes += size;
-      free_start = free_end + size;
-    }
-    size_t area_end =
-        p->Contains(new_space->top()) ? new_space->top() : p->area_end();
-    if (free_start != area_end) {
-      size_t free_bytes = area_end - free_start;
-      int free_bytes_index = 0;
-      for (auto free_size_class_limit : free_size_class_limits) {
-        if (free_bytes >= free_size_class_limit) {
-          free_bytes_of_class[free_bytes_index] += free_bytes;
-        }
-        free_bytes_index++;
-      }
-    }
-    allocatable_bytes += area_end - p->area_start();
-    CHECK_EQ(allocatable_bytes, live_bytes + free_bytes_of_class[0]);
-  }
-  PrintIsolate(
-      isolate(),
-      "Minor Mark-Compact Fragmentation: allocatable_bytes=%zu live_bytes=%zu "
-      "free_bytes=%zu free_bytes_1K=%zu free_bytes_2K=%zu free_bytes_4K=%zu\n",
-      allocatable_bytes, live_bytes, free_bytes_of_class[0],
-      free_bytes_of_class[1], free_bytes_of_class[2], free_bytes_of_class[3]);
 }
 
 void MinorMarkCompactCollector::Evacuate() {

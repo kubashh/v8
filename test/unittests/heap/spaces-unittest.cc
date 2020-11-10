@@ -44,9 +44,13 @@ TEST_F(SpacesTest, CompactionSpaceMerge) {
       compaction_space->AreaSize() / kMaxRegularHeapObjectSize;
   const int kExpectedPages =
       (kNumObjects + kNumObjectsPerPage - 1) / kNumObjectsPerPage;
+  Allocator allocator(heap, ThreadKind::kBackground, compaction_space,
+                      kTaggedSize, 0, Page::kPageSize);
   for (int i = 0; i < kNumObjects; i++) {
     HeapObject object =
-        compaction_space->AllocateRawUnaligned(kMaxRegularHeapObjectSize)
+        allocator
+            .Allocate(kMaxRegularHeapObjectSize, kWordAligned,
+                      AllocationOrigin::kRuntime, HeapLimitHandling::kIgnore)
             .ToObjectChecked();
     heap->CreateFillerObjectAt(object.address(), kMaxRegularHeapObjectSize,
                                ClearRecordedSlots::kNo);
@@ -54,6 +58,7 @@ TEST_F(SpacesTest, CompactionSpaceMerge) {
   int pages_in_old_space = old_space->CountTotalPages();
   int pages_in_compaction_space = compaction_space->CountTotalPages();
   EXPECT_EQ(kExpectedPages, pages_in_compaction_space);
+  allocator.FreeLab();
   old_space->MergeLocalSpace(compaction_space);
   EXPECT_EQ(pages_in_old_space + pages_in_compaction_space,
             old_space->CountTotalPages());
