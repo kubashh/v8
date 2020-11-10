@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd77d7f7_93f65692",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-10T09:49:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e715930_b9827715",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "648ccc54dbd385b8650fccf43bdb162ded5a2a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b1642ea_c76d6821",
@@ -37,6 +61,24 @@
       "writtenOn": "2020-11-06T18:31:14Z",
       "side": 1,
       "message": "Suggestion: changes 1 and 2 seems to be too trivial to be mentioned, unlike the LocalIsolate-related changes which are worth mentioning.",
+      "revId": "648ccc54dbd385b8650fccf43bdb162ded5a2a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8bccb99_004f1fbc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-10T09:49:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b1642ea_c76d6821",
       "revId": "648ccc54dbd385b8650fccf43bdb162ded5a2a45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +130,30 @@
       "writtenOn": "2020-11-06T18:31:14Z",
       "side": 1,
       "message": "Please remove ||s around class and method names. We usually use ||s for refering to function\u0027s parameter names which are often just short lower case words.",
+      "range": {
+        "startLine": 774,
+        "startChar": 39,
+        "endLine": 774,
+        "endChar": 40
+      },
+      "revId": "648ccc54dbd385b8650fccf43bdb162ded5a2a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae34fa6d_5d30e95d",
+        "filename": "src/objects/ordered-hash-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-10T09:49:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdf90019_9be75dc9",
       "range": {
         "startLine": 774,
         "startChar": 39,
