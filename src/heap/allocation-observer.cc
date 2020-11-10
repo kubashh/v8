@@ -10,7 +10,14 @@
 namespace v8 {
 namespace internal {
 
+namespace {
+
+size_t RoundUp(size_t a, size_t b) { return ((a + b - 1) / b) * b; }
+
+}  // anonymous namespace
+
 void AllocationCounter::AddAllocationObserver(AllocationObserver* observer) {
+  active_ = true;
 #if DEBUG
   auto it = std::find_if(observers_.begin(), observers_.end(),
                          [observer](const AllocationObserverCounter& aoc) {
@@ -24,7 +31,7 @@ void AllocationCounter::AddAllocationObserver(AllocationObserver* observer) {
     return;
   }
 
-  intptr_t step_size = observer->GetNextStepSize();
+  intptr_t step_size = RoundUp(observer->GetNextStepSize(), object_alignment_);
   size_t observer_next_counter = current_counter_ + step_size;
 
   observers_.push_back(AllocationObserverCounter(observer, current_counter_,
@@ -57,6 +64,7 @@ void AllocationCounter::RemoveAllocationObserver(AllocationObserver* observer) {
 
   if (observers_.size() == 0) {
     current_counter_ = next_counter_ = 0;
+    active_ = false;
   } else {
     size_t step_size = 0;
 
@@ -77,6 +85,7 @@ void AllocationCounter::AdvanceAllocationObservers(size_t allocated) {
 
   DCHECK(!step_in_progress_);
   DCHECK_LT(allocated, next_counter_ - current_counter_);
+  DCHECK_EQ(allocated % object_alignment_, 0);
   current_counter_ += allocated;
 }
 
@@ -109,7 +118,8 @@ void AllocationCounter::InvokeAllocationObservers(Address soon_object,
 
       aoc.prev_counter_ = current_counter_;
       aoc.next_counter_ =
-          current_counter_ + aligned_object_size + observer_step_size;
+          RoundUp(current_counter_ + aligned_object_size + observer_step_size,
+                  object_alignment_);
       step_run = true;
     }
 
@@ -124,7 +134,8 @@ void AllocationCounter::InvokeAllocationObservers(Address soon_object,
     size_t observer_step_size = aoc.observer_->GetNextStepSize();
     aoc.prev_counter_ = current_counter_;
     aoc.next_counter_ =
-        current_counter_ + aligned_object_size + observer_step_size;
+        RoundUp(current_counter_ + aligned_object_size + observer_step_size,
+                object_alignment_);
 
     DCHECK_NE(step_size, 0);
     step_size = Min(step_size, aligned_object_size + observer_step_size);
@@ -160,20 +171,6 @@ void AllocationCounter::InvokeAllocationObservers(Address soon_object,
   step_in_progress_ = false;
 }
 
-PauseAllocationObserversScope::PauseAllocationObserversScope(Heap* heap)
-    : heap_(heap) {
-  DCHECK_EQ(heap->gc_state(), Heap::NOT_IN_GC);
-
-  for (SpaceIterator it(heap_); it.HasNext();) {
-    it.Next()->PauseAllocationObservers();
-  }
-}
-
-PauseAllocationObserversScope::~PauseAllocationObserversScope() {
-  for (SpaceIterator it(heap_); it.HasNext();) {
-    it.Next()->ResumeAllocationObservers();
-  }
-}
 
 }  // namespace internal
 }  // namespace v8

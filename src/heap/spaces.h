@@ -129,15 +129,16 @@ class V8_EXPORT_PRIVATE Space : public BaseSpace {
     external_backing_store_bytes_ = nullptr;
   }
 
-  virtual void AddAllocationObserver(AllocationObserver* observer);
+  virtual bool RefillLab(ThreadKind, size_t min_size, size_t max_size,
+                         AllocationAlignment alignment, AllocationOrigin origin,
+                         HeapLimitHandling heap_limit_handling, Address* top,
+                         Address* limit, AllocationFailure* failure) {
+    return false;
+  }
+  virtual void FreeLab(ThreadKind, Address* top, Address* limit) {}
 
-  virtual void RemoveAllocationObserver(AllocationObserver* observer);
-
-  virtual void PauseAllocationObservers();
-
-  virtual void ResumeAllocationObservers();
-
-  virtual void StartNextInlineAllocationStep() {}
+  virtual void StartBlackAllocation(Address top, Address limit) {}
+  virtual void StopBlackAllocation(Address top, Address limit) {}
 
   // Returns size of objects. Can differ from the allocated size
   // (e.g. see OldLargeObjectSpace).
@@ -145,14 +146,6 @@ class V8_EXPORT_PRIVATE Space : public BaseSpace {
 
   // Return the available bytes without growing.
   virtual size_t Available() = 0;
-
-  virtual int RoundSizeDownToObjectAlignment(int size) {
-    if (id_ == CODE_SPACE) {
-      return RoundDown(size, kCodeAlignment);
-    } else {
-      return RoundDown(size, kTaggedSize);
-    }
-  }
 
   virtual std::unique_ptr<ObjectIterator> GetObjectIterator(Heap* heap) = 0;
 
@@ -180,13 +173,20 @@ class V8_EXPORT_PRIVATE Space : public BaseSpace {
 
   Address FirstPageAddress() const { return first_page()->address(); }
 
+  Executability GetExecutability() {
+    return (id_ == CODE_SPACE || id_ == CODE_LO_SPACE) ? EXECUTABLE
+                                                       : NOT_EXECUTABLE;
+  }
+
+  void set_main_thread_allocator(Allocator* allocator) {
+    main_thread_allocator_ = allocator;
+  }
+
 #ifdef DEBUG
   virtual void Print() = 0;
 #endif
 
  protected:
-  AllocationCounter allocation_counter_;
-
   // The List manages the pages that belong to the given space.
   heap::List<MemoryChunk> memory_chunk_list_;
 
@@ -194,6 +194,8 @@ class V8_EXPORT_PRIVATE Space : public BaseSpace {
   std::atomic<size_t>* external_backing_store_bytes_;
 
   std::unique_ptr<FreeList> free_list_;
+
+  Allocator* main_thread_allocator_ = nullptr;
 
   DISALLOW_COPY_AND_ASSIGN(Space);
 };
@@ -351,190 +353,6 @@ class PageRange {
   Page* end_;
 };
 
-// -----------------------------------------------------------------------------
-// A space has a circular list of pages. The next page can be accessed via
-// Page::next_page() call.
-
-// An abstraction of allocation and relocation pointers in a page-structured
-// space.
-class LinearAllocationArea {
- public:
-  LinearAllocationArea()
-      : start_(kNullAddress), top_(kNullAddress), limit_(kNullAddress) {}
-  LinearAllocationArea(Address top, Address limit)
-      : start_(top), top_(top), limit_(limit) {}
-
-  void Reset(Address top, Address limit) {
-    start_ = top;
-    set_top(top);
-    set_limit(limit);
-  }
-
-  void MoveStartToTop() { start_ = top_; }
-
-  V8_INLINE Address start() const { return start_; }
-
-  V8_INLINE void set_top(Address top) {
-    SLOW_DCHECK(top == kNullAddress || (top & kHeapObjectTagMask) == 0);
-    top_ = top;
-  }
-
-  V8_INLINE Address top() const {
-    SLOW_DCHECK(top_ == kNullAddress || (top_ & kHeapObjectTagMask) == 0);
-    return top_;
-  }
-
-  Address* top_address() { return &top_; }
-
-  V8_INLINE void set_limit(Address limit) { limit_ = limit; }
-
-  V8_INLINE Address limit() const { return limit_; }
-
-  Address* limit_address() { return &limit_; }
-
-#ifdef DEBUG
-  bool VerifyPagedAllocation() {
-    return (Page::FromAllocationAreaAddress(top_) ==
-            Page::FromAllocationAreaAddress(limit_)) &&
-           (top_ <= limit_);
-  }
-#endif
-
- private:
-  // Current allocation top.
-  Address start_;
-  // Current allocation top.
-  Address top_;
-  // Current allocation limit.
-  Address limit_;
-};
-
-
-// LocalAllocationBuffer represents a linear allocation area that is created
-// from a given {AllocationResult} and can be used to allocate memory without
-// synchronization.
-//
-// The buffer is properly closed upon destruction and reassignment.
-// Example:
-//   {
-//     AllocationResult result = ...;
-//     LocalAllocationBuffer a(heap, result, size);
-//     LocalAllocationBuffer b = a;
-//     CHECK(!a.IsValid());
-//     CHECK(b.IsValid());
-//     // {a} is invalid now and cannot be used for further allocations.
-//   }
-//   // Since {b} went out of scope, the LAB is closed, resulting in creating a
-//   // filler object for the remaining area.
-class LocalAllocationBuffer {
- public:
-  // Indicates that a buffer cannot be used for allocations anymore. Can result
-  // from either reassigning a buffer, or trying to construct it from an
-  // invalid {AllocationResult}.
-  static LocalAllocationBuffer InvalidBuffer() {
-    return LocalAllocationBuffer(
-        nullptr, LinearAllocationArea(kNullAddress, kNullAddress));
-  }
-
-  // Creates a new LAB from a given {AllocationResult}. Results in
-  // InvalidBuffer if the result indicates a retry.
-  static inline LocalAllocationBuffer FromResult(Heap* heap,
-                                                 AllocationResult result,
-                                                 intptr_t size);
-
-  ~LocalAllocationBuffer() { CloseAndMakeIterable(); }
-
-  LocalAllocationBuffer(const LocalAllocationBuffer& other) = delete;
-  V8_EXPORT_PRIVATE LocalAllocationBuffer(LocalAllocationBuffer&& other)
-      V8_NOEXCEPT;
-
-  LocalAllocationBuffer& operator=(const LocalAllocationBuffer& other) = delete;
-  V8_EXPORT_PRIVATE LocalAllocationBuffer& operator=(
-      LocalAllocationBuffer&& other) V8_NOEXCEPT;
-
-  V8_WARN_UNUSED_RESULT inline AllocationResult AllocateRawAligned(
-      int size_in_bytes, AllocationAlignment alignment);
-
-  inline bool IsValid() { return allocation_info_.top() != kNullAddress; }
-
-  // Try to merge LABs, which is only possible when they are adjacent in memory.
-  // Returns true if the merge was successful, false otherwise.
-  inline bool TryMerge(LocalAllocationBuffer* other);
-
-  inline bool TryFreeLast(HeapObject object, int object_size);
-
-  // Close a LAB, effectively invalidating it. Returns the unused area.
-  V8_EXPORT_PRIVATE LinearAllocationArea CloseAndMakeIterable();
-  void MakeIterable();
-
-  Address top() const { return allocation_info_.top(); }
-  Address limit() const { return allocation_info_.limit(); }
-
- private:
-  V8_EXPORT_PRIVATE LocalAllocationBuffer(
-      Heap* heap, LinearAllocationArea allocation_info) V8_NOEXCEPT;
-
-  Heap* heap_;
-  LinearAllocationArea allocation_info_;
-};
-
-class SpaceWithLinearArea : public Space {
- public:
-  SpaceWithLinearArea(Heap* heap, AllocationSpace id, FreeList* free_list)
-      : Space(heap, id, free_list) {
-    allocation_info_.Reset(kNullAddress, kNullAddress);
-  }
-
-  virtual bool SupportsAllocationObserver() = 0;
-
-  // Returns the allocation pointer in this space.
-  Address top() { return allocation_info_.top(); }
-  Address limit() { return allocation_info_.limit(); }
-
-  // The allocation top address.
-  Address* allocation_top_address() { return allocation_info_.top_address(); }
-
-  // The allocation limit address.
-  Address* allocation_limit_address() {
-    return allocation_info_.limit_address();
-  }
-
-  // Methods needed for allocation observers.
-  V8_EXPORT_PRIVATE void AddAllocationObserver(
-      AllocationObserver* observer) override;
-  V8_EXPORT_PRIVATE void RemoveAllocationObserver(
-      AllocationObserver* observer) override;
-  V8_EXPORT_PRIVATE void ResumeAllocationObservers() override;
-  V8_EXPORT_PRIVATE void PauseAllocationObservers() override;
-
-  V8_EXPORT_PRIVATE void AdvanceAllocationObservers();
-  V8_EXPORT_PRIVATE void InvokeAllocationObservers(Address soon_object,
-                                                   size_t size_in_bytes,
-                                                   size_t aligned_size_in_bytes,
-                                                   size_t allocation_size);
-
-  void MarkLabStartInitialized();
-
-  // When allocation observers are active we may use a lower limit to allow the
-  // observers to 'interrupt' earlier than the natural limit. Given a linear
-  // area bounded by [start, end), this function computes the limit to use to
-  // allow proper observation based on existing observers. min_size specifies
-  // the minimum size that the limited area should have.
-  Address ComputeLimit(Address start, Address end, size_t min_size);
-  V8_EXPORT_PRIVATE virtual void UpdateInlineAllocationLimit(
-      size_t min_size) = 0;
-
-  V8_EXPORT_PRIVATE void UpdateAllocationOrigins(AllocationOrigin origin);
-
-  void PrintAllocationsOrigins();
-
- protected:
-  // TODO(ofrobots): make these private after refactoring is complete.
-  LinearAllocationArea allocation_info_;
-
-  size_t allocations_origins_[static_cast<int>(
-      AllocationOrigin::kNumberOfAllocationOrigins)] = {0};
-};
 
 }  // namespace internal
 }  // namespace v8

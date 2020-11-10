@@ -24,6 +24,7 @@
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
 #include "src/heap/allocation-observer.h"
+#include "src/heap/allocator.h"
 #include "src/init/heap-symbols.h"
 #include "src/objects/allocation-site.h"
 #include "src/objects/fixed-array.h"
@@ -116,15 +117,6 @@ enum ExternalBackingStoreType { kArrayBuffer, kExternalString, kNumTypes };
 
 enum class RetainingPathOption { kDefault, kTrackEphemeronPath };
 
-enum class AllocationOrigin {
-  kGeneratedCode = 0,
-  kRuntime = 1,
-  kGC = 2,
-  kFirstAllocationOrigin = kGeneratedCode,
-  kLastAllocationOrigin = kGC,
-  kNumberOfAllocationOrigins = kLastAllocationOrigin + 1
-};
-
 enum class GarbageCollectionReason {
   kUnknown = 0,
   kAllocationFailure = 1,
@@ -190,44 +182,6 @@ class StrongRootsEntry {
 
   friend class Heap;
 };
-
-class AllocationResult {
- public:
-  static inline AllocationResult Retry(AllocationSpace space = NEW_SPACE) {
-    return AllocationResult(space);
-  }
-
-  // Implicit constructor from Object.
-  AllocationResult(Object object)  // NOLINT
-      : object_(object) {
-    // AllocationResults can't return Smis, which are used to represent
-    // failure and the space to retry in.
-    CHECK(!object.IsSmi());
-  }
-
-  AllocationResult() : object_(Smi::FromInt(NEW_SPACE)) {}
-
-  inline bool IsRetry() { return object_.IsSmi(); }
-  inline HeapObject ToObjectChecked();
-  inline HeapObject ToObject();
-  inline Address ToAddress();
-  inline AllocationSpace RetrySpace();
-
-  template <typename T>
-  bool To(T* obj) {
-    if (IsRetry()) return false;
-    *obj = T::cast(object_);
-    return true;
-  }
-
- private:
-  explicit AllocationResult(AllocationSpace space)
-      : object_(Smi::FromInt(static_cast<int>(space))) {}
-
-  Object object_;
-};
-
-STATIC_ASSERT(sizeof(AllocationResult) == kSystemPointerSize);
 
 #ifdef DEBUG
 struct CommentStatistic {
@@ -700,8 +654,6 @@ class Heap {
 
   V8_EXPORT_PRIVATE double MonotonicallyIncreasingTimeInMs();
 
-  void VerifyNewSpaceTop();
-
   void RecordStats(HeapStats* stats, bool take_snapshot = false);
 
   bool MeasureMemory(std::unique_ptr<v8::MeasureMemoryDelegate> delegate,
@@ -830,6 +782,7 @@ class Heap {
   inline Address NewSpaceTop();
 
   NewSpace* new_space() { return new_space_; }
+  Allocator* new_space_allocator() { return &allocator_[NEW_SPACE]; }
   OldSpace* old_space() { return old_space_; }
   CodeSpace* code_space() { return code_space_; }
   MapSpace* map_space() { return map_space_; }
@@ -1060,7 +1013,7 @@ class Heap {
   void StartIncrementalMarkingIfAllocationLimitIsReached(
       int gc_flags,
       GCCallbackFlags gc_callback_flags = GCCallbackFlags::kNoGCCallbackFlags);
-  void StartIncrementalMarkingIfAllocationLimitIsReachedBackground();
+  bool CheckIncrementalMarkingLimitOnSlowAllocation(ThreadKind thread_kind);
 
   void FinalizeIncrementalMarkingIfComplete(GarbageCollectionReason gc_reason);
   // Synchronously finalizes incremental marking.
@@ -1447,6 +1400,9 @@ class Heap {
   void RemoveAllocationObserversFromAllSpaces(
       AllocationObserver* observer, AllocationObserver* new_space_observer);
 
+  void AddAllocationObserver(AllocationSpace, AllocationObserver*);
+  void RemoveAllocationObserver(AllocationSpace, AllocationObserver*);
+
   // ===========================================================================
   // Heap object allocation tracking. ==========================================
   // ===========================================================================
@@ -1668,8 +1624,8 @@ class Heap {
   // over all objects.  May cause a GC.
   void MakeHeapIterable();
 
-  // Ensure that LABs of local heaps are iterable.
-  void MakeLocalHeapLabsIterable();
+  void FreeLabs();
+  bool AreLabsEmpty();
 
   // Performs garbage collection in a safepoint.
   // Returns the number of freed global handles.
@@ -1898,12 +1854,10 @@ class Heap {
 
   bool always_allocate() { return always_allocate_scope_count_ != 0; }
 
-  V8_EXPORT_PRIVATE bool CanExpandOldGeneration(size_t size);
-  V8_EXPORT_PRIVATE bool CanExpandOldGenerationBackground(size_t size);
+  V8_EXPORT_PRIVATE bool CanExpandOldGeneration(ThreadKind, size_t size);
   V8_EXPORT_PRIVATE bool CanPromoteYoungAndExpandOldGeneration(size_t size);
 
-  bool ShouldExpandOldGenerationOnSlowAllocation(
-      LocalHeap* local_heap = nullptr);
+  bool ShouldExpandOldGenerationOnSlowAllocation(ThreadKind);
   bool IsRetryOfFailedAllocation(LocalHeap* local_heap);
 
   HeapGrowingMode CurrentHeapGrowingMode();
@@ -1952,7 +1906,8 @@ class Heap {
   V8_WARN_UNUSED_RESULT inline AllocationResult AllocateRaw(
       int size_in_bytes, AllocationType allocation,
       AllocationOrigin origin = AllocationOrigin::kRuntime,
-      AllocationAlignment alignment = kWordAligned);
+      AllocationAlignment alignment = kWordAligned,
+      HeapLimitHandling heap_limit_handling = HeapLimitHandling::kRespect);
 
   // This method will try to allocate objects quickly (AllocationType::kYoung)
   // otherwise it falls back to a slower path indicated by the mode.
@@ -1990,6 +1945,12 @@ class Heap {
   V8_WARN_UNUSED_RESULT AllocationResult
   AllocatePartialMap(InstanceType instance_type, int instance_size);
 
+  inline bool IsPendingAllocation(HeapObject object);
+  void PublishPendingAllocations();
+
+  void StartBlackAllocation();
+  void StopBlackAllocation();
+
   void FinalizePartialMap(Map map);
 
   void set_force_oom(bool value) { force_oom_ = value; }
@@ -2017,13 +1978,29 @@ class Heap {
   std::vector<WeakArrayList> FindAllRetainedMaps();
   MemoryMeasurement* memory_measurement() { return memory_measurement_.get(); }
 
-  // The amount of memory that has been freed concurrently.
-  std::atomic<uintptr_t> external_memory_concurrently_freed_{0};
-  ExternalMemoryAccounting external_memory_;
+  // Returns AllocationSpace corresponding to the mutable object type and size:
+  // - kYoung, false => NEW_SPACE
+  // - kYoung, true  => NEW_LO_SPACE
+  // - kOld, false   => OLD_SPACE
+  // - kOld, true    => LO_SPACE
+  // - kCode, false  => CODE_SPACE
+  // - kCode, true   => CODE_LO_SPACE
+  // - kMap, false   => MAP_SPACE
+  // The function does not support kReadOnly.
+  uint8_t AllocatorIndex(AllocationType type, bool is_large_object) {
+    return (static_cast<uint8_t>(is_large_object) << 2) +
+           static_cast<uint8_t>(type);
+  }
 
   // This can be calculated directly from a pointer to the heap; however, it is
   // more expedient to get at the isolate directly from within Heap methods.
   Isolate* isolate_ = nullptr;
+
+  Allocator allocator_[LAST_MUTABLE_SPACE + 1];
+
+  // The amount of memory that has been freed concurrently.
+  std::atomic<uintptr_t> external_memory_concurrently_freed_{0};
+  ExternalMemoryAccounting external_memory_;
 
   // These limits are initialized in Heap::ConfigureHeap based on the resource
   // constraints and flags.
@@ -2076,9 +2053,9 @@ class Heap {
   OldSpace* old_space_ = nullptr;
   CodeSpace* code_space_ = nullptr;
   MapSpace* map_space_ = nullptr;
+  NewLargeObjectSpace* new_lo_space_ = nullptr;
   OldLargeObjectSpace* lo_space_ = nullptr;
   CodeLargeObjectSpace* code_lo_space_ = nullptr;
-  NewLargeObjectSpace* new_lo_space_ = nullptr;
   ReadOnlySpace* read_only_space_ = nullptr;
   // Map from the space id to the space.
   Space* space_[LAST_SPACE + 1];
@@ -2226,7 +2203,8 @@ class Heap {
   size_t old_generation_allocation_counter_at_last_gc_ = 0;
 
   // The size of objects in old generation after the last MarkCompact GC.
-  size_t old_generation_size_at_last_gc_{0};
+  size_t old_generation_size_at_last_gc_ = 0;
+  size_t old_generation_capacity_at_last_gc_ = 0;
 
   // The size of global memory after the last MarkCompact GC.
   size_t global_memory_at_last_gc_ = 0;
@@ -2311,6 +2289,7 @@ class Heap {
   std::unique_ptr<third_party_heap::Heap> tp_heap_;
 
   // Classes in "heap" can be friends.
+  friend class Allocator;
   friend class AlwaysAllocateScope;
   friend class ArrayBufferCollector;
   friend class ArrayBufferSweeper;
@@ -2500,13 +2479,51 @@ class VerifySmisVisitor : public RootVisitor {
 // is done.
 class V8_EXPORT_PRIVATE PagedSpaceIterator {
  public:
-  explicit PagedSpaceIterator(Heap* heap)
-      : heap_(heap), counter_(FIRST_GROWABLE_PAGED_SPACE) {}
+  explicit PagedSpaceIterator(Heap* heap) : heap_(heap), index_(0) {}
   PagedSpace* Next();
+
+  static const int kNumberOfPagedSpaces = 3;
+
+  static bool IsValidPagedSpace(AllocationSpace space) {
+    return space == OLD_SPACE || space == CODE_SPACE || space == MAP_SPACE;
+  }
+
+  static AllocationSpace PagedSpaceByIndex(int index) {
+    switch (index) {
+      case 0:
+        return OLD_SPACE;
+      case 1:
+        return CODE_SPACE;
+      case 2:
+        return MAP_SPACE;
+      default:
+        UNREACHABLE();
+    }
+  }
+
+  static int IndexOf(AllocationSpace space) {
+    switch (space) {
+      case OLD_SPACE:
+        return 0;
+      case CODE_SPACE:
+        return 1;
+      case MAP_SPACE:
+        return 2;
+      default:
+        UNREACHABLE();
+    }
+  }
+
+  template <typename Callback>
+  static void ForAllPagedSpaces(Callback callback) {
+    callback(OLD_SPACE);
+    callback(CODE_SPACE);
+    callback(MAP_SPACE);
+  }
 
  private:
   Heap* heap_;
-  int counter_;
+  int index_;
 };
 
 class V8_EXPORT_PRIVATE SpaceIterator : public Malloced {

@@ -448,12 +448,9 @@ void ConcurrentMarking::Run(JobDelegate* delegate, unsigned mark_compact_epoch,
         }
         objects_processed++;
         // The order of the two loads is important.
-        Address new_space_top = heap_->new_space()->original_top_acquire();
-        Address new_space_limit = heap_->new_space()->original_limit_relaxed();
         Address new_large_object = heap_->new_lo_space()->pending_object();
         Address addr = object.address();
-        if ((new_space_top <= addr && addr < new_space_limit) ||
-            addr == new_large_object) {
+        if (heap_->IsPendingAllocation(object) || addr == new_large_object) {
           local_marking_worklists.PushOnHold(object);
         } else {
           Map map = object.synchronized_map(isolate);
