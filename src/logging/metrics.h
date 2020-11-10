@@ -9,8 +9,8 @@
 #include <queue>
 
 #include "include/v8-metrics.h"
+#include "src/base/platform/elapsed-timer.h"
 #include "src/base/platform/mutex.h"
-#include "src/base/platform/time.h"
 #include "src/init/v8.h"
 
 namespace v8 {
@@ -47,6 +47,8 @@ class Recorder : public std::enable_shared_from_this<Recorder> {
     if (embedder_recorder_) embedder_recorder_->AddThreadSafeEvent(event);
   }
 
+  bool HasRecorder() { return embedder_recorder_ != nullptr; }
+
  private:
   class DelayedEventBase {
    public:
@@ -81,25 +83,55 @@ class Recorder : public std::enable_shared_from_this<Recorder> {
   std::queue<std::unique_ptr<DelayedEventBase>> delayed_events_;
 };
 
-template <class T, int64_t (base::TimeDelta::*precision)() const =
-                       &base::TimeDelta::InMicroseconds>
+template <class T>
 class TimedScope {
  public:
-  explicit TimedScope(T* event) : event_(event) { Start(); }
-  ~TimedScope() { Stop(); }
+  TimedScope(T& event, const std::shared_ptr<Recorder> recorder,
+             v8::metrics::Recorder::ContextId& context_id, bool delay_event)
+      : event_(event),
+        recorder_(recorder),
+        context_id_(context_id),
+        delay_event_(delay_event) {
+    if (recorder_->HasRecorder()) {
+      timer_.Start();
+    }
+  }
 
-  void Start() { start_time_ = base::TimeTicks::Now(); }
+  TimedScope(T& event, const std::shared_ptr<Recorder> recorder)
+      : TimedScope(event, recorder, v8::metrics::Recorder::ContextId::Empty(),
+                   false) {
+    if (recorder_->HasRecorder()) {
+      timer_.Start();
+    }
+  }
 
-  void Stop() {
-    if (start_time_.IsMin()) return;
-    base::TimeDelta duration = base::TimeTicks::Now() - start_time_;
-    event_->wall_clock_duration_in_us = (duration.*precision)();
-    start_time_ = base::TimeTicks::Min();
+  TimedScope(T& event, const std::shared_ptr<Recorder> recorder,
+             v8::metrics::Recorder::ContextId& context_id)
+      : TimedScope(event, recorder, context_id, false) {
+    if (recorder_->HasRecorder()) {
+      timer_.Start();
+    }
+  }
+
+  ~TimedScope() {
+    if (!recorder_->HasRecorder()) {
+      return;
+    }
+    event_.wall_clock_duration_in_us = timer_.Elapsed().InMicroseconds();
+    if (!context_id_.IsEmpty()) {
+      delay_event_ ? recorder_->DelayMainThreadEvent(event_, context_id_)
+                   : recorder_->AddMainThreadEvent(event_, context_id_);
+    } else {
+      recorder_->AddThreadSafeEvent(event_);
+    }
   }
 
  private:
-  T* event_;
-  base::TimeTicks start_time_;
+  T& event_;
+  const std::shared_ptr<Recorder> recorder_;
+  v8::metrics::Recorder::ContextId& context_id_;
+  bool delay_event_;
+  base::ElapsedTimer timer_;
 };
 
 }  // namespace metrics

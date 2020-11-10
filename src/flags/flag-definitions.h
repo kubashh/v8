@@ -1698,6 +1698,12 @@ DEFINE_BOOL(trace_wasm_gdb_remote, false, "trace Webassembly GDB-remote server")
 #undef FLAG
 #define FLAG FLAG_FULL
 
+#ifdef V8_ENABLE_SYSTEM_INSTRUMENTATION
+#define V8_SYSTEM_INSTRUMENTATION_BOOL true
+#else
+#define V8_SYSTEM_INSTRUMENTATION_BOOL false
+#endif
+
 // log.cc
 DEFINE_STRING(logfile, "v8.log",
               "Specify the name of the log file, use '-' for console, '+' for "
@@ -1706,6 +1712,9 @@ DEFINE_BOOL(logfile_per_isolate, true, "Separate log files for each isolate.")
 
 DEFINE_BOOL(log, false,
             "Minimal logging (no API, code, GC, suspect, or handles samples).")
+
+#ifdef V8_ENABLE_SYSTEM_INTSRUMENTATION
+#endif
 DEFINE_BOOL(log_all, false, "Log all events to the log file.")
 DEFINE_BOOL(log_api, false, "Log API events to the log file.")
 DEFINE_BOOL(log_code, false,
