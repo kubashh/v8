@@ -98,11 +98,13 @@ Descriptor Descriptor::AccessorConstant(Handle<Name> key,
 }
 
 // Outputs PropertyDetails as a dictionary details.
-void PropertyDetails::PrintAsSlowTo(std::ostream& os) {
+void PropertyDetails::PrintAsSlowTo(std::ostream& os, bool print_dict_index) {
   os << "(";
   if (constness() == PropertyConstness::kConst) os << "const ";
   os << (kind() == kData ? "data" : "accessor");
-  os << ", dict_index: " << dictionary_index();
+  if (print_dict_index) {
+    os << ", dict_index: " << dictionary_index();
+  }
   os << ", attrs: " << attributes() << ")";
 }
 
@@ -132,10 +134,10 @@ void PropertyDetails::PrintAsFastTo(std::ostream& os, PrintMode mode) {
 }
 
 #ifdef OBJECT_PRINT
-void PropertyDetails::Print(bool dictionary_mode) {
+void PropertyDetails::Print(bool dictionary_mode, bool print_dict_index) {
   StdoutStream os;
   if (dictionary_mode) {
-    PrintAsSlowTo(os);
+    PrintAsSlowTo(os, print_dict_index);
   } else {
     PrintAsFastTo(os, PrintMode::kPrintFull);
   }

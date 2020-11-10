@@ -65,6 +65,46 @@ void PrintHeapObjectHeaderWithoutMap(HeapObject object, std::ostream& os,
   }
 }
 
+template <typename T>
+void PrintDictionaryContents(std::ostream& os, T dict) {
+  DisallowHeapAllocation no_gc;
+  ReadOnlyRoots roots = dict.GetReadOnlyRoots();
+
+  for (InternalIndex i : dict.IterateEntries()) {
+    Object k;
+    if (!dict.ToKey(roots, i, &k)) continue;
+    os << "\n   ";
+    if (k.IsString()) {
+      String::cast(k).PrintUC16(os);
+    } else {
+      os << Brief(k);
+    }
+    os << ": " << Brief(dict.ValueAt(i)) << " ";
+    dict.DetailsAt(i).PrintAsSlowTo(os, !T::kIsOrderedDictionaryType);
+  }
+}
+
+template <typename T>
+void PrintOrderedHashTableHeaderAndBuckets(std::ostream& os, T table,
+                                           const char* type) {
+  DisallowHeapAllocation no_gc;
+
+  table.PrintHeader(os, type);
+  os << "\n - FixedArray length: " << table.length();
+  os << "\n - elements: " << table.NumberOfElements();
+  os << "\n - deleted: " << table.NumberOfDeletedElements();
+  os << "\n - buckets: " << table.NumberOfBuckets();
+  os << "\n - capacity: " << table.Capacity();
+
+  os << "\n - buckets: {";
+  for (int bucket = 0; bucket < table.NumberOfBuckets(); bucket++) {
+    Object entry = table.get(T::HashTableStartIndex() + bucket);
+    DCHECK(entry.IsSmi());
+    os << "\n  " << std::setw(12) << bucket << ": " << Brief(entry);
+  }
+  os << "\n }";
+}
+
 }  // namespace
 
 void HeapObject::PrintHeader(std::ostream& os, const char* id) {  // NOLINT
@@ -104,8 +144,14 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
       ObjectHashTable::cast(*this).ObjectHashTablePrint(os);
       break;
     case ORDERED_HASH_MAP_TYPE:
+      OrderedHashMap::cast(*this).OrderedHashMapPrint(os);
+      break;
     case ORDERED_HASH_SET_TYPE:
+      OrderedHashSet::cast(*this).OrderedHashSetPrint(os);
+      break;
     case ORDERED_NAME_DICTIONARY_TYPE:
+      OrderedNameDictionary::cast(*this).OrderedNameDictionaryPrint(os);
+      break;
     case NAME_DICTIONARY_TYPE:
     case GLOBAL_DICTIONARY_TYPE:
     case SIMPLE_NUMBER_DICTIONARY_TYPE:
@@ -274,11 +320,12 @@ bool JSObject::PrintProperties(std::ostream& os) {  // NOLINT
     }
     return map().NumberOfOwnDescriptors() > 0;
   } else if (IsJSGlobalObject()) {
-    JSGlobalObject::cast(*this).global_dictionary().Print(os);
+    PrintDictionaryContents(os,
+                            JSGlobalObject::cast(*this).global_dictionary());
   } else if (V8_DICT_MODE_PROTOTYPES_BOOL) {
-    property_dictionary_ordered().Print(os);
+    PrintDictionaryContents(os, property_dictionary_ordered());
   } else {
-    property_dictionary().Print(os);
+    PrintDictionaryContents(os, property_dictionary());
   }
   return true;
 }
@@ -398,7 +445,7 @@ void PrintDictionaryElements(std::ostream& os, FixedArrayBase elements) {
   } else {
     os << "\n   - max_number_key: " << dict.max_number_key();
   }
-  dict.Print(os);
+  PrintDictionaryContents(os, dict);
 }
 
 void PrintSloppyArgumentElements(std::ostream& os, ElementsKind kind,
@@ -1300,6 +1347,47 @@ void SmallOrderedNameDictionary::SmallOrderedNameDictionaryPrint(
   // TODO(tebbi): Print all fields.
 }
 
+void OrderedHashSet::OrderedHashSetPrint(std::ostream& os) {
+  PrintOrderedHashTableHeaderAndBuckets(os, *this, "OrderedHashSet");
+  os << "\n - elements: {";
+  ReadOnlyRoots roots(this->GetReadOnlyRoots());
+  for (InternalIndex i : IterateEntries()) {
+    Object k;
+    if (ToKey(roots, i, &k)) {
+      os << "\n  " << std::setw(12) << i.as_int() << ": " << Brief(KeyAt(i));
+    }
+  }
+  os << "\n }\n";
+}
+
+void OrderedHashMap::OrderedHashMapPrint(std::ostream& os) {
+  PrintOrderedHashTableHeaderAndBuckets(os, *this, "OrderedHashMap");
+  os << "\n - elements: {";
+  ReadOnlyRoots roots(this->GetReadOnlyRoots());
+  for (InternalIndex i : IterateEntries()) {
+    Object k;
+    if (ToKey(roots, i, &k)) {
+      os << "\n  " << std::setw(12) << i.as_int() << ": " << Brief(KeyAt(i))
+         << " -> " << Brief(ValueAt(i));
+    }
+  }
+  os << "\n }\n";
+}
+
+void OrderedNameDictionary::OrderedNameDictionaryPrint(std::ostream& os) {
+  PrintOrderedHashTableHeaderAndBuckets(os, *this, "OrderedNameDictionary");
+  os << "\n - elements: {";
+  ReadOnlyRoots roots(this->GetReadOnlyRoots());
+  for (InternalIndex i : IterateEntries()) {
+    Object k;
+    if (ToKey(roots, i, &k)) {
+      os << "\n  " << std::setw(12) << i.as_int() << ": " << Brief(KeyAt(i))
+         << " -> " << Brief(ValueAt(i));
+    }
+  }
+  os << "\n }\n";
+}
+
 void SharedFunctionInfo::SharedFunctionInfoPrint(std::ostream& os) {  // NOLINT
   PrintHeader(os, "SharedFunctionInfo");
   os << "\n - name: ";
@@ -1377,7 +1465,7 @@ void PropertyCell::PropertyCellPrint(std::ostream& os) {  // NOLINT
   name().NamePrint(os);
   os << "\n - value: " << Brief(value());
   os << "\n - details: ";
-  property_details().PrintAsSlowTo(os);
+  property_details().PrintAsSlowTo(os, true);
   PropertyCellType cell_type = property_details().cell_type();
   os << "\n - cell_type: ";
   if (value().IsTheHole()) {
