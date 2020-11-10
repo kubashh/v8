@@ -16,6 +16,23 @@
       "message": "PTAL. This should only affect the no-sse3/4 steps we\u0027re testing. They are optional in CQ. I\u0027m running that bot now to verify that they are going to fail.",
       "revId": "41579d321106993e44ca44f1605be5805f22c9e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b14ffe08_aa418165",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-10T10:42:16Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "41579d321106993e44ca44f1605be5805f22c9e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
