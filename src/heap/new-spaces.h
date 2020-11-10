@@ -45,6 +45,7 @@ class SemiSpace : public Space {
         committed_(false),
         id_(semispace),
         current_page_(nullptr),
+        current_top_(kNullAddress),
         pages_used_(0) {}
 
   inline bool Contains(HeapObject o) const;
@@ -78,6 +79,7 @@ class SemiSpace : public Space {
   }
 
   Page* current_page() { return current_page_; }
+  Address current_top() { return current_top_; }
   int pages_used() { return pages_used_; }
 
   // Returns the start address of the current page of the space.
@@ -87,6 +89,12 @@ class SemiSpace : public Space {
   Address page_high() { return current_page_->area_end(); }
 
   bool AdvancePage() {
+    if (current_top_ != page_high()) {
+      heap()->CreateFillerObjectAt(current_top_,
+                                   static_cast<int>(page_high() - current_top_),
+                                   ClearRecordedSlots::kNo);
+    }
+
     Page* next_page = current_page_->next_page();
     // We cannot expand if we reached the maximum number of pages already. Note
     // that we need to account for the next page already for this check as we
@@ -96,9 +104,28 @@ class SemiSpace : public Space {
       return false;
     }
     current_page_ = next_page;
+    current_top_ = current_page_->area_start();
     pages_used_++;
     return true;
   }
+
+  bool RefillLab(ThreadKind, size_t min_size, size_t max_size,
+                 AllocationAlignment alignment, AllocationOrigin origin,
+                 HeapLimitHandling heap_limit_handling, Address* top,
+                 Address* limit, AllocationFailure* failure) override;
+
+  void FreeLab(ThreadKind, Address* top, Address* limit) override;
+
+  bool RefillLabImpl(size_t min_size, size_t max_size,
+                     AllocationAlignment alignment, AllocationOrigin origin,
+                     Address* top, Address* limit);
+
+  bool RefillLabFromCurrentPage(size_t min_size, size_t max_size,
+                                AllocationAlignment alignment,
+                                AllocationOrigin origin, Address* top,
+                                Address* limit);
+
+  void FreeLabImpl(Address* top, Address* limit);
 
   // Resets the space to using the first page.
   void Reset();
@@ -110,7 +137,7 @@ class SemiSpace : public Space {
 
   // Age mark accessors.
   Address age_mark() { return age_mark_; }
-  void set_age_mark(Address mark);
+  void SetAgeMark();
 
   // Returns the current capacity of the semispace.
   size_t current_capacity() { return current_capacity_; }
@@ -195,6 +222,7 @@ class SemiSpace : public Space {
   SemiSpaceId id_;
 
   Page* current_page_;
+  Address current_top_;
 
   int pages_used_;
 
@@ -229,8 +257,7 @@ class SemiSpaceObjectIterator : public ObjectIterator {
 // The new space consists of a contiguous pair of semispaces.  It simply
 // forwards most functions to the appropriate semispace.
 
-class V8_EXPORT_PRIVATE NewSpace
-    : NON_EXPORTED_BASE(public SpaceWithLinearArea) {
+class V8_EXPORT_PRIVATE NewSpace : NON_EXPORTED_BASE(public Space) {
  public:
   using iterator = PageIterator;
   using const_iterator = ConstPageIterator;
@@ -260,10 +287,10 @@ class V8_EXPORT_PRIVATE NewSpace
 
   // Return the allocated bytes in the active semispace.
   size_t Size() final {
-    DCHECK_GE(top(), to_space_.page_low());
     return to_space_.pages_used() *
                MemoryChunkLayout::AllocatableMemoryInDataPage() +
-           static_cast<size_t>(top() - to_space_.page_low());
+           to_space_.current_top() - to_space_.page_low() -
+           (main_thread_allocator_ ? main_thread_allocator_->LabSize() : 0);
   }
 
   size_t SizeOfObjects() final { return Size(); }
@@ -321,9 +348,8 @@ class V8_EXPORT_PRIVATE NewSpace
   size_t AllocatedSinceLastGC() {
     const Address age_mark = to_space_.age_mark();
     DCHECK_NE(age_mark, kNullAddress);
-    DCHECK_NE(top(), kNullAddress);
     Page* const age_mark_page = Page::FromAllocationAreaAddress(age_mark);
-    Page* const last_page = Page::FromAllocationAreaAddress(top());
+    Page* const last_page = to_space_.current_page();
     Page* current_page = age_mark_page;
     size_t allocated = 0;
     if (current_page != last_page) {
@@ -332,16 +358,18 @@ class V8_EXPORT_PRIVATE NewSpace
       allocated += age_mark_page->area_end() - age_mark;
       current_page = current_page->next_page();
     } else {
-      DCHECK_GE(top(), age_mark);
-      return top() - age_mark;
+      return to_space_.current_top() - age_mark -
+             (main_thread_allocator_ ? main_thread_allocator_->LabSize() : 0);
     }
     while (current_page != last_page) {
       DCHECK_NE(current_page, age_mark_page);
       allocated += MemoryChunkLayout::AllocatableMemoryInDataPage();
       current_page = current_page->next_page();
     }
-    DCHECK_GE(top(), current_page->area_start());
-    allocated += top() - current_page->area_start();
+    DCHECK_GE(to_space_.current_top(), current_page->area_start());
+    allocated += to_space_.current_top() - current_page->area_start();
+    allocated -=
+        (main_thread_allocator_ ? main_thread_allocator_->LabSize() : 0);
     DCHECK_LE(allocated, Size());
     return allocated;
   }
@@ -368,15 +396,6 @@ class V8_EXPORT_PRIVATE NewSpace
     return to_space_.minimum_capacity();
   }
 
-  void VerifyTop();
-
-  Address original_top_acquire() {
-    return original_top_.load(std::memory_order_acquire);
-  }
-  Address original_limit_relaxed() {
-    return original_limit_.load(std::memory_order_relaxed);
-  }
-
   // Return the address of the first allocatable address in the active
   // semispace. This may be the address where the first object resides.
   Address first_allocatable_address() { return to_space_.space_start(); }
@@ -384,36 +403,20 @@ class V8_EXPORT_PRIVATE NewSpace
   // Get the age mark of the inactive semispace.
   Address age_mark() { return from_space_.age_mark(); }
   // Set the age mark in the active semispace.
-  void set_age_mark(Address mark) { to_space_.set_age_mark(mark); }
-
-  V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult
-  AllocateRaw(int size_in_bytes, AllocationAlignment alignment,
-              AllocationOrigin origin = AllocationOrigin::kRuntime);
-
-  V8_WARN_UNUSED_RESULT inline AllocationResult AllocateRawSynchronized(
-      int size_in_bytes, AllocationAlignment alignment,
-      AllocationOrigin origin = AllocationOrigin::kRuntime);
+  void SetAgeMark() { to_space_.SetAgeMark(); }
 
   // Reset the allocation pointer to the beginning of the active semispace.
-  void ResetLinearAllocationArea();
-
-  // When inline allocation stepping is active, either because of incremental
-  // marking, idle scavenge, or allocation statistics gathering, we 'interrupt'
-  // inline allocation every once in a while. This is done by setting
-  // allocation_info_.limit to be lower than the actual limit and and increasing
-  // it in steps to guarantee that the observers are notified periodically.
-  void UpdateInlineAllocationLimit(size_t size_in_bytes) override;
+  void Reset();
 
   inline bool ToSpaceContainsSlow(Address a) const;
   inline bool ToSpaceContains(Object o) const;
   inline bool FromSpaceContains(Object o) const;
 
-  // Try to switch the active semispace to a new, empty, page.
-  // Returns false if this isn't possible or reasonable (i.e., there
-  // are no pages, or the current page is already empty), or true
-  // if successful.
-  bool AddFreshPage();
-  bool AddFreshPageSynchronized();
+  bool RefillLab(ThreadKind, size_t min_size, size_t max_size,
+                 AllocationAlignment alignment, AllocationOrigin origin,
+                 HeapLimitHandling heap_limit_handling, Address* top,
+                 Address* limit, AllocationFailure* failure) override;
+  void FreeLab(ThreadKind, Address* top, Address* limit) override;
 
 #ifdef VERIFY_HEAP
   // Verify the active semispace.
@@ -454,61 +457,17 @@ class V8_EXPORT_PRIVATE NewSpace
   SemiSpace& from_space() { return from_space_; }
   SemiSpace& to_space() { return to_space_; }
 
-  void MoveOriginalTopForward() {
-    DCHECK_GE(top(), original_top_);
-    DCHECK_LE(top(), original_limit_);
-    original_top_.store(top(), std::memory_order_release);
-  }
-
-  void MaybeFreeUnusedLab(LinearAllocationArea info);
 
  private:
-  // Update linear allocation area to match the current to-space page.
-  void UpdateLinearAllocationArea();
-
   base::Mutex mutex_;
-
-  // The top and the limit at the time of setting the linear allocation area.
-  // These values can be accessed by background tasks.
-  std::atomic<Address> original_top_;
-  std::atomic<Address> original_limit_;
 
   // The semispaces.
   SemiSpace to_space_;
   SemiSpace from_space_;
   VirtualMemory reservation_;
 
-  // Internal allocation methods.
-  V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult
-  AllocateFastAligned(int size_in_bytes, int* aligned_size_in_bytes,
-                      AllocationAlignment alignment, AllocationOrigin origin);
-
-  V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult
-  AllocateFastUnaligned(int size_in_bytes, AllocationOrigin origin);
-
-  V8_WARN_UNUSED_RESULT AllocationResult
-  AllocateRawSlow(int size_in_bytes, AllocationAlignment alignment,
-                  AllocationOrigin origin);
-
-  V8_WARN_UNUSED_RESULT AllocationResult
-  AllocateRawAligned(int size_in_bytes, AllocationAlignment alignment,
-                     AllocationOrigin origin = AllocationOrigin::kRuntime);
-
-  V8_WARN_UNUSED_RESULT AllocationResult AllocateRawUnaligned(
-      int size_in_bytes, AllocationOrigin origin = AllocationOrigin::kRuntime);
-
-  bool EnsureAllocation(int size_in_bytes, AllocationAlignment alignment);
-  bool SupportsAllocationObserver() override { return true; }
-
   friend class SemiSpaceObjectIterator;
 };
-
-// For contiguous spaces, top should be in the space (or at the end) and limit
-// should be the end of the space.
-#define DCHECK_SEMISPACE_ALLOCATION_INFO(info, space) \
-  SLOW_DCHECK((space).page_low() <= (info).top() &&   \
-              (info).top() <= (space).page_high() &&  \
-              (info).limit() <= (space).page_high())
 
 }  // namespace internal
 }  // namespace v8

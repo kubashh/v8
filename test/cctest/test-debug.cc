@@ -4270,7 +4270,7 @@ UNINITIALIZED_TEST(DebugSetOutOfMemoryListener) {
     LocalContext context(isolate);
     isolate->AddNearHeapLimitCallback(NearHeapLimitCallback, nullptr);
     CHECK(!near_heap_limit_callback_called);
-    // The following allocation fails unless the out-of-memory callback
+    // The following allocations fail unless the out-of-memory callback
     // increases the heap limit.
     int length = 10 * i::MB / i::kTaggedSize;
     i_isolate->factory()->NewFixedArray(length, i::AllocationType::kOld);

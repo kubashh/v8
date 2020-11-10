@@ -110,39 +110,42 @@ void LargeObjectSpace::TearDown() {
   }
 }
 
-void LargeObjectSpace::AdvanceAndInvokeAllocationObservers(Address soon_object,
-                                                           size_t object_size) {
-  if (!allocation_counter_.IsActive()) return;
-
-  if (object_size >= allocation_counter_.NextBytes()) {
-    allocation_counter_.InvokeAllocationObservers(soon_object, object_size,
-                                                  object_size);
+bool OldLargeObjectSpace::RefillLab(ThreadKind thread_kind, size_t min_size,
+                                    size_t max_size,
+                                    AllocationAlignment alignment,
+                                    AllocationOrigin origin,
+                                    HeapLimitHandling heap_limit_handling,
+                                    Address* top, Address* limit,
+                                    AllocationFailure* failure) {
+  DCHECK_EQ(*top, *limit);
+  *top = kNullAddress;
+  *limit = kNullAddress;
+  size_t object_size = min_size;
+  DCHECK_EQ(min_size, max_size);
+  if (heap_limit_handling != HeapLimitHandling::kIgnore) {
+    if (heap_limit_handling != HeapLimitHandling::kIgnoreSoftLimit) {
+      if (!heap()->ShouldExpandOldGenerationOnSlowAllocation(thread_kind)) {
+        *failure = AllocationFailure::kRetryAfterFullGC;
+        return false;
+      }
+      if (!heap()->CheckIncrementalMarkingLimitOnSlowAllocation(thread_kind)) {
+        *failure = AllocationFailure::kRetryAfterIncrementalMarkingStart;
+        return false;
+      }
+    }
+    if (!heap()->CanExpandOldGeneration(thread_kind, object_size)) {
+      *failure = AllocationFailure::kRetryAfterFullGC;
+      return false;
+    }
   }
-
-  // Large objects can be accounted immediately since no LAB is involved.
-  allocation_counter_.AdvanceAllocationObservers(object_size);
-}
-
-AllocationResult OldLargeObjectSpace::AllocateRaw(int object_size) {
-  return AllocateRaw(object_size, NOT_EXECUTABLE);
-}
-
-AllocationResult OldLargeObjectSpace::AllocateRaw(int object_size,
-                                                  Executability executable) {
-  // Check if we want to force a GC before growing the old space further.
-  // If so, fail the allocation.
-  if (!heap()->CanExpandOldGeneration(object_size) ||
-      !heap()->ShouldExpandOldGenerationOnSlowAllocation()) {
-    return AllocationResult::Retry(identity());
+  LargePage* page =
+      AllocateLargePage(static_cast<int>(object_size), GetExecutability());
+  if (page == nullptr) {
+    *failure = AllocationFailure::kRetryAfterFullGC;
+    return false;
   }
-
-  LargePage* page = AllocateLargePage(object_size, executable);
-  if (page == nullptr) return AllocationResult::Retry(identity());
   page->SetOldGenerationPageFlags(heap()->incremental_marking()->IsMarking());
   HeapObject object = page->GetObject();
-  heap()->StartIncrementalMarkingIfAllocationLimitIsReached(
-      heap()->GCFlagsForIncrementalMarking(),
-      kGCCallbackScheduleIdleGarbageCollection);
   if (heap()->incremental_marking()->black_allocation()) {
     heap()->incremental_marking()->marking_state()->WhiteToBlack(object);
   }
@@ -150,34 +153,15 @@ AllocationResult OldLargeObjectSpace::AllocateRaw(int object_size,
       heap()->incremental_marking()->black_allocation(),
       heap()->incremental_marking()->marking_state()->IsBlack(object));
   page->InitializationMemoryFence();
-  heap()->NotifyOldGenerationExpansion(identity(), page);
-  AdvanceAndInvokeAllocationObservers(object.address(),
-                                      static_cast<size_t>(object_size));
-  return object;
+  *top = object.address();
+  *limit = object.address() + object_size;
+  return true;
 }
 
-AllocationResult OldLargeObjectSpace::AllocateRawBackground(
-    LocalHeap* local_heap, int object_size) {
-  // Check if we want to force a GC before growing the old space further.
-  // If so, fail the allocation.
-  if (!heap()->CanExpandOldGenerationBackground(object_size) ||
-      !heap()->ShouldExpandOldGenerationOnSlowAllocation(local_heap)) {
-    return AllocationResult::Retry(identity());
-  }
-
-  LargePage* page = AllocateLargePage(object_size, NOT_EXECUTABLE);
-  if (page == nullptr) return AllocationResult::Retry(identity());
-  page->SetOldGenerationPageFlags(heap()->incremental_marking()->IsMarking());
-  HeapObject object = page->GetObject();
-  heap()->StartIncrementalMarkingIfAllocationLimitIsReachedBackground();
-  if (heap()->incremental_marking()->black_allocation()) {
-    heap()->incremental_marking()->marking_state()->WhiteToBlack(object);
-  }
-  DCHECK_IMPLIES(
-      heap()->incremental_marking()->black_allocation(),
-      heap()->incremental_marking()->marking_state()->IsBlack(object));
-  page->InitializationMemoryFence();
-  return object;
+void OldLargeObjectSpace::FreeLab(ThreadKind, Address* top, Address* limit) {
+  DCHECK_EQ(*top, *limit);
+  *top = kNullAddress;
+  *limit = kNullAddress;
 }
 
 LargePage* LargeObjectSpace::AllocateLargePage(int object_size,
@@ -444,20 +428,39 @@ NewLargeObjectSpace::NewLargeObjectSpace(Heap* heap, size_t capacity)
       pending_object_(0),
       capacity_(capacity) {}
 
-AllocationResult NewLargeObjectSpace::AllocateRaw(int object_size) {
-  // Do not allocate more objects if promoting the existing object would exceed
-  // the old generation capacity.
-  if (!heap()->CanExpandOldGeneration(SizeOfObjects())) {
-    return AllocationResult::Retry(identity());
+bool NewLargeObjectSpace::RefillLab(ThreadKind thread_kind, size_t min_size,
+                                    size_t max_size,
+                                    AllocationAlignment alignment,
+                                    AllocationOrigin origin,
+                                    HeapLimitHandling heap_limit_handling,
+                                    Address* top, Address* limit,
+                                    AllocationFailure* failure) {
+  DCHECK_EQ(*top, *limit);
+  *top = kNullAddress;
+  *limit = kNullAddress;
+  size_t object_size = min_size;
+  DCHECK_EQ(min_size, max_size);
+  if (heap_limit_handling != HeapLimitHandling::kIgnore) {
+    // Do not allocate more objects if promoting the existing object would
+    // exceed the old generation capacity.
+    if (!heap()->CanExpandOldGeneration(thread_kind, SizeOfObjects())) {
+      *failure = AllocationFailure::kRetryAfterYoungGC;
+      return false;
+    }
+    // Allocation for the first object must succeed independent from the
+    // capacity.
+    if (SizeOfObjects() > 0 && object_size > Available()) {
+      *failure = AllocationFailure::kRetryAfterYoungGC;
+      return false;
+    }
   }
 
-  // Allocation for the first object must succeed independent from the capacity.
-  if (SizeOfObjects() > 0 && static_cast<size_t>(object_size) > Available()) {
-    return AllocationResult::Retry(identity());
+  LargePage* page =
+      AllocateLargePage(static_cast<int>(object_size), NOT_EXECUTABLE);
+  if (page == nullptr) {
+    *failure = AllocationFailure::kRetryAfterYoungGC;
+    return false;
   }
-
-  LargePage* page = AllocateLargePage(object_size, NOT_EXECUTABLE);
-  if (page == nullptr) return AllocationResult::Retry(identity());
 
   // The size of the first object may exceed the capacity.
   capacity_ = Max(capacity_, SizeOfObjects());
@@ -478,9 +481,15 @@ AllocationResult NewLargeObjectSpace::AllocateRaw(int object_size) {
   page->InitializationMemoryFence();
   DCHECK(page->IsLargePage());
   DCHECK_EQ(page->owner_identity(), NEW_LO_SPACE);
-  AdvanceAndInvokeAllocationObservers(result.address(),
-                                      static_cast<size_t>(object_size));
-  return result;
+  *top = result.address();
+  *limit = result.address() + object_size;
+  return true;
+}
+
+void NewLargeObjectSpace::FreeLab(ThreadKind, Address* top, Address* limit) {
+  DCHECK_EQ(*top, *limit);
+  *top = kNullAddress;
+  *limit = kNullAddress;
 }
 
 size_t NewLargeObjectSpace::Available() { return capacity_ - SizeOfObjects(); }
@@ -529,10 +538,6 @@ void NewLargeObjectSpace::SetCapacity(size_t capacity) {
 CodeLargeObjectSpace::CodeLargeObjectSpace(Heap* heap)
     : OldLargeObjectSpace(heap, CODE_LO_SPACE),
       chunk_map_(kInitialChunkMapCapacity) {}
-
-AllocationResult CodeLargeObjectSpace::AllocateRaw(int object_size) {
-  return OldLargeObjectSpace::AllocateRaw(object_size, EXECUTABLE);
-}
 
 void CodeLargeObjectSpace::AddPage(LargePage* page, size_t object_size) {
   OldLargeObjectSpace::AddPage(page, object_size);
