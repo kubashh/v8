@@ -16,6 +16,24 @@
       "message": "ty, lgtm (only looked at the reorder)",
       "revId": "71854b7b14ea35a3fb1d1061fdb74f8ec563e7a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4457dd06_1a8429e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-10T17:40:12Z",
+      "side": 1,
+      "message": "thanks, will wait for Tobias 😊",
+      "parentUuid": "2185c7ca_03480f74",
+      "revId": "71854b7b14ea35a3fb1d1061fdb74f8ec563e7a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
