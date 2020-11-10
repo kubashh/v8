@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2c22287_587f042d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-10T09:02:04Z",
+      "side": 1,
+      "message": "Argh, typo in the mail address. And I was already wondering why there was no reaction :/ \nZhi, PTAL.",
+      "revId": "8a6889b95b7a8f8383e736825f8585ffd13a86d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
