@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be7e51c0_0c397884",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-10T18:44:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cdaa1858_935cde99",
+      "range": {
+        "startLine": 1329,
+        "startChar": 6,
+        "endLine": 1329,
+        "endChar": 25
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9fae369_b5a128df",
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66dd1bc9_b421c63e",
+        "filename": "src/instrumentation/recorder-win.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-10T18:44:11Z",
+      "side": 1,
+      "message": "OK apparently converting GUID to string is non-trivial, so I\u0027ll think more about how to do this.",
+      "parentUuid": "d9fae369_b5a128df",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 71
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c50f4bc5_92718a36",
         "filename": "src/logging/metrics.h",
         "patchSetId": 24
@@ -60,6 +108,30 @@
       "writtenOn": "2020-11-09T19:38:01Z",
       "side": 1,
       "message": "we can use delegate constructors here https://stackoverflow.com/questions/308276/can-i-call-a-constructor-from-another-constructor-do-constructor-chaining-in-c",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 3
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9237fb15_4f61c999",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-10T18:44:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c50f4bc5_92718a36",
       "range": {
         "startLine": 88,
         "startChar": 0,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "03edc651_81c26d64",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-10T18:44:11Z",
+      "side": 1,
+      "message": "In case you wanted a similar effect, I\u0027ve added a public function to the isolate-recorder that exposes whether or not an embedder_recorder exists.",
+      "parentUuid": "01e5dee2_252bb74a",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 21
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7f8f2d95_bd689d97",
         "filename": "src/logging/metrics.h",
         "patchSetId": 24
@@ -106,6 +202,30 @@
       "writtenOn": "2020-11-09T20:14:32Z",
       "side": 1,
       "message": "nit: !context_id_.IsEmpty()",
+      "range": {
+        "startLine": 124,
+        "startChar": 8,
+        "endLine": 124,
+        "endChar": 19
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdccc5e4_5f50c2ae",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-10T18:44:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7f8f2d95_bd689d97",
       "range": {
         "startLine": 124,
         "startChar": 8,
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f804254_33768aeb",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-10T18:44:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "021bb1d5_2ac0ac7c",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 36
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "377484f7_a6bdbaaa",
@@ -162,6 +306,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e66871e1_4a38d15f",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-10T18:44:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "377484f7_a6bdbaaa",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 3
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e88a569c_4d9bd8b8",
@@ -175,6 +343,30 @@
       "writtenOn": "2020-11-09T19:38:01Z",
       "side": 1,
       "message": "this should not be pointer, you can use `Recorder::ContextId::Empty()` as replacement for nullptr.",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 48
+      },
+      "revId": "0ee6485bf16de54bfdd5999c662dbaac6154af1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "682e44b0_ef03db08",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-10T18:44:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e88a569c_4d9bd8b8",
       "range": {
         "startLine": 143,
         "startChar": 0,
