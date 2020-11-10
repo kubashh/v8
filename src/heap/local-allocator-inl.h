@@ -18,13 +18,18 @@ AllocationResult EvacuationAllocator::Allocate(AllocationSpace space,
                                                AllocationAlignment alignment) {
   switch (space) {
     case NEW_SPACE:
-      return AllocateInNewSpace(object_size, origin, alignment);
+      if (object_size > kMaxLabObjectSize) {
+        return new_space_medium_allocator_.Allocate(
+            object_size, alignment, origin, HeapLimitHandling::kIgnore);
+      }
+      return new_space_small_allocator_.Allocate(object_size, alignment, origin,
+                                                 HeapLimitHandling::kIgnore);
     case OLD_SPACE:
-      return compaction_spaces_.Get(OLD_SPACE)->AllocateRaw(object_size,
-                                                            alignment, origin);
+      return old_space_allocator_.Allocate(object_size, alignment, origin,
+                                           HeapLimitHandling::kIgnore);
     case CODE_SPACE:
-      return compaction_spaces_.Get(CODE_SPACE)
-          ->AllocateRaw(object_size, alignment, origin);
+      return code_space_allocator_.Allocate(object_size, alignment, origin,
+                                            HeapLimitHandling::kIgnore);
     default:
       UNREACHABLE();
   }
@@ -34,76 +39,21 @@ void EvacuationAllocator::FreeLast(AllocationSpace space, HeapObject object,
                                    int object_size) {
   switch (space) {
     case NEW_SPACE:
-      FreeLastInNewSpace(object, object_size);
+      if (object_size > kMaxLabObjectSize) {
+        new_space_medium_allocator_.UndoAllocation(object.address(),
+                                                   object_size);
+      } else {
+        new_space_small_allocator_.UndoAllocation(object.address(),
+                                                  object_size);
+      }
       return;
     case OLD_SPACE:
-      FreeLastInOldSpace(object, object_size);
+      old_space_allocator_.UndoAllocation(object.address(), object_size);
       return;
     default:
       // Only new and old space supported.
       UNREACHABLE();
   }
-}
-
-void EvacuationAllocator::FreeLastInNewSpace(HeapObject object,
-                                             int object_size) {
-  if (!new_space_lab_.TryFreeLast(object, object_size)) {
-    // We couldn't free the last object so we have to write a proper filler.
-    heap_->CreateFillerObjectAt(object.address(), object_size,
-                                ClearRecordedSlots::kNo);
-  }
-}
-
-void EvacuationAllocator::FreeLastInOldSpace(HeapObject object,
-                                             int object_size) {
-  if (!compaction_spaces_.Get(OLD_SPACE)->TryFreeLast(object, object_size)) {
-    // We couldn't free the last object so we have to write a proper filler.
-    heap_->CreateFillerObjectAt(object.address(), object_size,
-                                ClearRecordedSlots::kNo);
-  }
-}
-
-AllocationResult EvacuationAllocator::AllocateInLAB(
-    int object_size, AllocationAlignment alignment) {
-  AllocationResult allocation;
-  if (!new_space_lab_.IsValid() && !NewLocalAllocationBuffer()) {
-    return AllocationResult::Retry(OLD_SPACE);
-  }
-  allocation = new_space_lab_.AllocateRawAligned(object_size, alignment);
-  if (allocation.IsRetry()) {
-    if (!NewLocalAllocationBuffer()) {
-      return AllocationResult::Retry(OLD_SPACE);
-    } else {
-      allocation = new_space_lab_.AllocateRawAligned(object_size, alignment);
-      CHECK(!allocation.IsRetry());
-    }
-  }
-  return allocation;
-}
-
-bool EvacuationAllocator::NewLocalAllocationBuffer() {
-  if (lab_allocation_will_fail_) return false;
-  AllocationResult result =
-      new_space_->AllocateRawSynchronized(kLabSize, kWordAligned);
-  if (result.IsRetry()) {
-    lab_allocation_will_fail_ = true;
-    return false;
-  }
-  LocalAllocationBuffer saved_lab = std::move(new_space_lab_);
-  new_space_lab_ = LocalAllocationBuffer::FromResult(heap_, result, kLabSize);
-  DCHECK(new_space_lab_.IsValid());
-  if (!new_space_lab_.TryMerge(&saved_lab)) {
-    saved_lab.CloseAndMakeIterable();
-  }
-  return true;
-}
-
-AllocationResult EvacuationAllocator::AllocateInNewSpace(
-    int object_size, AllocationOrigin origin, AllocationAlignment alignment) {
-  if (object_size > kMaxLabObjectSize) {
-    return new_space_->AllocateRawSynchronized(object_size, alignment, origin);
-  }
-  return AllocateInLAB(object_size, alignment);
 }
 
 }  // namespace internal

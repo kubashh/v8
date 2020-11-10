@@ -18,27 +18,15 @@ class AllocationObserver;
 
 class AllocationCounter {
  public:
-  AllocationCounter()
-      : paused_(false),
-        current_counter_(0),
-        next_counter_(0),
-        step_in_progress_(false) {}
+  AllocationCounter() = default;
+
+  explicit AllocationCounter(size_t object_alignment)
+      : object_alignment_(object_alignment) {}
+
   V8_EXPORT_PRIVATE void AddAllocationObserver(AllocationObserver* observer);
   V8_EXPORT_PRIVATE void RemoveAllocationObserver(AllocationObserver* observer);
 
-  bool IsActive() { return !IsPaused() && observers_.size() > 0; }
-
-  void Pause() {
-    DCHECK(!paused_);
-    DCHECK(!step_in_progress_);
-    paused_ = true;
-  }
-
-  void Resume() {
-    DCHECK(paused_);
-    DCHECK(!step_in_progress_);
-    paused_ = false;
-  }
+  bool IsActive() { return active_; }
 
   V8_EXPORT_PRIVATE void AdvanceAllocationObservers(size_t allocated);
   V8_EXPORT_PRIVATE void InvokeAllocationObservers(Address soon_object,
@@ -52,9 +40,11 @@ class AllocationCounter {
 
   bool IsStepInProgress() { return step_in_progress_; }
 
- private:
-  bool IsPaused() { return paused_; }
+  void set_object_alignment(size_t object_alignment) {
+    object_alignment_ = object_alignment;
+  }
 
+ private:
   struct AllocationObserverCounter {
     AllocationObserverCounter(AllocationObserver* observer, size_t prev_counter,
                               size_t next_counter)
@@ -71,12 +61,11 @@ class AllocationCounter {
   std::vector<AllocationObserverCounter> pending_added_;
   std::unordered_set<AllocationObserver*> pending_removed_;
 
-  bool paused_;
-
-  size_t current_counter_;
-  size_t next_counter_;
-
-  bool step_in_progress_;
+  bool active_ = false;
+  bool step_in_progress_ = false;
+  size_t current_counter_ = 0;
+  size_t next_counter_ = 0;
+  size_t object_alignment_ = 0;
 };
 
 // -----------------------------------------------------------------------------
@@ -111,16 +100,6 @@ class AllocationObserver {
 
   friend class AllocationCounter;
   DISALLOW_COPY_AND_ASSIGN(AllocationObserver);
-};
-
-class V8_EXPORT_PRIVATE PauseAllocationObserversScope {
- public:
-  explicit PauseAllocationObserversScope(Heap* heap);
-  ~PauseAllocationObserversScope();
-
- private:
-  Heap* heap_;
-  DISALLOW_COPY_AND_ASSIGN(PauseAllocationObserversScope);
 };
 
 }  // namespace internal
