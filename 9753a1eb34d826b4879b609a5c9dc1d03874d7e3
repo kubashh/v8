@@ -16,6 +16,23 @@
       "message": "Argh, typo in the mail address. And I was already wondering why there was no reaction :/ \nZhi, PTAL.",
       "revId": "9753a1eb34d826b4879b609a5c9dc1d03874d7e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07a9fb5f_cfbea14c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-11-11T00:42:17Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "9753a1eb34d826b4879b609a5c9dc1d03874d7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
