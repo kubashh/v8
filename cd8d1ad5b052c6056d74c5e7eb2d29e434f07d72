@@ -33,6 +33,24 @@
       "message": "I\u0027m not super keen on having to have these two functions passed, would be interested in any thoughts you might have to avoid it?",
       "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0798a7a_21356b4f",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-11T10:17:34Z",
+      "side": 1,
+      "message": "Those two because they are a template you mean? We have the same issue with AssemblerFunction (i.e. the 32 bits one). I don\u0027t think we can avoid it since AtomicBinopBuiltinCommon does the dispatch and it needs the three method options.\n\nIn the AtomicLoad CL we have the same, except we know the name of the methods. Over here we can\u0027t because it is used for many binary ops.\n\nThe only solution I can think about is making AtomicBinopBuiltinCommon a macro and then we could call CodeAssembler::Atomic##op instead of passing it around.",
+      "parentUuid": "fa1c14e5_bc69e270",
+      "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
