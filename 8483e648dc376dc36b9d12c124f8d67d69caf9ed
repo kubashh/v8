@@ -234,6 +234,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "948595b5_c63b92b3",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-11T05:48:17Z",
+      "side": 1,
+      "message": "OK! UNREACHABLE is defined in src/base/logging.h, and uses a bunch of other logging macros. If I include it in include/ I get the following presubmit error:\n\n** Presubmit ERRORS **\nYou added one or more #includes that violate checkdeps rules.\n  include\\v8-metrics.h\n      Illegal include: \"src/base/logging.h\"\n    Because of no rule applying.\n\nNot sure what the best way to proceed would be. Should I copy the implementation in src/base/logging.h into a new file, include/v8-logging.h? But the one in src/ has a bunch of dependencies.",
+      "parentUuid": "f0bd7bf7_f09c142f",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 19
+      },
+      "revId": "8483e648dc376dc36b9d12c124f8d67d69caf9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93722392_22c690cb",
         "filename": "src/d8/d8.cc",
         "patchSetId": 19

@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e11f5d18_70990989",
+        "filename": "BUILD.gn",
+        "patchSetId": 26
+      },
+      "lineNbr": 4234,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-11T05:48:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3dce62bf_70d0a1c4",
+      "revId": "01922946e1b5e810380d73e1fe1908e9065dc2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31037a52_fd595577",
@@ -31,6 +49,30 @@
       "writtenOn": "2020-11-10T22:16:09Z",
       "side": 1,
       "message": "We usually don\u0027t divert to the external API for code in v8::internal.\nJust use the v8::internal methods directly:\n\n  isolate-\u003eGetOrRegisterRecorderContextId(isolate-\u003enative_context())",
+      "range": {
+        "startLine": 1331,
+        "startChar": 0,
+        "endLine": 1332,
+        "endChar": 68
+      },
+      "revId": "01922946e1b5e810380d73e1fe1908e9065dc2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39412690_3020e18b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-11T05:48:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "31037a52_fd595577",
       "range": {
         "startLine": 1331,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee5df7b6_6d2a1f47",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 1706,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-11T05:48:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "42a4d8bf_c207e861",
+      "range": {
+        "startLine": 1700,
+        "startChar": 0,
+        "endLine": 1706,
+        "endChar": 0
+      },
+      "revId": "01922946e1b5e810380d73e1fe1908e9065dc2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c82234c_dda5ed1d",
@@ -77,6 +143,30 @@
       "writtenOn": "2020-11-10T22:16:09Z",
       "side": 1,
       "message": "ContextId is a uintptr and thus trivially copyable, I don\u0027t think we need a refernce here, existing code avoids this as well.",
+      "range": {
+        "startLine": 90,
+        "startChar": 45,
+        "endLine": 90,
+        "endChar": 46
+      },
+      "revId": "01922946e1b5e810380d73e1fe1908e9065dc2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce60c7ec_9f273254",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-11T05:48:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2c82234c_dda5ed1d",
       "range": {
         "startLine": 90,
         "startChar": 45,
@@ -110,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3b27563_f67af033",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-11T05:48:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "04948a5b_6b16548b",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 28
+      },
+      "revId": "01922946e1b5e810380d73e1fe1908e9065dc2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b732b83_74f8c718",
@@ -123,6 +237,30 @@
       "writtenOn": "2020-11-10T22:16:09Z",
       "side": 1,
       "message": "This code is only necessary for the main constructor. All other ones get here via the delegate constructor.",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 97,
+        "endChar": 5
+      },
+      "revId": "01922946e1b5e810380d73e1fe1908e9065dc2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7adb3215_54f6e015",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-11T05:48:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4b732b83_74f8c718",
       "range": {
         "startLine": 95,
         "startChar": 4,
@@ -156,6 +294,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b041b10f_55d300cf",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-11T05:48:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c8bf371d_b7e632ad",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 36
+      },
+      "revId": "01922946e1b5e810380d73e1fe1908e9065dc2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "505bff89_d0665821",
@@ -169,6 +331,30 @@
       "writtenOn": "2020-11-10T22:16:09Z",
       "side": 1,
       "message": "Please add a test for the case where there is no recorder. A simplified version of TriggerMainThreadMetricsEvent will do.",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 13
+      },
+      "revId": "01922946e1b5e810380d73e1fe1908e9065dc2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa25b922_13b54c06",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-11T05:48:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "505bff89_d0665821",
       "range": {
         "startLine": 118,
         "startChar": 0,
