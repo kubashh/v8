@@ -6497,8 +6497,8 @@ Handle<PropertyCell> PropertyCell::PrepareForValue(
   }
 
   // Deopt when transitioning from a constant type.
-  if (!invalidate && (old_type != new_type ||
-                      original_details.IsReadOnly() != details.IsReadOnly())) {
+  if (!invalidate && (old_type != new_type || (!original_details.IsReadOnly() &&
+                                               details.IsReadOnly()))) {
     cell->dependent_code().DeoptimizeDependentCodeGroup(
         DependentCode::kPropertyCellChangedGroup);
   }

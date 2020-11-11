@@ -320,7 +320,7 @@ void GlobalDictionaryShape::DetailsAtPut(Dictionary dict, InternalIndex entry,
                                          PropertyDetails value) {
   DCHECK(entry.is_found());
   PropertyCell cell = dict.CellAt(entry);
-  if (cell.property_details().IsReadOnly() != value.IsReadOnly()) {
+  if (!cell.property_details().IsReadOnly() && value.IsReadOnly()) {
     cell.dependent_code().DeoptimizeDependentCodeGroup(
         DependentCode::kPropertyCellChangedGroup);
   }
