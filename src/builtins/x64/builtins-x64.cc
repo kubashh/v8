@@ -3035,8 +3035,8 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   // Increment the call count in function data.
   // -------------------------------------------
   __ SmiAddConstant(
-      MemOperand(function_data,
-                 WasmExportedFunctionData::kCallCountOffset - kHeapObjectTag),
+      MemOperand(function_data, WasmExportedFunctionData::kWrapperBudgetOffset -
+                                    kHeapObjectTag),
       Smi::FromInt(1));
 
   // -------------------------------------------
@@ -3044,9 +3044,9 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   // -------------------------------------------
   Label compile_wrapper, compile_wrapper_done;
   __ SmiCompare(
-      MemOperand(function_data,
-                 WasmExportedFunctionData::kCallCountOffset - kHeapObjectTag),
-      Smi::FromInt(wasm::kGenericWrapperThreshold));
+      MemOperand(function_data, WasmExportedFunctionData::kWrapperBudgetOffset -
+                                    kHeapObjectTag),
+      Smi::FromInt(wasm::kGenericWrapperBudget));
   __ j(greater_equal, &compile_wrapper);
   __ bind(&compile_wrapper_done);
 
