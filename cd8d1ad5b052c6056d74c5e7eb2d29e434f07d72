@@ -69,6 +69,24 @@
       "parentUuid": "a0798a7a_21356b4f",
       "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06407e90_d81d7227",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-11T11:27:12Z",
+      "side": 1,
+      "message": "As discussed, I\u0027d like for us to have TNode APIs for public code-assembler methods, so I think we still need to do the UncheckedCast in the AtomicExchange64. I think we need to keep this as-is.",
+      "parentUuid": "787d3fc4_1c5b064a",
+      "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
