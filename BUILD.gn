@@ -45,6 +45,12 @@ declare_args() {
   # Sets --DV8_LITE_MODE.
   v8_enable_lite_mode = false
 
+  # Sets -DSYSTEM_INSTRUMENTATION. Enables OS-dependent event tracing
+  v8_enable_system_instrumentation = false
+
+  # Sets the GUID for the ETW provider
+  v8_etw_guid = ""
+
   # Sets -DVERIFY_HEAP.
   v8_enable_verify_heap = ""
 
@@ -672,6 +678,12 @@ config("features") {
   }
   if (v8_dict_mode_prototypes) {
     defines += [ "V8_DICT_MODE_PROTOTYPES" ]
+  }
+  if (v8_enable_system_instrumentation) {
+    defines += [ "V8_ENABLE_SYSTEM_INSTRUMENTATION" ]
+  }
+  if (v8_etw_guid != "") {
+    defines += [ "V8_ETW_GUID=\"$v8_etw_guid\"" ]
   }
 }
 
@@ -2761,6 +2773,8 @@ v8_source_set("v8_base_without_compiler") {
     "src/init/startup-data-util.h",
     "src/init/v8.cc",
     "src/init/v8.h",
+    "src/instrumentation/recorder-default.cc",
+    "src/instrumentation/recorder.h",
     "src/interpreter/block-coverage-builder.h",
     "src/interpreter/bytecode-array-accessor.cc",
     "src/interpreter/bytecode-array-accessor.h",
@@ -3564,10 +3578,12 @@ v8_source_set("v8_base_without_compiler") {
       sources += [
         "src/diagnostics/unwinding-info-win64.cc",
         "src/diagnostics/unwinding-info-win64.h",
+        "src/instrumentation/recorder-win.cc",
         "src/trap-handler/handler-inside-win.cc",
         "src/trap-handler/handler-inside-win.h",
         "src/trap-handler/handler-outside-win.cc",
       ]
+      sources -= [ "src/instrumentation/recorder-default.cc" ]
     }
   } else if (v8_current_cpu == "arm") {
     sources += [  ### gcmole(arch:arm) ###
@@ -4221,10 +4237,15 @@ v8_component("v8_libbase") {
     defines += [ "_CRT_RAND_S" ]  # for rand_s()
 
     libs = [
+      "advapi32.lib",  # Needed for TraceLoggingProvider.h
       "dbghelp.lib",
       "winmm.lib",
       "ws2_32.lib",
     ]
+
+    if (v8_enable_system_instrumentation) {
+      libs += [ "advapi32.lib" ]  # Needed for TraceLoggingProvider.h
+    }
 
     data_deps += [ "//build/win:runtime_libs" ]
   }

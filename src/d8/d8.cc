@@ -41,6 +41,7 @@
 #include "src/flags/flags.h"
 #include "src/handles/maybe-handles.h"
 #include "src/init/v8.h"
+#include "src/instrumentation/recorder.h"
 #include "src/interpreter/interpreter.h"
 #include "src/logging/counters.h"
 #include "src/logging/log-utils.h"
@@ -4185,6 +4186,11 @@ int Shell::Main(int argc, char* argv[]) {
       FATAL("Could not register trap handler");
     }
   }
+
+#ifdef V8_ENABLE_SYSTEM_INSTRUMENTATION
+  create_params.metrics_recorder =
+      std::make_shared<i::instrumentation::Recorder>();
+#endif
 
   Isolate* isolate = Isolate::New(create_params);
 
