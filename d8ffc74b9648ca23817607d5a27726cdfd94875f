@@ -50,6 +50,23 @@
       "message": "rubberstamp lgtm",
       "revId": "d8ffc74b9648ca23817607d5a27726cdfd94875f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "944bf2c7_8d4279b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-11-11T16:14:07Z",
+      "side": 1,
+      "message": "Thanks for the quick reviews!",
+      "revId": "d8ffc74b9648ca23817607d5a27726cdfd94875f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
