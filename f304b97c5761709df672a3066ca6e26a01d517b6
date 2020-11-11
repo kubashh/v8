@@ -16,6 +16,23 @@
       "message": "Santiago, PTAL thanks.",
       "revId": "f304b97c5761709df672a3066ca6e26a01d517b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73382aaf_1f69a342",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-11T17:31:20Z",
+      "side": 1,
+      "message": "LGTM, thanks!\nSome bots are red but it looks like just a rebase is needed",
+      "revId": "f304b97c5761709df672a3066ca6e26a01d517b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
