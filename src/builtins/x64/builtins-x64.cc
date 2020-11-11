@@ -2207,9 +2207,13 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
 void Builtins::Generate_CallFunction(MacroAssembler* masm,
                                      ConvertReceiverMode mode) {
   // ----------- S t a t e -------------
-  //  -- rax : the number of arguments (not including the receiver)
+  //  -- rax : the number of arguments (including the receiver)
   //  -- rdi : the function to call (checked to be a JSFunction)
   // -----------------------------------
+
+  // Subtract receiver from argument count on netry until builtins handle it
+  // corretly
+  __ subq(rax, Immediate(kArgcAdditionForReceiver));
 
   StackArgumentsAccessor args(rax);
   __ AssertFunction(rdi);
