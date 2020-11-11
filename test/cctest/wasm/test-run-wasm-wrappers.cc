@@ -62,8 +62,9 @@ TEST(CallCounter) {
     Handle<WasmExportedFunction> main_export = maybe_export.ToHandleChecked();
 
     // Check that the counter has initially a value of 0.
-    CHECK_EQ(main_export->shared().wasm_exported_function_data().call_count(),
-             0);
+    CHECK_EQ(
+        main_export->shared().wasm_exported_function_data().wrapper_budget(),
+        0);
 
     // Call the exported Wasm function and get the result.
     Handle<Object> params[2] = {Handle<Object>(Smi::FromInt(6), isolate),
@@ -75,8 +76,9 @@ TEST(CallCounter) {
     Handle<Object> result = maybe_result.ToHandleChecked();
 
     // Check that the counter has now a value of 1.
-    CHECK_EQ(main_export->shared().wasm_exported_function_data().call_count(),
-             1);
+    CHECK_EQ(
+        main_export->shared().wasm_exported_function_data().wrapper_budget(),
+        1);
 
     CHECK(result->IsSmi() && Smi::ToInt(*result) == kExpectedValue);
   }
@@ -116,13 +118,14 @@ TEST(WrapperReplacement) {
     Handle<WasmExportedFunction> main_export = maybe_export.ToHandleChecked();
 
     // Check that the counter has initially a value of 0.
-    CHECK_EQ(main_export->shared().wasm_exported_function_data().call_count(),
-             0);
-    CHECK_GT(kGenericWrapperThreshold, 0);
+    CHECK_EQ(
+        main_export->shared().wasm_exported_function_data().wrapper_budget(),
+        0);
+    CHECK_GT(kGenericWrapperBudget, 0);
 
     // Call the exported Wasm function as many times as required to reach the
     // threshold for compiling the specific wrapper.
-    const int threshold = static_cast<int>(kGenericWrapperThreshold);
+    const int threshold = static_cast<int>(kGenericWrapperBudget);
     for (int i = 1; i < threshold; ++i) {
       // Verify that the wrapper to be used is still the generic one.
       Code wrapper =
@@ -139,8 +142,9 @@ TEST(WrapperReplacement) {
       Handle<Object> result = maybe_result.ToHandleChecked();
       // Verify that the counter has now a value of i and the return value is
       // correct.
-      CHECK_EQ(main_export->shared().wasm_exported_function_data().call_count(),
-               i);
+      CHECK_EQ(
+          main_export->shared().wasm_exported_function_data().wrapper_budget(),
+          i);
       CHECK(result->IsSmi() && Smi::ToInt(*result) == expected_value);
     }
 
@@ -163,8 +167,9 @@ TEST(WrapperReplacement) {
         Execution::Call(isolate, main_export, receiver, 1, params);
     Handle<Object> result = maybe_result.ToHandleChecked();
     // Check that the counter has the threshold value and the result is correct.
-    CHECK_EQ(main_export->shared().wasm_exported_function_data().call_count(),
-             kGenericWrapperThreshold);
+    CHECK_EQ(
+        main_export->shared().wasm_exported_function_data().wrapper_budget(),
+        kGenericWrapperBudget);
     CHECK(result->IsSmi() && Smi::ToInt(*result) == expected_value);
 
     // Verify that the wrapper-code object has changed.
@@ -237,12 +242,12 @@ TEST(EagerWrapperReplacement) {
 
     // Set the call count for add to (threshold - 1),
     // so that the next call to it will cause the function to tier up.
-    add_function_data.set_call_count(kGenericWrapperThreshold - 1);
+    add_function_data.set_wrapper_budget(kGenericWrapperBudget - 1);
 
     // Verify that the call counts for all functions are correct.
-    CHECK_EQ(add_function_data.call_count(), kGenericWrapperThreshold - 1);
-    CHECK_EQ(mult_function_data.call_count(), 0);
-    CHECK_EQ(id_function_data.call_count(), 0);
+    CHECK_EQ(add_function_data.wrapper_budget(), kGenericWrapperBudget - 1);
+    CHECK_EQ(mult_function_data.wrapper_budget(), 0);
+    CHECK_EQ(id_function_data.wrapper_budget(), 0);
 
     // Verify that all functions are set to use the generic wrapper.
     CHECK(add_function_data.wrapper_code().is_builtin() &&
@@ -268,9 +273,9 @@ TEST(EagerWrapperReplacement) {
     }
 
     // Verify that the call counts for all functions are correct.
-    CHECK_EQ(add_function_data.call_count(), kGenericWrapperThreshold);
-    CHECK_EQ(mult_function_data.call_count(), 0);
-    CHECK_EQ(id_function_data.call_count(), 0);
+    CHECK_EQ(add_function_data.wrapper_budget(), kGenericWrapperBudget);
+    CHECK_EQ(mult_function_data.wrapper_budget(), 0);
+    CHECK_EQ(id_function_data.wrapper_budget(), 0);
 
     // Verify that the tier up of the add function replaced the wrapper
     // for both the add and the mult functions, but not the id function.
@@ -295,7 +300,7 @@ TEST(EagerWrapperReplacement) {
     }
     // Verify that mult's call count is still 0, which means that the call
     // didn't go through the generic wrapper.
-    CHECK_EQ(mult_function_data.call_count(), 0);
+    CHECK_EQ(mult_function_data.wrapper_budget(), 0);
 
     // Call the id function to verify that the generic wrapper is used.
     {
@@ -310,7 +315,7 @@ TEST(EagerWrapperReplacement) {
     }
     // Verify that id's call count increased to 1, which means that the call
     // used the generic wrapper.
-    CHECK_EQ(id_function_data.call_count(), 1);
+    CHECK_EQ(id_function_data.wrapper_budget(), 1);
   }
   Cleanup();
 }
