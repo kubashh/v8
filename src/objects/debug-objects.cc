@@ -4,6 +4,7 @@
 
 #include "src/objects/debug-objects.h"
 
+#include "src/base/platform/mutex.h"
 #include "src/debug/debug-evaluate.h"
 #include "src/handles/handles-inl.h"
 #include "src/objects/debug-objects-inl.h"
@@ -29,9 +30,11 @@ void DebugInfo::SetDebugExecutionMode(ExecutionMode value) {
 
 void DebugInfo::ClearBreakInfo(Isolate* isolate) {
   if (HasInstrumentedBytecodeArray()) {
+    base::SharedMutexGuard<base::kExclusive> shared_mutex_guard(
+        isolate->shared_function_info_access());
     // Reset function's bytecode array field to point to the original bytecode
     // array.
-    shared().SetDebugBytecodeArray(OriginalBytecodeArray());
+    shared().SetDebugBytecodeArray(shared_mutex_guard, OriginalBytecodeArray());
 
     // If the function is currently running on the stack, we need to update the
     // bytecode pointers on the stack so they point to the original

@@ -1250,18 +1250,29 @@ void Debug::PrepareFunctionForDebugExecution(
   if (debug_info->flags() & DebugInfo::kPreparedForDebugExecution) return;
 
   // Make a copy of the bytecode array if available.
-  Handle<HeapObject> maybe_original_bytecode_array =
-      isolate_->factory()->undefined_value();
   if (shared->HasBytecodeArray()) {
     Handle<BytecodeArray> original_bytecode_array =
         handle(shared->GetBytecodeArray(), isolate_);
     Handle<BytecodeArray> debug_bytecode_array =
         isolate_->factory()->CopyBytecodeArray(original_bytecode_array);
-    debug_info->set_debug_bytecode_array(*debug_bytecode_array);
+
+    // The debug_bytecode_array and original_bytecode_array are accessed
+    // concurrently, so we follow a strict process of releasing these values to
+    // other threads: 1.) Release DebugInfo::original_bytecode_array to make
+    // sure readers see it fully initialized.
+    debug_info->set_synchronized_original_bytecode_array(
+        *original_bytecode_array, kReleaseStore);
+    // 2.) Release DebugInfo::debug_bytecode_array afterwards. This makes sure
+    // that when other threads read a debug_bytecode_array,
+    // DebugInfo::original_bytecode_array is guaranteed to be set.
+    debug_info->set_synchronized_debug_bytecode_array(*debug_bytecode_array,
+                                                      kReleaseStore);
+    // 3.) Release SharedFunctionInfo::function_data last.
     shared->SetDebugBytecodeArray(*debug_bytecode_array);
-    maybe_original_bytecode_array = original_bytecode_array;
+  } else {
+    debug_info->set_synchronized_original_bytecode_array(
+        *isolate_->factory()->undefined_value(), kReleaseStore);
   }
-  debug_info->set_original_bytecode_array(*maybe_original_bytecode_array);
 
   if (debug_info->CanBreakAtEntry()) {
     // Deopt everything in case the function is inlined anywhere.
@@ -1704,7 +1715,8 @@ void Debug::FreeDebugInfoListNode(DebugInfoListNode* prev,
   // Pack script back into the
   // SFI::script_or_debug_info field.
   Handle<DebugInfo> debug_info(node->debug_info());
-  debug_info->shared().set_script_or_debug_info(debug_info->script());
+  debug_info->shared().set_script_or_debug_info(debug_info->script(),
+                                                kReleaseStore);
 
   delete node;
 }
