@@ -8289,7 +8289,8 @@ class V8_EXPORT Isolate {
           allow_atomics_wait(true),
           only_terminate_in_safe_scope(false),
           embedder_wrapper_type_index(-1),
-          embedder_wrapper_object_index(-1) {}
+          embedder_wrapper_object_index(-1),
+          metrics_recorder(nullptr) {}
 
     /**
      * Allows the host application to provide the address of a function that is
@@ -8306,7 +8307,6 @@ class V8_EXPORT Isolate {
      * Explicitly specify a startup snapshot blob. The embedder owns the blob.
      */
     StartupData* snapshot_blob;
-
 
     /**
      * Enables the host application to provide a mechanism for recording
@@ -8361,6 +8361,11 @@ class V8_EXPORT Isolate {
      */
     int embedder_wrapper_type_index;
     int embedder_wrapper_object_index;
+
+    /**
+     * Base class for recording event-based metrics
+     */
+    std::shared_ptr<metrics::Recorder> metrics_recorder;
   };
 
 

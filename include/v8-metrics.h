@@ -10,7 +10,19 @@
 namespace v8 {
 namespace metrics {
 
-// TODO(sartang@microsoft.com): Remove wall_clock_time_in_us.
+/*
+ * Each struct represents an event we'd like to trace.
+ * For events where we want to track the duration, we are assuming the field
+ * wall_clock_duration_in_us exists.
+ */
+struct Compile {
+  int script_id = 0;
+  bool is_toplevel = false;
+  bool is_module = false;
+  bool is_eval = false;
+  int64_t wall_clock_duration_in_us = -1;
+};
+
 struct WasmModuleDecoded {
   bool async = false;
   bool streamed = false;
@@ -57,7 +69,8 @@ struct WasmModulesPerIsolate {
   V(WasmModuleDecoded)                   \
   V(WasmModuleCompiled)                  \
   V(WasmModuleInstantiated)              \
-  V(WasmModuleTieredUp)
+  V(WasmModuleTieredUp)                  \
+  V(Compile)
 
 #define V8_THREAD_SAFE_METRICS_EVENTS(V) V(WasmModulesPerIsolate)
 
@@ -118,10 +131,23 @@ class V8_EXPORT Recorder {
   V8_MAIN_THREAD_METRICS_EVENTS(ADD_MAIN_THREAD_EVENT)
 #undef ADD_MAIN_THREAD_EVENT
 
+// TODO(sartang@microsoft.com): This macro, as well as
+// ADD_MAIN_THREAD_ERROR_EVENT, should throw errors. But I don't know how to do
+// that from include/
+#define ADD_THREAD_SAFE_ERROR_EVENT(E) \
+  void AddThreadSafeEvent(const E& event) {}
+  V8_MAIN_THREAD_METRICS_EVENTS(ADD_THREAD_SAFE_ERROR_EVENT)
+#undef ADD_THREAD_SAFE_ERROR_EVENT
+
 #define ADD_THREAD_SAFE_EVENT(E) \
   virtual void AddThreadSafeEvent(const E& event) {}
   V8_THREAD_SAFE_METRICS_EVENTS(ADD_THREAD_SAFE_EVENT)
 #undef ADD_THREAD_SAFE_EVENT
+
+#define ADD_MAIN_THREAD_ERROR_EVENT(E) \
+  void AddMainThreadEvent(const E& event, ContextId context_id) {}
+  V8_THREAD_SAFE_METRICS_EVENTS(ADD_MAIN_THREAD_ERROR_EVENT)
+#undef ADD_MAIN_THREAD_ERROR_EVENT
 
   virtual void NotifyIsolateDisposal() {}
 
