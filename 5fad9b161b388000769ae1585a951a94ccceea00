@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "89b893b9_36713a7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-11T22:28:51Z",
+      "side": 1,
+      "message": "Maybe not the full renderer but one can create targets in Blink (e.g. unit tests) that only need parts of Blink, e.g. WTF. Realistically, it does not reduce compilation time, as we always need to build the library for execution (most unit tests have a heap). It can be nice for documentation. E.g., WTF depending on v8:cppgc_headers means that WTF cannot call into heap (which we don\u0027t want/need for now).\n\n(I am not a huge fan of header-only targets but they are somewhat used in Blink. E.g., also for V8\u0027s and Blink\u0027s public API)",
+      "parentUuid": "edbdaddc_14a2ea59",
+      "range": {
+        "startLine": 9,
+        "startChar": 60,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "5fad9b161b388000769ae1585a951a94ccceea00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e3ab5bec_ba273989",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
