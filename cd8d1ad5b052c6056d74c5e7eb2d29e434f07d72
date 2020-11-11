@@ -51,6 +51,24 @@
       "parentUuid": "fa1c14e5_bc69e270",
       "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "787d3fc4_1c5b064a",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-11T10:22:56Z",
+      "side": 1,
+      "message": "On second thought. \"Type\" is not used for these AssemblerFunction64 functions. We only use it to UncheckCast at the end. Then we can do \n  Unchecked_cast\u003cAtomicInt64\u003e(AtomicExchange64(...))\nhere instead of passing AtomicInt64 and AtomicUint64 around. That would get rid of one of those functions.\n\nWe can do the same in the CompareExchange follow-up CL since Type is not used there as well",
+      "parentUuid": "a0798a7a_21356b4f",
+      "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
