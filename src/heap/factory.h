@@ -20,7 +20,6 @@
 #include "src/objects/js-regexp.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/string.h"
-#include "torque-generated/class-forward-declarations.h"
 
 namespace v8 {
 namespace internal {
@@ -72,10 +71,6 @@ class WasmExportedFunctionData;
 class WasmJSFunctionData;
 class WeakCell;
 
-namespace wasm {
-class ValueType;
-}  // namespace wasm
-
 enum class SharedFlag : uint8_t;
 enum class InitializedFlag : uint8_t;
 
@@ -118,12 +113,6 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<T> MakeHandle(T obj) {
     return handle(obj, isolate());
   }
-
-#include "torque-generated/factory.inc"
-
-  // Avoid the Torque-generated factory function to shadow the one from
-  // FactoryBase.
-  using FactoryBase::NewDescriptorArray;
 
   Handle<Oddball> NewOddball(Handle<Map> map, const char* to_string,
                              Handle<Object> to_number, const char* type_of,
