@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f7da8fe_fec19038",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T10:38:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "193fe664_281c1531",
+      "revId": "31fa3fd96eea4b8da80125f02066c21efdf0f61b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a0e37d3_1d47430a",
@@ -48,6 +66,24 @@
       "writtenOn": "2020-11-10T14:40:15Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "31fa3fd96eea4b8da80125f02066c21efdf0f61b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "294873d0_e9ebdaa0",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T10:38:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a0e37d3_1d47430a",
       "revId": "31fa3fd96eea4b8da80125f02066c21efdf0f61b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
