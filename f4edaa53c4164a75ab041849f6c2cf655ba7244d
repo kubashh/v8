@@ -16,6 +16,46 @@
       "message": "Addressed all issues besides the one about the return types of NameDictionary::Add vs OrderedNameDictionary::Add, which need the necessary CL first.",
       "revId": "f4edaa53c4164a75ab041849f6c2cf655ba7244d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6804b07_be33a9cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-11T19:39:34Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "f4edaa53c4164a75ab041849f6c2cf655ba7244d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "237208bc_af9c5a16",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-11T19:39:34Z",
+      "side": 1,
+      "message": "Let\u0027s postpone this cleanup until we start integrating SmallOrderedDictionaries, so just\n  TODO(7569)",
+      "range": {
+        "startLine": 425,
+        "startChar": 3,
+        "endLine": 425,
+        "endChar": 8
+      },
+      "revId": "f4edaa53c4164a75ab041849f6c2cf655ba7244d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
