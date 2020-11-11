@@ -8,6 +8,8 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#include "src/base/base-export.h"
+
 namespace v8 {
 namespace base {
 
