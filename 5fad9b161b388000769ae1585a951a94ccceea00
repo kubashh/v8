@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "edbdaddc_14a2ea59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-11T22:19:00Z",
+      "side": 1,
+      "message": "Why do we need to build blink without the library?",
+      "range": {
+        "startLine": 9,
+        "startChar": 60,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "5fad9b161b388000769ae1585a951a94ccceea00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e3ab5bec_ba273989",
@@ -31,6 +54,30 @@
       "writtenOn": "2020-11-11T21:18:43Z",
       "side": 1,
       "message": "This is opinionated: All headers shown in this list can be part of an #include when specifying cppgc_headers as a gn dep.",
+      "range": {
+        "startLine": 4395,
+        "startChar": 2,
+        "endLine": 4395,
+        "endChar": 9
+      },
+      "revId": "5fad9b161b388000769ae1585a951a94ccceea00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3f272a4_d54d9198",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 4395,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-11T22:19:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4fcf88f7_ede0e4d2",
       "range": {
         "startLine": 4395,
         "startChar": 2,
