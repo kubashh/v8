@@ -16,6 +16,23 @@
       "message": "friendly ping",
       "revId": "bf8b0251a6addb47f0615fa6a9e1f798bad4c97b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7547b22_bbb3317d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-11T13:56:22Z",
+      "side": 1,
+      "message": "LGTM with comment.\nWrote it but forgot to hit send, sorry!",
+      "revId": "bf8b0251a6addb47f0615fa6a9e1f798bad4c97b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -87,6 +87,24 @@
       "parentUuid": "787d3fc4_1c5b064a",
       "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cdb2abd_b4328b00",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-11T13:56:22Z",
+      "side": 1,
+      "message": "Ack, then I think the macro ##name solution is the only way to move forward if we want to avoid passing these three functions.\n\nI\u0027d be okay with both solutions. The macro one might be annoying since A) the method is quite big, and B) we have already #if guards inside of it.",
+      "parentUuid": "06407e90_d81d7227",
+      "revId": "cd8d1ad5b052c6056d74c5e7eb2d29e434f07d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
