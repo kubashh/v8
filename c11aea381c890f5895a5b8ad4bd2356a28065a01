@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "752e819b_7fe80f89",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "621fd471_ad37f396",
+      "range": {
+        "startLine": 101,
+        "startChar": 5,
+        "endLine": 101,
+        "endChar": 22
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72657cba_b6618e6f",
@@ -71,6 +95,30 @@
       "writtenOn": "2020-11-09T10:04:26Z",
       "side": 1,
       "message": "Ditto.",
+      "range": {
+        "startLine": 118,
+        "startChar": 19,
+        "endLine": 118,
+        "endChar": 23
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b2fadec_50f8b3c6",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72657cba_b6618e6f",
       "range": {
         "startLine": 118,
         "startChar": 19,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce50e01d_72d1fcc0",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "58a8215a_e6b22e63",
+      "range": {
+        "startLine": 170,
+        "startChar": 34,
+        "endLine": 170,
+        "endChar": 35
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "700fc74e_a862123e",
@@ -117,6 +189,30 @@
       "writtenOn": "2020-11-09T10:04:26Z",
       "side": 1,
       "message": "Just Handle\u003cObject\u003e::cast(properties_dictionary_template_)",
+      "range": {
+        "startLine": 326,
+        "startChar": 17,
+        "endLine": 326,
+        "endChar": 30
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c386b9d8_608f225d",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "sorry, I originally had two different members, \"properties_dictionary_template_\" and \"properties_ordered_dictionary_template_\" and you\u0027re seeing some leftovers of this here.",
+      "parentUuid": "700fc74e_a862123e",
       "range": {
         "startLine": 326,
         "startChar": 17,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13b762ba_d37921f9",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb83e2dd_7b11025b",
+      "range": {
+        "startLine": 342,
+        "startChar": 40,
+        "endLine": 342,
+        "endChar": 76
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3ac9170_98dad8f3",
@@ -163,6 +283,30 @@
       "writtenOn": "2020-11-09T10:04:26Z",
       "side": 1,
       "message": "Same here.",
+      "range": {
+        "startLine": 346,
+        "startChar": 10,
+        "endLine": 346,
+        "endChar": 39
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "616846b9_b92fdea8",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3ac9170_98dad8f3",
       "range": {
         "startLine": 346,
         "startChar": 10,
@@ -196,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47db0ec6_b6e692f4",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29442aff_7c7a0beb",
+      "range": {
+        "startLine": 388,
+        "startChar": 18,
+        "endLine": 388,
+        "endChar": 23
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b163d4ce_5f0d7a48",
@@ -209,6 +377,30 @@
       "writtenOn": "2020-11-09T10:04:26Z",
       "side": 1,
       "message": "Maybe enum_order or enum_index to be consistent.",
+      "range": {
+        "startLine": 390,
+        "startChar": 10,
+        "endLine": 390,
+        "endChar": 20
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ce89b9_549eb11f",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b163d4ce_5f0d7a48",
       "range": {
         "startLine": 390,
         "startChar": 10,
@@ -266,6 +458,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81039c6b_749225ff",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Oops, thanks for catching this!\nI guess the off-by-one error was not observable because many operations using them only care about the relative order between entries (which wasn\u0027t broken by this), but not necessarily about whether or not one index is skipped/missing.",
+      "parentUuid": "535639f7_ce6e7892",
+      "range": {
+        "startLine": 391,
+        "startChar": 45,
+        "endLine": 391,
+        "endChar": 68
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "985837cb_13bd1f2f",
@@ -289,6 +505,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49031786_dd621d9b",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "985837cb_13bd1f2f",
+      "range": {
+        "startLine": 113,
+        "startChar": 44,
+        "endLine": 113,
+        "endChar": 56
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f53c7fac_73627408",
@@ -302,6 +542,30 @@
       "writtenOn": "2020-11-09T10:04:26Z",
       "side": 1,
       "message": "Dictionary",
+      "range": {
+        "startLine": 294,
+        "startChar": 19,
+        "endLine": 294,
+        "endChar": 23
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06e45363_2d16aa64",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f53c7fac_73627408",
       "range": {
         "startLine": 294,
         "startChar": 19,
@@ -342,6 +606,30 @@
       "writtenOn": "2020-11-09T10:04:26Z",
       "side": 1,
       "message": "Dictionary",
+      "range": {
+        "startLine": 438,
+        "startChar": 19,
+        "endLine": 438,
+        "endChar": 31
+      },
+      "revId": "c11aea381c890f5895a5b8ad4bd2356a28065a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "293760c4_4648c56e",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f821530_17623141",
       "range": {
         "startLine": 438,
         "startChar": 19,

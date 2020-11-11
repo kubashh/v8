@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0be275f5_e370a2c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-11T16:24:22Z",
+      "side": 1,
+      "message": "Addressed all issues besides the one about the return types of NameDictionary::Add vs OrderedNameDictionary::Add, which need the necessary CL first.",
+      "revId": "f4edaa53c4164a75ab041849f6c2cf655ba7244d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
