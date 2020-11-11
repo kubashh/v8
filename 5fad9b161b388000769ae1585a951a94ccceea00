@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3ab5bec_ba273989",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-11T21:18:43Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "5fad9b161b388000769ae1585a951a94ccceea00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fcf88f7_ede0e4d2",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 4395,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-11T21:18:43Z",
+      "side": 1,
+      "message": "This is opinionated: All headers shown in this list can be part of an #include when specifying cppgc_headers as a gn dep.",
+      "range": {
+        "startLine": 4395,
+        "startChar": 2,
+        "endLine": 4395,
+        "endChar": 9
+      },
+      "revId": "5fad9b161b388000769ae1585a951a94ccceea00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
