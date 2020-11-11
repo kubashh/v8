@@ -16,6 +16,23 @@
       "message": "When implementing ishell@\u0027s latest suggestion I decided to refactor things a bit, because the code was otherwise getting to convoluted. The main realization that is that the printing of the different hash table structures differs in 2 axes: \n1. Is the underlying hash table ordered or not? This affects how the header is printed and whether or not there is a separate buckets part in the table to print.\n2. Is it a hash set, hash map, or a property dictionary? This affects if/what values associated with each key should be printed.\n\nTherefore, I\u0027ve split up everything to separate these two things:\n1. PrintOrderedHashTableHeaderAndBuckets and PrintHashTableHeader handle the printing of the header part.\n2. PrintDictionaryContentsFull, PrintHashMapContentsFull, and PrintHashSetContentsFull print the contents. They are implemented by using PrintTableContentsGeneric.\n\nAll of the actual printing functions like NameDictionary::NameDictionaryPrint then consist of just two function calls, to one function from each group.\n\nI\u0027ve also moved the code around so that all of the hash table printing code sits in one place rather than random places throughout objects-printer.cc\n",
       "revId": "e3a322f36c8f60e10cd26c2bf521d0d9b69f853b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51636cdc_5bc00e77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-11T10:53:45Z",
+      "side": 1,
+      "message": "still lgtm",
+      "revId": "e3a322f36c8f60e10cd26c2bf521d0d9b69f853b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
