@@ -833,6 +833,12 @@ class V8_EXPORT_PRIVATE OrderedNameDictionary
 
   static const bool kIsOrderedDictionaryType = true;
 
+  // The enumeration order value in the property details should not be used if
+  // the property details are stored in an ordered name dictionary
+  // because the latter maintains the ordering itself. We use this dummy value
+  // as the enum order value instead.
+  static const int kDummyEnumOrder = 0;
+
   OBJECT_CONSTRUCTORS(OrderedNameDictionary,
                       OrderedHashTable<OrderedNameDictionary, 3>);
 };
