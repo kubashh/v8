@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfcd536b_4ea0ed33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-12T17:03:02Z",
+      "side": 1,
+      "message": "Ulan, PTAL overall\nIgor, PTAL src/execution\nGeorg, PTAL src/deoptimizer",
+      "revId": "c255a84a4478e0fc9466ebe75621eeed3fb796e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
