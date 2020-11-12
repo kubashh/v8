@@ -815,17 +815,11 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
   if (access_mode == AccessMode::kStore) {
     if (property_details.IsReadOnly()) {
       // Don't even bother trying to lower stores to read-only data properties.
+      // TODO(neis): We could generate code that checks if the new value equals
+      // the old one and then does nothing or deopts, respectively.
       return NoChange();
     } else if (property_cell_type == PropertyCellType::kUndefined) {
-      // There's no fast-path for dealing with undefined property cells.
       return NoChange();
-    } else if (property_cell_type == PropertyCellType::kConstantType) {
-      // There's also no fast-path to store to a global cell which pretended
-      // to be stable, but is no longer stable now.
-      if (property_cell_value.IsHeapObject() &&
-          !property_cell_value.AsHeapObject().map().is_stable()) {
-        return NoChange();
-      }
     }
   } else if (access_mode == AccessMode::kHas) {
     // has checks cannot follow the fast-path used by loads when these
@@ -942,17 +936,12 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
         Type property_cell_value_type;
         MachineRepresentation representation = MachineRepresentation::kTagged;
         if (property_cell_value.IsHeapObject()) {
-          // We cannot do anything if the {property_cell_value}s map is no
-          // longer stable.
-          MapRef property_cell_value_map =
-              property_cell_value.AsHeapObject().map();
-          dependencies()->DependOnStableMap(property_cell_value_map);
-
           // Check that the {value} is a HeapObject.
           value = effect = graph()->NewNode(simplified()->CheckHeapObject(),
                                             value, effect, control);
-
           // Check {value} map against the {property_cell} map.
+          MapRef property_cell_value_map =
+              property_cell_value.AsHeapObject().map();
           effect = graph()->NewNode(
               simplified()->CheckMaps(
                   CheckMapsFlag::kNone,
