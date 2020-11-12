@@ -43,7 +43,8 @@ void SharedFunctionInfo::Init(ReadOnlyRoots ro_roots, int unique_id) {
   // SharedFunctionInfo in a consistent state.
   set_raw_outer_scope_info_or_feedback_metadata(ro_roots.the_hole_value(),
                                                 SKIP_WRITE_BARRIER);
-  set_script_or_debug_info(ro_roots.undefined_value(), SKIP_WRITE_BARRIER);
+  set_script_or_debug_info(ro_roots.undefined_value(), kReleaseStore,
+                           SKIP_WRITE_BARRIER);
   set_function_literal_id(kFunctionLiteralIdInvalid);
 #if V8_SFI_HAS_UNIQUE_ID
   set_unique_id(unique_id);
@@ -673,6 +674,37 @@ void SharedFunctionInfo::EnsureSourcePositionsAvailable(
       !shared_info->GetBytecodeArray().HasSourcePositionTable()) {
     Compiler::CollectSourcePositions(isolate, shared_info);
   }
+}
+
+void SharedFunctionInfo::PrepareBytecodeForDebugExecution(Isolate* isolate) {
+  DebugInfo debug_info = GetDebugInfo();
+  if (HasBytecodeArray()) {
+    Handle<BytecodeArray> original_bytecode_array =
+        handle(GetBytecodeArray(), isolate);
+    Handle<BytecodeArray> debug_bytecode_array =
+        isolate->factory()->CopyBytecodeArray(original_bytecode_array);
+
+    base::SharedMutexGuard<base::kExclusive> mutex_guard(
+        isolate->shared_function_info_access());
+    debug_info.set_original_bytecode_array(*original_bytecode_array);
+    debug_info.set_debug_bytecode_array(*debug_bytecode_array);
+    SetDebugBytecodeArray(*debug_bytecode_array);
+  } else {
+    debug_info.set_original_bytecode_array(
+        *isolate->factory()->undefined_value());
+  }
+}
+
+void SharedFunctionInfo::UnprepareBytecodeForDebugExecution(Isolate* isolate) {
+  DebugInfo debug_info = GetDebugInfo();
+  BytecodeArray original_bytecode_array = debug_info.OriginalBytecodeArray();
+
+  base::SharedMutexGuard<base::kExclusive> mutex_guard(
+      isolate->shared_function_info_access());
+  SetDebugBytecodeArray(original_bytecode_array);
+  debug_info.set_original_bytecode_array(
+      ReadOnlyRoots(isolate).undefined_value());
+  debug_info.set_debug_bytecode_array(ReadOnlyRoots(isolate).undefined_value());
 }
 
 }  // namespace internal

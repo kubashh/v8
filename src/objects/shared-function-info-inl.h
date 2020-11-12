@@ -6,6 +6,7 @@
 #define V8_OBJECTS_SHARED_FUNCTION_INFO_INL_H_
 
 #include "src/base/macros.h"
+#include "src/base/platform/mutex.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/local-heap-inl.h"
@@ -101,8 +102,8 @@ RELEASE_ACQUIRE_ACCESSORS(SharedFunctionInfo, function_data, Object,
                           kFunctionDataOffset)
 RELEASE_ACQUIRE_ACCESSORS(SharedFunctionInfo, name_or_scope_info, Object,
                           kNameOrScopeInfoOffset)
-ACCESSORS(SharedFunctionInfo, script_or_debug_info, HeapObject,
-          kScriptOrDebugInfoOffset)
+RELEASE_ACQUIRE_ACCESSORS(SharedFunctionInfo, script_or_debug_info, HeapObject,
+                          kScriptOrDebugInfoOffset)
 
 INT32_ACCESSORS(SharedFunctionInfo, function_literal_id,
                 kFunctionLiteralIdOffset)
@@ -461,6 +462,9 @@ bool SharedFunctionInfo::HasBytecodeArray() const {
 }
 
 BytecodeArray SharedFunctionInfo::GetBytecodeArray() const {
+  Isolate* isolate = GetIsolate();
+  base::SharedMutexGuard<base::kShared> shared_mutex_guard(
+      isolate->shared_function_info_access());
   DCHECK(HasBytecodeArray());
   if (HasDebugInfo() && GetDebugInfo().HasInstrumentedBytecodeArray()) {
     return GetDebugInfo().OriginalBytecodeArray();
@@ -488,6 +492,17 @@ BytecodeArray SharedFunctionInfo::GetDebugBytecodeArray() const {
 }
 
 void SharedFunctionInfo::SetDebugBytecodeArray(BytecodeArray bytecode) {
+#if 0
+  Isolate* isolate = GetIsolate();
+  base::SharedMutexGuard<base::kExclusive> shared_mutex_guard(
+      isolate->shared_function_info_access());
+  SetDebugBytecodeArray(shared_mutex_guard, bytecode);
+}
+
+void SharedFunctionInfo::SetDebugBytecodeArray(
+    const base::SharedMutexGuard<base::kExclusive>& guard,
+    BytecodeArray bytecode) {
+#endif
   Object data = function_data(kAcquireLoad);
   if (data.IsBytecodeArray()) {
     set_function_data(bytecode, kReleaseStore);
@@ -684,7 +699,7 @@ bool SharedFunctionInfo::HasWasmCapiFunctionData() const {
 }
 
 HeapObject SharedFunctionInfo::script() const {
-  HeapObject maybe_script = script_or_debug_info();
+  HeapObject maybe_script = script_or_debug_info(kAcquireLoad);
   if (maybe_script.IsDebugInfo()) {
     return DebugInfo::cast(maybe_script).script();
   }
@@ -692,11 +707,11 @@ HeapObject SharedFunctionInfo::script() const {
 }
 
 void SharedFunctionInfo::set_script(HeapObject script) {
-  HeapObject maybe_debug_info = script_or_debug_info();
+  HeapObject maybe_debug_info = script_or_debug_info(kAcquireLoad);
   if (maybe_debug_info.IsDebugInfo()) {
     DebugInfo::cast(maybe_debug_info).set_script(script);
   } else {
-    set_script_or_debug_info(script);
+    set_script_or_debug_info(script, kReleaseStore);
   }
 }
 
@@ -705,18 +720,18 @@ bool SharedFunctionInfo::is_repl_mode() const {
 }
 
 bool SharedFunctionInfo::HasDebugInfo() const {
-  return script_or_debug_info().IsDebugInfo();
+  return script_or_debug_info(kAcquireLoad).IsDebugInfo();
 }
 
 DebugInfo SharedFunctionInfo::GetDebugInfo() const {
   DCHECK(HasDebugInfo());
-  return DebugInfo::cast(script_or_debug_info());
+  return DebugInfo::cast(script_or_debug_info(kAcquireLoad));
 }
 
 void SharedFunctionInfo::SetDebugInfo(DebugInfo debug_info) {
   DCHECK(!HasDebugInfo());
-  DCHECK_EQ(debug_info.script(), script_or_debug_info());
-  set_script_or_debug_info(debug_info);
+  DCHECK_EQ(debug_info.script(), script_or_debug_info(kAcquireLoad));
+  set_script_or_debug_info(debug_info, kReleaseStore);
 }
 
 bool SharedFunctionInfo::HasInferredName() {

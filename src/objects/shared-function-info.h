@@ -321,6 +321,13 @@ class SharedFunctionInfo : public HeapObject {
   inline void set_interpreter_data(InterpreterData interpreter_data);
   inline BytecodeArray GetDebugBytecodeArray() const;
   inline void SetDebugBytecodeArray(BytecodeArray bytecode);
+#if 0
+  // This overload of SetDebugBytecodeArray is to be used by callers that
+  // already acquired the Isolate::shared_function_info_access lock.
+  inline void SetDebugBytecodeArray(
+      const base::SharedMutexGuard<base::kExclusive>& guard,
+      BytecodeArray bytecode);
+#endif
   inline bool HasAsmWasmData() const;
   inline AsmWasmData asm_wasm_data() const;
   inline void set_asm_wasm_data(AsmWasmData data);
@@ -376,7 +383,7 @@ class SharedFunctionInfo : public HeapObject {
   // [script_or_debug_info]: One of:
   //  - Script from which the function originates.
   //  - a DebugInfo which holds the actual script [HasDebugInfo()].
-  DECL_ACCESSORS(script_or_debug_info, HeapObject)
+  DECL_RELEASE_ACQUIRE_ACCESSORS(script_or_debug_info, HeapObject)
 
   inline HeapObject script() const;
   inline void set_script(HeapObject script);
@@ -649,6 +656,9 @@ class SharedFunctionInfo : public HeapObject {
   // use a super property).
   // This is needed to set up the [[HomeObject]] on the function instance.
   inline bool needs_home_object() const;
+
+  void PrepareBytecodeForDebugExecution(Isolate* isolate);
+  void UnprepareBytecodeForDebugExecution(Isolate* isolate);
 
  private:
 #ifdef VERIFY_HEAP

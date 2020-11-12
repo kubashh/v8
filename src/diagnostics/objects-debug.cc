@@ -841,8 +841,8 @@ void SharedFunctionInfo::SharedFunctionInfoVerify(ReadOnlyRoots roots) {
         HasUncompiledDataWithoutPreparseData() || HasWasmJSFunctionData() ||
         HasWasmCapiFunctionData());
 
-  CHECK(script_or_debug_info().IsUndefined(roots) ||
-        script_or_debug_info().IsScript() || HasDebugInfo());
+  CHECK(script_or_debug_info(kAcquireLoad).IsUndefined(roots) ||
+        script_or_debug_info(kAcquireLoad).IsScript() || HasDebugInfo());
 
   if (!is_compiled()) {
     CHECK(!HasFeedbackMetadata());
