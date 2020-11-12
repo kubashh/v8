@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96708f0c_f3e5bf54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-11-12T09:35:17Z",
+      "side": 1,
+      "message": "PTAL, unfortunately I was only able to reproduce the crasher while running `v8_inspector_fuzzer` and I was unable to extract a reproduction case that would also work with `inspector-test` (for adding a regression test). I am not sure if this is due to the slight differences between the fuzzer and the test runner binaries, or if the fuzzer also modified the test harness (all the \"InspectorTest.*\" methods). Any advice?",
+      "revId": "836449e53db88ce81e186f7fc78a0a1ed268aa7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
