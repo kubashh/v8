@@ -4127,7 +4127,6 @@ JSTypeHintLowering::LoweringResult
 BytecodeGraphBuilder::TryBuildSimplifiedUnaryOp(const Operator* op,
                                                 Node* operand,
                                                 FeedbackSlot slot) {
-  if (!CanApplyTypeHintLowering(op)) return NoChange();
   Node* effect = environment()->GetEffectDependency();
   Node* control = environment()->GetControlDependency();
   JSTypeHintLowering::LoweringResult result =
@@ -4141,7 +4140,6 @@ JSTypeHintLowering::LoweringResult
 BytecodeGraphBuilder::TryBuildSimplifiedBinaryOp(const Operator* op, Node* left,
                                                  Node* right,
                                                  FeedbackSlot slot) {
-  if (!CanApplyTypeHintLowering(op)) return NoChange();
   Node* effect = environment()->GetEffectDependency();
   Node* control = environment()->GetControlDependency();
   JSTypeHintLowering::LoweringResult result =
@@ -4156,7 +4154,6 @@ BytecodeGraphBuilder::TryBuildSimplifiedForInNext(Node* receiver,
                                                   Node* cache_array,
                                                   Node* cache_type, Node* index,
                                                   FeedbackSlot slot) {
-  if (!CanApplyTypeHintLowering(IrOpcode::kJSForInNext)) return NoChange();
   Node* effect = environment()->GetEffectDependency();
   Node* control = environment()->GetControlDependency();
   JSTypeHintLowering::LoweringResult result =
@@ -4169,7 +4166,6 @@ BytecodeGraphBuilder::TryBuildSimplifiedForInNext(Node* receiver,
 JSTypeHintLowering::LoweringResult
 BytecodeGraphBuilder::TryBuildSimplifiedForInPrepare(Node* enumerator,
                                                      FeedbackSlot slot) {
-  if (!CanApplyTypeHintLowering(IrOpcode::kJSForInPrepare)) return NoChange();
   Node* effect = environment()->GetEffectDependency();
   Node* control = environment()->GetControlDependency();
   JSTypeHintLowering::LoweringResult result =
