@@ -8,6 +8,7 @@
 
 #include "src/base/bits.h"
 #include "src/codegen/code-factory.h"
+#include "src/codegen/code-stub-assembler.h"
 #include "src/codegen/interface-descriptors.h"
 #include "src/codegen/machine-type.h"
 #include "src/codegen/macro-assembler.h"
@@ -671,7 +672,7 @@ Node* CodeAssembler::AtomicLoad(MachineType type, Node* base, Node* offset) {
   return raw_assembler()->AtomicLoad(type, base, offset);
 }
 
-Node* CodeAssembler::LoadFromObject(MachineType type, TNode<HeapObject> object,
+Node* CodeAssembler::LoadFromObject(MachineType type, TNode<Object> object,
                                     TNode<IntPtrT> offset) {
   return raw_assembler()->LoadFromObject(type, object, offset);
 }
@@ -702,8 +703,8 @@ Node* CodeAssembler::Store(Node* base, Node* value) {
 }
 
 void CodeAssembler::StoreToObject(MachineRepresentation rep,
-                                  TNode<HeapObject> object,
-                                  TNode<IntPtrT> offset, Node* value,
+                                  TNode<Object> object, TNode<IntPtrT> offset,
+                                  Node* value,
                                   StoreToObjectWriteBarrier write_barrier) {
   WriteBarrierKind write_barrier_kind;
   switch (write_barrier) {
