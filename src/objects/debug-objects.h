@@ -45,6 +45,10 @@ class DebugInfo : public TorqueGeneratedDebugInfo<DebugInfo, Struct> {
   ExecutionMode DebugExecutionMode() const;
   void SetDebugExecutionMode(ExecutionMode value);
 
+  DECL_RELEASE_ACQUIRE_ACCESSORS(synchronized_debug_bytecode_array, HeapObject)
+  DECL_RELEASE_ACQUIRE_ACCESSORS(synchronized_original_bytecode_array,
+                                 HeapObject)
+
   // Specifies whether the associated function has an instrumented bytecode
   // array. If so, OriginalBytecodeArray returns the non-instrumented bytecode,
   // and DebugBytecodeArray returns the instrumented bytecode.
