@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13db4bed_31a84ff9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-12T20:35:05Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "e8bba2614f08d05afc647745d887edf6734a70c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46e8ed0a_2f23e3ea",
+        "filename": "include/libplatform/libplatform.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-12T20:35:05Z",
+      "side": 1,
+      "message": "nit: Maybe \"Must be used with...\" as it really doesn\u0027t work with the default mode.",
+      "range": {
+        "startLine": 48,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 20
+      },
+      "revId": "e8bba2614f08d05afc647745d887edf6734a70c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5194ba8_17876322",
+        "filename": "src/libplatform/default-platform.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-12T20:35:05Z",
+      "side": 1,
+      "message": "nit: newline",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 9
+      },
+      "revId": "e8bba2614f08d05afc647745d887edf6734a70c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd157414_e04a6d8f",
+        "filename": "src/libplatform/default-platform.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-12T20:35:05Z",
+      "side": 1,
+      "message": "Alternatively, we could have a DCHECK_NOT_NULL(worker_threads_task_runner_) in the places that lazily call EnsureBackgroundTaskRunnerInitialized().\n\nThat would mean only initializing the worker_threads_task_runner_ on creation and then assuming its state as an invariant.\n\nwdyt?",
+      "range": {
+        "startLine": 140,
+        "startChar": 2,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "e8bba2614f08d05afc647745d887edf6734a70c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
