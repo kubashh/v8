@@ -81,6 +81,30 @@
       },
       "revId": "71854b7b14ea35a3fb1d1061fdb74f8ec563e7a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea7830f8_3633516f",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-11-12T09:59:16Z",
+      "side": 1,
+      "message": "Right, slices and references don\u0027t support off-heap pointers. But I think I can change that, let me try, I\u0027ll send you a CL.",
+      "parentUuid": "434db641_5f4490f3",
+      "range": {
+        "startLine": 106,
+        "startChar": 20,
+        "endLine": 106,
+        "endChar": 34
+      },
+      "revId": "71854b7b14ea35a3fb1d1061fdb74f8ec563e7a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
