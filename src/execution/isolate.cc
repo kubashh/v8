@@ -1612,8 +1612,7 @@ Object Isolate::ThrowInternal(Object raw_exception, MessageLocation* location) {
 // Script::GetLineNumber and Script::GetColumnNumber can allocate on the heap to
 // initialize the line_ends array, so be careful when calling them.
 #ifdef DEBUG
-      if (AllowHeapAllocation::IsAllowed() &&
-          AllowGarbageCollection::IsAllowed()) {
+      if (AllowHeapAllocation::IsAllowed()) {
 #else
       if ((false)) {
 #endif
