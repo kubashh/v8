@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aa0ba70_302404b0",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-12T09:44:02Z",
+      "side": 1,
+      "message": "Minor: I was wondering whether we\u0027d like to add a OrderedNameDictionary::kDummyEnumOrder constant or such, for extra clarity. Your call.",
+      "range": {
+        "startLine": 192,
+        "startChar": 27,
+        "endLine": 192,
+        "endChar": 28
+      },
+      "revId": "ae6b6de5171b63ea63aec7db39379daa88b23262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5113936e_82c07d10",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-12T09:44:02Z",
+      "side": 1,
+      "message": "Random tip: you could make this v8:7569. If you do just \"grep 7569\", you might get all kinds of weird stuff (we have test files with long number sequences, for example). Also if you grep \"TODO\\(7569\\)\", then problem is you\u0027ll miss TODO(username, 7596) or TODO(7596, username) style comments. (Ok ok you can still do grep 7569 | grep TODO.)",
+      "range": {
+        "startLine": 425,
+        "startChar": 8,
+        "endLine": 425,
+        "endChar": 12
+      },
+      "revId": "ae6b6de5171b63ea63aec7db39379daa88b23262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
