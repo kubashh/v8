@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bec781b3_b7d3c99d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-12T18:13:56Z",
+      "side": 1,
+      "message": "Please see my comment in the file. I will write a CL description when we have decided which way to go.",
+      "revId": "117b6d80b9347fe0d914f1aa63a510f8b19dbfdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "968b7bfa_f3efe841",
