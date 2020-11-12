@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e39b7f57_86572f2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-11-12T13:43:12Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "8c229888_b5fd2cc1",
+      "revId": "2e3f4dfac732122046d8e82d2f398b319acd3448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e383b266_d8a9877b",
@@ -31,6 +49,30 @@
       "writtenOn": "2020-11-12T13:18:27Z",
       "side": 1,
       "message": "I\u0027m not very happy with this entire test (\"WrapperReplacement\"), firstly because it seems to duplicate things that the other two tests (\"WrapperBudget\" and \"EagerWrapperReplacement\") are already testing, and secondly because this loop will become quite slow when you bump the kGenericWrapperBudget to thousands of calls (as is the plan, IIUC).\n\nI see three options:\n(1) add a TODO to reconsider or at least speed up this test.\n(2) fix it now: set a test-specific budget before this loop.\n(3) just drop it entirely, if you agree that the remaining tests provide equivalent coverage.",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 38
+      },
+      "revId": "2e3f4dfac732122046d8e82d2f398b319acd3448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b047b81d_d6dde220",
+        "filename": "test/cctest/wasm/test-run-wasm-wrappers.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-11-12T13:43:12Z",
+      "side": 1,
+      "message": "This test\u0027s purpose is to a) check that the iterations within budget use the generic wrapper as intended and b) the wrapper is properly replaced exactly when the budget is exhausted.\n\nRegarding the first comment, this test does have some duplications from the other tests, but I think it has its purpose and I\u0027d like to keep it (at least for now).\n\nRegarding the second comment, I am aware that this test requires adjustments if the initial available budget gets larger than the existing one. That being said, I am planning on updating this test before or as part of the CL that does increase the threshold. In other words, I\u0027d prefer to update the test in a more relevant CL. (Actually, I have already made the change and I am planning to upload it in my next CL.)",
+      "parentUuid": "e383b266_d8a9877b",
       "range": {
         "startLine": 132,
         "startChar": 4,
