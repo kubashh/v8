@@ -77,6 +77,7 @@ INCOMPATIBLE_FLAGS_PER_BUILD_VARIABLE = {
                + INCOMPATIBLE_FLAGS_PER_VARIANT["jitless"],
   "predictable": ["--liftoff", "--parallel-compile-tasks",
                   "--concurrent-recompilation",
+                  "--stress-concurrent-allocation",
                   "--wasm-num-compilation-tasks=*"],
 }
 
