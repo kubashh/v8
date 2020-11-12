@@ -653,6 +653,9 @@ class SharedFunctionInfo : public HeapObject {
   // This is needed to set up the [[HomeObject]] on the function instance.
   inline bool needs_home_object() const;
 
+  void PrepareBytecodeForDebugExecution(Isolate* isolate);
+  void UnprepareBytecodeForDebugExecution(Isolate* isolate);
+
  private:
 #ifdef VERIFY_HEAP
   void SharedFunctionInfoVerify(ReadOnlyRoots roots);
