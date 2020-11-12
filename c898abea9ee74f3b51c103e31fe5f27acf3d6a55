@@ -16,6 +16,23 @@
       "message": "Hello,\n\nI ran into trouble cross-compiling V8 for arm64 with the third-party heap enabled. I seem to be running into a strange corner-case wrt to clang\u0027s -Wunreachable-code warning:\n\n```\n../../src/compiler/backend/arm64/instruction-selector-arm64.cc:804:58: error: code will never be executed [-Werror,-Wunreachable-code]                                                                                                                                                                                        \n    if (g.CanBeImmediate(index, COMPRESS_POINTERS_BOOL ? kLoadStoreImm32                                                                                                                                                                                                                                                      \n                                                         ^~~~~~~~~~~~~~~                                                                                                                                                                                                                                                      \n../../src/compiler/backend/arm64/instruction-selector-arm64.cc:804:33: note: silence by adding parentheses to mark code as explicitly dead                                                                                                                                                                                    \n    if (g.CanBeImmediate(index, COMPRESS_POINTERS_BOOL ? kLoadStoreImm32                                                                                                                                                                                                                                                      \n                                ^                                                                                                                                                                                                                                                                                             \n                                /* DISABLES CODE */ ( )                                                                                                        \n../../src/flags/flag-definitions.h:151:32: note: expanded from macro \u0027COMPRESS_POINTERS_BOOL\u0027\n#define COMPRESS_POINTERS_BOOL false                                           \n                               ^                                               \n1 error generated.\n```\n\nI found the issue goes away if we remove the V8_LIKELY, which isn\u0027t needed anyway since FLAG_disable_write_barriers is a constexpr. I\u0027m not sure why clang points to COMPRESS_POINTERS_BOOL as the source of the problem though.\n\nWDYT?\n\nThanks,\nPierre",
       "revId": "c898abea9ee74f3b51c103e31fe5f27acf3d6a55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52835599_ba41628b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-12T15:24:16Z",
+      "side": 1,
+      "message": "Nice! lgtm",
+      "revId": "c898abea9ee74f3b51c103e31fe5f27acf3d6a55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
