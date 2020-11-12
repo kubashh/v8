@@ -33,6 +33,41 @@
       "message": "I could also move the printing up one level into HandleBase::IsDereferenceAllowed but there we\u0027d have the same situation.",
       "revId": "dfafabb153b5779e835091d8384095718207eab2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4c66070_d491d63e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-11-12T18:54:41Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "dfafabb153b5779e835091d8384095718207eab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc552fd2_f6a1d18f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-11-12T18:54:41Z",
+      "side": 1,
+      "message": "What do you think of moving this into HandleBase::IsDereferenceAllowed? In case the method returns false we could also print some more help from that method in the future, e.g. \"LocalHeap missing\" or so?",
+      "parentUuid": "55216426_4e134155",
+      "revId": "dfafabb153b5779e835091d8384095718207eab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
