@@ -185,6 +185,11 @@ Reduction JSHeapCopyReducer::Reduce(Node* node) {
       NameRef name(broker(), p.name());
       break;
     }
+    case IrOpcode::kJSStoreNamedOwn: {
+      StoreNamedOwnParameters const& p = JSStoreNamedOwnNode{node}.Parameters();
+      NameRef name(broker(), p.name());
+      break;
+    }
     case IrOpcode::kStoreField:
     case IrOpcode::kLoadField: {
       FieldAccess access = FieldAccessOf(node->op());
