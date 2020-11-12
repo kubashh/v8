@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c229888_b5fd2cc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-11-12T13:18:27Z",
+      "side": 1,
+      "message": "LGTM, with a comment on tests.",
+      "revId": "2e3f4dfac732122046d8e82d2f398b319acd3448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e383b266_d8a9877b",
+        "filename": "test/cctest/wasm/test-run-wasm-wrappers.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-11-12T13:18:27Z",
+      "side": 1,
+      "message": "I\u0027m not very happy with this entire test (\"WrapperReplacement\"), firstly because it seems to duplicate things that the other two tests (\"WrapperBudget\" and \"EagerWrapperReplacement\") are already testing, and secondly because this loop will become quite slow when you bump the kGenericWrapperBudget to thousands of calls (as is the plan, IIUC).\n\nI see three options:\n(1) add a TODO to reconsider or at least speed up this test.\n(2) fix it now: set a test-specific budget before this loop.\n(3) just drop it entirely, if you agree that the remaining tests provide equivalent coverage.",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 38
+      },
+      "revId": "2e3f4dfac732122046d8e82d2f398b319acd3448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
