@@ -16,6 +16,23 @@
       "message": "PTAL, unfortunately I was only able to reproduce the crasher while running `v8_inspector_fuzzer` and I was unable to extract a reproduction case that would also work with `inspector-test` (for adding a regression test). I am not sure if this is due to the slight differences between the fuzzer and the test runner binaries, or if the fuzzer also modified the test harness (all the \"InspectorTest.*\" methods). Any advice?",
       "revId": "836449e53db88ce81e186f7fc78a0a1ed268aa7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32079907_6ba3e73f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-12T16:38:23Z",
+      "side": 1,
+      "message": "LGTM on the fix. I will look into why the test does not reproduce on inspector-test. For now, you could also add this as a fuzzer regression test (in test/fuzzer/inspector). But ideally the same test would also just run in inspector-test.\n\nMy Linux machine is currently frozen, but I will try to look into that tomorrow.",
+      "revId": "836449e53db88ce81e186f7fc78a0a1ed268aa7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
