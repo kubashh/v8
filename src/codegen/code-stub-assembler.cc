@@ -10435,23 +10435,23 @@ void CodeStubAssembler::BuildFastArrayForEach(
   CSA_SLOW_ASSERT(this, Word32Or(IsFixedArrayWithKind(array, kind),
                                  IsPropertyArray(array)));
 
-  int32_t first_val;
-  bool constant_first = ToInt32Constant(first_element_inclusive, &first_val);
-  int32_t last_val;
-  bool constent_last = ToInt32Constant(last_element_exclusive, &last_val);
+  intptr_t first_val;
+  bool constant_first = ToIntPtrConstant(first_element_inclusive, &first_val);
+  intptr_t last_val;
+  bool constent_last = ToIntPtrConstant(last_element_exclusive, &last_val);
   if (constant_first && constent_last) {
-    int delta = last_val - first_val;
+    intptr_t delta = last_val - first_val;
     DCHECK_GE(delta, 0);
     if (delta <= kElementLoopUnrollThreshold) {
       if (direction == ForEachDirection::kForward) {
-        for (int i = first_val; i < last_val; ++i) {
+        for (intptr_t i = first_val; i < last_val; ++i) {
           TNode<IntPtrT> index = IntPtrConstant(i);
           TNode<IntPtrT> offset = ElementOffsetFromIndex(
               index, kind, FixedArray::kHeaderSize - kHeapObjectTag);
           body(array, offset);
         }
       } else {
-        for (int i = last_val - 1; i >= first_val; --i) {
+        for (intptr_t i = last_val - 1; i >= first_val; --i) {
           TNode<IntPtrT> index = IntPtrConstant(i);
           TNode<IntPtrT> offset = ElementOffsetFromIndex(
               index, kind, FixedArray::kHeaderSize - kHeapObjectTag);

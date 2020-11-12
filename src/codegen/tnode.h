@@ -230,9 +230,9 @@ struct UnionT {
       kMachineType.representation();
   static_assert(kMachineRepresentation != MachineRepresentation::kNone,
                 "no common representation");
-  static_assert(is_valid_type_tag<T1>::is_tagged &&
-                    is_valid_type_tag<T2>::is_tagged,
-                "union types are only possible for tagged values");
+  // static_assert(is_valid_type_tag<T1>::is_tagged &&
+  //                   is_valid_type_tag<T2>::is_tagged,
+  //               "union types are only possible for tagged values");
 };
 
 using AnyTaggedT = UnionT<Object, MaybeObject>;
@@ -264,6 +264,10 @@ struct is_subtype<UnionT<T1, T2>, UnionT<U1, U2>> {
   static const bool value =
       (is_subtype<T1, U1>::value || is_subtype<T1, U2>::value) &&
       (is_subtype<T2, U1>::value || is_subtype<T2, U2>::value);
+};
+template <>
+struct is_subtype<ExternalReference, RawPtrT> {
+  static const bool value = true;
 };
 
 template <class T, class U>
