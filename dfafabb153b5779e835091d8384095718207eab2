@@ -16,6 +16,23 @@
       "message": "This would have saved me some headscratching today, as I had forgotten about the local heap parking.\n\nPrinting such a message in a predicate is weird but the predicate is used only in one place. But I could also either add a argument/template parameter that determines if anything should be printed, or I can make this a void function called CheckHandleDereferenceAllowed or similar.",
       "revId": "dfafabb153b5779e835091d8384095718207eab2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55216426_4e134155",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-12T18:19:07Z",
+      "side": 1,
+      "message": "I could also move the printing up one level into HandleBase::IsDereferenceAllowed but there we\u0027d have the same situation.",
+      "revId": "dfafabb153b5779e835091d8384095718207eab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
