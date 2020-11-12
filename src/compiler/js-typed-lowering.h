@@ -8,6 +8,7 @@
 #include "src/base/compiler-specific.h"
 #include "src/common/globals.h"
 #include "src/compiler/graph-reducer.h"
+#include "src/compiler/js-heap-broker.h"
 #include "src/compiler/opcodes.h"
 
 namespace v8 {
@@ -48,7 +49,6 @@ class V8_EXPORT_PRIVATE JSTypedLowering final
   Reduction ReduceJSIncrement(Node* node);
   Reduction ReduceJSNegate(Node* node);
   Reduction ReduceJSComparison(Node* node);
-  Reduction ReduceJSLoadNamed(Node* node);
   Reduction ReduceJSHasInPrototypeChain(Node* node);
   Reduction ReduceJSOrdinaryHasInstance(Node* node);
   Reduction ReduceJSHasContextExtension(Node* node);
@@ -85,6 +85,26 @@ class V8_EXPORT_PRIVATE JSTypedLowering final
   Reduction ReduceObjectIsArray(Node* node);
   Reduction ReduceJSParseInt(Node* node);
   Reduction ReduceJSResolvePromise(Node* node);
+
+  // Property accesses.
+  Reduction ReduceJSLoadNamed(Node* node);
+  Reduction ReduceJSLoadNamedFromSuper(Node* node);
+  Reduction ReduceJSStoreNamed(Node* node);
+  Reduction ReduceJSStoreNamedOwn(Node* node);
+  Reduction ReduceJSHasProperty(Node* node);
+  Reduction ReduceJSLoadProperty(Node* node);
+  Reduction ReduceJSStoreProperty(Node* node);
+  Reduction ReduceJSStoreDataPropertyInLiteral(Node* node);
+  Reduction ReduceJSStoreInArrayLiteral(Node* node);
+
+  Reduction ReducePropertyAccess(Node* node, Node* key,
+                                 base::Optional<NameRef> static_name,
+                                 Node* value, FeedbackSource const& source,
+                                 AccessMode access_mode);
+  Reduction ReduceMinimorphicPropertyAccess(
+      Node* node, Node* value,
+      MinimorphicLoadPropertyAccessFeedback const& feedback,
+      FeedbackSource const& source);
 
   // Helper for ReduceJSLoadModule and ReduceJSStoreModule.
   Node* BuildGetModuleCell(Node* node);
