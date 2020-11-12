@@ -102,7 +102,12 @@ bool LocalHeap::ContainsLocalHandle(Address* location) {
 
 bool LocalHeap::IsHandleDereferenceAllowed() {
   DCHECK_EQ(LocalHeap::Current(), this);
-  return state_ == ThreadState::Running;
+  if (state_ != ThreadState::Running) {
+    StdoutStream{} << "Cannot dereference handle owned by "
+                   << "non-running local heap\n";
+    return false;
+  }
+  return true;
 }
 #endif
 
