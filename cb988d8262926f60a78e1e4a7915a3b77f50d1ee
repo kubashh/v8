@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9576353a_011a83b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-11-13T09:08:38Z",
+      "side": 1,
+      "message": "I incorporated your suggestions, thanks!",
+      "parentUuid": "ec001d6a_0ea5603d",
+      "revId": "cb988d8262926f60a78e1e4a7915a3b77f50d1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "708379e1_c8b85b38",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eae80b0f_5a8ba4e7",
+        "filename": "test/cctest/wasm/test-run-wasm-wrappers.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-11-13T09:08:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "708379e1_c8b85b38",
+      "range": {
+        "startLine": 150,
+        "startChar": 58,
+        "endLine": 150,
+        "endChar": 60
+      },
+      "revId": "cb988d8262926f60a78e1e4a7915a3b77f50d1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "932e8987_7652804d",
@@ -54,6 +96,24 @@
       "writtenOn": "2020-11-12T18:58:26Z",
       "side": 1,
       "message": "1) I think you have to put {wrapper_before_call} into a handle. Otherwise it may get invalidated if the tier-up triggers a GC.\n\n2) Could you acquire wrapper_before_call before the loop? Then you could execute also the next call inside the loop. For that you could put the IsGeneric check before the SmiCall.",
+      "revId": "cb988d8262926f60a78e1e4a7915a3b77f50d1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1205e265_20483d59",
+        "filename": "test/cctest/wasm/test-run-wasm-wrappers.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-11-13T09:08:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "932e8987_7652804d",
       "revId": "cb988d8262926f60a78e1e4a7915a3b77f50d1ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
