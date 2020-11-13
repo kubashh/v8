@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f316075_a3f0a678",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-13T08:54:51Z",
+      "side": 0,
+      "message": "unused, remove.",
+      "range": {
+        "startLine": 635,
+        "startChar": 7,
+        "endLine": 635,
+        "endChar": 30
+      },
+      "revId": "9e4cd2bcd33f5618088a848fd90a15d2c3c0da9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
