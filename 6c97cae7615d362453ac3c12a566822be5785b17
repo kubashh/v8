@@ -16,6 +16,24 @@
       "message": "LGTM, please merge, since Lutz gave OK on bug, thanks!",
       "revId": "6c97cae7615d362453ac3c12a566822be5785b17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c73a5fed_a45e8750",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2020-11-13T02:58:36Z",
+      "side": 1,
+      "message": "We are not full committer, can you help to land this patch？ thank you！",
+      "parentUuid": "407f0bc6_3f1a02b3",
+      "revId": "6c97cae7615d362453ac3c12a566822be5785b17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
