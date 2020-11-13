@@ -39,6 +39,30 @@
       },
       "revId": "698e6e66a6e5a5dc70076182a333fd4a3f7fb201",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "404b58b1_cff160e4",
+        "filename": "src/heap/cppgc/marking-worklists.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-13T20:57:08Z",
+      "side": 1,
+      "message": "I didn\u0027t even notice these were templates... Removed the inline.",
+      "parentUuid": "c9e687f4_b2ab7468",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "698e6e66a6e5a5dc70076182a333fd4a3f7fb201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
