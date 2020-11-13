@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c6764ca_5ef5dcff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-13T11:40:39Z",
+      "side": 1,
+      "message": "lgtm modulo redness",
+      "revId": "2f894ac80fe9d45f08084810239f6cc88d3ce5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bda6a90b_b9673bdd",
+        "filename": "src/common/assert-scope.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-13T11:40:39Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "2f894ac80fe9d45f08084810239f6cc88d3ce5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

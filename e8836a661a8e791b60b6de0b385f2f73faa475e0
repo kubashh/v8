@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f901119c_d9340f52",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-13T11:40:39Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we use AllowGarbageCollection here?",
+      "revId": "e8836a661a8e791b60b6de0b385f2f73faa475e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e6794a0_ca10e476",
+        "filename": "src/common/assert-scope.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-13T11:40:39Z",
+      "side": 1,
+      "message": "Do we care about double-releases?",
+      "revId": "e8836a661a8e791b60b6de0b385f2f73faa475e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
