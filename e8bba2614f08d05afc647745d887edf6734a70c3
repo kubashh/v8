@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f158853d_af9be2fe",
+        "filename": "include/libplatform/libplatform.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-13T08:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46e8ed0a_2f23e3ea",
+      "range": {
+        "startLine": 48,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 20
+      },
+      "revId": "e8bba2614f08d05afc647745d887edf6734a70c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5194ba8_17876322",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9da13a3_1f320649",
+        "filename": "src/libplatform/default-platform.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-13T08:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5194ba8_17876322",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 9
+      },
+      "revId": "e8bba2614f08d05afc647745d887edf6734a70c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd157414_e04a6d8f",
@@ -77,6 +125,30 @@
       "writtenOn": "2020-11-12T20:35:05Z",
       "side": 1,
       "message": "Alternatively, we could have a DCHECK_NOT_NULL(worker_threads_task_runner_) in the places that lazily call EnsureBackgroundTaskRunnerInitialized().\n\nThat would mean only initializing the worker_threads_task_runner_ on creation and then assuming its state as an invariant.\n\nwdyt?",
+      "range": {
+        "startLine": 140,
+        "startChar": 2,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "e8bba2614f08d05afc647745d887edf6734a70c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "075d0ecd_d39bc1a9",
+        "filename": "src/libplatform/default-platform.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-13T08:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd157414_e04a6d8f",
       "range": {
         "startLine": 140,
         "startChar": 2,
