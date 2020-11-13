@@ -16,6 +16,29 @@
       "message": "Ulan, PTAL overall\nIgor, PTAL src/execution\nGeorg, PTAL src/deoptimizer",
       "revId": "c255a84a4478e0fc9466ebe75621eeed3fb796e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af9a4b32_c55e911e",
+        "filename": "src/common/assert-scope.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-13T08:33:51Z",
+      "side": 1,
+      "message": "Nice cleanup",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 12
+      },
+      "revId": "c255a84a4478e0fc9466ebe75621eeed3fb796e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
