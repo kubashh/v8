@@ -16,6 +16,23 @@
       "message": "+Bill, ptal, thanks!",
       "revId": "05ccc064952f39c5c79a13e3a57968a5d41e537c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b96ad060_082f4bc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2020-11-13T21:01:58Z",
+      "side": 1,
+      "message": "lgtm, sorry I missed this.",
+      "revId": "05ccc064952f39c5c79a13e3a57968a5d41e537c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
