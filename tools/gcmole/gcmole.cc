@@ -1589,7 +1589,7 @@ class ProblemsFinder : public clang::ASTConsumer,
     clang::CXXRecordDecl* no_heap_access_decl =
         r.ResolveNamespace("v8")
             .ResolveNamespace("internal")
-            .Resolve<clang::CXXRecordDecl>("DisallowHeapAccess");
+            .ResolveTemplate("DisallowHeapAccess");
 
     clang::CXXRecordDecl* object_decl =
         r.ResolveNamespace("v8").ResolveNamespace("internal").
