@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99cc4264_df8d7a80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-13T11:29:21Z",
+      "side": 1,
+      "message": "lgtm. Didn\u0027t look closely at the assert-scopes changes.",
+      "revId": "de59b94ff7f99399f2fa309fb1afe626fa07c94e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
