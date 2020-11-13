@@ -16,6 +16,29 @@
       "message": "Georg PTAL",
       "revId": "7affabbc0d0b0d4c009187bd074ef2e12635f586",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "769e4915_2930d702",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-13T09:24:28Z",
+      "side": 1,
+      "message": "This looks a bit funny after your change. Please replace with kNeverSerializedHeapObject.",
+      "range": {
+        "startLine": 1095,
+        "startChar": 60,
+        "endLine": 1095,
+        "endChar": 71
+      },
+      "revId": "7affabbc0d0b0d4c009187bd074ef2e12635f586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
