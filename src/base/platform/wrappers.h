@@ -7,23 +7,47 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "src/base/base-export.h"
 
 namespace v8 {
 namespace base {
 
-void* Malloc(size_t size);
+// void* Malloc(size_t size);
+// 
+// void* Realloc(void* memory, size_t size);
+// 
+// void Free(void* memory);
+// 
+// void* Calloc(size_t count, size_t size);
+// 
+// void* Memcpy(void* dest, const void* source, size_t count);
+// 
+// FILE* Fopen(const char* filename, const char* mode);
+// 
+// int Fclose(FILE* stream);
 
-void* Realloc(void* memory, size_t size);
+// #if !defined(STARBOARD)
 
-void Free(void* memory);
+inline void* Malloc(size_t size) { return malloc(size); }
 
-void* Calloc(size_t count, size_t size);
+inline void* Realloc(void* memory, size_t size) { return realloc(memory, size); }
 
-void* Memcpy(void* dest, const void* source, size_t count);
+inline void Free(void* memory) { return free(memory); }
 
-FILE* Fopen(const char* filename, const char* mode);
+inline void* Calloc(size_t count, size_t size) { return calloc(count, size); }
 
-int Fclose(FILE* stream);
+inline void* Memcpy(void* dest, const void* source, size_t count) {
+  return memcpy(dest, source, count);
+}
+
+inline FILE* Fopen(const char* filename, const char* mode) {
+  return fopen(filename, mode);
+}
+
+inline int Fclose(FILE* stream) { return fclose(stream); }
 
 }  // namespace base
 }  // namespace v8
