@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7131d27_e3df2a61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-11-13T10:32:47Z",
+      "side": 1,
+      "message": "Thanks a bunch! Added a few minor comments.",
+      "revId": "117b6d80b9347fe0d914f1aa63a510f8b19dbfdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "968b7bfa_f3efe841",
@@ -65,6 +82,24 @@
       "writtenOn": "2020-11-12T15:42:37Z",
       "side": 1,
       "message": "An alternative would be to compare the new value\u0027s map with the then-current value\u0027s map rather than with the now-current value\u0027s map. I think this would correspond to the CSA code and would perhaps be less surprising. In the case where the map is stable we could possibly take the dependency in order to avoid loading the then-current value and its map.",
+      "revId": "117b6d80b9347fe0d914f1aa63a510f8b19dbfdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92e0479d_bdd87438",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-11-13T10:32:47Z",
+      "side": 1,
+      "message": "That would be slower though due to 2 unnecessary loads; and the whole point of this code path is that they should be the same? CSA simply does the other thing because it uses less memory and the performance doesn\u0027t matter as much there.",
+      "parentUuid": "968b7bfa_f3efe841",
       "revId": "117b6d80b9347fe0d914f1aa63a510f8b19dbfdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

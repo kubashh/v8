@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aabe050_4e77cc7f",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-11-13T10:32:47Z",
+      "side": 0,
+      "message": "It probably makes sense to still add the dependency if the map is stable at this point. Still going down this path for already unstable maps is something we do because we don\u0027t want to mutate the global state from the compiler since that would (likely?) be concurrent mutation. Please do add a comment explaining this second part at least for future reference... otherwise we\u0027re surely going to scratch our heads why we\u0027re checking an unstable map before store.",
+      "revId": "5c21f4de9f3c5af2f86b499434dfaaf8e9d6d8da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
