@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89bd1285_bb3ca8a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-13T14:39:07Z",
+      "side": 1,
+      "message": "Still lgtm",
+      "revId": "487d7eade863a2cb8599f5632244fd9b2f61f7a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0828229e_376d0a5f",
@@ -55,6 +72,30 @@
       "side": 1,
       "message": "True, but it\u0027s not that easy. First, I need to put \"using TorqueGeneratedFactory\u003cImpl\u003e::impl\" into FactoryBase, because otherwise C++ won\u0027t allow referring to impl without explicit \"this-\u003e\". Then it\u0027s necessary to friend TorqueGeneratedFactory from both Factory and LocalFactory, so that the Torque-generated code becomes accessible.\nSo while TorqueGeneratedFactory used to be a local thing in a single header, it\u0027s then spread to three. Not sure this is actually better...",
       "parentUuid": "0828229e_376d0a5f",
+      "range": {
+        "startLine": 53,
+        "startChar": 2,
+        "endLine": 53,
+        "endChar": 80
+      },
+      "revId": "487d7eade863a2cb8599f5632244fd9b2f61f7a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a4faad0_e7523196",
+        "filename": "src/heap/factory-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-13T14:39:07Z",
+      "side": 1,
+      "message": "ack, this is fine in that case.",
+      "parentUuid": "417ca10e_893fcb65",
       "range": {
         "startLine": 53,
         "startChar": 2,
