@@ -93,6 +93,7 @@ INCOMPATIBLE_FLAGS_PER_EXTRA_FLAG = {
   "--no-enable-sse4-1": ["--enable-sse4-1"],
   "--optimize-for-size": ["--max-semi-space-size=*"],
   "--stress-flush-bytecode": ["--no-stress-flush-bytecode"],
+  "--stress_concurrent_allocation": ["--single-threaded-gc", "--predictable"],
   "--stress-incremental-marking": INCOMPATIBLE_FLAGS_PER_VARIANT["stress_incremental_marking"],
 }
 
