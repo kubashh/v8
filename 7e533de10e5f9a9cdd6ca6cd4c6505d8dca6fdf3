@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "088dcd3f_3c0c07b6",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-11-16T16:46:16Z",
+      "side": 1,
+      "message": "Hi Jakob, this check is failing on PPC and i\u0027m assuming it\u0027s due to the page size difference. Are there additional changes we need to make on PPC?",
+      "revId": "7e533de10e5f9a9cdd6ca6cd4c6505d8dca6fdf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
