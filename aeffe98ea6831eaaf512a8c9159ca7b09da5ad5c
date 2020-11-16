@@ -50,6 +50,92 @@
       "message": "Hey, sorry for the delay, I didn\u0027t work on Friday and took Thursday off.",
       "revId": "aeffe98ea6831eaaf512a8c9159ca7b09da5ad5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83b0bb89_457ddf96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-16T16:01:40Z",
+      "side": 1,
+      "message": "I think we need to find a different solution for the unreachable, I didn\u0027t have time yet to think about it.\n\nThe easiest, and cleanest way, is to provide a default Recorder implementation (not just the interface) where we then can use UNREACHABLE.",
+      "revId": "aeffe98ea6831eaaf512a8c9159ca7b09da5ad5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c46fac54_5e31e0f9",
+        "filename": "BUILD.gn",
+        "patchSetId": 29
+      },
+      "lineNbr": 4243,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-16T16:01:40Z",
+      "side": 1,
+      "message": "I guess this is no longer needed with the line below.",
+      "range": {
+        "startLine": 4243,
+        "startChar": 0,
+        "endLine": 4243,
+        "endChar": 58
+      },
+      "revId": "aeffe98ea6831eaaf512a8c9159ca7b09da5ad5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "435e612d_7bf1940f",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1711,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-16T16:01:40Z",
+      "side": 1,
+      "message": "spurious change.",
+      "range": {
+        "startLine": 1708,
+        "startChar": 4,
+        "endLine": 1711,
+        "endChar": 10
+      },
+      "revId": "aeffe98ea6831eaaf512a8c9159ca7b09da5ad5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8efc9109_b945ef5c",
+        "filename": "src/instrumentation/recorder-win.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-16T16:01:40Z",
+      "side": 1,
+      "message": "this is comment is no longer needed now that we have a compile-time flag.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 71
+      },
+      "revId": "aeffe98ea6831eaaf512a8c9159ca7b09da5ad5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
