@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bce3415_cb52321b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-11-16T15:12:50Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "4270f2e2_13f80282",
+      "revId": "f81dc3a1524b2ff80cc3db2bfe895c8bac80449c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce7ba330_61b17937",
@@ -31,6 +49,24 @@
       "writtenOn": "2020-11-16T12:47:56Z",
       "side": 1,
       "message": "Can you add some reasoning here where this value is coming from? Think about someone who wants to change this value eventually. What should a comment say to guide them whether changing the threshold is a good idea or not.",
+      "revId": "f81dc3a1524b2ff80cc3db2bfe895c8bac80449c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bf03e91_1a38d1b8",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-11-16T15:12:50Z",
+      "side": 1,
+      "message": "I added a comment. It\u0027s very high-level, but I don\u0027t know if we\u0027d like to go into more details in the code.",
+      "parentUuid": "ce7ba330_61b17937",
       "revId": "f81dc3a1524b2ff80cc3db2bfe895c8bac80449c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
