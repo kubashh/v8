@@ -34,6 +34,24 @@
       "parentUuid": "088dcd3f_3c0c07b6",
       "revId": "7e533de10e5f9a9cdd6ca6cd4c6505d8dca6fdf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7656a071_f3e7163d",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-11-16T22:33:30Z",
+      "side": 1,
+      "message": "thanks for your help.",
+      "parentUuid": "aceabb8b_1caafc34",
+      "revId": "7e533de10e5f9a9cdd6ca6cd4c6505d8dca6fdf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
