@@ -16,6 +16,23 @@
       "message": "Alternatively, the reductions could move to a new (native-context-independent) reducer added to the InliningPhase https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/pipeline.cc;l\u003d1467;drc\u003dc35d70dd5c9113fc9c2380b6628aa18aa30ec97d. Not sure if this would be beneficial enough to justify extra work.",
       "revId": "6c28a91f964f1fc067e30a94ebfa6fe15a06549e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "698e669c_25f2d084",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-16T09:07:34Z",
+      "side": 1,
+      "message": "Hi Jakob, I find it hard to evaluate this change without having a clearer idea of the direction into which NCI is moving. Could you write down some design notes for this? Thanks.",
+      "revId": "6c28a91f964f1fc067e30a94ebfa6fe15a06549e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
