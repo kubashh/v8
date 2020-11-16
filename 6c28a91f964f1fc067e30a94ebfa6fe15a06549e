@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "812e3f9b_2f52da1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-16T07:27:46Z",
+      "side": 1,
+      "message": "Alternatively, the reductions could move to a new (native-context-independent) reducer added to the InliningPhase https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/pipeline.cc;l\u003d1467;drc\u003dc35d70dd5c9113fc9c2380b6628aa18aa30ec97d. Not sure if this would be beneficial enough to justify extra work.",
+      "revId": "6c28a91f964f1fc067e30a94ebfa6fe15a06549e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
