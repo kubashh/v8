@@ -1654,7 +1654,7 @@ class V8_EXPORT Module : public Data {
    */
   V8_WARN_UNUSED_RESULT Maybe<bool> SetSyntheticModuleExport(
       Isolate* isolate, Local<String> export_name, Local<Value> export_value);
-  V8_DEPRECATE_SOON(
+  V8_DEPRECATED(
       "Use the preceding SetSyntheticModuleExport with an Isolate parameter, "
       "instead of the one that follows.  The former will throw a runtime "
       "error if called for an export that doesn't exist (as per spec); "
@@ -1839,7 +1839,7 @@ class V8_EXPORT ScriptCompiler {
    public:
     enum Encoding { ONE_BYTE, TWO_BYTE, UTF8 };
 
-    V8_DEPRECATE_SOON(
+    V8_DEPRECATED(
         "This class takes ownership of source_stream, so use the constructor "
         "taking a unique_ptr to make these semantics clearer")
     StreamedSource(ExternalSourceStream* source_stream, Encoding encoding);
@@ -1946,7 +1946,7 @@ class V8_EXPORT ScriptCompiler {
    * This API allows to start the streaming with as little data as possible, and
    * the remaining data (for example, the ScriptOrigin) is passed to Compile.
    */
-  V8_DEPRECATE_SOON("Use ScriptCompiler::StartStreamingScript instead.")
+  V8_DEPRECATED("Use ScriptCompiler::StartStreamingScript instead.")
   static ScriptStreamingTask* StartStreamingScript(
       Isolate* isolate, StreamedSource* source,
       CompileOptions options = kNoCompileOptions);
@@ -3452,7 +3452,7 @@ class V8_EXPORT Symbol : public Name {
    */
   Local<Value> Description() const;
 
-  V8_DEPRECATE_SOON("Use Symbol::Description()")
+  V8_DEPRECATED("Use Symbol::Description()")
   Local<Value> Name() const { return Description(); }
 
   /**
@@ -7228,30 +7228,6 @@ class V8_EXPORT ResourceConstraints {
     initial_young_generation_size_ = initial_size;
   }
 
-  /**
-   * Deprecated functions. Do not use in new code.
-   */
-  V8_DEPRECATED("Use code_range_size_in_bytes.")
-  size_t code_range_size() const { return code_range_size_ / kMB; }
-  V8_DEPRECATED("Use set_code_range_size_in_bytes.")
-  void set_code_range_size(size_t limit_in_mb) {
-    code_range_size_ = limit_in_mb * kMB;
-  }
-  V8_DEPRECATED("Use max_young_generation_size_in_bytes.")
-  size_t max_semi_space_size_in_kb() const;
-  V8_DEPRECATED("Use set_max_young_generation_size_in_bytes.")
-  void set_max_semi_space_size_in_kb(size_t limit_in_kb);
-  V8_DEPRECATED("Use max_old_generation_size_in_bytes.")
-  size_t max_old_space_size() const { return max_old_generation_size_ / kMB; }
-  V8_DEPRECATED("Use set_max_old_generation_size_in_bytes.")
-  void set_max_old_space_size(size_t limit_in_mb) {
-    max_old_generation_size_ = limit_in_mb * kMB;
-  }
-  V8_DEPRECATED("Zone does not pool memory any more.")
-  size_t max_zone_pool_size() const { return max_zone_pool_size_; }
-  V8_DEPRECATED("Zone does not pool memory any more.")
-  void set_max_zone_pool_size(size_t bytes) { max_zone_pool_size_ = bytes; }
-
  private:
   static constexpr size_t kMB = 1048576u;
   size_t code_range_size_ = 0;
@@ -7433,8 +7409,6 @@ class PromiseRejectMessage {
 typedef void (*PromiseRejectCallback)(PromiseRejectMessage message);
 
 // --- Microtasks Callbacks ---
-V8_DEPRECATED("Use *WithData version.")
-typedef void (*MicrotasksCompletedCallback)(Isolate*);
 typedef void (*MicrotasksCompletedCallbackWithData)(Isolate*, void*);
 typedef void (*MicrotaskCallback)(void* data);
 
@@ -8843,7 +8817,7 @@ class V8_EXPORT Isolate {
       std::unique_ptr<MeasureMemoryDelegate> delegate,
       MeasureMemoryExecution execution = MeasureMemoryExecution::kDefault);
 
-  V8_DEPRECATE_SOON("Use the version with a delegate")
+  V8_DEPRECATED("Use the version with a delegate")
   MaybeLocal<Promise> MeasureMemory(Local<Context> context,
                                     MeasureMemoryMode mode);
 
@@ -8905,10 +8879,6 @@ class V8_EXPORT Isolate {
    * on the top of the stack if no JavaScript is running.
    */
   Local<Context> GetCurrentContext();
-
-  /** Returns the last context entered through V8's C++ API. */
-  V8_DEPRECATED("Use GetEnteredOrMicrotaskContext().")
-  Local<Context> GetEnteredContext();
 
   /**
    * Returns either the last context entered through V8's C++ API, or the
@@ -9189,12 +9159,6 @@ class V8_EXPORT Isolate {
   void SetPromiseRejectCallback(PromiseRejectCallback callback);
 
   /**
-   * An alias for PerformMicrotaskCheckpoint.
-   */
-  V8_DEPRECATED("Use PerformMicrotaskCheckpoint.")
-  void RunMicrotasks() { PerformMicrotaskCheckpoint(); }
-
-  /**
    * Runs the default MicrotaskQueue until it gets empty and perform other
    * microtask checkpoint steps, such as calling ClearKeptObjects. Asserts that
    * the MicrotasksPolicy is not kScoped. Any exceptions thrown by microtask
@@ -9235,16 +9199,12 @@ class V8_EXPORT Isolate {
    * Executing scripts inside the callback will not re-trigger microtasks and
    * the callback.
    */
-  V8_DEPRECATED("Use *WithData version.")
-  void AddMicrotasksCompletedCallback(MicrotasksCompletedCallback callback);
   void AddMicrotasksCompletedCallback(
       MicrotasksCompletedCallbackWithData callback, void* data = nullptr);
 
   /**
    * Removes callback that was installed by AddMicrotasksCompletedCallback.
    */
-  V8_DEPRECATED("Use *WithData version.")
-  void RemoveMicrotasksCompletedCallback(MicrotasksCompletedCallback callback);
   void RemoveMicrotasksCompletedCallback(
       MicrotasksCompletedCallbackWithData callback, void* data = nullptr);
 
@@ -9487,11 +9447,6 @@ class V8_EXPORT Isolate {
    * strings should be allowed.
    */
   V8_DEPRECATED(
-      "Use Isolate::SetModifyCodeGenerationFromStringsCallback instead. "
-      "See http://crbug.com/v8/10096.")
-  void SetAllowCodeGenerationFromStringsCallback(
-      AllowCodeGenerationFromStringsCallback callback);
-  V8_DEPRECATE_SOON(
       "Use Isolate::SetModifyCodeGenerationFromStringsCallback with "
       "ModifyCodeGenerationFromStringsCallback2 instead. See "
       "http://crbug.com/1096017 and TC39 Dynamic Code Brand Checks proposal "
@@ -9856,7 +9811,7 @@ class V8_EXPORT V8 {
    * \param context The third argument passed to the Linux signal handler, which
    * points to a ucontext_t structure.
    */
-  V8_DEPRECATE_SOON("Use TryHandleWebAssemblyTrapPosix")
+  V8_DEPRECATED("Use TryHandleWebAssemblyTrapPosix")
   static bool TryHandleSignal(int signal_number, void* info, void* context);
 #endif  // V8_OS_POSIX
 
