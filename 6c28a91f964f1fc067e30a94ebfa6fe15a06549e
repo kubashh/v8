@@ -33,6 +33,74 @@
       "message": "Hi Jakob, I find it hard to evaluate this change without having a clearer idea of the direction into which NCI is moving. Could you write down some design notes for this? Thanks.",
       "revId": "6c28a91f964f1fc067e30a94ebfa6fe15a06549e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea9db03a_d36a0a97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-16T13:16:29Z",
+      "side": 1,
+      "message": "Sathya for the comment in typed-lowering about LoadFromPrototype.\n\nThanks Jakob! Looks reasonable from my side. Though I am not really familiar with the compiler pipeline. As long as compiler team is happy with this I am fine too.",
+      "revId": "6c28a91f964f1fc067e30a94ebfa6fe15a06549e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5643aeb_f736a19c",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-16T13:16:29Z",
+      "side": 1,
+      "message": "Why did we need this change here? I am just curious.",
+      "revId": "6c28a91f964f1fc067e30a94ebfa6fe15a06549e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eef8268a_9a35b087",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-16T13:16:29Z",
+      "side": 1,
+      "message": "I forgot that access_builder was a different class. This was one concern I had today in our discussion. I thought for LoadFromPrototype we may not be able to share code with native context specialization lowering. With access builder as a separate class maybe it isn\u0027t an issue.\n\n+Sathya, who is actully working on LoadFromPrototype.",
+      "revId": "6c28a91f964f1fc067e30a94ebfa6fe15a06549e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c8f1032_119864e2",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-16T13:16:29Z",
+      "side": 1,
+      "message": "Currently, we only have minimorphic property access for JSLoadNamed. So maybe we should just keep JSLoadNamed here? Maybe others can just DCHECK that there is no minimorphic property access corresponding to them.",
+      "revId": "6c28a91f964f1fc067e30a94ebfa6fe15a06549e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
