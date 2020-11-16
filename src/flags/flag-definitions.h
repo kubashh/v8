@@ -256,8 +256,8 @@ DEFINE_IMPLICATION(harmony_weak_refs_with_cleanup_some, harmony_weak_refs)
   V(harmony_import_assertions, "harmony import assertions")
 
 #ifdef V8_INTL_SUPPORT
-#define HARMONY_INPROGRESS(V)                       \
-  HARMONY_INPROGRESS_BASE(V)                        \
+#define HARMONY_INPROGRESS(V) \
+  HARMONY_INPROGRESS_BASE(V)  \
   V(harmony_intl_displaynames_date_types, "Intl.DisplayNames date types")
 #else
 #define HARMONY_INPROGRESS(V) HARMONY_INPROGRESS_BASE(V)
@@ -277,12 +277,12 @@ DEFINE_IMPLICATION(harmony_weak_refs_with_cleanup_some, harmony_weak_refs)
 #endif
 
 // Features that are shipping (turned on by default, but internal flag remains).
-#define HARMONY_SHIPPING_BASE(V)                                          \
-  V(harmony_sharedarraybuffer, "harmony sharedarraybuffer")               \
-  V(harmony_atomics, "harmony atomics")                                   \
-  V(harmony_weak_refs, "harmony weak references")                         \
-  V(harmony_string_replaceall, "harmony String.prototype.replaceAll")     \
-  V(harmony_logical_assignment, "harmony logical assignment")             \
+#define HARMONY_SHIPPING_BASE(V)                                      \
+  V(harmony_sharedarraybuffer, "harmony sharedarraybuffer")           \
+  V(harmony_atomics, "harmony atomics")                               \
+  V(harmony_weak_refs, "harmony weak references")                     \
+  V(harmony_string_replaceall, "harmony String.prototype.replaceAll") \
+  V(harmony_logical_assignment, "harmony logical assignment")         \
   V(harmony_atomics_waitasync, "harmony Atomics.waitAsync")
 
 #ifdef V8_INTL_SUPPORT
@@ -866,9 +866,8 @@ FOREACH_WASM_STAGING_FEATURE_FLAG(WASM_STAGING_IMPLICATION)
 #undef WASM_STAGING_IMPLICATION
 
 DEFINE_BOOL(wasm_opt, true, "enable wasm optimization")
-DEFINE_BOOL(
-    wasm_bounds_checks, true,
-    "enable bounds checks (disable for performance testing only)")
+DEFINE_BOOL(wasm_bounds_checks, true,
+            "enable bounds checks (disable for performance testing only)")
 DEFINE_BOOL(wasm_stack_checks, true,
             "enable stack checks (disable for performance testing only)")
 DEFINE_BOOL(wasm_math_intrinsics, true,
@@ -1223,6 +1222,9 @@ DEFINE_BOOL(stress_background_compile, false,
 DEFINE_BOOL(
     finalize_streaming_on_background, false,
     "perform the script streaming finalization on the background thread")
+// TODO(leszeks): Parallel compile tasks currently don't support off-thread
+// finalization.
+DEFINE_NEG_IMPLICATION(finalize_streaming_on_background, parallel_compile_tasks)
 DEFINE_BOOL(disable_old_api_accessors, false,
             "Disable old-style API accessors whose setters trigger through the "
             "prototype chain")

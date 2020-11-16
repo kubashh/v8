@@ -59,7 +59,7 @@ INCOMPATIBLE_FLAGS_PER_VARIANT = {
   "slow_path": ["--no-force-slow-path"],
   "stress_concurrent_allocation": ["--single-threaded-gc", "--predictable"],
   "stress_incremental_marking": ["--no-stress-incremental-marking"],
-  "stress_js_bg_compile_wasm_code_gc": ["--no-stress-background-compile"],
+  "stress_js_bg_compile_wasm_code_gc": ["--no-stress-background-compile", "--parallel_compile_tasks"],
   "stress": ["--no-stress-opt", "--always-opt", "--no-always-opt", "--liftoff", "--max-inlined-bytecode-size=*",
              "--max-inlined-bytecode-size-cumulative=*", "--stress-inline"],
   "turboprop": ["--interrupt-budget=*", "--no-turboprop"],
