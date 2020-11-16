@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4270f2e2_13f80282",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-16T12:47:56Z",
+      "side": 1,
+      "message": "LGTM with nit.",
+      "revId": "f81dc3a1524b2ff80cc3db2bfe895c8bac80449c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7ba330_61b17937",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-16T12:47:56Z",
+      "side": 1,
+      "message": "Can you add some reasoning here where this value is coming from? Think about someone who wants to change this value eventually. What should a comment say to guide them whether changing the threshold is a good idea or not.",
+      "revId": "f81dc3a1524b2ff80cc3db2bfe895c8bac80449c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
