@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/common/globals.h"
 #if V8_TARGET_ARCH_X64
 
 #include "src/api/api-arguments.h"
@@ -42,6 +43,14 @@ void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address) {
           RelocInfo::CODE_TARGET);
 }
 
+static void CheckArgc(MacroAssembler* masm, Register argc = rax) {
+  Label OK;
+  __ cmpl(argc, Immediate(kArgcAdditionForReceiver));
+  __ j(greater_equal, &OK, Label::kNear);
+  __ int3();
+  __ bind(&OK);
+}
+
 static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
                                            Runtime::FunctionId function_id) {
   // ----------- S t a t e -------------
@@ -49,6 +58,7 @@ static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
   //  -- rdx : new target (preserved for callee)
   //  -- rdi : target function (preserved for callee)
   // -----------------------------------
+  CheckArgc(masm);
   {
     FrameScope scope(masm, StackFrame::INTERNAL);
     // Push a copy of the target function, the new target and the actual
@@ -77,12 +87,16 @@ namespace {
 
 void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
   // ----------- S t a t e -------------
-  //  -- rax: number of arguments
+  //  -- rax: number of arguments (including the receiver)
   //  -- rdi: constructor function
   //  -- rdx: new target
   //  -- rsi: context
   // -----------------------------------
 
+  // Subtract receiver from argument count on entry until builtins handle it
+  // corretly
+  CheckArgc(masm);
+  __ subq(rax, Immediate(kArgcAdditionForReceiver));
   Label stack_overflow;
   __ StackOverflowCheck(rax, rcx, &stack_overflow, Label::kFar);
 
@@ -91,6 +105,7 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
     FrameScope scope(masm, StackFrame::CONSTRUCT);
 
     // Preserve the incoming parameters on the stack.
+    // Subtract receiver from argument count
     __ SmiTag(rcx, rax);
     __ Push(rsi);
     __ Push(rcx);
@@ -112,6 +127,10 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
     // rax: number of arguments (untagged)
     // rdi: constructor function
     // rdx: new target
+
+    // Include the receiver in the argument count again bevore calling
+    // Construct.
+    __ addq(rax, Immediate(kArgcAdditionForReceiver));
     __ InvokeFunction(rdi, rdx, rax, CALL_FUNCTION);
 
     // Restore context from the frame.
@@ -143,13 +162,14 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
 // The construct stub for ES5 constructor functions and ES6 class constructors.
 void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   // ----------- S t a t e -------------
-  //  -- rax: number of arguments (untagged)
+  //  -- rax: number of arguments (untagged; including the receiver)
   //  -- rdi: constructor function
   //  -- rdx: new target
   //  -- rsi: context
   //  -- sp[...]: constructor arguments
   // -----------------------------------
-
+  CheckArgc(masm);
+  __ subq(rax, Immediate(kArgcAdditionForReceiver));
   // Enter a construct frame.
   {
     FrameScope scope(masm, StackFrame::CONSTRUCT);
@@ -249,6 +269,8 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
     __ Push(r8);
 
     // Call the function.
+    CheckArgc(masm);
+    __ addq(rax, Immediate(kArgcAdditionForReceiver));
     __ InvokeFunction(rdi, rdx, rax, CALL_FUNCTION);
 
     // ----------- S t a t e -------------
@@ -584,6 +606,9 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
     // rdx : new.target
     // r9  : receiver
 
+    CheckArgc(masm);
+    __ subq(rax, Immediate(kArgcAdditionForReceiver));
+
     // Check if we have enough stack space to push all arguments.
     // Argument count in rax. Clobbers rcx.
     Label enough_stack_space, stack_overflow;
@@ -610,6 +635,7 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
     __ decq(rcx);
     __ j(greater_equal, &loop, Label::kNear);
 
+    __ addq(rax, Immediate(kArgcAdditionForReceiver));
     // Push the receiver.
     __ Push(r9);
 
@@ -875,6 +901,7 @@ static void MaybeOptimizeCode(MacroAssembler* masm, Register feedback_vector,
   //  -- optimization_marker : a Smi containing a non-zero optimization marker.
   // -----------------------------------
 
+  CheckArgc(masm);
   DCHECK(!AreAliased(feedback_vector, rdx, rdi, optimization_marker));
 
   // TODO(v8:8394): The logging of first execution will break if
@@ -907,6 +934,7 @@ static void TailCallOptimizedCodeSlot(MacroAssembler* masm,
   //  -- rdi : target function (preserved for callee if needed, and caller)
   // -----------------------------------
 
+  CheckArgc(masm);
   Register closure = rdi;
 
   Label heal_optimized_code_slot;
@@ -1038,6 +1066,8 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   Register closure = rdi;
   Register feedback_vector = rbx;
 
+  // TODO(pthier): make sure callers include the receiver in rax
+  // CheckArgc(masm);
   // Get the bytecode array from the function object and load it into
   // kInterpreterBytecodeArrayRegister.
   __ LoadTaggedPointerField(
@@ -1285,6 +1315,11 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
   //           they are to be pushed onto the stack.
   //  -- rdi : the target to call (can be any Object).
   // -----------------------------------
+  // Subtract receiver from argument count on netry until builtins handle it
+  // corretly
+  CheckArgc(masm);
+  __ subq(rax, Immediate(kArgcAdditionForReceiver));
+
   Label stack_overflow;
 
   if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
@@ -1323,6 +1358,10 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
   // Call the target.
   __ PushReturnAddressFrom(kScratchRegister);  // Re-push return address.
 
+  // Add receiver to argument count again to meet the expectation of the
+  // prologue
+  __ addq(rax, Immediate(kArgcAdditionForReceiver));
+
   if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
     __ Jump(BUILTIN_CODE(masm->isolate(), CallWithSpread),
             RelocInfo::CODE_TARGET);
@@ -1355,6 +1394,11 @@ void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
   // -----------------------------------
   Label stack_overflow;
 
+  // Subtract receiver from argument count on netry until builtins handle it
+  // corretly
+  CheckArgc(masm);
+  __ subq(rax, Immediate(kArgcAdditionForReceiver));
+
   // Add a stack check before pushing arguments.
   __ StackOverflowCheck(rax, r8, &stack_overflow);
 
@@ -1385,16 +1429,22 @@ void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
   if (mode == InterpreterPushArgsMode::kArrayFunction) {
     // Tail call to the array construct stub (still in the caller
     // context at this point).
+    // TODO(pthier): ArrayConstructorImpl still expects rax without receiver
     __ AssertFunction(rdi);
     // Jump to the constructor function (rax, rbx, rdx passed on).
     Handle<Code> code = BUILTIN_CODE(masm->isolate(), ArrayConstructorImpl);
     __ Jump(code, RelocInfo::CODE_TARGET);
   } else if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
     // Call the constructor (rax, rdx, rdi passed on).
+    __ DebugBreak();  // TODO(pthier): check receiver
     __ Jump(BUILTIN_CODE(masm->isolate(), ConstructWithSpread),
             RelocInfo::CODE_TARGET);
   } else {
     DCHECK_EQ(InterpreterPushArgsMode::kOther, mode);
+    // Add receiver to argument count again to meet the expectation of the
+    // prologue
+    __ addq(rax, Immediate(kArgcAdditionForReceiver));
+
     // Call the constructor (rax, rdx, rdi passed on).
     __ Jump(BUILTIN_CODE(masm->isolate(), Construct), RelocInfo::CODE_TARGET);
   }
@@ -1633,6 +1683,7 @@ void Builtins::Generate_FunctionPrototypeApply(MacroAssembler* masm) {
   //  -- rsp[3]  : argArray
   // -----------------------------------
 
+  CheckArgc(masm);
   // 1. Load receiver into rdi, argArray into rbx (if present), remove all
   // arguments from the stack (including the receiver), and push thisArg (if
   // present) instead.
@@ -1741,6 +1792,7 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
   //  -- rsp[32] : argumentsList  (if argc == 3)
   // -----------------------------------
 
+  CheckArgc(masm);
   // 1. Load target into rdi (if present), argumentsList into rbx (if present),
   // remove all arguments from the stack (including the receiver), and push
   // thisArgument (if present) instead.
@@ -1792,6 +1844,7 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
   //  -- rsp[32] : new.target (optional)
   // -----------------------------------
 
+  CheckArgc(masm);
   // 1. Load target into rdi (if present), argumentsList into rbx (if present),
   // new.target into rdx (if present, otherwise use target), remove all
   // arguments from the stack (including the receiver), and push thisArgument
@@ -1882,6 +1935,7 @@ void Builtins::Generate_ArgumentsAdaptorTrampoline(MacroAssembler* masm) {
   //  -- rdi : function (passed through to callee)
   // -----------------------------------
 
+  CheckArgc(masm);
   Label dont_adapt_arguments, stack_overflow;
   __ cmpq(rbx, Immediate(kDontAdaptArgumentsSentinel));
   __ j(equal, &dont_adapt_arguments);
@@ -1992,6 +2046,8 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
   //  -- rdx    : new.target (for [[Construct]])
   //  -- rsp[0] : return address
   // -----------------------------------
+
+  CheckArgc(masm);
   Register scratch = r11;
 
   if (masm->emit_debug_code()) {
@@ -2082,6 +2138,7 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
   //  -- rcx : start index (to support rest parameters)
   // -----------------------------------
 
+  CheckArgc(masm);
   // Check if new.target has a [[Construct]] internal method.
   if (mode == CallOrConstructMode::kConstruct) {
     Label new_target_constructor, new_target_not_constructor;
@@ -2207,10 +2264,11 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
 void Builtins::Generate_CallFunction(MacroAssembler* masm,
                                      ConvertReceiverMode mode) {
   // ----------- S t a t e -------------
-  //  -- rax : the number of arguments (not including the receiver)
+  //  -- rax : the number of arguments (including the receiver)
   //  -- rdi : the function to call (checked to be a JSFunction)
   // -----------------------------------
 
+  CheckArgc(masm);
   StackArgumentsAccessor args(rax);
   __ AssertFunction(rdi);
 
@@ -2307,6 +2365,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
   __ movzxwq(
       rbx, FieldOperand(rdx, SharedFunctionInfo::kFormalParameterCountOffset));
 
+  CheckArgc(masm);
   __ InvokeFunctionCode(rdi, no_reg, rbx, rax, JUMP_FUNCTION);
 
   // The function is a "classConstructor", need to raise an exception.
@@ -2327,6 +2386,7 @@ void Generate_PushBoundArguments(MacroAssembler* masm) {
   //  -- rdi : target (checked to be a JSBoundFunction)
   // -----------------------------------
 
+  CheckArgc(masm);
   // Load [[BoundArguments]] into rcx and length of that into rbx.
   Label no_bound_arguments;
   __ LoadTaggedPointerField(
@@ -2405,6 +2465,7 @@ void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
   // -----------------------------------
   __ AssertBoundFunction(rdi);
 
+  CheckArgc(masm);
   // Patch the receiver to [[BoundThis]].
   StackArgumentsAccessor args(rax);
   __ LoadAnyTaggedField(rbx,
@@ -2427,6 +2488,8 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   //  -- rax : the number of arguments (not including the receiver)
   //  -- rdi : the target to call (can be any Object)
   // -----------------------------------
+  CheckArgc(masm);
+
   StackArgumentsAccessor args(rax);
 
   Label non_callable;
@@ -2472,10 +2535,11 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
 // static
 void Builtins::Generate_ConstructFunction(MacroAssembler* masm) {
   // ----------- S t a t e -------------
-  //  -- rax : the number of arguments (not including the receiver)
+  //  -- rax : the number of arguments (including the receiver)
   //  -- rdx : the new target (checked to be a constructor)
   //  -- rdi : the constructor to call (checked to be a JSFunction)
   // -----------------------------------
+  CheckArgc(masm);
   __ AssertConstructor(rdi);
   __ AssertFunction(rdi);
 
@@ -2505,6 +2569,7 @@ void Builtins::Generate_ConstructBoundFunction(MacroAssembler* masm) {
   __ AssertConstructor(rdi);
   __ AssertBoundFunction(rdi);
 
+  CheckArgc(masm);
   // Push the [[BoundArguments]] onto the stack.
   Generate_PushBoundArguments(masm);
 
@@ -2532,8 +2597,9 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
   //           the JSFunction on which new was invoked initially)
   //  -- rdi : the constructor to call (can be any Object)
   // -----------------------------------
+  CheckArgc(masm);
+  __ subq(rax, Immediate(kArgcAdditionForReceiver));
   StackArgumentsAccessor args(rax);
-
   // Check if target is a Smi.
   Label non_constructor;
   __ JumpIfSmi(rdi, &non_constructor);
@@ -2545,9 +2611,12 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
   __ j(zero, &non_constructor);
 
   // Dispatch based on instance type.
+  __ addq(rax, Immediate(kArgcAdditionForReceiver));
   __ CmpInstanceType(rcx, JS_FUNCTION_TYPE);
   __ Jump(BUILTIN_CODE(masm->isolate(), ConstructFunction),
           RelocInfo::CODE_TARGET, equal);
+  __ subq(rax, Immediate(kArgcAdditionForReceiver));
+  __ DebugBreak();  // TODO(pthier): check receiver
 
   // Only dispatch to bound functions after checking whether they are
   // constructors.
@@ -3854,7 +3923,7 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
   Register argc = rcx;
   Register call_data = rbx;
   Register holder = rdi;
-
+  CheckArgc(masm, argc);
   DCHECK(!AreAliased(api_function_address, argc, holder, call_data,
                      kScratchRegister));
 

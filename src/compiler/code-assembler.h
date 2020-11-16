@@ -1105,7 +1105,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   TNode<Object> CallJS(Callable const& callable, Node* context, Node* function,
                        Node* receiver, TArgs... args) {
-    int argc = static_cast<int>(sizeof...(args));
+    int argc = static_cast<int>(sizeof...(args)) + kArgcAdditionForReceiver;
     TNode<Int32T> arity = Int32Constant(argc);
     TNode<Code> target = HeapConstant(callable.code());
     return CAST(CallJSStubImpl(callable.descriptor(), target, CAST(context),

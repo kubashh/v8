@@ -9254,6 +9254,7 @@ TNode<Oddball> CodeStubAssembler::OrdinaryHasInstance(
   TVARIABLE(Oddball, var_result);
   Label return_runtime(this, Label::kDeferred), return_result(this);
 
+  DebugBreak();
   GotoIfForceSlowPath(&return_runtime);
 
   // Goto runtime if {object} is a Smi.
@@ -9313,6 +9314,7 @@ TNode<Oddball> CodeStubAssembler::OrdinaryHasInstance(
   Goto(&return_result);
 
   BIND(&return_result);
+  DebugBreak();
   return var_result.value();
 }
 
@@ -12435,10 +12437,12 @@ TNode<Oddball> CodeStubAssembler::InstanceOf(TNode<Object> object,
             &if_otherhandler);
   {
     // Call to Function.prototype[@@hasInstance] directly.
+    DebugBreak();
     Callable builtin(BUILTIN_CODE(isolate(), FunctionPrototypeHasInstance),
                      CallTrampolineDescriptor{});
     var_result =
         CAST(CallJS(builtin, context, inst_of_handler, callable, object));
+    DebugBreak();
     Goto(&return_result);
   }
 

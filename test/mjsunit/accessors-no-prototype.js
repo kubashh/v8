@@ -2,14 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-
+print('getter');
 (function TestGetter() {
+  print('var o');
   var o = {
     get x() {}
   };
+  print('get property');
   var desc = Object.getOwnPropertyDescriptor(o, 'x');
+  print('assert type')
   assertEquals('function', typeof desc.get);
+  print('assert proto')
   assertFalse('prototype' in desc.get);
+  print('assert throws');
 
   assertThrows(function() {
     new desc.get();
@@ -17,6 +22,7 @@
 })();
 
 
+print('setter');
 (function TestSetter() {
   var o = {
     set x(_) {}

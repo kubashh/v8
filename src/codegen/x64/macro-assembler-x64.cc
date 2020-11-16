@@ -2480,6 +2480,14 @@ void MacroAssembler::StackOverflowCheck(
 void MacroAssembler::InvokePrologue(Register expected_parameter_count,
                                     Register actual_parameter_count,
                                     Label* done, InvokeFlag flag) {
+  Label argc_ok;
+  cmpl(actual_parameter_count, Immediate(kArgcAdditionForReceiver));
+  j(greater_equal, &argc_ok, Label::kNear);
+  int3();
+  bind(&argc_ok);
+  // Subtract the receiver from argument count until builtins handle it
+  // correctly
+  subq(actual_parameter_count, Immediate(kArgcAdditionForReceiver));
   if (expected_parameter_count != actual_parameter_count) {
     Label regular_invoke;
 #ifdef V8_NO_ARGUMENTS_ADAPTOR

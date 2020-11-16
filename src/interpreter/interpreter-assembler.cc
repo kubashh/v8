@@ -737,14 +737,16 @@ void InterpreterAssembler::CallJSAndDispatch(
   DCHECK(Bytecodes::IsCallOrConstruct(bytecode_) ||
          bytecode_ == Bytecode::kInvokeIntrinsic);
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), receiver_mode);
+  DCHECK_EQ(kArgcAdditionForReceiver, kArgcAdditionForReceiver & 1);
 
   TNode<Word32T> args_count;
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
     // The receiver is implied, so it is not in the argument list.
-    args_count = args.reg_count();
+    TNode<Int32T> receiver_count = Int32Constant(kArgcAdditionForReceiver);
+    args_count = Int32Add(args.reg_count(), receiver_count);
   } else {
     // Subtract the receiver from the argument count.
-    TNode<Int32T> receiver_count = Int32Constant(1);
+    TNode<Int32T> receiver_count = Int32Constant(1 - kArgcAdditionForReceiver);
     args_count = Int32Sub(args.reg_count(), receiver_count);
   }
 
@@ -771,6 +773,9 @@ void InterpreterAssembler::CallJSAndDispatch(TNode<Object> function,
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), receiver_mode);
   Callable callable = CodeFactory::Call(isolate());
   TNode<Code> code_target = HeapConstant(callable.code());
+
+  // Add the receiver to the argument count
+  arg_count = Int32Add(arg_count, Int32Constant(kArgcAdditionForReceiver));
 
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
     // The first argument parameter (the receiver) is implied to be undefined.
@@ -843,8 +848,11 @@ TNode<Object> InterpreterAssembler::Construct(
     Callable callable = CodeFactory::InterpreterPushArgsThenConstruct(
         isolate(), InterpreterPushArgsMode::kOther);
     TNode<Code> code_target = HeapConstant(callable.code());
+    // Add the receiver to the argument count
+    TNode<Word32T> args_count = args.reg_count();
+    args_count = Int32Add(args_count, Int32Constant(kArgcAdditionForReceiver));
     var_result = CallStub(callable.descriptor(), code_target, context,
-                          args.reg_count(), args.base_reg_location(), target,
+                          args_count, args.base_reg_location(), target,
                           new_target, UndefinedConstant());
     Goto(&return_result);
   }
@@ -857,8 +865,11 @@ TNode<Object> InterpreterAssembler::Construct(
     Callable callable = CodeFactory::InterpreterPushArgsThenConstruct(
         isolate(), InterpreterPushArgsMode::kArrayFunction);
     TNode<Code> code_target = HeapConstant(callable.code());
+    // Add the receiver to the argument count
+    TNode<Word32T> args_count = args.reg_count();
+    args_count = Int32Add(args_count, Int32Constant(kArgcAdditionForReceiver));
     var_result = CallStub(callable.descriptor(), code_target, context,
-                          args.reg_count(), args.base_reg_location(), target,
+                          args_count, args.base_reg_location(), target,
                           new_target, var_site.value());
     Goto(&return_result);
   }
