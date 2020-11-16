@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c44a9a5_e638002c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-11-16T14:07:50Z",
+      "side": 1,
+      "message": "Thanks for the review! Landing.",
+      "revId": "0f533cd1b439f2cb7a13d053d64a6d0059645432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "479040c4_a87fc9e6",
@@ -31,6 +48,24 @@
       "writtenOn": "2020-11-13T11:59:45Z",
       "side": 1,
       "message": "Is this to check that the resulting array is as large as expected? If so, couldn\u0027t we have an exact check?",
+      "revId": "0f533cd1b439f2cb7a13d053d64a6d0059645432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6df4f803_600a450b",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-11-16T14:07:50Z",
+      "side": 1,
+      "message": "The exact size (in bytes) is not what matters; what matters is that it is large enough to get allocated in Large Object Space -- otherwise the test failed to test what it intends to test, and the {kLongLength} constant would have to be chosen differently. I think the \u0027\u003e\u0027 comparison is the best way to express this.\nWe could add a CHECK(Handle\u003cWasmArray\u003e::cast(large_result)-\u003elength() \u003d\u003d kLongLength), but that\u0027s already covered by the kGetLength test above.",
+      "parentUuid": "479040c4_a87fc9e6",
       "revId": "0f533cd1b439f2cb7a13d053d64a6d0059645432",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
