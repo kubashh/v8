@@ -33,6 +33,40 @@
       "message": "Ping",
       "revId": "90dc099fac74cfd80549e7eccf717555185bb853",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac5d8a6_da071745",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-16T16:54:45Z",
+      "side": 1,
+      "message": "LGTM, but I think the whole br_table algorithm is needlessly complex. Essentially what we have to do is typecheck the stack values against each block type. Maybe we should simplify it in the future. ",
+      "revId": "90dc099fac74cfd80549e7eccf717555185bb853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4782121_c9f5ec5b",
+        "filename": "test/mjsunit/regress/wasm/regress-1046472.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-16T16:54:45Z",
+      "side": 1,
+      "message": "I don\u0027t like this error message, it needlessly exposes \u003cbot\u003e to the user.",
+      "revId": "90dc099fac74cfd80549e7eccf717555185bb853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
