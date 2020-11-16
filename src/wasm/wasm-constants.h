@@ -126,7 +126,7 @@ constexpr int kAnonymousFuncIndex = -1;
 // The number of calls to an exported Wasm function that will be handled
 // by the generic wrapper. Once the budget is exhausted, a specific wrapper
 // is to be compiled for the function's signature.
-constexpr uint32_t kGenericWrapperBudget = 6;
+constexpr uint32_t kGenericWrapperBudget = 1000;
 
 }  // namespace wasm
 }  // namespace internal
