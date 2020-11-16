@@ -16,6 +16,23 @@
       "message": "Also added a negative implication between the flags so that clusterfuzz doesn\u0027t try to enable both",
       "revId": "57b9779063c002d4f915e1e5cdc4f30bd03b3f46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "519becd7_5e56a8b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-16T10:28:12Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "57b9779063c002d4f915e1e5cdc4f30bd03b3f46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
