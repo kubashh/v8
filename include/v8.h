@@ -8328,6 +8328,11 @@ class V8_EXPORT Isolate {
     int embedder_wrapper_object_index = -1;
 
     /**
+     * Base class for recording event-based metrics
+     */
+    std::shared_ptr<metrics::Recorder> metrics_recorder = nullptr;
+
+    /**
      * If parameters are set, V8 creates a managed C++ heap as extension to its
      * JavaScript heap.
      *
