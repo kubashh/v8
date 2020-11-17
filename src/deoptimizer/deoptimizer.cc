@@ -522,7 +522,6 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction function,
 
   DCHECK(function.IsJSFunction());
 #ifdef DEBUG
-  DCHECK(AllowHeapAllocation::IsAllowed());
   DCHECK(AllowGarbageCollection::IsAllowed());
   disallow_garbage_collection_ = new DisallowGarbageCollection();
 #endif  // DEBUG
