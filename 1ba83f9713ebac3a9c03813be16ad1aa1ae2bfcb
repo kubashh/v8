@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9003c53c_a6f3a018",
+        "filename": "include/v8.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 8333,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-17T19:04:03Z",
+      "side": 1,
+      "message": "I mean instead of passing the recorded in create params, the embedder of V8 could simply call that function on the isolate.\n\nI.e. instead of this:\n\ncreate_params.metrics_recorder \u003d std::make_shared\u003ci::instrumentation::Recorder\u003e();\nIsolate* isolate \u003d Isolate::New(create_params);\n\nWe could do:\n\nIsolate* isolate \u003d Isolate::New(create_params);\nisolate-\u003eSetMetricsRecorder(std::make_shared\u003ci::instrumentation::Recorder\u003e());",
+      "parentUuid": "7d7a55d3_31846e01",
+      "range": {
+        "startLine": 8333,
+        "startChar": 4,
+        "endLine": 8333,
+        "endChar": 55
+      },
+      "revId": "1ba83f9713ebac3a9c03813be16ad1aa1ae2bfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e27fad9_d2eaf281",
         "filename": "src/instrumentation/recorder-win.cc",
         "patchSetId": 34
