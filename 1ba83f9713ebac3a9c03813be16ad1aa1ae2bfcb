@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39f568d2_d5e17795",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-17T16:33:40Z",
+      "side": 1,
+      "message": "I think we\u0027re almost there.",
+      "revId": "1ba83f9713ebac3a9c03813be16ad1aa1ae2bfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e27fad9_d2eaf281",
+        "filename": "src/instrumentation/recorder-win.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-17T16:33:40Z",
+      "side": 1,
+      "message": "Is this still needed?\nIf so, this should probably go into BUILD.gn.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 6
+      },
+      "revId": "1ba83f9713ebac3a9c03813be16ad1aa1ae2bfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4800f78e_97bcc651",
+        "filename": "src/instrumentation/recorder-win.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-17T16:33:40Z",
+      "side": 1,
+      "message": "nit: not needed anymore.",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 12
+      },
+      "revId": "1ba83f9713ebac3a9c03813be16ad1aa1ae2bfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
