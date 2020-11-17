@@ -38,6 +38,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "046aee1a_034a1e5f",
+        "filename": "include/v8.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 8333,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-17T16:45:27Z",
+      "side": 1,
+      "message": "There is v8::Isolate::SetMetricsRecorder. Can we use that instead of adding a new field here?",
+      "range": {
+        "startLine": 8333,
+        "startChar": 4,
+        "endLine": 8333,
+        "endChar": 55
+      },
+      "revId": "1ba83f9713ebac3a9c03813be16ad1aa1ae2bfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e27fad9_d2eaf281",
         "filename": "src/instrumentation/recorder-win.cc",
         "patchSetId": 34
