@@ -102,6 +102,24 @@
       "parentUuid": "968b7bfa_f3efe841",
       "revId": "117b6d80b9347fe0d914f1aa63a510f8b19dbfdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09441ae0_6eee22a4",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-17T14:57:36Z",
+      "side": 1,
+      "message": "What should be the same?\n\nHere\u0027s an illustration of the difference between what the CL is doing now and the alternative I described:\n\nSay we compile when the property cell is ConstantType with an object of an unstable map M1. Before compilation finishes, the object in the cell transitions to map M2 (unnoticed by the compiler).\n\nIf the compiled code now wants to do the store, then:\na) With the CL, it will deopt unless the new value\u0027s map is M1.\nb) With the alternative, it will deopt unless the new value\u0027s map is M2.\n\nAre we on the same page here?\n\nMaybe your point is that both (a) and (b) would be fine, so let\u0027s take (a) because it\u0027s cheaper.",
+      "parentUuid": "92e0479d_bdd87438",
+      "revId": "117b6d80b9347fe0d914f1aa63a510f8b19dbfdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
