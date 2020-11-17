@@ -103,6 +103,24 @@
       "parentUuid": "d4782121_c9f5ec5b",
       "revId": "90dc099fac74cfd80549e7eccf717555185bb853",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a918f74c_38aae8f2",
+        "filename": "test/mjsunit/regress/wasm/regress-1046472.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-17T13:46:40Z",
+      "side": 1,
+      "message": "I would prefer comparing the types of the branch values directly to each branch target, but as you mentioned, this would require restructuring the algorithm and is probably not worth it.",
+      "parentUuid": "ad817c09_39d1513d",
+      "revId": "90dc099fac74cfd80549e7eccf717555185bb853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
