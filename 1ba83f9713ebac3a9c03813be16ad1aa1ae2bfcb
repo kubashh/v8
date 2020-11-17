@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f8bdf2d_b4a51ef2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-17T16:42:22Z",
+      "side": 1,
+      "message": "Hooray!",
+      "parentUuid": "39f568d2_d5e17795",
+      "revId": "1ba83f9713ebac3a9c03813be16ad1aa1ae2bfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e27fad9_d2eaf281",
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2699ce5_29dd06a0",
+        "filename": "src/instrumentation/recorder-win.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-17T16:42:22Z",
+      "side": 1,
+      "message": "It is still needed, but only for the one file so I went with a more tightly scoped method. \n\nIt seems like the warning is triggered by the way macros in TraceLoggingProvider get expanded (see https://bugs.chromium.org/p/chromium/issues/detail?id\u003d753169). My intention is to file a bug to Microsoft internal, but I\u0027m having trouble reproducing it for a small case.",
+      "parentUuid": "2e27fad9_d2eaf281",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 6
+      },
+      "revId": "1ba83f9713ebac3a9c03813be16ad1aa1ae2bfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4800f78e_97bcc651",
         "filename": "src/instrumentation/recorder-win.cc",
         "patchSetId": 34
@@ -54,6 +96,30 @@
       "writtenOn": "2020-11-17T16:33:40Z",
       "side": 1,
       "message": "nit: not needed anymore.",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 12
+      },
+      "revId": "1ba83f9713ebac3a9c03813be16ad1aa1ae2bfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6b70328_ab180ee0",
+        "filename": "src/instrumentation/recorder-win.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-17T16:42:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4800f78e_97bcc651",
       "range": {
         "startLine": 47,
         "startChar": 2,
