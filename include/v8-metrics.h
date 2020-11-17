@@ -5,12 +5,25 @@
 #ifndef V8_METRICS_H_
 #define V8_METRICS_H_
 
-#include "v8.h"  // NOLINT(build/include_directory)
+#include "v8-logging.h"  // NOLINT(build/include_directory)
+#include "v8.h"          // NOLINT(build/include_directory)
 
 namespace v8 {
 namespace metrics {
 
-// TODO(sartang@microsoft.com): Remove wall_clock_time_in_us.
+/*
+ * Each struct represents an event we'd like to trace.
+ * For events where we want to track the duration, we are assuming the field
+ * wall_clock_duration_in_us exists.
+ */
+struct Compile {
+  int script_id = 0;
+  bool is_toplevel = false;
+  bool is_module = false;
+  bool is_eval = false;
+  int64_t wall_clock_duration_in_us = -1;
+};
+
 struct WasmModuleDecoded {
   bool async = false;
   bool streamed = false;
@@ -53,13 +66,14 @@ struct WasmModulesPerIsolate {
   size_t count = 0;
 };
 
-#define V8_MAIN_THREAD_METRICS_EVENTS(V) \
-  V(WasmModuleDecoded)                   \
-  V(WasmModuleCompiled)                  \
-  V(WasmModuleInstantiated)              \
-  V(WasmModuleTieredUp)
+#define V8_MAIN_THREAD_METRICS_EVENTS(V)   \
+  V(::v8::metrics::WasmModuleDecoded)      \
+  V(::v8::metrics::WasmModuleCompiled)     \
+  V(::v8::metrics::WasmModuleInstantiated) \
+  V(::v8::metrics::WasmModuleTieredUp)     \
+  V(::v8::metrics::Compile)
 
-#define V8_THREAD_SAFE_METRICS_EVENTS(V) V(WasmModulesPerIsolate)
+#define V8_THREAD_SAFE_METRICS_EVENTS(V) V(::v8::metrics::WasmModulesPerIsolate)
 
 /**
  * This class serves as a base class for recording event-based metrics in V8.
