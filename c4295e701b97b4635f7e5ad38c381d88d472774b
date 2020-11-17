@@ -50,6 +50,24 @@
       "message": "rubberstamp LGTM",
       "revId": "c4295e701b97b4635f7e5ad38c381d88d472774b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b340c746_5ebbc8be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-11-17T08:36:15Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "11c7c2a8_ee4c9cf3",
+      "revId": "c4295e701b97b4635f7e5ad38c381d88d472774b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
