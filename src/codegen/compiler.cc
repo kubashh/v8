@@ -1585,7 +1585,7 @@ void BackgroundCompileTask::Run() {
   // Save the language mode.
   language_mode_ = info_->language_mode();
 
-  if (!FLAG_finalize_streaming_on_background || info_->flags().is_module()) {
+  if (!FLAG_finalize_streaming_on_background) {
     if (info_->literal() != nullptr) {
       CompileOnBackgroundThread(info_.get(), compile_state_.allocator(),
                                 &compilation_jobs_);

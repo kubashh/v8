@@ -240,6 +240,9 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl(
       RuntimeCallCounterId::kCompileBackgroundIgnitionFinalization);
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                "V8.CompileIgnitionFinalization");
+  if (compilation_info_.flags().is_module()) {
+    return CompilationJob::RETRY_ON_MAIN_THREAD;
+  }
   return DoFinalizeJobImpl(shared_info, isolate);
 }
 
