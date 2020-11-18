@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67b49ffc_42d9ef44",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-18T18:06:08Z",
+      "side": 1,
+      "message": "yes, thanks",
+      "parentUuid": "5a2707ab_331c85ab",
+      "range": {
+        "startLine": 23,
+        "startChar": 5,
+        "endLine": 23,
+        "endChar": 13
+      },
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a5adee2_086bd5bf",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2270499_aa329051",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-18T18:06:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a5adee2_086bd5bf",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62c29446_239d3121",
@@ -54,6 +96,30 @@
       "writtenOn": "2020-11-18T17:04:26Z",
       "side": 1,
       "message": "context and object?",
+      "range": {
+        "startLine": 32,
+        "startChar": 28,
+        "endLine": 32,
+        "endChar": 35
+      },
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6b686e3_765de60c",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-18T18:06:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62c29446_239d3121",
       "range": {
         "startLine": 32,
         "startChar": 28,
@@ -87,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c029613_a9862511",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-18T18:06:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bae26d11_351a14ec",
+      "range": {
+        "startLine": 1372,
+        "startChar": 49,
+        "endLine": 1372,
+        "endChar": 56
+      },
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74e13d62_4e8c67a4",
@@ -100,6 +190,24 @@
       "writtenOn": "2020-11-18T17:04:26Z",
       "side": 1,
       "message": "I think you meant to add this comment to TryLookupPropertyInSimpleObject. This function has other reasons to bailout.",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8dfa40b_0ff35e11",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 8253,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-18T18:06:08Z",
+      "side": 1,
+      "message": "yes, sorry",
+      "parentUuid": "74e13d62_4e8c67a4",
       "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +263,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57002c6e_d66a5132",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2883,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-18T18:06:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "273192ea_67f67e30",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e341c8bd_54a00b89",
@@ -168,6 +294,24 @@
       "writtenOn": "2020-11-18T17:04:26Z",
       "side": 1,
       "message": "Ditto. GenericPropertyLoad() should handle this on respective code path instead.",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb879900_03372e82",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2924,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-18T18:06:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e341c8bd_54a00b89",
       "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -257,6 +401,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ece7bfcf_a514a2aa",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-18T18:06:08Z",
+      "side": 1,
+      "message": "good catch!",
+      "parentUuid": "7d1a6f3a_031f2a90",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9691ffe_8cb8b1aa",
@@ -270,6 +432,24 @@
       "writtenOn": "2020-11-18T17:04:26Z",
       "side": 1,
       "message": "Please move this check into respective branch inside CreateShallowObjectLiteral(). There are other clients that might hit the dictionary case too.",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a42b9f37_9eab0776",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2351,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-18T18:06:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9691ffe_8cb8b1aa",
       "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
