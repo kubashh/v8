@@ -68,6 +68,24 @@
       "message": "Replacing the template by actual implementations increases the binary size for methods that aren\u0027t actually used. The template mechanism guarantees that only those methods which are used are being compiled. If an event does not have the matching method to call (so if it\u0027s not thread-safe) this compilation will fail instead of having an UNREACHABLE which will only be discovered at runtime. So I\u0027m not seeing the benefits of the explicit version implemented here.",
       "revId": "def83057d839667d9c8dd7509954812c834c29b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a3d24b8_890ca016",
+        "filename": "src/logging/metrics.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-18T18:03:09Z",
+      "side": 1,
+      "message": "The reasoning behind the explicit implementation is that we call one of AddMainThreadEvent or AddThreadSafeEvent form within the TimedScope.\n\nSince there is no way to determine which kind of event E is being called at compile-time (I think), both versions of AddMainThreadEvent(E event) and AddThreadSafeEvent(E event) need to be defined, even though only the correct one is expected to be called at runtime. Otherwise, we run into a compile-time error for the undefined branch.\n\nI\u0027m open to any other ways to get around this compile-time error, but this is the method I landed on because it preserves the use of macros in v8-metrics.h. Originally, the ADD_MAIN_THREAD_ERROR_EVENT were inside include/v8-metrics.h, but we had to move them out because UNREACHABLE() doesn\u0027t exist in include/.",
+      "parentUuid": "1ac9811f_cdd8523b",
+      "revId": "def83057d839667d9c8dd7509954812c834c29b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
