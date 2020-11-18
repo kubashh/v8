@@ -2444,6 +2444,11 @@ void AccessorAssembler::GenericPropertyLoad(
 
   BIND(&if_property_dictionary);
   {
+    if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+      // TODO(v8:11167) remove once OrderedNameDictionary supported.
+      GotoIf(Int32TrueConstant(), slow);
+    }
+
     Comment("dictionary property load");
     // We checked for LAST_CUSTOM_ELEMENTS_RECEIVER before, which rules out
     // seeing global objects here (which would need special handling).
@@ -2684,6 +2689,11 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
 
   GotoIf(IsUndefined(p->vector()), &no_feedback);
 
+  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+    // TODO(v8:11167) remove once OrderedNameDictionary supported.
+    GotoIf(Int32TrueConstant(), &miss);
+  }
+
   TNode<Map> lookup_start_object_map =
       LoadReceiverMap(p->receiver_and_lookup_start_object());
   GotoIf(IsDeprecatedMap(lookup_start_object_map), &miss);
@@ -2800,6 +2810,11 @@ void AccessorAssembler::LoadSuperIC(const LoadICParameters* p) {
       miss(this, Label::kDeferred);
 
   GotoIf(IsUndefined(p->vector()), &no_feedback);
+
+  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+    // TODO(v8:11167) remove once OrderedNameDictionary supported.
+    GotoIf(Int32TrueConstant(), &miss);
+  }
 
   // The lookup start object cannot be a SMI, since it's the home object's
   // prototype, and it's not possible to set SMIs as prototypes.
@@ -3128,6 +3143,11 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p,
 
   GotoIf(IsUndefined(p->vector()), &generic);
 
+  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+    // TODO(v8:11167) remove once OrderedNameDictionary supported.
+    GotoIf(Int32TrueConstant(), &miss);
+  }
+
   // Check monomorphic case.
   TNode<MaybeObject> feedback =
       TryMonomorphicCase(p->slot(), CAST(p->vector()), lookup_start_object_map,
@@ -3240,6 +3260,12 @@ void AccessorAssembler::KeyedLoadICGeneric(const LoadICParameters* p) {
   TVARIABLE(Object, var_name, p->name());
 
   Label if_runtime(this, Label::kDeferred);
+
+  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+    // TODO(v8:11167) remove once OrderedNameDictionary supported.
+    GotoIf(Int32TrueConstant(), &if_runtime);
+  }
+
   TNode<Object> lookup_start_object = p->lookup_start_object();
   GotoIf(TaggedIsSmi(lookup_start_object), &if_runtime);
   GotoIf(IsNullOrUndefined(lookup_start_object), &if_runtime);
@@ -3375,6 +3401,11 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
       try_polymorphic(this, Label::kDeferred),
       try_megamorphic(this, Label::kDeferred), miss(this, Label::kDeferred),
       no_feedback(this, Label::kDeferred);
+
+  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+    // TODO(v8:11167) remove once OrderedNameDictionary supported.
+    GotoIf(Int32TrueConstant(), &miss);
+  }
 
   TNode<Map> receiver_map = LoadReceiverMap(p->receiver());
   GotoIf(IsDeprecatedMap(receiver_map), &miss);
@@ -3560,6 +3591,14 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
     GotoIf(IsDeprecatedMap(receiver_map), &miss);
 
     GotoIf(IsUndefined(p->vector()), &no_feedback);
+
+    if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+      // TODO(v8:11167) remove once OrderedNameDictionary supported.
+      // FIXME: Using GotoIfMapHasSlowProperties here fixes major performance
+      // regression, but can we guarantee that we don't need to access the
+      // prototype chain (where we may find dict mode objects)?
+      GotoIfMapHasSlowProperties(receiver_map, &miss);
+    }
 
     // Check monomorphic case.
     TNode<MaybeObject> feedback =
