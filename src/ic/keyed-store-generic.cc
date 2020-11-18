@@ -827,6 +827,10 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
 
   BIND(&dictionary_properties);
   {
+    if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+      // TODO(v8:11167, v8:11177) Only here due to SetDataProperties workaround.
+      GotoIf(Int32TrueConstant(), slow);
+    }
     Comment("dictionary property store");
     // We checked for LAST_CUSTOM_ELEMENTS_RECEIVER before, which rules out
     // seeing global objects here (which would need special handling).
@@ -975,6 +979,11 @@ void KeyedStoreGenericAssembler::KeyedStoreGeneric(
   TVARIABLE(Name, var_unique);
   Label if_index(this, &var_index), if_unique_name(this),
       not_internalized(this), slow(this);
+
+  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+    // TODO(v8:11167) remove once OrderedNameDictionary supported.
+    GotoIf(Int32TrueConstant(), &slow);
+  }
 
   GotoIf(TaggedIsSmi(receiver_maybe_smi), &slow);
   TNode<HeapObject> receiver = CAST(receiver_maybe_smi);

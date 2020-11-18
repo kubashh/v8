@@ -2348,6 +2348,11 @@ IGNITION_HANDLER(CreateObjectLiteral, InterpreterAssembler) {
   TNode<Uint32T> bytecode_flags = BytecodeOperandFlag(2);
 
   Label if_fast_clone(this), if_not_fast_clone(this, Label::kDeferred);
+  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+    // TODO(v8:11167) remove once OrderedNameDictionary supported.
+    GotoIf(Int32TrueConstant(), &if_not_fast_clone);
+  }
+
   // No feedback, so handle it as a slow case.
   GotoIf(IsUndefined(feedback_vector), &if_not_fast_clone);
 
