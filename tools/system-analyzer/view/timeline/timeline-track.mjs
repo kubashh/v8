@@ -2,24 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import {FocusEvent, SelectionEvent, SelectTimeEvent, SynchronizeSelectionEvent} from '../events.mjs';
-import {CSSColor, delay, DOM, V8CustomElement} from '../helper.mjs';
-import {kChunkHeight, kChunkWidth} from '../log/map.mjs';
-import {MapLogEntry} from '../log/map.mjs';
+import {FocusEvent, SelectionEvent, SelectTimeEvent, SynchronizeSelectionEvent} from '../../events.mjs';
+import {kChunkHeight, kChunkWidth} from '../../log/map.mjs';
+import {CSSColor, delay, DOM, kColors, V8CustomElement} from '../helper.mjs';
 
-const kColors = [
-  CSSColor.green,
-  CSSColor.violet,
-  CSSColor.orange,
-  CSSColor.yellow,
-  CSSColor.primaryColor,
-  CSSColor.red,
-  CSSColor.blue,
-  CSSColor.yellow,
-  CSSColor.secondaryColor,
-];
-
-DOM.defineCustomElement('./timeline/timeline-track',
+DOM.defineCustomElement('./view/timeline/timeline-track',
                         (templateText) =>
                             class TimelineTrack extends V8CustomElement {
   // TODO turn into static field once Safari supports it.
@@ -35,12 +22,6 @@ DOM.defineCustomElement('./timeline/timeline-track',
   _timeStartOffset;
   _selectionOriginTime;
   _typeToColor;
-
-  _entryTypeDoubleClickHandler = this.handleEntryTypeDoubleClick.bind(this);
-  _chunkMouseMoveHandler = this.handleChunkMouseMove.bind(this);
-  _chunkClickHandler = this.handleChunkClick.bind(this);
-  _chunkDoubleClickHandler = this.handleChunkDoubleClick.bind(this);
-
   constructor() {
     super(templateText);
     this.timeline.addEventListener('scroll', e => this.handleTimelineScroll(e));
@@ -50,6 +31,7 @@ DOM.defineCustomElement('./timeline/timeline-track',
         'mouseup', e => this.handleTimeSelectionMouseUp(e));
     this.timeline.addEventListener(
         'mousemove', e => this.handleTimeSelectionMouseMove(e));
+    this.backgroundCanvas = document.createElement('canvas');
     this.isLocked = false;
   }
 
@@ -173,14 +155,13 @@ DOM.defineCustomElement('./timeline/timeline-track',
   set data(value) {
     this._timeline = value;
     this._resetTypeToColorCache();
-    // Only update legend if the timeline data has changed.
-    this._updateLegend();
-    this._updateChunks();
     this.update();
   }
 
   _update() {
+    this._updateChunks();
     this._updateTimeline();
+    this._renderLegend();
   }
 
   _resetTypeToColorCache() {
@@ -197,7 +178,6 @@ DOM.defineCustomElement('./timeline/timeline-track',
 
   set nofChunks(count) {
     this._nofChunks = count;
-    this._updateChunks();
     this.update();
   }
 
@@ -230,13 +210,13 @@ DOM.defineCustomElement('./timeline/timeline-track',
     return this._typeToColor.get(type);
   }
 
-  _updateLegend() {
+  _renderLegend() {
     let timelineLegendContent = this.timelineLegendContent;
     DOM.removeAllChildren(timelineLegendContent);
     this._timeline.uniqueTypes.forEach((entries, type) => {
       let row = DOM.tr('clickable');
       row.entries = entries;
-      row.ondblclick = this.entryTypeDoubleClickHandler_;
+      row.addEventListener('dblclick', e => this.handleEntryTypeDblClick(e));
       let color = this.typeToColor(type);
       if (color !== null) {
         let div = DOM.div('colorbox');
@@ -262,7 +242,7 @@ DOM.defineCustomElement('./timeline/timeline-track',
     this.timelineLegend.appendChild(timelineLegendContent);
   }
 
-  handleEntryTypeDoubleClick(e) {
+  handleEntryTypeDblClick(e) {
     this.dispatchEvent(new SelectionEvent(e.target.parentNode.entries));
   }
 
@@ -276,28 +256,52 @@ DOM.defineCustomElement('./timeline/timeline-track',
         'scrolltrack', {bubbles: true, composed: true, detail: horizontal}));
   }
 
-  _createBackgroundImage(chunk) {
+  async setChunkBackgrounds(backgroundTodo) {
+    const kMaxDuration = 50;
+    let lastTime = 0;
+    for (let [chunk, node] of backgroundTodo) {
+      const current = performance.now();
+      if (current - lastTime > kMaxDuration) {
+        await delay(25);
+        lastTime = current;
+      }
+      this.setChunkBackground(chunk, node);
+    }
+  }
+
+  setChunkBackground(chunk, node) {
     // Render the types of transitions as bar charts
     const kHeight = chunk.height;
-    const total = chunk.size();
-    let increment = 0;
-    let lastHeight = 0.0;
-    const stops = [];
-    const breakDown = chunk.getBreakdown(map => map.type);
-    for (let i = 0; i < breakDown.length; i++) {
-      let [type, count] = breakDown[i];
-      const color = this.typeToColor(type);
-      increment += count;
-      let height = (increment / total * kHeight) | 0;
-      stops.push(`${color} ${lastHeight}px ${height}px`)
-      lastHeight = height;
+    const kWidth = 1;
+    this.backgroundCanvas.width = kWidth;
+    this.backgroundCanvas.height = kHeight;
+    let ctx = this.backgroundCanvas.getContext('2d');
+    ctx.clearRect(0, 0, kWidth, kHeight);
+    let y = 0;
+    let total = chunk.size();
+    let type, count;
+    if (true) {
+      chunk.getBreakdown(map => map.type).forEach(([type, count]) => {
+        ctx.fillStyle = this.typeToColor(type);
+        let height = count / total * kHeight;
+        ctx.fillRect(0, y, kWidth, y + height);
+        y += height;
+      });
+    } else {
+      chunk.items.forEach(map => {
+        ctx.fillStyle = this.typeToColor(map.type);
+        let y = chunk.yOffset(map);
+        ctx.fillRect(0, y, kWidth, y + 1);
+      });
     }
-    return `linear-gradient(0deg,${stops.join(',')})`;
+
+    let imageData = this.backgroundCanvas.toDataURL('image/webp', 0.2);
+    node.style.backgroundImage = `url(${imageData})`;
   }
 
   _updateTimeline() {
-    const reusableNodes = Array.from(this.timelineChunks.childNodes).reverse();
-    let fragment = new DocumentFragment();
+    let chunksNode = this.timelineChunks;
+    DOM.removeAllChildren(chunksNode);
     let chunks = this.chunks;
     let max = chunks.max(each => each.size());
     let start = this.data.startTime;
@@ -305,29 +309,30 @@ DOM.defineCustomElement('./timeline/timeline-track',
     let duration = end - start;
     this._timeToPixel = chunks.length * kChunkWidth / duration;
     this._timeStartOffset = start * this._timeToPixel;
+    let addTimestamp = (time, name) => {
+      let timeNode = DOM.div('timestamp');
+      timeNode.innerText = name;
+      timeNode.style.left = ((time - start) * this._timeToPixel) + 'px';
+      chunksNode.appendChild(timeNode);
+    };
+    let backgroundTodo = [];
     for (let i = 0; i < chunks.length; i++) {
       let chunk = chunks[i];
       let height = (chunk.size() / max * kChunkHeight);
       chunk.height = height;
       if (chunk.isEmpty()) continue;
-      let node = reusableNodes[reusableNodes.length - 1];
-      let reusedNode = false;
-      if (node?.className == 'chunk') {
-        reusableNodes.pop();
-        reusedNode = true;
-      } else {
-        node = DOM.div('chunk');
-        node.onmousemove = this._chunkMouseMoveHandler;
-        node.onclick = this._chunkClickHandler;
-        node.ondblclick = this.chunkDoubleClickHandler;
-      }
-      const style = node.style;
-      style.left = `${((chunk.start - start) * this._timeToPixel) | 0}px`;
-      style.height = `${height | 0}px`;
-      style.backgroundImage = this._createBackgroundImage(chunk);
+      let node = DOM.div();
+      node.className = 'chunk';
+      node.style.left = ((chunks[i].start - start) * this._timeToPixel) + 'px';
+      node.style.height = height + 'px';
       node.chunk = chunk;
-      if (!reusedNode) fragment.appendChild(node);
+      node.addEventListener('mousemove', e => this.handleChunkMouseMove(e));
+      node.addEventListener('click', e => this.handleChunkClick(e));
+      node.addEventListener('dblclick', e => this.handleChunkDoubleClick(e));
+      backgroundTodo.push([chunk, node])
+      chunksNode.appendChild(node);
     }
+    this.setChunkBackgrounds(backgroundTodo);
 
     // Put a time marker roughly every 20 chunks.
     let expected = duration / chunks.length * 20;
@@ -338,29 +343,9 @@ DOM.defineCustomElement('./timeline/timeline-track',
 
     let time = start;
     while (time < end) {
-      let timeNode = DOM.div('timestamp');
-      timeNode.innerText = `${((time - start) / 1000) | 0} ms`;
-      timeNode.style.left = `${((time - start) * this._timeToPixel) | 0}px`;
-      fragment.appendChild(timeNode);
+      addTimestamp(time, ((time - start) / 1000) + ' ms');
       time += interval;
     }
-
-    // Remove superfluos nodes lazily, for Chrome this is a very expensive
-    // operation.
-    if (reusableNodes.length > 0) {
-      for (const node of reusableNodes) {
-        node.style.display = 'none';
-      }
-      setTimeout(() => {
-        const range = document.createRange();
-        const first = reusableNodes[reusableNodes.length - 1];
-        const last = reusableNodes[0];
-        range.setStartBefore(first);
-        range.setEndAfter(last);
-        range.deleteContents();
-      }, 100);
-    }
-    this.timelineChunks.appendChild(fragment);
     this.redraw();
   }
 
@@ -387,15 +372,8 @@ DOM.defineCustomElement('./timeline/timeline-track',
   }
 
   redraw() {
-    window.requestAnimationFrame(() => this._redraw());
-  }
-
-  _redraw() {
-    if (!(this._timeline.at(0) instanceof MapLogEntry)) return;
     let canvas = this.timelineCanvas;
-    let width = (this.chunks.length + 1) * kChunkWidth;
-    if (width > 32767) width = 32767;
-    canvas.width = width;
+    canvas.width = (this.chunks.length + 1) * kChunkWidth;
     canvas.height = kChunkHeight;
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, kChunkHeight);
