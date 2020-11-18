@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bb1112b_1d4ae66a",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2020-11-18T20:34:34Z",
+      "side": 1,
+      "message": "yangguo@ from my reading, it seemed that the existing logic for JSStackFrame::GetFunctionName() and JSStackFrame::GetLineNumber() assume that the enclosing function are in the same script. This made me think that it\u0027s okay to start by assuming the same in getEnclosingColumnNumber()/getEnclosingLineNumber().",
+      "revId": "524145cbc95b4f05b50597b5317edcd39bd91119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
