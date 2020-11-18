@@ -16,6 +16,23 @@
       "message": "Hi Jakob, after this CL https://chromium-review.googlesource.com/c/v8/v8/+/2436341, this DHCECK has been failing on BE platforms: https://github.com/v8/v8/blob/master/src/regexp/regexp-bytecodes.h#L245.\nI noticed that the interpreter is loading a 32 bit value from pc to extract the bytecode name:\nhttps://github.com/v8/v8/blob/master/src/regexp/regexp-bytecodes.h#L245\nhowever, the functions in this cl are using the first byte of pc (vs the 4th one) which will load a different value on BE machines.\nI\u0027ve added a cast similar to the one in \"regexp-bytecodes\" to fix the endianness issue.",
       "revId": "865b7a518729d1ec36b9d5b2aac9e0ad22895e2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44f34391_6cf60b76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-18T06:31:31Z",
+      "side": 1,
+      "message": "LGTM, thanks.",
+      "revId": "865b7a518729d1ec36b9d5b2aac9e0ad22895e2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
