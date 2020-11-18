@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "ab13e5eb_0c190b69",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "I have no idea what this change is about. Looks GC related, plus changes public API, thus adding Ulan.",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "a22604bb_74301af0",
         "filename": "/PATCHSET_LEVEL",
@@ -32,10 +33,10 @@
       "message": "+1 :)",
       "parentUuid": "ab13e5eb_0c190b69",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "fd6b3cb3_aeae42a0",
         "filename": "/PATCHSET_LEVEL",
@@ -49,10 +50,10 @@
       "side": 1,
       "message": "Hi Hong. Thanks for the patch!\n\nWe are planning to remove RAIL APIs from V8 and instead provide a generic API that allows the embedder to choose between memory / performance directly. It will happen sometime in Q4.\n\nIs this fix urgent for you?\n\n",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "a664f48d_31ccf459",
         "filename": "/PATCHSET_LEVEL",
@@ -66,10 +67,10 @@
       "side": 1,
       "message": "PTAL",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "1654dc81_98c012d7",
         "filename": "/PATCHSET_LEVEL",
@@ -84,10 +85,10 @@
       "message": "Thanks all for your quick response.\n@Ulan, we meet a critical performance issue caused by inaccurate load start time, which degrades WebXPRT3 (a famous industry web workload) ~5% performance. This patch is to fix the issue. If we can land it ASAP, I would be very appreciated. If not, can I try your new solution to verify if it can resolve the issue?",
       "parentUuid": "fd6b3cb3_aeae42a0",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "b332c36d_6aa6b6b0",
         "filename": "/PATCHSET_LEVEL",
@@ -102,10 +103,10 @@
       "message": "This API was implemented 4 year ago and did not change since.\n\nIs the issue you\u0027re observing a recent regression? If so, then the actual issue may be elsewhere.",
       "parentUuid": "1654dc81_98c012d7",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "0c3ed82b_9bbdd40f",
         "filename": "/PATCHSET_LEVEL",
@@ -120,10 +121,10 @@
       "message": "It\u0027s not a recent regression. We just found it recently. Maybe it was there 4 years ago.",
       "parentUuid": "b332c36d_6aa6b6b0",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "91969910_b708f9b8",
         "filename": "/PATCHSET_LEVEL",
@@ -138,10 +139,10 @@
       "message": "Thanks Hong. If the issue was present for 4 years, we should not rush to add an API that we will deprecate soon.\n\nI will ping you when we add the new API in Q4.",
       "parentUuid": "0c3ed82b_9bbdd40f",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "2f031c06_83226579",
         "filename": "/PATCHSET_LEVEL",
@@ -156,8 +157,25 @@
       "message": "Thanks Ulan, look forward to your ping :-)",
       "parentUuid": "91969910_b708f9b8",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9674b891_d5b9b217",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1148006
+      },
+      "writtenOn": "2020-11-18T03:39:34Z",
+      "side": 1,
+      "message": "Hi Ulan, half a Q4 has passed, is there any update about RAIL API refactor? :-)",
+      "parentUuid": "2f031c06_83226579",
+      "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
