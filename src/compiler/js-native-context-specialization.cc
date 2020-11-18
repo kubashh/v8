@@ -1063,69 +1063,6 @@ Reduction JSNativeContextSpecialization::ReduceJSStoreGlobal(Node* node) {
   }
 }
 
-Reduction JSNativeContextSpecialization::ReduceMinimorphicPropertyAccess(
-    Node* node, Node* value,
-    MinimorphicLoadPropertyAccessFeedback const& feedback,
-    FeedbackSource const& source) {
-  DCHECK(node->opcode() == IrOpcode::kJSLoadNamed ||
-         node->opcode() == IrOpcode::kJSLoadProperty ||
-         node->opcode() == IrOpcode::kJSLoadNamedFromSuper);
-  STATIC_ASSERT(JSLoadNamedNode::ObjectIndex() == 0 &&
-                JSLoadPropertyNode::ObjectIndex() == 0);
-
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
-
-  Node* lookup_start_object;
-  if (node->opcode() == IrOpcode::kJSLoadNamedFromSuper) {
-    DCHECK(FLAG_super_ic);
-    JSLoadNamedFromSuperNode n(node);
-    // Lookup start object is the __proto__ of the home object.
-    lookup_start_object = effect =
-        BuildLoadPrototypeFromObject(n.home_object(), effect, control);
-  } else {
-    lookup_start_object = NodeProperties::GetValueInput(node, 0);
-  }
-
-  MinimorphicLoadPropertyAccessInfo access_info =
-      broker()->GetPropertyAccessInfo(
-          feedback, source,
-          should_disallow_heap_access()
-              ? SerializationPolicy::kAssumeSerialized
-              : SerializationPolicy::kSerializeIfNeeded);
-  if (access_info.IsInvalid()) return NoChange();
-
-  // The dynamic map check operator loads the feedback vector from the
-  // function's frame, so we can only use this for non-inlined functions.
-  // TODO(rmcilroy): Add support for using a trampoline like LoadICTrampoline
-  // and otherwise pass feedback vector explicitly if we need support for
-  // inlined functions.
-  // TODO(rmcilroy): Ideally we would check whether we are have an inlined frame
-  // state here, but there isn't a good way to distinguish inlined from OSR
-  // framestates.
-  DCHECK(broker()->is_turboprop());
-
-  PropertyAccessBuilder access_builder(jsgraph(), broker(), nullptr);
-  CheckMapsFlags flags = CheckMapsFlag::kNone;
-  if (feedback.has_migration_target_maps()) {
-    flags |= CheckMapsFlag::kTryMigrateInstance;
-  }
-
-  ZoneHandleSet<Map> maps;
-  for (Handle<Map> map : feedback.maps()) {
-    maps.insert(map, graph()->zone());
-  }
-
-  effect = graph()->NewNode(
-      simplified()->DynamicCheckMaps(flags, feedback.handler(), maps, source),
-      lookup_start_object, effect, control);
-  value = access_builder.BuildMinimorphicLoadDataField(
-      feedback.name(), access_info, lookup_start_object, &effect, &control);
-
-  ReplaceWithValue(node, value, effect, control);
-  return Replace(value);
-}
-
 Reduction JSNativeContextSpecialization::ReduceNamedAccess(
     Node* node, Node* value, NamedAccessFeedback const& feedback,
     AccessMode access_mode, Node* key) {
@@ -2023,10 +1960,7 @@ Reduction JSNativeContextSpecialization::ReducePropertyAccess(
       return ReduceNamedAccess(node, value, feedback.AsNamedAccess(),
                                access_mode, key);
     case ProcessedFeedback::kMinimorphicPropertyAccess:
-      DCHECK_EQ(access_mode, AccessMode::kLoad);
-      DCHECK_NULL(key);
-      return ReduceMinimorphicPropertyAccess(
-          node, value, feedback.AsMinimorphicPropertyAccess(), source);
+      return NoChange();  // Reduced by the JSInliningReducer.
     case ProcessedFeedback::kElementAccess:
       DCHECK_EQ(feedback.AsElementAccess().keyed_mode().access_mode(),
                 access_mode);
