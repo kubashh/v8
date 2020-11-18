@@ -120,6 +120,24 @@
       "parentUuid": "92e0479d_bdd87438",
       "revId": "117b6d80b9347fe0d914f1aa63a510f8b19dbfdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "650bde13_1c157c16",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-11-18T09:35:31Z",
+      "side": 1,
+      "message": "Yes my point is that once you\u0027re in that state, you\u0027re anyway in limbo until you finally go to the runtime to tell it that it should really use kMutable instead of kConstantType. And yes, I think we may as well take (a) because it\u0027s cheaper. Especially become the common case (the case for which this path exists) is that (a) and (b) won\u0027t be different and we won\u0027t be in this limbo state. We should make sure that that path is as fast as possible.\n\nI believe if we end up storing a value (b), we\u0027ll deopt and run the IC. The IC, if the current value is in state (a) will miss to the runtime and update the type to mutable. If it is currently in state (b) already, it won\u0027t miss and make it mutable. In that case a reopt will now inline map (b). This could technically flip-flop and repeatedly deopt, but it seems somewhat unlikely that we\u0027d get that unlucky. If we do see such a very unlucky case, we should check stability in the IC as well... (if we can\u0027t do it from the compiler, which would be cheaper).",
+      "parentUuid": "09441ae0_6eee22a4",
+      "revId": "117b6d80b9347fe0d914f1aa63a510f8b19dbfdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
