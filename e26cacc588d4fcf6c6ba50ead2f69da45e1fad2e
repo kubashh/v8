@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72ce2132_6d4fb3b0",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-18T14:52:00Z",
+      "side": 1,
+      "message": "I suspect this won\u0027t be needed anymore now that the optimization stays in InliningPhase.",
+      "revId": "e26cacc588d4fcf6c6ba50ead2f69da45e1fad2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "189c8711_f8e4fdf4",
+        "filename": "src/compiler/js-inlining-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-18T14:52:00Z",
+      "side": 1,
+      "message": "Please add a comment here that NCI intentionally doesn\u0027t soft-deopt on insufficient feedback. (I assume that it\u0027s intentional.)",
+      "revId": "e26cacc588d4fcf6c6ba50ead2f69da45e1fad2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "779d5a7d_02241cfb",
+        "filename": "src/compiler/js-inlining-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-18T14:52:00Z",
+      "side": 1,
+      "message": "This is the same check as above, you can remove it.",
+      "revId": "e26cacc588d4fcf6c6ba50ead2f69da45e1fad2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7599ff3c_da7554bc",
+        "filename": "src/compiler/js-inlining-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-18T14:52:00Z",
+      "side": 1,
+      "message": "You basically said that already in line 59.",
+      "revId": "e26cacc588d4fcf6c6ba50ead2f69da45e1fad2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e02ffc7b_412f086f",
+        "filename": "src/compiler/js-inlining-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-18T14:52:00Z",
+      "side": 1,
+      "message": "Given that we already have JSInliningHeuristics and JSInliner, this name is particularly confusing 😄\n\nHow about JSMinimorphicPropertyAccessReducer or JSContextGenericReducer or almost anything else.",
+      "range": {
+        "startLine": 23,
+        "startChar": 24,
+        "endLine": 23,
+        "endChar": 41
+      },
+      "revId": "e26cacc588d4fcf6c6ba50ead2f69da45e1fad2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
