@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a61d9a10_4f9749f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-18T11:30:56Z",
+      "side": 1,
+      "message": "After discussion with Georg and Mythri, this CL changed a bit. The minimorphic access reduction moves to a new reducer, called JSInliningReducer (for the lack of a better name). This reducer is added as part of the InliningPhase.\n\nPTALA",
+      "revId": "65531e0adde94bef76dcd61314a60e98b126abb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
