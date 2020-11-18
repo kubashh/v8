@@ -50,6 +50,7 @@
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/js-heap-copy-reducer.h"
 #include "src/compiler/js-inlining-heuristic.h"
+#include "src/compiler/js-inlining-reducer.h"
 #include "src/compiler/js-intrinsic-lowering.h"
 #include "src/compiler/js-native-context-specialization.h"
 #include "src/compiler/js-typed-lowering.h"
@@ -1454,6 +1455,8 @@ struct InliningPhase {
     JSNativeContextSpecialization native_context_specialization(
         &graph_reducer, data->jsgraph(), data->broker(), flags,
         data->dependencies(), temp_zone, info->zone());
+    JSInliningReducer inlining_reducer(&graph_reducer, data->jsgraph(),
+                                       data->broker());
     JSInliningHeuristic inlining(&graph_reducer,
                                  temp_zone, data->info(), data->jsgraph(),
                                  data->broker(), data->source_positions());
@@ -1467,6 +1470,7 @@ struct InliningPhase {
       AddReducer(data, &graph_reducer, &native_context_specialization);
       AddReducer(data, &graph_reducer, &context_specialization);
     }
+    AddReducer(data, &graph_reducer, &inlining_reducer);
     AddReducer(data, &graph_reducer, &intrinsic_lowering);
     AddReducer(data, &graph_reducer, &call_reducer);
     if (data->info()->inlining()) {
