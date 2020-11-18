@@ -16,6 +16,23 @@
       "message": "PTAL, Given my past activity on d8 it would probably make sense to add me as an owner:\n- Node-style module loading: https://crrev.com/c/2096629\n- Print module request referrers: https://crrev.com/c/2489680\n- Realm.eval script origin: https://crrev.com/c/2246564\n- Exit code for unhandled promise rejections: https://crrev.com/c/2238569\n- d8 and d8.log.getAndStop helper: https://crrev.com/c/2403245",
       "revId": "ce601d3fb39b05bc74864b8576ffc724e06f9c8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a24fbaa8_4dfb67f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-18T14:20:45Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "ce601d3fb39b05bc74864b8576ffc724e06f9c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
