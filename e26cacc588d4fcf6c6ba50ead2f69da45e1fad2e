@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b553821_dff7158d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-18T15:12:40Z",
+      "side": 1,
+      "message": "Thanks Jakob! I am mostly OK with the approach just that I feel it\u0027s better to do what is good for perf for now and re-evaluate a bit later.",
+      "revId": "e26cacc588d4fcf6c6ba50ead2f69da45e1fad2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72ce2132_6d4fb3b0",
@@ -71,6 +88,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "58b6042b_1fba9e66",
+        "filename": "src/compiler/js-inlining-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-18T15:12:40Z",
+      "side": 1,
+      "message": "I still think that we can move this to PropertyAccessBuilder and just call it from here and also from NCS. I looked at the pinpoint results, and for sheets there seems to be a minor regression on InliningPhase. I think it goes from ~190ms to ~200ms. Not a major regression but I would like to avoid it if possible. I kind of feel that this InliningReducer also seems like something we would have to clean up once TP and NCI have advanced further by seeing what this reducer is actually used for. So, having to call this from two places seems OK to me at least for now.",
+      "revId": "e26cacc588d4fcf6c6ba50ead2f69da45e1fad2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e02ffc7b_412f086f",
         "filename": "src/compiler/js-inlining-reducer.h",
         "patchSetId": 7
@@ -88,6 +122,23 @@
         "endLine": 23,
         "endChar": 41
       },
+      "revId": "e26cacc588d4fcf6c6ba50ead2f69da45e1fad2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49576715_c0c78286",
+        "filename": "src/compiler/js-inlining-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-18T15:12:40Z",
+      "side": 1,
+      "message": "I am not sure about InliningReducer name. Currently we only have minimorphic loads here. I am not sure what other operations we could add here. I am guessing we would use this to do more NCI stuff here, so I feel making this as a NCIReducer and using this reducer instead of Native context specialization. Another suggestion is we could just call it MinimorphicPropertyAccessReducer if that\u0027s the only thing we use it for. Or maybe add a TODO to fix the name once we are more clear on what this would be used for 😊\n\nI already get confused that InliningPhase does a bunch of stuff not really related to inlining. So this phase makes it a bit more confusing :)",
       "revId": "e26cacc588d4fcf6c6ba50ead2f69da45e1fad2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
