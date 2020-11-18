@@ -176,6 +176,24 @@
       "parentUuid": "2f031c06_83226579",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70e6dcea_964c754c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-18T08:43:35Z",
+      "side": 1,
+      "message": "Hi Hong. No update so far due to other higher priority work. It may slip to Q1.",
+      "parentUuid": "9674b891_d5b9b217",
+      "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
