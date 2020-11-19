@@ -69,6 +69,24 @@
       "parentUuid": "9ef04a3b_32385d7a",
       "revId": "c625637eed601cedbf538e9606135e8edcdffe9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a90d38ca_09906e08",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-19T15:12:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "681d43fc_e15ed163",
+      "revId": "c625637eed601cedbf538e9606135e8edcdffe9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
