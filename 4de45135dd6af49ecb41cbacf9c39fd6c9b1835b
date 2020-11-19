@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab0e751_f54b7a31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-11-19T19:52:43Z",
+      "side": 1,
+      "message": "Is it worth creating a new identifier for the PASE emulator to avoid mixing it with aix and other PPC BE systems?",
+      "revId": "4de45135dd6af49ecb41cbacf9c39fd6c9b1835b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
