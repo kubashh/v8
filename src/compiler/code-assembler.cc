@@ -1103,7 +1103,8 @@ Node* CodeAssembler::CallJSStubImpl(const CallInterfaceDescriptor& descriptor,
   if (!new_target.is_null()) {
     inputs.Add(new_target);
   }
-  inputs.Add(arity);
+  // Add receiver to argument count.
+  inputs.Add(Int32Add(arity, Int32Constant(kArgcAdditionForReceiver)));
   for (auto arg : args) inputs.Add(arg);
   if (descriptor.HasContextParameter()) {
     inputs.Add(context);
