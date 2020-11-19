@@ -51,6 +51,24 @@
       "parentUuid": "100eee3c_08b0445c",
       "revId": "c625637eed601cedbf538e9606135e8edcdffe9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "681d43fc_e15ed163",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-19T14:50:12Z",
+      "side": 1,
+      "message": "I\u0027m fine with keeping the TryLookupPropertyInSimpleObject changes. They\u0027ll go away soon as you\u0027ll be adding CSA support for OND now.",
+      "parentUuid": "9ef04a3b_32385d7a",
+      "revId": "c625637eed601cedbf538e9606135e8edcdffe9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
