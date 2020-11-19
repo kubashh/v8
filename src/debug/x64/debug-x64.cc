@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/common/globals.h"
 #if V8_TARGET_ARCH_X64
 
 #include "src/debug/debug.h"
@@ -44,7 +45,9 @@ void DebugCodegen::GenerateFrameDropperTrampoline(MacroAssembler* masm) {
   __ movzxwq(
       rbx, FieldOperand(rbx, SharedFunctionInfo::kFormalParameterCountOffset));
 
-  __ InvokeFunction(rdi, no_reg, rbx, rbx, JUMP_FUNCTION);
+  // Add receiver to actual parameter count.
+  __ leaq(rax, Operand(rbx, kArgcAdditionForReceiver));
+  __ InvokeFunction(rdi, no_reg, rbx, rax, JUMP_FUNCTION);
 }
 
 const bool LiveEdit::kFrameDropperSupported = true;

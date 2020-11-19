@@ -12435,11 +12435,18 @@ TNode<Oddball> CodeStubAssembler::InstanceOf(TNode<Object> object,
             &if_otherhandler);
   {
     // Call to Function.prototype[@@hasInstance] directly.
+    /*
+    Print("inst_of_handler", inst_of_handler);
     Callable builtin(BUILTIN_CODE(isolate(), FunctionPrototypeHasInstance),
                      CallTrampolineDescriptor{});
+    Print("before CallJS");
+    // 1 real arg...
     var_result =
         CAST(CallJS(builtin, context, inst_of_handler, callable, object));
+    Print("&ReturnResult");
     Goto(&return_result);
+    */
+    Goto(&if_otherhandler);
   }
 
   BIND(&if_otherhandler);

@@ -737,14 +737,16 @@ void InterpreterAssembler::CallJSAndDispatch(
   DCHECK(Bytecodes::IsCallOrConstruct(bytecode_) ||
          bytecode_ == Bytecode::kInvokeIntrinsic);
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), receiver_mode);
+  DCHECK_EQ(kArgcAdditionForReceiver, kArgcAdditionForReceiver & 1);
 
   TNode<Word32T> args_count;
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
     // The receiver is implied, so it is not in the argument list.
-    args_count = args.reg_count();
+    TNode<Int32T> receiver_count = Int32Constant(kArgcAdditionForReceiver);
+    args_count = Int32Add(args.reg_count(), receiver_count);
   } else {
     // Subtract the receiver from the argument count.
-    TNode<Int32T> receiver_count = Int32Constant(1);
+    TNode<Int32T> receiver_count = Int32Constant(1 - kArgcAdditionForReceiver);
     args_count = Int32Sub(args.reg_count(), receiver_count);
   }
 
@@ -772,6 +774,8 @@ void InterpreterAssembler::CallJSAndDispatch(TNode<Object> function,
   Callable callable = CodeFactory::Call(isolate());
   TNode<Code> code_target = HeapConstant(callable.code());
 
+  // Add the receiver to the argument count
+  arg_count = Int32Add(arg_count, Int32Constant(kArgcAdditionForReceiver));
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
     // The first argument parameter (the receiver) is implied to be undefined.
     TailCallStubThenBytecodeDispatch(callable.descriptor(), code_target,
@@ -806,6 +810,7 @@ void InterpreterAssembler::CallJSWithSpreadAndDispatch(
     TNode<UintPtrT> slot_id, TNode<HeapObject> maybe_feedback_vector) {
   DCHECK(Bytecodes::MakesCallAlongCriticalPath(bytecode_));
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), ConvertReceiverMode::kAny);
+  DCHECK_EQ(kArgcAdditionForReceiver, kArgcAdditionForReceiver & 1);
   CollectCallFeedback(function, context, maybe_feedback_vector, slot_id);
   Comment("call using CallWithSpread builtin");
   Callable callable = CodeFactory::InterpreterPushArgsThenCall(
@@ -813,7 +818,7 @@ void InterpreterAssembler::CallJSWithSpreadAndDispatch(
       InterpreterPushArgsMode::kWithFinalSpread);
   TNode<Code> code_target = HeapConstant(callable.code());
 
-  TNode<Int32T> receiver_count = Int32Constant(1);
+  TNode<Int32T> receiver_count = Int32Constant(1 - kArgcAdditionForReceiver);
   TNode<Word32T> args_count = Int32Sub(args.reg_count(), receiver_count);
   TailCallStubThenBytecodeDispatch(callable.descriptor(), code_target, context,
                                    args_count, args.base_reg_location(),
@@ -832,6 +837,10 @@ TNode<Object> InterpreterAssembler::Construct(
   Label return_result(this), construct_generic(this),
       construct_array(this, &var_site);
 
+  // Add the receiver to the argument count
+  TNode<Word32T> args_count = args.reg_count();
+  args_count = Int32Add(args_count, Int32Constant(kArgcAdditionForReceiver));
+
   CollectConstructFeedback(context, target, new_target, maybe_feedback_vector,
                            slot_id, &construct_generic, &construct_array,
                            &var_site);
@@ -844,7 +853,7 @@ TNode<Object> InterpreterAssembler::Construct(
         isolate(), InterpreterPushArgsMode::kOther);
     TNode<Code> code_target = HeapConstant(callable.code());
     var_result = CallStub(callable.descriptor(), code_target, context,
-                          args.reg_count(), args.base_reg_location(), target,
+                          args_count, args.base_reg_location(), target,
                           new_target, UndefinedConstant());
     Goto(&return_result);
   }
@@ -858,7 +867,7 @@ TNode<Object> InterpreterAssembler::Construct(
         isolate(), InterpreterPushArgsMode::kArrayFunction);
     TNode<Code> code_target = HeapConstant(callable.code());
     var_result = CallStub(callable.descriptor(), code_target, context,
-                          args.reg_count(), args.base_reg_location(), target,
+                          args_count, args.base_reg_location(), target,
                           new_target, var_site.value());
     Goto(&return_result);
   }
@@ -985,7 +994,9 @@ TNode<Object> InterpreterAssembler::ConstructWithSpread(
   Callable callable = CodeFactory::InterpreterPushArgsThenConstruct(
       isolate(), InterpreterPushArgsMode::kWithFinalSpread);
   TNode<Code> code_target = HeapConstant(callable.code());
-  return CallStub(callable.descriptor(), code_target, context, args.reg_count(),
+  TNode<Word32T> args_count = args.reg_count();
+  args_count = Int32Add(args_count, Int32Constant(kArgcAdditionForReceiver));
+  return CallStub(callable.descriptor(), code_target, context, args_count,
                   args.base_reg_location(), target, new_target,
                   UndefinedConstant());
 }

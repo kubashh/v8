@@ -53,9 +53,9 @@ ALL_VARIANT_FLAGS = {
 # implications defined in flag-definitions.h.
 INCOMPATIBLE_FLAGS_PER_VARIANT = {
   "assert_types": ["--no-assert-types"],
-  "jitless": ["--opt", "--liftoff", "--track-field-types", "--validate-asm"],
+  "jitless": ["--opt", "--always-opt",  "--liftoff", "--track-field-types", "--validate-asm"],
   "no_wasm_traps": ["--wasm-trap-handler"],
-  "nooptimization": ["--opt", "--no-liftoff", "--predictable", "--wasm-tier-up"],
+  "nooptimization": ["--opt",  "--always-opt", "--no-liftoff", "--predictable", "--wasm-tier-up"],
   "slow_path": ["--no-force-slow-path"],
   "stress_incremental_marking": ["--no-stress-incremental-marking"],
   "stress_js_bg_compile_wasm_code_gc": ["--no-stress-background-compile"],
