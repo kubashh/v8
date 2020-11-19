@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b288d960_5a271f49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2020-11-19T00:38:58Z",
+      "side": 1,
+      "message": "This is the first time I\u0027m trying to cherry-pick a v8 cl.\n\nI\u0027m cherry-picking to refs/heads/chromium/4280 because that\u0027s what https://docs.google.com/document/d/13JzmZBggRwJk36mM5tLFJNrqJxIXD9drqnd8-fJ4tXU/edit# says.\n\nhttps://omahaproxy.appspot.com/ says that 87 has V8 Commit: 3cd8a8915ce4f62b50e6371f5b7fc155b5d78413 which links to https://chromium.googlesource.com/v8/v8/+log/3cd8a8915ce4f62b50e6371f5b7fc155b5d78413 which has a bunch of cherry-picks to refs/branch-heads/8.7 instead, so I\u0027m not fully confident what I did is the right thing. You hopefully know :)\n\nThe merge hasn\u0027t been approved yet; I\u0027m preparing this early in the hope that it can get a green dry run so that the cq can land it immediately once it\u0027s approved (hence no auto-submit +1).",
+      "revId": "2abfae7576a6578b2724e6eeacdbfd2bf879a0c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
