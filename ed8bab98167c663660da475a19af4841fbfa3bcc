@@ -229,6 +229,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "179b4f4c_7cb17bfa",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2687,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-19T11:56:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5068c96e_82189888",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "092b1c86_7127c9d5",
@@ -242,6 +260,24 @@
       "writtenOn": "2020-11-18T17:04:26Z",
       "side": 1,
       "message": "I think this guard is not necessary here, see comments to KeyedStoreIC.",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9f7d7c1_8e523d02",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-19T11:56:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "092b1c86_7127c9d5",
       "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -333,6 +369,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d59f55e3_f101a845",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3152,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-19T11:56:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b464a9e_78498059",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf199d5a_7331d975",
@@ -346,6 +400,24 @@
       "writtenOn": "2020-11-18T17:04:26Z",
       "side": 1,
       "message": "Ditto. GenericPropertyLoad() should handle this on respective code path instead.",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b77563ab_f4e1ab06",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3270,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-19T11:56:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf199d5a_7331d975",
       "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -367,6 +439,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4002bc8_a78ab3b0",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3411,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-19T11:56:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98100ecc_42f424d7",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee2ee92c_935dc838",
@@ -380,6 +470,24 @@
       "writtenOn": "2020-11-18T17:04:26Z",
       "side": 1,
       "message": "Answer: a) this check doesn\u0027t guarantee that, b) it\u0027s an overkill.\n\nInstead of adding this guard here, please try to search for [Load/Store]Handler::kNormal in accessor assembler and you will find the \"bottommost\" places where we execute load/store operations for dictionary mode holders (i.e. objects containing the property).",
+      "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad3e7429_574f891b",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3605,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-19T11:56:50Z",
+      "side": 1,
+      "message": "I\u0027ve now implemented the idea of creating handlers of kind slow instead of kind normal if the V8_DICT_MODE_PROTOTYPES flag is set.\n\nThis allowed removing all the bailouts you pointed out, and only required the creation of a single new bailout, as we discussed elsewhere.",
+      "parentUuid": "ee2ee92c_935dc838",
       "revId": "ed8bab98167c663660da475a19af4841fbfa3bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
