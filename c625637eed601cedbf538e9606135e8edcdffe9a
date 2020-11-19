@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11cc0a33_26cac7eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-19T12:10:01Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "c625637eed601cedbf538e9606135e8edcdffe9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "100eee3c_08b0445c",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-11-19T12:10:01Z",
+      "side": 1,
+      "message": "I think this bailout is also not necessary since deep inside the TryHashOwnProperty the TryLookupPropertyInSimpleObject() will bailout properly.",
+      "revId": "c625637eed601cedbf538e9606135e8edcdffe9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
