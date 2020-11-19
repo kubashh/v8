@@ -33,6 +33,24 @@
       "message": "I think this bailout is also not necessary since deep inside the TryHashOwnProperty the TryLookupPropertyInSimpleObject() will bailout properly.",
       "revId": "c625637eed601cedbf538e9606135e8edcdffe9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ef04a3b_32385d7a",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2020-11-19T14:43:06Z",
+      "side": 1,
+      "message": "Indeed, things work without this bailout,however I was planning to revert the change to TryLookupPropertyInSimpleObject as soon as https://chromium-review.googlesource.com/c/v8/v8/+/2548080 has landed, because it requires more invasive changes (like changing function signatures) than the other bailouts.",
+      "parentUuid": "100eee3c_08b0445c",
+      "revId": "c625637eed601cedbf538e9606135e8edcdffe9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
