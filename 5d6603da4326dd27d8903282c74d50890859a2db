@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a142446_e0b37b37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2020-11-19T15:48:59Z",
+      "side": 1,
+      "message": "Ok, this is now following https://v8.dev/docs/merge-patch#option-2%3A-using-gerrit , so maybe it\u0027s correct.\n\nI guess node_ci_linux64_rel being red on the branch isn\u0027t anything to worry about if all branch merges are supposed to bypass treechecks and try.",
+      "revId": "5d6603da4326dd27d8903282c74d50890859a2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
