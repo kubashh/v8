@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2b021c1_32735344",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-19T08:20:08Z",
+      "side": 1,
+      "message": "lgtm from my side",
+      "revId": "53517b98b3daa9d490c7b6825405f930eab16574",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5874b031_8b794b2a",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3599,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-19T08:20:08Z",
+      "side": 1,
+      "message": "Afaics we can\u0027t guarantee it, since there might be an object in the prototype chain which has the relevant getter and it might be in dict mode.\n\nBut my understanding is not 100% clear here. Igor knows the real answer :)",
+      "range": {
+        "startLine": 3598,
+        "startChar": 25,
+        "endLine": 3599,
+        "endChar": 63
+      },
+      "revId": "53517b98b3daa9d490c7b6825405f930eab16574",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
