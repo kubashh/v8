@@ -16,6 +16,24 @@
       "message": "Prepared merge to 8.7 too: https://chromium-review.googlesource.com/c/v8/v8/+/2548315\n\nI have a feeling the 8.7 one is the one we want.",
       "revId": "1ffd7166130220e96b500fe8d9c09ce74f34c16e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64a6671d_630b322f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-11-19T19:57:57Z",
+      "side": 1,
+      "message": "Yes; I believe this branch was used by a Canary at some point, but it\u0027s not what\u0027s used by M87-Stable.",
+      "parentUuid": "a670d754_5ddb0ed2",
+      "revId": "1ffd7166130220e96b500fe8d9c09ce74f34c16e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
