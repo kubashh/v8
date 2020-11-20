@@ -673,6 +673,10 @@ macro UnsafeCast<A : type extends WeakHeapObject>(o: A|Object): A {
   return %RawDownCast<A>(o);
 }
 
+macro UnsafeCast<A : type extends RawPtr>(o: RawPtr): A {
+  return %RawDownCast<A>(o);
+}
+
 macro
 CastOrDefault<T: type, Arg: type, Default: type>(implicit context: Context)(
     x: Arg, default: Default): T|Default {
