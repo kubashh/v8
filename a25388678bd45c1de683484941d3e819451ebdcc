@@ -50,6 +50,24 @@
       "message": "Should this nullptr not be pushed after the loop?",
       "revId": "a25388678bd45c1de683484941d3e819451ebdcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e344f684_d8e4e348",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-11-20T17:33:14Z",
+      "side": 1,
+      "message": "Thanks, you\u0027re right. I made a few minor changes as a consequence:\n- Added a DCHECK that would have caught this\n- Realized that after the fix, having both the main thread and the background thread publishing created so much contention that the performance was worse off. So now I let the background thread finish first or cancel it.\nWe still need to process the publish queue in the main thread in case the publish task was canceled, but now this can be done with non-blocking and thread-unsafe code since background tasks are finished.",
+      "parentUuid": "1b01243c_b6ebf545",
+      "revId": "a25388678bd45c1de683484941d3e819451ebdcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
