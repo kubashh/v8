@@ -820,7 +820,9 @@ void DisposeModuleEmbedderData(Local<Context> context) {
 
 MaybeLocal<Module> ResolveModuleCallback(Local<Context> context,
                                          Local<String> specifier,
+                                         Local<FixedArray> import_assertions,
                                          Local<Module> referrer) {
+  // TODO(v8:11189) Consider JSON modules support in d8.
   Isolate* isolate = context->GetIsolate();
   ModuleEmbedderData* d = GetModuleDataFromContext(context);
   auto specifier_it =
@@ -881,8 +883,11 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Module> referrer,
 
   std::string dir_name = DirName(file_name);
 
-  for (int i = 0, length = module->GetModuleRequestsLength(); i < length; ++i) {
-    Local<String> name = module->GetModuleRequest(i);
+  Local<FixedArray> module_requests = module->GetModuleRequests();
+  for (int i = 0, length = module_requests->Length(); i < length; ++i) {
+    Local<ModuleRequest> module_request =
+        module_requests->Get(i).As<ModuleRequest>();
+    Local<String> name = module_request->GetSpecifier();
     std::string absolute_path =
         NormalizePath(ToSTLString(isolate, name), dir_name);
     if (d->specifier_to_module_map.count(absolute_path)) continue;

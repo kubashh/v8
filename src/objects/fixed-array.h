@@ -99,6 +99,8 @@ class FixedArrayBase
 class FixedArray
     : public TorqueGeneratedFixedArray<FixedArray, FixedArrayBase> {
  public:
+  NEVER_READ_ONLY_SPACE
+
   // Setter and getter for elements.
   inline Object get(int index) const;
   inline Object get(IsolateRoot isolate, int index) const;

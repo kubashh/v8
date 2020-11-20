@@ -81,6 +81,7 @@ using ::v8::Boolean;
 using ::v8::BooleanObject;
 using ::v8::Context;
 using ::v8::Extension;
+using ::v8::FixedArray;
 using ::v8::Function;
 using ::v8::FunctionTemplate;
 using ::v8::HandleScope;
@@ -24014,9 +24015,9 @@ TEST(CodeCache) {
   isolate2->Dispose();
 }
 
-v8::MaybeLocal<Module> UnexpectedModuleResolveCallback(Local<Context> context,
-                                                       Local<String> specifier,
-                                                       Local<Module> referrer) {
+v8::MaybeLocal<Module> UnexpectedModuleResolveCallback(
+    Local<Context> context, Local<String> specifier,
+    Local<FixedArray> import_assertions, Local<Module> referrer) {
   CHECK_WITH_MSG(false, "Unexpected call to resolve callback");
 }
 
@@ -24106,9 +24107,9 @@ Local<Module> CompileAndInstantiateModuleFromCache(
 
 }  // namespace
 
-v8::MaybeLocal<Module> SyntheticModuleResolveCallback(Local<Context> context,
-                                                      Local<String> specifier,
-                                                      Local<Module> referrer) {
+v8::MaybeLocal<Module> SyntheticModuleResolveCallback(
+    Local<Context> context, Local<String> specifier,
+    Local<FixedArray> import_assertions, Local<Module> referrer) {
   std::vector<v8::Local<v8::String>> export_names{v8_str("test_export")};
   Local<Module> module = CreateAndInstantiateSyntheticModule(
       context->GetIsolate(),
@@ -24118,7 +24119,8 @@ v8::MaybeLocal<Module> SyntheticModuleResolveCallback(Local<Context> context,
 }
 
 v8::MaybeLocal<Module> SyntheticModuleThatThrowsDuringEvaluateResolveCallback(
-    Local<Context> context, Local<String> specifier, Local<Module> referrer) {
+    Local<Context> context, Local<String> specifier,
+    Local<FixedArray> import_assertions, Local<Module> referrer) {
   std::vector<v8::Local<v8::String>> export_names{v8_str("test_export")};
   Local<Module> module = CreateAndInstantiateSyntheticModule(
       context->GetIsolate(),
