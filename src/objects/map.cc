@@ -754,6 +754,7 @@ void Map::GeneralizeField(Isolate* isolate, Handle<Map> map,
   // Check if we actually need to generalize the field type at all.
   Handle<DescriptorArray> old_descriptors(
       map->instance_descriptors(kRelaxedLoad), isolate);
+  // int index = old_descriptors->GetFieldIndex(modify_index);
   PropertyDetails old_details = old_descriptors->GetDetails(modify_index);
   PropertyConstness old_constness = old_details.constness();
   Representation old_representation = old_details.representation();
@@ -794,8 +795,10 @@ void Map::GeneralizeField(Isolate* isolate, Handle<Map> map,
                                new_representation, wrapped_type);
 
   if (new_constness != old_constness) {
+    // PrintF("Deoptimizing %x for field const %d\n", map->ptr(),
+    // modify_index.as_uint32());
     field_owner->dependent_code().DeoptimizeDependentCodeGroup(
-        DependentCode::kFieldConstGroup);
+        DependentCode::kFieldConstGroup, modify_index.as_uint32());
   }
 
   if (!new_field_type->Equals(*old_field_type)) {

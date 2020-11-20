@@ -942,7 +942,8 @@ void DependentCode::SetDependentCode(Handle<HeapObject> object,
 void DependentCode::InstallDependency(Isolate* isolate,
                                       const MaybeObjectHandle& code,
                                       Handle<HeapObject> object,
-                                      DependencyGroup group) {
+                                      DependencyGroup group,
+                                      int data /* = -1 */) {
   if (V8_UNLIKELY(FLAG_trace_code_dependencies)) {
     StdoutStream{} << "Installing dependency of [" << code->GetHeapObject()
                    << "] on [" << object << "] in group ["
@@ -951,24 +952,57 @@ void DependentCode::InstallDependency(Isolate* isolate,
   Handle<DependentCode> old_deps(DependentCode::GetDependentCode(object),
                                  isolate);
   Handle<DependentCode> new_deps =
-      InsertWeakCode(isolate, old_deps, group, code);
+      InsertWeakCode(isolate, old_deps, group, code, data);
   // Update the list head if necessary.
   if (!new_deps.is_identical_to(old_deps))
     DependentCode::SetDependentCode(object, new_deps);
 }
 
+bool DependentCode::MaybeAddData(int entry, DependencyGroup group, int data) {
+  if (data < 0) return false;
+  if (group != kFieldConstGroup) return false;
+
+  if (data >= (FieldComputer::kItemsPerWord - 1)) return false;
+
+  Smi s = data_at(entry);
+  int d = Smi::ToInt(s);
+  // The data is already set.
+  if (FieldComputer::decode(d, data)) return false;
+
+  // Change the data.
+  d = FieldComputer::encode(d, data, true);
+  set_data_at(entry, Smi::FromInt(d));
+  return true;
+}
+
+bool DependentCode::SatisfiesDataPredicate(int entry, DependencyGroup group,
+                                           int data) {
+  if (group != kFieldConstGroup) return true;
+  if (data < 0) return true;
+
+  if (data >= (FieldComputer::kItemsPerWord - 1)) return true;
+
+  Smi s = data_at(entry);
+  int d = Smi::ToInt(s);
+  // The data is already set.
+  if (FieldComputer::decode(d, data)) return true;
+
+  // We don't have a dependency on this field.
+  return false;
+}
+
 Handle<DependentCode> DependentCode::InsertWeakCode(
     Isolate* isolate, Handle<DependentCode> entries, DependencyGroup group,
-    const MaybeObjectHandle& code) {
+    const MaybeObjectHandle& code, int data /* = -1 */) {
   if (entries->length() == 0 || entries->group() > group) {
     // There is no such group.
-    return DependentCode::New(isolate, group, code, entries);
+    return DependentCode::New(isolate, group, code, entries, data);
   }
   if (entries->group() < group) {
     // The group comes later in the list.
     Handle<DependentCode> old_next(entries->next_link(), isolate);
     Handle<DependentCode> new_next =
-        InsertWeakCode(isolate, old_next, group, code);
+        InsertWeakCode(isolate, old_next, group, code, data);
     if (!old_next.is_identical_to(new_next)) {
       entries->set_next_link(*new_next);
     }
@@ -978,35 +1012,44 @@ Handle<DependentCode> DependentCode::InsertWeakCode(
   int count = entries->count();
   // Check for existing entry to avoid duplicates.
   for (int i = 0; i < count; i++) {
-    if (entries->object_at(i) == *code) return entries;
+    if (entries->object_at(i) == *code) {
+      entries->MaybeAddData(i, group, data);
+      return entries;
+    }
   }
-  if (entries->length() < kCodesStartIndex + count + 1) {
+  if (entries->length() < kCodesStartIndex + ((count + 1) * kEntrySize)) {
     entries = EnsureSpace(isolate, entries);
     // Count could have changed, reload it.
     count = entries->count();
   }
   entries->set_object_at(count, *code);
+  entries->set_data_at(count, Smi::FromInt(0));
   entries->set_count(count + 1);
+  entries->MaybeAddData(count, group, data);
   return entries;
 }
 
 Handle<DependentCode> DependentCode::New(Isolate* isolate,
                                          DependencyGroup group,
                                          const MaybeObjectHandle& object,
-                                         Handle<DependentCode> next) {
+                                         Handle<DependentCode> next,
+                                         int data /* = -1 */) {
   Handle<DependentCode> result =
       Handle<DependentCode>::cast(isolate->factory()->NewWeakFixedArray(
-          kCodesStartIndex + 1, AllocationType::kOld));
+          kCodesStartIndex + 1 * kEntrySize, AllocationType::kOld));
   result->set_next_link(*next);
   result->set_flags(GroupField::encode(group) | CountField::encode(1));
   result->set_object_at(0, *object);
+  result->set_data_at(0, Smi::FromInt(0));
+  result->MaybeAddData(0, group, data);
   return result;
 }
 
 Handle<DependentCode> DependentCode::EnsureSpace(
     Isolate* isolate, Handle<DependentCode> entries) {
   if (entries->Compact()) return entries;
-  int capacity = kCodesStartIndex + DependentCode::Grow(entries->count());
+  int capacity =
+      kCodesStartIndex + DependentCode::Grow(entries->count()) * kEntrySize;
   int grow_by = capacity - entries->length();
   return Handle<DependentCode>::cast(
       isolate->factory()->CopyWeakFixedArrayAndGrow(entries, grow_by));
@@ -1017,7 +1060,9 @@ bool DependentCode::Compact() {
   int new_count = 0;
   for (int i = 0; i < old_count; i++) {
     MaybeObject obj = object_at(i);
-    if (!obj->IsCleared()) {
+    if (obj->IsWeak()) {
+      // We want to preserve weak code pointers.
+      // Cleared code pointers or undefined sentinels should be cleared.
       if (i != new_count) {
         copy(i, new_count);
       }
@@ -1032,14 +1077,14 @@ bool DependentCode::Compact() {
 }
 
 bool DependentCode::MarkCodeForDeoptimization(
-    DependentCode::DependencyGroup group) {
+    DependentCode::DependencyGroup group, int data /* = -1 */) {
   if (this->length() == 0 || this->group() > group) {
     // There is no such group.
     return false;
   }
   if (this->group() < group) {
     // The group comes later in the list.
-    return next_link().MarkCodeForDeoptimization(group);
+    return next_link().MarkCodeForDeoptimization(group, data);
   }
   DCHECK_EQ(group, this->group());
   DisallowHeapAllocation no_allocation_scope;
@@ -1047,6 +1092,7 @@ bool DependentCode::MarkCodeForDeoptimization(
   bool marked = false;
   int count = this->count();
   for (int i = 0; i < count; i++) {
+    if (!SatisfiesDataPredicate(i, group, data)) continue;
     MaybeObject obj = object_at(i);
     if (obj->IsCleared()) continue;
     Code code = Code::cast(obj->GetHeapObjectAssumeWeak());
@@ -1054,18 +1100,19 @@ bool DependentCode::MarkCodeForDeoptimization(
       code.SetMarkedForDeoptimization(DependencyGroupName(group));
       marked = true;
     }
-  }
-  for (int i = 0; i < count; i++) {
     clear_at(i);
   }
-  set_count(0);
+  if (marked) {
+    Compact();
+  }
+  // set_count(0);
   return marked;
 }
 
 void DependentCode::DeoptimizeDependentCodeGroup(
-    DependentCode::DependencyGroup group) {
+    DependentCode::DependencyGroup group, int data /* = -1 */) {
   DisallowHeapAllocation no_allocation_scope;
-  bool marked = MarkCodeForDeoptimization(group);
+  bool marked = MarkCodeForDeoptimization(group, data);
   if (marked) {
     DCHECK(AllowCodeDependencyChange::IsAllowed());
     Deoptimizer::DeoptimizeMarkedCode(GetIsolateFromWritableObject(*this));

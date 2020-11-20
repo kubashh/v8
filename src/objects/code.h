@@ -646,15 +646,17 @@ class DependentCode : public WeakFixedArray {
   V8_EXPORT_PRIVATE static void InstallDependency(Isolate* isolate,
                                                   const MaybeObjectHandle& code,
                                                   Handle<HeapObject> object,
-                                                  DependencyGroup group);
+                                                  DependencyGroup group,
+                                                  int data = -1);
 
-  void DeoptimizeDependentCodeGroup(DependencyGroup group);
+  void DeoptimizeDependentCodeGroup(DependencyGroup group, int data = -1);
 
-  bool MarkCodeForDeoptimization(DependencyGroup group);
+  bool MarkCodeForDeoptimization(DependencyGroup group, int data = -1);
 
   // The following low-level accessors are exposed only for tests.
   inline DependencyGroup group();
   inline MaybeObject object_at(int i);
+  inline Smi data_at(int i);
   inline int count();
   inline DependentCode next_link();
 
@@ -668,13 +670,17 @@ class DependentCode : public WeakFixedArray {
 
   static Handle<DependentCode> New(Isolate* isolate, DependencyGroup group,
                                    const MaybeObjectHandle& object,
-                                   Handle<DependentCode> next);
+                                   Handle<DependentCode> next, int data = -1);
   static Handle<DependentCode> EnsureSpace(Isolate* isolate,
                                            Handle<DependentCode> entries);
   static Handle<DependentCode> InsertWeakCode(Isolate* isolate,
                                               Handle<DependentCode> entries,
                                               DependencyGroup group,
-                                              const MaybeObjectHandle& code);
+                                              const MaybeObjectHandle& code,
+                                              int data = -1);
+  using FieldComputer = base::BitSetComputer<bool, 1, kSmiValueSize, uint32_t>;
+  bool MaybeAddData(int entry, DependencyGroup group, int data);
+  bool SatisfiesDataPredicate(int entry, DependencyGroup group, int data);
 
   // Compact by removing cleared weak cells and return true if there was
   // any cleared weak cell.
@@ -689,10 +695,14 @@ class DependentCode : public WeakFixedArray {
   static const int kNextLinkIndex = 0;
   static const int kFlagsIndex = 1;
   static const int kCodesStartIndex = 2;
+  static const int kCodeIndex = 0;
+  static const int kDataIndex = 1;
+  static const int kEntrySize = 2;
 
   inline void set_next_link(DependentCode next);
   inline void set_count(int value);
   inline void set_object_at(int i, MaybeObject object);
+  inline void set_data_at(int i, Smi data);
   inline void clear_at(int i);
   inline void copy(int from, int to);
 

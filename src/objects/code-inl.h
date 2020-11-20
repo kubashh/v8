@@ -144,20 +144,36 @@ DependentCode::DependencyGroup DependentCode::group() {
 }
 
 void DependentCode::set_object_at(int i, MaybeObject object) {
-  Set(kCodesStartIndex + i, object);
+  Set(kCodesStartIndex + i * kEntrySize + kCodeIndex, object);
 }
 
 MaybeObject DependentCode::object_at(int i) {
-  return Get(kCodesStartIndex + i);
+  return Get(kCodesStartIndex + i * kEntrySize + kCodeIndex);
+}
+
+void DependentCode::set_data_at(int i, Smi data) {
+  Set(kCodesStartIndex + i * kEntrySize + kDataIndex,
+      MaybeObject::FromSmi(data));
+}
+
+Smi DependentCode::data_at(int i) {
+  MaybeObject o = Get(kCodesStartIndex + i * kEntrySize + kDataIndex);
+  CHECK(o.IsSmi());
+  return o.ToSmi();
 }
 
 void DependentCode::clear_at(int i) {
-  Set(kCodesStartIndex + i,
+  Set(kCodesStartIndex + i * kEntrySize + kCodeIndex,
       HeapObjectReference::Strong(GetReadOnlyRoots().undefined_value()));
+  Set(kCodesStartIndex + i * kEntrySize + kDataIndex,
+      MaybeObject::FromSmi(Smi::FromInt(0)));
 }
 
 void DependentCode::copy(int from, int to) {
-  Set(kCodesStartIndex + to, Get(kCodesStartIndex + from));
+  int to_location = kCodesStartIndex + to * kEntrySize;
+  int from_location = kCodesStartIndex + from * kEntrySize;
+  Set(to_location + kCodeIndex, Get(from_location + kCodeIndex));
+  Set(to_location + kDataIndex, Get(from_location + kDataIndex));
 }
 
 OBJECT_CONSTRUCTORS_IMPL(Code, HeapObject)

@@ -246,7 +246,8 @@ class FieldConstnessDependency final : public CompilationDependency {
   void Install(const MaybeObjectHandle& code) const override {
     SLOW_DCHECK(IsValid());
     DependentCode::InstallDependency(owner_.isolate(), code, owner_.object(),
-                                     DependentCode::kFieldConstGroup);
+                                     DependentCode::kFieldConstGroup,
+                                     descriptor_.as_uint32());
   }
 
  private:

@@ -440,6 +440,12 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
   } else {
     map_ref.SerializeOwnDescriptor(descriptor);
     constness = dependencies()->DependOnFieldConstness(map_ref, descriptor);
+    /*
+    if (constness == PropertyConstness::kConst) {
+      PrintF("Map %x  descriptor index %u\n", map->ptr(),
+    descriptor.as_uint32());
+    }
+    */
   }
   Handle<Map> field_owner_map(map->FindFieldOwner(isolate(), descriptor),
                               isolate());
