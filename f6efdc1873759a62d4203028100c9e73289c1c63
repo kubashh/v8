@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "f6efdc1873759a62d4203028100c9e73289c1c63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52e1fa3b_dfed80d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-20T13:39:00Z",
+      "side": 1,
+      "message": "LGTM with one comment.",
+      "revId": "f6efdc1873759a62d4203028100c9e73289c1c63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35477910_3352be69",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-20T13:39:00Z",
+      "side": 1,
+      "message": "I think you should add (!module_-\u003eglobals.empty() \u0026\u0026 ...) to the condition, otherwise this will run multiple times if there are no globals.",
+      "revId": "f6efdc1873759a62d4203028100c9e73289c1c63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
