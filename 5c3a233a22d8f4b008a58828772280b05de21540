@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f400e79_fc135649",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-20T11:19:10Z",
+      "side": 1,
+      "message": "Drive-by comment. Can I ask why we are only doing this for x64 right now? Arm64 has some challenges regarding arguments (due to it\u0027s stack having to be 16 byte aligned) and I would much prefer we had something we knew would be workable on all architectures before we start landing code. Is there a design doc with the plans here?",
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
