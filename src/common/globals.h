@@ -1690,7 +1690,11 @@ constexpr int kSmallOrderedHashSetMinCapacity = 4;
 constexpr int kSmallOrderedHashMapMinCapacity = 4;
 
 static const uint16_t kDontAdaptArgumentsSentinel = static_cast<uint16_t>(-1);
-
+#ifdef V8_INCLUDE_RECEIVER_IN_ARGC
+constexpr int kArgcAdditionForReceiver = 1;
+#else
+constexpr int kArgcAdditionForReceiver = 0;
+#endif
 // Opaque data type for identifying stack frames. Used extensively
 // by the debugger.
 // ID_MIN_VALUE and ID_MAX_VALUE are specified to ensure that enumeration type

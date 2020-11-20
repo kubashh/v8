@@ -286,6 +286,10 @@ declare_args() {
   # Experimental feature for always keeping prototypes in dict/"slow" mode
   # Sets -DV8_DICT_MODE_PROTOTYPES
   v8_dict_mode_prototypes = false
+
+  # Experimental, temporary flag indicating whether receiver is always included in argc for builtins.
+  # Sets -DV8_INCLUDE_RECEIVER_IN_ARGC
+  v8_include_receiver_in_argc = false
 }
 
 # Derived defaults.
@@ -673,6 +677,9 @@ config("features") {
   }
   if (v8_dict_mode_prototypes) {
     defines += [ "V8_DICT_MODE_PROTOTYPES" ]
+  }
+  if (v8_include_receiver_in_argc) {
+    defines += [ "V8_INCLUDE_RECEIVER_IN_ARGC" ]
   }
 }
 

@@ -44,7 +44,13 @@ void DebugCodegen::GenerateFrameDropperTrampoline(MacroAssembler* masm) {
   __ movzxwq(
       rbx, FieldOperand(rbx, SharedFunctionInfo::kFormalParameterCountOffset));
 
-  __ InvokeFunction(rdi, no_reg, rbx, rbx, JUMP_FUNCTION);
+  Register argc = rbx;
+  if (kArgcAdditionForReceiver != 0) {
+    // Add receiver to actual parameter count.
+    __ leaq(rax, Operand(rbx, kArgcAdditionForReceiver));
+    argc = rax;
+  }
+  __ InvokeFunction(rdi, no_reg, rbx, argc, JUMP_FUNCTION);
 }
 
 const bool LiveEdit::kFrameDropperSupported = true;
