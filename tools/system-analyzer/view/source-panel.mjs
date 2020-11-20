@@ -78,7 +78,7 @@ DOM.defineCustomElement('view/source-panel',
       scriptNode = builder.createScriptNode();
       this._sourcePositionsToMarkNodes = builder.sourcePositionToMarkers;
     } else {
-      scriptNode = document.createElement('pre');
+      scriptNode = DOM.div();
       this._selectedMarkNodes = undefined;
     }
     const oldScriptNode = this.script.childNodes[1];
@@ -202,8 +202,7 @@ class LineBuilder {
   }
 
   createScriptNode() {
-    const scriptNode = document.createElement('pre');
-    scriptNode.classList.add('scriptNode');
+    const scriptNode = DOM.div('scriptNode');
     for (let [lineIndex, line] of lineIterator(this._script.source)) {
       scriptNode.appendChild(this._createLineNode(lineIndex, line));
     }
@@ -211,7 +210,7 @@ class LineBuilder {
   }
 
   _createLineNode(lineIndex, line) {
-    const lineNode = document.createElement('span');
+    const lineNode = DOM.span();
     let columnIndex = 0;
     for (const sourcePosition of this._sourcePositions.forLine(lineIndex)) {
       const nextColumnIndex = sourcePosition.column - 1;
