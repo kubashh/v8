@@ -50,6 +50,24 @@
       "message": "I think you should add (!module_-\u003eglobals.empty() \u0026\u0026 ...) to the condition, otherwise this will run multiple times if there are no globals.",
       "revId": "f6efdc1873759a62d4203028100c9e73289c1c63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d562bcc_48be4b27",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-20T14:19:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35477910_3352be69",
+      "revId": "f6efdc1873759a62d4203028100c9e73289c1c63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
