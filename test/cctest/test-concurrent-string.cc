@@ -82,7 +82,7 @@ class ConcurrentStringThread final : public v8::base::Thread {
     // string, the nth character, and convert into a double.
     CHECK_EQ(str_->synchronized_length(), length_);
     for (unsigned int i = 0; i < length_; ++i) {
-      CHECK_EQ(str_->Get(i), chars_[i]);
+      CHECK_EQ(str_->Get(i, true), chars_[i]);
     }
     CHECK_EQ(TryStringToDouble(str_).value(), DOUBLE_VALUE);
   }
