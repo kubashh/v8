@@ -2266,6 +2266,13 @@ void MacroAssembler::AssertUndefinedOrAllocationSite(Register object) {
   }
 }
 
+void MacroAssembler::AssertReceiverInArgc(Register argc) {
+  if (emit_debug_code()) {
+    cmpl(argc, Immediate(kArgcAdditionForReceiver));
+    Check(greater_equal, AbortReason::kReceiverNotInArgc);
+  }
+}
+
 void MacroAssembler::LoadWeakValue(Register in_out, Label* target_if_cleared) {
   cmpl(in_out, Immediate(kClearedWeakHeapObjectLower32));
   j(equal, target_if_cleared);
@@ -2480,6 +2487,12 @@ void MacroAssembler::StackOverflowCheck(
 void MacroAssembler::InvokePrologue(Register expected_parameter_count,
                                     Register actual_parameter_count,
                                     Label* done, InvokeFlag flag) {
+  AssertReceiverInArgc();
+  // Subtract the receiver from argument count until builtins handle it
+  // correctly.
+  if (kArgcAdditionForReceiver != 0) {
+    subq(actual_parameter_count, Immediate(kArgcAdditionForReceiver));
+  }
   if (expected_parameter_count != actual_parameter_count) {
     Label regular_invoke;
 #ifdef V8_NO_ARGUMENTS_ADAPTOR

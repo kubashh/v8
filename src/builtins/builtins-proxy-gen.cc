@@ -130,6 +130,8 @@ TF_BUILTIN(CallProxy, ProxiesCodeStubAssembler) {
   BIND(&trap_undefined);
   {
     // 6.a. Return Call(target, thisArgument, argumentsList).
+    // Add the receiver to the argument count.
+    argc = Int32Add(argc, Int32Constant(kArgcAdditionForReceiver));
     TailCallStub(CodeFactory::Call(isolate()), context, target, argc);
   }
 
@@ -197,6 +199,8 @@ TF_BUILTIN(ConstructProxy, ProxiesCodeStubAssembler) {
     // 6.a. Assert: target has a [[Construct]] internal method.
     CSA_ASSERT(this, IsConstructor(CAST(target)));
 
+    // Add the receiver to the argument count.
+    argc = Int32Add(argc, Int32Constant(kArgcAdditionForReceiver));
     // 6.b. Return ? Construct(target, argumentsList, newTarget).
     TailCallStub(CodeFactory::Construct(isolate()), context, target, new_target,
                  argc);
