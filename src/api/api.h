@@ -134,7 +134,9 @@ class RegisteredExtension {
   V(Primitive, Object)                         \
   V(PrimitiveArray, FixedArray)                \
   V(BigInt, BigInt)                            \
-  V(ScriptOrModule, Script)
+  V(ScriptOrModule, Script)                    \
+  V(FixedArray, FixedArray)                    \
+  V(ModuleRequest, ModuleRequest)
 
 class Utils {
  public:
@@ -240,7 +242,9 @@ class Utils {
       v8::internal::Handle<v8::internal::JSReceiver> obj);
   static inline Local<Primitive> ToLocalPrimitive(
       v8::internal::Handle<v8::internal::Object> obj);
-  static inline Local<PrimitiveArray> ToLocal(
+  static inline Local<FixedArray> FixedArrayToLocal(
+      v8::internal::Handle<v8::internal::FixedArray> obj);
+  static inline Local<PrimitiveArray> PrimitiveArrayToLocal(
       v8::internal::Handle<v8::internal::FixedArray> obj);
   static inline Local<ScriptOrModule> ScriptOrModuleToLocal(
       v8::internal::Handle<v8::internal::Script> obj);
