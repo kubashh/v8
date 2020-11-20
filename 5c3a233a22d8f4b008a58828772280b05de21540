@@ -51,6 +51,24 @@
       "parentUuid": "1f400e79_fc135649",
       "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc02a9ae_0973020d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2020-11-20T11:35:29Z",
+      "side": 1,
+      "message": "And to (hopefully) address your concerns: we are not going to change the stack layout or how arguments are read. Just now the receiver is implicitly included in the argument count (it is always there). We are just making it explicit now in the argument count consistently.",
+      "parentUuid": "bba99fee_a5ffe95b",
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
