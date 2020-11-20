@@ -69,6 +69,24 @@
       "parentUuid": "bba99fee_a5ffe95b",
       "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef2e39b_a13fd156",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-20T11:38:20Z",
+      "side": 1,
+      "message": "Cool thanks for the doc. I\u0027m totally fine with reviews happening on x64, but I\u0027d like that we either land each step in the process for all architectures together, or have a CL per architecture for each step and land all architectures (or at least those we support ourself) for a given step before landing the following steps (although doing reviews of those later steps would be fine).",
+      "parentUuid": "bba99fee_a5ffe95b",
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
