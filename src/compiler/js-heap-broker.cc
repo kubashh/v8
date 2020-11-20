@@ -3200,7 +3200,7 @@ uint16_t StringRef::GetFirstChar() {
   if (data_->should_access_heap()) {
     AllowHandleDereferenceIfNeeded allow_handle_dereference(data()->kind(),
                                                             broker()->mode());
-    return object()->Get(0);
+    return object()->Get(0, broker()->isolate());
   }
   return data()->AsString()->first_char();
 }
