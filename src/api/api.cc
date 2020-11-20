@@ -375,7 +375,7 @@ static ScriptOrigin GetScriptOriginForScript(i::Isolate* isolate,
       v8::Boolean::New(v8_isolate, options.IsOpaque()),
       v8::Boolean::New(v8_isolate, script->type() == i::Script::TYPE_WASM),
       v8::Boolean::New(v8_isolate, options.IsModule()),
-      Utils::ToLocal(host_defined_options));
+      Utils::PrimitiveArrayToLocal(host_defined_options));
   return origin;
 }
 
@@ -2204,6 +2204,34 @@ Local<Primitive> PrimitiveArray::Get(Isolate* v8_isolate, int index) {
   return ToApiHandle<Primitive>(i_item);
 }
 
+int FixedArray::Length() const {
+  i::Handle<i::FixedArray> self = Utils::OpenHandle(this);
+  return self->length();
+}
+
+Local<Object> FixedArray::Get(int i) const {
+  i::Handle<i::FixedArray> self = Utils::OpenHandle(this);
+  CHECK_LT(i, self->length());
+  i::Handle<i::Object> entry(self->get(i), self->GetIsolate());
+  return ToApiHandle<Object>(entry);
+}
+
+Local<String> ModuleRequest::GetSpecifier() const {
+  i::Handle<i::ModuleRequest> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  return ToApiHandle<String>(i::handle(self->specifier(), isolate));
+}
+
+int ModuleRequest::GetSourceOffset() const {
+  return Utils::OpenHandle(this)->position();
+}
+
+Local<FixedArray> ModuleRequest::GetImportAssertions() const {
+  i::Handle<i::ModuleRequest> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  return ToApiHandle<FixedArray>(i::handle(self->import_assertions(), isolate));
+}
+
 Module::Status Module::GetStatus() const {
   i::Handle<i::Module> self = Utils::OpenHandle(this);
   switch (self->status()) {
@@ -2275,6 +2303,29 @@ Location Module::GetModuleRequestLocation(int i) const {
   return v8::Location(info.line, info.column);
 }
 
+Local<FixedArray> Module::GetModuleRequests() const {
+  i::Handle<i::Module> self = Utils::OpenHandle(this);
+  CHECK(self->IsSourceTextModule());
+  i::Isolate* isolate = self->GetIsolate();
+  i::Handle<i::FixedArray> module_requests(
+      i::Handle<i::SourceTextModule>::cast(self)->info().module_requests(),
+      isolate);
+  return ToApiHandle<FixedArray>(module_requests);
+}
+
+Location Module::SourceOffsetToLocation(int offset) const {
+  i::Handle<i::Module> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+  i::HandleScope scope(isolate);
+  CHECK(self->IsSourceTextModule());
+  i::Handle<i::Script> script(
+      i::Handle<i::SourceTextModule>::cast(self)->GetScript(), isolate);
+  i::Script::PositionInfo info;
+  i::Script::GetPositionInfo(script, offset, &info, i::Script::WITH_OFFSET);
+  return v8::Location(info.line, info.column);
+}
+
 Local<Value> Module::GetModuleNamespace() {
   Utils::ApiCheck(
       GetStatus() >= kInstantiated, "v8::Module::GetModuleNamespace",
@@ -2327,7 +2378,20 @@ Maybe<bool> Module::InstantiateModule(Local<Context> context,
   ENTER_V8(isolate, context, Module, InstantiateModule, Nothing<bool>(),
            i::HandleScope);
   has_pending_exception = !i::Module::Instantiate(
-      isolate, Utils::OpenHandle(this), context, callback);
+      isolate, Utils::OpenHandle(this), context, /*callback*/ nullptr,
+      /*callback_without_import_assertions*/ callback);
+  RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
+  return Just(true);
+}
+
+Maybe<bool> Module::InstantiateModule(Local<Context> context,
+                                      Module::ResolveModuleCallback callback) {
+  auto isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
+  ENTER_V8(isolate, context, Module, InstantiateModule, Nothing<bool>(),
+           i::HandleScope);
+  has_pending_exception = !i::Module::Instantiate(
+      isolate, Utils::OpenHandle(this), context, /*callback*/ callback,
+      /*callback_without_import_assertions*/ nullptr);
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
   return Just(true);
 }
@@ -3717,6 +3781,12 @@ void v8::Private::CheckCast(v8::Data* that) {
   Utils::ApiCheck(
       obj->IsSymbol() && i::Handle<i::Symbol>::cast(obj)->is_private(),
       "v8::Private::Cast", "Value is not a Private");
+}
+
+void v8::ModuleRequest::CheckCast(v8::Data* that) {
+  i::Handle<i::Object> obj = Utils::OpenHandle(that);
+  Utils::ApiCheck(obj->IsModuleRequest(), "v8::ModuleRequest::Cast",
+                  "Value is not a ModuleRequest");
 }
 
 void v8::Module::CheckCast(v8::Data* that) {

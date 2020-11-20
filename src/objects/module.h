@@ -75,7 +75,8 @@ class Module : public HeapObject {
   // exception is propagated.)
   static V8_WARN_UNUSED_RESULT bool Instantiate(
       Isolate* isolate, Handle<Module> module, v8::Local<v8::Context> context,
-      v8::Module::ResolveCallback callback);
+      v8::Module::ResolveModuleCallback callback,
+      v8::Module::ResolveCallback callback_without_import_assertions);
 
   // Implementation of spec operation ModuleEvaluation.
   static V8_WARN_UNUSED_RESULT MaybeHandle<Object> Evaluate(
@@ -114,7 +115,8 @@ class Module : public HeapObject {
 
   static V8_WARN_UNUSED_RESULT bool PrepareInstantiate(
       Isolate* isolate, Handle<Module> module, v8::Local<v8::Context> context,
-      v8::Module::ResolveCallback callback);
+      v8::Module::ResolveModuleCallback callback,
+      v8::Module::ResolveCallback callback_without_import_assertions);
   static V8_WARN_UNUSED_RESULT bool FinishInstantiate(
       Isolate* isolate, Handle<Module> module,
       ZoneForwardList<Handle<SourceTextModule>>* stack, unsigned* dfs_index,
