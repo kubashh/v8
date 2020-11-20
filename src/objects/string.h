@@ -214,7 +214,9 @@ class String : public TorqueGeneratedString<String, Name> {
   inline void Set(int index, uint16_t value);
   // Get individual two byte char in the string.  Repeated calls
   // to this method are not efficient unless the string is flat.
-  V8_INLINE uint16_t Get(int index);
+  // If it is called from a background thread, {from_background_thread} has to
+  // be true.
+  V8_INLINE uint16_t Get(int index, bool from_background_thread = false);
 
   // ES6 section 7.1.3.1 ToNumber Applied to the String Type
   static Handle<Object> ToNumber(Isolate* isolate, Handle<String> subject);

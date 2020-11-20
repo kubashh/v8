@@ -467,10 +467,16 @@ Handle<String> String::Flatten(LocalIsolate* isolate, Handle<String> string,
   return string;
 }
 
-uint16_t String::Get(int index) {
+uint16_t String::Get(int index, bool from_background_thread) {
   DCHECK(index >= 0 && index < length());
 
-  SharedStringAccessGuardIfNeeded scope(*this);
+  // If this is call from the main thread, then the mutex should not be needed
+  base::Optional<SharedStringAccessGuardIfNeeded> maybe_scope;
+  if (from_background_thread) {
+    maybe_scope.emplace(*this);
+  } else {
+    DCHECK(!SharedStringAccessGuardIfNeeded::IsNeeded(*this));
+  }
 
   class StringGetDispatcher : public AllStatic {
    public:
