@@ -87,6 +87,133 @@
       "parentUuid": "bba99fee_a5ffe95b",
       "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da0fa653_98c4af23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-20T15:15:30Z",
+      "side": 1,
+      "message": "From my experience with reversing the arguments in the stack, arm64 is usually challenging due to the alignment constraint. However, I really don\u0027t foresee any issue with adding +1 to the argument count. On the contrary, we usually need to add 1 in order to do the alignment calculation (since the receiver acts as yet another argument in the stack) like so: \nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/arm64/macro-assembler-arm64.cc;drc\u003dba681fdb939007147cdb5ad339be9a5264daa2d3;l\u003d2047\nand\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/arm64/macro-assembler-arm64.cc;drc\u003dba681fdb939007147cdb5ad339be9a5264daa2d3;l\u003d2184\n\nRegarding the steps to achieve this work, I don\u0027t really know what\u0027s best. My inclination would go to: many CLs for x64 (identify location for jitless, then compiler, remove all the unnecessary adds/subs in the builtins), then 1 CL per supported architectures. Maybe the first CLs (x64) could be chained and landed together.",
+      "parentUuid": "cef2e39b_a13fd156",
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4ff7a4b_d0f0d68c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-20T15:15:30Z",
+      "side": 1,
+      "message": "Pretty good! Only a few comments.",
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ca0e2f7_e5c402e6",
+        "filename": "src/builtins/builtins-proxy-gen.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-20T15:15:30Z",
+      "side": 1,
+      "message": "I think we should be clearer (throughout all the CL), what is temporary and what is not. I know we can grep for kArgcAdditionForReceiver, but for instance, here we don\u0027t know if later this should be {argc \u003d Int32Add(argc, 1)} or nothing.\nI know in this case is the latter, since CallProxy should (consistently) receive argc as the arguments count including the receiver.\n\nMaybe we should add in the top of this function something like:\n// TODO(pthier): CallProxy should expect argc to include the receiver.\n\nand before this current line something like:\n// TODO(pthier): Remove this line when CallProxy expect argc to include the receiver.",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 134,
+        "endChar": 67
+      },
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bf91538_fe919305",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-20T15:15:30Z",
+      "side": 1,
+      "message": "nit: Useless comment. Throughout the code base, the number of arguments is always untagged!",
+      "range": {
+        "startLine": 149,
+        "startChar": 35,
+        "endLine": 149,
+        "endChar": 44
+      },
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1aea0df_a7243f30",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-20T15:15:30Z",
+      "side": 1,
+      "message": "Same here, we should add a TODO saying this is temporary while JSConstructStubGeneric was not adapted to include the argument count.",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 54
+      },
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abeefe94_81394831",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-20T15:15:30Z",
+      "side": 1,
+      "message": "nit: the comment above already indicate we are including the receiver \"+ receiver\".",
+      "range": {
+        "startLine": 851,
+        "startChar": 0,
+        "endLine": 851,
+        "endChar": 40
+      },
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
