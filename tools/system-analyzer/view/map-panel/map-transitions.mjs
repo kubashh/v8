@@ -1,7 +1,8 @@
 // Copyright 2020 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-import {FocusEvent, SelectionEvent} from '../../events.mjs';
+import {ToolTipEvent} from '../events.mjs';
+import {FocusEvent, SelectionEvent} from '../events.mjs';
 import {CSSColor} from '../helper.mjs';
 import {DOM, V8CustomElement} from '../helper.mjs';
 
@@ -14,6 +15,7 @@ DOM.defineCustomElement(
       currentMap = undefined;
       _toggleSubtreeHandler = this._handleToggleSubtree.bind(this);
       _selectMapHandler = this._handleSelectMap.bind(this);
+      _mouseoverMapHandler = this._handleMouseoverMap.bind(this);
 
       constructor() {
         super(templateText);
@@ -169,6 +171,7 @@ DOM.defineCustomElement(
         if (map.edge) node.style.backgroundColor = this._typeToColor(map.edge);
         node.map = map;
         node.onclick = this._selectMapHandler
+        node.onmouseover = this._mouseoverMapHandler
         if (map.children.length > 1) {
           node.innerText = map.children.length;
           const showSubtree = DOM.div('showSubtransitions');
@@ -186,7 +189,13 @@ DOM.defineCustomElement(
         this._selectMap(event.currentTarget.map)
       }
 
+      _handleMouseoverMap(event) {
+        this.dispatchEvent(new ToolTipEvent(
+            event.currentTarget.map.toString(), event.currentTarget));
+      }
+
       _handleToggleSubtree(event) {
+        event.preventDefault();
         const node = event.currentTarget.parentElement;
         let map = node.map;
         event.target.classList.toggle('opened');
@@ -209,5 +218,6 @@ DOM.defineCustomElement(
             transitionsNode.removeChild(subtransitionNodes[i]);
           }
         }
+        return false;
       }
     });
