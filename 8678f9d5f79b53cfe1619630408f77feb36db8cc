@@ -33,6 +33,23 @@
       "message": "Wrong email! See above.",
       "revId": "8678f9d5f79b53cfe1619630408f77feb36db8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3151cf2e_3aa066a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-11-20T06:00:39Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "8678f9d5f79b53cfe1619630408f77feb36db8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
