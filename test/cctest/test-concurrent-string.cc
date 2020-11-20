@@ -81,8 +81,9 @@ class ConcurrentStringThread final : public v8::base::Thread {
     // Check the three operations we do from the StringRef concurrently: get the
     // string, the nth character, and convert into a double.
     CHECK_EQ(str_->synchronized_length(), length_);
+    LocalIsolate* local_isolate = LocalIsolate::FromHeap(&local_heap);
     for (unsigned int i = 0; i < length_; ++i) {
-      CHECK_EQ(str_->Get(i), chars_[i]);
+      CHECK_EQ(str_->Get(i, local_isolate), chars_[i]);
     }
     CHECK_EQ(TryStringToDouble(str_).value(), DOUBLE_VALUE);
   }
