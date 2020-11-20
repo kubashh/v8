@@ -247,11 +247,19 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction function,
   int ticks_for_optimization =
       kProfilerTicksBeforeOptimization +
       (bytecode.length() / kBytecodeSizeAllowancePerTick);
+  bool small_func_ticks = true;
+  if (scale_factor != 1) {
+    small_func_ticks = (ticks > FLAG_ticks_scale_factor_for_top_tier);
+    ticks_for_optimization += 1;
+  }
   ticks_for_optimization *= scale_factor;
+  bool small_func_midtier =
+      FLAG_turboprop_as_midtier && function.ActiveTierIsIgnition();
   if (ticks >= ticks_for_optimization) {
     return OptimizationReason::kHotAndStable;
-  } else if (!any_ic_changed_ &&
-             bytecode.length() < kMaxBytecodeSizeForEarlyOpt) {
+  } else if (!any_ic_changed_ && !small_func_midtier &&
+             bytecode.length() < kMaxBytecodeSizeForEarlyOpt &&
+             small_func_ticks) {
     // TODO(turboprop, mythria): Do we need to support small function
     // optimization for TP->TF tier up. If so, do we want to scale the bytecode
     // size?
