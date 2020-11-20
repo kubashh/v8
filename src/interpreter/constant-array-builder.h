@@ -20,6 +20,8 @@ class Isolate;
 class AstRawString;
 class AstValue;
 
+// FIXME: remove HomeObjectSymbol and home_object_symbol
+
 namespace interpreter {
 
 // Constant array entries that represent singletons.

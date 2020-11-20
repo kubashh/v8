@@ -2342,6 +2342,7 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr, Register name) {
       if (property->NeedsHomeObjectOnClassPrototype()) {
         Register func = register_allocator()->NewRegister();
         builder()->StoreAccumulatorInRegister(func);
+        // FIXME: when is this code hit?
         VisitSetHomeObject(func, home_object, property);
       }
     }
@@ -2373,6 +2374,7 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr, Register name) {
 
     if (FunctionLiteral::NeedsHomeObject(
             expr->instance_members_initializer_function())) {
+      // FIXME: change this
       FeedbackSlot slot = feedback_spec()->AddStoreICSlot(language_mode());
       builder()->LoadAccumulatorWithRegister(prototype).StoreHomeObjectProperty(
           initializer, feedback_index(slot), language_mode());
@@ -2473,6 +2475,7 @@ void BytecodeGenerator::VisitInitializeClassMembersStatement(
 
     builder()->SetExpressionAsStatementPosition(property->value());
     VisitForRegisterValue(property->value(), value);
+    // FIXME: when is this code hit?
     VisitSetHomeObject(value, constructor, property);
 
     Runtime::FunctionId function_id =
@@ -2594,7 +2597,7 @@ void BytecodeGenerator::VisitLiteral(Literal* expr) {
       execution_result()->SetResultIsString();
       break;
     case Literal::kSymbol:
-      builder()->LoadLiteral(expr->AsSymbol());
+      UNREACHABLE();
       break;
     case Literal::kBigInt:
       builder()->LoadLiteral(expr->AsBigInt());
@@ -2709,6 +2712,7 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
               builder()->StoreAccumulatorInRegister(value);
               builder()->StoreNamedOwnProperty(
                   literal, key->AsRawPropertyName(), feedback_index(slot));
+              // FIXME: when is this code hit?
               VisitSetHomeObject(value, literal, property);
             } else {
               builder()->StoreNamedOwnProperty(
@@ -2729,6 +2733,7 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
           if (property->emit_store()) {
             builder()->CallRuntime(Runtime::kSetKeyedProperty, args);
             Register value = args[2];
+            // FIXME: when is this code hit?
             VisitSetHomeObject(value, literal, property);
           }
         }
@@ -2821,6 +2826,7 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
         } else {
           value = VisitForRegisterValue(property->value());
         }
+        // FIXME: when is this code hit?
         VisitSetHomeObject(value, literal, property);
 
         DataPropertyInLiteralFlags data_property_flags =
@@ -3516,12 +3522,11 @@ BytecodeGenerator::AssignmentLhsData BytecodeGenerator::PrepareAssignmentLhs(
       AccumulatorPreservingScope scope(this, accumulator_preserving_mode);
       RegisterList super_property_args =
           register_allocator()->NewRegisterList(4);
-      SuperPropertyReference* super_property =
-          property->obj()->AsSuperPropertyReference();
+      // FIXME: can we remove property->obj() altogether?
       BuildThisVariableLoad();
       builder()->StoreAccumulatorInRegister(super_property_args[0]);
-      VisitForRegisterValue(super_property->home_object(),
-                            super_property_args[1]);
+      BuildHomeObjectLoad();
+      builder()->StoreAccumulatorInRegister(super_property_args[1]);
       builder()
           ->LoadLiteral(property->key()->AsLiteral()->AsRawPropertyName())
           .StoreAccumulatorInRegister(super_property_args[2]);
@@ -3531,12 +3536,10 @@ BytecodeGenerator::AssignmentLhsData BytecodeGenerator::PrepareAssignmentLhs(
       AccumulatorPreservingScope scope(this, accumulator_preserving_mode);
       RegisterList super_property_args =
           register_allocator()->NewRegisterList(4);
-      SuperPropertyReference* super_property =
-          property->obj()->AsSuperPropertyReference();
       BuildThisVariableLoad();
       builder()->StoreAccumulatorInRegister(super_property_args[0]);
-      VisitForRegisterValue(super_property->home_object(),
-                            super_property_args[1]);
+      BuildHomeObjectLoad();
+      builder()->StoreAccumulatorInRegister(super_property_args[1]);
       VisitForRegisterValue(property->key(), super_property_args[2]);
       return AssignmentLhsData::KeyedSuperProperty(super_property_args);
     }
@@ -4736,13 +4739,11 @@ void BytecodeGenerator::VisitPropertyLoadForRegister(Register obj,
 void BytecodeGenerator::VisitNamedSuperPropertyLoad(Property* property,
                                                     Register opt_receiver_out) {
   RegisterAllocationScope register_scope(this);
-  SuperPropertyReference* super_property =
-      property->obj()->AsSuperPropertyReference();
   if (FLAG_super_ic) {
     Register receiver = register_allocator()->NewRegister();
     BuildThisVariableLoad();
     builder()->StoreAccumulatorInRegister(receiver);
-    VisitForAccumulatorValue(super_property->home_object());
+    BuildHomeObjectLoad();
     builder()->SetExpressionPosition(property);
     auto name = property->key()->AsLiteral()->AsRawPropertyName();
     FeedbackSlot slot = GetCachedLoadSuperICSlot(name);
@@ -4754,8 +4755,8 @@ void BytecodeGenerator::VisitNamedSuperPropertyLoad(Property* property,
     RegisterList args = register_allocator()->NewRegisterList(3);
     BuildThisVariableLoad();
     builder()->StoreAccumulatorInRegister(args[0]);
-    VisitForRegisterValue(super_property->home_object(), args[1]);
-
+    BuildHomeObjectLoad();
+    builder()->StoreAccumulatorInRegister(args[1]);
     builder()->SetExpressionPosition(property);
     builder()
         ->LoadLiteral(property->key()->AsLiteral()->AsRawPropertyName())
@@ -4771,12 +4772,11 @@ void BytecodeGenerator::VisitNamedSuperPropertyLoad(Property* property,
 void BytecodeGenerator::VisitKeyedSuperPropertyLoad(Property* property,
                                                     Register opt_receiver_out) {
   RegisterAllocationScope register_scope(this);
-  SuperPropertyReference* super_property =
-      property->obj()->AsSuperPropertyReference();
   RegisterList args = register_allocator()->NewRegisterList(3);
   BuildThisVariableLoad();
   builder()->StoreAccumulatorInRegister(args[0]);
-  VisitForRegisterValue(super_property->home_object(), args[1]);
+  BuildHomeObjectLoad();
+  builder()->StoreAccumulatorInRegister(args[1]);
   VisitForRegisterValue(property->key(), args[2]);
 
   builder()->SetExpressionPosition(property);
@@ -5314,11 +5314,10 @@ void BytecodeGenerator::VisitCountOperation(CountOperation* expr) {
     case NAMED_SUPER_PROPERTY: {
       super_property_args = register_allocator()->NewRegisterList(4);
       RegisterList load_super_args = super_property_args.Truncate(3);
-      SuperPropertyReference* super_property =
-          property->obj()->AsSuperPropertyReference();
       BuildThisVariableLoad();
       builder()->StoreAccumulatorInRegister(load_super_args[0]);
-      VisitForRegisterValue(super_property->home_object(), load_super_args[1]);
+      BuildHomeObjectLoad();
+      builder()->StoreAccumulatorInRegister(load_super_args[1]);
       builder()
           ->LoadLiteral(property->key()->AsLiteral()->AsRawPropertyName())
           .StoreAccumulatorInRegister(load_super_args[2])
@@ -5328,11 +5327,10 @@ void BytecodeGenerator::VisitCountOperation(CountOperation* expr) {
     case KEYED_SUPER_PROPERTY: {
       super_property_args = register_allocator()->NewRegisterList(4);
       RegisterList load_super_args = super_property_args.Truncate(3);
-      SuperPropertyReference* super_property =
-          property->obj()->AsSuperPropertyReference();
       BuildThisVariableLoad();
       builder()->StoreAccumulatorInRegister(load_super_args[0]);
-      VisitForRegisterValue(super_property->home_object(), load_super_args[1]);
+      BuildHomeObjectLoad();
+      builder()->StoreAccumulatorInRegister(load_super_args[1]);
       VisitForRegisterValue(property->key(), load_super_args[2]);
       builder()->CallRuntime(Runtime::kLoadKeyedFromSuper, load_super_args);
       break;
@@ -6256,14 +6254,34 @@ void BytecodeGenerator::VisitLiteralAccessor(Register home_object,
   }
 }
 
+void BytecodeGenerator::BuildHomeObjectLoad() {
+  DeclarationScope* receiver_scope = closure_scope()->GetReceiverScope();
+
+  int depth = execution_context()->ContextChainDepth(receiver_scope);
+  ContextScope* context = execution_context()->Previous(depth);
+  Register context_reg;
+  if (context) {
+    context_reg = context->reg();
+    depth = 0;
+  } else {
+    context_reg = execution_context()->reg();
+  }
+
+  // FIXME: can it be made immutable?
+  builder()->LoadContextSlot(context_reg, Context::EXTENSION_INDEX, depth,
+                             BytecodeArrayBuilder::kMutableSlot);
+  // FIXME: no hole check here, is that ok? Derived ctors?
+}
+
 void BytecodeGenerator::VisitSetHomeObject(Register value, Register home_object,
                                            LiteralProperty* property) {
+  // FIXME: remove unneeded param
   Expression* expr = property->value();
   if (FunctionLiteral::NeedsHomeObject(expr)) {
-    FeedbackSlot slot = feedback_spec()->AddStoreICSlot(language_mode());
-    builder()
-        ->LoadAccumulatorWithRegister(home_object)
-        .StoreHomeObjectProperty(value, feedback_index(slot), language_mode());
+    builder()->LoadAccumulatorWithRegister(home_object);
+    // FIXME: is this the right context?
+    builder()->StoreContextSlot(execution_context()->reg(),
+                                Context::EXTENSION_INDEX, 0);
   }
 }
 

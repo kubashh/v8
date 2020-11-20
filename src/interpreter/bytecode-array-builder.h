@@ -90,7 +90,6 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   BytecodeArrayBuilder& LoadLiteral(const AstRawString* raw_string);
   BytecodeArrayBuilder& LoadLiteral(const Scope* scope);
   BytecodeArrayBuilder& LoadLiteral(AstBigInt bigint);
-  BytecodeArrayBuilder& LoadLiteral(AstSymbol symbol);
   BytecodeArrayBuilder& LoadUndefined();
   BytecodeArrayBuilder& LoadNull();
   BytecodeArrayBuilder& LoadTheHole();

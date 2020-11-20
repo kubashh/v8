@@ -2499,20 +2499,12 @@ class NativeFunctionLiteral final : public Expression {
 
 
 class SuperPropertyReference final : public Expression {
- public:
-  Expression* home_object() const { return home_object_; }
-
  private:
   friend class AstNodeFactory;
   friend Zone;
 
-  // We take in ThisExpression* only as a proof that it was accessed.
-  SuperPropertyReference(Expression* home_object, int pos)
-      : Expression(pos, kSuperPropertyReference), home_object_(home_object) {
-    DCHECK(home_object->IsProperty());
-  }
-
-  Expression* home_object_;
+  explicit SuperPropertyReference(int pos)
+      : Expression(pos, kSuperPropertyReference) {}
 };
 
 
@@ -3199,9 +3191,8 @@ class AstNodeFactory final {
     return zone_->New<NativeFunctionLiteral>(name, extension, pos);
   }
 
-  SuperPropertyReference* NewSuperPropertyReference(Expression* home_object,
-                                                    int pos) {
-    return zone_->New<SuperPropertyReference>(home_object, pos);
+  SuperPropertyReference* NewSuperPropertyReference(int pos) {
+    return zone_->New<SuperPropertyReference>(pos);
   }
 
   SuperCallReference* NewSuperCallReference(VariableProxy* new_target_var,

@@ -401,11 +401,12 @@ class ScriptContextTable : public FixedArray {
 // [ previous       ]  A pointer to the previous context.
 //
 // [ extension      ]  Additional data. This slot is only available when
-//                     extension_bit is set. Check using has_extension.
+//                     ScopeInfo::HasContextExtensionSlot returns true.
 //
 //                     For native contexts, it contains the global object.
 //                     For module contexts, it contains the module object.
 //                     For await contexts, it contains the generator object.
+//                     For class contexts, it may contain the home object.
 //                     For var block contexts, it may contain an "extension
 //                     object".
 //                     For with contexts, it contains an "extension object".
@@ -487,7 +488,7 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
     SCOPE_INFO_INDEX,
     PREVIOUS_INDEX,
 
-    // This slot only exists if the extension_flag bit is set.
+    // This slot only exists if ScopeInfo::HasContextExtensionSlot returns true.
     EXTENSION_INDEX,
 
 // These slots are only in native contexts.
