@@ -105,6 +105,30 @@
       },
       "revId": "71854b7b14ea35a3fb1d1061fdb74f8ec563e7a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fc6d758_49e79cc4",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-21T01:30:52Z",
+      "side": 1,
+      "message": "@Tobias: I\u0027m not sure why node_ci is failing but WDYT about the use of Slice in PS7?",
+      "parentUuid": "ea7830f8_3633516f",
+      "range": {
+        "startLine": 106,
+        "startChar": 20,
+        "endLine": 106,
+        "endChar": 34
+      },
+      "revId": "71854b7b14ea35a3fb1d1061fdb74f8ec563e7a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
