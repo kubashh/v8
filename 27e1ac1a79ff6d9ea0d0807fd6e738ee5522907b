@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f78f4f23_29852fa9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1471967
+      },
+      "writtenOn": "2020-11-22T15:28:34Z",
+      "side": 1,
+      "message": "Jakob, the changes here are guarded by V8_HOST_ARCH_ARM64, which does not work for cross-compiled releases. Any idea about https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1150060?",
+      "revId": "27e1ac1a79ff6d9ea0d0807fd6e738ee5522907b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
