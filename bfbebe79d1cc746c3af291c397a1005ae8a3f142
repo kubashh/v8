@@ -16,6 +16,46 @@
       "message": "PTAL.",
       "revId": "bfbebe79d1cc746c3af291c397a1005ae8a3f142",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53002dbd_12ad3cc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-23T10:15:02Z",
+      "side": 1,
+      "message": "LGTM with a comment.",
+      "revId": "bfbebe79d1cc746c3af291c397a1005ae8a3f142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84b7a822_bc2543fb",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-23T10:15:02Z",
+      "side": 1,
+      "message": "These are multi-byte opcodes (i.e. \u003e255), so they are not reachable here. Did you add them because the compiler did complain about unhandled cases in the switch?",
+      "range": {
+        "startLine": 1893,
+        "startChar": 0,
+        "endLine": 1897,
+        "endChar": 44
+      },
+      "revId": "bfbebe79d1cc746c3af291c397a1005ae8a3f142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
