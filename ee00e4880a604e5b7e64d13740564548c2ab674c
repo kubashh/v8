@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "298bbca3_fc0c8adc",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:31:25Z",
+      "side": 1,
+      "message": "Unfortunately, no. It is used by `SharedStringAccessGuardIfNeeded(String str)` i.e. without the local isolate which is used in other string methods, as well as a DCHECK in String::Get with Isolate*",
+      "parentUuid": "63947a35_1db478eb",
+      "range": {
+        "startLine": 49,
+        "startChar": 2,
+        "endLine": 49,
+        "endChar": 22
+      },
+      "revId": "ee00e4880a604e5b7e64d13740564548c2ab674c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59d72237_365724b6",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5764698_5a83ee74",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:31:25Z",
+      "side": 1,
+      "message": "Ack, removed the RO check. Updated the class comments accordingly.",
+      "parentUuid": "59d72237_365724b6",
+      "range": {
+        "startLine": 66,
+        "startChar": 12,
+        "endLine": 66,
+        "endChar": 34
+      },
+      "revId": "ee00e4880a604e5b7e64d13740564548c2ab674c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "158f447c_530b303e",
@@ -94,6 +142,30 @@
       "writtenOn": "2020-11-23T12:21:44Z",
       "side": 1,
       "message": "Nit: isolate?",
+      "range": {
+        "startLine": 219,
+        "startChar": 45,
+        "endLine": 219,
+        "endChar": 58
+      },
+      "revId": "ee00e4880a604e5b7e64d13740564548c2ab674c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "903a2e20_818c27d8",
+        "filename": "src/objects/string.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:31:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "158f447c_530b303e",
       "range": {
         "startLine": 219,
         "startChar": 45,
