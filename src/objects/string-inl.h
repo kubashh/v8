@@ -471,10 +471,18 @@ Handle<String> String::Flatten(LocalIsolate* isolate, Handle<String> string,
   return string;
 }
 
-uint16_t String::Get(int index) {
-  DCHECK(index >= 0 && index < length());
+uint16_t String::Get(int index, LocalIsolate* isolate) {
+  SharedStringAccessGuardIfNeeded(*this);
+  return GetImpl(index);
+}
 
-  SharedStringAccessGuardIfNeeded scope(*this);
+uint16_t String::Get(int index, Isolate* isolate) {
+  DCHECK(!SharedStringAccessGuardIfNeeded::IsNeeded(*this));
+  return GetImpl(index);
+}
+
+uint16_t String::GetImpl(int index) {
+  DCHECK(index >= 0 && index < length());
 
   class StringGetDispatcher : public AllStatic {
    public:
