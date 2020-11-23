@@ -299,8 +299,7 @@ TEST(Issue23768) {
   // Script needs to have a name in order to trigger InitLineEnds execution.
   v8::Local<v8::String> origin =
       v8::String::NewFromUtf8Literal(CcTest::isolate(), "issue-23768-test");
-  v8::Local<v8::Script> evil_script =
-      CompileWithOrigin(source, origin, v8_bool(false));
+  v8::Local<v8::Script> evil_script = CompileWithOrigin(source, origin, false);
   CHECK(!evil_script.IsEmpty());
   CHECK(!evil_script->Run(env).IsEmpty());
   i::Handle<i::ExternalTwoByteString> i_source(
@@ -615,7 +614,7 @@ UNINITIALIZED_TEST(LogInterpretedFramesNativeStackWithSerialization) {
       v8::Local<v8::String> source = v8_str(
           "function eyecatcher() { return a * a; } return eyecatcher();");
       v8::Local<v8::String> arg_str = v8_str("a");
-      v8::ScriptOrigin origin(v8_str("filename"));
+      v8::ScriptOrigin origin(v8_str("filename"), 0, 0);
 
       i::DisallowCompilation* no_compile_expected =
           has_cache ? new i::DisallowCompilation(
@@ -710,7 +709,7 @@ UNINITIALIZED_TEST(ExternalCodeEventListenerInnerFunctions) {
     code_event_handler.Enable();
 
     v8::Local<v8::String> source_string = v8_str(source_cstring);
-    v8::ScriptOrigin origin(v8_str("test"));
+    v8::ScriptOrigin origin(v8_str("test"), 0, 0);
     v8::ScriptCompiler::Source source(source_string, origin);
     v8::Local<v8::UnboundScript> script =
         v8::ScriptCompiler::CompileUnboundScript(isolate1, &source)
@@ -734,7 +733,7 @@ UNINITIALIZED_TEST(ExternalCodeEventListenerInnerFunctions) {
     code_event_handler.Enable();
 
     v8::Local<v8::String> source_string = v8_str(source_cstring);
-    v8::ScriptOrigin origin(v8_str("test"));
+    v8::ScriptOrigin origin(v8_str("test"), 0, 0);
     v8::ScriptCompiler::Source source(source_string, origin, cache);
     {
       i::DisallowCompilation no_compile_expected(
