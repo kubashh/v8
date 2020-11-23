@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "558c747d_4515b640",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-23T17:42:03Z",
+      "side": 1,
+      "message": "Recreated CL (from 2469606) because of authentication/ownership problems. (I created a new account associated to my email paolosev@microsoft.com and I lost ownership of existing CLs) ",
+      "revId": "e556c18179d8bcb417f4a36424b7db1501cfdafe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
