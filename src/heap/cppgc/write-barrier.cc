@@ -21,7 +21,8 @@ namespace internal {
 
 namespace {
 
-void MarkValue(const BasePage* page, MarkerBase* marker, const void* value) {
+void ProcessMarkValue(const BasePage* page, MarkerBase* marker,
+                      const void* value) {
 #if defined(CPPGC_CAGED_HEAP)
   DCHECK(reinterpret_cast<CagedHeapLocalData*>(
              reinterpret_cast<uintptr_t>(value) &
@@ -49,13 +50,16 @@ void MarkValue(const BasePage* page, MarkerBase* marker, const void* value) {
 
 }  // namespace
 
-void WriteBarrier::MarkingBarrierSlowWithSentinelCheck(const void* value) {
+// static
+void WriteBarrier::DijkstraMarkingBarrierSlowWithSentinelCheck(
+    const void* value) {
   if (!value || value == kSentinelPointer) return;
 
-  MarkingBarrierSlow(value);
+  DijkstraMarkingBarrierSlow(value);
 }
 
-void WriteBarrier::MarkingBarrierSlow(const void* value) {
+// static
+void WriteBarrier::DijkstraMarkingBarrierSlow(const void* value) {
   const BasePage* page = BasePage::FromPayload(value);
   const auto* heap = page->heap();
 
@@ -63,10 +67,58 @@ void WriteBarrier::MarkingBarrierSlow(const void* value) {
   // progress.
   if (!heap->marker()) return;
 
-  MarkValue(page, heap->marker(), value);
+  auto& header =
+      const_cast<HeapObjectHeader&>(page->ObjectHeaderFromInnerAddress(value));
+  if (!header.TryMarkAtomic()) return;
+
+  ProcessMarkValue(page, heap->marker(), value);
+}
+
+// static
+void WriteBarrier::DijkstraMarkingBarrierRangeSlow(
+    HeapHandle& heap_handle, void* first_element, size_t element_size,
+    size_t number_of_elements, TraceCallback trace_callback) {
+  auto& heap_base = HeapBase::From(heap_handle);
+  MarkerBase* marker = heap_base.marker();
+  if (!marker) {
+    return;
+  }
+
+  ObjectAllocator::NoAllocationScope no_allocation(
+      heap_base.object_allocator());
+  char* array = static_cast<char*>(first_element);
+  while (number_of_elements-- > 0) {
+    trace_callback(&heap_base.marker()->Visitor(), array);
+    array += element_size;
+  }
+}
+
+// static
+void WriteBarrier::SteeleMarkingBarrierSlowWithSentinelCheck(
+    const void* value) {
+  if (!value || value == kSentinelPointer) return;
+
+  SteeleMarkingBarrierSlow(value);
+}
+
+// static
+void WriteBarrier::SteeleMarkingBarrierSlow(const void* value) {
+  const BasePage* page = BasePage::FromPayload(value);
+  const auto* heap = page->heap();
+
+  // Marker being not set up means that no incremental/concurrent marking is in
+  // progress.
+  if (!heap->marker()) return;
+
+  auto& header =
+      const_cast<HeapObjectHeader&>(page->ObjectHeaderFromInnerAddress(value));
+  if (!header.IsMarked<AccessMode::kAtomic>()) return;
+
+  ProcessMarkValue(page, heap->marker(), value);
 }
 
 #if defined(CPPGC_YOUNG_GENERATION)
+// static
 void WriteBarrier::GenerationalBarrierSlow(CagedHeapLocalData* local_data,
                                            const AgeTable& age_table,
                                            const void* slot,
