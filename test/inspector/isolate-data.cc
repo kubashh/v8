@@ -256,8 +256,7 @@ int IsolateData::HandleMessage(v8::Local<v8::Message> message,
       IsolateData::FromContext(context)->inspector_.get();
 
   v8::Local<v8::StackTrace> stack = message->GetStackTrace();
-  int script_id =
-      static_cast<int>(message->GetScriptOrigin().ScriptID()->Value());
+  int script_id = message->GetScriptOrigin().ScriptId();
   if (!stack.IsEmpty() && stack->GetFrameCount() > 0) {
     int top_script_id = stack->GetFrame(isolate, 0)->GetScriptId();
     if (top_script_id == script_id) script_id = 0;
@@ -429,7 +428,7 @@ void IsolateData::installAdditionalCommandLineAPI(
   v8::HandleScope handle_scope(isolate());
   v8::Context::Scope context_scope(context);
   v8::ScriptOrigin origin(
-      v8::String::NewFromUtf8Literal(isolate(), "internal-console-api"));
+      v8::String::NewFromUtf8Literal(isolate(), "internal-console-api"), 0, 0);
   v8::ScriptCompiler::Source scriptSource(
       additional_console_api_.Get(isolate()), origin);
   v8::MaybeLocal<v8::Script> script =
