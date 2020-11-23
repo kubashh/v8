@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b33a2441_9df660d2",
+        "filename": "test/unittests/heap/cppgc/stats-collector-scopes-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-23T20:05:37Z",
+      "side": 1,
+      "message": "These tests don\u0027t work when built in v8 because v8\u0027s tracing macros implementation doesn\u0027t use the cppgc platform.",
+      "range": {
+        "startLine": 5,
+        "startChar": 5,
+        "endLine": 5,
+        "endChar": 22
+      },
+      "revId": "ee61c7a56f1b42393736f8a1dc7b0baf7b092458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
