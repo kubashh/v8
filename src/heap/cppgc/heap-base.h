@@ -32,6 +32,12 @@ namespace cppgc {
 
 class Platform;
 
+class V8_EXPORT HeapHandle {
+ private:
+  HeapHandle() = default;
+  friend class internal::HeapBase;
+};
+
 namespace internal {
 
 namespace testing {
@@ -43,7 +49,7 @@ class PreFinalizerHandler;
 class StatsCollector;
 
 // Base class for heap implementations.
-class V8_EXPORT_PRIVATE HeapBase {
+class V8_EXPORT_PRIVATE HeapBase : public cppgc::HeapHandle {
  public:
   using StackSupport = cppgc::Heap::StackSupport;
 
