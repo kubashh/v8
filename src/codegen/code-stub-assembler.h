@@ -398,6 +398,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   }
 
   TNode<String> TaggedToDirectString(TNode<Object> value, Label* fail);
+  TNode<RawPtrT> LoadDirectStringDataPointer(TNode<Object> value, Label* fail);
+  TNode<IntPtrT> LoadDirectStringOffset(TNode<Object> value, Label* fail);
 
   TNode<HeapObject> TaggedToHeapObject(TNode<Object> value, Label* fail) {
     GotoIf(TaggedIsSmi(value), fail);

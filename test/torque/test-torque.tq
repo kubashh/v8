@@ -1347,7 +1347,7 @@ macro TestOffHeapSlice(ptr: RawPtr<char8>, length: intptr) {
 
   check(*torque_internal::unsafe::NewOffHeapReference(ptr) == string.chars[0]);
 
-  let offHeapSlice = torque_internal::unsafe::NewOffHeapSlice(ptr, length);
+  let offHeapSlice = torque_internal::unsafe::NewOffHeapSlice(ptr, 0, length);
   let onHeapSlice = &string.chars;
   for (let i: intptr = 0; i < onHeapSlice.length; ++i) {
     check(*onHeapSlice.AtIndex(i) == *offHeapSlice.AtIndex(i));
