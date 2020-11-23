@@ -382,7 +382,7 @@ class PreParserStatementList {
   bool is_null_;
 };
 
-class PreParserScopedStatementList {
+class V8_NODISCARD PreParserScopedStatementList {
  public:
   explicit PreParserScopedStatementList(std::vector<void*>* buffer) {}
   void Rewind() {}
@@ -851,7 +851,7 @@ class PreParserSourceRange {
   }
 };
 
-class PreParserSourceRangeScope {
+class V8_NODISCARD PreParserSourceRangeScope {
  public:
   PreParserSourceRangeScope(Scanner* scanner, PreParserSourceRange* range) {}
   const PreParserSourceRange& Finalize() const { return range_; }

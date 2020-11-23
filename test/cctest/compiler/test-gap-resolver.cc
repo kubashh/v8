@@ -209,8 +209,7 @@ class MoveInterpreter : public GapResolver::Assembler {
   InterpreterState state_;
 };
 
-
-class ParallelMoveCreator : public HandleAndZoneScope {
+class V8_NODISCARD ParallelMoveCreator : public HandleAndZoneScope {
  public:
   ParallelMoveCreator() : rng_(CcTest::random_number_generator()) {}
 
