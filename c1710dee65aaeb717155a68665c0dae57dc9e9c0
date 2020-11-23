@@ -16,6 +16,24 @@
       "message": "Hello,\n\nAfter this CL, and more specially this underlying change:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/2481465\n\nAll debug builds are failing using GCC (including x64 using gcc 7.4).\n\nThe added `-fno-delete-null-pointer-checks` flag is causing a compilation error on this line:\nhttps://github.com/v8/v8/blob/master/test/unittests/utils/vector-unittest.cc#L82\n\nWith the error: \u0027(long int)(((const int*)(\u0026 kInit1)) \u003d\u003d 0u)\u0027 is not a constant expression.\n\nYou can test this flag on this sample code with `g++ -fno-delete-null-pointer-checks test.cc`\nwhich reproduces the same error:\n```\nconstexpr int test(const int *arr) {\n  if(arr \u003d\u003d 0){\n     //\n   }\n  return 5;\n}\n\nint main(){\n  static constexpr int arr[] \u003d {4, 11, 3};\n  static constexpr int b \u003d  test(arr);\n     \n  return 0;\n}\n```\n\nI was wondering if the flag needs to be excluded or changes need to be made on vector-unittest?",
       "revId": "c1710dee65aaeb717155a68665c0dae57dc9e9c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bde69b1b_45bd3a8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-23T13:05:54Z",
+      "side": 1,
+      "message": "Looks like this flag should be excluded on gcc builds. Can you open an issue, or upload a CL for that?",
+      "parentUuid": "309447d9_8ff9eff2",
+      "revId": "c1710dee65aaeb717155a68665c0dae57dc9e9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
