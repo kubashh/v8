@@ -66,6 +66,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eef23379_3d14f320",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-23T19:26:56Z",
+      "side": 1,
+      "message": "Hmm, I can\u0027t find it 😞",
+      "parentUuid": "b43a336a_9547266b",
+      "range": {
+        "startLine": 106,
+        "startChar": 31,
+        "endLine": 106,
+        "endChar": 48
+      },
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "824320d9_4978151f",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-23T19:26:56Z",
+      "side": 1,
+      "message": "Sorry I forgot to highlight this. Do you have any concern since we need to adjust slice with stringDataOffset and I did this \"hack\" by set the length to stringLength*stringDataOffset",
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4226e084_ccef0703",
         "filename": "src/builtins/string-trim.tq",
         "patchSetId": 7
