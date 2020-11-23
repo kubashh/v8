@@ -236,7 +236,7 @@ TEST(ModuleEvaluation) {
     MaybeLocal<Value> result = module->Evaluate(env.local());
     CHECK_EQ(Module::kEvaluated, module->GetStatus());
     if (i::FLAG_harmony_top_level_await) {
-      Local<Promise> promise = Local<Promise>::Cast(result.ToLocalChecked());
+      Local<Promise> promise = result.ToLocalChecked().As<Promise>();
       CHECK_EQ(promise->State(), v8::Promise::kFulfilled);
       CHECK(promise->Result()->IsUndefined());
     } else {
@@ -283,7 +283,7 @@ TEST(ModuleEvaluationError1) {
         // With top level await, we do not throw and errored evaluation returns
         // a rejected promise with the exception.
         CHECK(!inner_try_catch.HasCaught());
-        Local<Promise> promise = Local<Promise>::Cast(result.ToLocalChecked());
+        Local<Promise> promise = result.ToLocalChecked().As<Promise>();
         CHECK_EQ(promise->State(), v8::Promise::kRejected);
         CHECK_EQ(promise->Result(), module->GetException());
       } else {
@@ -305,7 +305,7 @@ TEST(ModuleEvaluationError1) {
         // With top level await, we do not throw and errored evaluation returns
         // a rejected promise with the exception.
         CHECK(!inner_try_catch.HasCaught());
-        Local<Promise> promise = Local<Promise>::Cast(result.ToLocalChecked());
+        Local<Promise> promise = result.ToLocalChecked().As<Promise>();
         CHECK_EQ(promise->State(), v8::Promise::kRejected);
         CHECK_EQ(promise->Result(), module->GetException());
       } else {
@@ -366,7 +366,7 @@ TEST(ModuleEvaluationError2) {
         // With top level await, we do not throw and errored evaluation returns
         // a rejected promise with the exception.
         CHECK(!inner_try_catch.HasCaught());
-        Local<Promise> promise = Local<Promise>::Cast(result.ToLocalChecked());
+        Local<Promise> promise = result.ToLocalChecked().As<Promise>();
         CHECK_EQ(promise->State(), v8::Promise::kRejected);
         CHECK_EQ(promise->Result(), failure_module->GetException());
       } else {
@@ -402,7 +402,7 @@ TEST(ModuleEvaluationError2) {
         // With top level await, we do not throw and errored evaluation returns
         // a rejected promise with the exception.
         CHECK(!inner_try_catch.HasCaught());
-        Local<Promise> promise = Local<Promise>::Cast(result.ToLocalChecked());
+        Local<Promise> promise = result.ToLocalChecked().As<Promise>();
         CHECK_EQ(promise->State(), v8::Promise::kRejected);
         CHECK_EQ(promise->Result(), failure_module->GetException());
       } else {
@@ -467,12 +467,12 @@ TEST(ModuleEvaluationCompletion1) {
       CHECK_EQ(Module::kEvaluated, module->GetStatus());
 
       if (i::FLAG_harmony_top_level_await) {
-        Local<Promise> promise = Local<Promise>::Cast(result_1);
+        Local<Promise> promise = result_1.As<Promise>();
         CHECK_EQ(promise->State(), v8::Promise::kFulfilled);
         CHECK(promise->Result()->IsUndefined());
 
         // Second evaluation should return the same promise.
-        Local<Promise> promise_too = Local<Promise>::Cast(result_2);
+        Local<Promise> promise_too = result_2.As<Promise>();
         CHECK_EQ(promise, promise_too);
         CHECK_EQ(promise_too->State(), v8::Promise::kFulfilled);
         CHECK(promise_too->Result()->IsUndefined());
@@ -534,12 +534,12 @@ TEST(ModuleEvaluationCompletion2) {
       Local<Value> result_2 = module->Evaluate(env.local()).ToLocalChecked();
       CHECK_EQ(Module::kEvaluated, module->GetStatus());
       if (i::FLAG_harmony_top_level_await) {
-        Local<Promise> promise = Local<Promise>::Cast(result_1);
+        Local<Promise> promise = result_1.As<Promise>();
         CHECK_EQ(promise->State(), v8::Promise::kFulfilled);
         CHECK(promise->Result()->IsUndefined());
 
         // Second Evaluation should return the same promise.
-        Local<Promise> promise_too = Local<Promise>::Cast(result_2);
+        Local<Promise> promise_too = result_2.As<Promise>();
         CHECK_EQ(promise, promise_too);
         CHECK_EQ(promise_too->State(), v8::Promise::kFulfilled);
         CHECK(promise_too->Result()->IsUndefined());
