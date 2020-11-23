@@ -209,6 +209,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "061d82b9_5aba4999",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-23T21:20:56Z",
+      "side": 1,
+      "message": "right! my bad, I wasn\u0027t thinking about changing NewOffHeapSlice. Thanks Tobias!",
+      "parentUuid": "67bb2cbd_c6ba7bf7",
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4226e084_ccef0703",
         "filename": "src/builtins/string-trim.tq",
         "patchSetId": 7
