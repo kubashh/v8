@@ -29,6 +29,11 @@ namespace internal {
 class Heap;
 }  // namespace internal
 
+/**
+ * Used for additional heap APIs.
+ */
+class HeapHandle;
+
 class V8_EXPORT Heap {
  public:
   /**
@@ -131,6 +136,11 @@ class V8_EXPORT Heap {
    * `MakeGarbageCollected()`.
    */
   AllocationHandle& GetAllocationHandle();
+
+  /**
+   * \returns the opaque heap handle.
+   */
+  HeapHandle& GetHeapHandle();
 
  private:
   Heap() = default;
