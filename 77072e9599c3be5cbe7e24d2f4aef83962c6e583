@@ -16,6 +16,23 @@
       "message": "PTAL. I couldn\u0027t come up with a regression test which triggers this reliably enough without taking too long to execute. We could have to fill the code space with lots of small functions, to trigger the case that a code space allocation ends exactly at the end of the pre-reserved region.\n\nI would be fine with landing this without a regression test, WDYT?",
       "revId": "77072e9599c3be5cbe7e24d2f4aef83962c6e583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89ea4f25_c6a92316",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-11-23T13:29:11Z",
+      "side": 1,
+      "message": "LGTM, thanks.\n\nI\u0027ve been thinking about regression tests too. I\u0027m fine with landing as-is (without test). \n\nOne idea we could look into (as a follow-up test) is a cctest that just calls related raw functions, e.g. simply WasmCodeAllocator::AllocateForCode and NativeModule::FindJumpTablesForRegion in a loop to simulate filling up the code space without actually compiling anything. I\u0027m not entirely sure how useful such a test would be though -- if successful, it would reproduce in a lab setting what I\u0027ve observed in the wild, but would that help guard against future regressions?",
+      "revId": "77072e9599c3be5cbe7e24d2f4aef83962c6e583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
