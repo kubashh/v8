@@ -487,7 +487,9 @@ void NativeContext::ResetErrorsThrown() { set_errors_thrown(Smi::FromInt(0)); }
 
 void NativeContext::IncrementErrorsThrown() {
   int previous_value = errors_thrown().value();
-  set_errors_thrown(Smi::FromInt(previous_value + 1));
+  int next_value =
+      previous_value == kSmiMaxValue ? kSmiMaxValue : (previous_value + 1);
+  set_errors_thrown(Smi::FromInt(next_value));
 }
 
 int NativeContext::GetErrorsThrown() { return errors_thrown().value(); }
