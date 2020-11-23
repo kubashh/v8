@@ -70,7 +70,7 @@ class SparseSidetable {
 // side-tables. All access to the IR and the reducer state should happen through
 // a ReduceScope to ensure that changes and dependencies are tracked and all
 // necessary node revisitations happen.
-class ReduceScope {
+class V8_NODISCARD ReduceScope {
  public:
   using Reduction = EffectGraphReducer::Reduction;
   explicit ReduceScope(Node* node, Reduction* reduction)
@@ -126,7 +126,7 @@ class VariableTracker {
   Node* Get(Variable var, Node* effect) { return table_.Get(effect).Get(var); }
   Zone* zone() { return zone_; }
 
-  class Scope : public ReduceScope {
+  class V8_NODISCARD Scope : public ReduceScope {
    public:
     Scope(VariableTracker* tracker, Node* node, Reduction* reduction);
     ~Scope();
@@ -174,7 +174,7 @@ class EscapeAnalysisTracker : public ZoneObject {
   EscapeAnalysisTracker(const EscapeAnalysisTracker&) = delete;
   EscapeAnalysisTracker& operator=(const EscapeAnalysisTracker&) = delete;
 
-  class Scope : public VariableTracker::Scope {
+  class V8_NODISCARD Scope : public VariableTracker::Scope {
    public:
     Scope(EffectGraphReducer* reducer, EscapeAnalysisTracker* tracker,
           Node* node, Reduction* reduction)

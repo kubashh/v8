@@ -24,7 +24,7 @@ class ZoneStats;
 // 3. Runs the bytecode which *must* return a function
 // 4. Takes the returned function and optimizes it
 // 5. The optimized function is accessible through `function()`
-class SerializerTester : public HandleAndZoneScope {
+class V8_NODISCARD SerializerTester : public HandleAndZoneScope {
  public:
   explicit SerializerTester(const char* source);
 

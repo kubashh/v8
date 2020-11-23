@@ -84,7 +84,8 @@ struct PointerWithPayloadTraits<Scope> {
 // and ModuleScope. DeclarationScope is used for any scope that hosts 'var'
 // declarations. This includes script, module, eval, varblock, and function
 // scope. ModuleScope further specializes DeclarationScope.
-class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
+class V8_EXPORT_PRIVATE V8_NODISCARD Scope
+    : public NON_EXPORTED_BASE(ZoneObject) {
  public:
   // ---------------------------------------------------------------------------
   // Construction
@@ -810,7 +811,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   bool deserialized_scope_uses_external_cache_ : 1;
 };
 
-class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
+class V8_EXPORT_PRIVATE V8_NODISCARD DeclarationScope : public Scope {
  public:
   DeclarationScope(Zone* zone, Scope* outer_scope, ScopeType scope_type,
                    FunctionKind function_kind = kNormalFunction);
@@ -1311,7 +1312,7 @@ Scope::Snapshot::Snapshot(Scope* scope)
       false;
 }
 
-class ModuleScope final : public DeclarationScope {
+class V8_NODISCARD ModuleScope final : public DeclarationScope {
  public:
   ModuleScope(DeclarationScope* script_scope, AstValueFactory* avfactory);
 
@@ -1330,7 +1331,7 @@ class ModuleScope final : public DeclarationScope {
   SourceTextModuleDescriptor* const module_descriptor_;
 };
 
-class V8_EXPORT_PRIVATE ClassScope : public Scope {
+class V8_EXPORT_PRIVATE V8_NODISCARD ClassScope : public Scope {
  public:
   ClassScope(Zone* zone, Scope* outer_scope, bool is_anonymous);
   // Deserialization.
@@ -1474,7 +1475,7 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
 
 // Iterate over the private name scope chain. The iteration proceeds from the
 // innermost private name scope outwards.
-class PrivateNameScopeIterator {
+class V8_NODISCARD PrivateNameScopeIterator {
  public:
   explicit PrivateNameScopeIterator(Scope* start);
 

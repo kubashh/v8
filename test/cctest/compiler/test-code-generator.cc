@@ -364,7 +364,7 @@ bool TestSimd128Moves() {
 // | parameters and return it.                         | <- CodeStubAssembler
 // '---------------------------------------------------'
 
-class TestEnvironment : public HandleAndZoneScope {
+class V8_NODISCARD TestEnvironment : public HandleAndZoneScope {
  public:
   // These constants may be tuned to experiment with different environments.
 

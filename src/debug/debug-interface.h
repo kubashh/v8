@@ -414,7 +414,7 @@ class V8_EXPORT_PRIVATE TypeProfile {
   std::shared_ptr<i::TypeProfile> type_profile_;
 };
 
-class V8_EXPORT_PRIVATE ScopeIterator {
+class V8_EXPORT_PRIVATE V8_NODISCARD ScopeIterator {
  public:
   static std::unique_ptr<ScopeIterator> CreateForFunction(
       v8::Isolate* isolate, v8::Local<v8::Function> func);
@@ -531,7 +531,7 @@ void ForceGarbageCollection(
     v8::Isolate* isolate,
     v8::EmbedderHeapTracer::EmbedderStackState embedder_stack_state);
 
-class PostponeInterruptsScope {
+class V8_NODISCARD PostponeInterruptsScope {
  public:
   explicit PostponeInterruptsScope(v8::Isolate* isolate);
   ~PostponeInterruptsScope();
@@ -540,7 +540,7 @@ class PostponeInterruptsScope {
   std::unique_ptr<i::PostponeInterruptsScope> scope_;
 };
 
-class DisableBreakScope {
+class V8_NODISCARD DisableBreakScope {
  public:
   explicit DisableBreakScope(v8::Isolate* isolate);
   ~DisableBreakScope();

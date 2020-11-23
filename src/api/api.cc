@@ -263,7 +263,7 @@ namespace v8 {
 
 namespace {
 
-class InternalEscapableScope : public v8::EscapableHandleScope {
+class V8_NODISCARD InternalEscapableScope : public v8::EscapableHandleScope {
  public:
   explicit inline InternalEscapableScope(i::Isolate* isolate)
       : v8::EscapableHandleScope(reinterpret_cast<v8::Isolate*>(isolate)) {}
@@ -281,7 +281,7 @@ void CheckMicrotasksScopesConsistency(i::MicrotaskQueue* microtask_queue) {
 #endif
 
 template <bool do_callback>
-class CallDepthScope {
+class V8_NODISCARD CallDepthScope {
  public:
   CallDepthScope(i::Isolate* isolate, Local<Context> context)
       : isolate_(isolate),
