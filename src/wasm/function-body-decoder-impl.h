@@ -690,12 +690,15 @@ class BranchTableIterator {
 };
 
 template <Decoder::ValidateFlag validate>
+class WasmDecoder;
+
+template <Decoder::ValidateFlag validate>
 struct MemoryAccessImmediate {
   uint32_t alignment;
-  uint32_t offset;
+  uint64_t offset;
   uint32_t length = 0;
   inline MemoryAccessImmediate(Decoder* decoder, const byte* pc,
-                               uint32_t max_alignment) {
+                               uint32_t max_alignment, bool is_memory64) {
     uint32_t alignment_length;
     alignment =
         decoder->read_u32v<validate>(pc, &alignment_length, "alignment");
@@ -707,10 +710,15 @@ struct MemoryAccessImmediate {
           max_alignment, alignment);
     }
     uint32_t offset_length;
-    offset = decoder->read_u32v<validate>(pc + alignment_length, &offset_length,
-                                          "offset");
+    offset = is_memory64 ? decoder->read_u64v<validate>(
+                               pc + alignment_length, &offset_length, "offset")
+                         : decoder->read_u32v<validate>(
+                               pc + alignment_length, &offset_length, "offset");
     length = alignment_length + offset_length;
   }
+  // Defined below, after the definition of WasmDecoder.
+  inline MemoryAccessImmediate(WasmDecoder<validate>* decoder, const byte* pc,
+                               uint32_t max_alignment);
 };
 
 // Immediate for SIMD lane operations.
@@ -1582,13 +1590,19 @@ class WasmDecoder : public Decoder {
 
   static uint32_t OpcodeLength(WasmDecoder* decoder, const byte* pc) {
     WasmOpcode opcode = static_cast<WasmOpcode>(*pc);
+    // We don't have information about the module here, so we just assume that
+    // memory64 is enabled when parsing memory access immediates. This is
+    // backwards-compatible; decode errors will be detected at another time when
+    // actually decoding that opcode.
+    constexpr bool kConservatibelyAssumeMemory64 = true;
     switch (opcode) {
 #define DECLARE_OPCODE_CASE(name, opcode, sig) case kExpr##name:
       FOREACH_LOAD_MEM_OPCODE(DECLARE_OPCODE_CASE)
       FOREACH_STORE_MEM_OPCODE(DECLARE_OPCODE_CASE)
 #undef DECLARE_OPCODE_CASE
       {
-        MemoryAccessImmediate<validate> imm(decoder, pc + 1, UINT32_MAX);
+        MemoryAccessImmediate<validate> imm(decoder, pc + 1, UINT32_MAX,
+                                            kConservatibelyAssumeMemory64);
         return 1 + imm.length;
       }
       case kExprBr:
@@ -1762,7 +1776,8 @@ class WasmDecoder : public Decoder {
 #undef DECLARE_OPCODE_CASE
           {
             MemoryAccessImmediate<validate> imm(decoder, pc + length,
-                                                UINT32_MAX);
+                                                UINT32_MAX,
+                                                kConservatibelyAssumeMemory64);
             return length + imm.length;
           }
           case kExprS128Load8Lane:
@@ -1774,7 +1789,8 @@ class WasmDecoder : public Decoder {
           case kExprS128Store32Lane:
           case kExprS128Store64Lane: {
             MemoryAccessImmediate<validate> imm(decoder, pc + length,
-                                                UINT32_MAX);
+                                                UINT32_MAX,
+                                                kConservatibelyAssumeMemory64);
             // 1 more byte for lane index immediate.
             return length + imm.length + 1;
           }
@@ -1797,7 +1813,8 @@ class WasmDecoder : public Decoder {
 #undef DECLARE_OPCODE_CASE
           {
             MemoryAccessImmediate<validate> imm(decoder, pc + length,
-                                                UINT32_MAX);
+                                                UINT32_MAX,
+                                                kConservatibelyAssumeMemory64);
             return length + imm.length;
           }
 #define DECLARE_OPCODE_CASE(name, opcode, sig) case kExpr##name:
@@ -2036,6 +2053,12 @@ class WasmDecoder : public Decoder {
   WasmFeatures* detected_;
   const FunctionSig* sig_;
 };
+
+template <Decoder::ValidateFlag validate>
+MemoryAccessImmediate<validate>::MemoryAccessImmediate(
+    WasmDecoder<validate>* decoder, const byte* pc, uint32_t max_alignment)
+    : MemoryAccessImmediate(decoder, pc, max_alignment,
+                            decoder->module_->is_memory64) {}
 
 #define CALL_INTERFACE(name, ...) interface_.name(this, ##__VA_ARGS__)
 #define CALL_INTERFACE_IF_REACHABLE(name, ...)            \
