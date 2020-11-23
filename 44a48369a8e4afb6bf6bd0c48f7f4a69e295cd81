@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "975d1301_0c002a8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-23T23:01:09Z",
+      "side": 1,
+      "message": "working now 😊",
+      "parentUuid": "760a89a6_4f97c084",
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe690c30_574665c7",
@@ -31,6 +49,30 @@
       "writtenOn": "2020-11-23T18:46:05Z",
       "side": 1,
       "message": "This RawPtr is also used to point into the heap, which makes this type non-GC safe and a very dangerous thing to add to Torque. I would really prefer if we found a way to construct a slice in a way that on-heap string data uses normal on-heap slices.",
+      "range": {
+        "startLine": 98,
+        "startChar": 2,
+        "endLine": 98,
+        "endChar": 15
+      },
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a05e3b5_65cb5398",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-23T23:01:09Z",
+      "side": 1,
+      "message": "Should we check IsExternalString for off-heap string data and then select on-heap/off-heap slice?",
+      "parentUuid": "fe690c30_574665c7",
       "range": {
         "startLine": 98,
         "startChar": 2,
@@ -225,6 +267,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c1998ef_9087da85",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-23T23:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "061d82b9_5aba4999",
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4226e084_ccef0703",
@@ -238,6 +298,30 @@
       "writtenOn": "2020-11-23T18:46:05Z",
       "side": 1,
       "message": "I think it\u0027s better to avoid not mentioning a template parameter in the arguments. How about letting this macro take a Slice as argument and perform the conversion elsewhere? We could have a type-safe macro to get the string data, for example something like this:\nmacro StringData(s: String): never labels OneByte(Slice\u003cchar8\u003e), TwoByte(Slice\u003cchar16\u003e)",
+      "range": {
+        "startLine": 113,
+        "startChar": 34,
+        "endLine": 113,
+        "endChar": 43
+      },
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2092a75e_6a759b4c",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-23T23:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4226e084_ccef0703",
       "range": {
         "startLine": 113,
         "startChar": 34,
