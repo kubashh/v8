@@ -239,6 +239,7 @@
 //  V8_HAS_ATTRIBUTE_VISIBILITY         - __attribute__((visibility)) supported
 //  V8_HAS_ATTRIBUTE_WARN_UNUSED_RESULT - __attribute__((warn_unused_result))
 //                                        supported
+//  V8_HAS_CPP_ATTRIBUTE_NODISCARD      - __attribute__((nodiscard)) supported
 //  V8_HAS_BUILTIN_BSWAP16              - __builtin_bswap16() supported
 //  V8_HAS_BUILTIN_BSWAP32              - __builtin_bswap32() supported
 //  V8_HAS_BUILTIN_BSWAP64              - __builtin_bswap64() supported
@@ -275,6 +276,8 @@
 # define V8_HAS_ATTRIBUTE_VISIBILITY (__has_attribute(visibility))
 # define V8_HAS_ATTRIBUTE_WARN_UNUSED_RESULT \
     (__has_attribute(warn_unused_result))
+
+# define V8_HAS_CPP_ATTRIBUTE_NODISCARD (__has_cpp_attribute(nodiscard))
 
 # define V8_HAS_BUILTIN_ASSUME_ALIGNED (__has_builtin(__builtin_assume_aligned))
 # define V8_HAS_BUILTIN_BSWAP16 (__has_builtin(__builtin_bswap16))
@@ -319,6 +322,8 @@
 # define V8_HAS_ATTRIBUTE_UNUSED 1
 # define V8_HAS_ATTRIBUTE_VISIBILITY 1
 # define V8_HAS_ATTRIBUTE_WARN_UNUSED_RESULT (!V8_CC_INTEL)
+// TODO(solanes): Is this correct?
+# define V8_HAS_CPP_ATTRIBUTE_NODISCARD (!V8_CC_INTEL)
 
 # define V8_HAS_BUILTIN_ASSUME_ALIGNED 1
 # define V8_HAS_BUILTIN_CLZ 1
@@ -434,6 +439,19 @@
 #define V8_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
 #else
 #define V8_WARN_UNUSED_RESULT /* NOT SUPPORTED */
+#endif
+
+
+// Annotate a class or constructor indicating the caller must assign the
+// constructed instances.
+// Apply to the whole class like:
+//   class V8_NODISCARD Foo() { ... };
+// or apply to just one constructor like:
+//   V8_NODISCARD Foo() { ... };
+#if V8_HAS_CPP_ATTRIBUTE_NODISCARD
+#define V8_NODISCARD [[nodiscard]]
+#else
+#define V8_NODISCARD /* NOT SUPPORTED */
 #endif
 
 // Helper macro to define no_sanitize attributes only with clang.
