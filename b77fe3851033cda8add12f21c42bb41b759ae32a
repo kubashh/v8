@@ -16,6 +16,92 @@
       "message": "ptal, this should match the write barrier refactoring in Blink (http://crrev.com/c/2551115)",
       "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f243ee9_7cea17d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-23T18:19:32Z",
+      "side": 1,
+      "message": "Looking good.",
+      "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0de63281_f2439226",
+        "filename": "include/cppgc/heap-consistency.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-23T18:19:32Z",
+      "side": 1,
+      "message": "Sorry, I missed on the first read.\n\nThe Steele barrier would revisit the object that owns |slot|. It seems that here we are revisiting |value|?\n\nHow about replacing both |slot| and |value| with |object|, which would be the source object and cannot be an interior pointer? Given that we could also do a quick markbit check here.",
+      "range": {
+        "startLine": 76,
+        "startChar": 43,
+        "endLine": 76,
+        "endChar": 66
+      },
+      "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3468066c_7f07c038",
+        "filename": "include/cppgc/heap.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-23T18:19:32Z",
+      "side": 1,
+      "message": "Maybe add the intended usage?",
+      "range": {
+        "startLine": 141,
+        "startChar": 5,
+        "endLine": 141,
+        "endChar": 37
+      },
+      "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a047c10e_0e958820",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-23T18:19:32Z",
+      "side": 1,
+      "message": "This seems to be used in multiple place. Can we introduce a helper for it?",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 55
+      },
+      "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
