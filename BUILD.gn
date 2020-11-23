@@ -460,6 +460,10 @@ config("libbase_config") {
   }
 }
 
+# Standalone cppgc cannot be built within chrome or with perfetto.
+assert(!cppgc_is_standalone || !build_with_chromium)
+assert(!cppgc_is_standalone || !v8_use_perfetto)
+
 # This config should be applied to code using the cppgc_base.
 config("cppgc_base_config") {
   defines = []
@@ -471,6 +475,9 @@ config("cppgc_base_config") {
   }
   if (cppgc_enable_young_generation) {
     defines += [ "CPPGC_YOUNG_GENERATION" ]
+  }
+  if (!cppgc_is_standalone) {
+    defines += [ "CPPGC_BUILD_IN_V8" ]
   }
 }
 
@@ -3825,8 +3832,6 @@ v8_source_set("v8_base_without_compiler") {
     ":cppgc_base_config",
   ]
 
-  defines = [ "CPPGC_BUILD_IN_V8" ]
-
   deps = [
     ":cppgc_base",
     ":torque_generated_definitions",
@@ -4427,7 +4432,6 @@ v8_source_set("cppgc_base") {
   visibility = [ ":*" ]
 
   sources = [
-    "//base/trace_event/common/trace_event_common.h",
     "include/cppgc/allocation.h",
     "include/cppgc/common.h",
     "include/cppgc/custom-space.h",
@@ -4530,6 +4534,10 @@ v8_source_set("cppgc_base") {
     "src/heap/cppgc/visitor.cc",
     "src/heap/cppgc/write-barrier.cc",
   ]
+
+  if (cppgc_is_standalone) {
+    sources += [ "//base/trace_event/common/trace_event_common.h" ]
+  }
 
   if (cppgc_enable_caged_heap) {
     sources += [
