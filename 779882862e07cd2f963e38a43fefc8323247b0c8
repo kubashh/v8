@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95a72ef1_334f5b5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-23T12:08:45Z",
+      "side": 1,
+      "message": "Georg, Santiago, PTAL -- I think this makes sense but I may have misunderstood the current scoping intentions.",
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
