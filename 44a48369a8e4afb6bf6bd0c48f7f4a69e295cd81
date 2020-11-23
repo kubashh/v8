@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a3cf5f4_beb7af10",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-23T20:56:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "76a02351_5f331352",
+      "range": {
+        "startLine": 106,
+        "startChar": 31,
+        "endLine": 106,
+        "endChar": 48
+      },
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "824320d9_4978151f",
@@ -143,6 +167,24 @@
       "side": 1,
       "message": "I actually don\u0027t understand this hack. Could you explain?",
       "parentUuid": "824320d9_4978151f",
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "449d5c85_a54a9663",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-11-23T20:56:17Z",
+      "side": 1,
+      "message": "In the case where stringDataOffset !\u003d 0, the slice does not really work since you need to get data at start_pointer + offset + (stringDataOffset + index)*%sizeOf\u003cT\u003e instead of start_pointer + offset + index*sizeOf\u003cT\u003e",
+      "parentUuid": "bbf2dae5_7d38119c",
       "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
