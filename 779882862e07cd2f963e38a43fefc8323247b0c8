@@ -129,6 +129,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d729b7a9_50be437b",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7566,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-23T19:02:12Z",
+      "side": 1,
+      "message": "Please just directly use broker()-\u003eis_concurrent_inlining().",
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "009ccf8c_6ae5854b",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 1
@@ -146,6 +163,23 @@
         "endLine": 2304,
         "endChar": 35
       },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81407fdb_6451be6f",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-23T19:02:12Z",
+      "side": 1,
+      "message": "A recent CL added ObjectRef::IsNeverSerializedHeapObject(), so this is indeed confusing.\n\nCan we instead define ObjectRef::IsSerializedHeapObject() and use the pattern\n    if (function.IsSerializedHeapObject() \u0026\u0026 !function.serialized()) ...",
       "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
