@@ -1208,9 +1208,17 @@ class RuntimeCallStats final {
 
 class WorkerThreadRuntimeCallStats final {
  public:
-  WorkerThreadRuntimeCallStats();
+  explicit WorkerThreadRuntimeCallStats(RuntimeCallStats* main_thread_table);
   ~WorkerThreadRuntimeCallStats();
 
+  // Returns the runtime call stats table associated by the current worker
+  // thread WorkerThreadRuntimeCallStats.
+  RuntimeCallStats* GetTable();
+
+  // Adds the counters from the worker thread tables to |main_call_stats|.
+  void AddToMainTable();
+
+ private:
   // Returns the TLS key associated with this WorkerThreadRuntimeCallStats.
   base::Thread::LocalStorageKey GetKey();
 
@@ -1218,10 +1226,6 @@ class WorkerThreadRuntimeCallStats final {
   // WorkerThreadRuntimeCallStats.
   RuntimeCallStats* NewTable();
 
-  // Adds the counters from the worker thread tables to |main_call_stats|.
-  void AddToMainTable(RuntimeCallStats* main_call_stats);
-
- private:
   base::Mutex mutex_;
   std::vector<std::unique_ptr<RuntimeCallStats>> tables_;
   base::Optional<base::Thread::LocalStorageKey> tls_key_;
@@ -1229,6 +1233,7 @@ class WorkerThreadRuntimeCallStats final {
   // main thread ID to ensure we never create a worker RCS table for the main
   // thread.
   ThreadId isolate_thread_id_;
+  RuntimeCallStats* main_thread_call_stats_;
 };
 
 // Creating a WorkerThreadRuntimeCallStatsScope will provide a thread-local
