@@ -508,8 +508,7 @@ RUNTIME_FUNCTION(Runtime_GetAndResetRuntimeCallStats) {
 
   // Append any worker thread runtime call stats to the main table before
   // printing.
-  isolate->counters()->worker_thread_runtime_call_stats()->AddToMainTable(
-      isolate->counters()->runtime_call_stats());
+  isolate->counters()->worker_thread_runtime_call_stats()->AddToMainTable();
 
   if (args.length() == 0) {
     // Without arguments, the result is returned as a string.

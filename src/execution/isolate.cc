@@ -3836,8 +3836,7 @@ void Isolate::DumpAndResetStats() {
   }
   if (V8_UNLIKELY(TracingFlags::runtime_stats.load(std::memory_order_relaxed) ==
                   v8::tracing::TracingCategoryObserver::ENABLED_BY_NATIVE)) {
-    counters()->worker_thread_runtime_call_stats()->AddToMainTable(
-        counters()->runtime_call_stats());
+    counters()->worker_thread_runtime_call_stats()->AddToMainTable();
     counters()->runtime_call_stats()->Print();
     counters()->runtime_call_stats()->Reset();
   }
