@@ -36,6 +36,13 @@ class SharedStringAccessGuardIfNeeded {
     if (IsNeeded(str, &isolate)) mutex_guard.emplace(isolate->string_access());
   }
 
+  SharedStringAccessGuardIfNeeded(String str, LocalIsolate* local_isolate) {
+    Isolate* isolate;
+    if (IsNeeded(str, &isolate, local_isolate)) {
+      mutex_guard.emplace(isolate->string_access());
+    }
+  }
+
   static SharedStringAccessGuardIfNeeded NotNeeded() {
     return SharedStringAccessGuardIfNeeded();
   }
@@ -52,6 +59,20 @@ class SharedStringAccessGuardIfNeeded {
       return false;
     }
     if (out_isolate) *out_isolate = isolate;
+    return true;
+  }
+
+  static bool IsNeeded(String str, Isolate** out_isolate,
+                       LocalIsolate* local_isolate) {
+    // Don't acquire the lock for the main thread.
+    if (local_isolate->heap()->is_main_thread()) return false;
+
+    DCHECK_NOT_NULL(out_isolate);
+    if (!GetIsolateFromHeapObject(str, out_isolate)) {
+      // If we can't get the isolate from the String, it must be read-only.
+      DCHECK(ReadOnlyHeap::Contains(str));
+      return false;
+    }
     return true;
   }
 
@@ -471,10 +492,18 @@ Handle<String> String::Flatten(LocalIsolate* isolate, Handle<String> string,
   return string;
 }
 
-uint16_t String::Get(int index) {
-  DCHECK(index >= 0 && index < length());
+uint16_t String::Get(int index, LocalIsolate* isolate) {
+  SharedStringAccessGuardIfNeeded(*this);
+  return GetImpl(index);
+}
 
-  SharedStringAccessGuardIfNeeded scope(*this);
+uint16_t String::Get(int index, Isolate* isolate) {
+  DCHECK(!SharedStringAccessGuardIfNeeded::IsNeeded(*this));
+  return GetImpl(index);
+}
+
+uint16_t String::GetImpl(int index) {
+  DCHECK(index >= 0 && index < length());
 
   class StringGetDispatcher : public AllStatic {
    public:
