@@ -33,6 +33,24 @@
       "message": "nit - how about:\nif (broker-\u003elocal_isolate()) {\n  return object()-\u003eGet(0, broker-\u003elocal_isolate());\n} else {\n  return object()-\u003eGet(0);\n}\n\nAlso, should there be a TODO here to remove the second case once the broker always has a local_isolate() ?",
       "revId": "40bf2eebaca1ad6138b3ab159222bb87bd4682bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba6b8d3a_a1316e6c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 3206,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T14:11:50Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "80e7d249_16aabb4f",
+      "revId": "40bf2eebaca1ad6138b3ab159222bb87bd4682bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
