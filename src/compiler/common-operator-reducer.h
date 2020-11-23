@@ -38,6 +38,7 @@ class V8_EXPORT_PRIVATE CommonOperatorReducer final
   Reduction ReduceDeoptimizeConditional(Node* node);
   Reduction ReduceMerge(Node* node);
   Reduction ReduceEffectPhi(Node* node);
+  Reduction ReduceObserveNode(Node* node);
   Reduction ReducePhi(Node* node);
   Reduction ReduceReturn(Node* node);
   Reduction ReduceSelect(Node* node);

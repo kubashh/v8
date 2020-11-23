@@ -149,6 +149,14 @@ const Operator* CommonOperatorBuilder::DelayedStringConstant(
       "DelayedStringConstant", 0, 0, 0, 1, 0, 0, str);
 }
 
+const Operator* CommonOperatorBuilder::ObserveNode(
+    NodeObservation* observation) {
+  DCHECK_NOT_NULL(observation);
+  return zone()->New<Operator1<ObserveNodeParameters>>(
+      IrOpcode::kObserveNode, Operator::kPure, "ObserveNode", 1, 0, 0, 1, 0, 0,
+      ObserveNodeParameters{observation});
+}
+
 bool operator==(SelectParameters const& lhs, SelectParameters const& rhs) {
   return lhs.representation() == rhs.representation() &&
          lhs.hint() == rhs.hint();
@@ -453,6 +461,25 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& out,
 IfValueParameters const& IfValueParametersOf(const Operator* op) {
   DCHECK(op->opcode() == IrOpcode::kIfValue);
   return OpParameter<IfValueParameters>(op);
+}
+
+V8_EXPORT_PRIVATE bool operator==(const ObserveNodeParameters& l,
+                                  const ObserveNodeParameters& r) {
+  return l.GetObservation() == r.GetObservation();
+}
+
+std::size_t hash_value(const ObserveNodeParameters& p) {
+  return reinterpret_cast<std::size_t>(p.GetObservation());
+}
+
+V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& out,
+                                           const ObserveNodeParameters& p) {
+  return out << "0x" << reinterpret_cast<intptr_t>(p.GetObservation());
+}
+
+const ObserveNodeParameters& ObserveNodeParametersOf(const Operator* op) {
+  DCHECK_EQ(op->opcode(), IrOpcode::kObserveNode);
+  return OpParameter<ObserveNodeParameters>(op);
 }
 
 #define COMMON_CACHED_OP_LIST(V)                          \

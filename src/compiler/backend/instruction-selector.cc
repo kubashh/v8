@@ -1326,6 +1326,7 @@ void InstructionSelector::VisitNode(Node* node) {
     case IrOpcode::kMerge:
     case IrOpcode::kTerminate:
     case IrOpcode::kBeginRegion:
+    case IrOpcode::kObserveNode:
       // No code needed for these graph artifacts.
       return;
     case IrOpcode::kIfException:

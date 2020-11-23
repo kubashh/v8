@@ -28,6 +28,7 @@ namespace compiler {
 // Forward declarations.
 class CallDescriptor;
 struct CommonOperatorGlobalCache;
+class NodeObservation;
 class Operator;
 class Type;
 class Node;
@@ -442,6 +443,28 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&,
 V8_EXPORT_PRIVATE IfValueParameters const& IfValueParametersOf(
     const Operator* op) V8_WARN_UNUSED_RESULT;
 
+class ObserveNodeParameters final {
+ public:
+  explicit ObserveNodeParameters(NodeObservation* observation)
+      : observation_(observation) {}
+
+  NodeObservation* GetObservation() const { return observation_; }
+
+ private:
+  NodeObservation* observation_;
+};
+
+V8_EXPORT_PRIVATE bool operator==(const ObserveNodeParameters&,
+                                  const ObserveNodeParameters&);
+
+std::size_t hash_value(const ObserveNodeParameters&);
+
+V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&,
+                                           const ObserveNodeParameters&);
+
+const ObserveNodeParameters& ObserveNodeParametersOf(const Operator* op)
+    V8_WARN_UNUSED_RESULT;
+
 const FrameStateInfo& FrameStateInfoOf(const Operator* op)
     V8_WARN_UNUSED_RESULT;
 
@@ -559,6 +582,8 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
                                     IsSafetyCheck safety_check);
 
   const Operator* DelayedStringConstant(const StringConstantBase* str);
+
+  const Operator* ObserveNode(NodeObservation* observation);
 
  private:
   Zone* zone() const { return zone_; }

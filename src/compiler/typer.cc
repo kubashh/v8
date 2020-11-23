@@ -325,7 +325,7 @@ void Typer::Run(const NodeVector& roots,
     induction_vars->ChangeToInductionVariablePhis();
   }
   Visitor visitor(this, induction_vars);
-  GraphReducer graph_reducer(zone(), graph(), tick_counter_, broker());
+  GraphReducer graph_reducer(zone(), graph(), tick_counter_, broker(), nullptr);
   graph_reducer.AddReducer(&visitor);
   for (Node* const root : roots) graph_reducer.ReduceNode(root);
   graph_reducer.ReduceGraph();
@@ -1494,6 +1494,8 @@ Type Typer::Visitor::TypeJSConstructWithSpread(Node* node) {
 Type Typer::Visitor::TypeJSObjectIsArray(Node* node) { return Type::Boolean(); }
 
 Type Typer::Visitor::TypeDateNow(Node* node) { return Type::Number(); }
+
+Type Typer::Visitor::TypeObserveNode(Node* node) { return Operand(node, 0); }
 
 Type Typer::Visitor::JSCallTyper(Type fun, Typer* t) {
   if (!fun.IsHeapConstant() || !fun.AsHeapConstant()->Ref().IsJSFunction()) {

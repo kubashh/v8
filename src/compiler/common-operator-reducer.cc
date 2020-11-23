@@ -9,9 +9,10 @@
 #include "src/compiler/common-operator.h"
 #include "src/compiler/graph.h"
 #include "src/compiler/machine-operator.h"
-#include "src/compiler/node.h"
 #include "src/compiler/node-matchers.h"
+#include "src/compiler/node-observer.h"
 #include "src/compiler/node-properties.h"
+#include "src/compiler/node.h"
 
 namespace v8 {
 namespace internal {
@@ -64,6 +65,8 @@ Reduction CommonOperatorReducer::Reduce(Node* node) {
       return ReduceMerge(node);
     case IrOpcode::kEffectPhi:
       return ReduceEffectPhi(node);
+    case IrOpcode::kObserveNode:
+      return ReduceObserveNode(node);
     case IrOpcode::kPhi:
       return ReducePhi(node);
     case IrOpcode::kReturn:
@@ -480,7 +483,6 @@ Reduction CommonOperatorReducer::Change(Node* node, Operator const* op,
   return Changed(node);
 }
 
-
 Reduction CommonOperatorReducer::Change(Node* node, Operator const* op, Node* a,
                                         Node* b) {
   node->ReplaceInput(0, a);
@@ -488,6 +490,24 @@ Reduction CommonOperatorReducer::Change(Node* node, Operator const* op, Node* a,
   node->TrimInputCount(2);
   NodeProperties::ChangeOp(node, op);
   return Changed(node);
+}
+
+Reduction CommonOperatorReducer::ReduceObserveNode(Node* node) {
+  DCHECK_EQ(IrOpcode::kObserveNode, node->opcode());
+  Node* value = NodeProperties::GetValueInput(node, 0);
+
+  const ObserveNodeParameters& p = ObserveNodeParametersOf(node->op());
+  NodeObservation* observation = p.GetObservation();
+  DCHECK_NOT_NULL(observation);
+
+  NodeObserver::Observation result =
+      observation->Update(NodeObservation::StateOfNode(value));
+  if (result == NodeObserver::Observation::kStop) {
+    return Replace(value);
+  }
+
+  DCHECK_EQ(result, NodeObserver::Observation::kContinue);
+  return NoChange();
 }
 
 }  // namespace compiler

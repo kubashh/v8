@@ -3768,6 +3768,12 @@ class RepresentationSelector {
       case IrOpcode::kAssertType:
         return VisitUnop<T>(node, UseInfo::AnyTagged(),
                             MachineRepresentation::kTagged);
+      case IrOpcode::kObserveNode:
+        // Remove ObserveNode here.
+        // TODO(nicohartmann@): Move this to a later phase to allow more
+        // lowerings to be observed.
+
+        return VisitNoop<T>(node, truncation);
       default:
         FATAL(
             "Representation inference: unsupported opcode %i (%s), node #%i\n.",
