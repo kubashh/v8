@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a483b287_26c1f17f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:57:55Z",
+      "side": 1,
+      "message": "super super nit: it has one character more than the limit so it inserts a line break",
+      "range": {
+        "startLine": 23,
+        "startChar": 60,
+        "endLine": 23,
+        "endChar": 73
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "95a72ef1_334f5b5f",
@@ -14,6 +37,178 @@
       "writtenOn": "2020-11-23T12:08:45Z",
       "side": 1,
       "message": "Georg, Santiago, PTAL -- I think this makes sense but I may have misunderstood the current scoping intentions.",
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eb0e774_2f98a9e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:57:55Z",
+      "side": 1,
+      "message": "Overall I think this is a good change that simplifies the pipeline. \nI have some comments, and I wanted to point out that there is a dbg bot error.",
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d2a7dd8_60f86b5d",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:57:55Z",
+      "side": 1,
+      "message": "Is this needed?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 36
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbda7c41_889159f4",
+        "filename": "src/compiler/checkpoint-elimination.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:57:55Z",
+      "side": 1,
+      "message": "Open Q: Do we currently use the heap in CheckpointElimination? If not, do we want to change it to DisallowHeapAccess even for FLAG_turbo_direct_heap_access?",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 63,
+        "endChar": 22
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beac63c9_d8be14e0",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4709,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:57:55Z",
+      "side": 1,
+      "message": "Missing `!` here",
+      "range": {
+        "startLine": 4709,
+        "startChar": 10,
+        "endLine": 4709,
+        "endChar": 11
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "009ccf8c_6ae5854b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:57:55Z",
+      "side": 1,
+      "message": "WDYT about flipping this over and being should_be_serialized()? When I read `is_never_serialized` I thought it was just about kNeverSerializedHeapObject (and not about the broker itself).",
+      "range": {
+        "startLine": 2304,
+        "startChar": 16,
+        "endLine": 2304,
+        "endChar": 35
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b2e5db2_48b428b6",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:57:55Z",
+      "side": 1,
+      "message": "I think that when property accesses can be computed on background threads we would change it to\n  broker()-\u003eis_concurrent_inlining() \u0026\u0026 FLAG_turbo_direct_heap_access\nor similar, due to the incremental effort. After the FLAG_turbo_direct_heap_access flag is made the default then we can remove this function.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 44
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a66420c_b34889ae",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:57:55Z",
+      "side": 1,
+      "message": "Related to the `is_never_serialized` comment above this would change to\n  if (function_map.should_be_serialized() \u0026\u0026 !function_map.serialized_prototype())\nwhich seems easier to reason.",
+      "range": {
+        "startLine": 363,
+        "startChar": 2,
+        "endLine": 364,
+        "endChar": 45
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b873bbe1_bacfe882",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-23T13:57:55Z",
+      "side": 1,
+      "message": "Completely unrelated but is there a reason we have double empty lines here?",
       "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
