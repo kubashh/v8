@@ -191,6 +191,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67bb2cbd_c6ba7bf7",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-11-23T21:02:52Z",
+      "side": 1,
+      "message": "Hmm, but couldn\u0027t you add stringDataOffset*%sizeOf\u003cT\u003e to the slice offset? And how does stringLength*stringDataOffset work? How does it make sense to multiply a length with an offset?",
+      "parentUuid": "449d5c85_a54a9663",
+      "revId": "44a48369a8e4afb6bf6bd0c48f7f4a69e295cd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4226e084_ccef0703",
         "filename": "src/builtins/string-trim.tq",
         "patchSetId": 7
