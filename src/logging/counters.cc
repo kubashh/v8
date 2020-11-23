@@ -6,6 +6,7 @@
 
 #include <iomanip>
 
+#include "src/base/logging.h"
 #include "src/base/platform/platform.h"
 #include "src/base/platform/time.h"
 #include "src/builtins/builtins-definitions.h"
@@ -129,7 +130,7 @@ Counters::Counters(Isolate* isolate)
 #undef SC
       // clang format on
       runtime_call_stats_(RuntimeCallStats::kMainIsolateThread),
-      worker_thread_runtime_call_stats_() {
+      worker_thread_runtime_call_stats_(&runtime_call_stats_) {
   static const struct {
     Histogram Counters::*member;
     const char* caption;
@@ -601,11 +602,27 @@ void RuntimeCallStats::Dump(v8::tracing::TracedValue* value) {
   in_use_ = false;
 }
 
-WorkerThreadRuntimeCallStats::WorkerThreadRuntimeCallStats()
-    : isolate_thread_id_(ThreadId::Current()) {}
+WorkerThreadRuntimeCallStats::WorkerThreadRuntimeCallStats(
+    RuntimeCallStats* main_thread_call_stats)
+    : isolate_thread_id_(ThreadId::Current()),
+      main_thread_call_stats_(main_thread_call_stats) {}
 
 WorkerThreadRuntimeCallStats::~WorkerThreadRuntimeCallStats() {
   if (tls_key_) base::Thread::DeleteThreadLocalKey(*tls_key_);
+}
+
+RuntimeCallStats* WorkerThreadRuntimeCallStats::GetTable() {
+  // Workers can also run on the main thread.
+  if (ThreadId::Current() == isolate_thread_id_) {
+    return main_thread_call_stats_;
+  }
+  RuntimeCallStats* table = reinterpret_cast<RuntimeCallStats*>(
+      base::Thread::GetThreadLocal(GetKey()));
+  if (table == nullptr) {
+    table = NewTable();
+    base::Thread::SetThreadLocal(*tls_key_, table);
+  }
+  return table;
 }
 
 base::Thread::LocalStorageKey WorkerThreadRuntimeCallStats::GetKey() {
@@ -628,12 +645,11 @@ RuntimeCallStats* WorkerThreadRuntimeCallStats::NewTable() {
   return result;
 }
 
-void WorkerThreadRuntimeCallStats::AddToMainTable(
-    RuntimeCallStats* main_call_stats) {
+void WorkerThreadRuntimeCallStats::AddToMainTable() {
   base::MutexGuard lock(&mutex_);
   for (auto& worker_stats : tables_) {
-    DCHECK_NE(main_call_stats, worker_stats.get());
-    main_call_stats->Add(worker_stats.get());
+    DCHECK_NE(main_thread_call_stats_, worker_stats.get());
+    main_thread_call_stats_->Add(worker_stats.get());
     worker_stats->Reset();
   }
 }
@@ -643,12 +659,8 @@ WorkerThreadRuntimeCallStatsScope::WorkerThreadRuntimeCallStatsScope(
     : table_(nullptr) {
   if (V8_LIKELY(!TracingFlags::is_runtime_stats_enabled())) return;
 
-  table_ = reinterpret_cast<RuntimeCallStats*>(
-      base::Thread::GetThreadLocal(worker_stats->GetKey()));
-  if (table_ == nullptr) {
-    table_ = worker_stats->NewTable();
-    base::Thread::SetThreadLocal(worker_stats->GetKey(), table_);
-  }
+  table_ = worker_stats->GetTable();
+  DCHECK_NOT_NULL(table_);
 
   if ((TracingFlags::runtime_stats.load(std::memory_order_relaxed) &
        v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
