@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3e6e0fa_6fd0a5ec",
+        "filename": "include/cppgc/heap-consistency.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-23T20:06:09Z",
+      "side": 1,
+      "message": "For the barrier here |value| \u003d\u003d |object|. We need the slot of the object though to also handle the young generation barrier which is hidden inside all of them.\n\nMaybe |source_slot| and |source| would be better names?",
+      "parentUuid": "0de63281_f2439226",
+      "range": {
+        "startLine": 76,
+        "startChar": 43,
+        "endLine": 76,
+        "endChar": 66
+      },
+      "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3468066c_7f07c038",
         "filename": "include/cppgc/heap.h",
         "patchSetId": 11
