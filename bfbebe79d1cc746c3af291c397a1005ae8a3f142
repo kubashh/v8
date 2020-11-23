@@ -56,6 +56,30 @@
       },
       "revId": "bfbebe79d1cc746c3af291c397a1005ae8a3f142",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "928ede5c_5d29ac10",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-23T10:22:11Z",
+      "side": 1,
+      "message": "Yes. I updated the comment to make it more clear.",
+      "parentUuid": "84b7a822_bc2543fb",
+      "range": {
+        "startLine": 1893,
+        "startChar": 0,
+        "endLine": 1897,
+        "endChar": 44
+      },
+      "revId": "bfbebe79d1cc746c3af291c397a1005ae8a3f142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
