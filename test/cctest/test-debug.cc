@@ -2848,8 +2848,7 @@ TEST(PauseInScript) {
   const char* src = "(function (evt) {})";
   const char* script_name = "StepInHandlerTest";
 
-  v8::ScriptOrigin origin(v8_str(env->GetIsolate(), script_name),
-                          v8::Integer::New(env->GetIsolate(), 0));
+  v8::ScriptOrigin origin(v8_str(env->GetIsolate(), script_name), 0, 0);
   v8::Local<v8::Script> script =
       v8::Script::Compile(context, v8_str(env->GetIsolate(), src), &origin)
           .ToLocalChecked();
@@ -3226,7 +3225,7 @@ TEST(DebugScriptLineEndsAreAscending) {
                                         "  debugger;\n"
                                         "}\n");
 
-  v8::ScriptOrigin origin1 = v8::ScriptOrigin(v8_str(isolate, "name"));
+  v8::ScriptOrigin origin1 = v8::ScriptOrigin(v8_str(isolate, "name"), 0, 0);
   v8::Local<v8::Script> script1 =
       v8::Script::Compile(env.local(), script, &origin1).ToLocalChecked();
   USE(script1);
@@ -4527,8 +4526,7 @@ UNINITIALIZED_TEST(LoadedAtStartupScripts) {
     LocalContext context(isolate);
 
     std::vector<i::Handle<i::Script>> scripts;
-    CompileWithOrigin(v8_str("function foo(){}"), v8_str("normal.js"),
-                      v8_bool(false));
+    CompileWithOrigin(v8_str("function foo(){}"), v8_str("normal.js"), false);
     std::unordered_map<int, int> count_by_type;
     {
       i::DisallowGarbageCollection no_gc;
