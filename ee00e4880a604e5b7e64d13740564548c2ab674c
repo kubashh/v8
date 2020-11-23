@@ -16,6 +16,92 @@
       "message": "Ulan PTAL\nRoss PTAL at src/execution\n\nFYI The \u0027?\u0027 in the commit message is supposed to be read as a regex",
       "revId": "ee00e4880a604e5b7e64d13740564548c2ab674c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d5df809_95abcb29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-23T12:21:44Z",
+      "side": 1,
+      "message": "lgtm with comments, thanks!",
+      "revId": "ee00e4880a604e5b7e64d13740564548c2ab674c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63947a35_1db478eb",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-23T12:21:44Z",
+      "side": 1,
+      "message": "Can this be removed now?",
+      "range": {
+        "startLine": 49,
+        "startChar": 2,
+        "endLine": 49,
+        "endChar": 22
+      },
+      "revId": "ee00e4880a604e5b7e64d13740564548c2ab674c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59d72237_365724b6",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-23T12:21:44Z",
+      "side": 1,
+      "message": "This fetches the page header. If most of the strings accessed are not in the read-only space, then it may be faster to skip the check and takes the lock for read-only strings as well.",
+      "range": {
+        "startLine": 66,
+        "startChar": 12,
+        "endLine": 66,
+        "endChar": 34
+      },
+      "revId": "ee00e4880a604e5b7e64d13740564548c2ab674c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "158f447c_530b303e",
+        "filename": "src/objects/string.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-23T12:21:44Z",
+      "side": 1,
+      "message": "Nit: isolate?",
+      "range": {
+        "startLine": 219,
+        "startChar": 45,
+        "endLine": 219,
+        "endChar": 58
+      },
+      "revId": "ee00e4880a604e5b7e64d13740564548c2ab674c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
