@@ -110,10 +110,11 @@ macro NewSlice<T: type>(
 }
 
 macro NewOffHeapSlice<T: type>(
-    startPointer: RawPtr<T>, length: intptr): Slice<T> {
+    startPointer: RawPtr<T>, dataOffset: intptr, length: intptr): Slice<T> {
   return Slice<T>{
     object: kZeroBitPattern,
-    offset: Convert<intptr>(Convert<RawPtr>(startPointer)) + kHeapObjectTag,
+    offset: Convert<intptr>(Convert<RawPtr>(startPointer)) + kHeapObjectTag +
+        dataOffset * %SizeOf<T>(),
     length: length,
     unsafeMarker: Unsafe {}
   };
