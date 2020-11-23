@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bc7f5ab_c5d851e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-11-23T21:07:33Z",
+      "side": 1,
+      "message": "Landing to chromium DEPS is in https://chromium-review.googlesource.com/c/chromium/src/+/2555661",
+      "revId": "85819f70207cdfd4e7c5d44bef25bc641abd35ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
