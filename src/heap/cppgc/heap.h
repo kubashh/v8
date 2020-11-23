@@ -29,8 +29,8 @@ class V8_EXPORT_PRIVATE Heap final : public HeapBase,
        cppgc::Heap::HeapOptions options);
   ~Heap() final;
 
-  HeapBase& AsBase() { return *this; }
-  const HeapBase& AsBase() const { return *this; }
+  internal::HeapBase& AsBase() { return *this; }
+  const internal::HeapBase& AsBase() const { return *this; }
 
   void CollectGarbage(Config) final;
   void StartIncrementalGarbageCollection(Config) final;
