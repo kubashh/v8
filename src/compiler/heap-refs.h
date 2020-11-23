@@ -139,6 +139,7 @@ class V8_EXPORT_PRIVATE ObjectRef {
   Handle<Object> object() const;
 
   bool equals(const ObjectRef& other) const;
+  bool is_never_serialized() const;
 
   bool IsSmi() const;
   int AsSmi() const;
