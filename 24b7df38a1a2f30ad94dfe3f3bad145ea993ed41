@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d1da7e6_39a017b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2020-11-23T11:50:52Z",
+      "side": 1,
+      "message": "Thanks for your feedback!\nAdded TODO\u0027s to indicate what\u0027s temporary.\nAlso I made two small changes in builtins-x64.cc (changed r11 to kScratchRegister in one place and changed the pretty generic subq in the beginning of Generate_JSConstructStubGeneric to handling the subtraction when pushing arguments to the stack. IMO this way its cleaner what the current/expected state is.)",
+      "revId": "24b7df38a1a2f30ad94dfe3f3bad145ea993ed41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

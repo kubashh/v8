@@ -147,6 +147,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15b6bf19_deba9417",
+        "filename": "src/builtins/builtins-proxy-gen.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2020-11-23T11:50:52Z",
+      "side": 1,
+      "message": "Added a bunch of TODO\u0027s throughout to indicate what needs to be changed.",
+      "parentUuid": "5ca0e2f7_e5c402e6",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 134,
+        "endChar": 67
+      },
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bf91538_fe919305",
@@ -160,6 +184,30 @@
       "writtenOn": "2020-11-20T15:15:30Z",
       "side": 1,
       "message": "nit: Useless comment. Throughout the code base, the number of arguments is always untagged!",
+      "range": {
+        "startLine": 149,
+        "startChar": 35,
+        "endLine": 149,
+        "endChar": 44
+      },
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c74b21_4d46cbd1",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2020-11-23T11:50:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bf91538_fe919305",
       "range": {
         "startLine": 149,
         "startChar": 35,
@@ -217,6 +265,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58091bff_ada704ba",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2020-11-23T11:50:52Z",
+      "side": 1,
+      "message": "Done. Just this change happened to be one I could be more explicit with the change anyways (instead of the subq in the beginning I moved the change to pushing arguments onto the stack).",
+      "parentUuid": "35e4dca5_6874bfbd",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 54
+      },
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abeefe94_81394831",
@@ -230,6 +302,30 @@
       "writtenOn": "2020-11-20T15:15:30Z",
       "side": 1,
       "message": "nit: the comment above already indicate we are including the receiver \"+ receiver\".",
+      "range": {
+        "startLine": 851,
+        "startChar": 0,
+        "endLine": 851,
+        "endChar": 40
+      },
+      "revId": "5c3a233a22d8f4b008a58828772280b05de21540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6457d6e_1aaa1d25",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2020-11-23T11:50:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abeefe94_81394831",
       "range": {
         "startLine": 851,
         "startChar": 0,
