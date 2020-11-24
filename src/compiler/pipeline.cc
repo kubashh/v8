@@ -1074,7 +1074,8 @@ PipelineCompilationJob::PipelineCompilationJob(
           compilation_info(), function->GetIsolate(), &zone_stats_)),
       data_(&zone_stats_, function->GetIsolate(), compilation_info(),
             pipeline_statistics_.get(),
-            FLAG_concurrent_inlining && osr_offset.IsNone()),
+            (code_kind == CodeKind::TURBOPROP || FLAG_concurrent_inlining) &&
+                osr_offset.IsNone()),
       pipeline_(&data_),
       linkage_(nullptr) {
   compilation_info_.SetOptimizingForOsr(osr_offset, osr_frame);
