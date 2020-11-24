@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6e68b2c_27f8fcb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-24T10:41:32Z",
+      "side": 1,
+      "message": "LGTM. I hope we can still figure out what\u0027s the problem with asm.js functions.",
+      "revId": "28ce5b3ceb759a3db4213c05f894ea3b28022749",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
