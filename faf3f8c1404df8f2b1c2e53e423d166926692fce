@@ -16,6 +16,23 @@
       "message": "Etienne: ptal\n\nCamillo, Ross: fyi",
       "revId": "faf3f8c1404df8f2b1c2e53e423d166926692fce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6e36369_4d581f62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2020-11-24T19:58:06Z",
+      "side": 1,
+      "message": "LGTM, thanks! (I can\u0027t give a real +1 in v8)",
+      "revId": "faf3f8c1404df8f2b1c2e53e423d166926692fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
