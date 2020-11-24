@@ -127,5 +127,12 @@ void WriteBarrier::GenerationalBarrierSlow(CagedHeapLocalData& local_data,
 }
 #endif
 
+#if V8_ENABLE_CHECKS
+// static
+void WriteBarrier::CheckResult(Type expected_type, Result& result) {
+  CHECK_EQ(expected_type, result.type);
+}
+#endif  // V8_ENABLE_CHECKS
+
 }  // namespace internal
 }  // namespace cppgc
