@@ -4716,6 +4716,11 @@ bool JSHeapBroker::CanUseFeedback(const FeedbackNexus& nexus) const {
   return !is_native_context_independent() && !nexus.IsUninitialized();
 }
 
+bool JSHeapBroker::CanUseSmiFeedback(const FeedbackNexus& nexus) const {
+  return !nexus.IsUninitialized() &&
+         (!is_native_context_independent() || FLAG_turbo_nci_use_smi_feedback);
+}
+
 const ProcessedFeedback& JSHeapBroker::NewInsufficientFeedback(
     FeedbackSlotKind kind) const {
   return *zone()->New<InsufficientFeedback>(kind);
@@ -4825,7 +4830,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForGlobalAccess(
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForBinaryOperation(
     FeedbackSource const& source) const {
   FeedbackNexus nexus(source.vector, source.slot, feedback_nexus_config());
-  if (nexus.IsUninitialized()) return NewInsufficientFeedback(nexus.kind());
+  if (!CanUseSmiFeedback(nexus)) return NewInsufficientFeedback(nexus.kind());
   BinaryOperationHint hint = nexus.GetBinaryOperationFeedback();
   DCHECK_NE(hint, BinaryOperationHint::kNone);  // Not uninitialized.
   return *zone()->New<BinaryOperationFeedback>(hint, nexus.kind());
@@ -4834,7 +4839,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForBinaryOperation(
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForCompareOperation(
     FeedbackSource const& source) const {
   FeedbackNexus nexus(source.vector, source.slot, feedback_nexus_config());
-  if (nexus.IsUninitialized()) return NewInsufficientFeedback(nexus.kind());
+  if (!CanUseSmiFeedback(nexus)) return NewInsufficientFeedback(nexus.kind());
   CompareOperationHint hint = nexus.GetCompareOperationFeedback();
   DCHECK_NE(hint, CompareOperationHint::kNone);  // Not uninitialized.
   return *zone()->New<CompareOperationFeedback>(hint, nexus.kind());
@@ -4843,7 +4848,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForCompareOperation(
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForForIn(
     FeedbackSource const& source) const {
   FeedbackNexus nexus(source.vector, source.slot, feedback_nexus_config());
-  if (nexus.IsUninitialized()) return NewInsufficientFeedback(nexus.kind());
+  if (!CanUseSmiFeedback(nexus)) return NewInsufficientFeedback(nexus.kind());
   ForInHint hint = nexus.GetForInFeedback();
   DCHECK_NE(hint, ForInHint::kNone);  // Not uninitialized.
   return *zone()->New<ForInFeedback>(hint, nexus.kind());

@@ -306,6 +306,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   friend class ObjectData;
 
   bool CanUseFeedback(const FeedbackNexus& nexus) const;
+  bool CanUseSmiFeedback(const FeedbackNexus& nexus) const;
   const ProcessedFeedback& NewInsufficientFeedback(FeedbackSlotKind kind) const;
 
   // Bottleneck FeedbackNexus access here, for storage in the broker

@@ -758,6 +758,8 @@ DEFINE_BOOL(turbo_nci_cache_ageing, false,
 // strategy.
 DEFINE_BOOL(isolate_script_cache_ageing, true,
             "enable ageing of the isolate script cache.")
+DEFINE_BOOL(turbo_nci_use_smi_feedback, true,
+            "enable use of smi feedback during NCI codegen.")
 
 // Favor memory over execution speed.
 DEFINE_BOOL(optimize_for_size, false,
