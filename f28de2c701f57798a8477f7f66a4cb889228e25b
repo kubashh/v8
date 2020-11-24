@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "f28de2c701f57798a8477f7f66a4cb889228e25b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "293770f4_e71ec113",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-24T14:39:34Z",
+      "side": 1,
+      "message": "LGTM with one typo.",
+      "revId": "f28de2c701f57798a8477f7f66a4cb889228e25b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "171fc0af_13abf698",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-24T14:39:34Z",
+      "side": 1,
+      "message": "Typo: Conservatively",
+      "revId": "f28de2c701f57798a8477f7f66a4cb889228e25b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
