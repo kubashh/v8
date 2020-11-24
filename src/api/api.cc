@@ -378,7 +378,7 @@ static ScriptOrigin GetScriptOriginForScript(i::Isolate* isolate,
       script->column_offset(), options.IsSharedCrossOrigin(), script->id(),
       Utils::ToLocal(source_map_url), options.IsOpaque(),
       script->type() == i::Script::TYPE_WASM, options.IsModule(),
-      Utils::ToLocal(host_defined_options));
+      Utils::PrimitiveArrayToLocal(host_defined_options));
   return origin;
 }
 
@@ -2397,7 +2397,20 @@ Maybe<bool> Module::InstantiateModule(Local<Context> context,
   ENTER_V8(isolate, context, Module, InstantiateModule, Nothing<bool>(),
            i::HandleScope);
   has_pending_exception = !i::Module::Instantiate(
-      isolate, Utils::OpenHandle(this), context, callback);
+      isolate, Utils::OpenHandle(this), context, /*callback*/ nullptr,
+      /*callback_without_import_assertions*/ callback);
+  RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
+  return Just(true);
+}
+
+Maybe<bool> Module::InstantiateModule(Local<Context> context,
+                                      Module::ResolveModuleCallback callback) {
+  auto isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
+  ENTER_V8(isolate, context, Module, InstantiateModule, Nothing<bool>(),
+           i::HandleScope);
+  has_pending_exception = !i::Module::Instantiate(
+      isolate, Utils::OpenHandle(this), context, /*callback*/ callback,
+      /*callback_without_import_assertions*/ nullptr);
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
   return Just(true);
 }

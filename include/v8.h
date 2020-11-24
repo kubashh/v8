@@ -1630,9 +1630,13 @@ class V8_EXPORT Module : public Data {
    */
   int GetIdentityHash() const;
 
+  V8_DEPRECATE_SOON("Use ResolveModuleCallback")
   typedef MaybeLocal<Module> (*ResolveCallback)(Local<Context> context,
                                                 Local<String> specifier,
                                                 Local<Module> referrer);
+  typedef MaybeLocal<Module> (*ResolveModuleCallback)(
+      Local<Context> context, Local<String> specifier,
+      Local<FixedArray> import_assertions, Local<Module> referrer);
 
   /**
    * Instantiates the module and its dependencies.
@@ -1641,8 +1645,13 @@ class V8_EXPORT Module : public Data {
    * instantiation. (In the case where the callback throws an exception, that
    * exception is propagated.)
    */
+  V8_DEPRECATE_SOON(
+      "Use the version of InstantiateModule that takes a ResolveModuleCallback "
+      "parameter")
   V8_WARN_UNUSED_RESULT Maybe<bool> InstantiateModule(Local<Context> context,
                                                       ResolveCallback callback);
+  V8_WARN_UNUSED_RESULT Maybe<bool> InstantiateModule(
+      Local<Context> context, ResolveModuleCallback callback);
 
   /**
    * Evaluates the module and its dependencies.
