@@ -80,6 +80,30 @@
       },
       "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f242aaf_8385e4ed",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-11-24T15:47:14Z",
+      "side": 1,
+      "message": "Can we then split the function (e.g. GenerationalBarrierWithValueCheck) to not regress the regular path?",
+      "parentUuid": "0edd3c04_451a8309",
+      "range": {
+        "startLine": 123,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 24
+      },
+      "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
