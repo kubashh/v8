@@ -33,6 +33,24 @@
       "message": "lgtm\n\nAre there more cases where the bindings diverge?",
       "revId": "f320da6e28cc64cfca796c9c5564a831961ca18d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1677cdc2_d1f82ea6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-24T10:55:28Z",
+      "side": 1,
+      "message": "Hard to say. I found this by fuzzing locally, and observing that many inspector tests throw unexpected exceptions when executed by the fuzzer.\nI don\u0027t even know how this divergence happened in the first place. But I guess that there are not many, this might have been the only one.",
+      "parentUuid": "89c88aea_bd510378",
+      "revId": "f320da6e28cc64cfca796c9c5564a831961ca18d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
