@@ -600,6 +600,7 @@ Handle<Code> Deoptimizer::compiled_code() const {
 }
 
 bool Deoptimizer::should_reuse_code() const {
+  if (compiled_code_.kind() == CodeKind::TURBOFAN) return false;
   int count = compiled_code_.deoptimization_count();
   return deopt_kind_ == DeoptimizeKind::kSoft &&
          count < FLAG_reuse_opt_code_count;
