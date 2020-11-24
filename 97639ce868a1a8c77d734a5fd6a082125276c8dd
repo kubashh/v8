@@ -194,6 +194,24 @@
       "parentUuid": "9674b891_d5b9b217",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "482c3f17_668b9053",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1148006
+      },
+      "writtenOn": "2020-11-24T05:05:17Z",
+      "side": 1,
+      "message": "because the load time issue is performance related (downgrade WebXPRT3 performance by ~4%) and new api refactor is delayed. can we review this CL firstly?  we have waited 2 months :-)",
+      "parentUuid": "70e6dcea_964c754c",
+      "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
