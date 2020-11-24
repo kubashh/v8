@@ -476,8 +476,8 @@ config("cppgc_base_config") {
   if (cppgc_enable_young_generation) {
     defines += [ "CPPGC_YOUNG_GENERATION" ]
   }
-  if (!cppgc_is_standalone) {
-    defines += [ "CPPGC_BUILD_IN_V8" ]
+  if (cppgc_is_standalone) {
+    defines += [ "CPPGC_IS_STANDALONE" ]
   }
 }
 
@@ -5102,33 +5102,21 @@ if (want_v8_shell) {
   }
 }
 
-if (cppgc_is_standalone) {
-  v8_executable("cppgc_standalone") {
-    sources = [ "samples/cppgc/cppgc-standalone.cc" ]
+v8_executable("cppgc_sample") {
+  sources = [ "samples/cppgc/cppgc-sample.cc" ]
 
-    configs = [
-      # Note: don't use :internal_config here because this target will get
-      # the :external_config applied to it by virtue of depending on :cppgc, and
-      # you can't have both applied to the same target.
-      ":internal_config_base",
-    ]
+  configs = [
+    # Note: don't use :internal_config here because this target will get
+    # the :external_config applied to it by virtue of depending on :cppgc, and
+    # you can't have both applied to the same target.
+    ":internal_config_base",
+    ":cppgc_base_config",
+  ]
 
-    deps = [ ":cppgc" ]
-  }
-} else {
-  v8_executable("cppgc_for_v8_embedders") {
-    sources = [ "samples/cppgc/cppgc-for-v8-embedders.cc" ]
-
-    configs = [
-      # Note: don't use :internal_config here because this target will get
-      # the :external_config applied to it by virtue of depending on :cppgc, and
-      # you can't have both applied to the same target.
-      ":internal_config_base",
-    ]
-
-    deps = [
+  deps = [ ":cppgc" ]
+  if (!cppgc_is_standalone) {
+    deps += [
       ":v8",
-      ":v8_libplatform",
       "//build/win:default_exe_manifest",
     ]
   }
