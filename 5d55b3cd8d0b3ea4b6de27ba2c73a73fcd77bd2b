@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dab87d54_3774447a",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T13:45:47Z",
+      "side": 1,
+      "message": "We should not expose V8 types in cppgc. In other words: The embedder must not know that our default platform is implemented in terms of v8 stuff. It\u0027s merely a shortcut that we take here.",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 14
+      },
+      "revId": "5d55b3cd8d0b3ea4b6de27ba2c73a73fcd77bd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
