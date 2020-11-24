@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "226cebcd_cf7e1380",
+        "filename": "include/cppgc/heap-consistency.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T07:18:50Z",
+      "side": 1,
+      "message": "Nevermind. I was talking about the wrong slot here. Will implement your suggestion.",
+      "parentUuid": "b3e6e0fa_6fd0a5ec",
+      "range": {
+        "startLine": 76,
+        "startChar": 43,
+        "endLine": 76,
+        "endChar": 66
+      },
+      "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3468066c_7f07c038",
         "filename": "include/cppgc/heap.h",
         "patchSetId": 11
