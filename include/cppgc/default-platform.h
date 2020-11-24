@@ -55,6 +55,8 @@ class V8_EXPORT DefaultPlatform : public Platform {
     return v8_platform_->GetTracingController();
   }
 
+  static void InitializeProcess(DefaultPlatform*);
+
  protected:
   static constexpr v8::Isolate* kNoIsolate = nullptr;
 
