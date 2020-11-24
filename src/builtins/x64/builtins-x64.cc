@@ -2995,7 +2995,11 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   constexpr int kFrameMarkerOffset = -kSystemPointerSize;
   constexpr int kGCScanSlotCountOffset =
       kFrameMarkerOffset - kSystemPointerSize;
-  constexpr int kParamCountOffset = kGCScanSlotCountOffset - kSystemPointerSize;
+  // The number of parameters passed to this function.
+  constexpr int kInParamCountOffset =
+      kGCScanSlotCountOffset - kSystemPointerSize;
+  // The number of parameters according to the signature.
+  constexpr int kParamCountOffset = kInParamCountOffset - kSystemPointerSize;
   constexpr int kReturnCountOffset = kParamCountOffset - kSystemPointerSize;
   constexpr int kValueTypesArrayStartOffset =
       kReturnCountOffset - kSystemPointerSize;
@@ -3004,8 +3008,13 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   constexpr int kFunctionDataOffset =
       kValueTypesArrayStartOffset - kSystemPointerSize;
   constexpr int kLastSpillOffset = kFunctionDataOffset;
-  constexpr int kNumSpillSlots = 5;
+  constexpr int kNumSpillSlots = 6;
   __ subq(rsp, Immediate(kNumSpillSlots * kSystemPointerSize));
+  // Put the in_parameter count on the stack, we only  need it at the very end
+  // when we pop the parameters off the stack.
+  Register in_param_count = rax;
+  __ movq(MemOperand(rbp, kInParamCountOffset), in_param_count);
+  in_param_count = no_reg;
 
   // -------------------------------------------
   // Load the Wasm exported function data and the Wasm instance.
@@ -3455,6 +3464,13 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   Label return_done;
   __ bind(&return_done);
   __ movq(param_count, MemOperand(rbp, kParamCountOffset));
+
+  // Calculate the number of parameters we have to pop off the stack. This
+  // number is max(in_param_count, param_count).
+  in_param_count = rdx;
+  __ movq(in_param_count, MemOperand(rbp, kInParamCountOffset));
+  __ cmpq(param_count, in_param_count);
+  __ cmovq(less, param_count, in_param_count);
 
   // -------------------------------------------
   // Deconstrunct the stack frame.
