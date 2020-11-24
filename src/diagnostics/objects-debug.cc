@@ -852,7 +852,7 @@ void SharedFunctionInfo::SharedFunctionInfoVerify(ReadOnlyRoots roots) {
   }
 
   int expected_map_index = Context::FunctionMapIndex(
-      language_mode(), kind(), HasSharedName(), needs_home_object());
+      language_mode(), kind(), HasSharedName());
   CHECK_EQ(expected_map_index, function_map_index());
 
   if (scope_info().length() > 0) {
