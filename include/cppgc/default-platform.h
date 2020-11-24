@@ -55,6 +55,11 @@ class V8_EXPORT DefaultPlatform : public Platform {
     return v8_platform_->GetTracingController();
   }
 
+  // Use this method instead of cppgc::InitializeProcess when using
+  // cppgc::DefaultPlatform. cppgc::DefaultPlatform::InitializeProcess will
+  // initialize cppgc and v8 if needed (for non-standalone builds).
+  static void InitializeProcess(DefaultPlatform*);
+
  protected:
   static constexpr v8::Isolate* kNoIsolate = nullptr;
 
