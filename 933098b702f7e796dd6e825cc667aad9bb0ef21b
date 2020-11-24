@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c59674fd_baed5698",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-24T09:20:35Z",
+      "side": 1,
+      "message": "Ross owner PTAL: src/inspector/* samples/*",
+      "revId": "933098b702f7e796dd6e825cc667aad9bb0ef21b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
