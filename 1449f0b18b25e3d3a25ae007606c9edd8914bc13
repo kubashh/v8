@@ -51,6 +51,24 @@
       "message": "Apologies for relanding the same CL. I reverted it because some SIMD opcodes were added  I thought I had broken the SIMD opcode list because it was changed in the meantime, but the CL is still good.",
       "revId": "1449f0b18b25e3d3a25ae007606c9edd8914bc13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09c9ceef_ef25699d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-24T14:50:35Z",
+      "side": 1,
+      "message": "No problem, thanks for clarifying!\nIt\u0027s always a good idea to add a sentence after the \"This is a reland of ...\" so reviewers and others know what was changed, or why the unchanged reland is fine.",
+      "parentUuid": "37ecf8b0_287c3f6f",
+      "revId": "1449f0b18b25e3d3a25ae007606c9edd8914bc13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
