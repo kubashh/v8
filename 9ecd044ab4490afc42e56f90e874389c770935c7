@@ -50,6 +50,24 @@
       "message": "could you pull out a static ShouldUseConcurrentInlining(code_kind, bool is_osr) or similar function and call it here to make it clear what this choice is.",
       "revId": "9ecd044ab4490afc42e56f90e874389c770935c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1702a03_71cc0a26",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-24T17:23:06Z",
+      "side": 1,
+      "message": "I couldn\u0027t find a good place to define this function, so just left it closer to the use. Let me know if this looks OK.",
+      "parentUuid": "4c73bb7a_9668f7ec",
+      "revId": "9ecd044ab4490afc42e56f90e874389c770935c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
