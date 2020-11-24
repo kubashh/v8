@@ -16,6 +16,41 @@
       "message": "Was anything changed in this reland, or was the revert accidental?",
       "revId": "1449f0b18b25e3d3a25ae007606c9edd8914bc13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37ecf8b0_287c3f6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-24T14:39:15Z",
+      "side": 1,
+      "message": "Nothing was changed. I mistakenly thought there were merge issues due to changes in the SIMD section of wasm-opcodes.h, but after further inspection, it all seemed to be in order.",
+      "parentUuid": "3dd93d13_4d66e119",
+      "revId": "1449f0b18b25e3d3a25ae007606c9edd8914bc13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "480adbb2_e9c8e9e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-24T14:39:15Z",
+      "side": 1,
+      "message": "Apologies for relanding the same CL. I reverted it because some SIMD opcodes were added  I thought I had broken the SIMD opcode list because it was changed in the meantime, but the CL is still good.",
+      "revId": "1449f0b18b25e3d3a25ae007606c9edd8914bc13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
