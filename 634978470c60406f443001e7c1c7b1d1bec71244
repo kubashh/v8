@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78b0582d_b5b40958",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T15:50:39Z",
+      "side": 1,
+      "message": "lgtm % comment",
+      "revId": "634978470c60406f443001e7c1c7b1d1bec71244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd32a916_9df73439",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T15:50:39Z",
+      "side": 1,
+      "message": "Most of the implementations of GetWriteBarrierType is the same and this is the only difference between them. Can we have a shared implementation that doesn\u0027t set value_offset and then set value_offset after returning from the shared part if the return type is kGenerational?\nI realize it could cause regressions but maybe we\u0027re lucky and clang can optimize it away.\n(Having one shared implementation will prevent the impls from diverging in the future)",
+      "range": {
+        "startLine": 144,
+        "startChar": 9,
+        "endLine": 144,
+        "endChar": 21
+      },
+      "revId": "634978470c60406f443001e7c1c7b1d1bec71244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
