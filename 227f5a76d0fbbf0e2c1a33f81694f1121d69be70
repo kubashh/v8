@@ -56,6 +56,30 @@
       },
       "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0edd3c04_451a8309",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:33:49Z",
+      "side": 1,
+      "message": "We have callers that do not have access to a |value| object (Steele barrier + Dijkstra range barrier) and we need to propagate that information to here.\n\nWhen there\u0027s no |value| information available, we cannot filter out the barrier. This should hopefully be rare.",
+      "parentUuid": "fe86c0d9_7e894730",
+      "range": {
+        "startLine": 123,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 24
+      },
+      "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
