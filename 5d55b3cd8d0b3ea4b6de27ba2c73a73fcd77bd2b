@@ -46,6 +46,30 @@
       },
       "revId": "5d55b3cd8d0b3ea4b6de27ba2c73a73fcd77bd2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13c26926_d3560b3f",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T14:28:58Z",
+      "side": 1,
+      "message": "In patchset 2 the platform initialization is encapsulated by DefaultPlatform.\nLooking at the code, both options are fine by me. Ptal.",
+      "parentUuid": "38a82cf6_2b9d3a7d",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 14
+      },
+      "revId": "5d55b3cd8d0b3ea4b6de27ba2c73a73fcd77bd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
