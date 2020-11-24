@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b7ca591_f31027d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-24T16:21:02Z",
+      "side": 1,
+      "message": "Etienne: ptal\n\nCamillo, Ross: fyi",
+      "revId": "faf3f8c1404df8f2b1c2e53e423d166926692fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
