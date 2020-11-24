@@ -104,6 +104,30 @@
       },
       "revId": "81a478382194c15c7810f9232af120ab7ef60eda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4257f9f_ef95a096",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 4969,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T09:37:48Z",
+      "side": 1,
+      "message": "Because it is not standalone and thus it relies on v8\u0027s tracing implementation.\nIf they had `cppgc_is_standalone \u003d\u003d true` they wouldn\u0027t need it, but for pdfium cppgc is indeed not standalone as far as I know.\nWe could either pull v8 into cppgc (for now) and unblock or change pdfium to depend on v8 instead of cppgc and wait for them to roll.",
+      "parentUuid": "c82bb252_62ac927c",
+      "range": {
+        "startLine": 4969,
+        "startChar": 9,
+        "endLine": 4969,
+        "endChar": 28
+      },
+      "revId": "81a478382194c15c7810f9232af120ab7ef60eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
