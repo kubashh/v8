@@ -247,11 +247,16 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction function,
   int ticks_for_optimization =
       kProfilerTicksBeforeOptimization +
       (bytecode.length() / kBytecodeSizeAllowancePerTick);
+  if (scale_factor != 1) {
+    ticks_for_optimization += 1;
+  }
   ticks_for_optimization *= scale_factor;
+  bool eligible_for_small_func_optimization =
+      !FLAG_turboprop && !any_ic_changed_ &&
+      bytecode.length() < kMaxBytecodeSizeForEarlyOpt;
   if (ticks >= ticks_for_optimization) {
     return OptimizationReason::kHotAndStable;
-  } else if (!any_ic_changed_ &&
-             bytecode.length() < kMaxBytecodeSizeForEarlyOpt) {
+  } else if (eligible_for_small_func_optimization) {
     // TODO(turboprop, mythria): Do we need to support small function
     // optimization for TP->TF tier up. If so, do we want to scale the bytecode
     // size?
