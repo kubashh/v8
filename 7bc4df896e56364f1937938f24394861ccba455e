@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19e9e3ef_1c08d927",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-24T17:10:16Z",
+      "side": 1,
+      "message": "PTAL\nThibaud as the expert in the generic wrapper\nVictor as the expert of removing the arguments adapter",
+      "revId": "7bc4df896e56364f1937938f24394861ccba455e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
