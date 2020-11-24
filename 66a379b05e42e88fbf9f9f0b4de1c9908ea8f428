@@ -50,6 +50,24 @@
       "message": "I think one thing is missing here now:\nIf there is more than one return value, we should add kFeature_mv to the detected_ set. This was previously done in DoReturn. I think we can just move this to the WasmDecoder constructor.",
       "revId": "66a379b05e42e88fbf9f9f0b4de1c9908ea8f428",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "329eef03_cea9ebd6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2633,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-24T14:50:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be7dd74c_217fc7ba",
+      "revId": "66a379b05e42e88fbf9f9f0b4de1c9908ea8f428",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
