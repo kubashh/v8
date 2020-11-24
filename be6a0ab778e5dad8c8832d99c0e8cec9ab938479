@@ -33,6 +33,24 @@
       "message": "I\u0027m fine with the code, but I\u0027m not sure this is the right approach to the problem. If a WorkerThreadRuntimeCallScope is being run on the main thread, then that suggests that we are also logging work happening on the main thread with a Background counter (e.g., TRACE_BACKGROUND_GC(heap_-\u003etracer(), GCTracer::BackgroundScope::MC_BACKGROUND_MARKING)) which would confuse our estimation of how much time we are spending on the background vs foreground threads.  \n\nSaying that, given the fact that we are now doing more and more work potentially on the background thread, having to specify in each counter whether we are background or foreground is a bit of a hassle.  I\u0027m wondering is if we can go full-into this approach, by renaming this class to RuntimeCallStats and making the default one MainThreadRuntimeCallStats, then having this class specifically apply the \"Background\" to counters if the work is happening on a background thread, rather than having to specify that on the counter itself. WDYT?  I\u0027d be fine with doing this in pieces, and fixing this issue first.\n\n+Ulan: given the original issue seems to be a background-GC RCS happening on the main thread since this may be impacting the benchmarks.",
       "revId": "be6a0ab778e5dad8c8832d99c0e8cec9ab938479",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d48bec2_5eea0dd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-24T11:17:09Z",
+      "side": 1,
+      "message": "v8:11181 is caused by a bug Jobs usage in GC. We can fix it by detecting the joining thread and using foreground counters there.\n\nI like Ross\u0027 suggestion to make the counter usage more uniform. I will upload a GC fix to remove time pressure on this potential refactoring.",
+      "parentUuid": "48cdc20e_2248876a",
+      "revId": "be6a0ab778e5dad8c8832d99c0e8cec9ab938479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
