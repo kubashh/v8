@@ -912,9 +912,9 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Module> referrer,
     return MaybeLocal<Module>();
   }
   ScriptOrigin origin(
-      String::NewFromUtf8(isolate, file_name.c_str()).ToLocalChecked(),
-      Local<Integer>(), Local<Integer>(), Local<Boolean>(), Local<Integer>(),
-      Local<Value>(), Local<Boolean>(), Local<Boolean>(), True(isolate));
+      String::NewFromUtf8(isolate, file_name.c_str()).ToLocalChecked(), 0, 0,
+      false, -1, Local<Value>(), false, false, true);
+  ScriptCompiler::Source source(source_text, origin);
 
   Local<Module> module;
   if (!CompileString<Module>(isolate, context, source_text, origin)
@@ -1533,8 +1533,9 @@ void Shell::RealmEval(const v8::FunctionCallbackInfo<v8::Value>& args) {
     Throw(args.GetIsolate(), "Invalid argument");
     return;
   }
-  ScriptOrigin origin(String::NewFromUtf8Literal(isolate, "(d8)",
-                                                 NewStringType::kInternalized));
+  ScriptOrigin origin(
+      String::NewFromUtf8Literal(isolate, "(d8)", NewStringType::kInternalized),
+      0, 0);
   ScriptCompiler::Source script_source(
       args[1]->ToString(isolate->GetCurrentContext()).ToLocalChecked(), origin);
   Local<UnboundScript> script;
