@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df42dc4_7078bb72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:05:16Z",
+      "side": 1,
+      "message": "ptal, this factors out the generational barrier from the marking barrier. The two are actually unrelated. Embedders will have to write what they want, similar to the barrier in pointer-policies.h.\n\nI checked that local compiles of caged heap (+ young gen) result in the same fast paths on current clang.",
+      "revId": "4c0d408301f63022d7c528f21072c2ba471f2828",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11e93420_63e9fa23",
+        "filename": "include/cppgc/heap-consistency.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:05:16Z",
+      "side": 1,
+      "message": "If we don\u0027t expose the second version of GetWriteBarrierType() we buy in an additional cmove() in the fast path of the barrier snippet that is patched in after each Member write. (result.value_offset will contain a branch)",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 21
+      },
+      "revId": "4c0d408301f63022d7c528f21072c2ba471f2828",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "948c9f1c_910fec21",
+        "filename": "include/cppgc/internal/pointer-policies.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:05:16Z",
+      "side": 1,
+      "message": "This does not cause any overhead when young gen is disabled. I didn\u0027t #ifdef out the enum and call to avoid cluttering the caller side.",
+      "range": {
+        "startLine": 34,
+        "startChar": 22,
+        "endLine": 34,
+        "endChar": 41
+      },
+      "revId": "4c0d408301f63022d7c528f21072c2ba471f2828",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afea3ac6_e30456fa",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:05:16Z",
+      "side": 1,
+      "message": "This is actually broken right now: We don\u0027t expose CPPGC_ macros via public_config in GN which means that the macros in  include/cppgc/* are not visible to the embedder, creating issues.\n\nWill fix that in a follow up.",
+      "range": {
+        "startLine": 35,
+        "startChar": 12,
+        "endLine": 35,
+        "endChar": 28
+      },
+      "revId": "4c0d408301f63022d7c528f21072c2ba471f2828",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a802059_3444a34d",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:05:16Z",
+      "side": 1,
+      "message": "This version and the version below differ in\n- TryGetCagedHeap\n- result.value_offset\n\nI didn\u0027t see a good way to refactor it with preserving optimizations and not introducing more jumps.",
+      "range": {
+        "startLine": 130,
+        "startChar": 33,
+        "endLine": 130,
+        "endChar": 52
+      },
+      "revId": "4c0d408301f63022d7c528f21072c2ba471f2828",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
