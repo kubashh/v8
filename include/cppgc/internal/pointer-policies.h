@@ -27,8 +27,21 @@ struct DijkstraWriteBarrierPolicy {
     // Since in initializing writes the source object is always white, having no
     // barrier doesn't break the tri-color invariant.
   }
-  static void AssigningBarrier(const void* slot, const void* value) {
-    WriteBarrier::DijkstraMarkingBarrier(slot, value);
+  __attribute__((noinline)) static void AssigningBarrier(const void* slot,
+                                                         const void* value) {
+    WriteBarrier::Result result;
+    switch (WriteBarrier::GetWriteBarrierType(slot, value, result)) {
+#if defined(CPPGC_YOUNG_GENERATION)
+      case WriteBarrier::Type::kGenerational:
+        WriteBarrier::GenerationalBarrier(result, slot);
+        break;
+#endif  // CPPGC_YOUNG_GENERATION
+      case WriteBarrier::Type::kMarking:
+        WriteBarrier::DijkstraMarkingBarrier(result, value);
+        break;
+      case WriteBarrier::Type::kNone:
+        break;
+    }
   }
 };
 
