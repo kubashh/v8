@@ -588,6 +588,7 @@ void GCTracer::PrintNVP() const {
           "background.array_buffer_free=%.2f "
           "background.store_buffer=%.2f "
           "background.unmapper=%.2f "
+          "unmapper=%.2f "
           "incremental.steps_count=%d "
           "incremental.steps_took=%.1f "
           "scavenge_throughput=%.f "
@@ -633,6 +634,7 @@ void GCTracer::PrintNVP() const {
           current_.scopes[Scope::BACKGROUND_ARRAY_BUFFER_FREE],
           current_.scopes[Scope::BACKGROUND_STORE_BUFFER],
           current_.scopes[Scope::BACKGROUND_UNMAPPER],
+          current_.scopes[Scope::UNMAPPER],
           current_.incremental_marking_scopes[GCTracer::Scope::MC_INCREMENTAL]
               .steps,
           current_.scopes[Scope::MC_INCREMENTAL],
@@ -677,6 +679,7 @@ void GCTracer::PrintNVP() const {
           "background.array_buffer_free=%.2f "
           "background.store_buffer=%.2f "
           "background.unmapper=%.2f "
+          "unmapper=%.2f "
           "update_marking_deque=%.2f "
           "reset_liveness=%.2f\n",
           duration, spent_in_mutator, "mmc", current_.reduce_memory,
@@ -703,6 +706,7 @@ void GCTracer::PrintNVP() const {
           current_.scopes[Scope::BACKGROUND_ARRAY_BUFFER_FREE],
           current_.scopes[Scope::BACKGROUND_STORE_BUFFER],
           current_.scopes[Scope::BACKGROUND_UNMAPPER],
+          current_.scopes[Scope::UNMAPPER],
           current_.scopes[Scope::MINOR_MC_MARKING_DEQUE],
           current_.scopes[Scope::MINOR_MC_RESET_LIVENESS]);
       break;
@@ -789,6 +793,7 @@ void GCTracer::PrintNVP() const {
           "background.array_buffer_free=%.2f "
           "background.store_buffer=%.2f "
           "background.unmapper=%.1f "
+          "unmapper=%.1f "
           "total_size_before=%zu "
           "total_size_after=%zu "
           "holes_size_before=%zu "
@@ -891,9 +896,10 @@ void GCTracer::PrintNVP() const {
           current_.scopes[Scope::BACKGROUND_ARRAY_BUFFER_FREE],
           current_.scopes[Scope::BACKGROUND_STORE_BUFFER],
           current_.scopes[Scope::BACKGROUND_UNMAPPER],
-          current_.start_object_size, current_.end_object_size,
-          current_.start_holes_size, current_.end_holes_size,
-          allocated_since_last_gc, heap_->promoted_objects_size(),
+          current_.scopes[Scope::UNMAPPER], current_.start_object_size,
+          current_.end_object_size, current_.start_holes_size,
+          current_.end_holes_size, allocated_since_last_gc,
+          heap_->promoted_objects_size(),
           heap_->semi_space_copied_object_size(),
           heap_->nodes_died_in_new_space_, heap_->nodes_copied_in_new_space_,
           heap_->nodes_promoted_, heap_->promotion_ratio_,

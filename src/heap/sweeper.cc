@@ -81,17 +81,13 @@ class Sweeper::SweeperJob final : public JobTask {
   ~SweeperJob() override = default;
 
   void Run(JobDelegate* delegate) final {
-    TRACE_BACKGROUND_GC(tracer_,
-                        GCTracer::BackgroundScope::MC_BACKGROUND_SWEEPING);
-    const int offset = delegate->GetTaskId();
-    for (int i = 0; i < kNumberOfSweepingSpaces; i++) {
-      const AllocationSpace space_id = static_cast<AllocationSpace>(
-          FIRST_GROWABLE_PAGED_SPACE +
-          ((i + offset) % kNumberOfSweepingSpaces));
-      // Do not sweep code space concurrently.
-      if (space_id == CODE_SPACE) continue;
-      DCHECK(IsValidSweepingSpace(space_id));
-      if (!sweeper_->ConcurrentSweepSpace(space_id, delegate)) return;
+    if (delegate->IsJoiningThread()) {
+      TRACE_GC(tracer_, GCTracer::Scope::MC_SWEEP);
+      RunImpl(delegate);
+    } else {
+      TRACE_BACKGROUND_GC(tracer_,
+                          GCTracer::BackgroundScope::MC_BACKGROUND_SWEEPING);
+      RunImpl(delegate);
     }
   }
 
@@ -105,6 +101,18 @@ class Sweeper::SweeperJob final : public JobTask {
   }
 
  private:
+  void RunImpl(JobDelegate* delegate) {
+    const int offset = delegate->GetTaskId();
+    for (int i = 0; i < kNumberOfSweepingSpaces; i++) {
+      const AllocationSpace space_id = static_cast<AllocationSpace>(
+          FIRST_GROWABLE_PAGED_SPACE +
+          ((i + offset) % kNumberOfSweepingSpaces));
+      // Do not sweep code space concurrently.
+      if (space_id == CODE_SPACE) continue;
+      DCHECK(IsValidSweepingSpace(space_id));
+      if (!sweeper_->ConcurrentSweepSpace(space_id, delegate)) return;
+    }
+  }
   Sweeper* const sweeper_;
   GCTracer* const tracer_;
 

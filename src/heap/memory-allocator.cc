@@ -160,12 +160,14 @@ class MemoryAllocator::Unmapper::UnmapFreeMemoryJob : public JobTask {
       : unmapper_(unmapper), tracer_(isolate->heap()->tracer()) {}
 
   void Run(JobDelegate* delegate) override {
-    TRACE_BACKGROUND_GC(tracer_,
-                        GCTracer::BackgroundScope::BACKGROUND_UNMAPPER);
-    unmapper_->PerformFreeMemoryOnQueuedChunks<FreeMode::kUncommitPooled>(
-        delegate);
-    if (FLAG_trace_unmapper) {
-      PrintIsolate(unmapper_->heap_->isolate(), "UnmapFreeMemoryTask Done\n");
+    if (delegate->IsJoiningThread()) {
+      TRACE_GC(tracer_, GCTracer::Scope::UNMAPPER);
+      RunImpl(delegate);
+
+    } else {
+      TRACE_BACKGROUND_GC(tracer_,
+                          GCTracer::BackgroundScope::BACKGROUND_UNMAPPER);
+      RunImpl(delegate);
     }
   }
 
@@ -179,6 +181,13 @@ class MemoryAllocator::Unmapper::UnmapFreeMemoryJob : public JobTask {
   }
 
  private:
+  void RunImpl(JobDelegate* delegate) {
+    unmapper_->PerformFreeMemoryOnQueuedChunks<FreeMode::kUncommitPooled>(
+        delegate);
+    if (FLAG_trace_unmapper) {
+      PrintIsolate(unmapper_->heap_->isolate(), "UnmapFreeMemoryTask Done\n");
+    }
+  }
   Unmapper* const unmapper_;
   GCTracer* const tracer_;
   DISALLOW_COPY_AND_ASSIGN(UnmapFreeMemoryJob);
