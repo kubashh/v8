@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c29108c8_1162dd6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-24T10:11:38Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "ebc7eac2c2335d59af1354b79944e6a2a3d7ea60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a1c7382_a67fdb23",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-24T10:11:38Z",
+      "side": 1,
+      "message": "Not for this CL, maybe for future cleanups: ideally the generational barrier would be on the same level as the marking barriers, which would require moving the common fast checks like TryGetCagedHeap to the caller side. Then we wouldn\u0027t have to pass dummy values here.",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 65
+      },
+      "revId": "ebc7eac2c2335d59af1354b79944e6a2a3d7ea60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
