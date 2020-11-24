@@ -111,6 +111,30 @@
       },
       "revId": "634978470c60406f443001e7c1c7b1d1bec71244",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eee80e13_9865ea85",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T17:07:53Z",
+      "side": 1,
+      "message": "Cool, thanks!",
+      "parentUuid": "77632517_6a235f1e",
+      "range": {
+        "startLine": 144,
+        "startChar": 9,
+        "endLine": 144,
+        "endChar": 21
+      },
+      "revId": "634978470c60406f443001e7c1c7b1d1bec71244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
