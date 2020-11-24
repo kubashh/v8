@@ -212,6 +212,24 @@
       "parentUuid": "70e6dcea_964c754c",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea7d77f4_559ec0e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-11-24T10:00:45Z",
+      "side": 1,
+      "message": "Every time we call UpdateLoadStartTime, GC is delayed by 7 seconds unless Chrome calls setRAILMode(Response|Animation|Idle). Since Chrome did not call setRAILMode(Load) in the first place on window.location changes (otherwise there would be no need for this CL), this means it is not going to call setRAILMode to move away from the load mode.\n\nSo I think this CL effectively disables GC for the benchmark and that\u0027s why we see perf improvement. I guess the memory usage of the benchmark is not measured, so we don\u0027t see that part of the trade-off. V8 may also force a heavy stop-the-world GC (~100ms pause time) if the memory usage becomes too large and there was no GC for a long time. That would negatively affect latency, which is probably also not measured in the benchmark.\n\nIn other words, the CL is not a clear win and may introduce regressions in other metrics like memory usage and latency. With the new API refactoring, we will move all RAIL management to Chrome. There we would have more information to switch away from the Load mode faster than the ad-hoc timeout of 7 seconds to avoid regressions in other metrics.\n\nConsidering all this, I hope you understand why I am reluctant to land this CL now.",
+      "parentUuid": "482c3f17_668b9053",
+      "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
