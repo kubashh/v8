@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48d2ae70_32c3f5db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:07:15Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5e1daefd0b2212bdac28f0b2eb65f4b82910a07a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bb689f2_9f5ec907",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:07:15Z",
+      "side": 1,
+      "message": "nit: Comment format is different for public APIs\n\n/**\n *\n */",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 58,
+        "endChar": 4
+      },
+      "revId": "5e1daefd0b2212bdac28f0b2eb65f4b82910a07a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74cc5af8_fa04442b",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:07:15Z",
+      "side": 1,
+      "message": "nit: backticks: `cppgc::....`",
+      "range": {
+        "startLine": 58,
+        "startChar": 32,
+        "endLine": 58,
+        "endChar": 37
+      },
+      "revId": "5e1daefd0b2212bdac28f0b2eb65f4b82910a07a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20a67409_4ac86c9b",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:07:15Z",
+      "side": 1,
+      "message": "nit: Move declaration up",
+      "range": {
+        "startLine": 61,
+        "startChar": 14,
+        "endLine": 61,
+        "endChar": 31
+      },
+      "revId": "5e1daefd0b2212bdac28f0b2eb65f4b82910a07a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
