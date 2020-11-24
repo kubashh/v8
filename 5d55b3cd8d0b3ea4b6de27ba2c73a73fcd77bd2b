@@ -22,6 +22,30 @@
       },
       "revId": "5d55b3cd8d0b3ea4b6de27ba2c73a73fcd77bd2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38a82cf6_2b9d3a7d",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T14:18:33Z",
+      "side": 1,
+      "message": "The problem is that v8 embedders need to initialize v8\u0027s platform by calling v8::V8::IntializePlatform. Otherwise tracing fails when it tries to get a TracingController and doesn\u0027t have a platform. My previous CL broke the sample because it made cppgc actually use v8\u0027s implementation in non-standalone builds, which means it tried to get the v8 platform.\n\nWe can either expose v8_platform here and divulge that DefaultPlatform is based on v8::Platform, or add a method to DefaultPlatform to \"initialize embedded platform\" (or something of the sort). Personally, I think exposing v8_platform makes more sense.\nDo you think differently?",
+      "parentUuid": "dab87d54_3774447a",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 14
+      },
+      "revId": "5d55b3cd8d0b3ea4b6de27ba2c73a73fcd77bd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
