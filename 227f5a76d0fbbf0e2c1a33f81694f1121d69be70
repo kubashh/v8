@@ -16,6 +16,46 @@
       "message": "lgtm",
       "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b2bef63_7ff07013",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-11-24T15:26:01Z",
+      "side": 1,
+      "message": "Thanks for working on this!",
+      "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe86c0d9_7e894730",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-11-24T15:26:01Z",
+      "side": 1,
+      "message": "Do you want to check against |value| being zero? This should already be checked in TryGetCagedHeap(). For the rest of the values this condition will always return true.",
+      "range": {
+        "startLine": 123,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 24
+      },
+      "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
