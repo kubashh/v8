@@ -64,6 +64,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f526b72_00547411",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T15:21:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bb689f2_9f5ec907",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 58,
+        "endChar": 4
+      },
+      "revId": "5e1daefd0b2212bdac28f0b2eb65f4b82910a07a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6a9d836_62d85457",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T15:21:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74cc5af8_fa04442b",
+      "range": {
+        "startLine": 58,
+        "startChar": 32,
+        "endLine": 58,
+        "endChar": 37
+      },
+      "revId": "5e1daefd0b2212bdac28f0b2eb65f4b82910a07a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20a67409_4ac86c9b",
@@ -77,6 +125,30 @@
       "writtenOn": "2020-11-24T15:07:15Z",
       "side": 1,
       "message": "nit: Move declaration up",
+      "range": {
+        "startLine": 61,
+        "startChar": 14,
+        "endLine": 61,
+        "endChar": 31
+      },
+      "revId": "5e1daefd0b2212bdac28f0b2eb65f4b82910a07a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfb7e9a7_1ae70965",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T15:21:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20a67409_4ac86c9b",
       "range": {
         "startLine": 61,
         "startChar": 14,
