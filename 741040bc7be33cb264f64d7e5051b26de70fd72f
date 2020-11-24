@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ccc98a3_e6c898a7",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T15:05:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4c03da60_177f82f9",
+      "range": {
+        "startLine": 58,
+        "startChar": 14,
+        "endLine": 58,
+        "endChar": 31
+      },
+      "revId": "741040bc7be33cb264f64d7e5051b26de70fd72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3283a5a0_b4f996d8",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-11-24T14:40:10Z",
       "side": 1,
       "message": "Can we move this into cppgc-sample? I think that should make it clear for somebody who looks at it that there\u0027s different initializers needed.",
+      "range": {
+        "startLine": 14,
+        "startChar": 22,
+        "endLine": 14,
+        "endChar": 39
+      },
+      "revId": "741040bc7be33cb264f64d7e5051b26de70fd72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31db52dd_392f0653",
+        "filename": "src/heap/cppgc/default-platform.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-11-24T15:05:21Z",
+      "side": 1,
+      "message": "Kept as is and added comments (as discussed offline)",
+      "parentUuid": "3283a5a0_b4f996d8",
       "range": {
         "startLine": 14,
         "startChar": 22,
