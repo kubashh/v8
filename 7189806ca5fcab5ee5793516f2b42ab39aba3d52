@@ -110,6 +110,30 @@
       },
       "revId": "7189806ca5fcab5ee5793516f2b42ab39aba3d52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4c13d59_13071e6b",
+        "filename": "test/inspector/isolate-data.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-24T09:21:25Z",
+      "side": 1,
+      "message": "Why not flip the ambiguity, and remove the optional args from the deprecated constructor?",
+      "parentUuid": "41dd8770_235dbd80",
+      "range": {
+        "startLine": 431,
+        "startChar": 71,
+        "endLine": 431,
+        "endChar": 77
+      },
+      "revId": "7189806ca5fcab5ee5793516f2b42ab39aba3d52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
