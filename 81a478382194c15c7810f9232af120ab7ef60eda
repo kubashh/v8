@@ -63,6 +63,30 @@
       },
       "revId": "81a478382194c15c7810f9232af120ab7ef60eda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c82bb252_62ac927c",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 4969,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T09:23:03Z",
+      "side": 1,
+      "message": "PDFium currently has `cppgc_is_standalone \u003d\u003d false` because of the default value. Why do they need to pull in v8?",
+      "parentUuid": "0ff43b94_4f1e2d26",
+      "range": {
+        "startLine": 4969,
+        "startChar": 9,
+        "endLine": 4969,
+        "endChar": 28
+      },
+      "revId": "81a478382194c15c7810f9232af120ab7ef60eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
