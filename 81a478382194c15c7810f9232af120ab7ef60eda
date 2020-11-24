@@ -16,6 +16,29 @@
       "message": "+hpayer@ for v8.gni owner",
       "revId": "81a478382194c15c7810f9232af120ab7ef60eda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "845248b1_50c3606b",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 4969,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T08:12:48Z",
+      "side": 1,
+      "message": "Why pull in v8 for cppgc stand-alone?",
+      "range": {
+        "startLine": 4969,
+        "startChar": 9,
+        "endLine": 4969,
+        "endChar": 28
+      },
+      "revId": "81a478382194c15c7810f9232af120ab7ef60eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
