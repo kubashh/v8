@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47a7f688_64bfd55c",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-24T09:16:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44a55c06_75d94dde",
+      "range": {
+        "startLine": 1427,
+        "startChar": 42,
+        "endLine": 1427,
+        "endChar": 51
+      },
+      "revId": "7189806ca5fcab5ee5793516f2b42ab39aba3d52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cccf0631_48d12472",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-11-24T09:11:56Z",
       "side": 1,
       "message": "any reason to not make these default to 0?",
+      "range": {
+        "startLine": 431,
+        "startChar": 71,
+        "endLine": 431,
+        "endChar": 77
+      },
+      "revId": "7189806ca5fcab5ee5793516f2b42ab39aba3d52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41dd8770_235dbd80",
+        "filename": "test/inspector/isolate-data.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-24T09:16:58Z",
+      "side": 1,
+      "message": "Yeah: ambiguous constructors 😞 since the deprecated one and the new one would only be distinguishable by the optional arguments (Not sure this sentence makes sense).\n\nI plan to turn on back the default args, after removal of the old deprecated version.",
+      "parentUuid": "cccf0631_48d12472",
       "range": {
         "startLine": 431,
         "startChar": 71,
