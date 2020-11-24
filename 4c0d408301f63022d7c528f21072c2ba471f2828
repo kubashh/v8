@@ -152,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e39a7e86_c9f9791e",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T15:31:40Z",
+      "side": 1,
+      "message": "Done (Params)",
+      "parentUuid": "9fe155b2_c063523e",
+      "range": {
+        "startLine": 31,
+        "startChar": 9,
+        "endLine": 31,
+        "endChar": 15
+      },
+      "revId": "4c0d408301f63022d7c528f21072c2ba471f2828",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "afea3ac6_e30456fa",
