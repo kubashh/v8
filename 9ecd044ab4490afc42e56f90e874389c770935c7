@@ -16,6 +16,40 @@
       "message": "PTAL.\n\nThanks,\nMythri",
       "revId": "9ecd044ab4490afc42e56f90e874389c770935c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d07f9bb_f61a5dbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-24T10:09:30Z",
+      "side": 1,
+      "message": "LGTM with a suggestion.",
+      "revId": "9ecd044ab4490afc42e56f90e874389c770935c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c73bb7a_9668f7ec",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-24T10:09:30Z",
+      "side": 1,
+      "message": "could you pull out a static ShouldUseConcurrentInlining(code_kind, bool is_osr) or similar function and call it here to make it clear what this choice is.",
+      "revId": "9ecd044ab4490afc42e56f90e874389c770935c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
