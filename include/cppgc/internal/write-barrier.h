@@ -22,112 +22,56 @@ namespace internal {
 
 class V8_EXPORT WriteBarrier final {
  public:
-  static V8_INLINE void DijkstraMarkingBarrier(const void* slot,
-                                               const void* value) {
+  enum class Type : uint8_t {
+    kNone,
+    kMarking,
+    kGenerational,
+  };
+
+  struct Result {
+#if V8_ENABLE_CHECKS
+    Type type = Type::kNone;
+#endif  // !V8_ENABLE_CHECKS
 #if defined(CPPGC_CAGED_HEAP)
-    CagedHeapResult result;
-    if (!TryGetCagedHeap(slot, value, result)) {
-      return;
-    }
-    if (V8_UNLIKELY(result.caged_heap().is_marking_in_progress)) {
-      DijkstraMarkingBarrierSlow(value);
-      return;
-    }
-#if defined(CPPGC_YOUNG_GENERATION)
-    GenerationalBarrier(result.caged_heap(), slot, result.slot_offset,
-                        reinterpret_cast<uintptr_t>(value) - result.start);
-#endif
-#else
-    if (V8_LIKELY(!ProcessHeap::IsAnyIncrementalOrConcurrentMarking())) return;
+    uintptr_t start;
 
-    DijkstraMarkingBarrierSlowWithSentinelCheck(value);
+    CagedHeapLocalData& caged_heap() const {
+      return *reinterpret_cast<CagedHeapLocalData*>(start);
+    }
+    uintptr_t slot_offset;
+    uintptr_t value_offset;
 #endif  // CPPGC_CAGED_HEAP
-  }
+  };
 
-  template <typename LazyHeapCallback>
+  // Returns the required write barrier for a given `slot` and `value`.
+  static V8_INLINE Type GetWriteBarrierType(const void* slot, const void* value,
+                                            Result& result);
+  // Returns the required write barrier for a given `slot`.
+  static V8_INLINE Type GetWriteBarrierType(const void* slot, Result& result);
+
+  static V8_INLINE void DijkstraMarkingBarrier(const Result& result,
+                                               const void* object);
   static V8_INLINE void DijkstraMarkingBarrierRange(
-      LazyHeapCallback heap_callback, const void* first_element,
+      const Result& result, HeapHandle& heap, const void* first_element,
       size_t element_size, size_t number_of_elements,
-      TraceCallback trace_callback) {
-#if defined(CPPGC_CAGED_HEAP)
-    CagedHeapResult result;
-    if (!TryGetCagedHeap(first_element, first_element, result)) {
-      return;
-    }
-
-    if (V8_UNLIKELY(result.caged_heap().is_marking_in_progress)) {
-      DijkstraMarkingBarrierRangeSlow(heap_callback(), first_element,
-                                      element_size, number_of_elements,
-                                      trace_callback);
-      return;
-    }
+      TraceCallback trace_callback);
+  static V8_INLINE void SteeleMarkingBarrier(const Result& result,
+                                             const void* object);
 #if defined(CPPGC_YOUNG_GENERATION)
-    // We pass 0 as value offset to indicate that there's no information about
-    // the value.
-    GenerationalBarrier(result.caged_heap(), first_element, result.slot_offset,
-                        0);
-#endif
-#else
-    if (V8_LIKELY(!ProcessHeap::IsAnyIncrementalOrConcurrentMarking())) return;
-
-    // TODO(1056170): Inline a check for is marking on the API if necessary.
-    DijkstraMarkingBarrierRangeSlow(heap_callback(), first_element,
-                                    element_size, number_of_elements,
-                                    trace_callback);
-#endif  // CPPGC_CAGED_HEAP
-  }
-
-  static V8_INLINE void SteeleMarkingBarrier(const void* object) {
-#if defined(CPPGC_CAGED_HEAP)
-    CagedHeapResult result;
-    // The passed slot here is contained within object's header, resulting in
-    // `result` referring to the interiors of `object`.
-    if (!TryGetCagedHeap(object, object, result)) {
-      return;
-    }
-
-    if (V8_UNLIKELY(result.caged_heap().is_marking_in_progress)) {
-      SteeleMarkingBarrierSlow(object);
-      return;
-    }
-#if defined(CPPGC_YOUNG_GENERATION)
-    // We pass 0 as value offset to indicate that there's no information about
-    // the value.
-    GenerationalBarrier(result.caged_heap(), object, result.slot_offset, 0);
-#endif
-#else
-    if (V8_LIKELY(!ProcessHeap::IsAnyIncrementalOrConcurrentMarking())) return;
-
-    SteeleMarkingBarrierSlowWithSentinelCheck(object);
-#endif  // CPPGC_CAGED_HEAP
-  }
+  static V8_INLINE void GenerationalBarrier(const Result& result,
+                                            const void* slot);
+#else   // !CPPGC_YOUNG_GENERATION
+  static V8_INLINE void GenerationalBarrier(const Result& result,
+                                            const void* slot) {}
+#endif  // CPPGC_YOUNG_GENERATION
 
  private:
   WriteBarrier() = delete;
 
 #if defined(CPPGC_CAGED_HEAP)
-  struct CagedHeapResult {
-    uintptr_t start;
-    uintptr_t slot_offset;
-
-    CagedHeapLocalData& caged_heap() const {
-      return *reinterpret_cast<CagedHeapLocalData*>(start);
-    }
-  };
-
   // The contents of `result` are only valid if `TryCagedHeap()` returns true.
   static V8_INLINE bool TryGetCagedHeap(const void* slot, const void* value,
-                                        CagedHeapResult& result) {
-    result.start = reinterpret_cast<uintptr_t>(value) &
-                   ~(api_constants::kCagedHeapReservationAlignment - 1);
-    result.slot_offset = reinterpret_cast<uintptr_t>(slot) - result.start;
-    if (result.slot_offset > api_constants::kCagedHeapReservationSize) {
-      // Check if slot is on stack or value is sentinel or nullptr. This relies
-      // on the fact that kSentinelPointer is encoded as 0x1.
-      return false;
-    }
-    return true;
-  }
+                                        Result& result);
 #endif  // CPPGC_CAGED_HEAP
 
   static void DijkstraMarkingBarrierSlow(const void* value);
@@ -139,6 +83,12 @@ class V8_EXPORT WriteBarrier final {
                                               TraceCallback trace_callback);
   static void SteeleMarkingBarrierSlow(const void* value);
   static void SteeleMarkingBarrierSlowWithSentinelCheck(const void* value);
+
+#if V8_ENABLE_CHECKS
+  static void CheckResult(Type expected_type, const Result& result);
+#else   // !V8_ENABLE_CHECKS
+  static void CheckResult(Type expected_type, const Result& result) {}
+#endif  // V8_ENABLE_CHECKS
 
 #if defined(CPPGC_YOUNG_GENERATION)
   static V8_INLINE void GenerationalBarrier(CagedHeapLocalData& local_data,
@@ -158,6 +108,134 @@ class V8_EXPORT WriteBarrier final {
                                       const void* slot, uintptr_t value_offset);
 #endif  // CPPGC_YOUNG_GENERATION
 };
+
+#if defined(CPPGC_CAGED_HEAP)
+// static
+bool WriteBarrier::TryGetCagedHeap(const void* slot, const void* value,
+                                   WriteBarrier::Result& result) {
+  result.start = reinterpret_cast<uintptr_t>(value) &
+                 ~(api_constants::kCagedHeapReservationAlignment - 1);
+  const uintptr_t slot_offset =
+      reinterpret_cast<uintptr_t>(slot) - result.start;
+  if (slot_offset > api_constants::kCagedHeapReservationSize) {
+    // Check if slot is on stack or value is sentinel or nullptr. This relies
+    // on the fact that kSentinelPointer is encoded as 0x1.
+    return false;
+  }
+  return true;
+}
+#endif  // CPPGC_CAGED_HEAP
+
+// static
+WriteBarrier::Type WriteBarrier::GetWriteBarrierType(
+    const void* slot, const void* value, WriteBarrier::Result& result) {
+#if defined(CPPGC_CAGED_HEAP)
+  if (!TryGetCagedHeap(slot, value, result)) {
+    return Type::kNone;
+  }
+  if (V8_UNLIKELY(result.caged_heap().is_marking_in_progress)) {
+#if V8_ENABLE_CHECKS
+    result.type = Type::kMarking;
+#endif  // !V8_ENABLE_CHECKS
+    return Type::kMarking;
+  }
+#if defined(CPPGC_YOUNG_GENERATION)
+  result.slot_offset = reinterpret_cast<uintptr_t>(slot) - result.start;
+  result.value_offset = reinterpret_cast<uintptr_t>(value) - result.start;
+#if V8_ENABLE_CHECKS
+  result.type = Type::kGenerational;
+#endif  // !V8_ENABLE_CHECKS
+  return Type::kGenerational;
+#else   // !CPPGC_YOUNG_GENERATION
+  return Type::kNone;
+#endif  // !CPPGC_YOUNG_GENERATION
+#endif  //  CPPGC_CAGED_HEAP
+  Type type = V8_LIKELY(!ProcessHeap::IsAnyIncrementalOrConcurrentMarking())
+                  ? Type::kNone
+                  : Type::kMarking;
+#if V8_ENABLE_CHECKS
+  result.type = type;
+#endif  // !V8_ENABLE_CHECKS
+  return type;
+}
+
+// static
+WriteBarrier::Type WriteBarrier::GetWriteBarrierType(
+    const void* slot, WriteBarrier::Result& result) {
+#if defined(CPPGC_CAGED_HEAP)
+  if (!TryGetCagedHeap(slot, slot, result)) {
+    return Type::kNone;
+  }
+  if (V8_UNLIKELY(result.caged_heap().is_marking_in_progress)) {
+#if V8_ENABLE_CHECKS
+    result.type = Type::kMarking;
+#endif  // !V8_ENABLE_CHECKS
+    return Type::kMarking;
+  }
+#if defined(CPPGC_YOUNG_GENERATION)
+  result.slot_offset = reinterpret_cast<uintptr_t>(slot) - result.start;
+  result.value_offset = 0;
+#if V8_ENABLE_CHECKS
+  result.type = Type::kGenerational;
+#endif  // !V8_ENABLE_CHECKS
+  return Type::kGenerational;
+#else   // !CPPGC_YOUNG_GENERATION
+  return Type::kNone;
+#endif  // !CPPGC_YOUNG_GENERATION
+#endif  //  CPPGC_CAGED_HEAP
+  Type type = V8_LIKELY(!ProcessHeap::IsAnyIncrementalOrConcurrentMarking())
+                  ? Type::kNone
+                  : Type::kMarking;
+#if V8_ENABLE_CHECKS
+  result.type = type;
+#endif  // !V8_ENABLE_CHECKS
+  return type;
+}
+
+// static
+void WriteBarrier::DijkstraMarkingBarrier(const Result& result,
+                                          const void* object) {
+  CheckResult(Type::kMarking, result);
+#if defined(CPPGC_CAGED_HEAP)
+  // Caged heap already filters out sentinels.
+  DijkstraMarkingBarrierSlow(object);
+#else   // !CPPGC_CAGED_HEAP
+  DijkstraMarkingBarrierSlowWithSentinelCheck(object);
+#endif  // !CPPGC_CAGED_HEAP
+}
+
+// static
+void WriteBarrier::DijkstraMarkingBarrierRange(const Result& result,
+                                               HeapHandle& heap,
+                                               const void* first_element,
+                                               size_t element_size,
+                                               size_t number_of_elements,
+                                               TraceCallback trace_callback) {
+  CheckResult(Type::kMarking, result);
+  DijkstraMarkingBarrierRangeSlow(heap, first_element, element_size,
+                                  number_of_elements, trace_callback);
+}
+
+// static
+void WriteBarrier::SteeleMarkingBarrier(const Result& result,
+                                        const void* object) {
+  CheckResult(Type::kMarking, result);
+#if defined(CPPGC_CAGED_HEAP)
+  // Caged heap already filters out sentinels.
+  SteeleMarkingBarrierSlow(object);
+#else   // !CPPGC_CAGED_HEAP
+  SteeleMarkingBarrierSlowWithSentinelCheck(object);
+#endif  // !CPPGC_CAGED_HEAP
+}
+
+#if defined(CPPGC_YOUNG_GENERATION)
+// static
+void WriteBarrier::GenerationalBarrier(const Result& result, const void* slot) {
+  CheckResult(Type::kGenerational, result);
+  GenerationalBarrier(result.caged_heap(), slot, result.slot_offset,
+                      result.value_offset);
+}
+#endif  // !CPPGC_YOUNG_GENERATION
 
 }  // namespace internal
 }  // namespace cppgc
