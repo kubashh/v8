@@ -16,6 +16,23 @@
       "message": "Hi Mythri. I ran into this case, where CompileOptimized was called on a JSFunction f s.t. f-\u003eis_compiled() was false (but f-\u003eshared().is_compiled() was true).\n\nDue to the early exit, we didn\u0027t fetch and install the cached Code objects. I think the correct fix is to simply remove the early exit, and let GetOptimizedCode handle these cases. PTAL.",
       "revId": "53f24d67baa45135195c0ae60877d8bcf0ef5406",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f117f951_aa827f2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-24T09:43:42Z",
+      "side": 1,
+      "message": "Thanks! Nice catch. lgtm.",
+      "revId": "53f24d67baa45135195c0ae60877d8bcf0ef5406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
