@@ -16,6 +16,29 @@
       "message": "Ross, Leszek PTAL\n\nIt happened to me twice already where I created a scope which I didn\u0027t name (and therefore was a useless scope). This CL would guard against that.\n\nThis CL is more of a proof of concept/MVP with \"Guard\" classes. I have a bigger follow-up CL for \"Scope\" classes.",
       "revId": "2063e15c40311a91ea9153cd741c8ece4e8067ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eda99eaa_5393d44c",
+        "filename": "include/v8config.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-24T08:05:19Z",
+      "side": 1,
+      "message": "I believe this can be used in place of V8_WARN_UNUSED_RESULT too, maybe that should be defined in terms of V8_NODISCARD where available?",
+      "range": {
+        "startLine": 450,
+        "startChar": 3,
+        "endLine": 451,
+        "endChar": 25
+      },
+      "revId": "2063e15c40311a91ea9153cd741c8ece4e8067ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
