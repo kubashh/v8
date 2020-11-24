@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3e07537_e632d47e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-24T10:46:45Z",
+      "side": 1,
+      "message": "PTAL. This fixes one source of incompatiblity between inspector-test and v8_simple_inspector_fuzzer.",
+      "revId": "f320da6e28cc64cfca796c9c5564a831961ca18d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
