@@ -50,6 +50,24 @@
       "message": "This line is now executed conditionally, is this intended?",
       "revId": "45016626c6a51b07cef71ba3412c08251151ffd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab481e69_2e07b082",
+        "filename": "test/common/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-24T12:50:11Z",
+      "side": 1,
+      "message": "Yes. If this method returns false, the computed address is meaningless anyway, and will not be used by the caller.",
+      "parentUuid": "6cc00d65_02cb7206",
+      "revId": "45016626c6a51b07cef71ba3412c08251151ffd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
