@@ -16,6 +16,24 @@
       "message": "LGTM. I hope we can still figure out what\u0027s the problem with asm.js functions.",
       "revId": "28ce5b3ceb759a3db4213c05f894ea3b28022749",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe9fa678_72de3487",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2020-11-24T13:01:27Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "f6e68b2c_27f8fcb7",
+      "revId": "28ce5b3ceb759a3db4213c05f894ea3b28022749",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
