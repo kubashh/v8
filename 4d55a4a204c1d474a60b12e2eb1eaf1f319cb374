@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0511c2f0_09171cce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2020-11-24T16:08:36Z",
+      "side": 1,
+      "message": "I\u0027m not a committer in V8. Deferring to V8 infra folks.",
+      "revId": "4d55a4a204c1d474a60b12e2eb1eaf1f319cb374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
