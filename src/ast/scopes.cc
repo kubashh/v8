@@ -189,7 +189,7 @@ ClassScope::ClassScope(Isolate* isolate, Zone* zone,
         ast_value_factory, ast_value_factory->GetString(handle(name, isolate)),
         kNoSourcePosition);
     var->AllocateTo(VariableLocation::CONTEXT,
-                    Context::MIN_CONTEXT_SLOTS + index);
+                    Context::MIN_CONTEXT_EXTENDED_SLOTS + index);
   }
 }
 
