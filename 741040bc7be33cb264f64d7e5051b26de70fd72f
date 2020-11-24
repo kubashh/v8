@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c03da60_177f82f9",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T14:40:10Z",
+      "side": 1,
+      "message": "I understand where this comes from: Now we have the problem that we have 2 APIs doing the same thing:\n- cppgc::InitializeProcess()\n- cppgc::DefaultPlatform::InitializeProcess()\n\nSee suggestion below.",
+      "range": {
+        "startLine": 58,
+        "startChar": 14,
+        "endLine": 58,
+        "endChar": 31
+      },
+      "revId": "741040bc7be33cb264f64d7e5051b26de70fd72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3283a5a0_b4f996d8",
+        "filename": "src/heap/cppgc/default-platform.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T14:40:10Z",
+      "side": 1,
+      "message": "Can we move this into cppgc-sample? I think that should make it clear for somebody who looks at it that there\u0027s different initializers needed.",
+      "range": {
+        "startLine": 14,
+        "startChar": 22,
+        "endLine": 14,
+        "endChar": 39
+      },
+      "revId": "741040bc7be33cb264f64d7e5051b26de70fd72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
