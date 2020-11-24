@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "7189806ca5fcab5ee5793516f2b42ab39aba3d52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44a55c06_75d94dde",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-24T09:11:56Z",
+      "side": 1,
+      "message": "nit: primitive (here and below)",
+      "range": {
+        "startLine": 1427,
+        "startChar": 42,
+        "endLine": 1427,
+        "endChar": 51
+      },
+      "revId": "7189806ca5fcab5ee5793516f2b42ab39aba3d52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cccf0631_48d12472",
+        "filename": "test/inspector/isolate-data.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-24T09:11:56Z",
+      "side": 1,
+      "message": "any reason to not make these default to 0?",
+      "range": {
+        "startLine": 431,
+        "startChar": 71,
+        "endLine": 431,
+        "endChar": 77
+      },
+      "revId": "7189806ca5fcab5ee5793516f2b42ab39aba3d52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
