@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "45016626c6a51b07cef71ba3412c08251151ffd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90ae4c75_a662ce35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-24T12:45:01Z",
+      "side": 1,
+      "message": "LGTM with one question",
+      "revId": "45016626c6a51b07cef71ba3412c08251151ffd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cc00d65_02cb7206",
+        "filename": "test/common/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-24T12:45:01Z",
+      "side": 1,
+      "message": "This line is now executed conditionally, is this intended?",
+      "revId": "45016626c6a51b07cef71ba3412c08251151ffd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
