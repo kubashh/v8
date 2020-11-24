@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a81027a1_81867365",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-11-24T16:11:44Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe86c0d9_7e894730",
@@ -120,6 +137,30 @@
       "side": 1,
       "message": "Yeah, let\u0027s do that as follow up?",
       "parentUuid": "8f242aaf_8385e4ed",
+      "range": {
+        "startLine": 123,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 24
+      },
+      "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "184f86f5_a6b74890",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-11-24T16:11:44Z",
+      "side": 1,
+      "message": "Sure (sorry for forgetting lgtm)",
+      "parentUuid": "10bb3be2_0d5aa97c",
       "range": {
         "startLine": 123,
         "startChar": 6,
