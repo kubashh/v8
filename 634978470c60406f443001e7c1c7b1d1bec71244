@@ -87,6 +87,30 @@
       },
       "revId": "634978470c60406f443001e7c1c7b1d1bec71244",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77632517_6a235f1e",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T16:46:56Z",
+      "side": 1,
+      "message": "Refactored using template switches. Also encapsulated into a policy object.",
+      "parentUuid": "419c790f_04d105d8",
+      "range": {
+        "startLine": 144,
+        "startChar": 9,
+        "endLine": 144,
+        "endChar": 21
+      },
+      "revId": "634978470c60406f443001e7c1c7b1d1bec71244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
