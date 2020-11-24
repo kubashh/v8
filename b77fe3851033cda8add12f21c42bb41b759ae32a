@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccf42ddf_cfc39830",
+        "filename": "include/cppgc/heap-consistency.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T09:19:46Z",
+      "side": 1,
+      "message": "Done. ptal",
+      "parentUuid": "226cebcd_cf7e1380",
+      "range": {
+        "startLine": 76,
+        "startChar": 43,
+        "endLine": 76,
+        "endChar": 66
+      },
+      "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3468066c_7f07c038",
@@ -129,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "629ab52d_580a7bbd",
+        "filename": "include/cppgc/heap.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T09:19:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3468066c_7f07c038",
+      "range": {
+        "startLine": 141,
+        "startChar": 5,
+        "endLine": 141,
+        "endChar": 37
+      },
+      "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a047c10e_0e958820",
@@ -142,6 +190,30 @@
       "writtenOn": "2020-11-23T18:19:32Z",
       "side": 1,
       "message": "This seems to be used in multiple place. Can we introduce a helper for it?",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 55
+      },
+      "revId": "b77fe3851033cda8add12f21c42bb41b759ae32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62a4197c_2335fcc3",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T09:19:46Z",
+      "side": 1,
+      "message": "Done. The block generates multiple values that are used below though. I made sure that the approach here gets optimized away. (returning struct/std::tuple didn\u0027t)",
+      "parentUuid": "a047c10e_0e958820",
       "range": {
         "startLine": 28,
         "startChar": 4,

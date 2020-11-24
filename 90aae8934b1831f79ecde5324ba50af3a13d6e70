@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d0b90e2_17de529b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T09:19:46Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "90aae8934b1831f79ecde5324ba50af3a13d6e70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d66bb386_10c14d69",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-24T09:19:46Z",
+      "side": 1,
+      "message": "fyi: The GenerationalBarrier() doesn\u0027t work well for the range-based and Steele barrier because we don\u0027t know the actual values and thus can only filter based on slot.",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 23
+      },
+      "revId": "90aae8934b1831f79ecde5324ba50af3a13d6e70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
