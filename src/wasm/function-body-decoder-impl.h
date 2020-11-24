@@ -989,7 +989,7 @@ struct ControlBase : public PcForErrors<validate> {
   F(Unreachable)                                                               \
   F(Select, const Value& cond, const Value& fval, const Value& tval,           \
     Value* result)                                                             \
-  F(Br, Control* target)                                                       \
+  F(BrOrRet, uint32_t depth)                                                   \
   F(BrIf, const Value& cond, uint32_t depth)                                   \
   F(BrTable, const BranchTableImmediate<validate>& imm, const Value& key)      \
   F(Else, Control* if_block)                                                   \
@@ -2630,12 +2630,8 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     Control* c = control_at(imm.depth);
     TypeCheckBranchResult check_result = TypeCheckBranch(c, false);
     if (V8_LIKELY(check_result == kReachableBranch)) {
-      if (imm.depth == control_.size() - 1) {
-        DoReturn();
-      } else {
-        CALL_INTERFACE(Br, c);
-        c->br_merge()->reached = true;
-      }
+      CALL_INTERFACE(BrOrRet, imm.depth);
+      c->br_merge()->reached = true;
     } else if (check_result == kInvalidStack) {
       return 0;
     }
