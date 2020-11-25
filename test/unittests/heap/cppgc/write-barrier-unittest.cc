@@ -19,7 +19,7 @@ namespace internal {
 
 namespace {
 
-class IncrementalMarkingScope {
+class V8_NODISCARD IncrementalMarkingScope {
  public:
   explicit IncrementalMarkingScope(MarkerBase* marker) : marker_(marker) {}
 
@@ -38,7 +38,8 @@ class IncrementalMarkingScope {
 
 constexpr Marker::MarkingConfig IncrementalMarkingScope::kIncrementalConfig;
 
-class ExpectWriteBarrierFires final : private IncrementalMarkingScope {
+class V8_NODISCARD ExpectWriteBarrierFires final
+    : private IncrementalMarkingScope {
  public:
   ExpectWriteBarrierFires(MarkerBase* marker,
                           std::initializer_list<void*> objects)
@@ -88,7 +89,8 @@ class ExpectWriteBarrierFires final : private IncrementalMarkingScope {
   std::vector<HeapObjectHeader*> headers_;
 };
 
-class ExpectNoWriteBarrierFires final : private IncrementalMarkingScope {
+class V8_NODISCARD ExpectNoWriteBarrierFires final
+    : private IncrementalMarkingScope {
  public:
   ExpectNoWriteBarrierFires(MarkerBase* marker,
                             std::initializer_list<void*> objects)

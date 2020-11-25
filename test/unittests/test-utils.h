@@ -58,7 +58,7 @@ class WithIsolateMixin : public TMixin {
 };
 
 template <typename TMixin>
-class WithIsolateScopeMixin : public TMixin {
+class V8_NODISCARD WithIsolateScopeMixin : public TMixin {
  public:
   WithIsolateScopeMixin()
       : isolate_scope_(this->v8_isolate()), handle_scope_(this->v8_isolate()) {}
