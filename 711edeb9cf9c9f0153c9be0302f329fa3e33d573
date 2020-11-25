@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67671c1e_a7b49fde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-25T13:54:44Z",
+      "side": 1,
+      "message": "lgtm with comments for the bits assigned to me.",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d6a7436_1bf39b67",
@@ -48,6 +65,75 @@
       "writtenOn": "2020-11-25T11:57:21Z",
       "side": 1,
       "message": "I\u0027m a bit wary about changing the API but it seems like a sound change.",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba3492fc_4f8a7661",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-25T13:54:44Z",
+      "side": 1,
+      "message": "drive-by: this isn\u0027t true anymore, right? Can we remove this comment and the `virtual` on the destructor?",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 62
+      },
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b8dc42_cfa257bb",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-25T13:54:44Z",
+      "side": 1,
+      "message": "no need here, this isn\u0027t a scope class",
+      "range": {
+        "startLine": 61,
+        "startChar": 6,
+        "endLine": 61,
+        "endChar": 18
+      },
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5b6c75e_e1910420",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-25T13:54:44Z",
+      "side": 1,
+      "message": "This is a scope class though.",
+      "range": {
+        "startLine": 233,
+        "startChar": 6,
+        "endLine": 233,
+        "endChar": 15
+      },
       "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
