@@ -22,6 +22,30 @@
       },
       "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17361c35_e3feb3b9",
+        "filename": "test/unittests/heap/cppgc/minor-gc-unittest.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-25T17:07:31Z",
+      "side": 0,
+      "message": "Because we CHECK in the new code that no barrier needs to emitted and don\u0027t even call into a barrier, so we had essentially\n  const size_t set_size_before_barrier \u003d set.size();\n  EXPECT_EQ(WeShouldNotEmitABarrier());\n  EXPECT_EQ(set_size_before_barrier, set.size());\n\nI think that\u0027s okay because the barrier call is different from the call that asks whether we want a barrier.",
+      "parentUuid": "3500e870_5b66bd03",
+      "range": {
+        "startLine": 213,
+        "startChar": 3,
+        "endLine": 213,
+        "endChar": 49
+      },
+      "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
