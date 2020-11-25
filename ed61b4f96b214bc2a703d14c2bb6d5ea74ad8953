@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ad4cfbd_c992f756",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbd4e9c7_f8750467",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 34
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a02adafb_a16c8bf7",
@@ -71,6 +95,24 @@
       "writtenOn": "2020-11-25T11:09:58Z",
       "side": 1,
       "message": "I think Unprepare is not a word. UndoPrepare... maybe? PrepareBytecodeForRegularExecution?\n\nOr UninstallDebugBytecode/InstallDebugBytecode.",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9c260ff_33ccb193",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a02adafb_a16c8bf7",
       "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +134,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96cf53b9_babca101",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "289ad2e3_68ba0562",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f7509f2_3710b8dc",
@@ -105,6 +165,24 @@
       "writtenOn": "2020-11-25T10:20:01Z",
       "side": 1,
       "message": "Taking the SFI via \"this\" isn\u0027t GC-safe. Please pass Handle\u003cSharedFunctionInfo\u003e as argument and make the function static.",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c126181_6049c0c9",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f7509f2_3710b8dc",
       "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -132,6 +210,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8338204_19fb9358",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80d730e2_5627dfc6",
+      "range": {
+        "startLine": 688,
+        "startChar": 0,
+        "endLine": 688,
+        "endChar": 33
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "249c7681_f35dc56d",
@@ -145,6 +247,24 @@
       "writtenOn": "2020-11-25T11:09:58Z",
       "side": 1,
       "message": "How about putting this chunk of code into an extra { } block, for emphasis.",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f5c6605_08355815",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "249c7681_f35dc56d",
       "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -166,6 +286,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab2965ee_13f4dfc9",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "397938df_94c3a402",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b12b9a8a_fc67f00b",
@@ -179,6 +317,30 @@
       "writtenOn": "2020-11-25T11:31:26Z",
       "side": 1,
       "message": "Nit: ExpectSharedFunctionInfoState",
+      "range": {
+        "startLine": 31,
+        "startChar": 5,
+        "endLine": 31,
+        "endChar": 33
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee52b805_35d2b3d9",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b12b9a8a_fc67f00b",
       "range": {
         "startLine": 31,
         "startChar": 5,
@@ -212,6 +374,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f16d177d_0470634b",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "574851ff_529bb843",
+      "range": {
+        "startLine": 33,
+        "startChar": 9,
+        "endLine": 33,
+        "endChar": 13
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02c9a17f_0544567f",
@@ -225,6 +411,30 @@
       "writtenOn": "2020-11-25T11:31:26Z",
       "side": 1,
       "message": "Nit: script_or_debug_info",
+      "range": {
+        "startLine": 34,
+        "startChar": 13,
+        "endLine": 34,
+        "endChar": 19
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e7a36b8_a3f075d6",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02c9a17f_0544567f",
       "range": {
         "startLine": 34,
         "startChar": 13,
@@ -258,6 +468,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4b655e6_dcf9eb53",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b26df14d_43c19ada",
+      "range": {
+        "startLine": 95,
+        "startChar": 18,
+        "endLine": 95,
+        "endChar": 41
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c387996_19997435",
@@ -271,6 +505,24 @@
       "writtenOn": "2020-11-25T11:31:26Z",
       "side": 1,
       "message": "I assume those are leftovers.",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ac791b3_aac922eb",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0c387996_19997435",
       "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -292,6 +544,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c127622_3a98c04e",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33cd5556_e30a3323",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf3a3349_7ccceb10",
@@ -309,6 +579,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e641541_5821e153",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "I don\u0027t know, tbh. Removed the extra scope.",
+      "parentUuid": "cf3a3349_7ccceb10",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7f65a36_b5f82f87",
@@ -322,6 +610,24 @@
       "writtenOn": "2020-11-25T11:31:26Z",
       "side": 1,
       "message": "Can you CHECK the result?",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20f3349a_aebec26d",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7f65a36_b5f82f87",
       "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
