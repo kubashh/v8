@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a978503_23c9cb07",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1326190
+      },
+      "writtenOn": "2020-11-25T20:23:59Z",
+      "side": 1,
+      "message": "Yes, it\u0027s up to the embedder to report failures resulting from import assertions (except for duplicate assertion keys, which is a JS parse error).\n\nIf an assertion has an invalid value, e.g. import \"./foo\" assert { type: \"notAType\" }; then the host will detect and report the error in the same place where invalid module specifiers are reported, in JSModuleScript::Create: https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/script/js_module_script.cc;l\u003d85?q\u003djsmodulescript::create\u0026ss\u003dchromium\n\nIf the MIME type of the fetched module doesn\u0027t match the asserted type, then the failure will be reported around ModuleScriptFetcher::WasModuleLoadSuccessful, in the same manner that errors are reported for module fetches that 404 or don\u0027t have a JS MIME type: https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/loader/modulescript/module_script_fetcher.cc;l\u003d70?q\u003dwasmoduleloadsuccessful\u0026ss\u003dchromium\nSee also the end of that function where the console error string is generated.\n\nFuture assertions should follow a similar pattern: invalid assertion values will cause an immediate failure in JSModuleScript::Create, and issues that depend on properties of the fetched module will report failure later in ModuleScriptFetcher::WasModuleLoadSuccessful.\n\nI can\u0027t think of any case where import assertions failing would be part of normal operation.  Something that causes the module graph to fail to load seems like something we\u0027d always want to report.",
+      "parentUuid": "38cb32e9_ad9507b9",
+      "range": {
+        "startLine": 1637,
+        "startChar": 10,
+        "endLine": 1637,
+        "endChar": 28
+      },
+      "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d161e643_452f8166",
@@ -71,6 +95,30 @@
       "writtenOn": "2020-11-25T12:42:27Z",
       "side": 1,
       "message": "Nit: this style would be more common:\nWhateverType callback_without_import_assertions \u003d nullptr;\n\n  has_pending_exception \u003d !i::Module::Instantiate(\n      isolate, Utils::OpenHandle(this), context, callback_with_import_assertions,\n      callback_without_import_assertions);",
+      "range": {
+        "startLine": 2399,
+        "startChar": 0,
+        "endLine": 2401,
+        "endChar": 54
+      },
+      "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4a2b8bf_136f8a12",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2401,
+      "author": {
+        "id": 1326190
+      },
+      "writtenOn": "2020-11-25T20:23:59Z",
+      "side": 1,
+      "message": "Changed this here.  Making the corresponding change in the version of Module::InstantiateModule below doesn\u0027t work because the compiler complains about the use of the deprecated ResolveCallback even though it\u0027s just nullptr, so I\u0027ll still just pass nullptr directly in that version.",
+      "parentUuid": "d161e643_452f8166",
       "range": {
         "startLine": 2399,
         "startChar": 0,
@@ -106,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab8a0273_11155e2f",
+        "filename": "src/objects/module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1326190
+      },
+      "writtenOn": "2020-11-25T20:23:59Z",
+      "side": 1,
+      "message": "SyntheticModule::PrepareInstantiate doesn\u0027t use the callback, so I deleted the parameter instead of switching the type to ResolveModuleCallback.\n\nSynthetic modules don\u0027t have imports; they are always leaf nodes in the module graph, so they never need to use the HostResolveImportedModule to resolve their requested modules from the host.  The fact that this unused parameter exists was probably a copy/paste oversight of mine back in https://chromium-review.googlesource.com/c/v8/v8/+/1626829.",
+      "parentUuid": "691980e9_d557eb36",
+      "range": {
+        "startLine": 220,
+        "startChar": 11,
+        "endLine": 220,
+        "endChar": 46
+      },
+      "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78765244_069548fb",
         "filename": "src/objects/source-text-module.cc",
         "patchSetId": 8
@@ -117,6 +189,30 @@
       "writtenOn": "2020-11-25T12:42:27Z",
       "side": 1,
       "message": "Nit: DCHECK_NULL\n\nor you might want\n\nDCHECK_EQ(callback !\u003d nullptr, callback_without_import_assertions \u003d\u003d nullptr); at the beginning of the func.",
+      "range": {
+        "startLine": 327,
+        "startChar": 6,
+        "endLine": 327,
+        "endChar": 15
+      },
+      "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e80bdb6_cba882df",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1326190
+      },
+      "writtenOn": "2020-11-25T20:23:59Z",
+      "side": 1,
+      "message": "Changed it to the latter.",
+      "parentUuid": "78765244_069548fb",
       "range": {
         "startLine": 327,
         "startChar": 6,
