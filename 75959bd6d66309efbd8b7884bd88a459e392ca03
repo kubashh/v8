@@ -1,0 +1,180 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8423d638_d774d4ed",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "It\u0027s super confusing that this is using SetDebugBytecodeArray, since this is not the debug bytecode array. Can you rewrite this more directly?",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a19db8f_707a915e",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "Do we still need/want the torque-generated ones?",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f35e80_01ec0e13",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "Are we planning to _not_ call this from the background thread?",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d8858b_2c96775e",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "Handle\u003cBytecodeArray\u003e original_bytecode_array(\n    shared-\u003eGetBytecodeArray(), isolate);",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3f41b43_cf54e396",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "Please move this into the extra block.",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "decf5a8a_f93e52f7",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "ReadOnlyRoots(isolate).undefined_value()",
+      "range": {
+        "startLine": 701,
+        "startChar": 8,
+        "endLine": 701,
+        "endChar": 46
+      },
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e088d253_ba5750a2",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "I don\u0027t see how the else-branch does what the function name suggests.",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13dc549f_d83c37d5",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "Please make that the first thing.",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95e6c94d_b6622e8d",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "This should be done either here or in the caller, not both. Ideally here so that UninstallDebugBytecode is symmetric to InstallDebugBytecode.",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12c51e5d_ee3b0065",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T16:14:33Z",
+      "side": 1,
+      "message": "Please add some documentation for these two.",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
