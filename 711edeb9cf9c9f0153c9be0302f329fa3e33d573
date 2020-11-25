@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3edbd9bb_e2afe41a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-25T11:57:21Z",
+      "side": 1,
+      "message": "Since the CL changed classes on several files, I split it for specific owners. Feel free to re-assign specific files/folders. \n\nRoss PTAL\ninclude/v8.h \nsrc/api, test/unittests/api\nsrc/asmjs\nsrc/common\nsrc/d8\nsrc/debug\nsrc/diagnostics\nsrc/execution\nsrc/inspector\nsrc/libplatform\nsrc/regexp\ntools/v8windbg\n\nLeszek PTAL\nsrc/ast\nsrc/codegen\nsrc/interpreter, test/cctest/interpreter\nsrc/logging, test/unittests/logging\nsrc/objects\nsrc/parsing\nsrc/runtime\nsrc/snapshot\nsrc/utils\ntest/cctest (not subfolders)\ntest/common (not subfolders)\ntest/unittests (not subfolders)\n\nUlan PTAL\nsrc/handles\nsrc/heap (minus cppgc), test/cctest/heap, test/unittests/heap\nsrc/profiler\n\nJakob PTAL\nsrc/wasm, test/common/wasm, test/fuzzer\n\nTobias PTAL\nsrc/compiler, test/cctest/compiler\nsrc/torque\n\nMichael PTAL\nsrc/heap/cppgc\ntest/unittests/heap/cppgc",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d6a7436_1bf39b67",
+        "filename": "src/api/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-25T11:57:21Z",
+      "side": 1,
+      "message": "I\u0027m a bit wary about changing the API but it seems like a sound change.",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
