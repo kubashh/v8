@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0214475a_bcc4c3dc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-25T11:48:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e78abd7b_6bb685ef",
+      "range": {
+        "startLine": 14,
+        "startChar": 15,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "c03c7770d508660cf771280ecc52d322780cd794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "43f832d8_93a3233b",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -37,6 +61,24 @@
       "writtenOn": "2020-11-25T11:37:32Z",
       "side": 1,
       "message": "I don\u0027t see any src/debug changes in PS2?",
+      "revId": "c03c7770d508660cf771280ecc52d322780cd794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56a59918_c0a2937f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-25T11:48:14Z",
+      "side": 1,
+      "message": "Yeah, sorry, I was confused. Looking at this CL again, I thought the src/debug change was just an unrelated minor refactoring, and thought I push it to the next CL instead (where more code in src/debug needs to be touched anyway).\nIt turned out it was not unrelated, so all bots turned red 😊\n\nI now reverted to PS1, so PTAnL at PS3. Sorry for the trouble.",
+      "parentUuid": "43f832d8_93a3233b",
       "revId": "c03c7770d508660cf771280ecc52d322780cd794",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
