@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e6edbdc_ba507ae3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2020-11-25T18:05:48Z",
+      "side": 1,
+      "message": "yes, we are going to implement Liftoff for s390 and ppc.",
+      "parentUuid": "7a0a3c42_f1c85789",
+      "revId": "c913efeb1f85037e97326a2959c7f1ef22358902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b324c928_7a4965df",
