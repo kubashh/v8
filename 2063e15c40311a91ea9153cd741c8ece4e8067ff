@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "264ed928_c20f7d1f",
+        "filename": "include/v8config.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-25T10:40:17Z",
+      "side": 1,
+      "message": "Sure. Are you okay with it being a follow-up CL?",
+      "parentUuid": "eda99eaa_5393d44c",
+      "range": {
+        "startLine": 450,
+        "startChar": 3,
+        "endLine": 451,
+        "endChar": 25
+      },
+      "revId": "2063e15c40311a91ea9153cd741c8ece4e8067ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dffbe52b_2953b965",
         "filename": "include/v8config.h",
         "patchSetId": 5
@@ -71,6 +95,24 @@
       "writtenOn": "2020-11-24T10:16:46Z",
       "side": 1,
       "message": "Could we undef this just above the \"// Helper macros\" section (i.e., line 360 or so)",
+      "revId": "2063e15c40311a91ea9153cd741c8ece4e8067ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7296a8b_357217ca",
+        "filename": "include/v8config.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-11-25T10:40:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dffbe52b_2953b965",
       "revId": "2063e15c40311a91ea9153cd741c8ece4e8067ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
