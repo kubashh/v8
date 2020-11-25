@@ -15,6 +15,35 @@ namespace wasm {
 
 namespace liftoff {
 
+static constexpr Condition LiftoffConditionToCondition(
+    LiftoffCondition liftoff_cond) {
+  switch (liftoff_cond) {
+    case kEqual:
+      return eq;
+    case kUnequal:
+      return ne;
+    case kSignedLessThan:
+      return lt;
+    case kSignedLessEqual:
+      return le;
+    case kSignedGreaterThan:
+      return gt;
+    case kSignedGreaterEqual:
+      return ge;
+    case kUnsignedLessThan:
+      return lo;
+    case kUnsignedLessEqual:
+      return ls;
+    case kUnsignedGreaterThan:
+      return hi;
+    case kUnsignedGreaterEqual:
+      return hs;
+    default:
+      return static_cast<Condition>(-1);
+  }
+  return static_cast<Condition>(-1);
+}
+
 // Liftoff Frames.
 //
 //  slot      Frame
@@ -1415,9 +1444,11 @@ void LiftoffAssembler::emit_jump(Label* label) { B(label); }
 
 void LiftoffAssembler::emit_jump(Register target) { Br(target); }
 
-void LiftoffAssembler::emit_cond_jump(Condition cond, Label* label,
-                                      ValueType type, Register lhs,
-                                      Register rhs) {
+void LiftoffAssembler::emit_cond_jump(LiftoffCondition liftoff_cond,
+                                      Label* label, ValueType type,
+                                      Register lhs, Register rhs) {
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  DCHECK_NE(cond, -1);
   switch (type.kind()) {
     case ValueType::kI32:
       if (rhs.is_valid()) {
@@ -1444,8 +1475,11 @@ void LiftoffAssembler::emit_i32_eqz(Register dst, Register src) {
   Cset(dst.W(), eq);
 }
 
-void LiftoffAssembler::emit_i32_set_cond(Condition cond, Register dst,
-                                         Register lhs, Register rhs) {
+void LiftoffAssembler::emit_i32_set_cond(LiftoffCondition liftoff_cond,
+                                         Register dst, Register lhs,
+                                         Register rhs) {
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  DCHECK_NE(cond, -1);
   Cmp(lhs.W(), rhs.W());
   Cset(dst.W(), cond);
 }
@@ -1455,16 +1489,20 @@ void LiftoffAssembler::emit_i64_eqz(Register dst, LiftoffRegister src) {
   Cset(dst.W(), eq);
 }
 
-void LiftoffAssembler::emit_i64_set_cond(Condition cond, Register dst,
-                                         LiftoffRegister lhs,
+void LiftoffAssembler::emit_i64_set_cond(LiftoffCondition liftoff_cond,
+                                         Register dst, LiftoffRegister lhs,
                                          LiftoffRegister rhs) {
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  DCHECK_NE(cond, -1);
   Cmp(lhs.gp().X(), rhs.gp().X());
   Cset(dst.W(), cond);
 }
 
-void LiftoffAssembler::emit_f32_set_cond(Condition cond, Register dst,
-                                         DoubleRegister lhs,
+void LiftoffAssembler::emit_f32_set_cond(LiftoffCondition liftoff_cond,
+                                         Register dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  DCHECK_NE(cond, -1);
   Fcmp(lhs.S(), rhs.S());
   Cset(dst.W(), cond);
   if (cond != ne) {
@@ -1473,9 +1511,11 @@ void LiftoffAssembler::emit_f32_set_cond(Condition cond, Register dst,
   }
 }
 
-void LiftoffAssembler::emit_f64_set_cond(Condition cond, Register dst,
-                                         DoubleRegister lhs,
+void LiftoffAssembler::emit_f64_set_cond(LiftoffCondition liftoff_cond,
+                                         Register dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  DCHECK_NE(cond, -1);
   Fcmp(lhs.D(), rhs.D());
   Cset(dst.W(), cond);
   if (cond != ne) {

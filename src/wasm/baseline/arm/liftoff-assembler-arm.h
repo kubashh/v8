@@ -16,6 +16,35 @@ namespace wasm {
 
 namespace liftoff {
 
+static constexpr Condition LiftoffConditionToCondition(
+    LiftoffCondition liftoff_cond) {
+  switch (liftoff_cond) {
+    case kEqual:
+      return eq;
+    case kUnequal:
+      return ne;
+    case kSignedLessThan:
+      return lt;
+    case kSignedLessEqual:
+      return le;
+    case kSignedGreaterThan:
+      return gt;
+    case kSignedGreaterEqual:
+      return ge;
+    case kUnsignedLessThan:
+      return lo;
+    case kUnsignedLessEqual:
+      return ls;
+    case kUnsignedGreaterThan:
+      return hi;
+    case kUnsignedGreaterEqual:
+      return hs;
+    default:
+      return static_cast<Condition>(-1);
+  }
+  return static_cast<Condition>(-1);
+}
+
 //  half
 //  slot        Frame
 //  -----+--------------------+---------------------------
@@ -95,7 +124,7 @@ inline Register CalculateActualAddress(LiftoffAssembler* assm,
   return actual_addr_reg;
 }
 
-inline Condition MakeUnsigned(Condition cond) {
+inline LiftoffCondition MakeUnsigned(LiftoffCondition cond) {
   switch (cond) {
     case kSignedLessThan:
       return kUnsignedLessThan;
@@ -2124,9 +2153,11 @@ void LiftoffAssembler::emit_jump(Label* label) { b(label); }
 
 void LiftoffAssembler::emit_jump(Register target) { bx(target); }
 
-void LiftoffAssembler::emit_cond_jump(Condition cond, Label* label,
-                                      ValueType type, Register lhs,
-                                      Register rhs) {
+void LiftoffAssembler::emit_cond_jump(LiftoffCondition liftoff_cond,
+                                      Label* label, ValueType type,
+                                      Register lhs, Register rhs) {
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  DCHECK_NE(cond, -1);
   DCHECK_EQ(type, kWasmI32);
   if (rhs == no_reg) {
     cmp(lhs, Operand(0));
@@ -2141,8 +2172,11 @@ void LiftoffAssembler::emit_i32_eqz(Register dst, Register src) {
   mov(dst, Operand(dst, LSR, kRegSizeInBitsLog2));
 }
 
-void LiftoffAssembler::emit_i32_set_cond(Condition cond, Register dst,
-                                         Register lhs, Register rhs) {
+void LiftoffAssembler::emit_i32_set_cond(LiftoffCondition liftoff_cond,
+                                         Register dst, Register lhs,
+                                         Register rhs) {
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  DCHECK_NE(cond, -1);
   cmp(lhs, rhs);
   mov(dst, Operand(0), LeaveCC);
   mov(dst, Operand(1), LeaveCC, cond);
@@ -2154,13 +2188,17 @@ void LiftoffAssembler::emit_i64_eqz(Register dst, LiftoffRegister src) {
   mov(dst, Operand(dst, LSR, 5));
 }
 
-void LiftoffAssembler::emit_i64_set_cond(Condition cond, Register dst,
-                                         LiftoffRegister lhs,
+void LiftoffAssembler::emit_i64_set_cond(LiftoffCondition liftoff_cond,
+                                         Register dst, LiftoffRegister lhs,
                                          LiftoffRegister rhs) {
   // For signed i64 comparisons, we still need to use unsigned comparison for
   // the low word (the only bit carrying signedness information is the MSB in
   // the high word).
-  Condition unsigned_cond = liftoff::MakeUnsigned(cond);
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  Condition unsigned_cond =
+      liftoff::LiftoffConditionToCondition(liftoff::MakeUnsigned(liftoff_cond));
+  DCHECK_NE(cond, -1);
+  DCHECK_NE(unsigned_cond, -1);
   Label set_cond;
   Label cont;
   LiftoffRegister dest = LiftoffRegister(dst);
@@ -2172,7 +2210,7 @@ void LiftoffAssembler::emit_i64_set_cond(Condition cond, Register dst,
   // equal, compare the low word and use that for set_cond.
   cmp(lhs.high_gp(), rhs.high_gp());
   if (unsigned_cond == cond) {
-    cmp(lhs.low_gp(), rhs.low_gp(), kEqual);
+    cmp(lhs.low_gp(), rhs.low_gp(), eq);
     if (!speculative_move) {
       mov(dst, Operand(0));
     }
@@ -2196,9 +2234,11 @@ void LiftoffAssembler::emit_i64_set_cond(Condition cond, Register dst,
   }
 }
 
-void LiftoffAssembler::emit_f32_set_cond(Condition cond, Register dst,
-                                         DoubleRegister lhs,
+void LiftoffAssembler::emit_f32_set_cond(LiftoffCondition liftoff_cond,
+                                         Register dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  DCHECK_NE(cond, -1);
   VFPCompareAndSetFlags(liftoff::GetFloatRegister(lhs),
                         liftoff::GetFloatRegister(rhs));
   mov(dst, Operand(0), LeaveCC);
@@ -2209,9 +2249,11 @@ void LiftoffAssembler::emit_f32_set_cond(Condition cond, Register dst,
   }
 }
 
-void LiftoffAssembler::emit_f64_set_cond(Condition cond, Register dst,
-                                         DoubleRegister lhs,
+void LiftoffAssembler::emit_f64_set_cond(LiftoffCondition liftoff_cond,
+                                         Register dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  DCHECK_NE(cond, -1);
   VFPCompareAndSetFlags(lhs, rhs);
   mov(dst, Operand(0), LeaveCC);
   mov(dst, Operand(1), LeaveCC, cond);
