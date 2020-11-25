@@ -1,0 +1,297 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfddfd0d_df2c16b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "Thanks for all the work. I got a bunch of comments and open questions to discuss.",
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "521b502c_e5c3c902",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2724,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "This seems not necessary.",
+      "range": {
+        "startLine": 2724,
+        "startChar": 10,
+        "endLine": 2724,
+        "endChar": 25
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5f1a87e_aa8ea6f4",
+        "filename": "src/compiler/graph-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "I think this is supposed to be called by Reduce internally, right? Maybe we should have this in the private section then.",
+      "range": {
+        "startLine": 62,
+        "startChar": 2,
+        "endLine": 62,
+        "endChar": 75
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b831f090_51e3d0cf",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "I think we should disable copying for this one.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 18
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceba0c78_96c54496",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "see below",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 3
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3a96336_e662ad52",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "You are basically handling the replacement case here. I think we should define what it means for a node to \"change\" and to \"be replaced\" and whether we actually want to handle those in different callbacks. In other words: Should we have a OnNodeChange() which is called when the node changes (but id stays the same, how often das this actually happen?) and another OnNodeReplaced() which is called when the node is lowered to another node (different id). I think it could be confusing when writing tests to know, which one to use without understanding the internals.\n\nMy current opinion is that it is best to just provide a single callback (OnNodeChanged) which is invoked for both cases (which I guess is done here) and then you can remove the TODO for OnNodeReplaced and related stuff.",
+      "range": {
+        "startLine": 144,
+        "startChar": 6,
+        "endLine": 144,
+        "endChar": 33
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d0cd8c_e0929f6e",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "new_node?",
+      "range": {
+        "startLine": 146,
+        "startChar": 22,
+        "endLine": 146,
+        "endChar": 30
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ea7c535_3492cc71",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "I think we should also change this (at least the name). When do we expect this to be called? When a node is marked as dead? When it is finally trimmed from the graph? How useful is this even for a test?",
+      "range": {
+        "startLine": 151,
+        "startChar": 7,
+        "endLine": 151,
+        "endChar": 20
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a99baeba_4bc8d69d",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "If we keep Deleted-handler, we could remove the node from the observations_ map here.",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 45
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "629ea52f_a2d5f7e7",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "What do you think about having this in release builds?\nIf we disable the feature in non-debug builds, maybe we should also #ifdef DEBUG all the other stuff. Wdyt?",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 49
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcb14052_a3f3d18e",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "I\u0027m curious how robust this is, I\u0027m afraid people are so used to using NodeProperties::ChangeOp that future changes might reintroduce this without us noting. We should think about how to prevent this or if here is another option to keep using NodeProperties::ChangeOp. Let\u0027s discuss that in a meeting.",
+      "range": {
+        "startLine": 782,
+        "startChar": 4,
+        "endLine": 782,
+        "endChar": 31
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c50c922b_40df0844",
+        "filename": "test/cctest/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "Do you think we should keep this in this CL?",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 130,
+        "endChar": 39
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a24fd134_c846b11c",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-25T14:23:29Z",
+      "side": 1,
+      "message": "I noticed you relaxed a bunch of cases here. Didn\u0027t the original (commented) cases work as they were?",
+      "range": {
+        "startLine": 163,
+        "startChar": 2,
+        "endLine": 206,
+        "endChar": 51
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
