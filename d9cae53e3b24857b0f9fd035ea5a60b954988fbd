@@ -16,6 +16,115 @@
       "message": "Here\u0027s the next one for import assertions.  Thanks!",
       "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a86d75f_2818bd04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-25T12:42:27Z",
+      "side": 1,
+      "message": "lgtm w/ comments. cbruni@ will need to lgtm the api changes.",
+      "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38cb32e9_ad9507b9",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-25T12:42:27Z",
+      "side": 1,
+      "message": "Not related to this CL, but in general: how does the error reporting for failed import assertions work? The same way as for modules which are not found? (I.e., here we don\u0027t know why we didn\u0027t get a module back, and then it\u0027s up to the embedder to report that error.) Is that correct?\n\nI was also wondering if import assertions failing might ever be part of \"normal operation\", meaning something we don\u0027t want to report to the console. Guess not?",
+      "range": {
+        "startLine": 1637,
+        "startChar": 10,
+        "endLine": 1637,
+        "endChar": 28
+      },
+      "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d161e643_452f8166",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2401,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-25T12:42:27Z",
+      "side": 1,
+      "message": "Nit: this style would be more common:\nWhateverType callback_without_import_assertions \u003d nullptr;\n\n  has_pending_exception \u003d !i::Module::Instantiate(\n      isolate, Utils::OpenHandle(this), context, callback_with_import_assertions,\n      callback_without_import_assertions);",
+      "range": {
+        "startLine": 2399,
+        "startChar": 0,
+        "endLine": 2401,
+        "endChar": 54
+      },
+      "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "691980e9_d557eb36",
+        "filename": "src/objects/module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-25T12:42:27Z",
+      "side": 1,
+      "message": "Why are you dropping the callback here?",
+      "range": {
+        "startLine": 220,
+        "startChar": 11,
+        "endLine": 220,
+        "endChar": 46
+      },
+      "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78765244_069548fb",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-11-25T12:42:27Z",
+      "side": 1,
+      "message": "Nit: DCHECK_NULL\n\nor you might want\n\nDCHECK_EQ(callback !\u003d nullptr, callback_without_import_assertions \u003d\u003d nullptr); at the beginning of the func.",
+      "range": {
+        "startLine": 327,
+        "startChar": 6,
+        "endLine": 327,
+        "endChar": 15
+      },
+      "revId": "d9cae53e3b24857b0f9fd035ea5a60b954988fbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
