@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32fdb4a5_efaa6d83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-25T14:40:36Z",
+      "side": 1,
+      "message": "*/cppgc/* lgtm\n\nMade this mistake a few times actually :) ",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d6a7436_1bf39b67",
