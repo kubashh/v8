@@ -912,9 +912,9 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Module> referrer,
     return MaybeLocal<Module>();
   }
   ScriptOrigin origin(
-      String::NewFromUtf8(isolate, file_name.c_str()).ToLocalChecked(),
-      Local<Integer>(), Local<Integer>(), Local<Boolean>(), Local<Integer>(),
-      Local<Value>(), Local<Boolean>(), Local<Boolean>(), True(isolate));
+      String::NewFromUtf8(isolate, file_name.c_str()).ToLocalChecked(), 0, 0,
+      false, -1, Local<Value>(), false, false, true);
+  ScriptCompiler::Source source(source_text, origin);
 
   Local<Module> module;
   if (!CompileString<Module>(isolate, context, source_text, origin)
@@ -931,8 +931,11 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Module> referrer,
 
   std::string dir_name = DirName(file_name);
 
-  for (int i = 0, length = module->GetModuleRequestsLength(); i < length; ++i) {
-    Local<String> name = module->GetModuleRequest(i);
+  Local<FixedArray> module_requests = module->GetModuleRequests();
+  for (int i = 0, length = module_requests->Length(); i < length; ++i) {
+    Local<ModuleRequest> module_request =
+        module_requests->Get(context, i).As<ModuleRequest>();
+    Local<String> name = module_request->GetSpecifier();
     std::string absolute_path =
         NormalizePath(ToSTLString(isolate, name), dir_name);
     if (d->specifier_to_module_map.count(absolute_path)) continue;

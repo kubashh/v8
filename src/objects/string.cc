@@ -835,7 +835,7 @@ bool String::SlowEquals(String other) {
   if (IsSeqOneByteString() && other.IsSeqOneByteString()) {
     const uint8_t* str1 = SeqOneByteString::cast(*this).GetChars(no_gc);
     const uint8_t* str2 = SeqOneByteString::cast(other).GetChars(no_gc);
-    return CompareRawStringContents(str1, str2, len);
+    return CompareCharsEqual(str1, str2, len);
   }
 
   StringComparator comparator;
@@ -891,9 +891,8 @@ bool String::SlowEquals(Isolate* isolate, Handle<String> one,
   String::FlatContent flat2 = two->GetFlatContent(no_gc);
 
   if (flat1.IsOneByte() && flat2.IsOneByte()) {
-    return CompareRawStringContents(flat1.ToOneByteVector().begin(),
-                                    flat2.ToOneByteVector().begin(),
-                                    one_length);
+    return CompareCharsEqual(flat1.ToOneByteVector().begin(),
+                             flat2.ToOneByteVector().begin(), one_length);
   } else {
     for (int i = 0; i < one_length; i++) {
       if (flat1.Get(i) != flat2.Get(i)) return false;
@@ -1302,50 +1301,8 @@ Object String::LastIndexOf(Isolate* isolate, Handle<Object> receiver,
   return Smi::FromInt(last_index);
 }
 
-template <>
-bool String::IsEqualTo(Vector<const uint8_t> str) {
-  return IsOneByteEqualTo(str);
-}
-
-template <>
-bool String::IsEqualTo(Vector<const uc16> str) {
-  return IsTwoByteEqualTo(str);
-}
-
 bool String::HasOneBytePrefix(Vector<const char> str) {
-  int slen = str.length();
-  if (slen > length()) return false;
-  DisallowGarbageCollection no_gc;
-  FlatContent content = GetFlatContent(no_gc);
-  if (content.IsOneByte()) {
-    return CompareChars(content.ToOneByteVector().begin(), str.begin(), slen) ==
-           0;
-  }
-  return CompareChars(content.ToUC16Vector().begin(), str.begin(), slen) == 0;
-}
-
-bool String::IsOneByteEqualTo(Vector<const uint8_t> str) {
-  int slen = length();
-  if (str.length() != slen) return false;
-  DisallowGarbageCollection no_gc;
-  FlatContent content = GetFlatContent(no_gc);
-  if (content.IsOneByte()) {
-    return CompareChars(content.ToOneByteVector().begin(), str.begin(), slen) ==
-           0;
-  }
-  return CompareChars(content.ToUC16Vector().begin(), str.begin(), slen) == 0;
-}
-
-bool String::IsTwoByteEqualTo(Vector<const uc16> str) {
-  int slen = length();
-  if (str.length() != slen) return false;
-  DisallowGarbageCollection no_gc;
-  FlatContent content = GetFlatContent(no_gc);
-  if (content.IsOneByte()) {
-    return CompareChars(content.ToOneByteVector().begin(), str.begin(), slen) ==
-           0;
-  }
-  return CompareChars(content.ToUC16Vector().begin(), str.begin(), slen) == 0;
+  return IsEqualTo(str, EqualityType::kPrefix);
 }
 
 namespace {

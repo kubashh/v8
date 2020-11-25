@@ -368,7 +368,7 @@ JsonString JsonParser<Char>::ScanJsonPropertyKey(JsonContinuation* cont) {
             advance();
             // Record element information.
             cont->elements++;
-            cont->max_index = Max(cont->max_index, index);
+            cont->max_index = std::max(cont->max_index, index);
             return JsonString(index);
           }
 
@@ -626,7 +626,7 @@ Handle<Object> JsonParser<Char>::BuildJsonObject(
       Address end =
           reinterpret_cast<Address>(mutable_double_buffer->GetDataEndAddress());
       if (kTaggedSize != kDoubleSize) {
-        DCHECK_EQ(Min(filler_address, mutable_double_address), end);
+        DCHECK_EQ(std::min(filler_address, mutable_double_address), end);
         DCHECK_GE(filler_address, end);
         DCHECK_GE(mutable_double_address, end);
       } else {
@@ -986,14 +986,7 @@ bool Matches(const Vector<const Char>& chars, Handle<String> string) {
   DCHECK(!string.is_null());
 
   if (chars.length() != string->length()) return false;
-
-  DisallowGarbageCollection no_gc;
-  if (string->IsOneByteRepresentation()) {
-    const uint8_t* string_data = string->GetChars<uint8_t>(no_gc);
-    return CompareChars(chars.begin(), string_data, chars.length()) == 0;
-  }
-  const uint16_t* string_data = string->GetChars<uint16_t>(no_gc);
-  return CompareChars(chars.begin(), string_data, chars.length()) == 0;
+  return string->IsEqualTo(chars);
 }
 
 }  // namespace
