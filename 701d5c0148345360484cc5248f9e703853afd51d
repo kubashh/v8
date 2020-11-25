@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30a5f60d_3c4beb67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-11-25T17:06:53Z",
+      "side": 1,
+      "message": "Hi, I\u0027m working on a better way to access Strings from Torque, I should have a CL tomorrow. If it\u0027s not too urgent, I would suggest to postpone this CL until then.",
+      "revId": "701d5c0148345360484cc5248f9e703853afd51d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
