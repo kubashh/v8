@@ -69,8 +69,6 @@ class SemiSpace : public Space {
 
   bool EnsureCurrentCapacity();
 
-  Address space_end() { return memory_chunk_list_.back()->area_end(); }
-
   // Returns the start address of the first page of the space.
   Address space_start() {
     DCHECK_NE(memory_chunk_list_.front(), nullptr);
