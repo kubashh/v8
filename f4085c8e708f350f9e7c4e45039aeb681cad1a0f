@@ -34,6 +34,24 @@
       "parentUuid": "4a42bd4a_2107c81d",
       "revId": "f4085c8e708f350f9e7c4e45039aeb681cad1a0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b150909_e3606ddd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-25T16:12:40Z",
+      "side": 1,
+      "message": "That would be great! But I guess there is a reason to not have TSan on CQ.\nMichael, do you have background on this?",
+      "parentUuid": "71400444_937f7072",
+      "revId": "f4085c8e708f350f9e7c4e45039aeb681cad1a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
