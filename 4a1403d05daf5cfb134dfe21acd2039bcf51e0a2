@@ -16,6 +16,80 @@
       "message": "Hi Georg and Andreas, please take a look at this fix for the float 64 truncation issue on arm64. As we discussed offline with Georg, it doesn\u0027t seem possible to trigger the issue from a user JavaScript program without involving the fast API, that\u0027s why I don\u0027t have a particular regression test.",
       "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b482ba9c_d6c7e475",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T14:58:39Z",
+      "side": 1,
+      "message": "The way it is written means that the new flag has no effect when there are two outputs. That might be surprising, so at least it should be documented somewhere (not in this file though).\n\nIt might make sense to instead (or additionally) add a DCHECK_IMPLIES(set_overflow_to_min_i64, i.OutputCount() \u003d\u003d 1)\n\nIf I remember correctly, Wasm is the only user of the two-output version. Andreas, what do you prefer?",
+      "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dec6a7e_e72023ee",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2611,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T14:58:39Z",
+      "side": 1,
+      "message": "Why did this one change?",
+      "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e96236a4_ed42441c",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28263,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T14:58:39Z",
+      "side": 1,
+      "message": "superfluous",
+      "range": {
+        "startLine": 28263,
+        "startChar": 5,
+        "endLine": 28263,
+        "endChar": 8
+      },
+      "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a67874a0_17d77d43",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28264,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T14:58:39Z",
+      "side": 1,
+      "message": "Please inform the mips people of this change so that they can port it, e.g. by removing the #if, thus making the test fail on mips.",
+      "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
