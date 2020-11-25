@@ -22,6 +22,30 @@
       },
       "revId": "d89114e0f14a91f7a3da98ee13b1951456a213cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea184526_2df1cd24",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-11-25T15:48:24Z",
+      "side": 1,
+      "message": "Even if we generate the call, avoiding this extra check would be beneficial. Especially with the probabilistic version of the barrier (where we have old/young objects mixed in 4K regions). This code will anyway go through a bunch of optimization iterations, but I would at least add a TODO.",
+      "parentUuid": "30ec35af_a857a776",
+      "range": {
+        "startLine": 69,
+        "startChar": 24,
+        "endLine": 69,
+        "endChar": 43
+      },
+      "revId": "d89114e0f14a91f7a3da98ee13b1951456a213cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

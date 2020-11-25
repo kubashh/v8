@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3500e870_5b66bd03",
+        "filename": "test/unittests/heap/cppgc/minor-gc-unittest.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-11-25T15:48:24Z",
+      "side": 0,
+      "message": "why was the check removed?",
+      "range": {
+        "startLine": 213,
+        "startChar": 3,
+        "endLine": 213,
+        "endChar": 49
+      },
+      "revId": "227f5a76d0fbbf0e2c1a33f81694f1121d69be70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
