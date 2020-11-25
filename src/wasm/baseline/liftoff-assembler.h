@@ -35,6 +35,38 @@ class LiftoffAssembler : public TurboAssembler {
   // Each slot in our stack frame currently has exactly 8 bytes.
   static constexpr int kStackSlotSize = 8;
 
+  static Condition NegateLiftoffCondition(Condition cond) {
+#if V8_TARGET_ARCH_S390X
+    switch (cond) {
+      case kEqual:
+        return kUnequal;
+      case kUnequal:
+        return kEqual;
+      case kSignedLessThan:
+        return kSignedGreaterEqual;
+      case kSignedLessEqual:
+        return kSignedGreaterThan;
+      case kSignedGreaterEqual:
+        return kSignedLessThan;
+      case kSignedGreaterThan:
+        return kSignedLessEqual;
+      case kUnsignedLessThan:
+        return kUnsignedGreaterEqual;
+      case kUnsignedLessEqual:
+        return kUnsignedGreaterThan;
+      case kUnsignedGreaterEqual:
+        return kUnsignedLessThan;
+      case kUnsignedGreaterThan:
+        return kUnsignedLessEqual;
+      default:
+        UNREACHABLE();
+    }
+    return static_cast<Condition>(0);
+#else
+    return NegateCondition(cond);
+#endif
+  }
+
   static constexpr ValueType kWasmIntPtr =
       kSystemPointerSize == 8 ? kWasmI64 : kWasmI32;
 

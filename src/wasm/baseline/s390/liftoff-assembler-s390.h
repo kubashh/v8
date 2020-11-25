@@ -44,6 +44,50 @@ inline MemOperand GetHalfStackSlot(int offset, RegPairHalf half) {
   return MemOperand(fp, -offset + half_offset);
 }
 
+static inline Condition LiftoffConditionToCondition(Condition liftoff_cond) {
+  switch (liftoff_cond) {
+    case kEqual:
+      return eq;
+    case kUnequal:
+      return ne;
+    case kSignedLessThan:
+    case kUnsignedLessThan:
+      return lt;
+    case kSignedLessEqual:
+    case kUnsignedLessEqual:
+      return le;
+    case kSignedGreaterEqual:
+    case kUnsignedGreaterEqual:
+      return ge;
+    case kSignedGreaterThan:
+    case kUnsignedGreaterThan:
+      return gt;
+    default:
+      UNREACHABLE();
+  }
+  return static_cast<Condition>(0);
+}
+
+static inline bool UseSignedOp(Condition liftoff_cond) {
+  switch (liftoff_cond) {
+    case kEqual:
+    case kUnequal:
+    case kSignedLessThan:
+    case kSignedLessEqual:
+    case kSignedGreaterThan:
+    case kSignedGreaterEqual:
+      return true;
+    case kUnsignedLessThan:
+    case kUnsignedLessEqual:
+    case kUnsignedGreaterThan:
+    case kUnsignedGreaterEqual:
+      return false;
+    default:
+      UNREACHABLE();
+  }
+  return false;
+}
+
 }  // namespace liftoff
 
 int LiftoffAssembler::PrepareStackFrame() {
@@ -520,41 +564,110 @@ void LiftoffAssembler::emit_jump(Register target) {
   bailout(kUnsupportedArchitecture, "emit_jump");
 }
 
-void LiftoffAssembler::emit_cond_jump(Condition cond, Label* label,
+void LiftoffAssembler::emit_cond_jump(Condition liftoff_cond, Label* label,
                                       ValueType type, Register lhs,
                                       Register rhs) {
-  bailout(kUnsupportedArchitecture, "emit_cond_jump");
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  bool use_signed = liftoff::UseSignedOp(liftoff_cond);
+
+  if (type.kind() == ValueType::kI32) {
+    if (rhs == no_reg) {
+      if (use_signed) {
+        Cmp32(lhs, Operand::Zero());
+      } else {
+        CmpLogical32(lhs, Operand::Zero());
+      }
+    } else {
+      if (use_signed) {
+        Cmp32(lhs, rhs);
+      } else {
+        CmpLogical32(lhs, rhs);
+      }
+    }
+  } else {
+    CHECK_EQ(type.kind(), ValueType::kI64);
+    if (rhs == no_reg) {
+      if (use_signed) {
+        CmpP(lhs, Operand::Zero());
+      } else {
+        CmpLogicalP(lhs, Operand::Zero());
+      }
+    } else {
+      if (use_signed) {
+        CmpP(lhs, rhs);
+      } else {
+        CmpLogicalP(lhs, rhs);
+      }
+    }
+  }
+  b(cond, label);
 }
 
 void LiftoffAssembler::emit_i32_eqz(Register dst, Register src) {
   bailout(kUnsupportedArchitecture, "emit_i32_eqz");
 }
 
-void LiftoffAssembler::emit_i32_set_cond(Condition cond, Register dst,
+void LiftoffAssembler::emit_i32_set_cond(Condition liftoff_cond, Register dst,
                                          Register lhs, Register rhs) {
-  bailout(kUnsupportedArchitecture, "emit_i32_set_cond");
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  bool use_signed = liftoff::UseSignedOp(liftoff_cond);
+  if (use_signed) {
+    Cmp32(lhs, rhs);
+  } else {
+    CmpLogical32(lhs, rhs);
+  }
+
+  Label done;
+  lghi(dst, Operand(1));
+  b(cond, &done);
+  lghi(dst, Operand(0));
+  bind(&done);
 }
 
 void LiftoffAssembler::emit_i64_eqz(Register dst, LiftoffRegister src) {
   bailout(kUnsupportedArchitecture, "emit_i64_eqz");
 }
 
-void LiftoffAssembler::emit_i64_set_cond(Condition cond, Register dst,
+void LiftoffAssembler::emit_i64_set_cond(Condition liftoff_cond, Register dst,
                                          LiftoffRegister lhs,
                                          LiftoffRegister rhs) {
-  bailout(kUnsupportedArchitecture, "emit_i64_set_cond");
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  bool use_signed = liftoff::UseSignedOp(liftoff_cond);
+  if (use_signed) {
+    CmpP(lhs.gp(), rhs.gp());
+  } else {
+    CmpLogicalP(lhs.gp(), rhs.gp());
+  }
+
+  Label done;
+  lghi(dst, Operand(1));
+  b(cond, &done);
+  lghi(dst, Operand(0));
+  bind(&done);
 }
 
-void LiftoffAssembler::emit_f32_set_cond(Condition cond, Register dst,
+void LiftoffAssembler::emit_f32_set_cond(Condition liftoff_cond, Register dst,
                                          DoubleRegister lhs,
                                          DoubleRegister rhs) {
-  bailout(kUnsupportedArchitecture, "emit_f32_set_cond");
+  Label done;
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  lghi(dst, Operand(1));
+  cebr(lhs, rhs);
+  b(cond, &done);
+  lghi(dst, Operand(0));
+  bind(&done);
 }
 
-void LiftoffAssembler::emit_f64_set_cond(Condition cond, Register dst,
+void LiftoffAssembler::emit_f64_set_cond(Condition liftoff_cond, Register dst,
                                          DoubleRegister lhs,
                                          DoubleRegister rhs) {
-  bailout(kUnsupportedArchitecture, "emit_f64_set_cond");
+  Label done;
+  Condition cond = liftoff::LiftoffConditionToCondition(liftoff_cond);
+  lghi(dst, Operand(1));
+  cdbr(lhs, rhs);
+  b(cond, &done);
+  lghi(dst, Operand(0));
+  bind(&done);
 }
 
 bool LiftoffAssembler::emit_select(LiftoffRegister dst, Register condition,
