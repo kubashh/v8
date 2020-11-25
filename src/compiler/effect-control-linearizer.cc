@@ -225,7 +225,7 @@ class EffectControlLinearizer {
                                    Node* frame_state);
   Node* BuildCheckedFloat64ToInt64(CheckForMinusZeroMode mode,
                                    const FeedbackSource& feedback, Node* value,
-                                   Node* frame_state);
+                                   Node* frame_state, TruncateKind kind);
   Node* BuildCheckedFloat64ToIndex(const FeedbackSource& feedback, Node* value,
                                    Node* frame_state);
   Node* BuildCheckedHeapNumberOrOddballToFloat64(CheckTaggedInputMode mode,
@@ -2607,7 +2607,8 @@ Node* EffectControlLinearizer::BuildCheckedFloat64ToInt32(
 Node* EffectControlLinearizer::BuildCheckedFloat64ToIndex(
     const FeedbackSource& feedback, Node* value, Node* frame_state) {
   if (machine()->Is64()) {
-    Node* value64 = __ TruncateFloat64ToInt64(value);
+    Node* value64 =
+        __ TruncateFloat64ToInt64(value, TruncateKind::kSetOverflowToMin);
     Node* check_same = __ Float64Equal(value, __ ChangeInt64ToFloat64(value64));
     __ DeoptimizeIfNot(DeoptimizeReason::kLostPrecisionOrNaN, feedback,
                        check_same, frame_state);
@@ -2640,8 +2641,8 @@ Node* EffectControlLinearizer::LowerCheckedFloat64ToInt32(Node* node,
 
 Node* EffectControlLinearizer::BuildCheckedFloat64ToInt64(
     CheckForMinusZeroMode mode, const FeedbackSource& feedback, Node* value,
-    Node* frame_state) {
-  Node* value64 = __ TruncateFloat64ToInt64(value);
+    Node* frame_state, TruncateKind kind) {
+  Node* value64 = __ TruncateFloat64ToInt64(value, kind);
   Node* check_same = __ Float64Equal(value, __ ChangeInt64ToFloat64(value64));
   __ DeoptimizeIfNot(DeoptimizeReason::kLostPrecisionOrNaN, feedback,
                      check_same, frame_state);
@@ -2674,7 +2675,8 @@ Node* EffectControlLinearizer::LowerCheckedFloat64ToInt64(Node* node,
       CheckMinusZeroParametersOf(node->op());
   Node* value = node->InputAt(0);
   return BuildCheckedFloat64ToInt64(params.mode(), params.feedback(), value,
-                                    frame_state);
+                                    frame_state,
+                                    TruncateKind::kSetOverflowToMin);
 }
 
 Node* EffectControlLinearizer::LowerCheckedTaggedSignedToInt32(
@@ -2790,8 +2792,9 @@ Node* EffectControlLinearizer::LowerCheckedTaggedToInt64(Node* node,
   __ DeoptimizeIfNot(DeoptimizeReason::kNotAHeapNumber, params.feedback(),
                      check_map, frame_state);
   Node* vfalse = __ LoadField(AccessBuilder::ForHeapNumberValue(), value);
-  vfalse = BuildCheckedFloat64ToInt64(params.mode(), params.feedback(), vfalse,
-                                      frame_state);
+  vfalse =
+      BuildCheckedFloat64ToInt64(params.mode(), params.feedback(), vfalse,
+                                 frame_state, TruncateKind::kSetOverflowToMin);
   __ Goto(&done, vfalse);
 
   __ Bind(&done);
