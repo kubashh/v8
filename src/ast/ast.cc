@@ -581,7 +581,6 @@ int ArrayLiteral::InitDepthAndFlags() {
             break;
           case Literal::kBigInt:
           case Literal::kString:
-          case Literal::kSymbol:
           case Literal::kBoolean:
           case Literal::kUndefined:
           case Literal::kNull:
@@ -981,8 +980,6 @@ Handle<Object> Literal::BuildValue(LocalIsolate* isolate) const {
           number_);
     case kString:
       return string_->string();
-    case kSymbol:
-      return isolate->factory()->home_object_symbol();
     case kBoolean:
       return isolate->factory()->ToBoolean(boolean_);
     case kNull:
@@ -1028,8 +1025,6 @@ bool Literal::ToBooleanIsTrue() const {
       }
       return false;
     }
-    case kSymbol:
-      return true;
     case kTheHole:
       UNREACHABLE();
   }
