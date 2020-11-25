@@ -19,6 +19,7 @@ namespace compiler {
 
 // Forward declarations.
 class NodeOriginTable;
+class ObserveNodeManager;
 class RepresentationChanger;
 class RepresentationSelector;
 class SourcePositionTable;
@@ -30,7 +31,8 @@ class V8_EXPORT_PRIVATE SimplifiedLowering final {
                      SourcePositionTable* source_position,
                      NodeOriginTable* node_origins,
                      PoisoningMitigationLevel poisoning_level,
-                     TickCounter* tick_counter, Linkage* linkage);
+                     TickCounter* tick_counter, Linkage* linkage,
+                     ObserveNodeManager* observe_node_manager = nullptr);
   ~SimplifiedLowering() = default;
 
   void LowerAllNodes();
@@ -50,6 +52,8 @@ class V8_EXPORT_PRIVATE SimplifiedLowering final {
   void DoUnsigned32ToUint8Clamped(Node* node);
 
  private:
+  void ChangeOp(Node* node, const Operator* new_op);
+
   JSGraph* const jsgraph_;
   JSHeapBroker* broker_;
   Zone* const zone_;
@@ -73,6 +77,8 @@ class V8_EXPORT_PRIVATE SimplifiedLowering final {
 
   TickCounter* const tick_counter_;
   Linkage* const linkage_;
+
+  ObserveNodeManager* observe_node_manager_;
 
   Node* Float64Round(Node* const node);
   Node* Float64Sign(Node* const node);

@@ -436,7 +436,6 @@ static inline v8::MaybeLocal<v8::Value> CompileRun(
       ->Run(context);
 }
 
-
 static inline v8::Local<v8::Value> CompileRunChecked(v8::Isolate* isolate,
                                                      const char* source) {
   v8::Local<v8::String> source_string =
