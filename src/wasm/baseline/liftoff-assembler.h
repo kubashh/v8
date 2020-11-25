@@ -35,6 +35,35 @@ class LiftoffAssembler : public TurboAssembler {
   // Each slot in our stack frame currently has exactly 8 bytes.
   static constexpr int kStackSlotSize = 8;
 
+  static constexpr LiftoffCondition NegateLiftoffCondition(
+      LiftoffCondition liftoff_cond) {
+    switch (liftoff_cond) {
+      case kEqual:
+        return kUnequal;
+      case kUnequal:
+        return kEqual;
+      case kSignedLessThan:
+        return kSignedGreaterEqual;
+      case kSignedLessEqual:
+        return kSignedGreaterThan;
+      case kSignedGreaterEqual:
+        return kSignedLessThan;
+      case kSignedGreaterThan:
+        return kSignedLessEqual;
+      case kUnsignedLessThan:
+        return kUnsignedGreaterEqual;
+      case kUnsignedLessEqual:
+        return kUnsignedGreaterThan;
+      case kUnsignedGreaterEqual:
+        return kUnsignedLessThan;
+      case kUnsignedGreaterThan:
+        return kUnsignedLessEqual;
+      default:
+        return static_cast<LiftoffCondition>(-1);
+    }
+    return static_cast<LiftoffCondition>(-1);
+  }
+
   static constexpr ValueType kWasmIntPtr =
       kSystemPointerSize == 8 ? kWasmI64 : kWasmI32;
 
@@ -747,18 +776,18 @@ class LiftoffAssembler : public TurboAssembler {
   inline void emit_jump(Label*);
   inline void emit_jump(Register);
 
-  inline void emit_cond_jump(Condition, Label*, ValueType value, Register lhs,
-                             Register rhs = no_reg);
+  inline void emit_cond_jump(LiftoffCondition, Label*, ValueType value,
+                             Register lhs, Register rhs = no_reg);
   // Set {dst} to 1 if condition holds, 0 otherwise.
   inline void emit_i32_eqz(Register dst, Register src);
-  inline void emit_i32_set_cond(Condition, Register dst, Register lhs,
+  inline void emit_i32_set_cond(LiftoffCondition, Register dst, Register lhs,
                                 Register rhs);
   inline void emit_i64_eqz(Register dst, LiftoffRegister src);
-  inline void emit_i64_set_cond(Condition condition, Register dst,
+  inline void emit_i64_set_cond(LiftoffCondition condition, Register dst,
                                 LiftoffRegister lhs, LiftoffRegister rhs);
-  inline void emit_f32_set_cond(Condition condition, Register dst,
+  inline void emit_f32_set_cond(LiftoffCondition condition, Register dst,
                                 DoubleRegister lhs, DoubleRegister rhs);
-  inline void emit_f64_set_cond(Condition condition, Register dst,
+  inline void emit_f64_set_cond(LiftoffCondition condition, Register dst,
                                 DoubleRegister lhs, DoubleRegister rhs);
 
   // Optional select support: Returns false if generic code (via branches)
