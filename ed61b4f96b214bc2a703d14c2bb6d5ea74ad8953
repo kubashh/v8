@@ -130,6 +130,183 @@
       "message": "How about putting this chunk of code into an extra { } block, for emphasis.",
       "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "397938df_94c3a402",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T11:31:26Z",
+      "side": 1,
+      "message": "This one is never used.",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b12b9a8a_fc67f00b",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T11:31:26Z",
+      "side": 1,
+      "message": "Nit: ExpectSharedFunctionInfoState",
+      "range": {
+        "startLine": 31,
+        "startChar": 5,
+        "endLine": 31,
+        "endChar": 33
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "574851ff_529bb843",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T11:31:26Z",
+      "side": 1,
+      "message": "Nit: function_data",
+      "range": {
+        "startLine": 33,
+        "startChar": 9,
+        "endLine": 33,
+        "endChar": 13
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02c9a17f_0544567f",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T11:31:26Z",
+      "side": 1,
+      "message": "Nit: script_or_debug_info",
+      "range": {
+        "startLine": 34,
+        "startChar": 13,
+        "endLine": 34,
+        "endChar": 19
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b26df14d_43c19ada",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T11:31:26Z",
+      "side": 1,
+      "message": "Nit: ..._access",
+      "range": {
+        "startLine": 95,
+        "startChar": 18,
+        "endLine": 95,
+        "endChar": 41
+      },
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c387996_19997435",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T11:31:26Z",
+      "side": 1,
+      "message": "I assume those are leftovers.",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33cd5556_e30a3323",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T11:31:26Z",
+      "side": 1,
+      "message": "// Get function \"test\".",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf3a3349_7ccceb10",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T11:31:26Z",
+      "side": 1,
+      "message": "Why is this scope so restricted?",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7f65a36_b5f82f87",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T11:31:26Z",
+      "side": 1,
+      "message": "Can you CHECK the result?",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
