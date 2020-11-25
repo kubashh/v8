@@ -16,6 +16,40 @@
       "message": "Hello Clemens, please take a look at this. Thanks.",
       "revId": "c913efeb1f85037e97326a2959c7f1ef22358902",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a0a3c42_f1c85789",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-25T16:02:56Z",
+      "side": 1,
+      "message": "Nice, are we starting to get Liftoff support on s390?\n\nIt looks like the way we use conditions does not work well on s390. Instead of hacking our way around that, we should try to redesign such that it works on all platforms. WDYT about a design as sketched below?",
+      "revId": "c913efeb1f85037e97326a2959c7f1ef22358902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b324c928_7a4965df",
+        "filename": "src/wasm/baseline/liftoff-assembler-defs.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-25T16:02:56Z",
+      "side": 1,
+      "message": "This does not look like a maintainable solution. Conditions are not actually used that much in Liftoff. WDYT about introducing a separate LiftoffCondition enum, using that everywhere, and doing the translation to the platform-specific Condition values in the platform-specific LiftoffAssembler instead?",
+      "revId": "c913efeb1f85037e97326a2959c7f1ef22358902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
