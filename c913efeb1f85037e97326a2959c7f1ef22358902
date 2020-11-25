@@ -50,6 +50,24 @@
       "message": "This does not look like a maintainable solution. Conditions are not actually used that much in Liftoff. WDYT about introducing a separate LiftoffCondition enum, using that everywhere, and doing the translation to the platform-specific Condition values in the platform-specific LiftoffAssembler instead?",
       "revId": "c913efeb1f85037e97326a2959c7f1ef22358902",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "765460d7_98befca4",
+        "filename": "src/wasm/baseline/liftoff-assembler-defs.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2020-11-25T16:51:17Z",
+      "side": 1,
+      "message": "That might be a better way to do this. I will try that.",
+      "parentUuid": "b324c928_7a4965df",
+      "revId": "c913efeb1f85037e97326a2959c7f1ef22358902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
