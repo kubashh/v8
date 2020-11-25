@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b503a58_7db013ff",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-25T14:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "236ad5bc_cabe606c",
+      "range": {
+        "startLine": 3164,
+        "startChar": 0,
+        "endLine": 3186,
+        "endChar": 76
+      },
+      "revId": "7bc4df896e56364f1937938f24394861ccba455e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4ccb5b0_55b25a22",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4954519_f83dc36d",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3469,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-25T14:37:26Z",
+      "side": 1,
+      "message": "Yes, the wasm signature does not include the receiver. I think in line 3490 we take care of the receiver.",
+      "parentUuid": "d4ccb5b0_55b25a22",
+      "range": {
+        "startLine": 3469,
+        "startChar": 2,
+        "endLine": 3469,
+        "endChar": 48
+      },
+      "revId": "7bc4df896e56364f1937938f24394861ccba455e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb71e572_f52e46a2",
@@ -94,6 +142,30 @@
       "writtenOn": "2020-11-25T11:20:21Z",
       "side": 1,
       "message": "nit: I am guessing this is due to the receiver? Maybe add a comment.",
+      "range": {
+        "startLine": 3490,
+        "startChar": 0,
+        "endLine": 3490,
+        "endChar": 50
+      },
+      "revId": "7bc4df896e56364f1937938f24394861ccba455e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb819c80_e8dbe972",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3490,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-11-25T14:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb71e572_f52e46a2",
       "range": {
         "startLine": 3490,
         "startChar": 0,
