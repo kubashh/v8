@@ -16,6 +16,24 @@
       "message": "Ahh, too bad. Why do we keep forgetting to add TSan bots on any concurrency related CLs? :/ ",
       "revId": "f4085c8e708f350f9e7c4e45039aeb681cad1a0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71400444_937f7072",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-11-25T16:09:56Z",
+      "side": 1,
+      "message": "+1, maybe we\u0027d have the resources to run at least one on CQ?",
+      "parentUuid": "4a42bd4a_2107c81d",
+      "revId": "f4085c8e708f350f9e7c4e45039aeb681cad1a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
