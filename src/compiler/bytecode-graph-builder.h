@@ -25,6 +25,8 @@ class Zone;
 namespace compiler {
 
 class JSGraph;
+class NodeObserver;
+class ObserveNodeManager;
 class SourcePositionTable;
 
 enum class BytecodeGraphBuilderFlag : uint8_t {
@@ -47,7 +49,9 @@ void BuildGraphFromBytecode(JSHeapBroker* broker, Zone* local_zone,
                             SourcePositionTable* source_positions,
                             int inlining_id, CodeKind code_kind,
                             BytecodeGraphBuilderFlags flags,
-                            TickCounter* tick_counter);
+                            TickCounter* tick_counter,
+                            ObserveNodeManager* observe_node_manager = nullptr,
+                            NodeObserver* node_observer = nullptr);
 
 }  // namespace compiler
 }  // namespace internal
