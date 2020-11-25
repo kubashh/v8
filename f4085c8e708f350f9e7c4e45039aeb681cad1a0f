@@ -52,6 +52,24 @@
       "parentUuid": "71400444_937f7072",
       "revId": "f4085c8e708f350f9e7c4e45039aeb681cad1a0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6271444b_a803c017",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-25T16:14:02Z",
+      "side": 1,
+      "message": "Just found two related issues:\nhttps://crbug.com/v8/8797\nhttps://crbug.com/v8/10469",
+      "parentUuid": "9b150909_e3606ddd",
+      "revId": "f4085c8e708f350f9e7c4e45039aeb681cad1a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
