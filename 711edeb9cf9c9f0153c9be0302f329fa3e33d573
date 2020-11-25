@@ -86,6 +86,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "079483f2_75e3891e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-25T15:43:49Z",
+      "side": 1,
+      "message": "A couple of comments, but otherwise LGTM on the directories I had listed.",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "240b82d0_c85deacd",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-25T15:43:49Z",
+      "side": 1,
+      "message": "I\u0027d suggest we make the changes to the API as a separate CL, since this is effectively changing the API and might break embedders (and potentially have to be rolled back)",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d6a7436_1bf39b67",
@@ -99,6 +133,58 @@
       "writtenOn": "2020-11-25T11:57:21Z",
       "side": 1,
       "message": "I\u0027m a bit wary about changing the API but it seems like a sound change.",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96e1a8a6_c3047871",
+        "filename": "src/api/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-25T15:43:49Z",
+      "side": 1,
+      "message": "This is the implmentation of the API, not the public API itself (that is what you are changing in include/v8.h, which indeed I\u0027d be wary about changing at least alongside all the other changes).",
+      "parentUuid": "8d6a7436_1bf39b67",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aecc4438_c3b6d217",
+        "filename": "src/api/api.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-25T15:43:49Z",
+      "side": 1,
+      "message": "This isn\u0027t a scope class",
+      "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbb5a393_8e0e6bfe",
+        "filename": "src/debug/debug-interface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-11-25T15:43:49Z",
+      "side": 1,
+      "message": "This isn\u0027t a scoped class",
       "revId": "711edeb9cf9c9f0153c9be0302f329fa3e33d573",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
