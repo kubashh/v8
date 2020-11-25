@@ -438,6 +438,13 @@ static inline v8::MaybeLocal<v8::Value> CompileRun(
       ->Run(context);
 }
 
+// static inline v8::MaybeLocal<v8::Value> CompileWithObserver(
+//    v8::Local<v8::Context> context, const char* source,
+//    NodeObserver* node_observer) {
+//  return v8::Script::Compile(context, v8_str(source))
+//      .ToLocalChecked()
+//      ->Run(context);
+//}
 
 static inline v8::Local<v8::Value> CompileRunChecked(v8::Isolate* isolate,
                                                      const char* source) {

@@ -28,6 +28,7 @@ namespace compiler {
 // Forward declarations.
 class CallDescriptor;
 struct CommonOperatorGlobalCache;
+class NodeObservation;
 class Operator;
 class Type;
 class Node;
