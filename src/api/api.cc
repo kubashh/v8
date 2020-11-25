@@ -372,18 +372,12 @@ static ScriptOrigin GetScriptOriginForScript(i::Isolate* isolate,
   i::Handle<i::Object> source_map_url(script->source_mapping_url(), isolate);
   i::Handle<i::FixedArray> host_defined_options(script->host_defined_options(),
                                                 isolate);
-  v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
   ScriptOriginOptions options(script->origin_options());
   v8::ScriptOrigin origin(
-      Utils::ToLocal(scriptName),
-      v8::Integer::New(v8_isolate, script->line_offset()),
-      v8::Integer::New(v8_isolate, script->column_offset()),
-      v8::Boolean::New(v8_isolate, options.IsSharedCrossOrigin()),
-      v8::Integer::New(v8_isolate, script->id()),
-      Utils::ToLocal(source_map_url),
-      v8::Boolean::New(v8_isolate, options.IsOpaque()),
-      v8::Boolean::New(v8_isolate, script->type() == i::Script::TYPE_WASM),
-      v8::Boolean::New(v8_isolate, options.IsModule()),
+      Utils::ToLocal(scriptName), script->line_offset(),
+      script->column_offset(), options.IsSharedCrossOrigin(), script->id(),
+      Utils::ToLocal(source_map_url), options.IsOpaque(),
+      script->type() == i::Script::TYPE_WASM, options.IsModule(),
       Utils::ToLocal(host_defined_options));
   return origin;
 }
@@ -2211,6 +2205,35 @@ Local<Primitive> PrimitiveArray::Get(Isolate* v8_isolate, int index) {
   return ToApiHandle<Primitive>(i_item);
 }
 
+int FixedArray::Length() const {
+  i::Handle<i::FixedArray> self = Utils::OpenHandle(this);
+  return self->length();
+}
+
+Local<Data> FixedArray::Get(Local<Context> context, int i) const {
+  i::Handle<i::FixedArray> self = Utils::OpenHandle(this);
+  auto isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
+  CHECK_LT(i, self->length());
+  i::Handle<i::Object> entry(self->get(i), isolate);
+  return ToApiHandle<Data>(entry);
+}
+
+Local<String> ModuleRequest::GetSpecifier() const {
+  i::Handle<i::ModuleRequest> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  return ToApiHandle<String>(i::handle(self->specifier(), isolate));
+}
+
+int ModuleRequest::GetSourceOffset() const {
+  return Utils::OpenHandle(this)->position();
+}
+
+Local<FixedArray> ModuleRequest::GetImportAssertions() const {
+  i::Handle<i::ModuleRequest> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  return ToApiHandle<FixedArray>(i::handle(self->import_assertions(), isolate));
+}
+
 Module::Status Module::GetStatus() const {
   i::Handle<i::Module> self = Utils::OpenHandle(this);
   switch (self->status()) {
@@ -2286,6 +2309,33 @@ Location Module::GetModuleRequestLocation(int i) const {
       i::Handle<i::SourceTextModule>::cast(self)->GetScript(), isolate);
   i::Script::PositionInfo info;
   i::Script::GetPositionInfo(script, position, &info, i::Script::WITH_OFFSET);
+  return v8::Location(info.line, info.column);
+}
+
+Local<FixedArray> Module::GetModuleRequests() const {
+  i::Handle<i::Module> self = Utils::OpenHandle(this);
+  Utils::ApiCheck(
+      self->IsSourceTextModule(), "v8::Module::GetModuleRequests",
+      "v8::Module::GetModuleRequests must be used on an SourceTextModule");
+  i::Isolate* isolate = self->GetIsolate();
+  i::Handle<i::FixedArray> module_requests(
+      i::Handle<i::SourceTextModule>::cast(self)->info().module_requests(),
+      isolate);
+  return ToApiHandle<FixedArray>(module_requests);
+}
+
+Location Module::SourceOffsetToLocation(int offset) const {
+  i::Handle<i::Module> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+  i::HandleScope scope(isolate);
+  Utils::ApiCheck(
+      self->IsSourceTextModule(), "v8::Module::SourceOffsetToLocation",
+      "v8::Module::SourceOffsetToLocation must be used on an SourceTextModule");
+  i::Handle<i::Script> script(
+      i::Handle<i::SourceTextModule>::cast(self)->GetScript(), isolate);
+  i::Script::PositionInfo info;
+  i::Script::GetPositionInfo(script, offset, &info, i::Script::WITH_OFFSET);
   return v8::Location(info.line, info.column);
 }
 
@@ -2430,26 +2480,19 @@ void Module::SetSyntheticModuleExport(Local<String> export_name,
 namespace {
 
 i::Compiler::ScriptDetails GetScriptDetails(
-    i::Isolate* isolate, Local<Value> resource_name,
-    Local<Integer> resource_line_offset, Local<Integer> resource_column_offset,
-    Local<Value> source_map_url, Local<PrimitiveArray> host_defined_options) {
+    i::Isolate* isolate, Local<Value> resource_name, int resource_line_offset,
+    int resource_column_offset, Local<Value> source_map_url,
+    Local<PrimitiveArray> host_defined_options) {
   i::Compiler::ScriptDetails script_details;
   if (!resource_name.IsEmpty()) {
     script_details.name_obj = Utils::OpenHandle(*(resource_name));
   }
-  if (!resource_line_offset.IsEmpty()) {
-    script_details.line_offset =
-        static_cast<int>(resource_line_offset->Value());
-  }
-  if (!resource_column_offset.IsEmpty()) {
-    script_details.column_offset =
-        static_cast<int>(resource_column_offset->Value());
-  }
-  script_details.host_defined_options = isolate->factory()->empty_fixed_array();
-  if (!host_defined_options.IsEmpty()) {
-    script_details.host_defined_options =
-        Utils::OpenHandle(*(host_defined_options));
-  }
+  script_details.line_offset = resource_line_offset;
+  script_details.column_offset = resource_column_offset;
+  script_details.host_defined_options =
+      host_defined_options.IsEmpty()
+          ? isolate->factory()->empty_fixed_array()
+          : Utils::OpenHandle(*(host_defined_options));
   if (!source_map_url.IsEmpty()) {
     script_details.source_map_url = Utils::OpenHandle(*(source_map_url));
   }
@@ -2685,10 +2728,10 @@ i::MaybeHandle<i::SharedFunctionInfo> CompileStreamedSource(
     i::Isolate* isolate, ScriptCompiler::StreamedSource* v8_source,
     Local<String> full_source_string, const ScriptOrigin& origin) {
   i::Handle<i::String> str = Utils::OpenHandle(*(full_source_string));
-  i::Compiler::ScriptDetails script_details = GetScriptDetails(
-      isolate, origin.ResourceName(), origin.ResourceLineOffset(),
-      origin.ResourceColumnOffset(), origin.SourceMapUrl(),
-      origin.HostDefinedOptions());
+  i::Compiler::ScriptDetails script_details =
+      GetScriptDetails(isolate, origin.ResourceName(), origin.LineOffset(),
+                       origin.ColumnOffset(), origin.SourceMapUrl(),
+                       origin.HostDefinedOptions());
   i::ScriptStreamingData* data = v8_source->impl();
   return i::Compiler::GetSharedFunctionInfoForStreamedScript(
       isolate, str, script_details, origin.Options(), data);
@@ -3785,6 +3828,12 @@ void v8::Private::CheckCast(v8::Data* that) {
   Utils::ApiCheck(
       obj->IsSymbol() && i::Handle<i::Symbol>::cast(obj)->is_private(),
       "v8::Private::Cast", "Value is not a Private");
+}
+
+void v8::ModuleRequest::CheckCast(v8::Data* that) {
+  i::Handle<i::Object> obj = Utils::OpenHandle(that);
+  Utils::ApiCheck(obj->IsModuleRequest(), "v8::ModuleRequest::Cast",
+                  "Value is not a ModuleRequest");
 }
 
 void v8::Module::CheckCast(v8::Data* that) {
@@ -5128,9 +5177,7 @@ Local<Value> Function::GetDisplayName() const {
 
 ScriptOrigin Function::GetScriptOrigin() const {
   auto self = Utils::OpenHandle(this);
-  if (!self->IsJSFunction()) {
-    return v8::ScriptOrigin(Local<Value>());
-  }
+  if (!self->IsJSFunction()) return v8::ScriptOrigin(Local<Value>());
   auto func = i::Handle<i::JSFunction>::cast(self);
   if (func->shared().script().IsScript()) {
     i::Handle<i::Script> script(i::Script::cast(func->shared().script()),
