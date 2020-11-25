@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26d0cd73_75627137",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T15:07:27Z",
+      "side": 1,
+      "message": "Maya, shouldn\u0027t GCmole have complained about function PrepareBlabla in\nhttps://chromium-review.googlesource.com/c/v8/v8/+/2523318/7/src/objects/shared-function-info.cc\nsince it operates on a raw object (this) and can allocate.",
+      "revId": "de3435f598f6228dd3dad3d4b08701c0108005ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
