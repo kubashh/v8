@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7384df18_d8435b93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-11-25T15:25:49Z",
+      "side": 1,
+      "message": "Landing now to give this time to show up in Blink.\n\nAnton: If you have comments, I\u0027ll address them in a followup.",
+      "revId": "07e29b380a16f967872ca18db25add0cbd2ac8f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
