@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f7509f2_3710b8dc",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-25T10:20:01Z",
+      "side": 1,
+      "message": "Taking the SFI via \"this\" isn\u0027t GC-safe. Please pass Handle\u003cSharedFunctionInfo\u003e as argument and make the function static.",
+      "revId": "ed61b4f96b214bc2a703d14c2bb6d5ea74ad8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
