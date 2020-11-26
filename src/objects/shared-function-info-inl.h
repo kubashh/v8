@@ -6,6 +6,7 @@
 #define V8_OBJECTS_SHARED_FUNCTION_INFO_INL_H_
 
 #include "src/base/macros.h"
+#include "src/base/platform/mutex.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/local-heap-inl.h"
@@ -463,6 +464,9 @@ bool SharedFunctionInfo::HasBytecodeArray() const {
 }
 
 BytecodeArray SharedFunctionInfo::GetBytecodeArray() const {
+  Isolate* isolate = GetIsolate();
+  base::SharedMutexGuard<base::kShared> mutex_guard(
+      isolate->shared_function_info_access());
   DCHECK(HasBytecodeArray());
   if (HasDebugInfo() && GetDebugInfo().HasInstrumentedBytecodeArray()) {
     return GetDebugInfo().OriginalBytecodeArray();
@@ -477,7 +481,7 @@ BytecodeArray SharedFunctionInfo::GetBytecodeArray() const {
   }
 }
 
-BytecodeArray SharedFunctionInfo::GetDebugBytecodeArray() const {
+BytecodeArray SharedFunctionInfo::GetBytecodeArrayForDebugging() const {
   DCHECK(HasDebugInfo() && GetDebugInfo().HasInstrumentedBytecodeArray());
 
   Object data = function_data(kAcquireLoad);
@@ -489,7 +493,7 @@ BytecodeArray SharedFunctionInfo::GetDebugBytecodeArray() const {
   }
 }
 
-void SharedFunctionInfo::SetDebugBytecodeArray(BytecodeArray bytecode) {
+void SharedFunctionInfo::SetBytecodeArrayForDebugging(BytecodeArray bytecode) {
   Object data = function_data(kAcquireLoad);
   if (data.IsBytecodeArray()) {
     set_function_data(bytecode, kReleaseStore);

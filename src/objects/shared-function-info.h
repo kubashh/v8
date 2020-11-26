@@ -321,8 +321,8 @@ class SharedFunctionInfo : public HeapObject {
   inline bool HasInterpreterData() const;
   inline InterpreterData interpreter_data() const;
   inline void set_interpreter_data(InterpreterData interpreter_data);
-  inline BytecodeArray GetDebugBytecodeArray() const;
-  inline void SetDebugBytecodeArray(BytecodeArray bytecode);
+  inline BytecodeArray GetBytecodeArrayForDebugging() const;
+  inline void SetBytecodeArrayForDebugging(BytecodeArray bytecode);
   inline bool HasAsmWasmData() const;
   inline AsmWasmData asm_wasm_data() const;
   inline void set_asm_wasm_data(AsmWasmData data);
@@ -652,6 +652,16 @@ class SharedFunctionInfo : public HeapObject {
   // use a super property).
   // This is needed to set up the [[HomeObject]] on the function instance.
   inline bool needs_home_object() const;
+
+  // Sets the instrumented bytecode in {shared}'s DebugInfo as the bytecode to
+  // be returned by following calls to GetBytecodeArray. Stores a copy of the
+  // original bytecode in the DebugInfo.
+  static void InstallDebugBytecode(Handle<SharedFunctionInfo> shared,
+                                   Isolate* isolate);
+  // Removes the instrumented bytecode and restores the original bytecode to be
+  // returned by following calls to GetBytecodeArray.
+  static void UninstallDebugBytecode(SharedFunctionInfo shared,
+                                     Isolate* isolate);
 
  private:
 #ifdef VERIFY_HEAP
