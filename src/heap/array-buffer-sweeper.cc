@@ -150,9 +150,7 @@ void ArrayBufferSweeper::RequestSweep(SweepingScope scope) {
     Prepare(scope);
 
     auto task = MakeCancelableTask(heap_->isolate(), [this] {
-      TRACE_BACKGROUND_GC(
-          heap_->tracer(),
-          GCTracer::BackgroundScope::BACKGROUND_ARRAY_BUFFER_SWEEP);
+      TRACE_GC(heap_->tracer(), GCTracer::Scope::BACKGROUND_ARRAY_BUFFER_SWEEP);
       base::MutexGuard guard(&sweeping_mutex_);
       job_->Sweep();
       job_finished_.NotifyAll();

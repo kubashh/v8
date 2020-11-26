@@ -95,8 +95,7 @@ class Sweeper::SweeperTask final : public CancelableTask {
 
  private:
   void RunInternal() final {
-    TRACE_BACKGROUND_GC(tracer_,
-                        GCTracer::BackgroundScope::MC_BACKGROUND_SWEEPING);
+    TRACE_GC(tracer_, GCTracer::Scope::MC_BACKGROUND_SWEEPING);
     DCHECK(IsValidSweepingSpace(space_to_start_));
     const int offset = space_to_start_ - FIRST_GROWABLE_PAGED_SPACE;
     for (int i = 0; i < kNumberOfSweepingSpaces; i++) {
@@ -608,8 +607,7 @@ class Sweeper::IterabilityTask final : public CancelableTask {
 
  private:
   void RunInternal() final {
-    TRACE_BACKGROUND_GC(tracer_,
-                        GCTracer::BackgroundScope::MC_BACKGROUND_SWEEPING);
+    TRACE_GC(tracer_, GCTracer::Scope::MC_BACKGROUND_SWEEPING);
     for (Page* page : sweeper_->iterability_list_) {
       sweeper_->MakeIterable(page);
     }
