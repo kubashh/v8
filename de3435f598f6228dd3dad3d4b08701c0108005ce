@@ -16,6 +16,24 @@
       "message": "Maya, shouldn\u0027t GCmole have complained about function PrepareBlabla in\nhttps://chromium-review.googlesource.com/c/v8/v8/+/2523318/7/src/objects/shared-function-info.cc\nsince it operates on a raw object (this) and can allocate.",
       "revId": "de3435f598f6228dd3dad3d4b08701c0108005ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2addea54_34ef83be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-26T09:10:18Z",
+      "side": 1,
+      "message": "I\u0027d say it should, but I doubt it currently supports it. I don\u0027t know if gcmole has code that supports analysing the \"this\" of a method as a possible raw pointer, and it definitely doesn\u0027t have such tests, so I\u0027d suspect it simply doesn\u0027t support this case. I\u0027ve filed a feature request to myself, feel free to supply additional info: https://bugs.chromium.org/p/v8/issues/detail?id\u003d11202",
+      "parentUuid": "26d0cd73_75627137",
+      "revId": "de3435f598f6228dd3dad3d4b08701c0108005ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
