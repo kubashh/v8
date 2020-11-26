@@ -144,6 +144,30 @@
       },
       "revId": "cb9e12c9d32082be6c6de5e3d9239cab2473ef96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31ff5bc5_b90e7e51",
+        "filename": "test/inspector/debugger/wasm-stepping-out-from-js.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-11-26T13:34:29Z",
+      "side": 1,
+      "message": "Ack, thanks!",
+      "parentUuid": "f7961a76_7e11133a",
+      "range": {
+        "startLine": 55,
+        "startChar": 2,
+        "endLine": 55,
+        "endChar": 132
+      },
+      "revId": "cb9e12c9d32082be6c6de5e3d9239cab2473ef96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
