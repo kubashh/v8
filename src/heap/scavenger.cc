@@ -182,9 +182,8 @@ void ScavengerCollector::JobTask::Run(JobDelegate* delegate) {
              GCTracer::Scope::SCAVENGER_SCAVENGE_PARALLEL);
     ProcessItems(delegate, scavenger);
   } else {
-    TRACE_BACKGROUND_GC(
-        outer_->heap_->tracer(),
-        GCTracer::BackgroundScope::SCAVENGER_BACKGROUND_SCAVENGE_PARALLEL);
+    TRACE_GC(outer_->heap_->tracer(),
+             GCTracer::Scope::SCAVENGER_BACKGROUND_SCAVENGE_PARALLEL);
     ProcessItems(delegate, scavenger);
   }
 }

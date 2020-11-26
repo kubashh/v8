@@ -87,8 +87,7 @@ void CollectionBarrier::ActivateStackGuardAndPostTask() {
 }
 
 void CollectionBarrier::BlockUntilCollected() {
-  TRACE_BACKGROUND_GC(heap_->tracer(),
-                      GCTracer::BackgroundScope::BACKGROUND_COLLECTION);
+  TRACE_GC(heap_->tracer(), GCTracer::Scope::BACKGROUND_COLLECTION);
   base::MutexGuard guard(&mutex_);
 
   while (CollectionRequested()) {
