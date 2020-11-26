@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b620478_922e7cf0",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "I renamed the accessors to [Set/Get]BytecodeArrayForDebugging, which is a bit clearer imho. Wdyt?",
+      "parentUuid": "8423d638_d774d4ed",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a19db8f_707a915e",
         "filename": "src/objects/debug-objects.h",
         "patchSetId": 9
@@ -31,6 +49,24 @@
       "writtenOn": "2020-11-25T16:14:33Z",
       "side": 1,
       "message": "Do we still need/want the torque-generated ones?",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10d21d0d_f4ea8aa4",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "Since the most critical modifications are performed under the lock, there was merely need for a little bit of additional synchronization besides that, so I just used acquire/release for those, but we could very well use those everywhere and hide the non-synchronizing ones.",
+      "parentUuid": "4a19db8f_707a915e",
       "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f03c526a_fdce48e0",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "There are currently ways to call this from the background thread (e.g. through GetInlinability()). If I don\u0027t miss anything, as long as the caller prevents bytecode flushing, this function should be safe to call as the acquire load makes sure we read initialized objects and once HasBytecodeArray is true, it stays true.",
+      "parentUuid": "63f35e80_01ec0e13",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08d8858b_2c96775e",
         "filename": "src/objects/shared-function-info.cc",
         "patchSetId": 9
@@ -65,6 +119,24 @@
       "writtenOn": "2020-11-25T16:14:33Z",
       "side": 1,
       "message": "Handle\u003cBytecodeArray\u003e original_bytecode_array(\n    shared-\u003eGetBytecodeArray(), isolate);",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a11a99b_dd5c685b",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08d8858b_2c96775e",
       "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9584d98_4b4f7d27",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3f41b43_cf54e396",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "decf5a8a_f93e52f7",
@@ -99,6 +189,30 @@
       "writtenOn": "2020-11-25T16:14:33Z",
       "side": 1,
       "message": "ReadOnlyRoots(isolate).undefined_value()",
+      "range": {
+        "startLine": 701,
+        "startChar": 8,
+        "endLine": 701,
+        "endChar": 46
+      },
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "632ef035_aef5ea8f",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "decf5a8a_f93e52f7",
       "range": {
         "startLine": 701,
         "startChar": 8,
@@ -128,6 +242,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b9122f42_993fee78",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "Yes, I was wondering about this path in the original implementation as well. I\u0027ll check if this is even reachable.",
+      "parentUuid": "e088d253_ba5750a2",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "13dc549f_d83c37d5",
         "filename": "src/objects/shared-function-info.cc",
         "patchSetId": 9
@@ -139,6 +271,24 @@
       "writtenOn": "2020-11-25T16:14:33Z",
       "side": 1,
       "message": "Please make that the first thing.",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6c1c811_9ddef459",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13dc549f_d83c37d5",
       "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -162,6 +312,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "80a361ae_5aeeb017",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "Are you referring to the additional SetDebugBytecodeArray in the caller? This is needed before the block where the functions are redirected. I was considering moving this entire block into UninstallDebugBytecode, but I was slightly in favour of not doing it. Do you think I should do that?",
+      "parentUuid": "95e6c94d_b6622e8d",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "12c51e5d_ee3b0065",
         "filename": "src/objects/shared-function-info.h",
         "patchSetId": 9
@@ -173,6 +341,24 @@
       "writtenOn": "2020-11-25T16:14:33Z",
       "side": 1,
       "message": "Please add some documentation for these two.",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eef1fd2_33bd6412",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-26T13:22:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12c51e5d_ee3b0065",
       "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
