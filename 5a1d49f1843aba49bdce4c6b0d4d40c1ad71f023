@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "78c18636_acd641e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-26T11:57:15Z",
+      "side": 1,
+      "message": "Oh, and please add some description here. If it\u0027s not too much hassle, it would even be nice to land the LiftoffCondition refactoring as a separate CL, and then do the s390 stuff on top of that.",
+      "revId": "5a1d49f1843aba49bdce4c6b0d4d40c1ad71f023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a0944b44_cdb81f6e",
