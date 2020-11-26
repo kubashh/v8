@@ -33,6 +33,69 @@
       "message": "LGTM",
       "revId": "cb9e12c9d32082be6c6de5e3d9239cab2473ef96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a71f3e8_56a26b84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-11-26T06:46:03Z",
+      "side": 1,
+      "message": "lgtm % nit/question",
+      "revId": "cb9e12c9d32082be6c6de5e3d9239cab2473ef96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c606c23b_09c7f1f2",
+        "filename": "src/wasm/wasm-debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-11-26T06:46:03Z",
+      "side": 1,
+      "message": "ultra-nit: I had to read the comment twice. IIUC we are always \"stepping inside\" of wasm. The difference being that after the step we either stay in the same wasm frame or leave the frame. Maybe\n\n  // Returns true if we stay inside the passed frame after the step. False if the frame will\n  // return after the step.\n\nor something similar is more clear? Wdyt?",
+      "range": {
+        "startLine": 173,
+        "startChar": 28,
+        "endLine": 173,
+        "endChar": 51
+      },
+      "revId": "cb9e12c9d32082be6c6de5e3d9239cab2473ef96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dadb340_93573ffd",
+        "filename": "test/inspector/debugger/wasm-stepping-out-from-js.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-11-26T06:46:03Z",
+      "side": 1,
+      "message": "q for my understanding: Why are we breaking at the script entry (#instance.exports.main()) first? Is it because the last action was a \u0027Step out\u0027 instead of a \u0027continue\u0027?",
+      "range": {
+        "startLine": 55,
+        "startChar": 2,
+        "endLine": 55,
+        "endChar": 132
+      },
+      "revId": "cb9e12c9d32082be6c6de5e3d9239cab2473ef96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
