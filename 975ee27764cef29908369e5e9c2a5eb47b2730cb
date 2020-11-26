@@ -16,6 +16,74 @@
       "message": "PTAL",
       "revId": "975ee27764cef29908369e5e9c2a5eb47b2730cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a28f9b88_e2c6f4e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2020-11-26T09:45:21Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "975ee27764cef29908369e5e9c2a5eb47b2730cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1df9680_02494053",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2020-11-26T09:45:21Z",
+      "side": 1,
+      "message": "nit: tool-tip for consistency with other ids",
+      "revId": "975ee27764cef29908369e5e9c2a5eb47b2730cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dc5bcaf_3b439818",
+        "filename": "tools/system-analyzer/view/tool-tip-template.html",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2020-11-26T09:45:21Z",
+      "side": 1,
+      "message": "missing indentation",
+      "revId": "975ee27764cef29908369e5e9c2a5eb47b2730cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce37a29d_6f107999",
+        "filename": "tools/system-analyzer/view/tool-tip.mjs",
+        "patchSetId": 8
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2020-11-26T09:45:21Z",
+      "side": 1,
+      "message": "nit: missing empty line",
+      "revId": "975ee27764cef29908369e5e9c2a5eb47b2730cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
