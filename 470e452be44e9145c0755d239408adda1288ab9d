@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a77a50cd_e065799a",
+        "filename": "tools/system-analyzer/view/helper.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-26T17:03:41Z",
+      "side": 1,
+      "message": "FIXED,\nit haunts me 😄 (and it\u0027s sooo much shorter)",
+      "parentUuid": "f0aeaba5_2c213d79",
+      "revId": "470e452be44e9145c0755d239408adda1288ab9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "662c63ad_ad1c7df6",
@@ -48,6 +66,24 @@
       "writtenOn": "2020-11-25T22:36:58Z",
       "side": 1,
       "message": "Typo: scriptNode",
+      "revId": "470e452be44e9145c0755d239408adda1288ab9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdaf5fe2_4fa5150a",
+        "filename": "tools/system-analyzer/view/source-panel-template.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-26T17:03:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "662c63ad_ad1c7df6",
       "revId": "470e452be44e9145c0755d239408adda1288ab9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
