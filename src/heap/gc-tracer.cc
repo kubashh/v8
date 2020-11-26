@@ -8,6 +8,7 @@
 
 #include "src/base/atomic-utils.h"
 #include "src/execution/isolate.h"
+#include "src/execution/thread-id.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/incremental-marking.h"
 #include "src/heap/spaces.h"
@@ -37,45 +38,35 @@ RuntimeCallCounterId GCTracer::RCSCounterFromScope(Scope::ScopeId id) {
       static_cast<int>(id));
 }
 
-RuntimeCallCounterId GCTracer::RCSCounterFromBackgroundScope(
-    BackgroundScope::ScopeId id) {
-  STATIC_ASSERT(Scope::FIRST_BACKGROUND_SCOPE ==
-                Scope::BACKGROUND_ARRAY_BUFFER_SWEEP);
-  STATIC_ASSERT(
-      0 == static_cast<int>(BackgroundScope::BACKGROUND_ARRAY_BUFFER_SWEEP));
-  return static_cast<RuntimeCallCounterId>(
-      static_cast<int>(RCSCounterFromScope(Scope::FIRST_BACKGROUND_SCOPE)) +
-      static_cast<int>(id));
-}
-
-GCTracer::Scope::Scope(GCTracer* tracer, ScopeId scope)
-    : tracer_(tracer), scope_(scope) {
+GCTracer::Scope::Scope(GCTracer* tracer, ScopeId scope, ThreadKind thread_kind)
+    : tracer_(tracer), scope_(scope), thread_kind_(thread_kind) {
   start_time_ = tracer_->heap_->MonotonicallyIncreasingTimeInMs();
   if (V8_LIKELY(!TracingFlags::is_runtime_stats_enabled())) return;
-  runtime_stats_ = tracer_->heap_->isolate()->counters()->runtime_call_stats();
-  runtime_stats_->Enter(&timer_, GCTracer::RCSCounterFromScope(scope));
+
+  if (thread_kind_ == ThreadKind::kMain) {
+    DCHECK_EQ(tracer_->heap_->isolate()->thread_id(), ThreadId::Current());
+    runtime_stats_ =
+        tracer_->heap_->isolate()->counters()->runtime_call_stats();
+    runtime_stats_->Enter(&timer_, GCTracer::RCSCounterFromScope(scope));
+  } else {
+    runtime_call_stats_scope_.emplace(
+        tracer->worker_thread_runtime_call_stats());
+    runtime_stats_ = runtime_call_stats_scope_->Get();
+    runtime_stats_->Enter(&timer_, GCTracer::RCSCounterFromScope(scope));
+  }
 }
 
 GCTracer::Scope::~Scope() {
-  tracer_->AddScopeSample(
-      scope_, tracer_->heap_->MonotonicallyIncreasingTimeInMs() - start_time_);
-  if (V8_LIKELY(runtime_stats_ == nullptr)) return;
-  runtime_stats_->Leave(&timer_);
-}
-
-GCTracer::BackgroundScope::BackgroundScope(GCTracer* tracer, ScopeId scope,
-                                           RuntimeCallStats* runtime_stats)
-    : tracer_(tracer), scope_(scope), runtime_stats_(runtime_stats) {
-  start_time_ = tracer_->heap_->MonotonicallyIncreasingTimeInMs();
-  if (V8_LIKELY(!TracingFlags::is_runtime_stats_enabled())) return;
-  runtime_stats_->Enter(&timer_,
-                        GCTracer::RCSCounterFromBackgroundScope(scope));
-}
-
-GCTracer::BackgroundScope::~BackgroundScope() {
   double duration_ms =
       tracer_->heap_->MonotonicallyIncreasingTimeInMs() - start_time_;
-  tracer_->AddBackgroundScopeSample(scope_, duration_ms);
+
+  if (thread_kind_ == ThreadKind::kMain) {
+    DCHECK_EQ(tracer_->heap_->isolate()->thread_id(), ThreadId::Current());
+    tracer_->AddScopeSample(scope_, duration_ms);
+  } else {
+    tracer_->AddScopeSampleBackground(scope_, duration_ms);
+  }
+
   if (V8_LIKELY(runtime_stats_ == nullptr)) return;
   runtime_stats_->Leave(&timer_);
 }
@@ -88,20 +79,6 @@ const char* GCTracer::Scope::Name(ScopeId id) {
     TRACER_SCOPES(CASE)
     TRACER_BACKGROUND_SCOPES(CASE)
     case Scope::NUMBER_OF_SCOPES:
-      break;
-  }
-#undef CASE
-  UNREACHABLE();
-  return nullptr;
-}
-
-const char* GCTracer::BackgroundScope::Name(ScopeId id) {
-#define CASE(scope)            \
-  case BackgroundScope::scope: \
-    return "V8.GC_" #scope;
-  switch (id) {
-    TRACER_BACKGROUND_SCOPES(CASE)
-    case BackgroundScope::NUMBER_OF_SCOPES:
       break;
   }
 #undef CASE
@@ -176,7 +153,7 @@ GCTracer::GCTracer(Heap* heap)
   // map it to RuntimeCallStats.
   STATIC_ASSERT(0 == Scope::MC_INCREMENTAL);
   current_.end_time = heap_->MonotonicallyIncreasingTimeInMs();
-  for (int i = 0; i < BackgroundScope::NUMBER_OF_SCOPES; i++) {
+  for (int i = 0; i < Scope::NUMBER_OF_SCOPES; i++) {
     background_counter_[i].total_duration_ms = 0;
   }
 }
@@ -209,7 +186,7 @@ void GCTracer::ResetForTesting() {
   current_mark_compact_mutator_utilization_ = 1.0;
   previous_mark_compact_end_time_ = 0;
   base::MutexGuard guard(&background_counter_mutex_);
-  for (int i = 0; i < BackgroundScope::NUMBER_OF_SCOPES; i++) {
+  for (int i = 0; i < Scope::NUMBER_OF_SCOPES; i++) {
     background_counter_[i].total_duration_ms = 0;
   }
 }
@@ -1138,9 +1115,7 @@ void GCTracer::NotifyIncrementalMarkingStart() {
 
 void GCTracer::FetchBackgroundMarkCompactCounters() {
   FetchBackgroundCounters(Scope::FIRST_MC_BACKGROUND_SCOPE,
-                          Scope::LAST_MC_BACKGROUND_SCOPE,
-                          BackgroundScope::FIRST_MC_BACKGROUND_SCOPE,
-                          BackgroundScope::LAST_MC_BACKGROUND_SCOPE);
+                          Scope::LAST_MC_BACKGROUND_SCOPE);
   heap_->isolate()->counters()->background_marking()->AddSample(
       static_cast<int>(current_.scopes[Scope::MC_BACKGROUND_MARKING]));
   heap_->isolate()->counters()->background_sweeping()->AddSample(
@@ -1149,9 +1124,7 @@ void GCTracer::FetchBackgroundMarkCompactCounters() {
 
 void GCTracer::FetchBackgroundMinorGCCounters() {
   FetchBackgroundCounters(Scope::FIRST_MINOR_GC_BACKGROUND_SCOPE,
-                          Scope::LAST_MINOR_GC_BACKGROUND_SCOPE,
-                          BackgroundScope::FIRST_MINOR_GC_BACKGROUND_SCOPE,
-                          BackgroundScope::LAST_MINOR_GC_BACKGROUND_SCOPE);
+                          Scope::LAST_MINOR_GC_BACKGROUND_SCOPE);
   heap_->isolate()->counters()->background_scavenger()->AddSample(
       static_cast<int>(
           current_.scopes[Scope::SCAVENGER_BACKGROUND_SCAVENGE_PARALLEL]));
@@ -1159,28 +1132,18 @@ void GCTracer::FetchBackgroundMinorGCCounters() {
 
 void GCTracer::FetchBackgroundGeneralCounters() {
   FetchBackgroundCounters(Scope::FIRST_GENERAL_BACKGROUND_SCOPE,
-                          Scope::LAST_GENERAL_BACKGROUND_SCOPE,
-                          BackgroundScope::FIRST_GENERAL_BACKGROUND_SCOPE,
-                          BackgroundScope::LAST_GENERAL_BACKGROUND_SCOPE);
+                          Scope::LAST_GENERAL_BACKGROUND_SCOPE);
 }
 
-void GCTracer::FetchBackgroundCounters(int first_global_scope,
-                                       int last_global_scope,
-                                       int first_background_scope,
-                                       int last_background_scope) {
-  DCHECK_EQ(last_global_scope - first_global_scope,
-            last_background_scope - first_background_scope);
+void GCTracer::FetchBackgroundCounters(int first_scope, int last_scope) {
   base::MutexGuard guard(&background_counter_mutex_);
-  int background_mc_scopes = last_background_scope - first_background_scope + 1;
-  for (int i = 0; i < background_mc_scopes; i++) {
-    current_.scopes[first_global_scope + i] +=
-        background_counter_[first_background_scope + i].total_duration_ms;
-    background_counter_[first_background_scope + i].total_duration_ms = 0;
+  for (int i = first_scope; i <= last_scope; i++) {
+    current_.scopes[i] += background_counter_[i].total_duration_ms;
+    background_counter_[i].total_duration_ms = 0;
   }
 }
 
-void GCTracer::AddBackgroundScopeSample(BackgroundScope::ScopeId scope,
-                                        double duration) {
+void GCTracer::AddScopeSampleBackground(Scope::ScopeId scope, double duration) {
   base::MutexGuard guard(&background_counter_mutex_);
   BackgroundCounter& counter = background_counter_[scope];
   counter.total_duration_ms += duration;
@@ -1260,15 +1223,12 @@ void GCTracer::RecordGCSumCounters(double atomic_pause_duration) {
           .duration +
       atomic_pause_duration;
   const double background_duration =
-      background_counter_[BackgroundScope::MC_BACKGROUND_EVACUATE_COPY]
+      background_counter_[Scope::MC_BACKGROUND_EVACUATE_COPY]
           .total_duration_ms +
-      background_counter_
-          [BackgroundScope::MC_BACKGROUND_EVACUATE_UPDATE_POINTERS]
-              .total_duration_ms +
-      background_counter_[BackgroundScope::MC_BACKGROUND_MARKING]
+      background_counter_[Scope::MC_BACKGROUND_EVACUATE_UPDATE_POINTERS]
           .total_duration_ms +
-      background_counter_[BackgroundScope::MC_BACKGROUND_SWEEPING]
-          .total_duration_ms;
+      background_counter_[Scope::MC_BACKGROUND_MARKING].total_duration_ms +
+      background_counter_[Scope::MC_BACKGROUND_SWEEPING].total_duration_ms;
 
   const double marking_duration =
       current_.incremental_marking_scopes[Scope::MC_INCREMENTAL_LAYOUT_CHANGE]
@@ -1280,8 +1240,7 @@ void GCTracer::RecordGCSumCounters(double atomic_pause_duration) {
           .duration +
       current_.scopes[Scope::MC_MARK];
   const double marking_background_duration =
-      background_counter_[BackgroundScope::MC_BACKGROUND_MARKING]
-          .total_duration_ms;
+      background_counter_[Scope::MC_BACKGROUND_MARKING].total_duration_ms;
 
   // UMA.
   heap_->isolate()->counters()->gc_mark_compactor()->AddSample(
