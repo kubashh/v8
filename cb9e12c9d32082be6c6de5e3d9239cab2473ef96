@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72213bc1_a55d9208",
+        "filename": "src/wasm/wasm-debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-26T13:30:06Z",
+      "side": 1,
+      "message": "Ack, that\u0027s more clear. Changed as proposed, with a little addition because we also return true if we end up in a called frame after the step.",
+      "parentUuid": "c606c23b_09c7f1f2",
+      "range": {
+        "startLine": 173,
+        "startChar": 28,
+        "endLine": 173,
+        "endChar": 51
+      },
+      "revId": "cb9e12c9d32082be6c6de5e3d9239cab2473ef96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dadb340_93573ffd",
@@ -88,6 +112,30 @@
       "writtenOn": "2020-11-26T06:46:03Z",
       "side": 1,
       "message": "q for my understanding: Why are we breaking at the script entry (#instance.exports.main()) first? Is it because the last action was a \u0027Step out\u0027 instead of a \u0027continue\u0027?",
+      "range": {
+        "startLine": 55,
+        "startChar": 2,
+        "endLine": 55,
+        "endChar": 132
+      },
+      "revId": "cb9e12c9d32082be6c6de5e3d9239cab2473ef96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7961a76_7e11133a",
+        "filename": "test/inspector/debugger/wasm-stepping-out-from-js.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-26T13:30:06Z",
+      "side": 1,
+      "message": "Yes. This seems to be the expected behaviour, see for example step-into-next-script.js, with the title \u0027Debugger breaks in next script after stepOut from previous one.\u0027.",
+      "parentUuid": "3dadb340_93573ffd",
       "range": {
         "startLine": 55,
         "startChar": 2,
