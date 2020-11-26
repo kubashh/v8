@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0392b2b3_4108f028",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-26T09:38:15Z",
+      "side": 1,
+      "message": "Thanks for the advice, guys! I\u0027ll add a DCHECK as Georg suggests and ideally document this assumption too. @Georg the rest of the cases seem to be documented in this file, why not add a comment in it too?",
+      "parentUuid": "fdc4f959_d31ac208",
+      "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2dec6a7e_e72023ee",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 1
@@ -141,6 +159,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a87a6368_bfc221d8",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2611,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-26T09:38:15Z",
+      "side": 1,
+      "message": "I see, TBH I didn\u0027t find a test covering this particular behaviour. I.e. running the test suite with both possible values here didn\u0027t produce any difference. I\u0027ll revert this change a put a comment.",
+      "parentUuid": "1a3ebd8f_90310ccd",
+      "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1576e161_60cb55d9",
@@ -188,6 +224,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5e3d0e5_c23dc2d6",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-26T09:38:15Z",
+      "side": 1,
+      "message": "Good point, I was moving this parameter up and down the call chain and left it like this to allow for more precision, but in this particular case it\u0027s unnecessary.",
+      "parentUuid": "593fc940_58adf40d",
+      "range": {
+        "startLine": 2644,
+        "startChar": 23,
+        "endLine": 2644,
+        "endChar": 40
+      },
+      "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e96236a4_ed42441c",
@@ -211,6 +271,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e2cee2_dd446a6e",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28263,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-26T09:38:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e96236a4_ed42441c",
+      "range": {
+        "startLine": 28263,
+        "startChar": 5,
+        "endLine": 28263,
+        "endChar": 8
+      },
+      "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a67874a0_17d77d43",
@@ -224,6 +308,24 @@
       "writtenOn": "2020-11-25T14:58:39Z",
       "side": 1,
       "message": "Please inform the mips people of this change so that they can port it, e.g. by removing the #if, thus making the test fail on mips.",
+      "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4107bcf9_ee0bd9f2",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28264,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-26T09:38:15Z",
+      "side": 1,
+      "message": "Good idea, I\u0027ll leave the todo as an explanation.",
+      "parentUuid": "a67874a0_17d77d43",
       "revId": "4a1403d05daf5cfb134dfe21acd2039bcf51e0a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
