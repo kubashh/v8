@@ -6,6 +6,7 @@
 #define V8_OBJECTS_SHARED_FUNCTION_INFO_INL_H_
 
 #include "src/base/macros.h"
+#include "src/base/platform/mutex.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/local-heap-inl.h"
@@ -463,6 +464,8 @@ bool SharedFunctionInfo::HasBytecodeArray() const {
 }
 
 BytecodeArray SharedFunctionInfo::GetBytecodeArray() const {
+  base::SharedMutexGuard<base::kShared> mutex_guard(
+      GetIsolate()->shared_function_info_access());
   DCHECK(HasBytecodeArray());
   if (HasDebugInfo() && GetDebugInfo().HasInstrumentedBytecodeArray()) {
     return GetDebugInfo().OriginalBytecodeArray();

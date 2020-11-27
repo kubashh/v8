@@ -653,6 +653,16 @@ class SharedFunctionInfo : public HeapObject {
   // This is needed to set up the [[HomeObject]] on the function instance.
   inline bool needs_home_object() const;
 
+  // Sets the bytecode in {shared}'s DebugInfo as the bytecode to
+  // be returned by following calls to GetDebugBytecodeArray. Stores a reference
+  // to the original bytecode in the DebugInfo.
+  static void InstallDebugBytecode(Handle<SharedFunctionInfo> shared,
+                                   Isolate* isolate);
+  // Removes the debug bytecode and restores the original bytecode to be
+  // returned by following calls to GetDebugBytecodeArray.
+  static void UninstallDebugBytecode(SharedFunctionInfo shared,
+                                     Isolate* isolate);
+
  private:
 #ifdef VERIFY_HEAP
   void SharedFunctionInfoVerify(ReadOnlyRoots roots);
