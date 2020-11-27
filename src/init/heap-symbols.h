@@ -346,7 +346,6 @@
   V(_, error_script_symbol)                           \
   V(_, error_start_pos_symbol)                        \
   V(_, frozen_symbol)                                 \
-  V(_, home_object_symbol)                            \
   V(_, interpreter_trampoline_symbol)                 \
   V(_, megamorphic_symbol)                            \
   V(_, native_context_index_symbol)                   \

@@ -325,6 +325,10 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
                                          Register instance);
   void BuildGeneratorObjectVariableInitialization();
   void VisitBlockDeclarationsAndStatements(Block* stmt);
+  Register GetReceiverScopeContextRegister(int* depth) const;
+  void BuildHomeObjectLoad();
+  // The value to be stored should be in the accumulator.
+  void BuildHomeObjectStore();
   void VisitSetHomeObject(Register value, Register home_object,
                           LiteralProperty* property);
   void VisitLiteralAccessor(Register home_object, LiteralProperty* property,

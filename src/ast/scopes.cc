@@ -189,7 +189,7 @@ ClassScope::ClassScope(Isolate* isolate, Zone* zone,
         ast_value_factory, ast_value_factory->GetString(handle(name, isolate)),
         kNoSourcePosition);
     var->AllocateTo(VariableLocation::CONTEXT,
-                    Context::MIN_CONTEXT_SLOTS + index);
+                    Context::CLASS_CONTEXT_SLOTS + index);
   }
 }
 
@@ -742,6 +742,7 @@ Scope* Scope::FinalizeBlockScope() {
          !AsDeclarationScope()->sloppy_eval_can_extend_vars());
 
   // This block does not need a context.
+  DCHECK(!is_class_scope());
   num_heap_slots_ = 0;
 
   // Mark scope as removed by making it its own sibling.
@@ -2430,7 +2431,8 @@ void Scope::AllocateVariablesRecursively() {
     // scope.
     bool must_have_context =
         scope->is_with_scope() || scope->is_module_scope() ||
-        scope->IsAsmModule() || scope->ForceContextForLanguageMode() ||
+        scope->is_class_scope() || scope->IsAsmModule() ||
+        scope->ForceContextForLanguageMode() ||
         (scope->is_function_scope() &&
          scope->AsDeclarationScope()->sloppy_eval_can_extend_vars()) ||
         (scope->is_block_scope() && scope->is_declaration_scope() &&

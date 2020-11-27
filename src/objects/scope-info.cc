@@ -642,6 +642,10 @@ bool ScopeInfo::HasContextExtensionSlot() const {
 }
 
 int ScopeInfo::ContextHeaderLength() const {
+  if (length() > 0 && scope_type() == CLASS_SCOPE) {
+    DCHECK(!HasContextExtensionSlot());
+    return Context::CLASS_CONTEXT_SLOTS;
+  }
   return HasContextExtensionSlot() ? Context::MIN_CONTEXT_EXTENDED_SLOTS
                                    : Context::MIN_CONTEXT_SLOTS;
 }
@@ -921,7 +925,7 @@ int ScopeInfo::ContextSlotIndex(ScopeInfo scope_info, String name,
 int ScopeInfo::SavedClassVariableContextLocalIndex() const {
   if (length() > 0 && HasSavedClassVariableIndexBit::decode(Flags())) {
     int index = Smi::ToInt(get(SavedClassVariableInfoIndex()));
-    return index - Context::MIN_CONTEXT_SLOTS;
+    return index - Context::CLASS_CONTEXT_SLOTS;
   }
   return -1;
 }
