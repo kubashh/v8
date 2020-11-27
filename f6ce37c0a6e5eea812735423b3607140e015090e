@@ -16,6 +16,80 @@
       "message": "PTAL cleanup CL",
       "revId": "f6ce37c0a6e5eea812735423b3607140e015090e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0618c4d_a16854d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-27T14:27:21Z",
+      "side": 1,
+      "message": "lgtm, but you need an inspector owner. 😊",
+      "revId": "f6ce37c0a6e5eea812735423b3607140e015090e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b894f3ea_075a0141",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-27T14:27:21Z",
+      "side": 1,
+      "message": "Do we need that?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 23
+      },
+      "revId": "f6ce37c0a6e5eea812735423b3607140e015090e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26792a61_6ef0156e",
+        "filename": "test/cctest/test-accessors.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-27T14:27:21Z",
+      "side": 1,
+      "message": "the same here",
+      "revId": "f6ce37c0a6e5eea812735423b3607140e015090e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ae5a9a7_7fa3a39b",
+        "filename": "test/cctest/test-api-array-buffer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-11-27T14:27:21Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "f6ce37c0a6e5eea812735423b3607140e015090e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
