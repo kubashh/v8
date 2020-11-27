@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91996c01_d028ba29",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-27T08:46:13Z",
+      "side": 1,
+      "message": "Hmm it\u0027s still confusing, isn\u0027t it? We are not setting it for debugging, we are setting it for executing. I think this should just be called SetBytecodeArray. Actually can\u0027t we use set_bytecode_array since we know which case we\u0027re in?",
+      "parentUuid": "0b620478_922e7cf0",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a19db8f_707a915e",
         "filename": "src/objects/debug-objects.h",
         "patchSetId": 9
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Since the most critical modifications are performed under the lock, there was merely need for a little bit of additional synchronization besides that, so I just used acquire/release for those, but we could very well use those everywhere and hide the non-synchronizing ones.",
       "parentUuid": "4a19db8f_707a915e",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a63c1e36_70a74e77",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-27T08:46:13Z",
+      "side": 1,
+      "message": "Yeah let\u0027s do that, I think that\u0027s the preferred way and we did it for others as well. Can we tell Torque not to generate them?",
+      "parentUuid": "10d21d0d_f4ea8aa4",
       "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -324,6 +360,24 @@
       "side": 1,
       "message": "Are you referring to the additional SetDebugBytecodeArray in the caller? This is needed before the block where the functions are redirected. I was considering moving this entire block into UninstallDebugBytecode, but I was slightly in favour of not doing it. Do you think I should do that?",
       "parentUuid": "95e6c94d_b6622e8d",
+      "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "578dfa22_da6af305",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-27T08:46:13Z",
+      "side": 1,
+      "message": "Is it really needed before the redirection? The redirection uses SFI\u0027s GetBytecodeArray, so it will read from the DebugInfo.",
+      "parentUuid": "80a361ae_5aeeb017",
       "revId": "75959bd6d66309efbd8b7884bd88a459e392ca03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
