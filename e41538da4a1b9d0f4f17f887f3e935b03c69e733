@@ -16,6 +16,23 @@
       "message": "Thanks for the review, PTAL again!",
       "revId": "e41538da4a1b9d0f4f17f887f3e935b03c69e733",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd70cdb7_1cb595b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-27T08:03:58Z",
+      "side": 1,
+      "message": "NIce, thanks!",
+      "revId": "e41538da4a1b9d0f4f17f887f3e935b03c69e733",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
