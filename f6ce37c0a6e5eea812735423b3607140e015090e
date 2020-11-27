@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "790dab20_6f7ccc7e",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-27T16:07:31Z",
+      "side": 1,
+      "message": "Presubmit checks barked... at some point, but it seems to pass now.\n\nDONE",
+      "parentUuid": "b894f3ea_075a0141",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 23
+      },
+      "revId": "f6ce37c0a6e5eea812735423b3607140e015090e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26792a61_6ef0156e",
@@ -75,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de0e13c3_be248c88",
+        "filename": "test/cctest/test-accessors.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-27T16:07:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26792a61_6ef0156e",
+      "revId": "f6ce37c0a6e5eea812735423b3607140e015090e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ae5a9a7_7fa3a39b",
@@ -88,6 +130,24 @@
       "writtenOn": "2020-11-27T14:27:21Z",
       "side": 1,
       "message": "and here",
+      "revId": "f6ce37c0a6e5eea812735423b3607140e015090e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fddf969e_8c93964a",
+        "filename": "test/cctest/test-api-array-buffer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-27T16:07:31Z",
+      "side": 1,
+      "message": "this one passed.",
+      "parentUuid": "0ae5a9a7_7fa3a39b",
       "revId": "f6ce37c0a6e5eea812735423b3607140e015090e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
