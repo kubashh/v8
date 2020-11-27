@@ -484,6 +484,10 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
     UNREACHABLE();
   }
   int ContextHeaderLength() const {
+    if (scope_type_ == CLASS_SCOPE) {
+      DCHECK(!HasContextExtensionSlot());
+      return Context::CLASS_CONTEXT_SLOTS;
+    }
     return HasContextExtensionSlot() ? Context::MIN_CONTEXT_EXTENDED_SLOTS
                                      : Context::MIN_CONTEXT_SLOTS;
   }

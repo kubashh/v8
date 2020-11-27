@@ -919,7 +919,6 @@ class Literal final : public Expression {
     kHeapNumber,
     kBigInt,
     kString,
-    kSymbol,
     kBoolean,
     kUndefined,
     kNull,
@@ -974,11 +973,6 @@ class Literal final : public Expression {
     return string_;
   }
 
-  AstSymbol AsSymbol() {
-    DCHECK_EQ(type(), kSymbol);
-    return symbol_;
-  }
-
   V8_EXPORT_PRIVATE bool ToBooleanIsTrue() const;
   bool ToBooleanIsFalse() const { return !ToBooleanIsTrue(); }
 
@@ -1019,11 +1013,6 @@ class Literal final : public Expression {
     bit_field_ = TypeField::update(bit_field_, kString);
   }
 
-  Literal(AstSymbol symbol, int position)
-      : Expression(position, kLiteral), symbol_(symbol) {
-    bit_field_ = TypeField::update(bit_field_, kSymbol);
-  }
-
   Literal(bool boolean, int position)
       : Expression(position, kLiteral), boolean_(boolean) {
     bit_field_ = TypeField::update(bit_field_, kBoolean);
@@ -1038,7 +1027,6 @@ class Literal final : public Expression {
     const AstRawString* string_;
     int smi_;
     double number_;
-    AstSymbol symbol_;
     AstBigInt bigint_;
     bool boolean_;
   };
@@ -2499,20 +2487,12 @@ class NativeFunctionLiteral final : public Expression {
 
 
 class SuperPropertyReference final : public Expression {
- public:
-  Expression* home_object() const { return home_object_; }
-
  private:
   friend class AstNodeFactory;
   friend Zone;
 
-  // We take in ThisExpression* only as a proof that it was accessed.
-  SuperPropertyReference(Expression* home_object, int pos)
-      : Expression(pos, kSuperPropertyReference), home_object_(home_object) {
-    DCHECK(home_object->IsProperty());
-  }
-
-  Expression* home_object_;
+  explicit SuperPropertyReference(int pos)
+      : Expression(pos, kSuperPropertyReference) {}
 };
 
 
@@ -2916,11 +2896,6 @@ class AstNodeFactory final {
     return zone_->New<Literal>(string, pos);
   }
 
-  // A JavaScript symbol (ECMA-262 edition 6).
-  Literal* NewSymbolLiteral(AstSymbol symbol, int pos) {
-    return zone_->New<Literal>(symbol, pos);
-  }
-
   Literal* NewNumberLiteral(double number, int pos);
 
   Literal* NewSmiLiteral(int number, int pos) {
@@ -3199,9 +3174,8 @@ class AstNodeFactory final {
     return zone_->New<NativeFunctionLiteral>(name, extension, pos);
   }
 
-  SuperPropertyReference* NewSuperPropertyReference(Expression* home_object,
-                                                    int pos) {
-    return zone_->New<SuperPropertyReference>(home_object, pos);
+  SuperPropertyReference* NewSuperPropertyReference(int pos) {
+    return zone_->New<SuperPropertyReference>(pos);
   }
 
   SuperCallReference* NewSuperCallReference(VariableProxy* new_target_var,

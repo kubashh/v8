@@ -113,11 +113,6 @@ RUNTIME_FUNCTION(Runtime_ThrowNotSuperConstructor) {
   return ThrowNotSuperConstructor(isolate, constructor, function);
 }
 
-RUNTIME_FUNCTION(Runtime_HomeObjectSymbol) {
-  DCHECK_EQ(0, args.length());
-  return ReadOnlyRoots(isolate).home_object_symbol();
-}
-
 namespace {
 
 template <typename Dictionary>
@@ -134,18 +129,11 @@ Handle<Name> KeyToName<NumberDictionary>(Isolate* isolate, Handle<Object> key) {
   return isolate->factory()->NumberToString(key);
 }
 
+// FIXME: call once per class
 inline void SetHomeObject(Isolate* isolate, JSFunction method,
                           JSObject home_object) {
   if (method.shared().needs_home_object()) {
-    const InternalIndex kPropertyIndex(
-        JSFunction::kMaybeHomeObjectDescriptorIndex);
-    CHECK_EQ(
-        method.map().instance_descriptors(kRelaxedLoad).GetKey(kPropertyIndex),
-        ReadOnlyRoots(isolate).home_object_symbol());
-
-    FieldIndex field_index =
-        FieldIndex::ForDescriptor(method.map(), kPropertyIndex);
-    method.RawFastPropertyAtPut(field_index, home_object);
+    method.context().set(Context::HOME_OBJECT_INDEX, home_object);
   }
 }
 

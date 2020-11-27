@@ -200,8 +200,6 @@ class AstConsString final : public ZoneObject {
   Segment segment_;
 };
 
-enum class AstSymbol : uint8_t { kHomeObjectSymbol };
-
 class AstBigInt {
  public:
   // |bigint| must be a NUL-terminated string of ASCII characters

@@ -72,6 +72,7 @@ function assertAccessorDescriptor(object, name) {
     [ID(4294967295)]() { return '4294967295' + super.m(); }
   }
 
+  // FIXME: add some kind of GetHomeObject runtime func
   assertSame(Derived.prototype, Derived.prototype.a[%HomeObjectSymbol()]);
 
   assertMethodDescriptor(Derived.prototype, "a");
