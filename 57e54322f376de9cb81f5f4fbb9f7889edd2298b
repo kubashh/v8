@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f5fc68c_5e4ffef4",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2724,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "521b502c_e5c3c902",
+      "range": {
+        "startLine": 2724,
+        "startChar": 10,
+        "endLine": 2724,
+        "endChar": 25
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5f1a87e_aa8ea6f4",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-11-25T14:23:29Z",
       "side": 1,
       "message": "I think this is supposed to be called by Reduce internally, right? Maybe we should have this in the private section then.",
+      "range": {
+        "startLine": 62,
+        "startChar": 2,
+        "endLine": 62,
+        "endChar": 75
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b06844a_d7a0c52c",
+        "filename": "src/compiler/graph-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Actually this is the public method that gets called by:\n- ScheduledMachineLowering::Run()\n- SourcePositionWrapper::Reduce()\n- NodeOriginsWrapper::Reduce()\nand especially by:\n- GraphReducer::Reduce(), which passes the ObserveNodeManager. This function calls the virtual Reduce() function, which is private and is overridden by all GraphReducer\u0027s derived classes.",
+      "parentUuid": "d5f1a87e_aa8ea6f4",
       "range": {
         "startLine": 62,
         "startChar": 2,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "985d0b60_8c90b3ed",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b831f090_51e3d0cf",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 18
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ceba0c78_96c54496",
@@ -100,6 +172,30 @@
       "writtenOn": "2020-11-25T14:23:29Z",
       "side": 1,
       "message": "see below",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 3
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "469448cf_f6be452f",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ceba0c78_96c54496",
       "range": {
         "startLine": 69,
         "startChar": 0,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "749484e5_1a763da8",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Removed OnNodeReplaced and OnNodeDeleted.",
+      "parentUuid": "e3a96336_e662ad52",
+      "range": {
+        "startLine": 144,
+        "startChar": 6,
+        "endLine": 144,
+        "endChar": 33
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5d0cd8c_e0929f6e",
@@ -146,6 +266,30 @@
       "writtenOn": "2020-11-25T14:23:29Z",
       "side": 1,
       "message": "new_node?",
+      "range": {
+        "startLine": 146,
+        "startChar": 22,
+        "endLine": 146,
+        "endChar": 30
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdd486b6_5c1b5c82",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Oops...",
+      "parentUuid": "f5d0cd8c_e0929f6e",
       "range": {
         "startLine": 146,
         "startChar": 22,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17118205_001d2826",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "9ea7c535_3492cc71",
+      "range": {
+        "startLine": 151,
+        "startChar": 7,
+        "endLine": 151,
+        "endChar": 20
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a99baeba_4bc8d69d",
@@ -192,6 +360,30 @@
       "writtenOn": "2020-11-25T14:23:29Z",
       "side": 1,
       "message": "If we keep Deleted-handler, we could remove the node from the observations_ map here.",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 45
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9970db3d_995f1928",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a99baeba_4bc8d69d",
       "range": {
         "startLine": 154,
         "startChar": 0,
@@ -225,6 +417,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "817ee072_1a00a87d",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "629ea52f_a2d5f7e7",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 49
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcb14052_a3f3d18e",
@@ -238,6 +454,30 @@
       "writtenOn": "2020-11-25T14:23:29Z",
       "side": 1,
       "message": "I\u0027m curious how robust this is, I\u0027m afraid people are so used to using NodeProperties::ChangeOp that future changes might reintroduce this without us noting. We should think about how to prevent this or if here is another option to keep using NodeProperties::ChangeOp. Let\u0027s discuss that in a meeting.",
+      "range": {
+        "startLine": 782,
+        "startChar": 4,
+        "endLine": 782,
+        "endChar": 31
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fb96264_25e7da69",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "As discussed, added class NodeProperties in SimplifiedLowering and in RepresentationSelector, with ChangeOp defined as private, so that devs will be aware that NodeProperties::ChangeOp should not be called directly.",
+      "parentUuid": "dcb14052_a3f3d18e",
       "range": {
         "startLine": 782,
         "startChar": 4,
@@ -273,6 +513,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a8686bc6_2a12363d",
+        "filename": "test/cctest/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Not sure... but we should have a test for %ObserveNode.",
+      "parentUuid": "c50c922b_40df0844",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 130,
+        "endChar": 39
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a24fd134_c846b11c",
         "filename": "test/cctest/compiler/test-sloppy-equality.cc",
         "patchSetId": 6
@@ -284,6 +548,30 @@
       "writtenOn": "2020-11-25T14:23:29Z",
       "side": 1,
       "message": "I noticed you relaxed a bunch of cases here. Didn\u0027t the original (commented) cases work as they were?",
+      "range": {
+        "startLine": 163,
+        "startChar": 2,
+        "endLine": 206,
+        "endChar": 51
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b93f142_a8e4753a",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-11-28T20:22:31Z",
+      "side": 1,
+      "message": "Yes, all the modified test cases were not passing.",
+      "parentUuid": "a24fd134_c846b11c",
       "range": {
         "startLine": 163,
         "startChar": 2,
