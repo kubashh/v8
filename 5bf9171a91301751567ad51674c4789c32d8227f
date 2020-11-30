@@ -16,6 +16,23 @@
       "message": "Hi Jakob, hi Leszek,\n\ncan you please take a look at\ndebug/\nexecution/\nheap/\nsnapshot/\n\nThanks",
       "revId": "5bf9171a91301751567ad51674c4789c32d8227f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e3dd301_a684c7b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-11-30T11:44:52Z",
+      "side": 1,
+      "message": "debug execution snapshot lgtm",
+      "revId": "5bf9171a91301751567ad51674c4789c32d8227f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
