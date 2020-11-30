@@ -10,6 +10,19 @@
 namespace v8 {
 namespace metrics {
 
+enum CompileType { kScript, kModule };
+enum Thread { kMain, kBackground };
+
+struct Compile {
+  int script_id = 0;
+  bool is_toplevel = false;
+  bool is_module = false;
+  bool is_eval = false;
+  CompileType type = kScript;
+  Thread thread = kMain;
+  int64_t wall_clock_duration_in_us = -1;
+};
+
 struct WasmModuleDecoded {
   bool async = false;
   bool streamed = false;
@@ -48,13 +61,14 @@ struct WasmModulesPerIsolate {
   size_t count = 0;
 };
 
-#define V8_MAIN_THREAD_METRICS_EVENTS(V) \
-  V(WasmModuleDecoded)                   \
-  V(WasmModuleCompiled)                  \
-  V(WasmModuleInstantiated)              \
-  V(WasmModuleTieredUp)
+#define V8_MAIN_THREAD_METRICS_EVENTS(V)   \
+  V(::v8::metrics::WasmModuleDecoded)      \
+  V(::v8::metrics::WasmModuleCompiled)     \
+  V(::v8::metrics::WasmModuleInstantiated) \
+  V(::v8::metrics::WasmModuleTieredUp)     \
+  V(::v8::metrics::Compile)
 
-#define V8_THREAD_SAFE_METRICS_EVENTS(V) V(WasmModulesPerIsolate)
+#define V8_THREAD_SAFE_METRICS_EVENTS(V) V(::v8::metrics::WasmModulesPerIsolate)
 
 /**
  * This class serves as a base class for recording event-based metrics in V8.

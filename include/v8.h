@@ -8396,7 +8396,6 @@ class V8_EXPORT Isolate {
      */
     int embedder_wrapper_type_index = -1;
     int embedder_wrapper_object_index = -1;
-
     /**
      * If parameters are set, V8 creates a managed C++ heap as extension to its
      * JavaScript heap.
