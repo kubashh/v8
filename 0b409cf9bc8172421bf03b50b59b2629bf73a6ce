@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65751bf8_d35fc61a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-11-30T16:57:53Z",
+      "side": 1,
+      "message": "PTAL. This should give the wasm-fuzzer a little boost.",
+      "revId": "0b409cf9bc8172421bf03b50b59b2629bf73a6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
