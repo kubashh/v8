@@ -139,6 +139,24 @@
       "parentUuid": "e959747c_9d1ba64c",
       "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81c711aa_999acd1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-11-30T14:46:29Z",
+      "side": 1,
+      "message": "Jumbo builds were removed. See https://groups.google.com/a/chromium.org/g/chromium-dev/c/DP9TQszzQLI\n\nWhy does the original fail to compile with jumbo builds?",
+      "parentUuid": "778b789c_fd5e2451",
+      "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
