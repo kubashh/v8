@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "647a018b_825bf39c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-11-30T10:00:15Z",
+      "side": 1,
+      "message": "PTAL, hopefully this mitigates the performance regression.",
+      "revId": "43d8f19673c493f4712f3b54a2f01f5e756fb6dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
