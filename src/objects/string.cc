@@ -182,6 +182,9 @@ bool String::MakeExternal(v8::String::ExternalStringResource* resource) {
   ReadOnlyRoots roots(isolate);
   if (size < ExternalString::kSizeOfAllExternalStrings) {
     if (is_internalized) {
+      // TODO(solanes, v8:7790): Concurrently accessing internal external
+      // uncached strings is not thread-safe yet.
+      if (FLAG_concurrent_inlining) return false;
       new_map = roots.uncached_external_internalized_string_map();
     } else {
       new_map = roots.uncached_external_string_map();
@@ -259,6 +262,9 @@ bool String::MakeExternal(v8::String::ExternalOneByteStringResource* resource) {
   Map new_map;
   ReadOnlyRoots roots(isolate);
   if (size < ExternalString::kSizeOfAllExternalStrings) {
+    // TODO(solanes, v8:7790): Concurrently accessing internal external uncached
+    // strings is not thread-safe yet.
+    if (FLAG_concurrent_inlining && is_internalized) return false;
     new_map = is_internalized
                   ? roots.uncached_external_one_byte_internalized_string_map()
                   : roots.uncached_external_one_byte_string_map();
