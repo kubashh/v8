@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f2e5b73_d0aa92f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-30T17:20:18Z",
+      "side": 1,
+      "message": "PTAL.\n\nThanks,\nMythri",
+      "revId": "018f8d933b9e97a62a7016848db54cd1a72ef089",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d758c590_1e888418",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-30T17:20:18Z",
+      "side": 1,
+      "message": "Leszek, from the discussion I thought maybe there is some value in keeping this for future investigations. Happy to remove if I understood it wrong. Also after cleanup, it doesn\u0027t seem too complex to have this.",
+      "revId": "018f8d933b9e97a62a7016848db54cd1a72ef089",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9546be93_94f20dad",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-11-30T17:20:18Z",
+      "side": 1,
+      "message": "I am not sure why we had \n\nif (!function.shared().IsInterpreted()) continue; \n\nI think this should be always true if we have a frame on the stack. I can\u0027t think of any case where we don\u0027t have bytecode on SFI if the function is on the stack currently. \nMaybe this is a left over from FCG times?",
+      "revId": "018f8d933b9e97a62a7016848db54cd1a72ef089",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
