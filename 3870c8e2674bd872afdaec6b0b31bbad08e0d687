@@ -85,6 +85,24 @@
       "message": "It says in the bug it fails if you compile Chromium for ARM, but obviously we do compile chromium for ARM, so is there a more specific repro?",
       "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "409b5c35_1ee7f00a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-30T14:14:26Z",
+      "side": 1,
+      "message": "Good point, didn\u0027t check the related bug. Just triggered a tryjob that compiles V8 on arm64. That should point if there\u0027s a problem with this CL.",
+      "parentUuid": "71f04ade_e2d8fbbc",
+      "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
