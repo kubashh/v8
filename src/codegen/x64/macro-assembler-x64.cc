@@ -2191,6 +2191,16 @@ void TurboAssembler::AssertZeroExtended(Register int32_register) {
   }
 }
 
+void TurboAssembler::AssertSpAligned(int offset) {
+  if (emit_debug_code()) {
+    HardAbortScope hard_abort(this);  // Avoid calls to Abort.
+    movq(kScratchRegister, rsp);
+    addq(kScratchRegister, Immediate(offset));
+    testq(kScratchRegister, Immediate(0xf));
+    Check(not_equal, AbortReason::kUnexpectedStackPointer);
+  }
+}
+
 void MacroAssembler::AssertConstructor(Register object) {
   if (emit_debug_code()) {
     testb(object, Immediate(kSmiTagMask));
