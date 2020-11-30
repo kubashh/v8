@@ -516,6 +516,7 @@ Handle<String> StringTable::LookupKey(LocalIsolate* isolate,
         return handle(String::cast(element), isolate);
       }
     }
+    UNREACHABLE();
   }
 }
 
