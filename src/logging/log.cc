@@ -1261,59 +1261,37 @@ void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
   msg.WriteToLogFile();
 }
 
-// Although, it is possible to extract source and line from
-// the SharedFunctionInfo object, we left it to caller
-// to leave logging functions free from heap allocations.
-void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
-                             Handle<SharedFunctionInfo> shared,
-                             Handle<Name> script_name, int line, int column) {
-  if (!is_listening_to_code_events()) return;
-  if (!FLAG_log_code) return;
-  {
-    std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-    if (!msg_ptr) return;
-    Log::MessageBuilder& msg = *msg_ptr.get();
-    AppendCodeCreateHeader(msg, tag, *code, Time());
-    msg << shared->DebugNameCStr().get() << " " << *script_name << ":" << line
-        << ":" << column << kNext << reinterpret_cast<void*>(shared->address())
-        << kNext << ComputeMarker(*shared, *code);
-    msg.WriteToLogFile();
-  }
+namespace {
+// We log source code information in the form:
+//
+// code-source-info <addr>,<script>,<start>,<end>,<pos>,<inline-pos>,<fns>
+//
+// where
+//   <addr> is code object address
+//   <script> is script id
+//   <start> is the starting position inside the script
+//   <end> is the end position inside the script
+//   <pos> is source position table encoded in the string,
+//      it is a sequence of C<code-offset>O<script-offset>[I<inlining-id>]
+//      where
+//        <code-offset> is the offset within the code object
+//        <script-offset> is the position within the script
+//        <inlining-id> is the offset in the <inlining> table
+//   <inlining> table is a sequence of strings of the form
+//      F<function-id>O<script-offset>[I<inlining-id>]
+//      where
+//         <function-id> is an index into the <fns> function table
+//   <fns> is the function table encoded as a sequence of strings
+//      S<shared-function-info-address>
 
-  if (!FLAG_log_source_code) return;
-  Object script_object = shared->script();
-  if (!script_object.IsScript()) return;
-  Script script = Script::cast(script_object);
-  if (!EnsureLogScriptSource(script)) return;
-
-  // We log source code information in the form:
-  //
-  // code-source-info <addr>,<script>,<start>,<end>,<pos>,<inline-pos>,<fns>
-  //
-  // where
-  //   <addr> is code object address
-  //   <script> is script id
-  //   <start> is the starting position inside the script
-  //   <end> is the end position inside the script
-  //   <pos> is source position table encoded in the string,
-  //      it is a sequence of C<code-offset>O<script-offset>[I<inlining-id>]
-  //      where
-  //        <code-offset> is the offset within the code object
-  //        <script-offset> is the position within the script
-  //        <inlining-id> is the offset in the <inlining> table
-  //   <inlining> table is a sequence of strings of the form
-  //      F<function-id>O<script-offset>[I<inlining-id>]
-  //      where
-  //         <function-id> is an index into the <fns> function table
-  //   <fns> is the function table encoded as a sequence of strings
-  //      S<shared-function-info-address>
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
-  msg << "code-source-info" << kNext
-      << reinterpret_cast<void*>(code->InstructionStart()) << kNext
-      << script.id() << kNext << shared->StartPosition() << kNext
-      << shared->EndPosition() << kNext;
+void AppendSourceCodeInfoEvent(
+    Log::MessageBuilder& msg,  // NOLINT(runtime/references)
+    Handle<AbstractCode> code, Handle<SharedFunctionInfo> shared,
+    Script script) {
+  msg << "code-source-info" << Logger::kNext
+      << reinterpret_cast<void*>(code->InstructionStart()) << Logger::kNext
+      << script.id() << Logger::kNext << shared->StartPosition()
+      << Logger::kNext << shared->EndPosition() << Logger::kNext;
 
   SourcePositionTableIterator iterator(code->source_position_table());
   bool hasInlined = false;
@@ -1325,7 +1303,7 @@ void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
       hasInlined = true;
     }
   }
-  msg << kNext;
+  msg << Logger::kNext;
   int maxInlinedId = -1;
   if (hasInlined) {
     PodArray<InliningPosition> inlining_positions =
@@ -1348,11 +1326,10 @@ void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
       }
     }
   }
-  msg << kNext;
+  msg << Logger::kNext;
   if (hasInlined) {
     DeoptimizationData deopt_data = DeoptimizationData::cast(
         Handle<Code>::cast(code)->deoptimization_data());
-
     msg << std::hex;
     for (int i = 0; i <= maxInlinedId; i++) {
       msg << "S"
@@ -1360,6 +1337,34 @@ void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
                  deopt_data.GetInlinedFunction(i).address());
     }
     msg << std::dec;
+  }
+}
+}  // namespace
+
+// Although, it is possible to extract source and line from
+// the SharedFunctionInfo object, we left it to caller
+// to leave logging functions free from heap allocations.
+void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
+                             Handle<SharedFunctionInfo> shared,
+                             Handle<Name> script_name, int line, int column) {
+  if (!is_listening_to_code_events()) return;
+  if (!FLAG_log_code) return;
+  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
+  if (!msg_ptr) return;
+  Log::MessageBuilder& msg = *msg_ptr.get();
+  AppendCodeCreateHeader(msg, tag, *code, Time());
+  msg << shared->DebugNameCStr().get() << " " << *script_name << ":" << line
+      << ":" << column << kNext << reinterpret_cast<void*>(shared->address())
+      << kNext << ComputeMarker(*shared, *code);
+
+  if (FLAG_log_source_code) {
+    Object script_object = shared->script();
+    if (script_object.IsScript()) {
+      Script script = Script::cast(script_object);
+      if (EnsureLogScriptSource(script)) {
+        AppendSourceCodeInfoEvent(msg, code, shared, script);
+      }
+    }
   }
   msg.WriteToLogFile();
 }
