@@ -13,25 +13,12 @@ extern macro StringBuiltinsAssembler::GetSubstitution(
 extern builtin
 StringIndexOf(implicit context: Context)(String, String, Smi): Smi;
 
-macro TryFastAbstractStringIndexOf(implicit context: Context)(
-    string: String, searchString: String, fromIndex: Smi): Smi labels Slow {
-  const stringLen = string.length_uintptr;
-  const searchLen = searchString.length_uintptr;
-  const directString = Cast<DirectString>(string) otherwise Slow;
-  const directSearchStr = Cast<DirectString>(searchString) otherwise Slow;
-  const fromIndexUint = Unsigned(SmiUntag(fromIndex));
-
-  for (let i: uintptr = fromIndexUint; i < stringLen; i++) {
-    let j = i;
-    let k: uintptr = 0;
-    while (j < stringLen && k < searchLen &&
-           StringCharCodeAt(directString, j) ==
-               StringCharCodeAt(directSearchStr, k)) {
-      j++;
-      k++;
-    }
-    if (k == searchLen) {
-      return SmiTag(Signed(i));
+macro AbstractStringIndexOf<A: type, B: type>(
+    string: ConstSlice<A>, searchString: ConstSlice<B>, fromIndex: Smi): Smi {
+  for (let i: intptr = SmiUntag(fromIndex);
+       i < string.length - searchString.length; i++) {
+    if (StringCompareSequence(string, searchString, i)) {
+      return SmiTag(i);
     }
   }
   return -1;
@@ -54,18 +41,23 @@ macro AbstractStringIndexOf(implicit context: Context)(
   }
 
   try {
-    return TryFastAbstractStringIndexOf(string, searchString, fromIndex)
-        otherwise Slow;
-  } label Slow {
-    for (let i: intptr = SmiUntag(fromIndex);
-         i + searchStringLength <= stringLength; i++) {
-      if (StringCompareSequence(
-              context, string, searchString, Convert<Number>(SmiTag(i))) ==
-          True) {
-        return SmiTag(i);
-      }
+    GetStringData(string) otherwise FirstOneByte, FirstTwoByte;
+  } label FirstOneByte(string: ConstSlice<char8>) {
+    try {
+      GetStringData(searchString) otherwise SecondOneByte, SecondTwoByte;
+    } label SecondOneByte(searchString: ConstSlice<char8>) {
+      return AbstractStringIndexOf(string, searchString, fromIndex);
+    } label SecondTwoByte(searchString: ConstSlice<char16>) {
+      return AbstractStringIndexOf(string, searchString, fromIndex);
     }
-    return -1;
+  } label FirstTwoByte(string: ConstSlice<char16>) {
+    try {
+      GetStringData(searchString) otherwise SecondOneByte, SecondTwoByte;
+    } label SecondOneByte(searchString: ConstSlice<char8>) {
+      return AbstractStringIndexOf(string, searchString, fromIndex);
+    } label SecondTwoByte(searchString: ConstSlice<char16>) {
+      return AbstractStringIndexOf(string, searchString, fromIndex);
+    }
   }
 }
 

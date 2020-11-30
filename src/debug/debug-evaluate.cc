@@ -785,6 +785,7 @@ DebugInfo::SideEffectState BuiltinGetSideEffectState(Builtins::Name id) {
     case Builtins::kStringPrototypeSlice:
     case Builtins::kStringPrototypeSmall:
     case Builtins::kStringPrototypeStartsWith:
+    case Builtins::kStringSlowFlatten:
     case Builtins::kStringPrototypeStrike:
     case Builtins::kStringPrototypeSub:
     case Builtins::kStringPrototypeSubstr:
