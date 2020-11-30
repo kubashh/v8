@@ -103,6 +103,24 @@
       "parentUuid": "71f04ade_e2d8fbbc",
       "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e959747c_9d1ba64c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1254946
+      },
+      "writtenOn": "2020-11-30T14:18:08Z",
+      "side": 1,
+      "message": "Sorry, I should have been more specific. Not sure if the problem can be reproduced in Chromium, I\u0027m having issue with jumbo build (and the original patch was also jumbo-only).",
+      "parentUuid": "409b5c35_1ee7f00a",
+      "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
