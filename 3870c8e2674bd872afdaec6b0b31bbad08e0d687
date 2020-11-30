@@ -175,6 +175,24 @@
       "parentUuid": "81c711aa_999acd1e",
       "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a7e7dee_e066c421",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-11-30T15:15:30Z",
+      "side": 1,
+      "message": "Right. Jumbo aside, the original looks horrible and I think your solution is much nicer.",
+      "parentUuid": "7bf1d3ae_b42d0b72",
+      "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
