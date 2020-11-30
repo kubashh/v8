@@ -16,6 +16,23 @@
       "message": "The CL looks good from my side, but please run the trybots and add at least one of the original reviewers (jkummerow@ or clemensb@ from https://chromium-review.googlesource.com/c/v8/v8/+/663898/), who have more context on why this was implemented in the way it was originally.",
       "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "080218ae_f99ed663",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-30T08:52:47Z",
+      "side": 1,
+      "message": "Just saw CQ\u0027s sad status, triggering trybots for you.",
+      "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
