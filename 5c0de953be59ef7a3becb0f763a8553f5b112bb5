@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21362b16_78d19ef2",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-30T09:37:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0a7b384_e587dc09",
+      "revId": "5c0de953be59ef7a3becb0f763a8553f5b112bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "612cee86_6cf90970",
@@ -31,6 +49,24 @@
       "writtenOn": "2020-11-27T14:30:59Z",
       "side": 1,
       "message": "This still is misleading. We\u0027re not setting the debug bytecode array. We are setting the original array and we are setting it at the place where the interpreter will look for the code to execute.\n\nIf you don\u0027t like my earlier suggestions, how about SetBytecodeArrayForExecution or SetActiveBytecodeArray.\n\nGetDebugBytecodeArray is just the corresponding GetActiveBytecodeArray _under the assumption_ that the instrumented bytecode has been set as the active one.",
+      "revId": "5c0de953be59ef7a3becb0f763a8553f5b112bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86e50316_673f621d",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-30T09:37:30Z",
+      "side": 1,
+      "message": "I like ActiveBytecodeArray. Changed it to that.",
+      "parentUuid": "612cee86_6cf90970",
       "revId": "5c0de953be59ef7a3becb0f763a8553f5b112bb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
