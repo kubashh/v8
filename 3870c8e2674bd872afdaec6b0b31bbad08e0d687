@@ -68,6 +68,23 @@
       "message": "LGTM, thanks. Let\u0027s see if the other reviewers have any further comments.",
       "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71f04ade_e2d8fbbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-11-30T14:00:53Z",
+      "side": 1,
+      "message": "It says in the bug it fails if you compile Chromium for ARM, but obviously we do compile chromium for ARM, so is there a more specific repro?",
+      "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
