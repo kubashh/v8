@@ -16,6 +16,7 @@ class BytecodeArray;
 class Isolate;
 class InterpretedFrame;
 class JavaScriptFrame;
+class JavaScriptFrameIterator;
 class JSFunction;
 enum class CodeKind;
 enum class OptimizationReason : uint8_t;
@@ -35,6 +36,9 @@ class RuntimeProfiler {
                                  int nesting_levels = 1);
 
  private:
+  // Helper function called from MarkCandidatesForOptimization*
+  void MarkCandidatesForOptimization(JavaScriptFrameIterator* it);
+
   // Make the decision whether to optimize the given function, and mark it for
   // optimization if the decision was 'yes'.
   void MaybeOptimizeFrame(JSFunction function, JavaScriptFrame* frame,
