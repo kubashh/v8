@@ -1227,11 +1227,23 @@ void InstructionSelector::VisitChangeUint32ToFloat64(Node* node) {
 }
 
 void InstructionSelector::VisitTruncateFloat32ToInt32(Node* node) {
-  VisitRR(this, kMips64TruncWS, node);
+  Mips64OperandGenerator g(this);
+  InstructionCode opcode = kMips64TruncWS;
+  TruncateKind kind = OpParameter<TruncateKind>(node->op());
+  if (kind == TruncateKind::kSetOverflowToMin) {
+    opcode |= MiscField::encode(true);
+  }
+  Emit(opcode, g.DefineAsRegister(node), g.UseRegister(node->InputAt(0)));
 }
 
 void InstructionSelector::VisitTruncateFloat32ToUint32(Node* node) {
-  VisitRR(this, kMips64TruncUwS, node);
+  Mips64OperandGenerator g(this);
+  InstructionCode opcode = kMips64TruncUwS;
+  TruncateKind kind = OpParameter<TruncateKind>(node->op());
+  if (kind == TruncateKind::kSetOverflowToMin) {
+    opcode |= MiscField::encode(true);
+  }
+  Emit(opcode, g.DefineAsRegister(node), g.UseRegister(node->InputAt(0)));
 }
 
 void InstructionSelector::VisitChangeFloat64ToInt32(Node* node) {
@@ -1306,7 +1318,13 @@ void InstructionSelector::VisitChangeFloat64ToUint32(Node* node) {
 }
 
 void InstructionSelector::VisitChangeFloat64ToUint64(Node* node) {
-  VisitRR(this, kMips64TruncUlD, node);
+  Mips64OperandGenerator g(this);
+  InstructionCode opcode = kMips64TruncUlD;
+  TruncateKind kind = OpParameter<TruncateKind>(node->op());
+  if (kind == TruncateKind::kSetOverflowToMin) {
+    opcode |= MiscField::encode(true);
+  }
+  Emit(opcode, g.DefineAsRegister(node), g.UseRegister(node->InputAt(0)));
 }
 
 void InstructionSelector::VisitTruncateFloat64ToUint32(Node* node) {
@@ -1314,7 +1332,13 @@ void InstructionSelector::VisitTruncateFloat64ToUint32(Node* node) {
 }
 
 void InstructionSelector::VisitTruncateFloat64ToInt64(Node* node) {
-  VisitRR(this, kMips64TruncLD, node);
+  Mips64OperandGenerator g(this);
+  InstructionCode opcode = kMips64TruncLD;
+  TruncateKind kind = OpParameter<TruncateKind>(node->op());
+  if (kind == TruncateKind::kSetOverflowToMin) {
+    opcode |= MiscField::encode(true);
+  }
+  Emit(opcode, g.DefineAsRegister(node), g.UseRegister(node->InputAt(0)));
 }
 
 void InstructionSelector::VisitTryTruncateFloat32ToInt64(Node* node) {
