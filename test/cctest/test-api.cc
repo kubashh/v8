@@ -28555,10 +28555,9 @@ TEST(TriggerMainThreadMetricsEvent) {
     // Check that event submission works.
     {
       i::metrics::TimedScope<v8::metrics::WasmModuleDecoded> timed_scope(
-          &event);
+          event, i_iso->metrics_recorder(), context_id);
       v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(100));
     }
-    i_iso->metrics_recorder()->AddMainThreadEvent(event, context_id);
     CHECK_EQ(recorder->count_, 1);  // Increased.
     CHECK_GT(recorder->time_in_us_, 100);
   }
@@ -28594,10 +28593,9 @@ TEST(TriggerDelayedMainThreadMetricsEvent) {
     // Check that event submission works.
     {
       i::metrics::TimedScope<v8::metrics::WasmModuleDecoded> timed_scope(
-          &event);
+          event, i_iso->metrics_recorder(), context_id, true);
       v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(100));
     }
-    i_iso->metrics_recorder()->DelayMainThreadEvent(event, context_id);
     CHECK_EQ(recorder->count_, 0);        // Unchanged.
     CHECK_EQ(recorder->time_in_us_, -1);  // Unchanged.
     v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(1100));
@@ -28655,6 +28653,35 @@ void SetupCodeLike(LocalContext* env, const char* name,
             ->Set(env->local(), v8_str(name),
                   constructor->GetFunction(env->local()).ToLocalChecked())
             .FromJust());
+}
+
+TEST(TriggerMetricsEventWithoutRecorder) {
+  using v8::Context;
+  using v8::Local;
+  using v8::MaybeLocal;
+
+  // Set up isolate and context.
+  v8::Isolate* iso = CcTest::isolate();
+  i::Isolate* i_iso = reinterpret_cast<i::Isolate*>(iso);
+  CHECK(i_iso->metrics_recorder());
+  v8::metrics::WasmModuleDecoded event;
+  v8::metrics::Recorder::ContextId context_id;
+  {
+    v8::HandleScope scope(iso);
+    Local<Context> context = Context::New(iso);
+    context_id = v8::metrics::Recorder::GetContextId(context);
+
+    // Check that the wall_clock_duration_in_us field is never populated,
+    // because there is no metrics_recorder().
+    {
+      i::metrics::TimedScope<v8::metrics::WasmModuleDecoded> timed_scope(
+          event, i_iso->metrics_recorder(), context_id);
+      v8::base::OS::Sleep(v8::base::TimeDelta::FromMilliseconds(100));
+    }
+    CHECK_EQ(event.wall_clock_duration_in_us, -1);
+  }
+
+  CcTest::PreciseCollectAllGarbage();
 }
 
 TEST(CodeLikeEval) {

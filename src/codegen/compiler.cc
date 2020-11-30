@@ -41,6 +41,7 @@
 #include "src/init/bootstrapper.h"
 #include "src/interpreter/interpreter.h"
 #include "src/logging/log-inl.h"
+#include "src/logging/metrics.h"
 #include "src/objects/feedback-cell-inl.h"
 #include "src/objects/js-function-inl.h"
 #include "src/objects/map.h"
@@ -1315,10 +1316,11 @@ MaybeHandle<SharedFunctionInfo> CompileToplevel(
 
   PostponeInterruptsScope postpone(isolate);
   DCHECK(!isolate->native_context().is_null());
+
+  auto parse_flags = parse_info->flags();
   RuntimeCallTimerScope runtimeTimer(
-      isolate, parse_info->flags().is_eval()
-                   ? RuntimeCallCounterId::kCompileEval
-                   : RuntimeCallCounterId::kCompileScript);
+      isolate, parse_flags.is_eval() ? RuntimeCallCounterId::kCompileEval
+                                     : RuntimeCallCounterId::kCompileScript);
   VMState<BYTECODE_COMPILER> state(isolate);
   if (parse_info->literal() == nullptr &&
       !parsing::ParseProgram(parse_info, script, maybe_outer_scope_info,
@@ -1330,12 +1332,19 @@ MaybeHandle<SharedFunctionInfo> CompileToplevel(
   // Measure how long it takes to do the compilation; only take the
   // rest of the function into account to avoid overlap with the
   // parsing statistics.
-  HistogramTimer* rate = parse_info->flags().is_eval()
+  HistogramTimer* rate = parse_flags.is_eval()
                              ? isolate->counters()->compile_eval()
                              : isolate->counters()->compile();
   HistogramTimerScope timer(rate);
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-               parse_info->flags().is_eval() ? "V8.CompileEval" : "V8.Compile");
+               parse_flags.is_eval() ? "V8.CompileEval" : "V8.Compile");
+
+  v8::metrics::Compile event{parse_flags.script_id(), parse_flags.is_toplevel(),
+                             parse_flags.is_module(), parse_flags.is_eval()};
+  auto context_id =
+      isolate->GetOrRegisterRecorderContextId(isolate->native_context());
+  internal::metrics::TimedScope<v8::metrics::Compile> timed_scope(
+      event, isolate->metrics_recorder(), context_id);
 
   // Prepare and execute compilation of the outer-most function.
 
@@ -1359,7 +1368,7 @@ MaybeHandle<SharedFunctionInfo> CompileToplevel(
   parse_info->ResetCharacterStream();
 
   FinalizeUnoptimizedScriptCompilation(
-      isolate, script, parse_info->flags(), parse_info->state(),
+      isolate, script, parse_flags, parse_info->state(),
       finalize_unoptimized_compilation_data_list);
   return shared_info;
 }
