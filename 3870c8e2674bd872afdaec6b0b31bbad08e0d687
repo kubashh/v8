@@ -51,6 +51,23 @@
       "parentUuid": "080218ae_f99ed663",
       "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5bf8b0e_7e928e41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-11-30T13:40:06Z",
+      "side": 1,
+      "message": "LGTM, thanks. Let\u0027s see if the other reviewers have any further comments.",
+      "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
