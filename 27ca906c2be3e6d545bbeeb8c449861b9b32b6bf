@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45793f66_eb2aded4",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-30T13:27:59Z",
+      "side": 1,
+      "message": "nit: We follow the policy to have deleted copy constructor/assignment in the public section.",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 56
+      },
+      "revId": "27ca906c2be3e6d545bbeeb8c449861b9b32b6bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16775224_0efe48b6",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-30T13:27:59Z",
+      "side": 1,
+      "message": "Would it be simpler to just inherit from compiler::NodePropierties so that you get all its methods automatically and just redefine ChangeOp?",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 313,
+        "endChar": 0
+      },
+      "revId": "27ca906c2be3e6d545bbeeb8c449861b9b32b6bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a7f6fd1_f6813014",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-11-30T13:27:59Z",
+      "side": 1,
+      "message": "Do we need this? I think it would be better to not provide an implementation so that we get a static error (probably. linker error) when building?",
+      "range": {
+        "startLine": 315,
+        "startChar": 60,
+        "endLine": 315,
+        "endChar": 79
+      },
+      "revId": "27ca906c2be3e6d545bbeeb8c449861b9b32b6bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
