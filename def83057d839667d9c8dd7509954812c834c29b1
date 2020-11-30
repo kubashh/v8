@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b4bd561_3a3ff931",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-11-30T09:28:21Z",
+      "side": 1,
+      "message": "After some discussion with Ulan (and Sara) we\u0027ve decided to take a slightly different approach:\n- Keep include/v8-metrics.h event structs only for externally visible metrics\n- Add a custom v8/d8-only TracingController that supports ETW (this is already supported on the chrome side)\n- Hook into the CodeEvents with a custom ETW provider to propagate the compiled/source information\n\nFuture work (orthogonal to the ETW work):\n- use v8-metrics for all histograms in v8\n- create internal \"v8-metric\" structs for current log events and funnel through a similar interface as the current metrics recorder\n- deduplicate multiple measuring scopes at the same location (RCS, logging, tracing?) if possible\n",
+      "revId": "def83057d839667d9c8dd7509954812c834c29b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94a4c1c1_0191c67c",
