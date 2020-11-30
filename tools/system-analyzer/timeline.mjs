@@ -103,10 +103,12 @@ class Timeline {
   }
 
   duration() {
+    if (this.isEmpty()) return 0;
     return this.last().time - this.first().time;
   }
 
   forEachChunkSize(count, fn) {
+    if (this.isEmpty()) return;
     const increment = this.duration() / count;
     let currentTime = this.first().time + increment;
     let index = 0;

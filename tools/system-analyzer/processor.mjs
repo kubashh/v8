@@ -60,6 +60,14 @@ export class Processor extends LogReader {
         ],
         processor: this.processCodeSourceInfo
       },
+      'code-disassemble': {
+        parsers: [
+          parseInt,
+          parseString,
+          parseString,
+        ],
+        processor: this.processCodeDisassemble
+      },
       'script-source': {
         parsers: [parseInt, parseString, parseString],
         processor: this.processScriptSource
@@ -242,6 +250,10 @@ export class Processor extends LogReader {
     this._profile.addSourcePositions(
         start, script, startPos, endPos, sourcePositions, inliningPositions,
         inlinedFunctions);
+  }
+
+  processCodeDisassemble(start, kind, disassemble) {
+    this._profile.addDisassemble(start, kind, disassemble);
   }
 
   processPropertyIC(
