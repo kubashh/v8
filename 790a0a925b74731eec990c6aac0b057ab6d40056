@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58f046c6_ce03657d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-30T09:44:33Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "790a0a925b74731eec990c6aac0b057ab6d40056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76ad9f1_75e1bbe5",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-11-30T09:44:33Z",
+      "side": 1,
+      "message": "How about removing this precondition now?",
+      "revId": "790a0a925b74731eec990c6aac0b057ab6d40056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
