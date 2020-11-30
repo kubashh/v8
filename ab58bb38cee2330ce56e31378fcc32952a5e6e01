@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b281525_ddd69a6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-11-30T17:57:12Z",
+      "side": 1,
+      "message": "Now that we\u0027ve decided to move the system instrumentation into TracingController, should I make a separate CL for the Recorder-specific changes (like Compile event, modifying TimedScope)?",
+      "revId": "ab58bb38cee2330ce56e31378fcc32952a5e6e01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
