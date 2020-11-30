@@ -157,6 +157,24 @@
       "parentUuid": "778b789c_fd5e2451",
       "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bf1d3ae_b42d0b72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1254946
+      },
+      "writtenOn": "2020-11-30T14:54:43Z",
+      "side": 1,
+      "message": "There is some linker magic going on (see the bug: \"instructions-arm64-constants.cc defines integer constants. instructions-arm64.h declares them as float.\"), I think the real question is rather: why does compile at all?\nI *think* that the cause might be: if the declaration and definition both land in the same translation unit, the compilation fails.\n\nNote: the file instructions-arm64-constants.cc does not include instructions-arm64.h where the constants are declared.",
+      "parentUuid": "81c711aa_999acd1e",
+      "revId": "3870c8e2674bd872afdaec6b0b31bbad08e0d687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
