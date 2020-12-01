@@ -1951,7 +1951,7 @@ TEST(Regress876759) {
   CHECK_EQ(*parent, SlicedString::cast(*sliced).parent());
   OneByteStringResource* resource =
       new OneByteStringResource(external_one_byte_buf, kLength);
-  grandparent->MakeExternal(resource);
+  CHECK(grandparent->MakeExternal(resource));
   // The grandparent string becomes one-byte, but the child strings are still
   // two-byte.
   CHECK(grandparent->IsOneByteRepresentation());
