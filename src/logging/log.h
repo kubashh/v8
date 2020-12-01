@@ -13,6 +13,7 @@
 #include "include/v8-profiler.h"
 #include "src/base/platform/elapsed-timer.h"
 #include "src/logging/code-events.h"
+#include "src/logging/log-utils.h"
 #include "src/objects/objects.h"
 
 namespace v8 {
@@ -63,7 +64,6 @@ struct TickSample;
 class CodeEventListener;
 class Isolate;
 class JitLogger;
-class Log;
 class LowLevelLogger;
 class PerfBasicLogger;
 class PerfJitLogger;
@@ -280,9 +280,6 @@ class Logger : public CodeEventListener {
   V8_INLINE static CodeEventListener::LogEventsAndTags ToNativeByScript(
       CodeEventListener::LogEventsAndTags, Script);
 
-  // Used for logging stubs found in the snapshot.
-  void LogCodeObject(Object code_object);
-
  private:
   void UpdateIsLogging(bool value);
 
@@ -313,6 +310,10 @@ class Logger : public CodeEventListener {
   // Logs a scripts sources. Keeps track of all logged scripts to ensure that
   // each script is logged only once.
   bool EnsureLogScriptSource(Script script);
+
+  void LogSourceCodeInformation(Handle<AbstractCode> code,
+                                Handle<SharedFunctionInfo> shared);
+  void LogCodeDisassemble(Handle<AbstractCode> code);
 
   int64_t Time();
 
