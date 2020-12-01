@@ -16,6 +16,23 @@
       "message": "Leszek PTAL\nAs an extra check, I placed an unreachable in a previous patchset (https://chromium-review.googlesource.com/c/v8/v8/+/2565513/1) and kept the loop.",
       "revId": "3f5afd73d44aef39d7245d84310deb066e7b871f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33c8e958_f7eff1eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T08:49:04Z",
+      "side": 1,
+      "message": "Thanks, this was leftover from when we\u0027d want to retry allocations for failed on-heap table resizes. I\u0027ve been meaning to clear it up, you got there before me :)",
+      "revId": "3f5afd73d44aef39d7245d84310deb066e7b871f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
