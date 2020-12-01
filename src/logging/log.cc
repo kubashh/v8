@@ -34,6 +34,8 @@
 #include "src/logging/log-inl.h"
 #include "src/logging/log-utils.h"
 #include "src/objects/api-callbacks.h"
+#include "src/objects/code-kind.h"
+#include "src/objects/code.h"
 #include "src/profiler/tick-sample.h"
 #include "src/snapshot/embedded/embedded-data.h"
 #include "src/strings/string-stream.h"
@@ -983,6 +985,10 @@ void Profiler::Run() {
 //
 // Logger class implementation.
 //
+#define MSG_BUILDER()                                                       \
+  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder(); \
+  if (!msg_ptr) return;                                                     \
+  Log::MessageBuilder& msg = *msg_ptr.get();
 
 Logger::Logger(Isolate* isolate)
     : isolate_(isolate),
@@ -1011,9 +1017,7 @@ void Logger::RemoveCodeEventListener(CodeEventListener* listener) {
 }
 
 void Logger::ProfilerBeginEvent() {
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "profiler" << kNext << "begin" << kNext << FLAG_prof_sampling_interval;
   msg.WriteToLogFile();
 }
@@ -1023,9 +1027,7 @@ void Logger::StringEvent(const char* name, const char* value) {
 }
 
 void Logger::UncheckedStringEvent(const char* name, const char* value) {
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << name << kNext << value;
   msg.WriteToLogFile();
 }
@@ -1035,9 +1037,7 @@ void Logger::IntPtrTEvent(const char* name, intptr_t value) {
 }
 
 void Logger::UncheckedIntPtrTEvent(const char* name, intptr_t value) {
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << name << kNext;
   msg.AppendFormatString("%" V8PRIdPTR, value);
   msg.WriteToLogFile();
@@ -1045,18 +1045,14 @@ void Logger::UncheckedIntPtrTEvent(const char* name, intptr_t value) {
 
 void Logger::HandleEvent(const char* name, Address* location) {
   if (!FLAG_log_handles) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << name << kNext << reinterpret_cast<void*>(location);
   msg.WriteToLogFile();
 }
 
 void Logger::ApiSecurityCheck() {
   if (!FLAG_log_api) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "api" << kNext << "check-security";
   msg.WriteToLogFile();
 }
@@ -1065,9 +1061,7 @@ void Logger::SharedLibraryEvent(const std::string& library_path,
                                 uintptr_t start, uintptr_t end,
                                 intptr_t aslr_slide) {
   if (!FLAG_prof_cpp) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "shared-library" << kNext << library_path.c_str() << kNext
       << reinterpret_cast<void*>(start) << kNext << reinterpret_cast<void*>(end)
       << kNext << aslr_slide;
@@ -1076,17 +1070,13 @@ void Logger::SharedLibraryEvent(const std::string& library_path,
 
 void Logger::CurrentTimeEvent() {
   DCHECK(FLAG_log_internal_timer_events);
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "current-time" << kNext << Time();
   msg.WriteToLogFile();
 }
 
 void Logger::TimerEvent(Logger::StartEnd se, const char* name) {
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   switch (se) {
     case START:
       msg << "timer-event-start";
@@ -1104,9 +1094,7 @@ void Logger::TimerEvent(Logger::StartEnd se, const char* name) {
 void Logger::BasicBlockCounterEvent(const char* name, int block_id,
                                     double count) {
   if (!FLAG_turbo_profiling_log_builtins) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << ProfileDataFromFileConstants::kBlockCounterMarker << kNext << name
       << kNext << block_id << kNext << count;
   msg.WriteToLogFile();
@@ -1114,9 +1102,7 @@ void Logger::BasicBlockCounterEvent(const char* name, int block_id,
 
 void Logger::BuiltinHashEvent(const char* name, int hash) {
   if (!FLAG_turbo_profiling_log_builtins) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << ProfileDataFromFileConstants::kBuiltinHashMarker << kNext << name
       << kNext << hash;
   msg.WriteToLogFile();
@@ -1139,9 +1125,7 @@ void Logger::ApiNamedPropertyAccess(const char* tag, JSObject holder,
                                     Object property_name) {
   DCHECK(property_name.IsName());
   if (!FLAG_log_api) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "api" << kNext << tag << kNext << holder.class_name() << kNext
       << Name::cast(property_name);
   msg.WriteToLogFile();
@@ -1150,9 +1134,7 @@ void Logger::ApiNamedPropertyAccess(const char* tag, JSObject holder,
 void Logger::ApiIndexedPropertyAccess(const char* tag, JSObject holder,
                                       uint32_t index) {
   if (!FLAG_log_api) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "api" << kNext << tag << kNext << holder.class_name() << kNext
       << index;
   msg.WriteToLogFile();
@@ -1160,27 +1142,21 @@ void Logger::ApiIndexedPropertyAccess(const char* tag, JSObject holder,
 
 void Logger::ApiObjectAccess(const char* tag, JSObject object) {
   if (!FLAG_log_api) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "api" << kNext << tag << kNext << object.class_name();
   msg.WriteToLogFile();
 }
 
 void Logger::ApiEntryCall(const char* name) {
   if (!FLAG_log_api) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "api" << kNext << name;
   msg.WriteToLogFile();
 }
 
 void Logger::NewEvent(const char* name, void* object, size_t size) {
   if (!FLAG_log) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "new" << kNext << name << kNext << object << kNext
       << static_cast<unsigned int>(size);
   msg.WriteToLogFile();
@@ -1188,9 +1164,7 @@ void Logger::NewEvent(const char* name, void* object, size_t size) {
 
 void Logger::DeleteEvent(const char* name, void* object) {
   if (!FLAG_log) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "delete" << kNext << name << kNext << object;
   msg.WriteToLogFile();
 }
@@ -1217,103 +1191,40 @@ void AppendCodeCreateHeader(
 }
 
 }  // namespace
+// We log source code information in the form:
+//
+// code-source-info <addr>,<script>,<start>,<end>,<pos>,<inline-pos>,<fns>
+//
+// where
+//   <addr> is code object address
+//   <script> is script id
+//   <start> is the starting position inside the script
+//   <end> is the end position inside the script
+//   <pos> is source position table encoded in the string,
+//      it is a sequence of C<code-offset>O<script-offset>[I<inlining-id>]
+//      where
+//        <code-offset> is the offset within the code object
+//        <script-offset> is the position within the script
+//        <inlining-id> is the offset in the <inlining> table
+//   <inlining> table is a sequence of strings of the form
+//      F<function-id>O<script-offset>[I<inlining-id>]
+//      where
+//         <function-id> is an index into the <fns> function table
+//   <fns> is the function table encoded as a sequence of strings
+//      S<shared-function-info-address>
 
-void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
-                             const char* name) {
-  if (!is_listening_to_code_events()) return;
-  if (!FLAG_log_code) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
-  AppendCodeCreateHeader(msg, tag, *code, Time());
-  msg << name;
-  msg.WriteToLogFile();
-}
-
-void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
-                             Handle<Name> name) {
-  if (!is_listening_to_code_events()) return;
-  if (!FLAG_log_code) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
-  AppendCodeCreateHeader(msg, tag, *code, Time());
-  msg << *name;
-  msg.WriteToLogFile();
-}
-
-void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
-                             Handle<SharedFunctionInfo> shared,
-                             Handle<Name> script_name) {
-  if (!is_listening_to_code_events()) return;
-  if (!FLAG_log_code) return;
-  if (*code == AbstractCode::cast(
-                   isolate_->builtins()->builtin(Builtins::kCompileLazy))) {
-    return;
-  }
-
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
-  AppendCodeCreateHeader(msg, tag, *code, Time());
-  msg << *script_name << kNext << reinterpret_cast<void*>(shared->address())
-      << kNext << ComputeMarker(*shared, *code);
-  msg.WriteToLogFile();
-}
-
-// Although, it is possible to extract source and line from
-// the SharedFunctionInfo object, we left it to caller
-// to leave logging functions free from heap allocations.
-void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
-                             Handle<SharedFunctionInfo> shared,
-                             Handle<Name> script_name, int line, int column) {
-  if (!is_listening_to_code_events()) return;
-  if (!FLAG_log_code) return;
-  {
-    std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-    if (!msg_ptr) return;
-    Log::MessageBuilder& msg = *msg_ptr.get();
-    AppendCodeCreateHeader(msg, tag, *code, Time());
-    msg << shared->DebugNameCStr().get() << " " << *script_name << ":" << line
-        << ":" << column << kNext << reinterpret_cast<void*>(shared->address())
-        << kNext << ComputeMarker(*shared, *code);
-    msg.WriteToLogFile();
-  }
-
-  if (!FLAG_log_source_code) return;
+void Logger::LogSourceCodeInformation(Handle<AbstractCode> code,
+                                      Handle<SharedFunctionInfo> shared) {
   Object script_object = shared->script();
   if (!script_object.IsScript()) return;
   Script script = Script::cast(script_object);
-  if (!EnsureLogScriptSource(script)) return;
+  EnsureLogScriptSource(script);
 
-  // We log source code information in the form:
-  //
-  // code-source-info <addr>,<script>,<start>,<end>,<pos>,<inline-pos>,<fns>
-  //
-  // where
-  //   <addr> is code object address
-  //   <script> is script id
-  //   <start> is the starting position inside the script
-  //   <end> is the end position inside the script
-  //   <pos> is source position table encoded in the string,
-  //      it is a sequence of C<code-offset>O<script-offset>[I<inlining-id>]
-  //      where
-  //        <code-offset> is the offset within the code object
-  //        <script-offset> is the position within the script
-  //        <inlining-id> is the offset in the <inlining> table
-  //   <inlining> table is a sequence of strings of the form
-  //      F<function-id>O<script-offset>[I<inlining-id>]
-  //      where
-  //         <function-id> is an index into the <fns> function table
-  //   <fns> is the function table encoded as a sequence of strings
-  //      S<shared-function-info-address>
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
-  msg << "code-source-info" << kNext
-      << reinterpret_cast<void*>(code->InstructionStart()) << kNext
-      << script.id() << kNext << shared->StartPosition() << kNext
-      << shared->EndPosition() << kNext;
+  MSG_BUILDER();
+  msg << "code-source-info" << Logger::kNext
+      << reinterpret_cast<void*>(code->InstructionStart()) << Logger::kNext
+      << script.id() << Logger::kNext << shared->StartPosition()
+      << Logger::kNext << shared->EndPosition() << Logger::kNext;
 
   SourcePositionTableIterator iterator(code->source_position_table());
   bool hasInlined = false;
@@ -1325,7 +1236,7 @@ void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
       hasInlined = true;
     }
   }
-  msg << kNext;
+  msg << Logger::kNext;
   int maxInlinedId = -1;
   if (hasInlined) {
     PodArray<InliningPosition> inlining_positions =
@@ -1348,11 +1259,10 @@ void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
       }
     }
   }
-  msg << kNext;
+  msg << Logger::kNext;
   if (hasInlined) {
     DeoptimizationData deopt_data = DeoptimizationData::cast(
         Handle<Code>::cast(code)->deoptimization_data());
-
     msg << std::hex;
     for (int i = 0; i <= maxInlinedId; i++) {
       msg << "S"
@@ -1364,13 +1274,100 @@ void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
   msg.WriteToLogFile();
 }
 
+void Logger::LogCodeDisassemble(Handle<AbstractCode> code) {
+  if (!FLAG_log_code_disassemble) return;
+  MSG_BUILDER();
+  msg << "code-disassemble" << Logger::kNext
+      << reinterpret_cast<void*>(code->InstructionStart()) << Logger::kNext
+      << CodeKindToString(code->kind()) << Logger::kNext;
+  {
+    std::ostringstream stream;
+    if (code->IsCode()) {
+      Code::cast(*code).Disassemble(nullptr, stream, isolate_);
+    } else {
+      BytecodeArray::cast(*code).Disassemble(stream);
+    }
+    std::string string = stream.str();
+    msg.AppendString(string.c_str(), string.length());
+  }
+  msg.WriteToLogFile();
+}
+
+// Builtins and Bytecode handlers
+void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
+                             const char* name) {
+  if (!is_listening_to_code_events()) return;
+  if (!FLAG_log_code) return;
+  {
+    MSG_BUILDER();
+    AppendCodeCreateHeader(msg, tag, *code, Time());
+    msg << name;
+    msg.WriteToLogFile();
+  }
+  LogCodeDisassemble(code);
+}
+
+void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
+                             Handle<Name> name) {
+  if (!is_listening_to_code_events()) return;
+  if (!FLAG_log_code) return;
+  {
+    MSG_BUILDER();
+    AppendCodeCreateHeader(msg, tag, *code, Time());
+    msg << *name;
+    msg.WriteToLogFile();
+  }
+  LogCodeDisassemble(code);
+}
+
+// Scripts
+void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
+                             Handle<SharedFunctionInfo> shared,
+                             Handle<Name> script_name) {
+  if (!is_listening_to_code_events()) return;
+  if (!FLAG_log_code) return;
+  if (*code == AbstractCode::cast(
+                   isolate_->builtins()->builtin(Builtins::kCompileLazy))) {
+    return;
+  }
+  {
+    MSG_BUILDER();
+    AppendCodeCreateHeader(msg, tag, *code, Time());
+    msg << *script_name << kNext << reinterpret_cast<void*>(shared->address())
+        << kNext << ComputeMarker(*shared, *code);
+    msg.WriteToLogFile();
+  }
+  LogSourceCodeInformation(code, shared);
+  LogCodeDisassemble(code);
+}
+
+// Functions
+// Although, it is possible to extract source and line from
+// the SharedFunctionInfo object, we left it to caller
+// to leave logging functions free from heap allocations.
+void Logger::CodeCreateEvent(LogEventsAndTags tag, Handle<AbstractCode> code,
+                             Handle<SharedFunctionInfo> shared,
+                             Handle<Name> script_name, int line, int column) {
+  if (!is_listening_to_code_events()) return;
+  if (!FLAG_log_code) return;
+  {
+    MSG_BUILDER();
+    AppendCodeCreateHeader(msg, tag, *code, Time());
+    msg << shared->DebugNameCStr().get() << " " << *script_name << ":" << line
+        << ":" << column << kNext << reinterpret_cast<void*>(shared->address())
+        << kNext << ComputeMarker(*shared, *code);
+
+    msg.WriteToLogFile();
+  }
+  LogSourceCodeInformation(code, shared);
+  LogCodeDisassemble(code);
+}
+
 void Logger::CodeCreateEvent(LogEventsAndTags tag, const wasm::WasmCode* code,
                              wasm::WasmName name) {
   if (!is_listening_to_code_events()) return;
   if (!FLAG_log_code) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   AppendCodeCreateHeader(msg, tag, CodeKind::WASM_FUNCTION,
                          code->instructions().begin(),
                          code->instructions().length(), Time());
@@ -1391,9 +1388,7 @@ void Logger::CodeCreateEvent(LogEventsAndTags tag, const wasm::WasmCode* code,
 void Logger::CallbackEventInternal(const char* prefix, Handle<Name> name,
                                    Address entry_point) {
   if (!FLAG_log_code) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << kLogEventsNames[CodeEventListener::CODE_CREATION_EVENT] << kNext
       << kLogEventsNames[CodeEventListener::CALLBACK_TAG] << kNext << -2
       << kNext << Time() << kNext << reinterpret_cast<void*>(entry_point)
@@ -1417,9 +1412,7 @@ void Logger::RegExpCodeCreateEvent(Handle<AbstractCode> code,
                                    Handle<String> source) {
   if (!is_listening_to_code_events()) return;
   if (!FLAG_log_code) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   AppendCodeCreateHeader(msg, CodeEventListener::REG_EXP_TAG, *code, Time());
   msg << *source;
   msg.WriteToLogFile();
@@ -1446,9 +1439,7 @@ void Logger::CodeDisableOptEvent(Handle<AbstractCode> code,
                                  Handle<SharedFunctionInfo> shared) {
   if (!is_listening_to_code_events()) return;
   if (!FLAG_log_code) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << kLogEventsNames[CodeEventListener::CODE_DISABLE_OPT_EVENT] << kNext
       << shared->DebugNameCStr().get() << kNext
       << GetBailoutReason(shared->disable_optimization_reason());
@@ -1457,9 +1448,7 @@ void Logger::CodeDisableOptEvent(Handle<AbstractCode> code,
 
 void Logger::ProcessDeoptEvent(Handle<Code> code, SourcePosition position,
                                const char* kind, const char* reason) {
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "code-deopt" << kNext << Time() << kNext << code->CodeSize() << kNext
       << reinterpret_cast<void*>(code->InstructionStart());
 
@@ -1534,9 +1523,7 @@ void Logger::CodeLinePosInfoRecordEvent(
 
 void Logger::CodeNameEvent(Address addr, int pos, const char* code_name) {
   if (code_name == nullptr) return;  // Not a code object.
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << kLogEventsNames[CodeEventListener::SNAPSHOT_CODE_NAME_EVENT] << kNext
       << pos << kNext << code_name;
   msg.WriteToLogFile();
@@ -1545,9 +1532,7 @@ void Logger::CodeNameEvent(Address addr, int pos, const char* code_name) {
 void Logger::MoveEventInternal(LogEventsAndTags event, Address from,
                                Address to) {
   if (!FLAG_log_code) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << kLogEventsNames[event] << kNext << reinterpret_cast<void*>(from)
       << kNext << reinterpret_cast<void*>(to);
   msg.WriteToLogFile();
@@ -1555,9 +1540,7 @@ void Logger::MoveEventInternal(LogEventsAndTags event, Address from,
 
 void Logger::ResourceEvent(const char* name, const char* tag) {
   if (!FLAG_log) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << name << kNext << tag << kNext;
 
   uint32_t sec, usec;
@@ -1571,9 +1554,7 @@ void Logger::ResourceEvent(const char* name, const char* tag) {
 
 void Logger::SuspectReadEvent(Name name, Object obj) {
   if (!FLAG_log_suspect) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   String class_name = obj.IsJSObject() ? JSObject::cast(obj).class_name()
                                        : ReadOnlyRoots(isolate_).empty_string();
   msg << "suspect-read" << kNext << class_name << kNext << name;
@@ -1601,9 +1582,7 @@ void Logger::FunctionEvent(const char* reason, int script_id, double time_delta,
                            int start_position, int end_position,
                            String function_name) {
   if (!FLAG_log_function_events) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   AppendFunctionMessage(msg, reason, script_id, time_delta, start_position,
                         end_position, Time());
   if (!function_name.is_null()) msg << function_name;
@@ -1615,9 +1594,7 @@ void Logger::FunctionEvent(const char* reason, int script_id, double time_delta,
                            const char* function_name,
                            size_t function_name_length, bool is_one_byte) {
   if (!FLAG_log_function_events) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   AppendFunctionMessage(msg, reason, script_id, time_delta, start_position,
                         end_position, Time());
   if (function_name_length > 0) {
@@ -1629,9 +1606,7 @@ void Logger::FunctionEvent(const char* reason, int script_id, double time_delta,
 void Logger::CompilationCacheEvent(const char* action, const char* cache_type,
                                    SharedFunctionInfo sfi) {
   if (!FLAG_log_function_events) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   int script_id = -1;
   if (sfi.script().IsScript()) {
     script_id = Script::cast(sfi.script()).id();
@@ -1645,9 +1620,7 @@ void Logger::CompilationCacheEvent(const char* action, const char* cache_type,
 
 void Logger::ScriptEvent(ScriptEventType type, int script_id) {
   if (!FLAG_log_function_events) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "script" << Logger::kNext;
   switch (type) {
     case ScriptEventType::kReserveId:
@@ -1673,9 +1646,7 @@ void Logger::ScriptEvent(ScriptEventType type, int script_id) {
 void Logger::ScriptDetails(Script script) {
   if (!FLAG_log_function_events) return;
   {
-    std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-    if (!msg_ptr) return;
-    Log::MessageBuilder& msg = *msg_ptr.get();
+    MSG_BUILDER();
     msg << "script-details" << Logger::kNext << script.id() << Logger::kNext;
     if (script.name().IsString()) {
       msg << String::cast(script.name());
@@ -1691,9 +1662,6 @@ void Logger::ScriptDetails(Script script) {
 }
 
 bool Logger::EnsureLogScriptSource(Script script) {
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return false;
-  Log::MessageBuilder& msg = *msg_ptr.get();
   // Make sure the script is written to the log file.
   int script_id = script.id();
   if (logged_source_code_.find(script_id) != logged_source_code_.end()) {
@@ -1703,6 +1671,11 @@ bool Logger::EnsureLogScriptSource(Script script) {
   logged_source_code_.insert(script_id);
   Object source_object = script.source();
   if (!source_object.IsString()) return false;
+
+  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
+  if (!msg_ptr) return false;
+  Log::MessageBuilder& msg = *msg_ptr.get();
+
   String source_code = String::cast(source_object);
   msg << "script-source" << kNext << script_id << kNext;
 
@@ -1723,9 +1696,7 @@ void Logger::RuntimeCallTimerEvent() {
   RuntimeCallStats* stats = isolate_->counters()->runtime_call_stats();
   RuntimeCallCounter* counter = stats->current_counter();
   if (counter == nullptr) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "active-runtime-timer" << kNext << counter->name();
   msg.WriteToLogFile();
 }
@@ -1736,9 +1707,7 @@ void Logger::TickEvent(TickSample* sample, bool overflow) {
                   v8::tracing::TracingCategoryObserver::ENABLED_BY_NATIVE)) {
     RuntimeCallTimerEvent();
   }
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << kLogEventsNames[CodeEventListener::TICK_EVENT] << kNext
       << reinterpret_cast<void*>(sample->pc) << kNext << Time();
   if (sample->has_external_callback) {
@@ -1759,9 +1728,7 @@ void Logger::ICEvent(const char* type, bool keyed, Handle<Map> map,
                      Handle<Object> key, char old_state, char new_state,
                      const char* modifier, const char* slow_stub_reason) {
   if (!FLAG_trace_ic) return;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   if (keyed) msg << "Keyed";
   int line;
   int column;
@@ -1795,9 +1762,7 @@ void Logger::MapEvent(const char* type, Handle<Map> from, Handle<Map> to,
   if (!isolate_->bootstrapper()->IsActive()) {
     pc = isolate_->GetAbstractPC(&line, &column);
   }
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "map" << kNext << type << kNext << Time() << kNext
       << AsHex::Address(from.is_null() ? kNullAddress : from->ptr()) << kNext
       << AsHex::Address(to.is_null() ? kNullAddress : to->ptr()) << kNext
@@ -1821,9 +1786,7 @@ void Logger::MapEvent(const char* type, Handle<Map> from, Handle<Map> to,
 void Logger::MapCreate(Map map) {
   if (!FLAG_trace_maps) return;
   DisallowGarbageCollection no_gc;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "map-create" << kNext << Time() << kNext << AsHex::Address(map.ptr());
   msg.WriteToLogFile();
 }
@@ -1831,9 +1794,7 @@ void Logger::MapCreate(Map map) {
 void Logger::MapDetails(Map map) {
   if (!FLAG_trace_maps) return;
   DisallowGarbageCollection no_gc;
-  std::unique_ptr<Log::MessageBuilder> msg_ptr = log_->NewMessageBuilder();
-  if (!msg_ptr) return;
-  Log::MessageBuilder& msg = *msg_ptr.get();
+  MSG_BUILDER();
   msg << "map-details" << kNext << Time() << kNext << AsHex::Address(map.ptr())
       << kNext;
   if (FLAG_trace_maps_details) {
@@ -1926,10 +1887,6 @@ static int EnumerateWasmModuleObjects(
     }
   }
   return module_objects_count;
-}
-
-void Logger::LogCodeObject(Object object) {
-  existing_code_logger_.LogCodeObject(object);
 }
 
 void Logger::LogCodeObjects() { existing_code_logger_.LogCodeObjects(); }
@@ -2312,6 +2269,7 @@ void ExistingCodeLogger::LogExistingFunction(
 }
 
 #undef CALL_CODE_EVENT_HANDLER
+#undef MSG_BUILDER
 
 }  // namespace internal
 }  // namespace v8
