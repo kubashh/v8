@@ -27777,7 +27777,8 @@ void CallAndCheck(
 
   bool has_caught = SetupTest<T, ApiNumberChecker<T>>(
       initial_value, &env, &checker,
-      "function func(arg) { return receiver.api_func(arg); }"
+      "function func(arg) { arg[0] = arg[1] + arg[2]; return "
+      "receiver.api_func(arg); }"
       "%PrepareFunctionForOptimization(func);"
       "func(value);");
   checker.result_ = ApiCheckerResult::kNotCalled;
@@ -28031,6 +28032,28 @@ TEST(FastApiCalls) {
 
   v8::HandleScope scope(isolate);
   LocalContext env;
+
+  // Map inference - sequence
+  CallAndCheck<int32_t>(0, Behavior::kNoException,
+                        ApiCheckerResult::kFastCalled,
+                        CompileRun("new Array(1.5,2.5,3.5);"));
+  /* Inferred information:
+    IsJSArray: 1
+    IsJSTypedArray: 0
+    Elements kind: 4
+    Instance type: 1059
+  */
+
+  // Map inference - sequence
+  CallAndCheck<int32_t>(0, Behavior::kNoException,
+                        ApiCheckerResult::kFastCalled,
+                        CompileRun("new Float32Array(1.5,2.5,3.5);"));
+  /* Inferred information:
+    IsJSArray: 0
+    IsJSTypedArray: 1
+    Elements kind: 23
+    Instance type: 1051
+  */
 
   // Main cases (the value fits in the type)
   CallAndCheck<int32_t>(-42, Behavior::kNoException,
