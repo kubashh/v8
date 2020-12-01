@@ -67,6 +67,24 @@
       "message": "I think this should only return true for kSerializedHeapObject (it\u0027s possible that we currently don\u0027t happen to call it on an kUnserializedReadOnlyHeapObject but I don\u0027t want to rely on that).\n\nIs the broker mode condition needed (I\u0027m not sure)? If not then please just  check the object kind to be kSerializedHeapObject and name the function IsSerializedHeapObject, analogous to IsNeverSerializedHeapObject above.",
       "revId": "71579118fbed45e59aa3b4fcb53bde725600ddfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c08fe9c_5efce953",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:31:09Z",
+      "side": 1,
+      "message": "Both conditions are necessary. We need to make sure that this is a) a stage where we are expecting to have serialized the objects we need, and b) this is an object that requires serialization to be accessed. The broker check does a). For b), if I checked for kSerializedHeapObject, then I\u0027d explicitly miss serializable objects in the kUnserializedHeapObject state, which are precisely the ones we need to alert for.\n\nWe could change this check to kSerializedHeapObject || kUnserializedHeapObject, I think that would be slightly more precise?",
+      "parentUuid": "3d414793_d554db43",
+      "revId": "71579118fbed45e59aa3b4fcb53bde725600ddfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
