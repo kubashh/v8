@@ -1901,20 +1901,6 @@ TEST(StringEquals) {
   CHECK(!bar_str->StringEquals(foo_str2));
 }
 
-class OneByteStringResource : public v8::String::ExternalOneByteStringResource {
- public:
-  // Takes ownership of |data|.
-  OneByteStringResource(char* data, size_t length)
-      : data_(data), length_(length) {}
-  ~OneByteStringResource() override { delete[] data_; }
-  const char* data() const override { return data_; }
-  size_t length() const override { return length_; }
-
- private:
-  char* data_;
-  size_t length_;
-};
-
 TEST(Regress876759) {
   // Thin strings are used in conjunction with young gen
   if (FLAG_single_generation) return;
@@ -1949,9 +1935,9 @@ TEST(Regress876759) {
   Handle<String> grandparent =
       handle(ThinString::cast(*parent).actual(), isolate);
   CHECK_EQ(*parent, SlicedString::cast(*sliced).parent());
-  OneByteStringResource* resource =
-      new OneByteStringResource(external_one_byte_buf, kLength);
-  grandparent->MakeExternal(resource);
+  OneByteResource* resource =
+      new OneByteResource(external_one_byte_buf, kLength);
+  CHECK(grandparent->MakeExternal(resource));
   // The grandparent string becomes one-byte, but the child strings are still
   // two-byte.
   CHECK(grandparent->IsOneByteRepresentation());
@@ -1959,6 +1945,50 @@ TEST(Regress876759) {
   CHECK(sliced->IsTwoByteRepresentation());
   // The *Underneath version returns the correct representation.
   CHECK(String::IsOneByteRepresentationUnderneath(*sliced));
+}
+
+// Show failure when trying to create and internal, external and uncached string
+// through MakeExternal. One byte version.
+TEST(MakeExternalCreationFailureOneByte) {
+  Isolate* isolate = CcTest::i_isolate();
+  Factory* factory = isolate->factory();
+  const char* raw_small = "small string";
+
+  HandleScope handle_scope(isolate);
+  Handle<String> one_byte_string =
+      factory->InternalizeString(factory->NewStringFromAsciiChecked(raw_small));
+  CHECK(one_byte_string->IsOneByteRepresentation());
+  CHECK(!one_byte_string->IsExternalString());
+  CHECK(!one_byte_string->MakeExternal(
+      new OneByteResource(i::StrDup(raw_small), strlen(raw_small))));
+}
+
+// Show failure when trying to create and internal, external and uncached string
+// through MakeExternal. Two byte version.
+TEST(MakeExternalCreationFailureTwoByte) {
+  Isolate* isolate = CcTest::i_isolate();
+  Factory* factory = isolate->factory();
+  // Due to different size restrictions the string needs to be small but not too
+  // small, therefore 'smalls'.
+  const char* raw_small = "smalls";
+  const int kLength = 6;
+  DCHECK_EQ(kLength, strlen(raw_small));
+  const uint16_t two_byte_array[kLength] = {'s', 'm', 'a', 'l', 'l', 's'};
+
+  HandleScope handle_scope(isolate);
+  Handle<String> two_bytes_string;
+  {
+    Handle<SeqTwoByteString> raw =
+        factory->NewRawTwoByteString(kLength).ToHandleChecked();
+    DisallowGarbageCollection no_gc;
+    CopyChars(raw->GetChars(no_gc), two_byte_array, kLength);
+    two_bytes_string = raw;
+  }
+  two_bytes_string = factory->InternalizeString(two_bytes_string);
+  CHECK(two_bytes_string->IsTwoByteRepresentation());
+  CHECK(!two_bytes_string->IsExternalString());
+  CHECK(!two_bytes_string->MakeExternal(
+      new Resource(AsciiToTwoByteString(raw_small), strlen(raw_small))));
 }
 
 }  // namespace test_strings
