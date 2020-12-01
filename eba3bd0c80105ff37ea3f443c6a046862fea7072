@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d4c6c0c_cec2f864",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-01T16:07:00Z",
+      "side": 1,
+      "message": "PTAL, plain revert + manual fixes for tree changes in the meantime",
+      "revId": "eba3bd0c80105ff37ea3f443c6a046862fea7072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
