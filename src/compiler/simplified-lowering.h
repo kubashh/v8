@@ -19,6 +19,7 @@ namespace compiler {
 
 // Forward declarations.
 class NodeOriginTable;
+class ObserveNodeManager;
 class RepresentationChanger;
 class RepresentationSelector;
 class SourcePositionTable;
@@ -30,7 +31,8 @@ class V8_EXPORT_PRIVATE SimplifiedLowering final {
                      SourcePositionTable* source_position,
                      NodeOriginTable* node_origins,
                      PoisoningMitigationLevel poisoning_level,
-                     TickCounter* tick_counter, Linkage* linkage);
+                     TickCounter* tick_counter, Linkage* linkage,
+                     ObserveNodeManager* observe_node_manager = nullptr);
   ~SimplifiedLowering() = default;
 
   void LowerAllNodes();
@@ -50,6 +52,24 @@ class V8_EXPORT_PRIVATE SimplifiedLowering final {
   void DoUnsigned32ToUint8Clamped(Node* node);
 
  private:
+  // The purpose of this nested class is to hide class
+  // v8::internal::compiler::NodeProperties which should not be directly used
+  // by code in SimplifiedLowering.
+  // In particular, SimplifiedLowering code should call
+  // SimplifiedLowering::ChangeOp in place of NodeProperies::ChangeOp, in order
+  // to notify the changes to registered ObserveNodeManager and support the
+  // %ObserveNode intrinsic. Therefore, a static method ChangeOp() should not be
+  // declared in this class.
+  class NodeProperties {
+   public:
+    static bool IsControlEdge(Edge edge);
+    static bool IsEffectEdge(Edge edge);
+    static bool IsExceptionalCall(Node* node, Node** out_exception = nullptr);
+    static void ReplaceControlInput(Node* node, Node* control, int index = 0);
+    static void ReplaceEffectInput(Node* node, Node* control, int index = 0);
+  };
+  void ChangeOp(Node* node, const Operator* new_op);
+
   JSGraph* const jsgraph_;
   JSHeapBroker* broker_;
   Zone* const zone_;
@@ -73,6 +93,8 @@ class V8_EXPORT_PRIVATE SimplifiedLowering final {
 
   TickCounter* const tick_counter_;
   Linkage* const linkage_;
+
+  ObserveNodeManager* observe_node_manager_;
 
   Node* Float64Round(Node* const node);
   Node* Float64Sign(Node* const node);

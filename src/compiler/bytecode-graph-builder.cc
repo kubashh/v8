@@ -14,6 +14,7 @@
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/node-matchers.h"
+#include "src/compiler/node-observer.h"
 #include "src/compiler/operator-properties.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/compiler/state-values-utils.h"
@@ -41,7 +42,9 @@ class BytecodeGraphBuilder {
                        CallFrequency const& invocation_frequency,
                        SourcePositionTable* source_positions, int inlining_id,
                        CodeKind code_kind, BytecodeGraphBuilderFlags flags,
-                       TickCounter* tick_counter);
+                       TickCounter* tick_counter,
+                       ObserveNodeManager* observe_node_manager,
+                       NodeObserver* node_observer);
 
   BytecodeGraphBuilder(const BytecodeGraphBuilder&) = delete;
   BytecodeGraphBuilder& operator=(const BytecodeGraphBuilder&) = delete;
@@ -486,6 +489,9 @@ class BytecodeGraphBuilder {
   SourcePosition const start_position_;
 
   TickCounter* const tick_counter_;
+
+  ObserveNodeManager* observe_node_manager_;
+  NodeObserver* node_observer_;
 
   static constexpr int kBinaryOperationHintIndex = 1;
   static constexpr int kBinaryOperationSmiHintIndex = 1;
@@ -993,7 +999,8 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
     FeedbackCellRef const& feedback_cell, BailoutId osr_offset,
     JSGraph* jsgraph, CallFrequency const& invocation_frequency,
     SourcePositionTable* source_positions, int inlining_id, CodeKind code_kind,
-    BytecodeGraphBuilderFlags flags, TickCounter* tick_counter)
+    BytecodeGraphBuilderFlags flags, TickCounter* tick_counter,
+    ObserveNodeManager* observe_node_manager, NodeObserver* node_observer)
     : broker_(broker),
       local_zone_(local_zone),
       jsgraph_(jsgraph),
@@ -1041,7 +1048,9 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
       state_values_cache_(jsgraph),
       source_positions_(source_positions),
       start_position_(shared_info.StartPosition(), inlining_id),
-      tick_counter_(tick_counter) {}
+      tick_counter_(tick_counter),
+      observe_node_manager_(observe_node_manager),
+      node_observer_(node_observer) {}
 
 Node* BytecodeGraphBuilder::GetFunctionClosure() {
   if (!function_closure_.is_set()) {
@@ -2704,16 +2713,38 @@ void BytecodeGraphBuilder::VisitCallRuntime() {
   interpreter::Register receiver = bytecode_iterator().GetRegisterOperand(1);
   size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
 
-  // Create node to perform the runtime call.
-  const Operator* call = javascript()->CallRuntime(function_id, reg_count);
-  Node* value = ProcessCallRuntimeArguments(call, receiver, reg_count);
-  environment()->BindAccumulator(value, Environment::kAttachFrameState);
+  if (function_id == Runtime::FunctionId::kObserveNode) {
+    DCHECK_EQ(1, reg_count);
+    const int first_arg_index = receiver.index();
+    Node* value =
+        environment()->LookupRegister(interpreter::Register(first_arg_index));
 
-  // Connect to the end if {function_id} is non-returning.
-  if (Runtime::IsNonReturning(function_id)) {
-    // TODO(7099): Investigate if we need LoopExit node here.
-    Node* control = NewNode(common()->Throw());
-    MergeControlToLeaveFunction(control);
+    if (observe_node_manager_ && node_observer_) {
+      NodeObservation* observation = graph()->zone()->New<NodeObservation>(
+          node_observer_, graph()->zone());
+
+      auto obs = observation->Begin(value);
+
+      if (obs == NodeObserver::Observation::kContinue) {
+        observe_node_manager_->StartObserving(value, observation);
+      } else {
+        DCHECK_EQ(obs, NodeObserver::Observation::kStop);
+      }
+    }
+
+    environment()->BindAccumulator(value);
+  } else {
+    // Create node to perform the runtime call.
+    const Operator* call = javascript()->CallRuntime(function_id, reg_count);
+    Node* value = ProcessCallRuntimeArguments(call, receiver, reg_count);
+    environment()->BindAccumulator(value, Environment::kAttachFrameState);
+
+    // Connect to the end if {function_id} is non-returning.
+    if (Runtime::IsNonReturning(function_id)) {
+      // TODO(7099): Investigate if we need LoopExit node here.
+      Node* control = NewNode(common()->Throw());
+      MergeControlToLeaveFunction(control);
+    }
   }
 }
 
@@ -4509,21 +4540,21 @@ void BytecodeGraphBuilder::UpdateSourcePosition(int offset) {
   }
 }
 
-void BuildGraphFromBytecode(JSHeapBroker* broker, Zone* local_zone,
-                            SharedFunctionInfoRef const& shared_info,
-                            FeedbackCellRef const& feedback_cell,
-                            BailoutId osr_offset, JSGraph* jsgraph,
-                            CallFrequency const& invocation_frequency,
-                            SourcePositionTable* source_positions,
-                            int inlining_id, CodeKind code_kind,
-                            BytecodeGraphBuilderFlags flags,
-                            TickCounter* tick_counter) {
+void BuildGraphFromBytecode(
+    JSHeapBroker* broker, Zone* local_zone,
+    SharedFunctionInfoRef const& shared_info,
+    FeedbackCellRef const& feedback_cell, BailoutId osr_offset,
+    JSGraph* jsgraph, CallFrequency const& invocation_frequency,
+    SourcePositionTable* source_positions, int inlining_id, CodeKind code_kind,
+    BytecodeGraphBuilderFlags flags, TickCounter* tick_counter,
+    ObserveNodeManager* observe_node_manager, NodeObserver* node_observer) {
   DCHECK(broker->IsSerializedForCompilation(
       shared_info, feedback_cell.value().AsFeedbackVector()));
   BytecodeGraphBuilder builder(
       broker, local_zone, broker->target_native_context(), shared_info,
       feedback_cell, osr_offset, jsgraph, invocation_frequency,
-      source_positions, inlining_id, code_kind, flags, tick_counter);
+      source_positions, inlining_id, code_kind, flags, tick_counter,
+      observe_node_manager, node_observer);
   builder.CreateGraph();
 }
 
