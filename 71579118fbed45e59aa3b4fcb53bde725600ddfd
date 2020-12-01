@@ -120,6 +120,24 @@
       "parentUuid": "1c08fe9c_5efce953",
       "revId": "71579118fbed45e59aa3b4fcb53bde725600ddfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82abef6c_efbfcada",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T16:01:32Z",
+      "side": 1,
+      "message": "You\u0027re right, I was confusing `kSerializedHeapObject` with `serialized()`. The broker check is still needed though, for the cases where the same code path may be running with and without the broker in serialized mode.",
+      "parentUuid": "366350b9_00df6aa6",
+      "revId": "71579118fbed45e59aa3b4fcb53bde725600ddfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
