@@ -16,6 +16,23 @@
       "message": "PTAL\n",
       "revId": "825dbb621ee4d545e9e5e945aa0beb2e195e654d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d741d99_cd7079a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-12-01T12:26:29Z",
+      "side": 1,
+      "message": "The fix looks good, can you include that in the next reland?",
+      "revId": "825dbb621ee4d545e9e5e945aa0beb2e195e654d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
