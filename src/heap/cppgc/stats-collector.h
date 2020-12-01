@@ -159,6 +159,9 @@ class V8_EXPORT_PRIVATE StatsCollector final {
       IncreaseScopeTime();
     }
 
+    InternalScope(const InternalScope&) = delete;
+    InternalScope& operator=(const InternalScope&) = delete;
+
    private:
     void* operator new(size_t, void*) = delete;
     void* operator new(size_t) = delete;
@@ -183,8 +186,6 @@ class V8_EXPORT_PRIVATE StatsCollector final {
     StatsCollector* const stats_collector_;
     const v8::base::TimeTicks start_time_;
     const ScopeIdType scope_id_;
-
-    DISALLOW_COPY_AND_ASSIGN(InternalScope);
   };
 
  public:
