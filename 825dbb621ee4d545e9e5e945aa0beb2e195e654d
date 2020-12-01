@@ -33,6 +33,41 @@
       "message": "The fix looks good, can you include that in the next reland?",
       "revId": "825dbb621ee4d545e9e5e945aa0beb2e195e654d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32b3e9c1_e846244a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2020-12-01T17:53:22Z",
+      "side": 1,
+      "message": "Yes, for sure!\nThere is another lifetime issue that I overlooked with CancelAndDetach, that I\u0027m fixing in gin:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/2566724",
+      "parentUuid": "5d741d99_cd7079a2",
+      "revId": "825dbb621ee4d545e9e5e945aa0beb2e195e654d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29a79f08_24132138",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2020-12-01T17:53:22Z",
+      "side": 1,
+      "message": "I\u0027ll abandon this CL and include the fix in the reland",
+      "revId": "825dbb621ee4d545e9e5e945aa0beb2e195e654d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
