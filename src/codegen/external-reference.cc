@@ -660,6 +660,25 @@ ExternalReference ExternalReference::search_string_raw_two_two() {
   return search_string_raw<const uc16, const uc16>();
 }
 
+namespace {
+
+void StringWriteToFlatOneByte(Address source, uint8_t* sink, int32_t from,
+                              int32_t to) {
+  return String::WriteToFlat<uint8_t>(String::cast(Object(source)), sink, from,
+                                      to);
+}
+
+void StringWriteToFlatTwoByte(Address source, uint16_t* sink, int32_t from,
+                              int32_t to) {
+  return String::WriteToFlat<uint16_t>(String::cast(Object(source)), sink, from,
+                                       to);
+}
+
+}  // namespace
+
+FUNCTION_REFERENCE(string_write_to_flat_one_byte, StringWriteToFlatOneByte)
+FUNCTION_REFERENCE(string_write_to_flat_two_byte, StringWriteToFlatTwoByte)
+
 FUNCTION_REFERENCE(orderedhashmap_gethash_raw, OrderedHashMap::GetHash)
 
 Address GetOrCreateHash(Isolate* isolate, Address raw_key) {
