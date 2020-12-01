@@ -16,6 +16,23 @@
       "message": "PTAL\n\nThere is still a test failure because of a timeout I need to look at, but this shouldn\u0027t change anything about the CL anymore.",
       "revId": "9a4701a5fe8828088bf8b618f9ed378b3fc08a82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cda4b2b_6f94bd68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-12-01T17:41:01Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "9a4701a5fe8828088bf8b618f9ed378b3fc08a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
