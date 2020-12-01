@@ -33,6 +33,40 @@
       "message": "Oops, thought I had an lgtm 😂",
       "revId": "71579118fbed45e59aa3b4fcb53bde725600ddfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4c97059_286dba6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-12-01T15:25:04Z",
+      "side": 1,
+      "message": "lgtm with comment",
+      "revId": "71579118fbed45e59aa3b4fcb53bde725600ddfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d414793_d554db43",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-12-01T15:25:04Z",
+      "side": 1,
+      "message": "I think this should only return true for kSerializedHeapObject (it\u0027s possible that we currently don\u0027t happen to call it on an kUnserializedReadOnlyHeapObject but I don\u0027t want to rely on that).\n\nIs the broker mode condition needed (I\u0027m not sure)? If not then please just  check the object kind to be kSerializedHeapObject and name the function IsSerializedHeapObject, analogous to IsNeverSerializedHeapObject above.",
+      "revId": "71579118fbed45e59aa3b4fcb53bde725600ddfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
