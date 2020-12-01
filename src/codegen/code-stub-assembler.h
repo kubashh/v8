@@ -1185,6 +1185,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                   value, StoreToObjectWriteBarrier::kNone);
   }
 
+  TNode<RawPtrT> GCUnsafeReferenceToRawPtr(TNode<Object> object,
+                                           TNode<IntPtrT> offset) {
+    return ReinterpretCast<RawPtrT>(
+        IntPtrAdd(BitcastTaggedToWord(object),
+                  IntPtrSub(offset, IntPtrConstant(kHeapObjectTag))));
+  }
+
   // Load the floating point value of a HeapNumber.
   TNode<Float64T> LoadHeapNumberValue(TNode<HeapObject> object);
   // Load the Map of an HeapObject.
@@ -2515,7 +2522,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // String helpers.
   // Load a character from a String (might flatten a ConsString).
-  TNode<Int32T> StringCharCodeAt(TNode<String> string, TNode<UintPtrT> index);
+  TNode<Uint16T> StringCharCodeAt(TNode<String> string, TNode<UintPtrT> index);
   // Return the single character string with only {code}.
   TNode<String> StringFromSingleCharCode(TNode<Int32T> code);
 
@@ -2760,6 +2767,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                  TVariable<IntPtrT>* var_index, Label* if_keyisunique,
                  TVariable<Name>* var_unique, Label* if_bailout,
                  Label* if_notinternalized = nullptr);
+
+  // Call non-allocating runtime String::WriteToFlat using fast C-calls.
+  void StringWriteToFlatOneByte(TNode<String> source, TNode<RawPtrT> sink,
+                                TNode<Int32T> from, TNode<Int32T> to);
+  void StringWriteToFlatTwoByte(TNode<String> source, TNode<RawPtrT> sink,
+                                TNode<Int32T> from, TNode<Int32T> to);
 
   // Performs a hash computation and string table lookup for the given string,
   // and jumps to:
