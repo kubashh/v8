@@ -81,6 +81,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d2e7c60_0fe3c5a2",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:12:53Z",
+      "side": 1,
+      "message": "yeah, for DisallowGarbageCollection",
+      "parentUuid": "6d2a7dd8_60f86b5d",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 36
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbda7c41_889159f4",
@@ -94,6 +118,30 @@
       "writtenOn": "2020-11-23T13:57:55Z",
       "side": 1,
       "message": "Open Q: Do we currently use the heap in CheckpointElimination? If not, do we want to change it to DisallowHeapAccess even for FLAG_turbo_direct_heap_access?",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 63,
+        "endChar": 22
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb45173b_991391f2",
+        "filename": "src/compiler/checkpoint-elimination.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:12:53Z",
+      "side": 1,
+      "message": "I guess not, I\u0027ll change it back.",
+      "parentUuid": "dbda7c41_889159f4",
       "range": {
         "startLine": 63,
         "startChar": 2,
@@ -127,6 +175,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c8f876e_5476b9ec",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4709,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:12:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "beac63c9_d8be14e0",
+      "range": {
+        "startLine": 4709,
+        "startChar": 10,
+        "endLine": 4709,
+        "endChar": 11
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d729b7a9_50be437b",
@@ -144,6 +216,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b050dcba_6837d3cb",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7566,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:12:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d729b7a9_50be437b",
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "009ccf8c_6ae5854b",
@@ -157,6 +247,30 @@
       "writtenOn": "2020-11-23T13:57:55Z",
       "side": 1,
       "message": "WDYT about flipping this over and being should_be_serialized()? When I read `is_never_serialized` I thought it was just about kNeverSerializedHeapObject (and not about the broker itself).",
+      "range": {
+        "startLine": 2304,
+        "startChar": 16,
+        "endLine": 2304,
+        "endChar": 35
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c793b1_0c33feb3",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:12:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "009ccf8c_6ae5854b",
       "range": {
         "startLine": 2304,
         "startChar": 16,
@@ -186,6 +300,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b4861aa_592c6bd5",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:12:53Z",
+      "side": 1,
+      "message": "Changed to ObjectRef::ShouldHaveBeenSerialized, wdyt?",
+      "parentUuid": "81407fdb_6451be6f",
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2b2e5db2_48b428b6",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 1
@@ -197,6 +329,30 @@
       "writtenOn": "2020-11-23T13:57:55Z",
       "side": 1,
       "message": "I think that when property accesses can be computed on background threads we would change it to\n  broker()-\u003eis_concurrent_inlining() \u0026\u0026 FLAG_turbo_direct_heap_access\nor similar, due to the incremental effort. After the FLAG_turbo_direct_heap_access flag is made the default then we can remove this function.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 44
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e72c0c5_4120c95e",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:12:53Z",
+      "side": 1,
+      "message": "is_concurrent_inlining implies FLAG_turbo_direct_heap_access, right? So there\u0027s no need for \u0026\u0026. Georg asked me to remove this method anyway.",
+      "parentUuid": "2b2e5db2_48b428b6",
       "range": {
         "startLine": 57,
         "startChar": 0,
@@ -230,6 +386,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7746bbd9_5206ebb6",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:12:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a66420c_b34889ae",
+      "range": {
+        "startLine": 363,
+        "startChar": 2,
+        "endLine": 364,
+        "endChar": 45
+      },
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b873bbe1_bacfe882",
@@ -243,6 +423,24 @@
       "writtenOn": "2020-11-23T13:57:55Z",
       "side": 1,
       "message": "Completely unrelated but is there a reason we have double empty lines here?",
+      "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e912cfc7_a047c69e",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-01T15:12:53Z",
+      "side": 1,
+      "message": "Old style I guess :)",
+      "parentUuid": "b873bbe1_bacfe882",
       "revId": "779882862e07cd2f963e38a43fefc8323247b0c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
