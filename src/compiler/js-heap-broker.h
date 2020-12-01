@@ -149,9 +149,11 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   Handle<Object> GetRootHandle(Object object);
 
   // Never returns nullptr.
-  ObjectData* GetOrCreateData(Handle<Object>);
+  ObjectData* GetOrCreateData(Handle<Object>,
+                              bool safe_to_serialize_on_background = false);
   // Like the previous but wraps argument in handle first (for convenience).
-  ObjectData* GetOrCreateData(Object);
+  ObjectData* GetOrCreateData(Object,
+                              bool safe_to_serialize_on_background = false);
 
   // Check if {object} is any native context's %ArrayPrototype% or
   // %ObjectPrototype%.
@@ -244,6 +246,8 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
                                   const FeedbackVectorRef& feedback) const;
 
   LocalIsolate* local_isolate() const { return local_isolate_; }
+
+  bool IsPendingAllocation(HeapObject heap_object);
 
   // Return the corresponding canonical persistent handle for {object}. Create
   // one if it does not exist.

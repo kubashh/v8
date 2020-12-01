@@ -47,6 +47,7 @@ namespace compiler {
 HEAP_BROKER_SERIALIZED_OBJECT_LIST(FORWARD_DECL)
 // TODO(solanes, v8:10866): Remove once FLAG_turbo_direct_heap_access is
 // removed.
+HEAP_BROKER_POSSIBLY_BACKGROUND_SERIALIZED_OBJECT_LIST(FORWARD_DECL)
 HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(FORWARD_DECL)
 #undef FORWARD_DECL
 
@@ -175,6 +176,7 @@ class ObjectData : public ZoneObject {
 
 #define DECLARE_IS(Name) bool Is##Name() const;
   HEAP_BROKER_SERIALIZED_OBJECT_LIST(DECLARE_IS)
+  HEAP_BROKER_POSSIBLY_BACKGROUND_SERIALIZED_OBJECT_LIST(DECLARE_IS)
   HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(DECLARE_IS)
 #undef DECLARE_IS
 
@@ -182,6 +184,7 @@ class ObjectData : public ZoneObject {
   HEAP_BROKER_SERIALIZED_OBJECT_LIST(DECLARE_AS)
   // TODO(solanes, v8:10866): Remove once FLAG_turbo_direct_heap_access is
   // removed.
+  HEAP_BROKER_POSSIBLY_BACKGROUND_SERIALIZED_OBJECT_LIST(DECLARE_AS)
   HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(DECLARE_AS)
 #undef DECLARE_AS
 
@@ -2041,6 +2044,7 @@ class CodeData : public HeapObjectData {
     return InstanceTypeChecker::Is##Name(instance_type);                \
   }
 HEAP_BROKER_SERIALIZED_OBJECT_LIST(DEFINE_IS)
+HEAP_BROKER_POSSIBLY_BACKGROUND_SERIALIZED_OBJECT_LIST(DEFINE_IS)
 HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(DEFINE_IS)
 #undef DEFINE_IS
 
@@ -2051,6 +2055,14 @@ HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(DEFINE_IS)
     return static_cast<Name##Data*>(this);  \
   }
 HEAP_BROKER_SERIALIZED_OBJECT_LIST(DEFINE_AS)
+#undef DEFINE_AS
+#define DEFINE_AS(Name)                     \
+  Name##Data* ObjectData::As##Name() {      \
+    CHECK(Is##Name());                      \
+    CHECK_EQ(kind_, kSerializedHeapObject); \
+    return static_cast<Name##Data*>(this);  \
+  }
+HEAP_BROKER_POSSIBLY_BACKGROUND_SERIALIZED_OBJECT_LIST(DEFINE_AS)
 #undef DEFINE_AS
 
 // TODO(solanes, v8:10866): Remove once FLAG_turbo_direct_heap_access is
@@ -2447,6 +2459,10 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
 
 JSHeapBroker::~JSHeapBroker() { DCHECK_NULL(local_isolate_); }
 
+bool JSHeapBroker::IsPendingAllocation(HeapObject heap_object) {
+  return isolate_->heap()->IsPendingAllocation(heap_object);
+}
+
 void JSHeapBroker::SetPersistentAndCopyCanonicalHandlesForTesting(
     std::unique_ptr<PersistentHandles> persistent_handles,
     std::unique_ptr<CanonicalHandlesMap> canonical_handles) {
@@ -2733,7 +2749,8 @@ void JSHeapBroker::InitializeAndStartSerializing(
 }
 
 // clang-format off
-ObjectData* JSHeapBroker::GetOrCreateData(Handle<Object> object) {
+ObjectData* JSHeapBroker::GetOrCreateData(Handle<Object> object,
+bool safe_to_serialize_on_background) {
   RefsMap::Entry* entry = refs_->LookupOrInsert(object.address());
   ObjectData* object_data = entry->value;
 
@@ -2761,6 +2778,15 @@ ObjectData* JSHeapBroker::GetOrCreateData(Handle<Object> object) {
       }
     HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(CREATE_DATA_FOR_DIRECT_READ)
 #undef CREATE_DATA_FOR_DIRECT_READ
+#define CREATE_DATA_FOR_POSSIBLE_SERIALIZATION(name)                         \
+    } else if (object->Is##name()) {                                         \
+      CHECK_IMPLIES(mode() == kSerialized, safe_to_serialize_on_background); \
+      AllowHandleAllocation handle_allocation;                               \
+      object_data = zone()->New<name##Data>(this, data_storage,              \
+                                            Handle<name>::cast(object));
+    HEAP_BROKER_POSSIBLY_BACKGROUND_SERIALIZED_OBJECT_LIST(
+      CREATE_DATA_FOR_POSSIBLE_SERIALIZATION)
+#undef CREATE_DATA_FOR_POSSIBLE_SERIALIZATION
 #define CREATE_DATA_FOR_SERIALIZATION(name)                     \
     } else if (object->Is##name()) {                            \
       CHECK_EQ(mode(), kSerializing);                           \
@@ -2780,8 +2806,10 @@ ObjectData* JSHeapBroker::GetOrCreateData(Handle<Object> object) {
 }
 // clang-format on
 
-ObjectData* JSHeapBroker::GetOrCreateData(Object object) {
-  return GetOrCreateData(CanonicalPersistentHandle(object));
+ObjectData* JSHeapBroker::GetOrCreateData(
+    Object object, bool safe_to_serialize_on_background) {
+  return GetOrCreateData(CanonicalPersistentHandle(object),
+                         safe_to_serialize_on_background);
 }
 
 #define DEFINE_IS_AND_AS(Name)                                    \
@@ -2791,6 +2819,7 @@ ObjectData* JSHeapBroker::GetOrCreateData(Object object) {
     return Name##Ref(broker(), data());                           \
   }
 HEAP_BROKER_SERIALIZED_OBJECT_LIST(DEFINE_IS_AND_AS)
+HEAP_BROKER_POSSIBLY_BACKGROUND_SERIALIZED_OBJECT_LIST(DEFINE_IS_AND_AS)
 HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(DEFINE_IS_AND_AS)
 #undef DEFINE_IS_AND_AS
 
@@ -4158,6 +4187,7 @@ Handle<Object> ObjectRef::object() const {
 #endif  // DEBUG
 
 HEAP_BROKER_SERIALIZED_OBJECT_LIST(DEF_OBJECT_GETTER)
+HEAP_BROKER_POSSIBLY_BACKGROUND_SERIALIZED_OBJECT_LIST(DEF_OBJECT_GETTER)
 HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(DEF_OBJECT_GETTER)
 #undef DEF_OBJECT_GETTER
 
