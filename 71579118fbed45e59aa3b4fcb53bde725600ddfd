@@ -102,6 +102,24 @@
       "parentUuid": "3d414793_d554db43",
       "revId": "71579118fbed45e59aa3b4fcb53bde725600ddfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "366350b9_00df6aa6",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-12-01T15:53:41Z",
+      "side": 1,
+      "message": "I don\u0027t think \"serializable objects in the kUnserializedHeapObject state\" are the prime objects for which we need to alert. Those of kind SerializedHeapObject who are missing certain data are. I don\u0027t remember if kUnserializedHeapObject can even occur when the broker is in mode Serialized.\n\nI did a quick experiment running with my proposed definition of just\n  return data()-\u003ekind() \u003d\u003d kSerializedHeapObject;\nI got no failures on mjsunit.\n\n(Except one failure that occurs already in your CL, regress-4023.)",
+      "parentUuid": "1c08fe9c_5efce953",
+      "revId": "71579118fbed45e59aa3b4fcb53bde725600ddfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
