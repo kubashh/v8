@@ -490,6 +490,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "03bd3b06_77ca9029",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-01T15:02:55Z",
+      "side": 1,
+      "message": "We are iterating through replacements_ vector, but the notification was already sent in DeferReplacement(), where the node were added to the vector.",
+      "parentUuid": "ea8e323c_0870fe8c",
+      "range": {
+        "startLine": 693,
+        "startChar": 6,
+        "endLine": 693,
+        "endChar": 44
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcb14052_a3f3d18e",
         "filename": "src/compiler/simplified-lowering.cc",
         "patchSetId": 6
@@ -667,6 +691,30 @@
       "side": 1,
       "message": "That\u0027s interesting. Could you please keep the old cases and have them commented out at the end of the list, together with the TODO comment I already added. I don\u0027t want us to adapt the tests to what works, but rather I like to have a look at the tests in a follow up and very that it\u0027s actually the tests that are incorrect, rather than the implementation that is tested.",
       "parentUuid": "3b93f142_a8e4753a",
+      "range": {
+        "startLine": 163,
+        "startChar": 2,
+        "endLine": 206,
+        "endChar": 51
+      },
+      "revId": "57e54322f376de9cb81f5f4fbb9f7889edd2298b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ddf03b4_41951c97",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-01T15:02:55Z",
+      "side": 1,
+      "message": "Done. And these cases were also already commented out in your original CL: https://chromium-review.googlesource.com/c/v8/v8/+/2135631/6/test/cctest/compiler/test-sloppy-equality.cc.",
+      "parentUuid": "c546655a_afcc06df",
       "range": {
         "startLine": 163,
         "startChar": 2,
