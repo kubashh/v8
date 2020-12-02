@@ -40,6 +40,15 @@ class JSLocale : public TorqueGeneratedJSLocale<JSLocale, JSObject> {
   static MaybeHandle<JSLocale> Minimize(Isolate* isolate,
                                         Handle<JSLocale> locale);
 
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> Defaults(
+      Isolate* isolate, Handle<JSLocale> locale);
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> TextInfo(
+      Isolate* isolate, Handle<JSLocale> locale);
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> UnitInfo(
+      Isolate* isolate, Handle<JSLocale> locale);
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> WeekInfo(
+      Isolate* isolate, Handle<JSLocale> locale);
+
   static Handle<Object> Language(Isolate* isolate, Handle<JSLocale> locale);
   static Handle<Object> Script(Isolate* isolate, Handle<JSLocale> locale);
   static Handle<Object> Region(Isolate* isolate, Handle<JSLocale> locale);

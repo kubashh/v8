@@ -674,6 +674,30 @@ BUILTIN(LocalePrototypeMinimize) {
   RETURN_RESULT_OR_FAILURE(isolate, JSLocale::Minimize(isolate, locale));
 }
 
+BUILTIN(LocalePrototypeDefaults) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale, "Intl.Locale.prototype.defaults");
+  RETURN_RESULT_OR_FAILURE(isolate, JSLocale::Defaults(isolate, locale));
+}
+
+BUILTIN(LocalePrototypeTextInfo) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale, "Intl.Locale.prototype.textInfo");
+  RETURN_RESULT_OR_FAILURE(isolate, JSLocale::TextInfo(isolate, locale));
+}
+
+BUILTIN(LocalePrototypeUnitInfo) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale, "Intl.Locale.prototype.UnitInfo");
+  RETURN_RESULT_OR_FAILURE(isolate, JSLocale::UnitInfo(isolate, locale));
+}
+
+BUILTIN(LocalePrototypeWeekInfo) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale, "Intl.Locale.prototype.weekInfo");
+  RETURN_RESULT_OR_FAILURE(isolate, JSLocale::WeekInfo(isolate, locale));
+}
+
 BUILTIN(RelativeTimeFormatSupportedLocalesOf) {
   HandleScope scope(isolate);
   Handle<Object> locales = args.atOrUndefined(isolate, 1);
