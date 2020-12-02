@@ -2851,8 +2851,6 @@ TEST_F(FunctionBodyDecoderTest, ThrowUnreachable) {
 }
 
 #define WASM_TRY_OP kExprTry, kVoidCode
-#define WASM_BR_ON_EXN(depth, index) \
-  kExprBrOnExn, static_cast<byte>(depth), static_cast<byte>(index)
 
 TEST_F(FunctionBodyDecoderTest, TryCatch) {
   WASM_FEATURE_SCOPE(eh);
@@ -2872,31 +2870,6 @@ TEST_F(FunctionBodyDecoderTest, Rethrow) {
   ExpectFailure(sigs.v_v(), {kExprRethrow});
 }
 
-TEST_F(FunctionBodyDecoderTest, BrOnExn) {
-  WASM_FEATURE_SCOPE(eh);
-  byte ex1 = builder.AddException(sigs.v_v());
-  byte ex2 = builder.AddException(sigs.v_i());
-  ExpectValidates(sigs.v_v(), {WASM_TRY_OP, kExprCatch, WASM_BR_ON_EXN(0, ex1),
-                               kExprDrop, kExprEnd});
-  ExpectValidates(sigs.v_v(), {WASM_TRY_OP, kExprCatch, WASM_BR_ON_EXN(1, ex1),
-                               kExprDrop, kExprEnd});
-  ExpectValidates(sigs.v_v(), {WASM_TRY_OP, kExprCatch, WASM_BR_ON_EXN(0, ex1),
-                               WASM_BR_ON_EXN(0, ex1), kExprDrop, kExprEnd});
-  ExpectValidates(sigs.v_v(),
-                  {WASM_BLOCK(WASM_TRY_OP, kExprCatch, WASM_BR_ON_EXN(1, ex1),
-                              kExprDrop, kExprEnd)});
-  ExpectValidates(sigs.i_v(),
-                  {WASM_BLOCK_I(WASM_TRY_OP, kExprCatch, WASM_BR_ON_EXN(1, ex2),
-                                kExprDrop, kExprEnd, kExprI32Const, 0)});
-  ExpectFailure(sigs.v_v(), {WASM_TRY_OP, kExprCatch, WASM_BR_ON_EXN(2, ex1),
-                             kExprDrop, kExprEnd});
-  ExpectFailure(sigs.v_v(), {WASM_TRY_OP, kExprCatch, kExprDrop,
-                             WASM_BR_ON_EXN(0, ex1), kExprEnd});
-  ExpectFailure(sigs.v_v(),
-                {WASM_TRY_OP, kExprCatch, WASM_BR_ON_EXN(0, ex1), kExprEnd});
-}
-
-#undef WASM_BR_ON_EXN
 #undef WASM_TRY_OP
 
 TEST_F(FunctionBodyDecoderTest, MultiValBlock1) {
@@ -4516,7 +4489,6 @@ TEST_F(WasmOpcodeLengthTest, Statements) {
   ExpectLength(2, kExprBr);
   ExpectLength(2, kExprBrIf);
   ExpectLength(2, kExprThrow);
-  ExpectLength(3, kExprBrOnExn);
   ExpectLength(2, kExprBlock, kI32Code);
   ExpectLength(2, kExprLoop, kI32Code);
   ExpectLength(2, kExprIf, kI32Code);
