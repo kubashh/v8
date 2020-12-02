@@ -16,6 +16,23 @@
       "message": "Thanks for your reviews! Also removed the flag.",
       "revId": "03033ae449275970151d1fef568b3f4de1855ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30fad518_16f98500",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T06:12:51Z",
+      "side": 1,
+      "message": "Still lgtm :)",
+      "revId": "03033ae449275970151d1fef568b3f4de1855ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
