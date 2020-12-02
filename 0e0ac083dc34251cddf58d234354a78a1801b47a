@@ -33,6 +33,23 @@
       "message": "Dominik, PTAL",
       "revId": "0e0ac083dc34251cddf58d234354a78a1801b47a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b733ed33_d0730b8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-12-02T12:18:31Z",
+      "side": 1,
+      "message": "Very cool, thanks! LGTM",
+      "revId": "0e0ac083dc34251cddf58d234354a78a1801b47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
