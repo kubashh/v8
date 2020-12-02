@@ -16,6 +16,257 @@
       "message": "Great stuff! LGTM 👍 Thanks Tobias 😊",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "effb983f_dd0b9cf5",
+        "filename": "src/builtins/builtins-string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "char16?",
+      "range": {
+        "startLine": 157,
+        "startChar": 16,
+        "endLine": 157,
+        "endChar": 22
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8fcf120_db6e067a",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "What\u0027s the emitted code like for these checks / would the masking approach we use elsewhere be better here too? I mean something like `instance_type \u0026 REPRESENTATION_AND_BITNESS_MASK \u003d\u003d SEQ_ONE_BYTE`, instead of what I assume is `instance_type \u0026 REPR_MASK \u003d\u003d SEQ \u0026\u0026 instance_type \u0026 BITNESS_MASK \u003d\u003d ONE` emitted here.",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ab8edf9_07f089f1",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "Should we replace this with a call to StringCompareEqual? https://source.chromium.org/chromium/chromium/src/+/master:v8/src/utils/utils.h;l\u003d366;drc\u003d52cfffde972d833cc9be768432a1f5e45ccfe87b",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dcf08ae_75e03830",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "Since this dispatch pattern is super-verbose and repeated a few times, it\u0027d be nice to wrap it in a helper. You\u0027ve probably thought about this and it doesn\u0027t work for some reason?",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad522a6d_5b80eefc",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "SelectBooleanConstant?",
+      "range": {
+        "startLine": 90,
+        "startChar": 56,
+        "endLine": 90,
+        "endChar": 71
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f0ed999_28249276",
+        "filename": "src/builtins/string-replaceall.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "Could be a call to CompareCharsUnsigned.",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8d610bf_8dde4784",
+        "filename": "src/builtins/string-startswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "SelectBooleanConstant",
+      "range": {
+        "startLine": 50,
+        "startChar": 64,
+        "endLine": 50,
+        "endChar": 79
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6e82732_627df51f",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "q: are the mutable versions currently used anywhere?",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dd72fc7_17fa592f",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "q: Why did you decide to assert equality instead of defining one by the other?",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d7bbac8_f8f14fcf",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "nit: Perhaps update the return type of AllocateSeqXXXByteString",
+      "range": {
+        "startLine": 176,
+        "startChar": 22,
+        "endLine": 176,
+        "endChar": 50
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54086ae1_b1774470",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "Very nice.. Is anything blocking integration of the new Flatten call into TryToDirect? That\u0027d help all existing callsites by removing a common runtime bailout.",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "032dc1d8_92cab2f0",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "It looks like this repeats the instance-type check a second time.. Could we avoid this since we\u0027ve *just* switched on the instance type?",
+      "range": {
+        "startLine": 216,
+        "startChar": 55,
+        "endLine": 216,
+        "endChar": 77
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2156fa06_2732c236",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-02T07:09:31Z",
+      "side": 1,
+      "message": "q about the external cases: in TryToSequential, there\u0027s a bailout for IsUncachedExternalStringInstanceType. Do we need something similar here?",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
