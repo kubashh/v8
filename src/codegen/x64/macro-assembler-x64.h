@@ -575,6 +575,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // have zeros in the top 32 bits, enabled via --debug-code.
   void AssertZeroExtended(Register reg);
 
+  void AssertSpAligned();
+
   // Like Assert(), but always enabled.
   void Check(Condition cc, AbortReason reason);
 

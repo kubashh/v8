@@ -681,8 +681,15 @@ void EmitWordLoadPoisoningIfNeeded(CodeGenerator* codegen,
 
 void CodeGenerator::AssembleDeconstructFrame() {
   unwinding_info_writer_.MarkFrameDeconstructed(__ pc_offset());
-  __ movq(rsp, rbp);
-  __ popq(rbp);
+  auto call_descriptor = linkage()->GetIncomingDescriptor();
+  if (call_descriptor->IsWasmFunctionCall()) {
+    __ movq(rsp, rbp);
+    __ popq(rsp);
+    __ popq(rbp);
+  } else {
+    __ movq(rsp, rbp);
+    __ popq(rbp);
+  }
 }
 
 void CodeGenerator::AssemblePrepareTailCall() {
@@ -4356,11 +4363,22 @@ void CodeGenerator::AssembleConstructFrame() {
     } else if (call_descriptor->IsJSFunctionCall()) {
       __ Prologue();
     } else {
-      __ StubPrologue(info()->GetOutputStackFrameType());
+      StackFrame::Type stack_frame_type = info()->GetOutputStackFrameType();
       if (call_descriptor->IsWasmFunctionCall()) {
+        // Align Wasm frames to 16 bytes for aligning SIMD slots.
+        __ pushq(rbp);
+        __ pushq(rsp);
+        __ pushq(Operand(rsp, kSystemPointerSize));
+        __ andq(rsp, Immediate(-16));
+        __ movq(rbp, rsp);
+
+        __ AssertSpAligned();
+
+        __ Push(Immediate(StackFrame::TypeToMarker(stack_frame_type)));
         __ pushq(kWasmInstanceRegister);
       } else if (call_descriptor->IsWasmImportWrapper() ||
                  call_descriptor->IsWasmCapiFunction()) {
+        __ StubPrologue(stack_frame_type);
         // Wasm import wrappers are passed a tuple in the place of the instance.
         // Unpack the tuple into the instance and the target callable.
         // This must be done here in the codegen because it cannot be expressed
@@ -4376,6 +4394,8 @@ void CodeGenerator::AssembleConstructFrame() {
           // Reserve space for saving the PC later.
           __ AllocateStackSpace(kSystemPointerSize);
         }
+      } else {
+        __ StubPrologue(stack_frame_type);
       }
     }
 

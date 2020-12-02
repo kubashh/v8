@@ -2191,6 +2191,18 @@ void TurboAssembler::AssertZeroExtended(Register int32_register) {
   }
 }
 
+void TurboAssembler::AssertSpAligned() {
+  if (emit_debug_code()) {
+    movq(kScratchRegister, rsp);
+    Label alignment_as_expected;
+    testq(kScratchRegister, Immediate(0xf));
+    j(zero, &alignment_as_expected, Label::kNear);
+    // Abort if stack is not aligned.
+    int3();
+    bind(&alignment_as_expected);
+  }
+}
+
 void MacroAssembler::AssertConstructor(Register object) {
   if (emit_debug_code()) {
     testb(object, Immediate(kSmiTagMask));
