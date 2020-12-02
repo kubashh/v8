@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7710379_d89d9ecf",
+        "filename": "src/builtins/builtins-string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "With char16, the Convert below doesn\u0027t work.",
+      "parentUuid": "effb983f_dd0b9cf5",
+      "range": {
+        "startLine": 157,
+        "startChar": 16,
+        "endLine": 157,
+        "endChar": 22
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8fcf120_db6e067a",
         "filename": "src/builtins/cast.tq",
         "patchSetId": 6
@@ -54,6 +78,24 @@
       "writtenOn": "2020-12-02T07:09:31Z",
       "side": 1,
       "message": "What\u0027s the emitted code like for these checks / would the masking approach we use elsewhere be better here too? I mean something like `instance_type \u0026 REPRESENTATION_AND_BITNESS_MASK \u003d\u003d SEQ_ONE_BYTE`, instead of what I assume is `instance_type \u0026 REPR_MASK \u003d\u003d SEQ \u0026\u0026 instance_type \u0026 BITNESS_MASK \u003d\u003d ONE` emitted here.",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ce2ac71_17b091db",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "This emits the following code:\n\n0x7ea8000cc588  14a8  83e10f         andl rcx,0xf\n0x7ea8000cc58b  14ab  83f908         cmpl rcx,0x8\n0x7ea8000cc58e  14ae  0f8557010000   jnz 0x7ea8000cc6eb  \u003c+0x160b\u003e\n\nSo it does exactly this, we have an optimization for that now 😊\nTo enable this optimization, it\u0027s important to write \u0026 instead of \u0026\u0026. We should have a warning if you don\u0027t.",
+      "parentUuid": "d8fcf120_db6e067a",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -77,6 +119,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a59c28d9_cf87ccf5",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "Good idea, I guess it depends on the length whether it\u0027s faster to stay in Torque or call the C++ code doing memcmp. Your link points to CompareCharsUnsigned, do you mean this? How about adding a TODO to do this later with separate measurements?",
+      "parentUuid": "2ab8edf9_07f089f1",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8dcf08ae_75e03830",
         "filename": "src/builtins/string-endswith.tq",
         "patchSetId": 6
@@ -88,6 +148,24 @@
       "writtenOn": "2020-12-02T07:09:31Z",
       "side": 1,
       "message": "Since this dispatch pattern is super-verbose and repeated a few times, it\u0027d be nice to wrap it in a helper. You\u0027ve probably thought about this and it doesn\u0027t work for some reason?",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53e4ae9c_0a12fc28",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "Yes, I did think about this :). The problem is that this requires lambdas or something equivalent. One could use a C++-Functor like pattern in Torque by creating a struct for each macro that needs this dispatch.",
+      "parentUuid": "8dcf08ae_75e03830",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -117,6 +195,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dcddc0f5_0a04152a",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "I don\u0027t really like SelectBooleanConstant because it\u0027s longer and not more readable. But I agree that we should have a uniform style.",
+      "parentUuid": "ad522a6d_5b80eefc",
+      "range": {
+        "startLine": 90,
+        "startChar": 56,
+        "endLine": 90,
+        "endChar": 71
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f0ed999_28249276",
         "filename": "src/builtins/string-replaceall.tq",
         "patchSetId": 6
@@ -128,6 +230,24 @@
       "writtenOn": "2020-12-02T07:09:31Z",
       "side": 1,
       "message": "Could be a call to CompareCharsUnsigned.",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5ae1428_689d7e7c",
+        "filename": "src/builtins/string-replaceall.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "This should be solved by changing StringCompareSequence to call that, right?",
+      "parentUuid": "6f0ed999_28249276",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -174,6 +294,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "16816d60_e5660f80",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "Yes, implicitly in all array accesses.",
+      "parentUuid": "b6e82732_627df51f",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4dd72fc7_17fa592f",
         "filename": "src/objects/string.cc",
         "patchSetId": 6
@@ -185,6 +323,24 @@
       "writtenOn": "2020-12-02T07:09:31Z",
       "side": 1,
       "message": "q: Why did you decide to assert equality instead of defining one by the other?",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ee1d5ee_e3391894",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "Because instance-type.h defines a number of related constants and any change to the Torque definition likely needs them to be adapted too. So it\u0027s better for definitions in instance-type.h to break so that the neighboring ones get fixed too.",
+      "parentUuid": "4dd72fc7_17fa592f",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -214,6 +370,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9418b5b_b95452df",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "Doesn\u0027t work, since that one can return kEmptyString, just not in this case.",
+      "parentUuid": "9d7bbac8_f8f14fcf",
+      "range": {
+        "startLine": 176,
+        "startChar": 22,
+        "endLine": 176,
+        "endChar": 50
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54086ae1_b1774470",
         "filename": "src/objects/string.tq",
         "patchSetId": 6
@@ -225,6 +405,24 @@
       "writtenOn": "2020-12-02T07:09:31Z",
       "side": 1,
       "message": "Very nice.. Is anything blocking integration of the new Flatten call into TryToDirect? That\u0027d help all existing callsites by removing a common runtime bailout.",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4830112d_719863dd",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "I\u0027d think that\u0027s possible.",
+      "parentUuid": "54086ae1_b1774470",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -254,6 +452,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "074c3ec3_801a663e",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "The otherwise unreachable is about bounds checks always performed by Subslice for safety reasons. I should check, it should be possible that these get optimized away automatically.",
+      "parentUuid": "032dc1d8_92cab2f0",
+      "range": {
+        "startLine": 216,
+        "startChar": 55,
+        "endLine": 216,
+        "endChar": 77
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2156fa06_2732c236",
         "filename": "src/objects/string.tq",
         "patchSetId": 6
@@ -265,6 +487,24 @@
       "writtenOn": "2020-12-02T07:09:31Z",
       "side": 1,
       "message": "q about the external cases: in TryToSequential, there\u0027s a bailout for IsUncachedExternalStringInstanceType. Do we need something similar here?",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10c9c3ff_659e1206",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-02T14:15:47Z",
+      "side": 1,
+      "message": "Oh, good catch, I overlooked that. This does require another trip to C++ then. I guess we could get away with a fast C call, since it seems the callback to get the data pointer has never been GC-safe.",
+      "parentUuid": "2156fa06_2732c236",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
