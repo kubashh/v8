@@ -1529,10 +1529,9 @@ void SerializerForBackgroundCompilation::VisitInvokeIntrinsic(
 
 void SerializerForBackgroundCompilation::VisitLdaConstant(
     BytecodeArrayIterator* iterator) {
-  ObjectRef object(
-      broker(), iterator->GetConstantForIndexOperand(0, broker()->isolate()));
-  environment()->accumulator_hints() =
-      Hints::SingleConstant(object.object(), zone());
+  Handle<Object> constant =
+      iterator->GetConstantForIndexOperand(0, broker()->isolate());
+  environment()->accumulator_hints() = Hints::SingleConstant(constant, zone());
 }
 
 void SerializerForBackgroundCompilation::VisitPushContext(
