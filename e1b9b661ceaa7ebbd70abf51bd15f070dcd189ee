@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3460fda3_f9f876b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-12-02T08:37:42Z",
+      "side": 1,
+      "message": "lgtm, assuming the TSAN failure is fixed by the other CL.",
+      "revId": "e1b9b661ceaa7ebbd70abf51bd15f070dcd189ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
