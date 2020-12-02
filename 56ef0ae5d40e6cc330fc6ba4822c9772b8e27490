@@ -63,6 +63,30 @@
       },
       "revId": "56ef0ae5d40e6cc330fc6ba4822c9772b8e27490",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dda869b_59076137",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-02T16:17:54Z",
+      "side": 1,
+      "message": "by \"folding\" I meant changing the \"if\" above into `if (size \u003c ExternalString::kSizeOfAllExternalStrings)` and removing the uncached path here entirely, but maybe that would regress too hard if there\u0027s a lot of too-small internal+external strings.",
+      "parentUuid": "6bf46d9f_25841418",
+      "range": {
+        "startLine": 185,
+        "startChar": 6,
+        "endLine": 187,
+        "endChar": 19
+      },
+      "revId": "56ef0ae5d40e6cc330fc6ba4822c9772b8e27490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
