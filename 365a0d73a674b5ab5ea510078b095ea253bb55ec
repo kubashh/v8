@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2da716e_e64e8308",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-03T16:05:43Z",
+      "side": 1,
+      "message": "It allows us to compare char8 with char16, since both have the common supertype uint16 now.",
+      "parentUuid": "d46a56d1_5a94d403",
+      "range": {
+        "startLine": 104,
+        "startChar": 19,
+        "endLine": 104,
+        "endChar": 24
+      },
+      "revId": "365a0d73a674b5ab5ea510078b095ea253bb55ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7d3aeaa2_073a0860",
         "filename": "src/builtins/cast.tq",
         "patchSetId": 8
@@ -54,6 +78,30 @@
       "writtenOn": "2020-12-03T15:59:42Z",
       "side": 1,
       "message": "This looks wrong, if I don\u0027t miss anything. I guess it should be \u0026\u0026 ?\n\nIn general it\u0027s not nice to read. How about\n\nif(instanceType.representation !\u003d StringRepresentationTag::kSeqStringTag) goto CastError;\nif(!instanceType.is_one_byte) goto CastError;",
+      "range": {
+        "startLine": 550,
+        "startChar": 78,
+        "endLine": 550,
+        "endChar": 79
+      },
+      "revId": "365a0d73a674b5ab5ea510078b095ea253bb55ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b7bffab_64365394",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-03T16:05:43Z",
+      "side": 1,
+      "message": "This is important for performance, because Turbofan will merge the two checks into one. See the discussion here: https://chromium-review.googlesource.com/c/v8/v8/+/2565515/6/src/builtins/cast.tq#550\n\nI think it\u0027s a myth that \u0026\u0026 is always better than \u0026, because \u0026\u0026 leads to more branches, making the job of the branch predictor harder. For performance-aware code like Torque with limited compiler optimizations, I think it would be good to get used to \u0026 where it makes sense.",
+      "parentUuid": "7d3aeaa2_073a0860",
       "range": {
         "startLine": 550,
         "startChar": 78,
