@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "306a005d48038881a9faac5529dc043b24498dd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec22c9ed_c363d05b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-12-03T17:07:58Z",
+      "side": 1,
+      "message": "Thanks, LGTM with a potential follow-up (that you probably already had in mind).\nI skimmed over some parts only, assuming that most code was already there in the past.",
+      "revId": "306a005d48038881a9faac5529dc043b24498dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
