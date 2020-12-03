@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d403d076_65d79c85",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-03T15:59:43Z",
+      "side": 1,
+      "message": "It would be difficult, because you need to remove the control flow after the fact. That\u0027s why we implemented a warning instead if you write \u0026\u0026 with two bitfield accesses. I just checked, using \u0026\u0026 here actually won\u0027t compile  :). Unfortunately, the check only detects the pattern with two bitfield accesses possibly with equality checks, but not the pattern below with a negated bitfield value (!instanceType.is_one_byte).",
+      "parentUuid": "832f9364_0345c2e6",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ab8edf9_07f089f1",
         "filename": "src/builtins/string-endswith.tq",
         "patchSetId": 6
@@ -339,6 +357,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb1327da_619740f7",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-03T15:59:43Z",
+      "side": 1,
+      "message": "I like that!",
+      "parentUuid": "89cbc6fb_abb3355c",
+      "range": {
+        "startLine": 90,
+        "startChar": 56,
+        "endLine": 90,
+        "endChar": 71
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f0ed999_28249276",
         "filename": "src/builtins/string-replaceall.tq",
         "patchSetId": 6
@@ -386,6 +428,24 @@
       "side": 1,
       "message": "Oh sorry I was thinking of StringSearchRaw when writing this (https://source.chromium.org/chromium/chromium/src/+/master:v8/src/strings/string-search.h;l\u003d545;drc\u003d52cfffde972d833cc9be768432a1f5e45ccfe87b). I meant to call that instead; it\u0027s a single call and returns the index of the found string, exactly what\u0027s needed here. A TODO / followup would be fine too.",
       "parentUuid": "b5ae1428_689d7e7c",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9303197e_21de5ad2",
+        "filename": "src/builtins/string-replaceall.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-03T15:59:43Z",
+      "side": 1,
+      "message": "We should probably do this together with porting StringIndexOf to Torque, which alread uses StringSearchRaw. I\u0027ll add a TODO.",
+      "parentUuid": "1f139b47_a084b575",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
