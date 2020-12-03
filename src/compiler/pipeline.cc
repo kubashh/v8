@@ -56,6 +56,7 @@
 #include "src/compiler/load-elimination.h"
 #include "src/compiler/loop-analysis.h"
 #include "src/compiler/loop-peeling.h"
+#include "src/compiler/loop-unrolling.h"
 #include "src/compiler/loop-variable-optimizer.h"
 #include "src/compiler/machine-graph-verifier.h"
 #include "src/compiler/machine-operator-reducer.h"
@@ -1714,6 +1715,18 @@ struct LoopPeelingPhase {
   }
 };
 
+struct WasmLoopUnrollingPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(WasmLoopUnrolling)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    LoopTree* loop_tree = LoopFinder::BuildLoopTree(
+        data->graph(), &data->info()->tick_counter(), temp_zone);
+    LoopUnroller(data->graph(), data->common(), loop_tree, temp_zone,
+                 data->source_positions(), data->node_origins())
+        .Unroll();
+  }
+};
+
 struct LoopExitEliminationPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(LoopExitElimination)
 
@@ -2411,7 +2424,7 @@ struct PrintGraphPhase {
       tracing_scope.stream()
           << "-- Graph after " << phase << " -- " << std::endl
           << AsScheduledGraph(schedule);
-    } else if (info->trace_turbo_graph()) {  // Simple textual RPO.
+    } else {  // if (info->trace_turbo_graph()) {  // Simple textual RPO.
       UnparkedScopeIfNeeded scope(data->broker());
       AllowHandleDereference allow_deref;
       CodeTracer::StreamScope tracing_scope(data->GetCodeTracer());
@@ -3155,8 +3168,17 @@ void Pipeline::GenerateCodeForWasmFunction(
 
   pipeline.RunPrintAndVerify("V8.WasmMachineCode", true);
 
+  if (FLAG_wasm_loop_unrolling) {
+    // pipeline.Run<WasmLoopUnrollingPhase>();
+    // pipeline.Run<PrintGraphPhase>("V8.WasmLoopUnrolling");
+    pipeline.Run<LoopExitEliminationPhase>();
+    pipeline.RunPrintAndVerify("V8.LoopExitEliminationPhase", true);
+  }
+
   data.BeginPhaseKind("V8.WasmOptimization");
+
   const bool is_asm_js = is_asmjs_module(module);
+
   if (FLAG_turbo_splitting && !is_asm_js) {
     data.info()->set_splitting();
   }

@@ -533,7 +533,7 @@ LoopTree* LoopFinder::BuildLoopTree(Graph* graph, TickCounter* tick_counter,
   return loop_tree;
 }
 
-Node* LoopTree::HeaderNode(Loop* loop) {
+Node* LoopTree::HeaderNode(const Loop* loop) {
   Node* first = *HeaderNodes(loop).begin();
   if (first->opcode() == IrOpcode::kLoop) return first;
   DCHECK(IrOpcode::IsPhiOpcode(first->opcode()));

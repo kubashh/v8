@@ -5,7 +5,7 @@
 // Flags: --experimental-wasm-mv
 
 load("test/mjsunit/wasm/wasm-module-builder.js");
-
+/*
 (function MultiBlockResultTest() {
   print("MultiBlockResultTest");
   let builder = new WasmModuleBuilder();
@@ -148,7 +148,7 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   let instance = new WebAssembly.Instance(module);
   assertEquals(instance.exports.main(1, 4), 5);
 })();
-
+*/
 (function MultiLoopBrTest() {
   print("MultiLoopBrTest");
   let builder = new WasmModuleBuilder();

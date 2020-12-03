@@ -1739,6 +1739,10 @@ function wasmI32Const(val) {
   return [kExprI32Const, ...wasmSignedLeb(val, 5)];
 }
 
+function wasmI64Const(val) {
+  return [kExprI64Const, ...wasmSignedLeb(val, 10)];
+}
+
 function wasmF32Const(f) {
   // Write in little-endian order at offset 0.
   data_view.setFloat32(0, f, true);

@@ -1206,12 +1206,8 @@ class WasmDecoder : public Decoder {
     wasm::DecodeError<validate>(this, std::forward<Args>(args)...);
   }
 
-  // Returns a BitVector of length {locals_count + 1} representing the set of
-  // variables that are assigned in the loop starting at {pc}. The additional
-  // position at the end of the vector represents possible assignments to
-  // the instance cache.
-  static BitVector* AnalyzeLoopAssignment(WasmDecoder* decoder, const byte* pc,
-                                          uint32_t locals_count, Zone* zone) {
+  static BitVector* AnalyzeLoopAssignments(WasmDecoder* decoder, const byte* pc,
+                                           uint32_t locals_count, Zone* zone) {
     if (pc >= decoder->end()) return nullptr;
     if (*pc != kExprLoop) return nullptr;
     // The number of locals_count is augmented by 1 so that the 'locals_count'
@@ -1241,10 +1237,7 @@ class WasmDecoder : public Decoder {
         case kExprMemoryGrow:
         case kExprCallFunction:
         case kExprCallIndirect:
-        case kExprReturnCall:
-        case kExprReturnCallIndirect:
         case kExprCallRef:
-        case kExprReturnCallRef:
           // Add instance cache to the assigned set.
           assigned->Add(locals_count);
           break;
@@ -3301,6 +3294,8 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     }
   }
 
+  // Initializes start- and end-merges of {c} with values according to the
+  // in- and out-types of {c} respectively.
   void SetBlockType(Control* c, BlockTypeImmediate<validate>& imm,
                     Value* args) {
     const byte* pc = this->pc_;
@@ -4399,10 +4394,13 @@ class WasmFullDecoder : public WasmDecoder<validate> {
 
   void FallThruTo(Control* c) {
     DCHECK_EQ(c, &control_.back());
+    // This is only used with try-catch blocks, and may not work for other
+    // blocks (definitely not loops if --wasm-loop-unrolling is set).
+    DCHECK_EQ(c->kind, kControlTryCatch);
     if (!TypeCheckFallThru()) return;
     if (!c->reachable()) return;
 
-    if (!c->is_loop()) CALL_INTERFACE(FallThruTo, c);
+    CALL_INTERFACE(FallThruTo, c);
     c->end_merge.reached = true;
   }
 

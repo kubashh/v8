@@ -874,7 +874,8 @@ DEFINE_BOOL(wasm_stack_checks, true,
             "enable stack checks (disable for performance testing only)")
 DEFINE_BOOL(wasm_math_intrinsics, true,
             "intrinsify some Math imports into wasm")
-
+DEFINE_BOOL(wasm_loop_unrolling, true,
+            "enable loop unrolling for wasm functions (experimental)")
 DEFINE_BOOL(wasm_trap_handler, true,
             "use signal handlers to catch out of bounds memory access in wasm"
             " (currently Linux x86_64 only)")

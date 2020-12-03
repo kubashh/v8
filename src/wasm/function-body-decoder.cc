@@ -307,7 +307,7 @@ BitVector* AnalyzeLoopAssignmentForTesting(Zone* zone, uint32_t num_locals,
   WasmFeatures no_features = WasmFeatures::None();
   WasmDecoder<Decoder::kFullValidation> decoder(
       zone, nullptr, no_features, &no_features, nullptr, start, end, 0);
-  return WasmDecoder<Decoder::kFullValidation>::AnalyzeLoopAssignment(
+  return WasmDecoder<Decoder::kFullValidation>::AnalyzeLoopAssignments(
       &decoder, start, num_locals, zone);
 }
 

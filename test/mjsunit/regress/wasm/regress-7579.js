@@ -25,7 +25,7 @@ builder.addFunction(undefined, sig0)
       ...wasmF64Const(0),
       kExprCallFunction, 0x01,
       ...wasmF64Const(0),
-      kExprEnd,
+    kExprEnd,
     ...wasmF64Const(0),
     ...wasmF64Const(0),
     ...wasmF64Const(0),

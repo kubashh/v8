@@ -103,59 +103,6 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
-struct Peeling {
-  // Maps a node to its index in the {pairs} vector.
-  NodeMarker<size_t> node_map;
-  // The vector which contains the mapped nodes.
-  NodeVector* pairs;
-
-  Peeling(Graph* graph, size_t max, NodeVector* p)
-      : node_map(graph, static_cast<uint32_t>(max)), pairs(p) {}
-
-  Node* map(Node* node) {
-    if (node_map.Get(node) == 0) return node;
-    return pairs->at(node_map.Get(node));
-  }
-
-  void Insert(Node* original, Node* copy) {
-    node_map.Set(original, 1 + pairs->size());
-    pairs->push_back(original);
-    pairs->push_back(copy);
-  }
-
-  void CopyNodes(Graph* graph, Zone* tmp_zone_, Node* dead, NodeRange nodes,
-                 SourcePositionTable* source_positions,
-                 NodeOriginTable* node_origins) {
-    NodeVector inputs(tmp_zone_);
-    // Copy all the nodes first.
-    for (Node* node : nodes) {
-      SourcePositionTable::Scope position(
-          source_positions, source_positions->GetSourcePosition(node));
-      NodeOriginTable::Scope origin_scope(node_origins, "copy nodes", node);
-      inputs.clear();
-      for (Node* input : node->inputs()) {
-        inputs.push_back(map(input));
-      }
-      Node* copy = graph->NewNode(node->op(), node->InputCount(), &inputs[0]);
-      if (NodeProperties::IsTyped(node)) {
-        NodeProperties::SetType(copy, NodeProperties::GetType(node));
-      }
-      Insert(node, copy);
-    }
-
-    // Fix remaining inputs of the copies.
-    for (Node* original : nodes) {
-      Node* copy = pairs->at(node_map.Get(original));
-      for (int i = 0; i < copy->InputCount(); i++) {
-        copy->ReplaceInput(i, map(original->InputAt(i)));
-      }
-    }
-  }
-
-  bool Marked(Node* node) { return node_map.Get(node) > 0; }
-};
-
-
 class PeeledIterationImpl : public PeeledIteration {
  public:
   NodeVector node_pairs_;
@@ -217,19 +164,19 @@ PeeledIteration* LoopPeeler::Peel(LoopTree::Loop* loop) {
   // Construct the peeled iteration.
   //============================================================================
   PeeledIterationImpl* iter = tmp_zone_->New<PeeledIterationImpl>(tmp_zone_);
-  size_t estimated_peeled_size = 5 + (loop->TotalSize()) * 2;
-  Peeling peeling(graph_, estimated_peeled_size, &iter->node_pairs_);
+  size_t estimated_peeled_size = 5 + loop->TotalSize() * 2;
+  NodeCopier copier(graph_, estimated_peeled_size, &iter->node_pairs_);
 
   Node* dead = graph_->NewNode(common_->Dead());
 
   // Map the loop header nodes to their entry values.
   for (Node* node : loop_tree_->HeaderNodes(loop)) {
-    peeling.Insert(node, node->InputAt(kAssumedLoopEntryIndex));
+    copier.Insert(node, node->InputAt(kAssumedLoopEntryIndex));
   }
 
   // Copy all the nodes of loop body for the peeled iteration.
-  peeling.CopyNodes(graph_, tmp_zone_, dead, loop_tree_->BodyNodes(loop),
-                    source_positions_, node_origins_);
+  copier.CopyNodes(graph_, tmp_zone_, dead, loop_tree_->BodyNodes(loop),
+                   source_positions_, node_origins_);
 
   //============================================================================
   // Replace the entry to the loop with the output of the peeled iteration.
@@ -242,7 +189,7 @@ PeeledIteration* LoopPeeler::Peel(LoopTree::Loop* loop) {
     // from the peeled iteration.
     NodeVector inputs(tmp_zone_);
     for (int i = 1; i < loop_node->InputCount(); i++) {
-      inputs.push_back(peeling.map(loop_node->InputAt(i)));
+      inputs.push_back(copier.map(loop_node->InputAt(i)));
     }
     Node* merge =
         graph_->NewNode(common_->Merge(backedges), backedges, &inputs[0]);
@@ -252,7 +199,7 @@ PeeledIteration* LoopPeeler::Peel(LoopTree::Loop* loop) {
       if (node->opcode() == IrOpcode::kLoop) continue;  // already done.
       inputs.clear();
       for (int i = 0; i < backedges; i++) {
-        inputs.push_back(peeling.map(node->InputAt(1 + i)));
+        inputs.push_back(copier.map(node->InputAt(1 + i)));
       }
       for (Node* input : inputs) {
         if (input != inputs[0]) {  // Non-redundant phi.
@@ -269,9 +216,9 @@ PeeledIteration* LoopPeeler::Peel(LoopTree::Loop* loop) {
     // Only one backedge, simply replace the input to loop with output of
     // peeling.
     for (Node* node : loop_tree_->HeaderNodes(loop)) {
-      node->ReplaceInput(0, peeling.map(node->InputAt(1)));
+      node->ReplaceInput(0, copier.map(node->InputAt(1)));
     }
-    new_entry = peeling.map(loop_node->InputAt(1));
+    new_entry = copier.map(loop_node->InputAt(1));
   }
   loop_node->ReplaceInput(0, new_entry);
 
@@ -282,18 +229,18 @@ PeeledIteration* LoopPeeler::Peel(LoopTree::Loop* loop) {
     switch (exit->opcode()) {
       case IrOpcode::kLoopExit:
         // Change the loop exit node to a merge node.
-        exit->ReplaceInput(1, peeling.map(exit->InputAt(0)));
+        exit->ReplaceInput(1, copier.map(exit->InputAt(0)));
         NodeProperties::ChangeOp(exit, common_->Merge(2));
         break;
       case IrOpcode::kLoopExitValue:
         // Change exit marker to phi.
-        exit->InsertInput(graph_->zone(), 1, peeling.map(exit->InputAt(0)));
+        exit->InsertInput(graph_->zone(), 1, copier.map(exit->InputAt(0)));
         NodeProperties::ChangeOp(
             exit, common_->Phi(MachineRepresentation::kTagged, 2));
         break;
       case IrOpcode::kLoopExitEffect:
         // Change effect exit marker to effect phi.
-        exit->InsertInput(graph_->zone(), 1, peeling.map(exit->InputAt(0)));
+        exit->InsertInput(graph_->zone(), 1, copier.map(exit->InputAt(0)));
         NodeProperties::ChangeOp(exit, common_->EffectPhi(2));
         break;
       default:

@@ -7,7 +7,11 @@
 
 #include "src/base/iterator.h"
 #include "src/common/globals.h"
+#include "src/compiler/compiler-source-position-table.h"
 #include "src/compiler/graph.h"
+#include "src/compiler/node-marker.h"
+#include "src/compiler/node-origin-table.h"
+#include "src/compiler/node-properties.h"
 #include "src/compiler/node.h"
 #include "src/zone/zone-containers.h"
 
@@ -77,7 +81,7 @@ class LoopTree : public ZoneObject {
 
   // Check if the {loop} contains the {node}, either directly or by containing
   // a nested loop that contains {node}.
-  bool Contains(Loop* loop, Node* node) {
+  bool Contains(const Loop* loop, Node* node) {
     for (Loop* c = ContainingLoop(node); c != nullptr; c = c->parent_) {
       if (c == loop) return true;
     }
@@ -87,40 +91,51 @@ class LoopTree : public ZoneObject {
   // Return the list of outer loops.
   const ZoneVector<Loop*>& outer_loops() const { return outer_loops_; }
 
+  // Return a new vector containing the inner loops.
+  ZoneVector<const Loop*> inner_loops() const {
+    ZoneVector<const Loop*> inner_loops(zone_);
+    for (const Loop& loop : all_loops_) {
+      if (loop.children().empty()) {
+        inner_loops.insert(inner_loops.end(), &loop);
+      }
+    }
+    return inner_loops;
+  }
+
   // Return the unique loop number for a given loop. Loop numbers start at {1}.
-  int LoopNum(Loop* loop) const {
+  int LoopNum(const Loop* loop) const {
     return 1 + static_cast<int>(loop - &all_loops_[0]);
   }
 
   // Return a range which can iterate over the header nodes of {loop}.
-  NodeRange HeaderNodes(Loop* loop) {
+  NodeRange HeaderNodes(const Loop* loop) {
     return NodeRange(&loop_nodes_[0] + loop->header_start_,
                      &loop_nodes_[0] + loop->body_start_);
   }
 
   // Return the header control node for a loop.
-  Node* HeaderNode(Loop* loop);
+  Node* HeaderNode(const Loop* loop);
 
   // Return a range which can iterate over the body nodes of {loop}.
-  NodeRange BodyNodes(Loop* loop) {
+  NodeRange BodyNodes(const Loop* loop) {
     return NodeRange(&loop_nodes_[0] + loop->body_start_,
                      &loop_nodes_[0] + loop->exits_start_);
   }
 
   // Return a range which can iterate over the body nodes of {loop}.
-  NodeRange ExitNodes(Loop* loop) {
+  NodeRange ExitNodes(const Loop* loop) {
     return NodeRange(&loop_nodes_[0] + loop->exits_start_,
                      &loop_nodes_[0] + loop->exits_end_);
   }
 
   // Return a range which can iterate over the nodes of {loop}.
-  NodeRange LoopNodes(Loop* loop) {
+  NodeRange LoopNodes(const Loop* loop) {
     return NodeRange(&loop_nodes_[0] + loop->header_start_,
                      &loop_nodes_[0] + loop->exits_end_);
   }
 
   // Return the node that represents the control, i.e. the loop node itself.
-  Node* GetLoopControl(Loop* loop) {
+  Node* GetLoopControl(const Loop* loop) {
     // TODO(turbofan): make the loop control node always first?
     for (Node* node : HeaderNodes(loop)) {
       if (node->opcode() == IrOpcode::kLoop) return node;
@@ -163,6 +178,57 @@ class V8_EXPORT_PRIVATE LoopFinder {
                                  Zone* temp_zone);
 };
 
+struct NodeCopier {
+  // Maps a node to its index in the {pairs} vector.
+  NodeMarker<size_t> node_map;
+  // The vector which contains the mapped nodes.
+  NodeVector* pairs;
+
+  NodeCopier(Graph* graph, size_t max, NodeVector* p)
+      : node_map(graph, static_cast<uint32_t>(max)), pairs(p) {}
+
+  Node* map(Node* node) {
+    if (node_map.Get(node) == 0) return node;
+    return pairs->at(node_map.Get(node));
+  }
+
+  void Insert(Node* original, Node* copy) {
+    node_map.Set(original, 1 + pairs->size());
+    pairs->push_back(original);
+    pairs->push_back(copy);
+  }
+
+  void CopyNodes(Graph* graph, Zone* tmp_zone_, Node* dead, NodeRange nodes,
+                 SourcePositionTable* source_positions,
+                 NodeOriginTable* node_origins) {
+    NodeVector inputs(tmp_zone_);
+    // Copy all the nodes first.
+    for (Node* node : nodes) {
+      SourcePositionTable::Scope position(
+          source_positions, source_positions->GetSourcePosition(node));
+      NodeOriginTable::Scope origin_scope(node_origins, "copy nodes", node);
+      inputs.clear();
+      for (Node* input : node->inputs()) {
+        inputs.push_back(map(input));
+      }
+      Node* copy = graph->NewNode(node->op(), node->InputCount(), &inputs[0]);
+      if (NodeProperties::IsTyped(node)) {
+        NodeProperties::SetType(copy, NodeProperties::GetType(node));
+      }
+      Insert(node, copy);
+    }
+
+    // Fix remaining inputs of the copies.
+    for (Node* original : nodes) {
+      Node* copy = pairs->at(node_map.Get(original));
+      for (int i = 0; i < copy->InputCount(); i++) {
+        copy->ReplaceInput(i, map(original->InputAt(i)));
+      }
+    }
+  }
+
+  bool Marked(Node* node) { return node_map.Get(node) > 0; }
+};
 
 }  // namespace compiler
 }  // namespace internal
