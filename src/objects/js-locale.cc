@@ -20,10 +20,13 @@
 #include "src/objects/intl-objects.h"
 #include "src/objects/js-locale-inl.h"
 #include "src/objects/objects-inl.h"
+#include "unicode/calendar.h"
 #include "unicode/char16ptr.h"
 #include "unicode/localebuilder.h"
 #include "unicode/locid.h"
+#include "unicode/ucal.h"
 #include "unicode/uloc.h"
+#include "unicode/ulocdata.h"
 #include "unicode/unistr.h"
 
 namespace v8 {
@@ -171,6 +174,11 @@ bool IsUnicodeVariantSubtag(const std::string& value) {
 bool IsExtensionSingleton(const std::string& value) {
   return IsAlphanum(value, 1, 1);
 }
+
+int32_t weekdayFromEDaysOfWeek(icu_68::Calendar::EDaysOfWeek eDaysOfWeek) {
+  return (eDaysOfWeek == icu_68::Calendar::SUNDAY) ? 7 : eDaysOfWeek - 1;
+}
+
 }  // namespace
 
 bool JSLocale::Is38AlphaNumList(const std::string& value) {
@@ -414,6 +422,119 @@ MaybeHandle<JSLocale> JSLocale::Minimize(Isolate* isolate,
   DCHECK(U_SUCCESS(status));
   DCHECK(!icu_locale.isBogus());
   return Construct(isolate, icu_locale);
+}
+
+MaybeHandle<JSObject> JSLocale::Defaults(Isolate* isolate,
+                                         Handle<JSLocale> locale) {
+  icu::Locale icu_locale(*(locale->icu_locale().raw()));
+  Factory* factory = isolate->factory();
+  Handle<JSObject> info = factory->NewJSObject(isolate->object_function());
+  // UErrorCode status = U_ZERO_ERROR;
+  return info;
+}
+
+MaybeHandle<JSObject> JSLocale::TextInfo(Isolate* isolate,
+                                         Handle<JSLocale> locale) {
+  Factory* factory = isolate->factory();
+  Handle<JSObject> info = factory->NewJSObject(isolate->object_function());
+  UErrorCode status = U_ZERO_ERROR;
+  ULayoutType dir = uloc_getCharacterOrientation(
+      (locale->icu_locale().raw())->getName(), &status);
+  if (U_FAILURE(status)) {
+    THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
+                    JSObject);
+  }
+  Maybe<bool> maybe_create_direction = JSReceiver::CreateDataProperty(
+      isolate, info, factory->direction_string(),
+      (dir == ULOC_LAYOUT_LTR)
+          ? factory->ltr_string()
+          : (dir == ULOC_LAYOUT_RTL)
+                ? factory->rtl_string()
+                : (dir == ULOC_LAYOUT_TTB) ? factory->ttb_string()
+                                           : factory->btt_string(),
+      Just(kDontThrow));
+  DCHECK(maybe_create_direction.FromJust());
+  USE(maybe_create_direction);
+  return info;
+}
+
+MaybeHandle<JSObject> JSLocale::UnitInfo(Isolate* isolate,
+                                         Handle<JSLocale> locale) {
+  icu::Locale icu_locale(*(locale->icu_locale().raw()));
+  Factory* factory = isolate->factory();
+  Handle<JSObject> info = factory->NewJSObject(isolate->object_function());
+  UErrorCode status = U_ZERO_ERROR;
+  UMeasurementSystem ms = ulocdata_getMeasurementSystem(
+      (locale->icu_locale().raw())->getName(), &status);
+  if (U_FAILURE(status)) {
+    THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
+                    JSObject);
+  }
+  Maybe<bool> maybe_create_measurement_system = JSReceiver::CreateDataProperty(
+      isolate, info, factory->measurementSystem_string(),
+      (ms == UMS_SI) ? factory->metric_string()
+                     : (ms == UMS_US) ? factory->ussystem_string()
+                                      : factory->uksystem_string(),
+      Just(kDontThrow));
+  DCHECK(maybe_create_measurement_system.FromJust());
+  USE(maybe_create_measurement_system);
+  return info;
+}
+
+MaybeHandle<JSObject> JSLocale::WeekInfo(Isolate* isolate,
+                                         Handle<JSLocale> locale) {
+  Factory* factory = isolate->factory();
+  Handle<JSObject> info = factory->NewJSObject(isolate->object_function());
+  UErrorCode status = U_ZERO_ERROR;
+  std::unique_ptr<icu::Calendar> calendar(
+      icu::Calendar::createInstance(*(locale->icu_locale().raw()), status));
+  if (U_FAILURE(status)) {
+    THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
+                    JSObject);
+  }
+  int32_t first_day = weekdayFromEDaysOfWeek(calendar->getFirstDayOfWeek());
+  bool thrusday_is_weekend =
+      (UCAL_WEEKDAY != calendar->getDayOfWeekType(UCAL_THURSDAY, status));
+  bool friday_is_weekend =
+      (UCAL_WEEKDAY != calendar->getDayOfWeekType(UCAL_FRIDAY, status));
+  bool saturday_is_weekend =
+      (UCAL_WEEKDAY != calendar->getDayOfWeekType(UCAL_SATURDAY, status));
+  bool sunday_is_weekend =
+      (UCAL_WEEKDAY != calendar->getDayOfWeekType(UCAL_SUNDAY, status));
+  if (U_FAILURE(status)) {
+    THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
+                    JSObject);
+  }
+  int32_t weekend_start = thrusday_is_weekend ? 4 : (friday_is_weekend ? 5 : 6);
+  int32_t weekend_end = sunday_is_weekend ? 7 : (saturday_is_weekend ? 6 : 5);
+
+  int32_t minimal_days = calendar->getMinimalDaysInFirstWeek();
+
+  Maybe<bool> maybe_create_first_day = JSReceiver::CreateDataProperty(
+      isolate, info, factory->firstDay_string(),
+      factory->NewNumberFromInt(first_day), Just(kDontThrow));
+  DCHECK(maybe_create_first_day.FromJust());
+  USE(maybe_create_first_day);
+
+  Maybe<bool> maybe_create_weekend_start = JSReceiver::CreateDataProperty(
+      isolate, info, factory->weekendStart_string(),
+      factory->NewNumberFromInt(weekend_start), Just(kDontThrow));
+  DCHECK(maybe_create_weekend_start.FromJust());
+  USE(maybe_create_weekend_start);
+
+  Maybe<bool> maybe_create_weekend_end = JSReceiver::CreateDataProperty(
+      isolate, info, factory->weekendEnd_string(),
+      factory->NewNumberFromInt(weekend_end), Just(kDontThrow));
+  DCHECK(maybe_create_weekend_end.FromJust());
+  USE(maybe_create_weekend_end);
+
+  Maybe<bool> maybe_create_minimal_days = JSReceiver::CreateDataProperty(
+      isolate, info, factory->minimalDays_string(),
+      factory->NewNumberFromInt(minimal_days), Just(kDontThrow));
+  DCHECK(maybe_create_minimal_days.FromJust());
+  USE(maybe_create_minimal_days);
+
+  return info;
 }
 
 Handle<Object> JSLocale::Language(Isolate* isolate, Handle<JSLocale> locale) {

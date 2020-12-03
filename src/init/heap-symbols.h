@@ -9,6 +9,7 @@
 #define INTERNALIZED_STRING_LIST_GENERATOR_INTL(V, _)               \
   V(_, adoptText_string, "adoptText")                               \
   V(_, baseName_string, "baseName")                                 \
+  V(_, btt_string, "btt")                                           \
   V(_, accounting_string, "accounting")                             \
   V(_, breakType_string, "breakType")                               \
   V(_, calendar_string, "calendar")                                 \
@@ -26,6 +27,8 @@
   V(_, day_string, "day")                                           \
   V(_, dayPeriod_string, "dayPeriod")                               \
   V(_, decimal_string, "decimal")                                   \
+  V(_, defaults_string, "defaults")                                 \
+  V(_, direction_string, "direction")                               \
   V(_, endRange_string, "endRange")                                 \
   V(_, engineering_string, "engineering")                           \
   V(_, era_string, "era")                                           \
@@ -35,6 +38,7 @@
   V(_, exponentSeparator_string, "exponentSeparator")               \
   V(_, fallback_string, "fallback")                                 \
   V(_, first_string, "first")                                       \
+  V(_, firstDay_string, "firstDay")                                 \
   V(_, format_string, "format")                                     \
   V(_, fraction_string, "fraction")                                 \
   V(_, fractionalSecond_string, "fractionalSecond")                 \
@@ -63,8 +67,12 @@
   V(_, locale_string, "locale")                                     \
   V(_, loose_string, "loose")                                       \
   V(_, lower_string, "lower")                                       \
+  V(_, ltr_string, "ltr")                                           \
+  V(_, measurementSystem_string, "measurementSystem")               \
+  V(_, metric_string, "metric")                                     \
   V(_, maximumFractionDigits_string, "maximumFractionDigits")       \
   V(_, maximumSignificantDigits_string, "maximumSignificantDigits") \
+  V(_, minimalDays_string, "minimalDays")                           \
   V(_, minimumFractionDigits_string, "minimumFractionDigits")       \
   V(_, minimumIntegerDigits_string, "minimumIntegerDigits")         \
   V(_, minimumSignificantDigits_string, "minimumSignificantDigits") \
@@ -85,6 +93,7 @@
   V(_, quarter_string, "quarter")                                   \
   V(_, region_string, "region")                                     \
   V(_, relatedYear_string, "relatedYear")                           \
+  V(_, rtl_string, "rtl")                                           \
   V(_, scientific_string, "scientific")                             \
   V(_, second_string, "second")                                     \
   V(_, segment_string, "segment")                                   \
@@ -99,18 +108,26 @@
   V(_, strict_string, "strict")                                     \
   V(_, style_string, "style")                                       \
   V(_, term_string, "term")                                         \
+  V(_, textInfo_string, "textInfo")                                 \
   V(_, timeStyle_string, "timeStyle")                               \
   V(_, timeZone_string, "timeZone")                                 \
   V(_, timeZoneName_string, "timeZoneName")                         \
+  V(_, ttb_string, "ttb")                                           \
   V(_, type_string, "type")                                         \
+  V(_, uksystem_string, "uksystem")                                 \
+  V(_, unitInfo_string, "unitInfo")                                 \
   V(_, unknown_string, "unknown")                                   \
   V(_, upper_string, "upper")                                       \
   V(_, usage_string, "usage")                                       \
   V(_, useGrouping_string, "useGrouping")                           \
+  V(_, ussystem_string, "ussystem")                                 \
   V(_, UTC_string, "UTC")                                           \
   V(_, unit_string, "unit")                                         \
   V(_, unitDisplay_string, "unitDisplay")                           \
   V(_, weekday_string, "weekday")                                   \
+  V(_, weekendEnd_string, "weekendEnd")                             \
+  V(_, weekendStart_string, "weekendStart")                         \
+  V(_, weekInfo_string, "weekInfo")                                 \
   V(_, year_string, "year")                                         \
   V(_, yearName_string, "yearName")
 #else  // V8_INTL_SUPPORT
