@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "832f9364_0345c2e6",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-03T15:21:09Z",
+      "side": 1,
+      "message": "Drive-by: how much TF effort would it be to optimise this for `\u0026\u0026` as well? This feels like a bit of a foot-gun.",
+      "parentUuid": "28c50fee_f451180d",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ab8edf9_07f089f1",
         "filename": "src/builtins/string-endswith.tq",
         "patchSetId": 6
