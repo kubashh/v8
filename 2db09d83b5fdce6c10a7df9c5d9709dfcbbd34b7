@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f3a8b4ce_5d3043fa",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-03T16:05:52Z",
+      "side": 1,
+      "message": "This feels very fragile to rely on then, I\u0027d prefer explicit masking like Jakob suggested for readability alone.",
+      "parentUuid": "d403d076_65d79c85",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ab8edf9_07f089f1",
         "filename": "src/builtins/string-endswith.tq",
         "patchSetId": 6
