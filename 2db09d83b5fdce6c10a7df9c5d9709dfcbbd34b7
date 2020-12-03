@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "286051cd_4555f1fe",
+        "filename": "src/builtins/builtins-string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d7710379_d89d9ecf",
+      "range": {
+        "startLine": 157,
+        "startChar": 16,
+        "endLine": 157,
+        "endChar": 22
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8fcf120_db6e067a",
@@ -96,6 +120,24 @@
       "side": 1,
       "message": "This emits the following code:\n\n0x7ea8000cc588  14a8  83e10f         andl rcx,0xf\n0x7ea8000cc58b  14ab  83f908         cmpl rcx,0x8\n0x7ea8000cc58e  14ae  0f8557010000   jnz 0x7ea8000cc6eb  \u003c+0x160b\u003e\n\nSo it does exactly this, we have an optimization for that now 😊\nTo enable this optimization, it\u0027s important to write \u0026 instead of \u0026\u0026. We should have a warning if you don\u0027t.",
       "parentUuid": "d8fcf120_db6e067a",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28c50fee_f451180d",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "Very nice 👍 (huh, the way to write this with \u0027\u0026\u0027 is a bit unexpected though :)",
+      "parentUuid": "8ce2ac71_17b091db",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +179,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bbc02812_1d6b612e",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "\u0027CompareCharsUnsigned\u0027 yes that\u0027s what I meant. A TODO sg!",
+      "parentUuid": "a59c28d9_cf87ccf5",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8dcf08ae_75e03830",
         "filename": "src/builtins/string-endswith.tq",
         "patchSetId": 6
@@ -166,6 +226,24 @@
       "side": 1,
       "message": "Yes, I did think about this :). The problem is that this requires lambdas or something equivalent. One could use a C++-Functor like pattern in Torque by creating a struct for each macro that needs this dispatch.",
       "parentUuid": "8dcf08ae_75e03830",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6eb0b1b_f6638dd1",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "Ack. Perhaps a TODO?",
+      "parentUuid": "53e4ae9c_0a12fc28",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -219,6 +297,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "89cbc6fb_abb3355c",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "It could also be a Convert\u003cBoolean\u003e(bool), no?",
+      "parentUuid": "dcddc0f5_0a04152a",
+      "range": {
+        "startLine": 90,
+        "startChar": 56,
+        "endLine": 90,
+        "endChar": 71
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f0ed999_28249276",
         "filename": "src/builtins/string-replaceall.tq",
         "patchSetId": 6
@@ -248,6 +350,24 @@
       "side": 1,
       "message": "This should be solved by changing StringCompareSequence to call that, right?",
       "parentUuid": "6f0ed999_28249276",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f139b47_a084b575",
+        "filename": "src/builtins/string-replaceall.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "Oh sorry I was thinking of StringSearchRaw when writing this (https://source.chromium.org/chromium/chromium/src/+/master:v8/src/strings/string-search.h;l\u003d545;drc\u003d52cfffde972d833cc9be768432a1f5e45ccfe87b). I meant to call that instead; it\u0027s a single call and returns the index of the found string, exactly what\u0027s needed here. A TODO / followup would be fine too.",
+      "parentUuid": "b5ae1428_689d7e7c",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -310,6 +430,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b18b9a8_a8f9c193",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "16816d60_e5660f80",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4dd72fc7_17fa592f",
@@ -341,6 +479,24 @@
       "side": 1,
       "message": "Because instance-type.h defines a number of related constants and any change to the Torque definition likely needs them to be adapted too. So it\u0027s better for definitions in instance-type.h to break so that the neighboring ones get fixed too.",
       "parentUuid": "4dd72fc7_17fa592f",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa97cfb8_fa38af3d",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7ee1d5ee_e3391894",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -394,6 +550,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7c7d3b17_ba836b3b",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "I remember now having discussed exactly this before; so unfortunate :[ Perhaps a helper AllocateNonEmptySeqTwoByteString? As you like.",
+      "parentUuid": "d9418b5b_b95452df",
+      "range": {
+        "startLine": 176,
+        "startChar": 22,
+        "endLine": 176,
+        "endChar": 50
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54086ae1_b1774470",
         "filename": "src/objects/string.tq",
         "patchSetId": 6
@@ -423,6 +603,24 @@
       "side": 1,
       "message": "I\u0027d think that\u0027s possible.",
       "parentUuid": "54086ae1_b1774470",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a16eecd_080916c6",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "Are you planning to do that (follow-up\u0027s perfectly fine)?",
+      "parentUuid": "4830112d_719863dd",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -505,6 +703,24 @@
       "side": 1,
       "message": "Oh, good catch, I overlooked that. This does require another trip to C++ then. I guess we could get away with a fast C call, since it seems the callback to get the data pointer has never been GC-safe.",
       "parentUuid": "2156fa06_2732c236",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24c198c3_3f53e30d",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-12-03T06:58:14Z",
+      "side": 1,
+      "message": "👍 And you added disallow-gc scopes, nice!",
+      "parentUuid": "10c9c3ff_659e1206",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
