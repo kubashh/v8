@@ -130,6 +130,8 @@
 ##############################################################################
 ['mode == debug', {
   # These tests are supposed to fail in a DCHECK.
+  'test-local-handles/DereferenceLocalHandleFailsWhenDisallowed': [FAIL],
+  'test-persistent-handles/DereferencePersistentHandleFailsWhenDisallowed': [FAIL],
   'test-persistent-handles/NewPersistentHandleFailsWhenParked': [FAIL],
   'test-persistent-handles/NewPersistentHandleFailsWhenParkedExplicit': [FAIL],
 }],
