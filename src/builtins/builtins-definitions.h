@@ -982,6 +982,7 @@ namespace internal {
   CPP(LocalePrototypeCalendar)                                         \
   CPP(LocalePrototypeCaseFirst)                                        \
   CPP(LocalePrototypeCollation)                                        \
+  CPP(LocalePrototypeDefaults)                                         \
   CPP(LocalePrototypeHourCycle)                                        \
   CPP(LocalePrototypeLanguage)                                         \
   /* ecma402 #sec-Intl.Locale.prototype.maximize */                    \
@@ -992,7 +993,10 @@ namespace internal {
   CPP(LocalePrototypeNumberingSystem)                                  \
   CPP(LocalePrototypeRegion)                                           \
   CPP(LocalePrototypeScript)                                           \
+  CPP(LocalePrototypeTextInfo)                                         \
   CPP(LocalePrototypeToString)                                         \
+  CPP(LocalePrototypeUnitInfo)                                         \
+  CPP(LocalePrototypeWeekInfo)                                         \
   /* ecma402 #sec-intl.numberformat */                                 \
   CPP(NumberFormatConstructor)                                         \
   /* ecma402 #sec-number-format-functions */                           \
