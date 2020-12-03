@@ -198,6 +198,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "07f5fc36_f5bc2eea",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-12-03T16:20:44Z",
+      "side": 1,
+      "message": "As discussed offline though, I don\u0027t mean to block this CL on this suggestion.",
+      "parentUuid": "f3a8b4ce_5d3043fa",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ab8edf9_07f089f1",
         "filename": "src/builtins/string-endswith.tq",
         "patchSetId": 6
