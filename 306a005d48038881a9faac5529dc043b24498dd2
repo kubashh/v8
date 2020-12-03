@@ -33,6 +33,24 @@
       "message": "Thanks, LGTM with a potential follow-up (that you probably already had in mind).\nI skimmed over some parts only, assuming that most code was already there in the past.",
       "revId": "306a005d48038881a9faac5529dc043b24498dd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3bacf40_e5b7b62e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-12-03T18:06:17Z",
+      "side": 1,
+      "message": "Thanks, that was an oversight, I think it makes sense to remove it in this CL.",
+      "parentUuid": "ec22c9ed_c363d05b",
+      "revId": "306a005d48038881a9faac5529dc043b24498dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
