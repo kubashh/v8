@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7488f08d_4ced6323",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3300,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2020-12-04T15:45:27Z",
+      "side": 1,
+      "message": "I\u0027ve refactored the code to not use `SourceRangeScope`, this should also provide an efficiency gain, as we only track the source range when we know we\u0027re in an optional chain.",
+      "parentUuid": "eab9570a_aee48f40",
+      "revId": "b7b9b8968004d43636884238dec9c0e87ecff6f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31b9ce92_c0812959",
@@ -55,6 +73,30 @@
       "side": 1,
       "message": "I wad doing a bit of a backflip to create a SourceRangeScope within a block that included both the `?.` and the continuation, see:\n\nhttps://github.com/v8/v8/blob/master/src/parsing/parser-base.h#L81\n\nWith this approach missing blocks look like this:\n\na[?.b?.c]\n\nIf we instead create a block within the original loop, we end up with source ranges that look like this:\n\na?.[b]?.[c]\n\nWhich would be weird, because it would indicate that the `?.` are executed, and just the continuations are uncovered.",
       "parentUuid": "31b9ce92_c0812959",
+      "range": {
+        "startLine": 3414,
+        "startChar": 0,
+        "endLine": 3415,
+        "endChar": 28
+      },
+      "revId": "b7b9b8968004d43636884238dec9c0e87ecff6f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "016695a1_6a211480",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3415,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2020-12-04T15:45:27Z",
+      "side": 1,
+      "message": "See latest patch, I refactored to avoid using the SourceRangeScope helper; this allowed me to remove the second loop.",
+      "parentUuid": "06eebab4_87e7a275",
       "range": {
         "startLine": 3414,
         "startChar": 0,
