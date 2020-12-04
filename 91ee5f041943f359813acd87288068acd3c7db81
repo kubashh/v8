@@ -16,6 +16,24 @@
       "message": "Hi Zhi,\n\nSorry for commenting on this old CL but my question is related to this WASM opcode.\nAs NAN values could differ, when doing NAN propagation on f64x2min and max, does it matter which NAN value is propagated from the lanes being compared? Also do they need to be canonicalized or they can be moved to destination register as is?\n",
       "revId": "91ee5f041943f359813acd87288068acd3c7db81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "531ddceb_5d09d1da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-12-04T02:31:06Z",
+      "side": 1,
+      "message": "Hi Milad,\nNo problem. We canonicalize the NaN values. We follow the same propagation rules as scalar float min (https://webassembly.github.io/spec/core/exec/numerics.html#nan-propagation).\n\nIf all inputs are canonical NaNs, then the output must be canonical.\nOtherwise, it can be any arithmetic NaN.\nSince the canonical NaN is an arithmetic NaN, by always canonicalizing, we return the correct NaN in both case.",
+      "parentUuid": "b8f7790c_63c5b9a3",
+      "revId": "91ee5f041943f359813acd87288068acd3c7db81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
