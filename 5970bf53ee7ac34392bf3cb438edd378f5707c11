@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "5970bf53ee7ac34392bf3cb438edd378f5707c11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fe27f4f_c5287a59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-12-04T16:07:59Z",
+      "side": 1,
+      "message": "Faster \u0026 cleaner, nice. :D\nLGTM with nit.",
+      "revId": "5970bf53ee7ac34392bf3cb438edd378f5707c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9a2d80d_7310216e",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2177,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-12-04T16:07:59Z",
+      "side": 1,
+      "message": "auto\u0026, to avoid the copy?",
+      "range": {
+        "startLine": 2177,
+        "startChar": 7,
+        "endLine": 2177,
+        "endChar": 11
+      },
+      "revId": "5970bf53ee7ac34392bf3cb438edd378f5707c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce0d460c_464fc9fb",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-12-04T16:07:59Z",
+      "side": 1,
+      "message": "I would also suggest auto\u0026 here, although we\u0027re only copying a pointer.",
+      "range": {
+        "startLine": 2194,
+        "startChar": 7,
+        "endLine": 2194,
+        "endChar": 11
+      },
+      "revId": "5970bf53ee7ac34392bf3cb438edd378f5707c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
