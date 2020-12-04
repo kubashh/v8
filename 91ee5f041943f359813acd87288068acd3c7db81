@@ -52,6 +52,24 @@
       "parentUuid": "531ddceb_5d09d1da",
       "revId": "91ee5f041943f359813acd87288068acd3c7db81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f310acc_deffa161",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-12-04T03:47:05Z",
+      "side": 1,
+      "message": "It is f64x2min/max\u0027s job to canonicalize the output. (AFIAK, inputs cannot be guaranteed to be canonicalized, it could be loaded from arbitrary bytes in the linear memory.)\n\nI\u0027m a bit fuzzy on SNAN v.s. QNAN, so correct me if I\u0027m wrong.\nQNAN is known in the spec as a canonical NaN, the top bit of significand is 1, the rest is 0.\nSNAN has top bit 0, the rest is non-0.\nIf SNAN is passed as the input, the output of the operation is a NaN, if we refer to https://webassembly.github.io/spec/core/exec/numerics.html#nan-propagation, we fall into the second bullet point \"Otherwise the payload is picked non-deterministically among all arithmetic NaNs\", since QNAN is a valid arithmetic NaN, returning QNAN is a valid result. (Returning SNAN would not be correct).",
+      "parentUuid": "9425eb87_0880ccd3",
+      "revId": "91ee5f041943f359813acd87288068acd3c7db81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
