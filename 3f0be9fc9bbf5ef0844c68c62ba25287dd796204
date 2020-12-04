@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "3f0be9fc9bbf5ef0844c68c62ba25287dd796204",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffea86ff_36c5ea24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-12-04T15:33:02Z",
+      "side": 1,
+      "message": "LGTM with nit.",
+      "revId": "3f0be9fc9bbf5ef0844c68c62ba25287dd796204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e54a1b63_dc45d713",
+        "filename": "test/inspector/cpu-profiler/console-profile-wasm.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-12-04T15:33:02Z",
+      "side": 1,
+      "message": "Unused?",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 23
+      },
+      "revId": "3f0be9fc9bbf5ef0844c68c62ba25287dd796204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
