@@ -16,6 +16,23 @@
       "message": "This API change might make it slightly more straightforward for hosts to get Primitives out of FixedArray.\n\nThanks!",
       "revId": "a030512bf1269c54da6add5dfe715a1ec4e5d009",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "806ae695_d0c98cb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-12-04T08:22:41Z",
+      "side": 1,
+      "message": "Looks safe, v8::Value subclasses v8::Data so this shouldn\u0027t break anything (famous last words).\n\nCamillo will need to OWNERS review and will probably do so next week.",
+      "revId": "a030512bf1269c54da6add5dfe715a1ec4e5d009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
