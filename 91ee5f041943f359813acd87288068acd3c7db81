@@ -70,6 +70,24 @@
       "parentUuid": "9425eb87_0880ccd3",
       "revId": "91ee5f041943f359813acd87288068acd3c7db81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cb5966c_0cd8ac65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-12-04T03:59:29Z",
+      "side": 1,
+      "message": "So to clarify, it is f64x2min/max\u0027s job to canonicalize the output only if both inputs are also canonicalized, otherwise any arithmetic NaN will do.\n\nThat\u0027s correct, A SNaN is a NaN with the most significant fraction bit set to 0, QNAN has it set to 1. So we convert to QNAN as expected.",
+      "parentUuid": "3f310acc_deffa161",
+      "revId": "91ee5f041943f359813acd87288068acd3c7db81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
