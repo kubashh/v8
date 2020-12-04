@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ee5ba3c_fd79f21a",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1951,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-12-04T15:19:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f7f5e94_90598d8c",
+      "range": {
+        "startLine": 1951,
+        "startChar": 57,
+        "endLine": 1951,
+        "endChar": 78
+      },
+      "revId": "dc7d0011779d6197ae96903d258dcfff9ce5d47e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "033be1fe_bbd9ec7b",
@@ -71,6 +95,24 @@
       "writtenOn": "2020-12-04T11:00:27Z",
       "side": 1,
       "message": "Unused? I guess you ended up inlining it.",
+      "revId": "dc7d0011779d6197ae96903d258dcfff9ce5d47e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ace2d67f_6016a984",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1977,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-12-04T15:19:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "033be1fe_bbd9ec7b",
       "revId": "dc7d0011779d6197ae96903d258dcfff9ce5d47e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
