@@ -285,6 +285,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5016b8_432269b6",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-04T10:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbc02812_1d6b612e",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8dcf08ae_75e03830",
@@ -334,6 +352,24 @@
       "side": 1,
       "message": "Ack. Perhaps a TODO?",
       "parentUuid": "53e4ae9c_0a12fc28",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6323a8b6_f8bea9dd",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-04T10:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6eb0b1b_f6638dd1",
       "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -433,6 +469,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6383888_6e62d350",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-04T10:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb1327da_619740f7",
+      "range": {
+        "startLine": 90,
+        "startChar": 56,
+        "endLine": 90,
+        "endChar": 71
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f0ed999_28249276",
@@ -517,6 +577,30 @@
       "writtenOn": "2020-12-02T07:09:31Z",
       "side": 1,
       "message": "SelectBooleanConstant",
+      "range": {
+        "startLine": 50,
+        "startChar": 64,
+        "endLine": 50,
+        "endChar": 79
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0b47dda_f37df10f",
+        "filename": "src/builtins/string-startswith.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-04T10:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8d610bf_8dde4784",
       "range": {
         "startLine": 50,
         "startChar": 64,
@@ -694,6 +778,30 @@
       "side": 1,
       "message": "I remember now having discussed exactly this before; so unfortunate :[ Perhaps a helper AllocateNonEmptySeqTwoByteString? As you like.",
       "parentUuid": "d9418b5b_b95452df",
+      "range": {
+        "startLine": 176,
+        "startChar": 22,
+        "endLine": 176,
+        "endChar": 50
+      },
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa462183_51b60798",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-04T10:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c7d3b17_ba836b3b",
       "range": {
         "startLine": 176,
         "startChar": 22,
