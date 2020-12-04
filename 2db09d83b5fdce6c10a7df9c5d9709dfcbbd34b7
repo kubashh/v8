@@ -216,6 +216,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a5eee60_927fd3b4",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-04T09:43:14Z",
+      "side": 1,
+      "message": "To clarify my earlier comment, Turbofan optimizes all patterns used here, we just don\u0027t warn about negated patterns when replacing \u0026 with \u0026\u0026.\n\nI think we have fairly robust safeguards to make sure the optimization happens (see TestBitFieldMultipleFlags in test-torque.tq for a list of patterns end-to-end tested for optimization) and people can\u0027t just go ahead and replace \u0026 with \u0026\u0026 since this will produce errors too.\n\nI\u0027ll add comments to all the usages of \u0026 that enable the admittedly non-obvious optimization.",
+      "parentUuid": "07f5fc36_f5bc2eea",
+      "revId": "2db09d83b5fdce6c10a7df9c5d9709dfcbbd34b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ab8edf9_07f089f1",
         "filename": "src/builtins/string-endswith.tq",
         "patchSetId": 6
