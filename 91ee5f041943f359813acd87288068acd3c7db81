@@ -34,6 +34,24 @@
       "parentUuid": "b8f7790c_63c5b9a3",
       "revId": "91ee5f041943f359813acd87288068acd3c7db81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9425eb87_0880ccd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-12-04T03:26:10Z",
+      "side": 1,
+      "message": "Thanks for the information, so in this case, is it the job of f64x2min/max opcodes to canonicalize the output or the inputs are already canonicalized? \n\nSNAN however might be passed as input in which case the opcodes need set to QNAN if I\u0027m no mistaking?",
+      "parentUuid": "531ddceb_5d09d1da",
+      "revId": "91ee5f041943f359813acd87288068acd3c7db81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
