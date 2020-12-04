@@ -3295,13 +3295,22 @@ ParserBase<Impl>::ParseLeftHandSideContinuation(ExpressionT result) {
 
   bool optional_chaining = false;
   bool is_optional = false;
+  int first_link_offset = 1;  // Include '?' at start of chain.
+  int optional_link_begin;
   do {
+    // Move the source range position to current continuation, unless
+    // last token was ?.
+    if (optional_chaining && !is_optional) {
+      optional_link_begin = scanner()->peek_location().beg_pos;
+    }
     switch (peek()) {
       case Token::QUESTION_PERIOD: {
         if (is_optional) {
           ReportUnexpectedToken(peek());
           return impl()->FailureExpression();
         }
+        // Include the ?. in the source range position.
+        optional_link_begin = scanner()->peek_location().beg_pos;
         Consume(Token::QUESTION_PERIOD);
         is_optional = true;
         optional_chaining = true;
@@ -3403,7 +3412,13 @@ ParserBase<Impl>::ParseLeftHandSideContinuation(ExpressionT result) {
         result = ParseTemplateLiteral(result, position(), true);
         break;
     }
-    is_optional = false;
+    if (is_optional) {
+      SourceRange chain_link_range(optional_link_begin + first_link_offset,
+                                   end_position());
+      impl()->RecordExpressionSourceRange(result, chain_link_range);
+      first_link_offset = 0;
+      is_optional = false;
+    }
   } while (is_optional || Token::IsPropertyOrCall(peek()));
   if (optional_chaining) return factory()->NewOptionalChain(result);
   return result;

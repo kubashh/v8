@@ -1177,4 +1177,34 @@ a(true);                                  // 0500
  {"start":0,"end":401,"count":2},
  {"start":154,"end":254,"count":0}]);
 
+ TestCoverage(
+"Optional Chaining",
+`
+const a = undefined || null               // 0000
+const b = a?.b                            // 0050
+const c = a?.['b']                        // 0100
+const d = {                               // 0150
+  e: {f: 99, g: () => {return undefined}} // 0200
+}                                         // 0250
+const e = d?.e?.f                         // 0300
+const f = d?.e?.['f']                     // 0350
+const g = d?.e?.f?.g                      // 0400
+const h = d?.e?.f?.g?.h                   // 0450
+const i = d?.['d']?.['e']?.['h']          // 0500
+const k = a?.('b')                        // 0550
+const l = d?.e?.g?.()                     // 0600
+const m = d?.e?.g?.()?.a?.b               // 0650
+delete a?.b                               // 0700
+`,
+[{"start":0,"end":749,"count":1},
+ {"start":62,"end":64,"count":0},
+ {"start":112,"end":118,"count":0},
+ {"start":470,"end":473,"count":0},
+ {"start":518,"end":532,"count":0},
+ {"start":562,"end":568,"count":0},
+ {"start":671,"end":677,"count":0},
+ {"start":709,"end":711,"count":0},
+ {"start":216,"end":240,"count":2},
+]);
+
 %DebugToggleBlockCoverage(false);
