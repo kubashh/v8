@@ -13665,6 +13665,21 @@ TNode<String> CodeStubAssembler::TaggedToDirectString(TNode<Object> value,
   return CAST(value);
 }
 
+TNode<RawPtrT> CodeStubAssembler::LoadDirectStringDataPointer(
+    TNode<Object> value, Label* fail) {
+  ToDirectStringAssembler to_direct(state(), CAST(value));
+  to_direct.TryToDirect(fail);
+  return to_direct.PointerToData(fail);
+}
+
+TNode<IntPtrT> CodeStubAssembler::LoadDirectStringOffset(TNode<Object> value,
+                                                         Label* fail) {
+  ToDirectStringAssembler to_direct(state(), CAST(value));
+  to_direct.TryToDirect(fail);
+  to_direct.PointerToData(fail);
+  return to_direct.offset();
+}
+
 void CodeStubAssembler::RemoveFinalizationRegistryCellFromUnregisterTokenMap(
     TNode<JSFinalizationRegistry> finalization_registry,
     TNode<WeakCell> weak_cell) {

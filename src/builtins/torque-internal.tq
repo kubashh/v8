@@ -162,7 +162,8 @@ macro NewOffHeapConstSlice<T: type>(
     startPointer: RawPtr<T>, length: intptr): ConstSlice<T> {
   return %RawDownCast<ConstSlice<T>>(Slice<T, const &T>{
     object: kZeroBitPattern,
-    offset: Convert<intptr>(Convert<RawPtr>(startPointer)) + kHeapObjectTag,
+    offset: Convert<intptr>(Convert<RawPtr>(startPointer)) + kHeapObjectTag +
+        dataOffset * %SizeOf<T>(),
     length: length,
     unsafeMarker: Unsafe {}
   });

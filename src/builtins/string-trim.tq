@@ -19,6 +19,11 @@ macro IsWhiteSpaceOrLineTerminator(charCode: char16): bool {
     return true;
   }
 
+  // Common Non-whitespace characters from (0x000E, 0x00A0)
+  if (Unsigned(charCode - 0x000E) < 0x0092) {
+    return false;
+  }
+
   // 0x0009 - HORIZONTAL TAB
   if (charCode < 0x0009) {
     return false;
@@ -29,11 +34,6 @@ macro IsWhiteSpaceOrLineTerminator(charCode: char16): bool {
   // 0x000D - HORIZONTAL TAB
   if (charCode <= 0x000D) {
     return true;
-  }
-
-  // Common Non-whitespace characters
-  if (charCode < 0x00A0) {
-    return false;
   }
 
   // 0x00A0 - NO-BREAK SPACE
@@ -92,6 +92,52 @@ macro IsWhiteSpaceOrLineTerminator(charCode: char16): bool {
   return false;
 }
 
+macro NewStringSlice<T: type>(
+    stringData: RawPtr<T>, stringDataOffset: intptr,
+    stringLength: intptr): torque_internal::Slice<T> {
+  return torque_internal::unsafe::NewOffHeapSlice(
+      stringData, stringDataOffset, stringLength);
+}
+
+transitioning macro StringTrimLoop<T: type>(implicit context: Context)(
+    stringSlice: torque_internal::Slice<T>, startIndex: intptr,
+    endIndex: intptr, increment: intptr): intptr {
+  let index = startIndex;
+  while (true) {
+    if (index == endIndex) {
+      return index;
+    }
+
+    const char: int32 = Convert<int32>(*stringSlice.AtIndex(index));
+    if (!IsWhiteSpaceOrLineTerminator(char)) {
+      return index;
+    }
+    index = index + increment;
+  }
+  unreachable;
+}
+
+extern macro LoadDirectStringDataPointer(DirectString): RawPtr labels Fail;
+extern macro LoadDirectStringOffset(DirectString): intptr labels Fail;
+
+macro StringDataHelper(directString: DirectString):
+    never labels OneByte(torque_internal::Slice<uint8>),
+    TwoByte(torque_internal::Slice<uint16>) {
+  const stringData: RawPtr =
+      LoadDirectStringDataPointer(directString) otherwise unreachable;
+  const stringDataOffset: intptr =
+      LoadDirectStringOffset(directString) otherwise unreachable;
+  const stringLength: intptr = directString.length_intptr;
+  if (IsOneByteStringInstanceType(directString.instanceType)) {
+    goto OneByte(NewStringSlice(
+        UnsafeCast<RawPtr<uint8>>(stringData), stringDataOffset, stringLength));
+  } else {
+    goto TwoByte(NewStringSlice(
+        UnsafeCast<RawPtr<uint16>>(stringData), stringDataOffset,
+        stringLength));
+  }
+}
+
 transitioning macro StringTrim(implicit context: Context)(
     receiver: JSAny, _arguments: Arguments, methodName: constexpr string,
     variant: constexpr TrimMode): String {
@@ -105,31 +151,29 @@ transitioning macro StringTrim(implicit context: Context)(
   let startIndex: intptr = 0;
   let endIndex: intptr = stringLength - 1;
 
-  // TODO(duongn): It would probably be more efficient to turn StringTrim into a
-  // tempalate for the different string types and specialize the loop for them.
   if (variant == TrimMode::kTrim || variant == TrimMode::kTrimStart) {
-    while (true) {
-      if (startIndex == stringLength) {
-        return EmptyStringConstant();
-      }
-      if (!IsWhiteSpaceOrLineTerminator(
-              StringCharCodeAt(directString, Unsigned(startIndex)))) {
-        break;
-      }
-      startIndex++;
+    try {
+      StringDataHelper(directString) otherwise OneByte, TwoByte;
+    } label OneByte(slice: torque_internal::Slice<uint8>) {
+      startIndex = StringTrimLoop(slice, startIndex, stringLength, 1);
+    } label TwoByte(slice: torque_internal::Slice<uint16>) {
+      startIndex = StringTrimLoop(slice, startIndex, stringLength, 1);
+    }
+    if (startIndex == stringLength) {
+      return EmptyStringConstant();
     }
   }
 
   if (variant == TrimMode::kTrim || variant == TrimMode::kTrimEnd) {
-    while (true) {
-      if (endIndex == -1) {
-        return EmptyStringConstant();
-      }
-      if (!IsWhiteSpaceOrLineTerminator(
-              StringCharCodeAt(directString, Unsigned(endIndex)))) {
-        break;
-      }
-      endIndex--;
+    try {
+      StringDataHelper(directString) otherwise OneByte, TwoByte;
+    } label OneByte(slice: torque_internal::Slice<uint8>) {
+      endIndex = StringTrimLoop(slice, endIndex, -1, -1);
+    } label TwoByte(slice: torque_internal::Slice<uint16>) {
+      endIndex = StringTrimLoop(slice, endIndex, -1, -1);
+    }
+    if (endIndex == -1) {
+      return EmptyStringConstant();
     }
   }
 
