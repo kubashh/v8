@@ -3254,7 +3254,6 @@ template <typename Impl>
 typename ParserBase<Impl>::ExpressionT
 ParserBase<Impl>::ParseLeftHandSideContinuation(ExpressionT result) {
   DCHECK(Token::IsPropertyOrCall(peek()));
-
   if (V8_UNLIKELY(peek() == Token::LPAREN && impl()->IsIdentifier(result) &&
                   scanner()->current_token() == Token::ASYNC &&
                   !scanner()->HasLineTerminatorBeforeNext() &&
@@ -3296,115 +3295,130 @@ ParserBase<Impl>::ParseLeftHandSideContinuation(ExpressionT result) {
   bool optional_chaining = false;
   bool is_optional = false;
   do {
-    switch (peek()) {
-      case Token::QUESTION_PERIOD: {
-        if (is_optional) {
-          ReportUnexpectedToken(peek());
-          return impl()->FailureExpression();
-        }
-        Consume(Token::QUESTION_PERIOD);
-        is_optional = true;
-        optional_chaining = true;
-        continue;
-      }
-
-      /* Property */
-      case Token::LBRACK: {
-        Consume(Token::LBRACK);
-        int pos = position();
-        AcceptINScope scope(this, true);
-        ExpressionT index = ParseExpressionCoverGrammar();
-        result = factory()->NewProperty(result, index, pos, is_optional);
-        Expect(Token::RBRACK);
-        break;
-      }
-
-      /* Property */
-      case Token::PERIOD: {
-        if (is_optional) {
-          ReportUnexpectedToken(Next());
-          return impl()->FailureExpression();
-        }
-        Consume(Token::PERIOD);
-        int pos = position();
-        ExpressionT key = ParsePropertyOrPrivatePropertyName();
-        result = factory()->NewProperty(result, key, pos, is_optional);
-        break;
-      }
-
-      /* Call */
-      case Token::LPAREN: {
-        int pos;
-        if (Token::IsCallable(scanner()->current_token())) {
-          // For call of an identifier we want to report position of
-          // the identifier as position of the call in the stack trace.
-          pos = position();
-        } else {
-          // For other kinds of calls we record position of the parenthesis as
-          // position of the call. Note that this is extremely important for
-          // expressions of the form function(){...}() for which call position
-          // should not point to the closing brace otherwise it will intersect
-          // with positions recorded for function literal and confuse debugger.
-          pos = peek_position();
-          // Also the trailing parenthesis are a hint that the function will
-          // be called immediately. If we happen to have parsed a preceding
-          // function literal eagerly, we can also compile it eagerly.
-          if (result->IsFunctionLiteral()) {
-            result->AsFunctionLiteral()->SetShouldEagerCompile();
-            if (scope()->is_script_scope()) {
-              // A non-top-level iife is likely to be executed multiple times
-              // and so shouldn`t be optimized as one-shot.
-              result->AsFunctionLiteral()->mark_as_oneshot_iife();
+    SourceRange chain_link_range;
+    {
+      SourceRangeScope range_scope(scanner(), &chain_link_range);
+      do {
+        {
+          switch (peek()) {
+            case Token::QUESTION_PERIOD: {
+              if (is_optional) {
+                ReportUnexpectedToken(peek());
+                return impl()->FailureExpression();
+              }
+              Consume(Token::QUESTION_PERIOD);
+              is_optional = true;
+              optional_chaining = true;
+              continue;
             }
+
+            /* Property */
+            case Token::LBRACK: {
+              Consume(Token::LBRACK);
+              int pos = position();
+              AcceptINScope scope(this, true);
+              ExpressionT index = ParseExpressionCoverGrammar();
+              result = factory()->NewProperty(result, index, pos, is_optional);
+              Expect(Token::RBRACK);
+              break;
+            }
+
+            /* Property */
+            case Token::PERIOD: {
+              if (is_optional) {
+                ReportUnexpectedToken(Next());
+                return impl()->FailureExpression();
+              }
+              Consume(Token::PERIOD);
+              int pos = position();
+              ExpressionT key = ParsePropertyOrPrivatePropertyName();
+              result = factory()->NewProperty(result, key, pos, is_optional);
+              break;
+            }
+
+            /* Call */
+            case Token::LPAREN: {
+              int pos;
+              if (Token::IsCallable(scanner()->current_token())) {
+                // For call of an identifier we want to report position of
+                // the identifier as position of the call in the stack trace.
+                pos = position();
+              } else {
+                // For other kinds of calls we record position of the
+                // parenthesis as position of the call. Note that this is
+                // extremely important for expressions of the form
+                // function(){...}() for which call position should not point to
+                // the closing brace otherwise it will intersect with positions
+                // recorded for function literal and confuse debugger.
+                pos = peek_position();
+                // Also the trailing parenthesis are a hint that the function
+                // will be called immediately. If we happen to have parsed a
+                // preceding function literal eagerly, we can also compile it
+                // eagerly.
+                if (result->IsFunctionLiteral()) {
+                  result->AsFunctionLiteral()->SetShouldEagerCompile();
+                  if (scope()->is_script_scope()) {
+                    // A non-top-level iife is likely to be executed multiple
+                    // times and so shouldn`t be optimized as one-shot.
+                    result->AsFunctionLiteral()->mark_as_oneshot_iife();
+                  }
+                }
+              }
+              bool has_spread;
+              ExpressionListT args(pointer_buffer());
+              ParseArguments(&args, &has_spread);
+
+              // Keep track of eval() calls since they disable all local
+              // variable optimizations.
+              // The calls that need special treatment are the
+              // direct eval calls. These calls are all of the form eval(...),
+              // with no explicit receiver.
+              // These calls are marked as potentially direct eval calls.
+              // Whether they are actually direct calls to eval is determined
+              // at run time.
+              Call::PossiblyEval is_possibly_eval =
+                  CheckPossibleEvalCall(result, is_optional, scope());
+
+              if (has_spread) {
+                result = impl()->SpreadCall(result, args, pos, is_possibly_eval,
+                                            is_optional);
+              } else {
+                result = factory()->NewCall(result, args, pos, is_possibly_eval,
+                                            is_optional);
+              }
+
+              fni_.RemoveLastFunction();
+              break;
+            }
+
+            default:
+              /* Optional Property */
+              if (is_optional) {
+                DCHECK_EQ(scanner()->current_token(), Token::QUESTION_PERIOD);
+                int pos = position();
+                ExpressionT key = ParsePropertyOrPrivatePropertyName();
+                result = factory()->NewProperty(result, key, pos, is_optional);
+                break;
+              }
+              if (optional_chaining) {
+                impl()->ReportMessageAt(scanner()->peek_location(),
+                                  MessageTemplate::kOptionalChainingNoTemplate);
+                return impl()->FailureExpression();
+              }
+              /* Tagged Template */
+              DCHECK(Token::IsTemplate(peek()));
+              result = ParseTemplateLiteral(result, position(), true);
+              break;
           }
         }
-        bool has_spread;
-        ExpressionListT args(pointer_buffer());
-        ParseArguments(&args, &has_spread);
-
-        // Keep track of eval() calls since they disable all local variable
-        // optimizations.
-        // The calls that need special treatment are the
-        // direct eval calls. These calls are all of the form eval(...), with
-        // no explicit receiver.
-        // These calls are marked as potentially direct eval calls. Whether
-        // they are actually direct calls to eval is determined at run time.
-        Call::PossiblyEval is_possibly_eval =
-            CheckPossibleEvalCall(result, is_optional, scope());
-
-        if (has_spread) {
-          result = impl()->SpreadCall(result, args, pos, is_possibly_eval,
-                                      is_optional);
-        } else {
-          result = factory()->NewCall(result, args, pos, is_possibly_eval,
-                                      is_optional);
-        }
-
-        fni_.RemoveLastFunction();
-        break;
-      }
-
-      default:
-        /* Optional Property */
-        if (is_optional) {
-          DCHECK_EQ(scanner()->current_token(), Token::QUESTION_PERIOD);
-          int pos = position();
-          ExpressionT key = ParsePropertyOrPrivatePropertyName();
-          result = factory()->NewProperty(result, key, pos, is_optional);
-          break;
-        }
-        if (optional_chaining) {
-          impl()->ReportMessageAt(scanner()->peek_location(),
-                                  MessageTemplate::kOptionalChainingNoTemplate);
-          return impl()->FailureExpression();
-        }
-        /* Tagged Template */
-        DCHECK(Token::IsTemplate(peek()));
-        result = ParseTemplateLiteral(result, position(), true);
-        break;
+        if (is_optional) break;
+      } while (is_optional);
     }
-    is_optional = false;
-  } while (is_optional || Token::IsPropertyOrCall(peek()));
+    if (is_optional) {
+      impl()->RecordExpressionSourceRange(result, chain_link_range);
+      is_optional = false;
+    }
+  } while (Token::IsPropertyOrCall(peek()));
   if (optional_chaining) return factory()->NewOptionalChain(result);
   return result;
 }
