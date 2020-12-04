@@ -16,6 +16,29 @@
       "message": "I didn\u0027t love the approach I came up with of using a nested loop, but it allowed me to capture a source range with `SourceRangeScope` that included the `?.`, open to other suggestions.",
       "revId": "b7b9b8968004d43636884238dec9c0e87ecff6f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31b9ce92_c0812959",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3415,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2020-12-04T03:44:05Z",
+      "side": 1,
+      "message": "is this loop just not needed?",
+      "range": {
+        "startLine": 3414,
+        "startChar": 0,
+        "endLine": 3415,
+        "endChar": 28
+      },
+      "revId": "b7b9b8968004d43636884238dec9c0e87ecff6f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
