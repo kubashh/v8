@@ -56,6 +56,30 @@
       },
       "revId": "3f0be9fc9bbf5ef0844c68c62ba25287dd796204",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dab54392_9f43c9d0",
+        "filename": "test/inspector/cpu-profiler/console-profile-wasm.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-12-04T15:36:01Z",
+      "side": 1,
+      "message": "Oh, good catch. Remnant from a previous approach...",
+      "parentUuid": "e54a1b63_dc45d713",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 23
+      },
+      "revId": "3f0be9fc9bbf5ef0844c68c62ba25287dd796204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
