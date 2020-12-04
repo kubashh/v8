@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8f7790c_63c5b9a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-12-04T00:05:36Z",
+      "side": 1,
+      "message": "Hi Zhi,\n\nSorry for commenting on this old CL but my question is related to this WASM opcode.\nAs NAN values could differ, when doing NAN propagation on f64x2min and max, does it matter which NAN value is propagated from the lanes being compared? Also do they need to be canonicalized or they can be moved to destination register as is?\n",
+      "revId": "91ee5f041943f359813acd87288068acd3c7db81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
