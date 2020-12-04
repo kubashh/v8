@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8029865_ff6a004d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326190
+      },
+      "writtenOn": "2020-12-04T04:05:53Z",
+      "side": 1,
+      "message": "This API change might make it slightly more straightforward for hosts to get Primitives out of FixedArray.\n\nThanks!",
+      "revId": "a030512bf1269c54da6add5dfe715a1ec4e5d009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
