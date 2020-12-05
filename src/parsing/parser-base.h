@@ -2980,8 +2980,7 @@ ParserBase<Impl>::ParseCoalesceExpression(ExpressionT expression) {
   // into an nary expresion.
   bool first_nullish = true;
   while (peek() == Token::NULLISH) {
-    SourceRange right_range;
-    SourceRangeScope right_range_scope(scanner(), &right_range);
+    int beg_pos = scanner()->peek_location().beg_pos;
     Consume(Token::NULLISH);
     int pos = peek_position();
 
@@ -2990,9 +2989,11 @@ ParserBase<Impl>::ParseCoalesceExpression(ExpressionT expression) {
     if (first_nullish) {
       expression =
           factory()->NewBinaryOperation(Token::NULLISH, expression, y, pos);
+      SourceRange right_range(beg_pos, end_position());
       impl()->RecordBinaryOperationSourceRange(expression, right_range);
       first_nullish = false;
     } else {
+      SourceRange right_range(beg_pos, end_position());
       impl()->CollapseNaryExpression(&expression, y, Token::NULLISH, pos,
                                      right_range);
     }
