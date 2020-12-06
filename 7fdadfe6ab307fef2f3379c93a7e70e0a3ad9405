@@ -16,6 +16,23 @@
       "message": "The discussion in the original CL (https://codereview.chromium.org/316173002) sounded like there was no known issue with allowing these characters (beyond not wanting to make unrelated changes while moving the logic):\n\n\u003e The latest patch set matches the disallowed characters and whitespace handling\n\u003e of ContentSearchUtils, even though it\u0027s pretty arbitrary regarding what\n\u003e characters it allows in the URL and what not (disallows \u0027 which is a valid URL\n\u003e character, allows ^ which is not a valid URL character).",
       "revId": "7fdadfe6ab307fef2f3379c93a7e70e0a3ad9405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d908db9b_ad23a4e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1391172
+      },
+      "writtenOn": "2020-12-06T23:07:01Z",
+      "side": 1,
+      "message": "Quick cross-browser notes:\n\n- Firefox Developer Edition 80.0b4: Allows quotes in inline source maps.\n- Safari Technology Preview 14.1: Doesn\u0027t allow quotes in inline source maps.\n\nSo neither the before- nor the after state would be consistent across browsers.",
+      "revId": "7fdadfe6ab307fef2f3379c93a7e70e0a3ad9405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
