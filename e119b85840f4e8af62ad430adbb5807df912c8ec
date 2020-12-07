@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "427ed354_71d38a36",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-12-07T12:32:54Z",
+      "side": 0,
+      "message": "Why not move both up?",
+      "range": {
+        "startLine": 1551,
+        "startChar": 0,
+        "endLine": 1555,
+        "endChar": 0
+      },
+      "revId": "e119b85840f4e8af62ad430adbb5807df912c8ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
