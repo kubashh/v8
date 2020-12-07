@@ -16,6 +16,23 @@
       "message": "I\u0027m not 100% sure what was going on here. I noticed when I was updating optional chaining here:\n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/2573013\n\nThat SourceRangeScope did a poor job of determining the terminal source position, when run within a loop. I tried pulling SourceRangeScope into an additional block, but it continued to determine a bad source position.\n\nWhen I instead create a SourceRange with a parser position, things work great.",
       "revId": "11e78d374208410e931f08b2231ae27bb96acdf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ac5649f_10d080e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-12-07T18:07:47Z",
+      "side": 1,
+      "message": "This looks good to me, but may want to have someone closer to the parser lgtm.",
+      "revId": "11e78d374208410e931f08b2231ae27bb96acdf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
