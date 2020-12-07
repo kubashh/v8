@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ef972bd_a6b613cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-12-07T12:45:03Z",
+      "side": 1,
+      "message": "LGTM, thanks!\n\nLet\u0027s include tests for nested optional ranges, e.g:\n\nconst n \u003d d?.[d?.x?.f]                    // 0750\nconst o \u003d a?.[d?.x?.f]                    // 0800\nconst p \u003d d?.[d?.x?.f]?.x                 // 0850\n\nAlso adding Toon as parser OWNER.",
+      "revId": "13fca56ec7033b2f78bec936db0018d88bec3ff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
