@@ -16,6 +16,75 @@
       "message": "PTAL again 😊",
       "revId": "9719df9dec8142ec7c90bca54e40921568831253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b22277c7_7514cbff",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 13
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-07T14:18:37Z",
+      "side": 1,
+      "message": "This is no longer necessary. Could we remove the runtime version of StringTrim now?",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 49
+      },
+      "revId": "9719df9dec8142ec7c90bca54e40921568831253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb75027b_9db8f057",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 13
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-07T14:18:37Z",
+      "side": 1,
+      "message": "This can be written as kEmptyString.",
+      "range": {
+        "startLine": 135,
+        "startChar": 13,
+        "endLine": 135,
+        "endChar": 34
+      },
+      "revId": "9719df9dec8142ec7c90bca54e40921568831253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e67e714_648c0928",
+        "filename": "src/builtins/string-trim.tq",
+        "patchSetId": 13
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-07T14:18:37Z",
+      "side": 1,
+      "message": "Instead of dispatching twice, how about templatizing the whole body of this macro and doing the dispatching outside?",
+      "range": {
+        "startLine": 141,
+        "startChar": 6,
+        "endLine": 141,
+        "endChar": 19
+      },
+      "revId": "9719df9dec8142ec7c90bca54e40921568831253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
