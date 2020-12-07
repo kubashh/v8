@@ -16,6 +16,23 @@
       "message": "This is my first contribution to v8. Not sure if we need a bug for this. I don\u0027t have access to dry runs and can\u0027t commit.\n",
       "revId": "ecb23ced6d811625dfb4c9d914da61d41ea88bd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ffb28a3_7dfdbee7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-12-07T11:41:17Z",
+      "side": 1,
+      "message": "Hi Stephan,\n\nThank you for your contribution! I\u0027d suggest filing a bug on https://crbug.com/v8/ with a slightly more detailed explanation why this template specialization is needed, and then adding \"Bug: v8:NNN\" to the CL description. Otherwise the change looks good to me, I\u0027ll wait for the tryjobs to finish to +1 it.\n",
+      "revId": "ecb23ced6d811625dfb4c9d914da61d41ea88bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
