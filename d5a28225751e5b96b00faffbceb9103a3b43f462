@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9698675_5c1fea88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-12-08T23:20:31Z",
+      "side": 1,
+      "message": "Please ignore the previous patchset (Patchset 38).\n\nTo integrate system instrumentation with the existing TraceEvent, I just implemented another TraceWriter, called SystemInstrumentationTraceWriter, that writes events to the appropriate system event controller (ETW for Windows, signposts to-be-implemented for Mac).\n\nThe default flow will use the JSONTraceWriter that writes to trace.json, but with the --enable-system-instrumentation flag, we will use the SystemInstrumentationTraceWriter.",
+      "revId": "d5a28225751e5b96b00faffbceb9103a3b43f462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
