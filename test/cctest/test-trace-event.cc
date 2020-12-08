@@ -37,6 +37,7 @@ class MockTracingController : public v8::TracingController {
   MockTracingController(const MockTracingController&) = delete;
   MockTracingController& operator=(const MockTracingController&) = delete;
 
+#ifndef V8_ENABLE_SYSTEM_INSTRUMENTATION
   uint64_t AddTraceEvent(
       char phase, const uint8_t* category_enabled_flag, const char* name,
       const char* scope, uint64_t id, uint64_t bind_id, int num_args,
@@ -48,6 +49,14 @@ class MockTracingController : public v8::TracingController {
         phase, category_enabled_flag, name, scope, id, bind_id, num_args,
         arg_names, arg_types, arg_values, arg_convertables, flags, 0);
   }
+#else
+  uint64_t AddTraceEvent(const char* name) override {
+    std::unique_ptr<MockTraceObject> to = std::make_unique<MockTraceObject>(
+        'a', std::string(name), 0, 0, 0, 0, 0);
+    trace_objects_.push_back(std::move(to));
+    return 0;
+  }
+#endif
 
   uint64_t AddTraceEventWithTimestamp(
       char phase, const uint8_t* category_enabled_flag, const char* name,

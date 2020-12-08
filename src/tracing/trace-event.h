@@ -170,6 +170,7 @@ enum CategoryGroupEnabledFlags {
       category_group, INTERNAL_TRACE_EVENT_UID(atomic),                    \
       INTERNAL_TRACE_EVENT_UID(category_group_enabled));
 
+#if !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 // Implementation detail: internal macro to create static category and add
 // event if the category is enabled.
 #define INTERNAL_TRACE_EVENT_ADD(phase, category_group, name, flags, ...)    \
@@ -195,11 +196,9 @@ enum CategoryGroupEnabledFlags {
         INTERNAL_TRACE_EVENT_UID(category_group_enabled), name,              \
         v8::internal::tracing::kGlobalScope, v8::internal::tracing::kNoId,   \
         v8::internal::tracing::kNoId, TRACE_EVENT_FLAG_NONE, ##__VA_ARGS__); \
-    INTERNAL_TRACE_EVENT_UID(tracer)                                         \
-        .Initialize(INTERNAL_TRACE_EVENT_UID(category_group_enabled), name,  \
-                    h);                                                      \
+    INTERNAL_TRACE_EVENT_UID(tracer).Initialize(                             \
+        INTERNAL_TRACE_EVENT_UID(category_group_enabled), name, h);          \
   }
-
 #define INTERNAL_TRACE_EVENT_ADD_SCOPED_WITH_FLOW(category_group, name,     \
                                                   bind_id, flow_flags, ...) \
   INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(category_group);                   \
@@ -234,6 +233,53 @@ enum CategoryGroupEnabledFlags {
           v8::internal::tracing::kNoId, trace_event_flags, ##__VA_ARGS__);     \
     }                                                                          \
   } while (false)
+#else
+#define INTERNAL_TRACE_EVENT_ADD(phase, category_group, name, flags, ...)   \
+  do {                                                                      \
+    INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(category_group);                 \
+    if (INTERNAL_TRACE_EVENT_CATEGORY_GROUP_ENABLED_FOR_RECORDING_MODE()) { \
+      v8::internal::tracing::AddTraceEvent(name);                           \
+    }                                                                       \
+  } while (false)
+// Implementation detail: internal macro to create static category and add begin
+// event if the category is enabled. Also adds the end event when the scope
+// ends.
+#define INTERNAL_TRACE_EVENT_ADD_SCOPED(category_group, name, ...)        \
+  INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(category_group);                 \
+  v8::internal::tracing::ScopedTracer INTERNAL_TRACE_EVENT_UID(tracer);   \
+  if (INTERNAL_TRACE_EVENT_CATEGORY_GROUP_ENABLED_FOR_RECORDING_MODE()) { \
+    uint64_t h = v8::internal::tracing::AddTraceEvent(name);              \
+    INTERNAL_TRACE_EVENT_UID(tracer).Initialize(                          \
+        INTERNAL_TRACE_EVENT_UID(category_group_enabled), name, h);       \
+  }
+
+#define INTERNAL_TRACE_EVENT_ADD_SCOPED_WITH_FLOW(category_group, name,     \
+                                                  bind_id, flow_flags, ...) \
+  INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(category_group);                   \
+  v8::internal::tracing::ScopedTracer INTERNAL_TRACE_EVENT_UID(tracer);     \
+  if (INTERNAL_TRACE_EVENT_CATEGORY_GROUP_ENABLED_FOR_RECORDING_MODE()) {   \
+    unsigned int trace_event_flags = flow_flags;                            \
+    v8::internal::tracing::TraceID trace_event_bind_id(bind_id,             \
+                                                       &trace_event_flags); \
+    uint64_t h = v8::internal::tracing::AddTraceEvent(name);                \
+    INTERNAL_TRACE_EVENT_UID(tracer).Initialize(                            \
+        INTERNAL_TRACE_EVENT_UID(category_group_enabled), name, h);         \
+  }
+
+// Implementation detail: internal macro to create static category and add
+// event if the category is enabled.
+#define INTERNAL_TRACE_EVENT_ADD_WITH_ID(phase, category_group, name, id,      \
+                                         flags, ...)                           \
+  do {                                                                         \
+    INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(category_group);                    \
+    if (INTERNAL_TRACE_EVENT_CATEGORY_GROUP_ENABLED_FOR_RECORDING_MODE()) {    \
+      unsigned int trace_event_flags = flags | TRACE_EVENT_FLAG_HAS_ID;        \
+      v8::internal::tracing::TraceID trace_event_trace_id(id,                  \
+                                                          &trace_event_flags); \
+      v8::internal::tracing::AddTraceEvent(name);                              \
+    }                                                                          \
+  } while (false)
+#endif
 
 // Adds a trace event with a given timestamp.
 #define INTERNAL_TRACE_EVENT_ADD_WITH_TIMESTAMP(phase, category_group, name, \
@@ -370,6 +416,7 @@ class TraceStringWithCopy {
   const char* str_;
 };
 
+#if !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 static V8_INLINE uint64_t AddTraceEventImpl(
     char phase, const uint8_t* category_group_enabled, const char* name,
     const char* scope, uint64_t id, uint64_t bind_id, int32_t num_args,
@@ -391,6 +438,13 @@ static V8_INLINE uint64_t AddTraceEventImpl(
                                    id, bind_id, num_args, arg_names, arg_types,
                                    arg_values, arg_convertables, flags);
 }
+#else  // defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+static V8_INLINE uint64_t AddTraceEventImpl(const char* name) {
+  v8::TracingController* controller =
+      v8::internal::tracing::TraceEventHelper::GetTracingController();
+  return controller->AddTraceEvent(name);
+}
+#endif
 
 static V8_INLINE uint64_t AddTraceEventWithTimestampImpl(
     char phase, const uint8_t* category_group_enabled, const char* name,
@@ -457,6 +511,7 @@ SetTraceValue(std::unique_ptr<T> ptr, unsigned char* type, uint64_t* value) {
   SetTraceValue(ptr.release(), type, value);
 }
 
+#if !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 // These AddTraceEvent template
 // function is defined here instead of in the macro, because the arg_values
 // could be temporary objects, such as std::string. In order to store
@@ -505,6 +560,11 @@ static V8_INLINE uint64_t AddTraceEvent(
       phase, category_group_enabled, name, scope, id, bind_id, num_args,
       arg_names, arg_types, arg_values, flags);
 }
+#else
+static V8_INLINE uint64_t AddTraceEvent(const char* name) {
+  return TRACE_EVENT_API_ADD_TRACE_EVENT(name);
+}
+#endif
 
 static V8_INLINE uint64_t AddTraceEventWithTimestamp(
     char phase, const uint8_t* category_group_enabled, const char* name,

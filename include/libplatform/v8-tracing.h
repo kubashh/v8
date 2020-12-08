@@ -32,6 +32,19 @@ namespace tracing {
 
 class TraceEventListener;
 
+#if defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+class V8_PLATFORM_EXPORT Recorder {
+ public:
+  Recorder();
+  ~Recorder();
+
+  bool IsEnabled();
+  bool IsEnabled(const uint8_t level);
+
+  uint64_t AddEvent(const char* name);
+};
+#endif
+
 const int kTraceMaxNumArgs = 2;
 
 class V8_PLATFORM_EXPORT TraceObject {
@@ -244,7 +257,7 @@ class V8_PLATFORM_EXPORT TracingController
   // Provide an optional listener for testing that will receive trace events.
   // Must be called before StartTracing().
   void SetTraceEventListenerForTesting(TraceEventListener* listener);
-#else   // defined(V8_USE_PERFETTO)
+#else  // defined(V8_USE_PERFETTO) && defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
   // The pointer returned from GetCategoryGroupEnabled() points to a value with
   // zero or more of the following bits. Used in this class only. The
   // TRACE_EVENT macros should only use the value as a bool. These values must
@@ -258,11 +271,17 @@ class V8_PLATFORM_EXPORT TracingController
     ENABLED_FOR_ETW_EXPORT = 1 << 3
   };
 
+#ifdef V8_ENABLE_SYSTEM_INSTRUMENTATION
+  void Initialize(Recorder* recorder);
+#else
   // Takes ownership of |trace_buffer|.
   void Initialize(TraceBuffer* trace_buffer);
+#endif
 
   // v8::TracingController implementation.
   const uint8_t* GetCategoryGroupEnabled(const char* category_group) override;
+
+#ifndef V8_ENABLE_SYSTEM_INSTRUMENTATION
   uint64_t AddTraceEvent(
       char phase, const uint8_t* category_enabled_flag, const char* name,
       const char* scope, uint64_t id, uint64_t bind_id, int32_t num_args,
@@ -270,6 +289,9 @@ class V8_PLATFORM_EXPORT TracingController
       const uint64_t* arg_values,
       std::unique_ptr<v8::ConvertableToTraceFormat>* arg_convertables,
       unsigned int flags) override;
+#else
+  uint64_t AddTraceEvent(const char* name) override;
+#endif
   uint64_t AddTraceEventWithTimestamp(
       char phase, const uint8_t* category_enabled_flag, const char* name,
       const char* scope, uint64_t id, uint64_t bind_id, int32_t num_args,
@@ -301,7 +323,8 @@ class V8_PLATFORM_EXPORT TracingController
 #if !defined(V8_USE_PERFETTO)
   void UpdateCategoryGroupEnabledFlag(size_t category_index);
   void UpdateCategoryGroupEnabledFlags();
-#endif  // !defined(V8_USE_PERFETTO)
+#endif  // !defined(V8_USE_PERFETTO) &&
+        // !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 
   std::unique_ptr<base::Mutex> mutex_;
   std::unique_ptr<TraceConfig> trace_config_;
@@ -314,6 +337,8 @@ class V8_PLATFORM_EXPORT TracingController
       trace_processor_;
   TraceEventListener* listener_for_testing_ = nullptr;
   std::unique_ptr<perfetto::TracingSession> tracing_session_;
+#elif defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+  std::unique_ptr<Recorder> recorder_;
 #else   // !defined(V8_USE_PERFETTO)
   std::unique_ptr<TraceBuffer> trace_buffer_;
 #endif  // !defined(V8_USE_PERFETTO)

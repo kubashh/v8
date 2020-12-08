@@ -317,6 +317,7 @@ class TracingController {
     return &no;
   }
 
+#if !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
   /**
    * Adds a trace event to the platform tracing system. These function calls are
    * usually the result of a TRACE_* macro from trace_event_common.h when
@@ -334,6 +335,9 @@ class TracingController {
       unsigned int flags) {
     return 0;
   }
+#else  // defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+  virtual uint64_t AddTraceEvent(const char* name) { return 0; }
+#endif
   virtual uint64_t AddTraceEventWithTimestamp(
       char phase, const uint8_t* category_enabled_flag, const char* name,
       const char* scope, uint64_t id, uint64_t bind_id, int32_t num_args,

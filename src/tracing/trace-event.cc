@@ -20,6 +20,7 @@ v8::TracingController* TraceEventHelper::GetTracingController() {
   return v8::internal::V8::GetCurrentPlatform()->GetTracingController();
 }
 
+#if !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 void CallStatsScopedTracer::AddEndTraceEvent() {
   if (!has_parent_scope_ && p_data_->isolate) {
     auto value = v8::tracing::TracedValue::Create();
@@ -52,6 +53,31 @@ void CallStatsScopedTracer::Initialize(v8::internal::Isolate* isolate,
       v8::internal::tracing::kGlobalScope, v8::internal::tracing::kNoId,
       TRACE_EVENT_FLAG_NONE, v8::internal::tracing::kNoId);
 }
+#else   // defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+// TODO(sartang@microsoft.com): fix this
+void CallStatsScopedTracer::AddEndTraceEvent() {
+  if (!has_parent_scope_ && p_data_->isolate) {
+    auto value = v8::tracing::TracedValue::Create();
+    p_data_->isolate->counters()->runtime_call_stats()->Dump(value.get());
+    v8::internal::tracing::AddTraceEvent(p_data_->name);
+  } else {
+    v8::internal::tracing::AddTraceEvent(p_data_->name);
+  }
+}
+
+void CallStatsScopedTracer::Initialize(v8::internal::Isolate* isolate,
+                                       const uint8_t* category_group_enabled,
+                                       const char* name) {
+  data_.isolate = isolate;
+  data_.category_group_enabled = category_group_enabled;
+  data_.name = name;
+  p_data_ = &data_;
+  RuntimeCallStats* table = isolate->counters()->runtime_call_stats();
+  has_parent_scope_ = table->InUse();
+  if (!has_parent_scope_) table->Reset();
+  v8::internal::tracing::AddTraceEvent(name);
+}
+#endif  // !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 #endif  // !defined(V8_USE_PERFETTO)
 
 }  // namespace tracing

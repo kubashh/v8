@@ -3560,6 +3560,11 @@ bool Shell::SetOptions(int argc, char* argv[]) {
     } else if (strcmp(argv[i], "--fuzzy-module-file-extensions") == 0) {
       options.fuzzy_module_file_extensions = true;
       argv[i] = nullptr;
+#ifdef V8_ENABLE_SYSTEM_INSTRUMENTATION
+    } else if (strcmp(argv[i], "--enable-system-instrumentation") == 0) {
+      options.enable_system_instrumentation = true;
+      argv[i] = nullptr;
+#endif
     }
   }
 
@@ -4130,16 +4135,20 @@ int Shell::Main(int argc, char* argv[]) {
           : v8::platform::InProcessStackDumping::kEnabled;
 
   std::unique_ptr<platform::tracing::TracingController> tracing;
-  std::ofstream trace_file;
-  if (options.trace_enabled && !i::FLAG_verify_predictable) {
+  if ((options.trace_enabled && !i::FLAG_verify_predictable) ||
+      options.enable_system_instrumentation) {
+    std::ofstream trace_file;
     tracing = std::make_unique<platform::tracing::TracingController>();
-    const char* trace_path =
-        options.trace_path ? options.trace_path : "v8_trace.json";
-    trace_file.open(trace_path);
-    if (!trace_file.good()) {
-      printf("Cannot open trace file '%s' for writing: %s.\n", trace_path,
-             strerror(errno));
-      return 1;
+
+    if (!options.enable_system_instrumentation) {
+      const char* trace_path =
+          options.trace_path ? options.trace_path : "v8_trace.json";
+      trace_file.open(trace_path);
+      if (!trace_file.good()) {
+        printf("Cannot open trace file '%s' for writing: %s.\n", trace_path,
+               strerror(errno));
+        return 1;
+      }
     }
 
 #ifdef V8_USE_PERFETTO
@@ -4150,6 +4159,12 @@ int Shell::Main(int argc, char* argv[]) {
     perfetto::Tracing::Initialize(init_args);
 
     tracing->InitializeForPerfetto(&trace_file);
+#elif defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+    // TODO(sartang@microsoft.com): not sure what the else branch should be,
+    // default to normal trace_buffer?
+    if (options.enable_system_instrumentation) {
+      tracing->Initialize(new platform::tracing::Recorder());
+    }
 #else
     platform::tracing::TraceBuffer* trace_buffer =
         platform::tracing::TraceBuffer::CreateTraceBufferRingBuffer(
@@ -4238,7 +4253,6 @@ int Shell::Main(int argc, char* argv[]) {
   }
 
   Isolate* isolate = Isolate::New(create_params);
-
   {
     D8Console console(isolate);
     Isolate::Scope scope(isolate);
@@ -4260,7 +4274,7 @@ int Shell::Main(int argc, char* argv[]) {
 
       result = 0;
 
-      if (options.trace_enabled) {
+      if (options.trace_enabled || options.enable_system_instrumentation) {
         platform::tracing::TraceConfig* trace_config;
         if (options.trace_config) {
           int size = 0;
@@ -4411,7 +4425,7 @@ int Shell::Main(int argc, char* argv[]) {
 
   // Delete the platform explicitly here to write the tracing output to the
   // tracing file.
-  if (options.trace_enabled) {
+  if (options.trace_enabled || options.enable_system_instrumentation) {
     tracing_controller->StopTracing();
   }
   g_platform.reset();

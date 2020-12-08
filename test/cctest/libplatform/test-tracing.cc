@@ -20,6 +20,8 @@ namespace v8 {
 namespace platform {
 namespace tracing {
 
+// TODO(sartang@microsoft.com): fix
+
 TEST(TestTraceConfig) {
   LocalContext env;
   TraceConfig* trace_config = new TraceConfig();
@@ -143,7 +145,7 @@ TEST(TestTraceBufferRingBuffer) {
 #endif  // !defined(V8_USE_PERFETTO)
 
 // Perfetto has an internal JSON exporter.
-#if !defined(V8_USE_PERFETTO)
+#if !defined(V8_USE_PERFETTO) && !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 void PopulateJSONWriter(TraceWriter* writer) {
   v8::Platform* old_platform = i::V8::GetCurrentPlatform();
   std::unique_ptr<v8::Platform> default_platform(
@@ -208,7 +210,8 @@ TEST(TestJSONTraceWriterWithCustomtag) {
 
   CHECK_EQ(expected_trace_str, trace_str);
 }
-#endif  // !defined(V8_USE_PERFETTO)
+#endif  // !defined(V8_USE_PERFETTO) &&
+        // !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 
 void GetJSONStrings(std::vector<std::string>* ret, const std::string& str,
                     const std::string& param, const std::string& start_delim,
@@ -225,7 +228,7 @@ void GetJSONStrings(std::vector<std::string>* ret, const std::string& str,
 }
 
 // With Perfetto the tracing controller doesn't observe events.
-#if !defined(V8_USE_PERFETTO)
+#if !defined(V8_USE_PERFETTO) && !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 TEST(TestTracingController) {
   v8::Platform* old_platform = i::V8::GetCurrentPlatform();
   std::unique_ptr<v8::Platform> default_platform(
@@ -385,7 +388,8 @@ TEST(TestTracingControllerMultipleArgsAndCopy) {
   CHECK_EQ(all_args[22], "\"a1\":[42,42]");
   CHECK_EQ(all_args[23], "\"a1\":[42,42],\"a2\":[123,123]");
 }
-#endif  // !defined(V8_USE_PERFETTO)
+#endif  // !defined(V8_USE_PERFETTO) &&
+        // !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 
 namespace {
 
@@ -413,6 +417,8 @@ TEST(TracingObservers) {
 #ifdef V8_USE_PERFETTO
   std::ostringstream sstream;
   tracing_controller->InitializeForPerfetto(&sstream);
+#elif defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+  tracing_controller->Initialize(new v8::platform::tracing::Recorder());
 #else
   MockTraceWriter* writer = new MockTraceWriter();
   v8::platform::tracing::TraceBuffer* ring_buffer =
@@ -469,7 +475,7 @@ TEST(TracingObservers) {
 }
 
 // With Perfetto the tracing controller doesn't observe events.
-#if !defined(V8_USE_PERFETTO)
+#if !defined(V8_USE_PERFETTO) && !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 class TraceWritingThread : public base::Thread {
  public:
   TraceWritingThread(
@@ -527,7 +533,8 @@ TEST(AddTraceEventMultiThreaded) {
 
   i::V8::SetPlatformForTesting(old_platform);
 }
-#endif  // !defined(V8_USE_PERFETTO)
+#endif  // !defined(V8_USE_PERFETTO) &&
+        // !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 
 #ifdef V8_USE_PERFETTO
 

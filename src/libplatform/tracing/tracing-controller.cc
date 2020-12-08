@@ -100,7 +100,42 @@ void TracingController::SetTraceEventListenerForTesting(
     TraceEventListener* listener) {
   listener_for_testing_ = listener;
 }
-#else   // !V8_USE_PERFETTO
+#elif defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+void TracingController::Initialize(Recorder* recorder) {
+  recorder_.reset(recorder);
+}
+
+int64_t TracingController::CurrentTimestampMicroseconds() {
+  return base::TimeTicks::HighResolutionNow().ToInternalValue();
+}
+
+int64_t TracingController::CurrentCpuTimestampMicroseconds() {
+  return base::ThreadTicks::Now().ToInternalValue();
+}
+
+uint64_t TracingController::AddTraceEvent(const char* name) {
+  return recorder_->AddEvent(name);
+}
+
+uint64_t TracingController::AddTraceEventWithTimestamp(
+    char phase, const uint8_t* category_enabled_flag, const char* name,
+    const char* scope, uint64_t id, uint64_t bind_id, int num_args,
+    const char** arg_names, const uint8_t* arg_types,
+    const uint64_t* arg_values,
+    std::unique_ptr<v8::ConvertableToTraceFormat>* arg_convertables,
+    unsigned int flags, int64_t timestamp) {
+  return recorder_->AddEvent(name);
+}
+
+void TracingController::UpdateTraceEventDuration(
+    const uint8_t* category_enabled_flag, const char* name, uint64_t handle) {}
+
+const char* TracingController::GetCategoryGroupName(
+    const uint8_t* category_group_enabled) {
+  return "";
+}
+
+#else   // !V8_USE_PERFETTO && !V8_ENABLE_SYSTEM_INSTRUMENTATION
 void TracingController::Initialize(TraceBuffer* trace_buffer) {
   trace_buffer_.reset(trace_buffer);
 }
@@ -253,6 +288,7 @@ void TracingController::StopTracing() {
   if (listener_for_testing_) listener_for_testing_->ParseFromArray(trace);
 
   trace_processor_.reset();
+#elif defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
 #else
 
   {

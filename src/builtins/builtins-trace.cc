@@ -226,8 +226,7 @@ BUILTIN(Trace) {
       THROW_NEW_ERROR_RETURN_FAILURE(
           isolate, NewTypeError(MessageTemplate::kTraceEventPhaseError));
   }
-
-#else   // !defined(V8_USE_PERFETTO)
+#elif !defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
   uint8_t arg_type;
   uint64_t arg_value;
   if (num_args) {
@@ -239,7 +238,10 @@ BUILTIN(Trace) {
   TRACE_EVENT_API_ADD_TRACE_EVENT(
       phase, category_group_enabled, *name, tracing::kGlobalScope, id,
       tracing::kNoId, num_args, &arg_name, &arg_type, &arg_value, flags);
-#endif  // !defined(V8_USE_PERFETTO)
+#else  // !defined(V8_USE_PERFETTO) && defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+  // TODO(sartang@microsoft.com): populate args
+  TRACE_EVENT_API_ADD_TRACE_EVENT(*name);
+#endif
 
   return ReadOnlyRoots(isolate).true_value();
 }
