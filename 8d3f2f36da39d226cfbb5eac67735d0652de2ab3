@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5de5681_3fdad1ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-12-08T21:40:22Z",
+      "side": 1,
+      "message": "This is a big-gish change, I tried to add a new branch to TracingController to deal with ETW + other system-specific instrumentation.\n\nRight now, the implementations for AddTraceEvent + other functions are either minimal or unchanged from the normal tracing flow. I just wanted to check-in and make sure I\u0027ve got the correct structure + touched the right files before I implement too many details.",
+      "revId": "8d3f2f36da39d226cfbb5eac67735d0652de2ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
