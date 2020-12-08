@@ -6,6 +6,7 @@
 #define V8_LIBPLATFORM_TRACING_TRACE_WRITER_H_
 
 #include "include/libplatform/v8-tracing.h"
+#include "src/libplatform/tracing/recorder.h"
 
 namespace v8 {
 namespace platform {
@@ -25,6 +26,17 @@ class JSONTraceWriter : public TraceWriter {
 
   std::ostream& stream_;
   bool append_comma_ = false;
+};
+
+class SystemInstrumentationTraceWriter : public TraceWriter {
+ public:
+  SystemInstrumentationTraceWriter();
+  ~SystemInstrumentationTraceWriter() override;
+  void AppendTraceEvent(TraceObject* trace_event) override;
+  void Flush() override;
+
+ private:
+  Recorder* recorder_;
 };
 
 }  // namespace tracing
