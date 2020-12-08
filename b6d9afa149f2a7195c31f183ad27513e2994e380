@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5001ee7b_6236f476",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-12-08T12:48:49Z",
+      "side": 1,
+      "message": "Thank you! And thank you for your patience! LGTM",
+      "revId": "b6d9afa149f2a7195c31f183ad27513e2994e380",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
