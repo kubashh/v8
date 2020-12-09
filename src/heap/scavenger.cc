@@ -621,7 +621,8 @@ void Scavenger::Process(JobDelegate* delegate) {
       scavenge_visitor.Visit(object_and_size.first);
       done = false;
       if (delegate && ((++objects % kInterruptThreshold) == 0)) {
-        if (!copied_list_.IsGlobalPoolEmpty()) {
+        if (!copied_list_.IsGlobalPoolEmpty() ||
+            !promotion_list_.IsGlobalPoolEmpty()) {
           delegate->NotifyConcurrencyIncrease();
         }
       }
