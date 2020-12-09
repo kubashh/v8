@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f50db78f_1eaa9c41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-12-09T18:32:00Z",
+      "side": 1,
+      "message": "```\nvoid InstructionSelector::VisitLoadLane(Node* node) {\n  LoadLaneParameters params \u003d LoadLaneParametersOf(node-\u003eop());\n  InstructionCode opcode \u003d kArchNop;\n  if (params.rep \u003d\u003d MachineType::Int8()) {\n    opcode \u003d kPPC_S128Load8Lane;\n  } else if (params.rep \u003d\u003d MachineType::Int16()) {\n    opcode \u003d kPPC_S128Load16Lane;\n  } else if (params.rep \u003d\u003d MachineType::Int32()) {\n    opcode \u003d kPPC_S128Load32Lane;\n  } else if (params.rep \u003d\u003d MachineType::Int64()) {\n    opcode \u003d kPPC_S128Load64Lane;\n  } else {\n    UNREACHABLE();\n  }\n\n  PPCOperandGenerator g(this);\n  Emit(opcode | AddressingModeField::encode(kMode_MRR),\n       g.DefineSameAsFirst(node), g.UseRegister(node-\u003eInputAt(2)),\n       g.UseRegister(node-\u003eInputAt(0)), g.UseRegister(node-\u003eInputAt(1)),\n       g.UseImmediate(params.laneidx));\n}\n\nvoid InstructionSelector::VisitStoreLane(Node* node) {\n  PPCOperandGenerator g(this);\n\n  StoreLaneParameters params \u003d StoreLaneParametersOf(node-\u003eop());\n  InstructionCode opcode \u003d kArchNop;\n  if (params.rep \u003d\u003d MachineRepresentation::kWord8) {\n    opcode \u003d kPPC_S128Store8Lane;\n  } else if (params.rep \u003d\u003d MachineRepresentation::kWord16) {\n    opcode \u003d kPPC_S128Store16Lane;\n  } else if (params.rep \u003d\u003d MachineRepresentation::kWord32) {\n    opcode \u003d kPPC_S128Store32Lane;\n  } else if (params.rep \u003d\u003d MachineRepresentation::kWord64) {\n    opcode \u003d kPPC_S128Store64Lane;\n  } else {\n    UNREACHABLE();\n  }\n\n  InstructionOperand inputs[4];\n  InstructionOperand value_operand \u003d g.UseRegister(node-\u003eInputAt(2));\n  inputs[0] \u003d value_operand;\n  inputs[1] \u003d g.UseRegister(node-\u003eInputAt(0));\n  inputs[2] \u003d g.UseRegister(node-\u003eInputAt(1));\n  inputs[3] \u003d g.UseImmediate(params.laneidx);\n  Emit(opcode | AddressingModeField::encode(kMode_MRR), 0, nullptr, 4, inputs);\n}\n```",
+      "revId": "48cdcde741968dffcefbb59972f3dff01ae02cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
