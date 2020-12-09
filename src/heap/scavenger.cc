@@ -621,7 +621,8 @@ void Scavenger::Process(JobDelegate* delegate) {
       scavenge_visitor.Visit(object_and_size.first);
       done = false;
       if (delegate && ((++objects % kInterruptThreshold) == 0)) {
-        if (!copied_list_.IsGlobalPoolEmpty()) {
+        if (!copied_list_.IsGlobalPoolEmpty() ||
+            !promotion_list_.IsGlobalPoolEmpty()) {
           delegate->NotifyConcurrencyIncrease();
         }
       }
@@ -633,7 +634,8 @@ void Scavenger::Process(JobDelegate* delegate) {
       IterateAndScavengePromotedObject(target, entry.map, entry.size);
       done = false;
       if (delegate && ((++objects % kInterruptThreshold) == 0)) {
-        if (!promotion_list_.IsGlobalPoolEmpty()) {
+        if (!copied_list_.IsGlobalPoolEmpty() ||
+            !promotion_list_.IsGlobalPoolEmpty()) {
           delegate->NotifyConcurrencyIncrease();
         }
       }
