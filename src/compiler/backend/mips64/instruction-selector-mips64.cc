@@ -367,6 +367,24 @@ void EmitLoad(InstructionSelector* selector, Node* node, InstructionCode opcode,
   Node* base = node->InputAt(0);
   Node* index = node->InputAt(1);
 
+  ExternalReferenceMatcher m(base);
+  if (m.HasResolvedValue() && g.IsIntegerConstant(index) &&
+      selector->CanAddressRelativeToRootsRegister(m.ResolvedValue())) {
+    ptrdiff_t const delta =
+        g.GetIntegerConstantValue(index) +
+        TurboAssemblerBase::RootRegisterOffsetForExternalReference(
+            selector->isolate(), m.ResolvedValue());
+    // Check that the delta is a 32-bit integer due to the limitations of
+    // immediate operands.
+    if (is_int32(delta)) {
+      opcode |= AddressingModeField::encode(kMode_Root);
+      selector->Emit(opcode,
+                     g.DefineAsRegister(output == nullptr ? node : output),
+                     g.UseImmediate(static_cast<int32_t>(delta)));
+      return;
+    }
+  }
+
   if (g.CanBeImmediate(index, opcode)) {
     selector->Emit(opcode | AddressingModeField::encode(kMode_MRI),
                    g.DefineAsRegister(output == nullptr ? node : output),
@@ -586,6 +604,23 @@ void InstructionSelector::VisitStore(Node* node) {
       case MachineRepresentation::kMapWord:            // Fall through.
       case MachineRepresentation::kNone:
         UNREACHABLE();
+    }
+
+    ExternalReferenceMatcher m(base);
+    if (m.HasResolvedValue() && g.IsIntegerConstant(index) &&
+        CanAddressRelativeToRootsRegister(m.ResolvedValue())) {
+      ptrdiff_t const delta =
+          g.GetIntegerConstantValue(index) +
+          TurboAssemblerBase::RootRegisterOffsetForExternalReference(
+              isolate(), m.ResolvedValue());
+      // Check that the delta is a 32-bit integer due to the limitations of
+      // immediate operands.
+      if (is_int32(delta)) {
+        Emit(opcode | AddressingModeField::encode(kMode_Root), g.NoOutput(),
+             g.UseImmediate(static_cast<int32_t>(delta)), g.UseImmediate(0),
+             g.UseRegisterOrImmediateZero(value));
+        return;
+      }
     }
 
     if (g.CanBeImmediate(index, opcode)) {
@@ -1855,6 +1890,23 @@ void InstructionSelector::VisitUnalignedLoad(Node* node) {
       UNREACHABLE();
   }
 
+  ExternalReferenceMatcher m(base);
+  if (m.HasResolvedValue() && g.IsIntegerConstant(index) &&
+      CanAddressRelativeToRootsRegister(m.ResolvedValue())) {
+    ptrdiff_t const delta =
+        g.GetIntegerConstantValue(index) +
+        TurboAssemblerBase::RootRegisterOffsetForExternalReference(
+            isolate(), m.ResolvedValue());
+    // Check that the delta is a 32-bit integer due to the limitations of
+    // immediate operands.
+    if (is_int32(delta)) {
+      Emit(opcode | AddressingModeField::encode(kMode_Root),
+           g.DefineAsRegister(node),
+           g.UseImmediate(static_cast<int32_t>(delta)));
+      return;
+    }
+  }
+
   if (g.CanBeImmediate(index, opcode)) {
     Emit(opcode | AddressingModeField::encode(kMode_MRI),
          g.DefineAsRegister(node), g.UseRegister(base), g.UseImmediate(index));
@@ -1907,6 +1959,23 @@ void InstructionSelector::VisitUnalignedStore(Node* node) {
     case MachineRepresentation::kMapWord:            // Fall through.
     case MachineRepresentation::kNone:
       UNREACHABLE();
+  }
+
+  ExternalReferenceMatcher m(base);
+  if (m.HasResolvedValue() && g.IsIntegerConstant(index) &&
+      CanAddressRelativeToRootsRegister(m.ResolvedValue())) {
+    ptrdiff_t const delta =
+        g.GetIntegerConstantValue(index) +
+        TurboAssemblerBase::RootRegisterOffsetForExternalReference(
+            isolate(), m.ResolvedValue());
+    // Check that the delta is a 32-bit integer due to the limitations of
+    // immediate operands.
+    if (is_int32(delta)) {
+      Emit(opcode | AddressingModeField::encode(kMode_Root), g.NoOutput(),
+           g.UseImmediate(static_cast<int32_t>(delta)), g.UseImmediate(0),
+           g.UseRegisterOrImmediateZero(value));
+      return;
+    }
   }
 
   if (g.CanBeImmediate(index, opcode)) {
