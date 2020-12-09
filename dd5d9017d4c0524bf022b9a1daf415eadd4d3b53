@@ -52,6 +52,167 @@
       "parentUuid": "3f2ae6eb_882ebeb3",
       "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ee8ccf1_fc586f48",
+        "filename": "src/compiler/graph-reducer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-09T14:01:54Z",
+      "side": 1,
+      "message": "Conditions should be switched so the case where there is no observe_node_manager is even faster due do short-circuiting.",
+      "range": {
+        "startLine": 35,
+        "startChar": 18,
+        "endLine": 35,
+        "endChar": 61
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d12a96d_1a11ad4e",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-09T14:01:54Z",
+      "side": 1,
+      "message": "Do we actually need this class? In my initial prototype this was somewhat required because the inserted graph node had to hold state for the ongoing observation.\n\nWith our current approach I think it would be okay to just integrate this into the manager, such that the manager maps observed nodes\u0027 ids to a small struct containing ObservableNodeState and the NodeObersver.\n\nCan you please give this a quick thought whether this would remove some code and complexity?",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 2
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffcc818f_472ab56f",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-09T14:01:54Z",
+      "side": 1,
+      "message": "Add a DCHECK that this node is not yet in the observations_.",
+      "range": {
+        "startLine": 126,
+        "startChar": 3,
+        "endLine": 126,
+        "endChar": 4
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24e8e37d_98c7e555",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-09T14:01:54Z",
+      "side": 1,
+      "message": "Could be worth moving this implementation to the .cc file. Wdyt?",
+      "range": {
+        "startLine": 129,
+        "startChar": 2,
+        "endLine": 146,
+        "endChar": 3
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3936d201_94a66b1b",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-09T14:01:54Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 276,
+        "startChar": 2,
+        "endLine": 276,
+        "endChar": 22
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e49b842_ac6f0b33",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-09T14:01:54Z",
+      "side": 1,
+      "message": "This is not the only way RepresentationChanger can insert nodes. There are a bunch of InsertXyz in representation-change.h/.cc that can insert additional nodes. Can you have a look at that, please.\n\nBesides that: What happens here is that node n is inserted between input and node, so from\ninput -\u003e node, we get to input -\u003e n -\u003e node. With NotifyNodeChanged, you are recognizing the change of node\u0027s input from input to n, but you\u0027re not detecting the change of input\u0027s use from node to n. Can we support this? Imho, providing inputs and uses as abservable node state makes sense only if we can rely on those being reported correctly.\n\nI guess this problem exists with all NotifyNodeChanged calls here with changed inputs. Maybe you can add the logic there to have it very general.",
+      "range": {
+        "startLine": 920,
+        "startChar": 0,
+        "endLine": 924,
+        "endChar": 30
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3b81d1f_47910d0b",
+        "filename": "src/compiler/simplified-lowering.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-09T14:01:54Z",
+      "side": 1,
+      "message": "Did you consider inheriting NodeProperties to avoid reimplementation of all the methods. You can then just shadow ChangeOp.",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 63,
+        "endChar": 22
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
