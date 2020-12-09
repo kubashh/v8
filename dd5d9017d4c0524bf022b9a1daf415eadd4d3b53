@@ -54,6 +54,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e502b0d_ebeb3062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-12-09T14:23:01Z",
+      "side": 1,
+      "message": "Thanks again for this effort! A few initial comments on the test itself, continuing to read the actual implementation.",
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ee8ccf1_fc586f48",
@@ -210,6 +227,121 @@
         "startChar": 2,
         "endLine": 63,
         "endChar": 22
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48bf16bf_df334245",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-12-09T14:23:01Z",
+      "side": 1,
+      "message": "nit: usually those tester classes are named in a more verbose manner. How about NodeObserverTester or something more descriptive? From what I see, it contains functionality to test the generic NodeObserver functionality, not the sloppy equality in particular.",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 12
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afa3b333_6d0ce785",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-12-09T14:23:01Z",
+      "side": 1,
+      "message": "Do you necessarily need the HandleScope to be canonical? If not, then you could derive the Tester class from the HandleAndZoneScope helper class declared in cctest.h and use it\u0027s main_zone instead of managing the Zone manually.",
+      "range": {
+        "startLine": 50,
+        "startChar": 39,
+        "endLine": 50,
+        "endChar": 48
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86e54a9b_810b03b9",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-12-09T14:23:01Z",
+      "side": 1,
+      "message": "Just for my own understanding, what is the purpose of the continue/stop functionality? Is it to have the possibility to shortcut observers evaluation for performance purposes?",
+      "range": {
+        "startLine": 72,
+        "startChar": 24,
+        "endLine": 72,
+        "endChar": 29
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0dc8a52_7bebf766",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-12-09T14:23:01Z",
+      "side": 1,
+      "message": "Could this class and the Creation/Modification observer be used for utility classes for writing other cctests as well? If so, then I\u0027d suggest moving them to a common header below the test/cctest/compiler folder.",
+      "range": {
+        "startLine": 108,
+        "startChar": 6,
+        "endLine": 108,
+        "endChar": 21
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5856619_87f537c9",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-12-09T14:23:01Z",
+      "side": 1,
+      "message": "Is this currently supported or is it left to support in the future? If it\u0027s the latter, please add a TODO.",
+      "range": {
+        "startLine": 122,
+        "startChar": 24,
+        "endLine": 122,
+        "endChar": 46
       },
       "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
