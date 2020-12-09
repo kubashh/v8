@@ -33,6 +33,24 @@
       "message": "As this CL now does not contain any code related to v8-metrics.h anymore, I\u0027m going to remove myself from the list of reviewers.",
       "revId": "d5a28225751e5b96b00faffbceb9103a3b43f462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caab0172_abae7776",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-12-09T18:09:54Z",
+      "side": 1,
+      "message": "Thanks for all your help :)",
+      "parentUuid": "6c3b66e3_df792b4b",
+      "revId": "d5a28225751e5b96b00faffbceb9103a3b43f462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
