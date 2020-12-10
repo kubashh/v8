@@ -94,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "988c385f_9bd0edf1",
+        "filename": "src/compiler/graph-reducer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ee8ccf1_fc586f48",
+      "range": {
+        "startLine": 35,
+        "startChar": 18,
+        "endLine": 35,
+        "endChar": 61
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d12a96d_1a11ad4e",
@@ -107,6 +131,30 @@
       "writtenOn": "2020-12-09T14:01:54Z",
       "side": 1,
       "message": "Do we actually need this class? In my initial prototype this was somewhat required because the inserted graph node had to hold state for the ongoing observation.\n\nWith our current approach I think it would be okay to just integrate this into the manager, such that the manager maps observed nodes\u0027 ids to a small struct containing ObservableNodeState and the NodeObersver.\n\nCan you please give this a quick thought whether this would remove some code and complexity?",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 2
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abf1f0d0_25564d74",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d12a96d_1a11ad4e",
       "range": {
         "startLine": 79,
         "startChar": 0,
@@ -140,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "290432d4_3a72b71d",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffcc818f_472ab56f",
+      "range": {
+        "startLine": 126,
+        "startChar": 3,
+        "endLine": 126,
+        "endChar": 4
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24e8e37d_98c7e555",
@@ -163,6 +235,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "994244c6_7d8bdd4f",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24e8e37d_98c7e555",
+      "range": {
+        "startLine": 129,
+        "startChar": 2,
+        "endLine": 146,
+        "endChar": 3
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3936d201_94a66b1b",
@@ -176,6 +272,30 @@
       "writtenOn": "2020-12-09T14:01:54Z",
       "side": 1,
       "message": "Same as above.",
+      "range": {
+        "startLine": 276,
+        "startChar": 2,
+        "endLine": 276,
+        "endChar": 22
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9240ffc8_723499af",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3936d201_94a66b1b",
       "range": {
         "startLine": 276,
         "startChar": 2,
@@ -211,6 +331,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b200b322_4fb212b4",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Th InsertXyz in RepresentationChanger are private methods and should always be called by RepresentationChanger::GetRepresentationFor, called by RepresentationSelector::ConvertInput, here. So, the changes to the inputs of a Node should be covered.\n\nIt is more difficult to support the changes of use-Nodes for the input Node. Node::ReplaceInput(), which updates the uses of input nodes, is called in many places. \nA simple way could be, in ObserveNodeManager::OnNodeChanged, to call OnNodeChanged for all input nodes added/removed and for all the use nodes added/removed to the changed node.\nWe cannot have a NodeObserver registered for a new Node created by RepresentationChanger, until the new Node has been notified as part of the ObservableNodeState of an observed node, anyway.",
+      "parentUuid": "9e49b842_ac6f0b33",
+      "range": {
+        "startLine": 920,
+        "startChar": 0,
+        "endLine": 924,
+        "endChar": 30
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d3b81d1f_47910d0b",
         "filename": "src/compiler/simplified-lowering.h",
         "patchSetId": 11
@@ -222,6 +366,30 @@
       "writtenOn": "2020-12-09T14:01:54Z",
       "side": 1,
       "message": "Did you consider inheriting NodeProperties to avoid reimplementation of all the methods. You can then just shadow ChangeOp.",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 63,
+        "endChar": 22
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c99a38d2_76bbc8de",
+        "filename": "src/compiler/simplified-lowering.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done. I didn\u0027t realize that compiler::NodeProperties was declared as final...",
+      "parentUuid": "d3b81d1f_47910d0b",
       "range": {
         "startLine": 63,
         "startChar": 2,
@@ -255,6 +423,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "daa85455_4ac05cc6",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48bf16bf_df334245",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 12
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61d8b3e8_6d1dfdab",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48bf16bf_df334245",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 12
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "afa3b333_6d0ce785",
@@ -268,6 +484,30 @@
       "writtenOn": "2020-12-09T14:23:01Z",
       "side": 1,
       "message": "Do you necessarily need the HandleScope to be canonical? If not, then you could derive the Tester class from the HandleAndZoneScope helper class declared in cctest.h and use it\u0027s main_zone instead of managing the Zone manually.",
+      "range": {
+        "startLine": 50,
+        "startChar": 39,
+        "endLine": 50,
+        "endChar": 48
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb3a5cce_6de51e47",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afa3b333_6d0ce785",
       "range": {
         "startLine": 50,
         "startChar": 39,
@@ -303,6 +543,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "293a0d14_d9640e0a",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Yes, an observer can tell when it\u0027s done observing and it\u0027s not interested in further changes. More than for performance, this can simplify the observer test code.",
+      "parentUuid": "86e54a9b_810b03b9",
+      "range": {
+        "startLine": 72,
+        "startChar": 24,
+        "endLine": 72,
+        "endChar": 29
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0dc8a52_7bebf766",
         "filename": "test/cctest/compiler/test-sloppy-equality.cc",
         "patchSetId": 11
@@ -314,6 +578,30 @@
       "writtenOn": "2020-12-09T14:23:01Z",
       "side": 1,
       "message": "Could this class and the Creation/Modification observer be used for utility classes for writing other cctests as well? If so, then I\u0027d suggest moving them to a common header below the test/cctest/compiler folder.",
+      "range": {
+        "startLine": 108,
+        "startChar": 6,
+        "endLine": 108,
+        "endChar": 21
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00af1747_6a312a5e",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0dc8a52_7bebf766",
       "range": {
         "startLine": 108,
         "startChar": 6,
@@ -337,6 +625,30 @@
       "writtenOn": "2020-12-09T14:23:01Z",
       "side": 1,
       "message": "Is this currently supported or is it left to support in the future? If it\u0027s the latter, please add a TODO.",
+      "range": {
+        "startLine": 122,
+        "startChar": 24,
+        "endLine": 122,
+        "endChar": 46
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9e8ff33_15616ac6",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2020-12-10T17:43:53Z",
+      "side": 1,
+      "message": "This code was in the original tests written by Nico.\nBut CompareOperationHintOf does not exist anymore and I could not find a simple way to recreate it.\nDo you know what should be the current equivalent code?",
+      "parentUuid": "e5856619_87f537c9",
       "range": {
         "startLine": 122,
         "startChar": 24,
