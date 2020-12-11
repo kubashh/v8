@@ -50,6 +50,23 @@
       "message": "Hi, sorry for the delayed reply!\n\nLooking at the spec https://sourcemaps.info/spec.html\n\nIt says:\nNote: \u003curl\u003e is a URL as defined in RFC3986; in particular, characters outside the set permitted to appear in URIs must be percent-encoded.\n\nAnd then looking at https://tools.ietf.org/html/rfc3986#page-11 ,\n\nlooks like \u0027 should be allowed since it\u0027s a \"sub-delims\" character, but \" should not be allowed.\n\nAm I holding this wrong? Is there a reason why we should allow \" too?\n",
       "revId": "7fdadfe6ab307fef2f3379c93a7e70e0a3ad9405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bbec02c_5db15176",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-12-11T08:17:14Z",
+      "side": 1,
+      "message": "Ah, I read the history here https://codereview.chromium.org/316173002 .\n\nLooks like our \"disallowed set\" is anyway inconsistent with what URLs allow, and has always been.\n\nSo this CL makes sense, as there\u0027s no real reason to disallow \u0027 and \", and especially the former should be allowed, since it\u0027s a valid URL character.",
+      "revId": "7fdadfe6ab307fef2f3379c93a7e70e0a3ad9405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
