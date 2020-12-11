@@ -67,6 +67,24 @@
       "message": "Ah, I read the history here https://codereview.chromium.org/316173002 .\n\nLooks like our \"disallowed set\" is anyway inconsistent with what URLs allow, and has always been.\n\nSo this CL makes sense, as there\u0027s no real reason to disallow \u0027 and \", and especially the former should be allowed, since it\u0027s a valid URL character.",
       "revId": "7fdadfe6ab307fef2f3379c93a7e70e0a3ad9405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f569b9b_5c6c985c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1391172
+      },
+      "writtenOn": "2020-12-11T22:15:19Z",
+      "side": 1,
+      "message": "Yeah, the spec waters are a bit murky but what led me to suggest this change is:\n\n1. The fact that other browsers (e.g. Firefox) allow it.\n2. That `fetch(\u0027data:application/json,{\"version\":3}\u0027).then(r \u003d\u003e r.json())` succeeds in Chrome.\n3. And, as you said, that it\u0027s not a _general_ rule right now that the source map comment requires escaping of all non-URL-safe chars.",
+      "parentUuid": "6bbec02c_5db15176",
+      "revId": "7fdadfe6ab307fef2f3379c93a7e70e0a3ad9405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
