@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15d04864_f8c46f51",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-11T13:33:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bd4223d_9e093a3c",
+      "revId": "184cf010529b959a7752b7e0ed856f452977747a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8b1b461_7bf182ba",
@@ -48,6 +66,30 @@
       "writtenOn": "2020-12-10T15:21:14Z",
       "side": 1,
       "message": "Replace selected text with \"Like\".",
+      "range": {
+        "startLine": 66,
+        "startChar": 43,
+        "endLine": 67,
+        "endChar": 11
+      },
+      "revId": "184cf010529b959a7752b7e0ed856f452977747a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0110373_048f3656",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-11T13:33:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8b1b461_7bf182ba",
       "range": {
         "startLine": 66,
         "startChar": 43,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cee68ca4_4762a148",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-11T13:33:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73f69ff9_f4471a93",
+      "revId": "184cf010529b959a7752b7e0ed856f452977747a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee7838c1_4010c913",
@@ -88,6 +148,24 @@
       "writtenOn": "2020-12-10T15:21:14Z",
       "side": 1,
       "message": "Please assert that it must be the new kind if it isn\u0027t kSerializing.",
+      "revId": "184cf010529b959a7752b7e0ed856f452977747a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fab0ae0_e1022a30",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-11T13:33:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee7838c1_4010c913",
       "revId": "184cf010529b959a7752b7e0ed856f452977747a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +187,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fad91649_40fcedec",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-11T13:33:23Z",
+      "side": 1,
+      "message": "For example when we have a ObjectRef that represents a BigInt or HeapNumber and we do\n.AsHeapObject(). Encountered that already.",
+      "parentUuid": "f6e9751d_30c2dc9f",
+      "revId": "184cf010529b959a7752b7e0ed856f452977747a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fbe1809_24a572e6",
@@ -122,6 +218,24 @@
       "writtenOn": "2020-12-10T15:21:14Z",
       "side": 1,
       "message": "Nit:\nif (!FLAG_turbo_direct_heap_access || constant-\u003eIsFixedArray()) {\n  ObjectRef(broker(), constant);\n}",
+      "revId": "184cf010529b959a7752b7e0ed856f452977747a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd271d36_183c7bb4",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-11T13:33:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fbe1809_24a572e6",
       "revId": "184cf010529b959a7752b7e0ed856f452977747a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
