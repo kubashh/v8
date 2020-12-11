@@ -33,6 +33,23 @@
       "message": "Quick cross-browser notes:\n\n- Firefox Developer Edition 80.0b4: Allows quotes in inline source maps.\n- Safari Technology Preview 14.1: Doesn\u0027t allow quotes in inline source maps.\n\nSo neither the before- nor the after state would be consistent across browsers.",
       "revId": "7fdadfe6ab307fef2f3379c93a7e70e0a3ad9405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdfe8d8f_891e4dda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-12-11T08:10:36Z",
+      "side": 1,
+      "message": "Hi, sorry for the delayed reply!\n\nLooking at the spec https://sourcemaps.info/spec.html\n\nIt says:\nNote: \u003curl\u003e is a URL as defined in RFC3986; in particular, characters outside the set permitted to appear in URIs must be percent-encoded.\n\nAnd then looking at https://tools.ietf.org/html/rfc3986#page-11 ,\n\nlooks like \u0027 should be allowed since it\u0027s a \"sub-delims\" character, but \" should not be allowed.\n\nAm I holding this wrong? Is there a reason why we should allow \" too?\n",
+      "revId": "7fdadfe6ab307fef2f3379c93a7e70e0a3ad9405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
