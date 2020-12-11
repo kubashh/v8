@@ -982,6 +982,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
   // via --debug-code.
   void AssertUndefinedOrAllocationSite(Register object);
 
+  // Assert receiver is included in argument count, enabled via --debug-code.
+  void AssertReceiverInArgc(Register argc = rax);
+
   // ---------------------------------------------------------------------------
   // Exception handling
 

@@ -4567,8 +4567,12 @@ void CodeGenerator::AssembleReturn(InstructionOperand* additional_pop_count) {
     __ Ret(parameter_count * kSystemPointerSize, scratch_reg);
     __ bind(&mismatch_return);
     __ PopReturnAddressTo(scratch_reg);
+    DCHECK_EQ(kArgcAdditionForReceiver, kArgcAdditionForReceiver & 1);
     __ leaq(rsp, Operand(rsp, argc_reg, times_system_pointer_size,
-                         kSystemPointerSize));  // Also pop the receiver.
+                         // Also pop the receiver if it's not included in argc
+                         // already. TODO(pthier): Remove displacement once argc
+                         // always includes the receiver.
+                         (1 - kArgcAdditionForReceiver) * kSystemPointerSize));
     // We use a return instead of a jump for better return address prediction.
     __ PushReturnAddressFrom(scratch_reg);
     __ Ret();
