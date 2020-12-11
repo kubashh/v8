@@ -51,6 +51,40 @@
       "parentUuid": "6ac5649f_10d080e0",
       "revId": "11e78d374208410e931f08b2231ae27bb96acdf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f9e39fa_fc04213f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-12-11T12:40:46Z",
+      "side": 1,
+      "message": "I\u0027m going to have to let Jakob Gruber take a look at this since he did code coverage first. I agree that the destructor of the RangeScope makes it run until the next token, but isn\u0027t that always the case?",
+      "revId": "11e78d374208410e931f08b2231ae27bb96acdf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7296b3e8_002fa132",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2984,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-12-11T12:40:46Z",
+      "side": 1,
+      "message": "It seems like what you want is:\nwhile (peek() \u003d\u003d Token::NULLISH) {\n  SourceRange right_range;\n  int pos;\n  ExpressionT y;\n  {\n    SourceRangeScope right_range_scope(scanner(), \u0026right_range);\n    Consume(Token::NULLISH);\n    pos \u003d peek_position();\n    y \u003d ParseBinaryExpression(6);\n  }\n  if (....",
+      "revId": "11e78d374208410e931f08b2231ae27bb96acdf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
