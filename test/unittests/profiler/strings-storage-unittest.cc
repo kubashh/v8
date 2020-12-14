@@ -146,17 +146,6 @@ TEST_F(StringsStorageWithIsolate, Refcounting) {
 #endif  // !DEBUG
 }
 
-TEST_F(StringsStorageWithIsolate, InvalidRelease) {
-  StringsStorage storage;
-
-  // If a refcount becomes invalid, throw in debug builds.
-#ifdef DEBUG
-  ASSERT_DEATH_IF_SUPPORTED(storage.Release("12"), "check failed");
-#else
-  CHECK(!storage.Release("12"));
-#endif  // DEBUG
-}
-
 TEST_F(StringsStorageWithIsolate, CopyAndConsShareStorage) {
   StringsStorage storage;
 
