@@ -24,6 +24,7 @@
 namespace v8 {
 namespace internal {
 
+struct ProfilerResources;
 struct TickSample;
 
 // Provides a mapping from the offsets within generated code or a bytecode array
@@ -59,7 +60,8 @@ struct CodeEntryAndLineNumber;
 
 class CodeEntry {
  public:
-  // CodeEntry doesn't own name strings, just references them.
+  // CodeEntry may refcounted strings (|name|, |resource_name|) managed by a
+  // StringsStorage instance. These must be freed via ReleaseStrings.
   inline CodeEntry(CodeEventListener::LogEventsAndTags tag, const char* name,
                    const char* resource_name = CodeEntry::kEmptyResourceName,
                    int line_number = v8::CpuProfileNode::kNoLineNumberInfo,
@@ -98,6 +100,7 @@ class CodeEntry {
     rare_data_->deopt_reason_ = kNoDeoptReason;
     rare_data_->deopt_id_ = kNoDeoptimizationId;
   }
+
   void mark_used() { bit_field_ = UsedField::update(bit_field_, true); }
   bool used() const { return UsedField::decode(bit_field_); }
 
@@ -163,6 +166,11 @@ class CodeEntry {
     return kUnresolvedEntry.Pointer();
   }
   V8_INLINE static CodeEntry* root_entry() { return kRootEntry.Pointer(); }
+
+  // Releases strings owned by this CodeEntry, which may be allocated in the
+  // provided StringsStorage instance. This instance is not stored directly
+  // with the CodeEntry in order to reduce memory footprint.
+  void ReleaseStrings(StringsStorage& strings);
 
   void print() const;
 
@@ -405,7 +413,7 @@ class CpuProfile {
 
 class V8_EXPORT_PRIVATE CodeMap {
  public:
-  CodeMap();
+  explicit CodeMap(StringsStorage& function_and_resource_names);
   ~CodeMap();
   CodeMap(const CodeMap&) = delete;
   CodeMap& operator=(const CodeMap&) = delete;
@@ -440,6 +448,7 @@ class V8_EXPORT_PRIVATE CodeMap {
   std::deque<CodeEntrySlotInfo> code_entries_;
   std::map<Address, CodeEntryMapInfo> code_map_;
   unsigned free_list_head_ = kNoFreeSlot;
+  StringsStorage& function_and_resource_names_;
 };
 
 class V8_EXPORT_PRIVATE CpuProfilesCollection {

@@ -88,7 +88,8 @@ static const char* reason(const i::DeoptimizeReason reason) {
 TEST(StartStop) {
   i::Isolate* isolate = CcTest::i_isolate();
   CpuProfilesCollection profiles(isolate);
-  ProfilerCodeObserver code_observer(isolate);
+  auto strings = std::make_shared<StringsStorage>();
+  ProfilerCodeObserver code_observer(isolate, *strings);
   Symbolizer symbolizer(code_observer.code_map());
   std::unique_ptr<ProfilerEventsProcessor> processor(
       new SamplingEventsProcessor(
@@ -171,13 +172,14 @@ TEST(CodeEvents) {
   i::Handle<i::AbstractCode> moved_code(CreateCode(&env), isolate);
 
   CpuProfilesCollection* profiles = new CpuProfilesCollection(isolate);
-  ProfilerCodeObserver code_observer(isolate);
+  auto strings = std::make_shared<StringsStorage>();
+  ProfilerCodeObserver code_observer(isolate, *strings);
   Symbolizer* symbolizer = new Symbolizer(code_observer.code_map());
   ProfilerEventsProcessor* processor = new SamplingEventsProcessor(
       isolate, symbolizer, &code_observer, profiles,
       v8::base::TimeDelta::FromMicroseconds(100), true);
   CHECK(processor->Start());
-  ProfilerListener profiler_listener(isolate, processor);
+  ProfilerListener profiler_listener(isolate, processor, *strings);
   isolate->logger()->AddCodeEventListener(&profiler_listener);
 
   // Enqueue code creation events.
@@ -232,16 +234,17 @@ TEST(TickEvents) {
   i::Handle<i::AbstractCode> frame3_code(CreateCode(&env), isolate);
 
   CpuProfilesCollection* profiles = new CpuProfilesCollection(isolate);
-  ProfilerCodeObserver code_observer(isolate);
+  auto strings = std::make_shared<StringsStorage>();
+  ProfilerCodeObserver code_observer(isolate, *strings);
   Symbolizer* symbolizer = new Symbolizer(code_observer.code_map());
   ProfilerEventsProcessor* processor = new SamplingEventsProcessor(
       CcTest::i_isolate(), symbolizer, &code_observer, profiles,
       v8::base::TimeDelta::FromMicroseconds(100), true);
   CpuProfiler profiler(isolate, kDebugNaming, kLazyLogging, profiles,
-                       symbolizer, processor);
+                       symbolizer, processor, strings);
   profiles->StartProfiling("");
   CHECK(processor->Start());
-  ProfilerListener profiler_listener(isolate, processor);
+  ProfilerListener profiler_listener(isolate, processor, *strings);
   isolate->logger()->AddCodeEventListener(&profiler_listener);
 
   profiler_listener.CodeCreateEvent(i::Logger::BUILTIN_TAG, frame1_code, "bbb");
@@ -392,16 +395,17 @@ TEST(Issue1398) {
   i::Handle<i::AbstractCode> code(CreateCode(&env), isolate);
 
   CpuProfilesCollection* profiles = new CpuProfilesCollection(isolate);
-  ProfilerCodeObserver code_observer(isolate);
+  auto strings = std::make_shared<StringsStorage>();
+  ProfilerCodeObserver code_observer(isolate, *strings);
   Symbolizer* symbolizer = new Symbolizer(code_observer.code_map());
   ProfilerEventsProcessor* processor = new SamplingEventsProcessor(
       CcTest::i_isolate(), symbolizer, &code_observer, profiles,
       v8::base::TimeDelta::FromMicroseconds(100), true);
   CpuProfiler profiler(isolate, kDebugNaming, kLazyLogging, profiles,
-                       symbolizer, processor);
+                       symbolizer, processor, strings);
   profiles->StartProfiling("");
   CHECK(processor->Start());
-  ProfilerListener profiler_listener(isolate, processor);
+  ProfilerListener profiler_listener(isolate, processor, *strings);
 
   profiler_listener.CodeCreateEvent(i::Logger::BUILTIN_TAG, code, "bbb");
 
@@ -1245,13 +1249,14 @@ static void TickLines(bool optimize) {
   CHECK_NE(code_address, kNullAddress);
 
   CpuProfilesCollection* profiles = new CpuProfilesCollection(isolate);
-  ProfilerCodeObserver code_observer(isolate);
+  auto strings = std::make_shared<StringsStorage>();
+  ProfilerCodeObserver code_observer(isolate, *strings);
   Symbolizer* symbolizer = new Symbolizer(code_observer.code_map());
   ProfilerEventsProcessor* processor = new SamplingEventsProcessor(
       CcTest::i_isolate(), symbolizer, &code_observer, profiles,
       v8::base::TimeDelta::FromMicroseconds(100), true);
   CpuProfiler profiler(isolate, kDebugNaming, kLazyLogging, profiles,
-                       symbolizer, processor);
+                       symbolizer, processor, strings);
   profiles->StartProfiling("");
   // TODO(delphick): Stop using the CpuProfiler internals here: This forces
   // LogCompiledFunctions so that source positions are collected everywhere.
@@ -1259,7 +1264,7 @@ static void TickLines(bool optimize) {
   // but doesn't because it's constructed with a symbolizer and a processor.
   isolate->logger()->LogCompiledFunctions();
   CHECK(processor->Start());
-  ProfilerListener profiler_listener(isolate, processor);
+  ProfilerListener profiler_listener(isolate, processor, *strings);
 
   // Enqueue code creation events.
   i::Handle<i::String> str = factory->NewStringFromAsciiChecked(func_name);
@@ -3419,7 +3424,8 @@ TEST(MaxSimultaneousProfiles) {
 TEST(LowPrecisionSamplingStartStopInternal) {
   i::Isolate* isolate = CcTest::i_isolate();
   CpuProfilesCollection profiles(isolate);
-  ProfilerCodeObserver code_observer(isolate);
+  auto strings = std::make_shared<StringsStorage>();
+  ProfilerCodeObserver code_observer(isolate, *strings);
   Symbolizer symbolizer(code_observer.code_map());
   std::unique_ptr<ProfilerEventsProcessor> processor(
       new SamplingEventsProcessor(
@@ -3545,14 +3551,15 @@ TEST(ProflilerSubsampling) {
   i::HandleScope scope(isolate);
 
   CpuProfilesCollection* profiles = new CpuProfilesCollection(isolate);
-  ProfilerCodeObserver code_observer(isolate);
+  auto strings = std::make_shared<StringsStorage>();
+  ProfilerCodeObserver code_observer(isolate, *strings);
   Symbolizer* symbolizer = new Symbolizer(code_observer.code_map());
   ProfilerEventsProcessor* processor =
       new SamplingEventsProcessor(isolate, symbolizer, &code_observer, profiles,
                                   v8::base::TimeDelta::FromMicroseconds(1),
                                   /* use_precise_sampling */ true);
   CpuProfiler profiler(isolate, kDebugNaming, kLazyLogging, profiles,
-                       symbolizer, processor);
+                       symbolizer, processor, strings);
 
   // Create a new CpuProfile that wants samples at 8us.
   CpuProfile profile(&profiler, "",
@@ -3589,14 +3596,15 @@ TEST(DynamicResampling) {
   i::HandleScope scope(isolate);
 
   CpuProfilesCollection* profiles = new CpuProfilesCollection(isolate);
-  ProfilerCodeObserver code_observer(isolate);
+  auto strings = std::make_shared<StringsStorage>();
+  ProfilerCodeObserver code_observer(isolate, *strings);
   Symbolizer* symbolizer = new Symbolizer(code_observer.code_map());
   ProfilerEventsProcessor* processor =
       new SamplingEventsProcessor(isolate, symbolizer, &code_observer, profiles,
                                   v8::base::TimeDelta::FromMicroseconds(1),
                                   /* use_precise_sampling */ true);
   CpuProfiler profiler(isolate, kDebugNaming, kLazyLogging, profiles,
-                       symbolizer, processor);
+                       symbolizer, processor, strings);
 
   // Set a 1us base sampling rate, dividing all possible intervals.
   profiler.set_sampling_interval(base::TimeDelta::FromMicroseconds(1));
@@ -3650,14 +3658,15 @@ TEST(DynamicResamplingWithBaseInterval) {
   i::HandleScope scope(isolate);
 
   CpuProfilesCollection* profiles = new CpuProfilesCollection(isolate);
-  ProfilerCodeObserver code_observer(isolate);
+  auto strings = std::make_shared<StringsStorage>();
+  ProfilerCodeObserver code_observer(isolate, *strings);
   Symbolizer* symbolizer = new Symbolizer(code_observer.code_map());
   ProfilerEventsProcessor* processor =
       new SamplingEventsProcessor(isolate, symbolizer, &code_observer, profiles,
                                   v8::base::TimeDelta::FromMicroseconds(1),
                                   /* use_precise_sampling */ true);
   CpuProfiler profiler(isolate, kDebugNaming, kLazyLogging, profiles,
-                       symbolizer, processor);
+                       symbolizer, processor, strings);
 
   profiler.set_sampling_interval(base::TimeDelta::FromMicroseconds(7));
 
