@@ -122,8 +122,11 @@ bool StringsStorage::Release(const char* str) {
   int len = static_cast<int>(strlen(str));
   uint32_t hash = ComputeStringHash(str, len);
   base::HashMap::Entry* entry = names_.Lookup(const_cast<char*>(str), hash);
-  DCHECK(entry);
-  if (!entry) {
+
+  // If an entry wasn't found or the address of the found entry doesn't match
+  // the one passed in, this string wasn't managed by this StringsStorage
+  // instance (i.e. a constant). Ignore this.
+  if (!entry || entry->key != str) {
     return false;
   }
 
