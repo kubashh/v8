@@ -320,8 +320,9 @@ void* SamplingEventsProcessor::operator new(size_t size) {
 
 void SamplingEventsProcessor::operator delete(void* ptr) { AlignedFree(ptr); }
 
-ProfilerCodeObserver::ProfilerCodeObserver(Isolate* isolate)
-    : isolate_(isolate), processor_(nullptr) {
+ProfilerCodeObserver::ProfilerCodeObserver(Isolate* isolate,
+                                           StringsStorage& strings)
+    : isolate_(isolate), code_map_(strings), processor_(nullptr) {
   CreateEntriesForRuntimeCallStats();
   LogBuiltins();
 }
@@ -445,22 +446,25 @@ DEFINE_LAZY_LEAKY_OBJECT_GETTER(CpuProfilersManager, GetProfilersManager)
 CpuProfiler::CpuProfiler(Isolate* isolate, CpuProfilingNamingMode naming_mode,
                          CpuProfilingLoggingMode logging_mode)
     : CpuProfiler(isolate, naming_mode, logging_mode,
-                  new CpuProfilesCollection(isolate), nullptr, nullptr) {}
+                  new CpuProfilesCollection(isolate), nullptr, nullptr,
+                  std::make_shared<StringsStorage>()) {}
 
 CpuProfiler::CpuProfiler(Isolate* isolate, CpuProfilingNamingMode naming_mode,
                          CpuProfilingLoggingMode logging_mode,
                          CpuProfilesCollection* test_profiles,
                          Symbolizer* test_symbolizer,
-                         ProfilerEventsProcessor* test_processor)
+                         ProfilerEventsProcessor* test_processor,
+                         std::shared_ptr<StringsStorage> test_strings)
     : isolate_(isolate),
       naming_mode_(naming_mode),
       logging_mode_(logging_mode),
       base_sampling_interval_(base::TimeDelta::FromMicroseconds(
           FLAG_cpu_profiler_sampling_interval)),
+      strings_(test_strings),
       profiles_(test_profiles),
       symbolizer_(test_symbolizer),
       processor_(test_processor),
-      code_observer_(isolate),
+      code_observer_(isolate, *strings_),
       is_profiling_(false) {
   profiles_->set_cpu_profiler(this);
   GetProfilersManager()->AddProfiler(isolate, this);
@@ -492,6 +496,9 @@ void CpuProfiler::ResetProfiles() {
   if (!profiling_scope_) {
     profiler_listener_.reset();
     code_observer_.ClearCodeMap();
+    // We don't currently expect any references to refcounted strings to be
+    // maintained with zero profiles after the code map is cleared.
+    DCHECK(strings_->empty());
   }
 }
 
@@ -499,8 +506,8 @@ void CpuProfiler::EnableLogging() {
   if (profiling_scope_) return;
 
   if (!profiler_listener_) {
-    profiler_listener_.reset(
-        new ProfilerListener(isolate_, &code_observer_, naming_mode_));
+    profiler_listener_.reset(new ProfilerListener(isolate_, &code_observer_,
+                                                  *strings_, naming_mode_));
   }
   profiling_scope_.reset(
       new ProfilingScope(isolate_, profiler_listener_.get()));

@@ -68,6 +68,7 @@ TEST(ProfileNodeFindOrAddChild) {
 
 TEST(ProfileNodeFindOrAddChildWithLineNumber) {
   CcTest::InitializeVM();
+  StringsStorage strings;
   ProfileTree tree(CcTest::i_isolate());
   ProfileNode* root = tree.root();
   CodeEntry a(i::CodeEventListener::FUNCTION_TAG, "a");
@@ -88,6 +89,7 @@ TEST(ProfileNodeFindOrAddChildWithLineNumber) {
 
 TEST(ProfileNodeFindOrAddChildForSameFunction) {
   CcTest::InitializeVM();
+  StringsStorage strings;
   const char* aaa = "aaa";
   ProfileTree tree(CcTest::i_isolate());
   ProfileNode* node = tree.root();
@@ -138,6 +140,7 @@ TEST(ProfileTreeAddPathFromEnd) {
   CodeEntry entry1(i::CodeEventListener::FUNCTION_TAG, "aaa");
   CodeEntry entry2(i::CodeEventListener::FUNCTION_TAG, "bbb");
   CodeEntry entry3(i::CodeEventListener::FUNCTION_TAG, "ccc");
+  StringsStorage strings;
   ProfileTree tree(CcTest::i_isolate());
   ProfileTreeTestHelper helper(&tree);
   CHECK(!helper.Walk(&entry1));
@@ -198,6 +201,7 @@ TEST(ProfileTreeAddPathFromEndWithLineNumbers) {
   CodeEntry a(i::CodeEventListener::FUNCTION_TAG, "a");
   CodeEntry b(i::CodeEventListener::FUNCTION_TAG, "b");
   CodeEntry c(i::CodeEventListener::FUNCTION_TAG, "c");
+  StringsStorage strings;
   ProfileTree tree(CcTest::i_isolate());
   ProfileTreeTestHelper helper(&tree);
 
@@ -219,6 +223,7 @@ TEST(ProfileTreeAddPathFromEndWithLineNumbers) {
 
 TEST(ProfileTreeCalculateTotalTicks) {
   CcTest::InitializeVM();
+  StringsStorage strings;
   ProfileTree empty_tree(CcTest::i_isolate());
   CHECK_EQ(0u, empty_tree.root()->self_ticks());
   empty_tree.root()->IncrementSelfTicks();
@@ -311,7 +316,8 @@ static inline i::Address ToAddress(int n) { return static_cast<i::Address>(n); }
 static inline void* ToPointer(int n) { return reinterpret_cast<void*>(n); }
 
 TEST(CodeMapAddCode) {
-  CodeMap code_map;
+  StringsStorage strings;
+  CodeMap code_map(strings);
   CodeEntry* entry1 = new CodeEntry(i::CodeEventListener::FUNCTION_TAG, "aaa");
   CodeEntry* entry2 = new CodeEntry(i::CodeEventListener::FUNCTION_TAG, "bbb");
   CodeEntry* entry3 = new CodeEntry(i::CodeEventListener::FUNCTION_TAG, "ccc");
@@ -340,7 +346,8 @@ TEST(CodeMapAddCode) {
 }
 
 TEST(CodeMapMoveAndDeleteCode) {
-  CodeMap code_map;
+  StringsStorage strings;
+  CodeMap code_map(strings);
   CodeEntry* entry1 = new CodeEntry(i::CodeEventListener::FUNCTION_TAG, "aaa");
   CodeEntry* entry2 = new CodeEntry(i::CodeEventListener::FUNCTION_TAG, "bbb");
   code_map.AddCode(ToAddress(0x1500), entry1, 0x200);
@@ -357,7 +364,8 @@ TEST(CodeMapMoveAndDeleteCode) {
 }
 
 TEST(CodeMapClear) {
-  CodeMap code_map;
+  StringsStorage strings;
+  CodeMap code_map(strings);
   CodeEntry* entry1 = new CodeEntry(i::CodeEventListener::FUNCTION_TAG, "aaa");
   CodeEntry* entry2 = new CodeEntry(i::CodeEventListener::FUNCTION_TAG, "bbb");
   code_map.AddCode(ToAddress(0x1500), entry1, 0x200);
@@ -392,7 +400,8 @@ class TestSetup {
 
 TEST(SymbolizeTickSample) {
   TestSetup test_setup;
-  CodeMap code_map;
+  StringsStorage strings;
+  CodeMap code_map(strings);
   Symbolizer symbolizer(&code_map);
   CodeEntry* entry1 = new CodeEntry(i::Logger::FUNCTION_TAG, "aaa");
   CodeEntry* entry2 = new CodeEntry(i::Logger::FUNCTION_TAG, "bbb");
@@ -460,7 +469,8 @@ TEST(SampleIds) {
   CpuProfiler profiler(isolate);
   profiles.set_cpu_profiler(&profiler);
   profiles.StartProfiling("", {CpuProfilingMode::kLeafNodeLineNumbers});
-  CodeMap code_map;
+  StringsStorage strings;
+  CodeMap code_map(strings);
   Symbolizer symbolizer(&code_map);
   CodeEntry* entry1 = new CodeEntry(i::Logger::FUNCTION_TAG, "aaa");
   CodeEntry* entry2 = new CodeEntry(i::Logger::FUNCTION_TAG, "bbb");
@@ -525,7 +535,8 @@ TEST(NoSamples) {
   CpuProfiler profiler(isolate);
   profiles.set_cpu_profiler(&profiler);
   profiles.StartProfiling("");
-  CodeMap code_map;
+  StringsStorage strings;
+  CodeMap code_map(strings);
   Symbolizer symbolizer(&code_map);
   CodeEntry* entry1 = new CodeEntry(i::Logger::FUNCTION_TAG, "aaa");
   symbolizer.code_map()->AddCode(ToAddress(0x1500), entry1, 0x200);
@@ -785,6 +796,7 @@ TEST(BailoutReason) {
 }
 
 TEST(NodeSourceTypes) {
+  StringsStorage strings;
   ProfileTree tree(CcTest::i_isolate());
   CodeEntry function_entry(CodeEventListener::FUNCTION_TAG, "function");
   tree.AddPathFromEnd({&function_entry});
