@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbf2239a_c333b53f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-12-15T10:54:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15249d60_4b558d7d",
+      "revId": "fcdcf2946d0d270da38c084a8a46029ce63887d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "162239b8_7042ad55",
@@ -31,6 +49,24 @@
       "writtenOn": "2020-11-02T23:13:49Z",
       "side": 1,
       "message": "Initially, the if-statement in ~TimedScope that calls Add*Event would fail at compile-time bc each event is only defined for one of AddMainThreadEvent/AddThreadSafeEvent.\n\nThe workaround I landed on was to define both AddMainThreadEvent and AddThreadSafeEvent for all events, but throw an error for the one we don\u0027t expect. Unfortunately, I don\u0027t know how to throw errors in /include so help would be greatly appreciated.\n\nAnd also open to other ideas on how to get the Add*Event working from within ~TimedScope.",
+      "revId": "fcdcf2946d0d270da38c084a8a46029ce63887d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f2b8dc0_b731f1dc",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-12-15T10:54:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "162239b8_7042ad55",
       "revId": "fcdcf2946d0d270da38c084a8a46029ce63887d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

@@ -85,6 +85,75 @@
       "message": "ups sorry, I didn\u0027t see the updates on this.\nWill check tomorrow first thing!",
       "revId": "d5a28225751e5b96b00faffbceb9103a3b43f462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e012af27_484f39dd",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 4139,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-12-15T10:54:20Z",
+      "side": 1,
+      "message": "Let\u0027s disable the tracing controller in general if we have FLAG_verify_predictable on (that shouldn\u0027t affect anything besides the testing bots)",
+      "range": {
+        "startLine": 4139,
+        "startChar": 15,
+        "endLine": 4139,
+        "endChar": 28
+      },
+      "revId": "d5a28225751e5b96b00faffbceb9103a3b43f462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cce7786_8a803e88",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 4167,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-12-15T10:54:20Z",
+      "side": 1,
+      "message": "we create an unused v8_trace.json file, but that should be ok.",
+      "range": {
+        "startLine": 4167,
+        "startChar": 18,
+        "endLine": 4167,
+        "endChar": 56
+      },
+      "revId": "d5a28225751e5b96b00faffbceb9103a3b43f462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aa71924_8ba2af21",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 4181,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-12-15T10:54:20Z",
+      "side": 1,
+      "message": "Could you merge those two?\n- reuse the code to make it obvious that they only differ by the TraceWriter.",
+      "range": {
+        "startLine": 4160,
+        "startChar": 0,
+        "endLine": 4181,
+        "endChar": 38
+      },
+      "revId": "d5a28225751e5b96b00faffbceb9103a3b43f462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
