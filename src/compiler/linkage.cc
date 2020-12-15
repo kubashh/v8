@@ -100,8 +100,8 @@ int CallDescriptor::GetStackParameterDelta(
   // inputs to the TailCall node, since they already exist on the stack.
   if (IsTailCallForTierUp()) return 0;
 
-  int callee_slots_above_sp = GetFirstUnusedStackSlot();
-  int tail_caller_slots_above_sp = tail_caller->GetFirstUnusedStackSlot();
+  int callee_slots_above_sp = GetOffsetToReturns();
+  int tail_caller_slots_above_sp = tail_caller->GetOffsetToReturns();
   int stack_param_delta = callee_slots_above_sp - tail_caller_slots_above_sp;
   if (ShouldPadArguments(stack_param_delta)) {
     if (callee_slots_above_sp % 2 != 0) {
