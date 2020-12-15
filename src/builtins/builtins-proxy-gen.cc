@@ -86,6 +86,7 @@ TNode<JSFunction> ProxiesCodeStubAssembler::AllocateProxyRevokeFunction(
 }
 
 TF_BUILTIN(CallProxy, ProxiesCodeStubAssembler) {
+  // TODO(pthier): CallProxy should expect argc including the receiver.
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   TNode<IntPtrT> argc_ptr = ChangeInt32ToIntPtr(argc);
   auto proxy = Parameter<JSProxy>(Descriptor::kFunction);
@@ -133,6 +134,9 @@ TF_BUILTIN(CallProxy, ProxiesCodeStubAssembler) {
   BIND(&trap_undefined);
   {
     // 6.a. Return Call(target, thisArgument, argumentsList).
+    // Add the receiver to the argument count. TODO(pthier): Remove once
+    // CallProxy expects argc including the receiver.
+    argc = Int32Add(argc, Int32Constant(kArgcAdditionForReceiver));
     TailCallStub(CodeFactory::Call(isolate()), context, target, argc);
   }
 
@@ -141,6 +145,7 @@ TF_BUILTIN(CallProxy, ProxiesCodeStubAssembler) {
 }
 
 TF_BUILTIN(ConstructProxy, ProxiesCodeStubAssembler) {
+  // TODO(pthier): ConstructProxy should expect argc including the receiver.
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   TNode<IntPtrT> argc_ptr = ChangeInt32ToIntPtr(argc);
   auto proxy = Parameter<JSProxy>(Descriptor::kTarget);
@@ -200,6 +205,9 @@ TF_BUILTIN(ConstructProxy, ProxiesCodeStubAssembler) {
     // 6.a. Assert: target has a [[Construct]] internal method.
     CSA_ASSERT(this, IsConstructor(CAST(target)));
 
+    // Add the receiver to the argument count. TODO(pthier): Remove once
+    // ConstructProxy expects argc including the receiver.
+    argc = Int32Add(argc, Int32Constant(kArgcAdditionForReceiver));
     // 6.b. Return ? Construct(target, argumentsList, newTarget).
     TailCallStub(CodeFactory::Construct(isolate()), context, target, new_target,
                  argc);
