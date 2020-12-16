@@ -190,6 +190,27 @@ TraceWriter* TraceWriter::CreateJSONTraceWriter(std::ostream& stream,
   return new JSONTraceWriter(stream, tag);
 }
 
+SystemInstrumentationTraceWriter::SystemInstrumentationTraceWriter() {
+  recorder_ = new Recorder();
+}
+
+SystemInstrumentationTraceWriter::~SystemInstrumentationTraceWriter() {
+  delete recorder_;
+}
+
+void SystemInstrumentationTraceWriter::AppendTraceEvent(
+    TraceObject* trace_event) {
+  if (recorder_->IsEnabled()) {
+    recorder_->AddEvent(trace_event);
+  }
+}
+
+void SystemInstrumentationTraceWriter::Flush() {}
+
+TraceWriter* TraceWriter::CreateSystemInstrumentationTraceWriter() {
+  return new SystemInstrumentationTraceWriter();
+}
+
 }  // namespace tracing
 }  // namespace platform
 }  // namespace v8
