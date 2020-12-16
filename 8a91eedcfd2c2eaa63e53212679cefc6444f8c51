@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "451b6ea8_dc40cc88",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 3304,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-12-16T12:00:01Z",
+      "side": 1,
+      "message": "This adds a cost to all LHS for optional chaining. Can you find a way to push this down into the relevant paths only? The parser is very performance sensitive and we should avoid adding code for one case on the fast path for all.",
+      "revId": "8a91eedcfd2c2eaa63e53212679cefc6444f8c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
