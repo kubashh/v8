@@ -16,6 +16,24 @@
       "message": "This adds a cost to all LHS for optional chaining. Can you find a way to push this down into the relevant paths only? The parser is very performance sensitive and we should avoid adding code for one case on the fast path for all.",
       "revId": "8a91eedcfd2c2eaa63e53212679cefc6444f8c51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44a553f3_f56fa431",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 3304,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2020-12-16T15:45:22Z",
+      "side": 1,
+      "message": "What if, once an optional chain is detected, a separate function handles parsing the remainder of the chain?",
+      "parentUuid": "451b6ea8_dc40cc88",
+      "revId": "8a91eedcfd2c2eaa63e53212679cefc6444f8c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
