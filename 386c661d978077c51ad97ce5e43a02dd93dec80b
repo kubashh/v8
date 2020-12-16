@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29625945_dc362732",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2020-12-16T03:22:15Z",
+      "side": 1,
+      "message": "Hey Peter, PTAL. This CL is a first stab at leveraging refcounting for the strings managed by CodeEntry objects in order to support long-lived CodeMaps. This CL shouldn\u0027t change any existing behaviour, only freeing strings associated with the profiler at shutdown. Leak verification is done through DCHECKing that the string table is empty after the last profile is removed.\n\nThe most contentious part of this CL is probably making StringsStorage operations guarded by a mutex, but it should be relatively fast since the lock will be primarily held by the main thread. Rarely, we\u0027ll free an unused CodeEntry on the profiler thread which requires decrementing string refcounts / hash table mutation.\n\nCodeEntries are additionally modified to require calling ReleaseStrings before being deallocated, in order to avoid associating each CodeEntry with its StringsStorage. This saves us from storing a pointer with each CodeEntry, but requires us to be careful with deallocation.\n\nThe next steps here are making CodeEntry objects refcounted as well (instead of the `mark_used` logic) to ensure that we can handle CodeEntry deletion events.\n\nLet me know your thoughts. Thanks!",
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
