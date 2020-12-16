@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66a2d55c_e9ab36f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-12-16T15:40:01Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "822e3c8701c39929258848734f4d52bfcfff3257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "111d1706_7e4a3f87",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-12-16T15:40:01Z",
+      "side": 1,
+      "message": "I noticed that TF was still compiling stuff, because setting flags via FlagScope ignores flag implications defined in flag-definitions.h. Maybe we should use `SetFlagsFromString` instead of FlagScopes here instead? That\u0027d be a separate project though.",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 61
+      },
+      "revId": "822e3c8701c39929258848734f4d52bfcfff3257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a13ccab_19578085",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-12-16T15:40:01Z",
+      "side": 1,
+      "message": "...and continues to do so! The changes in liftoff-assembler-$arch.h in this CL were flushed out by this test.",
+      "range": {
+        "startLine": 1178,
+        "startChar": 3,
+        "endLine": 1178,
+        "endChar": 30
+      },
+      "revId": "822e3c8701c39929258848734f4d52bfcfff3257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
