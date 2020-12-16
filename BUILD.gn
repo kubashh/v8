@@ -1401,6 +1401,8 @@ template("run_torque") {
       "$target_gen_dir/torque-generated/csa-types.h",
       "$target_gen_dir/torque-generated/instance-types.h",
       "$target_gen_dir/torque-generated/class-forward-declarations.h",
+      "$target_gen_dir/torque-generated/debug-macros.cc",
+      "$target_gen_dir/torque-generated/debug-macros.h",
     ]
 
     outputs = []
