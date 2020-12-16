@@ -241,11 +241,11 @@ class V8_EXPORT_PRIVATE SamplingEventsProcessor
 // Redirects events to the profiler events processor when present.
 class V8_EXPORT_PRIVATE ProfilerCodeObserver : public CodeEventObserver {
  public:
-  explicit ProfilerCodeObserver(Isolate*);
+  explicit ProfilerCodeObserver(Isolate*, StringsStorage& strings);
 
   void CodeEventHandler(const CodeEventsContainer& evt_rec) override;
-
   CodeMap* code_map() { return &code_map_; }
+
   void ClearCodeMap();
 
  private:
@@ -299,7 +299,8 @@ class V8_EXPORT_PRIVATE CpuProfiler {
   CpuProfiler(Isolate* isolate, CpuProfilingNamingMode naming_mode,
               CpuProfilingLoggingMode logging_mode,
               CpuProfilesCollection* profiles, Symbolizer* test_symbolizer,
-              ProfilerEventsProcessor* test_processor);
+              ProfilerEventsProcessor* test_processor,
+              std::shared_ptr<StringsStorage> test_strings);
 
   ~CpuProfiler();
   CpuProfiler(const CpuProfiler&) = delete;
@@ -361,6 +362,9 @@ class V8_EXPORT_PRIVATE CpuProfiler {
   // Sampling interval to which per-profile sampling intervals will be clamped
   // to a multiple of, or used as the default if unspecified.
   base::TimeDelta base_sampling_interval_;
+  // Strings are reused between CodeEntry objects, both in a CodeMap and in a
+  // ProfileNode. We store these strings (refcounted) on the CpuProfiler.
+  std::shared_ptr<StringsStorage> strings_;
   std::unique_ptr<CpuProfilesCollection> profiles_;
   std::unique_ptr<Symbolizer> symbolizer_;
   std::unique_ptr<ProfilerEventsProcessor> processor_;
