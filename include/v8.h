@@ -6744,6 +6744,11 @@ class V8_EXPORT FunctionTemplate : public Template {
    */
   bool HasInstance(Local<Value> object);
 
+  /**
+   * Same as HasInstance(Local<Value>) but for raw object pointers.
+   */
+  bool HasInstanceRaw(Value* object);
+
   V8_INLINE static FunctionTemplate* Cast(Data* data);
 
  private:
