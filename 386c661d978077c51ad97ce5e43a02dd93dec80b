@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3abfe86d_d3e36621",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-16T12:44:22Z",
+      "side": 1,
+      "message": "Nice! Thanks, a few comments",
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5bfcbee_b1b2ff09",
@@ -31,6 +48,116 @@
       "writtenOn": "2020-12-16T03:39:15Z",
       "side": 1,
       "message": "FYI, this is being defined as a |shared_ptr| so that tests may keep it alive (for cases where the test code manually passes it in). Open to converting this to |unique_ptr| if you prefer, though it makes dependencies a bit messier.",
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "816560d8_30eb24c7",
+        "filename": "src/profiler/cpu-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-16T12:44:22Z",
+      "side": 1,
+      "message": "Do the tests need to keep it alive? I don\u0027t see them using it after the Profiler has been deleted. If that\u0027s the case I\u0027d prefer to follow the same pattern as the other bits here and use unique_ptr. The tests can still look at the raw ptr if they need to, before the Profiler dies",
+      "parentUuid": "c5bfcbee_b1b2ff09",
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04d200c9_7f602ed4",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-16T12:44:22Z",
+      "side": 1,
+      "message": "We could add a destructor that DCHECKS name_ and resource_name_ are nullptr to ensure that this has been called?",
+      "range": {
+        "startLine": 228,
+        "startChar": 4,
+        "endLine": 232,
+        "endChar": 29
+      },
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7979082_34cabfcf",
+        "filename": "src/profiler/profile-generator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-16T12:44:22Z",
+      "side": 1,
+      "message": "Maybe make this explicit in the comment that this is called before every destruction (and only then)",
+      "range": {
+        "startLine": 171,
+        "startChar": 2,
+        "endLine": 171,
+        "endChar": 47
+      },
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "243e076f_c69d5084",
+        "filename": "test/cctest/test-profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-16T12:44:22Z",
+      "side": 1,
+      "message": "Are these needed in this + following tests? It doesn\u0027t seem to be used",
+      "range": {
+        "startLine": 71,
+        "startChar": 2,
+        "endLine": 71,
+        "endChar": 25
+      },
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d096d2cb_a09a6562",
+        "filename": "test/cctest/test-profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-16T12:44:22Z",
+      "side": 1,
+      "message": "Is this used?",
+      "range": {
+        "startLine": 799,
+        "startChar": 2,
+        "endLine": 799,
+        "endChar": 25
+      },
       "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
