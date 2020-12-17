@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eb16e79_06505167",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-12-17T21:17:17Z",
+      "side": 1,
+      "message": "Looks great, thanks! Just a few very minor comments.",
+      "revId": "f1ad9a1e9faa4e06af3181c4a729ddfe11de52fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a66c826_9e104861",
+        "filename": "src/torque/class-debug-reader-generator.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-12-17T21:17:17Z",
+      "side": 1,
+      "message": "Could you please update this comment to represent the new output format?",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 347,
+        "endChar": 67
+      },
+      "revId": "f1ad9a1e9faa4e06af3181c4a729ddfe11de52fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ba2580d_d1566551",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-12-17T21:17:17Z",
+      "side": 1,
+      "message": "Maybe we could include these macros in debug-macro-shims.h instead of emitting them here because it would be a little easier to read.",
+      "revId": "f1ad9a1e9faa4e06af3181c4a729ddfe11de52fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c1291ad_2745d406",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-12-17T21:17:17Z",
+      "side": 1,
+      "message": "Looks like this TODO was already done 😊",
+      "revId": "f1ad9a1e9faa4e06af3181c4a729ddfe11de52fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a09d2fb_aed4295e",
+        "filename": "src/torque/implementation-visitor.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-12-17T21:17:17Z",
+      "side": 1,
+      "message": "You can remove this sentence; I think that debug macros should stay as a separate file forever and doesn\u0027t need to be inlinable like the runtime macros.",
+      "range": {
+        "startLine": 851,
+        "startChar": 0,
+        "endLine": 853,
+        "endChar": 27
+      },
+      "revId": "f1ad9a1e9faa4e06af3181c4a729ddfe11de52fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
