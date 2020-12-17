@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae17ccc8_a24d2d19",
+        "filename": "src/profiler/cpu-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2020-12-17T04:08:47Z",
+      "side": 1,
+      "message": "The main concern is with destruction order, in the cases where CpuProfiler gets destroyed before other instances that also depend on a StringsStorage and outlive the CpuProfiler (e.g. ProfilerCodeObserver). If the ownership is transferred with unique_ptr there, we\u0027ll free it too early when the CpuProfiler destructs.\n\nWhat we can do is move the ownership to the ProfilerCodeObserver, since its lifetime is at least as long as CpuProfiler. This coheres with having ProfilerCodeObserver own the CodeMap as well as its dependencies.\n\nI\u0027ve gone ahead and done that, let me know what you think!",
+      "parentUuid": "816560d8_30eb24c7",
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04d200c9_7f602ed4",
         "filename": "src/profiler/profile-generator.cc",
         "patchSetId": 5
@@ -83,6 +101,30 @@
       "writtenOn": "2020-12-16T12:44:22Z",
       "side": 1,
       "message": "We could add a destructor that DCHECKS name_ and resource_name_ are nullptr to ensure that this has been called?",
+      "range": {
+        "startLine": 228,
+        "startChar": 4,
+        "endLine": 232,
+        "endChar": 29
+      },
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9b3d2dd_06deae9b",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2020-12-17T04:08:47Z",
+      "side": 1,
+      "message": "This sounds good, the only issue is that we\u0027d strictly couple CodeEntry with StringsStorage. It\u0027s permissible (and pretty common in our tests) to have string literals provided to CodeEntry fields, with no StringsStorage instance required.\n\nWe could either do this and add a stub StringsStorage to the CodeEntry tests, add a bit to indicate that a StringsStorage owns the strings, or add a ReleaseStringsForTesting method that nulls them. The second option would have the benefit of avoiding a hash table lookup on calls to ReleaseStrings when a string literal is used, if unmanaged by StringsStorage. What do you think?",
+      "parentUuid": "04d200c9_7f602ed4",
       "range": {
         "startLine": 228,
         "startChar": 4,
@@ -116,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9839b32_c7d86862",
+        "filename": "src/profiler/profile-generator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2020-12-17T04:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7979082_34cabfcf",
+      "range": {
+        "startLine": 171,
+        "startChar": 2,
+        "endLine": 171,
+        "endChar": 47
+      },
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "243e076f_c69d5084",
@@ -139,6 +205,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1c7f9b2_2bb381e7",
+        "filename": "test/cctest/test-profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2020-12-17T04:08:47Z",
+      "side": 1,
+      "message": "Nope, just a relic from a previous approach. Removed.",
+      "parentUuid": "243e076f_c69d5084",
+      "range": {
+        "startLine": 71,
+        "startChar": 2,
+        "endLine": 71,
+        "endChar": 25
+      },
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d096d2cb_a09a6562",
@@ -152,6 +242,30 @@
       "writtenOn": "2020-12-16T12:44:22Z",
       "side": 1,
       "message": "Is this used?",
+      "range": {
+        "startLine": 799,
+        "startChar": 2,
+        "endLine": 799,
+        "endChar": 25
+      },
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c68760df_ef95da8f",
+        "filename": "test/cctest/test-profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2020-12-17T04:08:47Z",
+      "side": 1,
+      "message": "Nope, (as mentioned above) part of an earlier revision.",
+      "parentUuid": "d096d2cb_a09a6562",
       "range": {
         "startLine": 799,
         "startChar": 2,
