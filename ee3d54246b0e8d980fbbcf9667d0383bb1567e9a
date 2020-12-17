@@ -67,6 +67,24 @@
       "message": "should already be public, remove please",
       "revId": "ee3d54246b0e8d980fbbcf9667d0383bb1567e9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6785197f_c5dea61a",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-17T16:16:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "472b74b6_1c603950",
+      "revId": "ee3d54246b0e8d980fbbcf9667d0383bb1567e9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
