@@ -2172,7 +2172,7 @@ void MarkCompactCollector::FlushBytecodeFromSFI(
                 UncompiledDataWithoutPreparseData::kSize);
 
   // Replace bytecode array with an uncompiled data array.
-  HeapObject compiled_data = shared_info.GetBytecodeArray();
+  HeapObject compiled_data = shared_info.GetBytecodeArray(isolate());
   Address compiled_data_start = compiled_data.address();
   int compiled_data_size = compiled_data.Size();
   MemoryChunk* chunk = MemoryChunk::FromAddress(compiled_data_start);
@@ -2228,7 +2228,7 @@ void MarkCompactCollector::ClearOldBytecodeCandidates() {
     // If the BytecodeArray is dead, flush it, which will replace the field with
     // an uncompiled data object.
     if (!non_atomic_marking_state()->IsBlackOrGrey(
-            flushing_candidate.GetBytecodeArray())) {
+            flushing_candidate.GetBytecodeArray(isolate()))) {
       FlushBytecodeFromSFI(flushing_candidate);
     }
 
