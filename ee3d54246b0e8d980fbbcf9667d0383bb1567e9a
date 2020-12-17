@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08cf1007_aa9cbfe6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-12-17T10:33:41Z",
+      "side": 1,
+      "message": "LGTM on this big but mechanical change ! 😊",
+      "revId": "ee3d54246b0e8d980fbbcf9667d0383bb1567e9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
