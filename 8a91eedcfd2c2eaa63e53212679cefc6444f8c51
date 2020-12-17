@@ -34,6 +34,24 @@
       "parentUuid": "451b6ea8_dc40cc88",
       "revId": "8a91eedcfd2c2eaa63e53212679cefc6444f8c51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bda4e99_ca7d16a6",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 3304,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-12-17T15:20:43Z",
+      "side": 1,
+      "message": "I\u0027m not sure what that would look like. This function is copied twice due to parser+preparser though, so it may start using quite a lot of binary space.",
+      "parentUuid": "44a553f3_f56fa431",
+      "revId": "8a91eedcfd2c2eaa63e53212679cefc6444f8c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
