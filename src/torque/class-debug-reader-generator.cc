@@ -347,7 +347,8 @@ void GenerateFieldValueAccessor(const Field& field,
 //     GetArrayKind(indexed_field_count.validity)));  // Field kind
 void GenerateGetPropsChunkForField(const Field& field,
                                    base::Optional<NameAndType> array_length,
-                                   std::ostream& get_props_impl) {
+                                   std::ostream& get_props_impl,
+                                   std::string class_name) {
   DebugFieldType debug_field_type(field);
 
   // If the current field is a struct or bitfield struct, create a vector
@@ -395,8 +396,32 @@ void GenerateGetPropsChunkForField(const Field& field,
                    << CamelifyString(array_length->name)
                    << "Value(accessor);\n";
     property_kind = "GetArrayKind(indexed_field_count.validity)";
-  }
 
+    // Handle indexed field with slices here.
+  } else if (field.index) {
+    std::string indexed_field_slice =
+        "indexed_field_slice_" + field.name_and_type.name;
+    get_props_impl << "  auto " << indexed_field_slice << " = "
+                   << "TqDebugFieldSlice" << class_name
+                   << CamelifyString(field.name_and_type.name)
+                   << "(accessor, address_);\n";
+    std::string validity = indexed_field_slice + ".validity";
+    std::string value = indexed_field_slice + ".value";
+    property_kind = "GetArrayKind(" + validity + ")";
+
+    get_props_impl << "  if (" << validity
+                   << " == d::MemoryAccessResult::kOk) {\n"
+                   << "    result.push_back(std::make_unique<ObjectProperty>(\""
+                   << field.name_and_type.name << "\", "
+                   << debug_field_type.GetTypeString(kAsStoredInHeap) << ", "
+                   << debug_field_type.GetTypeString(kUncompressed) << ", "
+                   << "std::get<1>(" << value << "), "
+                   << "std::get<2>(" << value << ")"
+                   << ", " << debug_field_type.GetSize() << ", "
+                   << struct_field_list << ", " << property_kind << "));\n"
+                   << "  }\n";
+    return;
+  }
   get_props_impl << "  result.push_back(std::make_unique<ObjectProperty>(\""
                  << field.name_and_type.name << "\", "
                  << debug_field_type.GetTypeString(kAsStoredInHeap) << ", "
@@ -508,12 +533,8 @@ void GenerateClassDebugReader(const ClassType& type, std::ostream& h_contents,
     base::Optional<NameAndType> array_length;
     if (field.index) {
       array_length = ExtractSimpleFieldArraySize(type, *field.index);
-      if (!array_length) {
-        // Unsupported complex array length, skipping this field.
-        continue;
-      }
     }
-    GenerateGetPropsChunkForField(field, array_length, get_props_impl);
+    GenerateGetPropsChunkForField(field, array_length, get_props_impl, name);
   }
 
   h_contents << "};\n";
@@ -556,6 +577,9 @@ void ImplementationVisitor::GenerateClassDebugReaders(
       cc_contents << "#include " << StringLiteralQuote(include_path) << "\n";
     }
     cc_contents << "#include \"torque-generated/" << file_name << ".h\"\n";
+    cc_contents << "#include \"torque-generated/"
+                << "debug-macros"
+                << ".h\"\n";
     cc_contents << "#include \"include/v8-internal.h\"\n\n";
     cc_contents << "namespace i = v8::internal;\n\n";
 

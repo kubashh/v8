@@ -450,5 +450,48 @@ THREADED_TEST(GetFrameStack) {
       .ToLocalChecked();
 }
 
+TEST(SmallOrderedHashSetGetObjectProperties) {
+  LocalContext context;
+  Isolate* isolate = reinterpret_cast<Isolate*>((*context)->GetIsolate());
+  Factory* factory = isolate->factory();
+  HandleScope scope(isolate);
+
+  Handle<SmallOrderedHashSet> set = factory->NewSmallOrderedHashSet();
+  CHECK_EQ(2, set->NumberOfBuckets());
+  CHECK_EQ(0, set->NumberOfElements());
+
+  // Add a new key.
+  Handle<Smi> key1(Smi::FromInt(1), isolate);
+  CHECK(!set->HasKey(isolate, key1));
+  set = SmallOrderedHashSet::Add(isolate, set, key1).ToHandleChecked();
+  const size_t number_of_buckets = 2;
+  CHECK_EQ(number_of_buckets, set->NumberOfBuckets());
+  CHECK_EQ(1, set->NumberOfElements());
+  CHECK(set->HasKey(isolate, key1));
+
+  d::HeapAddresses heap_addresses{0, 0, 0, 0};
+
+  d::ObjectPropertiesResultPtr props =
+      d::GetObjectProperties(set->ptr(), &ReadMemory, heap_addresses);
+  CHECK_EQ(props->type_check_result, d::TypeCheckResult::kUsedMap);
+  CHECK_EQ(props->type, std::string("v8::internal::SmallOrderedHashSet"));
+  CHECK_EQ(props->num_properties, 6);
+
+  CheckProp(*props->properties[0], "v8::internal::Map", "map");
+  CheckProp(*props->properties[1], "uint8_t", "number_of_elements");
+  CheckProp(*props->properties[2], "uint8_t", "number_of_deleted_elements");
+  CheckProp(*props->properties[3], "uint8_t", "number_of_buckets");
+#if TAGGED_SIZE_8_BYTES
+  CheckProp(*props->properties[4], "uint8_t", "padding",
+            d::PropertyKind::kArrayOfKnownSize, 5);
+#else
+  CheckProp(*props->properties[4], "uint8_t", "padding",
+            d::PropertyKind::kArrayOfKnownSize, 1);
+#endif
+  CheckProp(*props->properties[5], "v8::internal::Object", "data_table",
+            d::PropertyKind::kArrayOfKnownSize,
+            number_of_buckets * OrderedHashMap::kLoadFactor);
+}
+
 }  // namespace internal
 }  // namespace v8
