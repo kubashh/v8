@@ -353,6 +353,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41555e01_a36047c1",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-17T09:55:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b200b322_4fb212b4",
+      "range": {
+        "startLine": 920,
+        "startChar": 0,
+        "endLine": 924,
+        "endChar": 30
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3b81d1f_47910d0b",
@@ -567,6 +591,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "652c530e_2a1c4485",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-17T09:55:42Z",
+      "side": 1,
+      "message": "In my initial implementation (where we had an additional node in the graph for observation) stopping observation (and thus removing the additional node) could also improve generated code/allow more optimizations of the graph. With Paolo\u0027s new approach, this is not as important anymore, but I think it is still useful to prevent your callback from being fired in more phases than you are actually interested in. But I\u0027m fine with reconsidering this decision and potentially remove this mechanism, if you think it is not worth having it.",
+      "parentUuid": "293a0d14_d9640e0a",
+      "range": {
+        "startLine": 72,
+        "startChar": 24,
+        "endLine": 72,
+        "endChar": 29
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0dc8a52_7bebf766",
         "filename": "test/cctest/compiler/test-sloppy-equality.cc",
         "patchSetId": 11
@@ -649,6 +697,30 @@
       "side": 1,
       "message": "This code was in the original tests written by Nico.\nBut CompareOperationHintOf does not exist anymore and I could not find a simple way to recreate it.\nDo you know what should be the current equivalent code?",
       "parentUuid": "e5856619_87f537c9",
+      "range": {
+        "startLine": 122,
+        "startChar": 24,
+        "endLine": 122,
+        "endChar": 46
+      },
+      "revId": "dd5d9017d4c0524bf022b9a1daf415eadd4d3b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "748cf7bb_f379d2e5",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-12-17T09:55:42Z",
+      "side": 1,
+      "message": "Feel free to TODO this to me and v8:5660, I built the %ObserveNode on my improvements on sloppy equality comparison with improved interpreter feedback, but I discontinued updating all tests when we gave up on landing the framework right away.\n\nI plan to have a follow up CL cleaning this up and finalizing the tests to the current implementation.",
+      "parentUuid": "b9e8ff33_15616ac6",
       "range": {
         "startLine": 122,
         "startChar": 24,
