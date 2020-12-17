@@ -52,6 +52,24 @@
       "parentUuid": "44a553f3_f56fa431",
       "revId": "8a91eedcfd2c2eaa63e53212679cefc6444f8c51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4294c753_8dade0de",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 3304,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2020-12-17T19:21:32Z",
+      "side": 1,
+      "message": "I played around and I\u0027m pretty sure I was over complicating the implementation, tests pass if I only capture the source range position when we observe a ?.:\n\n      case Token::QUESTION_PERIOD: {\n        if (is_optional) {\n          ReportUnexpectedToken(peek());\n          return impl()-\u003eFailureExpression();\n        }\n        // Include the ?. in the source range position.\n        optional_link_begin \u003d scanner()-\u003epeek_location().beg_pos;\n        Consume(Token::QUESTION_PERIOD);\n        is_optional \u003d true;\n        optional_chaining \u003d true;\n        continue;\n      }\n\nWhen recording the arrange, I added a \u0027continue\u0027:\n\n    if (is_optional) {\n      SourceRange chain_link_range(optional_link_begin, end_position());\n      impl()-\u003eRecordExpressionSourceRange(result, chain_link_range);\n      is_optional \u003d false;\n      continue;\n    }\n\nSo there should be no additional comparisons than before this code change (as the next line of code already checked is_optional):\n\n} while (is_optional || Token::IsPropertyOrCall(peek()));\n\nI think we could eliminate some additional comparisons if we did something like this, but was wondering if it\u0027s worthwhile?\n\n\n    if (is_optional) {\n      SourceRange chain_link_range(optional_link_begin, end_position());\n      impl()-\u003eRecordExpressionSourceRange(result, chain_link_range);\n      is_optional \u003d false;\n      continue;\n    } else if (Token::IsPropertyOrCall(peek()) {\n      continue;\n    } else {\n      break;\n    }\n    } while (is_optional || Token::IsPropertyOrCall(peek()));",
+      "parentUuid": "5bda4e99_ca7d16a6",
+      "revId": "8a91eedcfd2c2eaa63e53212679cefc6444f8c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
