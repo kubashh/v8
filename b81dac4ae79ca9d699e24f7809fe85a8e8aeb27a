@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2be6561d_7bf6ad4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 41
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-12-21T23:49:39Z",
+      "side": 1,
+      "message": "Just comment and I think we can land tomorrow (have to check wether ulan@ is around)",
+      "revId": "b81dac4ae79ca9d699e24f7809fe85a8e8aeb27a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62a9d9ab_8c12c90d",
