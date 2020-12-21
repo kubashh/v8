@@ -77,21 +77,6 @@ MachineSignature* CallDescriptor::GetMachineSignature(Zone* zone) const {
   return zone->New<MachineSignature>(return_count, param_count, types);
 }
 
-int CallDescriptor::GetFirstUnusedStackSlot() const {
-  int slots_above_sp = 0;
-  for (size_t i = 0; i < InputCount(); ++i) {
-    LinkageLocation operand = GetInputLocation(i);
-    if (!operand.IsRegister()) {
-      int new_candidate =
-          -operand.GetLocation() + operand.GetSizeInPointers() - 1;
-      if (new_candidate > slots_above_sp) {
-        slots_above_sp = new_candidate;
-      }
-    }
-  }
-  return slots_above_sp;
-}
-
 int CallDescriptor::GetStackParameterDelta(
     CallDescriptor const* tail_caller) const {
   // In the IsTailCallForTierUp case, the callee has
@@ -100,8 +85,8 @@ int CallDescriptor::GetStackParameterDelta(
   // inputs to the TailCall node, since they already exist on the stack.
   if (IsTailCallForTierUp()) return 0;
 
-  int callee_slots_above_sp = GetFirstUnusedStackSlot();
-  int tail_caller_slots_above_sp = tail_caller->GetFirstUnusedStackSlot();
+  int callee_slots_above_sp = GetOffsetToReturns();
+  int tail_caller_slots_above_sp = tail_caller->GetOffsetToReturns();
   int stack_param_delta = callee_slots_above_sp - tail_caller_slots_above_sp;
   if (ShouldPadArguments(stack_param_delta)) {
     if (callee_slots_above_sp % 2 != 0) {
@@ -120,9 +105,34 @@ int CallDescriptor::GetStackParameterDelta(
 }
 
 int CallDescriptor::GetOffsetToReturns() const {
-  int offset = static_cast<int>(StackParameterCount());
-  if (ShouldPadArguments(offset)) offset++;
-  return offset;
+  // If there are return stack slots, return the first slot of the first one.
+  // There may be padding slots to align the first return, adjacent to any
+  // argument padding slots.
+  constexpr int kNoReturnSlot = std::numeric_limits<int>::max();
+  int first_return_slot = kNoReturnSlot;
+  for (size_t i = 0; i < ReturnCount(); ++i) {
+    LinkageLocation operand = GetReturnLocation(i);
+    if (!operand.IsRegister()) {
+      first_return_slot =
+          std::min(first_return_slot, -operand.GetLocation() - 1);
+    }
+  }
+  if (first_return_slot != kNoReturnSlot) return first_return_slot;
+
+  // Otherwise, return the first unused slot after the parameters, with the
+  // additional padding slot if needed. This is the slot where returns would go
+  // if there were any.
+  int end_of_args = 0;
+  for (size_t i = 0; i < InputCount(); ++i) {
+    LinkageLocation operand = GetInputLocation(i);
+    if (!operand.IsRegister()) {
+      end_of_args = std::max(end_of_args, -operand.GetLocation() +
+                                              operand.GetSizeInPointers() - 1);
+    }
+  }
+
+  if (ShouldPadArguments(end_of_args)) end_of_args++;
+  return end_of_args;
 }
 
 int CallDescriptor::GetTaggedParameterSlots() const {
@@ -138,11 +148,12 @@ int CallDescriptor::GetTaggedParameterSlots() const {
 
 bool CallDescriptor::CanTailCall(const CallDescriptor* callee) const {
   if (ReturnCount() != callee->ReturnCount()) return false;
-  const int stack_param_delta = callee->GetStackParameterDelta(this);
+  const int stack_returns_delta =
+      GetOffsetToReturns() - callee->GetOffsetToReturns();
   for (size_t i = 0; i < ReturnCount(); ++i) {
     if (GetReturnLocation(i).IsCallerFrameSlot() &&
         callee->GetReturnLocation(i).IsCallerFrameSlot()) {
-      if (GetReturnLocation(i).AsCallerFrameSlot() - stack_param_delta !=
+      if (GetReturnLocation(i).AsCallerFrameSlot() + stack_returns_delta !=
           callee->GetReturnLocation(i).AsCallerFrameSlot()) {
         return false;
       }
