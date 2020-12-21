@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70904d4b_29f415a6",
+        "filename": "src/profiler/cpu-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-21T09:17:23Z",
+      "side": 1,
+      "message": "Nice",
+      "parentUuid": "ae17ccc8_a24d2d19",
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04d200c9_7f602ed4",
@@ -125,6 +143,30 @@
       "side": 1,
       "message": "This sounds good, the only issue is that we\u0027d strictly couple CodeEntry with StringsStorage. It\u0027s permissible (and pretty common in our tests) to have string literals provided to CodeEntry fields, with no StringsStorage instance required.\n\nWe could either do this and add a stub StringsStorage to the CodeEntry tests, add a bit to indicate that a StringsStorage owns the strings, or add a ReleaseStringsForTesting method that nulls them. The second option would have the benefit of avoiding a hash table lookup on calls to ReleaseStrings when a string literal is used, if unmanaged by StringsStorage. What do you think?",
       "parentUuid": "04d200c9_7f602ed4",
+      "range": {
+        "startLine": 228,
+        "startChar": 4,
+        "endLine": 232,
+        "endChar": 29
+      },
+      "revId": "386c661d978077c51ad97ce5e43a02dd93dec80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da1b1504_efd8152b",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-21T09:17:23Z",
+      "side": 1,
+      "message": "Ah hmm. Either way you need to remember to do the right call in tests which is kind of annoying. I\u0027ll leave it up to you, we can leave it as-is because we have DCHECKS elsewhere",
+      "parentUuid": "a9b3d2dd_06deae9b",
       "range": {
         "startLine": 228,
         "startChar": 4,
