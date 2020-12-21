@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4240f793_678ffeff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 40
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-21T16:49:17Z",
+      "side": 1,
+      "message": "This info seems out of date now?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 47
+      },
+      "revId": "cff679212f82e6970a1d31a7e3bfe379416f62ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "06d280c5_b29e03ae",
@@ -14,6 +37,46 @@
       "writtenOn": "2020-12-17T20:41:39Z",
       "side": 1,
       "message": "Hey sorry, didn\u0027t get to this yet. I\u0027ll take a look Monday",
+      "revId": "cff679212f82e6970a1d31a7e3bfe379416f62ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddde535d_501bbd9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-21T16:49:17Z",
+      "side": 1,
+      "message": "Just a few notes on the impl itself.\n\nSome meta points. This integration works with d8, but tracing works quite differently when v8 is embedded in Chrome, so if ETW in V8 + Chrome is important then this won\u0027t be the only solution you\u0027ll need. From the design doc comments it sounds like skyostil@ and his team have ideas here so I\u0027d defer to them.\n\nIn terms of integrating into the existing tracing system I think this is a good approach and you\u0027ve been able to use the existing interfaces nicely to achieve that so I think this is minimally invasive.\n\nSo I\u0027ll LGTM this from the perspective of this code implementing this particular solution. But whether this is the best solution I\u0027ll leave to people more involved it the project to decide. Thanks!",
+      "revId": "cff679212f82e6970a1d31a7e3bfe379416f62ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6405270_8a3dce95",
+        "filename": "src/libplatform/tracing/trace-writer.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-12-21T16:49:17Z",
+      "side": 1,
+      "message": "I\u0027d suggest a unique_ptr for this instead",
+      "range": {
+        "startLine": 194,
+        "startChar": 2,
+        "endLine": 194,
+        "endChar": 29
+      },
       "revId": "cff679212f82e6970a1d31a7e3bfe379416f62ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
