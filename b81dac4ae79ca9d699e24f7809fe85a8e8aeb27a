@@ -16,6 +16,46 @@
       "message": "Camillo if this looks good could you please +1 CR :)",
       "revId": "b81dac4ae79ca9d699e24f7809fe85a8e8aeb27a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2c42afb_d0c6df61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 41
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-12-21T23:48:54Z",
+      "side": 1,
+      "message": "one last nit (sorry a bit late so not 100% reliable here :P)",
+      "revId": "b81dac4ae79ca9d699e24f7809fe85a8e8aeb27a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62a9d9ab_8c12c90d",
+        "filename": "src/libplatform/tracing/trace-writer.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-12-21T23:48:54Z",
+      "side": 1,
+      "message": "minor nit (just spotted now): can we forward declare Recorder here and remove the header dependency?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 38
+      },
+      "revId": "b81dac4ae79ca9d699e24f7809fe85a8e8aeb27a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
