@@ -129,6 +129,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "397bb3cc_331bdcde",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 4139,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-12-21T22:10:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e012af27_484f39dd",
+      "range": {
+        "startLine": 4139,
+        "startChar": 15,
+        "endLine": 4139,
+        "endChar": 28
+      },
+      "revId": "d5a28225751e5b96b00faffbceb9103a3b43f462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7cce7786_8a803e88",
         "filename": "src/d8/d8.cc",
         "patchSetId": 39
@@ -163,6 +187,30 @@
       "writtenOn": "2020-12-15T10:54:20Z",
       "side": 1,
       "message": "Could you merge those two?\n- reuse the code to make it obvious that they only differ by the TraceWriter.",
+      "range": {
+        "startLine": 4160,
+        "startChar": 0,
+        "endLine": 4181,
+        "endChar": 38
+      },
+      "revId": "d5a28225751e5b96b00faffbceb9103a3b43f462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91d95173_7f7a0a45",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 4181,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-12-21T22:10:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8aa71924_8ba2af21",
       "range": {
         "startLine": 4160,
         "startChar": 0,
