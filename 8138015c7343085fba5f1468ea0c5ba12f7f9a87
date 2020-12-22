@@ -56,6 +56,30 @@
       },
       "revId": "8138015c7343085fba5f1468ea0c5ba12f7f9a87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d60a661_e14d649c",
+        "filename": "src/profiler/profile-generator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2020-12-22T02:37:10Z",
+      "side": 1,
+      "message": "Nice catch, fixed.",
+      "parentUuid": "964ce00a_15862b56",
+      "range": {
+        "startLine": 62,
+        "startChar": 15,
+        "endLine": 62,
+        "endChar": 37
+      },
+      "revId": "8138015c7343085fba5f1468ea0c5ba12f7f9a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
