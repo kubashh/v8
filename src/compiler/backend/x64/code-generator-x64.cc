@@ -1073,9 +1073,15 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       frame_access_state()->IncreaseSPDelta(bytes / kSystemPointerSize);
       DCHECK(!caller_registers_saved_);
       caller_registers_saved_ = true;
+      __ pushq(rsp);
+      __ movq(kScratchRegister, rsp);
+      __ pushq(Operand(rsp, 0));
+      __ andq(kScratchRegister, Immediate(-16));
+      __ movq(rsp, kScratchRegister);
       break;
     }
     case kArchRestoreCallerRegisters: {
+      __ popq(rsp);
       DCHECK(fp_mode_ ==
              static_cast<SaveFPRegsMode>(MiscField::decode(instr->opcode())));
       DCHECK(fp_mode_ == kDontSaveFPRegs || fp_mode_ == kSaveFPRegs);
