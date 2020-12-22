@@ -3682,13 +3682,138 @@ class CppClassGenerator {
  private:
   void GenerateClassConstructors();
   void GenerateFieldAccessor(const Field& f);
-  void GenerateFieldAccessorForUntagged(const Field& f);
-  void GenerateFieldAccessorForSmi(const Field& f);
-  void GenerateFieldAccessorForTagged(const Field& f);
 
   void GenerateClassCasts();
 
   std::string GetFieldOffsetForAccessor(const Field& f);
+
+  // Generates struct definitions that can be used for accessors on struct-typed
+  // fields. Does nothing if the type is not a StructType.
+  void EnsureStructGenerated(const Type* s);
+
+  enum AccessorKind {
+    kGet,
+    kSet,
+  };
+
+  // Gets the C++ type name that should be used in accessors for referring to
+  // the value of a class field or a struct field within a class field.
+  std::string GetTypeNameForAccessor(const Field& f, AccessorKind kind) {
+    const Type* field_type = f.name_and_type.type;
+    if (const StructType* s = StructType::DynamicCast(field_type)) {
+      return (kind == kGet ? "TqRuntimeStruct" : "TqRuntimeOptionalStruct") +
+             s->name();
+    }
+    if (!field_type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+      const Type* constexpr_version = field_type->ConstexprVersion();
+      if (!constexpr_version) {
+        Error("Field accessor for ", type_->name(), ":: ", f.name_and_type.name,
+              " cannot be generated because its type ", *field_type,
+              " is neither a subclass of Object nor does the type have a "
+              "constexpr "
+              "version.")
+            .Position(f.pos)
+            .Throw();
+      }
+      return constexpr_version->GetGeneratedTypeName();
+    }
+    if (field_type->IsSubtypeOf(TypeOracle::GetSmiType())) {
+      // Follow the convention to create Smi accessors with type int.
+      return "int";
+    }
+    return field_type->UnhandlifiedCppTypeName();
+  }
+
+  bool CanContainHeapObjects(const Type* t) {
+    if (const StructType* s = StructType::DynamicCast(t)) {
+      for (const Field& f : s->fields()) {
+        if (CanContainHeapObjects(f.name_and_type.type)) return true;
+      }
+      return false;
+    }
+    return t->IsSubtypeOf(TypeOracle::GetTaggedType()) &&
+           !t->IsSubtypeOf(TypeOracle::GetSmiType());
+  }
+
+  // If constexpr_offset is provided, then it is a compile-time constant C++
+  // expression for the offset of the field. Otherwise, the field should be
+  // loaded based on the local variable named "offset".
+  void EmitLoadFieldExpression(const Type* field_type,
+                               const std::string& get_type,
+                               base::Optional<std::string> constexpr_offset,
+                               size_t struct_offset, bool relaxed_load) {
+    DCHECK(!field_type->IsStructType());
+
+    std::string offset = constexpr_offset ? *constexpr_offset : "offset";
+    if (struct_offset) {
+      offset += " + " + std::to_string(struct_offset);
+    }
+
+    if (!field_type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+      if (relaxed_load) {
+        ReportError("Torque doesn't support @relaxedRead on untagged data");
+      }
+      inl_ << "this->template ReadField<" << get_type << ">(" << offset
+           << ");\n";
+      return;
+    }
+
+    const char* load = relaxed_load ? "Relaxed_Load" : "load";
+    std::vector<std::string> template_params;
+    std::vector<std::string> params;
+    const char* postfix = "";
+    if (field_type->IsSubtypeOf(TypeOracle::GetSmiType())) {
+      template_params.push_back("Smi");
+      postfix = ".value()";
+    } else {
+      template_params.push_back(get_type);
+      params.push_back("isolate");
+    }
+    params.push_back("*this");
+    if (constexpr_offset) {
+      template_params.push_back(offset);
+    } else {
+      params.push_back(offset);
+    }
+
+    inl_ << "TaggedField<";
+    PrintCommaSeparatedList(inl_, template_params);
+    inl_ << ">::" << load << "(";
+    PrintCommaSeparatedList(inl_, params);
+    inl_ << ")" << postfix << ";\n";
+  }
+
+  void EmitStoreFieldStatement(const Type* field_type,
+                               const std::string& set_type, std::string offset,
+                               bool relaxed_write, size_t struct_offset,
+                               const char* indent, const std::string& value) {
+    DCHECK(!field_type->IsStructType());
+    bool strong_pointer = field_type->IsSubtypeOf(TypeOracle::GetObjectType());
+
+    if (struct_offset) {
+      offset += " + " + std::to_string(struct_offset);
+    }
+    const char* write_macro =
+        strong_pointer ? (relaxed_write ? "RELAXED_WRITE_FIELD" : "WRITE_FIELD")
+                       : "RELAXED_WRITE_WEAK_FIELD";
+    if (!field_type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+      inl_ << indent << "this->template WriteField<" << set_type << ">("
+           << offset << ", " << value << ");\n";
+    } else if (field_type->IsSubtypeOf(TypeOracle::GetSmiType())) {
+      inl_ << indent << write_macro << "(*this, " << offset << ", Smi::FromInt("
+           << value << "));\n";
+    } else {
+      inl_ << indent << write_macro << "(*this, " << offset << ", " << value
+           << ");\n";
+    }
+    if (CanContainHeapObjects(field_type)) {
+      const char* write_barrier = strong_pointer
+                                      ? "CONDITIONAL_WRITE_BARRIER"
+                                      : "CONDITIONAL_WEAK_WRITE_BARRIER";
+      inl_ << indent << write_barrier << "(*this, " << offset << ", " << value
+           << ", mode);\n";
+    }
+  }
 
   const ClassType* type_;
   const ClassType* super_;
@@ -3699,6 +3824,7 @@ class CppClassGenerator {
   std::ostream& hdr_;
   std::ostream& inl_;
   std::ostream& impl_;
+  std::unordered_set<const StructType*> generated_structs_;
 };
 
 base::Optional<std::vector<Field>> GetOrderedUniqueIndexFields(
@@ -3962,28 +4088,160 @@ void CppClassGenerator::GenerateFieldAccessor(const Field& f) {
   const Type* field_type = f.name_and_type.type;
   if (field_type == TypeOracle::GetVoidType()) return;
 
-  // TODO(danno): Support generation of struct accessors
-  if (f.name_and_type.type->IsStructType()) return;
+  // float64_or_hole should be treated like float64. For now, we don't need it.
+  if (f.name_and_type.type == TypeOracle::GetFloat64OrHoleType()) {
+    return;
+  }
 
   // TODO(v8:10391) Generate accessors for external pointers
   if (f.name_and_type.type->IsSubtypeOf(TypeOracle::GetExternalPointerType())) {
     return;
   }
 
-  if (!f.name_and_type.type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
-    return GenerateFieldAccessorForUntagged(f);
-  }
-  if (f.name_and_type.type->IsSubtypeOf(TypeOracle::GetSmiType())) {
-    return GenerateFieldAccessorForSmi(f);
-  }
-  if (f.name_and_type.type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
-    return GenerateFieldAccessorForTagged(f);
+  EnsureStructGenerated(f.name_and_type.type);
+
+  std::string get_type = GetTypeNameForAccessor(f, kGet);
+  std::string set_type = GetTypeNameForAccessor(f, kSet);
+  bool can_contain_heap_objects = CanContainHeapObjects(field_type);
+
+  // Like get_type, but can be looked up outside the class.
+  std::string get_impl_return_type = get_type;
+  if (field_type->IsStructType()) {
+    get_impl_return_type = "typename " + gen_name_T_ + "::" + get_type;
   }
 
-  Error("Generation of field accessor for ", type_->name(),
-        "::", f.name_and_type.name, " failed (type ", *field_type,
-        " is not supported).")
-      .Position(f.pos);
+  const std::string& name = f.name_and_type.name;
+  std::string offset = GetFieldOffsetForAccessor(f);
+  std::string field_size;
+  std::tie(std::ignore, field_size) = f.GetFieldSizeInformation();
+
+  // Generate declarations in header.
+  if (can_contain_heap_objects && !field_type->IsClassType() &&
+      !field_type->IsStructType() &&
+      field_type != TypeOracle::GetObjectType()) {
+    hdr_ << "  // Torque type: " << field_type->ToString() << "\n";
+  }
+
+  hdr_ << "  inline " << get_type << " " << name << "("
+       << (f.index ? "int i" : "") << ") const;\n";
+  if (can_contain_heap_objects) {
+    hdr_ << "  inline " << get_type << " " << name << "(IsolateRoot isolate"
+         << (f.index ? ", int i" : "") << ") const;\n";
+  }
+  hdr_ << "  inline void set_" << name << "(" << (f.index ? "int i, " : "")
+       << set_type << " value"
+       << (can_contain_heap_objects
+               ? ", WriteBarrierMode mode = UPDATE_WRITE_BARRIER"
+               : "")
+       << ");\n\n";
+
+  // Generate implementation in inline header.
+  if (can_contain_heap_objects) {
+    inl_ << "template <class D, class P>\n";
+    inl_ << get_impl_return_type << " " << gen_name_ << "<D, P>::" << name
+         << "(" << (f.index ? "int i" : "") << ") const {\n";
+    inl_ << "  IsolateRoot isolate = GetIsolateForPtrCompr(*this);\n";
+    inl_ << "  return " << gen_name_ << "::" << name << "(isolate"
+         << (f.index ? ", i" : "") << ");\n";
+    inl_ << "}\n";
+  }
+
+  std::vector<std::string> getter_params;
+  if (can_contain_heap_objects) getter_params.push_back("IsolateRoot isolate");
+  if (f.index) getter_params.push_back("int i");
+  inl_ << "template <class D, class P>\n";
+  inl_ << get_impl_return_type << " " << gen_name_ << "<D, P>::" << name << "(";
+  PrintCommaSeparatedList(inl_, getter_params);
+  inl_ << ") const {\n";
+
+  base::Optional<std::string> constexpr_offset;
+  if (f.index) {
+    GenerateBoundsDCheck(inl_, "i", type_, f);
+    inl_ << "  int offset = " << offset << " + i * " << field_size << ";\n";
+  } else {
+    constexpr_offset = offset;
+  }
+
+  if (const StructType* struct_type = StructType::DynamicCast(field_type)) {
+    inl_ << "  " << get_type << " result;\n";
+    for (const Field& struct_field : struct_type->fields()) {
+      const Type* struct_field_type = struct_field.name_and_type.type;
+      if (struct_field_type->IsStructType()) {
+        ReportError(
+            "Torque doesn't yet support nested structs used as class fields");
+      }
+      std::string struct_field_value =
+          "result." + struct_field.name_and_type.name;
+      inl_ << "  " << struct_field_value << " = ";
+      EmitLoadFieldExpression(
+          struct_field_type, GetTypeNameForAccessor(struct_field, kGet),
+          constexpr_offset, *struct_field.offset, f.relaxed_read);
+      if (CanContainHeapObjects(struct_field_type)) {
+        inl_ << "  DCHECK("
+             << GenerateRuntimeTypeCheck(struct_field_type, struct_field_value)
+             << ");\n";
+      }
+    }
+    inl_ << "  return result;\n";
+  } else {
+    std::string type_check;
+    if (can_contain_heap_objects) {
+      type_check = GenerateRuntimeTypeCheck(field_type, "value");
+    }
+    if (type_check.empty()) {
+      inl_ << "  return ";
+    } else {
+      inl_ << "  auto value = ";
+    }
+    EmitLoadFieldExpression(field_type, get_type, constexpr_offset, 0,
+                            f.relaxed_read);
+    if (!type_check.empty()) {
+      inl_ << "  DCHECK(" << type_check << ");\n";
+      inl_ << "  return value;\n";
+    }
+  }
+  inl_ << "}\n";
+
+  inl_ << "template <class D, class P>\n";
+  inl_ << "void " << gen_name_ << "<D, P>::set_" << name << "(";
+  if (f.index) {
+    inl_ << "int i, ";
+  }
+  inl_ << set_type << " value";
+  if (can_contain_heap_objects) {
+    inl_ << ", WriteBarrierMode mode";
+  }
+  inl_ << ") {\n";
+  if (can_contain_heap_objects && !field_type->IsStructType()) {
+    inl_ << "  SLOW_DCHECK(" << GenerateRuntimeTypeCheck(field_type, "value")
+         << ");\n";
+  }
+  if (f.index) {
+    GenerateBoundsDCheck(inl_, "i", type_, f);
+    inl_ << "  int offset = " << offset << " + i * " << field_size << ";\n";
+    offset = "offset";
+  }
+  if (const StructType* struct_type = StructType::DynamicCast(field_type)) {
+    for (const Field& struct_field : struct_type->fields()) {
+      const Type* struct_field_type = struct_field.name_and_type.type;
+      inl_ << "  if (value." << struct_field.name_and_type.name << ") {\n";
+      const std::string struct_field_value =
+          "(*value." + struct_field.name_and_type.name + ")";
+      if (CanContainHeapObjects(struct_field_type)) {
+        inl_ << "    SLOW_DCHECK("
+             << GenerateRuntimeTypeCheck(struct_field_type, struct_field_value)
+             << ");\n";
+      }
+      EmitStoreFieldStatement(
+          struct_field_type, GetTypeNameForAccessor(struct_field, kSet), offset,
+          f.relaxed_write, *struct_field.offset, "    ", struct_field_value);
+      inl_ << "  }\n";
+    }
+  } else {
+    EmitStoreFieldStatement(field_type, set_type, offset, f.relaxed_write, 0,
+                            "  ", "value");
+  }
+  inl_ << "}\n\n";
 }
 
 std::string CppClassGenerator::GetFieldOffsetForAccessor(const Field& f) {
@@ -3993,200 +4251,36 @@ std::string CppClassGenerator::GetFieldOffsetForAccessor(const Field& f) {
   return CamelifyString(f.name_and_type.name) + "Offset()";
 }
 
-void CppClassGenerator::GenerateFieldAccessorForUntagged(const Field& f) {
-  DCHECK(!f.name_and_type.type->IsSubtypeOf(TypeOracle::GetTaggedType()));
-  const Type* field_type = f.name_and_type.type;
-  if (field_type == TypeOracle::GetVoidType()) return;
-  const Type* constexpr_version = field_type->ConstexprVersion();
-  if (!constexpr_version) {
-    Error("Field accessor for ", type_->name(), ":: ", f.name_and_type.name,
-          " cannot be generated because its type ", *field_type,
-          " is neither a subclass of Object nor does the type have a constexpr "
-          "version.")
-        .Position(f.pos);
-    return;
-  }
-  const std::string& name = f.name_and_type.name;
-  const std::string type = constexpr_version->GetGeneratedTypeName();
-  std::string offset = GetFieldOffsetForAccessor(f);
+void CppClassGenerator::EnsureStructGenerated(const Type* t) {
+  const StructType* s = StructType::DynamicCast(t);
+  if (!s) return;
 
-  // Generate declarations in header.
-  if (f.index) {
-    hdr_ << "  inline " << type << " " << name << "(int i) const;\n";
-    hdr_ << "  inline void set_" << name << "(int i, " << type
-         << " value);\n\n";
-  } else {
-    hdr_ << "  inline " << type << " " << name << "() const;\n";
-    hdr_ << "  inline void set_" << name << "(" << type << " value);\n\n";
+  // Only generate each struct value type once within the containing class.
+  if (!generated_structs_.insert(s).second) return;
+
+  // Make sure nested structs have been emitted.
+  for (const Field& f : s->fields()) {
+    EnsureStructGenerated(f.name_and_type.type);
   }
 
-  // Generate implementation in inline header.
-  inl_ << "template <class D, class P>\n";
-  inl_ << type << " " << gen_name_ << "<D, P>::" << name << "(";
-  if (f.index) {
-    inl_ << "int i";
+  // For the getter, emit a struct with normal field types.
+  hdr_ << "  struct TqRuntimeStruct" << CamelifyString(s->name()) << " {\n";
+  for (const Field& f : s->fields()) {
+    hdr_ << "    " << GetTypeNameForAccessor(f, kGet) << " "
+         << f.name_and_type.name << ";\n";
   }
-  inl_ << ") const {\n";
-  if (f.index) {
-    GenerateBoundsDCheck(inl_, "i", type_, f);
-    size_t field_size;
-    std::string size_string;
-    std::tie(field_size, size_string) = f.GetFieldSizeInformation();
-    inl_ << "  int offset = " << offset << " + i * " << field_size << ";\n";
-    inl_ << "  return this->template ReadField<" << type << ">(offset);\n";
-  } else {
-    inl_ << "  return this->template ReadField<" << type << ">(" << offset
-         << ");\n";
-  }
-  inl_ << "}\n";
+  hdr_ << "  };\n\n";
 
-  inl_ << "template <class D, class P>\n";
-  inl_ << "void " << gen_name_ << "<D, P>::set_" << name << "(";
-  if (f.index) {
-    inl_ << "int i, ";
+  // For the setter, emit a struct where every non-struct field is optional.
+  hdr_ << "  struct TqRuntimeOptionalStruct" << CamelifyString(s->name())
+       << " {\n";
+  for (const Field& f : s->fields()) {
+    bool is_struct = f.name_and_type.type->IsStructType();
+    hdr_ << "    " << (is_struct ? "" : "base::Optional<")
+         << GetTypeNameForAccessor(f, kSet) << (is_struct ? "" : ">") << " "
+         << f.name_and_type.name << ";\n";
   }
-  inl_ << type << " value) {\n";
-  if (f.index) {
-    GenerateBoundsDCheck(inl_, "i", type_, f);
-    size_t field_size;
-    std::string size_string;
-    std::tie(field_size, size_string) = f.GetFieldSizeInformation();
-    inl_ << "  int offset = " << offset << " + i * " << field_size << ";\n";
-    inl_ << "  this->template WriteField<" << type << ">(offset, value);\n";
-  } else {
-    inl_ << "  this->template WriteField<" << type << ">(" << offset
-         << ", value);\n";
-  }
-  inl_ << "}\n\n";
-}
-
-void CppClassGenerator::GenerateFieldAccessorForSmi(const Field& f) {
-  DCHECK(f.name_and_type.type->IsSubtypeOf(TypeOracle::GetSmiType()));
-  // Follow the convention to create Smi accessors with type int.
-  const std::string type = "int";
-  const std::string& name = f.name_and_type.name;
-  const std::string offset = GetFieldOffsetForAccessor(f);
-
-  // Generate declarations in header.
-  if (f.index) {
-    hdr_ << "  inline " << type << " " << name << "(int i) const;\n";
-    hdr_ << "  inline void set_" << name << "(int i, " << type
-         << " value);\n\n";
-  }
-  hdr_ << "  inline " << type << " " << name << "() const;\n";
-  hdr_ << "  inline void set_" << name << "(" << type << " value);\n\n";
-
-  // Generate implementation in inline header.
-  inl_ << "template <class D, class P>\n";
-  inl_ << type << " " << gen_name_ << "<D, P>::" << name << "(";
-  if (f.index) {
-    inl_ << "int i";
-  }
-  inl_ << ") const {\n";
-  if (f.index) {
-    GenerateBoundsDCheck(inl_, "i", type_, f);
-    inl_ << "  int offset = " << offset << " + i * kTaggedSize;\n";
-    inl_ << "  return TaggedField<Smi>::load(*this, offset).value();\n";
-    inl_ << "}\n";
-  } else {
-    inl_ << "  return TaggedField<Smi, " << offset
-         << ">::load(*this).value();\n";
-    inl_ << "}\n";
-  }
-
-  inl_ << "template <class D, class P>\n";
-  inl_ << "void " << gen_name_ << "<D, P>::set_" << name << "(";
-  if (f.index) {
-    inl_ << "int i, ";
-  }
-  inl_ << type << " value) {\n";
-  const char* write_macro =
-      f.relaxed_write ? "RELAXED_WRITE_FIELD" : "WRITE_FIELD";
-  if (f.index) {
-    GenerateBoundsDCheck(inl_, "i", type_, f);
-    inl_ << "  int offset = " << offset << " + i * kTaggedSize;\n";
-    inl_ << "  " << write_macro << "(*this, offset, Smi::FromInt(value));\n";
-  } else {
-    inl_ << "  " << write_macro << "(*this, " << offset
-         << ", Smi::FromInt(value));\n";
-  }
-  inl_ << "}\n\n";
-}
-
-void CppClassGenerator::GenerateFieldAccessorForTagged(const Field& f) {
-  const Type* field_type = f.name_and_type.type;
-  DCHECK(field_type->IsSubtypeOf(TypeOracle::GetTaggedType()));
-  const std::string& name = f.name_and_type.name;
-  std::string offset = GetFieldOffsetForAccessor(f);
-  bool strong_pointer = field_type->IsSubtypeOf(TypeOracle::GetObjectType());
-
-  std::string type = field_type->UnhandlifiedCppTypeName();
-  // Generate declarations in header.
-  if (!field_type->IsClassType() && field_type != TypeOracle::GetObjectType()) {
-    hdr_ << "  // Torque type: " << field_type->ToString() << "\n";
-  }
-
-  hdr_ << "  inline " << type << " " << name << "(" << (f.index ? "int i" : "")
-       << ") const;\n";
-  hdr_ << "  inline " << type << " " << name << "(IsolateRoot isolates"
-       << (f.index ? ", int i" : "") << ") const;\n";
-  hdr_ << "  inline void set_" << name << "(" << (f.index ? "int i, " : "")
-       << type << " value, WriteBarrierMode mode = UPDATE_WRITE_BARRIER);\n\n";
-
-  std::string type_check = GenerateRuntimeTypeCheck(field_type, "value");
-
-  // Generate implementation in inline header.
-  inl_ << "template <class D, class P>\n";
-  inl_ << type << " " << gen_name_ << "<D, P>::" << name << "("
-       << (f.index ? "int i" : "") << ") const {\n";
-  inl_ << "  IsolateRoot isolate = GetIsolateForPtrCompr(*this);\n";
-  inl_ << "  return " << gen_name_ << "::" << name << "(isolate"
-       << (f.index ? ", i" : "") << ");\n";
-  inl_ << "}\n";
-
-  inl_ << "template <class D, class P>\n";
-  inl_ << type << " " << gen_name_ << "<D, P>::" << name
-       << "(IsolateRoot isolate" << (f.index ? ", int i" : "") << ") const {\n";
-
-  if (f.index) {
-    GenerateBoundsDCheck(inl_, "i", type_, f);
-    inl_ << "  int offset = " << offset << " + i * kTaggedSize;\n";
-    inl_ << "  auto value = TaggedField<" << type
-         << ">::Relaxed_Load(isolate, *this, offset);\n";
-  } else {
-    inl_ << "  auto value = TaggedField<" << type << ", " << offset
-         << ">::load(isolate, *this);\n";
-  }
-  if (!type_check.empty()) {
-    inl_ << "  DCHECK(" << type_check << ");\n";
-  }
-  inl_ << "  return value;\n";
-  inl_ << "}\n";
-
-  inl_ << "template <class D, class P>\n";
-  inl_ << "void " << gen_name_ << "<D, P>::set_" << name << "(";
-  if (f.index) {
-    inl_ << "int i, ";
-  }
-  inl_ << type << " value, WriteBarrierMode mode) {\n";
-  if (!type_check.empty()) {
-    inl_ << "  SLOW_DCHECK(" << type_check << ");\n";
-  }
-  const char* write_macro =
-      strong_pointer ? (f.relaxed_write ? "RELAXED_WRITE_FIELD" : "WRITE_FIELD")
-                     : "RELAXED_WRITE_WEAK_FIELD";
-  if (f.index) {
-    GenerateBoundsDCheck(inl_, "i", type_, f);
-    inl_ << "  int offset = " << offset << " + i * kTaggedSize;\n";
-    offset = "offset";
-    inl_ << "  " << write_macro << "(*this, offset, value);\n";
-  } else {
-    inl_ << "  " << write_macro << "(*this, " << offset << ", value);\n";
-  }
-  const char* write_barrier = strong_pointer ? "CONDITIONAL_WRITE_BARRIER"
-                                             : "CONDITIONAL_WEAK_WRITE_BARRIER";
-  inl_ << "  " << write_barrier << "(*this, " << offset << ", value, mode);\n";
-  inl_ << "}\n\n";
+  hdr_ << "  };\n\n";
 }
 
 void GenerateStructLayoutDescription(std::ostream& header,
