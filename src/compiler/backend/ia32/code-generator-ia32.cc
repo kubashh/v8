@@ -964,6 +964,34 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       caller_registers_saved_ = false;
       break;
     }
+    case kArchAlignStack: {
+      int alignment = i.InputInt32(0);
+      // Extra alignment on ia32 is kDoubleSize or kSimd128Size.
+      if (alignment == kDoubleSize) {
+        __ push(esp);
+        __ push(Operand(esp, 0));
+        __ sub(esp, Immediate(kSystemPointerSize));
+        __ and_(esp, Immediate(-kDoubleSize));
+        __ add(esp, Immediate(kDoubleSize));
+      } else if (alignment == kSimd128Size) {
+        __ push(esp);
+        __ push(Operand(esp, 0));
+        __ push(Operand(esp, kSystemPointerSize));
+        __ push(Operand(esp, 2 * kSystemPointerSize));
+        __ sub(esp, Immediate(kSystemPointerSize));
+        __ and_(esp, Immediate(-kSimd128Size));
+        __ add(esp, Immediate(kSimd128Size));
+      } else {
+        UNREACHABLE();
+      }
+      frame_access_state()->MarkHasFrame(false);
+      break;
+    }
+    case kArchRestoreStack: {
+      __ pop(esp);
+      frame_access_state()->MarkHasFrame(true);
+      break;
+    }
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;

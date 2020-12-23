@@ -399,6 +399,8 @@ class V8_EXPORT_PRIVATE CallDescriptor final
 
   int GetTaggedParameterSlots() const;
 
+  int GetMaximumSlotAlignment() const;
+
   bool CanTailCall(const CallDescriptor* callee) const;
 
   int CalculateFixedFrameSize(CodeKind code_kind) const;

@@ -825,6 +825,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       caller_registers_saved_ = false;
       break;
     }
+    case kArchAlignStack:
+    case kArchRestoreStack:
+      // Arm64 is already 16-byte aligned.
+      break;
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;

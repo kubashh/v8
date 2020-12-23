@@ -136,6 +136,23 @@ int CallDescriptor::GetTaggedParameterSlots() const {
   return result;
 }
 
+int CallDescriptor::GetMaximumSlotAlignment() const {
+  byte result = kSystemPointerSize;
+  for (size_t i = 0; i < InputCount(); ++i) {
+    LinkageLocation operand = GetInputLocation(i);
+    if (!operand.IsRegister()) {
+      result = std::max(result, operand.GetType().MemSize());
+    }
+  }
+  for (size_t i = 0; i < ReturnCount(); ++i) {
+    LinkageLocation operand = GetReturnLocation(i);
+    if (!operand.IsRegister()) {
+      result = std::max(result, operand.GetType().MemSize());
+    }
+  }
+  return static_cast<int>(result);
+}
+
 bool CallDescriptor::CanTailCall(const CallDescriptor* callee) const {
   if (ReturnCount() != callee->ReturnCount()) return false;
   const int stack_param_delta = callee->GetStackParameterDelta(this);
