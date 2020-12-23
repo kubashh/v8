@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "961cc76a_6b9970ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-12-23T09:20:39Z",
+      "side": 1,
+      "message": "Let me try to sum up what I think this code is doing:\n\nYou want to align the stack pointer, which means that it should be true that rsp % 16 \u003d\u003d 0. For this you first push the old rsp on the stack at slot Slot_rsp, and then you push the address of Slot_rsp multiple times on the stack such that at least one of these pushes of the address of Slot_rsp is stored at an aligned memory location. Then you store the address of this aligned memory location into rsp. Thereby rsp is aligned. The other pushes of the address of Slot_rsp are useless, but you don\u0027t know that. You don\u0027t know which of the pushes will be the good one at compile time.\n\nOn the way out you have to pop rsp to get rid of the unused pushes of the address of Slot_rsp, and to reset rsp to the original rsp.\n\nVery neat algorithm. I guess you will need some comments, maybe even a small graphic 😄",
+      "revId": "551f87935af8b7cdfa51ec7dc542897d67cd9ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
