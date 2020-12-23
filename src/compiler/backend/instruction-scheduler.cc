@@ -317,6 +317,8 @@ int InstructionScheduler::GetInstructionFlags(const Instruction* instr) const {
 
     case kArchSaveCallerRegisters:
     case kArchRestoreCallerRegisters:
+    case kArchAlignStack:
+    case kArchRestoreStack:
       return kIsBarrier;
 
     case kArchCallCFunction:
