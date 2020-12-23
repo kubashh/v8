@@ -1521,6 +1521,10 @@ int DisassemblerX64::AVXInstruction(byte* data) {
                        NameOfXMMRegister(regop));
         current += PrintRightOperand(current);
         break;
+      case 0x6F:
+        AppendToBuffer("vmovdqa %s,", NameOfXMMRegister(regop));
+        current += PrintRightXMMOperand(current);
+        break;
       case 0x70:
         AppendToBuffer("vpshufd %s,", NameOfXMMRegister(regop));
         current += PrintRightXMMOperand(current);
