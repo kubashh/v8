@@ -2972,6 +2972,11 @@ void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
          g.NoOutput());
   }
 
+  int maximum_alignment = call_descriptor->GetMaximumSlotAlignment();
+  if (maximum_alignment > kSystemPointerSize) {
+    Emit(kArchAlignStack, g.NoOutput(), g.UseImmediate(maximum_alignment));
+  }
+
   FrameStateDescriptor* frame_state_descriptor = nullptr;
   if (call_descriptor->NeedsFrameState()) {
     frame_state_descriptor = GetFrameStateDescriptor(
@@ -3049,6 +3054,9 @@ void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
     Emit(
         kArchRestoreCallerRegisters | MiscField::encode(static_cast<int>(mode)),
         g.NoOutput());
+  }
+  if (maximum_alignment > kSystemPointerSize) {
+    Emit(kArchRestoreStack, g.NoOutput());
   }
 }
 

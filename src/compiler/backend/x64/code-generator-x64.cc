@@ -1087,6 +1087,21 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       caller_registers_saved_ = false;
       break;
     }
+    case kArchAlignStack: {
+      // Extra alignment on x64 is always kSimd128Size.
+      DCHECK_EQ(i.InputInt32(0), kSimd128Size);
+      // Push two copies of RSP, and set RSP to the 16-byte aligned one.
+      __ pushq(rsp);
+      __ movq(kScratchRegister, rsp);
+      __ pushq(Operand(rsp, 0));
+      __ andq(kScratchRegister, Immediate(-kSimd128Size));
+      __ movq(rsp, kScratchRegister);
+      break;
+    }
+    case kArchRestoreStack: {
+      __ popq(rsp);
+      break;
+    }
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;

@@ -884,6 +884,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       caller_registers_saved_ = false;
       break;
     }
+    case kArchAlignStack:
+    case kArchRestoreStack:
+      // TODO(bbudge) Investigate alignment on Arm.
+      break;
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;

@@ -82,6 +82,8 @@ inline RecordWriteMode WriteBarrierKindToRecordWriteMode(
   V(ArchPrepareCallCFunction)                                              \
   V(ArchSaveCallerRegisters)                                               \
   V(ArchRestoreCallerRegisters)                                            \
+  V(ArchAlignStack)                                                        \
+  V(ArchRestoreStack)                                                      \
   V(ArchCallCFunction)                                                     \
   V(ArchPrepareTailCall)                                                   \
   V(ArchJmp)                                                               \
