@@ -2,9 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import {groupBy} from '../helper.mjs';
+import {App} from '../index.mjs'
 
 import {SelectRelatedEvent, ToolTipEvent} from './events.mjs';
-import {delay, DOM, formatBytes, V8CustomElement} from './helper.mjs';
+import {CSSColor, delay, DOM, formatBytes, gradientStopsFromGroups, V8CustomElement} from './helper.mjs';
 
 DOM.defineCustomElement('view/source-panel',
                         (templateText) =>
@@ -207,6 +208,11 @@ class LineBuilder {
       return a.line - b.line;
     });
     this._sourcePositions = new SourcePositionIterator(script.sourcePositions);
+    this._colorMap = new Map();
+    let i = 0;
+    for (let type of App.getAllEventTypes()) {
+      this._colorMap.set(type, CSSColor.at(i++));
+    }
   }
 
   get sourcePositionToMarkers() {
@@ -246,6 +252,13 @@ class LineBuilder {
     marker.sourcePosition = sourcePosition;
     marker.onclick = this._clickHandler;
     marker.onmouseover = this._mouseoverHandler;
+
+    const entries = sourcePosition.entries;
+    const stops = gradientStopsFromGroups(
+        entries.length, '%', groupBy(entries, entry => entry.constructor),
+        type => this._colorMap.get(type));
+    marker.style.backgroundImage = `linear-gradient(0deg,${stops.join(',')})`
+
     return marker;
   }
 }
