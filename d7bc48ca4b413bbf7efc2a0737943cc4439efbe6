@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98e46e42_0c7631c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-12-29T07:17:30Z",
+      "side": 1,
+      "message": "LGTM, rubber stamp ok. Thanks for updating the tests too :)",
+      "revId": "d7bc48ca4b413bbf7efc2a0737943cc4439efbe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
