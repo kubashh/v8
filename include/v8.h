@@ -1423,7 +1423,7 @@ class ScriptOriginOptions {
  */
 class ScriptOrigin {
  public:
-  V8_DEPRECATE_SOON("Use constructor with primitvie C++ types")
+  V8_DEPRECATE_SOON("Use constructor with primitive C++ types")
   V8_INLINE explicit ScriptOrigin(
       Local<Value> resource_name, Local<Integer> resource_line_offset,
       Local<Integer> resource_column_offset,
@@ -1435,8 +1435,8 @@ class ScriptOrigin {
       Local<Boolean> is_module = Local<Boolean>(),
       Local<PrimitiveArray> host_defined_options = Local<PrimitiveArray>());
   V8_INLINE explicit ScriptOrigin(
-      Local<Value> resource_name, int resource_line_offset = 0,
-      int resource_column_offset = 0,
+      Isolate* isolate, Local<Value> resource_name,
+      int resource_line_offset = 0, int resource_column_offset = 0,
       bool resource_is_shared_cross_origin = false, int script_id = -1,
       Local<Value> source_map_url = Local<Value>(),
       bool resource_is_opaque = false, bool is_wasm = false,
@@ -11480,7 +11480,7 @@ ScriptOrigin::ScriptOrigin(
     Local<Boolean> is_opaque, Local<Boolean> is_wasm, Local<Boolean> is_module,
     Local<PrimitiveArray> host_defined_options)
     : ScriptOrigin(
-          resource_name,
+          Isolate::GetCurrent(), resource_name,
           line_offset.IsEmpty() ? 0 : static_cast<int>(line_offset->Value()),
           column_offset.IsEmpty() ? 0
                                   : static_cast<int>(column_offset->Value()),
@@ -11490,12 +11490,13 @@ ScriptOrigin::ScriptOrigin(
           !is_wasm.IsEmpty() && is_wasm->IsTrue(),
           !is_module.IsEmpty() && is_module->IsTrue(), host_defined_options) {}
 
-ScriptOrigin::ScriptOrigin(Local<Value> resource_name, int line_offset,
-                           int column_offset, bool is_shared_cross_origin,
-                           int script_id, Local<Value> source_map_url,
-                           bool is_opaque, bool is_wasm, bool is_module,
+ScriptOrigin::ScriptOrigin(Isolate* isolate, Local<Value> resource_name,
+                           int line_offset, int column_offset,
+                           bool is_shared_cross_origin, int script_id,
+                           Local<Value> source_map_url, bool is_opaque,
+                           bool is_wasm, bool is_module,
                            Local<PrimitiveArray> host_defined_options)
-    : isolate_(Isolate::GetCurrent()),
+    : isolate_(isolate),
       resource_name_(resource_name),
       resource_line_offset_(line_offset),
       resource_column_offset_(column_offset),
