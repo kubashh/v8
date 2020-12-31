@@ -67,29 +67,27 @@ MaybeHandle<Object> Instantiate(
   }
 }
 
-MaybeHandle<Object> DefineAccessorProperty(
-    Isolate* isolate, Handle<JSObject> object, Handle<Name> name,
-    Handle<Object> getter, Handle<Object> setter, PropertyAttributes attributes,
-    bool force_instantiate) {
-  if (getter->IsFunctionTemplateInfo()) {
-    if (force_instantiate ||
-        FunctionTemplateInfo::cast(*getter).BreakAtEntry()) {
-      ASSIGN_RETURN_ON_EXCEPTION(
-          isolate, getter,
-          InstantiateFunction(isolate,
-                              Handle<FunctionTemplateInfo>::cast(getter)),
-          Object);
-    }
+MaybeHandle<Object> DefineAccessorProperty(Isolate* isolate,
+                                           Handle<JSObject> object,
+                                           Handle<Name> name,
+                                           Handle<Object> getter,
+                                           Handle<Object> setter,
+                                           PropertyAttributes attributes) {
+  if (getter->IsFunctionTemplateInfo() &&
+      FunctionTemplateInfo::cast(*getter).BreakAtEntry()) {
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, getter,
+        InstantiateFunction(isolate,
+                            Handle<FunctionTemplateInfo>::cast(getter)),
+        Object);
   }
-  if (setter->IsFunctionTemplateInfo()) {
-    if (force_instantiate ||
-        FunctionTemplateInfo::cast(*setter).BreakAtEntry()) {
-      ASSIGN_RETURN_ON_EXCEPTION(
-          isolate, setter,
-          InstantiateFunction(isolate,
-                              Handle<FunctionTemplateInfo>::cast(setter)),
-          Object);
-    }
+  if (setter->IsFunctionTemplateInfo() &&
+      FunctionTemplateInfo::cast(*setter).BreakAtEntry()) {
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, setter,
+        InstantiateFunction(isolate,
+                            Handle<FunctionTemplateInfo>::cast(setter)),
+        Object);
   }
   RETURN_ON_EXCEPTION(
       isolate,
@@ -250,7 +248,7 @@ MaybeHandle<JSObject> ConfigureInstance(Isolate* isolate, Handle<JSObject> obj,
         auto setter = handle(properties->get(i++), isolate);
         RETURN_ON_EXCEPTION(isolate,
                             DefineAccessorProperty(isolate, obj, name, getter,
-                                                   setter, attributes, false),
+                                                   setter, attributes),
                             JSObject);
       }
     } else {
