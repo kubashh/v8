@@ -4475,10 +4475,12 @@ Handle<Object> AccessorPair::GetComponent(Isolate* isolate,
                                           AccessorComponent component) {
   Object accessor = accessor_pair->get(component);
   if (accessor.IsFunctionTemplateInfo()) {
-    return ApiNatives::InstantiateFunction(
-               isolate, native_context,
-               handle(FunctionTemplateInfo::cast(accessor), isolate))
-        .ToHandleChecked();
+    Handle<JSFunction> accessor_function =
+        ApiNatives::InstantiateFunction(
+            isolate, native_context,
+            handle(FunctionTemplateInfo::cast(accessor), isolate))
+            .ToHandleChecked();
+    accessor_pair->set(component, *accessor_function);
   }
   if (accessor.IsNull(isolate)) {
     return isolate->factory()->undefined_value();
