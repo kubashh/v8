@@ -1466,7 +1466,8 @@ Local<FunctionTemplate> FunctionTemplate::New(
   LOG_API(i_isolate, FunctionTemplate, New);
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
   auto templ =
-      FunctionTemplateNew(i_isolate, callback, data, signature, length, false,
+      FunctionTemplateNew(i_isolate, callback, data, signature, length,
+                          behavior == ConstructorBehavior::kThrow,
                           Local<Private>(), side_effect_type, c_function);
   if (behavior == ConstructorBehavior::kThrow) templ->RemovePrototype();
   return templ;
@@ -1479,8 +1480,8 @@ Local<FunctionTemplate> FunctionTemplate::NewWithCache(
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
   LOG_API(i_isolate, FunctionTemplate, NewWithCache);
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
-  return FunctionTemplateNew(i_isolate, callback, data, signature, length,
-                             false, cache_property, side_effect_type);
+  return FunctionTemplateNew(i_isolate, callback, data, signature, length, true,
+                             cache_property, side_effect_type);
 }
 
 Local<Signature> Signature::New(Isolate* isolate,
@@ -1630,6 +1631,9 @@ void FunctionTemplate::RemovePrototype() {
   auto isolate = info->GetIsolate();
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
   info->set_remove_prototype(true);
+  // TODO(gsathya): This should be removed after v8:11288 is fixed.
+  info->set_do_not_cache(true);
+  info->set_serial_number(0);
 }
 
 // --- O b j e c t T e m p l a t e ---
