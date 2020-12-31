@@ -5,6 +5,8 @@
 #ifndef V8_OBJECTS_COMPRESSED_SLOTS_H_
 #define V8_OBJECTS_COMPRESSED_SLOTS_H_
 
+#include "v8-gn.h"  // NOLINT(build/include_directory)
+
 #ifdef V8_COMPRESS_POINTERS
 
 #include "src/objects/slots.h"
