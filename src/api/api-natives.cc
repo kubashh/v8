@@ -71,10 +71,10 @@ MaybeHandle<Object> DefineAccessorProperty(
     Isolate* isolate, Handle<JSObject> object, Handle<Name> name,
     Handle<Object> getter, Handle<Object> setter, PropertyAttributes attributes,
     bool force_instantiate) {
-  DCHECK(!getter->IsFunctionTemplateInfo() ||
-         !FunctionTemplateInfo::cast(*getter).do_not_cache());
-  DCHECK(!setter->IsFunctionTemplateInfo() ||
-         !FunctionTemplateInfo::cast(*setter).do_not_cache());
+  DCHECK_IMPLIES(getter->IsFunctionTemplateInfo(),
+                 FunctionTemplateInfo::cast(*getter).do_not_cache());
+  DCHECK_IMPLIES(setter->IsFunctionTemplateInfo(),
+                 FunctionTemplateInfo::cast(*setter).do_not_cache());
   if (getter->IsFunctionTemplateInfo()) {
     if (force_instantiate ||
         FunctionTemplateInfo::cast(*getter).BreakAtEntry()) {

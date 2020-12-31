@@ -1466,7 +1466,8 @@ Local<FunctionTemplate> FunctionTemplate::New(
   LOG_API(i_isolate, FunctionTemplate, New);
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
   auto templ =
-      FunctionTemplateNew(i_isolate, callback, data, signature, length, false,
+      FunctionTemplateNew(i_isolate, callback, data, signature, length,
+                          behavior == ConstructorBehavior::kThrow,
                           Local<Private>(), side_effect_type, c_function);
   if (behavior == ConstructorBehavior::kThrow) templ->RemovePrototype();
   return templ;
