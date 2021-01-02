@@ -5,6 +5,9 @@
 #ifndef V8_OBJECTS_COMPRESSED_SLOTS_H_
 #define V8_OBJECTS_COMPRESSED_SLOTS_H_
 
+// Must include before the ifdef to ensure V8_COMPRESS_POINTERS can be defined.
+#include "include/v8-internal.h"
+
 #ifdef V8_COMPRESS_POINTERS
 
 #include "src/objects/slots.h"
