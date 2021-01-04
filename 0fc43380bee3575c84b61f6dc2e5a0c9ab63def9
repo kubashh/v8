@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4df04a0_b311c5c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2021-01-04T19:49:06Z",
+      "side": 1,
+      "message": "@Nico: I believe you are right reviewer for this. PTAL 😊",
+      "revId": "0fc43380bee3575c84b61f6dc2e5a0c9ab63def9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
