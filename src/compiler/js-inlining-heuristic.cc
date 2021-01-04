@@ -10,6 +10,7 @@
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/simplified-operator.h"
+#include "src/compiler/wasm-compiler.h"
 #include "src/objects/objects-inl.h"
 
 namespace v8 {
@@ -142,7 +143,30 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
 }
 
 Reduction JSInliningHeuristic::Reduce(Node* node) {
+  // printf("JSInliningHeuristic::Reduce: %d %s\n", node->id(),
+  //       IrOpcode::Mnemonic(node->opcode()));
+
   if (!IrOpcode::IsInlineeOpcode(node->opcode())) return NoChange();
+
+  if (node->opcode() == IrOpcode::kJSWasmCall) {
+    if (!enable_wasm_inlining_) return NoChange();
+
+    Candidate candidate;
+    candidate.num_functions = 1;
+    candidate.node = node;
+    // TODO(paolosev): How to initialize the rest of the Candidate fields?
+    return InlineCandidate(candidate, true);
+  } else if (node->opcode() == IrOpcode::kWasmCall) {
+    DCHECK(enable_wasm_inlining_);
+
+    Candidate candidate;
+    candidate.num_functions = 1;
+    candidate.node = node;
+    // TODO(paolosev): How to initialize the rest of the Candidate fields?
+    return InlineCandidate(candidate, true);
+  }
+
+  if (enable_wasm_inlining_) return NoChange();
 
   if (total_inlined_bytecode_size_ >= FLAG_max_inlined_bytecode_size_absolute) {
     return NoChange();
@@ -672,7 +696,8 @@ Reduction JSInliningHeuristic::InlineCandidate(Candidate const& candidate,
   Node* const node = candidate.node;
   if (num_calls == 1) {
     Reduction const reduction = inliner_.ReduceJSCall(node);
-    if (reduction.Changed()) {
+    if (reduction.Changed() && node->opcode() != IrOpcode::kJSWasmCall &&
+        node->opcode() != IrOpcode::kWasmCall) {
       total_inlined_bytecode_size_ += candidate.bytecode[0].value().length();
     }
     return reduction;
