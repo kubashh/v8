@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3bf21fb_f7dc43a3",
+        "filename": "src/compiler/node-observer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-04T14:47:09Z",
+      "side": 1,
+      "message": "Yes, the logic here is really broken. What should happen, if node [2] is replaced with [3], is that if one of the inputs of [2] or [3] is an observed node ([10]) then OnNodeChanged([10]) should be called. Also, if one of the uses of [2] or [3] is [10] then OnNodeChanged([10]) should be called.\nThis should be possible to implement here, but it is indeed tricky and inefficient.\nI agree that we should probably not offer notifications for use/input changes, at least in this initial version.",
+      "parentUuid": "600069a1_eb920ee2",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 1
+      },
+      "revId": "242b92120428a4c2a9faad2fbd8841711a5893af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16149898_67c52a28",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-12-17T09:55:42Z",
       "side": 1,
       "message": "nit: I think there is no point in instantiating this class directly, so we could make it abstract (i.e. pure virtual destructor).",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 18
+      },
+      "revId": "242b92120428a4c2a9faad2fbd8841711a5893af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afc10ca7_739b9eb6",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-04T14:47:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16149898_67c52a28",
       "range": {
         "startLine": 54,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a02acd0_61f6ec9b",
+        "filename": "test/cctest/compiler/node-observer-tester.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-04T14:47:09Z",
+      "side": 1,
+      "message": "Renamed. It\u0027s useful to keep it as a class that inherits from HandleAndZoneScope.",
+      "parentUuid": "f3e1876c_2adee3f3",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 24
+      },
+      "revId": "242b92120428a4c2a9faad2fbd8841711a5893af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f7616f4_9dde1690",
@@ -100,6 +172,30 @@
       "writtenOn": "2020-12-17T09:55:42Z",
       "side": 1,
       "message": "This class is very specific to the test-sloppy-equality test, so we should move it there and have this file contain only the very generic stuff usable for all %ObserveNode tests.",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 2
+      },
+      "revId": "242b92120428a4c2a9faad2fbd8841711a5893af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c468f47_0d5b91bf",
+        "filename": "test/cctest/compiler/node-observer-tester.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-04T14:47:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f7616f4_9dde1690",
       "range": {
         "startLine": 82,
         "startChar": 0,
