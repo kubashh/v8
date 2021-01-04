@@ -693,5 +693,10 @@ void SharedFunctionInfo::UninstallDebugBytecode(SharedFunctionInfo shared,
                                       kReleaseStore);
 }
 
+const wasm::WasmModule* SharedFunctionInfo::wasm_module() const {
+  if (!HasWasmExportedFunctionData()) return nullptr;
+  return native_module()->module();
+}
+
 }  // namespace internal
 }  // namespace v8

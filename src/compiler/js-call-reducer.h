@@ -43,6 +43,7 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
   enum Flag {
     kNoFlags = 0u,
     kBailoutOnUninitialized = 1u << 0,
+    kInlineJSToWasmCalls = 1u << 1,
   };
   using Flags = base::Flags<Flag>;
 
@@ -73,6 +74,8 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
   Reduction ReduceBooleanConstructor(Node* node);
   Reduction ReduceCallApiFunction(Node* node,
                                   const SharedFunctionInfoRef& shared);
+  Reduction ReduceCallWasmFunction(Node* node,
+                                   const SharedFunctionInfoRef& shared);
   Reduction ReduceFunctionPrototypeApply(Node* node);
   Reduction ReduceFunctionPrototypeBind(Node* node);
   Reduction ReduceFunctionPrototypeCall(Node* node);
