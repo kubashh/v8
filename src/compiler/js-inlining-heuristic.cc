@@ -144,6 +144,18 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
 Reduction JSInliningHeuristic::Reduce(Node* node) {
   if (!IrOpcode::IsInlineeOpcode(node->opcode())) return NoChange();
 
+  if (node->opcode() == IrOpcode::kJSWasmCall) {
+    if (!enable_wasm_inlining_) return NoChange();
+
+    Candidate candidate;
+    candidate.num_functions = 1;
+    candidate.node = node;
+    // TODO(paolosev): How to initialize the rest of the Candidate fields?
+    return InlineCandidate(candidate, true);
+  }
+
+  if (enable_wasm_inlining_) return NoChange();
+
   if (total_inlined_bytecode_size_ >= FLAG_max_inlined_bytecode_size_absolute) {
     return NoChange();
   }
@@ -672,7 +684,7 @@ Reduction JSInliningHeuristic::InlineCandidate(Candidate const& candidate,
   Node* const node = candidate.node;
   if (num_calls == 1) {
     Reduction const reduction = inliner_.ReduceJSCall(node);
-    if (reduction.Changed()) {
+    if (reduction.Changed() && node->opcode() != IrOpcode::kJSWasmCall) {
       total_inlined_bytecode_size_ += candidate.bytecode[0].value().length();
     }
     return reduction;

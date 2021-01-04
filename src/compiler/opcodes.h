@@ -196,7 +196,8 @@
   V(JSCall)                \
   V(JSCallForwardVarargs)  \
   V(JSCallWithArrayLike)   \
-  V(JSCallWithSpread)
+  V(JSCallWithSpread)      \
+  V(JSWasmCall)
 
 #define JS_CONSTRUCT_OP_LIST(V) \
   V(JSConstructForwardVarargs)  \
@@ -1069,7 +1070,7 @@ class V8_EXPORT_PRIVATE IrOpcode {
 
   // Returns true if opcode can be inlined.
   static bool IsInlineeOpcode(Value value) {
-    return value == kJSConstruct || value == kJSCall;
+    return value == kJSConstruct || value == kJSCall || value == kJSWasmCall;
   }
 
   // Returns true if opcode for comparison operator.

@@ -40,6 +40,7 @@ class JSInliner final : public AdvancedReducer {
   // Can be used by inlining heuristics or by testing code directly, without
   // using the above generic reducer interface of the inlining machinery.
   Reduction ReduceJSCall(Node* node);
+  Reduction ReduceJSWasmCall(Node* node);
 
  private:
   Zone* zone() const { return local_zone_; }
@@ -70,7 +71,15 @@ class JSInliner final : public AdvancedReducer {
   Reduction InlineCall(Node* call, Node* new_target, Node* context,
                        Node* frame_state, Node* start, Node* end,
                        Node* exception_target,
+                       const NodeVector& uncaught_subcalls, int argument_count);
+  Reduction InlineCall(Node* call, Node* new_target, Node* context,
+                       Node* frame_state, Node* start, Node* end,
+                       Node* exception_target,
                        const NodeVector& uncaught_subcalls);
+  Reduction InlineJSWasmCall(Node* call, Node* new_target, Node* context,
+                             Node* frame_state, Node* start, Node* end,
+                             Node* exception_target,
+                             const NodeVector& uncaught_subcalls);
 };
 
 }  // namespace compiler
