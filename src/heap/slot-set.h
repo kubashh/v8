@@ -9,6 +9,7 @@
 #include <memory>
 #include <stack>
 
+#include "include/v8-internal.h"
 #include "src/base/atomic-utils.h"
 #include "src/base/bit-field.h"
 #include "src/base/bits.h"
