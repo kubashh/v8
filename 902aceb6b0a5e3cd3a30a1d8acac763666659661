@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca11a667_dd61bcf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-01-05T07:53:44Z",
+      "side": 1,
+      "message": "Benedikt has been making substantial contributions to src/inspector as part of the Wasm debugging effort. I expect that he will continue to maintain and help review changes in src/inspector in the future.",
+      "revId": "902aceb6b0a5e3cd3a30a1d8acac763666659661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
