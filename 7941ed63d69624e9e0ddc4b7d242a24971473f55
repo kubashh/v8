@@ -166,6 +166,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6b23607_379922af",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 42
+      },
+      "lineNbr": 4295,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-05T18:54:00Z",
+      "side": 1,
+      "message": "There are other V8 categories like \"v8\", \"v8.execute\", \"disabled-by-default-v8.gc\", \"disabled-by-default-v8.runtime\". Shall we include them as well? I would be also okay with providing empty defaults.",
+      "parentUuid": "3dedfbfb_a8e4900d",
+      "range": {
+        "startLine": 4295,
+        "startChar": 12,
+        "endLine": 4295,
+        "endChar": 80
+      },
+      "revId": "7941ed63d69624e9e0ddc4b7d242a24971473f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d9e05de_a71454c6",
         "filename": "src/libplatform/tracing/recorder.h",
         "patchSetId": 42
