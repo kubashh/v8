@@ -16,6 +16,115 @@
       "message": "Let\u0027s try landing this change again!",
       "revId": "7941ed63d69624e9e0ddc4b7d242a24971473f55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8ad2693_fc0c5d90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-05T17:50:05Z",
+      "side": 1,
+      "message": "lgtm with nits (I am not familiar with tracing internals)",
+      "revId": "7941ed63d69624e9e0ddc4b7d242a24971473f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6c0be54_1524fb63",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 42
+      },
+      "lineNbr": 4139,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-05T17:50:05Z",
+      "side": 1,
+      "message": "Would it make sense to set options.trace_enabled if the --enable-system-instrumentation flag is passed?",
+      "range": {
+        "startLine": 4139,
+        "startChar": 29,
+        "endLine": 4139,
+        "endChar": 69
+      },
+      "revId": "7941ed63d69624e9e0ddc4b7d242a24971473f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ce888fc_8e6c291d",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 42
+      },
+      "lineNbr": 4295,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-05T17:50:05Z",
+      "side": 1,
+      "message": "This seems surprising. Why is this category enabled by default?",
+      "range": {
+        "startLine": 4295,
+        "startChar": 12,
+        "endLine": 4295,
+        "endChar": 80
+      },
+      "revId": "7941ed63d69624e9e0ddc4b7d242a24971473f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d9e05de_a71454c6",
+        "filename": "src/libplatform/tracing/recorder.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-05T17:50:05Z",
+      "side": 1,
+      "message": "Please add a comment describing the motivation and usage of this class.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "7941ed63d69624e9e0ddc4b7d242a24971473f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ed5de70_d3e6ac08",
+        "filename": "src/libplatform/tracing/trace-writer.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-05T17:50:05Z",
+      "side": 1,
+      "message": "This class is already defined in src/libplatform/tracing/recorder.h",
+      "range": {
+        "startLine": 14,
+        "startChar": 6,
+        "endLine": 14,
+        "endChar": 14
+      },
+      "revId": "7941ed63d69624e9e0ddc4b7d242a24971473f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
