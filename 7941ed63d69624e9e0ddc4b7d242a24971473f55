@@ -190,6 +190,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a6d0e92_b6c41f79",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 42
+      },
+      "lineNbr": 4295,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-01-05T18:59:27Z",
+      "side": 1,
+      "message": "I think the events emitted by \"v8.compile\" is a good place to start analyzing, and then the other categories can be added manually if the user needs more detailed info.",
+      "parentUuid": "b6b23607_379922af",
+      "range": {
+        "startLine": 4295,
+        "startChar": 12,
+        "endLine": 4295,
+        "endChar": 80
+      },
+      "revId": "7941ed63d69624e9e0ddc4b7d242a24971473f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d9e05de_a71454c6",
         "filename": "src/libplatform/tracing/recorder.h",
         "patchSetId": 42
