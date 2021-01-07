@@ -28,19 +28,22 @@ tools/gcmole/gcmole-test.cc:164:3: warning: Possibly dead variable.
 tools/gcmole/gcmole-test.cc:172:3: warning: Possibly dead variable.
   raw_obj.Print();
   ^
-tools/gcmole/gcmole-test.cc:210:3: warning: Possibly dead variable.
+tools/gcmole/gcmole-test.cc:236:3: warning: Possibly dead variable.
   raw_obj.Print();
   ^
-tools/gcmole/gcmole-test.cc:217:3: warning: Possibly dead variable.
+tools/gcmole/gcmole-test.cc:243:3: warning: Possibly dead variable.
   raw_obj.Print();
   ^
-tools/gcmole/gcmole-test.cc:227:3: warning: Possibly dead variable.
+tools/gcmole/gcmole-test.cc:263:3: warning: Possibly dead variable.
   raw_obj.Print();
   ^
-tools/gcmole/gcmole-test.cc:240:3: warning: Possibly dead variable.
+tools/gcmole/gcmole-test.cc:282:3: warning: Possibly dead variable.
   raw_obj.Print();
   ^
-tools/gcmole/gcmole-test.cc:253:3: warning: Possibly dead variable.
+tools/gcmole/gcmole-test.cc:295:3: warning: Possibly dead variable.
   raw_obj.Print();
   ^
-15 warnings generated.
+tools/gcmole/gcmole-test.cc:308:3: warning: Possibly dead variable.
+  raw_obj.Print();
+  ^
+16 warnings generated.

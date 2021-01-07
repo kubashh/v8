@@ -229,8 +229,9 @@ class CalleesPrinter : public clang::RecursiveASTVisitor<CalleesPrinter> {
   virtual bool VisitDeclRefExpr(clang::DeclRefExpr* expr) {
     // If function mentions EXTERNAL VMState add artificial garbage collection
     // mark.
-    if (IsExternalVMState(expr->getDecl()))
+    if (IsExternalVMState(expr->getDecl())) {
       AddCallee("CollectGarbage", "CollectGarbage");
+    }
     return true;
   }
 
@@ -1568,10 +1569,9 @@ class ProblemsFinder : public clang::ASTConsumer,
     // It is a valid situation that no_gc_decl == NULL when the
     // DisallowGarbageCollection is not included and can't be resolved.
     // This is gracefully handled in the FunctionAnalyzer later.
-    clang::CXXRecordDecl* no_gc_decl =
-        r.ResolveNamespace("v8")
-            .ResolveNamespace("internal")
-            .ResolveTemplate("DisallowGarbageCollection");
+    clang::CXXRecordDecl* no_gc_decl = r.ResolveNamespace("v8")
+                                           .ResolveNamespace("internal")
+                                           .ResolveTemplate("DisableGCMole");
 
     clang::CXXRecordDecl* object_decl =
         r.ResolveNamespace("v8").ResolveNamespace("internal").
