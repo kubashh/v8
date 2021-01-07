@@ -893,21 +893,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
   }
 
   if (!FLAG_string_slices || length < SlicedString::kMinLength) {
-    if (str->IsOneByteRepresentation()) {
-      Handle<SeqOneByteString> result =
-          NewRawOneByteString(length).ToHandleChecked();
-      DisallowGarbageCollection no_gc;
-      uint8_t* dest = result->GetChars(no_gc);
-      String::WriteToFlat(*str, dest, begin, end);
-      return result;
-    } else {
-      Handle<SeqTwoByteString> result =
-          NewRawTwoByteString(length).ToHandleChecked();
-      DisallowGarbageCollection no_gc;
-      uc16* dest = result->GetChars(no_gc);
-      String::WriteToFlat(*str, dest, begin, end);
-      return result;
-    }
+    return CopyStringToSeqString(str, begin, end);
   }
 
   int offset = begin;

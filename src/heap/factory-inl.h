@@ -30,8 +30,39 @@ namespace internal {
 ROOT_LIST(ROOT_ACCESSOR)
 #undef ROOT_ACCESSOR
 
+Handle<SeqString> Factory::CopyStringToSeqString(Handle<String> string,
+                                                 int begin, int end) {
+  int length = end - begin;
+  DCHECK_GE(length, 0);
+  if (string->IsOneByteRepresentation()) {
+    Handle<SeqOneByteString> new_string =
+        NewRawOneByteString(length).ToHandleChecked();
+    DisallowGarbageCollection no_gc;
+    uint8_t* dst = new_string->GetChars(no_gc);
+    String::WriteToFlat(*string, dst, begin, end);
+    return new_string;
+  }
+
+  DCHECK(string->IsTwoByteRepresentation());
+  Handle<SeqTwoByteString> new_string =
+      NewRawTwoByteString(length).ToHandleChecked();
+  DisallowGarbageCollection no_gc;
+  uc16* dst = new_string->GetChars(no_gc);
+  String::WriteToFlat(*string, dst, begin, end);
+  return new_string;
+}
+
 Handle<String> Factory::InternalizeString(Handle<String> string) {
   if (string->IsInternalizedString()) return string;
+
+  if (string->IsExternalString() &&
+      Handle<ExternalString>::cast(string)->is_uncached()) {
+    // Copy the String and internalize that since internal & external & uncached
+    // strings are not thread-safe.
+    Handle<SeqString> new_string =
+        CopyStringToSeqString(string, 0, string->length());
+    return isolate()->string_table()->LookupString(isolate(), new_string);
+  }
   return isolate()->string_table()->LookupString(isolate(), string);
 }
 

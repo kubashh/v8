@@ -995,6 +995,10 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   void InitializeJSObjectBody(Handle<JSObject> obj, Handle<Map> map,
                               int start_offset);
 
+  // Creates a copy of a String as a SeqString, in the range [begin, end).
+  inline Handle<SeqString> CopyStringToSeqString(Handle<String> string,
+                                                 int begin, int end);
+
  private:
   Handle<WeakArrayList> NewUninitializedWeakArrayList(
       int capacity, AllocationType allocation = AllocationType::kYoung);
