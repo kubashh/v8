@@ -191,6 +191,12 @@ using AllowCodeAllocation =
 // DisallowHeapAllocation by also forbidding safepoints.
 using DisallowGarbageCollection =
     CombinationAssertScope<DisallowSafepoints, DisallowHeapAllocation>;
+
+// Scope to skip gc mole verification in places where we do tricky raw
+// work.
+using DisableGCMole =
+    CombinationAssertScope<DisallowSafepoints, DisallowHeapAllocation>;
+
 // The DISALLOW_GARBAGE_COLLECTION macro can be used to define a
 // DisallowGarbageCollection field in classes that isn't present in release
 // builds.
@@ -214,15 +220,6 @@ using DisallowHeapAccess =
 using AllowHeapAccess =
     CombinationAssertScope<AllowCodeDependencyChange, AllowHandleDereference,
                            AllowHandleAllocation, AllowHeapAllocation>;
-
-// The DISALLOW_GARBAGE_COLLECTION macro can be used to define a
-// DisallowSafepoints field in classes that isn't present in release
-// builds.
-#ifdef DEBUG
-#define DISALLOW_GARBAGE_COLLECTION(name) DisallowGarbageCollection name;
-#else
-#define DISALLOW_GARBAGE_COLLECTION(name)
-#endif
 
 class DisallowHeapAccessIf {
  public:
