@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "02d6565c_74f522f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-07T15:20:43Z",
+      "side": 1,
+      "message": "You are right. Done.",
+      "parentUuid": "c3bf0d5f_0947e6e3",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "a2acdb86e1e2741fa1fc3a5d6e42f995ec9eb638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e379e6ff_08d1415e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -54,6 +78,24 @@
       "writtenOn": "2021-01-07T13:43:55Z",
       "side": 1,
       "message": "Thanks! Could you add tests for this, to protect against future errors?",
+      "revId": "a2acdb86e1e2741fa1fc3a5d6e42f995ec9eb638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0ffb983_6173e708",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-07T15:20:43Z",
+      "side": 1,
+      "message": "I added a test, in common-operator-unittest.cc. However all the tests in that file would fail if any Parameters class had a similar typo, because they only check for equality.",
+      "parentUuid": "54407d54_044c6f1e",
       "revId": "a2acdb86e1e2741fa1fc3a5d6e42f995ec9eb638",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fbea6af_b9e8e457",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-07T15:20:43Z",
+      "side": 1,
+      "message": "I added a test, in common-operator-unittest.cc. However all the tests in that file would fail if any Parameters class had a similar typo, because they only check for equality.",
+      "revId": "9348bc38c9686b7de04b1f09578b6174a85b83bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5162c4b7_65fcaf8d",
+        "filename": "test/unittests/compiler/common-operator-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-07T15:20:43Z",
+      "side": 1,
+      "message": "Is this correct? \u0027order\u0027 is not a \u0027value\u0027.",
+      "range": {
+        "startLine": 237,
+        "startChar": 35,
+        "endLine": 237,
+        "endChar": 48
+      },
+      "revId": "9348bc38c9686b7de04b1f09578b6174a85b83bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d845ce02_1b92d8f2",
+        "filename": "test/unittests/compiler/common-operator-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-07T15:20:43Z",
+      "side": 1,
+      "message": "This is ugly, but there is no operator!\u003d for IfValueParameters.",
+      "range": {
+        "startLine": 253,
+        "startChar": 2,
+        "endLine": 253,
+        "endChar": 9
+      },
+      "revId": "9348bc38c9686b7de04b1f09578b6174a85b83bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
