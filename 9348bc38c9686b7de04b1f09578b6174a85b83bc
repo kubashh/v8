@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f909098_a34ba736",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-07T22:40:32Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "b3450731_afa17022",
+      "revId": "9348bc38c9686b7de04b1f09578b6174a85b83bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5162c4b7_65fcaf8d",
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "I think kInt32Values is just a collection of int32 values. As order is of type int32, this should be fine.",
       "parentUuid": "5162c4b7_65fcaf8d",
+      "range": {
+        "startLine": 237,
+        "startChar": 35,
+        "endLine": 237,
+        "endChar": 48
+      },
+      "revId": "9348bc38c9686b7de04b1f09578b6174a85b83bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e91e72c_2458e65c",
+        "filename": "test/unittests/compiler/common-operator-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-07T22:40:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b192797d_781ede0c",
       "range": {
         "startLine": 237,
         "startChar": 35,
