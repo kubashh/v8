@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa61cc26_a0bd3bd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-07T21:28:40Z",
+      "side": 1,
+      "message": "Georg PTAL\nBack in 2020 we talked about bailing out on optimizations for non-internalized strings in the background, in order to flip String to kNeverSerialized without having to worry about other String instance types. This is the first in a string of CLs that does that.",
+      "revId": "e65d0651e7bf39c7e1952dd86cf31f20c29d1bce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
