@@ -545,7 +545,9 @@ void SharedFunctionInfo::set_bytecode_array(BytecodeArray bytecode) {
 }
 
 bool SharedFunctionInfo::ShouldFlushBytecode(BytecodeFlushMode mode) {
-  if (mode == BytecodeFlushMode::kDoNotFlushBytecode) return false;
+  if (mode == BytecodeFlushMode::kDoNotFlushBytecode ||
+      GetIsolate()->has_coverage_info())
+    return false;
 
   // TODO(rmcilroy): Enable bytecode flushing for resumable functions.
   if (IsResumableFunction(kind()) || !allows_lazy_compilation()) {
