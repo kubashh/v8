@@ -16,6 +16,24 @@
       "message": "Benedikt, you were part of the original CL by Philip where we discussed the design in length: https://crrev.com/c/2429265\n\nIn particular, we decided to put the proxy object in wasm-js.cc, because this is where the existing API objects are implemented (which deal with Locals or FunctionCallbackInfo). wasm-js.cc is not the perfect place, and I am totally open to move it to another cc file, but it does not belong in wasm-debug.cc, which only contained v8-internal implementation before. The implementation of the proxy object would ideally even live in src/debug or src/inspector.\n\nCan we refactor this to a state where the proxy lives in a separate file, and uses wasm-debug.cc as its \"backend\" for getting the actual data?",
       "revId": "5fc4649d945cc04e803444b4293d75d515c6a8d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a18a370a_80fe9493",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-01-07T18:17:22Z",
+      "side": 1,
+      "message": "Mea culpa, I forgot about that discussion. But in hindsight, I still stand by my current view that wasm-js is a really confusing place for this to live.\n\nGoing forward, I had sort of a hope (that might eventually turn into a plan), that we can first unify the existing DebugEvaluate and Scope functionality, and afterwards move most of this out of src/wasm and into src/debug, with a clearer boundary between what\u0027s in src/wasm (stuff that deals with Wasm engine internals) and what\u0027s in src/debug (inspector facing concerns). I think in an ideal world, DevTools concerns, which go beyond raw stepping and breakpoints, should not be dealt with in src/wasm, but in src/debug where we also deal with the JS higher level bits.\n\nDoes that make sense?",
+      "parentUuid": "df4b9520_f181bd9b",
+      "revId": "5fc4649d945cc04e803444b4293d75d515c6a8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
