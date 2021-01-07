@@ -175,25 +175,77 @@ void TestDeadVarBecauseOfSafepointAnalysis(Isolate* isolate) {
 void TestGuardedDeadVarAnalysis(Isolate* isolate) {
   JSObject raw_obj = *isolate->factory()->NewJSObjectWithNullProto();
 
-  // Note: having DisallowGarbageCollection with the same function as CauseGC
-  // normally doesn't make sense, but we want to test whether the gurads
+  // Note: having DisableGCMole with the same function as CauseGC
+  // normally doesn't make sense, but we want to test whether the guards
   // are recognized by GCMole.
-  DisallowGarbageCollection no_gc;
+  DisableGCMole no_gc_mole;
   CauseGCRaw(raw_obj, isolate);
 
   // Shouldn't cause warning.
   raw_obj.Print();
 }
 
-void TestGuardedAgainstSafepointDeadVarAnalysis(Isolate* isolate) {
+void TestGuardedDeadVarAnalysis2(Isolate* isolate) {
   JSObject raw_obj = *isolate->factory()->NewJSObjectWithNullProto();
 
   // Note: having DisallowGarbageCollection with the same function as CauseGC
-  // normally doesn't make sense, but we want to test whether the gurads
+  // normally doesn't make sense, but we want to test whether the guards
+  // are recognized by GCMole.
+  DisallowGarbageCollection no_gc;
+  CauseGCRaw(raw_obj, isolate);
+
+  // Should cause warning.
+  raw_obj.Print();
+}
+
+void TestGuardedAgainstSafepointDeadVarAnalysis(Isolate* isolate) {
+  JSObject raw_obj = *isolate->factory()->NewJSObjectWithNullProto();
+
+  // Note: having DisableGCMole with the same function as CauseGC
+  // normally doesn't make sense, but we want to test whether the guards
+  // are recognized by GCMole.
+  DisableGCMole no_gc_mole;
+  Safepoint();
+
+  // Shouldn't cause warning.
+  raw_obj.Print();
+}
+
+void TestGuardedAgainstSafepointDeadVarAnalysis2(Isolate* isolate) {
+  JSObject raw_obj = *isolate->factory()->NewJSObjectWithNullProto();
+
+  // Note: having DisallowGarbageCollection with the same function as CauseGC
+  // normally doesn't make sense, but we want to test whether the guards
   // are recognized by GCMole.
   DisallowGarbageCollection no_gc;
   Safepoint();
 
+  // Should cause warning.
+  raw_obj.Print();
+}
+
+void TestGuardedAgainstSafepointDeadVarAnalysis3(Isolate* isolate) {
+  JSObject raw_obj = *isolate->factory()->NewJSObjectWithNullProto();
+
+  // Note: having DisallowGarbageCollection with the same function as CauseGC
+  // normally doesn't make sense, but we want to test whether the guards
+  // are recognized by GCMole.
+  DisallowGarbageCollection no_gc;
+  Safepoint();
+
+  // Should cause warning.
+  raw_obj.Print();
+
+  {
+    DisableGCMole no_gc_mole;
+    // Shouldn't cause warning.
+    raw_obj.Print();
+  }
+
+  // Should cause warning.
+  raw_obj.Print();
+
+  DisableGCMole no_gc_mole;
   // Shouldn't cause warning.
   raw_obj.Print();
 }
@@ -210,6 +262,22 @@ void TestOnlyHeapGuardedDeadVarAnalysisInCompound(Isolate* isolate) {
   raw_obj.Print();
 }
 
+void TestOnlyHeapGuardedDeadVarAnalysisInCompound2(Isolate* isolate) {
+  JSObject raw_obj = *isolate->factory()->NewJSObjectWithNullProto();
+
+  // {DisallowHeapAccess} has a {DisallowHeapAllocation}, but no
+  // {DisallowSafepoints}, so it could see objects move due to safepoints.
+  DisallowHeapAccess no_gc;
+  CauseGCRaw(raw_obj, isolate);
+
+  // Should cause warning.
+  raw_obj.Print();
+
+  DisableGCMole no_gc_mole;
+  // Should cause warning.
+  raw_obj.Print();
+}
+
 void TestGuardedDeadVarAnalysisNested(JSObject raw_obj, Isolate* isolate) {
   CauseGCRaw(raw_obj, isolate);
 
@@ -218,7 +286,7 @@ void TestGuardedDeadVarAnalysisNested(JSObject raw_obj, Isolate* isolate) {
 }
 
 void TestGuardedDeadVarAnalysisCaller(Isolate* isolate) {
-  DisallowHeapAccess no_gc;
+  DisableGCMole no_gc_mole;
   JSObject raw_obj = *isolate->factory()->NewJSObjectWithNullProto();
 
   TestGuardedDeadVarAnalysisNested(raw_obj, isolate);
@@ -227,16 +295,38 @@ void TestGuardedDeadVarAnalysisCaller(Isolate* isolate) {
   raw_obj.Print();
 }
 
+void TestGuardedDeadVarAnalysisCaller2(Isolate* isolate) {
+  DisallowHeapAccess no_gc;
+  JSObject raw_obj = *isolate->factory()->NewJSObjectWithNullProto();
+
+  TestGuardedDeadVarAnalysisNested(raw_obj, isolate);
+
+  // Should cause warning.
+  raw_obj.Print();
+}
+
 JSObject GuardedAllocation(Isolate* isolate) {
   DisallowGarbageCollection no_gc;
+  return *isolate->factory()->NewJSObjectWithNullProto();
+}
+
+JSObject GuardedAllocation2(Isolate* isolate) {
+  DisableGCMole no_gc_mole;
   return *isolate->factory()->NewJSObjectWithNullProto();
 }
 
 void TestNestedDeadVarAnalysis(Isolate* isolate) {
   JSObject raw_obj = GuardedAllocation(isolate);
   CauseGCRaw(raw_obj, isolate);
-
   // Should cause warning.
+  raw_obj.Print();
+}
+
+void TestNestedDeadVarAnalysis2(Isolate* isolate) {
+  DisableGCMole no_gc_mole;
+  JSObject raw_obj = GuardedAllocation(isolate);
+  CauseGCRaw(raw_obj, isolate);
+  // Shouldn't cause warning.
   raw_obj.Print();
 }
 
@@ -249,6 +339,19 @@ void TestGuardedDeadVarAnalysisMidFunction(Isolate* isolate) {
 
   // Guarding the rest of the function from triggering a GC.
   DisallowGarbageCollection no_gc;
+  // Should cause warning.
+  raw_obj.Print();
+}
+
+// Test that putting a guard in the middle of the function doesn't
+// mistakenly cover the whole scope of the raw variable.
+void TestGuardedDeadVarAnalysisMidFunction2(Isolate* isolate) {
+  JSObject raw_obj = *isolate->factory()->NewJSObjectWithNullProto();
+
+  CauseGCRaw(raw_obj, isolate);
+
+  // Guarding the rest of the function from triggering a GC.
+  DisableGCMole no_gc_mole;
   // Should cause warning.
   raw_obj.Print();
 }

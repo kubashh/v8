@@ -229,8 +229,9 @@ class CalleesPrinter : public clang::RecursiveASTVisitor<CalleesPrinter> {
   virtual bool VisitDeclRefExpr(clang::DeclRefExpr* expr) {
     // If function mentions EXTERNAL VMState add artificial garbage collection
     // mark.
-    if (IsExternalVMState(expr->getDecl()))
+    if (IsExternalVMState(expr->getDecl())) {
       AddCallee("CollectGarbage", "CollectGarbage");
+    }
     return true;
   }
 
@@ -685,13 +686,13 @@ class FunctionAnalyzer {
   FunctionAnalyzer(clang::MangleContext* ctx, clang::CXXRecordDecl* object_decl,
                    clang::CXXRecordDecl* maybe_object_decl,
                    clang::CXXRecordDecl* smi_decl,
-                   clang::CXXRecordDecl* no_gc_decl,
+                   clang::CXXRecordDecl* no_gc_mole_decl,
                    clang::DiagnosticsEngine& d, clang::SourceManager& sm)
       : ctx_(ctx),
         object_decl_(object_decl),
         maybe_object_decl_(maybe_object_decl),
         smi_decl_(smi_decl),
-        no_gc_decl_(no_gc_decl),
+        no_gc_mole_decl_(no_gc_mole_decl),
         d_(d),
         sm_(sm),
         block_(NULL) {}
@@ -1396,21 +1397,15 @@ class FunctionAnalyzer {
   }
 
   bool IsGCGuard(clang::QualType qtype) {
-    if (qtype.isNull()) {
-      return false;
-    }
-    if (qtype->isNullPtrType()) {
-      return false;
-    }
+    if (!no_gc_mole_decl_) return false;
+    if (qtype.isNull()) return false;
+    if (qtype->isNullPtrType()) return false;
 
     const clang::CXXRecordDecl* record = qtype->getAsCXXRecordDecl();
     const clang::CXXRecordDecl* definition = GetDefinitionOrNull(record);
 
-    if (!definition) {
-      return false;
-    }
-
-    return no_gc_decl_ && IsDerivedFrom(definition, no_gc_decl_);
+    if (!definition) return false;
+    return no_gc_mole_decl_ == definition;
   }
 
   Environment VisitDecl(clang::Decl* decl, Environment& env) {
@@ -1494,7 +1489,7 @@ class FunctionAnalyzer {
   clang::CXXRecordDecl* object_decl_;
   clang::CXXRecordDecl* maybe_object_decl_;
   clang::CXXRecordDecl* smi_decl_;
-  clang::CXXRecordDecl* no_gc_decl_;
+  clang::CXXRecordDecl* no_gc_mole_decl_;
   clang::CXXRecordDecl* no_heap_access_decl_;
 
   clang::DiagnosticsEngine& d_;
@@ -1565,13 +1560,12 @@ class ProblemsFinder : public clang::ASTConsumer,
 
     Resolver r(ctx);
 
-    // It is a valid situation that no_gc_decl == NULL when the
-    // DisallowGarbageCollection is not included and can't be resolved.
-    // This is gracefully handled in the FunctionAnalyzer later.
-    clang::CXXRecordDecl* no_gc_decl =
-        r.ResolveNamespace("v8")
-            .ResolveNamespace("internal")
-            .ResolveTemplate("DisallowGarbageCollection");
+    // It is a valid situation that no_gc_mole_decl == NULL when DisableGCMole
+    // is not included and can't be resolved. This is gracefully handled in the
+    // FunctionAnalyzer later.
+    clang::CXXRecordDecl* no_gc_mole_decl = r.ResolveNamespace("v8")
+                                           .ResolveNamespace("internal")
+                                           .ResolveTemplate("DisableGCMole");
 
     clang::CXXRecordDecl* object_decl =
         r.ResolveNamespace("v8").ResolveNamespace("internal").
@@ -1596,7 +1590,7 @@ class ProblemsFinder : public clang::ASTConsumer,
     if (object_decl != NULL && smi_decl != NULL && maybe_object_decl != NULL) {
       function_analyzer_ = new FunctionAnalyzer(
           clang::ItaniumMangleContext::create(ctx, d_), object_decl,
-          maybe_object_decl, smi_decl, no_gc_decl, d_, sm_);
+          maybe_object_decl, smi_decl, no_gc_mole_decl, d_, sm_);
       TraverseDecl(ctx.getTranslationUnitDecl());
     } else {
       if (object_decl == NULL) {
