@@ -456,6 +456,41 @@ const StringConstantBase* StringConstantBaseOf(const Operator* op)
 
 const char* StaticAssertSourceOf(const Operator* op);
 
+class WasmCallParameters {
+ public:
+  explicit WasmCallParameters(const CallDescriptor* call_descriptor,
+                              const wasm::NativeModule* native_module,
+                              int wasm_function_index)
+      : call_descriptor_(call_descriptor),
+        native_module_(native_module),
+        wasm_function_index_(wasm_function_index) {
+    DCHECK_NOT_NULL(call_descriptor);
+    DCHECK_NOT_NULL(native_module);
+    DCHECK_GE(wasm_function_index_, 0);
+  }
+
+  const CallDescriptor* call_descriptor() const { return call_descriptor_; }
+  const wasm::NativeModule* native_module() const { return native_module_; }
+  const wasm::WasmModule* wasm_module() const;
+  int wasm_function_index() const { return wasm_function_index_; }
+
+ private:
+  const CallDescriptor* call_descriptor_;
+  const wasm::NativeModule* const native_module_;
+  int wasm_function_index_;
+};
+
+V8_EXPORT_PRIVATE bool operator==(WasmCallParameters const&,
+                                  WasmCallParameters const&);
+
+size_t hash_value(WasmCallParameters const&);
+
+V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&,
+                                           WasmCallParameters const&);
+
+V8_EXPORT_PRIVATE WasmCallParameters const& WasmCallParametersOf(
+    const Operator* op) V8_WARN_UNUSED_RESULT;
+
 // Interface for building common operators that can be used at any level of IR,
 // including JavaScript, mid-level, and low-level.
 class V8_EXPORT_PRIVATE CommonOperatorBuilder final
@@ -548,6 +583,9 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
                              const FrameStateFunctionInfo* function_info);
   const Operator* Call(const CallDescriptor* call_descriptor);
   const Operator* TailCall(const CallDescriptor* call_descriptor);
+  const Operator* WasmCall(const CallDescriptor* call_descriptor,
+                           const wasm::NativeModule* native_module,
+                           int wasm_function_index);
   const Operator* Projection(size_t index);
   const Operator* Retain();
   const Operator* TypeGuard(Type type);
@@ -560,7 +598,8 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
   // Constructs function info for frame state construction.
   const FrameStateFunctionInfo* CreateFrameStateFunctionInfo(
       FrameStateType type, int parameter_count, int local_count,
-      Handle<SharedFunctionInfo> shared_info);
+      Handle<SharedFunctionInfo> shared_info,
+      const wasm::FunctionSig* signature = nullptr);
 
   const Operator* MarkAsSafetyCheck(const Operator* op,
                                     IsSafetyCheck safety_check);

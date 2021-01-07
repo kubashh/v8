@@ -16,14 +16,16 @@ class JSInliningHeuristic final : public AdvancedReducer {
   JSInliningHeuristic(Editor* editor, Zone* local_zone,
                       OptimizedCompilationInfo* info, JSGraph* jsgraph,
                       JSHeapBroker* broker,
-                      SourcePositionTable* source_positions)
+                      SourcePositionTable* source_positions,
+                      bool enable_wasm_inlining = false)
       : AdvancedReducer(editor),
         inliner_(editor, local_zone, info, jsgraph, broker, source_positions),
         candidates_(local_zone),
         seen_(local_zone),
         source_positions_(source_positions),
         jsgraph_(jsgraph),
-        broker_(broker) {}
+        broker_(broker),
+        enable_wasm_inlining_(enable_wasm_inlining) {}
 
   const char* reducer_name() const override { return "JSInliningHeuristic"; }
 
@@ -99,6 +101,7 @@ class JSInliningHeuristic final : public AdvancedReducer {
   JSGraph* const jsgraph_;
   JSHeapBroker* const broker_;
   int total_inlined_bytecode_size_ = 0;
+  bool enable_wasm_inlining_;
 };
 
 }  // namespace compiler

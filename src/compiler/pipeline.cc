@@ -1443,6 +1443,9 @@ struct InliningPhase {
     if (data->info()->bailout_on_uninitialized()) {
       call_reducer_flags |= JSCallReducer::kBailoutOnUninitialized;
     }
+    if (FLAG_turbo_inline_js_wasm_calls && data->info()->inlining()) {
+      call_reducer_flags |= JSCallReducer::kInlineJSToWasmCalls;
+    }
     JSCallReducer call_reducer(&graph_reducer, data->jsgraph(), data->broker(),
                                temp_zone, call_reducer_flags,
                                data->dependencies());
@@ -1486,6 +1489,30 @@ struct InliningPhase {
   }
 };
 
+struct WasmInliningPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(WasmInlining)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    OptimizedCompilationInfo* info = data->info();
+    GraphReducer graph_reducer(temp_zone, data->graph(), &info->tick_counter(),
+                               data->broker(), data->jsgraph()->Dead());
+    DeadCodeElimination dead_code_elimination(&graph_reducer, data->graph(),
+                                              data->common(), temp_zone);
+    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
+                                         data->broker(), data->common(),
+                                         data->machine(), temp_zone);
+    JSInliningHeuristic inlining(&graph_reducer, temp_zone, data->info(),
+                                 data->jsgraph(), data->broker(),
+                                 data->source_positions(), true);
+
+    AddReducer(data, &graph_reducer, &dead_code_elimination);
+    AddReducer(data, &graph_reducer, &common_reducer);
+    if (data->info()->inlining()) {
+      AddReducer(data, &graph_reducer, &inlining);
+    }
+    graph_reducer.ReduceGraph();
+  }
+};
 
 struct TyperPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(Typer)
@@ -2583,6 +2610,12 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
   // might even conflict with the representation/truncation logic.
   Run<SimplifiedLoweringPhase>(linkage);
   RunPrintAndVerify(SimplifiedLoweringPhase::phase_name(), true);
+
+  // Inline JS->Wasm calls, if enabled.
+  if (FLAG_turbo_inline_js_wasm_calls && data->info()->inlining()) {
+    Run<WasmInliningPhase>();
+    RunPrintAndVerify(WasmInliningPhase::phase_name(), true);
+  }
 
   // From now on it is invalid to look at types on the nodes, because the types
   // on the nodes might not make sense after representation selection due to the

@@ -10,6 +10,7 @@
 #include "src/compiler/opcodes.h"
 #include "src/compiler/operator.h"
 #include "src/handles/handles-inl.h"
+#include "src/wasm/wasm-code-manager.h"
 #include "src/zone/zone.h"
 
 namespace v8 {
@@ -458,6 +459,34 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& out,
 IfValueParameters const& IfValueParametersOf(const Operator* op) {
   DCHECK(op->opcode() == IrOpcode::kIfValue);
   return OpParameter<IfValueParameters>(op);
+}
+
+V8_EXPORT_PRIVATE bool operator==(WasmCallParameters const& l,
+                                  WasmCallParameters const& r) {
+  return l.call_descriptor() == r.call_descriptor() &&
+         l.native_module() == r.native_module() &&
+         l.wasm_function_index() == r.wasm_function_index();
+}
+
+size_t hash_value(WasmCallParameters const& p) {
+  return base::hash_combine(p.call_descriptor(), p.native_module(),
+                            p.wasm_function_index());
+}
+
+V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& out,
+                                           WasmCallParameters const& p) {
+  out << p.call_descriptor() << " (native_module " << p.native_module()
+      << ", wasm_function_index " << p.wasm_function_index() << ")";
+  return out;
+}
+
+const wasm::WasmModule* WasmCallParameters::wasm_module() const {
+  return native_module_->module();
+}
+
+WasmCallParameters const& WasmCallParametersOf(const Operator* op) {
+  DCHECK(op->opcode() == IrOpcode::kWasmCall);
+  return OpParameter<WasmCallParameters>(op);
 }
 
 #define COMMON_CACHED_OP_LIST(V)                          \
@@ -1582,6 +1611,37 @@ const Operator* CommonOperatorBuilder::TailCall(
   return zone()->New<TailCallOperator>(call_descriptor);
 }
 
+const Operator* CommonOperatorBuilder::WasmCall(
+    const CallDescriptor* call_descriptor,
+    const wasm::NativeModule* native_module, int wasm_function_index) {
+  class WasmCallOperator final : public Operator1<WasmCallParameters> {
+   public:
+    explicit WasmCallOperator(WasmCallParameters parameters)
+        : Operator1<WasmCallParameters>(
+              IrOpcode::kWasmCall, parameters.call_descriptor()->properties(),
+              "WasmCall",
+              parameters.call_descriptor()->InputCount() +
+                  parameters.call_descriptor()->FrameStateCount(),
+              Operator::ZeroIfPure(parameters.call_descriptor()->properties()),
+              Operator::ZeroIfEliminatable(
+                  parameters.call_descriptor()->properties()),
+              parameters.call_descriptor()->ReturnCount(),
+              Operator::ZeroIfPure(parameters.call_descriptor()->properties()),
+              Operator::ZeroIfNoThrow(
+                  parameters.call_descriptor()->properties()),
+              parameters) {}
+
+    void PrintParameter(std::ostream& os,
+                        PrintVerbosity verbose) const override {
+      os << "[" << parameter() << "]";
+    }
+  };
+
+  WasmCallParameters parameters(call_descriptor, native_module,
+                                wasm_function_index);
+  return zone()->New<WasmCallOperator>(parameters);
+}
+
 const Operator* CommonOperatorBuilder::Projection(size_t index) {
   switch (index) {
 #define CACHED_PROJECTION(index) \
@@ -1620,9 +1680,15 @@ const Operator* CommonOperatorBuilder::ResizeMergeOrPhi(const Operator* op,
 const FrameStateFunctionInfo*
 CommonOperatorBuilder::CreateFrameStateFunctionInfo(
     FrameStateType type, int parameter_count, int local_count,
-    Handle<SharedFunctionInfo> shared_info) {
-  return zone()->New<FrameStateFunctionInfo>(type, parameter_count, local_count,
-                                             shared_info);
+    Handle<SharedFunctionInfo> shared_info,
+    const wasm::FunctionSig* signature) {
+  DCHECK_EQ(type == FrameStateType::kJSToWasmBuiltinContinuation,
+            signature != nullptr);
+  return type == FrameStateType::kJSToWasmBuiltinContinuation
+             ? zone()->New<JSToWasmFrameStateFunctionInfo>(
+                   type, parameter_count, local_count, shared_info, signature)
+             : zone()->New<FrameStateFunctionInfo>(type, parameter_count,
+                                                   local_count, shared_info);
 }
 
 const Operator* CommonOperatorBuilder::DeadValue(MachineRepresentation rep) {

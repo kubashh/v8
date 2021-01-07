@@ -17,9 +17,11 @@
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/js-operator.h"
 #include "src/compiler/node-matchers.h"
+#include "src/compiler/node-origin-table.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/operator-properties.h"
 #include "src/compiler/simplified-operator.h"
+#include "src/compiler/wasm-compiler.h"
 #include "src/execution/isolate-inl.h"
 #include "src/objects/feedback-cell-inl.h"
 #include "src/parsing/parse-info.h"
@@ -85,7 +87,27 @@ Reduction JSInliner::InlineCall(Node* call, Node* new_target, Node* context,
                                 Node* exception_target,
                                 const NodeVector& uncaught_subcalls) {
   JSCallAccessor c(call);
+  return InlineCall(call, new_target, context, frame_state, start, end,
+                    exception_target, uncaught_subcalls, c.argument_count());
+}
 
+Reduction JSInliner::InlineJSWasmCall(Node* call, Node* new_target,
+                                      Node* context, Node* frame_state,
+                                      Node* start, Node* end,
+                                      Node* exception_target,
+                                      const NodeVector& uncaught_subcalls) {
+  JSWasmCallNode n(call);
+  return InlineCall(
+      call, new_target, context, frame_state, start, end, exception_target,
+      uncaught_subcalls,
+      static_cast<int>(n.Parameters().signature()->parameter_count()));
+}
+
+Reduction JSInliner::InlineCall(Node* call, Node* new_target, Node* context,
+                                Node* frame_state, Node* start, Node* end,
+                                Node* exception_target,
+                                const NodeVector& uncaught_subcalls,
+                                int argument_count) {
   // The scheduler is smart enough to place our code; we just ensure {control}
   // becomes the control input of the start of the inlinee, and {effect} becomes
   // the effect input of the start of the inlinee.
@@ -101,7 +123,7 @@ Reduction JSInliner::InlineCall(Node* call, Node* new_target, Node* context,
 
   // {inliner_inputs} counts the target, receiver/new_target, and arguments; but
   // not feedback vector, context, effect or control.
-  const int inliner_inputs = c.argument_count() +
+  const int inliner_inputs = argument_count +
                              JSCallOrConstructNode::kExtraInputCount -
                              JSCallOrConstructNode::kFeedbackVectorInputCount;
   // Iterate over all uses of the start node.
@@ -120,7 +142,7 @@ Reduction JSInliner::InlineCall(Node* call, Node* new_target, Node* context,
           Replace(use, new_target);
         } else if (index == inlinee_arity_index) {
           // The projection is requesting the number of arguments.
-          Replace(use, jsgraph()->Constant(c.argument_count()));
+          Replace(use, jsgraph()->Constant(argument_count));
         } else if (index == inlinee_context_index) {
           // The projection is requesting the inlinee function context.
           Replace(use, context);
@@ -181,6 +203,78 @@ Reduction JSInliner::InlineCall(Node* call, Node* new_target, Node* context,
     } else {
       ReplaceWithValue(exception_target, exception_target, exception_target,
                        jsgraph()->Dead());
+    }
+  }
+
+  NodeVector values(local_zone_);
+  NodeVector effects(local_zone_);
+  NodeVector controls(local_zone_);
+  for (Node* const input : end->inputs()) {
+    switch (input->opcode()) {
+      case IrOpcode::kReturn:
+        values.push_back(NodeProperties::GetValueInput(input, 1));
+        effects.push_back(NodeProperties::GetEffectInput(input));
+        controls.push_back(NodeProperties::GetControlInput(input));
+        break;
+      case IrOpcode::kDeoptimize:
+      case IrOpcode::kTerminate:
+      case IrOpcode::kThrow:
+        NodeProperties::MergeControlToEnd(graph(), common(), input);
+        Revisit(graph()->end());
+        break;
+      default:
+        UNREACHABLE();
+        break;
+    }
+  }
+  DCHECK_EQ(values.size(), effects.size());
+  DCHECK_EQ(values.size(), controls.size());
+
+  // Depending on whether the inlinee produces a value, we either replace value
+  // uses with said value or kill value uses if no value can be returned.
+  if (values.size() > 0) {
+    int const input_count = static_cast<int>(controls.size());
+    Node* control_output = graph()->NewNode(common()->Merge(input_count),
+                                            input_count, &controls.front());
+    values.push_back(control_output);
+    effects.push_back(control_output);
+    Node* value_output = graph()->NewNode(
+        common()->Phi(MachineRepresentation::kTagged, input_count),
+        static_cast<int>(values.size()), &values.front());
+    Node* effect_output =
+        graph()->NewNode(common()->EffectPhi(input_count),
+                         static_cast<int>(effects.size()), &effects.front());
+    ReplaceWithValue(call, value_output, effect_output, control_output);
+    return Changed(value_output);
+  } else {
+    ReplaceWithValue(call, jsgraph()->Dead(), jsgraph()->Dead(),
+                     jsgraph()->Dead());
+    return Changed(call);
+  }
+}
+
+Reduction JSInliner::InlineWasmCall(Node* call, Node* start, Node* end) {
+  Node* control = NodeProperties::GetControlInput(call);
+  Node* effect = NodeProperties::GetEffectInput(call);
+
+  // Iterate over all uses of the start node.
+  for (Edge edge : start->use_edges()) {
+    Node* use = edge.from();
+    switch (use->opcode()) {
+      case IrOpcode::kParameter: {
+        int index = 1 + ParameterIndexOf(use->op());
+        Replace(use, call->InputAt(index));
+        break;
+      }
+      default:
+        if (NodeProperties::IsEffectEdge(edge)) {
+          edge.UpdateTo(effect);
+        } else if (NodeProperties::IsControlEdge(edge)) {
+          edge.UpdateTo(control);
+        } else {
+          UNREACHABLE();
+        }
+        break;
     }
   }
 
@@ -374,8 +468,127 @@ FeedbackCellRef JSInliner::DetermineCallContext(Node* node,
   UNREACHABLE();
 }
 
+Reduction JSInliner::ReduceJSWasmCall(Node* node) {
+  // Create the subgraph for the inlinee.
+  Node* start;
+  Node* end;
+  {
+    Graph::SubgraphScope scope(graph());
+
+    graph()->SetEnd(nullptr);
+
+    JSWasmCallNode n(node);
+    const JSWasmCallParameters& wasm_call_params = n.Parameters();
+
+    // Create a nested frame state inside the frame state attached to the
+    // call; this will ensure that lazy deoptimizations at this point will
+    // still return the result of the Wasm function call.
+    Node* continuation_frame_state =
+        CreateJSWasmCallBuiltinContinuationFrameState(
+            jsgraph(), n.context(), n.frame_state(),
+            wasm_call_params.signature());
+    JSWasmCallData js_wasm_call_data(wasm_call_params.signature());
+    BuildInlinedJSToWasmWrapper(
+        graph()->zone(), jsgraph(), wasm_call_params.signature(),
+        wasm_call_params.native_module(),
+        wasm_call_params.wasm_function_index(), source_positions_,
+        StubCallMode::kCallBuiltinPointer, wasm::WasmFeatures::FromFlags(),
+        &js_wasm_call_data, continuation_frame_state);
+
+    // Extract the inlinee start/end nodes.
+    start = graph()->start();
+    end = graph()->end();
+  }
+
+  Node* exception_target = nullptr;
+  NodeProperties::IsExceptionalCall(node, &exception_target);
+
+  // If we are inlining into a surrounding exception handler, we collect all
+  // potentially throwing nodes within the inlinee that are not handled locally
+  // by the inlinee itself. They are later wired into the surrounding handler.
+  NodeVector uncaught_subcalls(local_zone_);
+  if (exception_target != nullptr) {
+    // Find all uncaught 'calls' in the inlinee.
+    AllNodes inlined_nodes(local_zone_, end, graph());
+    for (Node* subnode : inlined_nodes.reachable) {
+      // Every possibly throwing node should get {IfSuccess} and {IfException}
+      // projections, unless there already is local exception handling.
+      if (subnode->op()->HasProperty(Operator::kNoThrow)) continue;
+      if (!NodeProperties::IsExceptionalCall(subnode)) {
+        DCHECK_EQ(2, subnode->op()->ControlOutputCount());
+        uncaught_subcalls.push_back(subnode);
+      }
+    }
+  }
+
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* frame_state = NodeProperties::GetFrameStateInput(node);
+  Node* new_target = jsgraph()->UndefinedConstant();
+
+  return InlineJSWasmCall(node, new_target, context, frame_state, start, end,
+                          exception_target, uncaught_subcalls);
+}
+
+Reduction JSInliner::ReduceWasmCall(Node* node) {
+  // Create the subgraph for the inlinee.
+  Node* start;
+  Node* end;
+  {
+    Graph::SubgraphScope scope(graph());
+
+    graph()->SetEnd(nullptr);
+
+    const WasmCallParameters& params = WasmCallParametersOf(node->op());
+
+    wasm::CompilationEnv env = params.native_module()->CreateCompilationEnv();
+    wasm::WasmEngine* wasm_engine = isolate()->wasm_engine();
+    wasm::WasmFeatures detected = wasm::WasmFeatures::FromIsolate(isolate());
+    Vector<const uint8_t> wire_bytes = params.native_module()->wire_bytes();
+    const wasm::WasmFunction& wasm_function =
+        params.native_module()
+            ->module()
+            ->functions[params.wasm_function_index()];
+    // TODO(paolosev) Can wire_bytes move?
+    base::Optional<Vector<const uint8_t>> wasm_function_code =
+        wire_bytes.SubVector(wasm_function.code.offset(),
+                             wasm_function.code.end_offset());
+    wasm::FunctionBody func_body{
+        wasm_function.sig, wasm_function.code.offset(),
+        wasm_function_code->begin(),
+        wasm_function_code->begin() + wasm_function_code->size()};
+
+    Zone* zone = graph()->zone();
+    OptimizedCompilationInfo info(
+        GetWasmFunctionDebugName(zone, params.wasm_function_index()), zone,
+        CodeKind::WASM_FUNCTION);
+    NodeOriginTable* node_origins =
+        info.trace_turbo_json() ? zone->New<NodeOriginTable>(graph()) : nullptr;
+    SourcePositionTable* source_positions =
+        zone->New<SourcePositionTable>(graph());
+    if (!BuildGraphForWasmFunction(wasm_engine->allocator(), &env, func_body,
+                                   params.wasm_function_index(), &detected,
+                                   jsgraph(), node_origins, source_positions)) {
+      // TODO(paolosev): change operator back to Call.
+      return NoChange();
+    }
+
+    // Extract the inlinee start/end nodes.
+    start = graph()->start();
+    end = graph()->end();
+  }
+
+  return InlineWasmCall(node, start, end);
+}
+
 Reduction JSInliner::ReduceJSCall(Node* node) {
   DCHECK(IrOpcode::IsInlineeOpcode(node->opcode()));
+
+  if (node->opcode() == IrOpcode::kJSWasmCall) {
+    return ReduceJSWasmCall(node);
+  } else if (node->opcode() == IrOpcode::kWasmCall) {
+    return ReduceWasmCall(node);
+  }
+
   JSCallAccessor call(node);
 
   // Determine the call target.

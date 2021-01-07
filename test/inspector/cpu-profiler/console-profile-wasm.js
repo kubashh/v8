@@ -3,7 +3,9 @@
 // found in the LICENSE file.
 
 // TODO(v8:10266): Figure out why this fails on tsan with --always-opt.
-// Flags: --no-always-opt
+// Disable Wasm TurboFan compilation because this test expects the presence of
+// a js-to-wasm-wrappers that are inlined in Turbofan builds.
+// Flags: --no-always-opt --no-wasm-tier-up
 
 let {session, contextGroup, Protocol} = InspectorTest.start(
     'Test that console profiles contain wasm function names.');
