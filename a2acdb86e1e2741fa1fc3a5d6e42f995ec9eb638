@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3bf0d5f_0947e6e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-01-07T14:04:13Z",
+      "side": 1,
+      "message": "It would be good if always add a component tag to your CLs. When looking over a regression range, such a tag allows you to see quickly if a CL may be relevant for a problem or not. Thanks.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "a2acdb86e1e2741fa1fc3a5d6e42f995ec9eb638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e379e6ff_08d1415e",
