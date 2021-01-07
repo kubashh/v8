@@ -16,6 +16,57 @@
       "message": "Very good! ",
       "revId": "d5628f9ecc9639a7ab2f546447b13821bb17aa22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de65f596_229f3d0f",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-07T09:37:41Z",
+      "side": 1,
+      "message": "Can we check some invariant here regarding end_of_args vs StackParameterCount()?\n\nE.g. end_of_args \u003d\u003d 0 iff StackParameterCount() \u003d\u003d 0",
+      "revId": "d5628f9ecc9639a7ab2f546447b13821bb17aa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a8d813f_25b18289",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-07T09:37:41Z",
+      "side": 1,
+      "message": "Is there an assumption here about the sign of stack_returns_delta?",
+      "revId": "d5628f9ecc9639a7ab2f546447b13821bb17aa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3240ce3_ed0c2115",
+        "filename": "src/compiler/linkage.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-07T09:37:41Z",
+      "side": 1,
+      "message": "I\u0027d copy/move your comment from the implementation here.",
+      "revId": "d5628f9ecc9639a7ab2f546447b13821bb17aa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
