@@ -16,6 +16,23 @@
       "message": "There is a typo in common-operator.cc,",
       "revId": "a2acdb86e1e2741fa1fc3a5d6e42f995ec9eb638",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54407d54_044c6f1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-01-07T13:43:55Z",
+      "side": 1,
+      "message": "Thanks! Could you add tests for this, to protect against future errors?",
+      "revId": "a2acdb86e1e2741fa1fc3a5d6e42f995ec9eb638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
