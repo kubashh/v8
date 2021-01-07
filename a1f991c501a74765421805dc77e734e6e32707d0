@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f1020be_8f4a0a56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-07T18:02:28Z",
+      "side": 1,
+      "message": "LGTM with a nit.",
+      "revId": "a1f991c501a74765421805dc77e734e6e32707d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09e563be_ed744949",
+        "filename": "test/intl/regress-11295.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-07T18:02:28Z",
+      "side": 1,
+      "message": "nit: 80col please.\n\nAgain below.",
+      "range": {
+        "startLine": 5,
+        "startChar": 80,
+        "endLine": 5,
+        "endChar": 82
+      },
+      "revId": "a1f991c501a74765421805dc77e734e6e32707d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
