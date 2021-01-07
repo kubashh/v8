@@ -3077,8 +3077,14 @@ base::Optional<int> StringRef::length() const {
   return data()->AsString()->length();
 }
 
-uint16_t StringRef::GetFirstChar() {
+base::Optional<uint16_t> StringRef::GetFirstChar() {
   if (data_->should_access_heap()) {
+    if (data_->kind() == kNeverSerializedHeapObject &&
+        !this->IsInternalizedString()) {
+      // Bail out for NeverSerialized non-internalized Strings.
+      return base::nullopt;
+    }
+
     if (broker()->local_isolate()) {
       return object()->Get(0, broker()->local_isolate());
     } else {
