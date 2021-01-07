@@ -16,6 +16,92 @@
       "message": "PTAL",
       "revId": "6e080fa9050af76487d8b2146f99b147aad2ef8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfe07b38_4b35bb33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-01-07T09:44:21Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "6e080fa9050af76487d8b2146f99b147aad2ef8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd480d62_b12526a4",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-01-07T09:44:21Z",
+      "side": 1,
+      "message": "why is this a function?",
+      "range": {
+        "startLine": 55,
+        "startChar": 9,
+        "endLine": 55,
+        "endChar": 25
+      },
+      "revId": "6e080fa9050af76487d8b2146f99b147aad2ef8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46820626_f1e22344",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-01-07T09:44:21Z",
+      "side": 1,
+      "message": "this can be a Set",
+      "range": {
+        "startLine": 56,
+        "startChar": 11,
+        "endLine": 59,
+        "endChar": 6
+      },
+      "revId": "6e080fa9050af76487d8b2146f99b147aad2ef8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b36609e5_44cb1943",
+        "filename": "tools/system-analyzer/view/source-panel.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-01-07T09:44:21Z",
+      "side": 1,
+      "message": "should this be static?",
+      "range": {
+        "startLine": 211,
+        "startChar": 9,
+        "endLine": 211,
+        "endChar": 18
+      },
+      "revId": "6e080fa9050af76487d8b2146f99b147aad2ef8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
