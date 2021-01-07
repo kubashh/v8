@@ -3098,6 +3098,12 @@ base::Optional<uint16_t> StringRef::GetFirstChar() {
 
 base::Optional<double> StringRef::ToNumber() {
   if (data_->should_access_heap()) {
+    if (data_->kind() == kNeverSerializedHeapObject &&
+        !this->IsInternalizedString()) {
+      // Bail out for NeverSerialized non-internalized Strings.
+      return base::nullopt;
+    }
+
     return TryStringToDouble(broker()->local_isolate(), object());
   }
   return data()->AsString()->to_number();
@@ -3548,8 +3554,15 @@ void ScopeInfoRef::SerializeScopeInfoChain() {
   data()->AsScopeInfo()->SerializeScopeInfoChain(broker());
 }
 
-bool StringRef::IsExternalString() const {
-  IF_ACCESS_FROM_HEAP_C(IsExternalString);
+base::Optional<bool> StringRef::IsExternalString() const {
+  if (data_->should_access_heap()) {
+    if (data_->kind() == kNeverSerializedHeapObject &&
+        !this->IsInternalizedString()) {
+      // Bail out for NeverSerialized non-internalized Strings.
+      return base::nullopt;
+    }
+    return object()->IsExternalString();
+  }
   return data()->AsString()->is_external_string();
 }
 
@@ -3574,8 +3587,15 @@ const CFunctionInfo* FunctionTemplateInfoRef::c_signature() const {
   return HeapObjectRef::data()->AsFunctionTemplateInfo()->c_signature();
 }
 
-bool StringRef::IsSeqString() const {
-  IF_ACCESS_FROM_HEAP_C(IsSeqString);
+base::Optional<bool> StringRef::IsSeqString() const {
+  if (data_->should_access_heap()) {
+    if (data_->kind() == kNeverSerializedHeapObject &&
+        !this->IsInternalizedString()) {
+      // Bail out for NeverSerialized non-internalized Strings.
+      return base::nullopt;
+    }
+    return object()->IsSeqString();
+  }
   return data()->AsString()->is_seq_string();
 }
 

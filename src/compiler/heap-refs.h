@@ -837,8 +837,8 @@ class StringRef : public NameRef {
   base::Optional<int> length() const;
   base::Optional<uint16_t> GetFirstChar();
   base::Optional<double> ToNumber();
-  bool IsSeqString() const;
-  bool IsExternalString() const;
+  base::Optional<bool> IsSeqString() const;
+  base::Optional<bool> IsExternalString() const;
 };
 
 class SymbolRef : public NameRef {
