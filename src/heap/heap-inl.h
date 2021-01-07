@@ -72,6 +72,19 @@ Address AllocationResult::ToAddress() {
   return HeapObject::cast(object_).address();
 }
 
+// static
+BytecodeFlushMode Heap::GetBytecodeFlushMode(Isolate* isolate) {
+  if (isolate->has_coverage_info()) {
+    return BytecodeFlushMode::kDoNotFlushBytecode;
+  }
+  if (FLAG_stress_flush_bytecode) {
+    return BytecodeFlushMode::kStressFlushBytecode;
+  } else if (FLAG_flush_bytecode) {
+    return BytecodeFlushMode::kFlushBytecode;
+  }
+  return BytecodeFlushMode::kDoNotFlushBytecode;
+}
+
 Isolate* Heap::isolate() {
   return reinterpret_cast<Isolate*>(
       reinterpret_cast<intptr_t>(this) -
