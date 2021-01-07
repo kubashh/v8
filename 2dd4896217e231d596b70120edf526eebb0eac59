@@ -16,6 +16,46 @@
       "message": "For more context: https://github.com/denoland/rusty_v8/pull/567#issuecomment-752408646",
       "revId": "2dd4896217e231d596b70120edf526eebb0eac59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50cb1e1e_661d5047",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-07T09:01:05Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "2dd4896217e231d596b70120edf526eebb0eac59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b3cd85d_d22edad5",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1439,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-07T09:01:05Z",
+      "side": 1,
+      "message": "We still need the previous version of the constructor to not break the V8 roll into chromium.\nLet\u0027s do the standard deprecation dance here :P",
+      "range": {
+        "startLine": 1437,
+        "startChar": 0,
+        "endLine": 1439,
+        "endChar": 66
+      },
+      "revId": "2dd4896217e231d596b70120edf526eebb0eac59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
