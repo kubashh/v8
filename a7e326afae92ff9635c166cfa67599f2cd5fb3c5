@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18a89263_79191373",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-01-08T10:14:54Z",
+      "side": 1,
+      "message": "no need for this to be a getter. THis can just be property. We\u0027re creating a new Set every time the getter is called which is not necessary.",
+      "range": {
+        "startLine": 55,
+        "startChar": 13,
+        "endLine": 55,
+        "endChar": 26
+      },
+      "revId": "a7e326afae92ff9635c166cfa67599f2cd5fb3c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
