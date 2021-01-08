@@ -47,6 +47,10 @@ echo You can find a packaged version of gcmole here:
 echo
 echo $(readlink -f "${PACKAGE_FILE}")
 echo
+echo Upload the update package to the chrome infra:
+echo
+echo 'gsutil.py cp tools/gcmole/gcmole-tools.tar.gz gs://chrome-v8-gcmole/$(cat tools/gcmole/gcmole-tools.tar.gz.sha1)'
+echo
 echo You can now run gcmole using this command:
 echo
 echo CLANG_BIN=\"tools/gcmole/gcmole-tools/bin\" python tools/gcmole/gcmole.py
