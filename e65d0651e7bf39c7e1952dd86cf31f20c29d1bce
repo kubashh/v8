@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8d32d26_fab455f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-08T08:14:36Z",
+      "side": 1,
+      "message": "The way it\u0027s implemented assumes that any non-trivial StringRef access starts by inspecting the length(). Is that true? For robustness we should have a similar check in the other methods (GetFirstChar, ToNumber) or make them CHECK that length() is available.",
+      "revId": "e65d0651e7bf39c7e1952dd86cf31f20c29d1bce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "fa61cc26_a0bd3bd2",
@@ -14,6 +31,40 @@
       "writtenOn": "2021-01-07T21:28:40Z",
       "side": 1,
       "message": "Georg PTAL\nBack in 2020 we talked about bailing out on optimizations for non-internalized strings in the background, in order to flip String to kNeverSerialized without having to worry about other String instance types. This is the first in a string of CLs that does that.",
+      "revId": "e65d0651e7bf39c7e1952dd86cf31f20c29d1bce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e747a4ca_4a51c1e7",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3071,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-08T08:14:36Z",
+      "side": 1,
+      "message": "The comment doesn\u0027t add information. Please remove it or explain why we do this bailout.\n\nDo I understand correctly that this is currently dead code?",
+      "revId": "e65d0651e7bf39c7e1952dd86cf31f20c29d1bce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c300f9_4fed28f2",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3072,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-08T08:14:36Z",
+      "side": 1,
+      "message": "I think we should use TRACE_BROKER_MISSING here to print a warning that we might be missing out on an optimization that we used to be able to perform.\nSomething like\n  TRACE_BROKER_MISSING(broker(), \"length for non-internalized string \" \u003c\u003c *this);",
       "revId": "e65d0651e7bf39c7e1952dd86cf31f20c29d1bce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
