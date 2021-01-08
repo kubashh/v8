@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7a414cdf_58df31eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-08T12:57:09Z",
+      "side": 1,
+      "message": "I have follow-up CLs for all other StringRef methods, and only after that I have another CL to flip String to kNeverSerialized.",
+      "parentUuid": "c8d32d26_fab455f6",
+      "revId": "e65d0651e7bf39c7e1952dd86cf31f20c29d1bce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fa61cc26_a0bd3bd2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ad16f91_02d948ca",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3071,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-08T12:57:09Z",
+      "side": 1,
+      "message": "Ack, removed comment.\nIt is dead code up until we enable String as kNeverSerialized.",
+      "parentUuid": "e747a4ca_4a51c1e7",
+      "revId": "e65d0651e7bf39c7e1952dd86cf31f20c29d1bce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54c300f9_4fed28f2",
@@ -65,6 +101,24 @@
       "writtenOn": "2021-01-08T08:14:36Z",
       "side": 1,
       "message": "I think we should use TRACE_BROKER_MISSING here to print a warning that we might be missing out on an optimization that we used to be able to perform.\nSomething like\n  TRACE_BROKER_MISSING(broker(), \"length for non-internalized string \" \u003c\u003c *this);",
+      "revId": "e65d0651e7bf39c7e1952dd86cf31f20c29d1bce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "310355e1_1e4ed67b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3072,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-08T12:57:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54c300f9_4fed28f2",
       "revId": "e65d0651e7bf39c7e1952dd86cf31f20c29d1bce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
