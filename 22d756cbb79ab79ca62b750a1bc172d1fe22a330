@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f901d73_e4992e8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-01-08T09:40:21Z",
+      "side": 1,
+      "message": "Step 2 for ETW integration! This is the one that implements stack-walking. Please take a look when you have the time 😊 I\u0027ve also updated the design doc to implementation details and what etw-metadata.h does.\n\nBy the way, there are a couple of pre-upload errors that have to do with the recorder living in libplatform/ but trying to access things in other parts of the code:\n\n```\nYou added one or more #includes that violate checkdeps rules.\n  src\\api\\api.cc\n      Illegal include: \"src/libplatform/tracing/recorder.h\"\n    Because of \"-src/libplatform\" from src\u0027s include_rules. \\\n  src\\libplatform\\tracing\\recorder.h\n      Illegal include: \"include/v8.h\"\n    Because of \"-include\" from src/libplatform\u0027s include_rules.\n```\n\nThere\u0027s also this error that has to do with using #include \u003cregex\u003e:\n\n`C:\\v8\\v8\\src\\libplatform\\tracing\\recorder-win.cc:7:  \u003cregex\u003e is an unapproved C++11 header.  [build/c++11] [5]`\n",
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
