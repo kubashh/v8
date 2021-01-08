@@ -83,7 +83,11 @@ set -x
 
 NUM_JOBS=3
 if [[ "${OS}" = "Linux" ]]; then
-  NUM_JOBS="$(grep -c "^processor" /proc/cpuinfo)"
+  if [[ -e "/proc/cpuinfo" ]]; then
+    NUM_JOBS="$(grep -c "^processor" /proc/cpuinfo)"
+  else
+    NUM_JOBS="70"
+  fi
 elif [ "${OS}" = "Darwin" ]; then
   NUM_JOBS="$(sysctl -n hw.ncpu)"
 fi
