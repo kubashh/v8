@@ -34,6 +34,24 @@
       "parentUuid": "df4b9520_f181bd9b",
       "revId": "5fc4649d945cc04e803444b4293d75d515c6a8d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b476b9a_4022bdab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-01-08T12:16:57Z",
+      "side": 1,
+      "message": "I totally agree on the desired end state, and that wasm-js is not a good place for the debug proxy to live in.\nI just don\u0027t see why we first have to make things worse by moving everything to the wasm-debug.cc file. But I am fine with this as long as we keep working on cleaning this up. It would be really unfortunate if we kept things in this state because higher-priority issues are keeping us from finishing the refactoring.",
+      "parentUuid": "a18a370a_80fe9493",
+      "revId": "5fc4649d945cc04e803444b4293d75d515c6a8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
