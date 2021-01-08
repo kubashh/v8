@@ -16,6 +16,46 @@
       "message": "PTAL.\n\nThanks,\nMythri",
       "revId": "17a9ebc62ea9c7d90c6b192bef69140787a56ef2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd65e78_8271ead4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-08T11:12:38Z",
+      "side": 1,
+      "message": "LGTM with a comment, thanks.",
+      "revId": "17a9ebc62ea9c7d90c6b192bef69140787a56ef2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9582002b_f100d531",
+        "filename": "src/debug/debug-coverage.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-08T11:12:38Z",
+      "side": 1,
+      "message": "Let\u0027s just call this disable_bytecode_flushing explicitly to make it clear what the flag means (since the isolate might not have coverage info later, but we should still disable bytecode flushing going forward.",
+      "range": {
+        "startLine": 753,
+        "startChar": 13,
+        "endLine": 753,
+        "endChar": 34
+      },
+      "revId": "17a9ebc62ea9c7d90c6b192bef69140787a56ef2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
