@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f229dd88_91361b15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-08T14:42:39Z",
+      "side": 1,
+      "message": "LGTM % nit, thanks a lot!\nI\u0027m not sure why the bot is unhappy with GLIBC_2.29/27 though. Could you ping machenbach@ or liviurau@? We might end up needing to build the binary on a local machine. 😞",
+      "revId": "2226c62d546435b7818d5a4b49f2001b3088424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36545fdc_f5e6d2c7",
+        "filename": "src/regexp/experimental/experimental.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-08T14:42:39Z",
+      "side": 1,
+      "message": "Which issue is that?",
+      "range": {
+        "startLine": 149,
+        "startChar": 41,
+        "endLine": 149,
+        "endChar": 46
+      },
+      "revId": "2226c62d546435b7818d5a4b49f2001b3088424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d15e1b_7a89b3d7",
+        "filename": "tools/gcmole/gcmole-test.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-08T14:42:39Z",
+      "side": 1,
+      "message": "Why should this cause a warning? I thought the DisableGCMole in the scope should prevent that.",
+      "range": {
+        "startLine": 238,
+        "startChar": 7,
+        "endLine": 238,
+        "endChar": 13
+      },
+      "revId": "2226c62d546435b7818d5a4b49f2001b3088424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
