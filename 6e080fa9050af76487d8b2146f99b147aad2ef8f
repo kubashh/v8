@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68dc8744_f9c00566",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T17:06:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd480d62_b12526a4",
+      "range": {
+        "startLine": 55,
+        "startChar": 9,
+        "endLine": 55,
+        "endChar": 25
+      },
+      "revId": "6e080fa9050af76487d8b2146f99b147aad2ef8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46820626_f1e22344",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0a283a1_da3044ab",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T17:06:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46820626_f1e22344",
+      "range": {
+        "startLine": 56,
+        "startChar": 11,
+        "endLine": 59,
+        "endChar": 6
+      },
+      "revId": "6e080fa9050af76487d8b2146f99b147aad2ef8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b36609e5_44cb1943",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-01-07T09:44:21Z",
       "side": 1,
       "message": "should this be static?",
+      "range": {
+        "startLine": 211,
+        "startChar": 9,
+        "endLine": 211,
+        "endChar": 18
+      },
+      "revId": "6e080fa9050af76487d8b2146f99b147aad2ef8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f7d8149_df227316",
+        "filename": "tools/system-analyzer/view/source-panel.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T17:06:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b36609e5_44cb1943",
       "range": {
         "startLine": 211,
         "startChar": 9,
