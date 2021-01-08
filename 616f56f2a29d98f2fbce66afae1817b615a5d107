@@ -33,6 +33,24 @@
       "message": "Hi Santiago, is this actually necessary? I thought it would be fine to keep these functions as they are because they\u0027re only looking at the map.",
       "revId": "616f56f2a29d98f2fbce66afae1817b615a5d107",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9d864fe_e7ce1f4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-08T18:31:57Z",
+      "side": 1,
+      "message": "I think you are right. We can just update ToNumber and leave the other two methods out of it.",
+      "parentUuid": "eac20012_4d4857a9",
+      "revId": "616f56f2a29d98f2fbce66afae1817b615a5d107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
