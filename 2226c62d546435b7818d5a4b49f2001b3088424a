@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6deb6a6b_b660ae0c",
+        "filename": "src/regexp/experimental/experimental.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T17:04:01Z",
+      "side": 1,
+      "message": "I haven\u0027t figured out yet why this is triggered here.\nRegistersForCaptureCount is a simple static method doing integer ops, and ExperimentalRegExpInterpreter::FindMatches doesn\u0027t allocate either, from what I can see.",
+      "parentUuid": "36545fdc_f5e6d2c7",
+      "range": {
+        "startLine": 149,
+        "startChar": 41,
+        "endLine": 149,
+        "endChar": 46
+      },
+      "revId": "2226c62d546435b7818d5a4b49f2001b3088424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d15e1b_7a89b3d7",
         "filename": "tools/gcmole/gcmole-test.cc",
         "patchSetId": 10
@@ -54,6 +78,30 @@
       "writtenOn": "2021-01-08T14:42:39Z",
       "side": 1,
       "message": "Why should this cause a warning? I thought the DisableGCMole in the scope should prevent that.",
+      "range": {
+        "startLine": 238,
+        "startChar": 7,
+        "endLine": 238,
+        "endChar": 13
+      },
+      "revId": "2226c62d546435b7818d5a4b49f2001b3088424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcce7fe1_76a6dd3a",
+        "filename": "tools/gcmole/gcmole-test.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T17:04:01Z",
+      "side": 1,
+      "message": "Ah you\u0027re right, it\u0027s actually not in the expectations.\n\nBut we still have the case below, line 265, where we currently still emit a warning. I guess that\u0027s ok.",
+      "parentUuid": "82d15e1b_7a89b3d7",
       "range": {
         "startLine": 238,
         "startChar": 7,
