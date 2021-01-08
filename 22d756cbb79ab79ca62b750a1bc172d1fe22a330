@@ -16,6 +16,161 @@
       "message": "Step 2 for ETW integration! This is the one that implements stack-walking. Please take a look when you have the time 😊 I\u0027ve also updated the design doc to implementation details and what etw-metadata.h does.\n\nBy the way, there are a couple of pre-upload errors that have to do with the recorder living in libplatform/ but trying to access things in other parts of the code:\n\n```\nYou added one or more #includes that violate checkdeps rules.\n  src\\api\\api.cc\n      Illegal include: \"src/libplatform/tracing/recorder.h\"\n    Because of \"-src/libplatform\" from src\u0027s include_rules. \\\n  src\\libplatform\\tracing\\recorder.h\n      Illegal include: \"include/v8.h\"\n    Because of \"-include\" from src/libplatform\u0027s include_rules.\n```\n\nThere\u0027s also this error that has to do with using #include \u003cregex\u003e:\n\n`C:\\v8\\v8\\src\\libplatform\\tracing\\recorder-win.cc:7:  \u003cregex\u003e is an unapproved C++11 header.  [build/c++11] [5]`\n",
       "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbdcf228_3dd68598",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T13:38:46Z",
+      "side": 1,
+      "message": "first round of comments, gotta check the includes issues. Most likely we should move the V8 code to live under src/",
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed3d8145_a5507cb3",
+        "filename": "src/libplatform/tracing/etw-metadata.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T13:38:46Z",
+      "side": 1,
+      "message": "nit: maybe better to do this in Header() itself",
+      "range": {
+        "startLine": 126,
+        "startChar": 32,
+        "endLine": 126,
+        "endChar": 36
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9966ce91_2251ef0d",
+        "filename": "src/libplatform/tracing/etw-metadata.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T13:38:46Z",
+      "side": 1,
+      "message": "nit: magic constant, please define separately",
+      "range": {
+        "startLine": 219,
+        "startChar": 54,
+        "endLine": 219,
+        "endChar": 55
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1000539_24e6b978",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T13:38:46Z",
+      "side": 1,
+      "message": "Could you define these magic constants somewhere?\n\nOut of curiosity, where do they come from?",
+      "range": {
+        "startLine": 81,
+        "startChar": 20,
+        "endLine": 81,
+        "endChar": 22
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aec3bdbf_35db1bb0",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T13:38:46Z",
+      "side": 1,
+      "message": "I feel like they should live either outside of this function or close to the LogEventData where you use it.",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 77
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31350dad_8c85f99a",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T13:38:46Z",
+      "side": 1,
+      "message": "You can simplify this by relying only on the script_id which is unique for a given isolate (even across native contexts).\n\nSee also Logger::EnsureLogScriptSource",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 33
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d28e16b6_51d03464",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-08T13:38:46Z",
+      "side": 1,
+      "message": "Should this be script.id() ?",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 44
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
