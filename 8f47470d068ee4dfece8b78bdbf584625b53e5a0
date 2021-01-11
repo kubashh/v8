@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8da4e63f_ba729a23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-11T16:05:24Z",
+      "side": 1,
+      "message": "Please don\u0027t block on my LGTM and sorry I haven\u0027t had the time to finish the review by now.\n\nI\u0027m fine too with giving it a try, but I\u0027m wondering if we should wait until Thursday, after the branch is cut? It\u0027s mostly new functionality (so it shouldn\u0027t break existing things) and the node observer notification is in an \"unlikely\" branch (so should affect compilation speed, unless an observer is attached), but still, I\u0027d suggest doing one of the following:\n1) running some compilation-intensive benchmark locally and observing the output of --turbo-stats with and without the change;\n2) landing the change as it is now, then me \u0026 Nico observing some UMA metrics (at least V8.TurboFanOptimizeTotalTime) for next Canary.\n\nWhat do you both think?",
+      "parentUuid": "97ec0acc_443ab087",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6984df5a_e1066db7",
