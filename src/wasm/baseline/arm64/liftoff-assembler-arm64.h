@@ -141,7 +141,8 @@ inline MemOperand GetMemOpWithImmOffsetZero(LiftoffAssembler* assm,
                                             UseScratchRegisterScope* temps,
                                             MemOperand src_op) {
   if (src_op.IsRegisterOffset()) {
-    DCHECK_EQ(src_op.shift_amount(), 0);
+    // We have 2 tmp gps, so it's okay to acquire 1 more here, and actually
+    // doesn't matter if we acquire the same one.
     Register tmp = temps->AcquireX();
     assm->Add(tmp, src_op.base(), src_op.regoffset().X());
     return MemOperand(tmp.X(), 0);
@@ -150,7 +151,6 @@ inline MemOperand GetMemOpWithImmOffsetZero(LiftoffAssembler* assm,
     assm->Add(tmp, src_op.base(), src_op.offset());
     return MemOperand(tmp.X(), 0);
   } else {
-    DCHECK(src_op.IsImmediateOffset() && src_op.offset() == 0);
     return src_op;
   }
 }
