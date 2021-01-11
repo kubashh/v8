@@ -16,6 +16,24 @@
       "message": "Clemens, this is a merge cl to 8.8, nothing is changed from original cl, ptal, thanks!",
       "revId": "7015fb2686c2da69046c6a03de6bf34fe55ddd75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6bed431_e1b689df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-01-11T09:59:28Z",
+      "side": 1,
+      "message": "LGTM. Note that clean cherry-picks can land with TBR according to https://v8.dev/docs/merge-patch.\n\nPlease wait for merge approval before landing.",
+      "parentUuid": "1bc3efda_8898e544",
+      "revId": "7015fb2686c2da69046c6a03de6bf34fe55ddd75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
