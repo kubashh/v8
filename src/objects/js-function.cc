@@ -133,16 +133,16 @@ bool JSFunction::ActiveTierIsNCI() const {
 
 bool JSFunction::ActiveTierIsToptierTurboprop() const {
   CodeKind highest_tier;
-  if (!FLAG_turboprop) return false;
+  if (!FLAG_turboprop_as_toptier) return false;
   if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
-  return highest_tier == CodeKind::TURBOPROP && !FLAG_turboprop_as_midtier;
+  return highest_tier == CodeKind::TURBOPROP && FLAG_turboprop_as_toptier;
 }
 
 bool JSFunction::ActiveTierIsMidtierTurboprop() const {
   CodeKind highest_tier;
-  if (!FLAG_turboprop_as_midtier) return false;
+  if (!FLAG_turboprop) return false;
   if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
-  return highest_tier == CodeKind::TURBOPROP && FLAG_turboprop_as_midtier;
+  return highest_tier == CodeKind::TURBOPROP && !FLAG_turboprop_as_toptier;
 }
 
 CodeKind JSFunction::NextTier() const {
