@@ -52,6 +52,24 @@
       "parentUuid": "a18a370a_80fe9493",
       "revId": "5fc4649d945cc04e803444b4293d75d515c6a8d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1be23931_827ca967",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-01-11T11:53:10Z",
+      "side": 1,
+      "message": "As promised, here\u0027s the cleanup: https://crrev.com/c/2621084",
+      "parentUuid": "9b476b9a_4022bdab",
+      "revId": "5fc4649d945cc04e803444b4293d75d515c6a8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
