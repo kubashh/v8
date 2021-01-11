@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "288aee1d_0cf4f60d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-11T14:20:52Z",
+      "side": 1,
+      "message": "Georg PTAL\n\nNameRef only has one method, that takes a look at the map. The only blocker was String not being kNeverSerialized",
+      "revId": "1c9007a3e9441148746c8a42d67e23521056298a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
