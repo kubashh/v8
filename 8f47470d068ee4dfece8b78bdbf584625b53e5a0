@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6c241eb_cd480197",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-11T16:28:31Z",
+      "side": 1,
+      "message": "Absolutely. This change should be quite safe and have no effect when the %ObserveNode intrinsic is not used, but still, better be safe and way for the branch cut.",
+      "parentUuid": "8da4e63f_ba729a23",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6984df5a_e1066db7",
@@ -49,6 +67,30 @@
       "writtenOn": "2021-01-11T14:02:47Z",
       "side": 1,
       "message": "nit: Did you know that you can also write\n\ninline NodeObserver::~NodeObserver() \u003d default;\n\nhere? :)",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 39
+      },
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fadfdf6_425e77ee",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-11T16:28:31Z",
+      "side": 1,
+      "message": "Thanks, I was looking for better way, :)\n\nWith MSVC you can have in the .h:\nvirtual NodeObserver::~NodeObserver() \u003d 0 {}\nbut it is not standard...",
+      "parentUuid": "6984df5a_e1066db7",
       "range": {
         "startLine": 67,
         "startChar": 0,
