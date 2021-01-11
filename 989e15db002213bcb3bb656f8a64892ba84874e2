@@ -33,6 +33,23 @@
       "message": "LGTM!\n\nThanks,\nPierre",
       "revId": "989e15db002213bcb3bb656f8a64892ba84874e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81b8d6be_7faa619f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-11T19:54:10Z",
+      "side": 1,
+      "message": "Simulator LGTM.",
+      "revId": "989e15db002213bcb3bb656f8a64892ba84874e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
