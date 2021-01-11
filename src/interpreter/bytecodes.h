@@ -21,6 +21,35 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
+// Register indices which are accessible via single-byte Star variants.
+#define SHORT_STAR_REGISTERS_GENERATOR(V, _) \
+  V(_, 15)                                   \
+  V(_, 14)                                   \
+  V(_, 13)                                   \
+  V(_, 12)                                   \
+  V(_, 11)                                   \
+  V(_, 10)                                   \
+  V(_, 9)                                    \
+  V(_, 8)                                    \
+  V(_, 7)                                    \
+  V(_, 6)                                    \
+  V(_, 5)                                    \
+  V(_, 4)                                    \
+  V(_, 3)                                    \
+  V(_, 2)                                    \
+  V(_, 1)                                    \
+  V(_, 0)
+
+#define SHORT_STAR_REGISTERS_ADAPTER(V, n) V(n)
+
+#define SHORT_STAR_REGISTERS(V) \
+  SHORT_STAR_REGISTERS_GENERATOR(SHORT_STAR_REGISTERS_ADAPTER, V)
+
+#define SHORT_STAR_BYTECODES_ADAPTER(V, n) V(Star##n, AccumulatorUse::kRead)
+
+#define SHORT_STAR_BYTECODE_LIST(V) \
+  SHORT_STAR_REGISTERS_GENERATOR(SHORT_STAR_BYTECODES_ADAPTER, V)
+
 // The list of bytecodes which are interpreted by the interpreter.
 // Format is V(<bytecode>, <accumulator_use>, <operands>).
 #define BYTECODE_LIST(V)                                                       \
@@ -368,6 +397,9 @@ namespace interpreter {
   /* Execution Abort (internal error) */                                       \
   V(Abort, AccumulatorUse::kNone, OperandType::kIdx)                           \
                                                                                \
+  /* Special-case Star for common register numbers, to save space */           \
+  SHORT_STAR_BYTECODE_LIST(V)                                                  \
+                                                                               \
   /* Illegal bytecode  */                                                      \
   V(Illegal, AccumulatorUse::kNone)
 
@@ -574,11 +606,16 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
            bytecode == Bytecode::kTestTypeOf;
   }
 
+  static constexpr bool IsAnyStar(Bytecode bytecode) {
+    return bytecode == Bytecode::kStar ||
+           (bytecode >= Bytecode::kStar15 && bytecode <= Bytecode::kStar0);
+  }
+
   // Return true if |bytecode| is a register load without effects,
   // e.g. Mov, Star.
   static constexpr bool IsRegisterLoadWithoutEffects(Bytecode bytecode) {
     return bytecode == Bytecode::kMov || bytecode == Bytecode::kPopContext ||
-           bytecode == Bytecode::kPushContext || bytecode == Bytecode::kStar;
+           bytecode == Bytecode::kPushContext || IsAnyStar(bytecode);
   }
 
   // Returns true if the bytecode is a conditional jump taking
@@ -668,7 +705,7 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
 
   // Returns true if the bytecode is Ldar or Star.
   static constexpr bool IsLdarOrStar(Bytecode bytecode) {
-    return bytecode == Bytecode::kLdar || bytecode == Bytecode::kStar;
+    return bytecode == Bytecode::kLdar || IsAnyStar(bytecode);
   }
 
   // Returns true if the bytecode is a call or a constructor call.
