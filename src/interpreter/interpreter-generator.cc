@@ -145,6 +145,15 @@ IGNITION_HANDLER(Star, InterpreterAssembler) {
   Dispatch();
 }
 
+#define SHORT_STAR_HANDLER(n)                       \
+  IGNITION_HANDLER(Star##n, InterpreterAssembler) { \
+    TNode<Object> accumulator = GetAccumulator();   \
+    StoreRegister(accumulator, Register(n));        \
+    Dispatch();                                     \
+  }
+SHORT_STAR_REGISTERS(SHORT_STAR_HANDLER)
+#undef SHORT_STAR_HANDLER
+
 // Mov <src> <dst>
 //
 // Stores the value of register <src> to register <dst>.

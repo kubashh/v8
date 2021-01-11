@@ -197,8 +197,21 @@ void BytecodeArrayBuilder::OutputLdarRaw(Register reg) {
 
 void BytecodeArrayBuilder::OutputStarRaw(Register reg) {
   uint32_t operand = static_cast<uint32_t>(reg.ToOperand());
-  BytecodeNode node(BytecodeNode::Star(BytecodeSourceInfo(), operand));
-  Write(&node);
+  switch (reg.index()) {
+#define REG_CASE(n)                                                 \
+  case n: {                                                         \
+    BytecodeNode node(BytecodeNode::Star##n(BytecodeSourceInfo())); \
+    Write(&node);                                                   \
+    break;                                                          \
+  }
+    SHORT_STAR_REGISTERS(REG_CASE)
+#undef REG_CASE
+    default: {
+      BytecodeNode node(BytecodeNode::Star(BytecodeSourceInfo(), operand));
+      Write(&node);
+      break;
+    }
+  }
 }
 
 void BytecodeArrayBuilder::OutputMovRaw(Register src, Register dest) {
@@ -707,7 +720,16 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::StoreAccumulatorInRegister(
     SetDeferredSourceInfo(CurrentSourcePosition(Bytecode::kStar));
     register_optimizer_->DoStar(reg);
   } else {
-    OutputStar(reg);
+    switch (reg.index()) {
+#define REG_CASE(n)  \
+  case n:            \
+    OutputStar##n(); \
+    break;
+      SHORT_STAR_REGISTERS(REG_CASE)
+#undef REG_CASE
+      default:
+        OutputStar(reg);
+    }
   }
   return *this;
 }
