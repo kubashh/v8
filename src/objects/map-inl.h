@@ -449,11 +449,11 @@ void Map::AccountAddedOutOfObjectPropertyField(int unused_in_property_array) {
 }
 
 byte Map::bit_field() const {
-  return ACQUIRE_READ_BYTE_FIELD(*this, kBitFieldOffset);
+  return RELAXED_READ_BYTE_FIELD(*this, kBitFieldOffset);
 }
 
 void Map::set_bit_field(byte value) {
-  RELEASE_WRITE_BYTE_FIELD(*this, kBitFieldOffset, value);
+  RELAXED_WRITE_BYTE_FIELD(*this, kBitFieldOffset, value);
 }
 
 byte Map::bit_field2() const {
