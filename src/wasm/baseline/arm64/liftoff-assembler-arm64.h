@@ -133,6 +133,28 @@ inline MemOperand GetMemOp(LiftoffAssembler* assm,
   return MemOperand(addr.X(), offset_imm);
 }
 
+// Certain load instructions do not support offset (register or immediate). This
+// converts a MemOperand that potentially has either, into a MemOperand that
+// has a single register base and an immediate offset of 0. It uses a scratch
+// register to hold the intermediate value of adding the base and offset.
+inline MemOperand GetMemOpWithImmOffsetZero(LiftoffAssembler* assm,
+                                            UseScratchRegisterScope* temps,
+                                            MemOperand src_op) {
+  if (src_op.IsRegisterOffset()) {
+    DCHECK_EQ(src_op.shift_amount(), 0);
+    Register tmp = temps->AcquireX();
+    assm->Add(tmp, src_op.base(), src_op.regoffset().X());
+    return MemOperand(tmp.X(), 0);
+  } else if (src_op.IsImmediateOffset() && src_op.offset() != 0) {
+    Register tmp = temps->AcquireX();
+    assm->Add(tmp, src_op.base(), src_op.offset());
+    return MemOperand(tmp.X(), 0);
+  } else {
+    DCHECK(src_op.IsImmediateOffset() && src_op.offset() == 0);
+    return src_op;
+  }
+}
+
 enum class ShiftDirection : bool { kLeft, kRight };
 
 enum class ShiftSign : bool { kSigned, kUnsigned };
@@ -1606,17 +1628,7 @@ void LiftoffAssembler::LoadTransform(LiftoffRegister dst, Register src_addr,
   } else {
     // ld1r only allows no offset or post-index, so emit an add.
     DCHECK_EQ(LoadTransformationKind::kSplat, transform);
-    if (src_op.IsRegisterOffset()) {
-      // We have 2 tmp gps, so it's okay to acquire 1 more here, and actually
-      // doesn't matter if we acquire the same one.
-      Register tmp = temps.AcquireX();
-      Add(tmp, src_op.base(), src_op.regoffset().X());
-      src_op = MemOperand(tmp.X(), 0);
-    } else if (src_op.IsImmediateOffset() && src_op.offset() != 0) {
-      Register tmp = temps.AcquireX();
-      Add(tmp, src_op.base(), src_op.offset());
-      src_op = MemOperand(tmp.X(), 0);
-    }
+    src_op = liftoff::GetMemOpWithImmOffsetZero(this, &temps, src_op);
 
     if (memtype == MachineType::Int8()) {
       ld1r(dst.fp().V16B(), src_op);
@@ -1634,7 +1646,28 @@ void LiftoffAssembler::LoadLane(LiftoffRegister dst, LiftoffRegister src,
                                 Register addr, Register offset_reg,
                                 uintptr_t offset_imm, LoadType type,
                                 uint8_t laneidx, uint32_t* protected_load_pc) {
-  bailout(kSimd, "loadlane");
+  UseScratchRegisterScope temps(this);
+  MemOperand src_op =
+      liftoff::GetMemOp(this, &temps, addr, offset_reg, offset_imm);
+  src_op = liftoff::GetMemOpWithImmOffsetZero(this, &temps, src_op);
+  *protected_load_pc = pc_offset();
+
+  MachineType mem_type = type.mem_type();
+  if (dst != src) {
+    Mov(dst.fp().Q(), src.fp().Q());
+  }
+
+  if (mem_type == MachineType::Int8()) {
+    ld1(dst.fp().B(), laneidx, src_op);
+  } else if (mem_type == MachineType::Int16()) {
+    ld1(dst.fp().H(), laneidx, src_op);
+  } else if (mem_type == MachineType::Int32()) {
+    ld1(dst.fp().S(), laneidx, src_op);
+  } else if (mem_type == MachineType::Int64()) {
+    ld1(dst.fp().D(), laneidx, src_op);
+  } else {
+    UNREACHABLE();
+  }
 }
 
 void LiftoffAssembler::emit_i8x16_swizzle(LiftoffRegister dst,
