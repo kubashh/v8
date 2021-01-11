@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec77ed29_773703d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-01-11T10:51:23Z",
+      "side": 1,
+      "message": "Hey thanks, that\u0027s looking great! Just one suggestion for cleaning up the optional chaining logic that\u0027s somewhat unrelated to your CL...",
+      "revId": "322379779f0d819c37f587478d4711e82f89aeaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ece356c9_de13ce94",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 3311,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-01-11T10:51:23Z",
+      "side": 1,
+      "message": "I think it would make more sense to change this to:\n  \n  is_optional \u003d true;\n  optional_chaining \u003d true;\n  if (Token::IsPropertyOrCall(peek()) continue;\n  int pos \u003d position();\n  ExpressionT key \u003d ParsePropertyOrPrivatePropertyName();\n  result \u003d factory()-\u003eNewProperty(result, key, pos, is_optional);\n  break;\n}\n\n(Move in the code from \"default\" into this case and only recurse if you\u0027re actually going to reuse code that\u0027s not just relevant to this path.)\n\nThat allows you to drop lines 3394 to 3405 (optional-chaining related code in the default path; including kOptionalChainingNoTemplate) and you can turn the do/while condition back into \"while (Token::IsPropertyOrCall(peek())\" which is cleaner imho.",
+      "revId": "322379779f0d819c37f587478d4711e82f89aeaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
