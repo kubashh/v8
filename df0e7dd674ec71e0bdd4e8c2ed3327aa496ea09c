@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38ed355c_f6f3d4fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2021-01-11T20:52:42Z",
+      "side": 1,
+      "message": "Implemented the suggested changes except dropping:\n\ndefault:\n        if (optional_chaining) {\n          impl()-\u003eReportMessageAt(scanner()-\u003epeek_location(),\n                                  MessageTemplate::kOptionalChainingNoTemplate);\n          return impl()-\u003eFailureExpression();\n        }\n\nWhich broke the tests:\n\nshouldThrowSyntaxError(\u0027function tag() {} tag?.``;\u0027);\nshouldThrowSyntaxError(\u0027const o \u003d { tag() {} }; o?.tag``;\u0027);",
+      "revId": "df0e7dd674ec71e0bdd4e8c2ed3327aa496ea09c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

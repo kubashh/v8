@@ -33,6 +33,24 @@
       "message": "I think it would make more sense to change this to:\n  \n  is_optional \u003d true;\n  optional_chaining \u003d true;\n  if (Token::IsPropertyOrCall(peek()) continue;\n  int pos \u003d position();\n  ExpressionT key \u003d ParsePropertyOrPrivatePropertyName();\n  result \u003d factory()-\u003eNewProperty(result, key, pos, is_optional);\n  break;\n}\n\n(Move in the code from \"default\" into this case and only recurse if you\u0027re actually going to reuse code that\u0027s not just relevant to this path.)\n\nThat allows you to drop lines 3394 to 3405 (optional-chaining related code in the default path; including kOptionalChainingNoTemplate) and you can turn the do/while condition back into \"while (Token::IsPropertyOrCall(peek())\" which is cleaner imho.",
       "revId": "322379779f0d819c37f587478d4711e82f89aeaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a579f14_b6a50493",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 3311,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2021-01-11T20:52:42Z",
+      "side": 1,
+      "message": "I\u0027ve applied your changes, but I don\u0027t think we can drop the kOptionalChainingNoTemplate check, due to the spec stating:\n\nNot Supported, constructor or template literals in/after an Optional Chain: new a?.b(), a?.b`string`.\n\nWhen I removed the `kOptionalChainingNoTemplate` the tests around:\n\na?.b`hello`\n\nbroke.",
+      "parentUuid": "ece356c9_de13ce94",
+      "revId": "322379779f0d819c37f587478d4711e82f89aeaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
