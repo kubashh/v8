@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a2160ec_9053be63",
+        "filename": "src/regexp/experimental/experimental.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-11T11:24:05Z",
+      "side": 1,
+      "message": "I also looked at FindMatches now and asked jgruber@ - it shouldn\u0027t allocate indeed. Looks to me it\u0027s one of the existing shortcomings of gcmole: https://bugs.chromium.org/p/v8/issues/detail?id\u003d10196.",
+      "parentUuid": "6deb6a6b_b660ae0c",
+      "range": {
+        "startLine": 149,
+        "startChar": 41,
+        "endLine": 149,
+        "endChar": 46
+      },
+      "revId": "2226c62d546435b7818d5a4b49f2001b3088424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d15e1b_7a89b3d7",
         "filename": "tools/gcmole/gcmole-test.cc",
         "patchSetId": 10
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "Ah you\u0027re right, it\u0027s actually not in the expectations.\n\nBut we still have the case below, line 265, where we currently still emit a warning. I guess that\u0027s ok.",
       "parentUuid": "82d15e1b_7a89b3d7",
+      "range": {
+        "startLine": 238,
+        "startChar": 7,
+        "endLine": 238,
+        "endChar": 13
+      },
+      "revId": "2226c62d546435b7818d5a4b49f2001b3088424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb89a08b_84dd1dc4",
+        "filename": "tools/gcmole/gcmole-test.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-11T11:24:05Z",
+      "side": 1,
+      "message": "Thanks for updating the comment!\nSo if I get the warning on line 265 correctly, DisableGCMole doesn\u0027t cause gcmole to ignore it in this case, right? But why is this?",
+      "parentUuid": "fcce7fe1_76a6dd3a",
       "range": {
         "startLine": 238,
         "startChar": 7,

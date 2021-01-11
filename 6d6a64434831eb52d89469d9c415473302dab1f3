@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35b270eb_5e84a867",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-11T11:24:05Z",
+      "side": 1,
+      "message": "Thanks again!\nI\u0027m really unsure why the GCMole step is timing out now. Could it be related to the chroot?",
+      "revId": "6d6a64434831eb52d89469d9c415473302dab1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "192bf7ed_1cb5ed50",
+        "filename": "tools/gcmole/package.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-11T11:24:05Z",
+      "side": 1,
+      "message": "Awesome, thanks a ton!",
+      "range": {
+        "startLine": 54,
+        "startChar": 5,
+        "endLine": 54,
+        "endChar": 31
+      },
+      "revId": "6d6a64434831eb52d89469d9c415473302dab1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "579dcb99_7020b748",
+        "filename": "tools/gcmole/package.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-11T11:24:05Z",
+      "side": 1,
+      "message": "For my own understanding, where does this path come from?",
+      "range": {
+        "startLine": 61,
+        "startChar": 24,
+        "endLine": 61,
+        "endChar": 33
+      },
+      "revId": "6d6a64434831eb52d89469d9c415473302dab1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
