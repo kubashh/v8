@@ -80,6 +80,30 @@
       },
       "revId": "6d6a64434831eb52d89469d9c415473302dab1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8b2b143_4b3e2a8a",
+        "filename": "tools/gcmole/package.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-12T11:10:15Z",
+      "side": 1,
+      "message": "changed name, see comment right above, it should be the dir containing depot_tools and v8.",
+      "parentUuid": "579dcb99_7020b748",
+      "range": {
+        "startLine": 61,
+        "startChar": 24,
+        "endLine": 61,
+        "endChar": 33
+      },
+      "revId": "6d6a64434831eb52d89469d9c415473302dab1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
