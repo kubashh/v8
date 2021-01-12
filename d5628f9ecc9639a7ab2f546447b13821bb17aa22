@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f3c97af5_dc87d7b0",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-01-12T19:41:26Z",
+      "side": 1,
+      "message": "Took your suggestion.",
+      "parentUuid": "de65f596_229f3d0f",
+      "revId": "d5628f9ecc9639a7ab2f546447b13821bb17aa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a8d813f_25b18289",
         "filename": "src/compiler/linkage.cc",
         "patchSetId": 7
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dcb99826_94a79375",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-01-12T19:41:26Z",
+      "side": 1,
+      "message": "I believe this can be positive or negative, depending on the caller and callee.",
+      "parentUuid": "1a8d813f_25b18289",
+      "revId": "d5628f9ecc9639a7ab2f546447b13821bb17aa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3240ce3_ed0c2115",
         "filename": "src/compiler/linkage.h",
         "patchSetId": 7
@@ -65,6 +101,24 @@
       "writtenOn": "2021-01-07T09:37:41Z",
       "side": 1,
       "message": "I\u0027d copy/move your comment from the implementation here.",
+      "revId": "d5628f9ecc9639a7ab2f546447b13821bb17aa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d869476_babcb26a",
+        "filename": "src/compiler/linkage.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-01-12T19:41:26Z",
+      "side": 1,
+      "message": "Done. I also changed the text a bit, since we are potentially returning the first slot \u0027before\u0027 the parameters (it was \u0027after\u0027).",
+      "parentUuid": "b3240ce3_ed0c2115",
       "revId": "d5628f9ecc9639a7ab2f546447b13821bb17aa22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
