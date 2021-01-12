@@ -16,6 +16,24 @@
       "message": "Are these DCHECKs now obsolete?",
       "revId": "ec598bbe552526d3ea393264b08a97b1642613f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dffc549_2f77a098",
+        "filename": "src/debug/debug-wasm-support.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-01-12T15:12:14Z",
+      "side": 0,
+      "message": "The UNREACHABLE() below handles that case here.",
+      "parentUuid": "5c040e68_f1f5d370",
+      "revId": "ec598bbe552526d3ea393264b08a97b1642613f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
