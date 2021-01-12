@@ -8608,8 +8608,8 @@ class V8_EXPORT Isolate {
     kFunctionTokenOffsetTooLongForToString = 49,
     kWasmSharedMemory = 50,
     kWasmThreadOpcodes = 51,
-    kAtomicsNotify = 52,  // Unused.
-    kAtomicsWake = 53,    // Unused.
+    // kAtomicsNotify = 52,
+    // kAtomicsWake = 53,
     kCollator = 54,
     kNumberFormat = 55,
     kDateTimeFormat = 56,
@@ -8630,7 +8630,7 @@ class V8_EXPORT Isolate {
     kOptimizedFunctionWithOneShotBytecode = 71,
     kRegExpMatchIsTrueishOnNonJSRegExp = 72,
     kRegExpMatchIsFalseishOnJSRegExp = 73,
-    kDateGetTimezoneOffset = 74,  // Unused.
+    // kDateGetTimezoneOffset = 74,
     kStringNormalize = 75,
     kCallSiteAPIGetFunctionSloppyCall = 76,
     kCallSiteAPIGetThisSloppyCall = 77,
@@ -8665,7 +8665,7 @@ class V8_EXPORT Isolate {
     kWasmSimdOpcodes = 106,
     kVarRedeclaredCatchBinding = 107,
     kWasmRefTypes = 108,
-    kWasmBulkMemory = 109,
+    // kWasmBulkMemory = 109,
     kWasmMultiValue = 110,
 
     // If you add new values here, you'll also need to update Chromium's:
