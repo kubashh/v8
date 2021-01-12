@@ -1042,8 +1042,6 @@ class MapData : public HeapObjectData {
   void SerializeOwnDescriptor(JSHeapBroker* broker,
                               InternalIndex descriptor_index);
   void SerializeOwnDescriptors(JSHeapBroker* broker);
-  base::Optional<ObjectData*> GetStrongValue(
-      InternalIndex descriptor_index) const;
   // TODO(neis, solanes): This code needs to be changed to allow for
   // kNeverSerialized instance descriptors. However, this is likely to require a
   // non-trivial refactoring of how maps are serialized because actual instance
@@ -2162,13 +2160,6 @@ void MapData::SerializeOwnDescriptors(JSHeapBroker* broker) {
   }
 }
 
-base::Optional<ObjectData*> MapData::GetStrongValue(
-    InternalIndex descriptor_index) const {
-  DescriptorArrayData* descriptor_array =
-      instance_descriptors()->AsDescriptorArray();
-  return descriptor_array->GetStrongValue(descriptor_index);
-}
-
 void MapData::SerializeOwnDescriptor(JSHeapBroker* broker,
                                      InternalIndex descriptor_index) {
   TraceScope tracer(broker, this, "MapData::SerializeOwnDescriptor");
@@ -3036,26 +3027,11 @@ int MapRef::GetInObjectPropertyOffset(int i) const {
 
 PropertyDetails MapRef::GetPropertyDetails(
     InternalIndex descriptor_index) const {
-  if (data_->should_access_heap()) {
-    return object()
-        ->instance_descriptors(kRelaxedLoad)
-        .GetDetails(descriptor_index);
-  }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return descriptors->GetPropertyDetails(descriptor_index);
+  return descriptor_array().GetPropertyDetails(descriptor_index);
 }
 
 NameRef MapRef::GetPropertyKey(InternalIndex descriptor_index) const {
-  if (data_->should_access_heap()) {
-    return NameRef(broker(), broker()->CanonicalPersistentHandle(
-                                 object()
-                                     ->instance_descriptors(kRelaxedLoad)
-                                     .GetKey(descriptor_index)));
-  }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return NameRef(broker(), descriptors->GetPropertyKey(descriptor_index));
+  return descriptor_array().GetPropertyKey(descriptor_index);
 }
 
 bool MapRef::IsFixedCowArrayMap() const {
@@ -3081,16 +3057,7 @@ MapRef MapRef::FindFieldOwner(InternalIndex descriptor_index) const {
 }
 
 ObjectRef MapRef::GetFieldType(InternalIndex descriptor_index) const {
-  if (data_->should_access_heap()) {
-    Handle<FieldType> field_type(object()
-                                     ->instance_descriptors(kRelaxedLoad)
-                                     .GetFieldType(descriptor_index),
-                                 broker()->isolate());
-    return ObjectRef(broker(), field_type);
-  }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return ObjectRef(broker(), descriptors->GetFieldType(descriptor_index));
+  return descriptor_array().GetFieldType(descriptor_index);
 }
 
 bool MapRef::IsUnboxedDoubleField(InternalIndex descriptor_index) const {
@@ -3513,21 +3480,17 @@ BIMODAL_ACCESSOR(FeedbackCell, HeapObject, value)
 
 base::Optional<ObjectRef> MapRef::GetStrongValue(
     InternalIndex descriptor_index) const {
+  return descriptor_array().GetStrongValue(descriptor_index);
+}
+
+DescriptorArrayRef MapRef::descriptor_array() const {
   if (data_->should_access_heap()) {
-    MaybeObject value =
-        object()->instance_descriptors(kRelaxedLoad).GetValue(descriptor_index);
-    HeapObject object;
-    if (value.GetHeapObjectIfStrong(&object)) {
-      return ObjectRef(broker(), broker()->CanonicalPersistentHandle((object)));
-    }
-    return base::nullopt;
+    return DescriptorArrayRef(
+        broker(), broker()->CanonicalPersistentHandle(
+                      object()->instance_descriptors(kRelaxedLoad)));
   }
-  base::Optional<ObjectData*> value =
-      data()->AsMap()->GetStrongValue(descriptor_index);
-  if (!value) {
-    return base::nullopt;
-  }
-  return ObjectRef(broker(), value.value());
+
+  return DescriptorArrayRef(broker(), data()->AsMap()->instance_descriptors());
 }
 
 void MapRef::SerializeRootMap() {
@@ -3931,6 +3894,53 @@ ObjectData* FixedArrayData::Get(int i) const {
 Float64 FixedDoubleArrayData::Get(int i) const {
   CHECK_LT(i, static_cast<int>(contents_.size()));
   return contents_[i];
+}
+
+PropertyDetails DescriptorArrayRef::GetPropertyDetails(
+    InternalIndex descriptor_index) const {
+  if (data_->should_access_heap()) {
+    return object()->GetDetails(descriptor_index);
+  }
+  return data()->AsDescriptorArray()->GetPropertyDetails(descriptor_index);
+}
+
+NameRef DescriptorArrayRef::GetPropertyKey(
+    InternalIndex descriptor_index) const {
+  if (data_->should_access_heap()) {
+    return NameRef(broker(), broker()->CanonicalPersistentHandle(
+                                 object()->GetKey(descriptor_index)));
+  }
+  return NameRef(broker(),
+                 data()->AsDescriptorArray()->GetPropertyKey(descriptor_index));
+}
+
+ObjectRef DescriptorArrayRef::GetFieldType(
+    InternalIndex descriptor_index) const {
+  if (data_->should_access_heap()) {
+    Handle<FieldType> field_type(object()->GetFieldType(descriptor_index),
+                                 broker()->isolate());
+    return ObjectRef(broker(), field_type);
+  }
+  return ObjectRef(broker(),
+                   data()->AsDescriptorArray()->GetFieldType(descriptor_index));
+}
+
+base::Optional<ObjectRef> DescriptorArrayRef::GetStrongValue(
+    InternalIndex descriptor_index) const {
+  if (data_->should_access_heap()) {
+    MaybeObject value = object()->GetValue(descriptor_index);
+    HeapObject object;
+    if (value.GetHeapObjectIfStrong(&object)) {
+      return ObjectRef(broker(), broker()->CanonicalPersistentHandle((object)));
+    }
+    return base::nullopt;
+  }
+  base::Optional<ObjectData*> value =
+      data()->AsDescriptorArray()->GetStrongValue(descriptor_index);
+  if (!value) {
+    return base::nullopt;
+  }
+  return ObjectRef(broker(), value.value());
 }
 
 base::Optional<SharedFunctionInfoRef> FeedbackCellRef::shared_function_info()
