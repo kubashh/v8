@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8bbbbed_cf2dab53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-01-12T11:51:21Z",
+      "side": 1,
+      "message": "Hey Philip,\n\nAlso exposing the entity debug proxies on the scope and the instance preview now.\nPlease take a look.\n\nthanks,\nBenedikt",
+      "revId": "bd41168f9efbdfa0114f8f9194ada7c71cba4a04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
