@@ -145,6 +145,24 @@ IGNITION_HANDLER(Star, InterpreterAssembler) {
   Dispatch();
 }
 
+#define SHORT_STAR_HANDLER(n)                                                 \
+  IGNITION_HANDLER(Star##n, InterpreterAssembler) {                           \
+    TNode<Object> accumulator = GetAccumulator();                             \
+    TNode<Int32T> opcode =                                                    \
+        Load<Int8T>(BytecodeArrayTaggedPointer(), BytecodeOffset());          \
+    /* Add a constant to map the range [kStar15, kStar0] to the range */      \
+    /* [Register(15).ToOperand(), Register(0).ToOperand()]. */                \
+    const int stack_slot_offset =                                             \
+        Register(0).ToOperand() - static_cast<int8_t>(Bytecode::kStar0);      \
+    DCHECK_EQ(stack_slot_offset, Register(15).ToOperand() -                   \
+                                     static_cast<int8_t>(Bytecode::kStar15)); \
+    StoreRegister(accumulator, ChangeInt32ToIntPtr(opcode),                   \
+                  stack_slot_offset* kSystemPointerSize);                     \
+    Dispatch();                                                               \
+  }
+SHORT_STAR_REGISTERS(SHORT_STAR_HANDLER)
+#undef SHORT_STAR_HANDLER
+
 // Mov <src> <dst>
 //
 // Stores the value of register <src> to register <dst>.
