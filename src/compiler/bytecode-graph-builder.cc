@@ -1568,6 +1568,14 @@ void BytecodeGraphBuilder::VisitStar() {
   environment()->BindRegister(bytecode_iterator().GetRegisterOperand(0), value);
 }
 
+#define SHORT_STAR_VISITOR(n)                                     \
+  void BytecodeGraphBuilder::VisitStar##n() {                     \
+    Node* value = environment()->LookupAccumulator();             \
+    environment()->BindRegister(interpreter::Register(n), value); \
+  }
+SHORT_STAR_REGISTERS(SHORT_STAR_VISITOR)
+#undef SHORT_STAR_VISITOR
+
 void BytecodeGraphBuilder::VisitMov() {
   Node* value =
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));

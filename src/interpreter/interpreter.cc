@@ -328,8 +328,9 @@ void Interpreter::Initialize() {
   // Initialize the dispatch table.
   Code illegal = builtins->builtin(Builtins::kIllegalHandler);
   int builtin_id = Builtins::kFirstBytecodeHandler;
-  ForEachBytecode([=, &builtin_id](Bytecode bytecode,
-                                   OperandScale operand_scale) {
+  Code star_15_handler = illegal;
+  ForEachBytecode([=, &builtin_id, &star_15_handler](
+                      Bytecode bytecode, OperandScale operand_scale) {
     Code handler = illegal;
     if (Bytecodes::BytecodeHasHandler(bytecode, operand_scale)) {
 #ifdef DEBUG
@@ -340,6 +341,12 @@ void Interpreter::Initialize() {
 #endif
       handler = builtins->builtin(builtin_id++);
     }
+
+    // Make all of the short Star opcodes point to the same handler.
+    if (bytecode == Bytecode::kStar15) star_15_handler = handler;
+    if (bytecode > Bytecode::kStar15 && bytecode <= Bytecode::kStar0)
+      handler = star_15_handler;
+
     SetBytecodeHandler(bytecode, operand_scale, handler);
   });
   DCHECK(builtin_id == Builtins::builtin_count);
