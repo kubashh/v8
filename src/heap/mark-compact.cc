@@ -499,7 +499,7 @@ void MarkCompactCollector::StartMarking() {
       std::make_unique<MarkingWorklists::Local>(marking_worklists());
   marking_visitor_ = std::make_unique<MarkingVisitor>(
       marking_state(), local_marking_worklists(), weak_objects(), heap_,
-      epoch(), Heap::GetBytecodeFlushMode(),
+      epoch(), bytecode_flush_mode(),
       heap_->local_embedder_heap_tracer()->InUse(),
       heap_->is_current_gc_forced());
 // Marking bits are cleared by the sweeper.
@@ -1917,6 +1917,8 @@ void MarkCompactCollector::MarkLiveObjects() {
   // and switches to a different marking system.  JS interrupts interfere
   // with the C stack limit check.
   PostponeInterruptsScope postpone(isolate());
+
+  bytecode_flush_mode_ = Heap::GetBytecodeFlushMode(isolate());
 
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_FINISH_INCREMENTAL);
