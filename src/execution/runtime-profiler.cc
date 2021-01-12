@@ -308,8 +308,28 @@ void RuntimeProfiler::MarkCandidatesForOptimization(JavaScriptFrame* frame) {
   MarkCandidatesForOptimizationScope scope(this);
 
   JSFunction function = frame->function();
-  CodeKind code_kind = frame->is_interpreted() ? CodeKind::INTERPRETED_FUNCTION
-                                               : function.code().kind();
+  CodeKind code_kind;
+  if (frame->is_interpreted()) {
+    code_kind = CodeKind::INTERPRETED_FUNCTION;
+  } else if (function.code().is_interpreter_trampoline_builtin()) {
+    // It is possible to see an optimized frame but without any optimized code
+    // on the function when we tier up from mid-tier. Consider a deeply
+    // recursive function, which gets optimized to mid-tier first and then to a
+    // higher tier. If top-tier code gets deoptimized, then JSFunction would
+    // just have unoptimized bytecode. However there could be still frames that
+    // are executing mid-tier code which might cause a bytecode budget interrupt
+    // from an optimized frame without optimized code on the function. This is a
+    // relatively rare case, so just re-compile mid-tier code.
+    DCHECK(FLAG_turboprop);
+    code_kind = CodeKind::INTERPRETED_FUNCTION;
+  } else {
+    code_kind = function.code().kind();
+  }
+
+  // For recursive functions it could happen that we have some frames
+  // still executing mid-tier code even after the function had higher tier code.
+  // In such cases, ignore any interrupts from the mid-tier code.
+  if (!CodeKindCanTierUp(code_kind)) return;
 
   DCHECK(function.shared().is_compiled());
   DCHECK(function.shared().IsInterpreted());
