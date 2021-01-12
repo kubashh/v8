@@ -16,6 +16,23 @@
       "message": "LGTM thanks.",
       "revId": "0f0871a839c340af031d4e6d4f3497377ce420e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7871aa87_d4de26c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-01-12T18:21:00Z",
+      "side": 1,
+      "message": "Ulan, PTAL. This is the fix for TSAN failures we discussed earlier. Now, I cache the bytecode_flushing_mode at the start of a GC.",
+      "revId": "0f0871a839c340af031d4e6d4f3497377ce420e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
