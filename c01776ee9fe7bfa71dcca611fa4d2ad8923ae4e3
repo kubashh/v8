@@ -16,6 +16,24 @@
       "message": "Sorry for the delay, Camillo. Here is the updated version.\n\nI used V8_DEPRECATE_SOON, is that the right one? I fixed up the sample - mea culpa, I didn\u0027t realize I had to use checkall rather than just check.",
       "revId": "c01776ee9fe7bfa71dcca611fa4d2ad8923ae4e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aba08b01_4ab04e09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-12T14:59:20Z",
+      "side": 1,
+      "message": "yes, perfect! :)",
+      "parentUuid": "cd6ada14_916c56c8",
+      "revId": "c01776ee9fe7bfa71dcca611fa4d2ad8923ae4e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
