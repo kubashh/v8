@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "938b4d99_23e8f523",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-01-12T22:27:19Z",
+      "side": 1,
+      "message": "I had to fix linkage-tail-call-unittest which wasn\u0027t constructing the call descriptor consistently.",
+      "parentUuid": "f3c97af5_dc87d7b0",
+      "revId": "d5628f9ecc9639a7ab2f546447b13821bb17aa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a8d813f_25b18289",
         "filename": "src/compiler/linkage.cc",
         "patchSetId": 7
