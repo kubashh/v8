@@ -33,6 +33,23 @@
       "message": "src/compiler and src/deoptimizer: @neis\nsrc/wasm: @ahaas\nsrc/execution and src/debug: @verwaest\n...rest: @ishell :)",
       "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "226657ea_9c182b50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-01-12T12:49:01Z",
+      "side": 1,
+      "message": "wasm lgtm",
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
