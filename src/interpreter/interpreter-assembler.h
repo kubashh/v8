@@ -252,10 +252,13 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
 
   void ToNumberOrNumeric(Object::Conversion mode);
 
- private:
   // Returns a pointer to the current function's BytecodeArray object.
   TNode<BytecodeArray> BytecodeArrayTaggedPointer();
 
+  void StoreRegister(TNode<Object> value, TNode<IntPtrT> reg_index,
+                     base::Optional<int> extra_offset = {});
+
+ private:
   // Returns a pointer to first entry in the interpreter dispatch table.
   TNode<ExternalReference> DispatchTablePointer();
 
@@ -273,7 +276,6 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   TNode<IntPtrT> RegisterLocation(TNode<IntPtrT> reg_index);
   TNode<IntPtrT> NextRegister(TNode<IntPtrT> reg_index);
   TNode<Object> LoadRegister(TNode<IntPtrT> reg_index);
-  void StoreRegister(TNode<Object> value, TNode<IntPtrT> reg_index);
 
   // Saves and restores interpreter bytecode offset to the interpreter stack
   // frame when performing a call.
@@ -379,9 +381,9 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // bytecode node for dispatch.
   TNode<WordT> StarDispatchLookahead(TNode<WordT> target_bytecode);
 
-  // Build code for Star at the current BytecodeOffset() and Advance() to the
-  // next dispatch offset.
-  void InlineStar();
+  // Build code for short Star at the current BytecodeOffset() and Advance() to
+  // the next dispatch offset.
+  void InlineShortStar(TNode<WordT> target_bytecode);
 
   // Dispatch to the bytecode handler with code entry point |handler_entry|.
   void DispatchToBytecodeHandlerEntry(TNode<RawPtrT> handler_entry,

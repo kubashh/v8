@@ -325,9 +325,13 @@ void InterpreterAssembler::StoreRegister(TNode<Object> value, Register reg) {
 }
 
 void InterpreterAssembler::StoreRegister(TNode<Object> value,
-                                         TNode<IntPtrT> reg_index) {
-  StoreFullTaggedNoWriteBarrier(GetInterpretedFramePointer(),
-                                RegisterFrameOffset(reg_index), value);
+                                         TNode<IntPtrT> reg_index,
+                                         base::Optional<int> extra_offset) {
+  TNode<IntPtrT> offset = RegisterFrameOffset(reg_index);
+  if (extra_offset) {
+    offset = IntPtrAdd(offset, IntPtrConstant(*extra_offset));
+  }
+  StoreFullTaggedNoWriteBarrier(GetInterpretedFramePointer(), offset, value);
 }
 
 void InterpreterAssembler::StoreRegisterAtOperandIndex(TNode<Object> value,
@@ -1141,15 +1145,26 @@ TNode<WordT> InterpreterAssembler::StarDispatchLookahead(
 
   TVARIABLE(WordT, var_bytecode, target_bytecode);
 
-  TNode<Int32T> star_bytecode =
-      Int32Constant(static_cast<int>(Bytecode::kStar));
-  TNode<BoolT> is_star =
-      Word32Equal(TruncateWordToInt32(target_bytecode), star_bytecode);
+  // Check whether the following opcode is one of the short Star codes. All
+  // opcodes higher than the short Star variants are invalid, and invalid
+  // opcodes are never deliberately written, so we can use a one-sided check.
+  // This is no less secure than the normal-length Star handler, which performs
+  // no validation on its operand.
+  STATIC_ASSERT(static_cast<int>(Bytecode::kStar0) + 1 ==
+                static_cast<int>(Bytecode::kIllegal));
+  STATIC_ASSERT(Bytecode::kIllegal == Bytecode::kLast);
+  TNode<Int32T> first_short_star_bytecode =
+      Int32Constant(static_cast<int>(Bytecode::kStar15));
+  TNode<BoolT> is_star = Uint32GreaterThanOrEqual(
+      TruncateWordToInt32(target_bytecode), first_short_star_bytecode);
   Branch(is_star, &do_inline_star, &done);
 
   BIND(&do_inline_star);
   {
-    InlineStar();
+    CSA_ASSERT(this, Uint32LessThanOrEqual(
+                         TruncateWordToInt32(target_bytecode),
+                         Int32Constant(static_cast<int>(Bytecode::kStar0))));
+    InlineShortStar(target_bytecode);
     var_bytecode = LoadBytecode(BytecodeOffset());
     Goto(&done);
   }
@@ -1157,18 +1172,28 @@ TNode<WordT> InterpreterAssembler::StarDispatchLookahead(
   return var_bytecode.value();
 }
 
-void InterpreterAssembler::InlineStar() {
+void InterpreterAssembler::InlineShortStar(TNode<WordT> target_bytecode) {
   Bytecode previous_bytecode = bytecode_;
   AccumulatorUse previous_acc_use = accumulator_use_;
 
-  bytecode_ = Bytecode::kStar;
+  // At this point we don't know statically what bytecode we're executing, but
+  // kStar0 has the right attributes (namely, no operands) for any of the short
+  // Star codes.
+  bytecode_ = Bytecode::kStar0;
   accumulator_use_ = AccumulatorUse::kNone;
 
 #ifdef V8_TRACE_IGNITION
   TraceBytecode(Runtime::kInterpreterTraceBytecodeEntry);
 #endif
-  StoreRegister(GetAccumulator(),
-                BytecodeOperandReg(0, LoadSensitivity::kSafe));
+
+  // Add a constant to map the range [kStar15, kStar0] to the range
+  // [Register(15).ToOperand(), Register(0).ToOperand()].
+  const int stack_slot_offset =
+      Register(0).ToOperand() - static_cast<int>(Bytecode::kStar0);
+  DCHECK_EQ(stack_slot_offset,
+            Register(15).ToOperand() - static_cast<int>(Bytecode::kStar15));
+  StoreRegister(GetAccumulator(), Signed(target_bytecode),
+                stack_slot_offset * kSystemPointerSize);
 
   DCHECK_EQ(accumulator_use_, Bytecodes::GetAccumulatorUse(bytecode_));
 

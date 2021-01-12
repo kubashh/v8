@@ -166,6 +166,19 @@ void UpdateInLiveness(Bytecode bytecode, BytecodeLivenessState* in_liveness,
     }
   }
 
+  // Short Star codes don't have a OperandType::kRegOut, but must still kill
+  // values.
+  switch (bytecode) {
+#define SHORT_STAR_CASE(n)            \
+  case Bytecode::kStar##n:            \
+    in_liveness->MarkRegisterDead(n); \
+    break;
+    SHORT_STAR_REGISTERS(SHORT_STAR_CASE)
+#undef SHORT_STAR_CASE
+    default:
+      break;
+  }
+
   if (Bytecodes::ReadsAccumulator(bytecode)) {
     in_liveness->MarkAccumulatorLive();
   }
@@ -307,6 +320,19 @@ void UpdateAssignments(Bytecode bytecode, BytecodeLoopAssignments* assignments,
         DCHECK(!Bytecodes::IsRegisterOutputOperandType(operand_types[i]));
         break;
     }
+  }
+
+  // Short Star codes don't have a OperandType::kRegOut, but must still assign
+  // values.
+  switch (bytecode) {
+#define SHORT_STAR_CASE(n)                      \
+  case Bytecode::kStar##n:                      \
+    assignments->Add(interpreter::Register(n)); \
+    break;
+    SHORT_STAR_REGISTERS(SHORT_STAR_CASE)
+#undef SHORT_STAR_CASE
+    default:
+      break;
   }
 }
 
