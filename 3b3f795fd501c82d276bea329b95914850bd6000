@@ -16,6 +16,80 @@
       "message": "Thanks Ross. Addressed your comments. PTAL.\n\n",
       "revId": "3b3f795fd501c82d276bea329b95914850bd6000",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9149f928_cd10a4c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T17:13:42Z",
+      "side": 1,
+      "message": "LGTM with some nits, thanks.",
+      "revId": "3b3f795fd501c82d276bea329b95914850bd6000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e38ac2a3_ca8e4430",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T17:13:42Z",
+      "side": 1,
+      "message": "Looks like this DCHECK is failing on the bots - we probably don\u0027t want it though, we want to still allow OSR even if a function has optimized code_kind, right?",
+      "revId": "3b3f795fd501c82d276bea329b95914850bd6000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7ac3b6d_45dba604",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T17:13:42Z",
+      "side": 1,
+      "message": "Why builtin? If we do want this to return BUILTIN, could we change the code to: \n  CodeKind highest_tier;\n  if (HighestTierOf(GetAvailableCodeKinds(), \u0026highest_tier))\n     return highest_tier;\n  } else {\n     // Comment...\n     return BUILTIN;\n  }",
+      "range": {
+        "startLine": 121,
+        "startChar": 23,
+        "endLine": 121,
+        "endChar": 43
+      },
+      "revId": "3b3f795fd501c82d276bea329b95914850bd6000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a87445aa_6a1b2fe0",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T17:13:42Z",
+      "side": 1,
+      "message": "Can we just rewrite these to use GetActiveTier please",
+      "revId": "3b3f795fd501c82d276bea329b95914850bd6000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
