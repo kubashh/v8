@@ -120,6 +120,24 @@
       "parentUuid": "dec94942_894c3ba4",
       "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "592ab496_0b46a9c3",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-01-13T09:39:18Z",
+      "side": 1,
+      "message": "Right. It\u0027s kind of the similar scenario as earlier. Depending on whether TF code deopted or not we hit the earlier case or this one. Both of these happen with the same mjsunit test depending on configuration :)",
+      "parentUuid": "656b86e4_509dd38a",
+      "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
