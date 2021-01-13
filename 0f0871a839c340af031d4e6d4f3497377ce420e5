@@ -33,6 +33,46 @@
       "message": "Ulan, PTAL. This is the fix for TSAN failures we discussed earlier. Now, I cache the bytecode_flushing_mode at the start of a GC.",
       "revId": "0f0871a839c340af031d4e6d4f3497377ce420e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33b2b205_f9c0a59c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-13T11:55:34Z",
+      "side": 1,
+      "message": "lgtm with a comment",
+      "revId": "0f0871a839c340af031d4e6d4f3497377ce420e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f90b0009_bc560059",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1921,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-13T11:55:34Z",
+      "side": 1,
+      "message": "This should be in MarkCompactCollector::StartMarking which is the bottleneck both for incremental/concurrent and non-incremental GC.\n\nIn that function we also need to update MainMarkingVisitor to use the cached mode:\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/heap/mark-compact.cc;l\u003d502;drc\u003d7ccffaf0933ccc647c744bf66971bcf5f33a676a",
+      "range": {
+        "startLine": 1921,
+        "startChar": 2,
+        "endLine": 1921,
+        "endChar": 63
+      },
+      "revId": "0f0871a839c340af031d4e6d4f3497377ce420e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
