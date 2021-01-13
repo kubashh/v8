@@ -401,6 +401,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b2876a4_96927263",
+        "filename": "src/execution/frames-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T08:54:38Z",
+      "side": 1,
+      "message": "Ah, the linked issue explains:\n\n JavaScriptFrame::cast(xxx)\n\nPlease replace the manual DCHECK+static_cast with that.",
+      "parentUuid": "9d1f75bd_c946355e",
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cef0b7bb_0803f9a8",
         "filename": "src/execution/frames.cc",
         "patchSetId": 2
