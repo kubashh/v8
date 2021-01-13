@@ -102,6 +102,24 @@
       "parentUuid": "ae3ce8af_c4ed7c7c",
       "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "656b86e4_509dd38a",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T09:34:24Z",
+      "side": 1,
+      "message": "I see so this is the opposite case of the comment above?\n\nHere: the recursive activation optimizes and returns to the TP activation, which hits a bytecode interrupt, but by this time the function\u0027s code object has been replaced.\n\nAbove: the recursive activation optimizes and then deopts, and returns to the TP activation.",
+      "parentUuid": "dec94942_894c3ba4",
+      "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
