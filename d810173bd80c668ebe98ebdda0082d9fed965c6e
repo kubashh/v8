@@ -275,6 +275,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa358d4_bfca4cb2",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-01-13T09:07:13Z",
+      "side": 1,
+      "message": "No, I don\u0027t think it needs to be updated. Although arguments adaptor frame do not exist in the runtime. We still have some notion of it when inlining functions in the compiler and in the deoptimizer. A follow-up work would be to remove from these places as well.",
+      "parentUuid": "f4d35d89_1d027cb1",
+      "range": {
+        "startLine": 1284,
+        "startChar": 46,
+        "endLine": 1284,
+        "endChar": 70
+      },
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "787c4a2e_f95d2eac",
@@ -336,6 +360,30 @@
       "side": 1,
       "message": "That\u0027s a google-internal link (it\u0027ll work if you remove the /doc/ shortening.",
       "parentUuid": "2b531b51_1e2346ad",
+      "range": {
+        "startLine": 1288,
+        "startChar": 14,
+        "endLine": 1288,
+        "endChar": 31
+      },
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01aea633_74279e2f",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-01-13T09:07:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7331b928_c3f90f5b",
       "range": {
         "startLine": 1288,
         "startChar": 14,
@@ -413,6 +461,42 @@
       "side": 1,
       "message": "Ah, the linked issue explains:\n\n JavaScriptFrame::cast(xxx)\n\nPlease replace the manual DCHECK+static_cast with that.",
       "parentUuid": "9d1f75bd_c946355e",
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34b0f418_7e38e043",
+        "filename": "src/execution/frames-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-01-13T09:07:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b2876a4_96927263",
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dd823cb_9476fdbd",
+        "filename": "src/execution/frames-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-01-13T09:07:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b2876a4_96927263",
       "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
