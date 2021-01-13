@@ -16,6 +16,24 @@
       "message": "I think we added this mostly to avoid additional work if we already have optimized code on JSFunction. With TP + tierup it is possible that we have TP code on JSFunction but TF code on Feedback vector. So we should still check feedback vector. I don\u0027t think it is performance critical so I just dropped this check. We could modify the check to check for top tier code (TF or TP with FLAG_turboprop_as_toptier) but I felt it is simpler to drop this check. Happy to update the check if it\u0027s better.",
       "revId": "e48b5c6d591d0d6d71962f70d7efd6c4e5a6552c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f50f331f_b6897e73",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T12:43:01Z",
+      "side": 0,
+      "message": "Ack, this seems fine to me, thanks.",
+      "parentUuid": "48141259_2cab6ce8",
+      "revId": "e48b5c6d591d0d6d71962f70d7efd6c4e5a6552c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

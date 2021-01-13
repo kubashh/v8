@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0209ead4_0a939bdd",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T12:43:01Z",
+      "side": 1,
+      "message": "Rather than doing all these checks, I think we should just get the highest active code_kind from the JSFunction directly, rather than looking at the code that caused this interrupt (since what we actually care about is whether we can or should tier up the function, not this particular activation of the function). \n\nCould you add a JSFunction::GetActiveTier() function (that works similarly to the ActiveTierIsTurbofan() type functions but just gives back the highest active tier rather than checking against a fixed tier) and call that here instead?",
+      "parentUuid": "fcccc6fb_0dc53ed6",
+      "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae3ce8af_c4ed7c7c",
         "filename": "src/execution/runtime-profiler.cc",
         "patchSetId": 3
@@ -136,6 +154,23 @@
       "side": 1,
       "message": "Right. It\u0027s kind of the similar scenario as earlier. Depending on whether TF code deopted or not we hit the earlier case or this one. Both of these happen with the same mjsunit test depending on configuration :)",
       "parentUuid": "656b86e4_509dd38a",
+      "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0426b4a6_c8a633b1",
+        "filename": "src/objects/code-kind.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T12:43:01Z",
+      "side": 1,
+      "message": "nit - how about just:\n if (V8_UNLIKELY(FLAG_turboprop_as_toptier)) {\n   return CodeKind::TURBOPROP;\n }\n return CodeKind::TURBOFAN;",
       "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
