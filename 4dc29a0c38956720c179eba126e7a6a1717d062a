@@ -16,6 +16,75 @@
       "message": "The only insensitive term found at the location was \"master\"\nPTAL\nThanks!",
       "revId": "4dc29a0c38956720c179eba126e7a6a1717d062a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d8e3deb_ca93f546",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-01-13T12:13:35Z",
+      "side": 1,
+      "message": "I was wonder if we could flatten this somehow, since we don\u0027t have clashing names in here across V8. We don\u0027t even need the builder_group.\n\nBut let\u0027s keep that effort separate. I also don\u0027t want to do anything that gets us farer away from merging back to chromium\u0027s mb.py",
+      "range": {
+        "startLine": 50,
+        "startChar": 5,
+        "endLine": 50,
+        "endChar": 14
+      },
+      "revId": "4dc29a0c38956720c179eba126e7a6a1717d062a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db2db38c_05b7efb3",
+        "filename": "tools/mb/mb.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-01-13T12:13:35Z",
+      "side": 1,
+      "message": "Is it possible to remove it right away? The infra passes -m. That\u0027s not so intuitive, but -b is taken already...",
+      "range": {
+        "startLine": 94,
+        "startChar": 10,
+        "endLine": 94,
+        "endChar": 21
+      },
+      "revId": "4dc29a0c38956720c179eba126e7a6a1717d062a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db111f3d_1fa12b21",
+        "filename": "tools/mb/mb.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-01-13T12:13:35Z",
+      "side": 1,
+      "message": "nit: whitespace",
+      "range": {
+        "startLine": 697,
+        "startChar": 40,
+        "endLine": 697,
+        "endChar": 41
+      },
+      "revId": "4dc29a0c38956720c179eba126e7a6a1717d062a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
