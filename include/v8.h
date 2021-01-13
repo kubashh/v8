@@ -10430,7 +10430,7 @@ class V8_EXPORT ExtensionConfiguration {
  * A sandboxed execution context with its own set of built-in objects
  * and functions.
  */
-class V8_EXPORT Context {
+class V8_EXPORT Context : Data {
  public:
   /**
    * Returns the global proxy object.
@@ -10717,7 +10717,6 @@ class V8_EXPORT Context {
   Local<Value> SlowGetEmbedderData(int index);
   void* SlowGetAlignedPointerFromEmbedderData(int index);
 };
-
 
 /**
  * Multiple threads in V8 are allowed, but only one thread at a time is allowed
