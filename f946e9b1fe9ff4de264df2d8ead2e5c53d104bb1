@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02c1717c_0f97982b",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3824,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-01-13T19:09:53Z",
+      "side": 1,
+      "message": "Would be more efficient to:\n  Move(tmp, uint32_t{0x0F0F0F0F}) +\n    shufps(tmp, tmp, 0) // pre-AVX\n    vpshufd(tmp, tmp, 0) // AVX\n    vpbroadcastd(tmp, tmp) // AVX2\n\nIMO a single instruction with 4-byte immediate is better than two instructions",
+      "range": {
+        "startLine": 3822,
+        "startChar": 0,
+        "endLine": 3824,
+        "endChar": 40
+      },
+      "revId": "f946e9b1fe9ff4de264df2d8ead2e5c53d104bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
