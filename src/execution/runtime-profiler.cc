@@ -308,8 +308,11 @@ void RuntimeProfiler::MarkCandidatesForOptimization(JavaScriptFrame* frame) {
   MarkCandidatesForOptimizationScope scope(this);
 
   JSFunction function = frame->function();
-  CodeKind code_kind = frame->is_interpreted() ? CodeKind::INTERPRETED_FUNCTION
-                                               : function.code().kind();
+  CodeKind code_kind = function.GetActiveTier();
+  // For recursive functions it could happen that we have some frames
+  // still executing mid-tier code even after the function had higher tier code.
+  // In such cases, ignore any interrupts from the mid-tier code.
+  if (!CodeKindCanTierUp(code_kind)) return;
 
   DCHECK(function.shared().is_compiled());
   DCHECK(function.shared().IsInterpreted());

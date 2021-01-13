@@ -52,14 +52,12 @@ CodeKinds JSFunction::GetAvailableCodeKinds() const {
     }
   }
 
-  if ((result & kOptimizedJSFunctionCodeKindsMask) == 0) {
-    // Check the optimized code cache.
-    if (has_feedback_vector() && feedback_vector().has_optimized_code() &&
-        !feedback_vector().optimized_code().marked_for_deoptimization()) {
-      Code code = feedback_vector().optimized_code();
-      DCHECK(CodeKindIsOptimizedJSFunction(code.kind()));
-      result |= CodeKindToCodeKindFlag(code.kind());
-    }
+  // Check the optimized code cache.
+  if (has_feedback_vector() && feedback_vector().has_optimized_code() &&
+      !feedback_vector().optimized_code().marked_for_deoptimization()) {
+    Code code = feedback_vector().optimized_code();
+    DCHECK(CodeKindIsOptimizedJSFunction(code.kind()));
+    result |= CodeKindToCodeKindFlag(code.kind());
   }
 
   DCHECK_EQ((result & ~kJSFunctionCodeKindsMask), 0);
@@ -119,6 +117,14 @@ bool JSFunction::ActiveTierIsIgnition() const {
   return result;
 }
 
+CodeKind JSFunction::GetActiveTier() const {
+  CodeKind highest_tier = CodeKind::BUILTIN;
+  bool result = HighestTierOf(GetAvailableCodeKinds(), &highest_tier);
+  DCHECK(result);
+  USE(result);
+  return highest_tier;
+}
+
 bool JSFunction::ActiveTierIsTurbofan() const {
   CodeKind highest_tier;
   if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
@@ -133,16 +139,16 @@ bool JSFunction::ActiveTierIsNCI() const {
 
 bool JSFunction::ActiveTierIsToptierTurboprop() const {
   CodeKind highest_tier;
-  if (!FLAG_turboprop) return false;
+  if (!FLAG_turboprop_as_toptier) return false;
   if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
-  return highest_tier == CodeKind::TURBOPROP && !FLAG_turboprop_as_midtier;
+  return highest_tier == CodeKind::TURBOPROP && FLAG_turboprop_as_toptier;
 }
 
 bool JSFunction::ActiveTierIsMidtierTurboprop() const {
   CodeKind highest_tier;
-  if (!FLAG_turboprop_as_midtier) return false;
+  if (!FLAG_turboprop) return false;
   if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
-  return highest_tier == CodeKind::TURBOPROP && FLAG_turboprop_as_midtier;
+  return highest_tier == CodeKind::TURBOPROP && !FLAG_turboprop_as_toptier;
 }
 
 CodeKind JSFunction::NextTier() const {
