@@ -68,6 +68,149 @@
       "parentUuid": "7884205c_d3ab69b4",
       "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14013e35_13f0084e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T07:06:20Z",
+      "side": 1,
+      "message": "Nice, I like it! Got interested and I have a few minor drive-by comments:",
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d255ce0_40ead288",
+        "filename": "src/builtins/frame-arguments.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T07:06:20Z",
+      "side": 1,
+      "message": "Are you planning to do this now that the flag is gone? It\u0027d be good to rephrase the TODO to clarify this has happened.",
+      "range": {
+        "startLine": 50,
+        "startChar": 24,
+        "endLine": 50,
+        "endChar": 75
+      },
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf925508_2b9ce58f",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3678,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T07:06:20Z",
+      "side": 1,
+      "message": "Seems like more simplification is possible here and in related spots (like js-create-lowering). For example, value inputs of ArgumentsLength and RestLength are now unused and could be removed. And I suspect LowerArgumentsFrame could be removed as well (users could just load the frame ptr themselves).\n\nPlease leave a TODO at relevant spots if these things don\u0027t happen in this CL.",
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b725015b_a8924db1",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T07:06:20Z",
+      "side": 1,
+      "message": "Please update the comment if needed.",
+      "range": {
+        "startLine": 1284,
+        "startChar": 46,
+        "endLine": 1284,
+        "endChar": 70
+      },
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "787c4a2e_f95d2eac",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T07:06:20Z",
+      "side": 1,
+      "message": "This is a dead link.",
+      "range": {
+        "startLine": 1288,
+        "startChar": 14,
+        "endLine": 1288,
+        "endChar": 31
+      },
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1224cf09_6e5e90b8",
+        "filename": "src/execution/frames-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T07:06:20Z",
+      "side": 1,
+      "message": "The comment is outdated and sounds like it could now be addressed?",
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cef0b7bb_0803f9a8",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T07:06:20Z",
+      "side": 1,
+      "message": "If possible please remove this class too.",
+      "range": {
+        "startLine": 2228,
+        "startChar": 0,
+        "endLine": 2228,
+        "endChar": 25
+      },
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
