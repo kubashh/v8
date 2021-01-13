@@ -253,6 +253,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f4d35d89_1d027cb1",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T08:52:49Z",
+      "side": 1,
+      "message": "By \u0027Ack\u0027 do you mean the comment doesn\u0027t need to be updated? Just curious to understand, since it refers to a concept (AA-frames) that no longer exists.",
+      "parentUuid": "d40956dc_9a41266e",
+      "range": {
+        "startLine": 1284,
+        "startChar": 46,
+        "endLine": 1284,
+        "endChar": 70
+      },
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "787c4a2e_f95d2eac",
         "filename": "src/deoptimizer/deoptimizer.cc",
         "patchSetId": 2
@@ -300,6 +324,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7331b928_c3f90f5b",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T08:52:49Z",
+      "side": 1,
+      "message": "That\u0027s a google-internal link (it\u0027ll work if you remove the /doc/ shortening.",
+      "parentUuid": "2b531b51_1e2346ad",
+      "range": {
+        "startLine": 1288,
+        "startChar": 14,
+        "endLine": 1288,
+        "endChar": 31
+      },
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1224cf09_6e5e90b8",
         "filename": "src/execution/frames-inl.h",
         "patchSetId": 2
@@ -329,6 +377,24 @@
       "side": 1,
       "message": "Thanks for noticing that! 😊",
       "parentUuid": "1224cf09_6e5e90b8",
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d1f75bd_c946355e",
+        "filename": "src/execution/frames-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-13T08:52:49Z",
+      "side": 1,
+      "message": "But is addressed? TBH I\u0027m not sure what it meant by \u0027safe-cast operator\u0027.",
+      "parentUuid": "99fa6e23_5c61c9a0",
       "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
