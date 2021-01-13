@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e49398c_08dc7383",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-01-13T08:35:20Z",
+      "side": 1,
+      "message": "As Jakob noticed, this solves an old bug from 2008!! b/1233797 😎",
+      "revId": "4aba2b186c6a36fe67629482c2068b2480113fa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
