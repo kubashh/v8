@@ -53,6 +53,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0d38a79_21a218ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-13T11:45:00Z",
+      "side": 1,
+      "message": "lgtm, nice!",
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0f973ab_d3e947e6",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-13T11:45:00Z",
+      "side": 1,
+      "message": "Nit: stale comment?",
+      "range": {
+        "startLine": 563,
+        "startChar": 2,
+        "endLine": 564,
+        "endChar": 62
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "905d36fa_aac0d797",
