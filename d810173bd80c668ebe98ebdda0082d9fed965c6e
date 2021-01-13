@@ -129,6 +129,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "45bdaad6_ff2cad54",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3678,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-13T07:08:42Z",
+      "side": 1,
+      "message": "Victor created an issue for that here: https://bugs.chromium.org/p/v8/issues/detail?id\u003d11306",
+      "parentUuid": "bf925508_2b9ce58f",
+      "revId": "d810173bd80c668ebe98ebdda0082d9fed965c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b725015b_a8924db1",
         "filename": "src/deoptimizer/deoptimizer.cc",
         "patchSetId": 2
