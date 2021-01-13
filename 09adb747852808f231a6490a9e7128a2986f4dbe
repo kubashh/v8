@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34e3c77b_233852fb",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2404,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-01-13T21:46:58Z",
+      "side": 1,
+      "message": "Ia32 doesn\u0027t have it right now, but I can use it as a follow up.",
+      "parentUuid": "75edbcfb_a6d002ba",
+      "range": {
+        "startLine": 2404,
+        "startChar": 9,
+        "endLine": 2404,
+        "endChar": 22
+      },
+      "revId": "09adb747852808f231a6490a9e7128a2986f4dbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c2116b1_d00efc37",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-01-13T00:44:41Z",
       "side": 1,
       "message": "I think we can do:\npcmpeqd(scratch, scratch)\npxor(dst, scratch)",
+      "range": {
+        "startLine": 3793,
+        "startChar": 8,
+        "endLine": 3795,
+        "endChar": 40
+      },
+      "revId": "09adb747852808f231a6490a9e7128a2986f4dbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8807fe3e_213fcd63",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3795,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-01-13T21:46:58Z",
+      "side": 1,
+      "message": "Oops yes, fixed.",
+      "parentUuid": "2c2116b1_d00efc37",
       "range": {
         "startLine": 3793,
         "startChar": 8,
