@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29b34564_20d05196",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-01-13T11:49:38Z",
+      "side": 1,
+      "message": "The only insensitive term found at the location was \"master\"\nPTAL\nThanks!",
+      "revId": "4dc29a0c38956720c179eba126e7a6a1717d062a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
