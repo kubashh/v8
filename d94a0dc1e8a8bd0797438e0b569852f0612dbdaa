@@ -34,6 +34,132 @@
       "parentUuid": "7b96fddf_9a092554",
       "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3713b58_1eca580d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T11:28:28Z",
+      "side": 1,
+      "message": "A couple of nits but overall looks fine to me, but adding Ulan as owner of API and Heap.",
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "905d36fa_aac0d797",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 3935,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T11:28:28Z",
+      "side": 1,
+      "message": "is this deps necessary or should v8_headers pull it in transitively?",
+      "range": {
+        "startLine": 3935,
+        "startChar": 4,
+        "endLine": 3935,
+        "endChar": 28
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6b6605_5036aaaa",
+        "filename": "src/objects/compressed-slots.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T11:28:28Z",
+      "side": 1,
+      "message": "nit - could we just move ifdef V8_COMPRESS_POINTERS below the #include \"src/objects/slots.h\" or even into the v8/internal namespace?",
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "105ecc81_36200112",
+        "filename": "tools/gen-v8-gn.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T11:28:28Z",
+      "side": 1,
+      "message": "2021  :)",
+      "range": {
+        "startLine": 3,
+        "startChar": 12,
+        "endLine": 3,
+        "endChar": 16
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f2b756d_fb41547e",
+        "filename": "tools/gen-v8-gn.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T11:28:28Z",
+      "side": 1,
+      "message": "but is disabled by V8\u0027s gn build arguments",
+      "range": {
+        "startLine": 37,
+        "startChar": 28,
+        "endLine": 37,
+        "endChar": 66
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1ce7bf6_5c16055a",
+        "filename": "tools/gen-v8-gn.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-13T11:28:28Z",
+      "side": 1,
+      "message": "Any reason to use BytesIO instead of StringIO ?",
+      "range": {
+        "startLine": 60,
+        "startChar": 18,
+        "endLine": 60,
+        "endChar": 25
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
