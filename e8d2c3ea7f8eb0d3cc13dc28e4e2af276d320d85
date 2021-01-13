@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75e2cf55_9e24960d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-13T09:08:33Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "e8d2c3ea7f8eb0d3cc13dc28e4e2af276d320d85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48866abf_942e1e10",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 10433,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-13T09:08:33Z",
+      "side": 1,
+      "message": "v8::Data also provides Is*() accessors. For the GC is this is all we need, which is why I didn\u0027t add v8::Data::IsContext().\n\nwdyt?",
+      "range": {
+        "startLine": 10433,
+        "startChar": 26,
+        "endLine": 10433,
+        "endChar": 30
+      },
+      "revId": "e8d2c3ea7f8eb0d3cc13dc28e4e2af276d320d85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
