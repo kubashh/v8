@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f17c86af_1e6de87c",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-01-13T13:04:18Z",
+      "side": 1,
+      "message": "I have noticed the comment in the parent bug. Better to approach this separately.",
+      "parentUuid": "1d8e3deb_ca93f546",
+      "range": {
+        "startLine": 50,
+        "startChar": 5,
+        "endLine": 50,
+        "endChar": 14
+      },
+      "revId": "4dc29a0c38956720c179eba126e7a6a1717d062a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db2db38c_05b7efb3",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd0d89ad_c609d783",
+        "filename": "tools/mb/mb.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-01-13T13:04:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db2db38c_05b7efb3",
+      "range": {
+        "startLine": 94,
+        "startChar": 10,
+        "endLine": 94,
+        "endChar": 21
+      },
+      "revId": "4dc29a0c38956720c179eba126e7a6a1717d062a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db111f3d_1fa12b21",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-01-13T12:13:35Z",
       "side": 1,
       "message": "nit: whitespace",
+      "range": {
+        "startLine": 697,
+        "startChar": 40,
+        "endLine": 697,
+        "endChar": 41
+      },
+      "revId": "4dc29a0c38956720c179eba126e7a6a1717d062a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1cbcbfc_aa60a698",
+        "filename": "tools/mb/mb.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-01-13T13:04:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db111f3d_1fa12b21",
       "range": {
         "startLine": 697,
         "startChar": 40,
