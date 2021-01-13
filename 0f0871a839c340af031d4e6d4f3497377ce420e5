@@ -73,6 +73,30 @@
       },
       "revId": "0f0871a839c340af031d4e6d4f3497377ce420e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6b10364_85d2eca2",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1921,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-01-13T12:22:21Z",
+      "side": 1,
+      "message": "Thanks Ulan! Done. I moved this to StartMarking and ensured we are using the cached mode in the main marking visitor too.",
+      "parentUuid": "f90b0009_bc560059",
+      "range": {
+        "startLine": 1921,
+        "startChar": 2,
+        "endLine": 1921,
+        "endChar": 63
+      },
+      "revId": "0f0871a839c340af031d4e6d4f3497377ce420e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
