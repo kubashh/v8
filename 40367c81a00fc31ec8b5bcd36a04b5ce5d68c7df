@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d35180f2_283294be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-01-13T09:27:14Z",
+      "side": 1,
+      "message": "Thanks Jakob!",
+      "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcccc6fb_0dc53ed6",
@@ -65,6 +82,24 @@
       "writtenOn": "2021-01-13T06:37:17Z",
       "side": 1,
       "message": "Which code kind would match this condition? We don\u0027t expect to see TF code here, do we? And INTERPRETER/TP can both tier-up.",
+      "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dec94942_894c3ba4",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-01-13T09:27:14Z",
+      "side": 1,
+      "message": "We can see TF code kind in rare cases. When we have recursive function and we tier up to TP and then to TF. Though we have TF code, there might be some frames which are still running TP code and when we start executing those frames we might hit byteocde budget interrupt and reach this point. Maybe I could add a test for this too. It\u0027s just hard to write deterministic tests for these. Currently this happens in some configurations on test/mjsunit/regress/regress-1138075",
+      "parentUuid": "ae3ce8af_c4ed7c7c",
       "revId": "40367c81a00fc31ec8b5bcd36a04b5ce5d68c7df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
