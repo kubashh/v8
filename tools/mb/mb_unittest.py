@@ -107,7 +107,7 @@ class FakeFile(object):
 
 TEST_CONFIG = """\
 {
-  'masters': {
+  'builder_groups': {
     'chromium': {},
     'fake_master': {
       'fake_builder': 'rel_bot',
@@ -155,7 +155,7 @@ TEST_CONFIG = """\
 
 TRYSERVER_CONFIG = """\
 {
-  'masters': {
+  'builder_groups': {
     'not_a_tryserver': {
       'fake_builder': 'fake_config',
     },
