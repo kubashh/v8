@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00e090dc_a4d34596",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3838,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-01-14T06:05:04Z",
+      "side": 1,
+      "message": "andps \u0026 andnps would save two bytes",
+      "range": {
+        "startLine": 3837,
+        "startChar": 0,
+        "endLine": 3838,
+        "endChar": 27
+      },
+      "revId": "9544a73af252efb6153dc7180b7ed2256bc33ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
