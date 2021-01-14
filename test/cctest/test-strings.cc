@@ -2142,6 +2142,7 @@ TEST(InternalizeExternalStringUncachedWithCopyTwoByte) {
   CHECK(external->is_uncached());
 
   // Internalize succesfully, with a copy.
+  CHECK(!external->IsInternalizedString());
   Handle<String> internal = factory->InternalizeString(external);
   CHECK(!external->IsInternalizedString());
   CHECK(internal->IsInternalizedString());
