@@ -34,6 +34,24 @@
       "parentUuid": "14e3f4ab_ccec4bc1",
       "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e9392af_79ff10d6",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-01-14T20:46:49Z",
+      "side": 1,
+      "message": "I agree that using the proper APIs would be ideal.\n\nI\u0027m confused why I\u0027m able to access JitCodeEvent but get undefined symbol errors when I invoke the methods of UnboundedScript...\n\nI could move the whole recorder to src/instrumentation, but I run into a similar problem when I compile trace-writer.cc:\n\n```\nlld-link: error: undefined symbol: public: static bool __cdecl v8::internal::instrumentation::Recorder::IsEnabled(void)\n\u003e\u003e\u003e referenced by .\\..\\..\\src\\libplatform\\tracing\\trace-writer.cc:204\n\u003e\u003e\u003e               obj/v8_libplatform/trace-writer.obj:(public: virtual void __cdecl v8::platform::tracing::SystemInstrumentationTraceWriter::AppendTraceEvent(class v8::platform\n```",
+      "parentUuid": "caa20a6c_767a9dc3",
+      "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
