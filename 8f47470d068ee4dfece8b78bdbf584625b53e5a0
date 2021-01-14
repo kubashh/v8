@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa914ef4_7130c360",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-14T14:54:12Z",
+      "side": 1,
+      "message": "Thanks for the patience! Just to let you know the V8 8.9 branch has been cut today.",
+      "parentUuid": "d6c241eb_cd480197",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6984df5a_e1066db7",
