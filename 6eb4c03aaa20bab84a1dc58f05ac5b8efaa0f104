@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a656b19_3317a099",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-01-14T17:18:07Z",
+      "side": 1,
+      "message": "Don\u0027t be so fast to +1. I haven\u0027t addressed any of your comments:)",
+      "revId": "6eb4c03aaa20bab84a1dc58f05ac5b8efaa0f104",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
