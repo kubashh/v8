@@ -7,23 +7,6 @@
 type MutableSlice<T: type> extends torque_internal::Slice<T, &T>;
 type ConstSlice<T: type> extends torque_internal::Slice<T, const &T>;
 
-macro Subslice<T: type>(slice: ConstSlice<T>, start: intptr, length: intptr):
-    ConstSlice<T>labels OutOfBounds {
-  if (Unsigned(length) > Unsigned(slice.length)) goto OutOfBounds;
-  if (Unsigned(start) > Unsigned(slice.length - length)) goto OutOfBounds;
-  const offset = slice.offset + torque_internal::TimesSizeOf<T>(start);
-  return torque_internal::unsafe::NewConstSlice<T>(
-      slice.object, offset, length);
-}
-macro Subslice<T: type>(slice: MutableSlice<T>, start: intptr, length: intptr):
-    MutableSlice<T>labels OutOfBounds {
-  if (Unsigned(length) > Unsigned(slice.length)) goto OutOfBounds;
-  if (Unsigned(start) > Unsigned(slice.length - length)) goto OutOfBounds;
-  const offset = slice.offset + torque_internal::TimesSizeOf<T>(start);
-  return torque_internal::unsafe::NewMutableSlice<T>(
-      slice.object, offset, length);
-}
-
 namespace torque_internal {
 // Unsafe is a marker that we require to be passed when calling internal APIs
 // that might lead to unsoundness when used incorrectly. Unsafe markers should
@@ -33,10 +16,6 @@ struct Unsafe {}
 // Size of a type in memory (on the heap). For class types, this is the size
 // of the pointer, not of the instance.
 intrinsic %SizeOf<T: type>(): constexpr int31;
-
-macro TimesSizeOf<T: type>(i: intptr): intptr {
-  return i * %SizeOf<T>();
-}
 
 struct Reference<T: type> {
   const object: HeapObject|TaggedZeroPattern;
@@ -64,17 +43,13 @@ macro ReferenceCast<T: type, U: type>(ref:&U):&T {
   UnsafeCast<T>(*ref);
   return ref;
 }
-
-extern macro GCUnsafeReferenceToRawPtr(
-    HeapObject | TaggedZeroPattern, intptr): RawPtr;
-
 }  // namespace unsafe
 
 struct Slice<T: type, Reference: type> {
   macro TryAtIndex(index: intptr): Reference labels OutOfBounds {
     if (Convert<uintptr>(index) < Convert<uintptr>(this.length)) {
       return unsafe::NewReference<T>(
-          this.object, this.offset + TimesSizeOf<T>(index));
+          this.object, this.offset + index * %SizeOf<T>());
     } else {
       goto OutOfBounds;
     }
@@ -99,7 +74,7 @@ struct Slice<T: type, Reference: type> {
   }
 
   macro Iterator(): SliceIterator<T, Reference> {
-    const end = this.offset + TimesSizeOf<T>(this.length);
+    const end = this.offset + this.length * %SizeOf<T>();
     return SliceIterator<T, Reference>{
       object: this.object,
       start: this.offset,
@@ -112,20 +87,14 @@ struct Slice<T: type, Reference: type> {
     check(
         Convert<uintptr>(endIndex) <= Convert<uintptr>(this.length) &&
         Convert<uintptr>(startIndex) <= Convert<uintptr>(endIndex));
-    const start = this.offset + TimesSizeOf<T>(startIndex);
-    const end = this.offset + TimesSizeOf<T>(endIndex);
+    const start = this.offset + startIndex * %SizeOf<T>();
+    const end = this.offset + endIndex * %SizeOf<T>();
     return SliceIterator<T, Reference>{
       object: this.object,
       start,
       end,
       unsafeMarker: Unsafe {}
     };
-  }
-
-  // WARNING: This can return a raw pointer into the heap, which is not GC-safe.
-  macro GCUnsafeStartPointer(): RawPtr<T> {
-    return %RawDownCast<RawPtr<T>>(
-        unsafe::GCUnsafeReferenceToRawPtr(this.object, this.offset));
   }
 
   const object: HeapObject|TaggedZeroPattern;
@@ -137,8 +106,7 @@ struct Slice<T: type, Reference: type> {
 namespace unsafe {
 
 macro NewMutableSlice<T: type>(
-    object: HeapObject|TaggedZeroPattern, offset: intptr,
-    length: intptr): MutableSlice<T> {
+    object: HeapObject, offset: intptr, length: intptr): MutableSlice<T> {
   return %RawDownCast<MutableSlice<T>>(Slice<T, &T>{
     object: object,
     offset: offset,
@@ -148,8 +116,7 @@ macro NewMutableSlice<T: type>(
 }
 
 macro NewConstSlice<T: type>(
-    object: HeapObject|TaggedZeroPattern, offset: intptr,
-    length: intptr): ConstSlice<T> {
+    object: HeapObject, offset: intptr, length: intptr): ConstSlice<T> {
   return %RawDownCast<ConstSlice<T>>(Slice<T, const &T>{
     object: object,
     offset: offset,
