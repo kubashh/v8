@@ -22,6 +22,30 @@
       },
       "revId": "f946e9b1fe9ff4de264df2d8ead2e5c53d104bb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3acf1b73_81c55eb6",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3824,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-01-14T03:41:53Z",
+      "side": 1,
+      "message": "Good point, done. I didn\u0027t do anything special for AVX2, does it help much here?",
+      "parentUuid": "02c1717c_0f97982b",
+      "range": {
+        "startLine": 3822,
+        "startChar": 0,
+        "endLine": 3824,
+        "endChar": 40
+      },
+      "revId": "f946e9b1fe9ff4de264df2d8ead2e5c53d104bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
