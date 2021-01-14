@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbf4225e_1c5430fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-14T11:11:44Z",
+      "side": 1,
+      "message": "Will land after branch cut to avoid any chance for release hiccups.",
+      "revId": "b2ceb6b09173ddacdd9c5036c8b2a8332c1d354a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
