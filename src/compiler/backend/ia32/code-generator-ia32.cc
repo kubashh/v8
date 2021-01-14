@@ -2958,7 +2958,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kIA32I32x4DotI16x8S: {
       __ Pmaddwd(i.OutputSimd128Register(), i.InputSimd128Register(0),
-                 i.InputSimd128Register(1));
+                 i.InputOperand(1));
       break;
     }
     case kIA32I16x8Splat: {
