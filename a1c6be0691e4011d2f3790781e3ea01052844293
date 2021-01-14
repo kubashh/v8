@@ -16,6 +16,24 @@
       "message": "I\u0027m seeing this message in git cl upload: `\u003cregex\u003e is an unapproved C++11 header.  [build/c++11]`. Is there anyway to suppress this message?\n\nThe reason I\u0027m using regex is so that I can recover the script name from method_name. Ideally, I would use script-\u003eGetScriptName(), but that method is implemented in src/api/api.cc. Invoking it from src/libplatform/ leads to an undefined symbol linker error.",
       "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caa20a6c_767a9dc3",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-14T09:46:58Z",
+      "side": 1,
+      "message": "I prefer using the proper APIs for this (after all, you\u0027re accessing already JitCodeEvent which is also defined in the api).\n\nShould we just move the whole recorder to src/instrumentation?",
+      "parentUuid": "14e3f4ab_ccec4bc1",
+      "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
