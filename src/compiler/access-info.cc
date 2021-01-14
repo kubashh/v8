@@ -529,13 +529,25 @@ MinimorphicLoadPropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
   DCHECK(feedback.handler()->IsSmi());
   int handler = Smi::cast(*feedback.handler()).value();
   bool is_inobject = LoadHandler::IsInobjectBits::decode(handler);
-  bool is_double = LoadHandler::IsDoubleBits::decode(handler);
   int offset = LoadHandler::FieldIndexBits::decode(handler) * kTaggedSize;
-  Representation field_rep =
-      is_double ? Representation::Double() : Representation::Tagged();
-  Type field_type = is_double ? Type::Number() : Type::Any();
-  return MinimorphicLoadPropertyAccessInfo::DataField(offset, is_inobject,
-                                                      field_rep, field_type);
+  // TODO(gsathya): whats the diff between Any and NonInternal?
+  Type field_type = Type::NonInternal();
+  LoadHandler::SmiOrDouble repr =
+      LoadHandler::IsSmiOrDoubleBits::decode(handler);
+  Representation representation = Representation::Tagged();
+
+  if (repr == LoadHandler::kSmi) {
+    field_type = Type::SignedSmall();
+    representation = Representation::Smi();
+  } else if (repr == LoadHandler::kDouble) {
+    field_type = type_cache_->kFloat64;
+    representation = Representation::Double();
+  } else {
+    representation = Representation::Tagged();
+  }
+
+  return MinimorphicLoadPropertyAccessInfo::DataField(
+      offset, is_inobject, representation, field_type);
 }
 
 PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(

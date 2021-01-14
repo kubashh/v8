@@ -76,10 +76,11 @@ class LoadHandler final : public DataHandler {
   // Encoding when KindBits contains kField.
   //
   using IsInobjectBits = LookupOnLookupStartObjectBits::Next<bool, 1>;
-  using IsDoubleBits = IsInobjectBits::Next<bool, 1>;
+  enum SmiOrDouble { kSmi, kDouble, kNone };
+  using IsSmiOrDoubleBits = IsInobjectBits::Next<SmiOrDouble, 2>;
   // +1 here is to cover all possible JSObject header sizes.
   using FieldIndexBits =
-      IsDoubleBits::Next<unsigned, kDescriptorIndexBitCount + 1>;
+      IsSmiOrDoubleBits::Next<unsigned, kDescriptorIndexBitCount + 1>;
   // Make sure we don't overflow the smi.
   STATIC_ASSERT(FieldIndexBits::kLastUsedBit < kSmiValueSize);
 
@@ -121,7 +122,8 @@ class LoadHandler final : public DataHandler {
   static inline Handle<Smi> LoadSlow(Isolate* isolate);
 
   // Creates a Smi-handler for loading a field from fast object.
-  static inline Handle<Smi> LoadField(Isolate* isolate, FieldIndex field_index);
+  static inline Handle<Smi> LoadField(Isolate* isolate, FieldIndex field_index,
+                                      Representation representation);
 
   // Creates a Smi-handler for loading a cached constant from fast
   // prototype object.
