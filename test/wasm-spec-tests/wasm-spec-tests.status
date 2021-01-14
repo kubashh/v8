@@ -10,6 +10,7 @@
   'proposals/bulk-memory-operations/binary': [FAIL],
   # TODO(v8:10994): Failing spec test after update.
   'proposals/simd/binary': [FAIL],
+  'proposals/simd/imports': [FAIL],
   'proposals/simd/data': [FAIL],
   'proposals/js-types/data': [FAIL],
   'proposals/reference-types/binary': [FAIL],
@@ -22,7 +23,7 @@
   'data': [FAIL],
 
   # TODO(wasm): Roll newest tests into "js-types" repository.
-  'proposals/js-types/exports': [FAIL],
+  'proposals/js-types/imports': [FAIL],
   'proposals/js-types/globals': [FAIL],
   'proposals/js-types/linking': [FAIL],
 
