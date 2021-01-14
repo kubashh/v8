@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa103407_c40c4427",
+        "filename": "src/execution/runtime-profiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-01-14T15:41:46Z",
+      "side": 1,
+      "message": "True. Dropped this check.",
+      "parentUuid": "e38ac2a3_ca8e4430",
+      "revId": "3b3f795fd501c82d276bea329b95914850bd6000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7ac3b6d_45dba604",
@@ -75,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c5d9ab_5d042fac",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-01-14T15:41:46Z",
+      "side": 1,
+      "message": "As discussed offline, we shouldn\u0027t see builtin here apart from when the function isn\u0027t compiled. I dropped BUILTIN and added a DCHECK that we only call this when the SFI is compiled.",
+      "parentUuid": "e7ac3b6d_45dba604",
+      "range": {
+        "startLine": 121,
+        "startChar": 23,
+        "endLine": 121,
+        "endChar": 43
+      },
+      "revId": "3b3f795fd501c82d276bea329b95914850bd6000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a87445aa_6a1b2fe0",
@@ -88,6 +130,24 @@
       "writtenOn": "2021-01-13T17:13:42Z",
       "side": 1,
       "message": "Can we just rewrite these to use GetActiveTier please",
+      "revId": "3b3f795fd501c82d276bea329b95914850bd6000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f33379ab_0075249c",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-01-14T15:41:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a87445aa_6a1b2fe0",
       "revId": "3b3f795fd501c82d276bea329b95914850bd6000",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
