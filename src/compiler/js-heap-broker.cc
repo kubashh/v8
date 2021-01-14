@@ -987,14 +987,17 @@ class ScriptContextTableData : public HeapObjectData {
       : HeapObjectData(broker, storage, object) {}
 };
 
+struct MapDependentPropertyDescriptor {
+  FieldIndex field_index;
+  ObjectData* field_owner = nullptr;
+  bool is_unboxed_double_field = false;
+};
+
 struct PropertyDescriptor {
   ObjectData* key = nullptr;
   ObjectData* value = nullptr;
   PropertyDetails details = PropertyDetails::Empty();
-  FieldIndex field_index;
-  ObjectData* field_owner = nullptr;
   ObjectData* field_type = nullptr;
-  bool is_unboxed_double_field = false;
 };
 
 class MapData : public HeapObjectData {
@@ -1042,12 +1045,23 @@ class MapData : public HeapObjectData {
   void SerializeOwnDescriptor(JSHeapBroker* broker,
                               InternalIndex descriptor_index);
   void SerializeOwnDescriptors(JSHeapBroker* broker);
-  ObjectData* GetStrongValue(InternalIndex descriptor_index) const;
   // TODO(neis, solanes): This code needs to be changed to allow for
   // kNeverSerialized instance descriptors. However, this is likely to require a
   // non-trivial refactoring of how maps are serialized because actual instance
   // descriptors don't contain information about owner maps.
   ObjectData* instance_descriptors() const { return instance_descriptors_; }
+
+  ObjectData* FindFieldOwner(InternalIndex descriptor_index) const {
+    return contents_.at(descriptor_index.as_int()).field_owner;
+  }
+
+  FieldIndex GetFieldIndexFor(InternalIndex descriptor_index) const {
+    return contents_.at(descriptor_index.as_int()).field_index;
+  }
+
+  bool IsUnboxedDoubleField(InternalIndex descriptor_index) const {
+    return contents_.at(descriptor_index.as_int()).is_unboxed_double_field;
+  }
 
   void SerializeRootMap(JSHeapBroker* broker);
   ObjectData* FindRootMap() const;
@@ -1113,6 +1127,8 @@ class MapData : public HeapObjectData {
   bool serialized_for_element_load_ = false;
 
   bool serialized_for_element_store_ = false;
+
+  ZoneMap<int, MapDependentPropertyDescriptor> contents_;
 };
 
 AccessorInfoData::AccessorInfoData(JSHeapBroker* broker, ObjectData** storage,
@@ -1230,7 +1246,8 @@ MapData::MapData(JSHeapBroker* broker, ObjectData** storage, Handle<Map> object)
       supports_fast_array_resize_(
           SupportsFastArrayResize(broker->isolate(), object)),
       is_abandoned_prototype_map_(object->is_abandoned_prototype_map()),
-      elements_kind_generalizations_(broker->zone()) {}
+      elements_kind_generalizations_(broker->zone()),
+      contents_(broker->zone()) {}
 
 JSFunctionData::JSFunctionData(JSHeapBroker* broker, ObjectData** storage,
                                Handle<JSFunction> object)
@@ -1313,10 +1330,8 @@ class DescriptorArrayData : public HeapObjectData {
  public:
   DescriptorArrayData(JSHeapBroker* broker, ObjectData** storage,
                       Handle<DescriptorArray> object)
-      : HeapObjectData(broker, storage, object), contents_(broker->zone()) {}
-
-  ObjectData* FindFieldOwner(InternalIndex descriptor_index) const {
-    return contents_.at(descriptor_index.as_int()).field_owner;
+      : HeapObjectData(broker, storage, object), contents_(broker->zone()) {
+    DCHECK(!FLAG_turbo_direct_heap_access);
   }
 
   PropertyDetails GetPropertyDetails(InternalIndex descriptor_index) const {
@@ -1327,16 +1342,8 @@ class DescriptorArrayData : public HeapObjectData {
     return contents_.at(descriptor_index.as_int()).key;
   }
 
-  FieldIndex GetFieldIndexFor(InternalIndex descriptor_index) const {
-    return contents_.at(descriptor_index.as_int()).field_index;
-  }
-
   ObjectData* GetFieldType(InternalIndex descriptor_index) const {
     return contents_.at(descriptor_index.as_int()).field_type;
-  }
-
-  bool IsUnboxedDoubleField(InternalIndex descriptor_index) const {
-    return contents_.at(descriptor_index.as_int()).is_unboxed_double_field;
   }
 
   ObjectData* GetStrongValue(InternalIndex descriptor_index) const {
@@ -1362,7 +1369,6 @@ void DescriptorArrayData::SerializeDescriptor(JSHeapBroker* broker,
   CHECK_LT(descriptor_index.as_int(), map->NumberOfOwnDescriptors());
   if (contents_.find(descriptor_index.as_int()) != contents_.end()) return;
 
-  Isolate* const isolate = broker->isolate();
   auto descriptors = Handle<DescriptorArray>::cast(object());
   CHECK_EQ(*descriptors, map->instance_descriptors(kRelaxedLoad));
 
@@ -1375,19 +1381,10 @@ void DescriptorArrayData::SerializeDescriptor(JSHeapBroker* broker,
   }
   d.details = descriptors->GetDetails(descriptor_index);
   if (d.details.location() == kField) {
-    d.field_index = FieldIndex::ForDescriptor(*map, descriptor_index);
-    d.field_owner =
-        broker->GetOrCreateData(map->FindFieldOwner(isolate, descriptor_index));
     d.field_type =
         broker->GetOrCreateData(descriptors->GetFieldType(descriptor_index));
-    d.is_unboxed_double_field = map->IsUnboxedDoubleField(d.field_index);
   }
   contents_[descriptor_index.as_int()] = d;
-
-  if (d.details.location() == kField && !d.field_owner->should_access_heap()) {
-    // Recurse on the owner map.
-    d.field_owner->AsMap()->SerializeOwnDescriptor(broker, descriptor_index);
-  }
 
   TRACE(broker, "Copied descriptor " << descriptor_index.as_int() << " into "
                                      << this << " (" << contents_.size()
@@ -2160,25 +2157,57 @@ void MapData::SerializeOwnDescriptors(JSHeapBroker* broker) {
   }
 }
 
-ObjectData* MapData::GetStrongValue(InternalIndex descriptor_index) const {
-  DescriptorArrayData* descriptor_array =
-      instance_descriptors()->AsDescriptorArray();
-  return descriptor_array->GetStrongValue(descriptor_index);
-}
-
 void MapData::SerializeOwnDescriptor(JSHeapBroker* broker,
                                      InternalIndex descriptor_index) {
   TraceScope tracer(broker, this, "MapData::SerializeOwnDescriptor");
   Handle<Map> map = Handle<Map>::cast(object());
 
+  if (contents_.find(descriptor_index.as_int()) != contents_.end()) return;
+
   if (instance_descriptors_ == nullptr) {
-    instance_descriptors_ =
-        broker->GetOrCreateData(map->instance_descriptors(kRelaxedLoad));
+    instance_descriptors_ = broker->GetOrCreateData(
+        Handle<Map>::cast(object())->instance_descriptors(kRelaxedLoad));
   }
 
-  DescriptorArrayData* descriptor_array =
-      instance_descriptors()->AsDescriptorArray();
-  descriptor_array->SerializeDescriptor(broker, map, descriptor_index);
+  bool need_more_serialization = false;
+  if (instance_descriptors()->should_access_heap()) {
+    PropertyDetails details =
+        Handle<DescriptorArray>::cast(instance_descriptors()->object())
+            ->GetDetails(descriptor_index);
+    need_more_serialization = (details.location() == kField);
+  } else {
+    DescriptorArrayData* descriptor_array =
+        instance_descriptors()->AsDescriptorArray();
+
+    // Map independent serialization. Map is only used for DCHECKS.
+    descriptor_array->SerializeDescriptor(broker, map, descriptor_index);
+    PropertyDetails details =
+        descriptor_array->GetPropertyDetails(descriptor_index);
+    need_more_serialization = (details.location() == kField);
+  }
+
+  MapDependentPropertyDescriptor d;
+  // Map dependent serialization
+  if (need_more_serialization) {
+    d.field_index = FieldIndex::ForDescriptor(*map, descriptor_index);
+    Isolate* const isolate = broker->isolate();
+    d.field_owner =
+        broker->GetOrCreateData(map->FindFieldOwner(isolate, descriptor_index));
+    d.is_unboxed_double_field = map->IsUnboxedDoubleField(d.field_index);
+  }
+
+  contents_[descriptor_index.as_int()] = d;
+
+  TRACE(broker, "Copied map dependent descriptor "
+                    << descriptor_index.as_int() << " into " << this << " ("
+                    << contents_.size() << " total)");
+
+  if (need_more_serialization) {
+    if (!d.field_owner->should_access_heap()) {
+      // Recurse on the owner map.
+      d.field_owner->AsMap()->SerializeOwnDescriptor(broker, descriptor_index);
+    }
+  }
 }
 
 void MapData::SerializeRootMap(JSHeapBroker* broker) {
@@ -3017,11 +3046,10 @@ void JSObjectRef::EnsureElementsTenured() {
 
 FieldIndex MapRef::GetFieldIndexFor(InternalIndex descriptor_index) const {
   if (data_->should_access_heap()) {
+    DCHECK(!descriptor_array().ShouldHaveBeenSerialized());
     return FieldIndex::ForDescriptor(*object(), descriptor_index);
   }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return descriptors->GetFieldIndexFor(descriptor_index);
+  return data()->AsMap()->GetFieldIndexFor(descriptor_index);
 }
 
 int MapRef::GetInObjectPropertyOffset(int i) const {
@@ -3033,26 +3061,11 @@ int MapRef::GetInObjectPropertyOffset(int i) const {
 
 PropertyDetails MapRef::GetPropertyDetails(
     InternalIndex descriptor_index) const {
-  if (data_->should_access_heap()) {
-    return object()
-        ->instance_descriptors(kRelaxedLoad)
-        .GetDetails(descriptor_index);
-  }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return descriptors->GetPropertyDetails(descriptor_index);
+  return descriptor_array().GetPropertyDetails(descriptor_index);
 }
 
 NameRef MapRef::GetPropertyKey(InternalIndex descriptor_index) const {
-  if (data_->should_access_heap()) {
-    return NameRef(broker(), broker()->CanonicalPersistentHandle(
-                                 object()
-                                     ->instance_descriptors(kRelaxedLoad)
-                                     .GetKey(descriptor_index)));
-  }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return NameRef(broker(), descriptors->GetPropertyKey(descriptor_index));
+  return descriptor_array().GetPropertyKey(descriptor_index);
 }
 
 bool MapRef::IsFixedCowArrayMap() const {
@@ -3067,37 +3080,26 @@ bool MapRef::IsPrimitiveMap() const {
 
 MapRef MapRef::FindFieldOwner(InternalIndex descriptor_index) const {
   if (data_->should_access_heap()) {
+    DCHECK(!descriptor_array().ShouldHaveBeenSerialized());
     Handle<Map> owner(
         object()->FindFieldOwner(broker()->isolate(), descriptor_index),
         broker()->isolate());
     return MapRef(broker(), owner);
   }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return MapRef(broker(), descriptors->FindFieldOwner(descriptor_index));
+  return MapRef(broker(), data()->AsMap()->FindFieldOwner(descriptor_index));
 }
 
 ObjectRef MapRef::GetFieldType(InternalIndex descriptor_index) const {
-  if (data_->should_access_heap()) {
-    Handle<FieldType> field_type(object()
-                                     ->instance_descriptors(kRelaxedLoad)
-                                     .GetFieldType(descriptor_index),
-                                 broker()->isolate());
-    return ObjectRef(broker(), field_type);
-  }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return ObjectRef(broker(), descriptors->GetFieldType(descriptor_index));
+  return descriptor_array().GetFieldType(descriptor_index);
 }
 
 bool MapRef::IsUnboxedDoubleField(InternalIndex descriptor_index) const {
   if (data_->should_access_heap()) {
+    DCHECK(!descriptor_array().ShouldHaveBeenSerialized());
     return object()->IsUnboxedDoubleField(
         FieldIndex::ForDescriptor(*object(), descriptor_index));
   }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return descriptors->IsUnboxedDoubleField(descriptor_index);
+  return data()->AsMap()->IsUnboxedDoubleField(descriptor_index);
 }
 
 base::Optional<int> StringRef::length() const {
@@ -3510,20 +3512,17 @@ BIMODAL_ACCESSOR(FeedbackCell, HeapObject, value)
 
 base::Optional<ObjectRef> MapRef::GetStrongValue(
     InternalIndex descriptor_index) const {
+  return descriptor_array().GetStrongValue(descriptor_index);
+}
+
+DescriptorArrayRef MapRef::descriptor_array() const {
   if (data_->should_access_heap()) {
-    MaybeObject value =
-        object()->instance_descriptors(kRelaxedLoad).GetValue(descriptor_index);
-    HeapObject object;
-    if (value.GetHeapObjectIfStrong(&object)) {
-      return ObjectRef(broker(), broker()->CanonicalPersistentHandle((object)));
-    }
-    return base::nullopt;
+    return DescriptorArrayRef(
+        broker(), broker()->CanonicalPersistentHandle(
+                      object()->instance_descriptors(kRelaxedLoad)));
   }
-  ObjectData* value = data()->AsMap()->GetStrongValue(descriptor_index);
-  if (!value) {
-    return base::nullopt;
-  }
-  return ObjectRef(broker(), value);
+
+  return DescriptorArrayRef(broker(), data()->AsMap()->instance_descriptors());
 }
 
 void MapRef::SerializeRootMap() {
@@ -3929,6 +3928,52 @@ Float64 FixedDoubleArrayData::Get(int i) const {
   return contents_[i];
 }
 
+PropertyDetails DescriptorArrayRef::GetPropertyDetails(
+    InternalIndex descriptor_index) const {
+  if (data_->should_access_heap()) {
+    return object()->GetDetails(descriptor_index);
+  }
+  return data()->AsDescriptorArray()->GetPropertyDetails(descriptor_index);
+}
+
+NameRef DescriptorArrayRef::GetPropertyKey(
+    InternalIndex descriptor_index) const {
+  if (data_->should_access_heap()) {
+    return NameRef(broker(), broker()->CanonicalPersistentHandle(
+                                 object()->GetKey(descriptor_index)));
+  }
+  return NameRef(broker(),
+                 data()->AsDescriptorArray()->GetPropertyKey(descriptor_index));
+}
+
+ObjectRef DescriptorArrayRef::GetFieldType(
+    InternalIndex descriptor_index) const {
+  if (data_->should_access_heap()) {
+    return ObjectRef(broker(), broker()->CanonicalPersistentHandle(
+                                   object()->GetFieldType(descriptor_index)));
+  }
+  return ObjectRef(broker(),
+                   data()->AsDescriptorArray()->GetFieldType(descriptor_index));
+}
+
+base::Optional<ObjectRef> DescriptorArrayRef::GetStrongValue(
+    InternalIndex descriptor_index) const {
+  if (data_->should_access_heap()) {
+    MaybeObject value = object()->GetValue(descriptor_index);
+    HeapObject object;
+    if (value.GetHeapObjectIfStrong(&object)) {
+      return ObjectRef(broker(), broker()->CanonicalPersistentHandle((object)));
+    }
+    return base::nullopt;
+  }
+  ObjectData* value =
+      data()->AsDescriptorArray()->GetStrongValue(descriptor_index);
+  if (!value) {
+    return base::nullopt;
+  }
+  return ObjectRef(broker(), value);
+}
+
 base::Optional<SharedFunctionInfoRef> FeedbackCellRef::shared_function_info()
     const {
   if (value().IsFeedbackVector()) {
@@ -4165,6 +4210,7 @@ bool MapRef::serialized_own_descriptor(InternalIndex descriptor_index) const {
   if (data_->should_access_heap()) return true;
   ObjectData* maybe_desc_array_data = data()->AsMap()->instance_descriptors();
   if (!maybe_desc_array_data) return false;
+  if (maybe_desc_array_data->should_access_heap()) return true;
   DescriptorArrayData* desc_array_data =
       maybe_desc_array_data->AsDescriptorArray();
   return desc_array_data->serialized_descriptor(descriptor_index);
