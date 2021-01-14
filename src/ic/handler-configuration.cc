@@ -344,7 +344,8 @@ void PrintSmiLoadHandler(int raw_handler, std::ostream& os) {
     case LoadHandler::Kind::kField: {
       os << "kField, is in object = "
          << LoadHandler::IsInobjectBits::decode(raw_handler)
-         << ", is double = " << LoadHandler::IsDoubleBits::decode(raw_handler)
+         << ", is smi_or_double = "
+         << LoadHandler::IsSmiOrDoubleBits::decode(raw_handler)
          << ", field index = "
          << LoadHandler::FieldIndexBits::decode(raw_handler);
       break;

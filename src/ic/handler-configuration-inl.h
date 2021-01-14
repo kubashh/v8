@@ -50,10 +50,17 @@ Handle<Smi> LoadHandler::LoadSlow(Isolate* isolate) {
   return handle(Smi::FromInt(config), isolate);
 }
 
-Handle<Smi> LoadHandler::LoadField(Isolate* isolate, FieldIndex field_index) {
+Handle<Smi> LoadHandler::LoadField(Isolate* isolate, FieldIndex field_index,
+                                   Representation representation) {
+  SmiOrDouble repr = LoadHandler::kNone;
+  if (representation.IsSmi())
+    repr = LoadHandler::kSmi;
+  else if (representation.IsDouble())
+    repr = LoadHandler::kDouble;
+
   int config = KindBits::encode(kField) |
                IsInobjectBits::encode(field_index.is_inobject()) |
-               IsDoubleBits::encode(field_index.is_double()) |
+               IsSmiOrDoubleBits::encode(repr) |
                FieldIndexBits::encode(field_index.index());
   return handle(Smi::FromInt(config), isolate);
 }

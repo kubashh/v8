@@ -251,7 +251,9 @@ void AccessorAssembler::HandleLoadField(TNode<JSObject> holder,
   BIND(&inobject);
   {
     Label is_double(this);
-    GotoIf(IsSetWord<LoadHandler::IsDoubleBits>(handler_word), &is_double);
+    GotoIf(WordEqual(DecodeWord<LoadHandler::IsSmiOrDoubleBits>(handler_word),
+                     IntPtrConstant(LoadHandler::kDouble)),
+           &is_double);
     exit_point->Return(LoadObjectField(holder, offset));
 
     BIND(&is_double);
@@ -274,7 +276,9 @@ void AccessorAssembler::HandleLoadField(TNode<JSObject> holder,
     Label is_double(this);
     TNode<HeapObject> properties = LoadFastProperties(holder);
     TNode<Object> value = LoadObjectField(properties, offset);
-    GotoIf(IsSetWord<LoadHandler::IsDoubleBits>(handler_word), &is_double);
+    GotoIf(WordEqual(DecodeWord<LoadHandler::IsSmiOrDoubleBits>(handler_word),
+                     IntPtrConstant(LoadHandler::kDouble)),
+           &is_double);
     exit_point->Return(value);
 
     BIND(&is_double);
