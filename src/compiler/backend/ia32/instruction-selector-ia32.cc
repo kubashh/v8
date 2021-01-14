@@ -2259,7 +2259,6 @@ void InstructionSelector::VisitWord32AtomicPairCompareExchange(Node* node) {
   V(I64x2Eq)                               \
   V(I32x4DotI16x8S)                        \
   V(I16x8RoundingAverageU)                 \
-  V(I16x8Q15MulRSatS)                      \
   V(I8x16RoundingAverageU)
 
 // These opcodes require all inputs to be registers because the codegen is
@@ -2276,7 +2275,8 @@ void InstructionSelector::VisitWord32AtomicPairCompareExchange(Node* node) {
   V(I16x8ExtMulLowI8x16S)  \
   V(I16x8ExtMulHighI8x16S) \
   V(I16x8ExtMulLowI8x16U)  \
-  V(I16x8ExtMulHighI8x16U)
+  V(I16x8ExtMulHighI8x16U) \
+  V(I16x8Q15MulRSatS)
 
 #define SIMD_UNOP_LIST(V)   \
   V(F32x4Abs)               \
