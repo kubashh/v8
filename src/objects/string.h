@@ -386,6 +386,8 @@ class String : public TorqueGeneratedString<String, Name> {
 
   // Trimming.
   enum TrimMode { kTrim, kTrimStart, kTrimEnd };
+  static Handle<String> Trim(Isolate* isolate, Handle<String> string,
+                             TrimMode mode);
 
   V8_EXPORT_PRIVATE void PrintOn(FILE* out);
 

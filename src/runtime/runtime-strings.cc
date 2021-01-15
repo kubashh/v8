@@ -139,6 +139,15 @@ RUNTIME_FUNCTION(Runtime_StringReplaceOneCharWithString) {
   return isolate->StackOverflow();
 }
 
+RUNTIME_FUNCTION(Runtime_StringTrim) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+  Handle<String> string = args.at<String>(0);
+  CONVERT_SMI_ARG_CHECKED(mode, 1);
+  String::TrimMode trim_mode = static_cast<String::TrimMode>(mode);
+  return *String::Trim(isolate, string, trim_mode);
+}
+
 // ES6 #sec-string.prototype.includes
 // String.prototype.includes(searchString [, position])
 RUNTIME_FUNCTION(Runtime_StringIncludes) {
@@ -475,6 +484,29 @@ RUNTIME_FUNCTION(Runtime_FlattenString) {
 RUNTIME_FUNCTION(Runtime_StringMaxLength) {
   SealHandleScope shs(isolate);
   return Smi::FromInt(String::kMaxLength);
+}
+
+RUNTIME_FUNCTION(Runtime_StringCompareSequence) {
+  HandleScope handle_scope(isolate);
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(String, string, 0);
+  CONVERT_ARG_HANDLE_CHECKED(String, search_string, 1);
+  CONVERT_NUMBER_CHECKED(int, start, Int32, args[2]);
+
+  // Check if start + searchLength is in bounds.
+  DCHECK_LE(start + search_string->length(), string->length());
+
+  FlatStringReader string_reader(isolate, String::Flatten(isolate, string));
+  FlatStringReader search_reader(isolate,
+                                 String::Flatten(isolate, search_string));
+
+  for (int i = 0; i < search_string->length(); i++) {
+    if (string_reader.Get(start + i) != search_reader.Get(i)) {
+      return ReadOnlyRoots(isolate).false_value();
+    }
+  }
+
+  return ReadOnlyRoots(isolate).true_value();
 }
 
 RUNTIME_FUNCTION(Runtime_StringEscapeQuotes) {

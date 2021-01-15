@@ -849,7 +849,6 @@ DEF_GETTER(ExternalOneByteString, resource,
 
 void ExternalOneByteString::update_data_cache(Isolate* isolate) {
   if (is_uncached()) return;
-  DisallowGarbageCollection no_gc;
   WriteExternalPointerField(kResourceDataOffset, isolate,
                             reinterpret_cast<Address>(resource()->data()),
                             kExternalStringResourceDataTag);
@@ -873,7 +872,6 @@ void ExternalOneByteString::set_resource(
 }
 
 const uint8_t* ExternalOneByteString::GetChars() {
-  DisallowGarbageCollection no_gc;
   return reinterpret_cast<const uint8_t*>(resource()->data());
 }
 
@@ -889,7 +887,6 @@ DEF_GETTER(ExternalTwoByteString, resource,
 
 void ExternalTwoByteString::update_data_cache(Isolate* isolate) {
   if (is_uncached()) return;
-  DisallowGarbageCollection no_gc;
   WriteExternalPointerField(kResourceDataOffset, isolate,
                             reinterpret_cast<Address>(resource()->data()),
                             kExternalStringResourceDataTag);
@@ -912,10 +909,7 @@ void ExternalTwoByteString::set_resource(
   if (resource != nullptr) update_data_cache(isolate);
 }
 
-const uint16_t* ExternalTwoByteString::GetChars() {
-  DisallowGarbageCollection no_gc;
-  return resource()->data();
-}
+const uint16_t* ExternalTwoByteString::GetChars() { return resource()->data(); }
 
 uint16_t ExternalTwoByteString::Get(int index) {
   DCHECK(index >= 0 && index < length());

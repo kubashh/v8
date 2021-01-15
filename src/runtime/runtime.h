@@ -438,8 +438,10 @@ namespace internal {
   F(StringLessThanOrEqual, 2, 1)          \
   F(StringMaxLength, 0, 1)                \
   F(StringReplaceOneCharWithString, 3, 1) \
+  F(StringCompareSequence, 3, 1)          \
   F(StringSubstring, 3, 1)                \
-  F(StringToArray, 2, 1)
+  F(StringToArray, 2, 1)                  \
+  F(StringTrim, 2, 1)
 
 #define FOR_EACH_INTRINSIC_SYMBOL(F, I)    \
   F(CreatePrivateNameSymbol, 1, 1)         \

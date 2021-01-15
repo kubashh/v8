@@ -411,6 +411,32 @@ void String::PrintUC16(StringStream* accumulator, int start, int end) {
   }
 }
 
+// static
+Handle<String> String::Trim(Isolate* isolate, Handle<String> string,
+                            TrimMode mode) {
+  string = String::Flatten(isolate, string);
+  int const length = string->length();
+
+  // Perform left trimming if requested.
+  int left = 0;
+  if (mode == kTrim || mode == kTrimStart) {
+    while (left < length && IsWhiteSpaceOrLineTerminator(string->Get(left))) {
+      left++;
+    }
+  }
+
+  // Perform right trimming if requested.
+  int right = length;
+  if (mode == kTrim || mode == kTrimEnd) {
+    while (right > left &&
+           IsWhiteSpaceOrLineTerminator(string->Get(right - 1))) {
+      right--;
+    }
+  }
+
+  return isolate->factory()->NewSubString(string, left, right);
+}
+
 int32_t String::ToArrayIndex(Address addr) {
   DisallowGarbageCollection no_gc;
   String key(addr);
@@ -1682,26 +1708,6 @@ template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void String::WriteToFlat(
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void String::WriteToFlat(
     String source, uint8_t* sink, int from, int to,
     const SharedStringAccessGuardIfNeeded&);
-
-namespace {
-// Check that the constants defined in src/objects/instance-type.h coincides
-// with the Torque-definition of string instance types in src/objects/string.tq.
-
-DEFINE_TORQUE_GENERATED_STRING_INSTANCE_TYPE()
-
-STATIC_ASSERT(kStringRepresentationMask == RepresentationBits::kMask);
-
-STATIC_ASSERT(kStringEncodingMask == IsOneByteBit::kMask);
-STATIC_ASSERT(kTwoByteStringTag == IsOneByteBit::encode(false));
-STATIC_ASSERT(kOneByteStringTag == IsOneByteBit::encode(true));
-
-STATIC_ASSERT(kUncachedExternalStringMask == IsUncachedBit::kMask);
-STATIC_ASSERT(kUncachedExternalStringTag == IsUncachedBit::encode(true));
-
-STATIC_ASSERT(kIsNotInternalizedMask == IsNotInternalizedBit::kMask);
-STATIC_ASSERT(kNotInternalizedTag == IsNotInternalizedBit::encode(true));
-STATIC_ASSERT(kInternalizedTag == IsNotInternalizedBit::encode(false));
-}  // namespace
 
 }  // namespace internal
 }  // namespace v8
