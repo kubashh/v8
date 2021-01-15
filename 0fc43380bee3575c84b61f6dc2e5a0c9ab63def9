@@ -33,6 +33,23 @@
       "message": "LGTM, thanks!",
       "revId": "0fc43380bee3575c84b61f6dc2e5a0c9ab63def9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "863770d3_730a92ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2021-01-15T19:23:29Z",
+      "side": 1,
+      "message": "@Jakob: I need LGTM for BUILD.gn Could you take a look?",
+      "revId": "0fc43380bee3575c84b61f6dc2e5a0c9ab63def9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
