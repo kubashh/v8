@@ -16,6 +16,23 @@
       "message": "@Nico: I believe you are right reviewer for this. PTAL 😊",
       "revId": "0fc43380bee3575c84b61f6dc2e5a0c9ab63def9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b7b1a4b_e0c577d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-01-15T13:58:22Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "0fc43380bee3575c84b61f6dc2e5a0c9ab63def9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
