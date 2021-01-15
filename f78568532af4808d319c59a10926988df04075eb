@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2f96cea_c44af204",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-01-15T18:37:54Z",
+      "side": 1,
+      "message": "I think this return should be before the FATAL above.",
+      "revId": "f78568532af4808d319c59a10926988df04075eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad459d12_d5258f3e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-01-15T18:37:54Z",
+      "side": 1,
+      "message": "Doesn\u0027t this just say that if there is any staged feature enabled, then reftypes can bailout, no matter if reftypes is shipped or not?\n\nWould it not be easier to say\nif (reason \u003d\u003d kExternRef \u0026\u0026 kStagedFeatures.has_reftypes()) return;",
+      "revId": "f78568532af4808d319c59a10926988df04075eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
