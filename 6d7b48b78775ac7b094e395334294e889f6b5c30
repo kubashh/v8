@@ -33,6 +33,24 @@
       "message": "This could just be part of the other revert but like this is fine too.",
       "revId": "6d7b48b78775ac7b094e395334294e889f6b5c30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6574d36_b9dcc1eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-15T14:28:27Z",
+      "side": 1,
+      "message": "Can we revert several CLs together? I thought we had to go one by one",
+      "parentUuid": "3027afd8_b8714811",
+      "revId": "6d7b48b78775ac7b094e395334294e889f6b5c30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
