@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "099191a5_3b555570",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-15T19:32:49Z",
+      "side": 1,
+      "message": "Georg PTAL\nMichael, Nico as FYI",
+      "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4ed1470_cd13e115",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-15T19:32:49Z",
+      "side": 1,
+      "message": "Willing to bikeshed this name and/or the \u0027PropertyDescriptor\u0027 one below",
+      "range": {
+        "startLine": 985,
+        "startChar": 7,
+        "endLine": 985,
+        "endChar": 37
+      },
+      "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
