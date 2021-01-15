@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "53a9cefd303515ee95a2858fab4db25d20da6330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a84de67_24f2e159",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-01-15T02:22:09Z",
+      "side": 1,
+      "message": "LGTM, seems to have merge conflict, probably needs a rebase?",
+      "revId": "53a9cefd303515ee95a2858fab4db25d20da6330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
