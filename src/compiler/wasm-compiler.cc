@@ -7985,8 +7985,9 @@ class LinkageLocationAllocator {
  public:
   template <size_t kNumGpRegs, size_t kNumFpRegs>
   constexpr LinkageLocationAllocator(const Register (&gp)[kNumGpRegs],
-                                     const DoubleRegister (&fp)[kNumFpRegs])
-      : allocator_(wasm::LinkageAllocator(gp, fp)) {}
+                                     const DoubleRegister (&fp)[kNumFpRegs],
+                                     bool align_slots)
+      : allocator_(wasm::LinkageAllocator(gp, fp)), align_slots_(align_slots) {}
 
   LinkageLocation Next(MachineRepresentation rep) {
     MachineType type = MachineType::TypeForRepresentation(rep);
@@ -8000,15 +8001,17 @@ class LinkageLocationAllocator {
       return LinkageLocation::ForRegister(reg_code, type);
     }
     // Cannot use register; use stack slot.
-    int index = -1 - allocator_.NextStackSlot(rep);
+    int index = -1 - allocator_.NextStackSlot(rep, align_slots_);
     return LinkageLocation::ForCallerFrameSlot(index, type);
   }
 
   void SetStackOffset(int offset) { allocator_.SetStackOffset(offset); }
   int NumStackSlots() const { return allocator_.NumStackSlots(); }
+  void EndSlotArea() { allocator_.EndSlotArea(); }
 
  private:
   wasm::LinkageAllocator allocator_;
+  bool align_slots_;
 };
 }  // namespace
 
@@ -8026,7 +8029,7 @@ CallDescriptor* GetWasmCallDescriptor(
 
   // Add register and/or stack parameter(s).
   LinkageLocationAllocator params(wasm::kGpParamRegisters,
-                                  wasm::kFpParamRegisters);
+                                  wasm::kFpParamRegisters, false);
 
   // The instance object.
   locations.AddParam(params.Next(MachineRepresentation::kTaggedPointer));
@@ -8043,6 +8046,10 @@ CallDescriptor* GetWasmCallDescriptor(
     auto l = params.Next(param);
     locations.AddParamAt(i + param_offset, l);
   }
+
+  // End the untagged area, so tagged slots come after.
+  params.EndSlotArea();
+
   for (size_t i = 0; i < parameter_count; i++) {
     MachineRepresentation param = fsig->GetParam(i).machine_representation();
     // Skip untagged parameters.
@@ -8060,7 +8067,7 @@ CallDescriptor* GetWasmCallDescriptor(
 
   // Add return location(s).
   LinkageLocationAllocator rets(wasm::kGpReturnRegisters,
-                                wasm::kFpReturnRegisters);
+                                wasm::kFpReturnRegisters, true);
 
   int parameter_slots = params.NumStackSlots();
   if (ShouldPadArguments(parameter_slots)) parameter_slots++;
@@ -8140,7 +8147,7 @@ CallDescriptor* ReplaceTypeInCallDescriptorWith(
        LinkageLocation::ForRegister(kJSFunctionRegister.code(),
                                     MachineType::TaggedPointer()));
   LinkageLocationAllocator params(wasm::kGpParamRegisters,
-                                  wasm::kFpParamRegisters);
+                                  wasm::kFpParamRegisters, false);
   for (size_t i = 0, e = call_descriptor->ParameterCount() -
                          (has_callable_param ? 1 : 0);
        i < e; i++) {
@@ -8159,7 +8166,7 @@ CallDescriptor* ReplaceTypeInCallDescriptorWith(
   }
 
   LinkageLocationAllocator rets(wasm::kGpReturnRegisters,
-                                wasm::kFpReturnRegisters);
+                                wasm::kFpReturnRegisters, true);
   rets.SetStackOffset(params.NumStackSlots());
   for (size_t i = 0; i < call_descriptor->ReturnCount(); i++) {
     if (call_descriptor->GetReturnType(i) == input_type) {
