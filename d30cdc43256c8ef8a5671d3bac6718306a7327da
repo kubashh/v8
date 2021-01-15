@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0413717e_893419a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-01-15T16:48:28Z",
+      "side": 1,
+      "message": "PTAL. This documents expected bailouts, and gives us a burndown list of things we should fix.",
+      "revId": "d30cdc43256c8ef8a5671d3bac6718306a7327da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
