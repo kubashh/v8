@@ -16,6 +16,23 @@
       "message": "PTAL at the revert",
       "revId": "6d7b48b78775ac7b094e395334294e889f6b5c30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3027afd8_b8714811",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-01-15T13:47:53Z",
+      "side": 1,
+      "message": "This could just be part of the other revert but like this is fine too.",
+      "revId": "6d7b48b78775ac7b094e395334294e889f6b5c30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
