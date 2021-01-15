@@ -264,9 +264,10 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction function,
   bool active_tier_is_turboprop = function.ActiveTierIsMidtierTurboprop();
   int scale_factor =
       active_tier_is_turboprop ? FLAG_ticks_scale_factor_for_top_tier : 1;
+  int allowance =
+      active_tier_is_turboprop ? kBytecodeSizeAllowancePerTick : 100;
   int ticks_for_optimization =
-      kProfilerTicksBeforeOptimization +
-      (bytecode.length() / kBytecodeSizeAllowancePerTick);
+      kProfilerTicksBeforeOptimization + (bytecode.length() / allowance);
   ticks_for_optimization *= scale_factor;
   if (ticks >= ticks_for_optimization) {
     return OptimizationReason::kHotAndStable;
