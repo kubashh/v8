@@ -72,6 +72,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "391433e9_49dc6c87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-15T08:31:37Z",
+      "side": 1,
+      "message": "Unfortunately there are still missing LGTM from an OWNER for these files:\n    BUILD.gn\n    src/codegen/*\n    src/runtime/*\n    test/cctest/*\n\nI also ran perf tests with kraken and octane and I don\u0027t see any perf. regressions.\nWhat would be the best benchmark to use to measure regressions in the compilation time?\n\nThanks!",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6984df5a_e1066db7",
