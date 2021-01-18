@@ -74,6 +74,24 @@
       "parentUuid": "9226e174_5639d7e3",
       "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "551543f0_d8bf5c74",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-18T13:11:39Z",
+      "side": 1,
+      "message": "Regarding the last sentence: which kind and which traversal do you mean?\n\nStoring the owner information in the map data doesn\u0027t fit the object model because the owner information applies to all maps that share this descriptor array, so we would have to copy it to all of them.",
+      "parentUuid": "6864bb1c_e278ba99",
+      "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
