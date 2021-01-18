@@ -93,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85abc53f_9e2100bf",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-01-18T12:02:37Z",
+      "side": 1,
+      "message": "There is still one define even when the flag is turned on (V8_GN_HEADER) and you don\u0027t have to turn it on, so I think it\u0027s still valid.",
+      "parentUuid": "f0f973ab_d3e947e6",
+      "range": {
+        "startLine": 563,
+        "startChar": 2,
+        "endLine": 564,
+        "endChar": 62
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "905d36fa_aac0d797",
@@ -106,6 +130,30 @@
       "writtenOn": "2021-01-13T11:28:28Z",
       "side": 1,
       "message": "is this deps necessary or should v8_headers pull it in transitively?",
+      "range": {
+        "startLine": 3935,
+        "startChar": 4,
+        "endLine": 3935,
+        "endChar": 28
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f5145b_63eb2f4c",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 3935,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-01-18T12:02:37Z",
+      "side": 1,
+      "message": "By moving v8_headers to public_deps, we can remove this.",
+      "parentUuid": "905d36fa_aac0d797",
       "range": {
         "startLine": 3935,
         "startChar": 4,
@@ -133,6 +181,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c684d012_c3ba6cc9",
+        "filename": "src/objects/compressed-slots.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-01-18T12:02:37Z",
+      "side": 1,
+      "message": "I\u0027ve moved it into the namespace.",
+      "parentUuid": "cf6b6605_5036aaaa",
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "105ecc81_36200112",
@@ -146,6 +212,30 @@
       "writtenOn": "2021-01-13T11:28:28Z",
       "side": 1,
       "message": "2021  :)",
+      "range": {
+        "startLine": 3,
+        "startChar": 12,
+        "endLine": 3,
+        "endChar": 16
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb4d6490_cf27a928",
+        "filename": "tools/gen-v8-gn.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-01-18T12:02:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "105ecc81_36200112",
       "range": {
         "startLine": 3,
         "startChar": 12,
@@ -179,6 +269,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aeb200f_5bb66df7",
+        "filename": "tools/gen-v8-gn.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-01-18T12:02:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f2b756d_fb41547e",
+      "range": {
+        "startLine": 37,
+        "startChar": 28,
+        "endLine": 37,
+        "endChar": 66
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1ce7bf6_5c16055a",
@@ -192,6 +306,30 @@
       "writtenOn": "2021-01-13T11:28:28Z",
       "side": 1,
       "message": "Any reason to use BytesIO instead of StringIO ?",
+      "range": {
+        "startLine": 60,
+        "startChar": 18,
+        "endLine": 60,
+        "endChar": 25
+      },
+      "revId": "d94a0dc1e8a8bd0797438e0b569852f0612dbdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4ffb8f2_3df6868a",
+        "filename": "tools/gen-v8-gn.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-01-18T12:02:37Z",
+      "side": 1,
+      "message": "It works with python 2 and 3. StringIO works with python3 but we can\u0027t rely on that yet.",
+      "parentUuid": "a1ce7bf6_5c16055a",
       "range": {
         "startLine": 60,
         "startChar": 18,

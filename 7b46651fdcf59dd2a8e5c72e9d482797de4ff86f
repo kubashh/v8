@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "720eadd3_fe4cb1a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-01-18T12:02:37Z",
+      "side": 1,
+      "message": "+mlippautz for cppgc and related BUILD.gn changes",
+      "revId": "7b46651fdcf59dd2a8e5c72e9d482797de4ff86f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
