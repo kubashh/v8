@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5da0738d_e66c6457",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-18T17:53:21Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a76c0108_a5f4c038",
@@ -53,6 +70,29 @@
         "startChar": 8,
         "endLine": 27,
         "endChar": 20
+      },
+      "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "253795e8_553edc42",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-18T17:53:21Z",
+      "side": 1,
+      "message": "DCHECK(!sweeper_.is_sweeping_on_mutator_thread_);",
+      "range": {
+        "startLine": 593,
+        "startChar": 6,
+        "endLine": 593,
+        "endChar": 45
       },
       "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
