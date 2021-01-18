@@ -1850,8 +1850,6 @@ void InstructionSelector::EmitPrepareResults(
 
 bool InstructionSelector::IsTailCallAddressImmediate() { return true; }
 
-int InstructionSelector::GetTempsCountForTailCallFromJSFunction() { return 3; }
-
 namespace {
 
 void VisitCompareWithMemoryOperand(InstructionSelector* selector,
