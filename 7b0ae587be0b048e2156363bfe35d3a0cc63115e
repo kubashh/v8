@@ -39,6 +39,23 @@
       },
       "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9226e174_5639d7e3",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-18T06:26:55Z",
+      "side": 1,
+      "message": "I don\u0027t understand the separation.\n\nfield_index certainly belongs to PropertyDescriptor (actually we can remove it since it\u0027s already contained in PropertyDetails).\n\nfield_owner depends on the map but only in so far as that when determining a field\u0027s owner, we need to start with a map that has that field. So I think we can move that to PropertyDescriptor as well.\n\nis_unboxed_double_field comes from the underlying LayoutDescriptor. I\u0027m not familiar with that. We need to find out if two maps sharing the same DescriptorArray always have equal (same?) LayoutDescriptors, at least for the common properties. If yes, then this can also move to PropertyDescriptor.",
+      "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
