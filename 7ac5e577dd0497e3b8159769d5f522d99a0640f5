@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1df80f6d_3cba271a",
+        "filename": "src/heap/cppgc/persistent-node.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-18T20:13:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a76c0108_a5f4c038",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 20
+      },
+      "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "253795e8_553edc42",
@@ -98,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "037780ee_685b203d",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-18T20:13:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "253795e8_553edc42",
+      "range": {
+        "startLine": 593,
+        "startChar": 6,
+        "endLine": 593,
+        "endChar": 45
+      },
+      "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ceec3a58_ef0bcd8a",
@@ -111,6 +159,30 @@
       "writtenOn": "2021-01-18T17:09:59Z",
       "side": 1,
       "message": "nit: Duplicate",
+      "range": {
+        "startLine": 700,
+        "startChar": 78,
+        "endLine": 701,
+        "endChar": 14
+      },
+      "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac533ae_5cd9ae8f",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-18T20:13:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ceec3a58_ef0bcd8a",
       "range": {
         "startLine": 700,
         "startChar": 78,
