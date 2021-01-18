@@ -56,6 +56,24 @@
       "message": "I don\u0027t understand the separation.\n\nfield_index certainly belongs to PropertyDescriptor (actually we can remove it since it\u0027s already contained in PropertyDetails).\n\nfield_owner depends on the map but only in so far as that when determining a field\u0027s owner, we need to start with a map that has that field. So I think we can move that to PropertyDescriptor as well.\n\nis_unboxed_double_field comes from the underlying LayoutDescriptor. I\u0027m not familiar with that. We need to find out if two maps sharing the same DescriptorArray always have equal (same?) LayoutDescriptors, at least for the common properties. If yes, then this can also move to PropertyDescriptor.",
       "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6864bb1c_e278ba99",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-18T12:42:35Z",
+      "side": 1,
+      "message": "I separated it based on whether the map was used in serializing (i.e. MapData::SerializeOwnDescriptor) and when accessing those fields concurrently (e.g. MapRef::FindFieldOwner).\n\nMy intention is to move the methods that do not need to be attached to a Map into DescriptorArray. This way, we would be able to skip serialization for DescriptorArray without having to worry about doing the same with Maps.\n\nIn this vein, I don\u0027t see how {field_owner} can be moved to DescriptorArray since we would need maps in order to serialize/access it concurrently. For example, we would need to respect map\u0027s kind when doing the traversal.",
+      "parentUuid": "9226e174_5639d7e3",
+      "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
