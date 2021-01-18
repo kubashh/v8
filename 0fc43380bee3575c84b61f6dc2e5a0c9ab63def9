@@ -50,6 +50,23 @@
       "message": "@Jakob: I need LGTM for BUILD.gn Could you take a look?",
       "revId": "0fc43380bee3575c84b61f6dc2e5a0c9ab63def9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28fb0eeb_685ab42c",
+        "filename": "BUILD.gn",
+        "patchSetId": 21
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-18T06:40:54Z",
+      "side": 1,
+      "message": "nit: not necessary in this change but unsorted lists always bother me. Perhaps we could run this through `sort` at some point.",
+      "revId": "0fc43380bee3575c84b61f6dc2e5a0c9ab63def9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
