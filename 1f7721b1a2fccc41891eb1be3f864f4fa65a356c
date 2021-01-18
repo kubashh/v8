@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca55911d_226e505a",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-01-18T09:29:22Z",
+      "side": 0,
+      "message": "Here and on other architectures: GetTempsCountForTailCallFromJSFunction() might require updating given that we don\u0027t need that many registers for this case. Please check.",
+      "revId": "1f7721b1a2fccc41891eb1be3f864f4fa65a356c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
