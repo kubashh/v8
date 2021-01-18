@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "320a48f1_73df76f7",
+        "filename": "BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-01-18T13:29:16Z",
+      "side": 1,
+      "message": "The immediate impact is that it would break anyone who wasn\u0027t using GN for their builds, since they wouldn\u0027t automatically set V8_GN_HEADER and add the include directory.\n\nI plan to turn the flag on by default in a follow-up (https://chromium-review.googlesource.com/c/v8/v8/+/2610966) but wanted to be able to do turn it trivially without the prospect of merge-conflicts on reverts.\n\nAfter a short while (but before the next branch so non-GN users don\u0027t have to change twice), I could envision changing the default to be that we define V8_NO_GN_HEADER in the off-case or possibly removing the flag altogether but we need to make sure we have documentation in place to help users to the correct solution.",
+      "parentUuid": "92f4dd21_2f09d387",
+      "range": {
+        "startLine": 543,
+        "startChar": 36,
+        "endLine": 543,
+        "endChar": 52
+      },
+      "revId": "7b46651fdcf59dd2a8e5c72e9d482797de4ff86f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12afe26e_80517171",
