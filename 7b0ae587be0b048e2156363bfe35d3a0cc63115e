@@ -92,6 +92,24 @@
       "parentUuid": "6864bb1c_e278ba99",
       "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7cba8d7_53957a77",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-18T14:38:07Z",
+      "side": 1,
+      "message": "\u003e Regarding the last sentence: which kind and which traversal do you mean?\n\nWith kind I\u0027m referring to the ObjectDataKind e.g. kNeverSerialized.\nIn order to find the find owner we call Map::FindFieldOwner. That traversal through the maps can\u0027t happen concurrently (i.e the result has to be serialized) if the maps are kSerializedHeapObject, regardless of the data kind of the DescriptorArray. This would mean that both the DescriptorArray and the Map have to be the same ObjectDataKind.\n\n\u003e Storing the owner information in the map data doesn\u0027t fit the object model because the owner information applies to all maps that share this descriptor array, so we would have to copy it to all of them.\n\nThis makes sense. The reason I moved those three fields to MapData is that when we were calling those methods concurrently, we were querying the Map rather than the DescriptorArray.",
+      "parentUuid": "551543f0_d8bf5c74",
+      "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
