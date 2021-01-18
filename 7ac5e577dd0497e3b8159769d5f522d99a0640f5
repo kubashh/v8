@@ -16,6 +16,69 @@
       "message": "ptal",
       "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adeca632_de3d232d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-01-18T17:09:59Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a76c0108_a5f4c038",
+        "filename": "src/heap/cppgc/persistent-node.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-01-18T17:09:59Z",
+      "side": 1,
+      "message": "nit: Add CPPGC_DCHECK(nodes_in_use_ \u003d\u003d 0) at the end of the method.",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 20
+      },
+      "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceec3a58_ef0bcd8a",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-01-18T17:09:59Z",
+      "side": 1,
+      "message": "nit: Duplicate",
+      "range": {
+        "startLine": 700,
+        "startChar": 78,
+        "endLine": 701,
+        "endChar": 14
+      },
+      "revId": "7ac5e577dd0497e3b8159769d5f522d99a0640f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
