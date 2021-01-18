@@ -52,6 +52,24 @@
       "parentUuid": "caa20a6c_767a9dc3",
       "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19473b96_0a8e3698",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-18T21:17:14Z",
+      "side": 1,
+      "message": "Sorry, I didn\u0027t have more time to look into this today.\nWill check tomorrow with a colleague.\n\nCould you try modify the DEPS files and see whether you get around the issues by loosening the include restrictions a bit?",
+      "parentUuid": "9e9392af_79ff10d6",
+      "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

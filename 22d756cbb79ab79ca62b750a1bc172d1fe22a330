@@ -178,6 +178,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2689ff60_b643c775",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-01-18T21:17:14Z",
+      "side": 1,
+      "message": "Nice, it be very nice to just do\n\n const int kSourceLoadId \u003d 41;\n const int kMethodLoadId \u003d 9;\n\noptionally with a quick comment.",
+      "parentUuid": "15f7a585_9b6ad5a6",
+      "range": {
+        "startLine": 81,
+        "startChar": 20,
+        "endLine": 81,
+        "endChar": 22
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aec3bdbf_35db1bb0",
         "filename": "src/libplatform/tracing/recorder-win.cc",
         "patchSetId": 2
