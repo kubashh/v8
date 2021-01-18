@@ -549,6 +549,7 @@
   'test-run-unwinding-info/*': [SKIP],
   'test-run-variables/*': [SKIP],
   'test-serialize/*': [SKIP],
+  'test-swiss-hash-table-csa/*': [SKIP],
   'test-torque/*': [SKIP],
   'test-unwinder-code-pages/PCIsInV8_LargeCodeObject_CodePagesAPI': [SKIP],
 

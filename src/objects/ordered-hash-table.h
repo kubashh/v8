@@ -196,8 +196,10 @@ class OrderedHashTable : public FixedArray {
   // optimize that case.
   static const int kClearedTableSentinel = -1;
   static constexpr int MaxCapacity() {
-    return (FixedArray::kMaxLength - HashTableStartIndex()) /
-           (1 + (kEntrySize * kLoadFactor));
+    constexpr int result = (FixedArray::kMaxLength - HashTableStartIndex()) /
+                           (1 + (kEntrySize * kLoadFactor));
+    static_assert(result <= std::numeric_limits<int>::max(), "");
+    return result;
   }
 
  protected:

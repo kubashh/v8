@@ -470,6 +470,7 @@ bool Heap::CreateInitialMaps() {
     ALLOCATE_VARSIZE_MAP(ORDERED_HASH_SET_TYPE, ordered_hash_set)
     ALLOCATE_VARSIZE_MAP(ORDERED_NAME_DICTIONARY_TYPE, ordered_name_dictionary)
     ALLOCATE_VARSIZE_MAP(NAME_DICTIONARY_TYPE, name_dictionary)
+    ALLOCATE_VARSIZE_MAP(SWISS_NAME_DICTIONARY_TYPE, swiss_name_dictionary)
     ALLOCATE_VARSIZE_MAP(GLOBAL_DICTIONARY_TYPE, global_dictionary)
     ALLOCATE_VARSIZE_MAP(NUMBER_DICTIONARY_TYPE, number_dictionary)
     ALLOCATE_VARSIZE_MAP(SIMPLE_NUMBER_DICTIONARY_TYPE,
@@ -904,6 +905,11 @@ void Heap::CreateInitialObjects() {
       OrderedNameDictionary::AllocateEmpty(isolate(), AllocationType::kReadOnly)
           .ToHandleChecked();
   set_empty_ordered_property_dictionary(*empty_ordered_property_dictionary);
+
+  // Allocate the empty SwissNameDictionary
+  Handle<SwissNameDictionary> empty_swiss_property_dictionary =
+      factory->CreateEmptyCanonicalSwissNameDictionary();
+  set_empty_swiss_property_dictionary(*empty_swiss_property_dictionary);
 
   // Allocate the empty FeedbackMetadata.
   Handle<FeedbackMetadata> empty_feedback_metadata =

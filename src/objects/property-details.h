@@ -6,9 +6,10 @@
 #define V8_OBJECTS_PROPERTY_DETAILS_H_
 
 #include "include/v8.h"
-#include "src/utils/allocation.h"
 #include "src/base/bit-field.h"
+#include "src/base/logging.h"
 #include "src/flags/flags.h"
+#include "src/utils/allocation.h"
 
 namespace v8 {
 namespace internal {
@@ -210,11 +211,11 @@ static const int kInvalidEnumCacheSentinel =
 // A PropertyCell's property details contains a cell type that is meaningful if
 // the cell is still valid (does not hold the hole).
 enum class PropertyCellType {
+  kMutable,       // Cell will no longer be tracked as constant.
   kUndefined,     // The PREMONOMORPHIC of property cells.
   kConstant,      // Cell has been assigned only once.
   kConstantType,  // Cell has been assigned only one type.
-  kMutable,       // Cell will no longer be tracked as constant.
-  // Arbitrary choice for dictionaries not holding cells.
+  // Value for dictionaries not holding cells, must have value 0
   kNoCell = kMutable,
 };
 
@@ -227,8 +228,7 @@ class PropertyDetails {
   // Property details for dictionary mode properties/elements.
   PropertyDetails(PropertyKind kind, PropertyAttributes attributes,
                   PropertyCellType cell_type, int dictionary_index = 0) {
-    value_ = KindField::encode(kind) | LocationField::encode(kField) |
-             AttributesField::encode(attributes) |
+    value_ = KindField::encode(kind) | AttributesField::encode(attributes) |
              DictionaryStorageField::encode(dictionary_index) |
              PropertyCellTypeField::encode(cell_type);
   }
@@ -328,6 +328,8 @@ class PropertyDetails {
     return PropertyCellTypeField::decode(value_);
   }
 
+  bool operator==(const PropertyDetails& b) const { return value_ == b.value_; }
+
   // Bit fields in value_ (type, shift, size). Must be public so the
   // constants can be embedded in generated code.
   using KindField = base::BitField<PropertyKind, 0, 1>;
@@ -342,8 +344,9 @@ class PropertyDetails {
       (DONT_ENUM << AttributesField::kShift);
 
   // Bit fields for normalized objects.
-  using PropertyCellTypeField = AttributesField::Next<PropertyCellType, 2>;
-  using DictionaryStorageField = PropertyCellTypeField::Next<uint32_t, 23>;
+  using DictionaryStorageField = AttributesField::Next<uint32_t, 23>;
+  using PropertyCellTypeField =
+      DictionaryStorageField::Next<PropertyCellType, 2>;
 
   // Bit fields for fast objects.
   using RepresentationField = AttributesField::Next<uint32_t, 3>;
@@ -353,8 +356,22 @@ class PropertyDetails {
       DescriptorPointer::Next<uint32_t, kDescriptorIndexBitCount>;
 
   // All bits for both fast and slow objects must fit in a smi.
-  STATIC_ASSERT(DictionaryStorageField::kLastUsedBit < 31);
+  STATIC_ASSERT(PropertyCellTypeField::kLastUsedBit < 31);
   STATIC_ASSERT(FieldIndexField::kLastUsedBit < 31);
+
+  // All bits for non-global dictionary mode objects except enumeration index
+  // must fit in a byte.
+  STATIC_ASSERT(KindField::kLastUsedBit < 8);
+  STATIC_ASSERT(ConstnessField::kLastUsedBit < 8);
+  STATIC_ASSERT(AttributesField::kLastUsedBit < 8);
+  STATIC_ASSERT(LocationField::kLastUsedBit < 8);
+
+  // The enumeration index must be what's following, pushing the dictionary
+  // property bits above a byte:
+  STATIC_ASSERT(KindField::kSize + LocationField::kSize +
+                    ConstnessField::kSize + AttributesField::kSize +
+                    DictionaryStorageField::kSize - 1 ==
+                DictionaryStorageField::kLastUsedBit);
 
   static const int kInitialIndex = 1;
 
@@ -376,6 +393,32 @@ class PropertyDetails {
   void PrintAsSlowTo(std::ostream& out, bool print_dict_index);
   void PrintAsFastTo(std::ostream& out, PrintMode mode = kPrintFull);
 
+  // Encodes those property details for non-global dictionary properties
+  // without an enumeration index as a single byte.
+  uint8_t ToByte() {
+    // We only care about KindField, LocationField, ConstnessField, and
+    // AttributesField. We've statically asserted earlier that those fit into a
+    // byte and if the enumeration index is 0, then the remaining bits to fill
+    // the byte are all 0.
+
+    // Only to be used when the enum index isn't actually maintained
+    // by the PropertyDetails:
+    DCHECK_EQ(0, dictionary_index());
+
+    return value_;
+  }
+
+  // Only to be used for bytes obtain by ToByte. In particular, only used for
+  // non-global dictionary properties.
+  static PropertyDetails FromByte(uint8_t encoded_details) {
+    STATIC_ASSERT(static_cast<int>(PropertyCellType::kNoCell) == 0);
+    // The 0-extension the 32bit sets PropertyCellType to kNoCell and
+    // enumeration index to 0. Everything else is obtained from
+    // |encoded_details|.
+
+    return PropertyDetails(encoded_details);
+  }
+
  private:
   PropertyDetails(int value, int pointer) {
     value_ = DescriptorPointer::update(value, pointer);
@@ -390,6 +433,8 @@ class PropertyDetails {
   PropertyDetails(int value, PropertyAttributes attributes) {
     value_ = AttributesField::update(value, attributes);
   }
+
+  explicit PropertyDetails(uint32_t value) : value_{value} {}
 
   uint32_t value_;
 };

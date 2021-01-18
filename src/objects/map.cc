@@ -236,6 +236,9 @@ VisitorId Map::GetVisitorId(Map map) {
     case SMALL_ORDERED_NAME_DICTIONARY_TYPE:
       return kVisitSmallOrderedNameDictionary;
 
+    case SWISS_NAME_DICTIONARY_TYPE:
+      return kVisitSwissNameDictionary;
+
     case CODE_DATA_CONTAINER_TYPE:
       return kVisitCodeDataContainer;
 

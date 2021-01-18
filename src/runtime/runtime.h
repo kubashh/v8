@@ -342,7 +342,12 @@ namespace internal {
   F(ToNumeric, 1, 1)                                            \
   I(ToObject, 1, 1)                                             \
   I(ToString, 1, 1)                                             \
-  F(TryMigrateInstance, 1, 1)
+  F(TryMigrateInstance, 1, 1)                                   \
+  F(SwissTableAdd, 4, 1)                                        \
+  F(SwissTableUpdate, 4, 1)                                     \
+  F(SwissTableFindEntry, 2, 1)                                  \
+  F(SwissTableDelete, 2, 1)                                     \
+  F(SwissTableEquals, 2, 1)
 
 #define FOR_EACH_INTRINSIC_OPERATORS(F, I) \
   F(Add, 2, 1)                             \

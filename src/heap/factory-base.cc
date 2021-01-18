@@ -22,6 +22,7 @@
 #include "src/objects/source-text-module.h"
 #include "src/objects/string-inl.h"
 #include "src/objects/string.h"
+#include "src/objects/swiss-hash-table-inl.h"
 #include "src/objects/template-objects-inl.h"
 
 namespace v8 {
@@ -829,6 +830,46 @@ template <typename Impl>
 HeapObject FactoryBase<Impl>::AllocateRaw(int size, AllocationType allocation,
                                           AllocationAlignment alignment) {
   return impl()->AllocateRaw(size, allocation, alignment);
+}
+
+template <typename Impl>
+Handle<SwissNameDictionary>
+FactoryBase<Impl>::NewSwissNameDictionaryWithCapacity(
+    int capacity, AllocationType allocation) {
+  DCHECK(SwissNameDictionary::IsValidCapacity(capacity));
+  ReadOnlyRoots roots(isolate());
+
+  if (capacity == 0) {
+    DCHECK_NE(roots.at(RootIndex::kEmptySwissPropertyDictionary), kNullAddress);
+
+    return handle(roots.empty_swiss_property_dictionary(), isolate());
+  }
+
+  if (capacity > SwissNameDictionary::MaxCapacity()) {
+    // FIXME do something better here.
+    CHECK(false);
+  }
+
+  int meta_table_length = SwissNameDictionary::MetaTableSizeFor(capacity);
+  Handle<ByteArray> meta_table =
+      isolate()->factory()->NewByteArray(meta_table_length, allocation);
+
+  Map map = roots.swiss_name_dictionary_map();
+  int size = SwissNameDictionary::SizeFor(capacity);
+  HeapObject result = AllocateRawWithImmortalMap(size, allocation, map);
+  Handle<SwissNameDictionary> table(SwissNameDictionary::cast(result),
+                                    isolate());
+  table->Initialize(isolate(), *meta_table, capacity);
+  return table;
+}
+
+template <typename Impl>
+Handle<SwissNameDictionary> FactoryBase<Impl>::NewSwissNameDictionary(
+    int at_least_space_for, AllocationType allocation) {
+  ReadOnlyRoots roots(isolate());
+
+  return NewSwissNameDictionaryWithCapacity(
+      SwissNameDictionary::CapacityFor(at_least_space_for), allocation);
 }
 
 // Instantiate FactoryBase for the two variants we want.
