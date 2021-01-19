@@ -51,6 +51,52 @@
       "parentUuid": "51e5ee1f_aff7a66a",
       "revId": "b7a2556193d8b766d435548b52dc6ed4d4dc708c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28aeb0f4_0d5a58dd",
+        "filename": "tools/mb/mb.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-01-19T12:41:01Z",
+      "side": 1,
+      "message": "My guess is that we don\u0027t use this in V8 (yet?). In the infrastructure we only use the MB gen command.",
+      "range": {
+        "startLine": 355,
+        "startChar": 6,
+        "endLine": 355,
+        "endChar": 23
+      },
+      "revId": "b7a2556193d8b766d435548b52dc6ed4d4dc708c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceb6b8ef_064f5cb9",
+        "filename": "tools/mb/mb.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-01-19T12:41:01Z",
+      "side": 1,
+      "message": "Note the internal trybots would need to use chrome-swarming. We need to add a switch somehow to make those work, too. Could you add a TODO?",
+      "range": {
+        "startLine": 362,
+        "startChar": 19,
+        "endLine": 362,
+        "endChar": 35
+      },
+      "revId": "b7a2556193d8b766d435548b52dc6ed4d4dc708c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
