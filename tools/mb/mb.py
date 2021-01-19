@@ -359,6 +359,7 @@ class MetaBuildWrapper(object):
     # swarming parameters, if possible.
     #
     # TODO(dpranke): Also, add support for sharding and merging results.
+    cas_instance = 'chromium-swarm'
     dimensions = []
     for k, v in self._DefaultDimensions() + self.args.dimensions:
       dimensions += ['-d', k, v]
@@ -371,9 +372,7 @@ class MetaBuildWrapper(object):
         'archive',
         '-i',
         self.ToSrcRelPath('%s/%s.isolate' % (build_dir, target)),
-        '-s',
-        self.ToSrcRelPath('%s/%s.isolated' % (build_dir, target)),
-        '-I', 'isolateserver.appspot.com',
+        '-cas-instance', cas_instance,
         '-dump-json',
         archive_json_path,
       ]
@@ -388,7 +387,7 @@ class MetaBuildWrapper(object):
           'Failed to read JSON file "%s"' % archive_json_path, file=sys.stderr)
       return 1
     try:
-      isolated_hash = archive_hashes[target]
+      cas_digest = archive_hashes[target]
     except Exception:
       self.Print(
           'Cannot find hash for "%s" in "%s", file content: %s' %
@@ -400,8 +399,7 @@ class MetaBuildWrapper(object):
         self.executable,
         self.PathJoin('tools', 'swarming_client', 'swarming.py'),
           'run',
-          '-s', isolated_hash,
-          '-I', 'isolateserver.appspot.com',
+          '-digests', cas_digest,
           '-S', 'chromium-swarm.appspot.com',
       ] + dimensions
     if self.args.extra_args:
