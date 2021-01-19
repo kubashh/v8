@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03ea26ba_2a3e5a2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-01-19T12:57:00Z",
+      "side": 1,
+      "message": "Hold on, I just realised that COMPUTED vs CONSTANT is the value, not the key",
+      "revId": "8bdcb6ea43d426e37755dc27ca5aa8b74a64a491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
