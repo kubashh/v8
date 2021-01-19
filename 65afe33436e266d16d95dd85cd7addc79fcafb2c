@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48ca314b_70a1aee1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-01-19T18:54:23Z",
+      "side": 1,
+      "message": "Hello, could you please take a look? This change is one of several follow-ups I mentioned in https://chromium-review.googlesource.com/c/v8/v8/+/2357758 . That predecessor change isn\u0027t yet landed, but it\u0027s only waiting on one OWNER review for a small portion so I don\u0027t expect any major merge conflicts with this change. Even so, it\u0027s fine if you\u0027d prefer to hold off reviewing until the predecessor has landed.\n\nNico: src/torque\nJakob: everything else",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
