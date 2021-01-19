@@ -16,6 +16,52 @@
       "message": "ptal at this small fix :)",
       "revId": "7b4d06f006c1757f8310b2089e54df4da5c3a69d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "523148e6_5944042f",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2857,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-01-19T08:00:33Z",
+      "side": 1,
+      "message": "Should we do this conditionally only if the property indeed has a computed name? To avoid unnecessary Pop/PushContext for constant names in the dynamic part of the object literal, e.g. in smth like `{a:0, [b]() { super() }, c(){ super() }}`",
+      "range": {
+        "startLine": 2855,
+        "startChar": 8,
+        "endLine": 2857,
+        "endChar": 57
+      },
+      "revId": "7b4d06f006c1757f8310b2089e54df4da5c3a69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d1da5e2_ab32bf33",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-01-19T08:00:33Z",
+      "side": 1,
+      "message": "also here?",
+      "range": {
+        "startLine": 2898,
+        "startChar": 8,
+        "endLine": 2898,
+        "endChar": 48
+      },
+      "revId": "7b4d06f006c1757f8310b2089e54df4da5c3a69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
