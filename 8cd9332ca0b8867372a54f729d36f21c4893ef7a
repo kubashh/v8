@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a02002c_b621c87b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-19T06:35:03Z",
+      "side": 1,
+      "message": "Hi Jakob, I think it would be good to follow-up with a test for Construct operations (new ...) as well.",
+      "revId": "8cd9332ca0b8867372a54f729d36f21c4893ef7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
