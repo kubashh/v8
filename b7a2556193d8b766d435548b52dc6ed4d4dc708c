@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2b06a14_9952214d",
+        "filename": "tools/mb/mb.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-01-19T16:17:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "28aeb0f4_0d5a58dd",
+      "range": {
+        "startLine": 355,
+        "startChar": 6,
+        "endLine": 355,
+        "endChar": 23
+      },
+      "revId": "b7a2556193d8b766d435548b52dc6ed4d4dc708c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ceb6b8ef_064f5cb9",
@@ -89,6 +113,30 @@
       "writtenOn": "2021-01-19T12:41:01Z",
       "side": 1,
       "message": "Note the internal trybots would need to use chrome-swarming. We need to add a switch somehow to make those work, too. Could you add a TODO?",
+      "range": {
+        "startLine": 362,
+        "startChar": 19,
+        "endLine": 362,
+        "endChar": 35
+      },
+      "revId": "b7a2556193d8b766d435548b52dc6ed4d4dc708c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1d86664_9db37be9",
+        "filename": "tools/mb/mb.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-01-19T16:17:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ceb6b8ef_064f5cb9",
       "range": {
         "startLine": 362,
         "startChar": 19,
