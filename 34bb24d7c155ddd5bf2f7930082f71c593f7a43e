@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9a56323_4f40da3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1398886
+      },
+      "writtenOn": "2021-01-19T15:53:46Z",
+      "side": 1,
+      "message": "Same cherry pick as https://chromium-review.googlesource.com/c/v8/v8/+/2624749 :facepalm: Abandoning now. ",
+      "revId": "34bb24d7c155ddd5bf2f7930082f71c593f7a43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
