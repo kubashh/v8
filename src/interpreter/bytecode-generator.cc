@@ -2852,6 +2852,10 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
       case ObjectLiteral::Property::CONSTANT:
       case ObjectLiteral::Property::COMPUTED:
       case ObjectLiteral::Property::MATERIALIZED_LITERAL: {
+        // Computed property keys don't belong to the object literal scope (even
+        // if they're syntactically inside it).
+        object_literal_context_scope.SetEnteredIf(false);
+
         Register key = register_allocator()->NewRegister();
         BuildLoadPropertyKey(property, key);
 
