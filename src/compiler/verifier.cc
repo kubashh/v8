@@ -551,13 +551,15 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
         const FrameStateInfo& state_info = FrameStateInfoOf(node->op());
         const FrameStateFunctionInfo* func_info = state_info.function_info();
         CHECK_EQ(func_info->parameter_count(),
-                 StateValuesAccess(node->InputAt(kFrameStateParametersInput))
+                 StateValuesAccess(
+                     node->InputAt(FrameState::kFrameStateParametersInput))
                      .size());
         CHECK_EQ(
             func_info->local_count(),
-            StateValuesAccess(node->InputAt(kFrameStateLocalsInput)).size());
+            StateValuesAccess(node->InputAt(FrameState::kFrameStateLocalsInput))
+                .size());
 
-        Node* accumulator = node->InputAt(kFrameStateStackInput);
+        Node* accumulator = node->InputAt(FrameState::kFrameStateStackInput);
         if (func_info->type() == FrameStateType::kInterpretedFunction) {
           // The accumulator (InputAt(2)) cannot be kStateValues.
           // It can be kTypedStateValues (to signal the type) and it can have
