@@ -3879,18 +3879,22 @@ Reduction JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpread(
   Node* const parameters = frame_state->InputAt(kFrameStateParametersInput);
   StateValuesAccess parameters_access(parameters);
   auto parameters_it = ++parameters_access.begin();  // Skip the receiver.
-  for (int i = 0; i < start_index; i++) {
-    // A non-zero start_index implies that there are rest arguments. Skip them.
-    ++parameters_it;
-  }
-  int argument_count = FrameStateInfoOf(frame_state->op()).parameter_count() -
-                       1;  // Minus receiver.
-  for (int i = start_index; i < argument_count; ++i, ++parameters_it) {
-    Node* parameter_node = parameters_it.node();
-    DCHECK_NOT_NULL(parameter_node);
-    node->InsertInput(graph()->zone(),
-                      JSCallOrConstructNode::ArgumentIndex(argc++),
-                      parameter_node);
+  const int argument_count =
+      FrameStateInfoOf(frame_state->op()).parameter_count() -
+      1;  // Minus receiver.
+  if (start_index < argument_count) {
+    for (int i = 0; i < start_index; i++) {
+      // A non-zero start_index implies that there are rest arguments. Skip
+      // them.
+      ++parameters_it;
+    }
+    for (int i = start_index; i < argument_count; ++i, ++parameters_it) {
+      Node* parameter_node = parameters_it.node();
+      DCHECK_NOT_NULL(parameter_node);
+      node->InsertInput(graph()->zone(),
+                        JSCallOrConstructNode::ArgumentIndex(argc++),
+                        parameter_node);
+    }
   }
   // TODO(jgruber): Currently, each use-site does the awkward dance above,
   // iterating based on the FrameStateInfo's parameter count minus one, and
