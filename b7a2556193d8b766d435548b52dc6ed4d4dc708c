@@ -16,6 +16,41 @@
       "message": "PTAL\nDoes node-ci failure seem related to you?\nThanks!",
       "revId": "b7a2556193d8b766d435548b52dc6ed4d4dc708c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49b1e20d_e61895a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-01-19T10:50:33Z",
+      "side": 1,
+      "message": "\u003e Patch Set 2:\n\u003e \n\u003e (1 comment)\n\u003e \n\u003e This change is ready for review.\n\n",
+      "revId": "b7a2556193d8b766d435548b52dc6ed4d4dc708c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62c1567a_f1828ad3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-01-19T10:50:33Z",
+      "side": 1,
+      "message": "Nevermind the failure - gone.",
+      "parentUuid": "51e5ee1f_aff7a66a",
+      "revId": "b7a2556193d8b766d435548b52dc6ed4d4dc708c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
