@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ee64607_b9c444b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-01-19T12:20:31Z",
+      "side": 1,
+      "message": "will incorporate these fixes in the reland",
+      "revId": "7b4d06f006c1757f8310b2089e54df4da5c3a69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "523148e6_5944042f",
@@ -41,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef79f1af_bbb80342",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2857,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-01-19T12:20:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "523148e6_5944042f",
+      "range": {
+        "startLine": 2855,
+        "startChar": 8,
+        "endLine": 2857,
+        "endChar": 57
+      },
+      "revId": "7b4d06f006c1757f8310b2089e54df4da5c3a69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d1da5e2_ab32bf33",
@@ -54,6 +95,30 @@
       "writtenOn": "2021-01-19T08:00:33Z",
       "side": 1,
       "message": "also here?",
+      "range": {
+        "startLine": 2898,
+        "startChar": 8,
+        "endLine": 2898,
+        "endChar": 48
+      },
+      "revId": "7b4d06f006c1757f8310b2089e54df4da5c3a69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd828ff_52a55aeb",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-01-19T12:20:31Z",
+      "side": 1,
+      "message": "Yes, thanks for catching that! (Added a failing test too.)",
+      "parentUuid": "7d1da5e2_ab32bf33",
       "range": {
         "startLine": 2898,
         "startChar": 8,
