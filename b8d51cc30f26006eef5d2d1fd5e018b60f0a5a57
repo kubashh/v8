@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2af13567_12b002d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-19T06:23:55Z",
+      "side": 1,
+      "message": "TBRing but happy to address comments afterwards.",
+      "revId": "b8d51cc30f26006eef5d2d1fd5e018b60f0a5a57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
