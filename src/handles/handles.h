@@ -32,6 +32,7 @@ class RootVisitor;
 class SmallOrderedHashMap;
 class SmallOrderedHashSet;
 class SmallOrderedNameDictionary;
+class SwissOrderedNameDictionary;
 class WasmExportedFunctionData;
 
 // ----------------------------------------------------------------------------

@@ -1691,6 +1691,8 @@ enum class StubCallMode {
 constexpr int kFunctionLiteralIdInvalid = -1;
 constexpr int kFunctionLiteralIdTopLevel = 0;
 
+constexpr int kSwissNameDictionaryInitialCapacity = 4;
+
 constexpr int kSmallOrderedHashSetMinCapacity = 4;
 constexpr int kSmallOrderedHashMapMinCapacity = 4;
 
