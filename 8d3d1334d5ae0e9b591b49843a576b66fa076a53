@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c3d9dca_5a07c059",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-20T18:34:37Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "8d3d1334d5ae0e9b591b49843a576b66fa076a53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acbee037_73da6fd1",
+        "filename": "test/unittests/heap/unified-heap-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-20T18:34:37Z",
+      "side": 1,
+      "message": "fyi: This is the snippet Blink has to put here in one way or another (probably wrapped in some Blink write barrier call): https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/platform/bindings/v8_dom_wrapper.h;l\u003d119;drc\u003d753ccbc44ac217736f1713011908fd4ee15b643a?q\u003dSetNativeInfo\u0026ss\u003dchromium",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 21
+      },
+      "revId": "8d3d1334d5ae0e9b591b49843a576b66fa076a53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
