@@ -50,6 +50,12 @@ void JSHeapConsistency::DijkstraMarkingBarrierSlow(
   static_cast<JSVisitor*>(&heap_base.marker()->Visitor())->Trace(ref);
 }
 
+void JSHeapConsistency::CheckWrapper(v8::Local<v8::Object>& wrapper,
+                                     int wrapper_index, void* wrappable_base) {
+  CHECK_EQ(wrappable_base,
+           wrapper->GetAlignedPointerFromInternalField(wrapper_index));
+}
+
 namespace internal {
 
 namespace {
