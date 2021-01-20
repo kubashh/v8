@@ -19,8 +19,8 @@ namespace compiler {
 
 // Guard equality of these constants. Ideally they should be merged at
 // some point.
-STATIC_ASSERT(kFrameStateOuterStateInput ==
-              FrameState::kFrameStateOuterStateInput);
+STATIC_ASSERT(FrameState::kFrameStateOuterStateInput ==
+              FrameState::FrameState::kFrameStateOuterStateInput);
 
 size_t hash_value(OutputFrameStateCombine const& sc) {
   return base::hash_value(sc.parameter_);
