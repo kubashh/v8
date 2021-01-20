@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abe562aa_7cdf48cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-20T22:26:52Z",
+      "side": 1,
+      "message": "This CL adds the interesting uses on the Blink side: https://crrev.com/c/2640618",
+      "revId": "96fe22b924511cfa14e0d6a41e13ab8e60b86c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
