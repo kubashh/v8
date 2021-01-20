@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11a8997c_4dbaee2a",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-20T19:20:47Z",
+      "side": 1,
+      "message": "Resolving since it got deleted.",
+      "parentUuid": "f4ed1470_cd13e115",
+      "range": {
+        "startLine": 985,
+        "startChar": 7,
+        "endLine": 985,
+        "endChar": 37
+      },
+      "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9226e174_5639d7e3",
@@ -108,6 +132,24 @@
       "side": 1,
       "message": "\u003e Regarding the last sentence: which kind and which traversal do you mean?\n\nWith kind I\u0027m referring to the ObjectDataKind e.g. kNeverSerialized.\nIn order to find the find owner we call Map::FindFieldOwner. That traversal through the maps can\u0027t happen concurrently (i.e the result has to be serialized) if the maps are kSerializedHeapObject, regardless of the data kind of the DescriptorArray. This would mean that both the DescriptorArray and the Map have to be the same ObjectDataKind.\n\n\u003e Storing the owner information in the map data doesn\u0027t fit the object model because the owner information applies to all maps that share this descriptor array, so we would have to copy it to all of them.\n\nThis makes sense. The reason I moved those three fields to MapData is that when we were calling those methods concurrently, we were querying the Map rather than the DescriptorArray.",
       "parentUuid": "551543f0_d8bf5c74",
+      "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "629478cd_7cc145c9",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-20T19:20:47Z",
+      "side": 1,
+      "message": "Moved those fields to DescriptorArray.",
+      "parentUuid": "e7cba8d7_53957a77",
       "revId": "7b0ae587be0b048e2156363bfe35d3a0cc63115e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
