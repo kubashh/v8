@@ -79,6 +79,7 @@ enum class OddballType : uint8_t {
   V(ArrayBoilerplateDescription)                    \
   V(CallHandlerInfo)                                \
   V(Cell)                                           \
+  V(DescriptorArray)                                \
   V(SharedFunctionInfo)                             \
   V(TemplateObjectDescription)
 
@@ -122,7 +123,6 @@ enum class OddballType : uint8_t {
   /* Subtypes of HeapObject */                \
   V(AllocationSite)                           \
   V(Code)                                     \
-  V(DescriptorArray)                          \
   V(FeedbackCell)                             \
   V(FeedbackVector)                           \
   V(FixedArrayBase)                           \
@@ -543,6 +543,12 @@ class DescriptorArrayRef : public HeapObjectRef {
   DEFINE_REF_CONSTRUCTOR(DescriptorArray, HeapObjectRef)
 
   Handle<DescriptorArray> object() const;
+
+  PropertyDetails GetPropertyDetails(InternalIndex descriptor_index) const;
+  NameRef GetPropertyKey(InternalIndex descriptor_index) const;
+  ObjectRef GetFieldType(InternalIndex descriptor_index) const;
+  base::Optional<ObjectRef> GetStrongValue(
+      InternalIndex descriptor_index) const;
 };
 
 class FeedbackCellRef : public HeapObjectRef {
@@ -687,6 +693,8 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
   bool IsUnboxedDoubleField(InternalIndex descriptor_index) const;
   base::Optional<ObjectRef> GetStrongValue(
       InternalIndex descriptor_number) const;
+
+  DescriptorArrayRef descriptor_array() const;
 
   void SerializeRootMap();
   base::Optional<MapRef> FindRootMap() const;
