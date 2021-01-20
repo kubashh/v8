@@ -62,6 +62,30 @@
       },
       "revId": "43759115d4f4b40bc5960d36659527fda573dbf8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9085231c_4f3accb6",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-01-20T10:49:05Z",
+      "side": 1,
+      "message": "If the receiver is passed twice, yes we would add it twice. But that is an error on the call-site then, and from having a quick look at the callers of this function, it doesn\u0027t seem to be the case.",
+      "parentUuid": "3f8da83a_f3d5d84b",
+      "range": {
+        "startLine": 1148,
+        "startChar": 32,
+        "endLine": 1148,
+        "endChar": 40
+      },
+      "revId": "43759115d4f4b40bc5960d36659527fda573dbf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
