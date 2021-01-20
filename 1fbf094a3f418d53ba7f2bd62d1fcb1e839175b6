@@ -16,6 +16,23 @@
       "message": "ptal, 2nd and last in the series.",
       "revId": "1fbf094a3f418d53ba7f2bd62d1fcb1e839175b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc76db31_e111b71a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-20T14:00:33Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "1fbf094a3f418d53ba7f2bd62d1fcb1e839175b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
