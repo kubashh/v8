@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36760a27_bbd56bcc",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-01-20T14:15:44Z",
+      "side": 1,
+      "message": "Great feedback, thanks! First, a few specific replies:\n\n- `auto` on getters: do you think it would be sufficient to spell out the generated struct name? Instead of `auto`, `TqRuntimeStructCoverageInfoSlot` for example.\n- setter field names: my first implementation of this used designated initializers (a C++ 20 feature, but supported with our Clang build options and allowed by the Google style guide). I really like designated initializers for exactly the reasons you listed, but alas, that implementation failed on the MSVC and GCC build bots. I considered adding a macro V8_DI(field_name, field_value) which would expand to designated-initializer syntax `.field_name \u003d field_value` when building with Clang and to just `field_value` on other build targets. Do you think that would help? I was concerned that such a change might further decrease readability unless it was used commonly elsewhere. (For the record, I would be in full support of a lint rule requiring designated initializers for all aggregate initializations throughout V8.) Dreams of designated initializers aside, perhaps we could mitigate this problem by setting each field, like:\n\n  TqRuntimeOptionalStructCoverageInfoSlot coverage_info;\n  coverage_info.start_source_position \u003d from_pos;\n  coverage_info.end_source_position \u003d to_pos;\n  coverage_info.block_count \u003d 0;\n  coverage_info.padding \u003d 0;\n  set_slots(slot_index, coverage_info);\n\n- non-obvious Optional-based setters with `{}`: good point, this is pretty unclear. Maybe it would help to define a constant named something like `TorqueStructs::kNoChange` that is set to base::Optional\u0027s equivalent of std::nullopt.\n\nSo far, everything I\u0027ve written here is about small details of how to use these accessors. But it sounds like we should take a step back to consider what I\u0027m hoping to accomplish, whether we find it valuable, and whether there are other alternatives that could provide similar benefits with fewer problems.\n\nMy goals:\n\n- I\u0027d like compilation to fail if any field is used in C++ runtime code in a way that is inconsistent with its Torque definition. Using Torque-generated offsets gets us partway there, but I\u0027d also like a compile-time guarantee that the types match.\n- I\u0027d like more consistency in what we can expect Torque to generate. Currently it generates accessors for most class fields; I\u0027d prefer for it to include all class fields.\n\nAre those goals worthwhile? I don\u0027t know. Some valid counterarguments:\n\n- V8 has a very robust test suite, which means it\u0027s fine for some classes of bugs to be invisible to the compiler. DCHECKs on casts and Torque-generated heap verifiers mean that most type mismatches would get caught during testing.\n- \"Torque generates accessors for all class fields\" sounds nice and consistent, but if struct-typed fields (which are a very small minority) have a new set of arcane rules to learn, then the overall consistency is harmed rather than improved.\n\nAlternate idea:\n\nInstead of Torque generating accessors, maybe it could just generate a list of `using` statements that give descriptive names for each type used within a struct field. Then the C++ side could implement the field accessors and include sufficient static assertions that the types match.\n\nDo you have recommendations? My preference is still for generating accessors so we don\u0027t have to spend cognitive effort on checking whether all of the appropriate static assertions exist and are up-to-date, but I recognize that my idea of the level of cognitive effort may be distorted because I\u0027m familiar with the Torque compiler and the code it produces. A valid decision is just to not do any of this.",
+      "parentUuid": "5cb1e1b0_a67f9da1",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "769b077f_c0ce21b2",
         "filename": "src/objects/scope-info.cc",
         "patchSetId": 4
@@ -65,6 +83,24 @@
       "writtenOn": "2021-01-20T07:06:46Z",
       "side": 1,
       "message": "Another remark is how access to a struct field now always requires copying the entire struct contents. Probably not a big deal, at least currently.",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b4d1161_694aa246",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-01-20T14:15:44Z",
+      "side": 1,
+      "message": "Accessors are generally inlined, so I was assuming the C++ compiler would make the extra loads go away. I tried to think of other options but liked them less:\n\n- Out-params are not particularly ergonomic\n- Returning references to on-heap data would be fraught with lifetime problems\n- Separate getters for each struct field would work, but I\u0027d like relatively symmetric getters and setters, and I was concerned about the performance implications of separate setters for each struct field in cases where the containing class field\u0027s offset is not compile-time known. In that case, each setter would have to load some data from the heap, use that data to compute the offset to store at, and then store the field. It\u0027s often not easy for the compiler to prove that the store doesn\u0027t affect the parts of the object that we used when computing the offset, so setting each part of a struct separately would end up causing repetitive work.",
+      "parentUuid": "769b077f_c0ce21b2",
       "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
