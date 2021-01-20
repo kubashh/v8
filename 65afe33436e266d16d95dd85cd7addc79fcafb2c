@@ -16,6 +16,57 @@
       "message": "Hello, could you please take a look? This change is one of several follow-ups I mentioned in https://chromium-review.googlesource.com/c/v8/v8/+/2357758 . That predecessor change isn\u0027t yet landed, but it\u0027s only waiting on one OWNER review for a small portion so I don\u0027t expect any major merge conflicts with this change. Even so, it\u0027s fine if you\u0027d prefer to hold off reviewing until the predecessor has landed.\n\nNico: src/torque\nJakob: everything else",
       "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "409274e7_93d9f0cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-20T07:06:46Z",
+      "side": 1,
+      "message": "A lgtm regarding code changes, with some general comments. Also adding ishell for a runtime/ perspective on object-layout defs.",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cb1e1b0_a67f9da1",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-20T07:06:46Z",
+      "side": 1,
+      "message": "I\u0027m slightly concerned about how implicit much about these uses is:\n\n- The torque-generated struct is always used as \u0027auto\u0027 (getters) and constructed with the \u0027{}\u0027 syntax (setters). Without understanding how torque generates these things, readers will have no idea what goes on in these invisible types, without looking into the out/x/gen/ directory.\n- The setter style doesn\u0027t specify field names. You improved this somewhat by adding them in comments, but still, future refactors of struct layout will be hard (tedious, manual updates, unchecked). For example, think of swapping the order of two fields with the same type. Or renaming a field.\n- The Optional-based interface to set only some fields is not totally obvious, yet the definition is hidden in out/x/gen/ and the use-sites are non-obvious either with the \u0027{{}, {}, x}\u0027 style syntax.\n\n(Maybe you can tell I prefer the old world where all definitions where in plain old C++ files :)",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "769b077f_c0ce21b2",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-20T07:06:46Z",
+      "side": 1,
+      "message": "Another remark is how access to a struct field now always requires copying the entire struct contents. Probably not a big deal, at least currently.",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
