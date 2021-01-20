@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1f39cbd_142f41f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-20T13:31:15Z",
+      "side": 1,
+      "message": "LG with some comments.",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feffd009_83e90843",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-20T13:31:15Z",
+      "side": 1,
+      "message": "I guess this is actually meaning kArgcAdditionForReceiver is 1 or 0. Could we make this explicit",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f749b475_87c09f91",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-20T13:31:15Z",
+      "side": 1,
+      "message": "Is kArgcAdditionForReciever going away once the temporary flag is gone? I\u0027d prefer we just did the following:\n\n Node\u003cWord32T\u003e args_count \u003d args.reg_count();\n #ifndef V8_INCLUDE_RECEIVER_IN_ARGC\n   TNode\u003cInt32T\u003e receiver_count \u003d Int32Constant(1);\n   args_count \u003d Int32Sub(args_count, receiver_count);\n #endif\n\nSo that it\u0027s clear what we need to remove once the temporary flag goes away.",
+      "range": {
+        "startLine": 820,
+        "startChar": 51,
+        "endLine": 820,
+        "endChar": 75
+      },
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
