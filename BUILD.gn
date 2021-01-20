@@ -286,6 +286,10 @@ declare_args() {
   # Sets -DV8_DICT_MODE_PROTOTYPES
   v8_dict_mode_prototypes = false
 
+  # Experimental, temporary flag indicating whether receiver is always included in argc for builtins.
+  # Sets -DV8_INCLUDE_RECEIVER_IN_ARGC
+  v8_include_receiver_in_argc = false
+
   # If enabled then macro definitions that are used in externally visible
   # header files are placed in a separate header file v8-gn.h.
   v8_generate_external_defines_header = false
@@ -748,6 +752,9 @@ config("features") {
   }
   if (v8_dict_mode_prototypes) {
     defines += [ "V8_DICT_MODE_PROTOTYPES" ]
+  }
+  if (v8_include_receiver_in_argc) {
+    defines += [ "V8_INCLUDE_RECEIVER_IN_ARGC" ]
   }
   if (v8_enable_system_instrumentation) {
     defines += [ "V8_ENABLE_SYSTEM_INSTRUMENTATION" ]
