@@ -3154,6 +3154,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // a feedback vector associated with it.
   TNode<HeapObject> LoadFeedbackVector(TNode<JSFunction> closure);
 
+  TNode<Code> LoadFunctionCode(TNode<JSFunction> closure);
+
   // Load the ClosureFeedbackCellArray that contains the feedback cells
   // used when creating closures from this function. This array could be
   // directly hanging off the FeedbackCell when there is no feedback vector
@@ -3165,6 +3167,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void UpdateFeedback(TNode<Smi> feedback,
                       TNode<HeapObject> maybe_feedback_vector,
                       TNode<UintPtrT> slot_id);
+
+  TNode<BoolT> BuiltinIsFunctionPrototypeApplyOrCall(
+      TNode<Int32T> builtin_index);
+
+  TNode<BoolT> ShouldCollectReceiver(TNode<Object> function);
 
   // Report that there was a feedback update, performing any tasks that should
   // be done after a feedback update.

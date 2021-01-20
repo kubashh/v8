@@ -805,7 +805,25 @@ void InterpreterAssembler::CallJSWithSpreadAndDispatch(
     TNode<UintPtrT> slot_id, TNode<HeapObject> maybe_feedback_vector) {
   DCHECK(Bytecodes::MakesCallAlongCriticalPath(bytecode_));
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), ConvertReceiverMode::kAny);
-  CollectCallFeedback(function, context, maybe_feedback_vector, slot_id);
+  Label collectTarget(this), collectReceiver(this), out(this);
+  Branch(ShouldCollectReceiver(function), &collectReceiver, &collectTarget);
+
+  // Collect the {function} feedback.
+  BIND(&collectTarget);
+  {
+    CollectCallFeedback(function, context, maybe_feedback_vector, slot_id);
+    Goto(&out);
+  }
+
+  BIND(&collectReceiver);
+  {
+    TNode<Object> receiver = LoadRegisterAtOperandIndex(1);
+    CollectCallFeedback(receiver, context, maybe_feedback_vector, slot_id);
+
+    Goto(&out);
+  }
+
+  BIND(&out);
   Comment("call using CallWithSpread builtin");
   Callable callable = CodeFactory::InterpreterPushArgsThenCall(
       isolate(), ConvertReceiverMode::kAny,

@@ -9583,6 +9583,10 @@ TNode<HeapObject> CodeStubAssembler::LoadFeedbackVector(
   return maybe_vector.value();
 }
 
+TNode<Code> CodeStubAssembler::LoadFunctionCode(TNode<JSFunction> closure) {
+  return LoadObjectField<Code>(closure, JSFunction::kCodeOffset);
+}
+
 TNode<ClosureFeedbackCellArray> CodeStubAssembler::LoadClosureFeedbackArray(
     TNode<JSFunction> closure) {
   TVARIABLE(HeapObject, feedback_cell_array, LoadFeedbackCellValue(closure));
@@ -9618,6 +9622,49 @@ CodeStubAssembler::LoadFeedbackVectorForStubWithTrampoline() {
       LoadFullTagged(parent_frame_pointer,
                      IntPtrConstant(StandardFrameConstants::kFunctionOffset)));
   return CAST(LoadFeedbackVector(function));
+}
+
+TNode<BoolT> CodeStubAssembler::BuiltinIsFunctionPrototypeApplyOrCall(
+    TNode<Int32T> builtin_index) {
+  Label is_prototype_call(this), check_prototype_apply(this), out(this);
+  TVARIABLE(BoolT, result_val, Int32FalseConstant());
+  Branch(Word32Equal(builtin_index,
+                     Int32Constant(Builtins::kFunctionPrototypeCall)),
+         &is_prototype_call, &check_prototype_apply);
+
+  BIND(&is_prototype_call);
+  {
+    result_val = Int32TrueConstant();
+    Goto(&out);
+  }
+
+  BIND(&check_prototype_apply);
+  {
+    result_val = Word32Equal(builtin_index,
+                             Int32Constant(Builtins::kFunctionPrototypeApply));
+    Goto(&out);
+  }
+
+  BIND(&out);
+  return result_val.value();
+}
+
+TNode<BoolT> CodeStubAssembler::ShouldCollectReceiver(TNode<Object> function) {
+  TVARIABLE(BoolT, result_val, Int32FalseConstant());
+  Label out(this);
+  GotoIf(TaggedIsSmi(function), &out);
+
+  GotoIfNot(IsJSFunction(CAST(function)), &out);
+  {
+    TNode<Code> code = CodeStubAssembler::LoadFunctionCode(CAST(function));
+    TNode<Int32T> builtin_index =
+        LoadObjectField<Int32T>(code, Code::kBuiltinIndexOffset);
+    result_val = BuiltinIsFunctionPrototypeApplyOrCall(builtin_index);
+    Goto(&out);
+  }
+
+  BIND(&out);
+  return result_val.value();
 }
 
 void CodeStubAssembler::UpdateFeedback(TNode<Smi> feedback,

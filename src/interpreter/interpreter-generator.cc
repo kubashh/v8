@@ -1357,10 +1357,28 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
     TNode<Context> context = GetContext();
 
-    // Collect the {function} feedback.
-    CollectCallFeedback(function, context, maybe_feedback_vector, slot_id);
+    Label collectTarget(this), collectReceiver(this), out(this);
+    Branch(ShouldCollectReceiver(function), &collectReceiver, &collectTarget);
 
-    // Call the function and dispatch to the next handler.
+    // Collect the {function} feedback.
+    BIND(&collectTarget);
+    {
+      CollectCallFeedback(function, context, maybe_feedback_vector, slot_id);
+      Goto(&out);
+    }
+
+    BIND(&collectReceiver);
+    {
+      TNode<Object> receiver =
+          receiver_mode == ConvertReceiverMode::kNullOrUndefined
+              ? UndefinedConstant()
+              : LoadRegisterAtOperandIndex(1);
+      CollectCallFeedback(receiver, context, maybe_feedback_vector, slot_id);
+
+      Goto(&out);
+    }
+
+    BIND(&out);
     CallJSAndDispatch(function, context, args, receiver_mode);
   }
 
@@ -1391,8 +1409,27 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
     TNode<Context> context = GetContext();
 
     // Collect the {function} feedback.
-    CollectCallFeedback(function, context, maybe_feedback_vector, slot_id);
+    Label collectTarget(this), collectReceiver(this), out(this);
+    Branch(ShouldCollectReceiver(function), &collectReceiver, &collectTarget);
 
+    BIND(&collectTarget);
+    {
+      CollectCallFeedback(function, context, maybe_feedback_vector, slot_id);
+      Goto(&out);
+    }
+
+    BIND(&collectReceiver);
+    {
+      TNode<Object> receiver =
+          receiver_mode == ConvertReceiverMode::kNullOrUndefined
+              ? UndefinedConstant()
+              : LoadRegisterAtOperandIndex(1);
+      CollectCallFeedback(receiver, context, maybe_feedback_vector, slot_id);
+
+      Goto(&out);
+    }
+
+    BIND(&out);
     switch (kReceiverAndArgOperandCount) {
       case 0:
         CallJSAndDispatch(function, context, Int32Constant(arg_count),

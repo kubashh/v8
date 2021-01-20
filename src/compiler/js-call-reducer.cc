@@ -2483,7 +2483,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
       NodeProperties::ChangeOp(
           node, javascript()->CallWithArrayLike(
                     p.frequency(), p.feedback(), p.speculation_mode(),
-                    CallFeedbackRelation::kUnrelated));
+                    CallFeedbackRelation::kRelated));
       return Changed(node).FollowedBy(ReduceJSCallWithArrayLike(node));
     } else {
       // Check whether {arguments_list} is null.
@@ -2511,7 +2511,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
       Node* value0 = effect0 = control0 = graph()->NewNode(
           javascript()->CallWithArrayLike(p.frequency(), p.feedback(),
                                           p.speculation_mode(),
-                                          CallFeedbackRelation::kUnrelated),
+                                          CallFeedbackRelation::kRelated),
           target, this_argument, arguments_list, n.feedback_vector(), context,
           frame_state, effect0, control0);
 
@@ -2561,7 +2561,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
   NodeProperties::ChangeOp(
       node, javascript()->Call(JSCallNode::ArityForArgc(arity), p.frequency(),
                                p.feedback(), convert_mode, p.speculation_mode(),
-                               CallFeedbackRelation::kUnrelated));
+                               CallFeedbackRelation::kRelated));
   // Try to further reduce the JSCall {node}.
   return Changed(node).FollowedBy(ReduceJSCall(node));
 }
@@ -2732,6 +2732,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeCall(Node* node) {
   // the thisArg becomes the new target.  If thisArg was not provided, insert
   // undefined instead.
   int arity = p.arity_without_implicit_args();
+
   ConvertReceiverMode convert_mode;
   if (arity == 0) {
     // The thisArg was not provided, use undefined as receiver.
@@ -2747,7 +2748,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeCall(Node* node) {
   NodeProperties::ChangeOp(
       node, javascript()->Call(JSCallNode::ArityForArgc(arity), p.frequency(),
                                p.feedback(), convert_mode, p.speculation_mode(),
-                               CallFeedbackRelation::kUnrelated));
+                               CallFeedbackRelation::kRelated));
   // Try to further reduce the JSCall {node}.
   return Changed(node).FollowedBy(ReduceJSCall(node));
 }
@@ -3977,10 +3978,9 @@ Reduction JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpread(
 
   if (IsCallWithArrayLikeOrSpread(node)) {
     NodeProperties::ChangeOp(
-        node,
-        javascript()->Call(JSCallNode::ArityForArgc(argc), frequency, feedback,
-                           ConvertReceiverMode::kAny, speculation_mode,
-                           CallFeedbackRelation::kUnrelated));
+        node, javascript()->Call(JSCallNode::ArityForArgc(argc), frequency,
+                                 feedback, ConvertReceiverMode::kAny,
+                                 speculation_mode, feedback_relation));
     return Changed(node).FollowedBy(ReduceJSCall(node));
   } else {
     NodeProperties::ChangeOp(
