@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21101277_230cf009",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-20T13:56:13Z",
+      "side": 1,
+      "message": "Nice refactoring, LGTM!",
+      "revId": "aed6bc190537aebe525581db43181841e1020a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59b31261_ffacb024",
+        "filename": "src/compiler/frame-states.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-20T13:56:13Z",
+      "side": 1,
+      "message": "It\u0027s somewhat unclear to me where the nested naming comes from. Could you add a comment here?",
+      "range": {
+        "startLine": 22,
+        "startChar": 26,
+        "endLine": 22,
+        "endChar": 36
+      },
+      "revId": "aed6bc190537aebe525581db43181841e1020a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
