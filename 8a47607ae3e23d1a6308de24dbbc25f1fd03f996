@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c38066c_294db67a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-01-20T14:06:09Z",
+      "side": 1,
+      "message": "Thanks for your feedback, Ross!\nSorry I added even more questions to your comments.",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "feffd009_83e90843",
@@ -37,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ccf7fbd8_7bb488b5",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-01-20T14:06:09Z",
+      "side": 1,
+      "message": "Yes that is the intended meaning. So you would prefer DCHECK(kArgcAdditionForReceiver \u003d\u003d 0 || kArgcAdditionForReceiver \u003d\u003d 1)?",
+      "parentUuid": "feffd009_83e90843",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f749b475_87c09f91",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 15
@@ -48,6 +83,30 @@
       "writtenOn": "2021-01-20T13:31:15Z",
       "side": 1,
       "message": "Is kArgcAdditionForReciever going away once the temporary flag is gone? I\u0027d prefer we just did the following:\n\n Node\u003cWord32T\u003e args_count \u003d args.reg_count();\n #ifndef V8_INCLUDE_RECEIVER_IN_ARGC\n   TNode\u003cInt32T\u003e receiver_count \u003d Int32Constant(1);\n   args_count \u003d Int32Sub(args_count, receiver_count);\n #endif\n\nSo that it\u0027s clear what we need to remove once the temporary flag goes away.",
+      "range": {
+        "startLine": 820,
+        "startChar": 51,
+        "endLine": 820,
+        "endChar": 75
+      },
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8c8dd54_2cfe5fc6",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-01-20T14:06:09Z",
+      "side": 1,
+      "message": "The current plan is to rename the constant (probably to kReceiverArgc), set it unconditionally, and keep it around everywhere we need to +1/-1 when handling with the receiver in the argument count.\nIMO having \"+ kReceiverArgc\" is cleaner than having e.g. \"+1 // add the receiver\". \nBut if you disagree and prefer numerical constants with comments, than it seems like I am the only one preferring named constants and will change my mind ;)\n\nRegarding being clear what we need to remove once the flag goes away I totally agree. Thank you for pointing out this location, where I didn\u0027t add a TODO.\nI don\u0027t really like ifdefs over TODOs, when there is no performance impact. And in this case I am pretty sure that TF will optimize the subtraction away if kArgcAdditionToReceiver \u003d\u003d 1.\n\nLooking forward to read your opinion on this.",
+      "parentUuid": "f749b475_87c09f91",
       "range": {
         "startLine": 820,
         "startChar": 51,
