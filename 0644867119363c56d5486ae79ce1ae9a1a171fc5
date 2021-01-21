@@ -68,6 +68,24 @@
       "parentUuid": "7a9a87ea_51af338b",
       "revId": "0644867119363c56d5486ae79ce1ae9a1a171fc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1131f7cb_22497253",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-21T10:30:13Z",
+      "side": 1,
+      "message": "From a first look, the additional code added to Call/Construct bytecode handlers is too much since calls are one of the hottest codepaths in the JS interpreter on real-world websites / JS. To land this it would need to be optimized to have minimal impact on JS performance, and prove it provides real savings on real world code.\n\nIn addition, the code should live alongside CollectCallFeedback / CollectConstructFeedback - there is already some special casing in CollectConstructFeedback for Array functions, and a similar approach should be taken here.",
+      "parentUuid": "16063e51_460ca168",
+      "revId": "0644867119363c56d5486ae79ce1ae9a1a171fc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
