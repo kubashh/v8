@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08da37c7_95b0e7f1",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-21T11:05:32Z",
+      "side": 1,
+      "message": "Renamed to\n- GetWriteBarrierTypeForExternallyReferencedObject() (in v8-cppgc.h)\n- ForExternallyReferenced() (in write-barrier.h)",
+      "parentUuid": "a83cbb26_334d06fe",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "96fe22b924511cfa14e0d6a41e13ab8e60b86c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8c896cc_9a5aaf29",
