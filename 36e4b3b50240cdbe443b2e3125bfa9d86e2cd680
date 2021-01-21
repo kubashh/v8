@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bfb300c_ba67eed9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-21T14:24:37Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "36e4b3b50240cdbe443b2e3125bfa9d86e2cd680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ccb63ad_fd604548",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-01-21T13:58:44Z",
       "side": 1,
       "message": "I know we\u0027ve used this method before but it seems fragile here. If for some reason the second GC finishes, the wrappable will be collected and the test will fail.\nCan we instead expose a \"FinishSweepingForTesting\" method?",
+      "range": {
+        "startLine": 76,
+        "startChar": 2,
+        "endLine": 76,
+        "endChar": 36
+      },
+      "revId": "36e4b3b50240cdbe443b2e3125bfa9d86e2cd680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd6dbadc_189d4fb8",
+        "filename": "test/unittests/heap/unified-heap-unittest.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-21T14:24:37Z",
+      "side": 1,
+      "message": "\u003e I know we\u0027ve used this method before but it seems fragile here. If for some reason the second GC finishes, the wrappable will be collected and the test will fail.\n\nThe wrappable should not be collected on the first GC (write barrier) but will also survive the second GC because it is reachable through the JS wrapper that is alive (Local).\n\n\u003e Can we instead expose a \"FinishSweepingForTesting\" method?\n\nLet me create a follow up.",
+      "parentUuid": "6ccb63ad_fd604548",
       "range": {
         "startLine": 76,
         "startChar": 2,
