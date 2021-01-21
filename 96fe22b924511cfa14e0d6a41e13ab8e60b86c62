@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a83cbb26_334d06fe",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-21T10:56:59Z",
+      "side": 1,
+      "message": "\u003e \"External\" seems ambiguous here as it is not clear to what exactly it is external.\n\u003e \n\nExternal refers to the fact that the slot must be off heap wrt to Cpp.\n\n(We don\u0027t check the slot because it\u0027s harder to get on the V8 API level and requires reinterpret casting through the Local)\n\n\u003e Since we talk about wrapper/wrappable, how about GetWriteBarrierTypeForWrappable?\n\ncppgc here doesn\u0027t know about wrapper/wrappable. That\u0027s part of cppgc-js",
+      "parentUuid": "4e3b07f3_0a0081e4",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "96fe22b924511cfa14e0d6a41e13ab8e60b86c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8c896cc_9a5aaf29",
         "filename": "include/v8-cppgc.h",
         "patchSetId": 6
@@ -71,6 +95,30 @@
       "writtenOn": "2021-01-21T10:52:03Z",
       "side": 1,
       "message": "DijkstraMarkingBarrier also calls CheckParams",
+      "range": {
+        "startLine": 158,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 55
+      },
+      "revId": "96fe22b924511cfa14e0d6a41e13ab8e60b86c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6ca5b28_07332075",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-21T10:56:59Z",
+      "side": 1,
+      "message": "Done (removed here)",
+      "parentUuid": "f8c896cc_9a5aaf29",
       "range": {
         "startLine": 158,
         "startChar": 4,
