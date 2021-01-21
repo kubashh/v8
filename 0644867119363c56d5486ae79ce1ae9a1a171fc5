@@ -86,6 +86,24 @@
       "parentUuid": "16063e51_460ca168",
       "revId": "0644867119363c56d5486ae79ce1ae9a1a171fc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ea57661_062ef660",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-21T10:38:53Z",
+      "side": 1,
+      "message": "As an aside, changes like this would benefit from a design doc to allow discussion of the approach and pros/cons of different options before code review, e.g., another recent interpreter change had a lot of discussion and performance analysis on this doc: https://docs.google.com/document/d/1g_NExMT78II_KnIYNa9MvyPYIj23qAiFUEsyemY5KRk/edit which helped refine the approach.",
+      "parentUuid": "1131f7cb_22497253",
+      "revId": "0644867119363c56d5486ae79ce1ae9a1a171fc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
