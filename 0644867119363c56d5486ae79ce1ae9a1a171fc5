@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "181a1414_4ba1a8d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-01-21T05:19:30Z",
+      "side": 1,
+      "message": "Thanks for reviewing this CL!",
+      "revId": "0644867119363c56d5486ae79ce1ae9a1a171fc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a9a87ea_51af338b",
@@ -31,6 +48,24 @@
       "writtenOn": "2021-01-20T10:07:54Z",
       "side": 1,
       "message": "Two questions come to mind, 1. does adding this codepath in JSCall slow down the common case of non-Function.p.{apply,call} calls? It\u0027s a sequence of 4+ checks (smi, JSFunction, builtin indices), so it probably doesn\u0027t come for free. 2. Sometimes collecting the target, sometimes the receiver, is new complexity, is it worth it? Can we reduce it?",
+      "revId": "0644867119363c56d5486ae79ce1ae9a1a171fc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16063e51_460ca168",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-01-21T05:19:30Z",
+      "side": 1,
+      "message": "For the first question, I guess we may reduce its impact on common js calls by restricting the checks to probable Function.p.{apply,call} calls, similar to what has been done on eval (https://source.chromium.org/chromium/chromium/src/+/master:v8/src/interpreter/bytecode-generator.cc;l\u003d4956;drc\u003de45616a746204e7405d3e2414675978597817414). This may lead to some additional changes to parser. WDYT?",
+      "parentUuid": "7a9a87ea_51af338b",
       "revId": "0644867119363c56d5486ae79ce1ae9a1a171fc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
