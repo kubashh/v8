@@ -16,6 +16,69 @@
       "message": "This CL adds the interesting uses on the Blink side: https://crrev.com/c/2640618",
       "revId": "96fe22b924511cfa14e0d6a41e13ab8e60b86c62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbce0804_d5546e3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-21T10:52:03Z",
+      "side": 1,
+      "message": "lgtm with comments",
+      "revId": "96fe22b924511cfa14e0d6a41e13ab8e60b86c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e3b07f3_0a0081e4",
+        "filename": "include/cppgc/internal/write-barrier.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-21T10:52:03Z",
+      "side": 1,
+      "message": "\"External\" seems ambiguous here as it is not clear to what exactly it is external.\n\nSince we talk about wrapper/wrappable, how about GetWriteBarrierTypeForWrappable?",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "96fe22b924511cfa14e0d6a41e13ab8e60b86c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c896cc_9a5aaf29",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-21T10:52:03Z",
+      "side": 1,
+      "message": "DijkstraMarkingBarrier also calls CheckParams",
+      "range": {
+        "startLine": 158,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 55
+      },
+      "revId": "96fe22b924511cfa14e0d6a41e13ab8e60b86c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
