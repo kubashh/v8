@@ -146,7 +146,7 @@ constexpr Register arg_reg_4 = rcx;
   V(xmm13)                              \
   V(xmm14)
 
-constexpr bool kPadArguments = false;
+constexpr bool kPadArguments = true;
 constexpr bool kSimpleFPAliasing = true;
 constexpr bool kSimdMaskRegisters = false;
 

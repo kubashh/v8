@@ -799,6 +799,12 @@ void CodeGenerator::AssembleTailCallAfterGap(Instruction* instr,
                                              int first_unused_stack_slot) {
   AdjustStackPointerForTailCall(instr, tasm(), linkage(), info(),
                                 frame_access_state(), first_unused_stack_slot);
+  DCHECK(instr->IsTailCall());
+  InstructionOperandConverter g(this, instr);
+  int optional_padding_slot = g.InputInt32(instr->InputCount() - 2);
+  if (optional_padding_slot % 2) {
+    __ AllocateStackSpace(optional_padding_slot * kSystemPointerSize);
+  }
 }
 
 // Check that {kJavaScriptCallCodeStartRegister} is correct.
@@ -4533,6 +4539,8 @@ static const int kQuadWordSize = 16;
 }  // namespace
 
 void CodeGenerator::FinishFrame(Frame* frame) {
+  frame->AlignFrame(kSimd128Size);
+
   CallDescriptor* call_descriptor = linkage()->GetIncomingDescriptor();
 
   const RegList saves_fp = call_descriptor->CalleeSavedFPRegisters();

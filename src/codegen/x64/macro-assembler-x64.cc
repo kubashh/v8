@@ -2806,8 +2806,31 @@ void MacroAssembler::InvokePrologue(Register expected_parameter_count,
     subq(expected_parameter_count, actual_parameter_count);
     j(less_equal, &regular_invoke, Label::kFar);
 
+    Label even_extra_count, skip_move;
+    testb(expected_parameter_count, Immediate(1));
+    j(zero, &even_extra_count, Label::kNear);
+
+    // Calculate {slots_to_claim} when {extra_argument_count} is odd.
+    // If {actual_argument_count} is even, we need one extra padding slot
+    // {slots_to_claim = extra_argument_count + 1}.
+    // If {actual_argument_count} is odd, we know that the
+    // original arguments will have a padding slot that we can reuse
+    // {slots_to_claim = extra_argument_count - 1}.
+    Register slots_to_claim = r11;
+    {
+      leaq(slots_to_claim, Operand(expected_parameter_count, 1));
+      movq(kScratchRegister, actual_parameter_count);
+      andq(kScratchRegister, Immediate(1));
+      xorq(kScratchRegister, Immediate(1));
+      shlq(kScratchRegister, Immediate(1));
+      subq(slots_to_claim, kScratchRegister);
+    }
+    testq(slots_to_claim, slots_to_claim);
+    j(zero, &skip_move, Label::kNear);
+
+    bind(&even_extra_count);
     Label stack_overflow;
-    StackOverflowCheck(expected_parameter_count, rcx, &stack_overflow);
+    StackOverflowCheck(slots_to_claim, rcx, &stack_overflow);
 
     // Underapplication. Move the arguments already in the stack, including the
     // receiver and the return address.
@@ -2817,7 +2840,7 @@ void MacroAssembler::InvokePrologue(Register expected_parameter_count,
       movq(src, rsp);
       leaq(kScratchRegister,
            Operand(expected_parameter_count, times_system_pointer_size, 0));
-      AllocateStackSpace(kScratchRegister);
+      AllocateStackSpace(slots_to_claim);
       // Extra words are the receiver and the return address (if a jump).
       int extra_words = flag == CALL_FUNCTION ? 1 : 2;
       leaq(num, Operand(rax, extra_words));  // Number of words to copy.
@@ -2834,6 +2857,8 @@ void MacroAssembler::InvokePrologue(Register expected_parameter_count,
       j(less, &copy);
       leaq(r8, Operand(rsp, num, times_system_pointer_size, 0));
     }
+
+    bind(&skip_move);
     // Fill remaining expected arguments with undefined values.
     LoadRoot(kScratchRegister, RootIndex::kUndefinedValue);
     {

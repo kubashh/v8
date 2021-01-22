@@ -1775,6 +1775,12 @@ void InstructionSelector::EmitPrepareArguments(
     Node* node) {
   X64OperandGenerator g(this);
 
+  int arg_count = static_cast<int>(arguments->size());
+  if (arg_count % 2 != 0) {
+    Emit(kX64Push, g.NoOutput(), g.UseImmediate(kSystemPointerSize),
+         g.UseImmediate(0));
+  }
+
   // Prepare for C function call.
   if (call_descriptor->IsCFunctionCall()) {
     Emit(kArchPrepareCallCFunction | MiscField::encode(static_cast<int>(
