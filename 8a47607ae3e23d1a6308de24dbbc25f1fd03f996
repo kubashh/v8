@@ -35,6 +35,57 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38afc5a0_6df641d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-01-22T14:20:47Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0670fcf7_ae9ef1d3",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-01-22T14:20:47Z",
+      "side": 1,
+      "message": "This code is supposed to stay here, right? Then I\u0027d suggest to consider keeping movq here and changing loop condition to \"greater\" instead. Such a code might be smaller.",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba3eacee_c43fb9db",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2584,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-01-22T14:20:47Z",
+      "side": 1,
+      "message": "Maybe also \n  \u0026\u0026 kArgcAdditionForReceiver",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "feffd009_83e90843",
