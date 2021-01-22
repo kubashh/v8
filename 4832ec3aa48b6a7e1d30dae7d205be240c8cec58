@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8feabdc_b153e8c0",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-22T13:50:03Z",
+      "side": 1,
+      "message": "This (old) code is strange. \"data\" should be called \"it\" since it\u0027s an iterator. But we don\u0027t actually need to search. From what I can tell this should be using at() just like the other methods because we check serialized_own_descriptor(...) before calling this.",
+      "revId": "4832ec3aa48b6a7e1d30dae7d205be240c8cec58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
