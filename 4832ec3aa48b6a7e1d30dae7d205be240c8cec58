@@ -16,6 +16,24 @@
       "message": "This (old) code is strange. \"data\" should be called \"it\" since it\u0027s an iterator. But we don\u0027t actually need to search. From what I can tell this should be using at() just like the other methods because we check serialized_own_descriptor(...) before calling this.",
       "revId": "4832ec3aa48b6a7e1d30dae7d205be240c8cec58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "962b41aa_7b820b0a",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-22T14:21:52Z",
+      "side": 1,
+      "message": "You\u0027re right. Modified this code to skip the search.\nAs a note, we always have a value but it could be nullptr if it is not Strong when serialized, and we still need to check that in the GetStrongValue ref method.",
+      "parentUuid": "b8feabdc_b153e8c0",
+      "revId": "4832ec3aa48b6a7e1d30dae7d205be240c8cec58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
