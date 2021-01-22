@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e7babe0_92a98ff2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-01-22T15:37:45Z",
+      "side": 1,
+      "message": "LGTM % nit comments\n\nAmazing CL description! Helps understanding its purpose and reviewing it a lot!",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cb1e1b0_a67f9da1",
@@ -89,6 +106,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c9c4134_b305e8cb",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-01-22T15:37:45Z",
+      "side": 1,
+      "message": "I\u0027m okay with your implementation. For readability, I prefer to provide type names for compound type initialization. So replacing\n\nset_slots(slot_index, {{}, {}, /*.block_count \u003d*/0, {}});\n\nwith \n\nset_slots(slot_index, TqRuntimeOptionalStructCoverageInfoSlot({}, {}, /*.block_count \u003d*/0, {}));\n\nalthough I agree that writing out this long name is a bit annoying 😊",
+      "parentUuid": "36760a27_bbd56bcc",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "769b077f_c0ce21b2",
         "filename": "src/objects/scope-info.cc",
         "patchSetId": 4
@@ -118,6 +153,52 @@
       "side": 1,
       "message": "Accessors are generally inlined, so I was assuming the C++ compiler would make the extra loads go away. I tried to think of other options but liked them less:\n\n- Out-params are not particularly ergonomic\n- Returning references to on-heap data would be fraught with lifetime problems\n- Separate getters for each struct field would work, but I\u0027d like relatively symmetric getters and setters, and I was concerned about the performance implications of separate setters for each struct field in cases where the containing class field\u0027s offset is not compile-time known. In that case, each setter would have to load some data from the heap, use that data to compute the offset to store at, and then store the field. It\u0027s often not easy for the compiler to prove that the store doesn\u0027t affect the parts of the object that we used when computing the offset, so setting each part of a struct separately would end up causing repetitive work.",
       "parentUuid": "769b077f_c0ce21b2",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa8c89fe_d686f814",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4099,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-01-22T15:37:45Z",
+      "side": 1,
+      "message": "nit: const std::string field_size \u003d f.GetFieldSizeInformation().second;",
+      "range": {
+        "startLine": 4098,
+        "startChar": 0,
+        "endLine": 4099,
+        "endChar": 66
+      },
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60ed6dc4_507f7f72",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4139,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-01-22T15:37:45Z",
+      "side": 1,
+      "message": "nit: Since getter_params is not used anywhere else, I\u0027d just print the arguments here instead of constructing the vector.\n\nSo move lines 4135 and 4136 here and put a if(can_contain_heap_objects \u0026\u0026 f.index) inl_ \u003c\u003c \", \"; in between. What do you think?",
+      "range": {
+        "startLine": 4139,
+        "startChar": 2,
+        "endLine": 4139,
+        "endChar": 47
+      },
       "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
