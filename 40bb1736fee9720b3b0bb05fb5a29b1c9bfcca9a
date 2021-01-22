@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff9bb2cc_a1cb5e53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-22T19:26:36Z",
+      "side": 1,
+      "message": "Georg PTAL\nThis moves one method to DescriptorArrayRef as well as sets the base for the follow-up methods to do the same.",
+      "revId": "40bb1736fee9720b3b0bb05fb5a29b1c9bfcca9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9b12708_66aea175",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-22T19:26:36Z",
+      "side": 1,
+      "message": "Drive-by: not needed right now but it will be needed when DescriptorArrays are kNeverSerialized.",
+      "range": {
+        "startLine": 2230,
+        "startChar": 0,
+        "endLine": 2230,
+        "endChar": 1
+      },
+      "revId": "40bb1736fee9720b3b0bb05fb5a29b1c9bfcca9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
