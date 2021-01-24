@@ -140,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b96c2832_fb713385",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-24T17:10:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21c58c87_5a2abadf",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3b3977f_e4730509",
@@ -153,6 +171,24 @@
       "writtenOn": "2021-01-21T08:32:47Z",
       "side": 1,
       "message": "Why do we allow these to be nullptr when there is such a call?",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bcfbf99_edca30c4",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2714,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-24T17:10:26Z",
+      "side": 1,
+      "message": "It could be possible to have a script with %ObserveNode intrinsics but when the test has not registered any ObserveNode in the OptimizedCompilationInfo, so both observe_node_manager_ and node_observer_ can be nullptr here.",
+      "parentUuid": "a3b3977f_e4730509",
       "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -174,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "202370d4_7838c1d4",
+        "filename": "src/compiler/bytecode-graph-builder.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-24T17:10:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "beaf4b1e_98bd90a4",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf36eeef_6f2dfdcb",
@@ -187,6 +241,42 @@
       "writtenOn": "2021-01-21T08:32:47Z",
       "side": 1,
       "message": "Please add some documentation here, the explanation from your commit message is a good start.",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c666325_379a9340",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-24T17:10:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf36eeef_6f2dfdcb",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42425832_1575de40",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-24T17:10:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf36eeef_6f2dfdcb",
       "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -238,6 +328,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f68cbcfe_7d741bbe",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-24T17:10:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fadfdf6_425e77ee",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 39
+      },
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7acc8474_6696dc54",
@@ -251,6 +365,24 @@
       "writtenOn": "2021-01-21T08:32:47Z",
       "side": 1,
       "message": "What\u0027s missing to do that?",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cc0f8d6_e173121a",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-24T17:10:26Z",
+      "side": 1,
+      "message": "In the past (when Nico wrote the initial implementation) there was a CompareOperationHintOf(op) function that could be used here. But that function disappeared after a refactoring and it\u0027s not clear (to me) how it should reimplemented now.",
+      "parentUuid": "7acc8474_6696dc54",
       "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
