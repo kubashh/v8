@@ -474,7 +474,7 @@ Reduction JSInliner::ReduceJSCall(Node* node) {
       BuildGraphFromBytecode(broker(), zone(), *shared_info, feedback_cell,
                              BytecodeOffset::None(), jsgraph(), frequency,
                              source_positions_, inlining_id, info_->code_kind(),
-                             flags, &info_->tick_counter());
+                             flags, &info_->tick_counter(), ObserveNodeInfo{});
     }
 
     // Extract the inlinee start/end nodes.
