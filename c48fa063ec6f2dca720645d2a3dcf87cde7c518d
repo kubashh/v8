@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d577505_ad0e0d31",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2822,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-01-25T06:41:12Z",
+      "side": 1,
+      "message": "nit: could you add a comment here that explains this calculation? Writing this calculation branch-free is neat but a bit hard to understand.\n\n// kScratchRegister \u003d (actual_parameter_count is odd) ? 0 : 1;",
+      "revId": "c48fa063ec6f2dca720645d2a3dcf87cde7c518d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d1c5294_f30ef6f4",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-01-25T06:41:12Z",
+      "side": 1,
+      "message": "nit: I think you should be consistent with how you check for odd/even. In the instruction selector you use (arg_count % 2 !\u003d 0), but here you just use (optional_padding_slot % 2). IMO (... % 2 !\u003d 0) is easier to read, but likely that\u0027s what I\u0027m more used to.",
+      "revId": "c48fa063ec6f2dca720645d2a3dcf87cde7c518d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
