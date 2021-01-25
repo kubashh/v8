@@ -10,7 +10,9 @@
 // TODO(jkummerow): Consider forward-declaring instead.
 #include "src/base/bit-field.h"
 #include "src/objects/internal-index.h"
+#include "src/objects/maybe-object.h"
 #include "src/objects/objects.h"
+#include "src/objects/primitive-heap-object.h"
 #include "src/objects/struct.h"
 #include "src/utils/utils.h"
 
