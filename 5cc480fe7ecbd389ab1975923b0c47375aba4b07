@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fe9ef08_d64d64d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-01-25T15:46:22Z",
+      "side": 1,
+      "message": "LGTM, thanks!\n\nPlease let me know if this fails on some other architecture that\u0027s not present in our trybots.",
+      "revId": "5cc480fe7ecbd389ab1975923b0c47375aba4b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
