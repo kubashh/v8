@@ -1,0 +1,214 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "932ac9dc_f64bab2a",
+        "filename": "src/codegen/optimized-compilation-info.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "This can be removed now.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00791c9b_5b9c826b",
+        "filename": "src/codegen/optimized-compilation-info.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "Here too.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4edd60e9_e9e776f8",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "DCHECK_NULL(node_observer_)\n if this is supposed to be called only once.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79cf2248_5d150713",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2751,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "Is this intentionally done here instead of in JSIntrinsicLowering in order to observe as early as possible? Please add a comment if yes.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251240fa_f7b3f587",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "Node* value \u003d environment()-\u003eLookupRegister(receiver).",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7c5cca1_f6cc523b",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "How about making this the default argument value.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc72a330_f3cb5d78",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "I think we shouldn\u0027t use that (or at least mark it as explicit, see https://google.github.io/styleguide/cppguide.html#Implicit_Conversions).\n\nI\u0027m fine with just calling StartObserving unconditionally and doing the check in there.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40d307d4_6dd918af",
+        "filename": "src/compiler/scheduled-machine-lowering.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "How about making this the default argument.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "897908c7_e73d2c83",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "It\u0027s easy to forget this in future code.\n\nHave you considered setting things up such that VisitNode is by default assumed to have changed the node (and the observer is notified)? One could then explicitly opt-out of that in cases where nothing changes, perhaps even with a macro or function like IF_LOWER_DO_NOTHING that does\nif (lower\u003cT\u003e) { observe_node_manager_.NothingChanged(); }\nor similar.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70fc5666_d0e0904e",
+        "filename": "src/compiler/simplified-lowering.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "SimplifiedLowering",
+      "range": {
+        "startLine": 59,
+        "startChar": 41,
+        "endLine": 59,
+        "endChar": 63
+      },
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "684b2fa3_713ba2e1",
+        "filename": "src/compiler/simplified-lowering.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "const",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b7d63d9_0fed3eba",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "Please add a comment saying that this intrinsic only does something when compiled by TF.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

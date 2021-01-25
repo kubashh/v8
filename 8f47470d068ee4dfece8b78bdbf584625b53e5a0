@@ -193,6 +193,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cca806d8_8f7fa30d",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2714,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "My question was about why that would be useful? Is the idea to run the same test both in the default configuration and with the observe machine turned on, because the latter adds quite some complexity and one wants to ensure that ordinary test assertions still pass in the default configuration?",
+      "parentUuid": "7bcfbf99_edca30c4",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "beaf4b1e_98bd90a4",
@@ -354,6 +372,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cb0f90a4_43645a7f",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "NodeProperties",
+      "range": {
+        "startLine": 250,
+        "startChar": 14,
+        "endLine": 250,
+        "endChar": 27
+      },
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7acc8474_6696dc54",
         "filename": "test/cctest/compiler/test-sloppy-equality.cc",
         "patchSetId": 13
@@ -383,6 +424,24 @@
       "side": 1,
       "message": "In the past (when Nico wrote the initial implementation) there was a CompareOperationHintOf(op) function that could be used here. But that function disappeared after a refactoring and it\u0027s not clear (to me) how it should reimplemented now.",
       "parentUuid": "7acc8474_6696dc54",
+      "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13f7cc9e_6ef8b243",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T18:59:07Z",
+      "side": 1,
+      "message": "Nico, please comment on that.",
+      "parentUuid": "0cc0f8d6_e173121a",
       "revId": "8f47470d068ee4dfece8b78bdbf584625b53e5a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
