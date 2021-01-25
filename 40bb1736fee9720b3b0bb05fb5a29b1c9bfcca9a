@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4234b20d_5f8eb36c",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T07:53:58Z",
+      "side": 1,
+      "message": "Please call this instance_descriptors, as that\u0027s its name on Map.",
+      "revId": "40bb1736fee9720b3b0bb05fb5a29b1c9bfcca9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b9b12708_66aea175",
@@ -37,6 +54,23 @@
         "endLine": 2230,
         "endChar": 1
       },
+      "revId": "40bb1736fee9720b3b0bb05fb5a29b1c9bfcca9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66b61f77_ac95221a",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4332,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-25T07:53:58Z",
+      "side": 1,
+      "message": "Let\u0027s copy this check to SerializeOwnDescriptor.",
       "revId": "40bb1736fee9720b3b0bb05fb5a29b1c9bfcca9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
