@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7f93195_ac6f5ec3",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-01-25T09:24:07Z",
+      "side": 1,
+      "message": "rcx is also used as index in the operand (line 631 below).\nWe could preserve correct behaviour by adding a displacement of -kSystemPointerSize to the Operand in line 631.\nTo be honest I have no idea how big the performance penalty of having a displacement in the address is.\nBut I would guess that having the displacement in a loop is a bigger penalty than a lea instead of a mov outside the loop?",
+      "parentUuid": "0670fcf7_ae9ef1d3",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba3eacee_c43fb9db",
         "filename": "src/codegen/x64/macro-assembler-x64.cc",
         "patchSetId": 15
@@ -82,6 +100,24 @@
       "writtenOn": "2021-01-22T14:20:47Z",
       "side": 1,
       "message": "Maybe also \n  \u0026\u0026 kArgcAdditionForReceiver",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac4ed4a1_181e27db",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2584,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-01-25T09:24:07Z",
+      "side": 1,
+      "message": "Good Point for this CL!\nBut in the next CL of this chain we already assert kArgcAdditionForReceiver \u003d\u003d 1.\nSo it doesn\u0027t make a lot of sense to add it here as we land the CLs together.\nBut will keep the feedback in my mind for future work.",
+      "parentUuid": "ba3eacee_c43fb9db",
       "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -135,6 +171,24 @@
       "side": 1,
       "message": "Yes please, thanks.",
       "parentUuid": "ccf7fbd8_7bb488b5",
+      "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf56d131_edd477cf",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-01-25T09:24:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f131f589_dcf07228",
       "revId": "8a47607ae3e23d1a6308de24dbbc25f1fd03f996",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

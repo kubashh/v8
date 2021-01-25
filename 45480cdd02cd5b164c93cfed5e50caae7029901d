@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b00caf99_263d6a08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-01-25T09:24:07Z",
+      "side": 1,
+      "message": "Thank you Igor!\n\nTwo open questions still remaining. 1 for Igor, 1 for Ross PTAL.",
+      "revId": "45480cdd02cd5b164c93cfed5e50caae7029901d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
