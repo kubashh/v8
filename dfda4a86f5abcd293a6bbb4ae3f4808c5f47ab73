@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "919552ea_0ef81171",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2021-01-25T12:38:56Z",
+      "side": 1,
+      "message": "Hi there,\n\nWe just noticed --perf-prof and --ll-prof weren\u0027t working as expected, and a little bisect later realised logging was accidentally disabled with this CL: https://chromium-review.googlesource.com/c/v8/v8/+/2602461.\n\nSo here\u0027s a fix!\n\nThanks,\nPierre\n",
+      "revId": "dfda4a86f5abcd293a6bbb4ae3f4808c5f47ab73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
