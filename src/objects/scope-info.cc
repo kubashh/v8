@@ -700,7 +700,7 @@ bool ScopeInfo::HasSharedFunctionName() const {
 void ScopeInfo::SetFunctionName(Object name) {
   DCHECK(HasFunctionName());
   DCHECK(name.IsString() || name == SharedFunctionInfo::kNoSharedNameSentinel);
-  set(FunctionNameInfoIndex(), name);
+  set_function_name_info(0, {/*.function_variable_name =*/name, {}});
 }
 
 void ScopeInfo::SetInferredFunctionName(String name) {
@@ -743,7 +743,7 @@ bool ScopeInfo::HasContext() const { return ContextLength() > 0; }
 
 Object ScopeInfo::FunctionName() const {
   DCHECK(HasFunctionName());
-  return get(FunctionNameInfoIndex());
+  return function_name_info(0).function_variable_name;
 }
 
 Object ScopeInfo::InferredFunctionName() const {
@@ -766,19 +766,18 @@ String ScopeInfo::FunctionDebugName() const {
 
 int ScopeInfo::StartPosition() const {
   DCHECK(HasPositionInfo());
-  return Smi::ToInt(get(PositionInfoIndex()));
+  return position_info(0).start;
 }
 
 int ScopeInfo::EndPosition() const {
   DCHECK(HasPositionInfo());
-  return Smi::ToInt(get(PositionInfoIndex() + 1));
+  return position_info(0).end;
 }
 
 void ScopeInfo::SetPositionInfo(int start, int end) {
   DCHECK(HasPositionInfo());
   DCHECK_LE(start, end);
-  set(PositionInfoIndex(), Smi::FromInt(start));
-  set(PositionInfoIndex() + 1, Smi::FromInt(end));
+  set_position_info(0, {/*.start =*/start, /*.end =*/end});
 }
 
 ScopeInfo ScopeInfo::OuterScopeInfo() const {
@@ -914,7 +913,7 @@ int ScopeInfo::FunctionContextSlotIndex(String name) const {
   if (FunctionVariableBits::decode(Flags()) ==
           VariableAllocationInfo::CONTEXT &&
       FunctionName() == name) {
-    return Smi::ToInt(get(FunctionNameInfoIndex() + 1));
+    return function_name_info(0).function_variable_context_or_stack_slot_index;
   }
   return -1;
 }
@@ -975,27 +974,23 @@ void ScopeInfo::ModuleVariable(int i, String* name, int* index,
                                VariableMode* mode,
                                InitializationFlag* init_flag,
                                MaybeAssignedFlag* maybe_assigned_flag) {
-  DCHECK_LE(0, i);
-  DCHECK_LT(i, module_variable_count(0));
-
-  int entry = ModuleVariablesIndex() + i * kModuleVariableEntryLength;
-  int properties = Smi::ToInt(get(entry + kModuleVariablePropertiesOffset));
+  auto variable = module_variables(i);
 
   if (name != nullptr) {
-    *name = String::cast(get(entry + kModuleVariableNameOffset));
+    *name = variable.name;
   }
   if (index != nullptr) {
-    *index = Smi::ToInt(get(entry + kModuleVariableIndexOffset));
+    *index = variable.index;
     DCHECK_NE(*index, 0);
   }
   if (mode != nullptr) {
-    *mode = VariableModeBits::decode(properties);
+    *mode = VariableModeBits::decode(variable.properties);
   }
   if (init_flag != nullptr) {
-    *init_flag = InitFlagBit::decode(properties);
+    *init_flag = InitFlagBit::decode(variable.properties);
   }
   if (maybe_assigned_flag != nullptr) {
-    *maybe_assigned_flag = MaybeAssignedFlagBit::decode(properties);
+    *maybe_assigned_flag = MaybeAssignedFlagBit::decode(variable.properties);
   }
 }
 
