@@ -50,6 +50,8 @@ namespace internal {
   V(kOperandIsNotASmi, "Operand is not a smi")                                 \
   V(kPromiseAlreadySettled, "Promise already settled")                         \
   V(kReceivedInvalidReturnAddress, "Received invalid return address")          \
+  V(kReceiverNotInArgc,                                                        \
+    "Receiver not inclueded in function call argument count")                  \
   V(kRegisterDidNotMatchExpectedRoot, "Register did not match expected root")  \
   V(kReturnAddressNotFoundInFrame, "Return address not found in frame")        \
   V(kShouldNotDirectlyEnterOsrFunction,                                        \
