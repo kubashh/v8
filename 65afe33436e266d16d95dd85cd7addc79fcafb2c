@@ -142,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd1ab29a_f166c5fe",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-01-25T23:09:38Z",
+      "side": 1,
+      "message": "Thanks to both of you for the excellent advice. I\u0027ve updated to use explicit names and set each field separately. I\u0027ve also updated to generate names that are slightly less ugly: I don\u0027t think TqRuntimeOptionalStructCoverageInfoSlot means anything to anybody, but TqSetterStructCoverageInfoSlot at least sounds like it has something to do with a setter.",
+      "parentUuid": "f59429f6_0a3c9741",
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "769b077f_c0ce21b2",
         "filename": "src/objects/scope-info.cc",
         "patchSetId": 4
@@ -198,6 +216,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "357b0327_666a459f",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4099,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-01-25T23:09:38Z",
+      "side": 1,
+      "message": "Good idea, thanks. This is a tuple not a pair, so I\u0027ve used std::get\u003c1\u003e instead.",
+      "parentUuid": "fa8c89fe_d686f814",
+      "range": {
+        "startLine": 4098,
+        "startChar": 0,
+        "endLine": 4099,
+        "endChar": 66
+      },
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60ed6dc4_507f7f72",
@@ -211,6 +253,30 @@
       "writtenOn": "2021-01-22T15:37:45Z",
       "side": 1,
       "message": "nit: Since getter_params is not used anywhere else, I\u0027d just print the arguments here instead of constructing the vector.\n\nSo move lines 4135 and 4136 here and put a if(can_contain_heap_objects \u0026\u0026 f.index) inl_ \u003c\u003c \", \"; in between. What do you think?",
+      "range": {
+        "startLine": 4139,
+        "startChar": 2,
+        "endLine": 4139,
+        "endChar": 47
+      },
+      "revId": "65afe33436e266d16d95dd85cd7addc79fcafb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07241940_aff3bb0f",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4139,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-01-25T23:09:38Z",
+      "side": 1,
+      "message": "Sounds good, thanks.",
+      "parentUuid": "60ed6dc4_507f7f72",
       "range": {
         "startLine": 4139,
         "startChar": 2,
