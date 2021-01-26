@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9536da5e_15b2a432",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-01-26T15:10:41Z",
+      "side": 1,
+      "message": "PTAL at the reland changes.",
+      "revId": "d742635369b6dfa7a1ac35a208b4f1e463b65582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
