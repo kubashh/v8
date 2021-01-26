@@ -398,6 +398,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc7a2062_6768a5d6",
+        "filename": "src/compiler/simplified-lowering.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-26T12:11:32Z",
+      "side": 1,
+      "message": "I meant \nObserveNodeManager* const observe_node_manager_",
+      "parentUuid": "c582a0eb_0bdd619f",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b7d63d9_0fed3eba",
