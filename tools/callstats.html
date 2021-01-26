@@ -1066,24 +1066,42 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
     // EventHandlers
     function handleBodyLoad() {
       $('uploadInput').focus();
-      if (defaultData) {
-        handleLoadJSON(defaultData);
-      } else if (window.location.protocol !== 'file:') {
-        tryLoadDefaultResults();
-      }
+      if (defaultData) return handleLoadJSON(defaultData);
+      if (tryLoadFromURLParams()) return;
+      if (window.location.protocol !== 'file:') return tryLoadDefaultResults();
     }
 
-    function tryLoadDefaultResults() {
+    async function tryLoadDefaultResults() {
      // Try to load a results.json file adjacent to this day.
-     let xhr = new XMLHttpRequest();
      // The markers on the following line can be used to replace the url easily
      // with scripts.
-     xhr.open('GET', /*results-url-start*/'results.json'/*results-url-end*/, true);
-     xhr.onreadystatechange = function(e) {
-       if(this.readyState !== XMLHttpRequest.DONE || this.status !== 200) return;
-       handleLoadText(this.responseText);
-     };
-     xhr.send();
+     const url = /*results-url-start*/'results.json'/*results-url-end*/;
+     tryLoadFile(url);
+    }
+
+    async function tryLoadFile(url, append=false) {
+      if (!url.startsWith('http')) {
+        // hack to get relative urls
+        let location = window.location;
+        let parts = location.pathname.split("/").slice(0, -1);
+        url = location.origin + parts.join('/') + '/' + url;
+      }
+      let response = await fetch(url);
+      if (!response.ok) return false;
+      let filename = url.split('/');
+      filename = filename[filename.length-1];
+      handleLoadText(await response.text(), append, filename);
+    }
+
+    async function tryLoadFromURLParams() {
+      let params = new URLSearchParams(document.location.search);
+      let hasFile = false;
+      params.forEach((value, key) => {
+        if (key !== 'file') return;
+        hasFile = true;
+        tryLoadFile(value, true);
+      });
+      return hasFile;
     }
 
     function handleAppendFile() {
@@ -1630,12 +1648,22 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
       add(entry) {
         // Ignore accidentally added Group entries.
         if (entry.name.startsWith(GroupedEntry.prefix)) return;
-        entry.page = this;
-        this.entryDict.set(entry.name, entry);
-        for (let group of this.groups) { 
-          if (group.add(entry)) return;
+        let existingEntry = this.entryDict.get(entry.name);
+        if (existingEntry !== undefined) {
+          // Duplicate entries happen when multipe runs are combined into a
+          // single file.
+          existingEntry.add(entry);
+          for (let group of this.groups) { 
+            if (group.addTimeAndCount(entry)) return;
+          }
+        } else {
+          entry.page = this;
+          this.entryDict.set(entry.name, entry);
+          for (let group of this.groups) { 
+            if (group.add(entry)) return;
+          }
         }
-        console.error("Sould not get here", entry);
+        console.error("Should not get here", entry);
       }
       get(name) {
         return this.entryDict.get(name)
@@ -1719,6 +1747,9 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
         for (let i = 2; i < lines.length; i++) {
           let line = lines[i].trim().split(split)
           if (line.length != 5) continue;
+          // Skip headers that appear later, when dumping mulitple runs into a
+          // single .txt file.
+          if (line[4] == "Time") continue;
           let position = i-2;
           pageVersion.add(Entry.fromTXT(position, line));
         }
@@ -1742,6 +1773,14 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
         this.page = undefined;
         this.parent = undefined;
         this.isTotal = false;
+      }
+      add(entry) {
+        if (this.name != entry.name) {
+          console.error("Should not combine entries with different names");
+          return;
+        }
+        this._time += entry._time;
+        this._count += entry._count;
       }
       urlParams() {
         let params = this.page.urlParams();
@@ -1886,12 +1925,16 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
       get color() { return this.group.color }
       get enabled() { return this.group.enabled }
       add(entry) {
-        if (!this.regexp.test(entry.name)) return false;
-        this._time += entry.time;
-        this._count += entry.count;
+        if (!this.addTimeAndCount(entry)) return;
         // TODO: sum up variance
         this.entries.push(entry);
         entry.parent = this;
+        return true;
+      }
+      addTimeAndCount(entry) {
+        if (!this.regexp.test(entry.name)) return false;
+        this._time += entry.time;
+        this._count += entry.count;
         return true;
       }
       _initializeMissingEntries() {
