@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "540a9e0c_f3adda7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-26T19:14:32Z",
+      "side": 1,
+      "message": "ptal\n\nDo you agree with the naming and the metrics?\n\nI will follow-up with the actual implementation in a separate CL.",
+      "revId": "bc229c0ed2b4abd0898347d8631189e99ae84a3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "320d8cec_1f236087",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-26T19:14:32Z",
+      "side": 1,
+      "message": "Review guide: here I am following the name of the existing Wasm events.",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 43
+      },
+      "revId": "bc229c0ed2b4abd0898347d8631189e99ae84a3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
