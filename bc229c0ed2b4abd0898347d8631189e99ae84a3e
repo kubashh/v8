@@ -39,6 +39,30 @@
       },
       "revId": "bc229c0ed2b4abd0898347d8631189e99ae84a3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e917145_6e2b1696",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-26T19:46:34Z",
+      "side": 1,
+      "message": "We used to record time in ms for all histograms. Do you think we need us or is it more a convenience?\n\n(Searching existing histograms I get 985 hits w/ units\u003d\"microseconds\" and 6k7 hits with units\u003d\"ms\", so we should be okay with reporting us.)",
+      "parentUuid": "320d8cec_1f236087",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 43
+      },
+      "revId": "bc229c0ed2b4abd0898347d8631189e99ae84a3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
