@@ -1096,7 +1096,8 @@ void V8HeapExplorer::ExtractMapReferences(HeapEntry* entry, Map map) {
     SetInternalReference(entry, "native_context", native_context,
                          Map::kConstructorOrBackPointerOrNativeContextOffset);
   } else {
-    Object constructor_or_backpointer = map.constructor_or_backpointer();
+    Object constructor_or_backpointer =
+        map.constructor_or_backpointer(kAcquireLoad);
     if (constructor_or_backpointer.IsMap()) {
       TagObject(constructor_or_backpointer, "(back pointer)");
       SetInternalReference(entry, "back_pointer", constructor_or_backpointer,

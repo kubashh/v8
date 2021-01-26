@@ -570,7 +570,7 @@ class Map : public HeapObject {
   // FunctionTemplateInfo available.
   // The field also overlaps with the native context pointer for context maps,
   // and with the Wasm type info for WebAssembly object maps.
-  DECL_ACCESSORS(constructor_or_backpointer, Object)
+  DECL_RELEASE_ACQUIRE_ACCESSORS(constructor_or_backpointer, Object)
   DECL_ACCESSORS(native_context, NativeContext)
   DECL_ACCESSORS(wasm_type_info, WasmTypeInfo)
   DECL_GETTER(GetConstructor, Object)
