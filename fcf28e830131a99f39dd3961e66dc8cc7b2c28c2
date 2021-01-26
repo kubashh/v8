@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82b930a9_2c7c0841",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-01-26T12:18:58Z",
+      "side": 1,
+      "message": "Looked more into this and I think my judgement was wrong. The GPU builders used an old Chromium revision which was stuck on this problem:\nhttps://chromium.googlesource.com/chromium/src/+log/6c027df5ee43a3c4573787092455b37ad5891352/content/test/gpu/gpu_tests/test_expectations/pixel_expectations.txt\n\nSo this CL was innocent, sorry for the revert. Please go ahead and reland.",
+      "revId": "fcf28e830131a99f39dd3961e66dc8cc7b2c28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
