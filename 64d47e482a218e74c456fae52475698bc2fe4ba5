@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23880c7d_222bc826",
+        "filename": "include/cppgc/heap-consistency.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-26T16:26:07Z",
+      "side": 1,
+      "message": "I put this in heap-consistency.h because it\u0027s similarly low-level as the write barriers and also works well with having just a HeapHandle.\n\nLMK if you have a better idea.",
+      "range": {
+        "startLine": 142,
+        "startChar": 29,
+        "endLine": 142,
+        "endChar": 53
+      },
+      "revId": "64d47e482a218e74c456fae52475698bc2fe4ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31906304_6c4756c3",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-26T16:26:07Z",
+      "side": 1,
+      "message": "fyi: This means we don\u0027t reporting while we are allocating during a main thread sweeping operation. (This is existing behavior but likely also something that cannot be easily fixed.)",
+      "range": {
+        "startLine": 318,
+        "startChar": 5,
+        "endLine": 318,
+        "endChar": 10
+      },
+      "revId": "64d47e482a218e74c456fae52475698bc2fe4ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
