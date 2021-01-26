@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cba59a2_6311b486",
+        "filename": "src/codegen/optimized-compilation-info.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "932ac9dc_f64bab2a",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00791c9b_5b9c826b",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-01-25T18:59:07Z",
       "side": 1,
       "message": "Here too.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0d2a8f7_49f3c699",
+        "filename": "src/codegen/optimized-compilation-info.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00791c9b_5b9c826b",
       "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3161f2fc_d785c0bb",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4edd60e9_e9e776f8",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79cf2248_5d150713",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-01-25T18:59:07Z",
       "side": 1,
       "message": "Is this intentionally done here instead of in JSIntrinsicLowering in order to observe as early as possible? Please add a comment if yes.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ec4489e_85b5f120",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2751,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79cf2248_5d150713",
       "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be994fc1_a20c5e09",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "251240fa_f7b3f587",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7c5cca1_f6cc523b",
@@ -103,6 +193,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2272d280_55f9ea0d",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7c5cca1_f6cc523b",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc72a330_f3cb5d78",
@@ -116,6 +224,24 @@
       "writtenOn": "2021-01-25T18:59:07Z",
       "side": 1,
       "message": "I think we shouldn\u0027t use that (or at least mark it as explicit, see https://google.github.io/styleguide/cppguide.html#Implicit_Conversions).\n\nI\u0027m fine with just calling StartObserving unconditionally and doing the check in there.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8970c6d3_053f4a5c",
+        "filename": "src/compiler/node-observer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc72a330_f3cb5d78",
       "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -139,6 +265,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbf214ba_a1085dd3",
+        "filename": "src/compiler/scheduled-machine-lowering.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "In class Reducer there is \n  Reduction Reduce(Node* node, ObserveNodeManager* observe_node_manager);\nbut also a private \n  virtual Reduction Reduce(Node* node) \u003d 0;\nwhich is overridden by the concrete graph reducers classes, so we can\u0027t have a default argument here.",
+      "parentUuid": "40d307d4_6dd918af",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "897908c7_e73d2c83",
         "filename": "src/compiler/simplified-lowering.cc",
         "patchSetId": 15
@@ -150,6 +294,24 @@
       "writtenOn": "2021-01-25T18:59:07Z",
       "side": 1,
       "message": "It\u0027s easy to forget this in future code.\n\nHave you considered setting things up such that VisitNode is by default assumed to have changed the node (and the observer is notified)? One could then explicitly opt-out of that in cases where nothing changes, perhaps even with a macro or function like IF_LOWER_DO_NOTHING that does\nif (lower\u003cT\u003e) { observe_node_manager_.NothingChanged(); }\nor similar.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78d0f09a_9a6af65b",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "True. However it is not so easy to call the observer from VisitNode, because observe_node_manager_-\u003eOnNodeChanged should be called at the end, after the changes, and VisitNode has a lot of exit points. We could introduce a new function DoVisitNode, called by VisitNode, and move the implementation there, with:\nvoid VisitNode(Node* node, Truncation truncation, SimplifiedLowering* lowering) {\n  DoVisitNode(node, lowering);\n  observe_node_manager_-\u003eOnNodeChanged(...);\n}\nBut given the complexity of the code it would not be so clear where to use the IF_LOWER_DO_NOTHING macro.\n\nActually I realized that currently we don\u0027t need NotifyNodeChanged(node) because we don\u0027t track changes to the node inputs or uses, but only the operator changes and the node replacements. For this it is sufficient to intercept ChangeOp and modify DeferReplacement to call NotifyNodeReplaced.",
+      "parentUuid": "897908c7_e73d2c83",
       "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -177,6 +339,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e17fb1e8_95752965",
+        "filename": "src/compiler/simplified-lowering.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70fc5666_d0e0904e",
+      "range": {
+        "startLine": 59,
+        "startChar": 41,
+        "endLine": 59,
+        "endChar": 63
+      },
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "684b2fa3_713ba2e1",
@@ -194,6 +380,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c582a0eb_0bdd619f",
+        "filename": "src/compiler/simplified-lowering.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "This cannot be const, because we call the non-const function observe_node_manager_-\u003eOnNodeChanged and we pass observe_node_manager_ to RepresentationSelector() that also calls OnNodeChanged.",
+      "parentUuid": "684b2fa3_713ba2e1",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b7d63d9_0fed3eba",
@@ -207,6 +411,24 @@
       "writtenOn": "2021-01-25T18:59:07Z",
       "side": 1,
       "message": "Please add a comment saying that this intrinsic only does something when compiled by TF.",
+      "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb63f778_b4518394",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-01-26T10:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b7d63d9_0fed3eba",
       "revId": "1750986027fc371bf40e3901db6f6cd4ce55f5d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
