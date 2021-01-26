@@ -33,6 +33,46 @@
       "message": "lgtm",
       "revId": "786c1a48712007905efa3d285bb44c51650b27a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "902751d9_b3e449c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-01-26T23:02:21Z",
+      "side": 1,
+      "message": "lgtm % nit",
+      "revId": "786c1a48712007905efa3d285bb44c51650b27a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2257fa2b_c405fc77",
+        "filename": "src/heap/cppgc-js/cpp-heap.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-01-26T23:02:21Z",
+      "side": 1,
+      "message": "nit: This seems false since you can call either IncreaseAllocatedSize or DecreaseAllocatedSize.",
+      "range": {
+        "startLine": 76,
+        "startChar": 31,
+        "endLine": 76,
+        "endChar": 79
+      },
+      "revId": "786c1a48712007905efa3d285bb44c51650b27a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
