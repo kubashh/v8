@@ -73,6 +73,30 @@
       },
       "revId": "786c1a48712007905efa3d285bb44c51650b27a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94590b02_5bf7147f",
+        "filename": "src/heap/cppgc-js/cpp-heap.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-26T23:10:12Z",
+      "side": 1,
+      "message": "Done. That comment was copied over from Blink :)",
+      "parentUuid": "2257fa2b_c405fc77",
+      "range": {
+        "startLine": 76,
+        "startChar": 31,
+        "endLine": 76,
+        "endChar": 79
+      },
+      "revId": "786c1a48712007905efa3d285bb44c51650b27a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
