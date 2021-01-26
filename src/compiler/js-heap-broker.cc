@@ -3173,15 +3173,7 @@ bool MapRef::IsPrimitiveMap() const {
 }
 
 MapRef MapRef::FindFieldOwner(InternalIndex descriptor_index) const {
-  if (data_->should_access_heap()) {
-    Handle<Map> owner(
-        object()->FindFieldOwner(broker()->isolate(), descriptor_index),
-        broker()->isolate());
-    return MapRef(broker(), owner);
-  }
-  DescriptorArrayData* descriptors =
-      data()->AsMap()->instance_descriptors()->AsDescriptorArray();
-  return MapRef(broker(), descriptors->FindFieldOwner(descriptor_index));
+  return instance_descriptors().FindFieldOwner(object(), descriptor_index);
 }
 
 ObjectRef MapRef::GetFieldType(InternalIndex descriptor_index) const {
@@ -3467,8 +3459,8 @@ BIMODAL_ACCESSOR_C(Map, int, NextFreePropertyIndex)
 BIMODAL_ACCESSOR_C(Map, int, UnusedPropertyFields)
 BIMODAL_ACCESSOR(Map, HeapObject, prototype)
 BIMODAL_ACCESSOR_C(Map, InstanceType, instance_type)
-BIMODAL_ACCESSOR(Map, Object, GetConstructor)
-BIMODAL_ACCESSOR(Map, HeapObject, GetBackPointer)
+BIMODAL_ACCESSOR_WITH_FLAG(Map, Object, GetConstructor)
+BIMODAL_ACCESSOR_WITH_FLAG(Map, HeapObject, GetBackPointer)
 BIMODAL_ACCESSOR_C(Map, bool, is_abandoned_prototype_map)
 
 BIMODAL_ACCESSOR_C(Code, unsigned, inlined_bytecode_size)
@@ -4055,6 +4047,16 @@ PropertyDetails DescriptorArrayRef::GetPropertyDetails(
     return object()->GetDetails(descriptor_index);
   }
   return data()->AsDescriptorArray()->GetPropertyDetails(descriptor_index);
+}
+
+MapRef DescriptorArrayRef::FindFieldOwner(
+    Handle<Map> map, InternalIndex descriptor_index) const {
+  if (data_->should_access_heap() || FLAG_turbo_direct_heap_access) {
+    return MapRef(broker(), broker()->GetOrCreateData(map->FindFieldOwner(
+                                broker()->isolate(), descriptor_index)));
+  }
+  return MapRef(broker(),
+                data()->AsDescriptorArray()->FindFieldOwner(descriptor_index));
 }
 
 base::Optional<SharedFunctionInfoRef> FeedbackCellRef::shared_function_info()
