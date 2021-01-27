@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e99da4b0_647045a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-27T11:15:05Z",
+      "side": 1,
+      "message": "Thanks all!",
+      "revId": "0bc2b10249ae4f0b1fc3b27f3b933e2f70df8e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4015d2e8_bb7a3948",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-01-26T23:16:44Z",
       "side": 1,
       "message": "nit: Wdyt about removing the *_cpp fields, using this as a base class and adding 2 aliases for it (one for v8 and one for cpp)? That way users have the option of registering to get just the v8 metrics, just the cpp metrics or both.",
+      "range": {
+        "startLine": 26,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "0bc2b10249ae4f0b1fc3b27f3b933e2f70df8e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d6a7658_e6bd1811",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-27T11:15:05Z",
+      "side": 1,
+      "message": "I would like to keep the simple POD type and optimize for the main UMA case. The embedders that don\u0027t need v8 metrics can ignore the fields.",
+      "parentUuid": "4015d2e8_bb7a3948",
       "range": {
         "startLine": 26,
         "startChar": 7,
@@ -81,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16f395fc_e646e6ac",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-27T11:15:05Z",
+      "side": 1,
+      "message": "As discussed offline, that seems to be a bug in the doc.",
+      "parentUuid": "299e3ef2_824a9ccf",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 24
+      },
+      "revId": "0bc2b10249ae4f0b1fc3b27f3b933e2f70df8e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "036246be_709f28da",
@@ -94,6 +159,30 @@
       "writtenOn": "2021-01-26T23:16:44Z",
       "side": 1,
       "message": "nit: Add \"Event\" to the name somewhere to clarify that these are reported per event (unlike the struct above that is reported per cycle)?",
+      "range": {
+        "startLine": 47,
+        "startChar": 7,
+        "endLine": 47,
+        "endChar": 53
+      },
+      "revId": "0bc2b10249ae4f0b1fc3b27f3b933e2f70df8e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfe38657_0776218c",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-27T11:15:05Z",
+      "side": 1,
+      "message": "The cycle event has \"Cycle\" in the name. Omit \"Event\" as implicit here (similar to the existing Wasm events).",
+      "parentUuid": "036246be_709f28da",
       "range": {
         "startLine": 47,
         "startChar": 7,
