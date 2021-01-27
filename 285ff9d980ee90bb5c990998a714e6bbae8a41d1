@@ -103,6 +103,24 @@
       "parentUuid": "80ece8dd_8eccc437",
       "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f21da64a_19d4f930",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-27T10:01:13Z",
+      "side": 1,
+      "message": "Oh, I see what you mean.\n\nI think it is correct, but indeed may be suboptimal because we could reusing the existing main thread marking visitor and marking state here.\n\nI\u0027ll follow up with a CL that fixes it.",
+      "parentUuid": "dd65390a_e318920a",
+      "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
