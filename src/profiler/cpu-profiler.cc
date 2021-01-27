@@ -23,6 +23,31 @@
 #include "src/wasm/wasm-engine.h"
 
 namespace v8 {
+
+class CpuProfileMaxSamplesCallbackTask : public v8::Task {
+ public:
+  CpuProfileMaxSamplesCallbackTask(
+      v8::Isolate* isolate, void* data,
+      MaxSamplesReachedCallbackFunction* callback_function)
+      : isolate_(isolate), data_(data), callback_function_(callback_function) {}
+
+  void Run() override { (*callback_function_)(isolate_, data_); }
+
+ private:
+  v8::Isolate* isolate_;
+  void* data_;
+  MaxSamplesReachedCallbackFunction* callback_function_;
+};
+
+void DiscardedSamplesDelegate::Notify() {
+  if (!posted_) {
+    const auto task_runner = platform_->GetForegroundTaskRunner(isolate_);
+    task_runner->PostTask(std::make_unique<CpuProfileMaxSamplesCallbackTask>(
+        isolate_, data_, callback_function_));
+    posted_ = true;
+  }
+}
+
 namespace internal {
 
 static const int kProfilerStackSize = 64 * KB;

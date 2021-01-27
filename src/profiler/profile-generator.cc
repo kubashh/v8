@@ -539,9 +539,11 @@ using v8::tracing::TracedValue;
 std::atomic<uint32_t> CpuProfile::last_id_;
 
 CpuProfile::CpuProfile(CpuProfiler* profiler, const char* title,
-                       CpuProfilingOptions options)
+                       CpuProfilingOptions options,
+                       std::shared_ptr<DiscardedSamplesDelegate> delegate)
     : title_(title),
       options_(options),
+      delegate_(delegate),
       start_time_(base::TimeTicks::HighResolutionNow()),
       top_down_(profiler->isolate()),
       profiler_(profiler),
@@ -588,8 +590,13 @@ void CpuProfile::AddPath(base::TimeTicks timestamp,
       (options_.max_samples() == CpuProfilingOptions::kNoSampleLimit ||
        samples_.size() < options_.max_samples());
 
-  if (should_record_sample)
+  if (should_record_sample) {
     samples_.push_back({top_frame_node, timestamp, src_line});
+  }
+
+  if (!should_record_sample && delegate_ != nullptr) {
+    delegate_->Notify();
+  }
 
   const int kSamplesFlushCount = 100;
   const int kNodesFlushCount = 10;
@@ -818,7 +825,9 @@ CpuProfilingStatus CpuProfilesCollection::StartProfiling(
       return CpuProfilingStatus::kAlreadyStarted;
     }
   }
-  current_profiles_.emplace_back(new CpuProfile(profiler_, title, options));
+
+  current_profiles_.emplace_back(new CpuProfile(
+      profiler_, title, options, options.discarded_samples_delegate()));
   current_profiles_semaphore_.Signal();
   return CpuProfilingStatus::kStarted;
 }
