@@ -10860,13 +10860,14 @@ CpuProfiler* CpuProfiler::New(Isolate* isolate,
       reinterpret_cast<i::Isolate*>(isolate), naming_mode, logging_mode));
 }
 
-CpuProfilingOptions::CpuProfilingOptions(CpuProfilingMode mode,
-                                         unsigned max_samples,
-                                         int sampling_interval_us,
-                                         MaybeLocal<Context> filter_context)
+CpuProfilingOptions::CpuProfilingOptions(
+    CpuProfilingMode mode, unsigned max_samples, int sampling_interval_us,
+    MaybeLocal<Context> filter_context,
+    std::shared_ptr<DiscardedSamplesDelegate> discarded_samples_delegate)
     : mode_(mode),
       max_samples_(max_samples),
-      sampling_interval_us_(sampling_interval_us) {}
+      sampling_interval_us_(sampling_interval_us),
+      discarded_samples_delegate_(discarded_samples_delegate) {}
 
 void CpuProfiler::Dispose() { delete reinterpret_cast<i::CpuProfiler*>(this); }
 

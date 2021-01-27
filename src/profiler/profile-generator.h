@@ -344,8 +344,9 @@ class CpuProfile {
     int line;
   };
 
-  V8_EXPORT_PRIVATE CpuProfile(CpuProfiler* profiler, const char* title,
-                               CpuProfilingOptions options);
+  V8_EXPORT_PRIVATE CpuProfile(
+      CpuProfiler* profiler, const char* title, CpuProfilingOptions options,
+      std::shared_ptr<DiscardedSamplesDelegate> delegate = nullptr);
   CpuProfile(const CpuProfile&) = delete;
   CpuProfile& operator=(const CpuProfile&) = delete;
 
@@ -381,6 +382,7 @@ class CpuProfile {
 
   const char* title_;
   const CpuProfilingOptions options_;
+  const std::shared_ptr<DiscardedSamplesDelegate> delegate_;
   base::TimeTicks start_time_;
   base::TimeTicks end_time_;
   std::deque<SampleInfo> samples_;

@@ -259,6 +259,42 @@ enum class CpuProfilingStatus {
 };
 
 /**
+ * Callback function invoked during profiling when max samples is reached.
+ */
+typedef void (*MaxSamplesReachedCallbackFunction)(v8::Isolate* isolate,
+                                                  void* data);
+
+/**
+ * Delegate for when max samples reached and samples are discarded.
+ */
+class V8_EXPORT DiscardedSamplesDelegate {
+ public:
+  DiscardedSamplesDelegate(v8::Isolate* isolate, v8::Platform* platform,
+                           void* data,
+                           MaxSamplesReachedCallbackFunction* callback_function)
+      : isolate_(isolate),
+        platform_(platform),
+        data_(data),
+        callback_function_(callback_function),
+        posted_(false) {}
+
+  void Notify();
+
+  MaxSamplesReachedCallbackFunction* callback_function() const {
+    return callback_function_;
+  }
+  v8::Isolate* isolate() const { return isolate_; }
+  void* data() const { return data_; }
+
+ protected:
+  v8::Isolate* isolate_;
+  v8::Platform* platform_;
+  void* data_;
+  MaxSamplesReachedCallbackFunction* callback_function_;
+  bool posted_;
+};
+
+/**
  * Optional profiling attributes.
  */
 class V8_EXPORT CpuProfilingOptions {
@@ -280,15 +316,23 @@ class V8_EXPORT CpuProfilingOptions {
    *                             the profiler's sampling interval.
    * \param filter_context Deprecated option to filter by context, currently a
    *                       no-op.
+   * \param discarded_samples_delegate optional delegate object passed in by
+   * the client; executed once max_samples is reached by the profiler, and
+   * samples beyond max_samples are being discarded.
    */
   CpuProfilingOptions(
       CpuProfilingMode mode = kLeafNodeLineNumbers,
       unsigned max_samples = kNoSampleLimit, int sampling_interval_us = 0,
-      MaybeLocal<Context> filter_context = MaybeLocal<Context>());
+      MaybeLocal<Context> filter_context = MaybeLocal<Context>(),
+      std::shared_ptr<DiscardedSamplesDelegate> discarded_samples_delegate =
+          nullptr);
 
   CpuProfilingMode mode() const { return mode_; }
   unsigned max_samples() const { return max_samples_; }
   int sampling_interval_us() const { return sampling_interval_us_; }
+  std::shared_ptr<DiscardedSamplesDelegate> discarded_samples_delegate() const {
+    return discarded_samples_delegate_;
+  }
 
  private:
   friend class internal::CpuProfile;
@@ -296,6 +340,7 @@ class V8_EXPORT CpuProfilingOptions {
   CpuProfilingMode mode_;
   unsigned max_samples_;
   int sampling_interval_us_;
+  std::shared_ptr<DiscardedSamplesDelegate> discarded_samples_delegate_;
 };
 
 /**
@@ -348,6 +393,13 @@ class V8_EXPORT CpuProfiler {
    */
   CpuProfilingStatus StartProfiling(Local<String> title,
                                     CpuProfilingOptions options);
+
+  /**
+   * Starts profiling with the same semantics as above, except with delegate
+   * callback object included.
+   */
+  void StartProfiling(Local<String> title, CpuProfilingOptions options,
+                      std::shared_ptr<DiscardedSamplesDelegate> delegate);
 
   /**
    * Starts profiling with the same semantics as above, except with expanded
