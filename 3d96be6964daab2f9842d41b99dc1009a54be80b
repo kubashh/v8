@@ -16,6 +16,24 @@
       "message": "Hey Peter, PTAL. This should resolve the race issue encountered after landing https://chromium-review.googlesource.com/c/v8/v8/+/2628587.\n\nThanks!",
       "revId": "3d96be6964daab2f9842d41b99dc1009a54be80b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5fde082_4d3eb287",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2021-01-27T14:25:36Z",
+      "side": 1,
+      "message": "There was a different failure here which was related to the used bit - can you take a look at that too? https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8857002663331012736/+/steps/Check/0/logs/FastReturnValuesWithProfiler/0",
+      "parentUuid": "e03ef028_48ff2680",
+      "revId": "3d96be6964daab2f9842d41b99dc1009a54be80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
