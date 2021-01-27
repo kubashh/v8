@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e03ef028_48ff2680",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-01-27T02:16:03Z",
+      "side": 1,
+      "message": "Hey Peter, PTAL. This should resolve the race issue encountered after landing https://chromium-review.googlesource.com/c/v8/v8/+/2628587.\n\nThanks!",
+      "revId": "3d96be6964daab2f9842d41b99dc1009a54be80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
