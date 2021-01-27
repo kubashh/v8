@@ -85,6 +85,24 @@
       "parentUuid": "9f4c16a3_5d9aec9f",
       "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd65390a_e318920a",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-01-27T09:48:30Z",
+      "side": 1,
+      "message": "Agreed. But I wouldn\u0027t expect the concurrent marking task to run on the main thread? Shouldn\u0027t we use the main thread marking there?",
+      "parentUuid": "80ece8dd_8eccc437",
+      "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
