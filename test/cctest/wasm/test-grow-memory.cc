@@ -39,6 +39,20 @@ void Cleanup(Isolate* isolate = CcTest::InitIsolateOnce()) {
 }
 }  // namespace
 
+TEST(GetBufferDetaches) {
+  {
+    Isolate* isolate = CcTest::InitIsolateOnce();
+    HandleScope scope(isolate);
+    Handle<WasmMemoryObject> memory_object =
+        WasmMemoryObject::New(isolate, 16, 100, SharedFlag::kNotShared)
+            .ToHandleChecked();
+    Handle<JSArrayBuffer> buffer(memory_object->array_buffer(), isolate);
+    CHECK_NE(*buffer, memory_object->array_buffer());
+    CHECK(buffer->was_detached());
+  }
+  Cleanup();
+}
+
 TEST(GrowMemDetaches) {
   {
     Isolate* isolate = CcTest::InitIsolateOnce();

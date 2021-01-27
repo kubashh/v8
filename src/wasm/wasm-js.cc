@@ -1774,6 +1774,9 @@ void WebAssemblyMemoryGetBuffer(
       thrower.TypeError(
           "Status of setting SetIntegrityLevel of buffer is false.");
     }
+  } else {
+    // Detach only when the buffer is not shared
+    buffer->Detach(true);
   }
   v8::ReturnValue<v8::Value> return_value = args.GetReturnValue();
   return_value.Set(Utils::ToLocal(buffer));
