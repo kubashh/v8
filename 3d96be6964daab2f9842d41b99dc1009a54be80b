@@ -34,6 +34,24 @@
       "parentUuid": "e03ef028_48ff2680",
       "revId": "3d96be6964daab2f9842d41b99dc1009a54be80b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "681e0a4e_ff00810a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-01-27T22:43:08Z",
+      "side": 1,
+      "message": "Ah yes, that issue requires doing a relaxed load inside of the used_ access. I can include that inside of the CL for re-landing the finalizer integration, if that works.",
+      "parentUuid": "b5fde082_4d3eb287",
+      "revId": "3d96be6964daab2f9842d41b99dc1009a54be80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
