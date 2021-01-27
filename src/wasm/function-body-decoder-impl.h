@@ -317,7 +317,7 @@ ValueType read_value_type(Decoder* decoder, const byte* pc,
       return heap_type.is_bottom() ? kWasmBottom
                                    : ValueType::Ref(heap_type, nullability);
     }
-    case kRttCode: {
+    case kRttWithDepthCode: {
       if (!VALIDATE(enabled.has_gc())) {
         DecodeError<validate>(
             decoder, pc,
@@ -354,6 +354,32 @@ ValueType read_value_type(Decoder* decoder, const byte* pc,
         return kWasmBottom;
       }
       return ValueType::Rtt(type_index, depth);
+    }
+    case kRttCode: {
+      if (!VALIDATE(enabled.has_gc())) {
+        DecodeError<validate>(
+            decoder, pc,
+            "invalid value type 'rtt', enable with --experimental-wasm-gc");
+        return kWasmBottom;
+      }
+      uint32_t type_index = decoder->read_u32v<validate>(pc + 1, length);
+      *length += 1;
+      if (!VALIDATE(type_index < kV8MaxWasmTypes)) {
+        DecodeError<validate>(
+            decoder, pc,
+            "Type index %u is greater than the maximum number %zu "
+            "of type definitions supported by V8",
+            type_index, kV8MaxWasmTypes);
+        return kWasmBottom;
+      }
+      // We use capacity over size so this works mid-DecodeTypeSection.
+      if (!VALIDATE(module == nullptr ||
+                    type_index < module->types.capacity())) {
+        DecodeError<validate>(decoder, pc, "Type index %u is out of bounds",
+                              type_index);
+        return kWasmBottom;
+      }
+      return ValueType::Rtt(type_index);
     }
     case kS128Code: {
       if (!VALIDATE(enabled.has_simd())) {
@@ -3804,8 +3830,9 @@ class WasmFullDecoder : public WasmDecoder<validate> {
         }
         // TODO(7748): Drop this check if {imm} is dropped from the proposal
         // à la https://github.com/WebAssembly/function-references/pull/31.
-        if (!VALIDATE(rtt.type.is_bottom() ||
-                      rtt.type.ref_index() == imm.index)) {
+        if (!VALIDATE(
+                rtt.type.is_bottom() ||
+                (rtt.type.ref_index() == imm.index && rtt.type.has_depth()))) {
           PopTypeError(imm.struct_type->field_count(), rtt,
                        "rtt for type " + std::to_string(imm.index));
           return 0;
@@ -3838,8 +3865,9 @@ class WasmFullDecoder : public WasmDecoder<validate> {
         }
         // TODO(7748): Drop this check if {imm} is dropped from the proposal
         // à la https://github.com/WebAssembly/function-references/pull/31.
-        if (!VALIDATE(rtt.type.is_bottom() ||
-                      rtt.type.ref_index() == imm.index)) {
+        if (!VALIDATE(
+                rtt.type.is_bottom() ||
+                (rtt.type.ref_index() == imm.index && rtt.type.has_depth()))) {
           PopTypeError(0, rtt, "rtt for type " + std::to_string(imm.index));
           return 0;
         }
@@ -3911,8 +3939,9 @@ class WasmFullDecoder : public WasmDecoder<validate> {
         }
         // TODO(7748): Drop this check if {imm} is dropped from the proposal
         // à la https://github.com/WebAssembly/function-references/pull/31.
-        if (!VALIDATE(rtt.type.is_bottom() ||
-                      rtt.type.ref_index() == imm.index)) {
+        if (!VALIDATE(
+                rtt.type.is_bottom() ||
+                (rtt.type.ref_index() == imm.index && rtt.type.has_depth()))) {
           PopTypeError(2, rtt, "rtt for type " + std::to_string(imm.index));
           return 0;
         }
@@ -3940,8 +3969,9 @@ class WasmFullDecoder : public WasmDecoder<validate> {
         }
         // TODO(7748): Drop this check if {imm} is dropped from the proposal
         // à la https://github.com/WebAssembly/function-references/pull/31.
-        if (!VALIDATE(rtt.type.is_bottom() ||
-                      rtt.type.ref_index() == imm.index)) {
+        if (!VALIDATE(
+                rtt.type.is_bottom() ||
+                (rtt.type.ref_index() == imm.index && rtt.type.has_depth()))) {
           PopTypeError(1, rtt, "rtt for type " + std::to_string(imm.index));
           return 0;
         }
