@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7af3e3be_ad5b5314",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-01-27T19:11:08Z",
+      "side": 1,
+      "message": "```\n#define SIMD_VISIT_SIGN_SELECT(Type)                                       \\\n  void InstructionSelector::Visit##Type(Node* node) {                      \\\n    S390OperandGenerator g(this);                                          \\\n    Emit(kS390_##Type, g.DefineAsRegister(node),                           \\\n         g.UseRegister(node-\u003eInputAt(0)), g.UseRegister(node-\u003eInputAt(1)), \\\n         g.UseRegister(node-\u003eInputAt(2)));                                 \\\n  }\nSIMD_VISIT_SIGN_SELECT(I8x16SignSelect)\nSIMD_VISIT_SIGN_SELECT(I16x8SignSelect)\nSIMD_VISIT_SIGN_SELECT(I32x4SignSelect)\nSIMD_VISIT_SIGN_SELECT(I64x2SignSelect)\n#undef SIMD_VISIT_SIGN_SELECT\n```",
+      "revId": "4391f2cef48aefce5a440f06c936e95cd3bbbcf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
