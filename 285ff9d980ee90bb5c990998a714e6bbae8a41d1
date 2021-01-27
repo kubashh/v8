@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2091c0bb_47816384",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-27T09:45:54Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f4c16a3_5d9aec9f",
@@ -48,6 +65,24 @@
       "writtenOn": "2021-01-27T09:32:30Z",
       "side": 1,
       "message": "Is the concurrent marking task running on the main thread as well (I guess that\u0027s where IsJoiningThread() would return true)?",
+      "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80ece8dd_8eccc437",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-27T09:45:54Z",
+      "side": 1,
+      "message": "Yep, Jobs API can run a task on the main thread which it calls a joining thread.",
+      "parentUuid": "9f4c16a3_5d9aec9f",
       "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
