@@ -16,6 +16,40 @@
       "message": "ptal\n\nThe background marking epoch was removed accidentally during a rebase of another CL.\nThe incremental marking step epoch was missing.\n",
       "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74b4fab2_d781ab7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-01-27T09:32:30Z",
+      "side": 1,
+      "message": "LGTM, with one question. I was actually wondering about the CL and why that got removed. Planned to ask you about that but great that this is already solved!",
+      "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f4c16a3_5d9aec9f",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-01-27T09:32:30Z",
+      "side": 1,
+      "message": "Is the concurrent marking task running on the main thread as well (I guess that\u0027s where IsJoiningThread() would return true)?",
+      "revId": "285ff9d980ee90bb5c990998a714e6bbae8a41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
