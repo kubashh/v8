@@ -16,6 +16,23 @@
       "message": "PTAL at the reland changes.",
       "revId": "d742635369b6dfa7a1ac35a208b4f1e463b65582",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "167a32e6_5d33307d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-27T08:26:23Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "d742635369b6dfa7a1ac35a208b4f1e463b65582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
