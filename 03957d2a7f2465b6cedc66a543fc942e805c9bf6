@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a869feb_c67465cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-28T12:02:23Z",
+      "side": 1,
+      "message": "How does making the backpointer store a release-store prevent that store from being delayed?\n\nI thought Santiago made this a a release-store to ensure that the map that we store in the backpointer field is safe to read from FindFieldOwner on the background. The reason why I wonder that the change might not be needed is that the map that we store in that field has already been released before (otherwise we couldn\u0027t be transitioning away from it). But I might be missing something too.",
+      "parentUuid": "deac0c09_a831fb40",
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c4b5d545_d3ca8c3e",
