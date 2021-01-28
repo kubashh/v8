@@ -411,7 +411,8 @@ wasm::StructType* WasmStruct::type(Map map) {
 
 wasm::StructType* WasmStruct::GcSafeType(Map map) {
   DCHECK_EQ(WASM_STRUCT_TYPE, map.instance_type());
-  HeapObject raw = HeapObject::cast(map.constructor_or_backpointer());
+  HeapObject raw =
+      HeapObject::cast(map.constructor_or_backpointer(kAcquireLoad));
   MapWord map_word = raw.map_word();
   HeapObject forwarded =
       map_word.IsForwardingAddress() ? map_word.ToForwardingAddress() : raw;
@@ -434,7 +435,8 @@ wasm::ArrayType* WasmArray::type(Map map) {
 
 wasm::ArrayType* WasmArray::GcSafeType(Map map) {
   DCHECK_EQ(WASM_ARRAY_TYPE, map.instance_type());
-  HeapObject raw = HeapObject::cast(map.constructor_or_backpointer());
+  HeapObject raw =
+      HeapObject::cast(map.constructor_or_backpointer(kAcquireLoad));
   MapWord map_word = raw.map_word();
   HeapObject forwarded =
       map_word.IsForwardingAddress() ? map_word.ToForwardingAddress() : raw;
