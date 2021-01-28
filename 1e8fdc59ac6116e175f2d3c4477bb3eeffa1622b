@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f921ea78_e24aefeb",
+        "filename": "test/intl/regress-1170305.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-01-28T23:39:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f061500a_6f11f282",
+      "range": {
+        "startLine": 5,
+        "startChar": 32,
+        "endLine": 5,
+        "endChar": 35
+      },
+      "revId": "1e8fdc59ac6116e175f2d3c4477bb3eeffa1622b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6f4e78d_37ed01dd",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0b71592_ea8e30c7",
+        "filename": "test/intl/regress-1170305.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-01-28T23:39:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6f4e78d_37ed01dd",
+      "range": {
+        "startLine": 11,
+        "startChar": 48,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "1e8fdc59ac6116e175f2d3c4477bb3eeffa1622b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b43fe78b_c818a715",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-01-28T16:37:34Z",
       "side": 1,
       "message": "nit: is (and a trailing full stop please).",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "1e8fdc59ac6116e175f2d3c4477bb3eeffa1622b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86f52c45_8de8f220",
+        "filename": "test/intl/regress-1170305.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-01-28T23:39:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b43fe78b_c818a715",
       "range": {
         "startLine": 14,
         "startChar": 18,
