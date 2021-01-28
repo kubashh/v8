@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "deac0c09_a831fb40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-01-28T09:35:11Z",
+      "side": 1,
+      "message": "I might be missing something, but I think this is necessary unless there is some other synchronization going on, otherwise there\u0027s nothing preventing the compiler/CPU reordering the write to the backpointer to be after it exposes the newer map somewhere that the compiler thread can read it.\n\nI guess the one case this wouldn\u0027t be necessary is if the backpointer is set on construction of the map (and we release store the whole map), is this the case?",
+      "parentUuid": "d6cb5af5_cbaff7a4",
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c4b5d545_d3ca8c3e",
