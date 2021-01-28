@@ -34,6 +34,24 @@
       "parentUuid": "c4503ce1_a890f61f",
       "revId": "c751a5ab4c9c995ae369b7ef333f54b78df40d21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84537f08_128dd326",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-01-28T17:32:15Z",
+      "side": 1,
+      "message": "The code I linked to is an attempt by the Blink side to get at this same is_detachable bit, which is effectively the same as an \"is_wasm_memory\" bit. So while in the abstract I agree that this is something that V8 can do internally, I\u0027d like to better-understand the root cause of the bug this is fixing, and why that IsDetachable() check inside Blink isn\u0027t already avoiding the sharing here.",
+      "parentUuid": "a58742b1_f3dc448b",
+      "revId": "c751a5ab4c9c995ae369b7ef333f54b78df40d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
