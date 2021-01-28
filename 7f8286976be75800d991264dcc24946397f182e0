@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc394713_d9ceda26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-01-28T16:12:14Z",
+      "side": 1,
+      "message": "Hi Georg, hi Nico,\nI talked to y\u0027all separately about this CL in the last days. I think a review from one or both of you would be great. Thanks much,\n--Michael\n",
+      "revId": "7f8286976be75800d991264dcc24946397f182e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
