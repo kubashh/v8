@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4503ce1_a890f61f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-01-28T16:59:41Z",
+      "side": 1,
+      "message": "It\u0027s interesting to me that this is entirely inside V8. There\u0027s still code in Chromium that seems to be attempting to do the copying behavior of old:\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/typed_arrays/dom_array_buffer.cc;drc\u003dae1a631ceaf488f5e9cb55755de32b6a505b4b1e;l\u003d45\n\ndo you understand why that\u0027s not working?\n\nI\u0027d like to see a Chromium-side web_test (hopefully web platform test that can be shared upstream) for this behavior as well, to make sure this does what we expect when integrated (obviously that\u0027d be a separate CL from this one.",
+      "revId": "c751a5ab4c9c995ae369b7ef333f54b78df40d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
