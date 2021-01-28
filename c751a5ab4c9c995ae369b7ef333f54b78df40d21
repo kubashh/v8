@@ -52,6 +52,24 @@
       "parentUuid": "a58742b1_f3dc448b",
       "revId": "c751a5ab4c9c995ae369b7ef333f54b78df40d21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41181021_d2c27ad2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-01-28T18:54:43Z",
+      "side": 1,
+      "message": "So the code on the blink side *looks* like it\u0027s doing the right thing - i.e. on printfs, it detects that the buffer is not detachable etc, but still somehow has access to the underlying backing store. My suspicion is that the backing store is somehow being shared unintentionally, but I haven\u0027t yet figured out where - still looking. \n\nIn the mean time, I sent this CL out for a couple of reasons. (a) This is the correct behavior for ArrayBuffers backed by Wasm memory as discussed in the bug. This also catches that the buffer is not detachable earlier in the flow, i.e. consistent with the other DataCloneErrors this detects that the buffer is not eligible to be PostMessaged and doesn\u0027t get to the transfer method. (b) This is small and self contained to fix the security issue that can be easily backmerged.",
+      "parentUuid": "84537f08_128dd326",
+      "revId": "c751a5ab4c9c995ae369b7ef333f54b78df40d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
