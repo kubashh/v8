@@ -70,6 +70,24 @@
       "parentUuid": "9e9392af_79ff10d6",
       "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1d2700f_09e99774",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-01-28T05:30:11Z",
+      "side": 1,
+      "message": "I was able to use the DEPS file to loosen the presubmit restrictions. But I still haven\u0027t figured out a way to use the APIs defined in api.cc without linker errors.\n\nI spent the last week exploring how v8_libplatform.dll and v8.dll interact, and this is what I\u0027ve concluded (please lmk if any of this is inaccurate):\n\n  - Recorder calls APIs that gather information about scripts. These APIs are declared in v8.h but defined within api.cc, which is linked in v8.dll.\n  - TraceWriter uses Recorder to do event-logging. TraceWriter is declared+defined within v8_libplatform.dll.\n\nIn scenario 1, we link the Recorder within v8_libplatform.dll.\n  - When v8_libplatform.dll is being linked, the symbols for the APIs do not exist, so we throw a linker error.\n\nIn scenario 2, we link the Recorder within v8.dll.\n  - When v8_libplatform.dll is being linked, the symbols for the Recorder do not exist, so we still throw a linker error.\n\nI tried one more iteration of this, namely declaring Recorder inside include/libplatform/v8-tracing.h but defining it within v8.dll. But I run into the same errors as scenario 2.\n\nAny suggestions are welcome. Alternatively, we can meet online if this is easier to explain over video :)",
+      "parentUuid": "19473b96_0a8e3698",
+      "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
