@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e16bd507_49000e8f",
+        "filename": "src/common/globals.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-01-28T12:03:25Z",
+      "side": 1,
+      "message": "While looking at the followup cl I realized that this name really confuses me. It\u0027s set to 1 when argc already includes the receiver. \u0027kArgcAdditionForReceiver\u0027 implies to me that this constant needs to be added to argc, but it\u0027s actually exactly the opposite IIUC. I realize there\u0027s a whole chain of CL on top of this so let\u0027s not get into rebasing hell, but we should end up with an understandable name at the end.",
+      "revId": "591306014cfc4b3f16d4ea4389f5889d56db04da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ad559e2_fc6a54ba",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 17
