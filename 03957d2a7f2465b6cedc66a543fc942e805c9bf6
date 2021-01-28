@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f51521b_1e26b879",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-28T15:48:14Z",
+      "side": 1,
+      "message": "\u003e I thought Santiago made this a a release-store to ensure that the map that we store in the backpointer field is safe to read from FindFieldOwner on the background. \n\nYes, that was my reasoning.\n\n\u003e The reason why I wonder that the change might not be needed is that the map that we store in that field has already been released before (otherwise we couldn\u0027t be transitioning away from it). \n\nWe need to release store the field because otherwise we risk reading an old value from the field if we have everything as relaxed. We set the backpointer / constructor after the map\u0027s construction.",
+      "parentUuid": "2a869feb_c67465cd",
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c4b5d545_d3ca8c3e",
@@ -101,6 +119,24 @@
       "writtenOn": "2021-01-28T08:49:55Z",
       "side": 1,
       "message": "Let\u0027s pass the MapRef instead.",
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "666ecb98_21a69f6f",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-28T15:48:14Z",
+      "side": 1,
+      "message": "Not needed since I moved it to MapRef.",
+      "parentUuid": "3e58a15c_fd2bcc04",
       "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -166,6 +202,30 @@
       "side": 1,
       "message": "To be clear, I don\u0027t have a strong opinion on that.",
       "parentUuid": "5c7f66a1_6a239642",
+      "range": {
+        "startLine": 4055,
+        "startChar": 54,
+        "endLine": 4055,
+        "endChar": 59
+      },
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cf657dc_74ca8c6b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-01-28T15:48:14Z",
+      "side": 1,
+      "message": "Regarding keeping it on MapRef, I\u0027m torn. On one hand, we are dereferencing the map to call Map::FindFieldOwner so it should be on MapRef. On the other hand, we are accessing the DescriptorArrayData so it should be on DescriptorArrayRef.\nTo break the tie I am thinking keeping it on MapRef since the end goal would be to keep the concurrent access and the DescriptorArrayData part would be eliminated. WDYT?\n\nRegarding caching I think it would be a good candidate. Added a TODO.",
+      "parentUuid": "d7e81fad_41ecd09d",
       "range": {
         "startLine": 4055,
         "startChar": 54,
