@@ -3053,7 +3053,12 @@ OddballType MapRef::oddball_type() const {
 
 FeedbackCellRef FeedbackVectorRef::GetClosureFeedbackCell(int index) const {
   if (data_->should_access_heap()) {
-    return FeedbackCellRef(broker(), object()->GetClosureFeedbackCell(index));
+    FeedbackCell cell = object()->closure_feedback_cell(index);
+    Handle<FeedbackCell> cell_handle =
+        broker()->CanonicalPersistentHandle(cell);
+    // TODO(mvstanton): can I be sure to get one of these?
+    ObjectData* cell_data = broker()->TryGetOrCreateData(cell_handle, true);
+    return FeedbackCellRef(broker(), cell_data);
   }
 
   return FeedbackCellRef(

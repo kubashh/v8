@@ -74,7 +74,8 @@ enum class OddballType : uint8_t {
   V(Cell)                                           \
   V(FeedbackCell)                                   \
   V(SharedFunctionInfo)                             \
-  V(TemplateObjectDescription)
+  V(TemplateObjectDescription)                      \
+  V(FeedbackVector)
 
 // This list is sorted such that subtypes appear before their supertypes.
 // DO NOT VIOLATE THIS PROPERTY!
@@ -117,7 +118,6 @@ enum class OddballType : uint8_t {
   V(AllocationSite)                           \
   V(Code)                                     \
   V(DescriptorArray)                          \
-  V(FeedbackVector)                           \
   V(FixedArrayBase)                           \
   V(FunctionTemplateInfo)                     \
   V(JSReceiver)                               \
