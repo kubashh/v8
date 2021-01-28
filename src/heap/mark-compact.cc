@@ -2117,7 +2117,8 @@ void MarkCompactCollector::MarkDependentCodeForDeoptimization() {
 
 void MarkCompactCollector::ClearPotentialSimpleMapTransition(Map dead_target) {
   DCHECK(non_atomic_marking_state()->IsWhite(dead_target));
-  Object potential_parent = dead_target.constructor_or_backpointer();
+  Object potential_parent =
+      dead_target.constructor_or_backpointer(kAcquireLoad);
   if (potential_parent.IsMap()) {
     Map parent = Map::cast(potential_parent);
     DisallowGarbageCollection no_gc_obviously;
@@ -2255,14 +2256,15 @@ void MarkCompactCollector::ClearFullMapTransitions() {
       // filled. Allow it.
       if (array.GetTargetIfExists(0, isolate(), &map)) {
         DCHECK(!map.is_null());  // Weak pointers aren't cleared yet.
-        Object constructor_or_backpointer = map.constructor_or_backpointer();
+        Object constructor_or_backpointer =
+            map.constructor_or_backpointer(kAcquireLoad);
         if (constructor_or_backpointer.IsSmi()) {
           DCHECK(isolate()->has_active_deserializer());
           DCHECK_EQ(constructor_or_backpointer,
                     Deserializer::uninitialized_field_value());
           continue;
         }
-        Map parent = Map::cast(map.constructor_or_backpointer());
+        Map parent = Map::cast(map.constructor_or_backpointer(kAcquireLoad));
         bool parent_is_alive =
             non_atomic_marking_state()->IsBlackOrGrey(parent);
         DescriptorArray descriptors =
@@ -2324,7 +2326,7 @@ bool MarkCompactCollector::CompactTransitionArray(Map map,
   // Compact all live transitions to the left.
   for (int i = 0; i < num_transitions; ++i) {
     Map target = transitions.GetTarget(i);
-    DCHECK_EQ(target.constructor_or_backpointer(), map);
+    DCHECK_EQ(target.constructor_or_backpointer(kAcquireLoad), map);
     if (non_atomic_marking_state()->IsWhite(target)) {
       if (!descriptors.is_null() &&
           target.instance_descriptors(kRelaxedLoad) == descriptors) {
