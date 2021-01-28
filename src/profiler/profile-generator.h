@@ -344,8 +344,9 @@ class CpuProfile {
     int line;
   };
 
-  V8_EXPORT_PRIVATE CpuProfile(CpuProfiler* profiler, const char* title,
-                               CpuProfilingOptions options);
+  V8_EXPORT_PRIVATE CpuProfile(
+      CpuProfiler* profiler, const char* title, CpuProfilingOptions options,
+      std::shared_ptr<DiscardedSamplesDelegate> delegate = nullptr);
   CpuProfile(const CpuProfile&) = delete;
   CpuProfile& operator=(const CpuProfile&) = delete;
 
@@ -381,6 +382,7 @@ class CpuProfile {
 
   const char* title_;
   const CpuProfilingOptions options_;
+  const std::shared_ptr<DiscardedSamplesDelegate> delegate_;
   base::TimeTicks start_time_;
   base::TimeTicks end_time_;
   std::deque<SampleInfo> samples_;
@@ -393,6 +395,18 @@ class CpuProfile {
   base::TimeDelta next_sample_delta_;
 
   static std::atomic<uint32_t> last_id_;
+};
+
+class CpuProfileMaxSamplesCallbackTask : public v8::Task {
+ public:
+  CpuProfileMaxSamplesCallbackTask(
+      std::shared_ptr<DiscardedSamplesDelegate> delegate)
+      : delegate_(delegate) {}
+
+  void Run() override { delegate_->Notify(); }
+
+ private:
+  std::shared_ptr<DiscardedSamplesDelegate> delegate_;
 };
 
 class V8_EXPORT_PRIVATE CodeMap {

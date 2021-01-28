@@ -23,6 +23,7 @@
 #include "src/wasm/wasm-engine.h"
 
 namespace v8 {
+
 namespace internal {
 
 static const int kProfilerStackSize = 64 * KB;
