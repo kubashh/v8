@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "046327da86973a9ccfe01790fadee74d0690eb0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37326c25_93b07778",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-01-28T10:53:39Z",
+      "side": 1,
+      "message": "lgtm but I don\u0027t fully understand the usecase.\nMaybe add a unittest (that fails without this CL)?",
+      "revId": "046327da86973a9ccfe01790fadee74d0690eb0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
