@@ -4188,18 +4188,27 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           return 0;
         }
         Control* c = control_at(branch_depth.depth);
-        Value* result_on_branch =
-            Push(rtt.type.is_bottom()
-                     ? kWasmBottom
-                     : ValueType::Ref(rtt.type.ref_index(), kNonNullable));
-        TypeCheckBranchResult check_result = TypeCheckBranch(c, true);
-        if (V8_LIKELY(check_result == kReachableBranch)) {
-          CALL_INTERFACE(BrOnCast, obj, rtt, result_on_branch,
-                         branch_depth.depth);
-          c->br_merge()->reached = true;
-        } else if (check_result == kInvalidStack) {
+        ValueType type_on_branch =
+            rtt.type.is_bottom()
+                ? kWasmBottom
+                : ValueType::Ref(rtt.type.ref_index(), kNonNullable);
+
+        if (!VALIDATE(c->br_merge()->arity == 1 &&
+                      (type_on_branch == kWasmBottom ||
+                       IsSubtypeOf(type_on_branch, (*c->br_merge())[0].type,
+                                   this->module_)))) {
+          this->DecodeError(
+              "br_on_cast must target a branch of a supertype of type %s",
+              type_on_branch.name().c_str());
           return 0;
         }
+        // We temporarily push this value for the interface to merge it into the
+        // branch merge.
+        Value* result_on_branch = Push(type_on_branch);
+        CALL_INTERFACE_IF_REACHABLE(BrOnCast, obj, rtt, result_on_branch,
+                                    branch_depth.depth);
+        c->br_merge()->reached = true;
+
         Pop(0);  // Drop {result_on_branch}, restore original value.
         Value* result_on_fallthrough = Push(obj.type);
         *result_on_fallthrough = obj;
@@ -4251,20 +4260,29 @@ class WasmFullDecoder : public WasmDecoder<validate> {
                 ? HeapType::kFunc
                 : opcode == kExprBrOnData ? HeapType::kData : HeapType::kI31;
 
-        Value* result_on_branch = Push(ValueType::Ref(heap_type, kNonNullable));
-        TypeCheckBranchResult check_result = TypeCheckBranch(c, true);
-        if (V8_LIKELY(check_result == kReachableBranch)) {
-          if (opcode == kExprBrOnFunc) {
-            CALL_INTERFACE(BrOnFunc, obj, result_on_branch, branch_depth.depth);
-          } else if (opcode == kExprBrOnData) {
-            CALL_INTERFACE(BrOnData, obj, result_on_branch, branch_depth.depth);
-          } else {
-            CALL_INTERFACE(BrOnI31, obj, result_on_branch, branch_depth.depth);
-          }
-          c->br_merge()->reached = true;
-        } else if (check_result == kInvalidStack) {
+        ValueType type_on_branch = ValueType::Ref(heap_type, kNonNullable);
+
+        if (!VALIDATE(c->br_merge()->arity == 1 &&
+                      IsSubtypeOf(type_on_branch, (*c->br_merge())[0].type,
+                                  this->module_))) {
+          this->DecodeError(
+              "br_on_cast must target a branch of a supertype of type %s",
+              type_on_branch.name().c_str());
           return 0;
         }
+
+        // We temporarily push this value for the interface to merge it into the
+        // branch merge.
+        Value* result_on_branch = Push(type_on_branch);
+        if (opcode == kExprBrOnFunc) {
+          CALL_INTERFACE(BrOnFunc, obj, result_on_branch, branch_depth.depth);
+        } else if (opcode == kExprBrOnData) {
+          CALL_INTERFACE(BrOnData, obj, result_on_branch, branch_depth.depth);
+        } else {
+          CALL_INTERFACE(BrOnI31, obj, result_on_branch, branch_depth.depth);
+        }
+        c->br_merge()->reached = true;
+
         Pop(0);  // Drop {result_on_branch}, restore original value.
         Value* result_on_fallthrough = Push(obj.type);
         *result_on_fallthrough = obj;
