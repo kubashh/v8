@@ -539,9 +539,11 @@ using v8::tracing::TracedValue;
 std::atomic<uint32_t> CpuProfile::last_id_;
 
 CpuProfile::CpuProfile(CpuProfiler* profiler, const char* title,
-                       CpuProfilingOptions options)
+                       CpuProfilingOptions options,
+                       std::shared_ptr<DiscardedSamplesDelegate> delegate)
     : title_(title),
       options_(options),
+      delegate_(delegate),
       start_time_(base::TimeTicks::HighResolutionNow()),
       top_down_(profiler->isolate()),
       profiler_(profiler),
@@ -588,8 +590,23 @@ void CpuProfile::AddPath(base::TimeTicks timestamp,
       (options_.max_samples() == CpuProfilingOptions::kNoSampleLimit ||
        samples_.size() < options_.max_samples());
 
-  if (should_record_sample)
+  if (should_record_sample) {
     samples_.push_back({top_frame_node, timestamp, src_line});
+  }
+
+  if (!should_record_sample && delegate_ != nullptr && !delegate_->posted()) {
+    const auto task_runner =
+        (delegate_->platform() != nullptr)
+            ? delegate_->platform()->GetForegroundTaskRunner(
+                  delegate_->isolate())
+            : V8::GetCurrentPlatform()->GetForegroundTaskRunner(
+                  delegate_->isolate());
+    task_runner->PostTask(std::make_unique<CpuProfileMaxSamplesCallbackTask>(
+        std::move(delegate_)));
+    delegate_->setPosted(true);
+    // std::move ensures that the delegate_ will be null on the next sample,
+    // so we don't post a task multiple times.
+  }
 
   const int kSamplesFlushCount = 100;
   const int kNodesFlushCount = 10;
@@ -818,7 +835,9 @@ CpuProfilingStatus CpuProfilesCollection::StartProfiling(
       return CpuProfilingStatus::kAlreadyStarted;
     }
   }
-  current_profiles_.emplace_back(new CpuProfile(profiler_, title, options));
+
+  current_profiles_.emplace_back(new CpuProfile(
+      profiler_, title, options, options.discarded_samples_delegate()));
   current_profiles_semaphore_.Signal();
   return CpuProfilingStatus::kStarted;
 }

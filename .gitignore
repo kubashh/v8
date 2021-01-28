@@ -3,6 +3,7 @@
 *.a
 *.exe
 *.idb
+*.iml
 *.lib
 *.log
 *.map
@@ -30,6 +31,7 @@
 .cproject
 .gclient_entries
 .gdb_history
+.idea*
 .jslint-cache
 .landmines
 .project
