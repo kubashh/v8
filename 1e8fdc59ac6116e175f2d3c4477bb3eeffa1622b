@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b137e8a5_2ad9ac3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-28T16:37:34Z",
+      "side": 1,
+      "message": "LGTM % typos.\n\nAnd maybe make the CL description a bit more descriptive? Suggestion:\n\n  [intl] Fix space between day and hour in Chinese locale",
+      "revId": "1e8fdc59ac6116e175f2d3c4477bb3eeffa1622b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f061500a_6f11f282",
+        "filename": "test/intl/regress-1170305.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-28T16:37:34Z",
+      "side": 1,
+      "message": "nit: s/are/is a/",
+      "range": {
+        "startLine": 5,
+        "startChar": 32,
+        "endLine": 5,
+        "endChar": 35
+      },
+      "revId": "1e8fdc59ac6116e175f2d3c4477bb3eeffa1622b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6f4e78d_37ed01dd",
+        "filename": "test/intl/regress-1170305.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-28T16:37:34Z",
+      "side": 1,
+      "message": "nit: found",
+      "range": {
+        "startLine": 11,
+        "startChar": 48,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "1e8fdc59ac6116e175f2d3c4477bb3eeffa1622b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b43fe78b_c818a715",
+        "filename": "test/intl/regress-1170305.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-28T16:37:34Z",
+      "side": 1,
+      "message": "nit: is (and a trailing full stop please).",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "1e8fdc59ac6116e175f2d3c4477bb3eeffa1622b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
