@@ -16,6 +16,69 @@
       "message": "ptal",
       "revId": "8b80d9b498128a3243a6597c46bd0eb5bcb8d6d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ed92cd4_2eac1ec0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-01-28T13:39:59Z",
+      "side": 1,
+      "message": "lgtm with comments/questions",
+      "revId": "8b80d9b498128a3243a6597c46bd0eb5bcb8d6d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa9c78a9_2e7fbcd4",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-01-28T13:39:59Z",
+      "side": 1,
+      "message": "why is ArrowFunction in here, but not in the RecordEvalCall if? Something to do with preserving the receiver?",
+      "range": {
+        "startLine": 1437,
+        "startChar": 10,
+        "endLine": 1437,
+        "endChar": 41
+      },
+      "revId": "8b80d9b498128a3243a6597c46bd0eb5bcb8d6d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daa4f599_36e4b688",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-01-28T13:39:59Z",
+      "side": 1,
+      "message": "this deserves a comment, along the lines of \"we don\u0027t know what the contents of the eval might be, so they might access \u0027super\u0027\"\n\nAlso, would there be use for a predicate for \"CanUseSuper(function_kind)\" or similar, to merge the ones in this if statement?",
+      "range": {
+        "startLine": 1332,
+        "startChar": 2,
+        "endLine": 1337,
+        "endChar": 3
+      },
+      "revId": "8b80d9b498128a3243a6597c46bd0eb5bcb8d6d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
