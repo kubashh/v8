@@ -33,6 +33,24 @@
       "message": "lgtm but I don\u0027t fully understand the usecase.\nMaybe add a unittest (that fails without this CL)?",
       "revId": "046327da86973a9ccfe01790fadee74d0690eb0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a4865d4_67914df0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-01-28T11:06:31Z",
+      "side": 1,
+      "message": "\u003e lgtm but I don\u0027t fully understand the usecase.\n\u003e Maybe add a unittest (that fails without this CL)?\n\nDone, added a test.\n\nUse case is having off-heap types that have an implicit dtor defined in the header by using a Persistent\u003cT\u003e with an incomplete T. Before this CL, we would Assign(nullptr), which needs to have a complete T for a branch that possibly assigns a non-nullptr object.",
+      "parentUuid": "37326c25_93b07778",
+      "revId": "046327da86973a9ccfe01790fadee74d0690eb0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
