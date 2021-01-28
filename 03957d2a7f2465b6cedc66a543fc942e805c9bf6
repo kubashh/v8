@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6cb5af5_cbaff7a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-28T08:49:55Z",
+      "side": 1,
+      "message": "I\u0027m wondering if that is actually necessary. Intuitively the map on which we start the search is newer than the backpointer map.",
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c4b5d545_d3ca8c3e",
@@ -37,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e58a15c_fd2bcc04",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-28T08:49:55Z",
+      "side": 1,
+      "message": "Let\u0027s pass the MapRef instead.",
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d3bae46d_145fecd3",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 3
@@ -48,6 +82,30 @@
       "writtenOn": "2021-01-26T20:35:10Z",
       "side": 1,
       "message": "I think this is the first time where we pass a Handle to a different class ref.\nTo avoid this, we can keep the FindFieldOwner method only on MapRef.",
+      "range": {
+        "startLine": 4055,
+        "startChar": 54,
+        "endLine": 4055,
+        "endChar": 59
+      },
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c7f66a1_6a239642",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-28T08:49:55Z",
+      "side": 1,
+      "message": "Keeping it on MapRef is fine with me too.\n\nAnother thing to consider is caching the owner in the descriptor array data. That would avoid repeating the search for that index not only when done on the same map but also on any other map sharing that descriptor array. Let me know what you think.",
+      "parentUuid": "d3bae46d_145fecd3",
       "range": {
         "startLine": 4055,
         "startChar": 54,
