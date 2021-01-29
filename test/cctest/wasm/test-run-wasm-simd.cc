@@ -2751,8 +2751,8 @@ WASM_SIMD_TEST_NO_LOWERING(I8x16Popcnt) {
 WASM_SIMD_TEST(I8x16ConvertI16x8) {
   WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
   // Create output vectors to hold signed and unsigned results.
-  int8_t* g0 = r.builder().AddGlobal<int8_t>(kWasmS128);
-  int8_t* g1 = r.builder().AddGlobal<int8_t>(kWasmS128);
+  int8_t* g_s = r.builder().AddGlobal<int8_t>(kWasmS128);
+  uint8_t* g_u = r.builder().AddGlobal<uint8_t>(kWasmS128);
   // Build fn to splat test value, perform conversions, and write the results.
   byte value = 0;
   byte temp1 = r.AllocateLocal(kWasmS128);
@@ -2768,10 +2768,10 @@ WASM_SIMD_TEST(I8x16ConvertI16x8) {
   FOR_INT16_INPUTS(x) {
     r.Call(x);
     int8_t expected_signed = Saturate<int8_t>(x);
-    int8_t expected_unsigned = Saturate<uint8_t>(x);
+    uint8_t expected_unsigned = Saturate<uint8_t>(x);
     for (int i = 0; i < 16; i++) {
-      CHECK_EQ(expected_signed, ReadLittleEndianValue<int8_t>(&g0[i]));
-      CHECK_EQ(expected_unsigned, ReadLittleEndianValue<int8_t>(&g1[i]));
+      CHECK_EQ(expected_signed, ReadLittleEndianValue<int8_t>(&g_s[i]));
+      CHECK_EQ(expected_unsigned, ReadLittleEndianValue<uint8_t>(&g_u[i]));
     }
   }
 }
