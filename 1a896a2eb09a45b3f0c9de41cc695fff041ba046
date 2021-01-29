@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ffbf201_634bae3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1460969
+      },
+      "writtenOn": "2021-01-29T00:05:09Z",
+      "side": 1,
+      "message": "Thanks for the feedback! I like the approach, and I\u0027ve gone ahead and implemented it. Only thing is in the use of unique_ptr on this (v8) side, the compiler wouldn\u0027t allow me as it gave an error for implicit move constructor - I\u0027m still relatively new to C++, so I left as-is with a shared pointer as I couldn\u0027t figure out a workaround. ",
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
