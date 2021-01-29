@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cc07170_36467e7b",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-01-29T13:59:25Z",
+      "side": 1,
+      "message": "As discussed, I am expanding the macros with 3 expansions and leaving the rest.",
+      "parentUuid": "7bb7e4f0_7dc2d1fa",
+      "range": {
+        "startLine": 1091,
+        "startChar": 0,
+        "endLine": 1091,
+        "endChar": 29
+      },
+      "revId": "66d8a8482397efb093e59135cebb0ce1ee9c9b7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb7fd06c_b843ba03",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-01-29T13:12:42Z",
       "side": 1,
       "message": "Why not WASM_REF_IS_*?",
+      "range": {
+        "startLine": 1157,
+        "startChar": 7,
+        "endLine": 1157,
+        "endChar": 28
+      },
+      "revId": "66d8a8482397efb093e59135cebb0ce1ee9c9b7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6967ce5_e29c5db5",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-01-29T13:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb7fd06c_b843ba03",
       "range": {
         "startLine": 1157,
         "startChar": 7,
