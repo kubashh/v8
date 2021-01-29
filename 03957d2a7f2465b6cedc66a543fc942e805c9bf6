@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "abd02f05_c393dac9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-29T10:08:03Z",
+      "side": 1,
+      "message": "From looking at the code I think we always set the backpointer on a map before we publish that map (release-store the map into an object). So when the compiler thread sees the map (e.g. in the object or in the feedback vector), the backpointer is guaranteed to have its final value.",
+      "parentUuid": "0f51521b_1e26b879",
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c4b5d545_d3ca8c3e",
