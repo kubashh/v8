@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f89f807a_e5ff1aae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-29T13:12:42Z",
+      "side": 1,
+      "message": "LGTM.\n\nI\u0027m not a fan of the templates and macros in function-body-decoder and graph-builder-interface, however I\u0027m not sure the alternative would be clearly better. In the tests, OTOH, I think it\u0027s pretty clear that we should just inline the macros.",
+      "revId": "66d8a8482397efb093e59135cebb0ce1ee9c9b7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bb7e4f0_7dc2d1fa",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-29T13:12:42Z",
+      "side": 1,
+      "message": "The style guide\u0027s [1] TL;DR on macros is: don\u0027t. In V8 we sometimes have to use them, but these 3-line macros really aren\u0027t worth it: if my counting is correct, you need 8 lines for the macro-ified version (including some pretty ugly formatting in lines 1096/1097; without that it\u0027d be 10 lines), where the expansion would be 9 lines; that\u0027s clearly not worth the repetitiveness savings to make a human reader of the code expand the macro in their head.\n\nSame for the other macros below.\n\n[1] https://google.github.io/styleguide/cppguide.html#Preprocessor_Macros",
+      "range": {
+        "startLine": 1091,
+        "startChar": 0,
+        "endLine": 1091,
+        "endChar": 29
+      },
+      "revId": "66d8a8482397efb093e59135cebb0ce1ee9c9b7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb7fd06c_b843ba03",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-01-29T13:12:42Z",
+      "side": 1,
+      "message": "Why not WASM_REF_IS_*?",
+      "range": {
+        "startLine": 1157,
+        "startChar": 7,
+        "endLine": 1157,
+        "endChar": 28
+      },
+      "revId": "66d8a8482397efb093e59135cebb0ce1ee9c9b7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
