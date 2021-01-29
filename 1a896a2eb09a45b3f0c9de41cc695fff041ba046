@@ -16,6 +16,184 @@
       "message": "Thanks for the feedback! I like the approach, and I\u0027ve gone ahead and implemented it. Only thing is in the use of unique_ptr on this (v8) side, the compiler wouldn\u0027t allow me as it gave an error for implicit move constructor - I\u0027m still relatively new to C++, so I left as-is with a shared pointer as I couldn\u0027t figure out a workaround. ",
       "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cb4bec9_b581c8a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-29T11:02:07Z",
+      "side": 1,
+      "message": "Looking good!",
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9679e4b_07b68c87",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-29T11:02:07Z",
+      "side": 1,
+      "message": "Unused code",
+      "range": {
+        "startLine": 261,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 62
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d07f6a4_1b1afda0",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-29T11:02:07Z",
+      "side": 1,
+      "message": "We don\u0027t need isolate and platform here because CpuProfiler already knows the isolate.",
+      "range": {
+        "startLine": 272,
+        "startChar": 27,
+        "endLine": 272,
+        "endChar": 71
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9674db61_59ea3e61",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-29T11:02:07Z",
+      "side": 1,
+      "message": "We don\u0027t need this because we can check for delegate_ \u003d\u003d nullptr to avoid double posting.",
+      "range": {
+        "startLine": 280,
+        "startChar": 25,
+        "endLine": 280,
+        "endChar": 32
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88c1abe9_b4a59c41",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-29T11:02:07Z",
+      "side": 1,
+      "message": "std::unique_ptr\u003cDiscardedSamplesDelegate\u003e did not work because CpuProfilingOptions needs to be copyable.\n\nInstead of storing the delegate in the options, how about passing it directly to StartProfiling? (This would simplify the ownership transfer and allow std::unique_ptr)",
+      "range": {
+        "startLine": 319,
+        "startChar": 6,
+        "endLine": 320,
+        "endChar": 17
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b63085f_4eefc461",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-29T11:02:07Z",
+      "side": 1,
+      "message": "Instead of declaring a new version can we add the delegate as an optional?\n\nCpuProfilingStatus StartProfiling(Local\u003cString\u003e title, CpuProfilingOptions options, std::unique_ptr\u003cDiscardedSamplesDelegate\u003e delegate \u003d nullptr);",
+      "range": {
+        "startLine": 393,
+        "startChar": 2,
+        "endLine": 394,
+        "endChar": 74
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1316a60_f5c02e90",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-29T11:02:07Z",
+      "side": 1,
+      "message": "Not needed because delegate_ !\u003d nullptr does the same.",
+      "range": {
+        "startLine": 597,
+        "startChar": 52,
+        "endLine": 597,
+        "endChar": 75
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70cab0a1_d3545b13",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-01-29T11:02:07Z",
+      "side": 1,
+      "message": "V8::GetCurrentPlatform() is a singleton so we don\u0027t have to pass the platform via the delegate (it will be the same).\n\nAdditionally we can get the isolate from profiler_.\n\nSo this can be simplified to:\nconst auto task_runner \u003d V8::GetCurrentPlatform()-\u003eGetForegroundTaskRunner(profiler_-\u003eisolate())",
+      "range": {
+        "startLine": 599,
+        "startChar": 8,
+        "endLine": 603,
+        "endChar": 40
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
