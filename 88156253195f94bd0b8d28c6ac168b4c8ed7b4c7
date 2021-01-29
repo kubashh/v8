@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d54fc514_16e81220",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-01-29T12:31:51Z",
+      "side": 1,
+      "message": "LGTM % comments",
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb3e296d_1016df0b",
@@ -60,6 +77,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "82167dc3_32f9b161",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3061,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-01-29T12:31:51Z",
+      "side": 1,
+      "message": "nit: Is Try with true even trying something or is it always CHECK-crashing? If so, I would prefer removing the 2nd argument (we could instead implement Get and TryGet in terms of an implementation function). Could think about that in a follow up.",
+      "parentUuid": "beb0427f_befcd401",
+      "range": {
+        "startLine": 3061,
+        "startChar": 28,
+        "endLine": 3061,
+        "endChar": 76
+      },
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "efdba211_35ee2c37",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 2
@@ -71,6 +112,29 @@
       "writtenOn": "2021-01-29T10:33:46Z",
       "side": 1,
       "message": "The cast is obsolete, you can do closure_feedback_cell_array().cell(index).",
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b951165e_05cd4abe",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-01-29T12:31:51Z",
+      "side": 1,
+      "message": "Do you still need this, now that theres is no LocalIsolate overload of GetFeedbackCell anymore?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 40
+      },
       "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
