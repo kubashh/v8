@@ -16,6 +16,23 @@
       "message": "Nico, can you please take a look?\nFor context, see crrev.com/c/2643390 and crrev.com/c/2637223. Originally reviewed by Zhi, but this is currently breaking the mac arm64 release bot, so I\u0027d like someone in the same timezone to review ASAP.",
       "revId": "201ebd7f8b732061de8c619e4ae92d2bd08d3c1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61da912c_24884695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-01-29T09:57:54Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "201ebd7f8b732061de8c619e4ae92d2bd08d3c1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
