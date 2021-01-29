@@ -16,6 +16,24 @@
       "message": "Hello Igor, do you know when you might have time to take a look?",
       "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57767d8d_6f648db4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-01-29T08:00:27Z",
+      "side": 1,
+      "message": "Hello Seth, I\u0027m sorry for delays and thank you for the CL. \n\nI have some comments.\n\n@relaxedRead - sgtm.\nI agree that the old way of accessing arrays of \"inlined structs\" is worth improving.\n\nI\u0027m a bit concerned about the new API. I see two scenarios of how these structs/fields can be accessed:\n  a) all or nothing, when we need to load/store all fields at once. \n  b) we need to access only some fields in the array.\n\nScenario (a) is handled fine by the API, but (b) seems to be error-prone and confusing (see Jakob\u0027s comments re Optional fields) and less efficient compared with what we had before. In addition, the fact that such structs might contain raw tagged pointers seems scary to me.\n\nI think if you could extend the API with a way to provide a reference to an existing struct element in the array then the gap between this API and C++\u0027y way of dealing with arrays might be reduced.\n\nWhat I have in mind is that Torque might also generate one-word \"view\" objects for such structs which would contain an address of the struct and accessors to the fields of the struct (similar to how C++ code \"sees\" objects stored in V8 heap).\nThis should address (b) use cases. The code that accesses only some of the fields will look like\n  Name name \u003d module.vars(j);\n  module.vars(i).set_name(name);\n\nor\n  Handle\u003cName\u003e name(module.vars(j).name(), isolate);\n  \n  TqModuleVariableRef var_ref \u003d module.vars(i); // just a one-word object\n  var_ref.set_name(*name);\n  var_ref.set_index(42);\n  var_ref.set_properties(props);\n\nNote, that in this example \n1) we have to write similar amount of code anyway as with the TqSetterStructModuleVariable approach. \n2) we access only those variables that we want to access and we can create handles if we need to without leaving TqGetterStructModuleVariable struct with a raw value.\n3) we have full fine-grained control over whether we want to trigger write barrier for storing to particular field.\n4) since module.vars(i) is just a simple address computation, the C++ compiler will have an opportunity to combine it into complex addressing mode for particular struct field access.\n5) we might need to teach GC mole bot to treat TqModuleVariableRef/TqGetterStructModuleVariable/TqSetterStructModuleVariable as raw tagged pointers and ensure GC does not invalidate them unexpectedly.\n\nWe might still have a TqSetterStructModuleVariable-like structure (without base::Optional) for initializing all fields at once, but I\u0027m not sure it\u0027ll be more readable/cleaner than just calling setters one by one. \n\nPlease take my comments with a grain of salt since I haven\u0027t been following the direction of Torque language development, so I might be missing things that have already beed discussed before.",
+      "parentUuid": "f1dadce9_64b2cd8e",
+      "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
