@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ca11a55_c3498304",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-29T10:33:46Z",
+      "side": 1,
+      "message": "Please add a DCHECK(!FLAG_turbo_direct_heap_access) to the FeedbackVectorData constructor. And add a TODO somewhere that once we allow inlining of functions that we didn\u0027t see during serialization, we need to make sure that the feedback vector is safe to read transitively.",
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb3e296d_1016df0b",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-29T10:33:46Z",
+      "side": 1,
+      "message": "Please keep subgroups sorted.",
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beb0427f_befcd401",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3061,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-29T10:33:46Z",
+      "side": 1,
+      "message": "That\u0027s GetOrCreateData.",
+      "range": {
+        "startLine": 3061,
+        "startChar": 28,
+        "endLine": 3061,
+        "endChar": 76
+      },
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efdba211_35ee2c37",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-01-29T10:33:46Z",
+      "side": 1,
+      "message": "The cast is obsolete, you can do closure_feedback_cell_array().cell(index).",
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
