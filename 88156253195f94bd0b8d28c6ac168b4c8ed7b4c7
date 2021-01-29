@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dce90ac0_16e948c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-01-29T13:07:52Z",
+      "side": 1,
+      "message": "Right on, done for two subjects:\n\na) for the read of the feedback vector through the cell in the JSFunction: are we sure we\u0027re seeing a fully initialized vector, and\nb) for the issue we noted in discussion in the use of the FeedbackNexus. The CallIC writes a (possibly?) new JSFunction into a slot from generated code, and therefore, without store ordering. We\u0027ll need to use the heap predicate to ensure the object has been store ordered before we can look at it.",
+      "parentUuid": "4ca11a55_c3498304",
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb3e296d_1016df0b",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-01-29T10:33:46Z",
       "side": 1,
       "message": "Please keep subgroups sorted.",
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35466c6d_07b83f99",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-01-29T13:07:52Z",
+      "side": 1,
+      "message": "Puh, its frankly ridiculous that I can\u0027t simply learn the concept of alphabetical order 😄. Done.",
+      "parentUuid": "bb3e296d_1016df0b",
       "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -123,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "facf94be_34b41b77",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3061,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-01-29T13:07:52Z",
+      "side": 1,
+      "message": "Good point. Yeah, it always CHECK crashes. Indeed, it\u0027s a bit clumsy. I know we didn\u0027t want to duplicate that logic and this led to the current position. It\u0027s definitely a construction site, that function!",
+      "parentUuid": "82167dc3_32f9b161",
+      "range": {
+        "startLine": 3061,
+        "startChar": 28,
+        "endLine": 3061,
+        "endChar": 76
+      },
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efdba211_35ee2c37",
@@ -140,6 +200,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "685ecb21_fe464b63",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-01-29T13:07:52Z",
+      "side": 1,
+      "message": "Ah great, I removed the cast in both functions.",
+      "parentUuid": "efdba211_35ee2c37",
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b951165e_05cd4abe",
@@ -153,6 +231,30 @@
       "writtenOn": "2021-01-29T12:31:51Z",
       "side": 1,
       "message": "Do you still need this, now that theres is no LocalIsolate overload of GetFeedbackCell anymore?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 40
+      },
+      "revId": "88156253195f94bd0b8d28c6ac168b4c8ed7b4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67c66155_05f8b171",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-01-29T13:07:52Z",
+      "side": 1,
+      "message": "No sir, removed, thanks!",
+      "parentUuid": "b951165e_05cd4abe",
       "range": {
         "startLine": 14,
         "startChar": 0,
