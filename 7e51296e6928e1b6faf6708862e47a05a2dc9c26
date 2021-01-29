@@ -34,6 +34,24 @@
       "parentUuid": "f1dadce9_64b2cd8e",
       "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f4e6b82_5675bb5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-01-29T22:03:05Z",
+      "side": 1,
+      "message": "Thanks for the detailed response! I hadn\u0027t thought about the inherent risk in storing raw tagged pointers in a temporary struct before passing them to a setter, but it makes a lot of sense now that you point it out.\n\nI agree that your proposal for reference-style access looks a lot cleaner and simpler. I had previously considered reference-style access but thought that it would either be too slow (if the reference contained a Handle and an offset) or too risky (if the reference contained a raw pointer). I hadn\u0027t realized that we might make the raw-pointer option acceptably safe by updating gcmole to treat the references like raw pointers.\n\nAnother option I just thought of: perhaps the Ref object could contain only an offset (no dangerous raw pointers) and require the caller to pass the object again for every access. Example usage:\n\n  TqModuleVariableRef var_ref \u003d module.vars(i); // just a one-word object\n  var_ref.set_name(module, *name);\n  var_ref.set_index(module, 42);\n  var_ref.set_properties(module, props);\n\nThe downsides are obvious: this option is more verbose and opens up an exciting new opportunity for misuse by passing an object that doesn\u0027t match the original. However, I like that this option doesn\u0027t require anybody to learn about a new kind of unsafe object. V8 developers are already used to recognizing Object-derived things as raw tagged pointers and using DisallowGarbageCollection accordingly, but I worry that adding a new category of rarely-used unsafe access would do more harm than good. I think we could somewhat mitigate the risk of passing the wrong object by having Refs in debug builds contain the originally-requested index and check during each access that the offset matches a newly-computed offset.\n\nIn any case, there\u0027s a pretty clear consensus that this CL as it currently stands is harmful, so I\u0027ll undo the struct-related parts and leave just the non-contentious @relaxedRead part. Thanks again for the great feedback!",
+      "parentUuid": "57767d8d_6f648db4",
+      "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
