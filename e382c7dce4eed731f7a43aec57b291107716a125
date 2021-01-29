@@ -16,6 +16,80 @@
       "message": "PTAL",
       "revId": "e382c7dce4eed731f7a43aec57b291107716a125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "044129aa_91babde7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-01-29T10:36:50Z",
+      "side": 1,
+      "message": "One comment and two nits/minor comments.",
+      "revId": "e382c7dce4eed731f7a43aec57b291107716a125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "235a0eef_6caee291",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2492,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-01-29T10:36:50Z",
+      "side": 1,
+      "message": "I think this line would fail if {imm.depth + 1 \u003d\u003d control_depth()}, i.e. if targeting the function itself. Do we have a test for that?",
+      "revId": "e382c7dce4eed731f7a43aec57b291107716a125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1002e014_b28affe2",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-01-29T10:36:50Z",
+      "side": 1,
+      "message": "Is \"function block\" a term that is being used elsewhere?\nI don\u0027t really have a good alternative though, maybe just \"function scope\"? Or is it easier if we say \"delegate must target a try block or the outermost block\"?",
+      "range": {
+        "startLine": 2495,
+        "startChar": 54,
+        "endLine": 2495,
+        "endChar": 68
+      },
+      "revId": "e382c7dce4eed731f7a43aec57b291107716a125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceac4e3a_e17b1b63",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2498,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-01-29T10:36:50Z",
+      "side": 1,
+      "message": "would \"if (!target-\u003eis_incomplete_try())\" read easier?",
+      "revId": "e382c7dce4eed731f7a43aec57b291107716a125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
