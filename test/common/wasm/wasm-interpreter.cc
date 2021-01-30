@@ -2532,8 +2532,38 @@ class WasmInterpreterInternals {
   }
         PACK_CASE(I16x8SConvertI32x4, int4, i32x4, int8, 8, int16_t, int16_t)
         PACK_CASE(I16x8UConvertI32x4, int4, i32x4, int8, 8, uint16_t, int16_t)
-        PACK_CASE(I8x16SConvertI16x8, int8, i16x8, int16, 16, int8_t, int8_t)
-        PACK_CASE(I8x16UConvertI16x8, int8, i16x8, int16, 16, uint8_t, int8_t)
+        /* PACK_CASE(I8x16SConvertI16x8, int8, i16x8, int16, 16, int8_t, int8_t)
+         */
+        /* PACK_CASE(I8x16UConvertI16x8, int8, i16x8, int16, 16, uint8_t,
+         * uint8_t) */
+      case kExprI8x16SConvertI16x8: {
+        WasmValue v2 = Pop();
+        WasmValue v1 = Pop();
+        int8 s1 = v1.to_s128().to_i16x8();
+        int8 s2 = v2.to_s128().to_i16x8();
+        int16 res;
+        for (size_t i = 0; i < 16; ++i) {
+          int64_t v =
+              i < 16 / 2 ? s1.val[LANE(i, s1)] : s2.val[LANE(i - 16 / 2, s2)];
+          res.val[LANE(i, res)] = base::saturated_cast<int8_t>(v);
+        }
+        Push(WasmValue(Simd128(res)));
+        return true;
+      }
+      case kExprI8x16UConvertI16x8: {
+        WasmValue v2 = Pop();
+        WasmValue v1 = Pop();
+        int8 s1 = v1.to_s128().to_i16x8();
+        int8 s2 = v2.to_s128().to_i16x8();
+        int16 res;
+        for (size_t i = 0; i < 16; ++i) {
+          int64_t v =
+              i < 16 / 2 ? s1.val[LANE(i, s1)] : s2.val[LANE(i - 16 / 2, s2)];
+          res.val[LANE(i, res)] = base::saturated_cast<uint8_t>(v);
+        }
+        Push(WasmValue(Simd128(res)));
+        return true;
+      }
 #undef PACK_CASE
       case kExprS128Select: {
         int4 bool_val = Pop().to_s128().to_i32x4();
