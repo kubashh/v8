@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f59e6882_b9fba9ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-01-31T21:08:44Z",
+      "side": 1,
+      "message": "Thanks for the review.",
+      "revId": "538ede5adc598896dcc2c980bb6e3be6803e2afc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24c91c6f_1f3e8997",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-01-29T16:14:45Z",
       "side": 1,
       "message": "I think you can just drop this line and the resulting code would have the same behavior: VALIDATE on line 4696 includes the `!validate` early return, and 4705 then does the same `return kReachableBranch`.",
+      "range": {
+        "startLine": 4694,
+        "startChar": 6,
+        "endLine": 4694,
+        "endChar": 45
+      },
+      "revId": "538ede5adc598896dcc2c980bb6e3be6803e2afc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeab8de6_fd4da9b1",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-01-31T21:08:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24c91c6f_1f3e8997",
       "range": {
         "startLine": 4694,
         "startChar": 6,
@@ -64,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5121e98_55f66f8b",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-01-31T21:08:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85216238_ceaef741",
+      "range": {
+        "startLine": 376,
+        "startChar": 39,
+        "endLine": 376,
+        "endChar": 65
+      },
+      "revId": "538ede5adc598896dcc2c980bb6e3be6803e2afc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3ca8e4d_7f6ea072",
@@ -77,6 +142,30 @@
       "writtenOn": "2021-01-29T16:14:45Z",
       "side": 1,
       "message": "Doesn\u0027t this put an i32 onto the value stack, in a block that\u0027s supposed to leave a struct behind? How does this typecheck?",
+      "range": {
+        "startLine": 407,
+        "startChar": 24,
+        "endLine": 407,
+        "endChar": 38
+      },
+      "revId": "538ede5adc598896dcc2c980bb6e3be6803e2afc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15897eb0_d5ab1113",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-01-31T21:08:44Z",
+      "side": 1,
+      "message": "It branches out to the outer block, which is typed i32.",
+      "parentUuid": "d3ca8e4d_7f6ea072",
       "range": {
         "startLine": 407,
         "startChar": 24,
