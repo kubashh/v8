@@ -2519,21 +2519,18 @@ class WasmInterpreterInternals {
     src_type s1 = v1.to_s128().to_##name();                              \
     src_type s2 = v2.to_s128().to_##name();                              \
     dst_type res;                                                        \
-    int64_t min = std::numeric_limits<ctype>::min();                     \
-    int64_t max = std::numeric_limits<ctype>::max();                     \
     for (size_t i = 0; i < count; ++i) {                                 \
       int64_t v = i < count / 2 ? s1.val[LANE(i, s1)]                    \
                                 : s2.val[LANE(i - count / 2, s2)];       \
-      res.val[LANE(i, res)] =                                            \
-          static_cast<dst_ctype>(std::max(min, std::min(max, v)));       \
+      res.val[LANE(i, res)] = base::saturated_cast<dst_ctype>(v);        \
     }                                                                    \
     Push(WasmValue(Simd128(res)));                                       \
     return true;                                                         \
   }
         PACK_CASE(I16x8SConvertI32x4, int4, i32x4, int8, 8, int16_t, int16_t)
-        PACK_CASE(I16x8UConvertI32x4, int4, i32x4, int8, 8, uint16_t, int16_t)
+        PACK_CASE(I16x8UConvertI32x4, int4, i32x4, int8, 8, uint16_t, uint16_t)
         PACK_CASE(I8x16SConvertI16x8, int8, i16x8, int16, 16, int8_t, int8_t)
-        PACK_CASE(I8x16UConvertI16x8, int8, i16x8, int16, 16, uint8_t, int8_t)
+        PACK_CASE(I8x16UConvertI16x8, int8, i16x8, int16, 16, uint8_t, uint8_t)
 #undef PACK_CASE
       case kExprS128Select: {
         int4 bool_val = Pop().to_s128().to_i32x4();
