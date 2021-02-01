@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "046fd918_80959743",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-01T22:29:14Z",
+      "side": 1,
+      "message": "Georg for machine-operator OWNERS\nDeepti for everything\nPtal, thanks!",
+      "revId": "6a89ef387d584132146957b57edd17b6b2677c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
