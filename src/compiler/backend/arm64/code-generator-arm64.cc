@@ -2304,6 +2304,13 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
       SIMD_BINOP_CASE(kArm64I64x2Eq, Cmeq, 2D);
+    case kArm64I64x2Ne: {
+      VRegister dst = i.OutputSimd128Register().V2D();
+      __ Cmeq(dst, i.InputSimd128Register(0).V2D(),
+              i.InputSimd128Register(1).V2D());
+      __ Mvn(dst, dst);
+      break;
+    }
     case kArm64I64x2ShrU: {
       ASSEMBLE_SIMD_SHIFT_RIGHT(Ushr, 6, V2D, Ushl, X);
       break;
@@ -2817,6 +2824,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
   }
       // For AnyTrue, the format does not matter.
       SIMD_REDUCE_OP_CASE(kArm64V128AnyTrue, Umaxv, kFormatS, 4S);
+      SIMD_REDUCE_OP_CASE(kArm64V64x2AllTrue, Uminv, kFormatD, 2D);
       SIMD_REDUCE_OP_CASE(kArm64V32x4AllTrue, Uminv, kFormatS, 4S);
       SIMD_REDUCE_OP_CASE(kArm64V16x8AllTrue, Uminv, kFormatH, 8H);
       SIMD_REDUCE_OP_CASE(kArm64V8x16AllTrue, Uminv, kFormatB, 16B);
