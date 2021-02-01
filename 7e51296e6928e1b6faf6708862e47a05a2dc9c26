@@ -88,6 +88,24 @@
       "parentUuid": "24f1fe98_72964230",
       "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfc5f002_752a4a50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-02-01T23:28:52Z",
+      "side": 1,
+      "message": "I agree, that sounds much nicer. I\u0027ve updated this CL to be just @relaxedRead, but I hope I\u0027ll get time soon to implement struct accessors based on your recommendations. Thanks!",
+      "parentUuid": "b6b7afaf_e1f1a071",
+      "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
