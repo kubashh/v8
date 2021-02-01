@@ -2748,11 +2748,32 @@ WASM_SIMD_TEST_NO_LOWERING(I8x16Popcnt) {
 #endif  // V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_ARM || V8_TARGET_ARCH_X64
 
 // Tests both signed and unsigned conversion from I16x8 (packing).
-WASM_SIMD_TEST(I8x16ConvertI16x8) {
+WASM_SIMD_TEST(I8x16UConvertI16x8) {
   WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
   // Create output vectors to hold signed and unsigned results.
-  int8_t* g0 = r.builder().AddGlobal<int8_t>(kWasmS128);
-  int8_t* g1 = r.builder().AddGlobal<int8_t>(kWasmS128);
+  uint8_t* g_u = r.builder().AddGlobal<uint8_t>(kWasmS128);
+  // Build fn to splat test value, perform conversions, and write the results.
+  byte value = 0;
+  byte temp1 = r.AllocateLocal(kWasmS128);
+  BUILD(r, WASM_LOCAL_SET(temp1, WASM_SIMD_I16x8_SPLAT(WASM_LOCAL_GET(value))),
+        WASM_GLOBAL_SET(
+            0, WASM_SIMD_BINOP(kExprI8x16UConvertI16x8, WASM_LOCAL_GET(temp1),
+                               WASM_LOCAL_GET(temp1))),
+        WASM_ONE);
+
+  FOR_INT16_INPUTS(x) {
+    r.Call(x);
+    uint8_t expected_unsigned = base::saturated_cast<uint8_t>(x);
+    for (int i = 0; i < 16; i++) {
+      CHECK_EQ(expected_unsigned, ReadLittleEndianValue<uint8_t>(&g_u[i]));
+    }
+  }
+}
+
+WASM_SIMD_TEST(I8x16SConvertI16x8) {
+  WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
+  // Create output vectors to hold signed and unsigned results.
+  int8_t* g_s = r.builder().AddGlobal<int8_t>(kWasmS128);
   // Build fn to splat test value, perform conversions, and write the results.
   byte value = 0;
   byte temp1 = r.AllocateLocal(kWasmS128);
@@ -2760,18 +2781,13 @@ WASM_SIMD_TEST(I8x16ConvertI16x8) {
         WASM_GLOBAL_SET(
             0, WASM_SIMD_BINOP(kExprI8x16SConvertI16x8, WASM_LOCAL_GET(temp1),
                                WASM_LOCAL_GET(temp1))),
-        WASM_GLOBAL_SET(
-            1, WASM_SIMD_BINOP(kExprI8x16UConvertI16x8, WASM_LOCAL_GET(temp1),
-                               WASM_LOCAL_GET(temp1))),
         WASM_ONE);
 
   FOR_INT16_INPUTS(x) {
     r.Call(x);
     int8_t expected_signed = base::saturated_cast<int8_t>(x);
-    int8_t expected_unsigned = base::saturated_cast<uint8_t>(x);
     for (int i = 0; i < 16; i++) {
-      CHECK_EQ(expected_signed, ReadLittleEndianValue<int8_t>(&g0[i]));
-      CHECK_EQ(expected_unsigned, ReadLittleEndianValue<int8_t>(&g1[i]));
+      CHECK_EQ(expected_signed, ReadLittleEndianValue<int8_t>(&g_s[i]));
     }
   }
 }
