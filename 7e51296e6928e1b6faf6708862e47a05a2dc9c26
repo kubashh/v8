@@ -52,6 +52,24 @@
       "parentUuid": "57767d8d_6f648db4",
       "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24f1fe98_72964230",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-02-01T10:45:36Z",
+      "side": 1,
+      "message": "Actually, the compilers might already be smart enough to be able to hoist the i-th struct offset computation if necessary or pack it into complex addressing mode that the CPUs can execute fast. In this case we could just have the code like this:\n  Name name \u003d module.var_name(j);\n  ...\n  module.set_var_name(i, name);\n  module.set_var_index(i, 42);\n  module.set_properties(i, props);\n\nWell, it might seem \"slow\" but \n1) still be fast in practice,\n2) provide all the required flexibility regarding write barriers,\n3) will not add new sources of raw pointers (and surprises) that GC mole has to support,\n4) the C++ code will exactly match the code that is generated via Torque/CSA pipeline for accesses of the i-th struct\u0027s fields.\n\nI think if Torque will provide a bunch of auto- and properly-generated set of accessors like those that you removed from CoverageInfo it would already be very useful.\n\nJakob, Nico, Seth, WDYT?",
+      "parentUuid": "9f4e6b82_5675bb5b",
+      "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
