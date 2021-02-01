@@ -70,6 +70,24 @@
       "parentUuid": "9f4e6b82_5675bb5b",
       "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6b7afaf_e1f1a071",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-01T10:58:38Z",
+      "side": 1,
+      "message": "Individual setters sgtm.",
+      "parentUuid": "24f1fe98_72964230",
+      "revId": "7e51296e6928e1b6faf6708862e47a05a2dc9c26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
