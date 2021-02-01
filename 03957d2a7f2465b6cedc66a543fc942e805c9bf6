@@ -92,6 +92,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "43ce8c11_acbc2cdc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-01T19:44:22Z",
+      "side": 1,
+      "message": "Ack. Removed the sync and uploaded a new patchset.\nI had to remove the GetConstructor part of this CL because I am not sure it is safe yet. In fact I am pretty sure it needs some extra sync, or at the very least some reordering of sets like these two lines https://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/js-function.cc;l\u003d444;drc\u003daa4ee8d534c2bf3cfb74fa9db076b30ff5df35a4",
+      "parentUuid": "abd02f05_c393dac9",
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c4b5d545_d3ca8c3e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
