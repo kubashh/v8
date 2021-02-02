@@ -13,6 +13,7 @@
 #include "src/ast/scopes.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/optimized-compilation-info.h"
@@ -1103,6 +1104,18 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
     PendingOptimizationTable::FunctionWasOptimized(isolate, function);
   }
 
+  if (FLAG_sparkplug && code_kind == CodeKind::SPARKPLUG) {
+    if (function->shared().sparkplug_code().IsUndefined(isolate)) {
+      Handle<Code> code =
+          CompileWithBaseline(isolate, handle(function->shared(), isolate));
+      function->shared().set_sparkplug_code(*code);
+      return code;
+    }
+    function->feedback_vector().EvictOptimizedCodeMarkedForDeoptimization(
+        function->shared(), "CachedSparkplug");
+    return handle(Code::cast(function->shared().sparkplug_code()), isolate);
+  }
+
   // Check the optimized code cache (stored on the SharedFunctionInfo).
   if (CodeKindIsStoredInOptimizedCodeCache(code_kind)) {
     Handle<Code> cached_code;
@@ -1846,6 +1859,20 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag,
 
   // Initialize the feedback cell for this JSFunction.
   JSFunction::InitializeFeedbackCell(function, is_compiled_scope);
+
+
+  if (FLAG_always_sparkplug && !function->shared().HasAsmWasmData()) {
+    if (shared_info->sparkplug_code().IsCode()) {
+      function->set_code(Code::cast(shared_info->sparkplug_code()));
+    } else {
+      IsCompiledScope is_compiled_scoped(*shared_info, isolate);
+      JSFunction::EnsureFeedbackVector(function, &is_compiled_scoped);
+      code = CompileWithBaseline(isolate, shared_info);
+      function->shared().set_sparkplug_code(*code);
+      function->shared().set_may_have_cached_code(true);
+      function->set_code(*code);
+    }
+  }
 
   // Optimize now if --always-opt is enabled.
   if (FLAG_always_opt && !function->shared().HasAsmWasmData()) {
