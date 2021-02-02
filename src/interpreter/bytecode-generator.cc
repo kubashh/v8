@@ -4831,11 +4831,13 @@ void BytecodeGenerator::BuildPrivateBrandCheck(Property* property,
       builder()->Bind(&return_check);
     }
   } else {
+    printf("BuildPrivateBrandCheck checking for scope->brand()\n");
     BuildVariableLoadForAccumulatorValue(scope->brand(),
                                          HoleCheckMode::kElided);
     builder()->SetExpressionPosition(property);
     builder()->LoadKeyedProperty(
         object, feedback_index(feedback_spec()->AddKeyedLoadICSlot()));
+    // FIXME: what's the counterpart for checking if a keyed property is there?
   }
 }
 
@@ -5665,6 +5667,31 @@ void BytecodeGenerator::VisitCompareOperation(CompareOperation* expr) {
     FeedbackSlot slot;
     if (expr->op() == Token::IN) {
       slot = feedback_spec()->AddKeyedHasICSlot();
+
+      if (expr->left()->IsPrivateName()) {
+        DCHECK(FLAG_harmony_private_brand_checks);
+        Variable* var = expr->left()->AsVariableProxy()->var();
+        switch (var->mode()) {
+          case VariableMode::kPrivateMethod:
+          case VariableMode::kPrivateGetterOnly:
+          case VariableMode::kPrivateSetterOnly:
+          case VariableMode::kPrivateGetterAndSetter:
+          // FIXME: what?
+          printf("should do something...\n");
+/*
+        Property* property = lhs_data.expr()->AsProperty();
+        Register object = VisitForRegisterValue(property->obj());
+      Register key = VisitForRegisterValue(property->key());
+      BuildPrivateBrandCheck(property, object,
+                             MessageTemplate::kInvalidPrivateMemberWrite);
+      BuildPrivateSetterAccess(object, key, value);*/
+break;
+  default:
+  break;
+
+        }
+      }
+
     } else if (expr->op() == Token::INSTANCEOF) {
       slot = feedback_spec()->AddInstanceOfSlot();
     } else {
