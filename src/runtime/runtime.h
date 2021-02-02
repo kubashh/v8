@@ -106,6 +106,8 @@ namespace internal {
 #define FOR_EACH_INTRINSIC_COMPILER(F, I) \
   F(CompileForOnStackReplacement, 0, 1)   \
   F(CompileLazy, 1, 1)                    \
+  F(CompileBaseline, -1, 1)               \
+  F(CompileTurboProp, -1, 1)              \
   F(CompileOptimized_Concurrent, 1, 1)    \
   F(CompileOptimized_NotConcurrent, 1, 1) \
   F(HealOptimizedCodeSlot, 1, 1)          \
@@ -504,6 +506,7 @@ namespace internal {
   F(HasSmiOrObjectElements, 1, 1)             \
   F(HaveSameMap, 2, 1)                        \
   F(HeapObjectVerify, 1, 1)                   \
+  F(VerifyHeap, 0, 1)                         \
   F(ICsAreEnabled, 0, 1)                      \
   F(InLargeObjectSpace, 1, 1)                 \
   F(InYoungGeneration, 1, 1)                  \
