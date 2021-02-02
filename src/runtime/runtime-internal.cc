@@ -7,6 +7,7 @@
 #include "src/api/api.h"
 #include "src/ast/ast-traversal-visitor.h"
 #include "src/ast/prettyprinter.h"
+#include "src/baseline/baseline.h"
 #include "src/builtins/builtins.h"
 #include "src/common/message-template.h"
 #include "src/debug/debug.h"
@@ -40,6 +41,16 @@ RUNTIME_FUNCTION(Runtime_AccessCheck) {
     isolate->ReportFailedAccessCheck(object);
     RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
   }
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_VerifyHeap) {
+  static int count = 0;
+  if (count++ < 0) return ReadOnlyRoots(isolate).undefined_value();
+  HandleScope scope(isolate);
+  // printf("verify %i\n", count);
+  // isolate->heap()->Verify();
+  // base::OS::DebugBreak();
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
@@ -335,6 +346,10 @@ RUNTIME_FUNCTION(Runtime_BytecodeBudgetInterruptFromBytecode) {
     IsCompiledScope is_compiled_scope(
         function->shared().is_compiled_scope(isolate));
     JSFunction::EnsureFeedbackVector(function, &is_compiled_scope);
+    if (FLAG_sparkplug && !function->shared().HasBaselineData()) {
+      Handle<SharedFunctionInfo> shared(function->shared(), isolate);
+      function->set_code(*CompileWithBaseline(isolate, shared));
+    }
     // Also initialize the invocation count here. This is only really needed for
     // OSR. When we OSR functions with lazy feedback allocation we want to have
     // a non zero invocation count so we can inline functions.

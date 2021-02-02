@@ -690,10 +690,14 @@ void Code::Disassemble(const char* name, std::ostream& os, Isolate* isolate,
   if ((name != nullptr) && (name[0] != '\0')) {
     os << "name = " << name << "\n";
   }
-  if (CodeKindIsOptimizedJSFunction(kind())) {
+  if (CodeKindIsOptimizedJSFunction(kind()) && kind() != CodeKind::SPARKPLUG) {
     os << "stack_slots = " << stack_slots() << "\n";
   }
-  os << "compiler = " << (is_turbofanned() ? "turbofan" : "unknown") << "\n";
+  os << "compiler = "
+     << (is_turbofanned()
+             ? "turbofan"
+             : kind() == CodeKind::SPARKPLUG ? "baseline" : "unknown")
+     << "\n";
   os << "address = " << reinterpret_cast<void*>(ptr()) << "\n\n";
 
   if (is_off_heap_trampoline()) {
@@ -819,6 +823,8 @@ void BytecodeArray::Disassemble(std::ostream& os) {
   os << "Parameter count " << parameter_count() << "\n";
   os << "Register count " << register_count() << "\n";
   os << "Frame size " << frame_size() << "\n";
+  os << "OSR nesting level: " << osr_loop_nesting_level() << "\n";
+  os << "Bytecode Age: " << bytecode_age() << "\n";
 
   Address base_address = GetFirstBytecodeAddress();
   SourcePositionTableIterator source_positions(SourcePositionTable());
