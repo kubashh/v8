@@ -332,7 +332,7 @@ CodeKind Code::kind() const {
 void Code::initialize_flags(CodeKind kind, bool is_turbofanned, int stack_slots,
                             bool is_off_heap_trampoline) {
   CHECK(0 <= stack_slots && stack_slots < StackSlotsField::kMax);
-  DCHECK(!CodeKindIsInterpretedJSFunction(kind));
+  DCHECK_NE(CodeKind::INTERPRETED_FUNCTION, kind);
   uint32_t flags = KindField::encode(kind) |
                    IsTurbofannedField::encode(is_turbofanned) |
                    StackSlotsField::encode(stack_slots) |
