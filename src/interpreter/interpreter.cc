@@ -10,6 +10,7 @@
 #include "builtins-generated/bytecodes-builtins-list.h"
 #include "src/ast/prettyprinter.h"
 #include "src/ast/scopes.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/compiler.h"
 #include "src/codegen/unoptimized-compilation-info.h"
 #include "src/init/bootstrapper.h"
@@ -181,6 +182,7 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::ExecuteJobImpl() {
   if (generator()->HasStackOverflow()) {
     return FAILED;
   }
+
   return SUCCEEDED;
 }
 
@@ -254,6 +256,14 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::DoFinalizeJobImpl(
       return FAILED;
     }
     compilation_info()->SetBytecodeArray(bytecodes);
+    if (FLAG_always_sparkplug) {
+      Handle<Code> code = CompileWithBaseline(
+          isolate, compilation_info_.literal()->parameter_count(), bytecodes);
+      if (!code.is_null()) {
+        shared_info->set_sparkplug_code(*code);
+        shared_info->set_may_have_cached_code(true);
+      }
+    }
   }
 
   if (compilation_info()->SourcePositionRecordingMode() ==
