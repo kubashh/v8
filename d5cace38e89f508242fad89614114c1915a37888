@@ -16,6 +16,23 @@
       "message": "thanks, lgtm",
       "revId": "d5cace38e89f508242fad89614114c1915a37888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c1f55d4_b811f0e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-02T12:28:20Z",
+      "side": 1,
+      "message": "Ross, I am landing a shorter version of the CL than the one you reviewed. Feel free to ping me offline or this CL if you want to continue the discussion",
+      "revId": "d5cace38e89f508242fad89614114c1915a37888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

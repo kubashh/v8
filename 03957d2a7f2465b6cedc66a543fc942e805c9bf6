@@ -288,6 +288,30 @@
       },
       "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f6b6ebd_27326539",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-02T12:28:20Z",
+      "side": 1,
+      "message": "Resolving to submit.",
+      "parentUuid": "3cf657dc_74ca8c6b",
+      "range": {
+        "startLine": 4055,
+        "startChar": 54,
+        "endLine": 4055,
+        "endChar": 59
+      },
+      "revId": "03957d2a7f2465b6cedc66a543fc942e805c9bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
