@@ -1317,7 +1317,8 @@ void InterpreterAssembler::MaybeDropFrames(TNode<Context> context) {
 
 void InterpreterAssembler::TraceBytecode(Runtime::FunctionId function_id) {
   CallRuntime(function_id, GetContext(), BytecodeArrayTaggedPointer(),
-              SmiTag(BytecodeOffset()), GetAccumulatorUnchecked());
+              SmiTag(BytecodeOffset()), GetAccumulatorUnchecked(),
+              SmiConstant(0));
 }
 
 void InterpreterAssembler::TraceBytecodeDispatch(TNode<WordT> target_bytecode) {
