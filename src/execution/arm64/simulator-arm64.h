@@ -730,6 +730,7 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
 
   // Start the debugging command line.
   void Debug();
+  bool ExecDebugCommand(char* command);
 
   bool GetValue(const char* desc, int64_t* value);
 
