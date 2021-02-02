@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79296d02_13dc3ea2",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1460969
+      },
+      "writtenOn": "2021-02-02T06:49:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c9679e4b_07b68c87",
+      "range": {
+        "startLine": 261,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 62
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d07f6a4_1b1afda0",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-01-29T11:02:07Z",
       "side": 1,
       "message": "We don\u0027t need isolate and platform here because CpuProfiler already knows the isolate.",
+      "range": {
+        "startLine": 272,
+        "startChar": 27,
+        "endLine": 272,
+        "endChar": 71
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd7c4a1a_35e3814a",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1460969
+      },
+      "writtenOn": "2021-02-02T06:49:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3d07f6a4_1b1afda0",
       "range": {
         "startLine": 272,
         "startChar": 27,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8df0ea71_2a4b8449",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1460969
+      },
+      "writtenOn": "2021-02-02T06:49:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9674db61_59ea3e61",
+      "range": {
+        "startLine": 280,
+        "startChar": 25,
+        "endLine": 280,
+        "endChar": 32
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88c1abe9_b4a59c41",
@@ -117,6 +189,30 @@
       "writtenOn": "2021-01-29T11:02:07Z",
       "side": 1,
       "message": "std::unique_ptr\u003cDiscardedSamplesDelegate\u003e did not work because CpuProfilingOptions needs to be copyable.\n\nInstead of storing the delegate in the options, how about passing it directly to StartProfiling? (This would simplify the ownership transfer and allow std::unique_ptr)",
+      "range": {
+        "startLine": 319,
+        "startChar": 6,
+        "endLine": 320,
+        "endChar": 17
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9b5648a_f76a0821",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1460969
+      },
+      "writtenOn": "2021-02-02T06:49:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "88c1abe9_b4a59c41",
       "range": {
         "startLine": 319,
         "startChar": 6,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d9509a9_7d841992",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1460969
+      },
+      "writtenOn": "2021-02-02T06:49:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8b63085f_4eefc461",
+      "range": {
+        "startLine": 393,
+        "startChar": 2,
+        "endLine": 394,
+        "endChar": 74
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1316a60_f5c02e90",
@@ -173,6 +293,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6740ae8b_4839a4a8",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1460969
+      },
+      "writtenOn": "2021-02-02T06:49:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d1316a60_f5c02e90",
+      "range": {
+        "startLine": 597,
+        "startChar": 52,
+        "endLine": 597,
+        "endChar": 75
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70cab0a1_d3545b13",
@@ -186,6 +330,30 @@
       "writtenOn": "2021-01-29T11:02:07Z",
       "side": 1,
       "message": "V8::GetCurrentPlatform() is a singleton so we don\u0027t have to pass the platform via the delegate (it will be the same).\n\nAdditionally we can get the isolate from profiler_.\n\nSo this can be simplified to:\nconst auto task_runner \u003d V8::GetCurrentPlatform()-\u003eGetForegroundTaskRunner(profiler_-\u003eisolate())",
+      "range": {
+        "startLine": 599,
+        "startChar": 8,
+        "endLine": 603,
+        "endChar": 40
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c307d96b_e38f25cd",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1460969
+      },
+      "writtenOn": "2021-02-02T06:49:26Z",
+      "side": 1,
+      "message": "That works - for the platform, how would we go about testing? In this case we\u0027ll actually post to a task runner, which isn\u0027t injected. My tests were kind of relying on being able to inject a platform, to verify behavior.",
+      "parentUuid": "70cab0a1_d3545b13",
       "range": {
         "startLine": 599,
         "startChar": 8,
