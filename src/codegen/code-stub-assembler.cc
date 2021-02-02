@@ -2912,7 +2912,8 @@ void CodeStubAssembler::StoreFeedbackVectorSlot(
   // Check that slot <= feedback_vector.length.
   CSA_ASSERT(this,
              IsOffsetInBounds(offset, LoadFeedbackVectorLength(feedback_vector),
-                              FeedbackVector::kHeaderSize));
+                              FeedbackVector::kHeaderSize),
+             SmiFromIntPtr(offset), feedback_vector);
   if (barrier_mode == SKIP_WRITE_BARRIER) {
     StoreNoWriteBarrier(MachineRepresentation::kTagged, feedback_vector, offset,
                         value);
