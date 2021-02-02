@@ -43,6 +43,16 @@ RUNTIME_FUNCTION(Runtime_AccessCheck) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_VerifyHeap) {
+  static int count = 0;
+  if (count++ < 0) return ReadOnlyRoots(isolate).undefined_value();
+  HandleScope scope(isolate);
+  // printf("verify %i\n", count);
+  // isolate->heap()->Verify();
+  // base::OS::DebugBreak();
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
 RUNTIME_FUNCTION(Runtime_FatalProcessOutOfMemoryInAllocateRaw) {
   HandleScope scope(isolate);
   DCHECK_EQ(0, args.length());
