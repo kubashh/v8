@@ -1294,6 +1294,13 @@ void TurboAssembler::Push(Smi smi) {
   Push(tmp);
 }
 
+void TurboAssembler::Push(Operand op) {
+  UseScratchRegisterScope temps(this);
+  Register tmp = temps.AcquireX();
+  Mov(tmp, op);
+  Push(tmp);
+}
+
 void TurboAssembler::Claim(int64_t count, uint64_t unit_size) {
   DCHECK_GE(count, 0);
   uint64_t size = count * unit_size;
