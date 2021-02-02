@@ -211,7 +211,8 @@ void PerfJitLogger::LogRecordedBuffer(
       (abstract_code->kind() != CodeKind::INTERPRETED_FUNCTION &&
        abstract_code->kind() != CodeKind::TURBOFAN &&
        abstract_code->kind() != CodeKind::NATIVE_CONTEXT_INDEPENDENT &&
-       abstract_code->kind() != CodeKind::TURBOPROP)) {
+       abstract_code->kind() != CodeKind::TURBOPROP &&
+       abstract_code->kind() != CodeKind::SPARKPLUG)) {
     return;
   }
 
@@ -337,8 +338,10 @@ void PerfJitLogger::LogWriteDebugInfo(Handle<Code> code,
                                       Handle<SharedFunctionInfo> shared) {
   // Compute the entry count and get the name of the script.
   uint32_t entry_count = 0;
+  // TODO(cbruni): support sparkplug source positions
+  if (code->kind() == CodeKind::SPARKPLUG) return;
   for (SourcePositionTableIterator iterator(code->SourcePositionTable());
-       !iterator.done(); iterator.Advance()) {
+      !iterator.done(); iterator.Advance()) {
     entry_count++;
   }
   if (entry_count == 0) return;
