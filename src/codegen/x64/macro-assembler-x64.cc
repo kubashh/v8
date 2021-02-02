@@ -1293,6 +1293,9 @@ void TurboAssembler::Move(Register dst, Register src) {
   }
 }
 
+void TurboAssembler::Move(Register dst, Operand src) { movq(dst, src); }
+void TurboAssembler::Move(Register dst, Immediate src) { movl(dst, src); }
+
 void TurboAssembler::MovePair(Register dst0, Register src0, Register dst1,
                               Register src1) {
   if (dst0 != src1) {
@@ -1633,6 +1636,16 @@ void TurboAssembler::CallBuiltin(int builtin_index) {
   Address entry = d.InstructionStartOfBuiltin(builtin_index);
   Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
   call(kScratchRegister);
+}
+
+void TurboAssembler::TailCallBuiltin(int builtin_index) {
+  DCHECK(Builtins::IsBuiltinId(builtin_index));
+  RecordCommentForOffHeapTrampoline(builtin_index);
+  CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
+  EmbeddedData d = EmbeddedData::FromBlob();
+  Address entry = d.InstructionStartOfBuiltin(builtin_index);
+  Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
+  jmp(kScratchRegister);
 }
 
 void TurboAssembler::LoadCodeObjectEntry(Register destination,
