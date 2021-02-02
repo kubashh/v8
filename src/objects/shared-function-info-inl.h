@@ -88,6 +88,8 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(UncompiledData)
 TQ_OBJECT_CONSTRUCTORS_IMPL(UncompiledDataWithoutPreparseData)
 TQ_OBJECT_CONSTRUCTORS_IMPL(UncompiledDataWithPreparseData)
 
+TQ_OBJECT_CONSTRUCTORS_IMPL(BaselineData)
+
 OBJECT_CONSTRUCTORS_IMPL(InterpreterData, Struct)
 
 CAST_ACCESSOR(InterpreterData)
@@ -481,7 +483,8 @@ FunctionTemplateInfo SharedFunctionInfo::get_api_func_data() const {
 
 bool SharedFunctionInfo::HasBytecodeArray() const {
   Object data = function_data(kAcquireLoad);
-  return data.IsBytecodeArray() || data.IsInterpreterData();
+  return data.IsBytecodeArray() || data.IsInterpreterData() ||
+         data.IsBaselineData();
 }
 
 template <typename LocalIsolate>
@@ -495,7 +498,11 @@ BytecodeArray SharedFunctionInfo::GetBytecodeArray(
     return GetDebugInfo().OriginalBytecodeArray();
   }
 
-  Object data = function_data(kAcquireLoad);
+  return GetActiveBytecodeArray();
+}
+
+BytecodeArray BaselineData::GetActiveBytecodeArray() const {
+  Object data = this->data();
   if (data.IsBytecodeArray()) {
     return BytecodeArray::cast(data);
   } else {
@@ -504,10 +511,22 @@ BytecodeArray SharedFunctionInfo::GetBytecodeArray(
   }
 }
 
+void BaselineData::SetActiveBytecodeArray(BytecodeArray bytecode) {
+  Object data = this->data();
+  if (data.IsBytecodeArray()) {
+    set_data(bytecode);
+  } else {
+    DCHECK(data.IsInterpreterData());
+    InterpreterData::cast(data).set_bytecode_array(bytecode);
+  }
+}
+
 BytecodeArray SharedFunctionInfo::GetActiveBytecodeArray() const {
   Object data = function_data(kAcquireLoad);
   if (data.IsBytecodeArray()) {
     return BytecodeArray::cast(data);
+  } else if (data.IsBaselineData()) {
+    return baseline_data().GetActiveBytecodeArray();
   } else {
     DCHECK(data.IsInterpreterData());
     return InterpreterData::cast(data).bytecode_array();
@@ -518,6 +537,8 @@ void SharedFunctionInfo::SetActiveBytecodeArray(BytecodeArray bytecode) {
   Object data = function_data(kAcquireLoad);
   if (data.IsBytecodeArray()) {
     set_function_data(bytecode, kReleaseStore);
+  } else if (data.IsBaselineData()) {
+    baseline_data().SetActiveBytecodeArray(bytecode);
   } else {
     DCHECK(data.IsInterpreterData());
     interpreter_data().set_bytecode_array(bytecode);
@@ -569,6 +590,19 @@ void SharedFunctionInfo::set_interpreter_data(
     InterpreterData interpreter_data) {
   DCHECK(FLAG_interpreted_frames_native_stack);
   set_function_data(interpreter_data, kReleaseStore);
+}
+
+bool SharedFunctionInfo::HasBaselineData() const {
+  return function_data(kAcquireLoad).IsBaselineData();
+}
+
+BaselineData SharedFunctionInfo::baseline_data() const {
+  DCHECK(HasBaselineData());
+  return BaselineData::cast(function_data(kAcquireLoad));
+}
+
+void SharedFunctionInfo::set_baseline_data(BaselineData baseline_data) {
+  set_function_data(baseline_data, kReleaseStore);
 }
 
 bool SharedFunctionInfo::HasAsmWasmData() const {
@@ -763,8 +797,9 @@ bool SharedFunctionInfo::IsSubjectToDebugging() const {
 }
 
 bool SharedFunctionInfo::CanDiscardCompiled() const {
-  bool can_decompile = (HasBytecodeArray() || HasAsmWasmData() ||
-                        HasUncompiledDataWithPreparseData());
+  bool can_decompile =
+      (HasBytecodeArray() || HasAsmWasmData() ||
+       HasUncompiledDataWithPreparseData() || HasBaselineData());
   return can_decompile;
 }
 
