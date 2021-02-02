@@ -106,6 +106,7 @@ namespace internal {
 #define FOR_EACH_INTRINSIC_COMPILER(F, I) \
   F(CompileForOnStackReplacement, 0, 1)   \
   F(CompileLazy, 1, 1)                    \
+  F(CompileBaseline, 1, 1)                \
   F(CompileOptimized_Concurrent, 1, 1)    \
   F(CompileOptimized_NotConcurrent, 1, 1) \
   F(HealOptimizedCodeSlot, 1, 1)          \
