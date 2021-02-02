@@ -52,6 +52,13 @@ CodeKinds JSFunction::GetAvailableCodeKinds() const {
     }
   }
 
+  if ((result & CodeKindFlag::SPARKPLUG) == 0) {
+    // The SharedFunctionInfo could have attached baseline code.
+    if (shared().HasBaselineData()) {
+      result |= CodeKindFlag::SPARKPLUG;
+    }
+  }
+
   // Check the optimized code cache.
   if (has_feedback_vector() && feedback_vector().has_optimized_code() &&
       !feedback_vector().optimized_code().marked_for_deoptimization()) {
@@ -91,6 +98,9 @@ bool HighestTierOf(CodeKinds kinds, CodeKind* highest_tier) {
   } else if ((kinds & CodeKindFlag::TURBOPROP) != 0) {
     *highest_tier = CodeKind::TURBOPROP;
     return true;
+  } else if ((kinds & CodeKindFlag::SPARKPLUG) != 0) {
+    *highest_tier = CodeKind::SPARKPLUG;
+    return true;
   } else if ((kinds & CodeKindFlag::NATIVE_CONTEXT_INDEPENDENT) != 0) {
     *highest_tier = CodeKind::NATIVE_CONTEXT_INDEPENDENT;
     return true;
@@ -121,6 +131,7 @@ CodeKind JSFunction::GetActiveTier() const {
   DCHECK(shared().is_compiled());
   HighestTierOf(GetAvailableCodeKinds(), &highest_tier);
   DCHECK(highest_tier == CodeKind::TURBOFAN ||
+         highest_tier == CodeKind::SPARKPLUG ||
          highest_tier == CodeKind::TURBOPROP ||
          highest_tier == CodeKind::NATIVE_CONTEXT_INDEPENDENT ||
          highest_tier == CodeKind::INTERPRETED_FUNCTION);
@@ -137,6 +148,16 @@ bool JSFunction::ActiveTierIsNCI() const {
   return GetActiveTier() == CodeKind::NATIVE_CONTEXT_INDEPENDENT;
 }
 
+bool JSFunction::ActiveTierIsSparkplug() const {
+  CodeKind highest_tier;
+  if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
+  return highest_tier == CodeKind::SPARKPLUG;
+}
+
+bool JSFunction::ActiveTierIsIgnitionOrSparkplug() const {
+  return ActiveTierIsIgnition() || ActiveTierIsSparkplug();
+}
+
 bool JSFunction::ActiveTierIsToptierTurboprop() const {
   if (!FLAG_turboprop_as_toptier) return false;
   if (!shared().HasBytecodeArray()) return false;
@@ -150,12 +171,13 @@ bool JSFunction::ActiveTierIsMidtierTurboprop() const {
 }
 
 CodeKind JSFunction::NextTier() const {
-  if (V8_UNLIKELY(FLAG_turbo_nci_as_midtier && ActiveTierIsIgnition())) {
+  if (V8_UNLIKELY(FLAG_turbo_nci_as_midtier &&
+                  ActiveTierIsIgnitionOrSparkplug())) {
     return CodeKind::NATIVE_CONTEXT_INDEPENDENT;
   } else if (V8_UNLIKELY(FLAG_turboprop) && ActiveTierIsMidtierTurboprop()) {
     return CodeKind::TURBOFAN;
   } else if (V8_UNLIKELY(FLAG_turboprop)) {
-    DCHECK(ActiveTierIsIgnition());
+    DCHECK(ActiveTierIsIgnitionOrSparkplug());
     return CodeKind::TURBOPROP;
   }
   return CodeKind::TURBOFAN;
@@ -318,6 +340,7 @@ void JSFunction::EnsureFeedbackVector(Handle<JSFunction> function,
 void JSFunction::InitializeFeedbackCell(Handle<JSFunction> function,
                                         IsCompiledScope* is_compiled_scope) {
   Isolate* const isolate = function->GetIsolate();
+  function->raw_feedback_cell().set_interrupt_budget(FLAG_interrupt_budget);
 
   if (function->has_feedback_vector()) {
     CHECK_EQ(function->feedback_vector().length(),
@@ -342,6 +365,12 @@ void JSFunction::InitializeFeedbackCell(Handle<JSFunction> function,
   if (needs_feedback_vector) {
     EnsureFeedbackVector(function, is_compiled_scope);
   } else {
+    // Initialize the interrupt budget for feedback allocation based on bytecode
+    // size.
+    // TODO(mythria): This is for a quick prototype. Clean it up for actual
+    // implementation.
+    int budget = function->shared().GetBytecodeArray(isolate).length() * 2;
+    function->raw_feedback_cell().set_interrupt_budget(budget);
     EnsureClosureFeedbackCellArray(function);
   }
 }
