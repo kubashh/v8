@@ -48,6 +48,9 @@ class V8_EXPORT_PRIVATE Register final {
   static Register bytecode_offset();
   bool is_bytecode_offset() const;
 
+  // Returns the register for the argument count.
+  static Register argument_count();
+
   // Returns a register that can be used to represent the accumulator
   // within code in the interpreter, but should never be emitted in
   // bytecode.
@@ -110,7 +113,6 @@ class RegisterList {
     DCHECK_LT(new_count, register_count_);
     return RegisterList(first_reg_index_, new_count);
   }
-
   const Register operator[](size_t i) const {
     DCHECK_LT(static_cast<int>(i), register_count_);
     return Register(first_reg_index_ + static_cast<int>(i));
@@ -131,6 +133,7 @@ class RegisterList {
   friend class BytecodeDecoder;
   friend class InterpreterTester;
   friend class BytecodeUtils;
+  friend class BytecodeArrayAccessor;
 
   RegisterList(int first_reg_index, int register_count)
       : first_reg_index_(first_reg_index), register_count_(register_count) {}
