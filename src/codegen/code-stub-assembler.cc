@@ -2730,11 +2730,22 @@ TNode<BytecodeArray> CodeStubAssembler::LoadSharedFunctionInfoBytecodeArray(
       shared, SharedFunctionInfo::kFunctionDataOffset);
 
   TVARIABLE(HeapObject, var_result, function_data);
+
+  Label check_for_interpreter_data(this, &var_result);
   Label done(this, &var_result);
 
-  GotoIfNot(HasInstanceType(function_data, INTERPRETER_DATA_TYPE), &done);
+  GotoIfNot(HasInstanceType(var_result.value(), BASELINE_DATA_TYPE),
+            &check_for_interpreter_data);
+  TNode<HeapObject> baseline_data = LoadObjectField<HeapObject>(
+      var_result.value(), BaselineData::kDataOffset);
+  var_result = baseline_data;
+  Goto(&check_for_interpreter_data);
+
+  BIND(&check_for_interpreter_data);
+
+  GotoIfNot(HasInstanceType(var_result.value(), INTERPRETER_DATA_TYPE), &done);
   TNode<BytecodeArray> bytecode_array = LoadObjectField<BytecodeArray>(
-      function_data, InterpreterData::kBytecodeArrayOffset);
+      var_result.value(), InterpreterData::kBytecodeArrayOffset);
   var_result = bytecode_array;
   Goto(&done);
 
@@ -2912,7 +2923,8 @@ void CodeStubAssembler::StoreFeedbackVectorSlot(
   // Check that slot <= feedback_vector.length.
   CSA_ASSERT(this,
              IsOffsetInBounds(offset, LoadFeedbackVectorLength(feedback_vector),
-                              FeedbackVector::kHeaderSize));
+                              FeedbackVector::kHeaderSize),
+             SmiFromIntPtr(offset), feedback_vector);
   if (barrier_mode == SKIP_WRITE_BARRIER) {
     StoreNoWriteBarrier(MachineRepresentation::kTagged, feedback_vector, offset,
                         value);
@@ -9604,6 +9616,15 @@ TNode<FeedbackVector> CodeStubAssembler::LoadFeedbackVectorForStub() {
   return CAST(LoadFeedbackVector(function));
 }
 
+TNode<FeedbackVector> CodeStubAssembler::LoadFeedbackVectorFromBaseline() {
+  return CAST(
+      LoadFromParentFrame(InterpreterFrameConstants::kBytecodeOffsetFromFp));
+}
+
+TNode<Context> CodeStubAssembler::LoadContextFromBaseline() {
+  return CAST(LoadFromParentFrame(InterpreterFrameConstants::kContextOffset));
+}
+
 TNode<FeedbackVector>
 CodeStubAssembler::LoadFeedbackVectorForStubWithTrampoline() {
   TNode<RawPtrT> frame_pointer = LoadParentFramePointer();
@@ -9614,17 +9635,27 @@ CodeStubAssembler::LoadFeedbackVectorForStubWithTrampoline() {
   return CAST(LoadFeedbackVector(function));
 }
 
-void CodeStubAssembler::UpdateFeedback(TNode<Smi> feedback,
-                                       TNode<HeapObject> maybe_vector,
-                                       TNode<UintPtrT> slot_id) {
+void CodeStubAssembler::MaybeUpdateFeedback(TNode<Smi> feedback,
+                                            TNode<HeapObject> maybe_vector,
+                                            TNode<UintPtrT> slot_id,
+                                            bool guaranteed_feedback) {
   Label end(this);
   // If feedback_vector is not valid, then nothing to do.
   GotoIf(IsUndefined(maybe_vector), &end);
+  {
+    UpdateFeedback(feedback, CAST(maybe_vector), slot_id);
+    Goto(&end);
+  }
+  BIND(&end);
+}
+void CodeStubAssembler::UpdateFeedback(TNode<Smi> feedback,
+                                       TNode<FeedbackVector> feedback_vector,
+                                       TNode<UintPtrT> slot_id) {
+  Label end(this);
 
   // This method is used for binary op and compare feedback. These
   // vector nodes are initialized with a smi 0, so we can simply OR
   // our new feedback in place.
-  TNode<FeedbackVector> feedback_vector = CAST(maybe_vector);
   TNode<MaybeObject> feedback_element =
       LoadFeedbackVectorSlot(feedback_vector, slot_id);
   TNode<Smi> previous_feedback = CAST(feedback_element);
@@ -10869,7 +10900,8 @@ Operation Reverse(Operation op) {
 
 TNode<Oddball> CodeStubAssembler::RelationalComparison(
     Operation op, TNode<Object> left, TNode<Object> right,
-    TNode<Context> context, TVariable<Smi>* var_type_feedback) {
+    std::function<TNode<Context>()> context,
+    TVariable<Smi>* var_type_feedback) {
   Label return_true(this), return_false(this), do_float_comparison(this),
       end(this);
   TVARIABLE(Oddball, var_result);  // Actually only "true" or "false".
@@ -10961,7 +10993,8 @@ TNode<Oddball> CodeStubAssembler::RelationalComparison(
         // dedicated ToPrimitive(right, hint Number) operation, as the
         // ToNumeric(right) will by itself already invoke ToPrimitive with
         // a Number hint.
-        var_right = CallBuiltin(Builtins::kNonNumberToNumeric, context, right);
+        var_right =
+            CallBuiltin(Builtins::kNonNumberToNumeric, context(), right);
         Goto(&loop);
       }
     }
@@ -11006,7 +11039,8 @@ TNode<Oddball> CodeStubAssembler::RelationalComparison(
           // dedicated ToPrimitive(left, hint Number) operation, as the
           // ToNumeric(left) will by itself already invoke ToPrimitive with
           // a Number hint.
-          var_left = CallBuiltin(Builtins::kNonNumberToNumeric, context, left);
+          var_left =
+              CallBuiltin(Builtins::kNonNumberToNumeric, context(), left);
           Goto(&loop);
         }
       }
@@ -11062,7 +11096,7 @@ TNode<Oddball> CodeStubAssembler::RelationalComparison(
             // ToNumeric(right) will by itself already invoke ToPrimitive with
             // a Number hint.
             var_right =
-                CallBuiltin(Builtins::kNonNumberToNumeric, context, right);
+                CallBuiltin(Builtins::kNonNumberToNumeric, context(), right);
             Goto(&loop);
           }
         }
@@ -11117,7 +11151,7 @@ TNode<Oddball> CodeStubAssembler::RelationalComparison(
             // ToNumeric(right) will by itself already invoke ToPrimitive with
             // a Number hint.
             var_right =
-                CallBuiltin(Builtins::kNonNumberToNumeric, context, right);
+                CallBuiltin(Builtins::kNonNumberToNumeric, context(), right);
             Goto(&loop);
           }
         }
@@ -11149,7 +11183,7 @@ TNode<Oddball> CodeStubAssembler::RelationalComparison(
             default:
               UNREACHABLE();
           }
-          var_result = CAST(CallBuiltin(builtin, context, left, right));
+          var_result = CAST(CallBuiltin(builtin, context(), left, right));
           Goto(&end);
 
           BIND(&if_right_not_string);
@@ -11168,8 +11202,8 @@ TNode<Oddball> CodeStubAssembler::RelationalComparison(
                    &if_right_receiver);
 
             var_left =
-                CallBuiltin(Builtins::kNonNumberToNumeric, context, left);
-            var_right = CallBuiltin(Builtins::kToNumeric, context, right);
+                CallBuiltin(Builtins::kNonNumberToNumeric, context(), left);
+            var_right = CallBuiltin(Builtins::kToNumeric, context(), right);
             Goto(&loop);
 
             BIND(&if_right_bigint);
@@ -11184,7 +11218,7 @@ TNode<Oddball> CodeStubAssembler::RelationalComparison(
             {
               Callable callable = CodeFactory::NonPrimitiveToPrimitive(
                   isolate(), ToPrimitiveHint::kNumber);
-              var_right = CallStub(callable, context, right);
+              var_right = CallStub(callable, context(), right);
               Goto(&loop);
             }
           }
@@ -11232,15 +11266,16 @@ TNode<Oddball> CodeStubAssembler::RelationalComparison(
           GotoIf(IsJSReceiverInstanceType(left_instance_type),
                  &if_left_receiver);
 
-          var_right = CallBuiltin(Builtins::kToNumeric, context, right);
-          var_left = CallBuiltin(Builtins::kNonNumberToNumeric, context, left);
+          var_right = CallBuiltin(Builtins::kToNumeric, context(), right);
+          var_left =
+              CallBuiltin(Builtins::kNonNumberToNumeric, context(), left);
           Goto(&loop);
 
           BIND(&if_left_receiver);
           {
             Callable callable = CodeFactory::NonPrimitiveToPrimitive(
                 isolate(), ToPrimitiveHint::kNumber);
-            var_left = CallStub(callable, context, left);
+            var_left = CallStub(callable, context(), left);
             Goto(&loop);
           }
         }
@@ -11397,7 +11432,7 @@ void CodeStubAssembler::GenerateEqual_Same(SloppyTNode<Object> value,
 // ES6 section 7.2.12 Abstract Equality Comparison
 TNode<Oddball> CodeStubAssembler::Equal(SloppyTNode<Object> left,
                                         SloppyTNode<Object> right,
-                                        TNode<Context> context,
+                                        std::function<TNode<Context>()> context,
                                         TVariable<Smi>* var_type_feedback) {
   // This is a slightly optimized version of Object::Equals. Whenever you
   // change something functionality wise in here, remember to update the
@@ -11512,7 +11547,7 @@ TNode<Oddball> CodeStubAssembler::Equal(SloppyTNode<Object> left,
           CombineFeedback(var_type_feedback,
                           CompareOperationFeedback::kReceiver);
           Callable callable = CodeFactory::NonPrimitiveToPrimitive(isolate());
-          var_right = CallStub(callable, context, right);
+          var_right = CallStub(callable, context(), right);
           Goto(&loop);
         }
       }
@@ -11543,7 +11578,7 @@ TNode<Oddball> CodeStubAssembler::Equal(SloppyTNode<Object> left,
       {
         GotoIfNot(IsStringInstanceType(right_type), &use_symmetry);
         result =
-            CAST(CallBuiltin(Builtins::kStringEqual, context, left, right));
+            CAST(CallBuiltin(Builtins::kStringEqual, context(), left, right));
         CombineFeedback(var_type_feedback,
                         SmiOr(CollectFeedbackForString(left_type),
                               CollectFeedbackForString(right_type)));
@@ -11788,7 +11823,7 @@ TNode<Oddball> CodeStubAssembler::Equal(SloppyTNode<Object> left,
             // convert {left} to Primitive too.
             CombineFeedback(var_type_feedback, CompareOperationFeedback::kAny);
             Callable callable = CodeFactory::NonPrimitiveToPrimitive(isolate());
-            var_left = CallStub(callable, context, left);
+            var_left = CallStub(callable, context(), left);
             Goto(&loop);
           }
         }
@@ -11803,7 +11838,7 @@ TNode<Oddball> CodeStubAssembler::Equal(SloppyTNode<Object> left,
         CombineFeedback(var_type_feedback,
                         CollectFeedbackForString(right_type));
       }
-      var_right = CallBuiltin(Builtins::kStringToNumber, context, right);
+      var_right = CallBuiltin(Builtins::kStringToNumber, context(), right);
       Goto(&loop);
     }
 
@@ -12429,7 +12464,8 @@ void CodeStubAssembler::ForInPrepare(TNode<HeapObject> enumerator,
                                      TNode<UintPtrT> slot,
                                      TNode<HeapObject> maybe_feedback_vector,
                                      TNode<FixedArray>* cache_array_out,
-                                     TNode<Smi>* cache_length_out) {
+                                     TNode<Smi>* cache_length_out,
+                                     bool guaranteed_feedback) {
   // Check if we're using an enum cache.
   TVARIABLE(FixedArray, cache_array);
   TVARIABLE(Smi, cache_length);
@@ -12458,7 +12494,8 @@ void CodeStubAssembler::ForInPrepare(TNode<HeapObject> enumerator,
         IntPtrLessThanOrEqual(enum_length, enum_indices_length),
         static_cast<int>(ForInFeedback::kEnumCacheKeysAndIndices),
         static_cast<int>(ForInFeedback::kEnumCacheKeys));
-    UpdateFeedback(feedback, maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback, maybe_feedback_vector, slot,
+                        guaranteed_feedback);
 
     cache_array = enum_keys;
     cache_length = SmiTag(Signed(enum_length));
@@ -12471,8 +12508,8 @@ void CodeStubAssembler::ForInPrepare(TNode<HeapObject> enumerator,
     TNode<FixedArray> array_enumerator = CAST(enumerator);
 
     // Record the fact that we hit the for-in slow-path.
-    UpdateFeedback(SmiConstant(ForInFeedback::kAny), maybe_feedback_vector,
-                   slot);
+    MaybeUpdateFeedback(SmiConstant(ForInFeedback::kAny), maybe_feedback_vector,
+                        slot, guaranteed_feedback);
 
     cache_array = array_enumerator;
     cache_length = LoadFixedArrayBaseLength(array_enumerator);
@@ -12482,21 +12519,6 @@ void CodeStubAssembler::ForInPrepare(TNode<HeapObject> enumerator,
   BIND(&out);
   *cache_array_out = cache_array.value();
   *cache_length_out = cache_length.value();
-}
-
-TNode<FixedArray> CodeStubAssembler::ForInPrepareForTorque(
-    TNode<HeapObject> enumerator, TNode<UintPtrT> slot,
-    TNode<HeapObject> maybe_feedback_vector) {
-  TNode<FixedArray> cache_array;
-  TNode<Smi> cache_length;
-  ForInPrepare(enumerator, slot, maybe_feedback_vector, &cache_array,
-               &cache_length);
-
-  TNode<FixedArray> result = AllocateUninitializedFixedArray(2);
-  StoreFixedArrayElement(result, 0, cache_array);
-  StoreFixedArrayElement(result, 1, cache_length);
-
-  return result;
 }
 
 TNode<String> CodeStubAssembler::Typeof(SloppyTNode<Object> value) {
@@ -13258,6 +13280,7 @@ TNode<Code> CodeStubAssembler::GetSharedFunctionInfoCode(
   TNode<Uint16T> data_type = LoadInstanceType(CAST(sfi_data));
 
   int32_t case_values[] = {BYTECODE_ARRAY_TYPE,
+                           BASELINE_DATA_TYPE,
                            WASM_EXPORTED_FUNCTION_DATA_TYPE,
                            ASM_WASM_DATA_TYPE,
                            UNCOMPILED_DATA_WITHOUT_PREPARSE_DATA_TYPE,
@@ -13266,6 +13289,7 @@ TNode<Code> CodeStubAssembler::GetSharedFunctionInfoCode(
                            WASM_JS_FUNCTION_DATA_TYPE,
                            WASM_CAPI_FUNCTION_DATA_TYPE};
   Label check_is_bytecode_array(this);
+  Label check_is_baseline_data(this);
   Label check_is_exported_function_data(this);
   Label check_is_asm_wasm_data(this);
   Label check_is_uncompiled_data_without_preparse_data(this);
@@ -13275,6 +13299,7 @@ TNode<Code> CodeStubAssembler::GetSharedFunctionInfoCode(
   Label check_is_wasm_js_function_data(this);
   Label check_is_wasm_capi_function_data(this);
   Label* case_labels[] = {&check_is_bytecode_array,
+                          &check_is_baseline_data,
                           &check_is_exported_function_data,
                           &check_is_asm_wasm_data,
                           &check_is_uncompiled_data_without_preparse_data,
@@ -13289,6 +13314,14 @@ TNode<Code> CodeStubAssembler::GetSharedFunctionInfoCode(
   // IsBytecodeArray: Interpret bytecode
   BIND(&check_is_bytecode_array);
   sfi_code = HeapConstant(BUILTIN_CODE(isolate(), InterpreterEntryTrampoline));
+  Goto(&done);
+
+  // IsBaselineData: Execute baseline code
+  BIND(&check_is_baseline_data);
+  TNode<BaselineData> baseline_data = CAST(sfi_data);
+  TNode<Code> baseline_code =
+      CAST(LoadObjectField(baseline_data, BaselineData::kBaselineCodeOffset));
+  sfi_code = baseline_code;
   Goto(&done);
 
   // IsWasmExportedFunctionData: Use the wrapper code
