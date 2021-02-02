@@ -3435,7 +3435,13 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
 }
 
 void AccessorAssembler::StoreGlobalIC(const StoreICParameters* pp) {
-  Label if_lexical_var(this), if_heapobject(this);
+  Label if_vector(this), if_lexical_var(this), if_heapobject(this);
+  GotoIfNot(IsUndefined(pp->vector()), &if_vector);
+
+  TailCallRuntime(Runtime::kStoreGlobalICNoFeedback_Miss, pp->context(),
+                  pp->value(), pp->name());
+
+  BIND(&if_vector);
   TNode<MaybeObject> maybe_weak_ref =
       LoadFeedbackVectorSlot(CAST(pp->vector()), pp->slot());
   Branch(TaggedIsSmi(maybe_weak_ref), &if_lexical_var, &if_heapobject);

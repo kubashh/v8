@@ -1293,6 +1293,9 @@ void TurboAssembler::Move(Register dst, Register src) {
   }
 }
 
+void TurboAssembler::Move(Register dst, Operand src) { movq(dst, src); }
+void TurboAssembler::Move(Register dst, Immediate src) { movq(dst, src); }
+
 void TurboAssembler::MovePair(Register dst0, Register src0, Register dst1,
                               Register src1) {
   if (dst0 != src1) {
