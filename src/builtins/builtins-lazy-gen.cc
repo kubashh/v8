@@ -171,6 +171,11 @@ TF_BUILTIN(CompileLazy, LazyBuiltinsAssembler) {
   CompileLazy(function);
 }
 
+TF_BUILTIN(PrepareForBaseline, LazyBuiltinsAssembler) {
+  auto function = Parameter<JSFunction>(Descriptor::kTarget);
+  GenerateTailCallToReturnedCode(Runtime::kPrepareForBaseline, function);
+}
+
 TF_BUILTIN(CompileLazyDeoptimizedCode, LazyBuiltinsAssembler) {
   auto function = Parameter<JSFunction>(Descriptor::kTarget);
 

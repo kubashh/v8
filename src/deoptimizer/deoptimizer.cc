@@ -252,7 +252,23 @@ class ActivationsFinder : public ThreadVisitor {
   // it to replace the current pc on the stack.
   void VisitThread(Isolate* isolate, ThreadLocalTop* top) override {
     for (StackFrameIterator it(isolate, top); !it.done(); it.Advance()) {
-      if (it.frame()->type() == StackFrame::OPTIMIZED) {
+      if (it.frame()->type() == StackFrame::SPARKPLUG) {
+        // Patch bytecode offset
+        SparkplugFrame* frame = SparkplugFrame::cast(it.frame());
+        int bytecode_offset = frame->GetBytecodeOffset();
+        Address fp = frame->fp();
+        Address* bytecode_offset_addr = reinterpret_cast<Address*>(
+            fp + InterpreterFrameConstants::kBytecodeOffsetFromFp);
+        int first_bytecode_offset = BytecodeArray::kHeaderSize - kHeapObjectTag;
+        *bytecode_offset_addr = (bytecode_offset + first_bytecode_offset)
+                                << 1;  // SmiTag
+        // Patch PC
+        Address* pc_addr = frame->pc_address();
+        Address dispatch =
+            BUILTIN_CODE(isolate, InterpreterEnterBytecodeAdvance)
+                ->InstructionStart();
+        PointerAuthentication::ReplacePC(pc_addr, dispatch, kSystemPointerSize);
+      } else if (it.frame()->type() == StackFrame::OPTIMIZED) {
         Code code = it.frame()->LookupCode();
         if (CodeKindCanDeoptimize(code.kind()) &&
             code.marked_for_deoptimization()) {
