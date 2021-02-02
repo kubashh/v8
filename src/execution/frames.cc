@@ -219,10 +219,13 @@ bool IsInterpreterFramePc(Isolate* isolate, Address pc,
       isolate->builtins()->builtin(Builtins::kInterpreterEnterBytecodeAdvance);
   Code interpreter_bytecode_dispatch =
       isolate->builtins()->builtin(Builtins::kInterpreterEnterBytecodeDispatch);
+  Code baseline_prologue =
+      isolate->builtins()->builtin(Builtins::kBaselinePrologue);
 
   if (interpreter_entry_trampoline.contains(pc) ||
       interpreter_bytecode_advance.contains(pc) ||
-      interpreter_bytecode_dispatch.contains(pc)) {
+      interpreter_bytecode_dispatch.contains(pc) ||
+      baseline_prologue.contains(pc)) {
     return true;
   } else if (FLAG_interpreted_frames_native_stack) {
     intptr_t marker = Memory<intptr_t>(
@@ -590,6 +593,10 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
             if (code_obj.is_interpreter_trampoline_builtin()) {
               return INTERPRETED;
             }
+            if (code_obj.is_baseline_prologue_builtin() ||
+                code_obj.is_baseline_leave_frame_builtin()) {
+              return SPARKPLUG;
+            }
             if (code_obj.is_turbofanned()) {
               // TODO(bmeurer): We treat frames for BUILTIN Code objects as
               // OptimizedFrame for now (all the builtins with JavaScript
@@ -602,6 +609,8 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
           case CodeKind::NATIVE_CONTEXT_INDEPENDENT:
           case CodeKind::TURBOPROP:
             return OPTIMIZED;
+          case CodeKind::SPARKPLUG:
+            return Type::SPARKPLUG;
           case CodeKind::JS_TO_WASM_FUNCTION:
             return JS_TO_WASM;
           case CodeKind::JS_TO_JS_FUNCTION:
@@ -981,6 +990,7 @@ void CommonFrame::IterateCompiledFrame(RootVisitor* v) const {
         break;
       case OPTIMIZED:
       case INTERPRETED:
+      case SPARKPLUG:
       case BUILTIN:
         // These frame types have a context, but they are actually stored
         // in the place on the stack that one finds the frame type.
@@ -1181,7 +1191,8 @@ Script JavaScriptFrame::script() const {
 int CommonFrameWithJSLinkage::LookupExceptionHandlerInTable(
     int* stack_depth, HandlerTable::CatchPrediction* prediction) {
   DCHECK(!LookupCode().has_handler_table());
-  DCHECK(!LookupCode().is_optimized_code());
+  DCHECK(!LookupCode().is_optimized_code() ||
+         LookupCode().kind() == CodeKind::SPARKPLUG);
   return -1;
 }
 
@@ -1356,6 +1367,7 @@ FrameSummary::JavaScriptFrameSummary::JavaScriptFrameSummary(
       is_constructor_(is_constructor),
       parameters_(parameters, isolate) {
   DCHECK(abstract_code.IsBytecodeArray() ||
+         Code::cast(abstract_code).kind() == CodeKind::SPARKPLUG ||
          !CodeKindIsOptimizedJSFunction(Code::cast(abstract_code).kind()));
 }
 
@@ -1740,6 +1752,55 @@ void InterpretedFrame::PatchBytecodeOffset(int new_offset) {
                 index * kSystemPointerSize);
   int raw_offset = BytecodeArray::kHeaderSize - kHeapObjectTag + new_offset;
   SetExpression(index, Smi::FromInt(raw_offset));
+}
+
+namespace {
+  int ReadUint(ByteArray array, int* index) {
+    int byte = 0;
+    int value = 0;
+    int shift = 0;
+    do {
+      byte = array.get((*index)++);
+      value += (byte & ((1<<7)-1)) << shift;
+      shift += 7;
+    } while (byte & (1<<7));
+    return value;
+  }
+}
+int SparkplugFrame::GetBytecodeOffset() const {
+  Code code = LookupCode();
+  if (code.is_baseline_prologue_builtin()) return kFunctionEntryBytecodeOffset;
+  ByteArray data = ByteArray::cast(code.source_position_table());
+  Address lookup_pc = 0;
+  Address pc = this->pc() - code.InstructionStart();
+  int index = 0;
+  int offset = 0;
+  // The first PC is after the baseline prologue call.
+  lookup_pc += ReadUint(data, &index);
+  if (lookup_pc == pc) return kFunctionEntryBytecodeOffset;
+  while (pc > lookup_pc) {
+    lookup_pc += ReadUint(data, &index);
+    offset += ReadUint(data, &index);
+  }
+  DCHECK_EQ(pc, lookup_pc);
+  return offset;
+}
+intptr_t SparkplugFrame::GetPCForBytecodeOffset(int lookup_offset) const {
+  Code code = LookupCode();
+  ByteArray data = ByteArray::cast(code.source_position_table());
+  intptr_t pc = 0;
+  int index = 0;
+  int offset = 0;
+  pc += ReadUint(data, &index);
+  if (lookup_offset == kFunctionEntryBytecodeOffset) {
+    return pc;
+  }
+  while (lookup_offset > offset) {
+    pc += ReadUint(data, &index);
+    offset += ReadUint(data, &index);
+  }
+  DCHECK_EQ(offset, lookup_offset);
+  return pc;
 }
 
 BytecodeArray InterpretedFrame::GetBytecodeArray() const {
