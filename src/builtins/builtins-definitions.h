@@ -204,6 +204,8 @@ namespace internal {
   /* Type conversions continuations */                                         \
   TFC(ToBooleanLazyDeoptContinuation, TypeConversionStackParameter)            \
                                                                                \
+  ASM(TailCallOptimizedCodeSlot, TailCallOptimizedCodeSlot)                    \
+                                                                               \
   /* Handlers */                                                               \
   TFH(KeyedLoadIC_PolymorphicName, LoadWithVector)                             \
   TFH(KeyedStoreIC_Megamorphic, Store)                                         \
@@ -673,6 +675,7 @@ namespace internal {
                                                                                \
   /* for-in */                                                                 \
   TFS(ForInEnumerate, kReceiver)                                               \
+  TFC(ForInPrepare, ForInPrepare)                                              \
   TFS(ForInFilter, kKey, kObject)                                              \
                                                                                \
   /* Reflect */                                                                \
