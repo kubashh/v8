@@ -486,5 +486,10 @@ void UnaryOp_WithFeedbackDescriptor::InitializePlatformSpecific(
   DefaultInitializePlatformSpecific(data, 3);
 }
 
+void ForInPrepareDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
+}
+
 }  // namespace internal
 }  // namespace v8

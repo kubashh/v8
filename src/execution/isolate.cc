@@ -1048,6 +1048,7 @@ Handle<Object> CaptureStackTrace(Isolate* isolate, Handle<Object> caller,
       case StackFrame::JAVA_SCRIPT_BUILTIN_CONTINUATION_WITH_CATCH:
       case StackFrame::OPTIMIZED:
       case StackFrame::INTERPRETED:
+      case StackFrame::SPARKPLUG:
       case StackFrame::BUILTIN:
       case StackFrame::WASM: {
         // A standard frame may include many summarized frames (due to
