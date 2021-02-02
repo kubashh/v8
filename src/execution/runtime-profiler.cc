@@ -151,7 +151,8 @@ void RuntimeProfiler::AttemptOnStackReplacement(InterpretedFrame* frame,
     PrintF(scope.file(), "]\n");
   }
 
-  DCHECK_EQ(StackFrame::INTERPRETED, frame->type());
+  DCHECK(frame->type() == StackFrame::INTERPRETED ||
+         frame->type() == StackFrame::SPARKPLUG);
   int level = frame->GetBytecodeArray().osr_loop_nesting_level();
   frame->GetBytecodeArray().set_osr_loop_nesting_level(std::min(
       {level + loop_nesting_levels, AbstractCode::kMaxLoopNestingMarker}));
@@ -326,7 +327,7 @@ void RuntimeProfiler::MarkCandidatesForOptimization(JavaScriptFrame* frame) {
 
 void RuntimeProfiler::MarkCandidatesForOptimizationFromBytecode() {
   JavaScriptFrameIterator it(isolate_);
-  DCHECK(it.frame()->is_interpreted());
+  DCHECK(it.frame()->HasInterpreterFrameType());
   MarkCandidatesForOptimization(it.frame());
 }
 

@@ -568,6 +568,14 @@ DEFINE_UINT_READONLY(max_minimorphic_map_checks, 4,
 DEFINE_INT(ticks_scale_factor_for_top_tier, 10,
            "scale factor for profiler ticks when tiering up from midtier")
 
+// Flags for Sparkplug
+DEFINE_BOOL(sparkplug, false, "enable experimental sparkplug baseline compiler")
+DEFINE_BOOL(always_sparkplug, false, "directly tier up to sparkplug")
+DEFINE_BOOL(sparkplug_verify_heap, false, "verify heap after builtin call")
+DEFINE_NEG_IMPLICATION(jitless, sparkplug)
+DEFINE_NEG_IMPLICATION(jitless, always_sparkplug)
+DEFINE_IMPLICATION(always_sparkplug, sparkplug)
+
 // Flags for concurrent recompilation.
 DEFINE_BOOL(concurrent_recompilation, true,
             "optimizing hot functions asynchronously on a separate thread")
@@ -1183,6 +1191,8 @@ DEFINE_BOOL(debug_code, DEBUG_BOOL,
 DEFINE_BOOL(code_comments, false,
             "emit comments in code disassembly; for more readable source "
             "positions you should add --no-concurrent_recompilation")
+DEFINE_BOOL(code_comments_list, false,
+          "Print a list of all code comments after printing code disassembly")
 DEFINE_BOOL(enable_sse3, true, "enable use of SSE3 instructions if available")
 DEFINE_BOOL(enable_ssse3, true, "enable use of SSSE3 instructions if available")
 DEFINE_BOOL(enable_sse4_1, true,
