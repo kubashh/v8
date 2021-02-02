@@ -27,6 +27,7 @@ namespace internal {
   V(C_WASM_ENTRY)               \
   V(INTERPRETED_FUNCTION)       \
   V(NATIVE_CONTEXT_INDEPENDENT) \
+  V(SPARKPLUG)                  \
   V(TURBOPROP)                  \
   V(TURBOFAN)
 
