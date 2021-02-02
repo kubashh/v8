@@ -1317,7 +1317,8 @@ void InterpreterAssembler::MaybeDropFrames(TNode<Context> context) {
 
 void InterpreterAssembler::TraceBytecode(Runtime::FunctionId function_id) {
   CallRuntime(function_id, GetContext(), BytecodeArrayTaggedPointer(),
-              SmiTag(BytecodeOffset()), GetAccumulatorUnchecked());
+              SmiTag(BytecodeOffset()), GetAccumulatorUnchecked(),
+              SmiConstant(0));
 }
 
 void InterpreterAssembler::TraceBytecodeDispatch(TNode<WordT> target_bytecode) {
@@ -1552,7 +1553,8 @@ void InterpreterAssembler::ToNumberOrNumeric(Object::Conversion mode) {
   TNode<UintPtrT> slot_index = BytecodeOperandIdx(0);
   TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
 
-  UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot_index);
+  MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector,
+                      slot_index, false);
 
   SetAccumulator(var_result.value());
   Dispatch();

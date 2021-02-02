@@ -133,6 +133,11 @@ namespace internal {
   ASM(InterpreterEnterBytecodeDispatch, Dummy)                                 \
   ASM(InterpreterOnStackReplacement, ContextOnly)                              \
                                                                                \
+  /* Baseline Compiler */                                                      \
+  ASM(BaselinePrologue, BaselinePrologue)                                      \
+  ASM(BaselineOnStackReplacement, ContextOnly)                                 \
+  ASM(BaselineLeaveFrame, BaselineLeaveFrame)                                  \
+                                                                               \
   /* Code life-cycle */                                                        \
   TFC(CompileLazy, JSTrampoline)                                               \
   TFC(CompileLazyDeoptimizedCode, JSTrampoline)                                \
@@ -142,6 +147,7 @@ namespace internal {
   ASM(DeoptimizationEntry_Soft, DeoptimizationEntry)                           \
   ASM(DeoptimizationEntry_Bailout, DeoptimizationEntry)                        \
   ASM(DeoptimizationEntry_Lazy, DeoptimizationEntry)                           \
+  TFC(PrepareForBaseline, JSTrampoline)                                        \
                                                                                \
   /* Trampolines called when returning from a deoptimization that expects   */ \
   /* to continue in a JavaScript builtin to finish the functionality of a   */ \
@@ -203,6 +209,8 @@ namespace internal {
                                                                                \
   /* Type conversions continuations */                                         \
   TFC(ToBooleanLazyDeoptContinuation, TypeConversionStackParameter)            \
+                                                                               \
+  ASM(TailCallOptimizedCodeSlot, TailCallOptimizedCodeSlot)                    \
                                                                                \
   /* Handlers */                                                               \
   TFH(KeyedLoadIC_PolymorphicName, LoadWithVector)                             \
@@ -543,26 +551,37 @@ namespace internal {
   TFH(LoadIC_Megamorphic, LoadWithVector)                                      \
   TFH(LoadIC_Noninlined, LoadWithVector)                                       \
   TFH(LoadICTrampoline, Load)                                                  \
+  TFH(LoadICBaseline, LoadBaseline)                                            \
   TFH(LoadICTrampoline_Megamorphic, Load)                                      \
   TFH(LoadSuperIC, LoadWithReceiverAndVector)                                  \
+  TFH(LoadSuperICBaseline, LoadWithReceiverBaseline)                           \
   TFH(KeyedLoadIC, LoadWithVector)                                             \
   TFH(KeyedLoadIC_Megamorphic, LoadWithVector)                                 \
   TFH(KeyedLoadICTrampoline, Load)                                             \
+  TFH(KeyedLoadICBaseline, LoadBaseline)                                       \
   TFH(KeyedLoadICTrampoline_Megamorphic, Load)                                 \
   TFH(StoreGlobalIC, StoreGlobalWithVector)                                    \
   TFH(StoreGlobalICTrampoline, StoreGlobal)                                    \
+  TFH(StoreGlobalICBaseline, StoreGlobalBaseline)                              \
   TFH(StoreIC, StoreWithVector)                                                \
   TFH(StoreICTrampoline, Store)                                                \
+  TFH(StoreICBaseline, StoreBaseline)                                          \
   TFH(KeyedStoreIC, StoreWithVector)                                           \
   TFH(KeyedStoreICTrampoline, Store)                                           \
+  TFH(KeyedStoreICBaseline, StoreBaseline)                                     \
   TFH(StoreInArrayLiteralIC, StoreWithVector)                                  \
+  TFH(StoreInArrayLiteralICBaseline, StoreBaseline)                            \
   TFH(LoadGlobalIC, LoadGlobalWithVector)                                      \
   TFH(LoadGlobalICInsideTypeof, LoadGlobalWithVector)                          \
   TFH(LoadGlobalICTrampoline, LoadGlobal)                                      \
+  TFH(LoadGlobalICBaseline, LoadGlobalBaseline)                                \
   TFH(LoadGlobalICInsideTypeofTrampoline, LoadGlobal)                          \
+  TFH(LoadGlobalICInsideTypeofBaseline, LoadGlobalBaseline)                    \
   TFH(CloneObjectIC, CloneObjectWithVector)                                    \
+  TFH(CloneObjectICBaseline, CloneObjectBaseline)                              \
   TFH(CloneObjectIC_Slow, CloneObjectWithVector)                               \
   TFH(KeyedHasIC, LoadWithVector)                                              \
+  TFH(KeyedHasICBaseline, LoadBaseline)                                        \
   TFH(KeyedHasIC_Megamorphic, LoadWithVector)                                  \
                                                                                \
   /* IterableToList */                                                         \
@@ -608,6 +627,19 @@ namespace internal {
   TFC(SameValueNumbersOnly, Compare)                                           \
                                                                                \
   /* Binary ops with feedback collection */                                    \
+  TFC(AddBaseline, BinaryOpBaseline)                                           \
+  TFC(SubtractBaseline, BinaryOpBaseline)                                      \
+  TFC(MultiplyBaseline, BinaryOpBaseline)                                      \
+  TFC(DivideBaseline, BinaryOpBaseline)                                        \
+  TFC(ModulusBaseline, BinaryOpBaseline)                                       \
+  TFC(ExponentiateBaseline, BinaryOpBaseline)                                  \
+  TFC(BitwiseAndBaseline, BinaryOpBaseline)                                    \
+  TFC(BitwiseOrBaseline, BinaryOpBaseline)                                     \
+  TFC(BitwiseXorBaseline, BinaryOpBaseline)                                    \
+  TFC(ShiftLeftBaseline, BinaryOpBaseline)                                     \
+  TFC(ShiftRightBaseline, BinaryOpBaseline)                                    \
+  TFC(ShiftRightLogicalBaseline, BinaryOpBaseline)                             \
+                                                                               \
   TFC(Add_WithFeedback, BinaryOp_WithFeedback)                                 \
   TFC(Subtract_WithFeedback, BinaryOp_WithFeedback)                            \
   TFC(Multiply_WithFeedback, BinaryOp_WithFeedback)                            \
@@ -622,6 +654,13 @@ namespace internal {
   TFC(ShiftRightLogical_WithFeedback, BinaryOp_WithFeedback)                   \
                                                                                \
   /* Compare ops with feedback collection */                                   \
+  TFC(EqualBaseline, CompareBaseline)                                          \
+  TFC(StrictEqualBaseline, CompareBaseline)                                    \
+  TFC(LessThanBaseline, CompareBaseline)                                       \
+  TFC(GreaterThanBaseline, CompareBaseline)                                    \
+  TFC(LessThanOrEqualBaseline, CompareBaseline)                                \
+  TFC(GreaterThanOrEqualBaseline, CompareBaseline)                             \
+                                                                               \
   TFC(Equal_WithFeedback, Compare_WithFeedback)                                \
   TFC(StrictEqual_WithFeedback, Compare_WithFeedback)                          \
   TFC(LessThan_WithFeedback, Compare_WithFeedback)                             \
@@ -673,6 +712,7 @@ namespace internal {
                                                                                \
   /* for-in */                                                                 \
   TFS(ForInEnumerate, kReceiver)                                               \
+  TFC(ForInPrepare, ForInPrepare)                                              \
   TFS(ForInFilter, kKey, kObject)                                              \
                                                                                \
   /* Reflect */                                                                \
