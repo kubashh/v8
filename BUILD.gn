@@ -2403,6 +2403,8 @@ v8_source_set("v8_base_without_compiler") {
     "src/ast/source-range-ast-visitor.h",
     "src/ast/variables.cc",
     "src/ast/variables.h",
+    "src/baseline/baseline.cc",
+    "src/baseline/baseline.h",
     "src/builtins/accessors.cc",
     "src/builtins/accessors.h",
     "src/builtins/builtins-api.cc",
