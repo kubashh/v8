@@ -1618,6 +1618,11 @@ void Builtins::Generate_NotifyDeoptimized(MacroAssembler* masm) {
   __ ret(1 * kSystemPointerSize);  // Remove rax.
 }
 
+void Builtins::Generate_TailCallOptimizedCodeSlot(MacroAssembler* masm) {
+  Register optimized_code_entry = rcx;
+  TailCallOptimizedCodeSlot(masm, optimized_code_entry, r11, r15);
+}
+
 // static
 void Builtins::Generate_FunctionPrototypeApply(MacroAssembler* masm) {
   // ----------- S t a t e -------------
