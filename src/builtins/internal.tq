@@ -47,15 +47,6 @@ builtin BytecodeBudgetInterruptFromCode(implicit context: Context)(
   tail runtime::BytecodeBudgetInterruptFromCode(feedbackCell);
 }
 
-extern transitioning macro ForInPrepareForTorque(
-    Map | FixedArray, uintptr, Undefined | FeedbackVector): FixedArray;
-
-transitioning builtin ForInPrepare(implicit _context: Context)(
-    enumerator: Map|FixedArray, slot: uintptr,
-    maybeFeedbackVector: Undefined|FeedbackVector): FixedArray {
-  return ForInPrepareForTorque(enumerator, slot, maybeFeedbackVector);
-}
-
 extern transitioning builtin ForInFilter(implicit context: Context)(
     JSAny, HeapObject): JSAny;
 extern enum ForInFeedback extends uint31 { kAny, ...}
