@@ -638,9 +638,12 @@ void Serializer::ObjectSerializer::Serialize() {
   RecursionScope recursion(serializer_);
 
   // Defer objects as "pending" if they cannot be serialized now, or if we
-  // exceed a certain recursion depth. Some objects cannot be deferred
-  if ((recursion.ExceedsMaximum() && CanBeDeferred(*object_)) ||
-      serializer_->MustBeDeferred(*object_)) {
+  // exceed a certain recursion depth. Some objects cannot be deferred.
+  DCHECK_IMPLIES(serializer_->MustBeDeferred(*object_),
+                 serializer_->MayDeferObjects());
+  if (serializer_->MayDeferObjects() &&
+      ((recursion.ExceedsMaximum() && CanBeDeferred(*object_)) ||
+       serializer_->MustBeDeferred(*object_))) {
     DCHECK(CanBeDeferred(*object_));
     if (FLAG_trace_serializer) {
       PrintF(" Deferring heap object: ");
@@ -714,7 +717,8 @@ SnapshotSpace GetSnapshotSpace(Handle<HeapObject> object) {
         MemoryChunk::FromHeapObject(*object)->owner_identity();
     // Large code objects are not supported and cannot be expressed by
     // SnapshotSpace.
-    DCHECK_NE(heap_space, CODE_LO_SPACE);
+    // TODO(pthier): Why? Can it cause problems for GC?
+    // DCHECK_NE(heap_space, CODE_LO_SPACE);
     switch (heap_space) {
       case OLD_SPACE:
       // Young generation objects are tenured, as objects that have survived
@@ -731,6 +735,9 @@ SnapshotSpace GetSnapshotSpace(Handle<HeapObject> object) {
       case MAP_SPACE:
         return SnapshotSpace::kMap;
       case CODE_LO_SPACE:
+        // Large code objects are only supported for Sparkplug code.
+        DCHECK_EQ(Code::cast(*object).kind(), CodeKind::SPARKPLUG);
+        return SnapshotSpace::kCode;
       case RO_SPACE:
         UNREACHABLE();
     }
@@ -1099,6 +1106,8 @@ void Serializer::ObjectSerializer::SerializeCode(Map map, int size) {
 
   DCHECK_EQ(HeapObject::kHeaderSize, bytes_processed_so_far_);
   Handle<Code> on_heap_code = Handle<Code>::cast(object_);
+  bool may_defer_objects = serializer_->MayDeferObjects();
+  serializer_->AllowObjectsDeferral(false);
 
   // With enabled pointer compression normal accessors no longer work for
   // off-heap objects, so we have to get the relocation info data via the
@@ -1173,6 +1182,7 @@ void Serializer::ObjectSerializer::SerializeCode(Map map, int size) {
     it.rinfo()->Visit(this);
   }
 
+  serializer_->AllowObjectsDeferral(may_defer_objects);
   // We record a kTaggedSize for every object encountered during the
   // serialization, so DCHECK that bytes_processed_so_far_ matches the expected
   // number of bytes (i.e. the code header + a tagged size per pre-serialized
