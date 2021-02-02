@@ -57,7 +57,7 @@ class BinaryOpAssembler : public CodeStubAssembler {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kBitwiseOr, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
     return result;
   }
 
@@ -68,7 +68,7 @@ class BinaryOpAssembler : public CodeStubAssembler {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kBitwiseXor, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
     return result;
   }
 
@@ -79,7 +79,7 @@ class BinaryOpAssembler : public CodeStubAssembler {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kBitwiseAnd, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
     return result;
   }
 
@@ -90,7 +90,7 @@ class BinaryOpAssembler : public CodeStubAssembler {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kShiftLeft, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
     return result;
   }
 
@@ -101,7 +101,7 @@ class BinaryOpAssembler : public CodeStubAssembler {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kShiftRight, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
     return result;
   }
 
@@ -112,7 +112,7 @@ class BinaryOpAssembler : public CodeStubAssembler {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kShiftRightLogical, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
     return result;
   }
 

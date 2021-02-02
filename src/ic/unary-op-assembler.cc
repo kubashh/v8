@@ -37,14 +37,14 @@ class UnaryOpAssemblerImpl final : public CodeStubAssembler {
     TNode<Smi> result_type = SelectSmiConstant(
         TaggedIsSmi(var_result.value()), BinaryOperationFeedback::kSignedSmall,
         BinaryOperationFeedback::kNumber);
-    UpdateFeedback(SmiOr(result_type, var_feedback.value()),
-                   maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(SmiOr(result_type, var_feedback.value()),
+                        maybe_feedback_vector, slot);
     Goto(&out);
 
     // BigInt case.
     BIND(&if_bigint);
-    UpdateFeedback(SmiConstant(BinaryOperationFeedback::kBigInt),
-                   maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(SmiConstant(BinaryOperationFeedback::kBigInt),
+                        maybe_feedback_vector, slot);
     var_result =
         CallRuntime(Runtime::kBigIntUnaryOp, context, var_bigint.value(),
                     SmiConstant(Operation::kBitwiseNot));
@@ -207,7 +207,7 @@ class UnaryOpAssemblerImpl final : public CodeStubAssembler {
     }
 
     BIND(&end);
-    UpdateFeedback(var_feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(var_feedback.value(), maybe_feedback_vector, slot);
     return var_result.value();
   }
 

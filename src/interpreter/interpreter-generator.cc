@@ -222,18 +222,9 @@ IGNITION_HANDLER(StaGlobal, InterpreterAssembler) {
   TNode<TaggedIndex> slot = BytecodeOperandIdxTaggedIndex(1);
   TNode<HeapObject> maybe_vector = LoadFeedbackVector();
 
-  Label no_feedback(this, Label::kDeferred), end(this);
-  GotoIf(IsUndefined(maybe_vector), &no_feedback);
-
   CallBuiltin(Builtins::kStoreGlobalIC, context, name, value, slot,
               maybe_vector);
-  Goto(&end);
 
-  Bind(&no_feedback);
-  CallRuntime(Runtime::kStoreGlobalICNoFeedback_Miss, context, value, name);
-  Goto(&end);
-
-  Bind(&end);
   Dispatch();
 }
 
@@ -991,7 +982,7 @@ class InterpreterBitwiseBinaryOpAssembler : public InterpreterAssembler {
     TNode<Object> result = binop_asm.Generate_BitwiseBinaryOpWithFeedback(
         bitwise_op, left, right, context, &feedback);
 
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot_index);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot_index);
     SetAccumulator(result);
     Dispatch();
   }
@@ -1017,14 +1008,14 @@ class InterpreterBitwiseBinaryOpAssembler : public InterpreterAssembler {
     TNode<Smi> result_type = SelectSmiConstant(
         TaggedIsSmi(result), BinaryOperationFeedback::kSignedSmall,
         BinaryOperationFeedback::kNumber);
-    UpdateFeedback(SmiOr(result_type, var_left_feedback.value()),
-                   maybe_feedback_vector, slot_index);
+    MaybeUpdateFeedback(SmiOr(result_type, var_left_feedback.value()),
+                        maybe_feedback_vector, slot_index);
     SetAccumulator(result);
     Dispatch();
 
     BIND(&if_bigint_mix);
-    UpdateFeedback(var_left_feedback.value(), maybe_feedback_vector,
-                   slot_index);
+    MaybeUpdateFeedback(var_left_feedback.value(), maybe_feedback_vector,
+                        slot_index);
     ThrowTypeError(context, MessageTemplate::kBigIntMixedTypes);
   }
 };
@@ -1623,8 +1614,8 @@ class InterpreterCompareOpAssembler : public InterpreterAssembler {
 
     TNode<UintPtrT> slot_index = BytecodeOperandIdx(1);
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector,
-                   slot_index);
+    MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector,
+                        slot_index);
     SetAccumulator(result);
     Dispatch();
   }

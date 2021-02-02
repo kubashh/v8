@@ -3148,6 +3148,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // Load type feedback vector from the stub caller's frame.
   TNode<FeedbackVector> LoadFeedbackVectorForStub();
+  TNode<FeedbackVector> LoadFeedbackVectorFromBaseline();
+  TNode<Context> LoadContextFromBaseline();
   // Load type feedback vector from the stub caller's frame, skipping an
   // intermediate trampoline frame.
   TNode<FeedbackVector> LoadFeedbackVectorForStubWithTrampoline();
@@ -3167,9 +3169,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<ClosureFeedbackCellArray> LoadClosureFeedbackArray(
       TNode<JSFunction> closure);
 
+  void MaybeUpdateFeedback(TNode<Smi> feedback,
+                           TNode<HeapObject> maybe_feedback_vector,
+                           TNode<UintPtrT> slot_id);
   // Update the type feedback vector.
   void UpdateFeedback(TNode<Smi> feedback,
-                      TNode<HeapObject> maybe_feedback_vector,
+                      TNode<FeedbackVector> feedback_vector,
                       TNode<UintPtrT> slot_id);
 
   // Report that there was a feedback update, performing any tasks that should
@@ -3409,13 +3414,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                     TNode<HeapObject> maybe_feedback_vector,
                     TNode<FixedArray>* cache_array_out,
                     TNode<Smi>* cache_length_out);
-  // Returns {cache_array} and {cache_length} in a fixed array of length 2.
-  // TODO(jgruber): Tuple2 would be a slightly better fit as the return type,
-  // but FixedArray has better support and there are no effective drawbacks to
-  // using it instead of Tuple2 in practice.
-  TNode<FixedArray> ForInPrepareForTorque(
-      TNode<HeapObject> enumerator, TNode<UintPtrT> slot,
-      TNode<HeapObject> maybe_feedback_vector);
 
   TNode<String> Typeof(SloppyTNode<Object> value);
 
