@@ -379,6 +379,77 @@ TEST(ReturnSumOfReturnsInt64) { ReturnSumOfReturns(MachineType::Int64()); }
 TEST(ReturnSumOfReturnsFloat32) { ReturnSumOfReturns(MachineType::Float32()); }
 TEST(ReturnSumOfReturnsFloat64) { ReturnSumOfReturns(MachineType::Float64()); }
 
+namespace {
+
+CallDescriptor* CreateCallDescriptor(Zone* zone) {
+  // Enough params to exhaust argument registers and force stack slots.
+  constexpr int kDoubleParams = 16;
+
+  wasm::FunctionSig::Builder builder(zone, 1, kDoubleParams + 1 + 1);
+  for (int i = 0; i < kDoubleParams; i++) {
+    builder.AddParam(wasm::ValueType::For(MachineType::Float64()));
+  }
+  // Allocate a single parameter.
+  builder.AddParam(wasm::ValueType::For(MachineType::Float32()));
+  // Allocate a double parameter which should create a stack gap.
+  builder.AddParam(wasm::ValueType::For(MachineType::Float64()));
+
+  builder.AddReturn(wasm::ValueType::For(MachineType::Int32()));
+
+  return compiler::GetWasmCallDescriptor(zone, builder.Build());
+}
+
+}  // namespace
+
+TEST(GapsInStackArguments) {
+  v8::internal::AccountingAllocator allocator;
+  Zone zone(&allocator, ZONE_NAME);
+
+  // Create a call descriptor with the right stack parameters, and build a
+  // minimal function that just returns 0.
+  CallDescriptor* desc = CreateCallDescriptor(&zone);
+
+  HandleAndZoneScope handles(kCompressGraphZone);
+  RawMachineAssembler m(handles.main_isolate(),
+                        handles.main_zone()->New<Graph>(handles.main_zone()),
+                        desc, MachineType::PointerRepresentation(),
+                        InstructionSelector::SupportedMachineOperatorFlags());
+
+  m.Return(m.Int32Constant(0));
+
+  OptimizedCompilationInfo info(ArrayVector("testing"), handles.main_zone(),
+                                CodeKind::WASM_FUNCTION);
+  Handle<Code> code =
+      Pipeline::GenerateCodeForTesting(
+          &info, handles.main_isolate(), desc, m.graph(),
+          AssemblerOptions::Default(handles.main_isolate()), m.ExportForTest())
+          .ToHandleChecked();
+
+  std::shared_ptr<wasm::NativeModule> module = AllocateNativeModule(
+      handles.main_isolate(), code->raw_instruction_size());
+  wasm::WasmCodeRefScope wasm_code_ref_scope;
+  byte* code_start = module->AddCodeForTesting(code)->instructions().begin();
+
+  // Generate a minimal caller, to generate code to push stack arguments.
+  RawMachineAssemblerTester<int32_t> mt;
+  Node* call_inputs[] = {
+      mt.PointerConstant(code_start),
+      // WasmContext dummy
+      mt.PointerConstant(nullptr), mt.Float64Constant(0), mt.Float64Constant(0),
+      mt.Float64Constant(0), mt.Float64Constant(0), mt.Float64Constant(0),
+      mt.Float64Constant(0), mt.Float64Constant(0), mt.Float64Constant(0),
+      mt.Float64Constant(0), mt.Float64Constant(0), mt.Float64Constant(0),
+      mt.Float64Constant(0), mt.Float64Constant(0), mt.Float64Constant(0),
+      mt.Float64Constant(0), mt.Float64Constant(0), mt.Float32Constant(0),
+      mt.Float64Constant(0)};
+
+  Node* call = mt.AddNode(mt.common()->Call(desc), 2 + 18, call_inputs);
+
+  mt.Return(call);
+
+  CHECK_EQ(uint32_t{0}, mt.Call());
+}
+
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8
