@@ -2494,6 +2494,10 @@ v8_source_set("v8_base_without_compiler") {
     "src/ast/source-range-ast-visitor.h",
     "src/ast/variables.cc",
     "src/ast/variables.h",
+    "src/baseline/baseline.cc",
+    "src/baseline/baseline.h",
+    "src/baseline/baseline-compiler.cc",
+    "src/baseline/baseline-compiler.h",
     "src/builtins/accessors.cc",
     "src/builtins/accessors.h",
     "src/builtins/builtins-api.cc",
@@ -3655,6 +3659,7 @@ v8_source_set("v8_base_without_compiler") {
 
   if (v8_current_cpu == "x86") {
     sources += [  ### gcmole(arch:ia32) ###
+      "src/baseline/ia32/baseline-compilier-ia32-inl.h",
       "src/codegen/ia32/assembler-ia32-inl.h",
       "src/codegen/ia32/assembler-ia32.cc",
       "src/codegen/ia32/assembler-ia32.h",
@@ -3681,6 +3686,7 @@ v8_source_set("v8_base_without_compiler") {
     ]
   } else if (v8_current_cpu == "x64") {
     sources += [  ### gcmole(arch:x64) ###
+      "src/baseline/x64/baseline-compilier-x64-inl.h",
       "src/codegen/x64/assembler-x64-inl.h",
       "src/codegen/x64/assembler-x64.cc",
       "src/codegen/x64/assembler-x64.h",
@@ -3731,6 +3737,7 @@ v8_source_set("v8_base_without_compiler") {
     }
   } else if (v8_current_cpu == "arm") {
     sources += [  ### gcmole(arch:arm) ###
+      "src/baseline/arm/baseline-compilier-arm-inl.h",
       "src/codegen/arm/assembler-arm-inl.h",
       "src/codegen/arm/assembler-arm.cc",
       "src/codegen/arm/assembler-arm.h",
@@ -3762,6 +3769,7 @@ v8_source_set("v8_base_without_compiler") {
     ]
   } else if (v8_current_cpu == "arm64") {
     sources += [  ### gcmole(arch:arm64) ###
+      "src/baseline/arm64/baseline-compilier-arm64-inl.h",
       "src/codegen/arm64/assembler-arm64-inl.h",
       "src/codegen/arm64/assembler-arm64.cc",
       "src/codegen/arm64/assembler-arm64.h",
@@ -3814,6 +3822,7 @@ v8_source_set("v8_base_without_compiler") {
     }
   } else if (v8_current_cpu == "mips" || v8_current_cpu == "mipsel") {
     sources += [  ### gcmole(arch:mipsel) ###
+      "src/baseline/mips/baseline-compilier-mips-inl.h",
       "src/codegen/mips/assembler-mips-inl.h",
       "src/codegen/mips/assembler-mips.cc",
       "src/codegen/mips/assembler-mips.h",
@@ -3842,6 +3851,7 @@ v8_source_set("v8_base_without_compiler") {
     ]
   } else if (v8_current_cpu == "mips64" || v8_current_cpu == "mips64el") {
     sources += [  ### gcmole(arch:mips64el) ###
+      "src/baseline/mips64/baseline-compilier-mips64-inl.h",
       "src/codegen/mips64/assembler-mips64-inl.h",
       "src/codegen/mips64/assembler-mips64.cc",
       "src/codegen/mips64/assembler-mips64.h",
@@ -3870,6 +3880,7 @@ v8_source_set("v8_base_without_compiler") {
     ]
   } else if (v8_current_cpu == "ppc") {
     sources += [  ### gcmole(arch:ppc) ###
+      "src/baseline/ppc/baseline-compilier-ppc-inl.h",
       "src/codegen/ppc/assembler-ppc-inl.h",
       "src/codegen/ppc/assembler-ppc.cc",
       "src/codegen/ppc/assembler-ppc.h",
@@ -3901,6 +3912,7 @@ v8_source_set("v8_base_without_compiler") {
     ]
   } else if (v8_current_cpu == "ppc64") {
     sources += [  ### gcmole(arch:ppc64) ###
+      "src/baseline/ppc/baseline-compilier-ppc-inl.h",
       "src/codegen/ppc/assembler-ppc-inl.h",
       "src/codegen/ppc/assembler-ppc.cc",
       "src/codegen/ppc/assembler-ppc.h",
@@ -3932,6 +3944,7 @@ v8_source_set("v8_base_without_compiler") {
     ]
   } else if (v8_current_cpu == "s390" || v8_current_cpu == "s390x") {
     sources += [  ### gcmole(arch:s390) ###
+      "src/baseline/s390/baseline-compilier-s390-inl.h",
       "src/codegen/s390/assembler-s390-inl.h",
       "src/codegen/s390/assembler-s390.cc",
       "src/codegen/s390/assembler-s390.h",
