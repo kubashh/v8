@@ -45,6 +45,7 @@ namespace internal {
   V(CallWithSpread)                      \
   V(CallWithSpread_WithFeedback)         \
   V(CEntry1ArgvOnStack)                  \
+  V(CloneObjectBaseline)                 \
   V(CloneObjectWithVector)               \
   V(Compare)                             \
   V(Compare_WithFeedback)                \
@@ -61,6 +62,7 @@ namespace internal {
   V(DynamicCheckMaps)                    \
   V(EphemeronKeyBarrier)                 \
   V(FastNewObject)                       \
+  V(ForInPrepare)                        \
   V(FrameDropperTrampoline)              \
   V(GetIteratorStackParameter)           \
   V(GetProperty)                         \
@@ -70,23 +72,31 @@ namespace internal {
   V(InterpreterCEntry1)                  \
   V(InterpreterCEntry2)                  \
   V(InterpreterDispatch)                 \
+  V(TailCallOptimizedCodeSlot)           \
   V(InterpreterPushArgsThenCall)         \
   V(InterpreterPushArgsThenConstruct)    \
   V(JSTrampoline)                        \
+  V(BaselinePrologue)                    \
+  V(BaselineLeaveFrame)                  \
   V(Load)                                \
+  V(LoadBaseline)                        \
   V(LoadGlobal)                          \
+  V(LoadGlobalBaseline)                  \
   V(LoadGlobalNoFeedback)                \
   V(LoadGlobalWithVector)                \
   V(LoadNoFeedback)                      \
   V(LoadWithVector)                      \
   V(LoadWithReceiverAndVector)           \
+  V(LoadWithReceiverBaseline)            \
   V(NoContext)                           \
   V(RecordWrite)                         \
   V(ResumeGenerator)                     \
   V(RunMicrotasks)                       \
   V(RunMicrotasksEntry)                  \
   V(Store)                               \
+  V(StoreBaseline)                       \
   V(StoreGlobal)                         \
+  V(StoreGlobalBaseline)                 \
   V(StoreGlobalWithVector)               \
   V(StoreTransition)                     \
   V(StoreWithVector)                     \
@@ -652,6 +662,17 @@ class LoadDescriptor : public CallInterfaceDescriptor {
   static const Register SlotRegister();
 };
 
+// LoadBaselineDescriptor is a load descriptor that does not take a context as
+// input.
+class LoadBaselineDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kReceiver, kName, kSlot)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
+                         MachineType::AnyTagged(),     // kName
+                         MachineType::TaggedSigned())  // kSlot
+  DECLARE_DESCRIPTOR(LoadBaselineDescriptor, CallInterfaceDescriptor)
+};
+
 class LoadGlobalNoFeedbackDescriptor : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kName, kICKind)
@@ -705,6 +726,14 @@ class LoadGlobalDescriptor : public CallInterfaceDescriptor {
   }
 };
 
+class LoadGlobalBaselineDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kName, kSlot)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kName
+                         MachineType::TaggedSigned())  // kSlot
+  DECLARE_DESCRIPTOR(LoadGlobalBaselineDescriptor, CallInterfaceDescriptor)
+};
+
 class StoreDescriptor : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kReceiver, kName, kValue, kSlot)
@@ -718,6 +747,25 @@ class StoreDescriptor : public CallInterfaceDescriptor {
   static const Register NameRegister();
   static const Register ValueRegister();
   static const Register SlotRegister();
+
+#if V8_TARGET_ARCH_IA32
+  static const bool kPassLastArgsOnStack = true;
+#else
+  static const bool kPassLastArgsOnStack = false;
+#endif
+
+  // Pass value and slot through the stack.
+  static const int kStackArgumentsCount = kPassLastArgsOnStack ? 2 : 0;
+};
+
+class StoreBaselineDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kReceiver, kName, kValue, kSlot)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
+                         MachineType::AnyTagged(),     // kName
+                         MachineType::AnyTagged(),     // kValue
+                         MachineType::TaggedSigned())  // kSlot
+  DECLARE_DESCRIPTOR(StoreBaselineDescriptor, CallInterfaceDescriptor)
 
 #if V8_TARGET_ARCH_IA32
   static const bool kPassLastArgsOnStack = true;
@@ -790,6 +838,20 @@ class StoreGlobalDescriptor : public CallInterfaceDescriptor {
   }
 };
 
+class StoreGlobalBaselineDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kName, kValue, kSlot)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kName
+                         MachineType::AnyTagged(),     // kValue
+                         MachineType::TaggedSigned())  // kSlot
+  DECLARE_DESCRIPTOR(StoreGlobalBaselineDescriptor, CallInterfaceDescriptor)
+
+  static const bool kPassLastArgsOnStack =
+      StoreDescriptor::kPassLastArgsOnStack;
+  // Pass value and slot through the stack.
+  static const int kStackArgumentsCount = kPassLastArgsOnStack ? 2 : 0;
+};
+
 class StoreGlobalWithVectorDescriptor : public StoreGlobalDescriptor {
  public:
   DEFINE_PARAMETERS(kName, kValue, kSlot, kVector)
@@ -856,6 +918,18 @@ class LoadWithReceiverAndVectorDescriptor : public LoadWithVectorDescriptor {
 
   // Pass vector through the stack.
   static const int kStackArgumentsCount = kPassLastArgsOnStack ? 1 : 0;
+};
+
+class LoadWithReceiverBaselineDescriptor : public LoadBaselineDescriptor {
+ public:
+  // TODO(v8:9497): Revert the Machine type for kSlot to the
+  // TaggedSigned once Torque can emit better call descriptors
+  DEFINE_PARAMETERS_NO_CONTEXT(kReceiver, kLookupStartObject, kName, kSlot)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kReceiver
+                         MachineType::AnyTagged(),  // kLookupStartObject
+                         MachineType::AnyTagged(),  // kName
+                         MachineType::AnyTagged())  // kSlot
+  DECLARE_DESCRIPTOR(LoadWithReceiverBaselineDescriptor, LoadBaselineDescriptor)
 };
 
 class LoadGlobalWithVectorDescriptor : public LoadGlobalDescriptor {
@@ -1308,6 +1382,37 @@ class GrowArrayElementsDescriptor : public CallInterfaceDescriptor {
   static const Register KeyRegister();
 };
 
+class V8_EXPORT_PRIVATE TailCallOptimizedCodeSlotDescriptor
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kOptimizedCodeEntry)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged())  // kAccumulator
+  DECLARE_DESCRIPTOR(TailCallOptimizedCodeSlotDescriptor,
+                     CallInterfaceDescriptor)
+};
+
+class BaselinePrologueDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kCalleeContext, kClosure, kJavaScriptCallArgCount,
+                    kInterpreterBytecodeArray)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kCalleeContext
+                         MachineType::AnyTagged(),  // kClosure
+                         MachineType::AnyTagged(),  // kJavaScriptCallArgCount
+                         MachineType::AnyTagged())  // kInterpreterBytecodeArray
+  DECLARE_DESCRIPTOR(BaselinePrologueDescriptor, CallInterfaceDescriptor)
+};
+
+class BaselineLeaveFrameDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kParamsSize, kWeight)
+  DEFINE_PARAMETER_TYPES(MachineType::Int32(),  // kParamsSize
+                         MachineType::Int32())  // kWeight
+  DECLARE_DESCRIPTOR(BaselineLeaveFrameDescriptor, CallInterfaceDescriptor)
+
+  static const Register ParamsSizeRegister();
+  static const Register WeightRegister();
+};
+
 class V8_EXPORT_PRIVATE InterpreterDispatchDescriptor
     : public CallInterfaceDescriptor {
  public:
@@ -1374,6 +1479,18 @@ class InterpreterCEntry2Descriptor : public CallInterfaceDescriptor {
                                     MachineType::Pointer(),  // kFirstArgument
                                     MachineType::Pointer())  // kFunctionEntry
   DECLARE_DESCRIPTOR(InterpreterCEntry2Descriptor, CallInterfaceDescriptor)
+};
+
+class ForInPrepareDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_RESULT_AND_PARAMETERS(2, kEnumerator, kVectorIndex, kFeedbackVector)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(
+      MachineType::AnyTagged(),     // result 1 (cache array)
+      MachineType::AnyTagged(),     // result 2 (cache length)
+      MachineType::AnyTagged(),     // kEnumerator
+      MachineType::TaggedSigned(),  // kVectorIndex
+      MachineType::AnyTagged())     // kFeedbackVector
+  DECLARE_DESCRIPTOR(ForInPrepareDescriptor, CallInterfaceDescriptor)
 };
 
 class ResumeGeneratorDescriptor final : public CallInterfaceDescriptor {
@@ -1508,6 +1625,15 @@ class CloneObjectWithVectorDescriptor final : public CallInterfaceDescriptor {
                                     MachineType::TaggedSigned(),   // kSlot
                                     MachineType::AnyTagged())      // kVector
   DECLARE_DESCRIPTOR(CloneObjectWithVectorDescriptor, CallInterfaceDescriptor)
+};
+
+class CloneObjectBaselineDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kSource, kFlags, kSlot)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kSource
+                         MachineType::TaggedSigned(),  // kFlags
+                         MachineType::TaggedSigned())  // kSlot
+  DECLARE_DESCRIPTOR(CloneObjectBaselineDescriptor, CallInterfaceDescriptor)
 };
 
 class BinaryOp_WithFeedbackDescriptor : public CallInterfaceDescriptor {
