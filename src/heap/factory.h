@@ -844,6 +844,12 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       return *this;
     }
 
+    CodeBuilder& set_bytecode_offset_table(Handle<ByteArray> table) {
+      DCHECK(!table.is_null());
+      bytecode_offset_table_ = table;
+      return *this;
+    }
+
     CodeBuilder& set_deoptimization_data(
         Handle<DeoptimizationData> deopt_data) {
       DCHECK(!deopt_data.is_null());
@@ -892,6 +898,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     uint32_t inlined_bytecode_size_ = 0;
     int32_t kind_specific_flags_ = 0;
     Handle<ByteArray> source_position_table_;
+    Handle<ByteArray> bytecode_offset_table_; // For Sparkplug
     Handle<DeoptimizationData> deoptimization_data_ =
         DeoptimizationData::Empty(isolate_);
     BasicBlockProfilerData* profiler_data_ = nullptr;
