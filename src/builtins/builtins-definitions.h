@@ -133,6 +133,9 @@ namespace internal {
   ASM(InterpreterEnterBytecodeDispatch, Dummy)                                 \
   ASM(InterpreterOnStackReplacement, ContextOnly)                              \
                                                                                \
+  /* Baseline Compiler */                                                      \
+  ASM(BaselineHandleOptimizationMarker, Dummy)                                 \
+                                                                               \
   /* Code life-cycle */                                                        \
   TFC(CompileLazy, JSTrampoline)                                               \
   TFC(CompileLazyDeoptimizedCode, JSTrampoline)                                \
@@ -203,6 +206,8 @@ namespace internal {
                                                                                \
   /* Type conversions continuations */                                         \
   TFC(ToBooleanLazyDeoptContinuation, TypeConversionStackParameter)            \
+                                                                               \
+  ASM(TailCallOptimizedCodeSlot, TailCallOptimizedCodeSlot)                    \
                                                                                \
   /* Handlers */                                                               \
   TFH(KeyedLoadIC_PolymorphicName, LoadWithVector)                             \
@@ -673,6 +678,7 @@ namespace internal {
                                                                                \
   /* for-in */                                                                 \
   TFS(ForInEnumerate, kReceiver)                                               \
+  TFC(ForInPrepare, ForInPrepare)                                              \
   TFS(ForInFilter, kKey, kObject)                                              \
                                                                                \
   /* Reflect */                                                                \
