@@ -13,6 +13,7 @@
 #include "src/ast/scopes.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/optimized-compilation-info.h"
@@ -1060,7 +1061,11 @@ Handle<Code> ContinuationForConcurrentOptimization(
       function->set_code(function->feedback_vector().optimized_code());
     }
     return handle(function->code(), isolate);
+  } else if (function->shared().HasBaselineData()) {
+    function->set_code(function->shared().baseline_data().baseline_code());
+    return handle(function->shared().baseline_data().baseline_code(), isolate);
   }
+  DCHECK(function->ActiveTierIsIgnition());
   return BUILTIN_CODE(isolate, InterpreterEntryTrampoline);
 }
 
@@ -1236,6 +1241,9 @@ void FinalizeUnoptimizedCompilation(
     }
     if (FLAG_interpreted_frames_native_stack) {
       InstallInterpreterTrampolineCopy(isolate, shared_info);
+    }
+    if (FLAG_always_sparkplug && shared_info->HasBytecodeArray()) {
+      CompileWithBaseline(isolate, shared_info);
     }
     Handle<CoverageInfo> coverage_info;
     if (finalize_data.coverage_info().ToHandle(&coverage_info)) {
@@ -1841,11 +1849,18 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag,
       !Compile(shared_info, flag, is_compiled_scope)) {
     return false;
   }
+  if (FLAG_always_sparkplug && !function->shared().HasAsmWasmData()) {
+    DCHECK(shared_info->HasBaselineData());
+  }
+
   DCHECK(is_compiled_scope->is_compiled());
   Handle<Code> code = handle(shared_info->GetCode(), isolate);
 
   // Initialize the feedback cell for this JSFunction.
   JSFunction::InitializeFeedbackCell(function, is_compiled_scope);
+  if (FLAG_sparkplug && code->kind() == CodeKind::SPARKPLUG) {
+    JSFunction::EnsureFeedbackVector(function, is_compiled_scope);
+  }
 
   // Optimize now if --always-opt is enabled.
   if (FLAG_always_opt && !function->shared().HasAsmWasmData()) {

@@ -52,6 +52,13 @@ CodeKinds JSFunction::GetAvailableCodeKinds() const {
     }
   }
 
+  if ((result & CodeKindFlag::SPARKPLUG) == 0) {
+    // The SharedFunctionInfo could have attached baseline code.
+    if (shared().HasBaselineData()) {
+      result |= CodeKindFlag::SPARKPLUG;
+    }
+  }
+
   // Check the optimized code cache.
   if (has_feedback_vector() && feedback_vector().has_optimized_code() &&
       !feedback_vector().optimized_code().marked_for_deoptimization()) {
@@ -90,6 +97,9 @@ bool HighestTierOf(CodeKinds kinds, CodeKind* highest_tier) {
     return true;
   } else if ((kinds & CodeKindFlag::TURBOPROP) != 0) {
     *highest_tier = CodeKind::TURBOPROP;
+    return true;
+  } else if ((kinds & CodeKindFlag::SPARKPLUG) != 0) {
+    *highest_tier = CodeKind::SPARKPLUG;
     return true;
   } else if ((kinds & CodeKindFlag::NATIVE_CONTEXT_INDEPENDENT) != 0) {
     *highest_tier = CodeKind::NATIVE_CONTEXT_INDEPENDENT;
@@ -137,6 +147,16 @@ bool JSFunction::ActiveTierIsNCI() const {
   return GetActiveTier() == CodeKind::NATIVE_CONTEXT_INDEPENDENT;
 }
 
+bool JSFunction::ActiveTierIsSparkplug() const {
+  CodeKind highest_tier;
+  if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
+  return highest_tier == CodeKind::SPARKPLUG;
+}
+
+bool JSFunction::ActiveTierIsIgnitionOrSparkplug() const {
+  return ActiveTierIsIgnition() || ActiveTierIsSparkplug();
+}
+
 bool JSFunction::ActiveTierIsToptierTurboprop() const {
   if (!FLAG_turboprop_as_toptier) return false;
   if (!shared().HasBytecodeArray()) return false;
@@ -150,12 +170,13 @@ bool JSFunction::ActiveTierIsMidtierTurboprop() const {
 }
 
 CodeKind JSFunction::NextTier() const {
-  if (V8_UNLIKELY(FLAG_turbo_nci_as_midtier && ActiveTierIsIgnition())) {
+  if (V8_UNLIKELY(FLAG_turbo_nci_as_midtier &&
+                  ActiveTierIsIgnitionOrSparkplug())) {
     return CodeKind::NATIVE_CONTEXT_INDEPENDENT;
   } else if (V8_UNLIKELY(FLAG_turboprop) && ActiveTierIsMidtierTurboprop()) {
     return CodeKind::TURBOFAN;
   } else if (V8_UNLIKELY(FLAG_turboprop)) {
-    DCHECK(ActiveTierIsIgnition());
+    DCHECK(ActiveTierIsIgnitionOrSparkplug());
     return CodeKind::TURBOPROP;
   }
   return CodeKind::TURBOFAN;
