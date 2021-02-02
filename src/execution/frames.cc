@@ -602,6 +602,8 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
           case CodeKind::NATIVE_CONTEXT_INDEPENDENT:
           case CodeKind::TURBOPROP:
             return OPTIMIZED;
+          case CodeKind::SPARKPLUG:
+            return Type::SPARKPLUG;
           case CodeKind::JS_TO_WASM_FUNCTION:
             return JS_TO_WASM;
           case CodeKind::JS_TO_JS_FUNCTION:
@@ -981,6 +983,7 @@ void CommonFrame::IterateCompiledFrame(RootVisitor* v) const {
         break;
       case OPTIMIZED:
       case INTERPRETED:
+      case SPARKPLUG:
       case BUILTIN:
         // These frame types have a context, but they are actually stored
         // in the place on the stack that one finds the frame type.
@@ -1181,7 +1184,8 @@ Script JavaScriptFrame::script() const {
 int CommonFrameWithJSLinkage::LookupExceptionHandlerInTable(
     int* stack_depth, HandlerTable::CatchPrediction* prediction) {
   DCHECK(!LookupCode().has_handler_table());
-  DCHECK(!LookupCode().is_optimized_code());
+  DCHECK(!LookupCode().is_optimized_code() ||
+         LookupCode().kind() == CodeKind::SPARKPLUG);
   return -1;
 }
 
@@ -1356,6 +1360,7 @@ FrameSummary::JavaScriptFrameSummary::JavaScriptFrameSummary(
       is_constructor_(is_constructor),
       parameters_(parameters, isolate) {
   DCHECK(abstract_code.IsBytecodeArray() ||
+         Code::cast(abstract_code).kind() == CodeKind::SPARKPLUG ||
          !CodeKindIsOptimizedJSFunction(Code::cast(abstract_code).kind()));
 }
 
@@ -1740,6 +1745,46 @@ void InterpretedFrame::PatchBytecodeOffset(int new_offset) {
                 index * kSystemPointerSize);
   int raw_offset = BytecodeArray::kHeaderSize - kHeapObjectTag + new_offset;
   SetExpression(index, Smi::FromInt(raw_offset));
+}
+
+namespace {
+  int ReadUint(ByteArray array, int* index) {
+    int byte = 0;
+    int value = 0;
+    int shift = 0;
+    do {
+      byte = array.get((*index)++);
+      value += (byte & ((1<<7)-1)) << shift;
+      shift += 7;
+    } while (byte & (1<<7));
+    return value;
+  }
+}
+int SparkplugFrame::GetBytecodeOffset() const {
+  Code code = LookupCode();
+  ByteArray data = ByteArray::cast(code.source_position_table());
+  Address lookup_pc = 0;
+  Address pc = this->pc() - code.InstructionStart();
+  int index = 0;
+  int offset = 0;
+  while (pc > lookup_pc) {
+    lookup_pc += ReadUint(data, &index);
+    offset += ReadUint(data, &index);
+  }
+  return offset;
+}
+intptr_t SparkplugFrame::GetPCForBytecodeOffset(int lookup_offset) const {
+  Code code = LookupCode();
+  ByteArray data = ByteArray::cast(code.source_position_table());
+  intptr_t pc = 0;
+  int index = 0;
+  int offset = 0;
+  while (lookup_offset > offset) {
+    pc += ReadUint(data, &index);
+    offset += ReadUint(data, &index);
+  }
+  DCHECK_EQ(offset, lookup_offset);
+  return pc;
 }
 
 BytecodeArray InterpretedFrame::GetBytecodeArray() const {
