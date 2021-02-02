@@ -977,6 +977,7 @@ class RuntimeCallTimer final {
   V(CompilePublishBackgroundFinalization)      \
   V(CompileSerialize)                          \
   V(CompileWaitForDispatcher)                  \
+  V(CompileWithBaseline)                       \
   V(DeoptimizeCode)                            \
   V(DeserializeContext)                        \
   V(DeserializeIsolate)                        \

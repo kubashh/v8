@@ -602,6 +602,8 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
           case CodeKind::NATIVE_CONTEXT_INDEPENDENT:
           case CodeKind::TURBOPROP:
             return OPTIMIZED;
+          case CodeKind::SPARKPLUG:
+            return Type::SPARKPLUG;
           case CodeKind::JS_TO_WASM_FUNCTION:
             return JS_TO_WASM;
           case CodeKind::JS_TO_JS_FUNCTION:
@@ -981,6 +983,7 @@ void CommonFrame::IterateCompiledFrame(RootVisitor* v) const {
         break;
       case OPTIMIZED:
       case INTERPRETED:
+      case SPARKPLUG:
       case BUILTIN:
         // These frame types have a context, but they are actually stored
         // in the place on the stack that one finds the frame type.
