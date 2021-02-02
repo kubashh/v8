@@ -51,6 +51,13 @@ CodeKinds JSFunction::GetAvailableCodeKinds() const {
       result |= CodeKindFlag::INTERPRETED_FUNCTION;
     }
   }
+  
+  if ((result & CodeKindFlag::SPARKPLUG) == 0) {
+    // The SharedFunctionInfo could have attached baseline code.
+    if (shared().HasBaselineData()) {
+      result |= CodeKindFlag::SPARKPLUG;
+    }    
+  }
 
   if ((result & kOptimizedJSFunctionCodeKindsMask) == 0) {
     // Check the optimized code cache.
@@ -93,6 +100,9 @@ bool HighestTierOf(CodeKinds kinds, CodeKind* highest_tier) {
   } else if ((kinds & CodeKindFlag::TURBOPROP) != 0) {
     *highest_tier = CodeKind::TURBOPROP;
     return true;
+  } else if ((kinds & CodeKindFlag::SPARKPLUG) != 0) {
+    *highest_tier = CodeKind::SPARKPLUG;
+    return true;
   } else if ((kinds & CodeKindFlag::NATIVE_CONTEXT_INDEPENDENT) != 0) {
     *highest_tier = CodeKind::NATIVE_CONTEXT_INDEPENDENT;
     return true;
@@ -129,6 +139,12 @@ bool JSFunction::ActiveTierIsNCI() const {
   CodeKind highest_tier;
   if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
   return highest_tier == CodeKind::NATIVE_CONTEXT_INDEPENDENT;
+}
+
+bool JSFunction::ActiveTierIsSparkplug() const {
+  CodeKind highest_tier;
+  if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
+  return highest_tier == CodeKind::SPARKPLUG;
 }
 
 bool JSFunction::ActiveTierIsToptierTurboprop() const {
