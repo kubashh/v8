@@ -3,19 +3,24 @@
 // found in the LICENSE file.
 
 #include "src/asmjs/asm-js.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/compiler.h"
+#include "src/codegen/optimized-compilation-info.h"
 #include "src/common/assert-scope.h"
 #include "src/common/message-template.h"
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
+#include "src/compiler/pipeline.h"
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/execution/arguments-inl.h"
 #include "src/execution/frames-inl.h"
 #include "src/execution/isolate-inl.h"
 #include "src/execution/v8threads.h"
 #include "src/execution/vm-state-inl.h"
+#include "src/heap/parked-scope.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
+#include "src/objects/shared-function-info.h"
 #include "src/runtime/runtime-utils.h"
 
 namespace v8 {
@@ -406,6 +411,69 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
     function->set_code(function->shared().GetCode());
   }
   return Object();
+}
+
+RUNTIME_FUNCTION(Runtime_CompileBaseline) {
+  HandleScope scope(isolate);
+  DCHECK_GE(2, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
+  int iterations = 1;
+  if (args.length() == 2) {
+    CONVERT_ARG_HANDLE_CHECKED(Smi, it, 1);
+    iterations = it->value();
+  }
+
+  Handle<SharedFunctionInfo> shared(function->shared(isolate), isolate);
+
+  IsCompiledScope is_compiled_scoped(*shared, isolate);
+  JSFunction::EnsureFeedbackVector(function, &is_compiled_scoped);
+
+  while (iterations--) {
+    function->set_code(*CompileWithBaseline(isolate, shared));
+  }
+  return *function;
+}
+
+RUNTIME_FUNCTION(Runtime_CompileTurboProp) {
+  HandleScope scope(isolate);
+  DCHECK_GE(2, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
+  int iterations = 1;
+  if (args.length() == 2) {
+    CONVERT_ARG_HANDLE_CHECKED(Smi, it, 1);
+    iterations = it->value();
+  }
+
+  Handle<SharedFunctionInfo> shared(function->shared(isolate), isolate);
+
+  IsCompiledScope is_compiled_scoped(*shared, isolate);
+  JSFunction::EnsureFeedbackVector(function, &is_compiled_scoped);
+
+  while (iterations--) {
+    std::unique_ptr<OptimizedCompilationJob> job(
+        compiler::Pipeline::NewCompilationJob(isolate, function,
+                                              CodeKind::TURBOPROP, true));
+    OptimizedCompilationInfo* compilation_info = job->compilation_info();
+
+    {
+      CompilationHandleScope compilation(isolate, compilation_info);
+      CanonicalHandleScope canonical(isolate, compilation_info);
+      compilation_info->ReopenHandlesInNewHandleScope(isolate);
+      CHECK(job->PrepareJob(isolate) == CompilationJob::SUCCEEDED);
+    }
+
+    {
+      // Park main thread here to be in the same state as background threads.
+      ParkedScope parked_scope(isolate->main_thread_local_isolate());
+      CHECK(job->ExecuteJob(isolate->counters()->runtime_call_stats(),
+                            isolate->main_thread_local_isolate()) ==
+            CompilationJob::SUCCEEDED);
+    }
+
+    CHECK(job->FinalizeJob(isolate) == CompilationJob::SUCCEEDED);
+    function->set_code(*compilation_info->code());
+  }
+  return *function;
 }
 
 static Object CompileGlobalEval(Isolate* isolate,
