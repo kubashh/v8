@@ -474,7 +474,7 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
   function->MarkForOptimization(ConcurrencyMode::kNotConcurrent);
 
   // Make the profiler arm all back edges in unoptimized code.
-  if (it.frame()->type() == StackFrame::INTERPRETED) {
+  if (it.frame()->HasInterpreterFrameType()) {
     isolate->runtime_profiler()->AttemptOnStackReplacement(
         InterpretedFrame::cast(it.frame()),
         AbstractCode::kMaxLoopNestingMarker);

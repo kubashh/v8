@@ -566,6 +566,10 @@ DEFINE_UINT_READONLY(max_minimorphic_map_checks, 4,
 DEFINE_INT(ticks_scale_factor_for_top_tier, 10,
            "scale factor for profiler ticks when tiering up from midtier")
 
+// Flags for Sparkplug
+DEFINE_BOOL(sparkplug, false, "enable experimental sparkplug baseline compiler")
+DEFINE_BOOL(always_sparkplug, false, "directly tier up to sparkplug")
+
 // Flags for concurrent recompilation.
 DEFINE_BOOL(concurrent_recompilation, true,
             "optimizing hot functions asynchronously on a separate thread")
