@@ -13,6 +13,7 @@
 #include "src/ast/scopes.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/optimized-compilation-info.h"
