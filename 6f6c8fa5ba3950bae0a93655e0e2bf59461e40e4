@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c59965_b2c4a153",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-02T15:06:11Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "6f6c8fa5ba3950bae0a93655e0e2bf59461e40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c38d3a60_61d48756",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 5080,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-02T15:06:11Z",
+      "side": 1,
+      "message": "The way this works is that we should not have a \"//v8:v8_for_testing\" gn dep in production code but only from testing. This way we allow only enabling the testing::* concepts from test targets.",
+      "range": {
+        "startLine": 5080,
+        "startChar": 16,
+        "endLine": 5080,
+        "endChar": 30
+      },
+      "revId": "6f6c8fa5ba3950bae0a93655e0e2bf59461e40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b0435c5_47bc6bfa",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 5130,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-02T15:06:11Z",
+      "side": 1,
+      "message": "We should never compile with :internal_config and :external_config as that sets two conflicting   component macros. IIUC, then we always have to compile an internal target with :internal_config and depend on it with :external_config.\n\n(This target would break here if we also added a source file.)",
+      "range": {
+        "startLine": 5130,
+        "startChar": 4,
+        "endLine": 5130,
+        "endChar": 11
+      },
+      "revId": "6f6c8fa5ba3950bae0a93655e0e2bf59461e40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca6fd916_238f719a",
+        "filename": "include/cppgc/testing.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-02T15:06:11Z",
+      "side": 1,
+      "message": "I think in future this can be a place to hold helpers for scheduling/testing GC over the API boundary.",
+      "range": {
+        "startLine": 29,
+        "startChar": 16,
+        "endLine": 29,
+        "endChar": 20
+      },
+      "revId": "6f6c8fa5ba3950bae0a93655e0e2bf59461e40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3297aa68_f8d7c723",
+        "filename": "test/unittests/heap/cppgc/testing-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-02T15:06:11Z",
+      "side": 1,
+      "message": "Test\u0027ception!",
+      "range": {
+        "startLine": 17,
+        "startChar": 6,
+        "endLine": 17,
+        "endChar": 17
+      },
+      "revId": "6f6c8fa5ba3950bae0a93655e0e2bf59461e40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
