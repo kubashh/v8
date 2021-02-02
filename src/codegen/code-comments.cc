@@ -91,6 +91,10 @@ void PrintCodeCommentsSection(std::ostream& out, Address code_comments_start,
                               uint32_t code_comments_size) {
   CodeCommentsIterator it(code_comments_start, code_comments_size);
   out << "CodeComments (size = " << it.size() << ")\n";
+  if (!FLAG_code_comments_list) {
+    out << "  # Use --code-comments-list to list all comments\n";
+    return;
+  };
   if (it.HasCurrent()) {
     out << std::setw(6) << "pc" << std::setw(6) << "len"
         << " comment\n";

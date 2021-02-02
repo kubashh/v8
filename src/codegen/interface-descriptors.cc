@@ -24,6 +24,11 @@ void CallInterfaceDescriptorData::InitializePlatformSpecific(
     // The value of the root register must be reserved, thus any uses
     // within the calling convention are disallowed.
     DCHECK_NE(registers[i], kRootRegister);
+#ifdef DEBUG
+    for (int j = i+1; j < register_parameter_count; j++) {
+      DCHECK_NE(registers[i], registers[j]);
+    }
+#endif
     register_params_[i] = registers[i];
   }
 }
@@ -191,6 +196,12 @@ const Register FastNewObjectDescriptor::NewTargetRegister() {
   return kJavaScriptCallNewTargetRegister;
 }
 
+void TailCallOptimizedCodeSlotDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {kJavaScriptCallCodeStartRegister};
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
 void LoadDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   Register registers[] = {ReceiverRegister(), NameRegister(), SlotRegister()};
@@ -264,6 +275,20 @@ void StoreTransitionDescriptor::InitializePlatformSpecific(
   };
   int len = arraysize(registers) - kStackArgumentsCount;
   data->InitializePlatformSpecific(len, registers);
+}
+
+void BaselinePrologueDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {kContextRegister, kJSFunctionRegister,
+                          kJavaScriptCallArgCountRegister,
+                          kInterpreterBytecodeArrayRegister};
+  data->InitializePlatformSpecific(kParameterCount, registers);
+}
+
+void BaselineLeaveFrameDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {ParamsSizeRegister(), WeightRegister()};
+  data->InitializePlatformSpecific(kParameterCount, registers);
 }
 
 void StringAtDescriptor::InitializePlatformSpecific(
@@ -484,6 +509,11 @@ void Compare_WithFeedbackDescriptor::InitializePlatformSpecific(
 void UnaryOp_WithFeedbackDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   DefaultInitializePlatformSpecific(data, 3);
+}
+
+void ForInPrepareDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
 }
 
 }  // namespace internal
