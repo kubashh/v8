@@ -968,6 +968,10 @@ class RuntimeCallTimer final {
   V(BoundFunctionNameGetter)                   \
   V(CodeGenerationFromStringsCallbacks)        \
   V(CompileBackgroundCompileTask)              \
+  V(CompileBaseline)                           \
+  V(CompileBaselineVisit)                      \
+  V(CompileBaselinePrepareHandlerOffsets)      \
+  V(CompileBaselinePreVisit)                   \
   V(CompileCollectSourcePositions)             \
   V(CompileDeserialize)                        \
   V(CompileEnqueueOnDispatcher)                \

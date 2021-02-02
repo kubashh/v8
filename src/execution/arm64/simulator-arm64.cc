@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "src/execution/arm64/simulator-arm64.h"
+#include "src/execution/isolate.h"
 
 #include "src/execution/isolate.h"
 
