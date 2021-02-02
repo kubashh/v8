@@ -14,20 +14,21 @@ namespace internal {
 // -----------------------------------------------------------------------------
 // ES6 section 20.1 Number Objects
 
-#define DEF_BINOP(Name, Generator)                                            \
-  TF_BUILTIN(Name, CodeStubAssembler) {                                       \
-    auto lhs = Parameter<Object>(Descriptor::kLeft);                          \
-    auto rhs = Parameter<Object>(Descriptor::kRight);                         \
-    auto context = Parameter<Context>(Descriptor::kContext);                  \
-    auto maybe_feedback_vector =                                              \
-        Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);              \
-    auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);              \
-                                                                              \
-    BinaryOpAssembler binop_asm(state());                                     \
-    TNode<Object> result = binop_asm.Generator(context, lhs, rhs, slot,       \
-                                               maybe_feedback_vector, false); \
-                                                                              \
-    Return(result);                                                           \
+#define DEF_BINOP(Name, Generator)                                           \
+  TF_BUILTIN(Name, CodeStubAssembler) {                                      \
+    auto lhs = Parameter<Object>(Descriptor::kLeft);                         \
+    auto rhs = Parameter<Object>(Descriptor::kRight);                        \
+    auto context = Parameter<Context>(Descriptor::kContext);                 \
+    auto feedback_vector =                                                   \
+        Parameter<FeedbackVector>(Descriptor::kFeedbackVector);              \
+    auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);             \
+                                                                             \
+    BinaryOpAssembler binop_asm(state());                                    \
+    TNode<Object> result =                                                   \
+        binop_asm.Generator([&]() { return context; }, lhs, rhs, slot,       \
+                            [&]() { return feedback_vector; }, true, false); \
+                                                                             \
+    Return(result);                                                          \
   }
 DEF_BINOP(Add_WithFeedback, Generate_AddWithFeedback)
 DEF_BINOP(Subtract_WithFeedback, Generate_SubtractWithFeedback)
@@ -44,17 +45,44 @@ DEF_BINOP(ShiftRightLogical_WithFeedback,
           Generate_ShiftRightLogicalWithFeedback)
 #undef DEF_BINOP
 
+#define DEF_BINOP(Name, Generator)                                        \
+  TF_BUILTIN(Name, CodeStubAssembler) {                                   \
+    auto lhs = Parameter<Object>(Descriptor::kLeft);                      \
+    auto rhs = Parameter<Object>(Descriptor::kRight);                     \
+    auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);          \
+                                                                          \
+    BinaryOpAssembler binop_asm(state());                                 \
+    TNode<Object> result = binop_asm.Generator(                           \
+        [&]() { return LoadContextFromBaseline(); }, lhs, rhs, slot,      \
+        [&]() { return LoadFeedbackVectorFromBaseline(); }, true, false); \
+                                                                          \
+    Return(result);                                                       \
+  }
+DEF_BINOP(AddBaseline, Generate_AddWithFeedback)
+DEF_BINOP(SubtractBaseline, Generate_SubtractWithFeedback)
+DEF_BINOP(MultiplyBaseline, Generate_MultiplyWithFeedback)
+DEF_BINOP(DivideBaseline, Generate_DivideWithFeedback)
+DEF_BINOP(ModulusBaseline, Generate_ModulusWithFeedback)
+DEF_BINOP(ExponentiateBaseline, Generate_ExponentiateWithFeedback)
+DEF_BINOP(BitwiseOrBaseline, Generate_BitwiseOrWithFeedback)
+DEF_BINOP(BitwiseXorBaseline, Generate_BitwiseXorWithFeedback)
+DEF_BINOP(BitwiseAndBaseline, Generate_BitwiseAndWithFeedback)
+DEF_BINOP(ShiftLeftBaseline, Generate_ShiftLeftWithFeedback)
+DEF_BINOP(ShiftRightBaseline, Generate_ShiftRightWithFeedback)
+DEF_BINOP(ShiftRightLogicalBaseline, Generate_ShiftRightLogicalWithFeedback)
+#undef DEF_BINOP
+
 #define DEF_UNOP(Name, Generator)                                 \
   TF_BUILTIN(Name, CodeStubAssembler) {                           \
     auto value = Parameter<Object>(Descriptor::kValue);           \
     auto context = Parameter<Context>(Descriptor::kContext);      \
-    auto maybe_feedback_vector =                                  \
-        Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);  \
+    auto feedback_vector =                                        \
+        Parameter<FeedbackVector>(Descriptor::kFeedbackVector);   \
     auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);  \
                                                                   \
     UnaryOpAssembler a(state());                                  \
     TNode<Object> result =                                        \
-        a.Generator(context, value, slot, maybe_feedback_vector); \
+        a.Generator(context, value, slot, feedback_vector, true); \
                                                                   \
     Return(result);                                               \
   }
@@ -69,16 +97,37 @@ DEF_UNOP(Negate_WithFeedback, Generate_NegateWithFeedback)
     auto lhs = Parameter<Object>(Descriptor::kLeft);                           \
     auto rhs = Parameter<Object>(Descriptor::kRight);                          \
     auto context = Parameter<Context>(Descriptor::kContext);                   \
-    auto maybe_feedback_vector =                                               \
-        Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);               \
+    auto feedback_vector =                                                     \
+        Parameter<FeedbackVector>(Descriptor::kFeedbackVector);                \
     auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);               \
                                                                                \
     TVARIABLE(Smi, var_type_feedback);                                         \
     TNode<Oddball> result = RelationalComparison(Operation::k##Name, lhs, rhs, \
                                                  context, &var_type_feedback); \
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot);    \
+    UpdateFeedback(var_type_feedback.value(), feedback_vector, slot);          \
                                                                                \
     Return(result);                                                            \
+  }
+DEF_COMPARE(LessThan)
+DEF_COMPARE(LessThanOrEqual)
+DEF_COMPARE(GreaterThan)
+DEF_COMPARE(GreaterThanOrEqual)
+#undef DEF_COMPARE
+
+#define DEF_COMPARE(Name)                                                 \
+  TF_BUILTIN(Name##Baseline, CodeStubAssembler) {                         \
+    auto lhs = Parameter<Object>(Descriptor::kLeft);                      \
+    auto rhs = Parameter<Object>(Descriptor::kRight);                     \
+    auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);          \
+                                                                          \
+    TVARIABLE(Smi, var_type_feedback);                                    \
+    TNode<Oddball> result = RelationalComparison(                         \
+        Operation::k##Name, lhs, rhs,                                     \
+        [&]() { return LoadContextFromBaseline(); }, &var_type_feedback); \
+    auto feedback_vector = LoadFeedbackVectorFromBaseline();              \
+    UpdateFeedback(var_type_feedback.value(), feedback_vector, slot);     \
+                                                                          \
+    Return(result);                                                       \
   }
 DEF_COMPARE(LessThan)
 DEF_COMPARE(LessThanOrEqual)
@@ -90,13 +139,13 @@ TF_BUILTIN(Equal_WithFeedback, CodeStubAssembler) {
   auto lhs = Parameter<Object>(Descriptor::kLeft);
   auto rhs = Parameter<Object>(Descriptor::kRight);
   auto context = Parameter<Context>(Descriptor::kContext);
-  auto maybe_feedback_vector =
-      Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);
+  auto feedback_vector = Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
 
   TVARIABLE(Smi, var_type_feedback);
-  TNode<Oddball> result = Equal(lhs, rhs, context, &var_type_feedback);
-  UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot);
+  TNode<Oddball> result = Equal(
+      lhs, rhs, [&]() { return context; }, &var_type_feedback);
+  UpdateFeedback(var_type_feedback.value(), feedback_vector, slot);
 
   Return(result);
 }
@@ -104,13 +153,40 @@ TF_BUILTIN(Equal_WithFeedback, CodeStubAssembler) {
 TF_BUILTIN(StrictEqual_WithFeedback, CodeStubAssembler) {
   auto lhs = Parameter<Object>(Descriptor::kLeft);
   auto rhs = Parameter<Object>(Descriptor::kRight);
-  auto maybe_feedback_vector =
-      Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);
+  auto feedback_vector = Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
 
   TVARIABLE(Smi, var_type_feedback);
   TNode<Oddball> result = StrictEqual(lhs, rhs, &var_type_feedback);
-  UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot);
+  UpdateFeedback(var_type_feedback.value(), feedback_vector, slot);
+
+  Return(result);
+}
+
+TF_BUILTIN(EqualBaseline, CodeStubAssembler) {
+  auto lhs = Parameter<Object>(Descriptor::kLeft);
+  auto rhs = Parameter<Object>(Descriptor::kRight);
+  auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
+
+  TVARIABLE(Smi, var_type_feedback);
+  TNode<Oddball> result = Equal(
+      lhs, rhs, [&]() { return LoadContextFromBaseline(); },
+      &var_type_feedback);
+  auto feedback_vector = LoadFeedbackVectorFromBaseline();
+  UpdateFeedback(var_type_feedback.value(), feedback_vector, slot);
+
+  Return(result);
+}
+
+TF_BUILTIN(StrictEqualBaseline, CodeStubAssembler) {
+  auto lhs = Parameter<Object>(Descriptor::kLeft);
+  auto rhs = Parameter<Object>(Descriptor::kRight);
+  auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
+
+  TVARIABLE(Smi, var_type_feedback);
+  TNode<Oddball> result = StrictEqual(lhs, rhs, &var_type_feedback);
+  auto feedback_vector = LoadFeedbackVectorFromBaseline();
+  UpdateFeedback(var_type_feedback.value(), feedback_vector, slot);
 
   Return(result);
 }
