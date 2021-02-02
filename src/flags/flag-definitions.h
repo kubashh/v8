@@ -507,6 +507,7 @@ DEFINE_INT(scale_factor_for_feedback_allocation, 4,
 DEFINE_BOOL(feedback_allocation_on_bytecode_size, false,
             "Instead of a fixed budget for lazy feedback vector allocation, "
             "scale it based in the bytecode size.")
+DEFINE_IMPLICATION(sparkplug, feedback_allocation_on_bytecode_size)
 DEFINE_BOOL(lazy_feedback_allocation, true, "Allocate feedback vectors lazily")
 
 // Flags for Ignition.
@@ -568,6 +569,15 @@ DEFINE_UINT_READONLY(max_minimorphic_map_checks, 4,
 // The default of 10 is approximately the ration of TP to TF interrupt budget.
 DEFINE_INT(ticks_scale_factor_for_top_tier, 10,
            "scale factor for profiler ticks when tiering up from midtier")
+
+// Flags for Sparkplug
+DEFINE_BOOL(sparkplug, false, "enable experimental sparkplug baseline compiler")
+DEFINE_BOOL(always_sparkplug, false, "directly tier up to sparkplug")
+DEFINE_BOOL(sparkplug_inline_smi, true, "inline fast paths for smi ops")
+DEFINE_NEG_IMPLICATION(sparkplug, write_protect_code_memory)
+DEFINE_NEG_IMPLICATION(jitless, sparkplug)
+DEFINE_NEG_IMPLICATION(jitless, always_sparkplug)
+DEFINE_IMPLICATION(always_sparkplug, sparkplug)
 
 // Flags for concurrent recompilation.
 DEFINE_BOOL(concurrent_recompilation, true,
@@ -751,20 +761,10 @@ DEFINE_BOOL(turbo_nci, false,
 // TODO(v8:8888): Temporary until NCI caching is implemented or
 // feedback collection is made unconditional.
 DEFINE_IMPLICATION(turbo_nci, turbo_collect_feedback_in_generic_lowering)
-DEFINE_BOOL(turbo_nci_as_midtier, false,
-            "insert NCI as a midtier compiler for testing purposes.")
 DEFINE_BOOL(print_nci_code, false, "print native context independent code.")
 DEFINE_BOOL(trace_turbo_nci, false, "trace native context independent code.")
 DEFINE_BOOL(turbo_collect_feedback_in_generic_lowering, true,
             "enable experimental feedback collection in generic lowering.")
-// TODO(jgruber,v8:8888): Remove this flag once we've settled on a codegen
-// strategy.
-DEFINE_BOOL(turbo_nci_delayed_codegen, true,
-            "delay NCI codegen to reduce useless compilation work.")
-// TODO(jgruber,v8:8888): Remove this flag once we've settled on an ageing
-// strategy.
-DEFINE_BOOL(turbo_nci_cache_ageing, false,
-            "enable ageing of the NCI code cache.")
 // TODO(jgruber,v8:8888): Remove this flag once we've settled on an ageing
 // strategy.
 DEFINE_BOOL(isolate_script_cache_ageing, true,
@@ -1176,6 +1176,8 @@ DEFINE_BOOL(debug_code, DEBUG_BOOL,
 DEFINE_BOOL(code_comments, false,
             "emit comments in code disassembly; for more readable source "
             "positions you should add --no-concurrent_recompilation")
+DEFINE_BOOL(code_comments_list, false,
+            "Print a list of all code comments after printing code disassembly")
 DEFINE_BOOL(enable_sse3, true, "enable use of SSE3 instructions if available")
 DEFINE_BOOL(enable_ssse3, true, "enable use of SSSE3 instructions if available")
 DEFINE_BOOL(enable_sse4_1, true,

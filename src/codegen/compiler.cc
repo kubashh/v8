@@ -13,6 +13,7 @@
 #include "src/ast/scopes.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/optimized-compilation-info.h"
@@ -60,35 +61,6 @@ namespace v8 {
 namespace internal {
 
 namespace {
-
-bool IsForNativeContextIndependentCachingOnly(CodeKind kind) {
-  // NCI code is only cached (and not installed on the JSFunction upon
-  // successful compilation), unless the testing-only
-  // FLAG_turbo_nci_as_midtier is enabled.
-  return CodeKindIsNativeContextIndependentJSFunction(kind) &&
-         !FLAG_turbo_nci_as_midtier;
-}
-
-// This predicate is currently needed only because the nci-as-midtier testing
-// configuration is special. A quick summary of compilation configurations:
-//
-// - Turbofan (and currently Turboprop) uses both the optimization marker and
-// the optimized code cache (underneath, the marker and the cache share the same
-// slot on the feedback vector).
-// - Native context independent (NCI) code uses neither the marker nor the
-// cache.
-// - The NCI-as-midtier testing configuration uses the marker, but not the
-// cache.
-//
-// This predicate supports that last case. In the near future, this last case is
-// expected to change s.t. code kinds use the marker iff they use the optimized
-// code cache (details still TBD). In that case, the existing
-// CodeKindIsStoredInOptimizedCodeCache is sufficient and this extra predicate
-// can be removed.
-// TODO(jgruber,rmcilroy,v8:8888): Remove this predicate once that has happened.
-bool UsesOptimizationMarker(CodeKind kind) {
-  return !IsForNativeContextIndependentCachingOnly(kind);
-}
 
 class CompilerTracer : public AllStatic {
  public:
@@ -199,13 +171,13 @@ struct ScopedTimer {
   base::TimeDelta* location_;
 };
 
-namespace {
-
-void LogFunctionCompilation(CodeEventListener::LogEventsAndTags tag,
-                            Handle<SharedFunctionInfo> shared,
-                            Handle<Script> script,
-                            Handle<AbstractCode> abstract_code, bool optimizing,
-                            double time_taken_ms, Isolate* isolate) {
+// static
+void Compiler::LogFunctionCompilation(Isolate* isolate,
+                                      CodeEventListener::LogEventsAndTags tag,
+                                      Handle<SharedFunctionInfo> shared,
+                                      Handle<Script> script,
+                                      Handle<AbstractCode> abstract_code,
+                                      bool optimizing, double time_taken_ms) {
   DCHECK(!abstract_code.is_null());
   DCHECK(!abstract_code.is_identical_to(BUILTIN_CODE(isolate, CompileLazy)));
 
@@ -253,6 +225,7 @@ void LogFunctionCompilation(CodeEventListener::LogEventsAndTags tag,
                              *debug_name));
 }
 
+namespace {
 ScriptOriginOptions OriginOptionsForEval(Object script) {
   if (!script.IsScript()) return ScriptOriginOptions();
 
@@ -332,8 +305,8 @@ void RecordUnoptimizedFunctionCompilation(
                          time_taken_to_finalize.InMillisecondsF();
 
   Handle<Script> script(Script::cast(shared->script()), isolate);
-  LogFunctionCompilation(tag, shared, script, abstract_code, false,
-                         time_taken_ms, isolate);
+  Compiler::LogFunctionCompilation(isolate, tag, shared, script, abstract_code,
+                                   false, time_taken_ms);
 }
 
 }  // namespace
@@ -467,8 +440,9 @@ void OptimizedCompilationJob::RecordFunctionCompilation(
 
   Handle<Script> script(
       Script::cast(compilation_info()->shared_info()->script()), isolate);
-  LogFunctionCompilation(tag, compilation_info()->shared_info(), script,
-                         abstract_code, true, time_taken_ms, isolate);
+  Compiler::LogFunctionCompilation(isolate, tag,
+                                   compilation_info()->shared_info(), script,
+                                   abstract_code, true, time_taken_ms);
 }
 
 // ----------------------------------------------------------------------------
@@ -867,7 +841,8 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Code> GetCodeFromOptimizedCodeCache(
 }
 
 void ClearOptimizedCodeCache(OptimizedCompilationInfo* compilation_info) {
-  DCHECK(UsesOptimizationMarker(compilation_info->code_kind()));
+  DCHECK(!CodeKindIsNativeContextIndependentJSFunction(
+      compilation_info->code_kind()));
   Handle<JSFunction> function = compilation_info->closure();
   if (compilation_info->osr_offset().IsNone()) {
     Handle<FeedbackVector> vector =
@@ -879,12 +854,7 @@ void ClearOptimizedCodeCache(OptimizedCompilationInfo* compilation_info) {
 void InsertCodeIntoOptimizedCodeCache(
     OptimizedCompilationInfo* compilation_info) {
   const CodeKind kind = compilation_info->code_kind();
-  if (!CodeKindIsStoredInOptimizedCodeCache(kind)) {
-    if (UsesOptimizationMarker(kind)) {
-      ClearOptimizedCodeCache(compilation_info);
-    }
-    return;
-  }
+  if (!CodeKindIsStoredInOptimizedCodeCache(kind)) return;
 
   if (compilation_info->function_context_specializing()) {
     // Function context specialization folds-in the function context, so no
@@ -1061,7 +1031,11 @@ Handle<Code> ContinuationForConcurrentOptimization(
       function->set_code(function->feedback_vector().optimized_code());
     }
     return handle(function->code(), isolate);
+  } else if (function->shared().HasBaselineData()) {
+    function->set_code(function->shared().baseline_data().baseline_code());
+    return handle(function->shared().baseline_data().baseline_code(), isolate);
   }
+  DCHECK(function->ActiveTierIsIgnition());
   return BUILTIN_CODE(isolate, InterpreterEntryTrampoline);
 }
 
@@ -1076,10 +1050,10 @@ MaybeHandle<Code> GetOptimizedCode(
 
   // Make sure we clear the optimization marker on the function so that we
   // don't try to re-optimize.
-  // If compiling for NCI caching only (which does not use the optimization
-  // marker), don't touch the marker to avoid interfering with Turbofan
-  // compilation.
-  if (UsesOptimizationMarker(code_kind) && function->HasOptimizationMarker()) {
+  // If compiling for NCI (which does not use the optimization marker), don't
+  // touch the marker to avoid interfering with Turbofan compilation.
+  if (!CodeKindIsNativeContextIndependentJSFunction(code_kind) &&
+      function->HasOptimizationMarker()) {
     function->ClearOptimizationMarker();
   }
 
@@ -1123,8 +1097,6 @@ MaybeHandle<Code> GetOptimizedCode(
   // contexts).
   if (CodeKindIsNativeContextIndependentJSFunction(code_kind)) {
     DCHECK(osr_offset.IsNone());
-    DCHECK(FLAG_turbo_nci_as_midtier || !FLAG_turbo_nci_delayed_codegen ||
-           shared->has_optimized_at_least_once());
 
     Handle<Code> cached_code;
     if (GetCodeFromCompilationCache(isolate, shared).ToHandle(&cached_code)) {
@@ -1237,6 +1209,9 @@ void FinalizeUnoptimizedCompilation(
     }
     if (FLAG_interpreted_frames_native_stack) {
       InstallInterpreterTrampolineCopy(isolate, shared_info);
+    }
+    if (FLAG_always_sparkplug && shared_info->HasBytecodeArray()) {
+      CompileWithBaseline(isolate, shared_info);
     }
     Handle<CoverageInfo> coverage_info;
     if (finalize_data.coverage_info().ToHandle(&coverage_info)) {
@@ -1842,6 +1817,10 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag,
       !Compile(shared_info, flag, is_compiled_scope)) {
     return false;
   }
+  if (FLAG_always_sparkplug && !function->shared().HasAsmWasmData()) {
+    DCHECK(shared_info->HasBaselineData());
+  }
+
   DCHECK(is_compiled_scope->is_compiled());
   Handle<Code> code = handle(shared_info->GetCode(), isolate);
 
@@ -1852,6 +1831,9 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag,
   // TODO(verwaest/mythria): Investigate if allocating feedback vector
   // immediately after a flush would be better.
   JSFunction::InitializeFeedbackCell(function, is_compiled_scope, true);
+  if (FLAG_sparkplug && code->kind() == CodeKind::SPARKPLUG) {
+    JSFunction::EnsureFeedbackVector(function, is_compiled_scope);
+  }
 
   // Optimize now if --always-opt is enabled.
   if (FLAG_always_opt && !function->shared().HasAsmWasmData()) {
@@ -1937,16 +1919,16 @@ bool Compiler::CompileOptimized(Handle<JSFunction> function,
     code = BUILTIN_CODE(isolate, InterpreterEntryTrampoline);
   }
 
-  if (!IsForNativeContextIndependentCachingOnly(code_kind)) {
+  if (!CodeKindIsNativeContextIndependentJSFunction(code_kind)) {
     function->set_code(*code);
   }
 
   // Check postconditions on success.
   DCHECK(!isolate->has_pending_exception());
   DCHECK(function->shared().is_compiled());
-  DCHECK(IsForNativeContextIndependentCachingOnly(code_kind) ||
+  DCHECK(CodeKindIsNativeContextIndependentJSFunction(code_kind) ||
          function->is_compiled());
-  if (UsesOptimizationMarker(code_kind)) {
+  if (!CodeKindIsNativeContextIndependentJSFunction(code_kind)) {
     DCHECK_IMPLIES(function->HasOptimizationMarker(),
                    function->IsInOptimizationQueue());
     DCHECK_IMPLIES(function->HasOptimizationMarker(),
@@ -3065,7 +3047,7 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
 
   CodeKind code_kind = compilation_info->code_kind();
   const bool should_install_code_on_function =
-      !IsForNativeContextIndependentCachingOnly(code_kind);
+      !CodeKindIsNativeContextIndependentJSFunction(code_kind);
   if (should_install_code_on_function) {
     // Reset profiler ticks, function is no longer considered hot.
     compilation_info->closure()->feedback_vector().set_profiler_ticks(0);
@@ -3100,7 +3082,7 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
   CompilerTracer::TraceAbortedJob(isolate, compilation_info);
   compilation_info->closure()->set_code(shared->GetCode());
   // Clear the InOptimizationQueue marker, if it exists.
-  if (UsesOptimizationMarker(code_kind) &&
+  if (!CodeKindIsNativeContextIndependentJSFunction(code_kind) &&
       compilation_info->closure()->IsInOptimizationQueue()) {
     compilation_info->closure()->ClearOptimizationMarker();
   }

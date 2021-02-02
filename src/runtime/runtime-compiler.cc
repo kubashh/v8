@@ -3,19 +3,25 @@
 // found in the LICENSE file.
 
 #include "src/asmjs/asm-js.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/compiler.h"
+#include "src/codegen/optimized-compilation-info.h"
 #include "src/common/assert-scope.h"
+#include "src/common/globals.h"
 #include "src/common/message-template.h"
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
+#include "src/compiler/pipeline.h"
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/execution/arguments-inl.h"
 #include "src/execution/frames-inl.h"
 #include "src/execution/isolate-inl.h"
 #include "src/execution/v8threads.h"
 #include "src/execution/vm-state-inl.h"
+#include "src/heap/parked-scope.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
+#include "src/objects/shared-function-info.h"
 #include "src/runtime/runtime-utils.h"
 
 namespace v8 {
@@ -26,26 +32,9 @@ namespace {
 // Returns false iff an exception was thrown.
 bool MaybeSpawnNativeContextIndependentCompilationJob(
     Handle<JSFunction> function, ConcurrencyMode mode) {
-  if (!FLAG_turbo_nci || FLAG_turbo_nci_as_midtier) {
-    return true;  // Nothing to do.
-  }
-
-  // If delayed codegen is enabled, the first optimization request does not
-  // trigger NCI compilation, since we try to avoid compiling Code that
-  // remains unused in the future.  Repeated optimization (possibly in
-  // different native contexts) is taken as a signal that this SFI will
-  // continue to be used in the future, thus we trigger NCI compilation.
-  if (!FLAG_turbo_nci_delayed_codegen ||
-      function->shared().has_optimized_at_least_once()) {
-    if (!Compiler::CompileOptimized(function, mode,
-                                    CodeKind::NATIVE_CONTEXT_INDEPENDENT)) {
-      return false;
-    }
-  } else {
-    function->shared().set_has_optimized_at_least_once(true);
-  }
-
-  return true;
+  if (!FLAG_turbo_nci) return true;  // Nothing to do.
+  return Compiler::CompileOptimized(function, mode,
+                                    CodeKind::NATIVE_CONTEXT_INDEPENDENT);
 }
 
 Object CompileOptimized(Isolate* isolate, Handle<JSFunction> function,
@@ -118,6 +107,22 @@ RUNTIME_FUNCTION(Runtime_CompileLazy) {
   }
   DCHECK(function->is_compiled());
   return function->code();
+}
+
+RUNTIME_FUNCTION(Runtime_PrepareForBaseline) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
+  Handle<SharedFunctionInfo> sfi(function->shared(), isolate);
+  DCHECK(sfi->HasBaselineData());
+  IsCompiledScope is_compiled_scope(*sfi, isolate);
+  DCHECK(!function->HasAvailableOptimizedCode());
+  DCHECK(!function->HasOptimizationMarker());
+  DCHECK(!function->has_feedback_vector());
+  JSFunction::EnsureFeedbackVector(function, &is_compiled_scope);
+  Code baseline_code = sfi->baseline_data().baseline_code();
+  function->set_code(baseline_code);
+  return baseline_code;
 }
 
 RUNTIME_FUNCTION(Runtime_TryInstallNCICode) {
@@ -302,9 +307,11 @@ BytecodeOffset DetermineEntryAndDisarmOSRForInterpreter(
   // the bytecode.
   Handle<BytecodeArray> bytecode(iframe->GetBytecodeArray(), iframe->isolate());
 
-  DCHECK(frame->LookupCode().is_interpreter_trampoline_builtin());
+  if (frame->type() != StackFrame::SPARKPLUG) {
+    DCHECK(frame->LookupCode().is_interpreter_trampoline_builtin());
+    DCHECK(frame->is_interpreted());
+  }
   DCHECK(frame->function().shared().HasBytecodeArray());
-  DCHECK(frame->is_interpreted());
 
   // Reset the OSR loop nesting depth to disarm back edges.
   bytecode->set_osr_loop_nesting_level(0);
@@ -419,6 +426,84 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
     function->set_code(function->shared().GetCode());
   }
   return Object();
+}
+
+RUNTIME_FUNCTION(Runtime_CompileBaseline) {
+  HandleScope scope(isolate);
+  DCHECK_GE(2, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
+  int iterations = 1;
+  if (args.length() == 2) {
+    CONVERT_ARG_HANDLE_CHECKED(Smi, it, 1);
+    iterations = it->value();
+  }
+
+  Handle<SharedFunctionInfo> shared(function->shared(isolate), isolate);
+
+  StackLimitCheck check(isolate);
+  if (check.JsHasOverflowed(kStackSpaceRequiredForCompilation * KB)) {
+    return isolate->StackOverflow();
+  }
+  if (!shared->is_compiled()) {
+    IsCompiledScope is_compiled_scope;
+    if (!Compiler::Compile(function, Compiler::KEEP_EXCEPTION,
+                           &is_compiled_scope)) {
+      return ReadOnlyRoots(isolate).exception();
+    }
+  }
+
+  IsCompiledScope is_compiled_scoped(*shared, isolate);
+  JSFunction::EnsureFeedbackVector(function, &is_compiled_scoped);
+
+  while (iterations--) {
+    if (shared->HasBaselineData()) {
+      shared->set_function_data(shared->baseline_data().data(), kReleaseStore);
+    }
+    function->set_code(*CompileWithBaseline(isolate, shared));
+  }
+  return *function;
+}
+
+RUNTIME_FUNCTION(Runtime_CompileTurboProp) {
+  HandleScope scope(isolate);
+  DCHECK_GE(2, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
+  int iterations = 1;
+  if (args.length() == 2) {
+    CONVERT_ARG_HANDLE_CHECKED(Smi, it, 1);
+    iterations = it->value();
+  }
+
+  Handle<SharedFunctionInfo> shared(function->shared(isolate), isolate);
+
+  IsCompiledScope is_compiled_scoped(*shared, isolate);
+  JSFunction::EnsureFeedbackVector(function, &is_compiled_scoped);
+
+  while (iterations--) {
+    std::unique_ptr<OptimizedCompilationJob> job(
+        compiler::Pipeline::NewCompilationJob(isolate, function,
+                                              CodeKind::TURBOPROP, true));
+    OptimizedCompilationInfo* compilation_info = job->compilation_info();
+
+    {
+      CompilationHandleScope compilation(isolate, compilation_info);
+      CanonicalHandleScope canonical(isolate, compilation_info);
+      compilation_info->ReopenHandlesInNewHandleScope(isolate);
+      CHECK(job->PrepareJob(isolate) == CompilationJob::SUCCEEDED);
+    }
+
+    {
+      // Park main thread here to be in the same state as background threads.
+      ParkedScope parked_scope(isolate->main_thread_local_isolate());
+      CHECK(job->ExecuteJob(isolate->counters()->runtime_call_stats(),
+                            isolate->main_thread_local_isolate()) ==
+            CompilationJob::SUCCEEDED);
+    }
+
+    CHECK(job->FinalizeJob(isolate) == CompilationJob::SUCCEEDED);
+    function->set_code(*compilation_info->code());
+  }
+  return *function;
 }
 
 static Object CompileGlobalEval(Isolate* isolate,

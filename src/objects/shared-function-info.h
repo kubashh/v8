@@ -147,6 +147,14 @@ class InterpreterData : public Struct {
   OBJECT_CONSTRUCTORS(InterpreterData, Struct);
 };
 
+class BaselineData : public TorqueGeneratedBaselineData<BaselineData, Struct> {
+ public:
+  inline BytecodeArray GetActiveBytecodeArray() const;
+  inline void SetActiveBytecodeArray(BytecodeArray bytecode);
+
+  TQ_OBJECT_CONSTRUCTORS(BaselineData)
+};
+
 // SharedFunctionInfo describes the JSFunction information that can be
 // shared by multiple instances of the function.
 class SharedFunctionInfo
@@ -293,6 +301,9 @@ class SharedFunctionInfo
   inline bool HasInterpreterData() const;
   inline InterpreterData interpreter_data() const;
   inline void set_interpreter_data(InterpreterData interpreter_data);
+  inline bool HasBaselineData() const;
+  inline BaselineData baseline_data() const;
+  inline void set_baseline_data(BaselineData Baseline_data);
   inline BytecodeArray GetActiveBytecodeArray() const;
   inline void SetActiveBytecodeArray(BytecodeArray bytecode);
   inline bool HasAsmWasmData() const;
@@ -389,10 +400,6 @@ class SharedFunctionInfo
   // private instance methdos.
   DECL_BOOLEAN_ACCESSORS(class_scope_has_private_brand)
   DECL_BOOLEAN_ACCESSORS(has_static_private_methods_or_accessors)
-
-  // True if this SFI has been (non-OSR) optimized in the past. This is used to
-  // guide native-context-independent codegen.
-  DECL_BOOLEAN_ACCESSORS(has_optimized_at_least_once)
 
   // True if a Code object associated with this SFI has been inserted into the
   // compilation cache. Note that the cache entry may be removed by aging,
