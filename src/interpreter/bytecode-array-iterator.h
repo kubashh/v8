@@ -24,6 +24,7 @@ class V8_EXPORT_PRIVATE BytecodeArrayIterator final
   BytecodeArrayIterator& operator=(const BytecodeArrayIterator&) = delete;
 
   void Advance();
+  void Reset();
   bool done() const;
 };
 
