@@ -27,6 +27,7 @@ namespace internal {
   V(C_WASM_ENTRY)               \
   V(INTERPRETED_FUNCTION)       \
   V(NATIVE_CONTEXT_INDEPENDENT) \
+  V(SPARKPLUG)                  \
   V(TURBOPROP)                  \
   V(TURBOFAN)
 
@@ -86,6 +87,7 @@ inline constexpr bool CodeKindCanOSR(CodeKind kind) {
 
 inline constexpr bool CodeKindIsOptimizedAndCanTierUp(CodeKind kind) {
   return kind == CodeKind::NATIVE_CONTEXT_INDEPENDENT ||
+         kind == CodeKind::SPARKPLUG ||
          (FLAG_turboprop_as_midtier && kind == CodeKind::TURBOPROP);
 }
 
