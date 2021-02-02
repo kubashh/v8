@@ -18,6 +18,7 @@
 //     - JavaScriptFrame (aka StandardFrame)
 //       - InterpretedFrame
 //       - OptimizedFrame
+//       - SparkplugFrame
 //       - ArgumentsAdaptorFrame (technically a TypedFrame)
 //     - TypedFrameWithJSLinkage
 //       - BuiltinFrame
@@ -103,6 +104,7 @@ class StackHandler {
   V(WASM_EXIT, WasmExitFrame)                                             \
   V(WASM_COMPILE_LAZY, WasmCompileLazyFrame)                              \
   V(INTERPRETED, InterpretedFrame)                                        \
+  V(SPARKPLUG, SparkplugFrame) \
   V(STUB, StubFrame)                                                      \
   V(BUILTIN_CONTINUATION, BuiltinContinuationFrame)                       \
   V(JAVA_SCRIPT_BUILTIN_CONTINUATION, JavaScriptBuiltinContinuationFrame) \
@@ -877,6 +879,17 @@ class InterpretedFrame : public JavaScriptFrame {
   inline explicit InterpretedFrame(StackFrameIteratorBase* iterator);
 
   Address GetExpressionAddress(int n) const override;
+
+ private:
+  friend class StackFrameIteratorBase;
+};
+
+class SparkplugFrame : public JavaScriptFrame {
+ public:
+  Type type() const override { return SPARKPLUG; }
+
+ protected:
+  inline explicit SparkplugFrame(StackFrameIteratorBase* iterator);
 
  private:
   friend class StackFrameIteratorBase;
