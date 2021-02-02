@@ -52,6 +52,8 @@ bitfield struct SharedFunctionInfoFlags2 extends uint8 {
 @customMap  // Just to place the map at the beginning of the roots array.
 class SharedFunctionInfo extends HeapObject {
   weak function_data: Object;
+  // TODO(verwaest): Move this elsewhere.
+  sparkplug_code: Code|Undefined;
   name_or_scope_info: String|NoSharedNameSentinel|ScopeInfo;
   outer_scope_info_or_feedback_metadata: HeapObject;
   script_or_debug_info: Script|DebugInfo|Undefined;

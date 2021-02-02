@@ -777,8 +777,9 @@ bool SharedFunctionInfo::IsSubjectToDebugging() const {
 }
 
 bool SharedFunctionInfo::CanDiscardCompiled() const {
-  bool can_decompile = (HasBytecodeArray() || HasAsmWasmData() ||
-                        HasUncompiledDataWithPreparseData());
+  bool can_decompile =
+      (HasBytecodeArray() || HasAsmWasmData() ||
+       HasUncompiledDataWithPreparseData() || sparkplug_code().IsCode());
   return can_decompile;
 }
 

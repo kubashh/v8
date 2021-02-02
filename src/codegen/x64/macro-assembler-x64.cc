@@ -203,6 +203,15 @@ void TurboAssembler::LoadTaggedPointerField(Register destination,
   }
 }
 
+void TurboAssembler::LoadTaggedSignedField(Register destination,
+                                           Operand field_operand) {
+  if (COMPRESS_POINTERS_BOOL) {
+    DecompressTaggedSigned(destination, field_operand);
+  } else {
+    mov_tagged(destination, field_operand);
+  }
+}
+
 void TurboAssembler::LoadAnyTaggedField(Register destination,
                                         Operand field_operand) {
   if (COMPRESS_POINTERS_BOOL) {
@@ -1340,6 +1349,9 @@ void TurboAssembler::Move(Register dst, Register src) {
   }
 }
 
+void TurboAssembler::Move(Register dst, Operand src) { movq(dst, src); }
+void TurboAssembler::Move(Register dst, Immediate src) { movl(dst, src); }
+
 void TurboAssembler::Move(XMMRegister dst, XMMRegister src) {
   if (dst != src) {
     Movaps(dst, src);
@@ -1676,6 +1688,16 @@ void TurboAssembler::CallBuiltin(int builtin_index) {
   Address entry = d.InstructionStartOfBuiltin(builtin_index);
   Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
   call(kScratchRegister);
+}
+
+void TurboAssembler::TailCallBuiltin(int builtin_index) {
+  DCHECK(Builtins::IsBuiltinId(builtin_index));
+  RecordCommentForOffHeapTrampoline(builtin_index);
+  CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
+  EmbeddedData d = EmbeddedData::FromBlob();
+  Address entry = d.InstructionStartOfBuiltin(builtin_index);
+  Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
+  jmp(kScratchRegister);
 }
 
 void TurboAssembler::LoadCodeObjectEntry(Register destination,
