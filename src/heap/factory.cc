@@ -586,6 +586,10 @@ template Handle<String> Factory::InternalizeString(
     Handle<SeqTwoByteString> string, int from, int length,
     bool convert_encoding);
 
+// One byte, two byte
+const int new_min_string_size_one_byte = 10;
+const int new_min_string_size_two_byte = 10;
+
 MaybeHandle<String> Factory::NewStringFromOneByte(
     const Vector<const uint8_t>& string, AllocationType allocation) {
   DCHECK_NE(allocation, AllocationType::kReadOnly);
@@ -593,9 +597,11 @@ MaybeHandle<String> Factory::NewStringFromOneByte(
   if (length == 0) return empty_string();
   if (length == 1) return LookupSingleCharacterStringFromCode(string[0]);
   Handle<SeqOneByteString> result;
-  ASSIGN_RETURN_ON_EXCEPTION(isolate(), result,
-                             NewRawOneByteString(string.length(), allocation),
-                             String);
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate(), result,
+      NewRawOneByteString(std::max(length, new_min_string_size_one_byte),
+                          allocation),
+      String);
 
   DisallowGarbageCollection no_gc;
   // Copy the characters into the new object.
@@ -616,7 +622,10 @@ MaybeHandle<String> Factory::NewStringFromUtf8(const Vector<const char>& string,
     Handle<SeqOneByteString> result;
     ASSIGN_RETURN_ON_EXCEPTION(
         isolate(), result,
-        NewRawOneByteString(decoder.utf16_length(), allocation), String);
+        NewRawOneByteString(
+            std::max(decoder.utf16_length(), new_min_string_size_one_byte),
+            allocation),
+        String);
 
     DisallowGarbageCollection no_gc;
     decoder.Decode(result->GetChars(no_gc), utf8_data);
@@ -627,7 +636,10 @@ MaybeHandle<String> Factory::NewStringFromUtf8(const Vector<const char>& string,
   Handle<SeqTwoByteString> result;
   ASSIGN_RETURN_ON_EXCEPTION(
       isolate(), result,
-      NewRawTwoByteString(decoder.utf16_length(), allocation), String);
+      NewRawTwoByteString(
+          std::max(decoder.utf16_length(), new_min_string_size_two_byte),
+          allocation),
+      String);
 
   DisallowGarbageCollection no_gc;
   decoder.Decode(result->GetChars(no_gc), utf8_data);
@@ -664,7 +676,10 @@ MaybeHandle<String> Factory::NewStringFromUtf8SubString(
     Handle<SeqOneByteString> result;
     ASSIGN_RETURN_ON_EXCEPTION(
         isolate(), result,
-        NewRawOneByteString(decoder.utf16_length(), allocation), String);
+        NewRawOneByteString(
+            std::max(decoder.utf16_length(), new_min_string_size_one_byte),
+            allocation),
+        String);
     DisallowGarbageCollection no_gc;
     // Update pointer references, since the original string may have moved after
     // allocation.
@@ -677,7 +692,10 @@ MaybeHandle<String> Factory::NewStringFromUtf8SubString(
   Handle<SeqTwoByteString> result;
   ASSIGN_RETURN_ON_EXCEPTION(
       isolate(), result,
-      NewRawTwoByteString(decoder.utf16_length(), allocation), String);
+      NewRawTwoByteString(
+          std::max(decoder.utf16_length(), new_min_string_size_two_byte),
+          allocation),
+      String);
 
   DisallowGarbageCollection no_gc;
   // Update pointer references, since the original string may have moved after
@@ -695,15 +713,21 @@ MaybeHandle<String> Factory::NewStringFromTwoByte(const uc16* string,
   if (String::IsOneByte(string, length)) {
     if (length == 1) return LookupSingleCharacterStringFromCode(string[0]);
     Handle<SeqOneByteString> result;
-    ASSIGN_RETURN_ON_EXCEPTION(isolate(), result,
-                               NewRawOneByteString(length, allocation), String);
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate(), result,
+        NewRawOneByteString(std::max(length, new_min_string_size_one_byte),
+                            allocation),
+        String);
     DisallowGarbageCollection no_gc;
     CopyChars(result->GetChars(no_gc), string, length);
     return result;
   } else {
     Handle<SeqTwoByteString> result;
-    ASSIGN_RETURN_ON_EXCEPTION(isolate(), result,
-                               NewRawTwoByteString(length, allocation), String);
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate(), result,
+        NewRawTwoByteString(std::max(length, new_min_string_size_two_byte),
+                            allocation),
+        String);
     DisallowGarbageCollection no_gc;
     CopyChars(result->GetChars(no_gc), string, length);
     return result;
@@ -891,14 +915,16 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
   if (!FLAG_string_slices || length < SlicedString::kMinLength) {
     if (str->IsOneByteRepresentation()) {
       Handle<SeqOneByteString> result =
-          NewRawOneByteString(length).ToHandleChecked();
+          NewRawOneByteString(std::max(length, new_min_string_size_one_byte))
+              .ToHandleChecked();
       DisallowGarbageCollection no_gc;
       uint8_t* dest = result->GetChars(no_gc);
       String::WriteToFlat(*str, dest, begin, end);
       return result;
     } else {
       Handle<SeqTwoByteString> result =
-          NewRawTwoByteString(length).ToHandleChecked();
+          NewRawTwoByteString(std::max(length, new_min_string_size_two_byte))
+              .ToHandleChecked();
       DisallowGarbageCollection no_gc;
       uc16* dest = result->GetChars(no_gc);
       String::WriteToFlat(*str, dest, begin, end);
