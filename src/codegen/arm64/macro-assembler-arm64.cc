@@ -1883,9 +1883,14 @@ void TurboAssembler::LoadEntryFromBuiltinIndex(Register builtin_index) {
 
 void TurboAssembler::LoadEntryFromBuiltinIndex(Builtins::Name builtin_index,
                                                Register destination) {
-  Ldr(destination,
-      MemOperand(kRootRegister,
-                 IsolateData::builtin_entry_slot_offset(builtin_index)));
+  Ldr(destination, EntryFromBuiltinIndexAsOperand(builtin_index));
+}
+
+Operand TurboAssembler::EntryFromBuiltinIndexAsOperand(
+    Builtins::Name builtin_index) {
+  DCHECK(root_array_available());
+  return MemOperand(kRootRegister,
+                    IsolateData::builtin_entry_slot_offset(builtin_index));
 }
 
 void TurboAssembler::CallBuiltinByIndex(Register builtin_index) {

@@ -976,6 +976,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void LoadEntryFromBuiltinIndex(Register builtin_index);
   void LoadEntryFromBuiltinIndex(Builtins::Name builtin_index,
                                  Register destination);
+  Operand EntryFromBuiltinIndexAsOperand(Builtins::Name builtin_index);
   void CallBuiltinByIndex(Register builtin_index) override;
   void CallBuiltin(int builtin_index);
 
