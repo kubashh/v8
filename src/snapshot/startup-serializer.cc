@@ -90,6 +90,7 @@ bool IsUnexpectedCodeObject(Isolate* isolate, HeapObject obj) {
 
   Code code = Code::cast(obj);
   if (code.kind() == CodeKind::REGEXP) return false;
+  if (code.kind() == CodeKind::SPARKPLUG) return false;
   if (!code.is_builtin()) return true;
   if (code.is_off_heap_trampoline()) return false;
 
