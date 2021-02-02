@@ -636,12 +636,18 @@ void Builtins::Generate_RunMicrotasksTrampoline(MacroAssembler* masm) {
   __ Jump(BUILTIN_CODE(masm->isolate(), RunMicrotasks), RelocInfo::CODE_TARGET);
 }
 
-static void GetSharedFunctionInfoBytecode(MacroAssembler* masm,
-                                          Register sfi_data,
-                                          Register scratch1) {
+static void GetSharedFunctionInfoBytecodeOrBaseline(MacroAssembler* masm,
+                                                    Register sfi_data,
+                                                    Register scratch1,
+                                                    Label* is_baseline) {
   Label done;
 
-  __ CmpObjectType(sfi_data, INTERPRETER_DATA_TYPE, scratch1);
+  __ LoadMap(scratch1, sfi_data);
+
+  __ CmpInstanceType(scratch1, BASELINE_DATA_TYPE);
+  __ j(equal, is_baseline);
+
+  __ CmpInstanceType(scratch1, INTERPRETER_DATA_TYPE);
   __ j(not_equal, &done, Label::kNear);
 
   __ LoadTaggedPointerField(
@@ -739,13 +745,16 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
 
   // Underlying function needs to have bytecode available.
   if (FLAG_debug_code) {
+    Label is_baseline;
     __ LoadTaggedPointerField(
         rcx, FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
     __ LoadTaggedPointerField(
         rcx, FieldOperand(rcx, SharedFunctionInfo::kFunctionDataOffset));
-    GetSharedFunctionInfoBytecode(masm, rcx, kScratchRegister);
+    GetSharedFunctionInfoBytecodeOrBaseline(masm, rcx, kScratchRegister,
+                                            &is_baseline);
     __ CmpObjectType(rcx, BYTECODE_ARRAY_TYPE, rcx);
     __ Assert(equal, AbortReason::kMissingBytecodeArray);
+    __ bind(&is_baseline);
   }
 
   // Resume (Ignition/TurboFan) generator object.
@@ -1041,8 +1050,10 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ LoadTaggedPointerField(
       kInterpreterBytecodeArrayRegister,
       FieldOperand(kScratchRegister, SharedFunctionInfo::kFunctionDataOffset));
-  GetSharedFunctionInfoBytecode(masm, kInterpreterBytecodeArrayRegister,
-                                kScratchRegister);
+
+  Label is_baseline;
+  GetSharedFunctionInfoBytecodeOrBaseline(
+      masm, kInterpreterBytecodeArrayRegister, kScratchRegister, &is_baseline);
 
   // The bytecode array could have been flushed from the shared function info,
   // if so, call into CompileLazy.
@@ -1225,6 +1236,10 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
 
   __ bind(&compile_lazy);
   GenerateTailCallToReturnedCode(masm, Runtime::kCompileLazy);
+  __ int3();  // Should not return.
+
+  __ bind(&is_baseline);
+  GenerateTailCallToReturnedCode(masm, Runtime::kPrepareForBaseline);
   __ int3();  // Should not return.
 
   __ bind(&has_optimized_code_or_marker);
@@ -1531,6 +1546,30 @@ void Builtins::Generate_InterpreterEnterBytecodeDispatch(MacroAssembler* masm) {
   Generate_InterpreterEnterBytecode(masm);
 }
 
+// static
+void Builtins::Generate_BaselineHandleOptimizationMarker(MacroAssembler* masm) {
+  Register feedback_vector = rbx;
+  Register optimization_state = rcx;
+  Label maybe_has_optimized_code;
+  __ testl(
+      optimization_state,
+      Immediate(FeedbackVector::kHasCompileOptimizedOrLogFirstExecutionMarker));
+  __ j(zero, &maybe_has_optimized_code);
+
+  Register optimization_marker = optimization_state;
+  __ DecodeField<FeedbackVector::OptimizationMarkerBits>(optimization_marker);
+  MaybeOptimizeCode(masm, feedback_vector, optimization_marker);
+
+  __ bind(&maybe_has_optimized_code);
+  Register optimized_code_entry = optimization_state;
+  __ RecordComment("[ optimized code check");
+  __ LoadAnyTaggedField(
+      optimized_code_entry,
+      FieldOperand(feedback_vector, FeedbackVector::kMaybeOptimizedCodeOffset));
+  TailCallOptimizedCodeSlot(masm, optimized_code_entry, r11, r15);
+  __ Trap();
+}
+
 namespace {
 void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
                                       bool java_script_builtin,
@@ -1616,6 +1655,11 @@ void Builtins::Generate_NotifyDeoptimized(MacroAssembler* masm) {
   DCHECK_EQ(kInterpreterAccumulatorRegister.code(), rax.code());
   __ movq(rax, Operand(rsp, kPCOnStackSize));
   __ ret(1 * kSystemPointerSize);  // Remove rax.
+}
+
+void Builtins::Generate_TailCallOptimizedCodeSlot(MacroAssembler* masm) {
+  Register optimized_code_entry = rcx;
+  TailCallOptimizedCodeSlot(masm, optimized_code_entry, r11, r15);
 }
 
 // static
@@ -2572,7 +2616,8 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
           RelocInfo::CODE_TARGET);
 }
 
-void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+namespace {
+void OnStackReplacement(MacroAssembler* masm, bool is_interpreter) {
   {
     FrameScope scope(masm, StackFrame::INTERNAL);
     __ CallRuntime(Runtime::kCompileForOnStackReplacement);
@@ -2586,9 +2631,11 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
 
   __ bind(&skip);
 
-  // Drop the handler frame that is be sitting on top of the actual
-  // JavaScript frame. This is the case then OSR is triggered from bytecode.
-  __ leave();
+  if (is_interpreter) {
+    // Drop the handler frame that is be sitting on top of the actual
+    // JavaScript frame. This is the case then OSR is triggered from bytecode.
+    __ leave();
+  }
 
   // Load deoptimization data from the code object.
   __ LoadTaggedPointerField(rbx,
@@ -2607,6 +2654,15 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
 
   // And "return" to the OSR entry point of the function.
   __ ret(0);
+}
+}
+
+void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, true);
+}
+
+void Builtins::Generate_BaselineOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, false);
 }
 
 void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
