@@ -14,6 +14,7 @@
 #include "src/codegen/x64/assembler-x64.h"
 #include "src/common/globals.h"
 #include "src/objects/contexts.h"
+#include "src/objects/tagged-index.h"
 
 namespace v8 {
 namespace internal {
@@ -320,6 +321,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void Push(Operand src);
   void Push(Immediate value);
   void Push(Smi smi);
+  void Push(TaggedIndex index) {
+    Push(Immediate(static_cast<uint32_t>(index.ptr())));
+  }
   void Push(Handle<HeapObject> source);
 
   enum class PushArrayOrder { kNormal, kReverse };
@@ -432,6 +436,14 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
     movq(dst, constant);
   }
 
+  void Move(Register dst, TaggedIndex source) {
+    movl(dst, Immediate(static_cast<uint32_t>(source.ptr())));
+  }
+
+  void Move(Operand dst, TaggedIndex source) {
+    movl(dst, Immediate(static_cast<uint32_t>(source.ptr())));
+  }
+
   void Move(Register dst, ExternalReference ext);
 
   void Move(XMMRegister dst, uint32_t src);
@@ -442,6 +454,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 
   // Move if the registers are not identical.
   void Move(Register target, Register source);
+
+  void Move(Register target, Operand source);
+  void Move(Register target, Immediate source);
 
   void Move(Register dst, Handle<HeapObject> source,
             RelocInfo::Mode rmode = RelocInfo::FULL_EMBEDDED_OBJECT);
@@ -498,6 +513,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   Operand EntryFromBuiltinIndexAsOperand(Register builtin_index);
   void CallBuiltinByIndex(Register builtin_index) override;
   void CallBuiltin(int builtin_index);
+  void TailCallBuiltin(int builtin_index);
 
   void LoadCodeObjectEntry(Register destination, Register code_object) override;
   void CallCodeObject(Register code_object) override;
