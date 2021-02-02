@@ -2,9 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/codegen/arm64/register-arm64.h"
+#include "src/objects/instance-type.h"
 #if V8_TARGET_ARCH_ARM64
 
 #include "src/api/api-arguments.h"
+#include "src/baseline/baseline-compiler.h"
 #include "src/codegen/code-factory.h"
 // For interpreter_entry_return_pc_offset. TODO(jkummerow): Drop.
 #include "src/codegen/macro-assembler-inl.h"
@@ -407,11 +410,14 @@ void Builtins::Generate_ConstructedNonConstructable(MacroAssembler* masm) {
   __ CallRuntime(Runtime::kThrowConstructedNonConstructable);
 }
 
-static void GetSharedFunctionInfoBytecode(MacroAssembler* masm,
-                                          Register sfi_data,
-                                          Register scratch1) {
+static void GetSharedFunctionInfoBytecodeOrBaseline(MacroAssembler* masm,
+                                                    Register sfi_data,
+                                                    Register scratch1,
+                                                    Label* is_baseline) {
   Label done;
-  __ CompareObjectType(sfi_data, scratch1, scratch1, INTERPRETER_DATA_TYPE);
+  __ CompareObjectType(sfi_data, scratch1, scratch1, BASELINE_DATA_TYPE);
+  __ B(eq, is_baseline);
+  __ Cmp(scratch1, INTERPRETER_DATA_TYPE);
   __ B(ne, &done);
   __ LoadTaggedPointerField(
       sfi_data,
@@ -514,13 +520,15 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
 
   // Underlying function needs to have bytecode available.
   if (FLAG_debug_code) {
+    Label is_baseline;
     __ LoadTaggedPointerField(
         x3, FieldMemOperand(x4, JSFunction::kSharedFunctionInfoOffset));
     __ LoadTaggedPointerField(
         x3, FieldMemOperand(x3, SharedFunctionInfo::kFunctionDataOffset));
-    GetSharedFunctionInfoBytecode(masm, x3, x0);
+    GetSharedFunctionInfoBytecodeOrBaseline(masm, x3, x0, &is_baseline);
     __ CompareObjectType(x3, x3, x3, BYTECODE_ARRAY_TYPE);
     __ Assert(eq, AbortReason::kMissingBytecodeArray);
+    __ bind(&is_baseline);
   }
 
   // Resume (Ignition/TurboFan) generator object.
@@ -980,6 +988,10 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch1,
   __ DropArguments(params_size);
 }
 
+void Builtins::Generate_BaselineLeaveFrame(MacroAssembler* masm) {
+  baseline::BaselineAssembler::EmitReturn(masm);
+}
+
 // Tail-call |function_id| if |actual_marker| == |expected_marker|
 static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
                                           Register actual_marker,
@@ -1147,6 +1159,166 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
   __ Bind(&end);
 }
 
+// static
+void Builtins::Generate_BaselinePrologue(MacroAssembler* masm) {
+  UseScratchRegisterScope temps(masm);
+  // Need a few extra registers
+  temps.Include(x14, x15);
+
+  auto descriptor =
+      Builtins::CallInterfaceDescriptorFor(Builtins::kBaselinePrologue);
+  Register closure =
+      descriptor.GetRegisterParameter(BaselinePrologueDescriptor::kClosure);
+  // Load the feedback vector from the closure.
+  Register feedback_vector = temps.AcquireX();
+  __ LoadTaggedPointerField(
+      feedback_vector, FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
+  __ LoadTaggedPointerField(feedback_vector,
+                            FieldMemOperand(feedback_vector, Cell::kValueOffset));
+  if (__ emit_debug_code()) {
+    __ CompareObjectType(feedback_vector, x4, x4, FEEDBACK_VECTOR_TYPE);
+    __ Assert(eq, AbortReason::kExpectedFeedbackVector);
+  }
+
+  __ RecordComment("[ Check optimization state");
+
+  // Read off the optimization state in the feedback vector.
+  Register optimization_state = temps.AcquireW();
+  __ Ldr(optimization_state,
+          FieldMemOperand(feedback_vector, FeedbackVector::kFlagsOffset));
+
+  // Check if there is optimized code or a optimization marker that needs to
+  // be processed.
+  Label has_optimized_code_or_marker;
+  __ TestAndBranchIfAnySet(
+      optimization_state,
+      FeedbackVector::kHasOptimizedCodeOrCompileOptimizedMarkerMask,
+      &has_optimized_code_or_marker);
+
+  // Increment invocation count for the function.
+  {
+    UseScratchRegisterScope temps(masm);
+    Register invocation_count = temps.AcquireW();
+    __ Ldr(invocation_count,
+           FieldMemOperand(feedback_vector,
+                           FeedbackVector::kInvocationCountOffset));
+    __ Add(invocation_count, invocation_count, Operand(1));
+    __ Str(invocation_count,
+           FieldMemOperand(feedback_vector,
+                           FeedbackVector::kInvocationCountOffset));
+  }
+
+  FrameScope frame_scope(masm, StackFrame::MANUAL);
+  // We already pushed lr,fp in the caller Prologue
+  //__ Push<TurboAssembler::kSignLR>(lr, fp);
+  __ Mov(fp, sp);
+
+  Register callee_context = descriptor.GetRegisterParameter(
+      BaselinePrologueDescriptor::kCalleeContext);
+  Register callee_js_function =
+      descriptor.GetRegisterParameter(BaselinePrologueDescriptor::kClosure);
+  __ RecordComment("[ Frame Setup");
+  __ Push(callee_context, callee_js_function);
+  DCHECK_EQ(callee_js_function, kJavaScriptCallTargetRegister);
+  DCHECK_EQ(callee_js_function, kJSFunctionRegister);
+
+  Register argc = descriptor.GetRegisterParameter(
+      BaselinePrologueDescriptor::kJavaScriptCallArgCount);
+  // We'll use the bytecode for both code age/OSR resetting, and pushing onto
+  // the frame, so load it into a register.
+  Register bytecodeArray = descriptor.GetRegisterParameter(
+      BaselinePrologueDescriptor::kInterpreterBytecodeArray);
+
+  // Reset code age and the OSR arming. The OSR field and BytecodeAgeOffset
+  // are 8-bit fields next to each other, so we could just optimize by writing
+  // a 16-bit. These static asserts guard our assumption is valid.
+  STATIC_ASSERT(BytecodeArray::kBytecodeAgeOffset ==
+                BytecodeArray::kOsrNestingLevelOffset + kCharSize);
+  STATIC_ASSERT(BytecodeArray::kNoAgeBytecodeAge == 0);
+  __ Strh(wzr, FieldMemOperand(bytecodeArray, BytecodeArray::kOsrNestingLevelOffset));
+
+  __ Push(argc, bytecodeArray);
+
+  // Horrible hack: This should be the bytecode offset, but we calculate that
+  // from the PC, so we cache the feedback vector in there instead.
+  if (__ emit_debug_code()) {
+    __ CompareObjectType(feedback_vector, x4, x4, FEEDBACK_VECTOR_TYPE);
+    __ Assert(eq, AbortReason::kExpectedFeedbackVector);
+  }
+  // Our stack is currently aligned. We have have to push something along with
+  // the feedback vector to keep it that way -- we may as well start
+  // initialising the register frame.
+  // TODO(leszeks): Consider guaranteeing that this call leaves `undefined` in
+  // the accumulator register, to skip the load in the baseline code.
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+  __ Push(feedback_vector, kInterpreterAccumulatorRegister);
+  __ RecordComment("]");
+
+  __ RecordComment("[ Stack/interrupt check");
+  Label call_stack_guard;
+  {
+    // Stack check. This folds the checks for both the interrupt stack limit
+    // check and the real stack limit into one by just checking for the
+    // interrupt limit. The interrupt limit is either equal to the real stack
+    // limit or tighter. By ensuring we have space until that limit after
+    // building the frame we can quickly precheck both at once.
+    UseScratchRegisterScope temps(masm);
+
+    Register frame_size = temps.AcquireW();
+    __ Ldr(frame_size,
+           FieldMemOperand(bytecodeArray, BytecodeArray::kFrameSizeOffset));
+    Register sp_minus_frame_size = frame_size.X();
+    __ Sub(sp_minus_frame_size, sp, frame_size.X());
+    Register interrupt_limit = temps.AcquireX();
+    __ LoadStackLimit(interrupt_limit, StackLimitKind::kInterruptStackLimit);
+    __ Cmp(sp_minus_frame_size, interrupt_limit);
+    __ B(lo, &call_stack_guard);
+    __ RecordComment("]");
+  }
+
+  // Do "fast" return to the caller pc in lr.
+  __ Ret();
+
+  __ RecordComment("[ Optimized marker check");
+  __ bind(&has_optimized_code_or_marker);
+  {
+    Label maybe_has_optimized_code;
+    // Drop the frame created by the baseline call.
+    __ Pop<TurboAssembler::kAuthLR>(fp, lr);
+    // Check if optimized code is available
+    __ TestAndBranchIfAllClear(
+        optimization_state,
+        FeedbackVector::kHasCompileOptimizedOrLogFirstExecutionMarker,
+        &maybe_has_optimized_code);
+
+    Register optimization_marker = optimization_state.X();
+    __ DecodeField<FeedbackVector::OptimizationMarkerBits>(optimization_marker);
+    MaybeOptimizeCode(masm, feedback_vector, optimization_marker);
+
+    __ bind(&maybe_has_optimized_code);
+    Register optimized_code_entry = optimization_state.X();
+    __ LoadAnyTaggedField(
+        optimized_code_entry,
+        FieldMemOperand(feedback_vector,
+                     FeedbackVector::kMaybeOptimizedCodeOffset));
+    TailCallOptimizedCodeSlot(masm, optimized_code_entry, x4);
+    __ Trap();
+  }
+  __ RecordComment("]");
+
+  __ bind(&call_stack_guard);
+  {
+    FrameScope frame_scope(masm, StackFrame::INTERNAL);
+    __ RecordComment("[ Stack/interrupt call");
+    // Save incoming new target or generator
+    __ Push(padreg, kJavaScriptCallNewTargetRegister);
+    __ CallRuntime(Runtime::kStackGuard);
+    __ Pop(kJavaScriptCallNewTargetRegister, padreg);
+    __ RecordComment("]");
+  }
+  __ Ret();
+}
+
 // Generate code for entering a JS function with the interpreter.
 // On entry to the function the receiver and arguments have been pushed on the
 // stack left to right.
@@ -1172,7 +1344,10 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ LoadTaggedPointerField(
       kInterpreterBytecodeArrayRegister,
       FieldMemOperand(x4, SharedFunctionInfo::kFunctionDataOffset));
-  GetSharedFunctionInfoBytecode(masm, kInterpreterBytecodeArrayRegister, x11);
+
+  Label is_baseline;
+  GetSharedFunctionInfoBytecodeOrBaseline(
+      masm, kInterpreterBytecodeArrayRegister, x11, &is_baseline);
 
   // The bytecode array could have been flushed from the shared function info,
   // if so, call into CompileLazy.
@@ -1386,6 +1561,49 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
       FieldMemOperand(feedback_vector,
                       FeedbackVector::kMaybeOptimizedCodeOffset));
   TailCallOptimizedCodeSlot(masm, optimized_code_entry, x4);
+
+  __ bind(&is_baseline);
+  {
+    // Load the feedback vector from the closure.
+    __ LoadTaggedPointerField(
+        feedback_vector,
+        FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
+    __ LoadTaggedPointerField(
+        feedback_vector, FieldMemOperand(feedback_vector, Cell::kValueOffset));
+
+    Label prepare_for_baseline;
+    // Check if feedback vector is valid. If not, call prepare for baseline to
+    // allocate it.
+    __ LoadTaggedPointerField(
+        x7, FieldMemOperand(feedback_vector, HeapObject::kMapOffset));
+    __ Ldrh(x7, FieldMemOperand(x7, Map::kInstanceTypeOffset));
+    __ Cmp(x7, FEEDBACK_VECTOR_TYPE);
+    __ B(ne, &prepare_for_baseline);
+
+    // Read off the optimization state in the feedback vector.
+    // TODO(leszeks): Is this worth doing here? Baseline code will check it
+    // anyway...
+    __ Ldr(optimization_state,
+           FieldMemOperand(feedback_vector, FeedbackVector::kFlagsOffset));
+
+    // Check if there is optimized code or a optimization marker that needes to
+    // be processed.
+    __ TestAndBranchIfAnySet(
+        optimization_state,
+        FeedbackVector::kHasOptimizedCodeOrCompileOptimizedMarkerMask,
+        &has_optimized_code_or_marker);
+
+    // Load the baseline code into the closure.
+    __ LoadTaggedPointerField(
+        x2, FieldMemOperand(kInterpreterBytecodeArrayRegister,
+                            BaselineData::kBaselineCodeOffset));
+    static_assert(kJavaScriptCallCodeStartRegister == x2, "ABI mismatch");
+    ReplaceClosureCodeWithOptimizedCode(masm, x2, closure);
+    __ JumpCodeObject(x2);
+
+    __ bind(&prepare_for_baseline);
+    GenerateTailCallToReturnedCode(masm, Runtime::kPrepareForBaseline);
+  }
 
   __ bind(&compile_lazy);
   GenerateTailCallToReturnedCode(masm, Runtime::kCompileLazy);
@@ -1786,7 +2004,14 @@ void Builtins::Generate_NotifyDeoptimized(MacroAssembler* masm) {
   __ Ret();
 }
 
-void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+void Builtins::Generate_TailCallOptimizedCodeSlot(MacroAssembler* masm) {
+  UseScratchRegisterScope temps(masm);
+  Register optimized_code_entry = kJavaScriptCallCodeStartRegister;
+  TailCallOptimizedCodeSlot(masm, optimized_code_entry, temps.AcquireX());
+}
+
+namespace {
+void OnStackReplacement(MacroAssembler* masm, bool is_interpreter) {
   {
     FrameScope scope(masm, StackFrame::INTERNAL);
     __ CallRuntime(Runtime::kCompileForOnStackReplacement);
@@ -1821,6 +2046,15 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
 
   // And "return" to the OSR entry point of the function.
   __ Ret();
+}
+}  // namespace  // namespace
+
+void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, true);
+}
+
+void Builtins::Generate_BaselineOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, false);
 }
 
 // static
