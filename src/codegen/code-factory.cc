@@ -410,6 +410,11 @@ Callable CodeFactory::InterpreterOnStackReplacement(Isolate* isolate) {
 }
 
 // static
+Callable CodeFactory::BaselineEpilogue(Isolate* isolate) {
+  return Builtins::CallableFor(isolate, Builtins::kBaselineEpilogue);
+}
+
+// static
 Callable CodeFactory::ArrayNoArgumentConstructor(
     Isolate* isolate, ElementsKind kind,
     AllocationSiteOverrideMode override_mode) {
