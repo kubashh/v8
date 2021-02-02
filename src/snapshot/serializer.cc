@@ -714,7 +714,8 @@ SnapshotSpace GetSnapshotSpace(Handle<HeapObject> object) {
         MemoryChunk::FromHeapObject(*object)->owner_identity();
     // Large code objects are not supported and cannot be expressed by
     // SnapshotSpace.
-    DCHECK_NE(heap_space, CODE_LO_SPACE);
+    // TODO(pthier): Why? Can it cause problems for GC?
+    // DCHECK_NE(heap_space, CODE_LO_SPACE);
     switch (heap_space) {
       case OLD_SPACE:
       // Young generation objects are tenured, as objects that have survived
@@ -731,6 +732,9 @@ SnapshotSpace GetSnapshotSpace(Handle<HeapObject> object) {
       case MAP_SPACE:
         return SnapshotSpace::kMap;
       case CODE_LO_SPACE:
+        // Large code objects are only supported for Sparkplug code.
+        DCHECK_EQ(Code::cast(*object).kind(), CodeKind::SPARKPLUG);
+        return SnapshotSpace::kCode;
       case RO_SPACE:
         UNREACHABLE();
     }
