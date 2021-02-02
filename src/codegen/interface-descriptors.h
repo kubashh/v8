@@ -61,6 +61,7 @@ namespace internal {
   V(DynamicCheckMaps)                    \
   V(EphemeronKeyBarrier)                 \
   V(FastNewObject)                       \
+  V(ForInPrepare)                        \
   V(FrameDropperTrampoline)              \
   V(GetIteratorStackParameter)           \
   V(GetProperty)                         \
@@ -70,6 +71,7 @@ namespace internal {
   V(InterpreterCEntry1)                  \
   V(InterpreterCEntry2)                  \
   V(InterpreterDispatch)                 \
+  V(TailCallOptimizedCodeSlot)           \
   V(InterpreterPushArgsThenCall)         \
   V(InterpreterPushArgsThenConstruct)    \
   V(JSTrampoline)                        \
@@ -637,6 +639,14 @@ class NoContextDescriptor : public CallInterfaceDescriptor {
   DEFINE_PARAMETER_TYPES()
   DECLARE_DESCRIPTOR(NoContextDescriptor, CallInterfaceDescriptor)
 };
+
+class BaselineEpilogueDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS()
+  DEFINE_PARAMETER_TYPES()
+  DECLARE_DESCRIPTOR(BaselineEpilogueDescriptor, CallInterfaceDescriptor)
+};
+
 
 // LoadDescriptor is used by all stubs that implement Load/KeyedLoad ICs.
 class LoadDescriptor : public CallInterfaceDescriptor {
@@ -1308,6 +1318,15 @@ class GrowArrayElementsDescriptor : public CallInterfaceDescriptor {
   static const Register KeyRegister();
 };
 
+class V8_EXPORT_PRIVATE TailCallOptimizedCodeSlotDescriptor
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kOptimizedCodeEntry)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged())  // kAccumulator
+  DECLARE_DESCRIPTOR(TailCallOptimizedCodeSlotDescriptor,
+                     CallInterfaceDescriptor)
+};
+
 class V8_EXPORT_PRIVATE InterpreterDispatchDescriptor
     : public CallInterfaceDescriptor {
  public:
@@ -1374,6 +1393,18 @@ class InterpreterCEntry2Descriptor : public CallInterfaceDescriptor {
                                     MachineType::Pointer(),  // kFirstArgument
                                     MachineType::Pointer())  // kFunctionEntry
   DECLARE_DESCRIPTOR(InterpreterCEntry2Descriptor, CallInterfaceDescriptor)
+};
+
+class ForInPrepareDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_RESULT_AND_PARAMETERS(2, kEnumerator, kVectorIndex, kFeedbackVector)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(
+      MachineType::AnyTagged(),     // result 1 (cache array)
+      MachineType::AnyTagged(),     // result 2 (cache length)
+      MachineType::AnyTagged(),     // kEnumerator
+      MachineType::TaggedSigned(),  // kVectorIndex
+      MachineType::AnyTagged())     // kFeedbackVector
+  DECLARE_DESCRIPTOR(ForInPrepareDescriptor, CallInterfaceDescriptor)
 };
 
 class ResumeGeneratorDescriptor final : public CallInterfaceDescriptor {
