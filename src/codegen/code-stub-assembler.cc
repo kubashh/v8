@@ -2912,7 +2912,8 @@ void CodeStubAssembler::StoreFeedbackVectorSlot(
   // Check that slot <= feedback_vector.length.
   CSA_ASSERT(this,
              IsOffsetInBounds(offset, LoadFeedbackVectorLength(feedback_vector),
-                              FeedbackVector::kHeaderSize));
+                              FeedbackVector::kHeaderSize),
+             SmiFromIntPtr(offset), feedback_vector);
   if (barrier_mode == SKIP_WRITE_BARRIER) {
     StoreNoWriteBarrier(MachineRepresentation::kTagged, feedback_vector, offset,
                         value);
@@ -12482,21 +12483,6 @@ void CodeStubAssembler::ForInPrepare(TNode<HeapObject> enumerator,
   BIND(&out);
   *cache_array_out = cache_array.value();
   *cache_length_out = cache_length.value();
-}
-
-TNode<FixedArray> CodeStubAssembler::ForInPrepareForTorque(
-    TNode<HeapObject> enumerator, TNode<UintPtrT> slot,
-    TNode<HeapObject> maybe_feedback_vector) {
-  TNode<FixedArray> cache_array;
-  TNode<Smi> cache_length;
-  ForInPrepare(enumerator, slot, maybe_feedback_vector, &cache_array,
-               &cache_length);
-
-  TNode<FixedArray> result = AllocateUninitializedFixedArray(2);
-  StoreFixedArrayElement(result, 0, cache_array);
-  StoreFixedArrayElement(result, 1, cache_length);
-
-  return result;
 }
 
 TNode<String> CodeStubAssembler::Typeof(SloppyTNode<Object> value) {
