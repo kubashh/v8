@@ -602,6 +602,8 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
           case CodeKind::NATIVE_CONTEXT_INDEPENDENT:
           case CodeKind::TURBOPROP:
             return OPTIMIZED;
+          case CodeKind::SPARKPLUG:
+            return Type::SPARKPLUG;
           case CodeKind::JS_TO_WASM_FUNCTION:
             return JS_TO_WASM;
           case CodeKind::JS_TO_JS_FUNCTION:
@@ -981,6 +983,7 @@ void CommonFrame::IterateCompiledFrame(RootVisitor* v) const {
         break;
       case OPTIMIZED:
       case INTERPRETED:
+      case SPARKPLUG:
       case BUILTIN:
         // These frame types have a context, but they are actually stored
         // in the place on the stack that one finds the frame type.
@@ -1181,7 +1184,8 @@ Script JavaScriptFrame::script() const {
 int CommonFrameWithJSLinkage::LookupExceptionHandlerInTable(
     int* stack_depth, HandlerTable::CatchPrediction* prediction) {
   DCHECK(!LookupCode().has_handler_table());
-  DCHECK(!LookupCode().is_optimized_code());
+  DCHECK(!LookupCode().is_optimized_code() ||
+         LookupCode().kind() == CodeKind::SPARKPLUG);
   return -1;
 }
 
@@ -1356,6 +1360,7 @@ FrameSummary::JavaScriptFrameSummary::JavaScriptFrameSummary(
       is_constructor_(is_constructor),
       parameters_(parameters, isolate) {
   DCHECK(abstract_code.IsBytecodeArray() ||
+         Code::cast(abstract_code).kind() == CodeKind::SPARKPLUG ||
          !CodeKindIsOptimizedJSFunction(Code::cast(abstract_code).kind()));
 }
 
