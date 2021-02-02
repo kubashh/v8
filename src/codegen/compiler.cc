@@ -13,6 +13,7 @@
 #include "src/ast/scopes.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/optimized-compilation-info.h"
@@ -1846,6 +1847,14 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag,
 
   // Initialize the feedback cell for this JSFunction.
   JSFunction::InitializeFeedbackCell(function, is_compiled_scope);
+
+
+  if (FLAG_always_sparkplug && !function->shared().HasAsmWasmData()) {
+    IsCompiledScope is_compiled_scoped(*shared_info, isolate);
+    JSFunction::EnsureFeedbackVector(function, &is_compiled_scoped);
+    code = CompileWithBaseline(isolate, shared_info);
+    function->set_code(*code);
+  }
 
   // Optimize now if --always-opt is enabled.
   if (FLAG_always_opt && !function->shared().HasAsmWasmData()) {
