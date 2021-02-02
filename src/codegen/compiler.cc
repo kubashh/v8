@@ -13,6 +13,7 @@
 #include "src/ast/scopes.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/optimized-compilation-info.h"
@@ -1103,6 +1104,16 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
     PendingOptimizationTable::FunctionWasOptimized(isolate, function);
   }
 
+  if (FLAG_sparkplug && code_kind == CodeKind::SPARKPLUG) {
+    if (!function->shared().HasBaselineData()) {
+      return CompileWithBaseline(isolate, handle(function->shared(), isolate));
+    }
+    function->feedback_vector().EvictOptimizedCodeMarkedForDeoptimization(
+        function->shared(), "CachedSparkplug");
+    return handle(function->shared().baseline_data().baseline_code(isolate),
+                  isolate);
+  }
+
   // Check the optimized code cache (stored on the SharedFunctionInfo).
   if (CodeKindIsStoredInOptimizedCodeCache(code_kind)) {
     Handle<Code> cached_code;
@@ -1236,6 +1247,9 @@ void FinalizeUnoptimizedCompilation(
     }
     if (FLAG_interpreted_frames_native_stack) {
       InstallInterpreterTrampolineCopy(isolate, shared_info);
+    }
+    if (FLAG_always_sparkplug && shared_info->HasBytecodeArray()) {
+      CompileWithBaseline(isolate, shared_info);
     }
     Handle<CoverageInfo> coverage_info;
     if (finalize_data.coverage_info().ToHandle(&coverage_info)) {
@@ -1841,11 +1855,18 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag,
       !Compile(shared_info, flag, is_compiled_scope)) {
     return false;
   }
+  if (FLAG_always_sparkplug && !function->shared().HasAsmWasmData()) {
+    DCHECK(shared_info->HasBaselineData());
+  }
+
   DCHECK(is_compiled_scope->is_compiled());
   Handle<Code> code = handle(shared_info->GetCode(), isolate);
 
   // Initialize the feedback cell for this JSFunction.
   JSFunction::InitializeFeedbackCell(function, is_compiled_scope);
+  if (FLAG_always_sparkplug) {
+    JSFunction::EnsureFeedbackVector(function, is_compiled_scope);
+  }
 
   // Optimize now if --always-opt is enabled.
   if (FLAG_always_opt && !function->shared().HasAsmWasmData()) {
