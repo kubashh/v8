@@ -15,7 +15,7 @@ const Register CallInterfaceDescriptor::ContextRegister() { return rsi; }
 
 void CallInterfaceDescriptor::DefaultInitializePlatformSpecific(
     CallInterfaceDescriptorData* data, int register_parameter_count) {
-  const Register default_stub_registers[] = {rax, rbx, rcx, rdx, rdi};
+  const Register default_stub_registers[] = {rbx, rcx, rdx, rdi, rax};
   CHECK_LE(static_cast<size_t>(register_parameter_count),
            arraysize(default_stub_registers));
   data->InitializePlatformSpecific(register_parameter_count,
