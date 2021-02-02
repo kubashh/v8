@@ -61,6 +61,7 @@ namespace internal {
   V(DynamicCheckMaps)                    \
   V(EphemeronKeyBarrier)                 \
   V(FastNewObject)                       \
+  V(ForInPrepare)                        \
   V(FrameDropperTrampoline)              \
   V(GetIteratorStackParameter)           \
   V(GetProperty)                         \
@@ -70,10 +71,14 @@ namespace internal {
   V(InterpreterCEntry1)                  \
   V(InterpreterCEntry2)                  \
   V(InterpreterDispatch)                 \
+  V(TailCallOptimizedCodeSlot)           \
   V(InterpreterPushArgsThenCall)         \
   V(InterpreterPushArgsThenConstruct)    \
   V(JSTrampoline)                        \
+  V(BaselinePrologue)                    \
+  V(BaselineLeaveFrame)                  \
   V(Load)                                \
+  V(BaselineLoad)                        \
   V(LoadGlobal)                          \
   V(LoadGlobalNoFeedback)                \
   V(LoadGlobalWithVector)                \
@@ -650,6 +655,17 @@ class LoadDescriptor : public CallInterfaceDescriptor {
   static const Register ReceiverRegister();
   static const Register NameRegister();
   static const Register SlotRegister();
+};
+
+// BaselineLoadDescriptor is a load descriptor that does not take a context as
+// input.
+class BaselineLoadDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kReceiver, kName, kSlot)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
+                         MachineType::AnyTagged(),     // kName
+                         MachineType::TaggedSigned())  // kSlot
+  DECLARE_DESCRIPTOR(BaselineLoadDescriptor, CallInterfaceDescriptor)
 };
 
 class LoadGlobalNoFeedbackDescriptor : public CallInterfaceDescriptor {
@@ -1308,6 +1324,37 @@ class GrowArrayElementsDescriptor : public CallInterfaceDescriptor {
   static const Register KeyRegister();
 };
 
+class V8_EXPORT_PRIVATE TailCallOptimizedCodeSlotDescriptor
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kOptimizedCodeEntry)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged())  // kAccumulator
+  DECLARE_DESCRIPTOR(TailCallOptimizedCodeSlotDescriptor,
+                     CallInterfaceDescriptor)
+};
+
+class BaselinePrologueDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kCalleeContext, kClosure, kJavaScriptCallArgCount,
+                    kInterpreterBytecodeArray)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kCalleeContext
+                         MachineType::AnyTagged(),  // kClosure
+                         MachineType::AnyTagged(),  // kJavaScriptCallArgCount
+                         MachineType::AnyTagged())  // kInterpreterBytecodeArray
+  DECLARE_DESCRIPTOR(BaselinePrologueDescriptor, CallInterfaceDescriptor)
+};
+
+class BaselineLeaveFrameDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kParamsSize, kWeight)
+  DEFINE_PARAMETER_TYPES(MachineType::Int32(),  // kParamsSize
+                         MachineType::Int32())  // kWeight
+  DECLARE_DESCRIPTOR(BaselineLeaveFrameDescriptor, CallInterfaceDescriptor)
+
+  static const Register ParamsSizeRegister();
+  static const Register WeightRegister();
+};
+
 class V8_EXPORT_PRIVATE InterpreterDispatchDescriptor
     : public CallInterfaceDescriptor {
  public:
@@ -1374,6 +1421,18 @@ class InterpreterCEntry2Descriptor : public CallInterfaceDescriptor {
                                     MachineType::Pointer(),  // kFirstArgument
                                     MachineType::Pointer())  // kFunctionEntry
   DECLARE_DESCRIPTOR(InterpreterCEntry2Descriptor, CallInterfaceDescriptor)
+};
+
+class ForInPrepareDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_RESULT_AND_PARAMETERS(2, kEnumerator, kVectorIndex, kFeedbackVector)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(
+      MachineType::AnyTagged(),     // result 1 (cache array)
+      MachineType::AnyTagged(),     // result 2 (cache length)
+      MachineType::AnyTagged(),     // kEnumerator
+      MachineType::TaggedSigned(),  // kVectorIndex
+      MachineType::AnyTagged())     // kFeedbackVector
+  DECLARE_DESCRIPTOR(ForInPrepareDescriptor, CallInterfaceDescriptor)
 };
 
 class ResumeGeneratorDescriptor final : public CallInterfaceDescriptor {

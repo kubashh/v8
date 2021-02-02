@@ -133,6 +133,11 @@ namespace internal {
   ASM(InterpreterEnterBytecodeDispatch, Dummy)                                 \
   ASM(InterpreterOnStackReplacement, ContextOnly)                              \
                                                                                \
+  /* Baseline Compiler */                                                      \
+  ASM(BaselinePrologue, BaselinePrologue)                                      \
+  ASM(BaselineOnStackReplacement, ContextOnly)                                 \
+  ASM(BaselineLeaveFrame, BaselineLeaveFrame)                                  \
+                                                                               \
   /* Code life-cycle */                                                        \
   TFC(CompileLazy, JSTrampoline)                                               \
   TFC(CompileLazyDeoptimizedCode, JSTrampoline)                                \
@@ -142,6 +147,7 @@ namespace internal {
   ASM(DeoptimizationEntry_Soft, DeoptimizationEntry)                           \
   ASM(DeoptimizationEntry_Bailout, DeoptimizationEntry)                        \
   ASM(DeoptimizationEntry_Lazy, DeoptimizationEntry)                           \
+  TFC(PrepareForBaseline, JSTrampoline)                                        \
                                                                                \
   /* Trampolines called when returning from a deoptimization that expects   */ \
   /* to continue in a JavaScript builtin to finish the functionality of a   */ \
@@ -203,6 +209,8 @@ namespace internal {
                                                                                \
   /* Type conversions continuations */                                         \
   TFC(ToBooleanLazyDeoptContinuation, TypeConversionStackParameter)            \
+                                                                               \
+  ASM(TailCallOptimizedCodeSlot, TailCallOptimizedCodeSlot)                    \
                                                                                \
   /* Handlers */                                                               \
   TFH(KeyedLoadIC_PolymorphicName, LoadWithVector)                             \
@@ -543,6 +551,7 @@ namespace internal {
   TFH(LoadIC_Megamorphic, LoadWithVector)                                      \
   TFH(LoadIC_Noninlined, LoadWithVector)                                       \
   TFH(LoadICTrampoline, Load)                                                  \
+  TFH(LoadICBaseline, BaselineLoad)                                            \
   TFH(LoadICTrampoline_Megamorphic, Load)                                      \
   TFH(LoadSuperIC, LoadWithReceiverAndVector)                                  \
   TFH(KeyedLoadIC, LoadWithVector)                                             \
@@ -673,6 +682,7 @@ namespace internal {
                                                                                \
   /* for-in */                                                                 \
   TFS(ForInEnumerate, kReceiver)                                               \
+  TFC(ForInPrepare, ForInPrepare)                                              \
   TFS(ForInFilter, kKey, kObject)                                              \
                                                                                \
   /* Reflect */                                                                \

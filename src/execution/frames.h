@@ -18,6 +18,7 @@
 //     - JavaScriptFrame (aka StandardFrame)
 //       - InterpretedFrame
 //       - OptimizedFrame
+//       - SparkplugFrame
 //       - ArgumentsAdaptorFrame (technically a TypedFrame)
 //     - TypedFrameWithJSLinkage
 //       - BuiltinFrame
@@ -94,7 +95,6 @@ class StackHandler {
   V(ENTRY, EntryFrame)                                                    \
   V(CONSTRUCT_ENTRY, ConstructEntryFrame)                                 \
   V(EXIT, ExitFrame)                                                      \
-  V(OPTIMIZED, OptimizedFrame)                                            \
   V(WASM, WasmFrame)                                                      \
   V(WASM_TO_JS, WasmToJsFrame)                                            \
   V(JS_TO_WASM, JsToWasmFrame)                                            \
@@ -103,6 +103,8 @@ class StackHandler {
   V(WASM_EXIT, WasmExitFrame)                                             \
   V(WASM_COMPILE_LAZY, WasmCompileLazyFrame)                              \
   V(INTERPRETED, InterpretedFrame)                                        \
+  V(SPARKPLUG, SparkplugFrame)                                            \
+  V(OPTIMIZED, OptimizedFrame)                                            \
   V(STUB, StubFrame)                                                      \
   V(BUILTIN_CONTINUATION, BuiltinContinuationFrame)                       \
   V(JAVA_SCRIPT_BUILTIN_CONTINUATION, JavaScriptBuiltinContinuationFrame) \
@@ -127,6 +129,12 @@ class StackFrame {
     MANUAL
   };
 #undef DECLARE_TYPE
+
+  bool HasInterpreterFrameType() const {
+    STATIC_ASSERT(SPARKPLUG == INTERPRETED + 1);
+    Type t = type();
+    return t >= INTERPRETED && t <= SPARKPLUG;
+  }
 
   // Used to mark the outermost JS entry frame.
   //
@@ -208,7 +216,9 @@ class StackFrame {
   bool is_construct_entry() const { return type() == CONSTRUCT_ENTRY; }
   bool is_exit() const { return type() == EXIT; }
   bool is_optimized() const { return type() == OPTIMIZED; }
-  bool is_interpreted() const { return type() == INTERPRETED; }
+  bool is_interpreted() const {
+    return type() == INTERPRETED || type() == SPARKPLUG;
+  }
   bool is_wasm() const { return this->type() == WASM; }
   bool is_wasm_compile_lazy() const { return type() == WASM_COMPILE_LAZY; }
   bool is_wasm_debug_break() const { return type() == WASM_DEBUG_BREAK; }
@@ -228,8 +238,10 @@ class StackFrame {
   bool is_builtin_exit() const { return type() == BUILTIN_EXIT; }
 
   bool is_java_script() const {
-    Type type = this->type();
-    return (type == OPTIMIZED) || (type == INTERPRETED);
+    STATIC_ASSERT(INTERPRETED + 1 == SPARKPLUG);
+    STATIC_ASSERT(SPARKPLUG + 1 == OPTIMIZED);
+    Type t = type();
+    return t >= INTERPRETED && t <= OPTIMIZED;
   }
   bool is_wasm_to_js() const { return type() == WASM_TO_JS; }
   bool is_js_to_wasm() const { return type() == JS_TO_WASM; }
@@ -846,7 +858,7 @@ class InterpretedFrame : public JavaScriptFrame {
       int* data, HandlerTable::CatchPrediction* prediction) override;
 
   // Returns the current offset into the bytecode stream.
-  int GetBytecodeOffset() const;
+  virtual int GetBytecodeOffset() const;
 
   // Updates the current offset into the bytecode stream, mainly used for stack
   // unwinding to continue execution at a different bytecode offset.
@@ -877,6 +889,22 @@ class InterpretedFrame : public JavaScriptFrame {
   inline explicit InterpretedFrame(StackFrameIteratorBase* iterator);
 
   Address GetExpressionAddress(int n) const override;
+
+ private:
+  friend class StackFrameIteratorBase;
+};
+
+class SparkplugFrame : public InterpretedFrame {
+ public:
+  Type type() const override { return SPARKPLUG; }
+
+    // Returns the current offset into the bytecode stream.
+  int GetBytecodeOffset() const override;
+
+  intptr_t GetPCForBytecodeOffset(int lookup_offset) const;
+
+ protected:
+  inline explicit SparkplugFrame(StackFrameIteratorBase* iterator);
 
  private:
   friend class StackFrameIteratorBase;
