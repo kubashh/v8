@@ -203,6 +203,15 @@ void TurboAssembler::LoadTaggedPointerField(Register destination,
   }
 }
 
+void TurboAssembler::LoadTaggedSignedField(Register destination,
+                                           Operand field_operand) {
+  if (COMPRESS_POINTERS_BOOL) {
+    DecompressTaggedSigned(destination, field_operand);
+  } else {
+    mov_tagged(destination, field_operand);
+  }
+}
+
 void TurboAssembler::LoadAnyTaggedField(Register destination,
                                         Operand field_operand) {
   if (COMPRESS_POINTERS_BOOL) {
@@ -1098,6 +1107,7 @@ void TurboAssembler::Move(Register dst, Smi source) {
   if (value == 0) {
     xorl(dst, dst);
   } else {
+    // mov_tagged(dst, Immediate(source));
     Move(dst, source.ptr(), RelocInfo::NONE);
   }
 }
@@ -1339,6 +1349,9 @@ void TurboAssembler::Move(Register dst, Register src) {
     movq(dst, src);
   }
 }
+
+void TurboAssembler::Move(Register dst, Operand src) { movq(dst, src); }
+void TurboAssembler::Move(Register dst, Immediate src) { movl(dst, src); }
 
 void TurboAssembler::Move(XMMRegister dst, XMMRegister src) {
   if (dst != src) {
@@ -1594,6 +1607,7 @@ void TurboAssembler::Jump(Handle<Code> code_object, RelocInfo::Mode rmode,
       Address entry = d.InstructionStartOfBuiltin(builtin_index);
       Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
       jmp(kScratchRegister);
+      if (FLAG_code_comments) RecordComment("]");
       bind(&skip);
       return;
     }
@@ -1676,6 +1690,18 @@ void TurboAssembler::CallBuiltin(int builtin_index) {
   Address entry = d.InstructionStartOfBuiltin(builtin_index);
   Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
   call(kScratchRegister);
+  if (FLAG_code_comments) RecordComment("]");
+}
+
+void TurboAssembler::TailCallBuiltin(int builtin_index) {
+  DCHECK(Builtins::IsBuiltinId(builtin_index));
+  RecordCommentForOffHeapTrampoline(builtin_index);
+  CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
+  EmbeddedData d = EmbeddedData::FromBlob();
+  Address entry = d.InstructionStartOfBuiltin(builtin_index);
+  Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
+  jmp(kScratchRegister);
+  if (FLAG_code_comments) RecordComment("]");
 }
 
 void TurboAssembler::LoadCodeObjectEntry(Register destination,
@@ -2918,7 +2944,7 @@ void TurboAssembler::EnterFrame(StackFrame::Type type) {
 }
 
 void TurboAssembler::LeaveFrame(StackFrame::Type type) {
-  if (emit_debug_code()) {
+  if (emit_debug_code() && type != StackFrame::MANUAL) {
     cmpq(Operand(rbp, CommonFrameConstants::kContextOrFrameTypeOffset),
          Immediate(StackFrame::TypeToMarker(type)));
     Check(equal, AbortReason::kStackFrameTypesMustMatch);
