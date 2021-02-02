@@ -1882,17 +1882,15 @@ void MarkCompactCollector::ProcessEphemeronMarking() {
 void MarkCompactCollector::ProcessTopOptimizedFrame(ObjectVisitor* visitor) {
   for (StackFrameIterator it(isolate(), isolate()->thread_local_top());
        !it.done(); it.Advance()) {
-    if (it.frame()->type() == StackFrame::INTERPRETED) {
-      return;
-    }
+    if (it.frame()->HasInterpreterFrameType()) return;
     if (it.frame()->type() == StackFrame::OPTIMIZED) {
       Code code = it.frame()->LookupCode();
       if (!code.CanDeoptAt(it.frame()->pc())) {
         Code::BodyDescriptor::IterateBody(code.map(), code, visitor);
       }
       return;
+      }
     }
-  }
 }
 
 void MarkCompactCollector::RecordObjectStats() {
