@@ -10,9 +10,10 @@ namespace v8 {
 namespace internal {
 
 TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
-    TNode<Context> context, TNode<Object> lhs, TNode<Object> rhs,
-    TNode<UintPtrT> slot_id, TNode<HeapObject> maybe_feedback_vector,
-    bool rhs_known_smi) {
+    std::function<TNode<Context>()> context, TNode<Object> lhs,
+    TNode<Object> rhs, TNode<UintPtrT> slot_id,
+    std::function<TNode<HeapObject>()> maybe_feedback_vector,
+    bool guaranteed_feedback, bool rhs_known_smi) {
   // Shared entry for floating point addition.
   Label do_fadd(this), if_lhsisnotnumber(this, Label::kDeferred),
       check_rhsisoddball(this, Label::kDeferred),
@@ -69,8 +70,8 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
       // Not overflowed.
       {
         var_type_feedback = SmiConstant(BinaryOperationFeedback::kSignedSmall);
-        UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector,
-                       slot_id);
+        MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                            slot_id, guaranteed_feedback);
         var_result = smi_result;
         Goto(&end);
       }
@@ -118,7 +119,8 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
   BIND(&do_fadd);
   {
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kNumber);
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot_id);
+    MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                        slot_id, guaranteed_feedback);
     TNode<Float64T> value =
         Float64Add(var_fadd_lhs.value(), var_fadd_rhs.value());
     TNode<HeapNumber> result = AllocateHeapNumberWithValue(value);
@@ -169,10 +171,10 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
                   &call_with_any_feedback);
 
         var_type_feedback = SmiConstant(BinaryOperationFeedback::kString);
-        UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector,
-                       slot_id);
+        MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                            slot_id, guaranteed_feedback);
         var_result =
-            CallBuiltin(Builtins::kStringAdd_CheckNone, context, lhs, rhs);
+            CallBuiltin(Builtins::kStringAdd_CheckNone, context(), lhs, rhs);
 
         Goto(&end);
       }
@@ -194,20 +196,22 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
   {
     // Both {lhs} and {rhs} are of BigInt type.
     Label bigint_too_big(this);
-    var_result = CallBuiltin(Builtins::kBigIntAddNoThrow, context, lhs, rhs);
+    var_result = CallBuiltin(Builtins::kBigIntAddNoThrow, context(), lhs, rhs);
     // Check for sentinel that signals BigIntTooBig exception.
     GotoIf(TaggedIsSmi(var_result.value()), &bigint_too_big);
 
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kBigInt);
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot_id);
+    MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                        slot_id, guaranteed_feedback);
     Goto(&end);
 
     BIND(&bigint_too_big);
     {
       // Update feedback to prevent deopt loop.
-      UpdateFeedback(SmiConstant(BinaryOperationFeedback::kAny),
-                     maybe_feedback_vector, slot_id);
-      ThrowRangeError(context, MessageTemplate::kBigIntTooBig);
+      MaybeUpdateFeedback(SmiConstant(BinaryOperationFeedback::kAny),
+                          maybe_feedback_vector(), slot_id,
+                          guaranteed_feedback);
+      ThrowRangeError(context(), MessageTemplate::kBigIntTooBig);
     }
   }
 
@@ -225,8 +229,9 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
 
   BIND(&call_add_stub);
   {
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot_id);
-    var_result = CallBuiltin(Builtins::kAdd, context, lhs, rhs);
+    MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                        slot_id, guaranteed_feedback);
+    var_result = CallBuiltin(Builtins::kAdd, context(), lhs, rhs);
     Goto(&end);
   }
 
@@ -235,10 +240,11 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
 }
 
 TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
-    TNode<Context> context, TNode<Object> lhs, TNode<Object> rhs,
-    TNode<UintPtrT> slot_id, TNode<HeapObject> maybe_feedback_vector,
+    std::function<TNode<Context>()> context, TNode<Object> lhs,
+    TNode<Object> rhs, TNode<UintPtrT> slot_id,
+    std::function<TNode<HeapObject>()> maybe_feedback_vector,
     const SmiOperation& smiOperation, const FloatOperation& floatOperation,
-    Operation op, bool rhs_known_smi) {
+    Operation op, bool guaranteed_feedback, bool rhs_known_smi) {
   Label do_float_operation(this), end(this), call_stub(this),
       check_rhsisoddball(this, Label::kDeferred), call_with_any_feedback(this),
       if_lhsisnotnumber(this, Label::kDeferred),
@@ -285,7 +291,8 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
     {
       Comment("perform smi operation");
       var_result = smiOperation(lhs_smi, CAST(rhs), &var_type_feedback);
-      UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot_id);
+      MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                          slot_id, guaranteed_feedback);
       Goto(&end);
     }
   }
@@ -328,7 +335,8 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
   BIND(&do_float_operation);
   {
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kNumber);
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot_id);
+    MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                        slot_id, guaranteed_feedback);
     TNode<Float64T> lhs_value = var_float_lhs.value();
     TNode<Float64T> rhs_value = var_float_rhs.value();
     TNode<Float64T> value = floatOperation(lhs_value, rhs_value);
@@ -392,11 +400,12 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
   BIND(&if_both_bigint);
   {
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kBigInt);
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot_id);
+    MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                        slot_id, guaranteed_feedback);
     if (op == Operation::kSubtract) {
       Label bigint_too_big(this);
       var_result =
-          CallBuiltin(Builtins::kBigIntSubtractNoThrow, context, lhs, rhs);
+          CallBuiltin(Builtins::kBigIntSubtractNoThrow, context(), lhs, rhs);
 
       // Check for sentinel that signals BigIntTooBig exception.
       GotoIf(TaggedIsSmi(var_result.value()), &bigint_too_big);
@@ -405,12 +414,13 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
       BIND(&bigint_too_big);
       {
         // Update feedback to prevent deopt loop.
-        UpdateFeedback(SmiConstant(BinaryOperationFeedback::kAny),
-                       maybe_feedback_vector, slot_id);
-        ThrowRangeError(context, MessageTemplate::kBigIntTooBig);
+        MaybeUpdateFeedback(SmiConstant(BinaryOperationFeedback::kAny),
+                            maybe_feedback_vector(), slot_id,
+                            guaranteed_feedback);
+        ThrowRangeError(context(), MessageTemplate::kBigIntTooBig);
       }
     } else {
-      var_result = CallRuntime(Runtime::kBigIntBinaryOp, context, lhs, rhs,
+      var_result = CallRuntime(Runtime::kBigIntBinaryOp, context(), lhs, rhs,
                                SmiConstant(op));
       Goto(&end);
     }
@@ -424,20 +434,21 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
 
   BIND(&call_stub);
   {
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot_id);
+    MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                        slot_id, guaranteed_feedback);
     TNode<Object> result;
     switch (op) {
       case Operation::kSubtract:
-        result = CallBuiltin(Builtins::kSubtract, context, lhs, rhs);
+        result = CallBuiltin(Builtins::kSubtract, context(), lhs, rhs);
         break;
       case Operation::kMultiply:
-        result = CallBuiltin(Builtins::kMultiply, context, lhs, rhs);
+        result = CallBuiltin(Builtins::kMultiply, context(), lhs, rhs);
         break;
       case Operation::kDivide:
-        result = CallBuiltin(Builtins::kDivide, context, lhs, rhs);
+        result = CallBuiltin(Builtins::kDivide, context(), lhs, rhs);
         break;
       case Operation::kModulus:
-        result = CallBuiltin(Builtins::kModulus, context, lhs, rhs);
+        result = CallBuiltin(Builtins::kModulus, context(), lhs, rhs);
         break;
       default:
         UNREACHABLE();
@@ -451,9 +462,10 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
 }
 
 TNode<Object> BinaryOpAssembler::Generate_SubtractWithFeedback(
-    TNode<Context> context, TNode<Object> lhs, TNode<Object> rhs,
-    TNode<UintPtrT> slot_id, TNode<HeapObject> maybe_feedback_vector,
-    bool rhs_known_smi) {
+    std::function<TNode<Context>()> context, TNode<Object> lhs,
+    TNode<Object> rhs, TNode<UintPtrT> slot_id,
+    std::function<TNode<HeapObject>()> maybe_feedback_vector,
+    bool guaranteed_feedback, bool rhs_known_smi) {
   auto smiFunction = [=](TNode<Smi> lhs, TNode<Smi> rhs,
                          TVariable<Smi>* var_type_feedback) {
     Label end(this);
@@ -483,13 +495,14 @@ TNode<Object> BinaryOpAssembler::Generate_SubtractWithFeedback(
   };
   return Generate_BinaryOperationWithFeedback(
       context, lhs, rhs, slot_id, maybe_feedback_vector, smiFunction,
-      floatFunction, Operation::kSubtract, rhs_known_smi);
+      floatFunction, Operation::kSubtract, guaranteed_feedback, rhs_known_smi);
 }
 
 TNode<Object> BinaryOpAssembler::Generate_MultiplyWithFeedback(
-    TNode<Context> context, TNode<Object> lhs, TNode<Object> rhs,
-    TNode<UintPtrT> slot_id, TNode<HeapObject> maybe_feedback_vector,
-    bool rhs_known_smi) {
+    std::function<TNode<Context>()> context, TNode<Object> lhs,
+    TNode<Object> rhs, TNode<UintPtrT> slot_id,
+    std::function<TNode<HeapObject>()> maybe_feedback_vector,
+    bool guaranteed_feedback, bool rhs_known_smi) {
   auto smiFunction = [=](TNode<Smi> lhs, TNode<Smi> rhs,
                          TVariable<Smi>* var_type_feedback) {
     TNode<Number> result = SmiMul(lhs, rhs);
@@ -503,13 +516,14 @@ TNode<Object> BinaryOpAssembler::Generate_MultiplyWithFeedback(
   };
   return Generate_BinaryOperationWithFeedback(
       context, lhs, rhs, slot_id, maybe_feedback_vector, smiFunction,
-      floatFunction, Operation::kMultiply, rhs_known_smi);
+      floatFunction, Operation::kMultiply, guaranteed_feedback, rhs_known_smi);
 }
 
 TNode<Object> BinaryOpAssembler::Generate_DivideWithFeedback(
-    TNode<Context> context, TNode<Object> dividend, TNode<Object> divisor,
-    TNode<UintPtrT> slot_id, TNode<HeapObject> maybe_feedback_vector,
-    bool rhs_known_smi) {
+    std::function<TNode<Context>()> context, TNode<Object> dividend,
+    TNode<Object> divisor, TNode<UintPtrT> slot_id,
+    std::function<TNode<HeapObject>()> maybe_feedback_vector,
+    bool guaranteed_feedback, bool rhs_known_smi) {
   auto smiFunction = [=](TNode<Smi> lhs, TNode<Smi> rhs,
                          TVariable<Smi>* var_type_feedback) {
     TVARIABLE(Object, var_result);
@@ -539,13 +553,14 @@ TNode<Object> BinaryOpAssembler::Generate_DivideWithFeedback(
   };
   return Generate_BinaryOperationWithFeedback(
       context, dividend, divisor, slot_id, maybe_feedback_vector, smiFunction,
-      floatFunction, Operation::kDivide, rhs_known_smi);
+      floatFunction, Operation::kDivide, guaranteed_feedback, rhs_known_smi);
 }
 
 TNode<Object> BinaryOpAssembler::Generate_ModulusWithFeedback(
-    TNode<Context> context, TNode<Object> dividend, TNode<Object> divisor,
-    TNode<UintPtrT> slot_id, TNode<HeapObject> maybe_feedback_vector,
-    bool rhs_known_smi) {
+    std::function<TNode<Context>()> context, TNode<Object> dividend,
+    TNode<Object> divisor, TNode<UintPtrT> slot_id,
+    std::function<TNode<HeapObject>()> maybe_feedback_vector,
+    bool guaranteed_feedback, bool rhs_known_smi) {
   auto smiFunction = [=](TNode<Smi> lhs, TNode<Smi> rhs,
                          TVariable<Smi>* var_type_feedback) {
     TNode<Number> result = SmiMod(lhs, rhs);
@@ -559,22 +574,24 @@ TNode<Object> BinaryOpAssembler::Generate_ModulusWithFeedback(
   };
   return Generate_BinaryOperationWithFeedback(
       context, dividend, divisor, slot_id, maybe_feedback_vector, smiFunction,
-      floatFunction, Operation::kModulus, rhs_known_smi);
+      floatFunction, Operation::kModulus, guaranteed_feedback, rhs_known_smi);
 }
 
 TNode<Object> BinaryOpAssembler::Generate_ExponentiateWithFeedback(
-    TNode<Context> context, TNode<Object> base, TNode<Object> exponent,
-    TNode<UintPtrT> slot_id, TNode<HeapObject> maybe_feedback_vector,
-    bool rhs_known_smi) {
+    std::function<TNode<Context>()> context, TNode<Object> base,
+    TNode<Object> exponent, TNode<UintPtrT> slot_id,
+    std::function<TNode<HeapObject>()> maybe_feedback_vector,
+    bool guaranteed_feedback, bool rhs_known_smi) {
   // We currently don't optimize exponentiation based on feedback.
   TNode<Smi> dummy_feedback = SmiConstant(BinaryOperationFeedback::kAny);
-  UpdateFeedback(dummy_feedback, maybe_feedback_vector, slot_id);
-  return CallBuiltin(Builtins::kExponentiate, context, base, exponent);
+  MaybeUpdateFeedback(dummy_feedback, maybe_feedback_vector(), slot_id,
+                      guaranteed_feedback);
+  return CallBuiltin(Builtins::kExponentiate, context(), base, exponent);
 }
 
 TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
     Operation bitwise_op, TNode<Object> left, TNode<Object> right,
-    TNode<Context> context, TVariable<Smi>* feedback) {
+    std::function<TNode<Context>()> context, TVariable<Smi>* feedback) {
   TVARIABLE(Object, result);
   TVARIABLE(Smi, var_left_feedback);
   TVARIABLE(Smi, var_right_feedback);
@@ -592,14 +609,14 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
   Label if_left_bigint(this), do_bigint_op(this);
 
   TaggedToWord32OrBigIntWithFeedback(
-      context, left, &if_left_number, &var_left_word32, &if_left_bigint,
+      context(), left, &if_left_number, &var_left_word32, &if_left_bigint,
       &var_left_bigint, feedback ? &var_left_feedback : nullptr);
 
   Label right_is_bigint(this);
   BIND(&if_left_number);
   {
     TaggedToWord32OrBigIntWithFeedback(
-        context, right, &do_number_op, &var_right_word32, &right_is_bigint,
+        context(), right, &do_number_op, &var_right_word32, &right_is_bigint,
         &var_right_bigint, feedback ? &var_right_feedback : nullptr);
   }
 
@@ -631,7 +648,7 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
   // BigInt cases.
   BIND(&if_left_bigint);
   {
-    TaggedToNumericWithFeedback(context, right, &var_right_maybe_bigint,
+    TaggedToNumericWithFeedback(context(), right, &var_right_maybe_bigint,
                                 &var_right_feedback);
     var_left_maybe_bigint = var_left_bigint.value();
     Goto(&do_bigint_op);
@@ -643,7 +660,7 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
       *feedback = SmiOr(var_left_feedback.value(), var_right_feedback.value());
     }
     result = CallRuntime(
-        Runtime::kBigIntBinaryOp, context, var_left_maybe_bigint.value(),
+        Runtime::kBigIntBinaryOp, context(), var_left_maybe_bigint.value(),
         var_right_maybe_bigint.value(), SmiConstant(bitwise_op));
     Goto(&done);
   }

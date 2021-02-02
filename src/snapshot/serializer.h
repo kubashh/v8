@@ -197,6 +197,8 @@ class Serializer : public SerializerDeserializer {
   void SerializeObject(Handle<HeapObject> o);
   virtual void SerializeObjectImpl(Handle<HeapObject> o) = 0;
 
+  bool MayDeferObjects() { return allow_objects_deferral_; }
+  void AllowObjectsDeferral(bool is_allowed) { allow_objects_deferral_ = is_allowed; }
   virtual bool MustBeDeferred(HeapObject object);
 
   void VisitRootPointers(Root root, const char* description,
@@ -343,6 +345,9 @@ class Serializer : public SerializerDeserializer {
   std::vector<byte> code_buffer_;
   GlobalHandleVector<HeapObject>
       deferred_objects_;  // To handle stack overflow.
+  // This flag controls whether it is allowed to defer objects in the current
+  // state of the serializer.
+  bool allow_objects_deferral_ = true;
   int num_back_refs_ = 0;
 
   // Objects which have started being serialized, but haven't yet been allocated
