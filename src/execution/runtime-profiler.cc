@@ -324,7 +324,7 @@ void RuntimeProfiler::MarkCandidatesForOptimization(JavaScriptFrame* frame) {
 
 void RuntimeProfiler::MarkCandidatesForOptimizationFromBytecode() {
   JavaScriptFrameIterator it(isolate_);
-  DCHECK(it.frame()->is_interpreted());
+  DCHECK(it.frame()->HasInterpreterFrameType());
   MarkCandidatesForOptimization(it.frame());
 }
 
