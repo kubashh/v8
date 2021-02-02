@@ -2730,11 +2730,22 @@ TNode<BytecodeArray> CodeStubAssembler::LoadSharedFunctionInfoBytecodeArray(
       shared, SharedFunctionInfo::kFunctionDataOffset);
 
   TVARIABLE(HeapObject, var_result, function_data);
+
+  Label check_for_interpreter_data(this, &var_result);
   Label done(this, &var_result);
 
-  GotoIfNot(HasInstanceType(function_data, INTERPRETER_DATA_TYPE), &done);
+  GotoIfNot(HasInstanceType(var_result.value(), BASELINE_DATA_TYPE),
+            &check_for_interpreter_data);
+  TNode<HeapObject> baseline_data = LoadObjectField<HeapObject>(
+      var_result.value(), BaselineData::kDataOffset);
+  var_result = baseline_data;
+  Goto(&check_for_interpreter_data);
+
+  BIND(&check_for_interpreter_data);
+
+  GotoIfNot(HasInstanceType(var_result.value(), INTERPRETER_DATA_TYPE), &done);
   TNode<BytecodeArray> bytecode_array = LoadObjectField<BytecodeArray>(
-      function_data, InterpreterData::kBytecodeArrayOffset);
+      var_result.value(), InterpreterData::kBytecodeArrayOffset);
   var_result = bytecode_array;
   Goto(&done);
 
@@ -2912,7 +2923,8 @@ void CodeStubAssembler::StoreFeedbackVectorSlot(
   // Check that slot <= feedback_vector.length.
   CSA_ASSERT(this,
              IsOffsetInBounds(offset, LoadFeedbackVectorLength(feedback_vector),
-                              FeedbackVector::kHeaderSize));
+                              FeedbackVector::kHeaderSize),
+             SmiFromIntPtr(offset), feedback_vector);
   if (barrier_mode == SKIP_WRITE_BARRIER) {
     StoreNoWriteBarrier(MachineRepresentation::kTagged, feedback_vector, offset,
                         value);
@@ -12484,21 +12496,6 @@ void CodeStubAssembler::ForInPrepare(TNode<HeapObject> enumerator,
   *cache_length_out = cache_length.value();
 }
 
-TNode<FixedArray> CodeStubAssembler::ForInPrepareForTorque(
-    TNode<HeapObject> enumerator, TNode<UintPtrT> slot,
-    TNode<HeapObject> maybe_feedback_vector) {
-  TNode<FixedArray> cache_array;
-  TNode<Smi> cache_length;
-  ForInPrepare(enumerator, slot, maybe_feedback_vector, &cache_array,
-               &cache_length);
-
-  TNode<FixedArray> result = AllocateUninitializedFixedArray(2);
-  StoreFixedArrayElement(result, 0, cache_array);
-  StoreFixedArrayElement(result, 1, cache_length);
-
-  return result;
-}
-
 TNode<String> CodeStubAssembler::Typeof(SloppyTNode<Object> value) {
   TVARIABLE(String, result_var);
 
@@ -13258,6 +13255,7 @@ TNode<Code> CodeStubAssembler::GetSharedFunctionInfoCode(
   TNode<Uint16T> data_type = LoadInstanceType(CAST(sfi_data));
 
   int32_t case_values[] = {BYTECODE_ARRAY_TYPE,
+                           BASELINE_DATA_TYPE,
                            WASM_EXPORTED_FUNCTION_DATA_TYPE,
                            ASM_WASM_DATA_TYPE,
                            UNCOMPILED_DATA_WITHOUT_PREPARSE_DATA_TYPE,
@@ -13266,6 +13264,7 @@ TNode<Code> CodeStubAssembler::GetSharedFunctionInfoCode(
                            WASM_JS_FUNCTION_DATA_TYPE,
                            WASM_CAPI_FUNCTION_DATA_TYPE};
   Label check_is_bytecode_array(this);
+  Label check_is_baseline_data(this);
   Label check_is_exported_function_data(this);
   Label check_is_asm_wasm_data(this);
   Label check_is_uncompiled_data_without_preparse_data(this);
@@ -13275,6 +13274,7 @@ TNode<Code> CodeStubAssembler::GetSharedFunctionInfoCode(
   Label check_is_wasm_js_function_data(this);
   Label check_is_wasm_capi_function_data(this);
   Label* case_labels[] = {&check_is_bytecode_array,
+                          &check_is_baseline_data,
                           &check_is_exported_function_data,
                           &check_is_asm_wasm_data,
                           &check_is_uncompiled_data_without_preparse_data,
@@ -13289,6 +13289,14 @@ TNode<Code> CodeStubAssembler::GetSharedFunctionInfoCode(
   // IsBytecodeArray: Interpret bytecode
   BIND(&check_is_bytecode_array);
   sfi_code = HeapConstant(BUILTIN_CODE(isolate(), InterpreterEntryTrampoline));
+  Goto(&done);
+
+  // IsBaselineData: Execute baseline code
+  BIND(&check_is_baseline_data);
+  TNode<BaselineData> baseline_data = CAST(sfi_data);
+  TNode<Code> baseline_code =
+      CAST(LoadObjectField(baseline_data, BaselineData::kBaselineCodeOffset));
+  sfi_code = baseline_code;
   Goto(&done);
 
   // IsWasmExportedFunctionData: Use the wrapper code
