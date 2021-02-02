@@ -212,6 +212,8 @@ bool RuntimeProfiler::MaybeOSR(JSFunction function, InterpretedFrame* frame) {
     return false;
   }
 
+  if (frame->type() == StackFrame::SPARKPLUG) return false;
+
   if (function.IsMarkedForOptimization() ||
       function.IsMarkedForConcurrentOptimization() ||
       function.HasAvailableOptimizedCode()) {
@@ -324,7 +326,7 @@ void RuntimeProfiler::MarkCandidatesForOptimization(JavaScriptFrame* frame) {
 
 void RuntimeProfiler::MarkCandidatesForOptimizationFromBytecode() {
   JavaScriptFrameIterator it(isolate_);
-  DCHECK(it.frame()->is_interpreted());
+  DCHECK(it.frame()->HasInterpreterFrameType());
   MarkCandidatesForOptimization(it.frame());
 }
 
