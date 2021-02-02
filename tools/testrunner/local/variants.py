@@ -14,6 +14,7 @@ ALL_VARIANT_FLAGS = {
   "interpreted_regexp": [["--regexp-interpret-all"]],
   "experimental_regexp":  [["--default-to-experimental-regexp-engine"]],
   "jitless": [["--jitless"]],
+  "sparkplug": [["--sparkplug"]],
   "minor_mc": [["--minor-mc"]],
   "nci": [["--turbo-nci"]],
   "nci_as_midtier": [["--turbo-nci-as-midtier"]],
@@ -53,7 +54,7 @@ ALL_VARIANT_FLAGS = {
 # implications defined in flag-definitions.h.
 INCOMPATIBLE_FLAGS_PER_VARIANT = {
   "assert_types": ["--no-assert-types"],
-  "jitless": ["--opt", "--always-opt", "--liftoff", "--track-field-types", "--validate-asm"],
+  "jitless": ["--opt", "--always-opt", "--liftoff", "--track-field-types", "--validate-asm", "--sparkplug", "--always-sparkplug"],
   "no_wasm_traps": ["--wasm-trap-handler"],
   "nooptimization": ["--opt", "--always-opt", "--no-liftoff", "--wasm-tier-up"],
   "slow_path": ["--no-force-slow-path"],
