@@ -19,13 +19,13 @@ namespace internal {
     auto lhs = Parameter<Object>(Descriptor::kLeft);                          \
     auto rhs = Parameter<Object>(Descriptor::kRight);                         \
     auto context = Parameter<Context>(Descriptor::kContext);                  \
-    auto maybe_feedback_vector =                                              \
-        Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);              \
+    auto feedback_vector =                                                    \
+        Parameter<FeedbackVector>(Descriptor::kFeedbackVector);               \
     auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);              \
                                                                               \
     BinaryOpAssembler binop_asm(state());                                     \
     TNode<Object> result = binop_asm.Generator(context, lhs, rhs, slot,       \
-                                               maybe_feedback_vector, false); \
+                                               feedback_vector, true, false); \
                                                                               \
     Return(result);                                                           \
   }
@@ -48,13 +48,13 @@ DEF_BINOP(ShiftRightLogical_WithFeedback,
   TF_BUILTIN(Name, CodeStubAssembler) {                           \
     auto value = Parameter<Object>(Descriptor::kValue);           \
     auto context = Parameter<Context>(Descriptor::kContext);      \
-    auto maybe_feedback_vector =                                  \
-        Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);  \
+    auto feedback_vector =                                        \
+        Parameter<FeedbackVector>(Descriptor::kFeedbackVector);   \
     auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);  \
                                                                   \
     UnaryOpAssembler a(state());                                  \
     TNode<Object> result =                                        \
-        a.Generator(context, value, slot, maybe_feedback_vector); \
+        a.Generator(context, value, slot, feedback_vector, true); \
                                                                   \
     Return(result);                                               \
   }
@@ -69,14 +69,14 @@ DEF_UNOP(Negate_WithFeedback, Generate_NegateWithFeedback)
     auto lhs = Parameter<Object>(Descriptor::kLeft);                           \
     auto rhs = Parameter<Object>(Descriptor::kRight);                          \
     auto context = Parameter<Context>(Descriptor::kContext);                   \
-    auto maybe_feedback_vector =                                               \
-        Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);               \
+    auto feedback_vector =                                                     \
+        Parameter<FeedbackVector>(Descriptor::kFeedbackVector);                \
     auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);               \
                                                                                \
     TVARIABLE(Smi, var_type_feedback);                                         \
     TNode<Oddball> result = RelationalComparison(Operation::k##Name, lhs, rhs, \
                                                  context, &var_type_feedback); \
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot);    \
+    UpdateFeedback(var_type_feedback.value(), feedback_vector, slot);          \
                                                                                \
     Return(result);                                                            \
   }
@@ -90,13 +90,12 @@ TF_BUILTIN(Equal_WithFeedback, CodeStubAssembler) {
   auto lhs = Parameter<Object>(Descriptor::kLeft);
   auto rhs = Parameter<Object>(Descriptor::kRight);
   auto context = Parameter<Context>(Descriptor::kContext);
-  auto maybe_feedback_vector =
-      Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);
+  auto feedback_vector = Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
 
   TVARIABLE(Smi, var_type_feedback);
   TNode<Oddball> result = Equal(lhs, rhs, context, &var_type_feedback);
-  UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot);
+  UpdateFeedback(var_type_feedback.value(), feedback_vector, slot);
 
   Return(result);
 }
@@ -104,13 +103,12 @@ TF_BUILTIN(Equal_WithFeedback, CodeStubAssembler) {
 TF_BUILTIN(StrictEqual_WithFeedback, CodeStubAssembler) {
   auto lhs = Parameter<Object>(Descriptor::kLeft);
   auto rhs = Parameter<Object>(Descriptor::kRight);
-  auto maybe_feedback_vector =
-      Parameter<HeapObject>(Descriptor::kMaybeFeedbackVector);
+  auto feedback_vector = Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
 
   TVARIABLE(Smi, var_type_feedback);
   TNode<Oddball> result = StrictEqual(lhs, rhs, &var_type_feedback);
-  UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector, slot);
+  UpdateFeedback(var_type_feedback.value(), feedback_vector, slot);
 
   Return(result);
 }
