@@ -602,6 +602,8 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
           case CodeKind::NATIVE_CONTEXT_INDEPENDENT:
           case CodeKind::TURBOPROP:
             return OPTIMIZED;
+          case CodeKind::SPARKPLUG:
+            return Type::INTERPRETED;
           case CodeKind::JS_TO_WASM_FUNCTION:
             return JS_TO_WASM;
           case CodeKind::JS_TO_JS_FUNCTION:
