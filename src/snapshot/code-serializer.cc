@@ -128,8 +128,6 @@ void CodeSerializer::SerializeObjectImpl(Handle<HeapObject> obj) {
 
   if (SerializeReadOnlyObject(obj)) return;
 
-  CHECK(!obj->IsCode());
-
   ReadOnlyRoots roots(isolate());
   if (ElideObject(*obj)) {
     return SerializeObject(roots.undefined_value_handle());
