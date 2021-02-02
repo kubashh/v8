@@ -23,96 +23,102 @@ class BinaryOpAssembler : public CodeStubAssembler {
   TNode<Object> Generate_AddWithFeedback(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool rhs_known_smi);
+      bool guaranteed_feedback, bool rhs_known_smi);
 
   TNode<Object> Generate_SubtractWithFeedback(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool rhs_known_smi);
+      bool guaranteed_feedback, bool rhs_known_smi);
 
   TNode<Object> Generate_MultiplyWithFeedback(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool rhs_known_smi);
+      bool guaranteed_feedback, bool rhs_known_smi);
 
   TNode<Object> Generate_DivideWithFeedback(
       TNode<Context> context, TNode<Object> dividend, TNode<Object> divisor,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool rhs_known_smi);
+      bool guaranteed_feedback, bool rhs_known_smi);
 
   TNode<Object> Generate_ModulusWithFeedback(
       TNode<Context> context, TNode<Object> dividend, TNode<Object> divisor,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool rhs_known_smi);
+      bool guaranteed_feedback, bool rhs_known_smi);
 
   TNode<Object> Generate_ExponentiateWithFeedback(
       TNode<Context> context, TNode<Object> base, TNode<Object> exponent,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool rhs_known_smi);
+      bool guaranteed_feedback, bool rhs_known_smi);
 
   TNode<Object> Generate_BitwiseOrWithFeedback(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool /* unused */) {
+      bool guaranteed_feedback, bool /* unused */) {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kBitwiseOr, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot,
+                        guaranteed_feedback);
     return result;
   }
 
   TNode<Object> Generate_BitwiseXorWithFeedback(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool /* unused */) {
+      bool guaranteed_feedback, bool /* unused */) {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kBitwiseXor, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot,
+                        guaranteed_feedback);
     return result;
   }
 
   TNode<Object> Generate_BitwiseAndWithFeedback(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool /* unused */) {
+      bool guaranteed_feedback, bool /* unused */) {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kBitwiseAnd, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot,
+                        guaranteed_feedback);
     return result;
   }
 
   TNode<Object> Generate_ShiftLeftWithFeedback(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool /* unused */) {
+      bool guaranteed_feedback, bool /* unused */) {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kShiftLeft, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot,
+                        guaranteed_feedback);
     return result;
   }
 
   TNode<Object> Generate_ShiftRightWithFeedback(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool /* unused */) {
+      bool guaranteed_feedback, bool /* unused */) {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kShiftRight, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot,
+                        guaranteed_feedback);
     return result;
   }
 
   TNode<Object> Generate_ShiftRightLogicalWithFeedback(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool /* unused */) {
+      bool guaranteed_feedback, bool /* unused */) {
     TVARIABLE(Smi, feedback);
     TNode<Object> result = Generate_BitwiseBinaryOpWithFeedback(
         Operation::kShiftRightLogical, left, right, context, &feedback);
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot,
+                        guaranteed_feedback);
     return result;
   }
 
@@ -143,7 +149,7 @@ class BinaryOpAssembler : public CodeStubAssembler {
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
       const SmiOperation& smiOperation, const FloatOperation& floatOperation,
-      Operation op, bool rhs_known_smi);
+      Operation op, bool guaranteed_feedback, bool rhs_known_smi);
 
   TNode<Object> Generate_BitwiseBinaryOpWithOptionalFeedback(
       Operation bitwise_op, TNode<Object> left, TNode<Object> right,
