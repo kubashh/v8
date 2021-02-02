@@ -443,6 +443,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // Move if the registers are not identical.
   void Move(Register target, Register source);
 
+  void Move(Register target, Operand source);
+  void Move(Register target, Immediate source);
+
   void Move(Register dst, Handle<HeapObject> source,
             RelocInfo::Mode rmode = RelocInfo::FULL_EMBEDDED_OBJECT);
   void Move(Operand dst, Handle<HeapObject> source,
