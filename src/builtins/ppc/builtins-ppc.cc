@@ -2404,6 +2404,15 @@ void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
         DoubleRegister::ListOf(d1, d2, d3, d4, d5, d6, d7, d8);
     constexpr RegList simd_regs =
         Simd128Register::ListOf(v1, v2, v3, v4, v5, v6, v7, v8);
+    static_assert(WasmCompileLazyFrameConstants::kNumberOfSavedGpParamRegs ==
+                      NumRegs(gp_regs),
+                  "frame size mismatch");
+    static_assert(WasmCompileLazyFrameConstants::kNumberOfSavedFpParamRegs ==
+                      NumRegs(fp_regs),
+                  "frame size mismatch");
+    static_assert(WasmCompileLazyFrameConstants::kNumberOfSavedFpParamRegs ==
+                      NumRegs(simd_regs),
+                  "frame size mismatch");
     __ MultiPush(gp_regs);
     __ MultiPushDoubles(fp_regs);
     // V8 uses the same set of fp param registers as Simd param registers.
