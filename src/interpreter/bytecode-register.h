@@ -48,6 +48,9 @@ class V8_EXPORT_PRIVATE Register final {
   static Register bytecode_offset();
   bool is_bytecode_offset() const;
 
+  // Returns the register for the argument count.
+  static Register argument_count();
+
   // Returns a register that can be used to represent the accumulator
   // within code in the interpreter, but should never be emitted in
   // bytecode.
