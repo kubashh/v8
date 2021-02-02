@@ -191,6 +191,12 @@ const Register FastNewObjectDescriptor::NewTargetRegister() {
   return kJavaScriptCallNewTargetRegister;
 }
 
+void TailCallOptimizedCodeSlotDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {rcx};
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
 void LoadDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   Register registers[] = {ReceiverRegister(), NameRegister(), SlotRegister()};
@@ -484,6 +490,11 @@ void Compare_WithFeedbackDescriptor::InitializePlatformSpecific(
 void UnaryOp_WithFeedbackDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   DefaultInitializePlatformSpecific(data, 3);
+}
+
+void ForInPrepareDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
 }
 
 }  // namespace internal
