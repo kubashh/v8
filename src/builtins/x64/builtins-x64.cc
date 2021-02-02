@@ -1531,6 +1531,105 @@ void Builtins::Generate_InterpreterEnterBytecodeDispatch(MacroAssembler* masm) {
   Generate_InterpreterEnterBytecode(masm);
 }
 
+// static
+void Builtins::Generate_BaselineEpilogueMaybeOptimize(MacroAssembler* masm) {
+  Register feedback_vector = rbx;
+  Register optimization_state = rcx;
+    // TODO(verwaest): Put this all in a stub.
+    Label maybe_has_optimized_code, maybe_not_concurrent, maybe_concurrent;
+    __ testl(
+        optimization_state,
+        Immediate(
+            FeedbackVector::kHasCompileOptimizedOrLogFirstExecutionMarker));
+    __ j(zero, &maybe_has_optimized_code);
+
+    // Inlined copied version of MaybeOptimizeCode
+    __ Cmp(optimization_state, OptimizationMarker::kLogFirstExecution);
+    __ j(not_equal, &maybe_not_concurrent);
+    {
+      FrameScope scope(masm, StackFrame::INTERNAL);
+      // Push a copy of the target function, the new target and the actual
+      // argument count.
+      __ Push(kJavaScriptCallTargetRegister);
+      __ Push(kJavaScriptCallNewTargetRegister);
+      __ SmiTag(kJavaScriptCallArgCountRegister);
+      __ Push(kJavaScriptCallArgCountRegister);
+      // Function is also the parameter to the runtime call.
+      __ Push(kJavaScriptCallTargetRegister);
+
+      __ CallRuntime(Runtime::kFunctionFirstExecution, 1);
+      __ movq(rcx, rax);
+
+      // Restore target function, new target and actual argument count.
+      __ Pop(kJavaScriptCallArgCountRegister);
+      __ SmiUntag(kJavaScriptCallArgCountRegister);
+      __ Pop(kJavaScriptCallNewTargetRegister);
+      __ Pop(kJavaScriptCallTargetRegister);
+    }
+    static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+    __ JumpCodeObject(rcx);
+
+    __ bind(&maybe_not_concurrent);
+    __ Cmp(optimization_state, OptimizationMarker::kCompileOptimized);
+    __ j(not_equal, &maybe_concurrent);
+    {
+      FrameScope scope(masm, StackFrame::INTERNAL);
+      // Push a copy of the target function, the new target and the actual
+      // argument count.
+      __ Push(kJavaScriptCallTargetRegister);
+      __ Push(kJavaScriptCallNewTargetRegister);
+      __ SmiTag(kJavaScriptCallArgCountRegister);
+      __ Push(kJavaScriptCallArgCountRegister);
+      // Function is also the parameter to the runtime call.
+      __ Push(kJavaScriptCallTargetRegister);
+
+      __ CallRuntime(Runtime::kCompileOptimized_NotConcurrent, 1);
+      __ movq(rcx, rax);
+
+      // Restore target function, new target and actual argument count.
+      __ Pop(kJavaScriptCallArgCountRegister);
+      __ SmiUntag(kJavaScriptCallArgCountRegister);
+      __ Pop(kJavaScriptCallNewTargetRegister);
+      __ Pop(kJavaScriptCallTargetRegister);
+    }
+    static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+    __ JumpCodeObject(rcx);
+
+    __ bind(&maybe_concurrent);
+    {
+      FrameScope scope(masm, StackFrame::INTERNAL);
+      // Push a copy of the target function, the new target and the actual
+      // argument count.
+      __ Push(kJavaScriptCallTargetRegister);
+      __ Push(kJavaScriptCallNewTargetRegister);
+      __ SmiTag(kJavaScriptCallArgCountRegister);
+      __ Push(kJavaScriptCallArgCountRegister);
+      // Function is also the parameter to the runtime call.
+      __ Push(kJavaScriptCallTargetRegister);
+
+      __ CallRuntime(Runtime::kCompileOptimized_Concurrent, 1);
+      __ movq(rcx, rax);
+
+      // Restore target function, new target and actual argument count.
+      __ Pop(kJavaScriptCallArgCountRegister);
+      __ SmiUntag(kJavaScriptCallArgCountRegister);
+      __ Pop(kJavaScriptCallNewTargetRegister);
+      __ Pop(kJavaScriptCallTargetRegister);
+    }
+    static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+    __ JumpCodeObject(rcx);
+
+    __ bind(&maybe_has_optimized_code);
+    Register optimized_code_entry = optimization_state;
+    __ RecordComment("[ optimized code check");
+    __ LoadAnyTaggedField(
+        optimized_code_entry,
+        FieldOperand(feedback_vector,
+                     FeedbackVector::kMaybeOptimizedCodeOffset));
+    TailCallOptimizedCodeSlot(masm, optimized_code_entry, r11, r15);
+    __ Trap();
+}
+
 namespace {
 void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
                                       bool java_script_builtin,
@@ -1616,6 +1715,11 @@ void Builtins::Generate_NotifyDeoptimized(MacroAssembler* masm) {
   DCHECK_EQ(kInterpreterAccumulatorRegister.code(), rax.code());
   __ movq(rax, Operand(rsp, kPCOnStackSize));
   __ ret(1 * kSystemPointerSize);  // Remove rax.
+}
+
+void Builtins::Generate_TailCallOptimizedCodeSlot(MacroAssembler* masm) {
+  Register optimized_code_entry = rcx;
+  TailCallOptimizedCodeSlot(masm, optimized_code_entry, r11, r15);
 }
 
 // static

@@ -33,6 +33,7 @@ void SharedFunctionInfo::Init(ReadOnlyRoots ro_roots, int unique_id) {
   // of "uninitialized" marker here, but it's cheaper to use a valid buitin and
   // avoid having to do uninitialized checks elsewhere.
   set_builtin_id(Builtins::kIllegal);
+  set_sparkplug_code(ro_roots.undefined_value());
 
   // Set the name to the no-name sentinel, this can be updated later.
   set_name_or_scope_info(SharedFunctionInfo::kNoSharedNameSentinel,
@@ -331,6 +332,7 @@ void SharedFunctionInfo::DiscardCompiled(
             inferred_name_val, start_position, end_position);
     shared_info->set_function_data(*data, kReleaseStore);
   }
+  shared_info->set_sparkplug_code(ReadOnlyRoots(isolate).undefined_value());
 }
 
 // static
@@ -413,6 +415,9 @@ std::ostream& operator<<(std::ostream& os, const SourceCodeOf& v) {
 MaybeHandle<Code> SharedFunctionInfo::TryGetCachedCode(Isolate* isolate) {
   if (!may_have_cached_code()) return {};
   Handle<SharedFunctionInfo> zis(*this, isolate);
+  if (!zis->sparkplug_code().IsUndefined(isolate)) {
+    return handle(Code::cast(zis->sparkplug_code()), isolate);
+  }
   return isolate->compilation_cache()->LookupCode(zis);
 }
 
