@@ -222,18 +222,9 @@ IGNITION_HANDLER(StaGlobal, InterpreterAssembler) {
   TNode<TaggedIndex> slot = BytecodeOperandIdxTaggedIndex(1);
   TNode<HeapObject> maybe_vector = LoadFeedbackVector();
 
-  Label no_feedback(this, Label::kDeferred), end(this);
-  GotoIf(IsUndefined(maybe_vector), &no_feedback);
-
   CallBuiltin(Builtins::kStoreGlobalIC, context, name, value, slot,
               maybe_vector);
-  Goto(&end);
 
-  Bind(&no_feedback);
-  CallRuntime(Runtime::kStoreGlobalICNoFeedback_Miss, context, value, name);
-  Goto(&end);
-
-  Bind(&end);
   Dispatch();
 }
 
@@ -855,7 +846,7 @@ class InterpreterBinaryOpAssembler : public InterpreterAssembler {
   using BinaryOpGenerator = TNode<Object> (BinaryOpAssembler::*)(
       TNode<Context> context, TNode<Object> left, TNode<Object> right,
       TNode<UintPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
-      bool rhs_known_smi);
+      bool guaranteed_feedback, bool rhs_known_smi);
 
   void BinaryOpWithFeedback(BinaryOpGenerator generator) {
     TNode<Object> lhs = LoadRegisterAtOperandIndex(0);
@@ -865,8 +856,8 @@ class InterpreterBinaryOpAssembler : public InterpreterAssembler {
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
 
     BinaryOpAssembler binop_asm(state());
-    TNode<Object> result = (binop_asm.*generator)(context, lhs, rhs, slot_index,
-                                                  maybe_feedback_vector, false);
+    TNode<Object> result = (binop_asm.*generator)(
+        context, lhs, rhs, slot_index, maybe_feedback_vector, false, false);
     SetAccumulator(result);
     Dispatch();
   }
@@ -879,8 +870,8 @@ class InterpreterBinaryOpAssembler : public InterpreterAssembler {
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
 
     BinaryOpAssembler binop_asm(state());
-    TNode<Object> result = (binop_asm.*generator)(context, lhs, rhs, slot_index,
-                                                  maybe_feedback_vector, true);
+    TNode<Object> result = (binop_asm.*generator)(
+        context, lhs, rhs, slot_index, maybe_feedback_vector, false, true);
     SetAccumulator(result);
     Dispatch();
   }
@@ -991,7 +982,8 @@ class InterpreterBitwiseBinaryOpAssembler : public InterpreterAssembler {
     TNode<Object> result = binop_asm.Generate_BitwiseBinaryOpWithFeedback(
         bitwise_op, left, right, context, &feedback);
 
-    UpdateFeedback(feedback.value(), maybe_feedback_vector, slot_index);
+    MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot_index,
+                        false);
     SetAccumulator(result);
     Dispatch();
   }
@@ -1017,14 +1009,14 @@ class InterpreterBitwiseBinaryOpAssembler : public InterpreterAssembler {
     TNode<Smi> result_type = SelectSmiConstant(
         TaggedIsSmi(result), BinaryOperationFeedback::kSignedSmall,
         BinaryOperationFeedback::kNumber);
-    UpdateFeedback(SmiOr(result_type, var_left_feedback.value()),
-                   maybe_feedback_vector, slot_index);
+    MaybeUpdateFeedback(SmiOr(result_type, var_left_feedback.value()),
+                        maybe_feedback_vector, slot_index, false);
     SetAccumulator(result);
     Dispatch();
 
     BIND(&if_bigint_mix);
-    UpdateFeedback(var_left_feedback.value(), maybe_feedback_vector,
-                   slot_index);
+    MaybeUpdateFeedback(var_left_feedback.value(), maybe_feedback_vector,
+                        slot_index, false);
     ThrowTypeError(context, MessageTemplate::kBigIntMixedTypes);
   }
 };
@@ -1112,7 +1104,7 @@ IGNITION_HANDLER(BitwiseNot, InterpreterAssembler) {
 
   UnaryOpAssembler unary_op_asm(state());
   TNode<Object> result = unary_op_asm.Generate_BitwiseNotWithFeedback(
-      context, value, slot_index, maybe_feedback_vector);
+      context, value, slot_index, maybe_feedback_vector, false);
 
   SetAccumulator(result);
   Dispatch();
@@ -1156,7 +1148,7 @@ IGNITION_HANDLER(Negate, InterpreterAssembler) {
 
   UnaryOpAssembler unary_op_asm(state());
   TNode<Object> result = unary_op_asm.Generate_NegateWithFeedback(
-      context, value, slot_index, maybe_feedback_vector);
+      context, value, slot_index, maybe_feedback_vector, false);
 
   SetAccumulator(result);
   Dispatch();
@@ -1217,7 +1209,7 @@ IGNITION_HANDLER(Inc, InterpreterAssembler) {
 
   UnaryOpAssembler unary_op_asm(state());
   TNode<Object> result = unary_op_asm.Generate_IncrementWithFeedback(
-      context, value, slot_index, maybe_feedback_vector);
+      context, value, slot_index, maybe_feedback_vector, false);
 
   SetAccumulator(result);
   Dispatch();
@@ -1234,7 +1226,7 @@ IGNITION_HANDLER(Dec, InterpreterAssembler) {
 
   UnaryOpAssembler unary_op_asm(state());
   TNode<Object> result = unary_op_asm.Generate_DecrementWithFeedback(
-      context, value, slot_index, maybe_feedback_vector);
+      context, value, slot_index, maybe_feedback_vector, false);
 
   SetAccumulator(result);
   Dispatch();
@@ -1623,8 +1615,8 @@ class InterpreterCompareOpAssembler : public InterpreterAssembler {
 
     TNode<UintPtrT> slot_index = BytecodeOperandIdx(1);
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
-    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector,
-                   slot_index);
+    MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector,
+                        slot_index, false);
     SetAccumulator(result);
     Dispatch();
   }
@@ -2852,7 +2844,7 @@ IGNITION_HANDLER(ForInPrepare, InterpreterAssembler) {
   TNode<FixedArray> cache_array;
   TNode<Smi> cache_length;
   ForInPrepare(enumerator, vector_index, maybe_feedback_vector, &cache_array,
-               &cache_length);
+               &cache_length, false);
 
   StoreRegisterTripleAtOperandIndex(cache_type, cache_array, cache_length, 0);
   Dispatch();
@@ -2887,7 +2879,7 @@ IGNITION_HANDLER(ForInNext, InterpreterAssembler) {
   {
     TNode<Object> result =
         ForInNextSlow(GetContext(), vector_index, receiver, key, cache_type,
-                      maybe_feedback_vector);
+                      maybe_feedback_vector, false);
     SetAccumulator(result);
     Dispatch();
   }
