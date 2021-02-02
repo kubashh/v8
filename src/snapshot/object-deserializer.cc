@@ -48,7 +48,7 @@ MaybeHandle<HeapObject> ObjectDeserializer::Deserialize() {
   {
     result = ReadObject();
     DeserializeDeferredObjects();
-    CHECK(new_code_objects().empty());
+    CHECK_IMPLIES(!FLAG_sparkplug && !FLAG_always_sparkplug, new_code_objects().empty());
     LinkAllocationSites();
     CHECK(new_maps().empty());
     WeakenDescriptorArrays();
