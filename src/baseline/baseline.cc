@@ -1,0 +1,1376 @@
+// Copyright 2020 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include "src/baseline/baseline.h"
+
+#include <type_traits>
+#include <unordered_map>
+
+#include "src/builtins/builtins-constructor.h"
+#include "src/builtins/builtins-descriptors.h"
+#include "src/codegen/assembler.h"
+#include "src/codegen/interface-descriptors.h"
+#include "src/codegen/macro-assembler-inl.h"
+#include "src/common/globals.h"
+#include "src/interpreter/bytecode-array-accessor.h"
+#include "src/interpreter/bytecode-array-iterator.h"
+#include "src/interpreter/bytecode-flags.h"
+#include "src/objects/code.h"
+#include "src/objects/heap-object.h"
+#include "src/objects/instance-type.h"
+#include "src/objects/object-list-macros.h"
+#include "src/objects/shared-function-info-inl.h"
+#include "src/objects/shared-function-info.h"
+#include "src/roots/roots.h"
+
+namespace v8 {
+namespace internal {
+
+class BaselineAssembler : public MacroAssembler {
+ public:
+  using MacroAssembler::MacroAssembler;
+
+  Operand RegisterFrameOperand(int register_index) {
+    return Operand(rbp, register_index * kSystemPointerSize);
+  }
+  Operand RegisterFrameOperand(interpreter::Register interpreter_register) {
+    return RegisterFrameOperand(interpreter_register.ToOperand());
+  }
+  Operand ContextOperand() {
+    return RegisterFrameOperand(interpreter::Register::current_context());
+  }
+  Operand FunctionOperand() {
+    return RegisterFrameOperand(interpreter::Register::function_closure());
+  }
+
+  void LoadPrototype(Register prototype, Register object) {
+    LoadMap(prototype, object);
+    LoadTaggedPointerField(prototype,
+                           FieldOperand(prototype, Map::kPrototypeOffset));
+  }
+
+  void AddSmi(Register lhs, int32_t rhs) {
+    Move(kScratchRegister, Smi::FromInt(rhs));
+    addq(lhs, kScratchRegister);
+  }
+  void SubSmi(Register lhs, int32_t rhs) {
+    Move(kScratchRegister, Smi::FromInt(rhs));
+    subq(lhs, kScratchRegister);
+  }
+  void BitwiseOrSmi(Register lhs, int32_t rhs) {
+    Move(kScratchRegister, Smi::FromInt(rhs));
+    orq(lhs, kScratchRegister);
+  }
+  void BitwiseXorSmi(Register lhs, int32_t rhs) {
+    Move(kScratchRegister, Smi::FromInt(rhs));
+    xorq(lhs, kScratchRegister);
+  }
+  void BitwiseAndSmi(Register lhs, int32_t rhs) {
+    Move(kScratchRegister, Smi::FromInt(rhs));
+    andq(lhs, kScratchRegister);
+  }
+  void ShiftLeftSmi(Register lhs, int32_t rhs) { shlq(lhs, Immediate(rhs)); }
+  void ShiftRightSmi(Register lhs, int32_t rhs) { sarq(lhs, Immediate(rhs)); }
+  void ShiftRightLogicalSmi(Register lhs, int32_t rhs) {
+    shrq(lhs, Immediate(rhs));
+  }
+};
+
+#define __ masm_.
+
+namespace {
+
+#ifdef DEBUG
+bool Clobbers(Register target, Register reg) { return target == reg; }
+bool Clobbers(Register target, Operand op) {
+  return op.AddressUsesRegister(target);
+}
+bool Clobbers(Register target, Handle<Object> handle) { return false; }
+bool Clobbers(Register target, Smi smi) { return false; }
+bool Clobbers(Register target, Immediate imm) { return false; }
+#endif
+
+template <typename... Args>
+struct ArgumentSettingHelper;
+
+template <>
+struct ArgumentSettingHelper<> {
+  static void Set(BaselineAssembler* masm, CallInterfaceDescriptor descriptor,
+                  int i) {}
+  static void CheckSettingDoesntClobber(Register target) {}
+};
+
+template <typename Arg, typename... Args>
+struct ArgumentSettingHelper<Arg, Args...> {
+  static void Set(BaselineAssembler* masm, CallInterfaceDescriptor descriptor,
+                  int i, Arg arg, Args... args) {
+    if (i < descriptor.GetRegisterParameterCount()) {
+      Register target = descriptor.GetRegisterParameter(i);
+      ArgumentSettingHelper<Args...>::CheckSettingDoesntClobber(target,
+                                                                args...);
+      masm->Move(target, arg);
+      ArgumentSettingHelper<Args...>::Set(masm, descriptor, i + 1, args...);
+    } else if (descriptor.GetStackArgumentOrder() ==
+               StackArgumentOrder::kDefault) {
+      masm->Push(arg);
+      ArgumentSettingHelper<Args...>::Set(masm, descriptor, i + 1, args...);
+    } else {
+      ArgumentSettingHelper<Args...>::Set(masm, descriptor, i + 1, args...);
+      masm->Push(arg);
+    }
+  }
+  static void CheckSettingDoesntClobber(Register target, Arg arg,
+                                        Args... args) {
+    DCHECK(!Clobbers(target, arg));
+    ArgumentSettingHelper<Args...>::CheckSettingDoesntClobber(target, args...);
+  }
+};
+
+template <typename... Args>
+void MoveArgumentsForDescriptor(BaselineAssembler* masm,
+                                CallInterfaceDescriptor descriptor,
+                                Args... args) {
+  ArgumentSettingHelper<Args...>::Set(masm, descriptor, 0, args...);
+}
+
+}  // namespace
+
+class BaselineCompiler {
+ public:
+  explicit BaselineCompiler(Isolate* isolate, Handle<SharedFunctionInfo> shared)
+      : isolate_(isolate),
+        shared_(shared),
+        bytecode_(shared->GetBytecodeArray(), isolate),
+        masm_(isolate, CodeObjectRequired::kNo),
+        iterator_(bytecode_) {}
+
+  void PreVisitSingleBytecode() {
+    if (accessor().current_bytecode() == interpreter::Bytecode::kJumpLoop) {
+      back_jumps_[accessor().GetJumpTargetOffset()] = Label();
+    }
+  }
+
+  class SaveAccumulatorScope final {
+   public:
+    explicit SaveAccumulatorScope(BaselineCompiler* compiler)
+        : compiler_(compiler) {
+      compiler_->PushAccumulator();
+    }
+
+    ~SaveAccumulatorScope() { compiler_->PopAccumulator(); }
+
+   private:
+    BaselineCompiler* compiler_;
+  };
+
+  void
+  Prologue() {
+    Register closure = rdi;
+
+    // Load the feedback vector from the closure.
+    Register feedback_vector = rbx;
+    __ LoadTaggedPointerField(
+        feedback_vector,
+        FieldOperand(closure, JSFunction::kFeedbackCellOffset));
+    __ LoadTaggedPointerField(
+        feedback_vector, FieldOperand(feedback_vector, Cell::kValueOffset));
+
+    // Read off the optimization state in the feedback vector.
+    Register optimization_state = rcx;
+    __ movl(optimization_state,
+            FieldOperand(feedback_vector, FeedbackVector::kFlagsOffset));
+
+    // Check if there is optimized code or a optimization marker that needs to
+    // be processed.
+    __ testl(
+        optimization_state,
+        Immediate(
+            FeedbackVector::kHasOptimizedCodeOrCompileOptimizedMarkerMask));
+    optimization_state_ = optimization_state;
+    feedback_vector_ = feedback_vector;
+    __ j(not_zero, &maybe_has_optimized_code_);
+
+    FrameScope frame_scope(&masm_, StackFrame::MANUAL);
+    __ pushq(rbp);  // Caller's frame pointer.
+    __ movq(rbp, rsp);
+    __ Push(kContextRegister);                 // Callee's context.
+    __ Push(kJavaScriptCallTargetRegister);    // Callee's JS function.
+    __ Push(kJavaScriptCallArgCountRegister);  // Actual argument count.
+
+    // Stack check. This folds the checks for both the interrupt stack limit
+    // check and the real stack limit into one by just checking for the
+    // interrupt limit. The interrupt limit is either equal to the real stack
+    // limit or tighter. By ensuring we have space until that limit after
+    // building the frame we can quickly precheck both at once.
+    __ movq(kScratchRegister, rsp);
+    __ subq(kScratchRegister,
+            Immediate(shared_->GetBytecodeArray().frame_size()));
+    __ cmpq(kScratchRegister,
+            __ StackLimitAsOperand(StackLimitKind::kInterruptStackLimit));
+    __ j(below, &stack_check_);
+
+    // Inlined register frame fill
+    __ LoadRoot(kScratchRegister, RootIndex::kUndefinedValue);
+    for (int i = 0; i < shared_->GetBytecodeArray().frame_size(); ++i) {
+      __ Push(kScratchRegister);
+    }
+  }
+
+  void VisitBytecodes() {
+    for (; !iterator_.done(); iterator_.Advance()) {
+      PreVisitSingleBytecode();
+    }
+    iterator_.Reset();
+    for (; !iterator_.done(); iterator_.Advance()) {
+      VisitSingleBytecode();
+    }
+  }
+
+  void Epilogue() {
+    __ bind(&maybe_has_optimized_code_);
+    Register optimized_code_entry = optimization_state_;
+    __ LoadAnyTaggedField(
+        optimized_code_entry,
+        FieldOperand(feedback_vector_,
+                     FeedbackVector::kMaybeOptimizedCodeOffset));
+    // TailCallOptimizedCodeSlot(masm_, optimized_code_entry, r11, r15);
+    __ Trap();
+
+    __ bind(&stack_check_);
+    __ Trap();
+  }
+
+  Handle<Code> Build(Isolate* isolate) {
+    CodeDesc desc;
+    __ GetCode(isolate, &desc);
+    return Factory::CodeBuilder(isolate, desc, CodeKind::SPARKPLUG).Build();
+  }
+
+  Operand RegisterOperand(int operand_index) {
+    return __ RegisterFrameOperand(
+        accessor().GetRegisterOperand(operand_index));
+  }
+  void LoadRegister(Register output, int operand_index) {
+    __ movq(output, RegisterOperand(operand_index));
+  }
+  void PushRegister(int operand_index) {
+    __ Push(RegisterOperand(operand_index));
+  }
+  void StoreRegister(int operand_index, Register value) {
+    __ movq(RegisterOperand(operand_index), value);
+  }
+  template <typename Type>
+  Handle<Type> Constant(int operand_index) {
+    return Handle<Type>::cast(
+        accessor().GetConstantForIndexOperand(operand_index, isolate_));
+  }
+  template <typename Type>
+  void LoadConstant(Register output, int operand_index) {
+    __ Move(output, Constant<Type>(operand_index));
+  }
+  template <typename Type>
+  void PushConstant(int operand_index) {
+    __ Push(Constant<Type>(operand_index));
+  }
+  void LoadAccumulator(Register output) {
+    __ movq(output, kInterpreterAccumulatorRegister);
+  }
+  void PushAccumulator() { __ Push(kInterpreterAccumulatorRegister); }
+  void PopAccumulator() { __ Pop(kInterpreterAccumulatorRegister); }
+  void LoadContext(Register output) { __ movq(output, __ ContextOperand()); }
+  void LoadFunction(Register output) { __ movq(output, __ FunctionOperand()); }
+  void StoreContext(Register context) { __ movq(__ ContextOperand(), context); }
+  uint32_t Uint(int operand_index) {
+    return accessor().GetUnsignedImmediateOperand(operand_index);
+  }
+  int32_t Int(int operand_index) {
+    return accessor().GetImmediateOperand(operand_index);
+  }
+  uint32_t Index(int operand_index) {
+    return accessor().GetIndexOperand(operand_index);
+  }
+  uint32_t Flag(int operand_index) {
+    return accessor().GetFlagOperand(operand_index);
+  }
+  Smi IndexAsSmi(int operand_index) {
+    return Smi::FromInt(Index(operand_index));
+  }
+  Smi IntAsSmi(int operand_index) { return Smi::FromInt(Int(operand_index)); }
+  void LoadIndexAsSmi(Register output, int operand_index) {
+    __ Move(output, IndexAsSmi(operand_index));
+  }
+  void PushIndexAsSmi(int operand_index) { __ Push(IndexAsSmi(operand_index)); }
+  void PushIntAsSmi(int operand_index) { __ Push(IntAsSmi(operand_index)); }
+  void LoadTaggedPointerField(Register output, Register source, int offset) {
+    __ LoadTaggedPointerField(output, FieldOperand(source, offset));
+  }
+  void LoadTaggedAnyField(Register output, Register source, int offset) {
+    __ LoadAnyTaggedField(output, FieldOperand(source, offset));
+  }
+  void StoreTaggedField(Register target, int offset, Register value) {
+    __ StoreTaggedField(FieldOperand(target, offset), value);
+  }
+  void LoadFeedbackVector(Register output) {
+    LoadFunction(output);
+    // Loads the feedback vector cell.
+    // TODO(verwaest): Remove this indirection by doing a map-check on the
+    // JSFunction::kFeedback entry instead.
+    LoadTaggedPointerField(output, output, JSFunction::kFeedbackCellOffset);
+    LoadTaggedPointerField(output, output, FeedbackCell::kValueOffset);
+  }
+  void LoadClosureFeedbackArray(Register output, Register closure) {
+    LoadTaggedPointerField(output, closure, JSFunction::kFeedbackCellOffset);
+    LoadTaggedPointerField(output, output, FeedbackCell::kValueOffset);
+    Label done;
+    __ CmpInstanceType(output, CLOSURE_FEEDBACK_CELL_ARRAY_TYPE);
+    __ j(equal, &done);
+    LoadTaggedPointerField(output, output,
+                           FeedbackVector::kClosureFeedbackCellArrayOffset);
+    __ bind(&done);
+  }
+  void LoadFixedArrayElement(Register output, Register array, int32_t index) {
+    LoadTaggedAnyField(output, array,
+                       FixedArray::kHeaderSize + index * kTaggedSize);
+  }
+  void SelectBooleanConstant(Condition condition, Register output) {
+    Label done, set_true;
+    __ j(condition, &set_true);
+    __ LoadRoot(output, RootIndex::kFalseValue);
+    __ jmp(&done);
+    __ bind(&set_true);
+    __ LoadRoot(output, RootIndex::kTrueValue);
+    __ bind(&done);
+  }
+
+ private:
+  void VisitSingleBytecode() {
+    // TODO(leszeks): Merge forward and back labels maps maybe.
+    auto forward_jump_label = forward_jumps_.find(accessor().current_offset());
+    if (forward_jump_label != forward_jumps_.end()) {
+      for (auto&& label : forward_jump_label->second) {
+        __ bind(&label);
+      }
+      forward_jumps_.erase(forward_jump_label);
+    }
+    auto back_jump_label = back_jumps_.find(accessor().current_offset());
+    if (back_jump_label != back_jumps_.end()) {
+      __ bind(&back_jump_label->second);
+    }
+
+    switch (accessor().current_bytecode()) {
+#define BYTECODE_CASE(name, ...)       \
+  case interpreter::Bytecode::k##name: \
+    __ RecordComment(#name);           \
+    return Visit##name();
+      BYTECODE_LIST(BYTECODE_CASE)
+#undef BYTECODE_CASE
+    }
+  }
+
+#define DECLARE_VISITOR(name, ...) void Visit##name();
+  BYTECODE_LIST(DECLARE_VISITOR)
+#undef DECLARE_VISITOR
+
+  Label* BuildJumpLabel(int bytecode_offset) {
+    std::vector<Label>& labels = forward_jumps_[bytecode_offset];
+    labels.emplace_back();
+    return &labels.back();
+  }
+
+  template <typename... Args>
+  void CallBuiltin(Builtins::Name builtin, Args... args) {
+    CallInterfaceDescriptor descriptor =
+        Builtins::CallInterfaceDescriptorFor(builtin);
+    DCHECK_EQ(descriptor.GetParameterCount(), sizeof...(args));
+    MoveArgumentsForDescriptor(&masm_, descriptor, args...);
+    if (descriptor.HasContextParameter()) {
+      LoadContext(descriptor.ContextRegister());
+    }
+    __ CallBuiltin(builtin);
+  }
+
+  template <typename... Args>
+  void CallRuntime(Runtime::FunctionId functionid, Args... args) {
+    LoadContext(kContextRegister);
+    ITERATE_PACK(__ Push(args));
+    __ CallRuntime(functionid);
+  }
+
+  // Returns into kInterpreterAccumulatorRegister
+  void JumpIfToBoolean(bool do_jump_if_true, Register reg, Label* label) {
+    Label if_notsmi, if_notoddball;
+    Label end;
+
+    // Fast path for Smi.
+    __ JumpIfNotSmi(reg, &if_notsmi);
+    {
+      __ Cmp(reg, Smi::FromInt(0));
+      __ j(do_jump_if_true ? not_equal : equal, label);
+      __ j(always, &end);
+    }
+
+    __ bind(&if_notsmi);
+    __ LoadMap(kScratchRegister, reg);
+
+    // Fast path for undetectable maps.
+    __ testb(FieldOperand(kScratchRegister, Map::kBitFieldOffset),
+             Immediate(Map::Bits1::IsUndetectableBit::kMask));
+    __ j(not_zero, do_jump_if_true ? &end : label);
+
+    // Fast path for Oddballs.
+    __ CmpInstanceType(kScratchRegister, ODDBALL_TYPE);
+    __ j(not_equal, &if_notoddball);
+    // Only the true value oddball ToBooleans to true.
+    // TODO(leszeks): DCHECK this.
+    // #define CHECK_ONLY_TRUE_IS_TOBOOLEAN_TRUE(Name, name)      \
+//   DCHECK_EQ(                                               \
+//       isolate_->factory()->name()->BooleanValue(isolate_), \
+//       *isolate_->factory()->name() ==
+    //       *isolate_->factory()->true_value());
+    //     ODDBALL_LIST(CHECK_ONLY_TRUE_IS_TOBOOLEAN_TRUE)
+    // #undef CHECK_ONLY_TRUE_IS_TOBOOLEAN_TRUE
+
+    __ CompareRoot(reg, RootIndex::kTrueValue);
+    __ j(do_jump_if_true ? equal : not_equal, label);
+    __ j(always, &end);
+
+    // Call builtin for heap numbers and bigints
+    Label call_builtin;
+    __ bind(&if_notoddball);
+    __ CmpInstanceType(kScratchRegister, HEAP_NUMBER_TYPE);
+    __ j(equal, &call_builtin);
+    __ CmpInstanceType(kScratchRegister, BIG_INT_BASE_TYPE);
+    __ j(equal, &call_builtin);
+
+    // Everything else is true.
+    __ j(always, do_jump_if_true ? label : &end);
+
+    __ bind(&call_builtin);
+    {
+      SaveAccumulatorScope accumulator_scope(this);
+      CallBuiltin(Builtins::kToBoolean, reg);
+      __ Move(kScratchRegister, kInterpreterAccumulatorRegister);
+    }
+    __ CompareRoot(kScratchRegister, RootIndex::kTrueValue);
+    __ j(do_jump_if_true ? equal : not_equal, label);
+
+    __ bind(&end);
+  }
+
+  void BuildBinop(Builtins::Name builtin_name);
+  void BuildUnop(Builtins::Name builtin_name);
+  void BuildCompare(Builtins::Name builtin_name, Condition condition);
+  void BuildBinopWithSmi(Builtins::Name builtin_name, bool fast_path,
+                         bool check_overflow,
+                         std::function<void(Register, int32_t)> instruction);
+
+  void UpdateFeedback(Register feedback_vector, int operand_index, int bit,
+                      Label* done);
+
+  template <typename... Args>
+  void BuildCall(ConvertReceiverMode mode, Args... args);
+
+  const interpreter::BytecodeArrayAccessor& accessor() { return iterator_; }
+
+  Isolate* isolate_;
+  Handle<SharedFunctionInfo> shared_;
+  Handle<BytecodeArray> bytecode_;
+  BaselineAssembler masm_;
+  interpreter::BytecodeArrayIterator iterator_;
+
+  std::unordered_map<int, std::vector<Label>> forward_jumps_;
+  std::unordered_map<int, Label> back_jumps_;
+
+  // Epilogue stuff.
+  Label maybe_has_optimized_code_;
+  Label stack_check_;
+  Register optimization_state_ = Register::no_reg();
+  Register feedback_vector_ = Register::no_reg();
+};
+
+void BaselineCompiler::VisitLdaZero() {
+  __ Move(kInterpreterAccumulatorRegister, Smi::FromInt(0));
+}
+void BaselineCompiler::VisitLdaSmi() {
+  Smi constant = Smi::FromInt(accessor().GetImmediateOperand(0));
+  __ Move(kInterpreterAccumulatorRegister, constant);
+}
+void BaselineCompiler::VisitLdaUndefined() {
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+}
+void BaselineCompiler::VisitLdaNull() {
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kNullValue);
+}
+void BaselineCompiler::VisitLdaTheHole() {
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kTheHoleValue);
+}
+void BaselineCompiler::VisitLdaTrue() {
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kTrueValue);
+}
+void BaselineCompiler::VisitLdaFalse() {
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kFalseValue);
+}
+void BaselineCompiler::VisitLdaConstant() {
+  LoadConstant<HeapObject>(kInterpreterAccumulatorRegister, 0);
+}
+void BaselineCompiler::VisitLdaGlobal() {
+  LoadFeedbackVector(LoadGlobalWithVectorDescriptor::VectorRegister());
+  CallBuiltin(Builtins::kLoadGlobalIC,
+              Constant<Name>(0),                            // name
+              IndexAsSmi(1),                                // slot
+              LoadWithVectorDescriptor::VectorRegister());  // vector
+}
+void BaselineCompiler::VisitLdaGlobalInsideTypeof() {
+  LoadFeedbackVector(LoadGlobalWithVectorDescriptor::VectorRegister());
+  CallBuiltin(Builtins::kLoadGlobalICInsideTypeof,
+              Constant<Name>(0),                            // name
+              IndexAsSmi(1),                                // slot
+              LoadWithVectorDescriptor::VectorRegister());  // vector
+}
+void BaselineCompiler::VisitStaGlobal() {
+  LoadFeedbackVector(StoreGlobalWithVectorDescriptor::VectorRegister());
+  CallBuiltin(Builtins::kStoreGlobalIC,
+              Constant<Name>(0),                            // name
+              kInterpreterAccumulatorRegister,              // value
+              IndexAsSmi(1),                                // slot
+              LoadWithVectorDescriptor::VectorRegister());  // vector
+}
+void BaselineCompiler::VisitPushContext() {
+  LoadContext(kScratchRegister);
+  StoreContext(kInterpreterAccumulatorRegister);
+  StoreRegister(0, kScratchRegister);
+}
+void BaselineCompiler::VisitPopContext() {
+  LoadRegister(kScratchRegister, 0);
+  StoreContext(kScratchRegister);
+}
+void BaselineCompiler::VisitLdaContextSlot() {
+  LoadRegister(kScratchRegister, 0);
+  int depth = Uint(2);
+  for (; depth > 0; --depth) {
+    LoadTaggedPointerField(kScratchRegister, kScratchRegister,
+                           Context::kPreviousOffset);
+  }
+  LoadTaggedAnyField(kInterpreterAccumulatorRegister, kScratchRegister,
+                     Context::OffsetOfElementAt(Index(1)));
+}
+void BaselineCompiler::VisitLdaImmutableContextSlot() { VisitLdaContextSlot(); }
+void BaselineCompiler::VisitLdaCurrentContextSlot() {
+  LoadContext(kScratchRegister);
+  LoadTaggedAnyField(kInterpreterAccumulatorRegister, kScratchRegister,
+                     Context::OffsetOfElementAt(Index(0)));
+}
+void BaselineCompiler::VisitLdaImmutableCurrentContextSlot() {
+  VisitLdaCurrentContextSlot();
+}
+void BaselineCompiler::VisitStaContextSlot() {
+  LoadRegister(kScratchRegister, 0);
+  int depth = Uint(2);
+  for (; depth > 0; --depth) {
+    LoadTaggedPointerField(kScratchRegister, kScratchRegister,
+                           Context::kPreviousOffset);
+  }
+  StoreTaggedField(kScratchRegister,
+                   Context::OffsetOfElementAt(accessor().GetIndexOperand(1)),
+                   kInterpreterAccumulatorRegister);
+}
+void BaselineCompiler::VisitStaCurrentContextSlot() {
+  LoadContext(kScratchRegister);
+  StoreTaggedField(kScratchRegister, Context::OffsetOfElementAt(Index(0)),
+                   kInterpreterAccumulatorRegister);
+}
+void BaselineCompiler::VisitLdaLookupSlot() {
+  CallRuntime(Runtime::kLoadLookupSlot, Constant<Name>(0));
+}
+void BaselineCompiler::VisitLdaLookupContextSlot() {
+  // TODO(verwaest): Add fast path if there are no extensions.
+  VisitLdaLookupSlot();
+}
+void BaselineCompiler::VisitLdaLookupGlobalSlot() {
+  // TODO(verwaest): Add fast path if there are no extensions.
+  VisitLdaLookupSlot();
+}
+void BaselineCompiler::VisitLdaLookupSlotInsideTypeof() {
+  CallRuntime(Runtime::kLoadLookupSlotInsideTypeof, Constant<Name>(0));
+}
+void BaselineCompiler::VisitLdaLookupContextSlotInsideTypeof() {
+  // TODO(verwaest): Add fast path if there are no extensions.
+  VisitLdaLookupSlotInsideTypeof();
+}
+void BaselineCompiler::VisitLdaLookupGlobalSlotInsideTypeof() {
+  // TODO(verwaest): Add fast path if there are no extensions.
+  VisitLdaLookupSlotInsideTypeof();
+}
+void BaselineCompiler::VisitStaLookupSlot() {
+  uint32_t flags = Uint(1);
+  Runtime::FunctionId function_id;
+  if (flags & interpreter::StoreLookupSlotFlags::LanguageModeBit::kMask) {
+    function_id = Runtime::kStoreLookupSlot_Strict;
+  } else if (flags &
+             interpreter::StoreLookupSlotFlags::LookupHoistingModeBit::kMask) {
+    function_id = Runtime::kStoreLookupSlot_SloppyHoisting;
+  } else {
+    function_id = Runtime::kStoreLookupSlot_Sloppy;
+  }
+  CallRuntime(function_id, Constant<Name>(0),    // name
+              kInterpreterAccumulatorRegister);  // value
+}
+void BaselineCompiler::VisitLdar() {
+  LoadRegister(kInterpreterAccumulatorRegister, 0);
+}
+void BaselineCompiler::VisitStar() {
+  StoreRegister(0, kInterpreterAccumulatorRegister);
+}
+void BaselineCompiler::VisitMov() {
+  LoadRegister(kScratchRegister, 0);
+  StoreRegister(1, kScratchRegister);
+}
+void BaselineCompiler::VisitLdaNamedProperty() {
+  LoadFeedbackVector(LoadWithVectorDescriptor::VectorRegister());
+  CallBuiltin(Builtins::kLoadIC, RegisterOperand(0),        // object
+              Constant<Name>(1),                            // name
+              IndexAsSmi(2),                                // slot
+              LoadWithVectorDescriptor::VectorRegister());  // vector
+}
+void BaselineCompiler::VisitLdaNamedPropertyNoFeedback() {
+  CallBuiltin(Builtins::kGetProperty, RegisterOperand(0), Constant<Name>(1));
+}
+void BaselineCompiler::VisitLdaNamedPropertyFromSuper() {
+  LoadFeedbackVector(LoadWithVectorDescriptor::VectorRegister());
+
+  __ LoadPrototype(
+      LoadWithReceiverAndVectorDescriptor::LookupStartObjectRegister(),
+      kInterpreterAccumulatorRegister);
+
+  CallBuiltin(Builtins::kLoadSuperIC, RegisterOperand(0),  // object
+              LoadWithReceiverAndVectorDescriptor::
+                  LookupStartObjectRegister(),              // lookup start
+              Constant<Name>(1),                            // name
+              IndexAsSmi(2),                                // slot
+              LoadWithVectorDescriptor::VectorRegister());  // vector
+}
+void BaselineCompiler::VisitLdaKeyedProperty() {
+  LoadFeedbackVector(LoadWithVectorDescriptor::VectorRegister());
+  CallBuiltin(Builtins::kKeyedLoadIC, RegisterOperand(0),   // object
+              kInterpreterAccumulatorRegister,              // key
+              IndexAsSmi(1),                                // slot
+              LoadWithVectorDescriptor::VectorRegister());  // vector
+}
+void BaselineCompiler::VisitLdaModuleVariable() { __ Trap(); }
+void BaselineCompiler::VisitStaModuleVariable() { __ Trap(); }
+void BaselineCompiler::VisitStaNamedProperty() {
+  LoadFeedbackVector(StoreWithVectorDescriptor::VectorRegister());
+  CallBuiltin(Builtins::kStoreIC,
+              RegisterOperand(0),                            // object
+              Constant<Name>(1),                             // name
+              kInterpreterAccumulatorRegister,               // value
+              IndexAsSmi(2),                                 // slot
+              StoreWithVectorDescriptor::VectorRegister());  // vector
+}
+void BaselineCompiler::VisitStaNamedPropertyNoFeedback() {
+  CallRuntime(Runtime::kSetNamedProperty,
+              RegisterOperand(0),                // object
+              Constant<Name>(1),                 // name
+              kInterpreterAccumulatorRegister);  // value
+}
+void BaselineCompiler::VisitStaNamedOwnProperty() {
+  // TODO(ishell): Currently we use StoreOwnIC only for storing properties that
+  // already exist in the boilerplate therefore we can use StoreIC.
+  VisitStaNamedProperty();
+}
+void BaselineCompiler::VisitStaKeyedProperty() {
+  LoadFeedbackVector(StoreWithVectorDescriptor::VectorRegister());
+  CallBuiltin(Builtins::kKeyedStoreIC, RegisterOperand(0),   // object
+              RegisterOperand(1),                            // key
+              kInterpreterAccumulatorRegister,               // value
+              IndexAsSmi(2),                                 // slot
+              StoreWithVectorDescriptor::VectorRegister());  // vector
+}
+void BaselineCompiler::VisitStaInArrayLiteral() {
+  LoadFeedbackVector(StoreWithVectorDescriptor::VectorRegister());
+
+  CallBuiltin(Builtins::kStoreInArrayLiteralIC, RegisterOperand(0),  // object
+              RegisterOperand(1),                                    // name
+              kInterpreterAccumulatorRegister,                       // value
+              IndexAsSmi(2),                                         // slot
+              StoreWithVectorDescriptor::VectorRegister());          // vector
+}
+void BaselineCompiler::VisitStaDataPropertyInLiteral() {
+  CallRuntime(Runtime::kDefineDataPropertyInLiteral,
+              RegisterOperand(0),               // object
+              RegisterOperand(1),               // name
+              kInterpreterAccumulatorRegister,  // value
+              IntAsSmi(2),                      // flags
+              IndexAsSmi(3));                   // slot
+}
+void BaselineCompiler::VisitCollectTypeProfile() { __ Trap(); }
+void BaselineCompiler::BuildBinop(Builtins::Name builtin_name) {
+  Register feedback_vector =
+      Builtins::CallInterfaceDescriptorFor(builtin_name)
+          .GetRegisterParameter(
+              BinaryOp_WithFeedbackDescriptor::kMaybeFeedbackVector);
+  LoadFeedbackVector(feedback_vector);
+  CallBuiltin(builtin_name, RegisterOperand(0),  // lhs
+              kInterpreterAccumulatorRegister,   // rhs
+              IndexAsSmi(1),                     // slot
+              feedback_vector);                  // vector
+}
+void BaselineCompiler::VisitAdd() { BuildBinop(Builtins::kAdd_WithFeedback); }
+void BaselineCompiler::VisitSub() {
+  BuildBinop(Builtins::kSubtract_WithFeedback);
+}
+void BaselineCompiler::VisitMul() {
+  BuildBinop(Builtins::kMultiply_WithFeedback);
+}
+void BaselineCompiler::VisitDiv() {
+  BuildBinop(Builtins::kDivide_WithFeedback);
+}
+void BaselineCompiler::VisitMod() {
+  BuildBinop(Builtins::kModulus_WithFeedback);
+}
+void BaselineCompiler::VisitExp() {
+  BuildBinop(Builtins::kExponentiate_WithFeedback);
+}
+void BaselineCompiler::VisitBitwiseOr() {
+  BuildBinop(Builtins::kBitwiseOr_WithFeedback);
+}
+void BaselineCompiler::VisitBitwiseXor() {
+  BuildBinop(Builtins::kBitwiseXor_WithFeedback);
+}
+void BaselineCompiler::VisitBitwiseAnd() {
+  BuildBinop(Builtins::kBitwiseAnd_WithFeedback);
+}
+void BaselineCompiler::VisitShiftLeft() {
+  BuildBinop(Builtins::kShiftLeft_WithFeedback);
+}
+void BaselineCompiler::VisitShiftRight() {
+  BuildBinop(Builtins::kShiftRight_WithFeedback);
+}
+void BaselineCompiler::VisitShiftRightLogical() {
+  BuildBinop(Builtins::kShiftRightLogical_WithFeedback);
+}
+void BaselineCompiler::UpdateFeedback(Register feedback_vector,
+                                      int operand_index, int bit, Label* done) {
+  // TODO(verwaest): Directly test the right bit in the feedback.
+  int32_t slot_offset = FeedbackVector::kRawFeedbackSlotsOffset +
+                        Index(operand_index) * kTaggedSize;
+  LoadTaggedAnyField(kScratchRegister, feedback_vector, slot_offset);
+  __ SmiUntag(kScratchRegister);
+  __ testb(kScratchRegister, Immediate(bit));
+  __ j(not_zero, done);
+  __ orq(kScratchRegister, Immediate(bit));
+  __ SmiTag(kScratchRegister);
+  StoreTaggedField(feedback_vector, slot_offset, kScratchRegister);
+  __ jmp(done);
+}
+
+void BaselineCompiler::BuildBinopWithSmi(
+    Builtins::Name builtin_name, bool fast_path, bool check_overflow,
+    std::function<void(Register, int32_t)> instruction) {
+  Register feedback_vector =
+      Builtins::CallInterfaceDescriptorFor(builtin_name)
+          .GetRegisterParameter(
+              BinaryOp_WithFeedbackDescriptor::kMaybeFeedbackVector);
+  LoadFeedbackVector(feedback_vector);
+  // Fast path for Smi.
+  Label builtin, done;
+  if (fast_path) {
+    __ JumpIfNotSmi(kInterpreterAccumulatorRegister, &builtin);
+
+    instruction(kInterpreterAccumulatorRegister, Int(0));
+    if (check_overflow) {
+      __ j(overflow, &builtin);
+    }
+
+    UpdateFeedback(feedback_vector, 1, BinaryOperationFeedback::kSignedSmall,
+                   &done);
+
+    __ bind(&builtin);
+  }
+  CallBuiltin(builtin_name, kInterpreterAccumulatorRegister,  // lhs
+              IntAsSmi(0),                                    // rhs
+              IndexAsSmi(1),                                  // slot
+              feedback_vector);                               // vector
+  if (fast_path) {
+    __ bind(&done);
+  }
+}
+void BaselineCompiler::VisitAddSmi() {
+  BuildBinopWithSmi(Builtins::kAdd_WithFeedback, true, true,
+                    [&](Register lhs, int32_t rhs) { __ AddSmi(lhs, rhs); });
+}
+void BaselineCompiler::VisitSubSmi() {
+  BuildBinopWithSmi(Builtins::kSubtract_WithFeedback, true, true,
+                    [&](Register lhs, int32_t rhs) { __ SubSmi(lhs, rhs); });
+}
+void BaselineCompiler::VisitMulSmi() {
+  BuildBinopWithSmi(Builtins::kMultiply_WithFeedback, false, false,
+                    [&](Register lhs, int32_t rhs) {});
+}
+void BaselineCompiler::VisitDivSmi() {
+  BuildBinopWithSmi(Builtins::kDivide_WithFeedback, false, false,
+                    [&](Register lhs, int32_t rhs) {});
+}
+void BaselineCompiler::VisitModSmi() {
+  BuildBinopWithSmi(Builtins::kModulus_WithFeedback, false, false,
+                    [&](Register lhs, int32_t rhs) {});
+}
+void BaselineCompiler::VisitExpSmi() {
+  BuildBinopWithSmi(Builtins::kExponentiate_WithFeedback, false, false,
+                    [&](Register lhs, int32_t rhs) {});
+}
+void BaselineCompiler::VisitBitwiseOrSmi() {
+  BuildBinopWithSmi(
+      Builtins::kBitwiseOr_WithFeedback, false, true,
+      [&](Register lhs, int32_t rhs) { __ BitwiseOrSmi(lhs, rhs); });
+}
+void BaselineCompiler::VisitBitwiseXorSmi() {
+  BuildBinopWithSmi(
+      Builtins::kBitwiseXor_WithFeedback, false, true,
+      [&](Register lhs, int32_t rhs) { __ BitwiseXorSmi(lhs, rhs); });
+}
+void BaselineCompiler::VisitBitwiseAndSmi() {
+  BuildBinopWithSmi(
+      Builtins::kBitwiseAnd_WithFeedback, false, true,
+      [&](Register lhs, int32_t rhs) { __ BitwiseAndSmi(lhs, rhs); });
+}
+void BaselineCompiler::VisitShiftLeftSmi() {
+  BuildBinopWithSmi(
+      Builtins::kShiftLeft_WithFeedback, false, true,
+      [&](Register lhs, int32_t rhs) { __ ShiftLeftSmi(lhs, rhs); });
+}
+void BaselineCompiler::VisitShiftRightSmi() {
+  BuildBinopWithSmi(
+      Builtins::kShiftRight_WithFeedback, false, true,
+      [&](Register lhs, int32_t rhs) { __ ShiftRightSmi(lhs, rhs); });
+}
+void BaselineCompiler::VisitShiftRightLogicalSmi() {
+  BuildBinopWithSmi(
+      Builtins::kShiftRightLogical_WithFeedback, false, true,
+      [&](Register lhs, int32_t rhs) { __ ShiftRightLogicalSmi(lhs, rhs); });
+}
+void BaselineCompiler::BuildUnop(Builtins::Name builtin_name) {
+  Register feedback_vector =
+      Builtins::CallInterfaceDescriptorFor(builtin_name)
+          .GetRegisterParameter(
+              UnaryOp_WithFeedbackDescriptor::kMaybeFeedbackVector);
+  LoadFeedbackVector(feedback_vector);
+  CallBuiltin(builtin_name,
+              kInterpreterAccumulatorRegister,  // value
+              IndexAsSmi(0),                    // slot
+              feedback_vector);                 // vector
+}
+void BaselineCompiler::VisitInc() {
+  BuildUnop(Builtins::kIncrement_WithFeedback);
+}
+void BaselineCompiler::VisitDec() {
+  BuildUnop(Builtins::kDecrement_WithFeedback);
+}
+void BaselineCompiler::VisitNegate() {
+  BuildUnop(Builtins::kNegate_WithFeedback);
+}
+void BaselineCompiler::VisitBitwiseNot() {
+  BuildUnop(Builtins::kBitwiseNot_WithFeedback);
+}
+void BaselineCompiler::VisitToBooleanLogicalNot() {
+  CallBuiltin(Builtins::kToBooleanLogicalNotHandler,
+              kInterpreterAccumulatorRegister);  // value
+}
+void BaselineCompiler::VisitLogicalNot() {
+  Label done, set_false;
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kTrueValue);
+  __ j(equal, &set_false, Label::kNear);
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kFalseValue);
+  __ jmp(&done);
+  __ bind(&set_false);
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kTrueValue);
+  __ bind(&done);
+}
+void BaselineCompiler::VisitTypeOf() { __ Trap(); }
+void BaselineCompiler::VisitDeletePropertyStrict() {
+  CallBuiltin(Builtins::kDeleteProperty, RegisterOperand(0),
+              kInterpreterAccumulatorRegister,
+              Smi::FromEnum(LanguageMode::kStrict));
+}
+void BaselineCompiler::VisitDeletePropertySloppy() {
+  CallBuiltin(Builtins::kDeleteProperty, RegisterOperand(0),
+              kInterpreterAccumulatorRegister,
+              Smi::FromEnum(LanguageMode::kSloppy));
+}
+void BaselineCompiler::VisitGetSuperConstructor() {
+  __ LoadPrototype(kScratchRegister, kInterpreterAccumulatorRegister);
+  StoreRegister(0, kScratchRegister);
+}
+template <typename... Args>
+void BaselineCompiler::BuildCall(ConvertReceiverMode mode, Args... args) {
+  Builtins::Name builtin;
+  bool push_receiver = false;
+  switch (mode) {
+    case ConvertReceiverMode::kNullOrUndefined:
+      builtin = Builtins::kCall_ReceiverIsNullOrUndefined_WithFeedback;
+      push_receiver = true;
+      break;
+    default:
+      // TODO: initializing builtin to shutup warning
+      builtin = Builtins::kCall_ReceiverIsNullOrUndefined_WithFeedback;
+      __ Trap();
+  }
+  CallInterfaceDescriptor descriptor =
+      Builtins::CallInterfaceDescriptorFor(builtin);
+  Register feedback_vector = descriptor.GetRegisterParameter(
+      CallTrampoline_WithFeedbackDescriptor::kMaybeFeedbackVector);
+  LoadFeedbackVector(feedback_vector);
+  int arg_count = sizeof...(args);
+  MoveArgumentsForDescriptor(&masm_, descriptor,
+                             RegisterOperand(0),    // kFunction
+                             Immediate(arg_count),  // kActualArgumentsCount
+                             Immediate(Index(arg_count + 1)),  // kSlot
+                             feedback_vector,  // kMaybeFeedbackVector
+                             args...);         // Arguments
+  if (descriptor.HasContextParameter()) {
+    LoadContext(descriptor.ContextRegister());
+  }
+  if (push_receiver) {
+    __ PushRoot(RootIndex::kUndefinedValue);
+  }
+  __ CallBuiltin(builtin);
+}
+void BaselineCompiler::VisitCallAnyReceiver() { __ Trap(); }
+void BaselineCompiler::VisitCallProperty() { __ Trap(); }
+void BaselineCompiler::VisitCallProperty0() { __ Trap(); }
+void BaselineCompiler::VisitCallProperty1() { __ Trap(); }
+void BaselineCompiler::VisitCallProperty2() { __ Trap(); }
+void BaselineCompiler::VisitCallUndefinedReceiver() { __ Trap(); }
+void BaselineCompiler::VisitCallUndefinedReceiver0() {
+  BuildCall(ConvertReceiverMode::kNullOrUndefined);
+}
+void BaselineCompiler::VisitCallUndefinedReceiver1() {
+  BuildCall(ConvertReceiverMode::kNullOrUndefined, RegisterOperand(1));
+}
+void BaselineCompiler::VisitCallUndefinedReceiver2() {
+  BuildCall(ConvertReceiverMode::kNullOrUndefined, RegisterOperand(1),
+            RegisterOperand(2));
+}
+void BaselineCompiler::VisitCallNoFeedback() { __ Trap(); }
+void BaselineCompiler::VisitCallWithSpread() { __ Trap(); }
+void BaselineCompiler::VisitCallRuntime() { __ Trap(); }
+void BaselineCompiler::VisitCallRuntimeForPair() { __ Trap(); }
+void BaselineCompiler::VisitCallJSRuntime() { __ Trap(); }
+void BaselineCompiler::VisitInvokeIntrinsic() { __ Trap(); }
+void BaselineCompiler::VisitConstruct() { __ Trap(); }
+void BaselineCompiler::VisitConstructWithSpread() { __ Trap(); }
+void BaselineCompiler::BuildCompare(Builtins::Name builtin_name,
+                                    Condition condition) {
+  Register feedback_vector =
+      Builtins::CallInterfaceDescriptorFor(builtin_name)
+          .GetRegisterParameter(
+              Compare_WithFeedbackDescriptor::kMaybeFeedbackVector);
+  LoadFeedbackVector(feedback_vector);
+
+  // Fast path for Smi.
+  Label builtin, done;
+  __ movq(kScratchRegister, RegisterOperand(0));
+  __ movq(rcx, kScratchRegister);
+  __ orq(rcx, kInterpreterAccumulatorRegister);
+  __ JumpIfNotSmi(rcx, &builtin);
+
+  __ cmpq(kScratchRegister, kInterpreterAccumulatorRegister);
+  SelectBooleanConstant(condition, kInterpreterAccumulatorRegister);
+
+  UpdateFeedback(feedback_vector, 1, CompareOperationFeedback::kSignedSmall,
+                 &done);
+
+  __ bind(&builtin);
+  CallBuiltin(builtin_name, kScratchRegister,   // lhs
+              kInterpreterAccumulatorRegister,  // rhs
+              IndexAsSmi(1),                    // slot
+              feedback_vector);                 // vector
+
+  __ bind(&done);
+}
+void BaselineCompiler::VisitTestEqual() {
+  BuildCompare(Builtins::kEqual_WithFeedback, equal);
+}
+void BaselineCompiler::VisitTestEqualStrict() {
+  BuildCompare(Builtins::kStrictEqual_WithFeedback, equal);
+}
+void BaselineCompiler::VisitTestLessThan() {
+  BuildCompare(Builtins::kLessThan_WithFeedback, less);
+}
+void BaselineCompiler::VisitTestGreaterThan() {
+  BuildCompare(Builtins::kGreaterThan_WithFeedback, greater);
+}
+void BaselineCompiler::VisitTestLessThanOrEqual() {
+  BuildCompare(Builtins::kLessThanOrEqual_WithFeedback, less_equal);
+}
+void BaselineCompiler::VisitTestGreaterThanOrEqual() {
+  BuildCompare(Builtins::kGreaterThanOrEqual_WithFeedback, greater_equal);
+}
+void BaselineCompiler::VisitTestReferenceEqual() {}
+void BaselineCompiler::VisitTestInstanceOf() {}
+void BaselineCompiler::VisitTestIn() {}
+void BaselineCompiler::VisitTestUndetectable() {
+  Label done, set_false;
+  __ JumpIfSmi(kInterpreterAccumulatorRegister, &set_false);
+
+  __ LoadMap(kScratchRegister, kInterpreterAccumulatorRegister);
+
+  __ testb(FieldOperand(kScratchRegister, Map::kBitFieldOffset),
+           Immediate(Map::Bits1::IsUndetectableBit::kMask));
+
+  __ j(zero, &set_false);
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kTrueValue);
+  __ jmp(&done);
+
+  __ bind(&set_false);
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kFalseValue);
+  __ bind(&done);
+}
+void BaselineCompiler::VisitTestNull() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kNullValue);
+  SelectBooleanConstant(equal, kInterpreterAccumulatorRegister);
+}
+void BaselineCompiler::VisitTestUndefined() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+  SelectBooleanConstant(equal, kInterpreterAccumulatorRegister);
+}
+void BaselineCompiler::VisitTestTypeOf() { __ Trap(); }
+void BaselineCompiler::VisitToName() {
+  SaveAccumulatorScope save_accumulator(this);
+  CallBuiltin(Builtins::kToName, kInterpreterAccumulatorRegister);
+  StoreRegister(0, kInterpreterAccumulatorRegister);
+}
+void BaselineCompiler::VisitToNumber() { __ Trap(); }
+void BaselineCompiler::VisitToNumeric() { __ Trap(); }
+void BaselineCompiler::VisitToObject() {
+  SaveAccumulatorScope save_accumulator(this);
+  CallBuiltin(Builtins::kToObject, kInterpreterAccumulatorRegister);
+  StoreRegister(0, kInterpreterAccumulatorRegister);
+}
+void BaselineCompiler::VisitToString() {
+  // TODO(verwaest): Add fast inline path if it's already a string.
+  CallBuiltin(Builtins::kToString, kInterpreterAccumulatorRegister);
+  StoreRegister(0, kInterpreterAccumulatorRegister);
+}
+void BaselineCompiler::VisitCreateRegExpLiteral() { __ Trap(); }
+void BaselineCompiler::VisitCreateArrayLiteral() {
+  uint32_t flags = Flag(2);
+  Register feedback_vector = kScratchRegister;
+  LoadFeedbackVector(feedback_vector);
+  if (flags &
+      interpreter::CreateArrayLiteralFlags::FastCloneSupportedBit::kMask) {
+    CallBuiltin(Builtins::kCreateShallowArrayLiteral, feedback_vector,
+                IndexAsSmi(1), Constant<HeapObject>(0));
+  } else {
+    int32_t flags_raw = static_cast<int32_t>(
+        interpreter::CreateArrayLiteralFlags::FlagsBits::decode(flags));
+    CallRuntime(Runtime::kCreateArrayLiteral, feedback_vector, IndexAsSmi(1),
+                Constant<HeapObject>(0), Smi::FromInt(flags_raw));
+  }
+}
+void BaselineCompiler::VisitCreateArrayFromIterable() { __ Trap(); }
+void BaselineCompiler::VisitCreateEmptyArrayLiteral() {
+  Register feedback_vector = kScratchRegister;
+  LoadFeedbackVector(feedback_vector);
+  CallBuiltin(Builtins::kCreateEmptyArrayLiteral, feedback_vector,
+              IndexAsSmi(0));
+}
+void BaselineCompiler::VisitCreateObjectLiteral() {
+  uint32_t flags = Flag(2);
+  int32_t flags_raw = static_cast<int32_t>(
+      interpreter::CreateObjectLiteralFlags::FlagsBits::decode(flags));
+  Register feedback_vector = kScratchRegister;
+  LoadFeedbackVector(feedback_vector);
+  if (flags &
+      interpreter::CreateObjectLiteralFlags::FastCloneSupportedBit::kMask) {
+    CallBuiltin(Builtins::kCreateShallowObjectLiteral, feedback_vector,
+                IndexAsSmi(1), Constant<ObjectBoilerplateDescription>(0),
+                Smi::FromInt(flags_raw));
+  } else {
+    CallRuntime(Runtime::kCreateObjectLiteral, feedback_vector, IndexAsSmi(1),
+                Constant<ObjectBoilerplateDescription>(0),
+                Smi::FromInt(flags_raw));
+  }
+}
+void BaselineCompiler::VisitCreateEmptyObjectLiteral() {
+  CallBuiltin(Builtins::kCreateEmptyLiteralObject);
+}
+void BaselineCompiler::VisitCloneObject() {
+  // TODO(verwaest): Directly use the right register if possible.
+  LoadFeedbackVector(kScratchRegister);
+  uint32_t flags = Flag(1);
+  int32_t raw_flags =
+      interpreter::CreateObjectLiteralFlags::FlagsBits::decode(flags);
+  CallBuiltin(Builtins::kCloneObjectIC, RegisterOperand(0),  // source
+              Smi::FromInt(raw_flags),                       // flags
+              IndexAsSmi(2),                                 // slot
+              kScratchRegister);                             // feedback_vector
+}
+void BaselineCompiler::VisitGetTemplateObject() { __ Trap(); }
+void BaselineCompiler::VisitCreateClosure() {
+  // TODO(verwaest): Use the feedback cell register expected by the builtin.
+  LoadFunction(kScratchRegister);
+  LoadClosureFeedbackArray(kScratchRegister, kScratchRegister);
+  LoadFixedArrayElement(kScratchRegister, kScratchRegister, Index(1));
+  uint32_t flags = Flag(2);
+  if (flags & interpreter::CreateClosureFlags::FastNewClosureBit::kMask) {
+    CallBuiltin(Builtins::kFastNewClosure, Constant<SharedFunctionInfo>(0),
+                kScratchRegister);
+  } else {
+    Runtime::FunctionId function_id =
+        (flags & interpreter::CreateClosureFlags::PretenuredBit::kMask)
+            ? Runtime::kNewClosure_Tenured
+            : Runtime::kNewClosure;
+    CallRuntime(function_id, Constant<SharedFunctionInfo>(0), kScratchRegister);
+  }
+}
+void BaselineCompiler::VisitCreateBlockContext() {
+  CallRuntime(Runtime::kPushBlockContext, Constant<ScopeInfo>(0));
+}
+void BaselineCompiler::VisitCreateCatchContext() {
+  CallRuntime(Runtime::kPushCatchContext, RegisterOperand(0),  // exception
+              Constant<ScopeInfo>(1));
+}
+void BaselineCompiler::VisitCreateFunctionContext() {
+  Handle<ScopeInfo> info = Constant<ScopeInfo>(0);
+  uint32_t slot_count = Uint(1);
+  if (slot_count < static_cast<uint32_t>(
+                       ConstructorBuiltins::MaximumFunctionContextSlots())) {
+    DCHECK_EQ(info->scope_type(), ScopeType::FUNCTION_SCOPE);
+    CallBuiltin(Builtins::kFastNewFunctionContextFunction, info,
+                Immediate(slot_count));
+  } else {
+    CallRuntime(Runtime::kNewFunctionContext, Constant<ScopeInfo>(0));
+  }
+}
+void BaselineCompiler::VisitCreateEvalContext() {
+  Handle<ScopeInfo> info = Constant<ScopeInfo>(0);
+  uint32_t slot_count = Uint(1);
+  if (slot_count < static_cast<uint32_t>(
+                       ConstructorBuiltins::MaximumFunctionContextSlots())) {
+    DCHECK_EQ(info->scope_type(), ScopeType::EVAL_SCOPE);
+    CallBuiltin(Builtins::kFastNewFunctionContextEval, info,
+                Immediate(slot_count));
+  } else {
+    CallRuntime(Runtime::kNewFunctionContext, Constant<ScopeInfo>(0));
+  }
+}
+void BaselineCompiler::VisitCreateWithContext() {
+  CallRuntime(Runtime::kPushWithContext, RegisterOperand(0),  // object
+              Constant<ScopeInfo>(1));
+}
+void BaselineCompiler::VisitCreateMappedArguments() { __ Trap(); }
+void BaselineCompiler::VisitCreateUnmappedArguments() { __ Trap(); }
+void BaselineCompiler::VisitCreateRestParameter() { __ Trap(); }
+void BaselineCompiler::VisitJumpLoop() {
+  DCHECK(back_jumps_.count(accessor().GetJumpTargetOffset()) == 1);
+  __ j(always, &back_jumps_[accessor().GetJumpTargetOffset()]);
+}
+void BaselineCompiler::VisitJump() {
+  __ j(always, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpConstant() {
+  __ j(always, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfNullConstant() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kNullValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfNotNullConstant() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kNullValue);
+  __ j(not_equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfUndefinedConstant() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfNotUndefinedConstant() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+  __ j(not_equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfUndefinedOrNullConstant() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kNullValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfTrueConstant() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kTrueValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfFalseConstant() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kFalseValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfJSReceiverConstant() {
+  Label is_smi;
+  __ JumpIfSmi(kInterpreterAccumulatorRegister, &is_smi, Label::kNear);
+
+  __ CmpInstanceType(kInterpreterAccumulatorRegister, FIRST_JS_RECEIVER_TYPE);
+  __ j(greater_equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+
+  __ bind(&is_smi);
+}
+void BaselineCompiler::VisitJumpIfToBooleanTrueConstant() {
+  JumpIfToBoolean(true, kInterpreterAccumulatorRegister,
+                  BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfToBooleanFalseConstant() {
+  JumpIfToBoolean(false, kInterpreterAccumulatorRegister,
+                  BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfToBooleanTrue() {
+  JumpIfToBoolean(true, kInterpreterAccumulatorRegister,
+                  BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfToBooleanFalse() {
+  JumpIfToBoolean(false, kInterpreterAccumulatorRegister,
+                  BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfTrue() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kTrueValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfFalse() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kFalseValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfNull() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kNullValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfNotNull() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kNullValue);
+  __ j(not_equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfUndefined() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfNotUndefined() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+  __ j(not_equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfUndefinedOrNull() {
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kNullValue);
+  __ j(equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+}
+void BaselineCompiler::VisitJumpIfJSReceiver() {
+  Label is_smi;
+  __ JumpIfSmi(kInterpreterAccumulatorRegister, &is_smi, Label::kNear);
+
+  __ CmpInstanceType(kInterpreterAccumulatorRegister, FIRST_JS_RECEIVER_TYPE);
+  __ j(greater_equal, BuildJumpLabel(accessor().GetJumpTargetOffset()));
+
+  __ bind(&is_smi);
+}
+void BaselineCompiler::VisitSwitchOnSmiNoFeedback() { __ Trap(); }
+void BaselineCompiler::VisitForInEnumerate() { __ Trap(); }
+void BaselineCompiler::VisitForInPrepare() { __ Trap(); }
+void BaselineCompiler::VisitForInContinue() { __ Trap(); }
+void BaselineCompiler::VisitForInNext() { __ Trap(); }
+void BaselineCompiler::VisitForInStep() { __ Trap(); }
+void BaselineCompiler::VisitSetPendingMessage() { __ Trap(); }
+void BaselineCompiler::VisitThrow() { __ Trap(); }
+void BaselineCompiler::VisitReThrow() { __ Trap(); }
+void BaselineCompiler::VisitReturn() {
+  Register argc_reg = rcx;
+
+  // Get the actual argument count.
+  __ movq(argc_reg, Operand(rbp, StandardFrameConstants::kArgCOffset));
+
+  __ movq(rsp, rbp);
+  __ popq(rbp);
+
+  int parameter_count = shared_->GetBytecodeArray().parameter_count();
+
+  // We must pop all arguments from the stack (including the receiver). This
+  // number of arguments is given by max(1 + argc_reg, parameter_count).
+  int parameter_count_without_receiver =
+      parameter_count - 1;  // Exclude the receiver to simplify the
+                            // computation. We'll account for it at the end.
+  Label mismatch_return;
+  Register scratch_reg = r10;
+  DCHECK_NE(argc_reg, scratch_reg);
+  __ cmpq(argc_reg, Immediate(parameter_count_without_receiver));
+  __ j(greater, &mismatch_return, Label::kNear);
+  __ Ret(parameter_count * kSystemPointerSize, scratch_reg);
+  __ bind(&mismatch_return);
+  __ PopReturnAddressTo(scratch_reg);
+  __ leaq(rsp, Operand(rsp, argc_reg, times_system_pointer_size,
+                       kSystemPointerSize));  // Also pop the receiver.
+  // We use a return instead of a jump for better return address prediction.
+  __ PushReturnAddressFrom(scratch_reg);
+  __ Ret();
+}
+void BaselineCompiler::VisitThrowReferenceErrorIfHole() {
+  Label done;
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kTheHoleValue);
+  __ j(not_equal, &done);
+  CallRuntime(Runtime::kThrowAccessedUninitializedVariable, Constant<Name>(0));
+  // Unreachable.
+  __ Trap();
+  __ bind(&done);
+}
+void BaselineCompiler::VisitThrowSuperNotCalledIfHole() {
+  Label done;
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kTheHoleValue);
+  __ j(not_equal, &done);
+  CallRuntime(Runtime::kThrowSuperNotCalled);
+  // Unreachable.
+  __ Trap();
+  __ bind(&done);
+}
+void BaselineCompiler::VisitThrowSuperAlreadyCalledIfNotHole() {
+  Label done;
+  __ CompareRoot(kInterpreterAccumulatorRegister, RootIndex::kTheHoleValue);
+  __ j(equal, &done);
+  CallRuntime(Runtime::kThrowSuperAlreadyCalledError);
+  // Unreachable.
+  __ Trap();
+  __ bind(&done);
+}
+void BaselineCompiler::VisitThrowIfNotSuperConstructor() { __ Trap(); }
+void BaselineCompiler::VisitSwitchOnGeneratorState() { __ Trap(); }
+void BaselineCompiler::VisitSuspendGenerator() { __ Trap(); }
+void BaselineCompiler::VisitResumeGenerator() { __ Trap(); }
+void BaselineCompiler::VisitGetIterator() { __ Trap(); }
+void BaselineCompiler::VisitDebugger() { __ Trap(); }
+void BaselineCompiler::VisitIncBlockCounter() {
+  CallRuntime(Runtime::kInlineIncBlockCounter, __ FunctionOperand(),
+              Constant<HeapObject>(0));  // coverage array slot
+}
+void BaselineCompiler::VisitAbort() { __ Trap(); }
+void BaselineCompiler::VisitWide() {
+  // Consumed by the BytecodeArrayIterator.
+  UNREACHABLE();
+}
+void BaselineCompiler::VisitExtraWide() {
+  // Consumed by the BytecodeArrayIterator.
+  UNREACHABLE();
+}
+void BaselineCompiler::VisitIllegal() {
+  // Not emitted in valid bytecode.
+  UNREACHABLE();
+}
+#define DEBUG_BREAK(Name, ...) \
+  void BaselineCompiler::Visit##Name() { UNREACHABLE(); }
+DEBUG_BREAK_BYTECODE_LIST(DEBUG_BREAK)
+#undef DEBUG_BREAK
+
+Handle<Code> CompileWithBaseline(Isolate* isolate,
+                                 Handle<SharedFunctionInfo> shared) {
+  BaselineCompiler compiler(isolate, shared);
+
+  compiler.Prologue();
+  compiler.VisitBytecodes();
+  compiler.Epilogue();
+
+  return compiler.Build(isolate);
+}
+
+}  // namespace internal
+}  // namespace v8
