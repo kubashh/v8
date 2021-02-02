@@ -22,6 +22,8 @@ void BytecodeArrayIterator::Advance() {
   SetOffset(current_offset() + current_bytecode_size());
 }
 
+void BytecodeArrayIterator::Reset() { SetOffset(0); }
+
 bool BytecodeArrayIterator::done() const {
   return current_offset() >= bytecode_length();
 }
