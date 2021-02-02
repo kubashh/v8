@@ -1146,6 +1146,112 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
   __ Bind(&end);
 }
 
+// static
+void Builtins::Generate_BaselinePrologue(MacroAssembler* masm) {
+  auto descriptor =
+      Builtins::CallInterfaceDescriptorFor(Builtins::kBaselinePrologue);
+  Register closure =
+      descriptor.GetRegisterParameter(BaselinePrologueDescriptor::kClosure);
+  // Load the feedback vector from the closure.
+  Register feedback_vector = rbx;
+  __ LoadTaggedPointerField(
+      feedback_vector, FieldOperand(closure, JSFunction::kFeedbackCellOffset));
+  __ LoadTaggedPointerField(feedback_vector,
+                            FieldOperand(feedback_vector, Cell::kValueOffset));
+  if (__ emit_debug_code()) {
+    __ CmpObjectType(feedback_vector, FEEDBACK_VECTOR_TYPE, kScratchRegister);
+    __ Assert(equal, AbortReason::kExpectedFeedbackVector);
+  }
+
+  __ RecordComment("[ Check optimization state");
+
+  // Read off the optimization state in the feedback vector.
+  Register optimization_state = w7;
+  __ Ldr(optimization_state,
+          FieldMemOperand(feedback_vector, FeedbackVector::kFlagsOffset));
+
+  // Check if there is optimized code or a optimization marker that needs to
+  // be processed.
+  Label has_optimized_code_or_marker;
+  __ TestAndBranchIfAnySet(
+      optimization_state,
+      FeedbackVector::kHasOptimizedCodeOrCompileOptimizedMarkerMask,
+      &has_optimized_code_or_marker);
+
+  Label not_optimized;
+  __ bind(&not_optimized;
+
+  // Increment invocation count for the function.
+  __ incl(
+      FieldOperand(feedback_vector, FeedbackVector::kInvocationCountOffset));
+
+  {
+    __ RecordComment("[ Frame Setup");
+    __ Push(descriptor.GetRegisterParameter(
+        BaselinePrologueDescriptor::kCalleeContext));  // Callee's context.
+    Register callee_js_function =
+        descriptor.GetRegisterParameter(BaselinePrologueDescriptor::kClosure);
+    DCHECK_EQ(callee_js_function, kJavaScriptCallTargetRegister);
+    DCHECK_EQ(callee_js_function, kJSFunctionRegister);
+    __ Push(callee_js_function);  // Callee's JS function.
+    __ Push(descriptor.GetRegisterParameter(
+        BaselinePrologueDescriptor::
+            kJavaScriptCallArgCount));  // Actual argument count.
+
+    // We'll use the bytecode for both code age/OSR resetting, and pushing onto
+    // the frame, so load it into a register.
+    Register bytecodeArray = descriptor.GetRegisterParameter(
+        BaselinePrologueDescriptor::kInterpreterBytecodeArray);
+
+    // Reset code age and the OSR arming. The OSR field and BytecodeAgeOffset
+    // are 8-bit fields next to each other, so we could just optimize by writing
+    // a 16-bit. These static asserts guard our assumption is valid.
+    STATIC_ASSERT(BytecodeArray::kBytecodeAgeOffset ==
+                  BytecodeArray::kOsrNestingLevelOffset + kCharSize);
+    STATIC_ASSERT(BytecodeArray::kNoAgeBytecodeAge == 0);
+    __ movw(FieldOperand(bytecodeArray, BytecodeArray::kOsrNestingLevelOffset),
+            Immediate(0));
+
+    __ Push(bytecodeArray);
+
+    // Horrible hack: This should be the bytecode offset, but we calculate that
+    // from the PC, so we cache the feedback vector in there instead.
+    __ Push(feedback_vector);
+    __ RecordComment("]");
+  }
+  // Reset the stack to get to return address.
+  __ addq(rsp, Immediate(kSystemPointerSize * 5));
+  // Do "fast" return to caller pushed pc.
+  __ Ret();
+
+  __ bind(&has_optimized_code_or_marker);
+  {
+    // TODO: Overwrite return address instead.
+    __ PopReturnAddressTo(kScratchRegister);
+    Register optimization_state = rcx;
+    Label maybe_has_optimized_code;
+    __ testl(
+        optimization_state,
+        Immediate(
+            FeedbackVector::kHasCompileOptimizedOrLogFirstExecutionMarker));
+    __ j(zero, &maybe_has_optimized_code);
+
+    Register optimization_marker = optimization_state;
+    __ DecodeField<FeedbackVector::OptimizationMarkerBits>(optimization_marker);
+    MaybeOptimizeCode(masm, feedback_vector, optimization_marker);
+
+    __ bind(&maybe_has_optimized_code);
+    Register optimized_code_entry = optimization_state;
+    __ LoadAnyTaggedField(
+        optimized_code_entry,
+        FieldOperand(feedback_vector,
+                     FeedbackVector::kMaybeOptimizedCodeOffset));
+    TailCallOptimizedCodeSlot(masm, optimized_code_entry, r11, r15);
+    __ Trap();
+  }
+  __ RecordComment("]");
+}
+
 // Generate code for entering a JS function with the interpreter.
 // On entry to the function the receiver and arguments have been pushed on the
 // stack left to right.
