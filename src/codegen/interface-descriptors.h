@@ -61,6 +61,7 @@ namespace internal {
   V(DynamicCheckMaps)                    \
   V(EphemeronKeyBarrier)                 \
   V(FastNewObject)                       \
+  V(ForInPrepare)                        \
   V(FrameDropperTrampoline)              \
   V(GetIteratorStackParameter)           \
   V(GetProperty)                         \
@@ -1373,6 +1374,18 @@ class InterpreterCEntry2Descriptor : public CallInterfaceDescriptor {
                                     MachineType::Pointer(),  // kFirstArgument
                                     MachineType::Pointer())  // kFunctionEntry
   DECLARE_DESCRIPTOR(InterpreterCEntry2Descriptor, CallInterfaceDescriptor)
+};
+
+class ForInPrepareDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_RESULT_AND_PARAMETERS(2, kEnumerator, kVectorIndex, kFeedbackVector)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(
+      MachineType::AnyTagged(),  // result 1 (cache array)
+      MachineType::AnyTagged(),  // result 2 (cache length)
+      MachineType::AnyTagged(),  // kEnumerator
+      MachineType::AnyTagged(),  // kVectorIndex
+      MachineType::AnyTagged())  // kFeedbackVector
+  DECLARE_DESCRIPTOR(ForInPrepareDescriptor, CallInterfaceDescriptor)
 };
 
 class ResumeGeneratorDescriptor final : public CallInterfaceDescriptor {

@@ -687,6 +687,21 @@ TF_BUILTIN(ForInEnumerate, CodeStubAssembler) {
   TailCallRuntime(Runtime::kForInEnumerate, context, receiver);
 }
 
+TF_BUILTIN(ForInPrepare, CodeStubAssembler) {
+  // The {enumerator} is either a Map or a FixedArray.
+  auto enumerator = Parameter<HeapObject>(Descriptor::kEnumerator);
+  auto index = Parameter<Smi>(Descriptor::kVectorIndex);
+  auto maybe_feedback_vector =
+      Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
+  TNode<UintPtrT> vector_index = UncheckedCast<UintPtrT>(SmiToIntPtr(index));
+
+  TNode<FixedArray> cache_array;
+  TNode<Smi> cache_length;
+  ForInPrepare(enumerator, vector_index, maybe_feedback_vector, &cache_array,
+               &cache_length);
+  Return(cache_array, cache_length);
+}
+
 TF_BUILTIN(ForInFilter, CodeStubAssembler) {
   auto key = Parameter<String>(Descriptor::kKey);
   auto object = Parameter<HeapObject>(Descriptor::kObject);
