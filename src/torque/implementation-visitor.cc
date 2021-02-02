@@ -1134,11 +1134,11 @@ const Type* ImplementationVisitor::Visit(BlockStatement* block) {
 }
 
 const Type* ImplementationVisitor::Visit(DebugStatement* stmt) {
-#if defined(DEBUG)
-  assembler().Emit(PrintConstantStringInstruction{"halting because of '" +
-                                                  stmt->reason + "' at " +
-                                                  PositionAsString(stmt->pos)});
-#endif
+  #if defined(DEBUG)
+    assembler().Emit(PrintConstantStringInstruction{"halting because of '" +
+                                                    stmt->reason + "' at " +
+                                                    PositionAsString(stmt->pos)});
+  #endif
   assembler().Emit(AbortInstruction{stmt->never_continues
                                         ? AbortInstruction::Kind::kUnreachable
                                         : AbortInstruction::Kind::kDebugBreak});
