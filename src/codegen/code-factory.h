@@ -94,6 +94,8 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   static Callable InterpreterCEntry(Isolate* isolate, int result_size = 1);
   static Callable InterpreterOnStackReplacement(Isolate* isolate);
 
+  static Callable BaselineEpilogue(Isolate* isolate);
+
   static Callable ArrayNoArgumentConstructor(
       Isolate* isolate, ElementsKind kind,
       AllocationSiteOverrideMode override_mode);
