@@ -93,6 +93,9 @@ const Register ApiGetterDescriptor::CallbackRegister() { return rbx; }
 const Register GrowArrayElementsDescriptor::ObjectRegister() { return rax; }
 const Register GrowArrayElementsDescriptor::KeyRegister() { return rbx; }
 
+const Register BaselineLeaveFrameDescriptor::ParamsSizeRegister() { return rbx; }
+const Register BaselineLeaveFrameDescriptor::WeightRegister() { return rcx; }
+
 void TypeofDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   Register registers[] = {rbx};

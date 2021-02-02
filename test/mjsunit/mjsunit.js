@@ -175,6 +175,7 @@ var V8OptimizationStatus = {
   kTopmostFrameIsTurboFanned: 1 << 11,
   kLiteMode: 1 << 12,
   kMarkedForDeoptimization: 1 << 13,
+  kSparkplug: 1 << 14,
 };
 
 // Returns true if --lite-mode is on and we can't ever turn on optimization.
@@ -676,7 +677,9 @@ var prettyPrinted;
       // to stress test the deoptimizer.
       return;
     }
-    assertFalse((opt_status & V8OptimizationStatus.kOptimized) !== 0, name_opt);
+    var is_optimized = (opt_status & V8OptimizationStatus.kOptimized) !== 0;
+    var is_sparkplug = (opt_status & V8OptimizationStatus.kSparkplug) !== 0;
+    assertFalse(is_optimized && !is_sparkplug, name_opt);
   }
 
   assertOptimized = function assertOptimized(
