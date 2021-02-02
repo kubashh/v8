@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "src/asmjs/asm-js.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/compiler.h"
 #include "src/common/assert-scope.h"
@@ -16,6 +17,7 @@
 #include "src/execution/vm-state-inl.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
+#include "src/objects/shared-function-info.h"
 #include "src/runtime/runtime-utils.h"
 
 namespace v8 {
@@ -406,6 +408,20 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
     function->set_code(function->shared().GetCode());
   }
   return Object();
+}
+
+RUNTIME_FUNCTION(Runtime_CompileBaseline) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
+
+  Handle<SharedFunctionInfo> shared(function->shared(isolate), isolate);
+
+  IsCompiledScope is_compiled_scoped(*shared, isolate);
+  JSFunction::EnsureFeedbackVector(function, &is_compiled_scoped);
+
+  function->set_code(*CompileWithBaseline(isolate, shared));
+  return *function;
 }
 
 static Object CompileGlobalEval(Isolate* isolate,
