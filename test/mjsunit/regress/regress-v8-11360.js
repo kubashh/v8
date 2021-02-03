@@ -116,6 +116,8 @@
 
 // The following tests test the above cases w/ brand check failures.
 
+const brandCheckFailMessage = /Cannot read private member/;
+
 (function TestBrandCheck_CompoundAssignmentToPrivateField() {
   class C {
     #foo = 1;
@@ -125,7 +127,7 @@
   }
 
   assertThrows(() => { C.prototype.m.call({}); }, TypeError,
-               /Cannot read private member/);
+               brandCheckFailMessage);
 
   // It's the same error we get from this case:
   class C2 {
@@ -136,7 +138,7 @@
   }
 
   assertThrows(() => { C2.prototype.m.call({}); }, TypeError,
-               /Cannot read private member/);
+               brandCheckFailMessage);
 })();
 
 (function TestBrandCheck_CompoundAssignmentToPrivateFieldWithOnlyGetter() {
@@ -148,7 +150,7 @@
   }
 
   assertThrows(() => { C.prototype.m.call({}); }, TypeError,
-               /Object must be an instance of class/);
+               brandCheckFailMessage);
 
   // It's the same error we get from this case:
   class C2 {
@@ -159,7 +161,7 @@
   }
 
   assertThrows(() => { C2.prototype.m.call({}); }, TypeError,
-               /Object must be an instance of class/);
+               brandCheckFailMessage);
 })();
 
 (function TestBrandCheck_CompoundAssignmentToPrivateFieldWithOnlySetter() {
@@ -171,7 +173,7 @@
   }
 
   assertThrows(() => { C.prototype.m.call({}); }, TypeError,
-               /Object must be an instance of class/);
+               brandCheckFailMessage);
 })();
 
 (function TestBrandCheck_CompoundAssignmentToPrivateFieldWithGetterAndSetter() {
@@ -184,7 +186,7 @@
   }
 
   assertThrows(() => { C.prototype.m.call({}); }, TypeError,
-               /Object must be an instance of class/);
+               brandCheckFailMessage);
 
   // It's the same error we get from this case:
   class C2 {
@@ -196,7 +198,7 @@
   }
 
   assertThrows(() => { C2.prototype.m.call({}); }, TypeError,
-               /Object must be an instance of class/);
+               brandCheckFailMessage);
 })();
 
 (function TestBrandCheck_CompoundAssignmentToPrivateMethod() {
@@ -208,5 +210,5 @@
   }
 
   assertThrows(() => { C.prototype.m.call({}); }, TypeError,
-               /Object must be an instance of class/);
+               brandCheckFailMessage);
 })();

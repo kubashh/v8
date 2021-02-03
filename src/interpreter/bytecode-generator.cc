@@ -4836,6 +4836,10 @@ void BytecodeGenerator::BuildPrivateBrandCheck(Property* property,
     builder()->SetExpressionPosition(property);
     builder()->LoadKeyedProperty(
         object, feedback_index(feedback_spec()->AddKeyedLoadICSlot()));
+    BytecodeLabel done;
+    builder()->JumpIfNotUndefined(&done);
+    BuildInvalidPropertyAccess(tmpl, property);
+    builder()->Bind(&done);
   }
 }
 

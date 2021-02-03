@@ -45,25 +45,17 @@ MaybeHandle<Object> Runtime::GetObjectProperty(Isolate* isolate,
   MaybeHandle<Object> result = Object::GetProperty(&it);
   if (is_found) *is_found = it.IsFound();
 
-  if (!it.IsFound() && key->IsSymbol() &&
-      Symbol::cast(*key).is_private_name()) {
+  if (!it.IsFound() && key->IsSymbol()) {
     Handle<Symbol> sym = Handle<Symbol>::cast(key);
-    Handle<Object> name(sym->description(), isolate);
-    DCHECK(name->IsString());
-    Handle<String> name_string = Handle<String>::cast(name);
-    if (sym->IsPrivateBrand()) {
-      Handle<String> class_name = (name_string->length() == 0)
-                                      ? isolate->factory()->anonymous_string()
-                                      : name_string;
+    if (sym->is_private_name() && !sym->IsPrivateBrand()) {
+      Handle<Object> name(sym->description(), isolate);
+      DCHECK(name->IsString());
+      Handle<String> name_string = Handle<String>::cast(name);
       THROW_NEW_ERROR(isolate,
-                      NewTypeError(MessageTemplate::kInvalidPrivateBrand,
-                                   class_name, holder),
+                      NewTypeError(MessageTemplate::kInvalidPrivateMemberRead,
+                                   name_string, holder),
                       Object);
     }
-    THROW_NEW_ERROR(isolate,
-                    NewTypeError(MessageTemplate::kInvalidPrivateMemberRead,
-                                 name_string, holder),
-                    Object);
   }
   return result;
 }
