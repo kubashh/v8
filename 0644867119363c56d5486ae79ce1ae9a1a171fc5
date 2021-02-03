@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e8467a9_b8d991f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-02-03T07:34:02Z",
+      "side": 1,
+      "message": "Hi all, the design doc is ready. Any feedback would be greatly appreciated. Thanks!\nhttps://docs.google.com/document/d/1AJKCWDMpugu31_mor3dd55UMO9oJ-85nyL5M748Zevc/edit?usp\u003dsharing",
+      "revId": "0644867119363c56d5486ae79ce1ae9a1a171fc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a9a87ea_51af338b",
