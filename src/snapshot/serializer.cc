@@ -638,9 +638,12 @@ void Serializer::ObjectSerializer::Serialize() {
   RecursionScope recursion(serializer_);
 
   // Defer objects as "pending" if they cannot be serialized now, or if we
-  // exceed a certain recursion depth. Some objects cannot be deferred
-  if ((recursion.ExceedsMaximum() && CanBeDeferred(*object_)) ||
-      serializer_->MustBeDeferred(*object_)) {
+  // exceed a certain recursion depth. Some objects cannot be deferred.
+  DCHECK_IMPLIES(serializer_->MustBeDeferred(*object_),
+                 serializer_->MayDeferObjects());
+  if (serializer_->MayDeferObjects() &&
+      ((recursion.ExceedsMaximum() && CanBeDeferred(*object_)) ||
+       serializer_->MustBeDeferred(*object_))) {
     DCHECK(CanBeDeferred(*object_));
     if (FLAG_trace_serializer) {
       PrintF(" Deferring heap object: ");
@@ -714,7 +717,8 @@ SnapshotSpace GetSnapshotSpace(Handle<HeapObject> object) {
         MemoryChunk::FromHeapObject(*object)->owner_identity();
     // Large code objects are not supported and cannot be expressed by
     // SnapshotSpace.
-    DCHECK_NE(heap_space, CODE_LO_SPACE);
+    // TODO(pthier): Why? Can it cause problems for GC?
+    // DCHECK_NE(heap_space, CODE_LO_SPACE);
     switch (heap_space) {
       case OLD_SPACE:
       // Young generation objects are tenured, as objects that have survived
@@ -731,6 +735,9 @@ SnapshotSpace GetSnapshotSpace(Handle<HeapObject> object) {
       case MAP_SPACE:
         return SnapshotSpace::kMap;
       case CODE_LO_SPACE:
+        // Large code objects are only supported for Sparkplug code.
+        DCHECK_EQ(Code::cast(*object).kind(), CodeKind::SPARKPLUG);
+        return SnapshotSpace::kCode;
       case RO_SPACE:
         UNREACHABLE();
     }
@@ -1155,12 +1162,17 @@ void Serializer::ObjectSerializer::SerializeCode(Map map, int size) {
   // only then walk the RelocInfo itself.
   // TODO(leszeks): We only really need to pre-serialize objects which need
   // serialization, i.e. no backrefs or roots.
+  // While serializing relocation info, don't defer any objects as the
+  // deserializer is not able to handle pending forward refs at this point.
+  bool may_defer_objects = serializer_->MayDeferObjects();
+  serializer_->AllowObjectsDeferral(false);
   RelocInfoObjectPreSerializer pre_serializer(serializer_);
   for (RelocIterator it(*on_heap_code, relocation_info,
                         Code::BodyDescriptor::kRelocModeMask);
        !it.done(); it.next()) {
     it.rinfo()->Visit(&pre_serializer);
   }
+  serializer_->AllowObjectsDeferral(may_defer_objects);
   // Mark that the pre-serialization finished with a kSynchronize bytecode.
   sink_->Put(kSynchronize, "PreSerializationFinished");
 
