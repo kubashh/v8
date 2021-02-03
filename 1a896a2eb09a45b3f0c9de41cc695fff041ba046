@@ -362,6 +362,30 @@
       },
       "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8463de44_82f903cb",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-02-03T13:25:25Z",
+      "side": 1,
+      "message": "The existing test already injects the MockPlatform by overriding the global platform using  i::V8::SetPlatformForTesting(this);",
+      "parentUuid": "c307d96b_e38f25cd",
+      "range": {
+        "startLine": 599,
+        "startChar": 8,
+        "endLine": 603,
+        "endChar": 40
+      },
+      "revId": "1a896a2eb09a45b3f0c9de41cc695fff041ba046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
