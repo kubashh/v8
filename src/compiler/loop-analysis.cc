@@ -542,7 +542,45 @@ LoopTree* LoopFinder::BuildLoopTree(Graph* graph, TickCounter* tick_counter,
   return loop_tree;
 }
 
-Node* LoopTree::HeaderNode(Loop* loop) {
+bool LoopFinder::HasMarkedExits(LoopTree* loop_tree,
+                                const LoopTree::Loop* loop) {
+  // Look for returns and if projections that are outside the loop but whose
+  // control input is inside the loop.
+  Node* loop_node = loop_tree->GetLoopControl(loop);
+  for (Node* node : loop_tree->LoopNodes(loop)) {
+    for (Node* use : node->uses()) {
+      if (!loop_tree->Contains(loop, use)) {
+        bool unmarked_exit;
+        switch (node->opcode()) {
+          case IrOpcode::kLoopExit:
+            unmarked_exit = (node->InputAt(1) != loop_node);
+            break;
+          case IrOpcode::kLoopExitValue:
+          case IrOpcode::kLoopExitEffect:
+            unmarked_exit = (node->InputAt(1)->InputAt(1) != loop_node);
+            break;
+          default:
+            unmarked_exit = (use->opcode() != IrOpcode::kTerminate);
+        }
+        if (unmarked_exit) {
+          if (FLAG_trace_turbo_loop) {
+            Node* loop_node = loop_tree->GetLoopControl(loop);
+            PrintF(
+                "Cannot peel loop %i. Loop exit without explicit mark: Node %i "
+                "(%s) is inside "
+                "loop, but its use %i (%s) is outside.\n",
+                loop_node->id(), node->id(), node->op()->mnemonic(), use->id(),
+                use->op()->mnemonic());
+          }
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+Node* LoopTree::HeaderNode(const Loop* loop) {
   Node* first = *HeaderNodes(loop).begin();
   if (first->opcode() == IrOpcode::kLoop) return first;
   DCHECK(IrOpcode::IsPhiOpcode(first->opcode()));
