@@ -56,6 +56,30 @@
       },
       "revId": "4df0aaa1b5508cf372c23ad96bf8dce4a27a2643",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb22c70_677b0bb9",
+        "filename": "src/heap/cppgc/heap-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-03T14:12:11Z",
+      "side": 1,
+      "message": "yip, done.",
+      "parentUuid": "d47058c6_6507fbee",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 8
+      },
+      "revId": "4df0aaa1b5508cf372c23ad96bf8dce4a27a2643",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
