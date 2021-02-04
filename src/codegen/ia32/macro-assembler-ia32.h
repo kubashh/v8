@@ -122,6 +122,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void Move(Register dst, Handle<HeapObject> src);
   void Move(Register dst, Register src);
   void Move(Operand dst, const Immediate& src);
+  void Move(Register dst, Operand src) { mov(dst, src); }
 
   // Move an immediate into an XMM register.
   void Move(XMMRegister dst, uint32_t src);
@@ -184,6 +185,10 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   }
 
   void SmiUntag(Register reg) { sar(reg, kSmiTagSize); }
+  void SmiUntag(Register dst, Register src) {
+    mov(dst, src);
+    sar(dst, kSmiTagSize);
+  }
 
   // Removes current frame and its arguments from the stack preserving the
   // arguments and a return address pushed to the stack for the next call. Both
@@ -788,7 +793,7 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
   void LoadGlobalProxy(Register dst);
 
   // Load a value from the native context with a given index.
-  void LoadNativeContextSlot(Register dst, int index);
+  void LoadNativeContextSlot(int index, Register dst);
 
   // ---------------------------------------------------------------------------
   // JavaScript invokes
