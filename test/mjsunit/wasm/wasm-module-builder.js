@@ -216,7 +216,6 @@ const kWasmOpcodes = {
   'Catch': 0x07,
   'Throw': 0x08,
   'Rethrow': 0x09,
-  'CatchAll': 0x0a,
   'End': 0x0b,
   'Br': 0x0c,
   'BrIf': 0x0d,
