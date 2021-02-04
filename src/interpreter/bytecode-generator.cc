@@ -4792,6 +4792,48 @@ void BytecodeGenerator::BuildPrivateSetterAccess(Register object,
                     feedback_index(feedback_spec()->AddCallICSlot()));
 }
 
+void BytecodeGenerator::BuildPrivateMethodIn(Variable* private_name,
+                                               Expression* object_expression) {
+  DCHECK(IsPrivateMethodOrAccessorVariableMode(private_name->mode()));
+  ClassScope* scope = private_name->scope()->AsClassScope();
+  if (private_name->is_static()) {
+    // For static private methods, "#privatemethod in ..." only returns true for the class constructor.
+    if (scope->class_variable() == nullptr) {
+      // See comment in BytecodeGenerator::BuildPrivateBrandCheck.
+      RegisterAllocationScope register_scope(this);
+      RegisterList args = register_allocator()->NewRegisterList(2);
+      builder()
+          ->LoadLiteral(Smi::FromEnum(
+              MessageTemplate::
+                  kInvalidUnusedPrivateStaticMethodAccessedByDebugger))
+          .StoreAccumulatorInRegister(args[0])
+          .LoadLiteral(private_name->raw_name())
+          .StoreAccumulatorInRegister(args[1])
+          .CallRuntime(Runtime::kNewError, args)
+          .Throw();
+    } else {
+      VisitForAccumulatorValue(object_expression);
+      Register object = register_allocator()->NewRegister();
+      builder()->StoreAccumulatorInRegister(object);
+      BuildVariableLoadForAccumulatorValue(scope->class_variable(),
+                                           HoleCheckMode::kElided);
+      builder()->CompareReference(object);
+    }
+  } else {
+    BuildVariableLoadForAccumulatorValue(scope->brand(),
+                                         HoleCheckMode::kElided);
+    Register brand = register_allocator()->NewRegister();
+    builder()->StoreAccumulatorInRegister(brand);
+
+    VisitForAccumulatorValue(object_expression);
+    builder()->SetExpressionPosition(object_expression);
+
+    FeedbackSlot slot = feedback_spec()->AddKeyedHasICSlot();
+    builder()->CompareOperation(Token::IN, brand, feedback_index(slot));
+    execution_result()->SetResultIsBoolean();
+  }
+}
+
 void BytecodeGenerator::BuildPrivateBrandCheck(Property* property,
                                                Register object,
                                                MessageTemplate tmpl) {
@@ -5659,10 +5701,26 @@ void BytecodeGenerator::VisitCompareOperation(CompareOperation* expr) {
     builder()->SetExpressionPosition(expr);
     BuildLiteralCompareNil(expr->op(), BytecodeArrayBuilder::kNullValue);
   } else {
+    if (expr->op() == Token::IN && expr->left()->IsPrivateName()) {
+      DCHECK(FLAG_harmony_private_brand_checks);
+      Variable* var = expr->left()->AsVariableProxy()->var();
+      switch (var->mode()) {
+        case VariableMode::kPrivateMethod:
+        case VariableMode::kPrivateGetterOnly:
+        case VariableMode::kPrivateSetterOnly:
+        case VariableMode::kPrivateGetterAndSetter: {
+          BuildPrivateMethodIn(var, expr->right());
+          return;
+        }
+        // For private fields, the code below does the right thing.
+        default:
+          break;
+      }
+    }
+    FeedbackSlot slot;
     Register lhs = VisitForRegisterValue(expr->left());
     VisitForAccumulatorValue(expr->right());
     builder()->SetExpressionPosition(expr);
-    FeedbackSlot slot;
     if (expr->op() == Token::IN) {
       slot = feedback_spec()->AddKeyedHasICSlot();
     } else if (expr->op() == Token::INSTANCEOF) {
