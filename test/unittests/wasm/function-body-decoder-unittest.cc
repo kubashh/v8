@@ -2871,10 +2871,8 @@ TEST_F(FunctionBodyDecoderTest, TryCatch) {
   WASM_FEATURE_SCOPE(eh);
   byte ex = builder.AddException(sigs.v_v());
   ExpectValidates(sigs.v_v(), {WASM_TRY_OP, kExprCatch, ex, kExprEnd});
-  ExpectFailure(sigs.v_v(),
-                {WASM_TRY_OP, kExprCatchAll, kExprCatch, ex, kExprEnd});
-  ExpectFailure(sigs.v_v(),
-                {WASM_TRY_OP, kExprCatchAll, kExprCatchAll, kExprEnd});
+  ExpectFailure(sigs.v_v(), {WASM_TRY_OP, kExprElse, kExprCatch, ex, kExprEnd});
+  ExpectFailure(sigs.v_v(), {WASM_TRY_OP, kExprElse, kExprElse, kExprEnd});
   ExpectFailure(sigs.v_v(), {WASM_TRY_OP, kExprEnd});    // Missing catch.
   ExpectFailure(sigs.v_v(), {WASM_TRY_OP, kExprCatch, ex});  // Missing end.
   ExpectFailure(sigs.v_v(), {kExprCatch, kExprEnd});     // Missing try.
@@ -2883,7 +2881,7 @@ TEST_F(FunctionBodyDecoderTest, TryCatch) {
 TEST_F(FunctionBodyDecoderTest, Rethrow) {
   WASM_FEATURE_SCOPE(eh);
   ExpectValidates(sigs.v_v(),
-                  {WASM_TRY_OP, kExprCatchAll, kExprRethrow, 0, kExprEnd});
+                  {WASM_TRY_OP, kExprElse, kExprRethrow, 0, kExprEnd});
   ExpectFailure(sigs.v_v(), {WASM_TRY_OP, kExprRethrow, kExprCatch, kExprEnd});
   ExpectFailure(sigs.v_v(), {WASM_BLOCK(kExprRethrow)});
   ExpectFailure(sigs.v_v(), {kExprRethrow});
@@ -2923,7 +2921,7 @@ TEST_F(FunctionBodyDecoderTest, TryDelegate) {
       kAppendEnd, "delegate does not match a try");
   ExpectFailure(
       sigs.v_v(),
-      {WASM_TRY_OP, WASM_TRY_OP, kExprCatchAll, kExprDelegate, 1, kExprEnd},
+      {WASM_TRY_OP, WASM_TRY_OP, kExprElse, kExprDelegate, 1, kExprEnd},
       kAppendEnd, "delegate does not match a try");
 }
 
