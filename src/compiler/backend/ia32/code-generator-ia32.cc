@@ -1788,6 +1788,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ AllocateStackSpace(stack_decrement);
         __ Movss(Operand(esp, 0), i.InputDoubleRegister(1));
       } else if (HasImmediateInput(instr, 1)) {
+        UNREACHABLE();
         __ Move(kScratchDoubleReg, i.InputFloat32(1));
         __ AllocateStackSpace(stack_decrement);
         __ Movss(Operand(esp, 0), kScratchDoubleReg);
@@ -1806,6 +1807,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ AllocateStackSpace(stack_decrement);
         __ Movsd(Operand(esp, 0), i.InputDoubleRegister(1));
       } else if (HasImmediateInput(instr, 1)) {
+        UNREACHABLE();
         __ Move(kScratchDoubleReg, i.InputDouble(1));
         __ AllocateStackSpace(stack_decrement);
         __ Movsd(Operand(esp, 0), kScratchDoubleReg);
