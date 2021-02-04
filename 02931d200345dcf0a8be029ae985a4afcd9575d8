@@ -16,6 +16,24 @@
       "message": "Forgot to mention: Maybe we should at some point re-evaluate whether pimpl pattern here is worth it. If we would lazy create the Sweeper during sweeping then this would not be an issue. (I remember we talked about this early on.)",
       "revId": "02931d200345dcf0a8be029ae985a4afcd9575d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43618b7a_360bc51d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-04T13:24:25Z",
+      "side": 1,
+      "message": "I\u0027m for lazy initializing (same as in Marker).\nI think the advantage of pimpl (when we last discussed it) was stable addresses for debugging, but I don\u0027t think this is a significant advantages.",
+      "parentUuid": "30a0a9a1_c59d413f",
+      "revId": "02931d200345dcf0a8be029ae985a4afcd9575d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
