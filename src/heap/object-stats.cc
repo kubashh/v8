@@ -5,6 +5,7 @@
 
 #include "src/heap/object-stats.h"
 
+#include <fstream>
 #include <unordered_set>
 
 #include "src/base/bits.h"
@@ -214,6 +215,9 @@ void ObjectStats::PrintKeyAndId(const char* key, int gc_count) {
 
 void ObjectStats::PrintInstanceTypeJSON(const char* key, int gc_count,
                                         const char* name, int index) {
+  std::FILE* file;
+  file = std::fopen("/tmp/strings.json", "a");
+
   PrintF("{ ");
   PrintKeyAndId(key, gc_count);
   PrintF("\"type\": \"instance_type_data\", ");
@@ -221,6 +225,8 @@ void ObjectStats::PrintInstanceTypeJSON(const char* key, int gc_count,
   PrintF("\"instance_type_name\": \"%s\", ", name);
   PrintF("\"overall\": %zu, ", object_sizes_[index]);
   PrintF("\"count\": %zu, ", object_counts_[index]);
+  PrintF(file, "%s, %zu, %zu\n", name, object_sizes_[index],
+         object_counts_[index]);
   PrintF("\"over_allocated\": %zu, ", over_allocated_[index]);
   PrintF("\"histogram\": ");
   PrintJSONArray(size_histogram_[index], kNumberOfBuckets);
@@ -267,11 +273,7 @@ void ObjectStats::PrintJSON(const char* key) {
 #define INSTANCE_TYPE_WRAPPER(name) \
   PrintInstanceTypeJSON(key, gc_count, #name, name);
 
-#define VIRTUAL_INSTANCE_TYPE_WRAPPER(name) \
-  PrintInstanceTypeJSON(key, gc_count, #name, FIRST_VIRTUAL_TYPE + name);
-
-  INSTANCE_TYPE_LIST(INSTANCE_TYPE_WRAPPER)
-  VIRTUAL_INSTANCE_TYPE_LIST(VIRTUAL_INSTANCE_TYPE_WRAPPER)
+  INSTANCE_TYPE_LIST_BASE(INSTANCE_TYPE_WRAPPER)
 
 #undef INSTANCE_TYPE_WRAPPER
 #undef VIRTUAL_INSTANCE_TYPE_WRAPPER
