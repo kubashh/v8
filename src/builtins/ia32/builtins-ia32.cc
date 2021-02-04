@@ -7,6 +7,7 @@
 #include "src/api/api-arguments.h"
 #include "src/base/bits-iterator.h"
 #include "src/base/iterator.h"
+#include "src/baseline/baseline-compiler.h"
 #include "src/codegen/code-factory.h"
 // For interpreter_entry_return_pc_offset. TODO(jkummerow): Drop.
 #include "src/codegen/macro-assembler-inl.h"
@@ -745,6 +746,10 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch1,
   __ PushReturnAddressFrom(return_pc);
 }
 
+void Builtins::Generate_BaselineLeaveFrame(MacroAssembler* masm) {
+  baseline::BaselineAssembler::EmitReturn(masm);
+}
+
 // Tail-call |function_id| if |actual_marker| == |expected_marker|
 static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
                                           Register actual_marker,
@@ -917,6 +922,12 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
   __ add(bytecode_offset, bytecode_size_table);
 
   __ bind(&end);
+}
+
+// static
+void Builtins::Generate_BaselinePrologue(MacroAssembler* masm) {
+  // TODO(ia32): Implement.
+  __ Trap();
 }
 
 // Generate code for entering a JS function with the interpreter.
@@ -2362,7 +2373,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   // Overwrite the original receiver with the (original) target.
   __ mov(args.GetReceiverOperand(), edi);
   // Let the "call_as_function_delegate" take care of the rest.
-  __ LoadNativeContextSlot(edi, Context::CALL_AS_FUNCTION_DELEGATE_INDEX);
+  __ LoadNativeContextSlot(Context::CALL_AS_FUNCTION_DELEGATE_INDEX, edi);
   __ Jump(masm->isolate()->builtins()->CallFunction(
               ConvertReceiverMode::kNotNullOrUndefined),
           RelocInfo::CODE_TARGET);
@@ -2484,7 +2495,7 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
     // Overwrite the original receiver with the (original) target.
     __ mov(args.GetReceiverOperand(), edi);
     // Let the "call_as_constructor_delegate" take care of the rest.
-    __ LoadNativeContextSlot(edi, Context::CALL_AS_CONSTRUCTOR_DELEGATE_INDEX);
+    __ LoadNativeContextSlot(Context::CALL_AS_CONSTRUCTOR_DELEGATE_INDEX, edi);
     __ Jump(masm->isolate()->builtins()->CallFunction(),
             RelocInfo::CODE_TARGET);
   }
@@ -2496,7 +2507,13 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
           RelocInfo::CODE_TARGET);
 }
 
-void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+void Builtins::Generate_TailCallOptimizedCodeSlot(MacroAssembler* masm) {
+  // TODO(ia32): Implement.
+  __ Trap();
+}
+
+namespace {
+void OnStackReplacement(MacroAssembler* masm, bool is_interpreter) {
   {
     FrameScope scope(masm, StackFrame::INTERNAL);
     __ CallRuntime(Runtime::kCompileForOnStackReplacement);
@@ -2510,9 +2527,11 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
 
   __ bind(&skip);
 
-  // Drop the handler frame that is be sitting on top of the actual
-  // JavaScript frame. This is the case then OSR is triggered from bytecode.
-  __ leave();
+  if (is_interpreter) {
+    // Drop the handler frame that is be sitting on top of the actual
+    // JavaScript frame. This is the case then OSR is triggered from bytecode.
+    __ leave();
+  }
 
   // Load deoptimization data from the code object.
   __ mov(ecx, Operand(eax, Code::kDeoptimizationDataOffset - kHeapObjectTag));
@@ -2531,6 +2550,16 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
 
   // And "return" to the OSR entry point of the function.
   __ ret(0);
+}
+
+}   // namespace
+
+void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, true);
+}
+
+void Builtins::Generate_BaselineOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, false);
 }
 
 void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
