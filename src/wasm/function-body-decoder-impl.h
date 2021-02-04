@@ -1744,7 +1744,7 @@ class WasmDecoder : public Decoder {
       case kExprReturnCallRef:
       case kExprDrop:
       case kExprSelect:
-      case kExprCatchAll:
+      case kExprUnwind:
         return 1;
       case kExprSelectWithType: {
         SelectTypeImmediate<validate> imm(WasmFeatures::All(), decoder, pc + 1,
@@ -2566,28 +2566,9 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     return 1 + imm.length;
   }
 
-  DECODE(CatchAll) {
-    CHECK_PROTOTYPE_OPCODE(eh);
-    if (!VALIDATE(!control_.empty())) {
-      this->error("catch-all does not match any try");
-      return 0;
-    }
-    Control* c = &control_.back();
-    if (!VALIDATE(c->is_try())) {
-      this->error("catch-all does not match any try");
-      return 0;
-    }
-    if (!VALIDATE(!c->is_try_catchall())) {
-      this->error("catch-all already present for try");
-      return 0;
-    }
-    c->kind = kControlTryCatchAll;
-    FallThruTo(c);
-    stack_end_ = stack_ + c->stack_depth;
-    c->reachability = control_at(1)->innerReachability();
-    CALL_INTERFACE_IF_PARENT_REACHABLE(CatchAll, c);
-    current_code_reachable_ = this->ok() && c->reachable();
-    return 1;
+  DECODE(Unwind) {
+    // Alias for catch_all in the current spec.
+    this->DecodeElse(trace_msg, opcode);
   }
 
   DECODE(BrOnNull) {
@@ -2687,24 +2668,42 @@ class WasmFullDecoder : public WasmDecoder<validate> {
 
   DECODE(Else) {
     if (!VALIDATE(!control_.empty())) {
-      this->DecodeError("else does not match any if");
+      this->DecodeError(
+          "else does not match any if / catch_all does not match any try");
       return 0;
     }
     Control* c = &control_.back();
-    if (!VALIDATE(c->is_if())) {
-      this->DecodeError("else does not match an if");
+    if (!VALIDATE(c->is_if() || c->is_try())) {
+      this->DecodeError(
+          "else does not match an if / catch_all does not match a try");
       return 0;
     }
-    if (!VALIDATE(c->is_onearmed_if())) {
-      this->DecodeError("else already present for if");
+    if (c->is_if()) {
+      if (!VALIDATE(c->is_onearmed_if())) {
+        this->DecodeError("else already present for if");
+        return 0;
+      }
+      if (!TypeCheckFallThru()) return 0;
+      c->kind = kControlIfElse;
+      CALL_INTERFACE_IF_PARENT_REACHABLE(Else, c);
+      if (c->reachable()) c->end_merge.reached = true;
+      PushMergeValues(c, &c->start_merge);
+      c->reachability = control_at(1)->innerReachability();
+      current_code_reachable_ = this->ok() && c->reachable();
+      return 1;
+    }
+    // Encodes catch_all in the context of a try.
+    CHECK_PROTOTYPE_OPCODE(eh);
+    DCHECK(c->is_try());
+    if (!VALIDATE(!c->is_try_catchall())) {
+      this->error("catch-all already present for try");
       return 0;
     }
-    if (!TypeCheckFallThru()) return 0;
-    c->kind = kControlIfElse;
-    CALL_INTERFACE_IF_PARENT_REACHABLE(Else, c);
-    if (c->reachable()) c->end_merge.reached = true;
-    PushMergeValues(c, &c->start_merge);
+    c->kind = kControlTryCatchAll;
+    FallThruTo(c);
+    stack_end_ = stack_ + c->stack_depth;
     c->reachability = control_at(1)->innerReachability();
+    CALL_INTERFACE_IF_PARENT_REACHABLE(CatchAll, c);
     current_code_reachable_ = this->ok() && c->reachable();
     return 1;
   }
@@ -3300,7 +3299,6 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     DECODE_IMPL(Try);
     DECODE_IMPL(Catch);
     DECODE_IMPL(Delegate);
-    DECODE_IMPL(CatchAll);
     DECODE_IMPL(BrOnNull);
     DECODE_IMPL(Let);
     DECODE_IMPL(Loop);
