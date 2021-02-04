@@ -12365,6 +12365,12 @@ TNode<Oddball> CodeStubAssembler::HasProperty(TNode<Context> context,
     GotoIf(Int32TrueConstant(), &call_runtime);
   }
 
+  if (mode == kHasProperty) {
+    TNode<Name> name = CAST(CallBuiltin(Builtins::kToName, context, key));
+    // FIXME: better. Also this skips proxies.
+    GotoIf(IsPrivateSymbol(name), &call_runtime);
+  }
+
   CodeStubAssembler::LookupPropertyInHolder lookup_property_in_holder =
       [this, &return_true](
           TNode<HeapObject> receiver, TNode<HeapObject> holder,
