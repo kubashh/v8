@@ -16,6 +16,23 @@
       "message": "PTAL. Set notry since I tested on all macs in the previous patchset. Last just fixes presubmit.",
       "revId": "ce7158759ef46d805b2c4c3cc6668638b12da59d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42d2ca8b_849f5301",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-02-04T14:57:04Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "ce7158759ef46d805b2c4c3cc6668638b12da59d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
