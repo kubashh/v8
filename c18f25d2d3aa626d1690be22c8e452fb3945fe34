@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23b6956d_71746df4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-02-04T12:22:47Z",
+      "side": 1,
+      "message": "Oh, you\u0027re right. In fact I just realized that there\u0027s also a difference between catch_all and unwind: a try...catch...unwind...end block is not valid.\nAdded unwind\u0027s own decoding logic now.",
+      "parentUuid": "1e778856_29ade721",
+      "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0378ee4f_1395a332",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-02-04T11:54:29Z",
       "side": 1,
       "message": "Shouldn\u0027t we return the result of DecodeElse here?\n\nAn even better solution would be to define Unwind as alias for Else directly in GetOpcodeHandlerTableEntry, via \"DECODE_IMPL2(Unwind, Else)\". That way, both entries in the handler table just share the same function.",
+      "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94e0e715_7a7bb85c",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2571,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-02-04T12:22:47Z",
+      "side": 1,
+      "message": "Does not apply anymore, unwind has its own implementation now.",
+      "parentUuid": "0378ee4f_1395a332",
       "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eef8e168_7c6b5b12",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2669,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-02-04T12:22:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba93c40d_51f14e19",
+      "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91c10502_9cb9eaa7",
@@ -82,6 +136,24 @@
       "writtenOn": "2021-02-04T11:54:29Z",
       "side": 1,
       "message": "Sorry for bikeshedding, feel free to ignore if you disagree:\nI would propose shortening this to \"else/catch_all does not match an if/try\".",
+      "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5e602d4_44f8db35",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-02-04T12:22:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91c10502_9cb9eaa7",
       "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
