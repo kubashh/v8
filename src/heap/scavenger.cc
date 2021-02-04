@@ -410,7 +410,11 @@ void ScavengerCollector::CollectGarbage() {
     MemoryChunk* chunk;
 
     while (empty_chunks.Pop(kMainThreadId, &chunk)) {
-      RememberedSet<OLD_TO_NEW>::CheckPossiblyEmptyBuckets(chunk);
+      if (chunk->SweepingDone()) {
+        RememberedSet<OLD_TO_NEW>::CheckPossiblyEmptyBuckets(chunk);
+      } else {
+        chunk->possibly_empty_buckets()->Release();
+      }
     }
 
 #ifdef DEBUG
