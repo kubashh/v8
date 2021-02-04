@@ -76,7 +76,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
       .addBody([
         kExprTry, kWasmStmt,
           kExprUnreachable,
-        kExprCatchAll,
+        kExprElse,
         kExprEnd
       ]).exportFunc();
   let instance = builder.instantiate();
@@ -98,7 +98,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
           kExprLocalGet, 0,
           kExprLocalGet, 1,
           kExprCallFunction, func_div.index,
-        kExprCatchAll,
+        kExprElse,
           kExprI32Const, 11,
         kExprEnd
       ]).exportFunc();
@@ -122,7 +122,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
       .addBody([
         kExprTry, kWasmI32,
           kExprCallFunction, imp,
-        kExprCatchAll,
+        kExprElse,
           kExprI32Const, 11,
         kExprEnd
       ]).exportFunc();
@@ -157,7 +157,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
       .addBody([
         kExprTry, kWasmI32,
           kExprCallFunction, imp,
-        kExprCatchAll,
+        kExprElse,
           kExprI32Const, 11,
         kExprEnd
       ]).exportFunc();
@@ -967,7 +967,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
           kExprTry, kWasmStmt,
             kExprThrow, except,
           kExprDelegate, 1,
-        kExprCatchAll,
+        kExprElse,
         kExprEnd
       ]).exportFunc();
   instance = builder.instantiate();
