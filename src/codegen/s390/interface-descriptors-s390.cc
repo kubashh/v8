@@ -86,6 +86,9 @@ const Register ApiGetterDescriptor::CallbackRegister() { return r5; }
 const Register GrowArrayElementsDescriptor::ObjectRegister() { return r2; }
 const Register GrowArrayElementsDescriptor::KeyRegister() { return r5; }
 
+const Register BaselineLeaveFrameDescriptor::ParamsSizeRegister() { return r5; }
+const Register BaselineLeaveFrameDescriptor::WeightRegister() { return r6; }
+
 // static
 const Register TypeConversionDescriptor::ArgumentRegister() { return r2; }
 
@@ -209,9 +212,21 @@ void CompareDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
+void CompareBaselineDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {r3, r2, r4};
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
 void BinaryOpDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   Register registers[] = {r3, r2};
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
+void BinaryOpBaselineDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {r3, r2, r4};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
