@@ -5659,10 +5659,37 @@ void BytecodeGenerator::VisitCompareOperation(CompareOperation* expr) {
     builder()->SetExpressionPosition(expr);
     BuildLiteralCompareNil(expr->op(), BytecodeArrayBuilder::kNullValue);
   } else {
+    FeedbackSlot slot;
+    if (expr->op() == Token::IN && expr->left()->IsPrivateName()) {
+      // FIXME: refactor this
+      DCHECK(FLAG_harmony_private_brand_checks);
+      Variable* var = expr->left()->AsVariableProxy()->var();
+      switch (var->mode()) {
+        case VariableMode::kPrivateMethod:
+        case VariableMode::kPrivateGetterOnly:
+        case VariableMode::kPrivateSetterOnly:
+        case VariableMode::kPrivateGetterAndSetter: {
+          slot = feedback_spec()->AddKeyedHasICSlot();
+          ClassScope* scope = var->scope()->AsClassScope();
+          BuildVariableLoadForAccumulatorValue(scope->brand(),
+                                               HoleCheckMode::kElided);
+          // FIXME: add support for private static methods
+          Register brand = register_allocator()->NewRegister();
+          builder()->StoreAccumulatorInRegister(brand);
+          VisitForAccumulatorValue(expr->right());
+          builder()->SetExpressionPosition(expr);
+          builder()->CompareOperation(expr->op(), brand, feedback_index(slot));
+          execution_result()->SetResultIsBoolean();
+
+          return;
+        }
+        default:
+          break;
+      }
+    }
     Register lhs = VisitForRegisterValue(expr->left());
     VisitForAccumulatorValue(expr->right());
     builder()->SetExpressionPosition(expr);
-    FeedbackSlot slot;
     if (expr->op() == Token::IN) {
       slot = feedback_spec()->AddKeyedHasICSlot();
     } else if (expr->op() == Token::INSTANCEOF) {
