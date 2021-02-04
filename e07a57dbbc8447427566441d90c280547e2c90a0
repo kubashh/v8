@@ -34,6 +34,24 @@
       "parentUuid": "682477dd_c348b85d",
       "revId": "e07a57dbbc8447427566441d90c280547e2c90a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac2d2d98_1d7a1524",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-02-04T18:06:50Z",
+      "side": 1,
+      "message": "I\u0027m wondering what test suite we can come up here that tests registers spilling more - clusterfuzz generates some, but it might be worthwhile to see if we can add a set of tests (perhaps a fuzzer itself) that are guaranteed to spill. I realize this discussion should be independent of this change, mostly thinking out aloud so change lgtm.",
+      "parentUuid": "0e96f556_ac0315ce",
+      "revId": "e07a57dbbc8447427566441d90c280547e2c90a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
