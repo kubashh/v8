@@ -363,6 +363,10 @@ void ObjectStats::RecordObjectStats(InstanceType type, size_t size,
                                     size_t over_allocated) {
   DCHECK_LE(type, LAST_TYPE);
   object_counts_[type]++;
+  if (type < FIRST_NONSTRING_TYPE) {
+    size = std::max(
+        size, static_cast<size_t>(ExternalString::kSizeOfAllExternalStrings));
+  }
   object_sizes_[type] += size;
   size_histogram_[type][HistogramIndexFromSize(size)]++;
   over_allocated_[type] += over_allocated;
