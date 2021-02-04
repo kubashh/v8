@@ -128,8 +128,6 @@ void CodeSerializer::SerializeObjectImpl(Handle<HeapObject> obj) {
 
   if (SerializeReadOnlyObject(obj)) return;
 
-  CHECK(!obj->IsCode());
-
   ReadOnlyRoots roots(isolate());
   if (ElideObject(*obj)) {
     return SerializeObject(roots.undefined_value_handle());
@@ -192,6 +190,7 @@ void CodeSerializer::SerializeObjectImpl(Handle<HeapObject> obj) {
   // bytecode array stored within the InterpreterData, which is the important
   // information. On deserialization we'll create our code objects again, if
   // --interpreted-frames-native-stack is on. See v8:9122 for more context
+  // TODO(pthier): Handle Baseline.
 #ifndef V8_TARGET_ARCH_ARM
   if (V8_UNLIKELY(FLAG_interpreted_frames_native_stack) &&
       obj->IsInterpreterData()) {
@@ -233,6 +232,7 @@ void CreateInterpreterDataForDeserializedCode(Isolate* isolate,
   SharedFunctionInfo::ScriptIterator iter(isolate, *script);
   for (SharedFunctionInfo shared_info = iter.Next(); !shared_info.is_null();
        shared_info = iter.Next()) {
+    // TODO(pthier): Handle Baseline
     if (!shared_info.HasBytecodeArray()) continue;
     Handle<SharedFunctionInfo> info = handle(shared_info, isolate);
     Handle<Code> code = isolate->factory()->CopyCode(Handle<Code>::cast(
@@ -325,6 +325,7 @@ MaybeHandle<SharedFunctionInfo> CodeSerializer::Deserialize(
       Script::cast(result->script()).set_source(*source);
     }
   } else {
+    CodeSpaceMemoryModificationScope modification_scope(isolate->heap());
     maybe_result = ObjectDeserializer::DeserializeSharedFunctionInfo(
         isolate, &scd, source);
   }
