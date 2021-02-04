@@ -190,6 +190,8 @@ RUNTIME_FUNCTION(Runtime_DeoptimizeFunction) {
 
   if (function->HasAttachedOptimizedCode()) {
     Deoptimizer::DeoptimizeFunction(*function);
+  } else if (function->code().kind() == CodeKind::SPARKPLUG) {
+    Deoptimizer::DeoptimizeSparkplug(*function);
   }
 
   return ReadOnlyRoots(isolate).undefined_value();
@@ -208,6 +210,8 @@ RUNTIME_FUNCTION(Runtime_DeoptimizeNow) {
 
   if (function->HasAttachedOptimizedCode()) {
     Deoptimizer::DeoptimizeFunction(*function);
+  } else if (function->code().kind() == CodeKind::SPARKPLUG) {
+    Deoptimizer::DeoptimizeSparkplug(*function);
   }
 
   return ReadOnlyRoots(isolate).undefined_value();
@@ -474,7 +478,7 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
   function->MarkForOptimization(ConcurrencyMode::kNotConcurrent);
 
   // Make the profiler arm all back edges in unoptimized code.
-  if (it.frame()->type() == StackFrame::INTERPRETED) {
+  if (it.frame()->HasInterpreterFrameType()) {
     isolate->runtime_profiler()->AttemptOnStackReplacement(
         InterpretedFrame::cast(it.frame()),
         AbstractCode::kMaxLoopNestingMarker);
@@ -566,6 +570,9 @@ RUNTIME_FUNCTION(Runtime_GetOptimizationStatus) {
     if (function->code().is_turbofanned()) {
       status |= static_cast<int>(OptimizationStatus::kTurboFanned);
     }
+  }
+  if (function->code().kind() == CodeKind::SPARKPLUG) {
+    status |= static_cast<int>(OptimizationStatus::kSparkplug);
   }
   if (function->ActiveTierIsIgnition()) {
     status |= static_cast<int>(OptimizationStatus::kInterpreted);
