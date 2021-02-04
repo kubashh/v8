@@ -52,6 +52,24 @@
       "parentUuid": "0e96f556_ac0315ce",
       "revId": "e07a57dbbc8447427566441d90c280547e2c90a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27e3f616_822454d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-04T21:57:45Z",
+      "side": 1,
+      "message": "For this particular case, we only need dst !\u003d src, and I believe we can do that by making all UseRegister be UseUniqueRegister. That should always be a safe and equivalent replacement. Although I\u0027m not sure how we can do that, adding a FLAG inside of UseRegister might not be a mergeable change.",
+      "parentUuid": "ac2d2d98_1d7a1524",
+      "revId": "e07a57dbbc8447427566441d90c280547e2c90a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
