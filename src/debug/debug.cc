@@ -1244,6 +1244,11 @@ void Debug::DeoptimizeFunction(Handle<SharedFunctionInfo> shared) {
   // inlining.
   isolate_->AbortConcurrentOptimization(BlockingBehavior::kBlock);
 
+  if (shared->GetCode().kind() == CodeKind::SPARKPLUG) {
+    Deoptimizer::DeoptimizeSparkplug(*shared);
+    return;
+  }
+
   bool found_something = false;
   Code::OptimizedCodeIterator iterator(isolate_);
   do {
