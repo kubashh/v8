@@ -16,6 +16,74 @@
       "message": "PTAL",
       "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e778856_29ade721",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-04T11:54:29Z",
+      "side": 1,
+      "message": "LGTM, even though I find it weird that we have both Unwind and Else opcodes, but they are interchangeable. Does that mean that we can also use \"if ... unwind ... end\"?\nOr can unwind only be used in a try block? If so, this CL needs to be adapted accordingly.",
+      "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0378ee4f_1395a332",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2571,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-04T11:54:29Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we return the result of DecodeElse here?\n\nAn even better solution would be to define Unwind as alias for Else directly in GetOpcodeHandlerTableEntry, via \"DECODE_IMPL2(Unwind, Else)\". That way, both entries in the handler table just share the same function.",
+      "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba93c40d_51f14e19",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2669,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-04T11:54:29Z",
+      "side": 1,
+      "message": "Please add a note here that this opcode is also used for \"catch_all\".",
+      "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91c10502_9cb9eaa7",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-04T11:54:29Z",
+      "side": 1,
+      "message": "Sorry for bikeshedding, feel free to ignore if you disagree:\nI would propose shortening this to \"else/catch_all does not match an if/try\".",
+      "revId": "c18f25d2d3aa626d1690be22c8e452fb3945fe34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
