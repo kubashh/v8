@@ -73,6 +73,14 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   static bool CompileOptimized(Handle<JSFunction> function,
                                ConcurrencyMode mode, CodeKind code_kind);
 
+  enum class CompilationType { kBytecode, kBaseline, kTurboProp, kTurboFan };
+  static void LogFunctionCompilation(Isolate* isolate,
+                                     CodeEventListener::LogEventsAndTags tag,
+                                     Handle<SharedFunctionInfo> shared,
+                                     Handle<Script> script,
+                                     Handle<AbstractCode> abstract_code,
+                                     CompilationType type,
+                                     double time_taken_ms);
   // Collect source positions for a function that has already been compiled to
   // bytecode, but for which source positions were not collected (e.g. because
   // they were not immediately needed).

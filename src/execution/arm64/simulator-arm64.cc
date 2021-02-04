@@ -6,6 +6,8 @@
 
 #include "src/execution/isolate.h"
 
+#include "src/execution/isolate.h"
+
 #if defined(USE_SIMULATOR)
 
 #include <stdlib.h>

@@ -1533,10 +1533,10 @@ void MacroAssembler::InvokeFunction(Register fun, Register new_target,
 }
 
 void MacroAssembler::LoadGlobalProxy(Register dst) {
-  LoadNativeContextSlot(dst, Context::GLOBAL_PROXY_INDEX);
+  LoadNativeContextSlot(Context::GLOBAL_PROXY_INDEX, dst);
 }
 
-void MacroAssembler::LoadNativeContextSlot(Register destination, int index) {
+void MacroAssembler::LoadNativeContextSlot(int index, Register destination) {
   // Load the native context from the current context.
   LoadMap(destination, esi);
   mov(destination,
