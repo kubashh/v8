@@ -1244,6 +1244,10 @@ void Debug::DeoptimizeFunction(Handle<SharedFunctionInfo> shared) {
   // inlining.
   isolate_->AbortConcurrentOptimization(BlockingBehavior::kBlock);
 
+  if (shared->GetCode().kind() == CodeKind::SPARKPLUG) {
+    shared->flush_baseline_data();
+  }
+
   bool found_something = false;
   Code::OptimizedCodeIterator iterator(isolate_);
   do {
