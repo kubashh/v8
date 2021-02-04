@@ -50,6 +50,24 @@
       "message": "Doesn\u0027t std::equal below already check this?",
       "revId": "c5acacc427030588fdc325e897c795e0ee27ef6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42b88933_408208d3",
+        "filename": "test/cctest/wasm/test-liftoff-inspection.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-04T13:24:22Z",
+      "side": 1,
+      "message": "Yes, but you need to run a debugger then to figure out what\u0027s actually different. This gives a nice error message if the size differs. So it\u0027s not strictly needed, but it helps if something goes wrong.",
+      "parentUuid": "4680955e_cb045f6e",
+      "revId": "c5acacc427030588fdc325e897c795e0ee27ef6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
