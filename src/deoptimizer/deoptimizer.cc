@@ -419,6 +419,53 @@ void Deoptimizer::MarkAllCodeForContext(NativeContext native_context) {
   }
 }
 
+namespace {
+class ActiveSparkplugFunction : public ThreadVisitor {
+ public:
+  void VisitThread(Isolate* isolate, ThreadLocalTop* top) override {
+    for (JavaScriptFrameIterator it(isolate, top); !it.done(); it.Advance()) {
+      Code code = it.frame()->LookupCode();
+      if (it.frame()->type() == StackFrame::SPARKPLUG &&
+          code.marked_for_deoptimization()) {
+        // Patch bytecode offset
+        SparkplugFrame* frame = SparkplugFrame::cast(it.frame());
+        Address fp = frame->fp();
+        Address* bytecode_offset_addr = reinterpret_cast<Address*>(
+            fp + InterpreterFrameConstants::kBytecodeOffsetFromFp);
+        int first_bytecode_offset = BytecodeArray::kHeaderSize - kHeapObjectTag;
+        int bytecode_array_offset =
+            first_bytecode_offset + frame->GetBytecodeOffset();
+        *bytecode_offset_addr = bytecode_array_offset << 1;  // SmiTag
+        // Patch PC
+        Address* pc_addr = frame->pc_address();
+        Address dispatch =
+            BUILTIN_CODE(isolate, InterpreterEnterBytecodeAdvance)
+                ->InstructionStart();
+        PointerAuthentication::ReplacePC(pc_addr, dispatch, kSystemPointerSize);
+        // Patch JSFunction
+        auto function = frame->function();
+        auto trampoline = BUILTIN_CODE(isolate, InterpreterEntryTrampoline);
+        function.set_code(*trampoline);
+        function.shared().flush_baseline_data();
+      }
+    }
+  }
+
+ private:
+  DISALLOW_GARBAGE_COLLECTION(no_gc_)
+};
+}  // namespace
+
+void Deoptimizer::DeoptimizeSparkplug(SharedFunctionInfo shared) {
+  Isolate *isolate = shared.GetIsolate();
+  Code code = shared.GetCode();
+  DCHECK_EQ(code.kind(), CodeKind::SPARKPLUG);
+  code.set_marked_for_deoptimization(true);
+  ActiveSparkplugFunction visitor;
+  visitor.VisitThread(isolate, isolate->thread_local_top());
+  isolate->thread_manager()->IterateArchivedThreads(&visitor);
+}
+
 void Deoptimizer::DeoptimizeFunction(JSFunction function, Code code) {
   Isolate* isolate = function.GetIsolate();
   RuntimeCallTimerScope runtimeTimer(isolate,
