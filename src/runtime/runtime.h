@@ -467,6 +467,7 @@ namespace internal {
   F(DisallowWasmCodegen, 1, 1)                \
   F(DisassembleFunction, 1, 1)                \
   F(DynamicCheckMapsEnabled, 0, 1)            \
+  F(IsTurbopropTopTier, 0, 1)                 \
   F(EnableCodeLoggingForTesting, 0, 1)        \
   F(EnsureFeedbackVectorForFunction, 1, 1)    \
   F(FreezeWasmLazyCompilation, 1, 1)          \
