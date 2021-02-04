@@ -5,6 +5,7 @@
 #if V8_TARGET_ARCH_ARM
 
 #include "src/api/api-arguments.h"
+#include "src/baseline/baseline-compiler.h"
 #include "src/codegen/code-factory.h"
 // For interpreter_entry_return_pc_offset. TODO(jkummerow): Drop.
 #include "src/codegen/macro-assembler-inl.h"
@@ -823,6 +824,10 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch1,
   __ add(sp, sp, params_size, LeaveCC);
 }
 
+void Builtins::Generate_BaselineLeaveFrame(MacroAssembler* masm) {
+  baseline::BaselineAssembler::EmitReturn(masm);
+}
+
 // Tail-call |function_id| if |actual_marker| == |expected_marker|
 static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
                                           Register actual_marker,
@@ -987,6 +992,12 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
   __ add(bytecode_offset, bytecode_offset, scratch1);
 
   __ bind(&end);
+}
+
+// static
+void Builtins::Generate_BaselinePrologue(MacroAssembler* masm) {
+  // TODO(arm): Implement.
+  __ Trap();
 }
 
 // Generate code for entering a JS function with the interpreter.
@@ -1566,7 +1577,13 @@ void Builtins::Generate_NotifyDeoptimized(MacroAssembler* masm) {
   __ Ret();
 }
 
-void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+void Builtins::Generate_TailCallOptimizedCodeSlot(MacroAssembler* masm) {
+  // TODO(arm): Implement.
+  __ Trap();
+}
+
+namespace {
+void OnStackReplacement(MacroAssembler* masm, bool is_interpreter) {
   {
     FrameAndConstantPoolScope scope(masm, StackFrame::INTERNAL);
     __ CallRuntime(Runtime::kCompileForOnStackReplacement);
@@ -1580,9 +1597,11 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
 
   __ bind(&skip);
 
-  // Drop the handler frame that is be sitting on top of the actual
-  // JavaScript frame. This is the case then OSR is triggered from bytecode.
-  __ LeaveFrame(StackFrame::STUB);
+  if (is_interpreter) {
+    // Drop the handler frame that is be sitting on top of the actual
+    // JavaScript frame. This is the case then OSR is triggered from bytecode.
+    __ LeaveFrame(StackFrame::STUB);
+  }
 
   // Load deoptimization data from the code object.
   // <deopt_data> = <code>[#deoptimization_data_offset]
@@ -1603,6 +1622,16 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
     // And "return" to the OSR entry point of the function.
     __ Ret();
   }
+}
+
+}  // namespace
+
+void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, true);
+}
+
+void Builtins::Generate_BaselineOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, false);
 }
 
 // static
