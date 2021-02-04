@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "c5acacc427030588fdc325e897c795e0ee27ef6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e73ee65f_cca757e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-02-04T13:02:45Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "c5acacc427030588fdc325e897c795e0ee27ef6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4680955e_cb045f6e",
+        "filename": "test/cctest/wasm/test-liftoff-inspection.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-02-04T13:02:45Z",
+      "side": 1,
+      "message": "Doesn\u0027t std::equal below already check this?",
+      "revId": "c5acacc427030588fdc325e897c795e0ee27ef6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
