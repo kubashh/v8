@@ -256,6 +256,12 @@ RUNTIME_FUNCTION(Runtime_DynamicCheckMapsEnabled) {
   return isolate->heap()->ToBoolean(FLAG_turbo_dynamic_map_checks);
 }
 
+RUNTIME_FUNCTION(Runtime_IsTurbopropTopTier) {
+  SealHandleScope shs(isolate);
+  DCHECK_EQ(0, args.length());
+  return isolate->heap()->ToBoolean(FLAG_turboprop_as_toptier);
+}
+
 RUNTIME_FUNCTION(Runtime_OptimizeFunctionOnNextCall) {
   HandleScope scope(isolate);
 
@@ -297,7 +303,8 @@ RUNTIME_FUNCTION(Runtime_OptimizeFunctionOnNextCall) {
     PendingOptimizationTable::MarkedForOptimization(isolate, function);
   }
 
-  if (function->HasAvailableOptimizedCode()) {
+  CodeKind kind = CodeKindForTopTier();
+  if (function->HasAvailableCodeKind(kind)) {
     DCHECK(function->HasAttachedOptimizedCode() ||
            function->ChecksOptimizationMarker());
     if (FLAG_testing_d8_test_runner) {
