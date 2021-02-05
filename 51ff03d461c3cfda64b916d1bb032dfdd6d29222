@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8b55612_758ca55a",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75760432_cca7cb8b",
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d898e822_4e0b67d7",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-02-05T09:59:54Z",
       "side": 1,
       "message": "Let\u0027s make the parameter uint32_t and cast at the call site instead (if needed).",
+      "range": {
+        "startLine": 191,
+        "startChar": 25,
+        "endLine": 191,
+        "endChar": 51
+      },
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d35e848_101ec2b1",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d898e822_4e0b67d7",
       "range": {
         "startLine": 191,
         "startChar": 25,
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ee15eb6_668f7294",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4acc3c18_33174e77",
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0049d731_af7db71a",
@@ -71,6 +131,30 @@
       "writtenOn": "2021-02-05T09:59:54Z",
       "side": 1,
       "message": "const\u0026",
+      "range": {
+        "startLine": 205,
+        "startChar": 30,
+        "endLine": 205,
+        "endChar": 41
+      },
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6742658f_6558265f",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0049d731_af7db71a",
       "range": {
         "startLine": 205,
         "startChar": 30,
@@ -98,6 +182,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8019d82_62ebe6e8",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6538dd6a_5dfb4a56",
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9887527_2a559876",
@@ -115,6 +217,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98d1ed2b_12d44917",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "The copies are 0-indexed.",
+      "parentUuid": "b9887527_2a559876",
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cff2ba77_ce601e8b",
@@ -128,6 +248,24 @@
       "writtenOn": "2021-02-05T09:59:54Z",
       "side": 1,
       "message": "Please call this dead_inputs or add a comment that this will only ever contain dead.",
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0892036_44ee2433",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "Turns out this vector is not needed if we use graph-\u003eCloneNode().",
+      "parentUuid": "cff2ba77_ce601e8b",
       "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +293,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d2cd04a_b7abe1c5",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79519c27_0095fda6",
+      "range": {
+        "startLine": 230,
+        "startChar": 15,
+        "endLine": 230,
+        "endChar": 19
+      },
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f38bed5_16b76957",
@@ -172,6 +334,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c115346c_72b5416f",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f38bed5_16b76957",
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf634aae_2e5a2d18",
@@ -185,6 +365,30 @@
       "writtenOn": "2021-02-05T09:59:54Z",
       "side": 1,
       "message": "copies_",
+      "range": {
+        "startLine": 262,
+        "startChar": 38,
+        "endLine": 262,
+        "endChar": 43
+      },
+      "revId": "51ff03d461c3cfda64b916d1bb032dfdd6d29222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65196fca_78a731db",
+        "filename": "src/compiler/loop-analysis.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-05T12:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf634aae_2e5a2d18",
       "range": {
         "startLine": 262,
         "startChar": 38,
