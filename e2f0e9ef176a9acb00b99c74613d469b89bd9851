@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fc268af_6590a97a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4809,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-02-05T11:37:54Z",
+      "side": 1,
+      "message": "Hmm, now I\u0027m questioning whether this situation can trigger - I had thought doing \"#unusedprivatemethod in {}\" via the debugger would trigger it, but now I\u0027m not sure anymore, I\u0027ll look into it.",
+      "parentUuid": "dbe2f0b7_3f291b3a",
+      "range": {
+        "startLine": 4809,
+        "startChar": 18,
+        "endLine": 4809,
+        "endChar": 69
+      },
+      "revId": "e2f0e9ef176a9acb00b99c74613d469b89bd9851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2edccbb0_0403a2dd",
