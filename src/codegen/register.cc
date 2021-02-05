@@ -3,13 +3,17 @@
 // found in the LICENSE file.
 
 #include "src/codegen/register.h"
+
 #include "src/codegen/register-arch.h"
+#include "src/common/globals.h"
 
 namespace v8 {
 namespace internal {
 
-bool ShouldPadArguments(int argument_count) {
-  return kPadArguments && (argument_count % 2 != 0);
+int ArgumentPaddingSlots(int argument_count) {
+  if (kStackFrameAlignment == kSystemPointerSize) return 0;
+  constexpr int alignment_mask = kStackFrameAlignment / kSystemPointerSize - 1;
+  return argument_count & alignment_mask;
 }
 
 }  // namespace internal
