@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52103e6b_56ecd626",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-02-05T12:34:24Z",
+      "side": 1,
+      "message": "But there is really no hurry for this.\nLet\u0027s wait first for a few days to see if at least when the feature is completely disabled it doesn\u0027t break anything. :)",
+      "revId": "8b33002eae39adaa249b1d9c3d9fcc7e81631477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
