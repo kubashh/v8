@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a52e3cb_cb853401",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-05T13:02:59Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "b42e16c2c6a9ab10172b3ff875e98b39106dfe3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b212cd52_dcc66424",
+        "filename": "src/compiler/loop-peeling.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-05T13:02:59Z",
+      "side": 1,
+      "message": "Can we change TotalSize to return a uint32_t? (Right now it seems to always substract an int from an int and then cast that to size_t.)",
+      "revId": "b42e16c2c6a9ab10172b3ff875e98b39106dfe3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
