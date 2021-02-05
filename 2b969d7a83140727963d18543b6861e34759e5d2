@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd9d5d96_569ffb50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-02-05T21:59:05Z",
+      "side": 1,
+      "message": "lgtm for language-level semantics",
+      "revId": "2b969d7a83140727963d18543b6861e34759e5d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "402c8fe3_4d781405",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 3151,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-02-05T21:59:05Z",
+      "side": 1,
+      "message": "I\u0027m kind of worried about this branch once this feature ships.",
+      "revId": "2b969d7a83140727963d18543b6861e34759e5d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daa269a2_8e576c5f",
+        "filename": "test/mjsunit/harmony/private-brand-checks.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-02-05T21:59:05Z",
+      "side": 1,
+      "message": "_Really_ nice tests!\n\nThe only addition I can think of is to test that the wack private name environment skipping for classes in heritage positions work correctly for `in`. You should be able to extract skeletons from https://source.chromium.org/chromium/chromium/src/+/master:v8/test/mjsunit/harmony/private-name-scopes.js;l\u003d1?q\u003dharmony%2Fprivate-name-scopes.js\u0026sq\u003d\u0026ss\u003dchromium",
+      "revId": "2b969d7a83140727963d18543b6861e34759e5d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
