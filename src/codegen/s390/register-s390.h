@@ -167,7 +167,7 @@ constexpr Register no_reg = Register::no_reg();
 constexpr Register kRootRegister = r10;  // Roots array pointer.
 constexpr Register cp = r13;             // JavaScript context pointer.
 
-constexpr bool kPadArguments = false;
+constexpr int kStackFrameAlignment = 8;
 constexpr bool kSimpleFPAliasing = true;
 constexpr bool kSimdMaskRegisters = false;
 

@@ -1190,7 +1190,8 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
 
   // Translate the accumulator register (depending on frame position).
   if (is_topmost) {
-    if (kPadArguments) {
+    int padding = ArgumentPaddingSlots(1);
+    for (int i = 0; i < padding; i++) {
       frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
     }
     // For topmost frame, put the accumulator on the stack. The
@@ -1449,7 +1450,8 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   frame_writer.PushTranslatedValue(receiver_iterator, debug_hint);
 
   if (is_topmost) {
-    if (kPadArguments) {
+    int padding = ArgumentPaddingSlots(1);
+    for (int i = 0; i < padding; i++) {
       frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
     }
     // Ensure the result is restored back when we return to the stub.
@@ -1888,7 +1890,8 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   }
 
   if (is_topmost) {
-    if (kPadArguments) {
+    int padding = ArgumentPaddingSlots(1);
+    for (int i = 0; i < padding; i++) {
       frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
     }
 
