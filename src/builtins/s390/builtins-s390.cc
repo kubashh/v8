@@ -2441,6 +2441,8 @@ void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
   // Convert to Smi for the runtime call.
   __ SmiTag(kWasmCompileLazyFuncIndexRegister,
             kWasmCompileLazyFuncIndexRegister);
+  // SupportsWasmSimd128() value was pushed to the stack by the caller as int64.
+  __ Pop(r0);
   {
     HardAbortScope hard_abort(masm);  // Avoid calls to Abort.
     FrameAndConstantPoolScope scope(masm, StackFrame::WASM_COMPILE_LAZY);
@@ -2461,7 +2463,26 @@ void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
                       NumRegs(fp_regs),
                   "frame size mismatch");
     __ MultiPush(gp_regs);
+    // Check if machine has simd enabled, if so push vector registers. If not
+    // then only push double registers.
+    Label push_doubles, simd_pushed;
+    __ LoadAndTestP(r0, r0);  // If > 0 then simd is available.
+    __ ble(&push_doubles, Label::kNear);
+    // Save vector registers, don't save double registers anymore.
     __ MultiPushV128(fp_regs);
+    __ b(&simd_pushed);
+    __ bind(&push_doubles);
+    // simd not supported, only save double registers.
+    __ MultiPushDoubles(fp_regs);
+    // kFixedFrameSizeFromFp is hard coded to include space for Simd
+    // registers, so we still need to allocate extra (unused) space on the stack
+    // as if they were saved.
+    __ lay(sp, MemOperand(
+                   sp, -(base::bits::CountPopulation(fp_regs) * kDoubleSize)));
+    __ bind(&simd_pushed);
+    // Push the SupportsWasmSimd128() value so we can re-use it for popping
+    // values back.
+    __ Push(r0);
 
     // Pass instance and function index as explicit arguments to the runtime
     // function.
@@ -2474,7 +2495,20 @@ void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
     __ mov(ip, r2);
 
     // Restore registers.
+    // Get back SupportsWasmSimd128() value.
+    __ Pop(r0);
+    Label pop_doubles, simd_popped;
+    __ LoadAndTestP(r0, r0);  // If > 0 then simd is available.
+    __ ble(&pop_doubles, Label::kNear);
+    // Pop vector registers, don't pop double registers anymore.
     __ MultiPopV128(fp_regs);
+    __ b(&simd_popped);
+    __ bind(&pop_doubles);
+    // simd not supported, only pop double registers.
+    __ lay(sp,
+           MemOperand(sp, base::bits::CountPopulation(fp_regs) * kDoubleSize));
+    __ MultiPopDoubles(fp_regs);
+    __ bind(&simd_popped);
     __ MultiPop(gp_regs);
   }
   // Finally, jump to the entrypoint.
