@@ -118,6 +118,7 @@ class Interpreter;
 }  // namespace interpreter
 
 namespace compiler {
+class NodeObserver;
 class PerIsolateCompilerCache;
 }  // namespace compiler
 
@@ -1662,6 +1663,11 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   LocalHeap* main_thread_local_heap();
   LocalHeap* CurrentLocalHeap();
 
+  void SetNodeObserver(compiler::NodeObserver* node_observer) {
+    node_observer_ = node_observer;
+  }
+  compiler::NodeObserver* node_observer() const { return node_observer_; }
+
 #ifdef V8_HEAP_SANDBOX
   ExternalPointerTable& external_pointer_table() {
     return isolate_data_.external_pointer_table_;
@@ -2055,6 +2061,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // predefined set of data as crash keys to be used in postmortem debugging
   // in case of a crash.
   AddCrashKeyCallback add_crash_key_callback_ = nullptr;
+
+  compiler::NodeObserver* node_observer_ = nullptr;
 
   // Delete new/delete operators to ensure that Isolate::New() and
   // Isolate::Delete() are used for Isolate creation and deletion.

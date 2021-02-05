@@ -41,10 +41,13 @@ class TestSloppyEqualityFactory {
         [created_op](const Node* node) {
           CHECK_EQ(created_op, node->opcode());
         },
-        [modified_op](const Node* node, const ObservableNodeState& old_state) {
+        [modified_op](const Node* node, const ObservableNodeState& old_state)
+            -> NodeObserver::Observation {
           if (old_state.opcode() != node->opcode()) {
             CHECK_EQ(modified_op, node->opcode());
+            return NodeObserver::Observation::kStop;
           }
+          return NodeObserver::Observation::kContinue;
         });
   }
 
@@ -125,8 +128,10 @@ TEST(TestSloppyEquality) {
           << "test(" << args.first << ", " << args.second << ");\n";
     }
 
-    TestWithObserveNode tester(isolate, src.str().c_str());
-    tester.OptimizeFunctionWithObserver("test", c.observer);
+    {
+      compiler::ObserveNodeScope scope(isolate, c.observer);
+      CompileRun(src.str().c_str());
+    }
   }
 }
 
