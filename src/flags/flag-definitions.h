@@ -551,7 +551,7 @@ DEFINE_BOOL(trace_migration, false, "trace object migration")
 DEFINE_BOOL(trace_generalization, false, "trace map generalization")
 
 // Flags for TurboProp.
-DEFINE_BOOL(turboprop, false, "enable experimental turboprop mid-tier compiler")
+DEFINE_BOOL(turboprop, true, "enable experimental turboprop mid-tier compiler")
 DEFINE_IMPLICATION(turboprop, turbo_direct_heap_access)
 DEFINE_BOOL(turboprop_mid_tier_reg_alloc, true,
             "enable mid-tier register allocator for turboprop")
@@ -1018,7 +1018,7 @@ DEFINE_INT(scavenge_task_trigger, 80,
 DEFINE_BOOL(scavenge_separate_stack_scanning, false,
             "use a separate phase for stack scanning in scavenge")
 DEFINE_BOOL(trace_parallel_scavenge, false, "trace parallel scavenge")
-DEFINE_BOOL(write_protect_code_memory, true, "write protect code memory")
+DEFINE_BOOL(write_protect_code_memory, false, "write protect code memory")
 #if defined(V8_ATOMIC_MARKING_STATE) && defined(V8_ATOMIC_OBJECT_FIELD_WRITES)
 #define V8_CONCURRENT_MARKING_BOOL true
 #else
