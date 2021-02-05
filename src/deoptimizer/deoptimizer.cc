@@ -1037,8 +1037,11 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
 
   // Compute the incoming parameter translation.
   ReadOnlyRoots roots(isolate());
-  if (should_pad_arguments && ShouldPadArguments(parameters_count)) {
-    frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
+  if (should_pad_arguments) {
+    const int padding = ArgumentPaddingSlots(parameters_count);
+    for (int i = 0; i < padding; ++i) {
+      frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
+    }
   }
 
   // Note: parameters_count includes the receiver.
@@ -1190,7 +1193,8 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
 
   // Translate the accumulator register (depending on frame position).
   if (is_topmost) {
-    if (kPadArguments) {
+    const int padding = ArgumentPaddingSlots(1);
+    for (int i = 0; i < padding; ++i) {
       frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
     }
     // For topmost frame, put the accumulator on the stack. The
@@ -1294,11 +1298,10 @@ void Deoptimizer::DoComputeArgumentsAdaptorFrame(
       argument_count_without_receiver - formal_parameter_count;
   // The number of pushed arguments is the maximum of the actual argument count
   // and the formal parameter count + the receiver.
-  const bool should_pad_args = ShouldPadArguments(
+  const int padding = ArgumentPaddingSlots(
       std::max(argument_count_without_receiver, formal_parameter_count) + 1);
   const int output_frame_size =
-      std::max(0, extra_argument_count * kSystemPointerSize) +
-      (should_pad_args ? kSystemPointerSize : 0);
+      (std::max(0, extra_argument_count) + padding) * kSystemPointerSize;
   if (verbose_tracing_enabled()) {
     PrintF(trace_scope_->file(),
            "  translating arguments adaptor => variable_size=%d\n",
@@ -1321,7 +1324,7 @@ void Deoptimizer::DoComputeArgumentsAdaptorFrame(
   FrameWriter frame_writer(this, output_frame, verbose_trace_scope());
 
   ReadOnlyRoots roots(isolate());
-  if (should_pad_args) {
+  for (int i = 0; i < padding; ++i) {
     frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
   }
 
@@ -1383,7 +1386,8 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   output_frame->SetTop(top_address);
 
   ReadOnlyRoots roots(isolate());
-  if (ShouldPadArguments(parameters_count)) {
+  const int padding = ArgumentPaddingSlots(parameters_count);
+  for (int i = 0; i < padding; ++i) {
     frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
   }
 
@@ -1449,7 +1453,8 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   frame_writer.PushTranslatedValue(receiver_iterator, debug_hint);
 
   if (is_topmost) {
-    if (kPadArguments) {
+    const int padding = ArgumentPaddingSlots(1);
+    for (int i = 0; i < padding; ++i) {
       frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
     }
     // Ensure the result is restored back when we return to the stub.
@@ -1733,7 +1738,8 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   ++value_iterator;
 
   ReadOnlyRoots roots(isolate());
-  if (ShouldPadArguments(frame_info.stack_parameter_count())) {
+  const int padding = ArgumentPaddingSlots(frame_info.stack_parameter_count());
+  for (int i = 0; i < padding; ++i) {
     frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
   }
 
@@ -1888,7 +1894,8 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   }
 
   if (is_topmost) {
-    if (kPadArguments) {
+    const int padding = ArgumentPaddingSlots(1);
+    for (int i = 0; i < padding; ++i) {
       frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
     }
 
