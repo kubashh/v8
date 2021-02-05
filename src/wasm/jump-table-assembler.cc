@@ -203,6 +203,9 @@ void JumpTableAssembler::NopBytes(int bytes) {
 #elif V8_TARGET_ARCH_S390X
 void JumpTableAssembler::EmitLazyCompileJumpSlot(uint32_t func_index,
                                                  Address lazy_compile_target) {
+  bool SimdSupported = CpuFeatures::SupportsWasmSimd128();
+  lgfi(r0, Operand(SimdSupported));  // 6 bytes
+  Push(r0);                          // 6 + 6 bytes
   // Load function index to r7. 6 bytes
   lgfi(kWasmCompileLazyFuncIndexRegister, Operand(func_index));
   // Jump to {lazy_compile_target}. 6 bytes or 12 bytes
