@@ -1277,20 +1277,24 @@ void TurboAssembler::PopCPURegList(CPURegList registers) {
 #endif
 }
 
-void TurboAssembler::Push(Handle<HeapObject> handle) {
-  UseScratchRegisterScope temps(this);
-  Register tmp = temps.AcquireX();
-  Mov(tmp, Operand(handle));
-  // This is only used in test-heap.cc, for generating code that is not
-  // executed. Push a padding slot together with the handle here, to
-  // satisfy the alignment requirement.
-  Push(padreg, tmp);
-}
-
 void TurboAssembler::Push(Smi smi) {
   UseScratchRegisterScope temps(this);
   Register tmp = temps.AcquireX();
   Mov(tmp, Operand(smi));
+  Push(tmp);
+}
+
+void TurboAssembler::Push(TaggedIndex index) {
+  UseScratchRegisterScope temps(this);
+  Register tmp = temps.AcquireX();
+  Mov(tmp, Operand(static_cast<int32_t>(index.ptr())));
+  Push(tmp);
+}
+
+void TurboAssembler::Push(Operand op) {
+  UseScratchRegisterScope temps(this);
+  Register tmp = temps.AcquireX();
+  Mov(tmp, op);
   Push(tmp);
 }
 

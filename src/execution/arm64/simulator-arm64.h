@@ -730,6 +730,7 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
 
   // Start the debugging command line.
   void Debug();
+  bool ExecDebugCommand(char* command);
 
   // Executes a single debug command. Takes ownership of the command (so that it
   // can store it for repeat executions), and returns true if the debugger
