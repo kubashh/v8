@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe2f0b7_3f291b3a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4809,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-02-05T11:34:20Z",
+      "side": 1,
+      "message": "This is copied from BytecodeGenerator::BuildPrivateBrandCheck and afaik the same situation can happen here. We might be using a class whose class_variable doesn\u0027t exist (because we thought we don\u0027t need it) via the debugger. So this is the right error message for that case.",
+      "parentUuid": "5f4aee4c_4d1f8ec8",
+      "range": {
+        "startLine": 4809,
+        "startChar": 18,
+        "endLine": 4809,
+        "endChar": 69
+      },
+      "revId": "e2f0e9ef176a9acb00b99c74613d469b89bd9851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2edccbb0_0403a2dd",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2648392a_1206de1e",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 3150,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-02-05T11:34:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2edccbb0_0403a2dd",
+      "range": {
+        "startLine": 3150,
+        "startChar": 6,
+        "endLine": 3150,
+        "endChar": 72
+      },
+      "revId": "e2f0e9ef176a9acb00b99c74613d469b89bd9851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2633232d_33004ad3",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-02-05T11:22:57Z",
       "side": 1,
       "message": "is this correct? Can we not have e.g. \"#foo + 2\"?",
+      "range": {
+        "startLine": 3152,
+        "startChar": 8,
+        "endLine": 3152,
+        "endChar": 27
+      },
+      "revId": "e2f0e9ef176a9acb00b99c74613d469b89bd9851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a9bbe2c_ea89d427",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 3152,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-02-05T11:34:20Z",
+      "side": 1,
+      "message": "We can\u0027t have #foo + 2 since #foo is not a valid PrimaryExpression. We can have this.#foo + 2 though but that doesn\u0027t get parsed here.",
+      "parentUuid": "2633232d_33004ad3",
       "range": {
         "startLine": 3152,
         "startChar": 8,
