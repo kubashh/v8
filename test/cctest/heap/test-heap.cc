@@ -204,6 +204,10 @@ HEAP_TEST(TestNewSpaceRefsInCopiedCode) {
                       ExternalAssemblerBuffer(buffer, sizeof(buffer)));
   // Add a new-space reference to the code.
   masm.Push(value);
+#if V8_TARGET_ARCH_ARM64
+  // Arm64 requires stack alignment.
+  masm.Push(padreg);
+#endif
 
   CodeDesc desc;
   masm.GetCode(isolate, &desc);
