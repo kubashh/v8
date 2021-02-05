@@ -70,8 +70,8 @@ class RegisterBase {
   int reg_code_;
 };
 
-// Whether padding is needed for the given stack argument count.
-bool ShouldPadArguments(int argument_count);
+// Amount of padding needed for the given stack argument count.
+V8_EXPORT_PRIVATE int ArgumentPaddingSlots(int argument_count);
 
 template <typename RegType,
           typename = decltype(RegisterName(std::declval<RegType>()))>

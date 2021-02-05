@@ -2175,13 +2175,9 @@ InnerPointerToCodeCache::GetCacheEntry(Address inner_pointer) {
 
 namespace {
 
-int ArgumentPaddingSlots(int arg_count) {
-  return ShouldPadArguments(arg_count) ? 1 : 0;
-}
-
 // Some architectures need to push padding together with the TOS register
 // in order to maintain stack alignment.
-constexpr int TopOfStackRegisterPaddingSlots() { return kPadArguments ? 1 : 0; }
+int TopOfStackRegisterPaddingSlots() { return ArgumentPaddingSlots(1); }
 
 bool BuiltinContinuationModeIsWithCatch(BuiltinContinuationMode mode) {
   switch (mode) {
@@ -2207,7 +2203,7 @@ InterpretedFrameInfo::InterpretedFrameInfo(int parameters_count_with_receiver,
       InterpreterFrameConstants::RegisterStackSlotCount(locals_count);
 
   static constexpr int kTheAccumulator = 1;
-  static constexpr int kTopOfStackPadding = TopOfStackRegisterPaddingSlots();
+  static int kTopOfStackPadding = TopOfStackRegisterPaddingSlots();
   int maybe_additional_slots =
       (is_topmost || frame_info_kind == FrameInfoKind::kConservative)
           ? (kTheAccumulator + kTopOfStackPadding)
@@ -2241,7 +2237,7 @@ ConstructStubFrameInfo::ConstructStubFrameInfo(int translation_height,
   // the top of the reconstructed stack and popping it in
   // {Builtins::kNotifyDeoptimized}.
 
-  static constexpr int kTopOfStackPadding = TopOfStackRegisterPaddingSlots();
+  static int kTopOfStackPadding = TopOfStackRegisterPaddingSlots();
   static constexpr int kTheResult = 1;
   const int argument_padding = ArgumentPaddingSlots(parameters_count);
 
@@ -2296,7 +2292,7 @@ BuiltinContinuationFrameInfo::BuiltinContinuationFrameInfo(
   // We do this here by "pushing" the result of callback function to the
   // top of the reconstructed stack and popping it in
   // {Builtins::kNotifyDeoptimized}.
-  static constexpr int kTopOfStackPadding = TopOfStackRegisterPaddingSlots();
+  static int kTopOfStackPadding = TopOfStackRegisterPaddingSlots();
   static constexpr int kTheResult = 1;
   const int push_result_count =
       (is_topmost || is_conservative) ? kTheResult + kTopOfStackPadding : 0;

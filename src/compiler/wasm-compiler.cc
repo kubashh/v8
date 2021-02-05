@@ -8237,7 +8237,7 @@ CallDescriptor* GetWasmCallDescriptor(
                                 wasm::kFpReturnRegisters);
 
   int parameter_slots = params.NumStackSlots();
-  if (ShouldPadArguments(parameter_slots)) parameter_slots++;
+  parameter_slots += ArgumentPaddingSlots(parameter_slots);
 
   rets.SetStackOffset(parameter_slots);
 
