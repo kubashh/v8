@@ -88,17 +88,18 @@ int CallDescriptor::GetStackParameterDelta(
   int callee_slots_above_sp = GetOffsetToReturns();
   int tail_caller_slots_above_sp = tail_caller->GetOffsetToReturns();
   int stack_param_delta = callee_slots_above_sp - tail_caller_slots_above_sp;
-  if (ShouldPadArguments(stack_param_delta)) {
-    if (callee_slots_above_sp % 2 != 0) {
-      // The delta is odd due to the callee - we will need to add one slot
+  int padding = ArgumentPaddingSlots(stack_param_delta);
+  if (padding) {
+    // TODO(bbudge) Modify this when 32 bit targets need alignment.
+    if (ArgumentPaddingSlots(callee_slots_above_sp) != 0) {
+      // The frame is misaligned due to the callee - we will need to add slots
       // of padding.
-      ++stack_param_delta;
+      stack_param_delta += padding;
     } else {
-      DCHECK_NE(tail_caller_slots_above_sp % 2, 0);
-      // The delta is odd because of the caller. We already have one slot of
-      // padding that we can reuse for arguments, so we will need one fewer
-      // slot.
-      --stack_param_delta;
+      DCHECK_NE(ArgumentPaddingSlots(tail_caller_slots_above_sp), 0);
+      // The frame is misaligned because of the caller. We already have padding
+      // that we can reuse for arguments, so we will need fewer slots.
+      stack_param_delta -= padding;
     }
   }
   return stack_param_delta;
@@ -137,7 +138,7 @@ int CallDescriptor::GetOffsetToReturns() const {
   // Otherwise, return the first unused slot before the parameters, with any
   // additional padding slot if it exists.
   end_of_returns = GetFirstUnusedStackSlot();
-  if (ShouldPadArguments(end_of_returns)) end_of_returns++;
+  end_of_returns += ArgumentPaddingSlots(end_of_returns);
 
   DCHECK_EQ(end_of_returns == 0, StackParameterCount() == 0);
   return end_of_returns;
