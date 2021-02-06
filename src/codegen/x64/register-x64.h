@@ -146,7 +146,13 @@ constexpr Register arg_reg_4 = rcx;
   V(xmm13)                              \
   V(xmm14)
 
-constexpr bool kPadArguments = false;
+// Stack frame alignment and padding.
+constexpr int kStackFrameAlignment = 8;
+constexpr int ArgumentPaddingSlots(int argument_count) {
+  // No argument padding required.
+  return 0;
+}
+
 constexpr bool kSimpleFPAliasing = true;
 constexpr bool kSimdMaskRegisters = false;
 

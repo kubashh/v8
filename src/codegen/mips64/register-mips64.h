@@ -203,7 +203,13 @@ int ToNumber(Register reg);
 
 Register ToRegister(int num);
 
-constexpr bool kPadArguments = false;
+// Stack frame alignment and padding.
+constexpr int kStackFrameAlignment = 8;
+constexpr int ArgumentPaddingSlots(int argument_count) {
+  // No argument padding required.
+  return 0;
+}
+
 constexpr bool kSimpleFPAliasing = true;
 constexpr bool kSimdMaskRegisters = false;
 
