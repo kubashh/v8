@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bbf0c177_0b30494b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 3151,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-08T08:25:41Z",
+      "side": 1,
+      "message": "Yeah, the alternative here would be to have a cover grammar for PrimaryExpressionOrPrivateName; wouldn\u0027t be the worst thing I guess, we\u0027ve got similar machinery elsewhere. Could you maybe add this as a TODO?",
+      "parentUuid": "2f536a1b_bc9c95e7",
+      "revId": "2b969d7a83140727963d18543b6861e34759e5d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "daa269a2_8e576c5f",
         "filename": "test/mjsunit/harmony/private-brand-checks.js",
         "patchSetId": 11

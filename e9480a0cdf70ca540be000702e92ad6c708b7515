@@ -16,6 +16,46 @@
       "message": "thanks for reviewing!",
       "revId": "e9480a0cdf70ca540be000702e92ad6c708b7515",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db8afd2_ab99b3e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-08T08:25:41Z",
+      "side": 1,
+      "message": "interpeter + parser lgtm",
+      "revId": "e9480a0cdf70ca540be000702e92ad6c708b7515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "713576c4_05cddbd9",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5728,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-08T08:25:41Z",
+      "side": 1,
+      "message": "could this be `if (IsPrivateMethod(var-\u003emode()))` or similar?",
+      "range": {
+        "startLine": 5725,
+        "startChar": 8,
+        "endLine": 5728,
+        "endChar": 51
+      },
+      "revId": "e9480a0cdf70ca540be000702e92ad6c708b7515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
