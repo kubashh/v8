@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "465ef28e_3a491fd9",
+        "filename": "test/mjsunit/regress/regress-1172797.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-02-08T17:58:56Z",
+      "side": 1,
+      "message": "Currently, there is no way to tier up from TP-\u003eTF using intrinsics. I have a followup cl here: https://chromium-review.googlesource.com/c/v8/v8/+/2682638 that adds this support. I kept it as a separate cl because it turned out to be a bit more tricky than I initially thought and might require more iterations to add the right support.",
+      "revId": "6fbe0e5f050275835d7564079d8d6b39d388e10b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
