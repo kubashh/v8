@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d25cdf00_dfdf955b",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-08T15:17:39Z",
+      "side": 1,
+      "message": "I think this might be the only call site for ShouldPadArguments, but it would be nicer. Done.",
+      "parentUuid": "362b257e_a07652de",
+      "revId": "54df4b248d65c1ca8a6bcc6a1a7b08001474f214",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8da9a822_681bfeb0",
         "filename": "src/compiler/linkage.cc",
         "patchSetId": 11
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6fa46e84_55cdc844",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-08T15:17:39Z",
+      "side": 1,
+      "message": "I removed the TODO and made the code do what I think it will have to do.\n\nIt should behave identically of course for 64 bit targets.",
+      "parentUuid": "8da9a822_681bfeb0",
+      "revId": "54df4b248d65c1ca8a6bcc6a1a7b08001474f214",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78f212da_e23f82ad",
         "filename": "src/compiler/linkage.cc",
         "patchSetId": 11
@@ -65,6 +101,24 @@
       "writtenOn": "2021-02-08T06:51:05Z",
       "side": 1,
       "message": "Does this work for multiple slots? The original comment was \u0027We already have one slot of padding\u0027, but what if padding \u003e 1?",
+      "revId": "54df4b248d65c1ca8a6bcc6a1a7b08001474f214",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74c20b2b_f5029fcf",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-08T15:17:39Z",
+      "side": 1,
+      "message": "Right, I don\u0027t think this will work when we can have 0, 1, 2, or 3 padding slots. I changed the code to what I think will be the final form.",
+      "parentUuid": "78f212da_e23f82ad",
       "revId": "54df4b248d65c1ca8a6bcc6a1a7b08001474f214",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9867e8c4_36c75129",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-08T15:17:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05c01a1c_e226b70e",
+      "range": {
+        "startLine": 1197,
+        "startChar": 24,
+        "endLine": 1197,
+        "endChar": 31
+      },
+      "revId": "54df4b248d65c1ca8a6bcc6a1a7b08001474f214",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "230b8783_7d250707",
@@ -105,6 +183,30 @@
       "writtenOn": "2021-02-08T06:51:05Z",
       "side": 1,
       "message": "and here and below",
+      "range": {
+        "startLine": 1390,
+        "startChar": 22,
+        "endLine": 1390,
+        "endChar": 29
+      },
+      "revId": "54df4b248d65c1ca8a6bcc6a1a7b08001474f214",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c1f2537_284585f1",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-08T15:17:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "230b8783_7d250707",
       "range": {
         "startLine": 1390,
         "startChar": 22,
