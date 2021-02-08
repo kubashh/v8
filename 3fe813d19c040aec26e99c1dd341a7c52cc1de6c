@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ea27d5f_df2312dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-08T21:04:17Z",
+      "side": 1,
+      "message": "No changes from original change, the CQ failure was likely a Mac infra config issue, see https://chromium-review.googlesource.com/c/2682521.",
+      "revId": "3fe813d19c040aec26e99c1dd341a7c52cc1de6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
