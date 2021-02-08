@@ -381,6 +381,10 @@ UNINITIALIZED_TEST(ConcurrentRecordRelocSlot) {
     MacroAssembler masm(i_isolate, v8::internal::CodeObjectRequired::kYes,
                         ExternalAssemblerBuffer(buffer, sizeof(buffer)));
     masm.Push(ReadOnlyRoots(heap).undefined_value_handle());
+#if V8_TARGET_ARCH_ARM64
+    // Arm64 requires stack alignment.
+    masm.Push(padreg);
+#endif
     CodeDesc desc;
     masm.GetCode(i_isolate, &desc);
     Handle<Code> code_handle =
