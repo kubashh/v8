@@ -479,6 +479,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
       mov(dst, src, sbit, cond);
     }
   }
+  void Move(Register dst, MemOperand src) { ldr(dst, src); }
   // Move src0 to dst0 and src1 to dst1, handling possible overlaps.
   void MovePair(Register dst0, Register src0, Register dst1, Register src1);
 
