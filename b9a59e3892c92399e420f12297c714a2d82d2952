@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6aa7f65_b338b2cd",
+        "filename": "test/mjsunit/regress/regress-1172797.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-02-09T15:36:45Z",
+      "side": 1,
+      "message": "Drive-by: Would it be feasible to write a %Function for this, similar to %OptimizeFunctionOnNextCall?\n\nSooner or later we\u0027ll get test cases that do more heavy lifting in the function and then use a lot of resources.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 34
+      },
+      "revId": "b9a59e3892c92399e420f12297c714a2d82d2952",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
