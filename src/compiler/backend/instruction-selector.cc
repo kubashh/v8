@@ -2016,6 +2016,8 @@ void InstructionSelector::VisitNode(Node* node) {
       return MarkAsSimd128(node), VisitI64x2ReplaceLane(node);
     case IrOpcode::kI64x2ReplaceLaneI32Pair:
       return MarkAsSimd128(node), VisitI64x2ReplaceLaneI32Pair(node);
+    case IrOpcode::kI64x2Abs:
+      return MarkAsSimd128(node), VisitI64x2Abs(node);
     case IrOpcode::kI64x2Neg:
       return MarkAsSimd128(node), VisitI64x2Neg(node);
     case IrOpcode::kI64x2SConvertI32x4Low:
@@ -2798,6 +2800,11 @@ void InstructionSelector::VisitI32x4WidenI8x16U(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitI64x2Ne(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitV64x2AllTrue(Node* node) { UNIMPLEMENTED(); }
 #endif  //! V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_ARM64 && !V8_TARGET_ARCH_IA32
+
+// TODO(v8:11416) Prototyping i64x2.abs.
+#if !V8_TARGET_ARCH_X64
+void InstructionSelector::VisitI64x2Abs(Node* node) { UNIMPLEMENTED(); }
+#endif  // !V8_TARGET_ARCH_X64
 
 void InstructionSelector::VisitFinishRegion(Node* node) { EmitIdentity(node); }
 
