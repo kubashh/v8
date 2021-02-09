@@ -1602,6 +1602,7 @@ void MacroAssembler::StackOverflowCheck(Register num_args, Register scratch,
 void MacroAssembler::InvokePrologue(Register expected_parameter_count,
                                     Register actual_parameter_count,
                                     Label* done, InvokeFlag flag) {
+  if (flag == JUMP_FUNCTION_DONT_ADAPT) return;
   Label regular_invoke;
   //  r0: actual arguments count
   //  r1: function (passed through to callee)
@@ -1734,7 +1735,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
   if (flag == CALL_FUNCTION) {
     CallCodeObject(code);
   } else {
-    DCHECK(flag == JUMP_FUNCTION);
+    DCHECK(flag == JUMP_FUNCTION || flag == JUMP_FUNCTION_DONT_ADAPT);
     JumpCodeObject(code);
   }
   b(&done);

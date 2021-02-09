@@ -5,6 +5,7 @@
 #if V8_TARGET_ARCH_MIPS64
 
 #include "src/api/api-arguments.h"
+#include "src/baseline/baseline-compiler.h"
 #include "src/codegen/code-factory.h"
 #include "src/debug/debug.h"
 #include "src/deoptimizer/deoptimizer.h"
@@ -974,6 +975,12 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
   __ bind(&end);
 }
 
+// static
+void Builtins::Generate_BaselinePrologue(MacroAssembler* masm) {
+  // TODO(mips64): Implement.
+  __ Trap();
+}
+
 // Generate code for entering a JS function with the interpreter.
 // On entry to the function the receiver and arguments have been pushed on the
 // stack left to right.
@@ -1551,7 +1558,13 @@ void Builtins::Generate_NotifyDeoptimized(MacroAssembler* masm) {
   __ Daddu(sp, sp, Operand(1 * kPointerSize));  // Remove state.
 }
 
-void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+void Builtins::Generate_TailCallOptimizedCodeSlot(MacroAssembler* masm) {
+  // TODO(mips64): Implement.
+  __ Trap();
+}
+
+namespace {
+void OnStackReplacement(MacroAssembler* masm, bool is_interpreter) {
   {
     FrameScope scope(masm, StackFrame::INTERNAL);
     __ CallRuntime(Runtime::kCompileForOnStackReplacement);
@@ -1560,9 +1573,11 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
   // If the code object is null, just return to the caller.
   __ Ret(eq, v0, Operand(Smi::zero()));
 
-  // Drop the handler frame that is be sitting on top of the actual
-  // JavaScript frame. This is the case then OSR is triggered from bytecode.
-  __ LeaveFrame(StackFrame::STUB);
+  if (is_interpreter) {
+    // Drop the handler frame that is be sitting on top of the actual
+    // JavaScript frame. This is the case then OSR is triggered from bytecode.
+    __ LeaveFrame(StackFrame::STUB);
+  }
 
   // Load deoptimization data from the code object.
   // <deopt_data> = <code>[#deoptimization_data_offset]
@@ -1581,6 +1596,16 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
 
   // And "return" to the OSR entry point of the function.
   __ Ret();
+}
+
+}  // namespace
+
+void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, true);
+}
+
+void Builtins::Generate_BaselineOnStackReplacement(MacroAssembler* masm) {
+  return OnStackReplacement(masm, false);
 }
 
 // static
