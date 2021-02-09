@@ -1044,6 +1044,24 @@ WASM_SIMD_TEST_NO_LOWERING(I64x2Ne) {
 }
 #endif  // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_IA32
 
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
+WASM_SIMD_TEST_NO_LOWERING(I64x2LtS) {
+  RunI64x2BinOpTest(execution_tier, lower_simd, kExprI64x2LtS, Less);
+}
+
+WASM_SIMD_TEST_NO_LOWERING(I64x2LeS) {
+  RunI64x2BinOpTest(execution_tier, lower_simd, kExprI64x2LeS, LessEqual);
+}
+
+WASM_SIMD_TEST_NO_LOWERING(I64x2GtS) {
+  RunI64x2BinOpTest(execution_tier, lower_simd, kExprI64x2GtS, Greater);
+}
+
+WASM_SIMD_TEST_NO_LOWERING(I64x2GeS) {
+  RunI64x2BinOpTest(execution_tier, lower_simd, kExprI64x2GeS, GreaterEqual);
+}
+#endif  // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
+
 WASM_SIMD_TEST(F64x2Splat) {
   WasmRunner<int32_t, double> r(execution_tier, lower_simd);
   // Set up a global to hold output vector.

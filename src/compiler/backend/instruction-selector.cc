@@ -2042,6 +2042,10 @@ void InstructionSelector::VisitNode(Node* node) {
       return MarkAsSimd128(node), VisitI64x2Eq(node);
     case IrOpcode::kI64x2Ne:
       return MarkAsSimd128(node), VisitI64x2Ne(node);
+    case IrOpcode::kI64x2GtS:
+      return MarkAsSimd128(node), VisitI64x2GtS(node);
+    case IrOpcode::kI64x2GeS:
+      return MarkAsSimd128(node), VisitI64x2GeS(node);
     case IrOpcode::kI64x2ShrU:
       return MarkAsSimd128(node), VisitI64x2ShrU(node);
     case IrOpcode::kI64x2ExtMulLowI32x4S:
@@ -2798,6 +2802,11 @@ void InstructionSelector::VisitI32x4WidenI8x16U(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitI64x2Ne(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitV64x2AllTrue(Node* node) { UNIMPLEMENTED(); }
 #endif  //! V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_ARM64 && !V8_TARGET_ARCH_IA32
+
+#if !V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_ARM64
+void InstructionSelector::VisitI64x2GtS(Node* node) { UNIMPLEMENTED(); }
+void InstructionSelector::VisitI64x2GeS(Node* node) { UNIMPLEMENTED(); }
+#endif  //! V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_ARM64
 
 void InstructionSelector::VisitFinishRegion(Node* node) { EmitIdentity(node); }
 
