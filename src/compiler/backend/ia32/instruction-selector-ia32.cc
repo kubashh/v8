@@ -3170,6 +3170,21 @@ void InstructionSelector::VisitI32x4TruncSatF64x2UZero(Node* node) {
        arraysize(temps), temps);
 }
 
+void InstructionSelector::VisitI64x2Abs(Node* node) {
+  IA32OperandGenerator g(this);
+  if (CpuFeatures::IsSupported(AVX)) {
+    Emit(kIA32I64x2Abs, g.DefineAsRegister(node),
+         g.UseUniqueRegister(node->InputAt(0)));
+  } else if (CpuFeatures::IsSupported(SSE4_1)) {
+    InstructionOperand temps[] = {g.TempFpRegister(xmm0)};
+    Emit(kIA32I64x2Abs, g.DefineAsRegister(node),
+         g.UseUniqueRegister(node->InputAt(0)), arraysize(temps), temps);
+  } else {
+    Emit(kIA32I64x2Abs, g.DefineSameAsFirst(node),
+         g.UseRegister(node->InputAt(0)));
+  }
+}
+
 // static
 MachineOperatorBuilder::Flags
 InstructionSelector::SupportedMachineOperatorFlags() {
