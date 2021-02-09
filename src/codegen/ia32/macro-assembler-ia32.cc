@@ -1355,7 +1355,8 @@ void MacroAssembler::StackOverflowCheck(Register num_args, Register scratch,
 void MacroAssembler::InvokePrologue(Register expected_parameter_count,
                                     Register actual_parameter_count,
                                     Label* done, InvokeFlag flag) {
-  if (expected_parameter_count != actual_parameter_count) {
+  if (expected_parameter_count != actual_parameter_count &&
+      flag != JUMP_FUNCTION_DONT_ADAPT) {
     DCHECK_EQ(actual_parameter_count, eax);
     DCHECK_EQ(expected_parameter_count, ecx);
     Label regular_invoke;
@@ -1505,7 +1506,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
   if (flag == CALL_FUNCTION) {
     CallCodeObject(ecx);
   } else {
-    DCHECK(flag == JUMP_FUNCTION);
+    DCHECK(flag == JUMP_FUNCTION || flag == JUMP_FUNCTION_DONT_ADAPT);
     JumpCodeObject(ecx);
   }
   jmp(&done, Label::kNear);
@@ -1523,7 +1524,7 @@ void MacroAssembler::InvokeFunction(Register fun, Register new_target,
                                     Register actual_parameter_count,
                                     InvokeFlag flag) {
   // You can't call a function without a valid frame.
-  DCHECK(flag == JUMP_FUNCTION || has_frame());
+  DCHECK_IMPLIES(flag == CALL_FUNCTION, has_frame());
 
   DCHECK(fun == edi);
   mov(ecx, FieldOperand(edi, JSFunction::kSharedFunctionInfoOffset));
@@ -1535,10 +1536,10 @@ void MacroAssembler::InvokeFunction(Register fun, Register new_target,
 }
 
 void MacroAssembler::LoadGlobalProxy(Register dst) {
-  LoadNativeContextSlot(dst, Context::GLOBAL_PROXY_INDEX);
+  LoadNativeContextSlot(Context::GLOBAL_PROXY_INDEX, dst);
 }
 
-void MacroAssembler::LoadNativeContextSlot(Register destination, int index) {
+void MacroAssembler::LoadNativeContextSlot(int index, Register destination) {
   // Load the native context from the current context.
   LoadMap(destination, esi);
   mov(destination,
