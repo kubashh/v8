@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c739fe7d_7e312b1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-02-09T20:24:02Z",
+      "side": 1,
+      "message": "Good point! I don\u0027t think there is an easy way to avoid %OptimizeFunctionOnNextCall; some tests don\u0027t work well if we triggered the compilation explicitly like in the previous implementation.\n\nWe should certainly check that the %ObserveNode callback is executed; code for this is in the next patchset.",
+      "parentUuid": "2bea1263_b22a0d34",
+      "revId": "e65468daf2ba0aad2490fe0599eff3e2e7b991b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aade9f4a_714ff97f",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-02-09T15:13:03Z",
       "side": 1,
       "message": "This is no longer guaranteed to actually compile the function and I\u0027d guess it doesn\u0027t do so.",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 36
+      },
+      "revId": "e65468daf2ba0aad2490fe0599eff3e2e7b991b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce8a839c_45bca4b1",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-02-09T20:24:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aade9f4a_714ff97f",
       "range": {
         "startLine": 121,
         "startChar": 0,
