@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "14365a1f_9a64172b",
+        "filename": "src/codegen/x64/register-x64.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-09T18:41:47Z",
+      "side": 1,
+      "message": "Whoops, I meant to include the !\u003d 0. Also, +1 to a single declaration/definition in register-arch.h!",
+      "parentUuid": "8692fe40_abaeab6d",
+      "revId": "998827e91a8992f22e2f1c379149245496786f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6cf888d5_26cc6211",
         "filename": "src/compiler/linkage.cc",
         "patchSetId": 12
@@ -48,6 +66,24 @@
       "writtenOn": "2021-02-09T07:41:06Z",
       "side": 1,
       "message": "Trying to wrap my head around this; does it make sense to think about both caller and callee slots as aligned? If so, wdyt of rephrasing this section to\n\n int callee_slots_above_sp \u003d PadArguments(...);\n int tail_caller_slots_above_sp \u003d PadArguments(...);\n int stack_param_delta \u003d callee_slots_above_sp - tail_caller_slots_above_sp;\n DCHECK(!ShouldPadArguments(stack_param_delta));\n return stack_param_delta;\n\nIs that an improvement? It avoids the +\u003d and -\u003d below at least.",
+      "revId": "998827e91a8992f22e2f1c379149245496786f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52748913_d32c7402",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-09T18:41:47Z",
+      "side": 1,
+      "message": "I added an AddArgumentPaddingSlots function in register-arch.h. It is actually the most common call pattern.",
+      "parentUuid": "6cf888d5_26cc6211",
       "revId": "998827e91a8992f22e2f1c379149245496786f73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "419b1312_a896b1af",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-09T18:41:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb749444_f50e5204",
+      "range": {
+        "startLine": 1042,
+        "startChar": 24,
+        "endLine": 1042,
+        "endChar": 31
+      },
+      "revId": "998827e91a8992f22e2f1c379149245496786f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17dc2de1_2cfa1dd6",
@@ -88,6 +148,30 @@
       "writtenOn": "2021-02-09T07:41:06Z",
       "side": 1,
       "message": "missed one?",
+      "range": {
+        "startLine": 1389,
+        "startChar": 22,
+        "endLine": 1389,
+        "endChar": 29
+      },
+      "revId": "998827e91a8992f22e2f1c379149245496786f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ded32a06_0c8e55a8",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-09T18:41:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17dc2de1_2cfa1dd6",
       "range": {
         "startLine": 1389,
         "startChar": 22,
