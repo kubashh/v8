@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bea1263_b22a0d34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-02-09T15:13:03Z",
+      "side": 1,
+      "message": "I like the idea with the ObserveNodeScope, but this test now has a proble. Previously, compilation (speaking of TurboFan compilation here) is no longer triggered explicitly as CompileRun doesn\u0027t automatically trigger TurboFan (Compile here means compile to bytecode), so the scripts need to be decorated with %OptimizeFunctionOnNextCall in order to observe anything.\n\nI find explicit compilation more reliable and we should think about providing an easy way to do that within an ObserveNodeScope.\n\nFurthermore, one remaining problem with the tests (already present in my initial implementation) is that we do pass the test silently if the compilation is not triggered and the test is thus not at all performed. Maybe we can come up with a solution for that (e.g. trigger test failure if the %ObserveNode callback is never executed?)",
+      "revId": "e65468daf2ba0aad2490fe0599eff3e2e7b991b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aade9f4a_714ff97f",
+        "filename": "test/cctest/compiler/test-sloppy-equality.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-02-09T15:13:03Z",
+      "side": 1,
+      "message": "This is no longer guaranteed to actually compile the function and I\u0027d guess it doesn\u0027t do so.",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 36
+      },
+      "revId": "e65468daf2ba0aad2490fe0599eff3e2e7b991b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
