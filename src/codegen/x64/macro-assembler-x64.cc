@@ -204,6 +204,15 @@ void TurboAssembler::LoadTaggedPointerField(Register destination,
   }
 }
 
+void TurboAssembler::LoadTaggedSignedField(Register destination,
+                                           Operand field_operand) {
+  if (COMPRESS_POINTERS_BOOL) {
+    DecompressTaggedSigned(destination, field_operand);
+  } else {
+    mov_tagged(destination, field_operand);
+  }
+}
+
 void TurboAssembler::LoadAnyTaggedField(Register destination,
                                         Operand field_operand) {
   if (COMPRESS_POINTERS_BOOL) {
@@ -1350,6 +1359,9 @@ void TurboAssembler::Move(Register dst, Register src) {
   }
 }
 
+void TurboAssembler::Move(Register dst, Operand src) { movq(dst, src); }
+void TurboAssembler::Move(Register dst, Immediate src) { movl(dst, src); }
+
 void TurboAssembler::Move(XMMRegister dst, XMMRegister src) {
   if (dst != src) {
     Movaps(dst, src);
@@ -1604,6 +1616,7 @@ void TurboAssembler::Jump(Handle<Code> code_object, RelocInfo::Mode rmode,
       Address entry = d.InstructionStartOfBuiltin(builtin_index);
       Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
       jmp(kScratchRegister);
+      if (FLAG_code_comments) RecordComment("]");
       bind(&skip);
       return;
     }
@@ -1686,6 +1699,18 @@ void TurboAssembler::CallBuiltin(int builtin_index) {
   Address entry = d.InstructionStartOfBuiltin(builtin_index);
   Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
   call(kScratchRegister);
+  if (FLAG_code_comments) RecordComment("]");
+}
+
+void TurboAssembler::TailCallBuiltin(int builtin_index) {
+  DCHECK(Builtins::IsBuiltinId(builtin_index));
+  RecordCommentForOffHeapTrampoline(builtin_index);
+  CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
+  EmbeddedData d = EmbeddedData::FromBlob();
+  Address entry = d.InstructionStartOfBuiltin(builtin_index);
+  Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
+  jmp(kScratchRegister);
+  if (FLAG_code_comments) RecordComment("]");
 }
 
 void TurboAssembler::LoadCodeObjectEntry(Register destination,
@@ -2814,7 +2839,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
   if (flag == CALL_FUNCTION) {
     CallCodeObject(rcx);
   } else {
-    DCHECK(flag == JUMP_FUNCTION);
+    DCHECK(flag == JUMP_FUNCTION || flag == JUMP_FUNCTION_DONT_ADAPT);
     JumpCodeObject(rcx);
   }
   jmp(&done, Label::kNear);
@@ -2869,7 +2894,8 @@ void MacroAssembler::StackOverflowCheck(
 void MacroAssembler::InvokePrologue(Register expected_parameter_count,
                                     Register actual_parameter_count,
                                     Label* done, InvokeFlag flag) {
-  if (expected_parameter_count != actual_parameter_count) {
+  if (expected_parameter_count != actual_parameter_count &&
+      flag != JUMP_FUNCTION_DONT_ADAPT) {
     Label regular_invoke;
     // If the expected parameter count is equal to the adaptor sentinel, no need
     // to push undefined value as arguments.
@@ -2986,7 +3012,7 @@ void TurboAssembler::EnterFrame(StackFrame::Type type) {
 }
 
 void TurboAssembler::LeaveFrame(StackFrame::Type type) {
-  if (emit_debug_code()) {
+  if (emit_debug_code() && type != StackFrame::MANUAL) {
     cmpq(Operand(rbp, CommonFrameConstants::kContextOrFrameTypeOffset),
          Immediate(StackFrame::TypeToMarker(type)));
     Check(equal, AbortReason::kStackFrameTypesMustMatch);
