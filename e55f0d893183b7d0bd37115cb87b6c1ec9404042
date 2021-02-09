@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be04037d_1b6b289c",
+        "filename": "BUILD.gn",
+        "patchSetId": 457
+      },
+      "lineNbr": 2510,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "I think baseline is fine, just because of the short path, but happy to hear others\u0027 opinions here.",
+      "parentUuid": "5b71b1ad_c3caad61",
+      "range": {
+        "startLine": 2510,
+        "startChar": 9,
+        "endLine": 2510,
+        "endChar": 17
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "734da2a1_341c1f39",
         "filename": "src/baseline/baseline-compiler.h",
         "patchSetId": 457
@@ -37,6 +61,30 @@
       "writtenOn": "2021-02-09T13:23:25Z",
       "side": 1,
       "message": "Can we have better names for n and v?",
+      "range": {
+        "startLine": 43,
+        "startChar": 24,
+        "endLine": 43,
+        "endChar": 25
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2580caf0_270a44bd",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 457
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "734da2a1_341c1f39",
       "range": {
         "startLine": 43,
         "startChar": 24,
@@ -60,6 +108,24 @@
       "writtenOn": "2021-02-09T14:10:52Z",
       "side": 1,
       "message": "This looks arch-independent, I\u0027d suggest putting it in builtins-internal-gen.cc.",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da6bcc58_8d363c7d",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "Nice idea, done.",
+      "parentUuid": "522468cb_81940038",
       "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -100,6 +166,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20211ae7_a8d5840d",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "I made the OnStackReplacement changes because they were pretty easy and mechanical, I can revert them to keep the diff smaller but I still need to either a) add Trapping stub implementations for BaselineOnStackReplacement, or b) make the existence of the builtins arch-dependent. WDYT?",
+      "parentUuid": "4f2bef4c_6a72fa2a",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8506efe_12b74f1b",
         "filename": "src/builtins/arm64/builtins-arm64.cc",
         "patchSetId": 457
@@ -111,6 +195,24 @@
       "writtenOn": "2021-02-09T14:10:52Z",
       "side": 1,
       "message": "nit: these probably belong after the #if",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8c6c07f_f4d04856",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8506efe_12b74f1b",
       "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -128,6 +230,30 @@
       "writtenOn": "2021-02-09T14:10:52Z",
       "side": 1,
       "message": "TODO?",
+      "range": {
+        "startLine": 153,
+        "startChar": 33,
+        "endLine": 153,
+        "endChar": 50
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "635530a8_3b9a92c9",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "@verwaest",
+      "parentUuid": "78095b09_8f3103a8",
       "range": {
         "startLine": 153,
         "startChar": 33,
@@ -209,6 +335,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "571b5ea9_8f074caf",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "I kept it as \"compile\" for existing tooling, we should absolutely change to \"interpreter\" though.\n@cbruni",
+      "parentUuid": "a8e48d7c_13d6c1ca",
+      "range": {
+        "startLine": 209,
+        "startChar": 14,
+        "endLine": 209,
+        "endChar": 21
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5cddcf07_e8b52cb7",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 457
@@ -220,6 +370,30 @@
       "writtenOn": "2021-02-09T13:23:25Z",
       "side": 1,
       "message": "in the spirit of not using project names here - light-optimize? tricky one",
+      "range": {
+        "startLine": 215,
+        "startChar": 14,
+        "endLine": 215,
+        "endChar": 23
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d493ba0_fb5df363",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "Agree -- do you think we should change the name (to something like light-optimize), keep it as is for now and cross that bridge later, or revert and have TP report as \"optimize\" same as it did before this change?",
+      "parentUuid": "5cddcf07_e8b52cb7",
       "range": {
         "startLine": 215,
         "startChar": 14,
@@ -253,6 +427,48 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9199e750_30317bd9",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "LogFunctionCompilation (above) was previously in this anonymous namespace, but had to be exposed, so the namespace range dropped down to here.",
+      "parentUuid": "0ed415f4_5d39533a",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 9
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "570eeab8_8af3f5ec",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "Baseline code is reachable from the graph being serialized here, and is safely serializable. We could replace with a check for IsCode \u003d\u003e CodeKind \u003d\u003d SPARKPLUG?",
+      "parentUuid": "e6982b58_5f26c0ac",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78cc037d_d216106b",
@@ -266,6 +482,30 @@
       "writtenOn": "2021-02-09T13:23:25Z",
       "side": 1,
       "message": "I cannot recall why this shouldn\u0027t work.",
+      "range": {
+        "startLine": 720,
+        "startChar": 21,
+        "endLine": 720,
+        "endChar": 24
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6248d84_bfeac62b",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "We should double check this with Ulan. @pthier",
+      "parentUuid": "78cc037d_d216106b",
       "range": {
         "startLine": 720,
         "startChar": 21,

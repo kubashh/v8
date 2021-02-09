@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "695f062f_e33ad3f1",
+        "filename": "src/codegen/macro-assembler.h",
+        "patchSetId": 459
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "@victorgomes",
+      "parentUuid": "feaf409a_6d5429a5",
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "965ecb20_687f4ba6",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 459
@@ -82,6 +100,30 @@
       "writtenOn": "2021-02-09T14:29:12Z",
       "side": 1,
       "message": "I assume this is not enabled anywhere yet?",
+      "range": {
+        "startLine": 575,
+        "startChar": 12,
+        "endLine": 575,
+        "endChar": 21
+      },
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd5d1e83_4263f1ed",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 459
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "Not yet, though it passes x64 locally. My plan is to enable by default in a followup, and deal with any remaining on-bot test failures there. How does that sound?",
+      "parentUuid": "965ecb20_687f4ba6",
       "range": {
         "startLine": 575,
         "startChar": 12,
@@ -111,6 +153,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ffc79d47_6413ac40",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 459
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "@cbruni",
+      "parentUuid": "1c94f35b_c625bca5",
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9469f86d_afe30b4f",
         "filename": "src/heap/factory.h",
         "patchSetId": 459
@@ -122,6 +182,24 @@
       "writtenOn": "2021-02-09T14:10:52Z",
       "side": 1,
       "message": "Please make this explicit :) at least in the variable name.",
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d38df42_692f7b46",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 459
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-09T15:31:29Z",
+      "side": 1,
+      "message": "@cbruni",
+      "parentUuid": "9469f86d_afe30b4f",
       "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
