@@ -8,6 +8,7 @@
 #include "src/api/api.h"
 #include "src/wasm/wasm-module-builder.h"
 #include "test/cctest/cctest.h"
+#include "test/cctest/compiler/node-observer-tester.h"
 #include "test/cctest/test-api.h"
 #include "test/common/wasm/flag-utils.h"
 #include "test/common/wasm/test-signatures.h"
@@ -351,9 +352,9 @@ class FastJSWasmCallTester {
         "let module = new WebAssembly.Module(buf);"
         "let instance = new WebAssembly.Instance(module, importObj);"
         "function test(value) {"
-        "  return instance.exports." +
+        "  return %ObserveNode(instance.exports." +
         exported_function_name +
-        "(value);"
+        "(value));"
         "}"
         "%PrepareFunctionForOptimization(test);"
         "test(" +
@@ -363,7 +364,8 @@ class FastJSWasmCallTester {
         "test(" +
         arg + ");";
 
-    v8::Local<v8::Value> result_value = CompileRun(js_code.c_str());
+    v8::Local<v8::Value> result_value =
+        CompileRunWithJSWasmCallNodeObserver(js_code.c_str());
     CHECK(CheckType<T>(result_value));
     T result = ConvertJSValue<T>::Get(result_value, env.local()).ToChecked();
     CHECK_EQ(result, expected_result);
@@ -399,9 +401,9 @@ class FastJSWasmCallTester {
         exported_function_name +
         ";"
         "function test() {"
-        "  return " +
+        "  return %ObserveNode(" +
         exported_function_name +
-        "(arg);"
+        "(arg));"
         "}"
         "%PrepareFunctionForOptimization(test);"
         "test();";
@@ -410,7 +412,8 @@ class FastJSWasmCallTester {
     CHECK(try_catch.HasCaught());
 
     try_catch.Reset();
-    CompileRun("%OptimizeFunctionOnNextCall(test); test();");
+    CompileRunWithJSWasmCallNodeObserver(
+        "%OptimizeFunctionOnNextCall(test); test();");
     CHECK(try_catch.HasCaught());
   }
 
@@ -557,7 +560,31 @@ class FastJSWasmCallTester {
                                          exported_function_name, args.size())
             : GetJSTestCode(WasmModuleAsJSArray(), exported_function_name,
                             args.size());
-    return CompileRun(js_code.c_str());
+    return CompileRunWithJSWasmCallNodeObserver(js_code);
+  }
+
+  v8::Local<v8::Value> CompileRunWithJSWasmCallNodeObserver(
+      const std::string& js_code) {
+    compiler::ModificationObserver js_wasm_call_observer(
+        [](const compiler::Node* node) {
+          CHECK_EQ(compiler::IrOpcode::kJSCall, node->opcode());
+        },
+        [](const compiler::Node* node,
+           const compiler::ObservableNodeState& old_state)
+            -> compiler::NodeObserver::Observation {
+          if (old_state.opcode() != node->opcode()) {
+            CHECK_EQ(compiler::IrOpcode::kJSCall, old_state.opcode());
+            CHECK_EQ(compiler::IrOpcode::kJSWasmCall, node->opcode());
+            return compiler::NodeObserver::Observation::kStop;
+          }
+          return compiler::NodeObserver::Observation::kContinue;
+        });
+
+    {
+      compiler::ObserveNodeScope scope(CcTest::i_isolate(),
+                                       &js_wasm_call_observer);
+      return CompileRun(js_code.c_str());
+    }
   }
 
   // Format the JS test code that loads and instantiates a Wasm module and
@@ -585,9 +612,9 @@ class FastJSWasmCallTester {
            wasm_exported_function_name +
            ";"
            "function test() {"
-           "  let result = " +
+           "  let result = %ObserveNode(" +
            wasm_exported_function_name + "(" + js_args +
-           ");"
+           "));"
            "  return result;"
            "}"
            "%PrepareFunctionForOptimization(test);"
@@ -652,10 +679,11 @@ class FastJSWasmCallTester {
         "  var result = 0;"
         "  for (let i = 0; i < " +
         std::to_string(kDeoptLoopCount) + " + 5; i++) {";
-    code += bigint_arg ? "    result = " + wasm_exported_function_name + "(" +
-                             js_args + "+ BigInt(b)) + BigInt(n);"
-                       : "    result = " + wasm_exported_function_name + "(" +
-                             js_args + "+ b) + n;";
+    code += bigint_arg
+                ? "    result = %ObserveNode(" + wasm_exported_function_name +
+                      "(" + js_args + " + BigInt(b))) + BigInt(n);"
+                : "    result = %ObserveNode(" + wasm_exported_function_name +
+                      "(" + js_args + " + b)) + n;";
     code +=
         "  }"
         "  return result;"
