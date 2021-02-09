@@ -37,6 +37,7 @@ void DebugCodegen::GenerateFrameDropperTrampoline(MacroAssembler* masm) {
 
   __ movq(rbp, rbx);
   __ movq(rdi, Operand(rbp, StandardFrameConstants::kFunctionOffset));
+  __ movq(rax, Operand(rbp, StandardFrameConstants::kArgCOffset));
   __ leave();
 
   __ LoadTaggedPointerField(
@@ -44,7 +45,9 @@ void DebugCodegen::GenerateFrameDropperTrampoline(MacroAssembler* masm) {
   __ movzxwq(
       rbx, FieldOperand(rbx, SharedFunctionInfo::kFormalParameterCountOffset));
 
-  __ InvokeFunction(rdi, no_reg, rbx, rbx, JUMP_FUNCTION);
+  // The arguments are already in the stack (including any necessary padding),
+  // we should not try to massage the arguments again.
+  __ InvokeFunction(rdi, no_reg, rbx, rax, JUMP_FUNCTION_DONT_ADAPT);
 }
 
 const bool LiveEdit::kFrameDropperSupported = true;
