@@ -1807,6 +1807,24 @@ void InstructionSelector::VisitWordCompareZero(Node* user, Node* value,
 
   // Continuation could not be combined with a compare, emit compare against 0.
   IA32OperandGenerator g(this);
+
+  if (value->opcode() == IrOpcode::kCall) {
+    auto desc = CallDescriptorOf(value->op());
+    if (desc->IsCFunctionCall()) {
+      switch (desc->GetReturnType(0).representation()) {
+        case MachineRepresentation::kBit:
+        case MachineRepresentation::kWord8:
+          VisitCompare(this, kIA32Cmp8, g.Use(value), g.TempImmediate(0), cont);
+        case MachineRepresentation::kWord16:
+          VisitCompare(this, kIA32Cmp16, g.Use(value), g.TempImmediate(0),
+                       cont);
+          return;
+        default:
+          break;
+      }
+    }
+  }
+
   VisitCompare(this, kIA32Cmp, g.Use(value), g.TempImmediate(0), cont);
 }
 

@@ -5100,8 +5100,7 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
       case CTypeInfo::Type::kVoid:
         return __ UndefinedConstant();
       case CTypeInfo::Type::kBool:
-        return ChangeBitToTagged(
-            __ Word32And(c_call_result, __ Int32Constant(0xFF)));
+        return ChangeBitToTagged(c_call_result);
       case CTypeInfo::Type::kInt32:
         return ChangeInt32ToTagged(c_call_result);
       case CTypeInfo::Type::kUint32:
