@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4851dba1_c718508e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-02-09T08:28:14Z",
+      "side": 1,
+      "message": "lgtm w/ comments\n\nrebaselining is needed only because of the added message template, i assume?",
+      "revId": "e2ea695e6a2338448a47e8592aa38a262b6c19f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6af1005_c4be9581",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 5931,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-02-09T08:28:14Z",
+      "side": 1,
+      "message": "Can you add a test for allowing for (async.x of ?",
+      "range": {
+        "startLine": 5931,
+        "startChar": 63,
+        "endLine": 5931,
+        "endChar": 70
+      },
+      "revId": "e2ea695e6a2338448a47e8592aa38a262b6c19f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "882edb1c_70ab2f58",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 5931,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-02-09T08:28:14Z",
+      "side": 1,
+      "message": "-\u003e but",
+      "range": {
+        "startLine": 5931,
+        "startChar": 39,
+        "endLine": 5931,
+        "endChar": 41
+      },
+      "revId": "e2ea695e6a2338448a47e8592aa38a262b6c19f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
