@@ -62,6 +62,54 @@
       },
       "revId": "e2ea695e6a2338448a47e8592aa38a262b6c19f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcbb70a0_53062298",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 5931,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-02-09T20:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "882edb1c_70ab2f58",
+      "range": {
+        "startLine": 5931,
+        "startChar": 39,
+        "endLine": 5931,
+        "endChar": 41
+      },
+      "revId": "e2ea695e6a2338448a47e8592aa38a262b6c19f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1efeaa81_83d23e78",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 5931,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-02-09T20:02:42Z",
+      "side": 1,
+      "message": "Newest test262 roll covers it: https://github.com/tc39/test262/blob/main/test/language/statements/for-of/head-lhs-async-dot.js",
+      "parentUuid": "d6af1005_c4be9581",
+      "range": {
+        "startLine": 5931,
+        "startChar": 63,
+        "endLine": 5931,
+        "endChar": 70
+      },
+      "revId": "e2ea695e6a2338448a47e8592aa38a262b6c19f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
