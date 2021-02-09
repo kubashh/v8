@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b71b1ad_c3caad61",
+        "filename": "BUILD.gn",
+        "patchSetId": 457
+      },
+      "lineNbr": 2510,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-02-09T13:23:25Z",
+      "side": 1,
+      "message": "Drive-by thought: We could consider calling the directory baseline-compiler - to make it clear that this is a compiler. However, I like the shorter name baseline for the directory.",
+      "range": {
+        "startLine": 2510,
+        "startChar": 9,
+        "endLine": 2510,
+        "endChar": 17
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "734da2a1_341c1f39",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 457
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-02-09T13:23:25Z",
+      "side": 1,
+      "message": "Can we have better names for n and v?",
+      "range": {
+        "startLine": 43,
+        "startChar": 24,
+        "endLine": 43,
+        "endChar": 25
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8e48d7c_13d6c1ca",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-02-09T13:23:25Z",
+      "side": 1,
+      "message": "interpreter?",
+      "range": {
+        "startLine": 209,
+        "startChar": 14,
+        "endLine": 209,
+        "endChar": 21
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cddcf07_e8b52cb7",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-02-09T13:23:25Z",
+      "side": 1,
+      "message": "in the spirit of not using project names here - light-optimize? tricky one",
+      "range": {
+        "startLine": 215,
+        "startChar": 14,
+        "endLine": 215,
+        "endChar": 23
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ed415f4_5d39533a",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-02-09T13:23:25Z",
+      "side": 1,
+      "message": "why this namespace here?",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 9
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78cc037d_d216106b",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-02-09T13:23:25Z",
+      "side": 1,
+      "message": "I cannot recall why this shouldn\u0027t work.",
+      "range": {
+        "startLine": 720,
+        "startChar": 21,
+        "endLine": 720,
+        "endChar": 24
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
