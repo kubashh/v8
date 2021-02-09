@@ -27713,6 +27713,17 @@ struct UnexpectedObjectChecker
   }
 };
 
+struct ApiObjectChecker
+    : BasicApiChecker<v8::ApiObject, UnexpectedObjectChecker, void> {
+  explicit ApiObjectChecker(i::FunctionTemplateInfo ctor) : ctor_(ctor) {}
+
+  static void FastCallback(v8::ApiObject receiver, v8::ApiObject argument,
+                           v8::FastApiCallbackOptions& options) {}
+  static void SlowCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {}
+
+  i::FunctionTemplateInfo ctor_;
+};
+
 template <typename Value, typename Impl, typename Ret>
 bool SetupTest(v8::Local<v8::Value> initial_value, LocalContext* env,
                BasicApiChecker<Value, Impl, Ret>* checker,
