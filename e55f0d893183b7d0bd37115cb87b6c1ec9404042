@@ -49,6 +49,143 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "522468cb_81940038",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "This looks arch-independent, I\u0027d suggest putting it in builtins-internal-gen.cc.",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a806ddb_3b71c11a",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "IMO it\u0027d be helpful if these were also be tied to a tracking bug nr.",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f2bef4c_6a72fa2a",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "Here and all other non-x64 and non-arm64 bits, would it be possible to clarify they\u0027re not actually ported yet? I\u0027d expect changes in these platforms to be just new UNREACHABLE() definitions to make C++ compilation succeed, and not have partial ports like the OnStackReplacement change above.\n\nIt\u0027d also make the review easier if we could completely skip -arch files except x64 and arm64.",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8506efe_12b74f1b",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "nit: these probably belong after the #if",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78095b09_8f3103a8",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "TODO?",
+      "range": {
+        "startLine": 153,
+        "startChar": 33,
+        "endLine": 153,
+        "endChar": 50
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44323460_dfdea59c",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 457
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "naming nit: this is inconsistent with _WithFeedback and _Megamorphic and _Slow. It\u0027s a tiny point but I\u0027d vote for consistency now before this reaches the tree.",
+      "range": {
+        "startLine": 53,
+        "startChar": 35,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fb9c41c_4e81a32c",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 457
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "maybe tamer can gift you crbug.com/v8/10000 ;)",
+      "range": {
+        "startLine": 85,
+        "startChar": 13,
+        "endLine": 85,
+        "endChar": 18
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8e48d7c_13d6c1ca",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 457

@@ -16,6 +16,74 @@
       "message": "Great work! Only a few naming nits. LGTM % other compiler owner comments.\n\nRegarding testing: it would be great to add an --always-sparkplug variant to stress the compiler.",
       "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a901b7d1_93e6e37c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 459
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "Just a few comments from a quick skim (big CL). In the interests of avoiding rebaseline hell I\u0027d be okay with landing something very close to the current form as long as a proper review + addressing comments follows after.\n\nMy main comment is about non-x64 and non-arm64 files. I\u0027d prefer if these changes were all just UNREACHABLE() and #ifdefs and not a partial port. A partial port confuses me, plus it adds to the size of the CL.",
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feaf409a_6d5429a5",
+        "filename": "src/codegen/macro-assembler.h",
+        "patchSetId": 459
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "Please add a comment for this third non-obvious option.",
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c94f35b_c625bca5",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 459
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "I\u0027m curious about this flag.. code comments are already printed inline when disassembling code. I don\u0027t think printing the again afterwards is helpful at all, what about we just remove the flag and the prints?",
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9469f86d_afe30b4f",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 459
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-09T14:10:52Z",
+      "side": 1,
+      "message": "Please make this explicit :) at least in the variable name.",
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
