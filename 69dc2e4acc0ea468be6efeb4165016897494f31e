@@ -193,6 +193,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2c67867_0f53f652",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 459
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-09T16:12:46Z",
+      "side": 1,
+      "message": "There were STRONG opinions about this in the past 😄.\nAll in for just removing it!",
+      "parentUuid": "ffc79d47_6413ac40",
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9469f86d_afe30b4f",

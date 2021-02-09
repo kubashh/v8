@@ -405,6 +405,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27ffde34_96295044",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-09T16:12:46Z",
+      "side": 1,
+      "message": "Changing to interpreter!\nFix for tooling is on its way.",
+      "parentUuid": "571b5ea9_8f074caf",
+      "range": {
+        "startLine": 209,
+        "startChar": 14,
+        "endLine": 209,
+        "endChar": 21
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cddcf07_e8b52cb7",
@@ -442,6 +466,30 @@
       "side": 1,
       "message": "Agree -- do you think we should change the name (to something like light-optimize), keep it as is for now and cross that bridge later, or revert and have TP report as \"optimize\" same as it did before this change?",
       "parentUuid": "5cddcf07_e8b52cb7",
+      "range": {
+        "startLine": 215,
+        "startChar": 14,
+        "endLine": 215,
+        "endChar": 23
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd275ce_01eafed7",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-09T16:12:46Z",
+      "side": 1,
+      "message": "This is for the v8.log only, so I would vote for deferring that decision as well.",
+      "parentUuid": "9d493ba0_fb5df363",
       "range": {
         "startLine": 215,
         "startChar": 14,

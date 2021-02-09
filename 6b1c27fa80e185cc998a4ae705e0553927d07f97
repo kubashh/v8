@@ -16,6 +16,24 @@
       "message": "Why did you remove this check?",
       "revId": "6b1c27fa80e185cc998a4ae705e0553927d07f97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b75c327_7b69b49e",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-09T16:12:46Z",
+      "side": 0,
+      "message": "Added back explicit sparkplug check.",
+      "parentUuid": "570eeab8_8af3f5ec",
+      "revId": "6b1c27fa80e185cc998a4ae705e0553927d07f97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
