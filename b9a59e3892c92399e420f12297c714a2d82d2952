@@ -22,6 +22,30 @@
       },
       "revId": "b9a59e3892c92399e420f12297c714a2d82d2952",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7d2ba52_8472bc3e",
+        "filename": "test/mjsunit/regress/regress-1172797.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-02-09T16:00:23Z",
+      "side": 1,
+      "message": "Yes, totally. I have a follow up cl here: https://chromium-review.googlesource.com/c/v8/v8/+/2682638. I just wanted to get the fix in before I get the tests correct. Initially I had it in the same cl but adding that support was a bit more tricky than I expected.",
+      "parentUuid": "c6aa7f65_b338b2cd",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 34
+      },
+      "revId": "b9a59e3892c92399e420f12297c714a2d82d2952",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
