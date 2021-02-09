@@ -266,6 +266,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23870dab_ab0f284b",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-09T15:58:00Z",
+      "side": 1,
+      "message": "This is a copy from the code above (115). Do you have more context Jakob? :)",
+      "parentUuid": "635530a8_3b9a92c9",
+      "range": {
+        "startLine": 153,
+        "startChar": 33,
+        "endLine": 153,
+        "endChar": 50
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44323460_dfdea59c",
         "filename": "src/builtins/builtins-definitions.h",
         "patchSetId": 457
@@ -277,6 +301,30 @@
       "writtenOn": "2021-02-09T14:10:52Z",
       "side": 1,
       "message": "naming nit: this is inconsistent with _WithFeedback and _Megamorphic and _Slow. It\u0027s a tiny point but I\u0027d vote for consistency now before this reaches the tree.",
+      "range": {
+        "startLine": 53,
+        "startChar": 35,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3490294_aa106f7b",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 457
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-09T15:58:00Z",
+      "side": 1,
+      "message": "I kinda found _WithFeedback inconsistent with all the other names (and actually just ugly)... :) We don\u0027t call it _Trampoline, ...",
+      "parentUuid": "44323460_dfdea59c",
       "range": {
         "startLine": 53,
         "startChar": 35,
