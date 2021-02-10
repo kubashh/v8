@@ -86,6 +86,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e32fd25_3c1de230",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 465
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:47:04Z",
+      "side": 1,
+      "message": "builtins-x64",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e6992b5_44f88f79",
@@ -150,6 +167,108 @@
       "writtenOn": "2021-02-10T10:30:49Z",
       "side": 1,
       "message": "Same here (after the #if)",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4b1d253_467bc1c1",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:47:04Z",
+      "side": 1,
+      "message": "No CmpObjectType here?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "118e4764_eff20f86",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:47:04Z",
+      "side": 1,
+      "message": "Could/should this also be moved to the prologue? If the vector is flushed, it\u0027s probably not safe to assume the next SP call will come from the IET. Plus it\u0027d make this block a lot less complex.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dbad065_8a763756",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:47:04Z",
+      "side": 1,
+      "message": "+1 seems reasonable to remove.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c080b237_294d20f7",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1635,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:47:04Z",
+      "side": 1,
+      "message": "Meaning what, we clobber a callee-saved register? That\u0027s okay why?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35b0f315_8e3324ba",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1679,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:47:04Z",
+      "side": 1,
+      "message": "Maybe a helper fn? I assume this is copied from another location.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d00bc763_48576cf5",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:47:04Z",
+      "side": 1,
+      "message": "Same here a helper fn could be useful.",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
