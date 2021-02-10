@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afebd612_8965eae7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-10T21:52:23Z",
+      "side": 1,
+      "message": "ptal again.\n\nneis@: it would probably be nice to indeed get rid of the Ref indirection. I didn\u0027t do it here since that also affects how we access the constant pool etc.",
+      "revId": "212d009b0c19ed0c882a527815218b69be5ae2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
