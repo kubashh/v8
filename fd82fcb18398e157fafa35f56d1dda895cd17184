@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef414ec9_7bb0354f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 471
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-02-10T11:51:32Z",
+      "side": 1,
+      "message": "Reverted serialization of BaselineData. Instead we just serialize the BytecodeArray for now.\n\nSerialization of BaselineData will be handled in a follow-up CL.",
+      "revId": "fd82fcb18398e157fafa35f56d1dda895cd17184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

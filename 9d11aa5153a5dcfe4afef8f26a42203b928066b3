@@ -1110,6 +1110,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4f29255_f23f1633",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-02-10T11:51:32Z",
+      "side": 1,
+      "message": "Ack\nRemoved for now.",
+      "parentUuid": "44edba76_f278bfa0",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89124267_0ae89e01",
@@ -1123,6 +1141,24 @@
       "writtenOn": "2021-02-10T07:33:24Z",
       "side": 1,
       "message": "I\u0027d prefer not keeping these style of TODOs in the tree. I\u0027m still trying to understand why we need to support SP serialization at all, at least in this initial CL. We probably don\u0027t want them in the startup snapshot. If possible I\u0027d vote for removing this and the below change.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f9b669a_37b72cc7",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-02-10T11:51:32Z",
+      "side": 1,
+      "message": "This TODO was not meant to survive until the changes are merged to the tree.\nulan@ thinks it was a restriction back when the deserializer used its own allocator. Now that the deserializer uses the main allocator, large objects are supported.\nReverted the change anyways for now.",
+      "parentUuid": "89124267_0ae89e01",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1144,6 +1180,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4ed59d7_0d3bfd9a",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-02-10T11:51:32Z",
+      "side": 1,
+      "message": "Ack\nRemoved for now.",
+      "parentUuid": "964ee30f_826ecde5",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f886b8a_30a53cce",
@@ -1157,6 +1211,24 @@
       "writtenOn": "2021-02-10T07:33:24Z",
       "side": 1,
       "message": "A general comment on snapshot/ changes: please extract those to a future CL, and let\u0027s implement snapshot support nicely there. We should clarify when/if we want to serialize SP code at all. For now, I\u0027d prefer if we replace BaselineData on the fly with bytecode during serialization.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b587c19_0c8f8279",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-02-10T11:51:32Z",
+      "side": 1,
+      "message": "Done.\nReverted the changes and instead replaced BaselineData with bytecode during serialization.",
+      "parentUuid": "0f886b8a_30a53cce",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1178,6 +1250,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3951706_95cc15b9",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-02-10T11:51:32Z",
+      "side": 1,
+      "message": "Ack\nRemoved for now.",
+      "parentUuid": "d662ff89_c9c40480",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40cc0a28_693aa5e2",
@@ -1195,6 +1285,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd698975_c6f6f6b1",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-02-10T11:51:32Z",
+      "side": 1,
+      "message": "Ack\nRemoved for now.",
+      "parentUuid": "40cc0a28_693aa5e2",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e76122b_4685a6e8",
@@ -1208,6 +1316,24 @@
       "writtenOn": "2021-02-10T07:33:24Z",
       "side": 1,
       "message": "When does this happen? I\u0027m not sure we want sparkplug code in the startup snapshot, alternatively we could clear compiled data prior to serialization, or replace it with the bytecode inline.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b507a15_c3f822a2",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-02-10T11:51:32Z",
+      "side": 1,
+      "message": "It happens only with --always-sparkplug.\nRemoved for now.",
+      "parentUuid": "0e76122b_4685a6e8",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
