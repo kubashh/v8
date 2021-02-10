@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44a9f51d_63153e80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-02-10T06:36:47Z",
+      "side": 1,
+      "message": "Hi Ulan and Peter, PTAL. This CL adds support for monitoring bytecode flushing events, since we won\u0027t be able to use finalizers to detect when bytecode flushes occur for the CodeMap GC changes (as we replace BytecodeArray objects with UncompiledData objects in-place, see https://source.chromium.org/chromium/chromium/src/+/master:v8/src/heap/mark-compact.cc;drc\u003d2ac64302ae161cd6b5e4b1254497bdf5fd6d3415;l\u003d2145?q\u003dflushbytecode\u0026ss\u003dchromium).\n\nIf this looks good to you, I\u0027ll follow this with propagating bytecode flushing events to the profiler\u0027s CodeMap. Thanks!",
+      "revId": "30c50922cda85f0a43a9a0eaccf78c20b2f6408c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
