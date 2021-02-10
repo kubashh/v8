@@ -503,6 +503,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a757425_157fbea0",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-02-10T10:58:33Z",
+      "side": 1,
+      "message": "It is okay for the prototype.\n\nIn production we probably want to keep track of SFI \u003d\u003e sparkplug code list to avoid heap iteration, which may require O(100) ms for larger heaps.",
+      "parentUuid": "30dfb4c7_0f52a962",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17a1eef8_acd7543e",
         "filename": "src/deoptimizer/deoptimizer.h",
         "patchSetId": 465
