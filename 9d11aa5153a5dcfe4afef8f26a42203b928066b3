@@ -69,6 +69,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bf0c938_14d79afc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 465
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "builtins/, codegen/",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e6992b5_44f88f79",
@@ -82,6 +99,199 @@
       "writtenOn": "2021-02-10T09:55:23Z",
       "side": 1,
       "message": "Should this be in src/baseline/DEPS? (The same applies to the other things in this file ofc but those are old code.)",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "234b2f8d_14d85295",
+        "filename": "src/builtins/builtins-lazy-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "So if we have baseline code we can skip most of the checks above, and we know if have SP code since GetSharedFunctionInfoCode. To avoid the repeat check you could jump to a label in GetSharedFunctionInfoCode.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42cebff0_4dcb48f3",
+        "filename": "src/builtins/builtins-lazy-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "Is this used anywhere? Looks like we just call the runtime function directly.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a885a302_dd4d992a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "Same here (after the #if)",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c515dee_4518ef5a",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 9665,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "The arg is unused and we still unconditionally check \u003d\u003d undefined?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fc5dedf_2e4553d2",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 10933,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "Please assert cur_depth !\u003d 0, otherwise we loop 2^32 times.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01836e0f_626555c1",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 10954,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "Please add an `out` label and change this to Branch(..., \u0026context_search, \u0026out) to make the loop exit more explicit.\n\nWhat is the contract for cur_context? Can it be used both in the fallthrough and in the extension-found case?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a048ef8_f89ef9fb",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "nit: extract the repeated load.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d959ddc_f6d142f5",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "This condition is repeated in the runtime file, could we extract it to some helper? Also in slightly different form (HasDebugInfo) below.",
+      "range": {
+        "startLine": 1233,
+        "startChar": 8,
+        "endLine": 1233,
+        "endChar": 36
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dfefd34_0a3ce4be",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "So we\u0027ve usually done this after installing the Code object on the JSFunction up to now, and elsewhere in this CL it\u0027s also done that way for SP. Could we continue that pattern, or is there a reason it must be done here prior to compilation?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba745957_838a263a",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "Would it make sense to reuse CodeKind? It\u0027s what we use everywhere else when we\u0027re interested in the code kind, and a new enum doesn\u0027t seem to be needed here. Maybe I missed something.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa3e055f_5d2aa22e",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 3025,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:30:49Z",
+      "side": 1,
+      "message": "q: This seems unsymmetric with EnterFrame; so in this case we call LeaveFrame without a corresponding EnterFrame? When does this happen?",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
