@@ -139,6 +139,114 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6bafcae_85f5c155",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T11:08:53Z",
+      "side": 1,
+      "message": "Consider a Register::feedback_vector_offset() to formalize this?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a7e1aab_09616e31",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T11:08:53Z",
+      "side": 1,
+      "message": "-\u003ebytecode offset?",
+      "range": {
+        "startLine": 372,
+        "startChar": 18,
+        "endLine": 372,
+        "endChar": 33
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abbca8b5_5e6d463a",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T11:08:53Z",
+      "side": 1,
+      "message": "Do you have thoughts on how to generalize this platform-independent interface to masm?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67518750_cc731c51",
+        "filename": "src/baseline/baseline.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T11:08:53Z",
+      "side": 1,
+      "message": "Feels like this should go into Factory::NewBaselineData.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa4c9095_78767007",
+        "filename": "src/baseline/baseline.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T11:08:53Z",
+      "side": 1,
+      "message": "All this is so similar to Compiler:: logic, was there a reason to not stick it in there? IMO it makes sense to keep compiler logic in compiler.{h,cc}.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b3c0d16_91898ef1",
+        "filename": "src/baseline/baseline.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T11:08:53Z",
+      "side": 1,
+      "message": "q: is this the full public api? If so, 👍 and consider restricting access to only this file in src/DEPS.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "234b2f8d_14d85295",
         "filename": "src/builtins/builtins-lazy-gen.cc",
         "patchSetId": 465
