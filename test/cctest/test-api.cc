@@ -27801,7 +27801,8 @@ void CallAndCheck(
 
   bool has_caught = SetupTest<T, ApiNumberChecker<T>, void>(
       initial_value, &env, &checker,
-      "function func(arg) { return receiver.api_func(arg); }"
+      "function func(arg) { arg[0] = arg[1] + arg[2]; return "
+      "receiver.api_func(arg); }"
       "%PrepareFunctionForOptimization(func);"
       "func(value);");
   checker.result_ = ApiCheckerResult::kNotCalled;

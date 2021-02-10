@@ -887,7 +887,7 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
       JSCallReducer* reducer, Node* node,
       const FunctionTemplateInfoRef function_template_info, Node* receiver,
       Node* holder, const SharedFunctionInfoRef shared, Node* target,
-      const int arity, Node* effect)
+      const int arity, Node* effect, JSHeapBroker* broker)
       : JSCallReducerAssembler(reducer, node),
         c_function_(function_template_info.c_function()),
         c_signature_(function_template_info.c_signature()),
@@ -896,11 +896,48 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
         holder_(holder),
         shared_(shared),
         target_(target),
-        arity_(arity) {
+        arity_(arity),
+        broker_(broker) {
     DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
     DCHECK_NE(c_function_, kNullAddress);
     CHECK_NOT_NULL(c_signature_);
     InitializeEffectControl(effect, NodeProperties::GetControlInput(node));
+  }
+
+  bool ArgumentTypesMatchSignature() {
+    bool match = true;
+
+    JSCallNode n(node_ptr());
+    // C arguments include the receiver at index 0. Thus C index 1 corresponds
+    // to the JS argument 0, etc.
+    const int c_argument_count =
+        static_cast<int>(c_signature_->ArgumentCount());
+    CHECK_GE(c_argument_count, kReceiver);
+
+    for (int i = 0; i < c_argument_count - kReceiver; ++i) {
+      CTypeInfo::Type type = c_signature_->ArgumentInfo(i).GetType();
+      if (type != CTypeInfo::Type::kV8Value) {
+        printf("[WARNING] Non-obj type, will skip arg[%d]: %hhd\n", i, type);
+        continue;
+      }
+      MapInference inference(broker_, Argument(i), effect());
+      if (inference.HaveMaps()) {
+        MapHandles const& arg_maps = inference.GetMaps();
+        MapRef first_arg_map(broker_, arg_maps[0]);
+
+        printf("IsHeapNumber: %d\n", first_arg_map.IsHeapNumberMap());
+        printf("IsJSArray: %d\n", first_arg_map.IsJSArrayMap());
+        printf("IsJSTypedArray: %d\n", first_arg_map.IsJSTypedArrayMap());
+        printf("Elements kind: %d\n", first_arg_map.elements_kind());
+        printf("Instance type: %d\n", first_arg_map.instance_type());
+      } else {
+        printf("[WARNING] Couldn't infer any maps\n");
+        match = false;
+        break;
+      }
+    }
+
+    return match;
   }
 
   TNode<Object> ReduceFastApiCall() {
@@ -998,6 +1035,7 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
   const SharedFunctionInfoRef shared_;
   Node* const target_;
   const int arity_;
+  JSHeapBroker* broker_;
 };
 
 TNode<Number> JSCallReducerAssembler::SpeculativeToNumber(
@@ -3642,7 +3680,7 @@ Reduction JSCallReducer::ReduceCallApiFunction(
       //
       // The same is true for the instance type, e.g. we still know that the
       // instance type is JSObject even if that information is unreliable, and
-      // the "access check needed" bit, which also cannot change later.
+      // f the "access check needed" bit, which also cannot change later.
       CHECK(first_receiver_map.IsJSReceiverMap());
       CHECK(!first_receiver_map.is_access_check_needed() ||
             function_template_info.accept_any_receiver());
@@ -3732,11 +3770,14 @@ Reduction JSCallReducer::ReduceCallApiFunction(
 
   if (CanOptimizeFastCall(function_template_info)) {
     FastApiCallReducerAssembler a(this, node, function_template_info, receiver,
-                                  holder, shared, target, argc, effect);
+                                  holder, shared, target, argc, effect,
+                                  broker());
+    // if (a.ArgumentTypesMatchSignature()) {
     Node* fast_call_subgraph = a.ReduceFastApiCall();
     ReplaceWithSubgraph(&a, fast_call_subgraph);
 
     return Replace(fast_call_subgraph);
+    // }
   }
 
   CallHandlerInfoRef call_handler_info = *function_template_info.call_code();
