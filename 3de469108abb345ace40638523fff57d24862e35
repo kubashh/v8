@@ -33,6 +33,23 @@
       "message": "Ulan, Jakob, can you take a look as owners?",
       "revId": "3de469108abb345ace40638523fff57d24862e35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b6673e9_f85d5e24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-02-10T14:16:40Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "3de469108abb345ace40638523fff57d24862e35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
