@@ -811,6 +811,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c37323a2_bcf65955",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-10T16:38:04Z",
+      "side": 1,
+      "message": "I specifically named them similar to XTrampoline because I quite dislike the CamelCase_CamelCase style. Also see response on jgruber@\u0027s similar comment.",
+      "parentUuid": "ddf7d8a7_fd621690",
+      "range": {
+        "startLine": 67,
+        "startChar": 11,
+        "endLine": 67,
+        "endChar": 49
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "848d5af6_abca294d",
         "filename": "src/builtins/builtins-constructor-gen.cc",
         "patchSetId": 465
@@ -905,6 +929,24 @@
       "side": 1,
       "message": "I believe most of these are the trivial \"fetch the context/vector, call the real function\" trampolines, so they should be small, but I\u0027ll run the binary size bot to check. FWIW, these are actually here to _save_ memory, to get rid of the feedback vector loading code in Sparkplug-generated code.",
       "parentUuid": "bafbe8b0_f0ce1f81",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fadc623_12707813",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-10T16:38:04Z",
+      "side": 1,
+      "message": "It\u0027s basically the same as for _WithFeedback indeed. We do sometimes generate the full builtin so we can avoid e.g., loading the context where it\u0027s not relevant until a slow path. Since we now will run this more than ignition we could also outline IC handlers from interpreter builtins. We probably won\u0027t even run ignition with feedback vectors anymore anyway...",
+      "parentUuid": "39d9e1dc_1ff3e85a",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
