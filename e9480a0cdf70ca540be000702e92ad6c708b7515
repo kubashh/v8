@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c9bc57b_e820bffc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-02-10T11:14:03Z",
+      "side": 1,
+      "message": "lgtm with suggestion",
+      "revId": "e9480a0cdf70ca540be000702e92ad6c708b7515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf15a6b5_9cbdc7a5",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 12371,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-02-10T11:14:03Z",
+      "side": 1,
+      "message": "You could probably move this check inside TryPrototypeChainLookup behind a new flag, thus you can remove the ToName call from here.",
+      "revId": "e9480a0cdf70ca540be000702e92ad6c708b7515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "713576c4_05cddbd9",
