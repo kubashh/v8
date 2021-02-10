@@ -2232,6 +2232,32 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Pinsrd(i.OutputSimd128Register(), i.InputOperand(3), lane * 2 + 1);
       break;
     }
+    case kIA32I64x2Abs: {
+      XMMRegister dst = i.OutputSimd128Register();
+      XMMRegister src = i.InputSimd128Register(0);
+      if (CpuFeatures::IsSupported(AVX)) {
+        CpuFeatureScope avx_scope(tasm(), AVX);
+        __ vpxor(dst, dst, dst);
+        __ vpsubq(dst, dst, src);
+        __ vblendvpd(dst, src, dst, src);
+      } else if (CpuFeatures::IsSupported(SSE4_1)) {
+        CpuFeatureScope sse_scope(tasm(), SSE4_1);
+        XMMRegister tmp = i.TempSimd128Register(0);
+        DCHECK_EQ(xmm0, tmp);
+        __ pxor(tmp, tmp);
+        __ psubq(tmp, src);
+        // TODO(zhin): use movdqa after rebase
+        __ movaps(dst, tmp);
+        __ blendvpd(dst, src);
+      } else {
+        DCHECK_EQ(dst, src);
+        __ pshufd(kScratchDoubleReg, src, 0xF5);
+        __ psrad(kScratchDoubleReg, 31);
+        __ pxor(dst, kScratchDoubleReg);
+        __ psubq(dst, kScratchDoubleReg);
+      }
+      break;
+    }
     case kIA32I64x2Neg: {
       XMMRegister dst = i.OutputSimd128Register();
       Operand src = i.InputOperand(0);
