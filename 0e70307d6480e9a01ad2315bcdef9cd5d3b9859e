@@ -16,6 +16,40 @@
       "message": "Hello, would you please take a look? Thanks!",
       "revId": "0e70307d6480e9a01ad2315bcdef9cd5d3b9859e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8068a63f_39d61529",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-02-10T11:20:47Z",
+      "side": 1,
+      "message": "lgtm, thanks Seth.",
+      "revId": "0e70307d6480e9a01ad2315bcdef9cd5d3b9859e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ae76365_e1302e43",
+        "filename": "test/cctest/compiler/test-basic-block-profiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-02-10T11:20:47Z",
+      "side": 1,
+      "message": "thx for the test, pretty cool.",
+      "revId": "0e70307d6480e9a01ad2315bcdef9cd5d3b9859e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
