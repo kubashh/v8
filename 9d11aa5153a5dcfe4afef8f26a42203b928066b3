@@ -646,6 +646,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb260441_57f43af2",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-02-10T13:25:24Z",
+      "side": 1,
+      "message": "Naming things is always hard! Specially after some iteration... 😊\nYes, DeoptimizeSparkplugVisitor sounds good to me. I\u0027ll change.",
+      "parentUuid": "1b07b1d3_e058e614",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30dfb4c7_0f52a962",
@@ -730,6 +748,24 @@
       "side": 1,
       "message": "@victorgomes",
       "parentUuid": "17a1eef8_acd7543e",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48c96864_f70799af",
+        "filename": "src/deoptimizer/deoptimizer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-02-10T13:25:24Z",
+      "side": 1,
+      "message": "We would need at least DeoptimizeSparkplug(SharedFunctionInfo) and DeoptimizeAllSparkplug(). Since the latter deoptimize every function (used on DeoptimizeAll). I\u0027ll change.",
+      "parentUuid": "4a8cc221_239e9637",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
