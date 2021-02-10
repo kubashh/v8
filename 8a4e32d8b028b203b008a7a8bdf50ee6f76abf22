@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17372e27_f7b493fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-10T22:13:05Z",
+      "side": 1,
+      "message": "Marat, ptal Bill\u0027s question on the SSE4.1 specialization and what speedup we can see over SSE2. I added a godbolt link with llvm-mca analysis comparing them, please feel free to add on.",
+      "revId": "8a4e32d8b028b203b008a7a8bdf50ee6f76abf22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08ad40e5_39f27dce",
@@ -14,6 +31,30 @@
       "writtenOn": "2021-02-10T21:48:28Z",
       "side": 1,
       "message": "Is this code significantly better than the default case below?",
+      "range": {
+        "startLine": 2855,
+        "startChar": 8,
+        "endLine": 2858,
+        "endChar": 30
+      },
+      "revId": "8a4e32d8b028b203b008a7a8bdf50ee6f76abf22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b19214c4_06395f8d",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2858,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-10T22:13:05Z",
+      "side": 1,
+      "message": "Based on llvm-mca, it seems to be quite a bit better yes, ptal https://godbolt.org/z/hxs7h7In term of IPC, this requires ~30% less cycles. I\u0027ll add Marat to this review to check the numbers.",
+      "parentUuid": "08ad40e5_39f27dce",
       "range": {
         "startLine": 2855,
         "startChar": 8,
