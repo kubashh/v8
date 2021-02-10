@@ -218,6 +218,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c5b2370_c1b68de6",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T13:15:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9f131ae_700867dd",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8506efe_12b74f1b",
@@ -574,6 +592,30 @@
       "side": 1,
       "message": "This is for the v8.log only, so I would vote for deferring that decision as well.",
       "parentUuid": "9d493ba0_fb5df363",
+      "range": {
+        "startLine": 215,
+        "startChar": 14,
+        "endLine": 215,
+        "endChar": 23
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddfef032_03e606a6",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T13:15:04Z",
+      "side": 1,
+      "message": "deferring sgtm.",
+      "parentUuid": "9dd275ce_01eafed7",
       "range": {
         "startLine": 215,
         "startChar": 14,

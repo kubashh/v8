@@ -296,6 +296,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2398dc90_bc6af596",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T13:15:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a885a302_dd4d992a",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4b1d253_467bc1c1",
@@ -540,6 +558,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f25f5053_94d27ebe",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 3025,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T13:15:04Z",
+      "side": 1,
+      "message": "Currently it happens because the baseline prologue does a manual push/move instead of calling EnterFrame. I think we could recover this symmetry by adding the same `if` condition to EnterFrame.",
+      "parentUuid": "aa3e055f_5d2aa22e",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d99ac43_e7d62b1b",
@@ -594,6 +630,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1b07b1d3_e058e614",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T13:15:04Z",
+      "side": 1,
+      "message": "@victorgomes",
+      "parentUuid": "39677090_b718da77",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "30dfb4c7_0f52a962",
         "filename": "src/deoptimizer/deoptimizer.cc",
         "patchSetId": 465
@@ -629,6 +683,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a97a98c_5246e317",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T13:15:04Z",
+      "side": 1,
+      "message": "This \"deoptimization\" is currently debugger-only anyway (dropping SP code so that we can set breakpoints in ignition), so it does a similar heap walk to the one in `Debug::InstallDebugBreakTrampoline`. We might revisit the single function DeoptimizeSparkplug, but I don\u0027t see a reasonable way of getting rid of the heap walk in DeoptimizeAllSparkplug.",
+      "parentUuid": "6a757425_157fbea0",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17a1eef8_acd7543e",
         "filename": "src/deoptimizer/deoptimizer.h",
         "patchSetId": 465
@@ -640,6 +712,24 @@
       "writtenOn": "2021-02-10T10:55:04Z",
       "side": 1,
       "message": "Mentioned elsewhere, if possible I\u0027d prefer to have only one entry point (DeoptimizeFunction) which dispatches internally to DeoptimizeSparkplug. The DeoptimizeSparkplug* functions below could be made private.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a8cc221_239e9637",
+        "filename": "src/deoptimizer/deoptimizer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T13:15:04Z",
+      "side": 1,
+      "message": "@victorgomes",
+      "parentUuid": "17a1eef8_acd7543e",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1351,6 +1441,24 @@
       "writtenOn": "2021-02-10T07:33:24Z",
       "side": 1,
       "message": "Maybe a whitelist would be easier? Small distinction since arch\u0027s don\u0027t change often, but just yesterday we landed the riscv port :).",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81bf5b8f_915422d3",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 465
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T13:15:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e025dff9_0918bab7",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
