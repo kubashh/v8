@@ -35,6 +35,131 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61ca29c1_acaba9ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 465
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:35:06Z",
+      "side": 1,
+      "message": "Just to repeat, these comments aren\u0027t blocking - to avoid rebasing I\u0027m okay with landing first and addressing after. Of course, whatever can be addressed before landing is a bonus.\n\nComments for objects/. The main q is about mark_for_deoptimization.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a71c805b_cd7fbc7a",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:35:06Z",
+      "side": 1,
+      "message": "Please add a reminder to combine this with TranslationArray de/encoding.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5958aca3_86ab0f86",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:35:06Z",
+      "side": 1,
+      "message": "Maybe we could consider CHECKs here and below, getting this wrong seems pretty bad and doing a runtime CHECK fairly inexpensive.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3046cc90_a4715dad",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:35:06Z",
+      "side": 1,
+      "message": "q: Why this change? Is CodeKindIsInterpretedJSFunction now !\u003d CodeKind::INTERPRETED_FUNCTION? That seems a bit surprising.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f194acb1_8becf8e5",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:35:06Z",
+      "side": 1,
+      "message": "Curious about this, can sparkplug really be marked for deoptimization? Why, tests? Should we allow this / what\u0027s the intended behavior?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eb8dfc3_5eb4c9d4",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:35:06Z",
+      "side": 1,
+      "message": "accidental nesting",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3263ee08_1dbb8970",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:35:06Z",
+      "side": 1,
+      "message": "q: what does the \u0027active\u0027 mean, why not just \u0027GetBytecodeArray\u0027? Fyi the word \u0027active\u0027 has meaning in a related spot, see JSFunction::GetActiveTier and related functions.",
+      "range": {
+        "startLine": 507,
+        "startChar": 28,
+        "endLine": 507,
+        "endChar": 50
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "741aa7a6_035afdf4",
