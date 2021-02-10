@@ -449,6 +449,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c3f1e87_82965c28",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T21:25:18Z",
+      "side": 1,
+      "message": "It has the same comparison against BYTECODE_ARRAY_TYPE with an Assert(eq, AbortReason::kMissingBytecodeArray), that could be turned into a Bind(\u0026not_compiled); AssertUnreachable(kMissingBytecodeArray) (and the other call site just binding not_compiled to compile_lazy)",
+      "parentUuid": "35986e8c_bb7bb596",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55134b70_dc922522",
         "filename": "src/builtins/arm64/builtins-arm64.cc",
         "patchSetId": 465
@@ -636,6 +654,30 @@
       "side": 1,
       "message": "This can both be a specific feature and still be a horrible hack :) do you mean that we should just rephrase this comment?",
       "parentUuid": "1c06756a_86baec31",
+      "range": {
+        "startLine": 1245,
+        "startChar": 5,
+        "endLine": 1245,
+        "endChar": 19
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6371e753_a60662a5",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T21:25:18Z",
+      "side": 1,
+      "message": "I guess my main concern so far with this code is playing a bit fast an loose with whether a frame is Interpreted or Baseline - I realize that this is a feature and makes a lot of things easier, but I would much prefer we are more explicit about what is the same and what is different, e.g., having a UnoptimizedJSFrameBase and that both frames types extend, rather than having BaselineFrames extend from InterpretedFrames and hack a few places that are different. If you did this then I would contend that this isn\u0027t a horrible hack here, it is just the one difference between Baseline and Interpreted frames.",
+      "parentUuid": "366ccbd2_c4d0cf8b",
       "range": {
         "startLine": 1245,
         "startChar": 5,
@@ -859,6 +901,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fcc5f951_857bb3cb",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T21:25:18Z",
+      "side": 1,
+      "message": "InterpreterEntryTrampoline isn\u0027t an equivalent comparison since that\u0027s an intergral part of the Interpreter (similarly I wouldn\u0027t suggest renaming BaselinePrologue for the same reason).  However these are variants of existing builtins, and names like ConstructBaseline or EqualBaseline are not clear about whether they are a builtin with different behaviour or a variant of the existing ones.\n\nI am also not keen on the CamelCase_CamelCase notation, but it is how we\u0027ve dealt with this up previously, and I\u0027d like to be consistent going forward, either using the same notion here, or coming up with a new scheme that is clear and renaming the existing variants (e.g., _WithFeedback) to be similar in a followup CL.",
+      "parentUuid": "73d705bb_ac93b2bc",
+      "range": {
+        "startLine": 67,
+        "startChar": 11,
+        "endLine": 67,
+        "endChar": 49
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "848d5af6_abca294d",
         "filename": "src/builtins/builtins-constructor-gen.cc",
         "patchSetId": 465
@@ -894,6 +960,30 @@
       "side": 1,
       "message": "Do you mean share the C++ code or the generated code?",
       "parentUuid": "848d5af6_abca294d",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70b76542_0bdcd45e",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T21:25:18Z",
+      "side": 1,
+      "message": "Sharing the C++ code is fine for short builtins, for more involved builtins we should treat them as trampolines (which I think you already do for many)",
+      "parentUuid": "08751f96_76c183d2",
       "range": {
         "startLine": 52,
         "startChar": 0,
