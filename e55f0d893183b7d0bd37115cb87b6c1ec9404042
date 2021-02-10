@@ -202,6 +202,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b9f131ae_700867dd",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "IMO either option is fine. Open to other opinions as well, but my personal +1 goes to keeping this CL to arm64- and x64-only.",
+      "parentUuid": "20211ae7_a8d5840d",
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8506efe_12b74f1b",
         "filename": "src/builtins/arm64/builtins-arm64.cc",
         "patchSetId": 457
@@ -306,6 +324,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a82036a_46c7f39f",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "Ha :) Maybe my past self does, present self needs some work. IIRC this was necessary because CollectConstructFeedback gives an opportunity to specialize for arrays; we just don\u0027t use that opportunity, although we could. (So a TODO explaining this would indeed be nice, I can add it in a followup.)",
+      "parentUuid": "23870dab_ab0f284b",
+      "range": {
+        "startLine": 153,
+        "startChar": 33,
+        "endLine": 153,
+        "endChar": 50
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44323460_dfdea59c",
@@ -343,6 +385,30 @@
       "side": 1,
       "message": "I kinda found _WithFeedback inconsistent with all the other names (and actually just ugly)... :) We don\u0027t call it _Trampoline, ...",
       "parentUuid": "44323460_dfdea59c",
+      "range": {
+        "startLine": 53,
+        "startChar": 35,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e315f3b4_50bba356",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 457
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "So just to mention the reasoning again, I used the _ as a stronger separator than camel-case, this is also how it\u0027s used elsewhere. It separates different concepts, e.g. in Call_ReceiverIsNullOrUndefined_WithFeedback \u0027Call\u0027, \u0027Receiver...\u0027 and \u0027WithFeedback\u0027 are all separate \u0027sentences\u0027. I agree the names are a bit long and ugly, but personally I think they\u0027re clearer than without the \u0027_\u0027.\n\nIn the end I don\u0027t care too much which way we go, as long as it\u0027s consistent.",
+      "parentUuid": "c3490294_aa106f7b",
       "range": {
         "startLine": 53,
         "startChar": 35,

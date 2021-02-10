@@ -1,0 +1,180 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "261eabac_cb3023b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 465
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "Still busy with this review, publishing replies and comments on snapshot/ now.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82699fc1_2467ce6e",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "Thank you! :D",
+      "range": {
+        "startLine": 641,
+        "startChar": 70,
+        "endLine": 641,
+        "endChar": 71
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44edba76_f278bfa0",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "This condition was ugly before and now it\u0027s reaching the limit imo; please extract the body into a helper function, `bool MaybeDeferObject` or similar.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89124267_0ae89e01",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "I\u0027d prefer not keeping these style of TODOs in the tree. I\u0027m still trying to understand why we need to support SP serialization at all, at least in this initial CL. We probably don\u0027t want them in the startup snapshot. If possible I\u0027d vote for removing this and the below change.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "964ee30f_826ecde5",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "Perfect use-case for a scope object.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f886b8a_30a53cce",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "A general comment on snapshot/ changes: please extract those to a future CL, and let\u0027s implement snapshot support nicely there. We should clarify when/if we want to serialize SP code at all. For now, I\u0027d prefer if we replace BaselineData on the fly with bytecode during serialization.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d662ff89_c9c40480",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "nit: please keep the variable and accessor name the same. Also the pattern for simple accessors is \n\n bool allow_objects_deferral() const {...}\n void set_allow_objects_deferral(bool v) {...}",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40cc0a28_693aa5e2",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "nit: this is mostly just restating the variable name, please add a half-sentence with an example of why deferral could be disabled.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e76122b_4685a6e8",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "When does this happen? I\u0027m not sure we want sparkplug code in the startup snapshot, alternatively we could clear compiled data prior to serialization, or replace it with the bytecode inline.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e025dff9_0918bab7",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 465
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T07:33:24Z",
+      "side": 1,
+      "message": "Maybe a whitelist would be easier? Small distinction since arch\u0027s don\u0027t change often, but just yesterday we landed the riscv port :).",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
