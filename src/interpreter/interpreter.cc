@@ -10,6 +10,7 @@
 #include "builtins-generated/bytecodes-builtins-list.h"
 #include "src/ast/prettyprinter.h"
 #include "src/ast/scopes.h"
+#include "src/baseline/baseline.h"
 #include "src/codegen/compiler.h"
 #include "src/codegen/unoptimized-compilation-info.h"
 #include "src/execution/local-isolate.h"
@@ -189,6 +190,7 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::ExecuteJobImpl() {
   if (generator()->HasStackOverflow()) {
     return FAILED;
   }
+
   return SUCCEEDED;
 }
 
