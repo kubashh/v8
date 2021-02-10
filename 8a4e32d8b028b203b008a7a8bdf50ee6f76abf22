@@ -63,6 +63,30 @@
       },
       "revId": "8a4e32d8b028b203b008a7a8bdf50ee6f76abf22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56167e94_f3526278",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2858,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-02-10T22:18:41Z",
+      "side": 1,
+      "message": "I think it is better to not use SSE4.1 path. Some SSE4 CPUs (e.g. Silvermont/Goldmont) have very slow BLENDVPD.",
+      "parentUuid": "b19214c4_06395f8d",
+      "range": {
+        "startLine": 2855,
+        "startChar": 8,
+        "endLine": 2858,
+        "endChar": 30
+      },
+      "revId": "8a4e32d8b028b203b008a7a8bdf50ee6f76abf22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
