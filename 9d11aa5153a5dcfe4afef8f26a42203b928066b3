@@ -103,6 +103,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a604d3b_27c7ea03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 465
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:55:04Z",
+      "side": 1,
+      "message": "deoptimizer/",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e6992b5_44f88f79",
@@ -446,6 +463,57 @@
       "side": 1,
       "message": "https://chromium-review.googlesource.com/c/v8/v8/+/2675927",
       "parentUuid": "5d99ac43_e7d62b1b",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39677090_b718da77",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:55:04Z",
+      "side": 1,
+      "message": "I don\u0027t understand this function name. Maybe DeoptimizeSparkplugVisitor?\n\nIt\u0027s also simple enough that I\u0027d propose to split the DeoptimizeAll and DeoptimizeSFI into two classes rather than having the dispatch on shared_.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30dfb4c7_0f52a962",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:55:04Z",
+      "side": 1,
+      "message": "So a heap iteration is a lot more expensive than using the optimized code list. +Ulan ptal.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17a1eef8_acd7543e",
+        "filename": "src/deoptimizer/deoptimizer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T10:55:04Z",
+      "side": 1,
+      "message": "Mentioned elsewhere, if possible I\u0027d prefer to have only one entry point (DeoptimizeFunction) which dispatches internally to DeoptimizeSparkplug. The DeoptimizeSparkplug* functions below could be made private.",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
