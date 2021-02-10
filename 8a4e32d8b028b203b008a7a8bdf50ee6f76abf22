@@ -137,6 +137,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10a976c3_6c66eab9",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2858,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-10T23:26:30Z",
+      "side": 1,
+      "message": "Ah yea, ic. Removing this then.",
+      "parentUuid": "50d463c9_8b3a2bd1",
+      "range": {
+        "startLine": 2855,
+        "startChar": 8,
+        "endLine": 2858,
+        "endChar": 30
+      },
+      "revId": "8a4e32d8b028b203b008a7a8bdf50ee6f76abf22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71ca7d1e_31ca16ba",
@@ -160,6 +184,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc524776_296490e7",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2861,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-10T23:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71ca7d1e_31ca16ba",
+      "range": {
+        "startLine": 2861,
+        "startChar": 11,
+        "endLine": 2861,
+        "endChar": 47
+      },
+      "revId": "8a4e32d8b028b203b008a7a8bdf50ee6f76abf22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8dcbe4b3_fe76fbae",
@@ -173,6 +221,30 @@
       "writtenOn": "2021-02-10T22:21:42Z",
       "side": 1,
       "message": "xorps is one byte shorter",
+      "range": {
+        "startLine": 2863,
+        "startChar": 11,
+        "endLine": 2863,
+        "endChar": 15
+      },
+      "revId": "8a4e32d8b028b203b008a7a8bdf50ee6f76abf22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4240c1ef_3e7628e2",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2863,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-10T23:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8dcbe4b3_fe76fbae",
       "range": {
         "startLine": 2863,
         "startChar": 11,
