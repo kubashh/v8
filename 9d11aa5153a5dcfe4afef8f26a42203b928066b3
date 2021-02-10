@@ -20,6 +20,199 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d04d83ae_90db5a70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 465
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "runtime/ comments",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "741aa7a6_035afdf4",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "nit: type \u003d\u003d INTERPRETED.\n\nIn general I think the interpreted/sp smashup of frame types is a bit problematic, and it would be cleaner to either keep the frames identical, or be very clear about used terms and predicates. \n\nWith the current state there\u0027s confusion about what \u0027interpreted\u0027 means. For example, here we look at an InterpretedFrame, but it could be type INTERPRETED or type SPARKPLUG.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53a7885d_066949f7",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "This feels worth a comment, why do we potentially compile multiple times below?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a56d0d1a_3b219176",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "q: Every other compilation currently goes through a Compiler::CompileX function, should we do the same for SP?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc994045_d8d85677",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "Unused?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5b0f08d_26dc3652",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "Leftover?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2debc6fc_b6ebc142",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "q: was there a reason for set_code to be kept outside CompileWithBaseline? I ask because some other compiler functions do the set_code themselves.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94d71079_f6207f83",
+        "filename": "src/runtime/runtime-interpreter.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "nit: imo a more obvious type here is Bool True/False, or some other more explicit encoding. Again minor point, but 1000 paper cuts.. Obviously this is not a blocking comment.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb9af2db_ddab702b",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "Could we put this inside Deoptimizer::DeoptimizeFunction?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6e177e0_2958fe95",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "Hm, this now includes SP? What about IsInterpreterOrBaselineFrame?",
+      "range": {
+        "startLine": 481,
+        "startChar": 18,
+        "endLine": 481,
+        "endChar": 41
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae89ec8d_12db396e",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T08:03:17Z",
+      "side": 1,
+      "message": "Please integrate into the existing predicates (like HasAttachedOptimizedCode, ActiveTierIsIgnition). What is the expected behavior here, is SP code \u0027turbofanned and optimized\u0027?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "82699fc1_2467ce6e",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 465
