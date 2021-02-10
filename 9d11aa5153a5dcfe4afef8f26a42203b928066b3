@@ -509,6 +509,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "149b4b31_05c7d3bc",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-10T14:15:27Z",
+      "side": 1,
+      "message": "FWIW it\u0027s not too bad, here\u0027s the output for _WithFeedback builtins:\n\nTFC Builtin, Call_ReceiverIsNullOrUndefined_WithFeedback, 556\nTFC Builtin, Call_ReceiverIsNotNullOrUndefined_WithFeedback, 556\nTFC Builtin, Call_ReceiverIsAny_WithFeedback, 556\nTFC Builtin, CallWithSpread_WithFeedback, 1608\nTFC Builtin, CallWithArrayLike_WithFeedback, 1480\nTFC Builtin, ConstructWithSpread_WithFeedback, 1904\nTFC Builtin, ConstructWithArrayLike_WithFeedback, 1848\nTFC Builtin, Construct_WithFeedback, 900\nTFC Builtin, Add_WithFeedback, 756\nTFC Builtin, Subtract_WithFeedback, 828\nTFC Builtin, Multiply_WithFeedback, 956\nTFC Builtin, Divide_WithFeedback, 832\nTFC Builtin, Modulus_WithFeedback, 868\nTFC Builtin, Exponentiate_WithFeedback, 60\nTFC Builtin, BitwiseAnd_WithFeedback, 804\nTFC Builtin, BitwiseOr_WithFeedback, 796\nTFC Builtin, BitwiseXor_WithFeedback, 804\nTFC Builtin, ShiftLeft_WithFeedback, 820\nTFC Builtin, ShiftRight_WithFeedback, 820\nTFC Builtin, ShiftRightLogical_WithFeedback, 824\nTFC Builtin, Equal_WithFeedback, 1656\nTFC Builtin, StrictEqual_WithFeedback, 892\nTFC Builtin, LessThan_WithFeedback, 1264\nTFC Builtin, GreaterThan_WithFeedback, 1264\nTFC Builtin, LessThanOrEqual_WithFeedback, 1264\nTFC Builtin, GreaterThanOrEqual_WithFeedback, 1264\nTFC Builtin, BitwiseNot_WithFeedback, 464\nTFC Builtin, Decrement_WithFeedback, 432\nTFC Builtin, Increment_WithFeedback, 432\nTFC Builtin, Negate_WithFeedback, 456\nTFC Builtin, InstanceOf_WithFeedback, 688\n\nSo a couple of 10s of KBs. At some point we can probably also remove the _WithFeedback or the base variant builtins (currently we still use them in generic lowering, although non-_WithFeedback variants have been disabled behind a flag for a while).",
+      "parentUuid": "bafbe8b0_f0ce1f81",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "234b2f8d_14d85295",
         "filename": "src/builtins/builtins-lazy-gen.cc",
         "patchSetId": 465
