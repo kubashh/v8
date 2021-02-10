@@ -103,6 +103,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d32e247_7067546c",
+        "filename": "src/debug/x64/debug-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-02-10T09:58:57Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/v8/v8/+/2675927",
+      "parentUuid": "5d99ac43_e7d62b1b",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be0f3edc_03d491a8",
