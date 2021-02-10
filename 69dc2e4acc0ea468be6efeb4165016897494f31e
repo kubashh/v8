@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a76ae93d_9589ea7d",
+        "filename": "src/codegen/macro-assembler.h",
+        "patchSetId": 459
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-02-10T09:51:06Z",
+      "side": 1,
+      "message": "This is actually orthogonal to Sparkplug, but I discovered while supporting debugger for SP. This actually fixes a bug when restarting a frame in LiveEdit. I have a proper CL for it (where I added a comment): https://chromium-review.googlesource.com/c/v8/v8/+/2675927",
+      "parentUuid": "695f062f_e33ad3f1",
+      "revId": "69dc2e4acc0ea468be6efeb4165016897494f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "965ecb20_687f4ba6",
