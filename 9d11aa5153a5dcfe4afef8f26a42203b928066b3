@@ -137,6 +137,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9efa598f_032b3c16",
+        "filename": "src/DEPS",
+        "patchSetId": 465
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e6992b5_44f88f79",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6bafcae_85f5c155",
@@ -150,6 +168,24 @@
       "writtenOn": "2021-02-10T11:08:53Z",
       "side": 1,
       "message": "Consider a Register::feedback_vector_offset() to formalize this?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "370f4245_2f7db12d",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "I think we should actually avoid adding that unless the interpreter were to also have access to a feedback vector slot; this makes it very explicit that this is a slot reuse.",
+      "parentUuid": "e6bafcae_85f5c155",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -177,6 +213,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "039b0aa4_7d191c28",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a7e1aab_09616e31",
+      "range": {
+        "startLine": 372,
+        "startChar": 18,
+        "endLine": 372,
+        "endChar": 33
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abbca8b5_5e6d463a",
@@ -190,6 +250,24 @@
       "writtenOn": "2021-02-10T11:08:53Z",
       "side": 1,
       "message": "Do you have thoughts on how to generalize this platform-independent interface to masm?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7cbf526_627c7906",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "The Jumps and field Loads/Stores should be easy, I\u0027m not yet 100% sure how to handle \"injecting\" new Move/Push behaviours (like for RegisterList), or how to deal with Baseline-specific things like RegisterFrameOperand. This will be non-trivial followup work, particularly merging somehow with Liftoff\u0027s approach.",
+      "parentUuid": "abbca8b5_5e6d463a",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -211,6 +289,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0079ecb5_90c8f842",
+        "filename": "src/baseline/baseline.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added TODO.",
+      "parentUuid": "67518750_cc731c51",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa4c9095_78767007",
@@ -224,6 +320,24 @@
       "writtenOn": "2021-02-10T11:08:53Z",
       "side": 1,
       "message": "All this is so similar to Compiler:: logic, was there a reason to not stick it in there? IMO it makes sense to keep compiler logic in compiler.{h,cc}.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1518bbd5_7e443da7",
+        "filename": "src/baseline/baseline.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added TODO",
+      "parentUuid": "fa4c9095_78767007",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -245,6 +359,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c0c90a5_6b25d506",
+        "filename": "src/baseline/baseline.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Right now we still access the BaselineAssembler from some builtins; added a TODO to clean that up.",
+      "parentUuid": "5b3c0d16_91898ef1",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6be77b68_94d4cd58",
@@ -258,6 +390,24 @@
       "writtenOn": "2021-02-10T13:41:42Z",
       "side": 1,
       "message": "nit - newline below (same for other archs)",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27a77987_853b97b3",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "removed anyway.",
+      "parentUuid": "6be77b68_94d4cd58",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -281,6 +431,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35986e8c_bb7bb596",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you mean, this helper is only used in two places and one of those doesn\u0027t have a not_compiled path.",
+      "parentUuid": "cef6f90c_66bed293",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55134b70_dc922522",
         "filename": "src/builtins/arm64/builtins-arm64.cc",
         "patchSetId": 465
@@ -292,6 +460,24 @@
       "writtenOn": "2021-02-10T13:41:42Z",
       "side": 1,
       "message": "Not sure what this comment means, since this is the Prologue - do you mean it\u0027s pushed by the caller\u0027s call sequence? Where are these pushed?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdc2fd04_b7a04d7e",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "it\u0027s explicitly pushed in the call of kBaselinePrologue by the sparkplug generated code (as defined in baseline-compiler-arm-inl.h); normally the call sequence for arm wouldn\u0027t need to push lr, but we do a funky little dance here where this builtin is setting up the _caller_\u0027s frame, not its own. On x64 that\u0027s fine, call pushes a return address on the stack and we can just shift that to the end of the frame we set up, but on arm the call clobbers lr without saving it on the stack, so we have to save it manually and skip setting it here.\n\nDoes that make sense? I expanded the comment a bit.",
+      "parentUuid": "55134b70_dc922522",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -319,6 +505,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88374cde_5376bed9",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "I kind of left it in as a \"look, this is what it should be if not for the lr clobber\", but I guess that\u0027s not clear, so removed.",
+      "parentUuid": "ace33d04_d531cbf5",
+      "range": {
+        "startLine": 1215,
+        "startChar": 2,
+        "endLine": 1215,
+        "endChar": 3
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72839697_2f4081e8",
@@ -336,6 +546,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a40e2217_b178f727",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72839697_2f4081e8",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12f83510_c66863a3",
@@ -349,6 +577,24 @@
       "writtenOn": "2021-02-10T13:41:42Z",
       "side": 1,
       "message": "Can we move this out of the frame setup code, e.g., just above the stack / interrupt check.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da370c26_769b3e4f",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "This is here for consistency with the InterpreterEntryTrampoline, we should move it in both or neither (I\u0027ll resolve this because it should be a followup either way)",
+      "parentUuid": "12f83510_c66863a3",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -378,6 +624,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "366ccbd2_c4d0cf8b",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "This can both be a specific feature and still be a horrible hack :) do you mean that we should just rephrase this comment?",
+      "parentUuid": "1c06756a_86baec31",
+      "range": {
+        "startLine": 1245,
+        "startChar": 5,
+        "endLine": 1245,
+        "endChar": 19
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ec2c0946_4876d891",
         "filename": "src/builtins/arm64/builtins-arm64.cc",
         "patchSetId": 465
@@ -389,6 +659,24 @@
       "writtenOn": "2021-02-10T13:41:42Z",
       "side": 1,
       "message": "Is there an explanation of how the prologue call logic works, I can\u0027t find it in the design doc. It\u0027s not clear to me why we are returning here rather than jumping to the baseline code.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b191dbd4_81ee05d4",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "You\u0027re right, it\u0027s not in the design doc, partially because it\u0027s more an implementation detail than an explicit design, partially because it\u0027s hard to describe :).\n\nI added a TODO to explain it better in a comment, the short version is that this is more \"deferred frame setup code\" than a \"called function\", with some awkward return address manipulation (lr on arm64, top of stack on x64) to allow us to use call/blr for it. It\u0027s not dissimilar to the stack manipulation in InterpreterPushArgsThenCall.",
+      "parentUuid": "ec2c0946_4876d891",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -410,6 +698,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4259522b_3016ecd6",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added a TODO.",
+      "parentUuid": "1084616d_0901d186",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab8a46dd_f2a0fea7",
@@ -427,6 +733,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f97a958_accc9aee",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Good question! The answer is native contexts, the baseline code is on the SharedFunctionInfo but feedback vectors are native-context dependent, so two JSFunctions in different native contexts can end up hitting this path.",
+      "parentUuid": "ab8a46dd_f2a0fea7",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74756c3d_01f85e8f",
@@ -440,6 +764,24 @@
       "writtenOn": "2021-02-10T13:41:42Z",
       "side": 1,
       "message": "Can we drop this in that case?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e401d79_af688d5f",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "As mentioned on the x64 version, we had an \"opt-loop\" with TP when this wasn\u0027t here -- that might be gone by now because of other changes but we need to double check before removing this. Updated the TODO to have the tracking bug id.",
+      "parentUuid": "74756c3d_01f85e8f",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -492,6 +834,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "08751f96_76c183d2",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Do you mean share the C++ code or the generated code?",
+      "parentUuid": "848d5af6_abca294d",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bafbe8b0_f0ce1f81",
         "filename": "src/builtins/builtins-definitions.h",
         "patchSetId": 465
@@ -527,6 +893,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "39d9e1dc_1ff3e85a",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "I believe most of these are the trivial \"fetch the context/vector, call the real function\" trampolines, so they should be small, but I\u0027ll run the binary size bot to check. FWIW, these are actually here to _save_ memory, to get rid of the feedback vector loading code in Sparkplug-generated code.",
+      "parentUuid": "bafbe8b0_f0ce1f81",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "234b2f8d_14d85295",
         "filename": "src/builtins/builtins-lazy-gen.cc",
         "patchSetId": 465
@@ -538,6 +922,24 @@
       "writtenOn": "2021-02-10T10:30:49Z",
       "side": 1,
       "message": "So if we have baseline code we can skip most of the checks above, and we know if have SP code since GetSharedFunctionInfoCode. To avoid the repeat check you could jump to a label in GetSharedFunctionInfoCode.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6b5e577_2ed0fba5",
+        "filename": "src/builtins/builtins-lazy-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "It\u0027s not quite as easy as that, because we need the feedback vector checks too, and they happen after GetSharedFunctionInfoCode. Adding a TODO.",
+      "parentUuid": "234b2f8d_14d85295",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -555,6 +957,24 @@
       "writtenOn": "2021-02-10T10:30:49Z",
       "side": 1,
       "message": "Is this used anywhere? Looks like we just call the runtime function directly.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "443a066d_f84727f8",
+        "filename": "src/builtins/builtins-lazy-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Good catch, just a leftover",
+      "parentUuid": "42cebff0_4dcb48f3",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -611,6 +1031,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d11e5319_735c90ee",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "GetSharedFunctionInfoBytecodeOrBaseline already did the CmpObjectType, seems unnecessary? Doesn\u0027t hurt I guess, added.",
+      "parentUuid": "d4b1d253_467bc1c1",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "118e4764_eff20f86",
@@ -624,6 +1062,24 @@
       "writtenOn": "2021-02-10T10:47:04Z",
       "side": 1,
       "message": "Could/should this also be moved to the prologue? If the vector is flushed, it\u0027s probably not safe to assume the next SP call will come from the IET. Plus it\u0027d make this block a lot less complex.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f05a8f3_eecef8fa",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "We actually moved the FeedbackVector checks out of the baseline prologue because of performance overheads. The vector currently cannot be flushed as far as I\u0027m aware.",
+      "parentUuid": "118e4764_eff20f86",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -645,6 +1101,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f87df31a_340cd724",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "There was an \"opt loop\" with turboprop before this was here, we\u0027d have to make sure that loop is gone before getting rid of this code. Added to the tracking TODO list.",
+      "parentUuid": "0dbad065_8a763756",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c080b237_294d20f7",
@@ -658,6 +1132,24 @@
       "writtenOn": "2021-02-10T10:47:04Z",
       "side": 1,
       "message": "Meaning what, we clobber a callee-saved register? That\u0027s okay why?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e030857f_774d2200",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1635,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "it\u0027s ok because this isn\u0027t a \"real\" call, but more an out-of-lined frame setup helper. I\u0027ve updated the comment to be less... casual about it.",
+      "parentUuid": "c080b237_294d20f7",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -679,6 +1171,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d88ece94_d88cba1e",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1679,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "This is actually new code (the interpreter entry trampoline does two stack checks, not just this one), but we should probably \"backport\" it to the IET. Added a TODO.",
+      "parentUuid": "35b0f315_8e3324ba",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d00bc763_48576cf5",
@@ -692,6 +1202,24 @@
       "writtenOn": "2021-02-10T10:47:04Z",
       "side": 1,
       "message": "Same here a helper fn could be useful.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "948783d2_55df2467",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added a TODO.",
+      "parentUuid": "d00bc763_48576cf5",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -713,6 +1241,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71e771bb_647bab8d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 9665,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added a TODO, I don\u0027t want to risk changing this and having to spend hours figuring out why guaranteed_feedback is wrong somewhere.",
+      "parentUuid": "1c515dee_4518ef5a",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc5dedf_2e4553d2",
@@ -726,6 +1272,24 @@
       "writtenOn": "2021-02-10T10:30:49Z",
       "side": 1,
       "message": "Please assert cur_depth !\u003d 0, otherwise we loop 2^32 times.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1974732_3608d086",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 10933,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added TODO.",
+      "parentUuid": "3fc5dedf_2e4553d2",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -747,6 +1311,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17988ccb_fb61c545",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 10954,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "cur_context can be used in both cases, added a comment to the header. Added an exit_loop.",
+      "parentUuid": "01836e0f_626555c1",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca9294df_a18103b5",
@@ -764,6 +1346,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50505880_22955cde",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca9294df_a18103b5",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a048ef8_f89ef9fb",
@@ -777,6 +1377,24 @@
       "writtenOn": "2021-02-10T10:30:49Z",
       "side": 1,
       "message": "nit: extract the repeated load.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a68e3289_aad4c5ef",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a048ef8_f89ef9fb",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -804,6 +1422,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d43f58b6_408e5c85",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added a TODO.",
+      "parentUuid": "4d959ddc_f6d142f5",
+      "range": {
+        "startLine": 1233,
+        "startChar": 8,
+        "endLine": 1233,
+        "endChar": 36
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cfccac7_93fe1ea3",
@@ -817,6 +1459,24 @@
       "writtenOn": "2021-02-10T13:41:42Z",
       "side": 1,
       "message": "Can we have the always_sparkplug checks near the always_opt checks?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2872fcc_f0cda35a",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1843,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "0cfccac7_93fe1ea3",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -838,6 +1498,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d36a98a_cf4bfae9",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "No reason, moved.",
+      "parentUuid": "1dfefd34_0a3ce4be",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba745957_838a263a",
@@ -851,6 +1529,24 @@
       "writtenOn": "2021-02-10T10:30:49Z",
       "side": 1,
       "message": "Would it make sense to reuse CodeKind? It\u0027s what we use everywhere else when we\u0027re interested in the code kind, and a new enum doesn\u0027t seem to be needed here. Maybe I missed something.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7a71d54_d5cedb04",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "I thought it was nice having an explicit enum here, if only to \"lock out\" other code kinds, but if we use it like this elsewhere then CodeKind makes sense here too.",
+      "parentUuid": "ba745957_838a263a",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1031,6 +1727,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a13196e_c43bbd80",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "As discussed, this is ok for now.",
+      "parentUuid": "2a97a98c_5246e317",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17a1eef8_acd7543e",
@@ -1101,6 +1815,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab8bbeda_e0ff7a41",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "correct, thanks.",
+      "parentUuid": "be0f3edc_03d491a8",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b84f6ca_8fdebc14",
@@ -1114,6 +1846,30 @@
       "writtenOn": "2021-02-10T13:41:42Z",
       "side": 1,
       "message": "Not keen on this naming given Sparkplug isn\u0027t interpreted. How about HasUnoptimizedJavascriptFrameType or similar?",
+      "range": {
+        "startLine": 132,
+        "startChar": 7,
+        "endLine": 132,
+        "endChar": 30
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a70a590_ad994a9e",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b84f6ca_8fdebc14",
       "range": {
         "startLine": 132,
         "startChar": 7,
@@ -1155,6 +1911,24 @@
       "side": 1,
       "message": "ditto, I think is_interpreted should only be for interpreted frames, and if we want something to unify them then we should have is_unoptimized_js or similar.",
       "parentUuid": "566b5957_9c1e8033",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "620d4b42_39261646",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added a TODO, I think changing this in this CL is too intrusive to is_interpreted callers.",
+      "parentUuid": "8791e3cc_e2b2c788",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1216,6 +1990,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86420e8e_ec3ed86c",
+        "filename": "src/ic/unary-op-assembler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added a TODO.",
+      "parentUuid": "492ebe06_2ad227b0",
+      "range": {
+        "startLine": 22,
+        "startChar": 27,
+        "endLine": 22,
+        "endChar": 51
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2a32083_9bdfa068",
@@ -1229,6 +2027,24 @@
       "writtenOn": "2021-02-10T09:55:23Z",
       "side": 1,
       "message": "Here\u0027s the other side of where the suggested named constant would be nice.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceaf1276_c6bc58c5",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2a32083_9bdfa068",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1250,6 +2066,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f85512fa_4aa06767",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Yup! Thanks.",
+      "parentUuid": "bc0e0bc0_eb530a73",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "673a57a1_71186281",
@@ -1263,6 +2097,24 @@
       "writtenOn": "2021-02-10T09:55:23Z",
       "side": 1,
       "message": "I wish we could avoid these; could we either have a function that returns a SourcePositionTableIterator (empty if Sparkplug), or teach SourcePositionTableIterator itself about SP? It\u0027s bound to be confused at some point otherwise.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ff0772c_4f83c560",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Amended the TODO above to be explicit about this.",
+      "parentUuid": "673a57a1_71186281",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1284,6 +2136,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc2bd826_aaa851bc",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a71c805b_cd7fbc7a",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5958aca3_86ab0f86",
@@ -1297,6 +2167,24 @@
       "writtenOn": "2021-02-10T08:35:06Z",
       "side": 1,
       "message": "Maybe we could consider CHECKs here and below, getting this wrong seems pretty bad and doing a runtime CHECK fairly inexpensive.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "660cbac3_696e7118",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5958aca3_86ab0f86",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1318,6 +2206,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "880f64f3_1566b790",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "leftovers.",
+      "parentUuid": "3046cc90_a4715dad",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f194acb1_8becf8e5",
@@ -1331,6 +2237,24 @@
       "writtenOn": "2021-02-10T08:35:06Z",
       "side": 1,
       "message": "Curious about this, can sparkplug really be marked for deoptimization? Why, tests? Should we allow this / what\u0027s the intended behavior?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "806d169c_a1ce4f37",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "IIRC the intention was that it can be temporarily marked for deopt, but only by the debugger, and then we could use that mark to know for which JSFunctions we have to swap out their Sparkplug code object. We should reevaluate this though, added a TODO.",
+      "parentUuid": "f194acb1_8becf8e5",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1352,6 +2276,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "870ad10f_38fed5cc",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Nope, this is a scope for the SourcePositionTableIterator below.",
+      "parentUuid": "9eb8dfc3_5eb4c9d4",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3263ee08_1dbb8970",
@@ -1365,6 +2307,30 @@
       "writtenOn": "2021-02-10T08:35:06Z",
       "side": 1,
       "message": "q: what does the \u0027active\u0027 mean, why not just \u0027GetBytecodeArray\u0027? Fyi the word \u0027active\u0027 has meaning in a related spot, see JSFunction::GetActiveTier and related functions.",
+      "range": {
+        "startLine": 507,
+        "startChar": 28,
+        "endLine": 507,
+        "endChar": 50
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "244c60f8_353831e6",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "It means precisely \"active\" in the same way as ActiverTier; it\u0027s distinguished from GetBytecodeArray in that GetActiveBytecodeArray can return a debug BytecodeArray (with DebugBreaks where breakpoints are) that is currently being used for execution, while GetBytecodeArray always returns the \"canonical\" bytecode array.",
+      "parentUuid": "3263ee08_1dbb8970",
       "range": {
         "startLine": 507,
         "startChar": 28,
@@ -1412,6 +2378,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb0c16e0_da527bea",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Yes, this is problematic, but there\u0027s method behind the madness. We\u0027re considering sparkplug _frames_ to be a (type of) interpreted frames, because they\u0027re pretty much interchangeable (with the one interchangeability hidden away by the GetBytecodeOffset method) and it has been convenient to have the rest of the system treat them as such (stack traces etc.). Hence making is_interpreted return true for SP. Only the stuff that cares about the differences has to check the actual frame type. Perhaps we should (unconditionally) rename is_interpreted to is_interpreted_or_baseline (and similarly elsewhere)?\n\nI cleaned up this example, since we can unconditionally check is_interpreted and can explicitly allow Sparkplug code.",
+      "parentUuid": "5e9e8a7b_2c5dcc3f",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "53a7885d_066949f7",
         "filename": "src/runtime/runtime-compiler.cc",
         "patchSetId": 465
@@ -1423,6 +2407,24 @@
       "writtenOn": "2021-02-10T08:03:17Z",
       "side": 1,
       "message": "This feels worth a comment, why do we potentially compile multiple times below?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "152f03bb_aee447ea",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "This was used for compilation time performance testing, we can get rid of the iterations for shipping.",
+      "parentUuid": "53a7885d_066949f7",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1444,6 +2446,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8999c78f_05ba99e3",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "We should, added a TODO.",
+      "parentUuid": "a56d0d1a_3b219176",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc994045_d8d85677",
@@ -1457,6 +2477,24 @@
       "writtenOn": "2021-02-10T08:03:17Z",
       "side": 1,
       "message": "Unused?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0811efb3_9627905a",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Also used for compilation performance testing, removed.",
+      "parentUuid": "bc994045_d8d85677",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1478,6 +2516,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d2cc57_83ffe2cb",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5b0f08d_26dc3652",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2debc6fc_b6ebc142",
@@ -1491,6 +2547,24 @@
       "writtenOn": "2021-02-10T08:03:17Z",
       "side": 1,
       "message": "q: was there a reason for set_code to be kept outside CompileWithBaseline? I ask because some other compiler functions do the set_code themselves.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9caa653b_47c8cf84",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Here it\u0027s just because CompileWithBaseline is intended to be NCI and only takes the SharedFunctionInfo. A Compiler::CompileBaseline method would take the JSFunction, added a TODO.",
+      "parentUuid": "2debc6fc_b6ebc142",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1542,6 +2616,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca8f32c5_01466880",
+        "filename": "src/runtime/runtime-interpreter.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Added a TODO to figure out the right approach (renaming or copying).",
+      "parentUuid": "9dda6d54_6417c167",
+      "range": {
+        "startLine": 102,
+        "startChar": 25,
+        "endLine": 102,
+        "endChar": 54
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94d71079_f6207f83",
@@ -1559,6 +2657,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d3a94ac_cec34152",
+        "filename": "src/runtime/runtime-interpreter.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94d71079_f6207f83",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb9af2db_ddab702b",
@@ -1572,6 +2688,24 @@
       "writtenOn": "2021-02-10T08:03:17Z",
       "side": 1,
       "message": "Could we put this inside Deoptimizer::DeoptimizeFunction?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f0efae5_75a0747b",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Probably this shouldn\u0027t be here at all, and we should have a different predicate for testing.",
+      "parentUuid": "fb9af2db_ddab702b",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1599,6 +2733,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "001f154d_526fa8df",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Changed to IsUnoptimizedJavaScriptFrame",
+      "parentUuid": "c6e177e0_2958fe95",
+      "range": {
+        "startLine": 481,
+        "startChar": 18,
+        "endLine": 481,
+        "endChar": 41
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae89ec8d_12db396e",
@@ -1612,6 +2770,24 @@
       "writtenOn": "2021-02-10T08:03:17Z",
       "side": 1,
       "message": "Please integrate into the existing predicates (like HasAttachedOptimizedCode, ActiveTierIsIgnition). What is the expected behavior here, is SP code \u0027turbofanned and optimized\u0027?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3967727_114a40e6",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "It\u0027s definitely not turbofanned :) we\u0027re going back and forth on whether it\u0027s optimized, probably also not (but also not interpreted)",
+      "parentUuid": "ae89ec8d_12db396e",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

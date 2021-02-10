@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "680c33d3_23e32c20",
+        "filename": "BUILD.gn",
+        "patchSetId": 457
+      },
+      "lineNbr": 2510,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Considering this resolved.",
+      "parentUuid": "be04037d_1b6b289c",
+      "range": {
+        "startLine": 2510,
+        "startChar": 9,
+        "endLine": 2510,
+        "endChar": 17
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "734da2a1_341c1f39",
@@ -728,6 +752,30 @@
       "side": 1,
       "message": "We should double check this with Ulan. @pthier",
       "parentUuid": "78cc037d_d216106b",
+      "range": {
+        "startLine": 720,
+        "startChar": 21,
+        "endLine": 720,
+        "endChar": 24
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43eba9c9_810ea2f4",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 457
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-10T15:50:07Z",
+      "side": 1,
+      "message": "Removed for now anyway.",
+      "parentUuid": "f6248d84_bfeac62b",
       "range": {
         "startLine": 720,
         "startChar": 21,
