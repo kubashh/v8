@@ -1677,7 +1677,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
   if (flag == CALL_FUNCTION) {
     CallCodeObject(code);
   } else {
-    DCHECK(flag == JUMP_FUNCTION);
+    DCHECK(flag == JUMP_FUNCTION || flag == JUMP_FUNCTION_DONT_ADAPT);
     JumpCodeObject(code);
   }
   // Continue here if InvokePrologue does handle the invocation due to
