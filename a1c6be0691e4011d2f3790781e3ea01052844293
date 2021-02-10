@@ -157,6 +157,24 @@
       "parentUuid": "19473b96_0a8e3698",
       "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89faf9ce_b541bc9d",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-10T14:47:50Z",
+      "side": 1,
+      "message": "Let\u0027s split the low-level ETW/tracing interface from the sampler/code-event part.\n\n- tracing/base-etw lives in libplatform/tracing\n- ETWCodeHandler lives in src/diagnostics/etw and deals with the V8 specifics (I think gdb-jit is a good example for this).\n\nThe tracing part is most likely replaced based on who embeds V8, however, the ETWCodeHandler is much more tied to V8 itself (code event handling and potential stack walking).",
+      "parentUuid": "b1d2700f_09e99774",
+      "revId": "a1c6be0691e4011d2f3790781e3ea01052844293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
