@@ -69,4 +69,7 @@ specific_include_rules = {
   "builtins-trace\.cc": [
     "+protos/perfetto",
   ],
+  "baseline-compiler\.h": [
+    "+src/interpreter/interpreter-intrinsics.h",
+  ],
 }
