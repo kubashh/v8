@@ -62,17 +62,23 @@ function TestCase(test_scenario, expected_output) {
       return 'Capybara';
     }
     function B(p1, p2) {
+      assertTrue(p1 == undefined);
+      assertTrue(p2 == undefined);
+      assertTrue(arguments.length == 0);
       test_output += 'B';
       return A();
     }
     function C() {
+      assertTrue(arguments[0] == 1);
+      assertTrue(arguments[1] == 2);
+      assertTrue(arguments.length == 2);
       test_output += 'C';
-      // Function call with argument adaptor is intentional.
+      // Function call with mismatched number of arguments and parameters is intentional.
       return B();
     }
     function D() {
       test_output += 'D';
-      // Function call with argument adaptor is intentional.
+      // Function call with mismatched number of arguments and parameters is intentional.
       return C(1, 2);
     }
     function E() {
