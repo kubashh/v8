@@ -247,6 +247,268 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6be77b68_94d4cd58",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "nit - newline below (same for other archs)",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cef6f90c_66bed293",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Could we unify all the checks into this function and have it\n - fallthrough for bytecode\n - goto is_baseline for baseline \n - goto not_compiled if there isn\u0027t either (pulling the checks which are currently immediately after the call to this function into this function)\nand specify this in a comment.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55134b70_dc922522",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Not sure what this comment means, since this is the Prologue - do you mean it\u0027s pushed by the caller\u0027s call sequence? Where are these pushed?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ace33d04_d531cbf5",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "leftover comment?",
+      "range": {
+        "startLine": 1215,
+        "startChar": 2,
+        "endLine": 1215,
+        "endChar": 3
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72839697_2f4081e8",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "nit - move this to line 1212?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12f83510_c66863a3",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Can we move this out of the frame setup code, e.g., just above the stack / interrupt check.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c06756a_86baec31",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Can we make this a specific feature of BaselineFrames and not a horrible hack, with some means to determine whether a frame is a baseline frame rather than an interpreted frame (when required) so we can differentiate them.",
+      "range": {
+        "startLine": 1245,
+        "startChar": 5,
+        "endLine": 1245,
+        "endChar": 19
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec2c0946_4876d891",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Is there an explanation of how the prologue call logic works, I can\u0027t find it in the design doc. It\u0027s not clear to me why we are returning here rather than jumping to the baseline code.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1084616d_0901d186",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Can we share most of this logic with the code in InterpreterEntryTrampoline using a helper function?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab8a46dd_f2a0fea7",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Why would we have baseline code without a feedback vector?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74756c3d_01f85e8f",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Can we drop this in that case?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddf7d8a7_fd621690",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Can we make all of these new builtins named \"\u003cBuiltinName\u003e_Baseline\" for all these functions (with the underscores similar to X_WithFeedback) so it is clear these are just variants of the same builtin but specialized for the  callee.",
+      "range": {
+        "startLine": 67,
+        "startChar": 11,
+        "endLine": 67,
+        "endChar": 49
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "848d5af6_abca294d",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "For all of these extra builtins, can we split out the code that does the builtin operation from the logic that gets the arguments (either from parameters or the baseline stackframe) so that the main logic of the builtin can be shared in a single helper function, and the Construct_Baseline vs Construct_WithFeedback functions just deal with getting the arguments to pass to the shared helper funciton.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bafbe8b0_f0ce1f81",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "I\u0027m a bit worried about the number of extra builtins that are being added for baseline specific calls. How many of these are trampolines that simply get the feedbackvector / context form the frame and trampoline to the real builtin, vs replacement builtins. Any idea on binary size impact of these extra builtins?",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "234b2f8d_14d85295",
         "filename": "src/builtins/builtins-lazy-gen.cc",
         "patchSetId": 465
@@ -469,6 +731,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ca9294df_a18103b5",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "nit - newline (to match with closing bracket)",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a048ef8_f89ef9fb",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 465
@@ -503,6 +782,23 @@
         "endLine": 1233,
         "endChar": 36
       },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cfccac7_93fe1ea3",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1843,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Can we have the always_sparkplug checks near the always_opt checks?",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -789,6 +1085,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b84f6ca_8fdebc14",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "Not keen on this naming given Sparkplug isn\u0027t interpreted. How about HasUnoptimizedJavascriptFrameType or similar?",
+      "range": {
+        "startLine": 132,
+        "startChar": 7,
+        "endLine": 132,
+        "endChar": 30
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "566b5957_9c1e8033",
         "filename": "src/execution/frames.h",
         "patchSetId": 465
@@ -800,6 +1119,24 @@
       "writtenOn": "2021-02-10T09:55:23Z",
       "side": 1,
       "message": "Left other comments re this as well, but here\u0027s a dedicated one: SP frames count as is_interpreted, SP code counts as optimized. It\u0027d be nice to find a solution that\u0027s a bit more intuitive.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8791e3cc_e2b2c788",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "ditto, I think is_interpreted should only be for interpreted frames, and if we want something to unify them then we should have is_unoptimized_js or similar.",
+      "parentUuid": "566b5957_9c1e8033",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1039,6 +1376,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e9e8a7b_2c5dcc3f",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "741aa7a6_035afdf4",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "53a7885d_066949f7",
         "filename": "src/runtime/runtime-compiler.cc",
         "patchSetId": 465
@@ -1118,6 +1473,29 @@
       "writtenOn": "2021-02-10T08:03:17Z",
       "side": 1,
       "message": "q: was there a reason for set_code to be kept outside CompileWithBaseline? I ask because some other compiler functions do the set_code themselves.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0253461_55a18496",
+        "filename": "src/runtime/runtime-interpreter.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-10T13:41:42Z",
+      "side": 1,
+      "message": "I\u0027m not super keen on a function called InterpreterTraceBytecodeEntry also being used for Sparkplug. Could we just have two functions (one for SP one for Igntiion) that call a common helper function that has the extra is_sparkplug argument?",
+      "range": {
+        "startLine": 102,
+        "startChar": 25,
+        "endLine": 102,
+        "endChar": 54
+      },
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
