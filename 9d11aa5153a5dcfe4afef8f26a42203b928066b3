@@ -536,6 +536,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c7f57d0_2c99150e",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "Yes thanks.",
+      "parentUuid": "cdc2fd04_b7a04d7e",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ace33d04_d531cbf5",
@@ -1116,6 +1134,30 @@
       "side": 1,
       "message": "Yeah, I think most are trampolines.\n\nFor these cases, I\u0027m not sure sharing the C++ code is cleaner, especially since we want to e.g. teach CollectConstructFeedback to not do undefined checks when we know a feedback vector exists. We\u0027d end up having to pass so many arguments I don\u0027t think we\u0027d end up saving on lines of code -- especially since the future of the NCI `X_WithFeedback` builtins is unclear. I\u0027ll leave as-is and resolve this comment, if you feel strongly then please do reopen and I\u0027ll do this in a followup.",
       "parentUuid": "70b76542_0bdcd45e",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be52edc8_1685e539",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "I\u0027m assuming we could just pass a \"enum guaranteed_feedback\" argument to deal with whether the feedback vector checks are required? Please add a TODO to revisit this once we have a better sense of the future of `X_WithFeedback` and the the guaranteed_feedback enum is added",
+      "parentUuid": "4ca0a4bc_b7142c85",
       "range": {
         "startLine": 52,
         "startChar": 0,

@@ -1,0 +1,296 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b8a0d29_fee4fe57",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 485
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "Can we add newlines between all the functions please",
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d7a8024_a5530313",
+        "filename": "src/baseline/baseline.cc",
+        "patchSetId": 485
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "I think pretty much this entire function should move to compiler.cc (and have the entry point be the function above).",
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4695edf_a2118877",
+        "filename": "src/baseline/x64/baseline-compiler-x64-inl.h",
+        "patchSetId": 485
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "Can we move the BaselineAssembler definitions into a seperate baseline-assembler-x64-inl.h instead please.",
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55abe51f_45650714",
+        "filename": "src/baseline/x64/baseline-compiler-x64-inl.h",
+        "patchSetId": 485
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "leftover debugging",
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "458fb4a4_4a66d137",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 485
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "I\u0027m not sure why this is a \"fast\" return? Also could you document that we are returning to the baseline code without tearing down the frame that we have just built for that baseline code.",
+      "range": {
+        "startLine": 1287,
+        "startChar": 5,
+        "endLine": 1287,
+        "endChar": 45
+      },
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2714d1a7_e47c5bff",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 485
+      },
+      "lineNbr": 3170,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "Can we make this an enum so it\u0027s clearer at the callsite what the argument means (same for other occurrences of the same type of argument).",
+      "range": {
+        "startLine": 3170,
+        "startChar": 52,
+        "endLine": 3170,
+        "endChar": 76
+      },
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11a2674f_910d2f80",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 485
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "Can these move to the jitless section where the other NEG implications are defined",
+      "range": {
+        "startLine": 579,
+        "startChar": 0,
+        "endLine": 580,
+        "endChar": 49
+      },
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bbe9e62_349f846d",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 485
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "This should be a different tag for baseline code",
+      "range": {
+        "startLine": 2196,
+        "startChar": 29,
+        "endLine": 2196,
+        "endChar": 53
+      },
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36f92f44_2453b88e",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 485
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "could the cleanup tracking bug be added to all the TODOs in the CL (I\u0027m fine with having usernames too)",
+      "range": {
+        "startLine": 168,
+        "startChar": 10,
+        "endLine": 168,
+        "endChar": 17
+      },
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e546c18e_1bc02c04",
+        "filename": "src/profiler/profiler-listener.cc",
+        "patchSetId": 485
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "Add the cleanup tracking bug please",
+      "range": {
+        "startLine": 119,
+        "startChar": 12,
+        "endLine": 119,
+        "endChar": 18
+      },
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbf2bb8a_78e67dcd",
+        "filename": "src/profiler/profiler-listener.cc",
+        "patchSetId": 485
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "tracking bug, and move the TODO below together with the comment on it being slow to make a sentence",
+      "range": {
+        "startLine": 138,
+        "startChar": 16,
+        "endLine": 138,
+        "endChar": 22
+      },
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9e912bc_4ed65434",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 485
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "This is a confusing name to me, it sounds like it is preparing for later compiling baseline code but is actually just attaching baseline code that already exists to a function on a different native context. How about AttachBaselineCode or similar?",
+      "range": {
+        "startLine": 112,
+        "startChar": 25,
+        "endLine": 112,
+        "endChar": 43
+      },
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92badeca_4df19c7f",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 485
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "Can you use the is_compiled_scoped on line 446 and check it (instead of shared) for is_compiled and pass it to the Compile function, to ensure the scope compile and compilebaseline with no gaps",
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bdfdf05_0afa49fe",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 485
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "I\u0027d prefer this is consistent with the other functions like CompileOptimized to just return a bool, and then do:\n\n if (shared-\u003eHasBaselineData() || CompileWithBaseline(isolate, shared)) {\n   function-\u003eset_code(shared-\u003ebaseline_data().baseline_code(isolate));\n }",
+      "range": {
+        "startLine": 459,
+        "startChar": 24,
+        "endLine": 459,
+        "endChar": 43
+      },
+      "revId": "f7916733b3098b0e5be3fc9bd4d488758c48529b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

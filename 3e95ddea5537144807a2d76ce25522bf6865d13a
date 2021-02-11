@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13f9210e_38b540fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 487
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "Last set of comments. I didn\u0027t look closely at the builtin changes (assuming jgruber dived into that), but overall LGTM with the agreement that review comments (particularly the Stack type logic) will be fixed up in followups. Please wait for mvstanton@ to have a look too before landing.",
+      "revId": "3e95ddea5537144807a2d76ce25522bf6865d13a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "895514cf_5d4831b7",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 487
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-02-11T12:37:09Z",
+      "side": 1,
+      "message": "Having both BaselineCompiler::Prologue and Builtins::BaselinePrologue makes talking about the baseline prologue a bit confusing. How about calling this BaselineOutOfLinePrologue or similar to be more explicit?",
+      "range": {
+        "startLine": 1166,
+        "startChar": 24,
+        "endLine": 1166,
+        "endChar": 40
+      },
+      "revId": "3e95ddea5537144807a2d76ce25522bf6865d13a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
