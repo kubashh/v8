@@ -5174,6 +5174,20 @@ Object JSDate::DoGetField(Isolate* isolate, FieldIndex index) {
   }
 
   if (index >= kFirstUTCField) {
+    if (index == kTimezoneOffset) {
+      if (std::isnan(value().Number())) return GetReadOnlyRoots().nan_value();
+      if (index == kTimezoneOffset) {
+        double offset = date_cache->TimezoneOffset(value().Number());
+        int offset_int = static_cast<int>(offset);
+        if (offset - offset_int > 0) {
+          // Special case for timezone London/Europe has an offset of -0:01:15
+          // (1min 15s) prior to Dec 1, 1847.
+          Handle<Object> offsetHandle = isolate->factory()->NewNumber(offset);
+          return *offsetHandle;
+        }
+        return Smi::FromInt(offset_int);
+      }
+    }
     return GetUTCField(index, value().Number(), date_cache);
   }
 
@@ -5198,10 +5212,6 @@ Object JSDate::GetUTCField(FieldIndex index, double value,
   if (std::isnan(value)) return GetReadOnlyRoots().nan_value();
 
   int64_t time_ms = static_cast<int64_t>(value);
-
-  if (index == kTimezoneOffset) {
-    return Smi::FromInt(date_cache->TimezoneOffset(time_ms));
-  }
 
   int days = DateCache::DaysFromTime(time_ms);
 
