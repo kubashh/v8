@@ -485,6 +485,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1579937_5852fa02",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 457
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "That\u0027s fair but imo consistency trumps personal style :)",
+      "parentUuid": "8e3d0742_9ec1ba35",
+      "range": {
+        "startLine": 53,
+        "startChar": 35,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "e55f0d893183b7d0bd37115cb87b6c1ec9404042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5fb9c41c_4e81a32c",

@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea8486ed_c45f59a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 481
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "Final comments, lgtm once the _DONT_ADAPT changes have been removed and the very minor snapshot/ comments are addressed. Again, based on the agreement that review comments will be fixed up in follow-ups. Very nice work!",
+      "revId": "fa176ebb86b969100587f8a11c7aa85a991f0111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "385da7d9_ff524253",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 481
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "Is this a leftover? Same with the TODOs above (there\u0027s already a TODO in the next file).",
+      "revId": "fa176ebb86b969100587f8a11c7aa85a991f0111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dc03f98_27f31d6c",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 481
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "BytecodeArray",
+      "range": {
+        "startLine": 125,
+        "startChar": 34,
+        "endLine": 125,
+        "endChar": 46
+      },
+      "revId": "fa176ebb86b969100587f8a11c7aa85a991f0111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -272,6 +272,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb63ccf2_3fb1eefe",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "Ack, we don\u0027t have to do everything at once, it\u0027ll be helpful even if we \u0027only\u0027 enforce a consistent interface for certain standard functions. A single implementation would ofc be nice too.",
+      "parentUuid": "a7cbf526_627c7906",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67518750_cc731c51",
@@ -678,6 +696,30 @@
       "side": 1,
       "message": "I guess my main concern so far with this code is playing a bit fast an loose with whether a frame is Interpreted or Baseline - I realize that this is a feature and makes a lot of things easier, but I would much prefer we are more explicit about what is the same and what is different, e.g., having a UnoptimizedJSFrameBase and that both frames types extend, rather than having BaselineFrames extend from InterpretedFrames and hack a few places that are different. If you did this then I would contend that this isn\u0027t a horrible hack here, it is just the one difference between Baseline and Interpreted frames.",
       "parentUuid": "366ccbd2_c4d0cf8b",
+      "range": {
+        "startLine": 1245,
+        "startChar": 5,
+        "endLine": 1245,
+        "endChar": 19
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10edbfa8_fa7e2a08",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "+1 it doesn\u0027t have to be a \u0027horrible hack\u0027 if we have a good way of thinking about / approaching ignition vs. sparkplug frames.",
+      "parentUuid": "6371e753_a60662a5",
       "range": {
         "startLine": 1245,
         "startChar": 5,
@@ -1415,6 +1457,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "159f1a1a_efdfbfbd",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 9665,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "Ack (should be safe though, a CSA_CHECK would ensure we get it right).",
+      "parentUuid": "71e771bb_647bab8d",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc5dedf_2e4553d2",
@@ -1744,6 +1804,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84178447_7e647aee",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 3025,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "q: yes symmetry recovers but I wonder if the baseline prologue could call EnterFrame instead? Actually, looking at https://chromium-review.googlesource.com/c/v8/v8/+/2667514/481/src/builtins/x64/builtins-x64.cc#1649 the prologue already calls EnterFrame - confused. \n\nEdit: I see, maybe it\u0027s because of the arm64 builtin. Could we perhaps just push the marker there in the MANUAL case?",
+      "parentUuid": "f25f5053_94d27ebe",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d99ac43_e7d62b1b",
         "filename": "src/debug/x64/debug-x64.cc",
         "patchSetId": 465
@@ -1773,6 +1851,24 @@
       "side": 1,
       "message": "https://chromium-review.googlesource.com/c/v8/v8/+/2675927",
       "parentUuid": "5d99ac43_e7d62b1b",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "619b5df7_52a4034e",
+        "filename": "src/debug/x64/debug-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "Please don\u0027t forget to remove the DONT_ADAPT change from this CL.",
+      "parentUuid": "1d32e247_7067546c",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1903,6 +1999,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27a2732c_fd2fa2fd",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t see a reasonable way of getting rid of the heap walk in DeoptimizeAllSparkplug.\n\nThe same solution (a linked list) as for optimized code wouldn\u0027t work?\n\n(Just marking as unresolved so the comment doesn\u0027t get lost, there\u0027s nothing to do here right now.)",
+      "parentUuid": "6a13196e_c43bbd80",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17a1eef8_acd7543e",
         "filename": "src/deoptimizer/deoptimizer.h",
         "patchSetId": 465
@@ -1950,6 +2064,24 @@
       "side": 1,
       "message": "We would need at least DeoptimizeSparkplug(SharedFunctionInfo) and DeoptimizeAllSparkplug(). Since the latter deoptimize every function (used on DeoptimizeAll). I\u0027ll change.",
       "parentUuid": "4a8cc221_239e9637",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ba8a029_84a6b5ae",
+        "filename": "src/deoptimizer/deoptimizer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "My point is the outside system doesn\u0027t care about a SP/everything-else distinction. It either wants to deoptimize a given function, or deoptimize all functions. Right? The SP-specific logic should be internal in the deoptimizer functions.\n\n(Just marking as unresolved so the comment doesn\u0027t get lost. I\u0027m okay with deferring this.)",
+      "parentUuid": "48c96864_f70799af",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -2435,6 +2567,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d199bfbb_a2758f73",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "Yeah +1 this should be thought out, currently marking Code for deoptimization means it will be removed from the system permanently.\n\n(Just marking as unresolved so the comment doesn\u0027t get lost, there\u0027s nothing to do here right now.)",
+      "parentUuid": "806d169c_a1ce4f37",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9eb8dfc3_5eb4c9d4",
         "filename": "src/objects/code.cc",
         "patchSetId": 465
@@ -2464,6 +2614,24 @@
       "side": 1,
       "message": "Nope, this is a scope for the SourcePositionTableIterator below.",
       "parentUuid": "9eb8dfc3_5eb4c9d4",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4740e1f5_7270f3f9",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "I see, ack.",
+      "parentUuid": "870ad10f_38fed5cc",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -2505,6 +2673,30 @@
       "side": 1,
       "message": "It means precisely \"active\" in the same way as ActiverTier; it\u0027s distinguished from GetBytecodeArray in that GetActiveBytecodeArray can return a debug BytecodeArray (with DebugBreaks where breakpoints are) that is currently being used for execution, while GetBytecodeArray always returns the \"canonical\" bytecode array.",
       "parentUuid": "3263ee08_1dbb8970",
+      "range": {
+        "startLine": 507,
+        "startChar": 28,
+        "endLine": 507,
+        "endChar": 50
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c82760fc_7ca92aee",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "I see (I do think it\u0027s at least worth a comment in the header that mentions the debugging bytecode array.)",
+      "parentUuid": "244c60f8_353831e6",
       "range": {
         "startLine": 507,
         "startChar": 28,
@@ -2564,6 +2756,24 @@
       "side": 1,
       "message": "Yes, this is problematic, but there\u0027s method behind the madness. We\u0027re considering sparkplug _frames_ to be a (type of) interpreted frames, because they\u0027re pretty much interchangeable (with the one interchangeability hidden away by the GetBytecodeOffset method) and it has been convenient to have the rest of the system treat them as such (stack traces etc.). Hence making is_interpreted return true for SP. Only the stuff that cares about the differences has to check the actual frame type. Perhaps we should (unconditionally) rename is_interpreted to is_interpreted_or_baseline (and similarly elsewhere)?\n\nI cleaned up this example, since we can unconditionally check is_interpreted and can explicitly allow Sparkplug code.",
       "parentUuid": "5e9e8a7b_2c5dcc3f",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cb7c3b0_b296a0e9",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-11T08:09:11Z",
+      "side": 1,
+      "message": "This topic seems like something for the design doc: \u0027are SP frames considered interpreted?\u0027 \u0027is SP code considered optimized?\u0027. I think it\u0027ll help to be clear about this from the beginning.",
+      "parentUuid": "fb0c16e0_da527bea",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
