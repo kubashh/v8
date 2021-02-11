@@ -1239,6 +1239,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53ebeab5_eec029df",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T12:59:20Z",
+      "side": 1,
+      "message": "For posterity:\n\n```\nTFC Builtin, Call_ReceiverIsNullOrUndefined_Baseline, 572\nTFC Builtin, Call_ReceiverIsNotNullOrUndefined_Baseline, 572\nTFC Builtin, Call_ReceiverIsAny_Baseline, 572\nTFC Builtin, CallWithSpread_Baseline, 1596\nTFC Builtin, ConstructWithSpread_Baseline, 1888\nTFC Builtin, Construct_Baseline, 900\nTFC Builtin, Add_Baseline, 832\nTFC Builtin, Subtract_Baseline, 864\nTFC Builtin, Multiply_Baseline, 948\nTFC Builtin, Divide_Baseline, 828\nTFC Builtin, Modulus_Baseline, 876\nTFC Builtin, Exponentiate_Baseline, 84\nTFC Builtin, BitwiseAnd_Baseline, 840\nTFC Builtin, BitwiseOr_Baseline, 844\nTFC Builtin, BitwiseXor_Baseline, 844\nTFC Builtin, ShiftLeft_Baseline, 856\nTFC Builtin, ShiftRight_Baseline, 856\nTFC Builtin, ShiftRightLogical_Baseline, 860\nTFC Builtin, Equal_Baseline, 1852\nTFC Builtin, StrictEqual_Baseline, 852\nTFC Builtin, LessThan_Baseline, 1288\nTFC Builtin, GreaterThan_Baseline, 1288\nTFC Builtin, LessThanOrEqual_Baseline, 1288\nTFC Builtin, GreaterThanOrEqual_Baseline, 1288\nTFC Builtin, BitwiseNot_Baseline, 480\nTFC Builtin, Decrement_Baseline, 460\nTFC Builtin, Increment_Baseline, 460\nTFC Builtin, Negate_Baseline, 484\nTFC Builtin, InstanceOf_Baseline, 708\n```",
+      "parentUuid": "3fadc623_12707813",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "234b2f8d_14d85295",
