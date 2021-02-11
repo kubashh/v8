@@ -19,13 +19,13 @@ namespace tracing {
 // the --enable-system-instrumentation command line flag. When enabled, it is
 // called from within SystemInstrumentationTraceWriter and replaces the
 // JSONTraceWriter for event-tracing.
-class Recorder {
+class V8_PLATFORM_EXPORT Recorder {
  public:
   Recorder();
   ~Recorder();
 
-  bool IsEnabled();
-  bool IsEnabled(const uint8_t level);
+  static bool IsEnabled();
+  static bool IsEnabled(const uint8_t level);
 
   void AddEvent(TraceObject* trace_event);
 };

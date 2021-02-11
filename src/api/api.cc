@@ -40,6 +40,7 @@
 #include "src/debug/debug.h"
 #include "src/debug/liveedit.h"
 #include "src/deoptimizer/deoptimizer.h"
+#include "src/diagnostics/etw-jit.h"
 #include "src/diagnostics/gdb-jit.h"
 #include "src/execution/execution.h"
 #include "src/execution/frames-inl.h"
@@ -8531,6 +8532,12 @@ void Isolate::Initialize(Isolate* isolate,
     code_event_handler = i::GDBJITInterface::EventHandler;
   }
 #endif  // ENABLE_GDB_JIT_INTERFACE
+#if defined(V8_TARGET_OS_WIN)
+  if (code_event_handler == nullptr) {
+    code_event_handler = i::ETWJITInterface::EventHandler;
+  }
+#endif  // defined(V8_TARGET_OS_WIN)
+
   if (code_event_handler) {
     i_isolate->InitializeLoggingAndCounters();
     i_isolate->logger()->SetCodeEventHandler(kJitCodeEventDefault,
