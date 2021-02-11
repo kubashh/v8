@@ -33,6 +33,24 @@
       "message": "This manual checking to do NewNumber or Smi::FromInt isn\u0027t necessary. NewNumber already tries to make a Smi if the argument fits in a Smi.",
       "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f5d96de_042d1405",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5185,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-02-11T23:40:43Z",
+      "side": 1,
+      "message": "I hit a run time problem here. The upper level caller restrict DisallowHandleAllocation\n \n\n// static\nAddress JSDate::GetField(Isolate* isolate, Address raw_object,\n                         Address smi_index) {\n  // Called through CallCFunction.\n  DisallowGarbageCollection no_gc;\n  DisallowHandleAllocation no_handles;\n  DisallowJavascriptExecution no_js(isolate);\n\nSo... I got assertion in debug build while I call NewHandle.\nWhat should do here?  How can I return an object with non integer from here?",
+      "parentUuid": "727ec627_7d3cb74a",
+      "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
