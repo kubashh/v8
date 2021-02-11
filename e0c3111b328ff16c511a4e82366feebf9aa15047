@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3a96884_4e70f004",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5183,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-02-11T01:20:25Z",
+      "side": 1,
+      "message": "Nit: London/Europe, which has",
+      "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "727ec627_7d3cb74a",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5185,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-02-11T01:20:25Z",
+      "side": 1,
+      "message": "This manual checking to do NewNumber or Smi::FromInt isn\u0027t necessary. NewNumber already tries to make a Smi if the argument fits in a Smi.",
+      "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
