@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c983f91_31f29a95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-02-11T13:48:46Z",
+      "side": 1,
+      "message": "Still want to improve a bit on the concept of having a successful observation, but will do that in a follow up CL.\n\nI think we should land this now!\n\nThanks again for all the work!",
+      "revId": "5b74340263990c155933114ef73f4a2799d43e07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bf3fd08_417760cd",
+        "filename": "test/cctest/compiler/node-observer-tester.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-02-11T13:48:46Z",
+      "side": 1,
+      "message": "nit: empty line",
+      "revId": "5b74340263990c155933114ef73f4a2799d43e07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
