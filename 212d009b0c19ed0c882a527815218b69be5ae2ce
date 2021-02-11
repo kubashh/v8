@@ -16,6 +16,41 @@
       "message": "ptal again.\n\nneis@: it would probably be nice to indeed get rid of the Ref indirection. I didn\u0027t do it here since that also affects how we access the constant pool etc.",
       "revId": "212d009b0c19ed0c882a527815218b69be5ae2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6034203_a1af5691",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-11T08:42:32Z",
+      "side": 1,
+      "message": "For relands please make the first patch set the original CL so that the reviewers can easily see the new changes.\n\nRegarding OffHeapBytecodeArray, I think this is what happened:\nIt used to be created for an off-heap copy of the bytecode array. When Santiago made BytecodeArrayRef use direct reads, the consequence was that OffHeapBytecodeArray now worked more or less directly on the bytecode array. The plan was to get rid of OffHeapBytecodeArray (and probably AbstractBytecodeArray) but I guess that fell off the radar. We should do it now (either before, with, or after your CL). I think in order to be able to replace the use of OffHeapBytecodeArray with OnHeapBytecodeArray we need to change GetConstantAtIndex etc to create a local handle (passing the local isolate).",
+      "revId": "212d009b0c19ed0c882a527815218b69be5ae2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44ec7fc7_407ed5e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-11T08:42:32Z",
+      "side": 1,
+      "message": "Not sure what you\u0027re talking about exactly.",
+      "parentUuid": "afebd612_8965eae7",
+      "revId": "212d009b0c19ed0c882a527815218b69be5ae2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
