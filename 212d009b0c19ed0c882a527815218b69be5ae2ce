@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "945a0c28_a96ce4a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-11T16:52:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47aa9fa4_06a2313f",
+      "range": {
+        "startLine": 11,
+        "startChar": 72,
+        "endLine": 11,
+        "endChar": 74
+      },
+      "revId": "212d009b0c19ed0c882a527815218b69be5ae2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b465f5a7_d1dbddaa",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-02-11T09:14:10Z",
       "side": 1,
       "message": "Nit: typo",
+      "range": {
+        "startLine": 12,
+        "startChar": 32,
+        "endLine": 12,
+        "endChar": 37
+      },
+      "revId": "212d009b0c19ed0c882a527815218b69be5ae2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebdebe7d_2a27918e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-11T16:52:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b465f5a7_d1dbddaa",
       "range": {
         "startLine": 12,
         "startChar": 32,
@@ -112,6 +160,42 @@
       "writtenOn": "2021-02-11T09:14:10Z",
       "side": 1,
       "message": "Rubber-stamping heap",
+      "revId": "212d009b0c19ed0c882a527815218b69be5ae2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59bbbf32_48414c91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-11T16:52:24Z",
+      "side": 1,
+      "message": "I didn\u0027t do more here because as you mention yourself below, there\u0027s GetConstant* stuff that currently checks whether it should do direct access. I don\u0027t think it makes sense in the scope of this cl.",
+      "parentUuid": "44ec7fc7_407ed5e2",
+      "revId": "212d009b0c19ed0c882a527815218b69be5ae2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bb127bf_3b2c3775",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-11T16:52:24Z",
+      "side": 1,
+      "message": "Makes sense, but not in this cl.\n\nYeah sorry, forgot to upload the base patch first. Basically I just removed the conditional \"can_move\"; now all can move. And we always have a LocalHeap and we always register a callback. That\u0027s the only diff.",
+      "parentUuid": "a6034203_a1af5691",
       "revId": "212d009b0c19ed0c882a527815218b69be5ae2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
