@@ -483,6 +483,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7df837c7_d0ed7c29",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "Got it, that makes sense, added a TODO.",
+      "parentUuid": "1c3f1e87_82965c28",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55134b70_dc922522",
@@ -720,6 +738,30 @@
       "side": 1,
       "message": "+1 it doesn\u0027t have to be a \u0027horrible hack\u0027 if we have a good way of thinking about / approaching ignition vs. sparkplug frames.",
       "parentUuid": "6371e753_a60662a5",
+      "range": {
+        "startLine": 1245,
+        "startChar": 5,
+        "endLine": 1245,
+        "endChar": 19
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7efdbca_f5d06576",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "Sounds good, I like turning hacks into features. Added a TODO.",
+      "parentUuid": "10edbfa8_fa7e2a08",
       "range": {
         "startLine": 1245,
         "startChar": 5,
@@ -1026,6 +1068,30 @@
       "side": 1,
       "message": "Sharing the C++ code is fine for short builtins, for more involved builtins we should treat them as trampolines (which I think you already do for many)",
       "parentUuid": "08751f96_76c183d2",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ca0a4bc_b7142c85",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "Yeah, I think most are trampolines.\n\nFor these cases, I\u0027m not sure sharing the C++ code is cleaner, especially since we want to e.g. teach CollectConstructFeedback to not do undefined checks when we know a feedback vector exists. We\u0027d end up having to pass so many arguments I don\u0027t think we\u0027d end up saving on lines of code -- especially since the future of the NCI `X_WithFeedback` builtins is unclear. I\u0027ll leave as-is and resolve this comment, if you feel strongly then please do reopen and I\u0027ll do this in a followup.",
+      "parentUuid": "70b76542_0bdcd45e",
       "range": {
         "startLine": 52,
         "startChar": 0,
@@ -1820,6 +1886,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "804f5e71_10acc9e4",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 3025,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "We don\u0027t have a marker to push in the MANUAL case; we\u0027re using MANUAL to signify that we indeed don\u0027t want a marker. Perhaps this should be \"IsJSFrame\" and we should pass \"SPARKPLUG\", or similar -- adding a TODO.",
+      "parentUuid": "84178447_7e647aee",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d99ac43_e7d62b1b",
@@ -2033,6 +2117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95f75910_37036ad9",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "You\u0027re right that DeoptimizeAllSparkplug (which should actually be DeoptimizeAllSparkplugOnStack) is not an issue. However, it\u0027s still unclear how we could walk all the JSFunctions pointing to that Sparkplug code, without walking the heap.",
+      "parentUuid": "27a2732c_fd2fa2fd",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17a1eef8_acd7543e",
@@ -2100,6 +2202,24 @@
       "side": 1,
       "message": "My point is the outside system doesn\u0027t care about a SP/everything-else distinction. It either wants to deoptimize a given function, or deoptimize all functions. Right? The SP-specific logic should be internal in the deoptimizer functions.\n\n(Just marking as unresolved so the comment doesn\u0027t get lost. I\u0027m okay with deferring this.)",
       "parentUuid": "48c96864_f70799af",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2be5ca0f_1a89e4ac",
+        "filename": "src/deoptimizer/deoptimizer.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "Really, the SP-specific logic should maybe just move to the debugger, since it\u0027s only used in the debugger. I think we have another TODO for this elsewhere, but adding one here just in case.",
+      "parentUuid": "0ba8a029_84a6b5ae",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -2287,6 +2407,24 @@
       "writtenOn": "2021-02-10T09:55:23Z",
       "side": 1,
       "message": "We still need to clean this up, at least by updating the variable name (here and on Code itself). Ideally through some other means that don\u0027t require a code_kind !\u003d SPARKPLUG in every spot that reads the source_position_table.",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e831b6f_2319dd00",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "Added a TODO.",
+      "parentUuid": "786cde29_7428fd56",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -2601,6 +2739,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c07182e_86e8b8e9",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 465
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "Thanks, noted.",
+      "parentUuid": "d199bfbb_a2758f73",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9eb8dfc3_5eb4c9d4",
@@ -2792,6 +2948,24 @@
       "side": 1,
       "message": "This topic seems like something for the design doc: \u0027are SP frames considered interpreted?\u0027 \u0027is SP code considered optimized?\u0027. I think it\u0027ll help to be clear about this from the beginning.",
       "parentUuid": "fb0c16e0_da527bea",
+      "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "945dc2f3_af599185",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 465
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "Added a section to the design doc. Elsewhere I definitely have TODOs for cleaning this up, because it\u0027s also driving me made.",
+      "parentUuid": "9cb7c3b0_b296a0e9",
       "revId": "9d11aa5153a5dcfe4afef8f26a42203b928066b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

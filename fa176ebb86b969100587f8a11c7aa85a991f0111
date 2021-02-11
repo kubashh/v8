@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53927eaf_c6db237b",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 481
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "Removed, thanks.",
+      "parentUuid": "385da7d9_ff524253",
+      "revId": "fa176ebb86b969100587f8a11c7aa85a991f0111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dc03f98_27f31d6c",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-02-11T08:09:11Z",
       "side": 1,
       "message": "BytecodeArray",
+      "range": {
+        "startLine": 125,
+        "startChar": 34,
+        "endLine": 125,
+        "endChar": 46
+      },
+      "revId": "fa176ebb86b969100587f8a11c7aa85a991f0111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03173815_3b8db781",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 481
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-11T09:22:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dc03f98_27f31d6c",
       "range": {
         "startLine": 125,
         "startChar": 34,
