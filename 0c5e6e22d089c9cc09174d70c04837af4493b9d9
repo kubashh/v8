@@ -56,6 +56,30 @@
       },
       "revId": "0c5e6e22d089c9cc09174d70c04837af4493b9d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ff01194_4149288d",
+        "filename": "test/common/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-02-12T11:49:43Z",
+      "side": 1,
+      "message": "I think technically nothing wrong can happen, the Zone does not reclaim memory AFAIK and the destructor does not do anything.\nBut if you think this is too fragile or if I missed something I can move the pop_back() below. There is only a weak reason why I moved it here, which is that the current try block should not be included in the count for the delegate immediate below.",
+      "parentUuid": "1b413c33_21e73a92",
+      "range": {
+        "startLine": 928,
+        "startChar": 0,
+        "endLine": 929,
+        "endChar": 35
+      },
+      "revId": "0c5e6e22d089c9cc09174d70c04837af4493b9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
