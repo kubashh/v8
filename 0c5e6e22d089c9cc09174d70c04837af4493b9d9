@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "0c5e6e22d089c9cc09174d70c04837af4493b9d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e38f997_f42419ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-12T11:36:45Z",
+      "side": 1,
+      "message": "LGTM with one remark.",
+      "revId": "0c5e6e22d089c9cc09174d70c04837af4493b9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b413c33_21e73a92",
+        "filename": "test/common/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-12T11:36:45Z",
+      "side": 1,
+      "message": "Isn\u0027t this use-after-free (any access to {c} after the pop_back)?",
+      "range": {
+        "startLine": 928,
+        "startChar": 0,
+        "endLine": 929,
+        "endChar": 35
+      },
+      "revId": "0c5e6e22d089c9cc09174d70c04837af4493b9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
