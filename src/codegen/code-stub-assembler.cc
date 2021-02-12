@@ -6,6 +6,7 @@
 
 #include "include/v8-internal.h"
 #include "src/base/macros.h"
+#include "src/base/optional.h"
 #include "src/codegen/code-factory.h"
 #include "src/codegen/tnode.h"
 #include "src/common/globals.h"
@@ -4855,18 +4856,26 @@ void CodeStubAssembler::CopyFixedArrayElements(
       if_hole = nullptr;
     }
 
-    Node* value = LoadElementAndPrepareForStore(
-        from_array, var_from_offset.value(), from_kind, to_kind, if_hole);
+    base::Optional<TNode<Object>> maybe_object;
+    base::Optional<TNode<Float64T>> maybe_float64;
+    if (to_double_elements) {
+      maybe_float64 = LoadElementAndPrepareForStore<Float64T>(
+          from_array, var_from_offset.value(), from_kind, to_kind, if_hole);
+    } else {
+      maybe_object = LoadElementAndPrepareForStore<Object>(
+          from_array, var_from_offset.value(), from_kind, to_kind, if_hole);
+    }
 
     if (needs_write_barrier) {
       CHECK_EQ(to_array, to_array_adjusted);
-      Store(to_array_adjusted, to_offset, value);
+      Store(to_array_adjusted, to_offset, maybe_object.value());
     } else if (to_double_elements) {
       StoreNoWriteBarrier(MachineRepresentation::kFloat64, to_array_adjusted,
-                          to_offset, value);
+                          to_offset, maybe_float64.value());
     } else {
       UnsafeStoreNoWriteBarrier(MachineRepresentation::kTagged,
-                                to_array_adjusted, to_offset, value);
+                                to_array_adjusted, to_offset,
+                                maybe_object.value());
     }
     Goto(&next_iter);
 
@@ -4979,30 +4988,43 @@ TNode<FixedArrayBase> CodeStubAssembler::CloneFixedArray(
       base::Optional<TNode<BInt>>(base::nullopt), flags);
 }
 
-Node* CodeStubAssembler::LoadElementAndPrepareForStore(
+template <>
+TNode<Object> CodeStubAssembler::LoadElementAndPrepareForStore(
     TNode<FixedArrayBase> array, TNode<IntPtrT> offset, ElementsKind from_kind,
     ElementsKind to_kind, Label* if_hole) {
   CSA_ASSERT(this, IsFixedArrayWithKind(array, from_kind));
+  DCHECK(!IsDoubleElementsKind(to_kind));
   if (IsDoubleElementsKind(from_kind)) {
     TNode<Float64T> value =
         LoadDoubleWithHoleCheck(array, offset, if_hole, MachineType::Float64());
-    if (!IsDoubleElementsKind(to_kind)) {
-      return AllocateHeapNumberWithValue(value);
-    }
-    return value;
-
+    return AllocateHeapNumberWithValue(value);
   } else {
     TNode<Object> value = Load<Object>(array, offset);
     if (if_hole) {
       GotoIf(TaggedEqual(value, TheHoleConstant()), if_hole);
     }
-    if (IsDoubleElementsKind(to_kind)) {
-      if (IsSmiElementsKind(from_kind)) {
-        return SmiToFloat64(CAST(value));
-      }
-      return LoadHeapNumberValue(CAST(value));
-    }
     return value;
+  }
+}
+
+template <>
+TNode<Float64T> CodeStubAssembler::LoadElementAndPrepareForStore(
+    TNode<FixedArrayBase> array, TNode<IntPtrT> offset, ElementsKind from_kind,
+    ElementsKind to_kind, Label* if_hole) {
+  CSA_ASSERT(this, IsFixedArrayWithKind(array, from_kind));
+  DCHECK(IsDoubleElementsKind(to_kind));
+  if (IsDoubleElementsKind(from_kind)) {
+    return LoadDoubleWithHoleCheck(array, offset, if_hole,
+                                   MachineType::Float64());
+  } else {
+    TNode<Object> value = Load<Object>(array, offset);
+    if (if_hole) {
+      GotoIf(TaggedEqual(value, TheHoleConstant()), if_hole);
+    }
+    if (IsSmiElementsKind(from_kind)) {
+      return SmiToFloat64(CAST(value));
+    }
+    return LoadHeapNumberValue(CAST(value));
   }
 }
 
