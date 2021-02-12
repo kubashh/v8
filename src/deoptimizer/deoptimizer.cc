@@ -214,7 +214,7 @@ DeoptimizedFrameInfo* Deoptimizer::DebuggerInspectableFrame(
   int counter = jsframe_index;
   for (auto it = translated_values.begin(); it != translated_values.end();
        it++) {
-    if (it->kind() == TranslatedFrame::kInterpretedFunction ||
+    if (it->kind() == TranslatedFrame::kUnoptimizedFunction ||
         it->kind() == TranslatedFrame::kJavaScriptBuiltinContinuation ||
         it->kind() ==
             TranslatedFrame::kJavaScriptBuiltinContinuationWithCatch) {
@@ -228,7 +228,7 @@ DeoptimizedFrameInfo* Deoptimizer::DebuggerInspectableFrame(
   CHECK(frame_it != translated_values.end());
   // We only include kJavaScriptBuiltinContinuation frames above to get the
   // counting right.
-  CHECK_EQ(frame_it->kind(), TranslatedFrame::kInterpretedFunction);
+  CHECK_EQ(frame_it->kind(), TranslatedFrame::kUnoptimizedFunction);
 
   DeoptimizedFrameInfo* info =
       new DeoptimizedFrameInfo(&translated_values, frame_it, isolate);
@@ -434,12 +434,13 @@ class DeoptimizeBaselineVisitor : public ThreadVisitor {
       if (it.frame()->type() == StackFrame::BASELINE) {
         BaselineFrame* frame = BaselineFrame::cast(it.frame());
         if (!deopt_all && frame->function().shared() != shared_) continue;
-        frame->InterpretedFrame::PatchBytecodeOffset(
-            frame->GetBytecodeOffset());
+        int bytecode_offset = frame->GetBytecodeOffset();
         Address* pc_addr = frame->pc_address();
         Address advance = BUILTIN_CODE(isolate, InterpreterEnterBytecodeAdvance)
                               ->InstructionStart();
         PointerAuthentication::ReplacePC(pc_addr, advance, kSystemPointerSize);
+        InterpretedFrame::cast(it.Reframe())
+            ->PatchBytecodeOffset(bytecode_offset);
       }
     }
   }
@@ -775,7 +776,7 @@ namespace {
 int LookupCatchHandler(Isolate* isolate, TranslatedFrame* translated_frame,
                        int* data_out) {
   switch (translated_frame->kind()) {
-    case TranslatedFrame::kInterpretedFunction: {
+    case TranslatedFrame::kUnoptimizedFunction: {
       int bytecode_offset = translated_frame->bytecode_offset().ToInt();
       HandlerTable table(
           translated_frame->raw_shared_info().GetBytecodeArray(isolate));
@@ -993,8 +994,8 @@ void Deoptimizer::DoComputeOutputFrames() {
     TranslatedFrame* translated_frame = &(translated_state_.frames()[i]);
     const bool handle_exception = deoptimizing_throw_ && i == count - 1;
     switch (translated_frame->kind()) {
-      case TranslatedFrame::kInterpretedFunction:
-        DoComputeInterpretedFrame(translated_frame, frame_index,
+      case TranslatedFrame::kUnoptimizedFunction:
+        DoComputeUnoptimizedFrame(translated_frame, frame_index,
                                   handle_exception);
         break;
       case TranslatedFrame::kArgumentsAdaptor:
@@ -1048,7 +1049,7 @@ void Deoptimizer::DoComputeOutputFrames() {
       stack_guard->real_jslimit() - kStackLimitSlackForDeoptimizationInBytes);
 }
 
-void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
+void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
                                             int frame_index,
                                             bool goto_catch_handler) {
   SharedFunctionInfo shared = translated_frame->raw_shared_info();
@@ -1072,13 +1073,13 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
                             TranslatedFrame::kArgumentsAdaptor;
 
   const int locals_count = translated_frame->height();
-  InterpretedFrameInfo frame_info = InterpretedFrameInfo::Precise(
+  UnoptimizedFrameInfo frame_info = UnoptimizedFrameInfo::Precise(
       parameters_count, locals_count, is_topmost, should_pad_arguments);
   const uint32_t output_frame_size = frame_info.frame_size_in_bytes();
 
   TranslatedFrame::iterator function_iterator = value_iterator++;
   if (verbose_tracing_enabled()) {
-    PrintF(trace_scope()->file(), "  translating interpreted frame ");
+    PrintF(trace_scope()->file(), "  translating unoptimized frame ");
     std::unique_ptr<char[]> name = shared.DebugNameCStr();
     PrintF(trace_scope()->file(), "%s", name.get());
     PrintF(trace_scope()->file(),
@@ -1152,7 +1153,7 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
   const intptr_t fp_value = top_address + frame_writer.top_offset();
   output_frame->SetFp(fp_value);
   if (is_topmost) {
-    Register fp_reg = InterpretedFrame::fp_register();
+    Register fp_reg = UnoptimizedFrame::fp_register();
     output_frame->SetRegister(fp_reg.code(), fp_value);
   }
 
@@ -1323,7 +1324,7 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
     output_frame->SetConstantPool(constant_pool_value);
     if (is_topmost) {
       Register constant_pool_reg =
-          InterpretedFrame::constant_pool_pointer_register();
+          UnoptimizedFrame::constant_pool_pointer_register();
       output_frame->SetRegister(constant_pool_reg.code(), constant_pool_value);
     }
   }

@@ -527,7 +527,7 @@ int Code::stack_slots() const {
 }
 
 bool Code::marked_for_deoptimization() const {
-  // TODO(v8:11429): Re-evaluate if baseline code can really deopt.
+  // TODO(v8:11429): Re-evaluate if sparkplug code can really deopt.
   DCHECK(CodeKindCanDeoptimize(kind()) || kind() == CodeKind::BASELINE);
   int32_t flags = code_data_container(kAcquireLoad).kind_specific_flags();
   return MarkedForDeoptimizationField::decode(flags);
@@ -725,7 +725,7 @@ void BytecodeArray::set_parameter_count(int32_t number_of_parameters) {
   // Parameter count is stored as the size on stack of the parameters to allow
   // it to be used directly by generated code.
   WriteField<int32_t>(kParameterSizeOffset,
-                  (number_of_parameters << kSystemPointerSizeLog2));
+                      (number_of_parameters << kSystemPointerSizeLog2));
 }
 
 interpreter::Register BytecodeArray::incoming_new_target_or_generator_register()
@@ -748,7 +748,7 @@ void BytecodeArray::set_incoming_new_target_or_generator_register(
            register_count());
     DCHECK_NE(0, incoming_new_target_or_generator_register.ToOperand());
     WriteField<int32_t>(kIncomingNewTargetOrGeneratorRegisterOffset,
-                    incoming_new_target_or_generator_register.ToOperand());
+                        incoming_new_target_or_generator_register.ToOperand());
   }
 }
 
