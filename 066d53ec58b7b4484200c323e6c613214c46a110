@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c70b2d9_55c27054",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-12T10:50:44Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846cd595_13ec37c7",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-12T10:50:44Z",
+      "side": 1,
+      "message": "This cannot be part of the testing namespace as it\u0027s exposed from some internal bindings on content_shell when built for tests (it\u0027s still a non-test target).\n\nIt\u0027s similar to the V8 and EmbedderHeapTracer version in that it requires --expose_gc V8 flag.",
+      "range": {
+        "startLine": 119,
+        "startChar": 7,
+        "endLine": 119,
+        "endChar": 34
+      },
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "246cdd79_bf2b4b2f",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-12T10:50:44Z",
+      "side": 1,
+      "message": "This should only be needed for platform unittests which do not have an Isolate attached. Implementing separately as it may require moving around a little bit of infrastructure.",
+      "range": {
+        "startLine": 240,
+        "startChar": 6,
+        "endLine": 240,
+        "endChar": 19
+      },
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
