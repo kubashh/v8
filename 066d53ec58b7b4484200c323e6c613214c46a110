@@ -43,6 +43,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ceec195_b6d179b3",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-02-12T11:02:11Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be on the embedder side?",
+      "range": {
+        "startLine": 232,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 43
+      },
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "178842f5_e6b59ff3",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-02-12T11:02:11Z",
+      "side": 1,
+      "message": "I guess the embedder doesn\u0027t have the corresponding v8 isolate to call its GC?",
+      "range": {
+        "startLine": 236,
+        "startChar": 6,
+        "endLine": 236,
+        "endChar": 67
+      },
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "246cdd79_bf2b4b2f",
         "filename": "src/heap/cppgc-js/cpp-heap.cc",
         "patchSetId": 1
