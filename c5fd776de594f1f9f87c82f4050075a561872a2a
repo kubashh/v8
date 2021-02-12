@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9681f337_6b2f7eaf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-02-12T19:38:49Z",
+      "side": 1,
+      "message": "Do we also need that in the test runner status file:\nhttps://chromium.googlesource.com/v8/v8/+/c5fd776de594f1f9f87c82f4050075a561872a2a/tools/testrunner/base_runner.py#638\n\nBut when adding it there, we also need to skip it for foozzie and flag fuzzer for now, e.g.:\nhttps://chromium.googlesource.com/v8/v8/+/c5fd776de594f1f9f87c82f4050075a561872a2a/tools/clusterfuzz/v8_fuzz_flags.json#20",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 61
+      },
+      "revId": "c5fd776de594f1f9f87c82f4050075a561872a2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
