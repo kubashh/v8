@@ -90,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f3eead9_a632165a",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-12T11:12:55Z",
+      "side": 1,
+      "message": "If we want to have a new API, we could return the marked_bytes and then move the loop to the embedder.",
+      "parentUuid": "fef0f610_82a87ccd",
+      "range": {
+        "startLine": 232,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 43
+      },
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "178842f5_e6b59ff3",
         "filename": "src/heap/cppgc-js/cpp-heap.cc",
         "patchSetId": 1
