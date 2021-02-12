@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79bece1e_5515c643",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-12T12:55:39Z",
+      "side": 1,
+      "message": "PTAL, locally tested to fix the CFI config.",
+      "revId": "1c08cd02f5437d40e0fb4620c03eb73cb26411c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
