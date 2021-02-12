@@ -869,8 +869,8 @@ Address CommonFrame::GetExpressionAddress(int n) const {
   return fp() + offset - n * kSystemPointerSize;
 }
 
-Address InterpretedFrame::GetExpressionAddress(int n) const {
-  const int offset = InterpreterFrameConstants::kExpressionsOffset;
+Address UnoptimizedFrame::GetExpressionAddress(int n) const {
+  const int offset = UnoptimizedFrameConstants::kExpressionsOffset;
   return fp() + offset - n * kSystemPointerSize;
 }
 
@@ -1550,7 +1550,7 @@ void OptimizedFrame::Summarize(std::vector<FrameSummary>* frames) const {
   // in the deoptimization translation are ordered bottom-to-top.
   bool is_constructor = IsConstructor();
   for (auto it = translated.begin(); it != translated.end(); it++) {
-    if (it->kind() == TranslatedFrame::kInterpretedFunction ||
+    if (it->kind() == TranslatedFrame::kUnoptimizedFunction ||
         it->kind() == TranslatedFrame::kJavaScriptBuiltinContinuation ||
         it->kind() ==
             TranslatedFrame::kJavaScriptBuiltinContinuationWithCatch) {
@@ -1582,7 +1582,7 @@ void OptimizedFrame::Summarize(std::vector<FrameSummary>* frames) const {
                 Builtins::GetBuiltinFromBytecodeOffset(it->bytecode_offset()))),
             isolate());
       } else {
-        DCHECK_EQ(it->kind(), TranslatedFrame::kInterpretedFunction);
+        DCHECK_EQ(it->kind(), TranslatedFrame::kUnoptimizedFunction);
         code_offset = it->bytecode_offset().ToInt();
         abstract_code =
             handle(shared_info->abstract_code(isolate()), isolate());
@@ -1709,16 +1709,43 @@ Object OptimizedFrame::StackSlotAt(int index) const {
   return Object(Memory<Address>(fp() + StackSlotOffsetRelativeToFp(index)));
 }
 
-int InterpretedFrame::position() const {
+int UnoptimizedFrame::position() const {
   AbstractCode code = AbstractCode::cast(GetBytecodeArray());
   int code_offset = GetBytecodeOffset();
   return code.SourcePosition(code_offset);
 }
 
-int InterpretedFrame::LookupExceptionHandlerInTable(
+int UnoptimizedFrame::LookupExceptionHandlerInTable(
     int* context_register, HandlerTable::CatchPrediction* prediction) {
   HandlerTable table(GetBytecodeArray());
   return table.LookupRange(GetBytecodeOffset(), context_register, prediction);
+}
+
+BytecodeArray UnoptimizedFrame::GetBytecodeArray() const {
+  const int index = InterpreterFrameConstants::kBytecodeArrayExpressionIndex;
+  DCHECK_EQ(InterpreterFrameConstants::kBytecodeArrayFromFp,
+            InterpreterFrameConstants::kExpressionsOffset -
+                index * kSystemPointerSize);
+  return BytecodeArray::cast(GetExpression(index));
+}
+
+Object UnoptimizedFrame::ReadInterpreterRegister(int register_index) const {
+  const int index = InterpreterFrameConstants::kRegisterFileExpressionIndex;
+  DCHECK_EQ(InterpreterFrameConstants::kRegisterFileFromFp,
+            InterpreterFrameConstants::kExpressionsOffset -
+                index * kSystemPointerSize);
+  return GetExpression(index + register_index);
+}
+
+void UnoptimizedFrame::Summarize(std::vector<FrameSummary>* functions) const {
+  DCHECK(functions->empty());
+  Handle<AbstractCode> abstract_code(AbstractCode::cast(GetBytecodeArray()),
+                                     isolate());
+  Handle<FixedArray> params = GetParameters();
+  FrameSummary::JavaScriptFrameSummary summary(
+      isolate(), receiver(), function(), *abstract_code, GetBytecodeOffset(),
+      IsConstructor(), *params);
+  functions->push_back(summary);
 }
 
 int InterpretedFrame::GetBytecodeOffset() const {
@@ -1730,6 +1757,7 @@ int InterpretedFrame::GetBytecodeOffset() const {
   return raw_offset - BytecodeArray::kHeaderSize + kHeapObjectTag;
 }
 
+// static
 int InterpretedFrame::GetBytecodeOffset(Address fp) {
   const int offset = InterpreterFrameConstants::kExpressionsOffset;
   const int index = InterpreterFrameConstants::kBytecodeOffsetExpressionIndex;
@@ -1750,22 +1778,6 @@ void InterpretedFrame::PatchBytecodeOffset(int new_offset) {
   SetExpression(index, Smi::FromInt(raw_offset));
 }
 
-int BaselineFrame::GetBytecodeOffset() const {
-  return LookupCode().GetBytecodeOffsetForBaselinePC(this->pc());
-}
-
-intptr_t BaselineFrame::GetPCForBytecodeOffset(int bytecode_offset) const {
-  return LookupCode().GetBaselinePCForBytecodeOffset(bytecode_offset);
-}
-
-BytecodeArray InterpretedFrame::GetBytecodeArray() const {
-  const int index = InterpreterFrameConstants::kBytecodeArrayExpressionIndex;
-  DCHECK_EQ(InterpreterFrameConstants::kBytecodeArrayFromFp,
-            InterpreterFrameConstants::kExpressionsOffset -
-                index * kSystemPointerSize);
-  return BytecodeArray::cast(GetExpression(index));
-}
-
 void InterpretedFrame::PatchBytecodeArray(BytecodeArray bytecode_array) {
   const int index = InterpreterFrameConstants::kBytecodeArrayExpressionIndex;
   DCHECK_EQ(InterpreterFrameConstants::kBytecodeArrayFromFp,
@@ -1774,32 +1786,17 @@ void InterpretedFrame::PatchBytecodeArray(BytecodeArray bytecode_array) {
   SetExpression(index, bytecode_array);
 }
 
-Object InterpretedFrame::ReadInterpreterRegister(int register_index) const {
-  const int index = InterpreterFrameConstants::kRegisterFileExpressionIndex;
-  DCHECK_EQ(InterpreterFrameConstants::kRegisterFileFromFp,
-            InterpreterFrameConstants::kExpressionsOffset -
-                index * kSystemPointerSize);
-  return GetExpression(index + register_index);
+int BaselineFrame::GetBytecodeOffset() const {
+  return LookupCode().GetBytecodeOffsetForBaselinePC(this->pc());
 }
 
-void InterpretedFrame::WriteInterpreterRegister(int register_index,
-                                                Object value) {
-  const int index = InterpreterFrameConstants::kRegisterFileExpressionIndex;
-  DCHECK_EQ(InterpreterFrameConstants::kRegisterFileFromFp,
-            InterpreterFrameConstants::kExpressionsOffset -
-                index * kSystemPointerSize);
-  return SetExpression(index + register_index, value);
+intptr_t BaselineFrame::GetPCForBytecodeOffset(int bytecode_offset) const {
+  return LookupCode().GetBaselinePCForBytecodeOffset(bytecode_offset);
 }
 
-void InterpretedFrame::Summarize(std::vector<FrameSummary>* functions) const {
-  DCHECK(functions->empty());
-  Handle<AbstractCode> abstract_code(AbstractCode::cast(GetBytecodeArray()),
-                                     isolate());
-  Handle<FixedArray> params = GetParameters();
-  FrameSummary::JavaScriptFrameSummary summary(
-      isolate(), receiver(), function(), *abstract_code, GetBytecodeOffset(),
-      IsConstructor(), *params);
-  functions->push_back(summary);
+void BaselineFrame::PatchContext(Context value) {
+  base::Memory<Address>(fp() + BaselineFrameConstants::kContextOffset) =
+      value.ptr();
 }
 
 JSFunction BuiltinFrame::function() const {
@@ -2032,8 +2029,7 @@ void JavaScriptFrame::Print(StringStream* accumulator, PrintMode mode,
     accumulator->PrintName(script.name());
 
     if (is_interpreted()) {
-      const InterpretedFrame* iframe =
-          reinterpret_cast<const InterpretedFrame*>(this);
+      const InterpretedFrame* iframe = InterpretedFrame::cast(this);
       BytecodeArray bytecodes = iframe->GetBytecodeArray();
       int offset = iframe->GetBytecodeOffset();
       int source_pos = AbstractCode::cast(bytecodes).SourcePosition(offset);
@@ -2221,14 +2217,14 @@ bool BuiltinContinuationModeIsWithCatch(BuiltinContinuationMode mode) {
 
 }  // namespace
 
-InterpretedFrameInfo::InterpretedFrameInfo(int parameters_count_with_receiver,
+UnoptimizedFrameInfo::UnoptimizedFrameInfo(int parameters_count_with_receiver,
                                            int translation_height,
                                            bool is_topmost, bool pad_arguments,
                                            FrameInfoKind frame_info_kind) {
   const int locals_count = translation_height;
 
   register_stack_slot_count_ =
-      InterpreterFrameConstants::RegisterStackSlotCount(locals_count);
+      UnoptimizedFrameConstants::RegisterStackSlotCount(locals_count);
 
   static constexpr int kTheAccumulator = 1;
   static constexpr int kTopOfStackPadding = TopOfStackRegisterPaddingSlots();

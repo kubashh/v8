@@ -145,7 +145,7 @@ JSGeneratorObject BreakLocation::GetGeneratorObjectForSuspendedFrame(
   DCHECK(IsSuspend());
   DCHECK_GE(generator_obj_reg_index_, 0);
 
-  Object generator_obj = InterpretedFrame::cast(frame)->ReadInterpreterRegister(
+  Object generator_obj = UnoptimizedFrame::cast(frame)->ReadInterpreterRegister(
       generator_obj_reg_index_);
 
   return JSGeneratorObject::cast(generator_obj);
@@ -339,7 +339,6 @@ void DebugFeatureTracker::Track(DebugFeatureTracker::Feature feature) {
   bitfield_ |= mask;
 }
 
-
 // Threading support.
 void Debug::ThreadInit() {
   thread_local_.break_frame_id_ = StackFrameId::NO_ID;
@@ -358,7 +357,6 @@ void Debug::ThreadInit() {
   thread_local_.break_on_next_function_call_ = false;
   UpdateHookOnFunctionCall();
 }
-
 
 char* Debug::ArchiveDebug(char* storage) {
   MemCopy(storage, reinterpret_cast<char*>(&thread_local_),
@@ -545,7 +543,6 @@ void Debug::Break(JavaScriptFrame* frame, Handle<JSFunction> break_target) {
   }
 }
 
-
 // Find break point objects for this location, if any, and evaluate them.
 // Return an array of break point objects that evaluated true, or an empty
 // handle if none evaluated true.
@@ -559,7 +556,6 @@ MaybeHandle<FixedArray> Debug::CheckBreakPoints(Handle<DebugInfo> debug_info,
 
   return Debug::GetHitBreakPoints(debug_info, location->position());
 }
-
 
 bool Debug::IsMutedAtCurrentLocation(JavaScriptFrame* frame) {
   HandleScope scope(isolate_);
@@ -883,7 +879,6 @@ void Debug::ChangeBreakOnException(ExceptionBreakType type, bool enable) {
     break_on_exception_ = enable;
   }
 }
-
 
 bool Debug::IsBreakOnException(ExceptionBreakType type) {
   if (type == BreakUncaughtException) {
@@ -1225,7 +1220,6 @@ void Debug::ClearStepping() {
   UpdateHookOnFunctionCall();
 }
 
-
 // Clears all the one-shot break points that are currently set. Normally this
 // function is called each time a break point is hit as one shot break points
 // are used to support stepping.
@@ -1540,7 +1534,6 @@ class SharedFunctionInfoFinder {
   DISALLOW_GARBAGE_COLLECTION(no_gc_)
 };
 
-
 // We need to find a SFI for a literal that may not yet have been compiled yet,
 // and there may not be a JSFunction referencing it. Find the SFI closest to
 // the given position, compile it to reveal possible inner SFIs and repeat.
@@ -1592,7 +1585,6 @@ Handle<Object> Debug::FindSharedFunctionInfoInScript(Handle<Script> script,
   }
   return isolate_->factory()->undefined_value();
 }
-
 
 // Ensures the debug information is present for shared.
 bool Debug::EnsureBreakInfo(Handle<SharedFunctionInfo> shared) {
@@ -2121,7 +2113,8 @@ void Debug::HandleDebugBreak(IgnoreBreakMode ignore_break_mode) {
   StackLimitCheck check(isolate_);
   if (check.HasOverflowed()) return;
 
-  { JavaScriptFrameIterator it(isolate_);
+  {
+    JavaScriptFrameIterator it(isolate_);
     DCHECK(!it.done());
     Object fun = it.frame()->function();
     if (fun.IsJSFunction()) {
