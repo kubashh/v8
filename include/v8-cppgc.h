@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 
+#include "cppgc/common.h"
 #include "cppgc/custom-space.h"
 #include "cppgc/heap-statistics.h"
 #include "cppgc/internal/process-heap.h"
@@ -106,6 +107,16 @@ class V8_EXPORT CppHeap {
    * After this call, object allocation is prohibited.
    */
   void Terminate();
+
+  /**
+   * Invokes a series of synchronous testing garbage collections. If the
+   * `CppHeap` is attached to a `Isolate`, the garbage collection will consider
+   * JavaScript and C++ objects, otherwise, only the C++ graph is considered.
+   *
+   * Should only be used in testing code and requires V8's --expose_gc flag to
+   * be set.
+   */
+  void GarbageCollectionForTesting(cppgc::EmbedderStackState stack_state);
 
   /**
    * \param detail_level specifies whether should return detailed

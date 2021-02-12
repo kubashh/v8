@@ -58,6 +58,11 @@ cppgc::HeapHandle& CppHeap::GetHeapHandle() {
 
 void CppHeap::Terminate() { internal::CppHeap::From(this)->Terminate(); }
 
+void CppHeap::GarbageCollectionForTesting(
+    cppgc::EmbedderStackState stack_state) {
+  internal::CppHeap::From(this)->GarbageCollectionForTesting(stack_state);
+}
+
 cppgc::HeapStatistics CppHeap::CollectStatistics(
     cppgc::HeapStatistics::DetailLevel detail_level) {
   return internal::CppHeap::From(this)->AsBase().CollectStatistics(
@@ -218,6 +223,30 @@ void CppHeap::Terminate() {
   CHECK(!isolate_);
   // Gracefully terminate the C++ heap invoking destructors.
   HeapBase::Terminate();
+}
+
+void CppHeap::GarbageCollectionForTesting(
+    cppgc::EmbedderStackState stack_state) {
+  constexpr size_t kMaxGCCount = 5;
+  size_t previous_live_bytes = 0;
+  for (auto i = 0u; i < kMaxGCCount; i++) {
+    if (isolate_) {
+      // Heap is attached to V8, just invoke testing GC using existing
+      // EmbedderHeapTracer interface.
+      EmbedderHeapTracer::GarbageCollectionForTesting(stack_state);
+    } else {
+      //
+      // TODO(chromium:1056170): Heap is detached. Invoke a stand-alone GC.
+      UNIMPLEMENTED();
+    }
+    const size_t live_bytes =
+        stats_collector()->GetPreviousEventForTesting().marked_bytes;
+    // Early bailout if live size does not change anymore.
+    if (previous_live_bytes == live_bytes) {
+      break;
+    }
+    previous_live_bytes = live_bytes;
+  }
 }
 
 void CppHeap::AttachIsolate(Isolate* isolate) {

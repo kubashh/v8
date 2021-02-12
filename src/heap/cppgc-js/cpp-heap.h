@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_CPPGC_JS_CPP_HEAP_H_
 #define V8_HEAP_CPPGC_JS_CPP_HEAP_H_
 
+#include "include/cppgc/common.h"
 #include "include/v8-cppgc.h"
 #include "include/v8.h"
 #include "src/base/macros.h"
@@ -49,6 +50,8 @@ class V8_EXPORT_PRIVATE CppHeap final
   void DetachIsolate();
 
   void Terminate();
+
+  void GarbageCollectionForTesting(cppgc::EmbedderStackState);
 
   // v8::EmbedderHeapTracer interface.
   void RegisterV8References(

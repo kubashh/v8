@@ -18,14 +18,14 @@ UnifiedHeapTest::UnifiedHeapTest()
     : cpp_heap_(v8::CppHeap::Create(
           V8::GetCurrentPlatform(),
           CppHeapCreateParams{{}, WrapperHelper::DefaultWrapperDescriptor()})) {
+  FLAG_expose_gc = true;
   isolate()->heap()->AttachCppHeap(cpp_heap_.get());
 }
 
 void UnifiedHeapTest::CollectGarbageWithEmbedderStack(
     cppgc::Heap::SweepingType sweeping_type) {
-  heap()->SetEmbedderStackStateForNextFinalization(
-      EmbedderHeapTracer::EmbedderStackState::kMayContainHeapPointers);
-  CollectGarbage(OLD_SPACE);
+  cpp_heap().GarbageCollectionForTesting(
+      cppgc::EmbedderStackState::kMayContainHeapPointers);
   if (sweeping_type == cppgc::Heap::SweepingType::kAtomic) {
     cpp_heap().AsBase().sweeper().FinishIfRunning();
   }
@@ -33,9 +33,8 @@ void UnifiedHeapTest::CollectGarbageWithEmbedderStack(
 
 void UnifiedHeapTest::CollectGarbageWithoutEmbedderStack(
     cppgc::Heap::SweepingType sweeping_type) {
-  heap()->SetEmbedderStackStateForNextFinalization(
-      EmbedderHeapTracer::EmbedderStackState::kNoHeapPointers);
-  CollectGarbage(OLD_SPACE);
+  cpp_heap().GarbageCollectionForTesting(
+      cppgc::EmbedderStackState::kNoHeapPointers);
   if (sweeping_type == cppgc::Heap::SweepingType::kAtomic) {
     cpp_heap().AsBase().sweeper().FinishIfRunning();
   }
