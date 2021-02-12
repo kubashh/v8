@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3db60a1e_2c5ff183",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-12T11:58:30Z",
+      "side": 1,
+      "message": "I would prefer to change this, but feel free to land as-is if this is too much hassle. This is only the interpreter, after all :) ",
+      "revId": "0c5e6e22d089c9cc09174d70c04837af4493b9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b413c33_21e73a92",
@@ -72,6 +89,30 @@
       "side": 1,
       "message": "I think technically nothing wrong can happen, the Zone does not reclaim memory AFAIK and the destructor does not do anything.\nBut if you think this is too fragile or if I missed something I can move the pop_back() below. There is only a weak reason why I moved it here, which is that the current try block should not be included in the count for the delegate immediate below.",
       "parentUuid": "1b413c33_21e73a92",
+      "range": {
+        "startLine": 928,
+        "startChar": 0,
+        "endLine": 929,
+        "endChar": 35
+      },
+      "revId": "0c5e6e22d089c9cc09174d70c04837af4493b9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d053a757_1c78f9cf",
+        "filename": "test/common/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-12T11:58:30Z",
+      "side": 1,
+      "message": "Oh, right, because of ZoneVector this is technically correct.\nI just looked through the rest of the interpreter and didn\u0027t find other places that rely on that. So I would prefer to do it the \"clean way\" and only pop at the end. Maybe you can make the adaption in the stack size less confusing by introducing something like \"size_t outer_control_stack_size \u003d ...\". Or name it \"control_stack_reference\" or something.",
+      "parentUuid": "5ff01194_4149288d",
       "range": {
         "startLine": 928,
         "startChar": 0,
