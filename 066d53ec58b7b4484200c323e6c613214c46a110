@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fef0f610_82a87ccd",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-12T11:11:23Z",
+      "side": 1,
+      "message": "We want to bail out asap and only perform 5 GCs if really needed.\n\nWe could get marked bytes from cppgc::HeapStatistics which we have now but the sweeper is still running after the testing GC, so the bailout wouldn\u0027t work.",
+      "parentUuid": "3ceec195_b6d179b3",
+      "range": {
+        "startLine": 232,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 43
+      },
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "178842f5_e6b59ff3",
         "filename": "src/heap/cppgc-js/cpp-heap.cc",
         "patchSetId": 1
@@ -100,6 +124,30 @@
       "writtenOn": "2021-02-12T11:05:29Z",
       "side": 1,
       "message": "Nevermind, V8 does not expose it directly.",
+      "parentUuid": "178842f5_e6b59ff3",
+      "range": {
+        "startLine": 236,
+        "startChar": 6,
+        "endLine": 236,
+        "endChar": 67
+      },
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4afe1747_4532b7b2",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-12T11:11:23Z",
+      "side": 1,
+      "message": "We have a V8 Isolate but Isolate::RequestGarbageCollection does not have a way to pass a stack state.",
       "parentUuid": "178842f5_e6b59ff3",
       "range": {
         "startLine": 236,
