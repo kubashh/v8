@@ -887,7 +887,7 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
       JSCallReducer* reducer, Node* node,
       const FunctionTemplateInfoRef function_template_info, Node* receiver,
       Node* holder, const SharedFunctionInfoRef shared, Node* target,
-      const int arity, Node* effect)
+      const int arity, Node* effect, JSHeapBroker* broker)
       : JSCallReducerAssembler(reducer, node),
         c_function_(function_template_info.c_function()),
         c_signature_(function_template_info.c_signature()),
@@ -896,11 +896,36 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
         holder_(holder),
         shared_(shared),
         target_(target),
-        arity_(arity) {
+        arity_(arity),
+        broker_(broker) {
     DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
-    DCHECK_NE(c_function_, kNullAddress);
-    CHECK_NOT_NULL(c_signature_);
+    // DCHECK_NE(c_function_, kNullAddress);
+    // CHECK_NOT_NULL(c_signature_);
     InitializeEffectControl(effect, NodeProperties::GetControlInput(node));
+  }
+
+  void ArgumentTypesInference() {
+    static int matched = 0, total = 0;
+
+    JSCallNode n(node_ptr());
+    if (ArgumentCount() == 0) return;
+
+    bool match = false;
+    for (int i = 0; i < ArgumentCount(); ++i) {
+      ++total;
+      MapInference inference(broker_, Argument(i), effect());
+      if (inference.HaveMaps()) {
+        ++matched;
+        match = true;
+      }
+    }
+
+    if (match) {
+      String name = shared_.object()->Name();
+      printf("%s:\t", name.ToCString().get());
+      printf("matched / total: %d / %d [%s]\n", matched, total,
+             match ? "yes" : "no");
+    }
   }
 
   TNode<Object> ReduceFastApiCall() {
@@ -998,6 +1023,7 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
   const SharedFunctionInfoRef shared_;
   Node* const target_;
   const int arity_;
+  JSHeapBroker* broker_;
 };
 
 TNode<Number> JSCallReducerAssembler::SpeculativeToNumber(
@@ -3642,7 +3668,7 @@ Reduction JSCallReducer::ReduceCallApiFunction(
       //
       // The same is true for the instance type, e.g. we still know that the
       // instance type is JSObject even if that information is unreliable, and
-      // the "access check needed" bit, which also cannot change later.
+      // f the "access check needed" bit, which also cannot change later.
       CHECK(first_receiver_map.IsJSReceiverMap());
       CHECK(!first_receiver_map.is_access_check_needed() ||
             function_template_info.accept_any_receiver());
@@ -3730,9 +3756,10 @@ Reduction JSCallReducer::ReduceCallApiFunction(
     return NoChange();
   }
 
+  FastApiCallReducerAssembler a(this, node, function_template_info, receiver,
+                                holder, shared, target, argc, effect, broker());
+  a.ArgumentTypesInference();
   if (CanOptimizeFastCall(function_template_info)) {
-    FastApiCallReducerAssembler a(this, node, function_template_info, receiver,
-                                  holder, shared, target, argc, effect);
     Node* fast_call_subgraph = a.ReduceFastApiCall();
     ReplaceWithSubgraph(&a, fast_call_subgraph);
 
