@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8847afef_7b34691f",
+        "filename": "test/cctest/test-profile-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-02-12T09:30:06Z",
+      "side": 1,
+      "message": "\"delete mock_platform;\" should fix the asan bot failures.",
+      "range": {
+        "startLine": 634,
+        "startChar": 2,
+        "endLine": 634,
+        "endChar": 33
+      },
+      "revId": "a8774e8a14719def5e1a1d014c33100cd7f62230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
