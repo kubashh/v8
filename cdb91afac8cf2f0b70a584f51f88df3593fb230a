@@ -50,6 +50,24 @@
       "message": "Not for this CL, but I wonder if we want to template this by to/from elements kind to avoid these kind of checks in the future?",
       "revId": "cdb91afac8cf2f0b70a584f51f88df3593fb230a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3da679ce_27e486c8",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4858,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-12T15:01:42Z",
+      "side": 1,
+      "message": "In this particular case the to_kind would be enough, at least for typing {value} in this method.\nMaybe templating with some std::enable_if could do the trick since the conversions would be for a range of values e.g. PACKED_DOUBLE_ELEMENTS and HOLEY_DOUBLE_ELEMENTS.",
+      "parentUuid": "8f59db52_1c5be0b6",
+      "revId": "cdb91afac8cf2f0b70a584f51f88df3593fb230a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
