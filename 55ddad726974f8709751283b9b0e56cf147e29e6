@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1345880e_c7199fdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-12T13:17:09Z",
+      "side": 1,
+      "message": "Ross, Jakob, PTAL, first followup to upstreaming SP.\n\nCC: Victor \u0026 Patrick, this will likely affect your work too.",
+      "revId": "55ddad726974f8709751283b9b0e56cf147e29e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
