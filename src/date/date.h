@@ -92,9 +92,10 @@ class V8_EXPORT_PRIVATE DateCache {
   }
 
   // ECMA 262 - 15.9.5.26
-  int TimezoneOffset(int64_t time_ms) {
-    int64_t local_ms = ToLocal(time_ms);
-    return static_cast<int>((time_ms - local_ms) / kMsPerMin);
+  double TimezoneOffset(int64_t time_ms) {
+    double local_ms = ToLocal(time_ms);
+    return static_cast<double>(time_ms - local_ms) /
+           static_cast<double>(kMsPerMin);
   }
 
   // ECMA 262 - ES#sec-localtime-t
