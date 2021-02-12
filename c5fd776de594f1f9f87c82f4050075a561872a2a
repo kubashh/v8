@@ -22,6 +22,30 @@
       },
       "revId": "c5fd776de594f1f9f87c82f4050075a561872a2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b72223b_f652bba3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-12T20:03:22Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to add it to the test runner status file, because the availability of SSE4.2 does not determine if Wasm SIMD is supported or not (it\u0027s not the boundary condition). It affects the code sequence we generate though.",
+      "parentUuid": "9681f337_6b2f7eaf",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 61
+      },
+      "revId": "c5fd776de594f1f9f87c82f4050075a561872a2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
