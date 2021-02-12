@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7e85771_b547a657",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-12T11:18:11Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "846cd595_13ec37c7",
@@ -36,6 +53,29 @@
         "startChar": 7,
         "endLine": 119,
         "endChar": 34
+      },
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bcf7bf5_b3bef06b",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-12T11:18:11Z",
+      "side": 1,
+      "message": "Check the expose_gc flag here?\nDoes the flag do anything other than be used for checks?",
+      "range": {
+        "startLine": 228,
+        "startChar": 14,
+        "endLine": 228,
+        "endChar": 41
       },
       "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -102,6 +142,30 @@
       "side": 1,
       "message": "If we want to have a new API, we could return the marked_bytes and then move the loop to the embedder.",
       "parentUuid": "fef0f610_82a87ccd",
+      "range": {
+        "startLine": 232,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 43
+      },
+      "revId": "066d53ec58b7b4484200c323e6c613214c46a110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "473485c7_c6a43569",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-12T11:18:11Z",
+      "side": 1,
+      "message": "I\u0027d assume that synchronous GC would also mean atomic sweeping so sweeping should be done when we return.",
+      "parentUuid": "1f3eead9_a632165a",
       "range": {
         "startLine": 232,
         "startChar": 1,
