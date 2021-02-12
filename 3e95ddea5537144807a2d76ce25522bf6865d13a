@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b353d90d_bafc9769",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 487
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-12T09:23:03Z",
+      "side": 1,
+      "message": "Thanks both of you for the detailed review -- even with the parts you skipped over, the reviews were very helpful. FWIW the work in src/baseline itself was \"reviewed\" (albeit informally, on the experimental branch, rather than in gerrit) by the new src/baseline OWNERS, so it\u0027s not going int without having had at least 3 pairs of eyes on it.\n\nWe\u0027ll get to the followups ASAP, I\u0027ve started a burndown here: https://docs.google.com/spreadsheets/d/12J3JF8aDmjRXsLa9JU5NEBvwMlNAZ37X1-GBGY-dAc4/edit?resourcekey\u003d0-GgAFQOT9LAoc3qcwAwCE5g#gid\u003d0",
+      "parentUuid": "c9955fd8_ddbdcb40",
+      "revId": "3e95ddea5537144807a2d76ce25522bf6865d13a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "895514cf_5d4831b7",
