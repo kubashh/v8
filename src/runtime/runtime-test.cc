@@ -508,15 +508,14 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
   function->MarkForOptimization(ConcurrencyMode::kNotConcurrent);
 
   // Make the profiler arm all back edges in unoptimized code.
-  if (it.frame()->IsUnoptimizedJavaScriptFrame()) {
+  if (it.frame()->is_unoptimized()) {
     isolate->runtime_profiler()->AttemptOnStackReplacement(
-        InterpretedFrame::cast(it.frame()),
+        UnoptimizedFrame::cast(it.frame()),
         AbstractCode::kMaxLoopNestingMarker);
   }
 
   return ReadOnlyRoots(isolate).undefined_value();
 }
-
 
 RUNTIME_FUNCTION(Runtime_NeverOptimizeFunction) {
   HandleScope scope(isolate);
@@ -718,7 +717,6 @@ RUNTIME_FUNCTION(Runtime_NotifyContextDisposed) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
-
 RUNTIME_FUNCTION(Runtime_SetAllocationTimeout) {
   SealHandleScope shs(isolate);
   DCHECK(args.length() == 2 || args.length() == 3);
@@ -913,7 +911,6 @@ RUNTIME_FUNCTION(Runtime_GlobalPrint) {
   return string;
 }
 
-
 RUNTIME_FUNCTION(Runtime_SystemBreak) {
   // The code below doesn't create handles, but when breaking here in GDB
   // having a handle scope might be useful.
@@ -922,7 +919,6 @@ RUNTIME_FUNCTION(Runtime_SystemBreak) {
   base::OS::DebugBreak();
   return ReadOnlyRoots(isolate).undefined_value();
 }
-
 
 RUNTIME_FUNCTION(Runtime_SetForceSlowPath) {
   SealHandleScope shs(isolate);
