@@ -45,6 +45,7 @@
 
   # Unable to change locale and TZ on Windows:
   'regress-7770': [SKIP],
+  'regress-1143701': [SKIP],
 }],  # system == windows'
 
 ['system == android', {
@@ -58,6 +59,7 @@
   'default_locale': [SKIP],
   # Unable to change locale and TZ on Android:
   'regress-7770': [SKIP],
+  'regress-1143701': [SKIP],
 }],  # 'system == android'
 
 ################################################################################
