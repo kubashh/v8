@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47ecb03f_8fb197d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-02-14T15:54:43Z",
+      "side": 1,
+      "message": "+ Georgia for Arm64 change",
+      "revId": "1dea7ce2b49d1e099f4735440dfd849bfa57d8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
