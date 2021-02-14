@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad2c04d9_15929c10",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5179,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-02-14T14:49:10Z",
+      "side": 1,
+      "message": "dupe of line 5177",
+      "range": {
+        "startLine": 5179,
+        "startChar": 6,
+        "endLine": 5179,
+        "endChar": 37
+      },
+      "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3a96884_4e70f004",
         "filename": "src/objects/js-objects.cc",
         "patchSetId": 1
@@ -67,6 +90,24 @@
       "side": 1,
       "message": "Hm, I\u0027m not sure why JSDate::GetField is called via CallCFunction. jkummerow@, any ideas?",
       "parentUuid": "8f5d96de_042d1405",
+      "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e28cc326_61ce7fc3",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5185,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-02-14T14:49:10Z",
+      "side": 1,
+      "message": "We use \"CallCFunction\" (a.k.a. \"fast C calls\" a.k.a. \"ExternalReference call\") because they\u0027re faster than the standard CEntryStub -- precisely because they skip the bookkeeping required to support GC and exceptions.\n\nGenerally speaking, one solution would be to stop doing that, and migrate all users of `get_date_field_function` (all one of them, in builtins-date-gen.cc) to runtime calls instead. However, it would be sad to make all date field accesses significantly slower just because of this corner case (London before 1847? Come on! I\u0027m not surprised that we\u0027ve been doing that wrong since Chrome 1.0 and nobody has noticed/cared so far...).\n\nSo since it\u0027s just one very specific corner case, another way to solve this without allocations is to cache a specific HeapNumber (similar to `nan_value`, in roots.h), and return that if offset \u003d\u003d 1.25. One could say that\u0027s an ugly hack, but unless someone has a better idea... I\u0027d say this corner case deserves no better? :-)",
+      "parentUuid": "f1576c4d_24acfb7c",
       "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
