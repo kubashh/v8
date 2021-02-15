@@ -456,6 +456,10 @@ void LiftoffAssembler::CacheState::InitMerge(const CacheState& source,
   // |------locals------|---(in between)----|--(discarded)--|----merge----|
   //  <-- num_locals --> <-- stack_depth -->^stack_base      <-- arity -->
 
+  if (source.cached_instance != no_reg) {
+    SetInstanceCacheRegister(source.cached_instance);
+  }
+
   uint32_t stack_base = stack_depth + num_locals;
   uint32_t target_height = stack_base + arity;
   uint32_t discarded = source.stack_height() - target_height;
@@ -720,6 +724,10 @@ void LiftoffAssembler::MergeStackWith(const CacheState& target,
     transfers.TransferStackSlot(target.stack_state[target_stack_base + i],
                                 cache_state_.stack_state[stack_base + i]);
   }
+
+  if (cache_state_.cached_instance != target.cached_instance) {
+    cache_state_.ClearCachedInstanceRegister();
+  }
 }
 
 void LiftoffAssembler::Spill(VarState* slot) {
@@ -750,6 +758,7 @@ void LiftoffAssembler::SpillAllRegisters() {
     Spill(slot.offset(), slot.reg(), slot.type());
     slot.MakeStack();
   }
+  cache_state_.ClearCachedInstanceRegister();
   cache_state_.reset_used_registers();
 }
 
@@ -850,6 +859,7 @@ void LiftoffAssembler::PrepareCall(const FunctionSig* sig,
   constexpr size_t kInputShift = 1;
 
   // Spill all cache slots which are not being used as parameters.
+  cache_state_.ClearCachedInstanceRegister();
   for (VarState* it = cache_state_.stack_state.end() - 1 - num_params;
        it >= cache_state_.stack_state.begin() &&
        !cache_state_.used_registers.is_empty();
@@ -1079,6 +1089,14 @@ bool LiftoffAssembler::ValidateCacheState() const {
       ++register_use_count[reg.liftoff_code()];
     }
     used_regs.set(reg);
+  }
+  if (cache_state_.cached_instance != no_reg) {
+    DCHECK(!used_regs.has(cache_state_.cached_instance));
+    int liftoff_code =
+        LiftoffRegister{cache_state_.cached_instance}.liftoff_code();
+    used_regs.set(cache_state_.cached_instance);
+    DCHECK_EQ(0, register_use_count[liftoff_code]);
+    register_use_count[liftoff_code] = 1;
   }
   bool valid = memcmp(register_use_count, cache_state_.register_use_count,
                       sizeof(register_use_count)) == 0 &&

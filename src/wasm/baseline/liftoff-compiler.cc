@@ -62,15 +62,16 @@ struct assert_field_size {
 #define WASM_INSTANCE_OBJECT_FIELD_SIZE(name) \
   FIELD_SIZE(WasmInstanceObject::k##name##Offset)
 
-#define LOAD_INSTANCE_FIELD(dst, name, load_size)                              \
-  __ LoadFromInstance(dst, WASM_INSTANCE_OBJECT_FIELD_OFFSET(name),            \
+#define LOAD_INSTANCE_FIELD(dst, name, load_size, pinned)                      \
+  __ LoadFromInstance(dst, LoadInstanceIntoRegister(pinned, dst),              \
+                      WASM_INSTANCE_OBJECT_FIELD_OFFSET(name),                 \
                       assert_field_size<WASM_INSTANCE_OBJECT_FIELD_SIZE(name), \
                                         load_size>::size);
 
-#define LOAD_TAGGED_PTR_INSTANCE_FIELD(dst, name)                         \
-  static_assert(WASM_INSTANCE_OBJECT_FIELD_SIZE(name) == kTaggedSize,     \
-                "field in WasmInstance does not have the expected size"); \
-  __ LoadTaggedPointerFromInstance(dst,                                   \
+#define LOAD_TAGGED_PTR_INSTANCE_FIELD(dst, name, pinned)                      \
+  static_assert(WASM_INSTANCE_OBJECT_FIELD_SIZE(name) == kTaggedSize,          \
+                "field in WasmInstance does not have the expected size");      \
+  __ LoadTaggedPointerFromInstance(dst, LoadInstanceIntoRegister(pinned, dst), \
                                    WASM_INSTANCE_OBJECT_FIELD_OFFSET(name));
 
 #ifdef DEBUG
@@ -657,9 +658,14 @@ class LiftoffCompiler {
         position, regs_to_save, spilled_regs, safepoint_info,
         RegisterOOLDebugSideTableEntry()));
     OutOfLineCode& ool = out_of_line_code_.back();
-    LOAD_INSTANCE_FIELD(limit_address, StackLimitAddress, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(limit_address, StackLimitAddress, kSystemPointerSize,
+                        {});
     __ StackCheck(ool.label.get(), limit_address);
     __ bind(ool.continuation.get());
+    // If the stack check triggers, we lose the cached instance register.
+    // TODO(clemensb): Restore that register when returning from the stack
+    // check.
+    __ cache_state()->ClearCachedInstanceRegister();
   }
 
   bool SpillLocalsInitially(FullDecoder* decoder, uint32_t num_params) {
@@ -719,13 +725,14 @@ class LiftoffCompiler {
 
     // Input 0 is the call target, the instance is at 1.
     constexpr int kInstanceParameterIndex = 1;
-    // Check that {kWasmInstanceRegister} matches out call descriptor.
+    // Check that {kWasmInstanceRegister} matches our call descriptor.
     DCHECK_EQ(kWasmInstanceRegister,
               Register::from_code(
                   descriptor_->GetInputLocation(kInstanceParameterIndex)
                       .AsRegister()));
     // Store the instance parameter to a special stack slot.
     __ SpillInstance(kWasmInstanceRegister);
+    __ cache_state()->SetInstanceCacheRegister(kWasmInstanceRegister);
 
     // Process parameters.
     if (num_params) DEBUG_CODE_COMMENT("process parameters");
@@ -791,7 +798,7 @@ class LiftoffCompiler {
       LiftoffRegister array_address =
           pinned.set(__ GetUnusedRegister(kGpReg, pinned));
       LOAD_INSTANCE_FIELD(array_address.gp(), NumLiftoffFunctionCallsArray,
-                          kSystemPointerSize);
+                          kSystemPointerSize, pinned);
 
       // Compute the correct offset in the array.
       uint32_t offset =
@@ -964,13 +971,14 @@ class LiftoffCompiler {
       Register flag = __ GetUnusedRegister(kGpReg, {}).gp();
 
       // Check the "hook on function call" flag. If set, trigger a break.
-      LOAD_INSTANCE_FIELD(flag, HookOnFunctionCallAddress, kSystemPointerSize);
+      LOAD_INSTANCE_FIELD(flag, HookOnFunctionCallAddress, kSystemPointerSize,
+                          {});
       __ Load(LiftoffRegister{flag}, flag, no_reg, 0, LoadType::kI32Load8U, {});
       // Unary "unequal" means "not equals zero".
       __ emit_cond_jump(kUnequal, &do_break, kWasmI32, flag);
 
       // Check if we should stop on "script entry".
-      LOAD_INSTANCE_FIELD(flag, BreakOnEntry, kUInt8Size);
+      LOAD_INSTANCE_FIELD(flag, BreakOnEntry, kUInt8Size, {});
       // Unary "equal" means "equals zero".
       __ emit_cond_jump(kEqual, &no_break, kWasmI32, flag);
 
@@ -1026,6 +1034,8 @@ class LiftoffCompiler {
     // TODO(clemensb): Come up with a better strategy here, involving
     // pre-analysis of the function.
     __ SpillLocals();
+    // Same for the cached instance register.
+    __ cache_state()->ClearCachedInstanceRegister();
 
     __ PrepareLoopArgs(loop->start_merge.arity);
 
@@ -1996,12 +2006,13 @@ class LiftoffCompiler {
                                   LiftoffRegList* pinned, uint32_t* offset) {
     Register addr = pinned->set(__ GetUnusedRegister(kGpReg, {})).gp();
     if (global->mutability && global->imported) {
-      LOAD_INSTANCE_FIELD(addr, ImportedMutableGlobals, kSystemPointerSize);
+      LOAD_INSTANCE_FIELD(addr, ImportedMutableGlobals, kSystemPointerSize,
+                          *pinned);
       __ Load(LiftoffRegister(addr), addr, no_reg,
               global->index * sizeof(Address), kPointerLoadType, *pinned);
       *offset = 0;
     } else {
-      LOAD_INSTANCE_FIELD(addr, GlobalsStart, kSystemPointerSize);
+      LOAD_INSTANCE_FIELD(addr, GlobalsStart, kSystemPointerSize, *pinned);
       *offset = global->offset;
     }
     return addr;
@@ -2013,7 +2024,7 @@ class LiftoffCompiler {
     Register globals_buffer =
         pinned->set(__ GetUnusedRegister(kGpReg, *pinned)).gp();
     LOAD_TAGGED_PTR_INSTANCE_FIELD(globals_buffer,
-                                   ImportedMutableGlobalsBuffers);
+                                   ImportedMutableGlobalsBuffers, *pinned);
     *base = globals_buffer;
     __ LoadTaggedPointer(
         *base, globals_buffer, no_reg,
@@ -2027,7 +2038,7 @@ class LiftoffCompiler {
         pinned->set(__ GetUnusedRegister(kGpReg, *pinned)).gp();
 
     LOAD_INSTANCE_FIELD(imported_mutable_globals, ImportedMutableGlobals,
-                        kSystemPointerSize);
+                        kSystemPointerSize, *pinned);
     *offset = imported_mutable_globals;
     __ Load(LiftoffRegister(*offset), imported_mutable_globals, no_reg,
             global->index * sizeof(Address),
@@ -2060,7 +2071,8 @@ class LiftoffCompiler {
       LiftoffRegList pinned;
       Register globals_buffer =
           pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-      LOAD_TAGGED_PTR_INSTANCE_FIELD(globals_buffer, TaggedGlobalsBuffer);
+      LOAD_TAGGED_PTR_INSTANCE_FIELD(globals_buffer, TaggedGlobalsBuffer,
+                                     pinned);
       Register value = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
       __ LoadTaggedPointer(value, globals_buffer, no_reg,
                            wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(
@@ -2101,7 +2113,8 @@ class LiftoffCompiler {
       LiftoffRegList pinned;
       Register globals_buffer =
           pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-      LOAD_TAGGED_PTR_INSTANCE_FIELD(globals_buffer, TaggedGlobalsBuffer);
+      LOAD_TAGGED_PTR_INSTANCE_FIELD(globals_buffer, TaggedGlobalsBuffer,
+                                     pinned);
       LiftoffRegister value = pinned.set(__ PopToRegister(pinned));
       __ StoreTaggedPointer(globals_buffer, no_reg,
                             wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(
@@ -2448,7 +2461,7 @@ class LiftoffCompiler {
     LiftoffRegister end_offset_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     LiftoffRegister mem_size = __ GetUnusedRegister(kGpReg, pinned);
-    LOAD_INSTANCE_FIELD(mem_size.gp(), MemorySize, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(mem_size.gp(), MemorySize, kSystemPointerSize, pinned);
 
     __ LoadConstant(end_offset_reg, WasmValue::ForUintPtr(end_offset));
 
@@ -2569,7 +2582,7 @@ class LiftoffCompiler {
       }
     }
     Register tmp = __ GetUnusedRegister(kGpReg, *pinned).gp();
-    LOAD_INSTANCE_FIELD(tmp, MemoryMask, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(tmp, MemoryMask, kSystemPointerSize, *pinned);
     if (*offset) __ emit_ptrsize_addi(index, index, *offset);
     __ emit_ptrsize_and(index, index, tmp);
     *offset = 0;
@@ -2597,7 +2610,7 @@ class LiftoffCompiler {
     index = AddMemoryMasking(index, &offset, &pinned);
     DEBUG_CODE_COMMENT("load from memory");
     Register addr = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     RegClass rc = reg_class_for(value_type);
     LiftoffRegister value = pinned.set(__ GetUnusedRegister(rc, pinned));
     uint32_t protected_load_pc = 0;
@@ -2640,7 +2653,7 @@ class LiftoffCompiler {
     index = AddMemoryMasking(index, &offset, &pinned);
     DEBUG_CODE_COMMENT("load with transformation");
     Register addr = __ GetUnusedRegister(kGpReg, pinned).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     LiftoffRegister value = __ GetUnusedRegister(reg_class_for(kS128), {});
     uint32_t protected_load_pc = 0;
     __ LoadTransform(value, addr, index, offset, type, transform,
@@ -2682,7 +2695,7 @@ class LiftoffCompiler {
     index = AddMemoryMasking(index, &offset, &pinned);
     DEBUG_CODE_COMMENT("load lane");
     Register addr = __ GetUnusedRegister(kGpReg, pinned).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     LiftoffRegister result = __ GetUnusedRegister(reg_class_for(kS128), {});
     uint32_t protected_load_pc = 0;
 
@@ -2719,7 +2732,7 @@ class LiftoffCompiler {
     index = AddMemoryMasking(index, &offset, &pinned);
     DEBUG_CODE_COMMENT("store to memory");
     Register addr = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     uint32_t protected_store_pc = 0;
     LiftoffRegList outer_pinned;
     if (FLAG_trace_wasm_memory) outer_pinned.set(index);
@@ -2752,7 +2765,7 @@ class LiftoffCompiler {
     index = AddMemoryMasking(index, &offset, &pinned);
     DEBUG_CODE_COMMENT("store lane to memory");
     Register addr = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     uint32_t protected_store_pc = 0;
     __ StoreLane(addr, index, offset, value, type, lane, &protected_store_pc);
     if (env_->use_trap_handler) {
@@ -2768,7 +2781,7 @@ class LiftoffCompiler {
 
   void CurrentMemoryPages(FullDecoder* /* decoder */, Value* /* result */) {
     Register mem_size = __ GetUnusedRegister(kGpReg, {}).gp();
-    LOAD_INSTANCE_FIELD(mem_size, MemorySize, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(mem_size, MemorySize, kSystemPointerSize, {});
     __ emit_ptrsize_shri(mem_size, mem_size, kWasmPageSizeLog2);
     LiftoffRegister result{mem_size};
     if (env_->module->is_memory64 && kNeedI64RegPair) {
@@ -2876,7 +2889,7 @@ class LiftoffCompiler {
     Label cont_false;
     LiftoffRegList pinned;
     LiftoffRegister ref = pinned.set(__ PopToRegister(pinned));
-    Register null = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
+    Register null = __ GetUnusedRegister(kGpReg, pinned).gp();
     LoadNullValue(null, pinned);
     __ emit_cond_jump(kUnequal, &cont_false, ref_object.type, ref.gp(), null);
 
@@ -3553,7 +3566,7 @@ class LiftoffCompiler {
     index = AddMemoryMasking(index, &offset, &pinned);
     DEBUG_CODE_COMMENT("atomic store to memory");
     Register addr = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     LiftoffRegList outer_pinned;
     if (FLAG_trace_wasm_memory) outer_pinned.set(index);
     __ AtomicStore(addr, index, offset, value, type, outer_pinned);
@@ -3577,7 +3590,7 @@ class LiftoffCompiler {
     index = AddMemoryMasking(index, &offset, &pinned);
     DEBUG_CODE_COMMENT("atomic load from memory");
     Register addr = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     RegClass rc = reg_class_for(value_type);
     LiftoffRegister value = pinned.set(__ GetUnusedRegister(rc, pinned));
     __ AtomicLoad(value, addr, index, offset, type, pinned);
@@ -3625,7 +3638,7 @@ class LiftoffCompiler {
     uintptr_t offset = imm.offset;
     index = AddMemoryMasking(index, &offset, &pinned);
     Register addr = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
 
     (asm_.*emit_fn)(addr, index, offset, value, result, type);
     __ PushRegister(result_type, result);
@@ -3649,7 +3662,7 @@ class LiftoffCompiler {
     uintptr_t offset = imm.offset;
     index = AddMemoryMasking(index, &offset, &pinned);
     Register addr = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     __ emit_i32_add(addr, addr, index);
     pinned.clear(LiftoffRegister(index));
     LiftoffRegister new_value = pinned.set(__ PopToRegister(pinned));
@@ -3681,7 +3694,7 @@ class LiftoffCompiler {
     uintptr_t offset = imm.offset;
     index = AddMemoryMasking(index, &offset, &pinned);
     Register addr = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     LiftoffRegister result =
         pinned.set(__ GetUnusedRegister(reg_class_for(result_type), pinned));
 
@@ -3984,7 +3997,8 @@ class LiftoffCompiler {
 
     Register seg_size_array =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LOAD_INSTANCE_FIELD(seg_size_array, DataSegmentSizes, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(seg_size_array, DataSegmentSizes, kSystemPointerSize,
+                        pinned);
 
     LiftoffRegister seg_index =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
@@ -4100,7 +4114,7 @@ class LiftoffCompiler {
     Register dropped_elem_segments =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
     LOAD_INSTANCE_FIELD(dropped_elem_segments, DroppedElemSegments,
-                        kSystemPointerSize);
+                        kSystemPointerSize, pinned);
 
     LiftoffRegister seg_index =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
@@ -4242,7 +4256,7 @@ class LiftoffCompiler {
     LiftoffRegister obj = pinned.set(__ PopToRegister(pinned));
     MaybeEmitNullCheck(decoder, obj.gp(), pinned, struct_obj.type);
     LiftoffRegister value =
-        pinned.set(__ GetUnusedRegister(reg_class_for(field_type), pinned));
+        __ GetUnusedRegister(reg_class_for(field_type), pinned);
     LoadObjectField(value, obj.gp(), no_reg, offset, field_type, is_signed,
                     pinned);
     __ PushRegister(field_type.Unpacked(), value);
@@ -4390,7 +4404,7 @@ class LiftoffCompiler {
     LiftoffRegList pinned;
     LiftoffRegister obj = pinned.set(__ PopToRegister(pinned));
     MaybeEmitNullCheck(decoder, obj.gp(), pinned, array_obj.type);
-    LiftoffRegister len = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+    LiftoffRegister len = __ GetUnusedRegister(kGpReg, pinned);
     int kLengthOffset = wasm::ObjectAccess::ToTagged(WasmArray::kLengthOffset);
     LoadObjectField(len, obj.gp(), no_reg, kLengthOffset, kWasmI32, false,
                     pinned);
@@ -4439,7 +4453,7 @@ class LiftoffCompiler {
 
   void RttCanon(FullDecoder* decoder, uint32_t type_index, Value* result) {
     LiftoffRegister rtt = __ GetUnusedRegister(kGpReg, {});
-    LOAD_TAGGED_PTR_INSTANCE_FIELD(rtt.gp(), ManagedObjectMaps);
+    LOAD_TAGGED_PTR_INSTANCE_FIELD(rtt.gp(), ManagedObjectMaps, {});
     __ LoadTaggedPointer(
         rtt.gp(), rtt.gp(), no_reg,
         wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(type_index), {});
@@ -4820,13 +4834,13 @@ class LiftoffCompiler {
 
       Register imported_targets = tmp;
       LOAD_INSTANCE_FIELD(imported_targets, ImportedFunctionTargets,
-                          kSystemPointerSize);
+                          kSystemPointerSize, pinned);
       __ Load(LiftoffRegister(target), imported_targets, no_reg,
               imm.index * sizeof(Address), kPointerLoadType, pinned);
 
       Register imported_function_refs = tmp;
       LOAD_TAGGED_PTR_INSTANCE_FIELD(imported_function_refs,
-                                     ImportedFunctionRefs);
+                                     ImportedFunctionRefs, pinned);
       Register imported_function_ref = tmp;
       __ LoadTaggedPointer(
           imported_function_ref, imported_function_refs, no_reg,
@@ -4900,7 +4914,8 @@ class LiftoffCompiler {
 
     // Compare against table size stored in
     // {instance->indirect_function_table_size}.
-    LOAD_INSTANCE_FIELD(tmp_const, IndirectFunctionTableSize, kUInt32Size);
+    LOAD_INSTANCE_FIELD(tmp_const, IndirectFunctionTableSize, kUInt32Size,
+                        pinned);
     __ emit_cond_jump(kUnsignedGreaterEqual, invalid_func_label, kWasmI32,
                       index, tmp_const);
 
@@ -4928,7 +4943,8 @@ class LiftoffCompiler {
 
     DEBUG_CODE_COMMENT("Check indirect call signature");
     // Load the signature from {instance->ift_sig_ids[key]}
-    LOAD_INSTANCE_FIELD(table, IndirectFunctionTableSigIds, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(table, IndirectFunctionTableSigIds, kSystemPointerSize,
+                        pinned);
     // Shift {index} by 2 (multiply by 4) to represent kInt32Size items.
     STATIC_ASSERT((1 << 2) == kInt32Size);
     __ emit_i32_shli(index, index, 2);
@@ -4953,7 +4969,7 @@ class LiftoffCompiler {
     // At this point {index} has already been multiplied by kTaggedSize.
 
     // Load the instance from {instance->ift_instances[key]}
-    LOAD_TAGGED_PTR_INSTANCE_FIELD(table, IndirectFunctionTableRefs);
+    LOAD_TAGGED_PTR_INSTANCE_FIELD(table, IndirectFunctionTableRefs, pinned);
     __ LoadTaggedPointer(tmp_const, table, index,
                          ObjectAccess::ElementOffsetInTaggedFixedArray(0),
                          pinned);
@@ -4968,8 +4984,8 @@ class LiftoffCompiler {
     Register* explicit_instance = &tmp_const;
 
     // Load the target from {instance->ift_targets[key]}
-    LOAD_INSTANCE_FIELD(table, IndirectFunctionTableTargets,
-                        kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(table, IndirectFunctionTableTargets, kSystemPointerSize,
+                        pinned);
     __ Load(LiftoffRegister(scratch), table, index, 0, kPointerLoadType,
             pinned);
 
@@ -5206,7 +5222,7 @@ class LiftoffCompiler {
   }
 
   void LoadNullValue(Register null, LiftoffRegList pinned) {
-    LOAD_INSTANCE_FIELD(null, IsolateRoot, kSystemPointerSize);
+    LOAD_INSTANCE_FIELD(null, IsolateRoot, kSystemPointerSize, pinned);
     __ LoadTaggedPointer(null, null, no_reg,
                          IsolateData::root_slot_offset(RootIndex::kNullValue),
                          pinned);
@@ -5383,6 +5399,17 @@ class LiftoffCompiler {
     Safepoint safepoint = safepoint_table_builder_.DefineSafepoint(
         &asm_, Safepoint::kNoLazyDeopt);
     __ cache_state()->DefineSafepoint(safepoint);
+  }
+
+  Register LoadInstanceIntoRegister(LiftoffRegList pinned, Register fallback) {
+    Register instance = __ cache_state()->cached_instance;
+    if (instance == no_reg) {
+      instance = __ cache_state()->TrySetCachedInstanceRegister(
+          pinned | LiftoffRegList::ForRegs(fallback));
+      if (instance == no_reg) instance = fallback;
+      __ LoadInstanceFromFrame(instance);
+    }
+    return instance;
   }
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(LiftoffCompiler);
