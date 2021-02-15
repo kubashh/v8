@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fceb47b8_016ca962",
+        "filename": "BUILD.gn",
+        "patchSetId": 16
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-02-15T10:57:16Z",
+      "side": 1,
+      "message": "I wonder if we need an explicit deps entry to v8_config_headers where this include is listed?\n\nI don\u0027t know the GN rules for this. Would otherwise the action that generates a file in folder A be invoked by build nodes that use this include dir?",
+      "revId": "553def5ffa18ba142e798513c42b626d9030aeb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
