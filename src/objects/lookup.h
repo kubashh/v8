@@ -292,6 +292,20 @@ class V8_EXPORT_PRIVATE LookupIterator final {
   InternalIndex number_ = InternalIndex::NotFound();
 };
 
+// Similar to the LookupIterator, but for concurrent accesses from a background
+// thread.
+// TODO(jgruber, v8:7790): Consider using a LookupIterator-style interface.
+// TODO(jgruber, v8:7790): Consider merging back into the LookupIterator once
+// functionality and constraints are better known.
+class ConcurrentLookupIterator final {
+ public:
+  static MaybeHandle<Object> TryGetOwnCowElement(
+      Isolate* isolate, Handle<FixedArray> array_elements, int array_length,
+      size_t index);
+
+ private:
+};
+
 }  // namespace internal
 }  // namespace v8
 

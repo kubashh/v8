@@ -842,8 +842,14 @@ class JSArrayRef : public JSObjectRef {
   // Return the element at key {index} if the array has a copy-on-write elements
   // storage and {index} is known to be an own data property.
   base::Optional<ObjectRef> GetOwnCowElement(
-      uint32_t index, SerializationPolicy policy =
-                          SerializationPolicy::kAssumeSerialized) const;
+      FixedArrayBaseRef elements_ref, ObjectRef length_ref, uint32_t index,
+      SerializationPolicy policy =
+          SerializationPolicy::kAssumeSerialized) const;
+
+  // The `JSArray::length` property; not safe to use in general, but can be
+  // used in some special cases that guarantee a valid `length` value despite
+  // concurrent reads.
+  ObjectRef length_unsafe() const;
 };
 
 class ScopeInfoRef : public HeapObjectRef {

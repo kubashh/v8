@@ -509,6 +509,7 @@ void JSObjectData::SerializeObjectCreateMap(JSHeapBroker* broker) {
 }
 
 namespace {
+
 base::Optional<ObjectRef> GetOwnElementFromHeap(JSHeapBroker* broker,
                                                 Handle<Object> receiver,
                                                 uint32_t index,
@@ -4022,10 +4023,14 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnDataProperty(
 }
 
 ObjectRef JSArrayRef::GetBoilerplateLength() const {
+  // Safe to read concurrently because:
+  // - boilerplates are immutable after initialization.
+  // - boilerplates are published into the feedback vector.
+  return length_unsafe();
+}
+
+ObjectRef JSArrayRef::length_unsafe() const {
   if (data_->should_access_heap() || FLAG_turbo_direct_heap_access) {
-    // Safe to read concurrently because:
-    // - boilerplates are immutable after initialization.
-    // - boilerplates are published into the feedback vector.
     return ObjectRef{broker(),
                      broker()->CanonicalPersistentHandle(object()->length())};
   } else {
@@ -4034,7 +4039,35 @@ ObjectRef JSArrayRef::GetBoilerplateLength() const {
 }
 
 base::Optional<ObjectRef> JSArrayRef::GetOwnCowElement(
-    uint32_t index, SerializationPolicy policy) const {
+    FixedArrayBaseRef elements_ref, ObjectRef length_ref, uint32_t index,
+    SerializationPolicy policy) const {
+  if (FLAG_turbo_direct_heap_access) {
+    // `elements` are currently still serialized as members of JSObjectRef.
+    static_assert(std::is_base_of<JSObject, JSArray>::value, "");
+    STATIC_ASSERT(IsSerializedHeapObject<JSObject>());
+
+    // The elements_ref is passed in by callers to make explicit that it is
+    // also used outside of this function, and must match the `elements` used
+    // inside this function.
+    DCHECK(elements_ref.equals(elements()));
+
+    // We only inspect fixed COW arrays.
+    if (!elements_ref.map().IsFixedCowArrayMap()) return {};
+
+    // Likewise we only deal with smi lengths.
+    if (!length_ref.IsSmi()) return {};
+
+    Handle<Object> result;
+    if (ConcurrentLookupIterator::TryGetOwnCowElement(
+            broker()->isolate(), elements_ref.AsFixedArray().object(),
+            length_ref.AsSmi(), index)
+            .ToHandle(&result)) {
+      return ObjectRef{broker(), broker()->CanonicalPersistentHandle(result)};
+    }
+
+    return {};
+  }
+
   if (data_->should_access_heap()) {
     if (!object()->elements().IsCowArray()) return base::nullopt;
     return GetOwnElementFromHeap(broker(), object(), index, false);
@@ -4051,6 +4084,7 @@ base::Optional<ObjectRef> JSArrayRef::GetOwnCowElement(
   ObjectData* element =
       data()->AsJSArray()->GetOwnElement(broker(), index, policy);
   if (element == nullptr) return base::nullopt;
+
   return ObjectRef(broker(), element);
 }
 

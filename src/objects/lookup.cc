@@ -22,109 +22,109 @@ namespace v8 {
 namespace internal {
 
 LookupIterator::Key::Key(Isolate* isolate, Handle<Object> key, bool* success) {
-  if (key->ToIntegerIndex(&index_)) {
-    *success = true;
-    return;
-  }
-  *success = Object::ToName(isolate, key).ToHandle(&name_);
-  if (!*success) {
-    DCHECK(isolate->has_pending_exception());
-    index_ = kInvalidIndex;
-    return;
-  }
-  if (!name_->AsIntegerIndex(&index_)) {
-    // {AsIntegerIndex} may modify {index_} before deciding to fail.
-    index_ = LookupIterator::kInvalidIndex;
-  }
+if (key->ToIntegerIndex(&index_)) {
+  *success = true;
+  return;
+}
+*success = Object::ToName(isolate, key).ToHandle(&name_);
+if (!*success) {
+  DCHECK(isolate->has_pending_exception());
+  index_ = kInvalidIndex;
+  return;
+}
+if (!name_->AsIntegerIndex(&index_)) {
+  // {AsIntegerIndex} may modify {index_} before deciding to fail.
+  index_ = LookupIterator::kInvalidIndex;
+}
 }
 
 LookupIterator::LookupIterator(Isolate* isolate, Handle<Object> receiver,
-                               Handle<Name> name, Handle<Map> transition_map,
-                               PropertyDetails details, bool has_property)
-    : configuration_(DEFAULT),
-      state_(TRANSITION),
-      has_property_(has_property),
-      interceptor_state_(InterceptorState::kUninitialized),
-      property_details_(details),
-      isolate_(isolate),
-      name_(name),
-      transition_(transition_map),
-      receiver_(receiver),
-      lookup_start_object_(receiver),
-      index_(kInvalidIndex) {
-  holder_ = GetRoot(isolate, lookup_start_object_);
+                             Handle<Name> name, Handle<Map> transition_map,
+                             PropertyDetails details, bool has_property)
+  : configuration_(DEFAULT),
+    state_(TRANSITION),
+    has_property_(has_property),
+    interceptor_state_(InterceptorState::kUninitialized),
+    property_details_(details),
+    isolate_(isolate),
+    name_(name),
+    transition_(transition_map),
+    receiver_(receiver),
+    lookup_start_object_(receiver),
+    index_(kInvalidIndex) {
+holder_ = GetRoot(isolate, lookup_start_object_);
 }
 
 template <bool is_element>
 void LookupIterator::Start() {
-  // GetRoot might allocate if lookup_start_object_ is a string.
-  holder_ = GetRoot(isolate_, lookup_start_object_, index_);
+// GetRoot might allocate if lookup_start_object_ is a string.
+holder_ = GetRoot(isolate_, lookup_start_object_, index_);
 
-  {
-    DisallowGarbageCollection no_gc;
+{
+  DisallowGarbageCollection no_gc;
 
-    has_property_ = false;
-    state_ = NOT_FOUND;
+  has_property_ = false;
+  state_ = NOT_FOUND;
 
-    JSReceiver holder = *holder_;
-    Map map = holder.map(isolate_);
+  JSReceiver holder = *holder_;
+  Map map = holder.map(isolate_);
 
-    state_ = LookupInHolder<is_element>(map, holder);
-    if (IsFound()) return;
+  state_ = LookupInHolder<is_element>(map, holder);
+  if (IsFound()) return;
 
-    NextInternal<is_element>(map, holder);
-  }
+  NextInternal<is_element>(map, holder);
+}
 }
 
 template void LookupIterator::Start<true>();
 template void LookupIterator::Start<false>();
 
 void LookupIterator::Next() {
-  DCHECK_NE(JSPROXY, state_);
-  DCHECK_NE(TRANSITION, state_);
-  DisallowGarbageCollection no_gc;
-  has_property_ = false;
+DCHECK_NE(JSPROXY, state_);
+DCHECK_NE(TRANSITION, state_);
+DisallowGarbageCollection no_gc;
+has_property_ = false;
 
-  JSReceiver holder = *holder_;
-  Map map = holder.map(isolate_);
+JSReceiver holder = *holder_;
+Map map = holder.map(isolate_);
 
-  if (map.IsSpecialReceiverMap()) {
-    state_ = IsElement() ? LookupInSpecialHolder<true>(map, holder)
-                         : LookupInSpecialHolder<false>(map, holder);
-    if (IsFound()) return;
-  }
+if (map.IsSpecialReceiverMap()) {
+  state_ = IsElement() ? LookupInSpecialHolder<true>(map, holder)
+                       : LookupInSpecialHolder<false>(map, holder);
+  if (IsFound()) return;
+}
 
-  IsElement() ? NextInternal<true>(map, holder)
-              : NextInternal<false>(map, holder);
+IsElement() ? NextInternal<true>(map, holder)
+            : NextInternal<false>(map, holder);
 }
 
 template <bool is_element>
 void LookupIterator::NextInternal(Map map, JSReceiver holder) {
-  do {
-    JSReceiver maybe_holder = NextHolder(map);
-    if (maybe_holder.is_null()) {
-      if (interceptor_state_ == InterceptorState::kSkipNonMasking) {
-        RestartLookupForNonMaskingInterceptors<is_element>();
-        return;
-      }
-      state_ = NOT_FOUND;
-      if (holder != *holder_) holder_ = handle(holder, isolate_);
+do {
+  JSReceiver maybe_holder = NextHolder(map);
+  if (maybe_holder.is_null()) {
+    if (interceptor_state_ == InterceptorState::kSkipNonMasking) {
+      RestartLookupForNonMaskingInterceptors<is_element>();
       return;
     }
-    holder = maybe_holder;
-    map = holder.map(isolate_);
-    state_ = LookupInHolder<is_element>(map, holder);
-  } while (!IsFound());
+    state_ = NOT_FOUND;
+    if (holder != *holder_) holder_ = handle(holder, isolate_);
+    return;
+  }
+  holder = maybe_holder;
+  map = holder.map(isolate_);
+  state_ = LookupInHolder<is_element>(map, holder);
+} while (!IsFound());
 
-  holder_ = handle(holder, isolate_);
+holder_ = handle(holder, isolate_);
 }
 
 template <bool is_element>
 void LookupIterator::RestartInternal(InterceptorState interceptor_state) {
-  interceptor_state_ = interceptor_state;
-  property_details_ = PropertyDetails::Empty();
-  number_ = InternalIndex::NotFound();
-  Start<is_element>();
+interceptor_state_ = interceptor_state;
+property_details_ = PropertyDetails::Empty();
+number_ = InternalIndex::NotFound();
+Start<is_element>();
 }
 
 template void LookupIterator::RestartInternal<true>(InterceptorState);
@@ -132,173 +132,173 @@ template void LookupIterator::RestartInternal<false>(InterceptorState);
 
 // static
 Handle<JSReceiver> LookupIterator::GetRootForNonJSReceiver(
-    Isolate* isolate, Handle<Object> lookup_start_object, size_t index) {
-  // Strings are the only objects with properties (only elements) directly on
-  // the wrapper. Hence we can skip generating the wrapper for all other cases.
-  if (lookup_start_object->IsString(isolate) &&
-      index <
-          static_cast<size_t>(String::cast(*lookup_start_object).length())) {
-    // TODO(verwaest): Speed this up. Perhaps use a cached wrapper on the native
-    // context, ensuring that we don't leak it into JS?
-    Handle<JSFunction> constructor = isolate->string_function();
-    Handle<JSObject> result = isolate->factory()->NewJSObject(constructor);
-    Handle<JSPrimitiveWrapper>::cast(result)->set_value(*lookup_start_object);
-    return result;
-  }
-  Handle<HeapObject> root(
-      lookup_start_object->GetPrototypeChainRootMap(isolate).prototype(isolate),
-      isolate);
-  if (root->IsNull(isolate)) {
-    isolate->PushStackTraceAndDie(
-        reinterpret_cast<void*>(lookup_start_object->ptr()));
-  }
-  return Handle<JSReceiver>::cast(root);
+  Isolate* isolate, Handle<Object> lookup_start_object, size_t index) {
+// Strings are the only objects with properties (only elements) directly on
+// the wrapper. Hence we can skip generating the wrapper for all other cases.
+if (lookup_start_object->IsString(isolate) &&
+    index <
+        static_cast<size_t>(String::cast(*lookup_start_object).length())) {
+  // TODO(verwaest): Speed this up. Perhaps use a cached wrapper on the native
+  // context, ensuring that we don't leak it into JS?
+  Handle<JSFunction> constructor = isolate->string_function();
+  Handle<JSObject> result = isolate->factory()->NewJSObject(constructor);
+  Handle<JSPrimitiveWrapper>::cast(result)->set_value(*lookup_start_object);
+  return result;
+}
+Handle<HeapObject> root(
+    lookup_start_object->GetPrototypeChainRootMap(isolate).prototype(isolate),
+    isolate);
+if (root->IsNull(isolate)) {
+  isolate->PushStackTraceAndDie(
+      reinterpret_cast<void*>(lookup_start_object->ptr()));
+}
+return Handle<JSReceiver>::cast(root);
 }
 
 Handle<Map> LookupIterator::GetReceiverMap() const {
-  if (receiver_->IsNumber(isolate_)) return factory()->heap_number_map();
-  return handle(Handle<HeapObject>::cast(receiver_)->map(isolate_), isolate_);
+if (receiver_->IsNumber(isolate_)) return factory()->heap_number_map();
+return handle(Handle<HeapObject>::cast(receiver_)->map(isolate_), isolate_);
 }
 
 bool LookupIterator::HasAccess() const {
-  DCHECK_EQ(ACCESS_CHECK, state_);
-  return isolate_->MayAccess(handle(isolate_->context(), isolate_),
-                             GetHolder<JSObject>());
+DCHECK_EQ(ACCESS_CHECK, state_);
+return isolate_->MayAccess(handle(isolate_->context(), isolate_),
+                           GetHolder<JSObject>());
 }
 
 template <bool is_element>
 void LookupIterator::ReloadPropertyInformation() {
-  state_ = BEFORE_PROPERTY;
-  interceptor_state_ = InterceptorState::kUninitialized;
-  state_ = LookupInHolder<is_element>(holder_->map(isolate_), *holder_);
-  DCHECK(IsFound() || !holder_->HasFastProperties(isolate_));
+state_ = BEFORE_PROPERTY;
+interceptor_state_ = InterceptorState::kUninitialized;
+state_ = LookupInHolder<is_element>(holder_->map(isolate_), *holder_);
+DCHECK(IsFound() || !holder_->HasFastProperties(isolate_));
 }
 
 // static
 void LookupIterator::InternalUpdateProtector(Isolate* isolate,
-                                             Handle<Object> receiver_generic,
-                                             Handle<Name> name) {
-  if (isolate->bootstrapper()->IsActive()) return;
-  if (!receiver_generic->IsHeapObject()) return;
-  Handle<HeapObject> receiver = Handle<HeapObject>::cast(receiver_generic);
+                                           Handle<Object> receiver_generic,
+                                           Handle<Name> name) {
+if (isolate->bootstrapper()->IsActive()) return;
+if (!receiver_generic->IsHeapObject()) return;
+Handle<HeapObject> receiver = Handle<HeapObject>::cast(receiver_generic);
 
-  ReadOnlyRoots roots(isolate);
-  if (*name == roots.constructor_string()) {
-    // Setting the constructor property could change an instance's @@species
-    if (receiver->IsJSArray(isolate)) {
+ReadOnlyRoots roots(isolate);
+if (*name == roots.constructor_string()) {
+  // Setting the constructor property could change an instance's @@species
+  if (receiver->IsJSArray(isolate)) {
+    if (!Protectors::IsArraySpeciesLookupChainIntact(isolate)) return;
+    isolate->CountUsage(
+        v8::Isolate::UseCounterFeature::kArrayInstanceConstructorModified);
+    Protectors::InvalidateArraySpeciesLookupChain(isolate);
+    return;
+  } else if (receiver->IsJSPromise(isolate)) {
+    if (!Protectors::IsPromiseSpeciesLookupChainIntact(isolate)) return;
+    Protectors::InvalidatePromiseSpeciesLookupChain(isolate);
+    return;
+  } else if (receiver->IsJSRegExp(isolate)) {
+    if (!Protectors::IsRegExpSpeciesLookupChainIntact(isolate)) return;
+    Protectors::InvalidateRegExpSpeciesLookupChain(isolate);
+    return;
+  } else if (receiver->IsJSTypedArray(isolate)) {
+    if (!Protectors::IsTypedArraySpeciesLookupChainIntact(isolate)) return;
+    Protectors::InvalidateTypedArraySpeciesLookupChain(isolate);
+    return;
+  }
+  if (receiver->map(isolate).is_prototype_map()) {
+    DisallowGarbageCollection no_gc;
+    // Setting the constructor of any prototype with the @@species protector
+    // (of any realm) also needs to invalidate the protector.
+    if (isolate->IsInAnyContext(*receiver,
+                                Context::INITIAL_ARRAY_PROTOTYPE_INDEX)) {
       if (!Protectors::IsArraySpeciesLookupChainIntact(isolate)) return;
       isolate->CountUsage(
-          v8::Isolate::UseCounterFeature::kArrayInstanceConstructorModified);
+          v8::Isolate::UseCounterFeature::kArrayPrototypeConstructorModified);
       Protectors::InvalidateArraySpeciesLookupChain(isolate);
-      return;
-    } else if (receiver->IsJSPromise(isolate)) {
+    } else if (receiver->IsJSPromisePrototype()) {
       if (!Protectors::IsPromiseSpeciesLookupChainIntact(isolate)) return;
       Protectors::InvalidatePromiseSpeciesLookupChain(isolate);
-      return;
-    } else if (receiver->IsJSRegExp(isolate)) {
+    } else if (receiver->IsJSRegExpPrototype()) {
       if (!Protectors::IsRegExpSpeciesLookupChainIntact(isolate)) return;
       Protectors::InvalidateRegExpSpeciesLookupChain(isolate);
-      return;
-    } else if (receiver->IsJSTypedArray(isolate)) {
+    } else if (receiver->IsJSTypedArrayPrototype()) {
       if (!Protectors::IsTypedArraySpeciesLookupChainIntact(isolate)) return;
       Protectors::InvalidateTypedArraySpeciesLookupChain(isolate);
-      return;
     }
-    if (receiver->map(isolate).is_prototype_map()) {
-      DisallowGarbageCollection no_gc;
-      // Setting the constructor of any prototype with the @@species protector
-      // (of any realm) also needs to invalidate the protector.
-      if (isolate->IsInAnyContext(*receiver,
-                                  Context::INITIAL_ARRAY_PROTOTYPE_INDEX)) {
-        if (!Protectors::IsArraySpeciesLookupChainIntact(isolate)) return;
-        isolate->CountUsage(
-            v8::Isolate::UseCounterFeature::kArrayPrototypeConstructorModified);
-        Protectors::InvalidateArraySpeciesLookupChain(isolate);
-      } else if (receiver->IsJSPromisePrototype()) {
-        if (!Protectors::IsPromiseSpeciesLookupChainIntact(isolate)) return;
-        Protectors::InvalidatePromiseSpeciesLookupChain(isolate);
-      } else if (receiver->IsJSRegExpPrototype()) {
-        if (!Protectors::IsRegExpSpeciesLookupChainIntact(isolate)) return;
-        Protectors::InvalidateRegExpSpeciesLookupChain(isolate);
-      } else if (receiver->IsJSTypedArrayPrototype()) {
-        if (!Protectors::IsTypedArraySpeciesLookupChainIntact(isolate)) return;
-        Protectors::InvalidateTypedArraySpeciesLookupChain(isolate);
-      }
-    }
-  } else if (*name == roots.next_string()) {
-    if (receiver->IsJSArrayIterator() ||
-        receiver->IsJSArrayIteratorPrototype()) {
-      // Setting the next property of %ArrayIteratorPrototype% also needs to
-      // invalidate the array iterator protector.
-      if (!Protectors::IsArrayIteratorLookupChainIntact(isolate)) return;
-      Protectors::InvalidateArrayIteratorLookupChain(isolate);
-    } else if (receiver->IsJSMapIterator() ||
-               receiver->IsJSMapIteratorPrototype()) {
-      if (!Protectors::IsMapIteratorLookupChainIntact(isolate)) return;
-      Protectors::InvalidateMapIteratorLookupChain(isolate);
-    } else if (receiver->IsJSSetIterator() ||
-               receiver->IsJSSetIteratorPrototype()) {
-      if (!Protectors::IsSetIteratorLookupChainIntact(isolate)) return;
+  }
+} else if (*name == roots.next_string()) {
+  if (receiver->IsJSArrayIterator() ||
+      receiver->IsJSArrayIteratorPrototype()) {
+    // Setting the next property of %ArrayIteratorPrototype% also needs to
+    // invalidate the array iterator protector.
+    if (!Protectors::IsArrayIteratorLookupChainIntact(isolate)) return;
+    Protectors::InvalidateArrayIteratorLookupChain(isolate);
+  } else if (receiver->IsJSMapIterator() ||
+             receiver->IsJSMapIteratorPrototype()) {
+    if (!Protectors::IsMapIteratorLookupChainIntact(isolate)) return;
+    Protectors::InvalidateMapIteratorLookupChain(isolate);
+  } else if (receiver->IsJSSetIterator() ||
+             receiver->IsJSSetIteratorPrototype()) {
+    if (!Protectors::IsSetIteratorLookupChainIntact(isolate)) return;
+    Protectors::InvalidateSetIteratorLookupChain(isolate);
+  } else if (receiver->IsJSStringIterator() ||
+             receiver->IsJSStringIteratorPrototype()) {
+    // Setting the next property of %StringIteratorPrototype% invalidates the
+    // string iterator protector.
+    if (!Protectors::IsStringIteratorLookupChainIntact(isolate)) return;
+    Protectors::InvalidateStringIteratorLookupChain(isolate);
+  }
+} else if (*name == roots.species_symbol()) {
+  // Setting the Symbol.species property of any Array, Promise or TypedArray
+  // constructor invalidates the @@species protector
+  if (receiver->IsJSArrayConstructor()) {
+    if (!Protectors::IsArraySpeciesLookupChainIntact(isolate)) return;
+    isolate->CountUsage(
+        v8::Isolate::UseCounterFeature::kArraySpeciesModified);
+    Protectors::InvalidateArraySpeciesLookupChain(isolate);
+  } else if (receiver->IsJSPromiseConstructor()) {
+    if (!Protectors::IsPromiseSpeciesLookupChainIntact(isolate)) return;
+    Protectors::InvalidatePromiseSpeciesLookupChain(isolate);
+  } else if (receiver->IsJSRegExpConstructor()) {
+    if (!Protectors::IsRegExpSpeciesLookupChainIntact(isolate)) return;
+    Protectors::InvalidateRegExpSpeciesLookupChain(isolate);
+  } else if (receiver->IsTypedArrayConstructor()) {
+    if (!Protectors::IsTypedArraySpeciesLookupChainIntact(isolate)) return;
+    Protectors::InvalidateTypedArraySpeciesLookupChain(isolate);
+  }
+} else if (*name == roots.is_concat_spreadable_symbol()) {
+  if (!Protectors::IsIsConcatSpreadableLookupChainIntact(isolate)) return;
+  Protectors::InvalidateIsConcatSpreadableLookupChain(isolate);
+} else if (*name == roots.iterator_symbol()) {
+  if (receiver->IsJSArray(isolate)) {
+    if (!Protectors::IsArrayIteratorLookupChainIntact(isolate)) return;
+    Protectors::InvalidateArrayIteratorLookupChain(isolate);
+  } else if (receiver->IsJSSet(isolate) || receiver->IsJSSetIterator() ||
+             receiver->IsJSSetIteratorPrototype() ||
+             receiver->IsJSSetPrototype()) {
+    if (Protectors::IsSetIteratorLookupChainIntact(isolate)) {
       Protectors::InvalidateSetIteratorLookupChain(isolate);
-    } else if (receiver->IsJSStringIterator() ||
-               receiver->IsJSStringIteratorPrototype()) {
-      // Setting the next property of %StringIteratorPrototype% invalidates the
-      // string iterator protector.
-      if (!Protectors::IsStringIteratorLookupChainIntact(isolate)) return;
-      Protectors::InvalidateStringIteratorLookupChain(isolate);
     }
-  } else if (*name == roots.species_symbol()) {
-    // Setting the Symbol.species property of any Array, Promise or TypedArray
-    // constructor invalidates the @@species protector
-    if (receiver->IsJSArrayConstructor()) {
-      if (!Protectors::IsArraySpeciesLookupChainIntact(isolate)) return;
-      isolate->CountUsage(
-          v8::Isolate::UseCounterFeature::kArraySpeciesModified);
-      Protectors::InvalidateArraySpeciesLookupChain(isolate);
-    } else if (receiver->IsJSPromiseConstructor()) {
-      if (!Protectors::IsPromiseSpeciesLookupChainIntact(isolate)) return;
-      Protectors::InvalidatePromiseSpeciesLookupChain(isolate);
-    } else if (receiver->IsJSRegExpConstructor()) {
-      if (!Protectors::IsRegExpSpeciesLookupChainIntact(isolate)) return;
-      Protectors::InvalidateRegExpSpeciesLookupChain(isolate);
-    } else if (receiver->IsTypedArrayConstructor()) {
-      if (!Protectors::IsTypedArraySpeciesLookupChainIntact(isolate)) return;
-      Protectors::InvalidateTypedArraySpeciesLookupChain(isolate);
+  } else if (receiver->IsJSMapIterator() ||
+             receiver->IsJSMapIteratorPrototype()) {
+    if (Protectors::IsMapIteratorLookupChainIntact(isolate)) {
+      Protectors::InvalidateMapIteratorLookupChain(isolate);
     }
-  } else if (*name == roots.is_concat_spreadable_symbol()) {
-    if (!Protectors::IsIsConcatSpreadableLookupChainIntact(isolate)) return;
-    Protectors::InvalidateIsConcatSpreadableLookupChain(isolate);
-  } else if (*name == roots.iterator_symbol()) {
-    if (receiver->IsJSArray(isolate)) {
-      if (!Protectors::IsArrayIteratorLookupChainIntact(isolate)) return;
-      Protectors::InvalidateArrayIteratorLookupChain(isolate);
-    } else if (receiver->IsJSSet(isolate) || receiver->IsJSSetIterator() ||
-               receiver->IsJSSetIteratorPrototype() ||
-               receiver->IsJSSetPrototype()) {
-      if (Protectors::IsSetIteratorLookupChainIntact(isolate)) {
-        Protectors::InvalidateSetIteratorLookupChain(isolate);
-      }
-    } else if (receiver->IsJSMapIterator() ||
-               receiver->IsJSMapIteratorPrototype()) {
-      if (Protectors::IsMapIteratorLookupChainIntact(isolate)) {
-        Protectors::InvalidateMapIteratorLookupChain(isolate);
-      }
-    } else if (receiver->IsJSIteratorPrototype()) {
-      if (Protectors::IsMapIteratorLookupChainIntact(isolate)) {
-        Protectors::InvalidateMapIteratorLookupChain(isolate);
-      }
-      if (Protectors::IsSetIteratorLookupChainIntact(isolate)) {
-        Protectors::InvalidateSetIteratorLookupChain(isolate);
-      }
-    } else if (isolate->IsInAnyContext(
-                   *receiver, Context::INITIAL_STRING_PROTOTYPE_INDEX)) {
-      // Setting the Symbol.iterator property of String.prototype invalidates
-      // the string iterator protector. Symbol.iterator can also be set on a
-      // String wrapper, but not on a primitive string. We only support
-      // protector for primitive strings.
-      if (!Protectors::IsStringIteratorLookupChainIntact(isolate)) return;
-      Protectors::InvalidateStringIteratorLookupChain(isolate);
+  } else if (receiver->IsJSIteratorPrototype()) {
+    if (Protectors::IsMapIteratorLookupChainIntact(isolate)) {
+      Protectors::InvalidateMapIteratorLookupChain(isolate);
     }
+    if (Protectors::IsSetIteratorLookupChainIntact(isolate)) {
+      Protectors::InvalidateSetIteratorLookupChain(isolate);
+    }
+  } else if (isolate->IsInAnyContext(
+                 *receiver, Context::INITIAL_STRING_PROTOTYPE_INDEX)) {
+    // Setting the Symbol.iterator property of String.prototype invalidates
+    // the string iterator protector. Symbol.iterator can also be set on a
+    // String wrapper, but not on a primitive string. We only support
+    // protector for primitive strings.
+    if (!Protectors::IsStringIteratorLookupChainIntact(isolate)) return;
+    Protectors::InvalidateStringIteratorLookupChain(isolate);
+  }
   } else if (*name == roots.resolve_string()) {
     if (!Protectors::IsPromiseResolveLookupChainIntact(isolate)) return;
     // Setting the "resolve" property on any %Promise% intrinsic object
@@ -1267,6 +1267,24 @@ bool LookupIterator::LookupCachedProperty(Handle<AccessorPair> accessor_pair) {
   Restart();
   CHECK_EQ(state(), LookupIterator::DATA);
   return true;
+}
+
+// static
+MaybeHandle<Object> ConcurrentLookupIterator::TryGetOwnCowElement(
+        Isolate* isolate, Handle<FixedArray> array_elements,
+        int array_length, size_t index) {
+  // TODO.
+  FixedArray array_elements_raw = *array_elements;
+
+  // OOB.
+  const int index_int = static_cast<int>(index);
+  if (index_int >= array_length) return {};
+
+  // Holey?
+  Object result = array_elements_raw.get(isolate, index_int);
+  if (result == ReadOnlyRoots(isolate).the_hole_value()) return {};
+
+  return handle(result, isolate);
 }
 
 }  // namespace internal
