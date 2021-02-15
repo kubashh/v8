@@ -493,6 +493,7 @@ class LiftoffCompiler {
         protected_instructions_(compilation_zone),
         compilation_zone_(compilation_zone),
         safepoint_table_builder_(compilation_zone_),
+        callee_safepoint_table_builder_(compilation_zone_),
         next_breakpoint_ptr_(breakpoints.begin()),
         next_breakpoint_end_(breakpoints.end()),
         dead_breakpoint_(dead_breakpoint) {
@@ -506,7 +507,7 @@ class LiftoffCompiler {
 
   void GetCode(CodeDesc* desc) {
     asm_.GetCode(nullptr, desc, &safepoint_table_builder_,
-                 Assembler::kNoHandlerTable);
+                 &callee_safepoint_table_builder_, Assembler::kNoHandlerTable);
   }
 
   OwnedVector<uint8_t> GetSourcePositionTable() {
@@ -919,6 +920,7 @@ class LiftoffCompiler {
     __ PatchPrepareStackFrame(pc_offset_stack_frame_construction_);
     __ FinishCode();
     safepoint_table_builder_.Emit(&asm_, __ GetTotalFrameSlotCountForGC());
+    callee_safepoint_table_builder_.Emit(&asm_, 7);
     __ MaybeEmitOutOfLineConstantPool();
     // The previous calls may have also generated a bailout.
     DidAssemblerBailout(decoder);
@@ -1003,10 +1005,8 @@ class LiftoffCompiler {
     DCHECK(for_debugging_);
     source_position_table_builder_.AddPosition(
         __ pc_offset(), SourcePosition(decoder->position()), true);
-    __ DebugBreak();
     __ CallRuntimeStub(WasmCode::kWasmDebugBreak);
-    // TODO(ahaas): Define a proper safepoint here.
-    safepoint_table_builder_.DefineSafepoint(&asm_, Safepoint::kNoLazyDeopt);
+    DefineSafepointForDebugBreak();
     RegisterDebugSideTableEntry(DebugSideTableBuilder::kAllowRegisters);
   }
 
@@ -5332,6 +5332,7 @@ class LiftoffCompiler {
   // LiftoffCompiler after compilation.
   Zone* compilation_zone_;
   SafepointTableBuilder safepoint_table_builder_;
+  SafepointTableBuilder callee_safepoint_table_builder_;
   // The pc offset of the instructions to reserve the stack frame. Needed to
   // patch the actually needed stack size in the end.
   uint32_t pc_offset_stack_frame_construction_ = 0;
@@ -5374,6 +5375,13 @@ class LiftoffCompiler {
     Safepoint safepoint = safepoint_table_builder_.DefineSafepoint(
         &asm_, Safepoint::kNoLazyDeopt);
     __ cache_state()->DefineSafepoint(safepoint);
+  }
+
+  void DefineSafepointForDebugBreak() {
+    DefineSafepoint();
+    Safepoint safepoint = callee_safepoint_table_builder_.DefineSafepoint(
+        &asm_, Safepoint::kNoLazyDeopt);
+    __ DefineSafepointForDebugBreak(safepoint);
   }
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(LiftoffCompiler);

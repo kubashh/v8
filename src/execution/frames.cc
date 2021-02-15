@@ -1900,8 +1900,36 @@ int WasmFrame::LookupExceptionHandlerInTable() {
 }
 
 void WasmDebugBreakFrame::Iterate(RootVisitor* v) const {
-  // Nothing to iterate here. This will change once we support references in
-  // Liftoff.
+  DCHECK(caller_pc());
+  wasm::WasmCode* code =
+      isolate()->wasm_engine()->code_manager()->LookupCode(caller_pc());
+  DCHECK(code);
+  SafepointTable table(code, true);
+  SafepointEntry safepoint_entry = table.FindEntry(caller_pc());
+  FullObjectSlot end(&Memory<Address>(fp() - 8 * kSystemPointerSize));
+
+  uint8_t* safepoint_bits = safepoint_entry.bits();
+  for (unsigned index = 0; index < 7; index++) {
+    if ((safepoint_bits[0] & (1U << index)) != 0) {
+      FullObjectSlot spill_slot = end + index;
+#ifdef V8_COMPRESS_POINTERS
+      // Spill slots may contain compressed values in which case the upper
+      // 32-bits will contain zeros. In order to simplify handling of such
+      // slots in GC we ensure that the slot always contains full value.
+
+      // The spill slot may actually contain weak references so we load/store
+      // values using spill_slot.location() in order to avoid dealing with
+      // FullMaybeObjectSlots here.
+      Tagged_t compressed_value = static_cast<Tagged_t>(*spill_slot.location());
+      if (!HAS_SMI_TAG(compressed_value)) {
+        // We don't need to update smi values.
+        *spill_slot.location() =
+            DecompressTaggedPointer(isolate(), compressed_value);
+      }
+#endif
+      v->VisitRootPointer(Root::kTop, nullptr, spill_slot);
+    }
+  }
 }
 
 void WasmDebugBreakFrame::Print(StringStream* accumulator, PrintMode mode,

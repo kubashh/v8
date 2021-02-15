@@ -4242,6 +4242,23 @@ void LiftoffAssembler::RecordSpillsInSafepoint(Safepoint& safepoint,
   RecordOolSpillSpaceSize(spill_space_size);
 }
 
+void LiftoffAssembler::DefineSafepointForDebugBreak(Safepoint& safepoint) {
+  LiftoffRegList spills;
+  cache_state()->GetTaggedSpills(&spills);
+
+  // The return address, FP, and frame marker of the DebugBreak builtin.
+  int spill_offset = 0;
+  LiftoffRegList all_spills = kGpCacheRegList;
+  while (!all_spills.is_empty()) {
+    LiftoffRegister reg = all_spills.GetLastRegSet();
+    if (spills.has(reg)) {
+      safepoint.DefinePointerSlot(spill_offset);
+    }
+    all_spills.clear(reg);
+    ++spill_offset;
+  }
+}
+
 void LiftoffAssembler::DropStackSlotsAndRet(uint32_t num_stack_slots) {
   DCHECK_LT(num_stack_slots,
             (1 << 16) / kSystemPointerSize);  // 16 bit immediate

@@ -186,6 +186,8 @@ class LiftoffAssembler : public TurboAssembler {
                                   /*out*/ LiftoffRegList* spills,
                                   SpillLocation spill_location);
 
+    void GetTaggedSpills(LiftoffRegList* spills);
+
     void DefineSafepoint(Safepoint& safepoint);
 
     base::SmallVector<VarState, 8> stack_state;
@@ -1276,6 +1278,8 @@ class LiftoffAssembler : public TurboAssembler {
                                       LiftoffRegList all_spills,
                                       LiftoffRegList ref_spills,
                                       int spill_offset);
+
+  inline void DefineSafepointForDebugBreak(Safepoint& safepoint);
 
   inline void DropStackSlotsAndRet(uint32_t num_stack_slots);
 

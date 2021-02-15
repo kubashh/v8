@@ -169,6 +169,9 @@ class V8_EXPORT_PRIVATE WasmCode final {
   int code_comments_size() const;
   int constant_pool_offset() const { return constant_pool_offset_; }
   int safepoint_table_offset() const { return safepoint_table_offset_; }
+  int callee_safepoint_table_offset() const {
+    return callee_safepoint_table_offset_;
+  }
   int handler_table_offset() const { return handler_table_offset_; }
   int code_comments_offset() const { return code_comments_offset_; }
   int unpadded_binary_size() const { return unpadded_binary_size_; }
@@ -265,9 +268,9 @@ class V8_EXPORT_PRIVATE WasmCode final {
 
   WasmCode(NativeModule* native_module, int index, Vector<byte> instructions,
            int stack_slots, int tagged_parameter_slots,
-           int safepoint_table_offset, int handler_table_offset,
-           int constant_pool_offset, int code_comments_offset,
-           int unpadded_binary_size,
+           int safepoint_table_offset, int callee_safepoint_table_offset,
+           int handler_table_offset, int constant_pool_offset,
+           int code_comments_offset, int unpadded_binary_size,
            Vector<const byte> protected_instructions_data,
            Vector<const byte> reloc_info,
            Vector<const byte> source_position_table, Kind kind,
@@ -287,6 +290,7 @@ class V8_EXPORT_PRIVATE WasmCode final {
         stack_slots_(stack_slots),
         tagged_parameter_slots_(tagged_parameter_slots),
         safepoint_table_offset_(safepoint_table_offset),
+        callee_safepoint_table_offset_(callee_safepoint_table_offset),
         handler_table_offset_(handler_table_offset),
         code_comments_offset_(code_comments_offset),
         unpadded_binary_size_(unpadded_binary_size) {
@@ -341,6 +345,7 @@ class V8_EXPORT_PRIVATE WasmCode final {
   // We care about safepoint data for wasm-to-js functions, since there may be
   // stack/register tagged values for large number conversions.
   const int safepoint_table_offset_;
+  const int callee_safepoint_table_offset_;
   const int handler_table_offset_;
   const int code_comments_offset_;
   const int unpadded_binary_size_;
@@ -368,7 +373,7 @@ class V8_EXPORT_PRIVATE WasmCode final {
 // often for rather small functions.
 // Increase the limit if needed, but first check if the size increase is
 // justified.
-STATIC_ASSERT(sizeof(WasmCode) <= 88);
+STATIC_ASSERT(sizeof(WasmCode) <= 96);
 
 WasmCode::Kind GetCodeKind(const WasmCompilationResult& result);
 

@@ -526,6 +526,16 @@ int GetSafepointIndexForStackSlot(const VarState& slot) {
 }
 }  // namespace
 
+void LiftoffAssembler::CacheState::GetTaggedSpills(LiftoffRegList* spills) {
+  for (const auto& slot : stack_state) {
+    if (!slot.type().is_reference_type()) continue;
+
+    if (slot.is_reg()) {
+      spills->set(slot.reg());
+    }
+  }
+}
+
 void LiftoffAssembler::CacheState::GetTaggedSlotsForOOLCode(
     ZoneVector<int>* slots, LiftoffRegList* spills,
     SpillLocation spill_location) {
@@ -547,10 +557,10 @@ void LiftoffAssembler::CacheState::GetTaggedSlotsForOOLCode(
 
 void LiftoffAssembler::CacheState::DefineSafepoint(Safepoint& safepoint) {
   for (const auto& slot : stack_state) {
-    DCHECK(!slot.is_reg());
-
     if (slot.type().is_reference_type()) {
-      safepoint.DefinePointerSlot(GetSafepointIndexForStackSlot(slot));
+      if (slot.is_stack()) {
+        safepoint.DefinePointerSlot(GetSafepointIndexForStackSlot(slot));
+      }
     }
   }
 }

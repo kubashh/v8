@@ -346,6 +346,7 @@ Assembler::Assembler(const AssemblerOptions& options,
 
 void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
                         SafepointTableBuilder* safepoint_table_builder,
+                        SafepointTableBuilder* callee_safepoint_table_builder,
                         int handler_table_offset) {
   // As a crutch to avoid having to add manual Align calls wherever we use a
   // raw workflow to create Code objects (mostly in tests), add another Align
@@ -378,15 +379,20 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
   const int handler_table_offset2 = (handler_table_offset == kNoHandlerTable)
                                         ? constant_pool_offset
                                         : handler_table_offset;
+  const int callee_safepoint_table_offset =
+      (callee_safepoint_table_builder == kNoSafepointTable)
+          ? handler_table_offset2
+          : callee_safepoint_table_builder->GetCodeOffset();
   const int safepoint_table_offset =
       (safepoint_table_builder == kNoSafepointTable)
-          ? handler_table_offset2
+          ? callee_safepoint_table_offset
           : safepoint_table_builder->GetCodeOffset();
   const int reloc_info_offset =
       static_cast<int>(reloc_info_writer.pos() - buffer_->start());
   CodeDesc::Initialize(desc, this, safepoint_table_offset,
-                       handler_table_offset2, constant_pool_offset,
-                       code_comments_offset, reloc_info_offset);
+                       callee_safepoint_table_offset, handler_table_offset2,
+                       constant_pool_offset, code_comments_offset,
+                       reloc_info_offset);
 }
 
 void Assembler::FinalizeJumpOptimizationInfo() {

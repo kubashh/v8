@@ -71,6 +71,7 @@ class SafepointTable {
  public:
   explicit SafepointTable(Code code);
   explicit SafepointTable(const wasm::WasmCode* code);
+  explicit SafepointTable(const wasm::WasmCode* code, bool);
 
   SafepointTable(const SafepointTable&) = delete;
   SafepointTable& operator=(const SafepointTable&) = delete;

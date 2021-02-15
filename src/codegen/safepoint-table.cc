@@ -24,6 +24,12 @@ SafepointTable::SafepointTable(const wasm::WasmCode* code)
                      code->instruction_start() + code->safepoint_table_offset(),
                      code->stack_slots(), false) {}
 
+SafepointTable::SafepointTable(const wasm::WasmCode* code, bool)
+    : SafepointTable(
+          code->instruction_start(),
+          code->instruction_start() + code->callee_safepoint_table_offset(), 7,
+          false) {}
+
 SafepointTable::SafepointTable(Address instruction_start,
                                Address safepoint_table_address,
                                uint32_t stack_slots, bool has_deopt)

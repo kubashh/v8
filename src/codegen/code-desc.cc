@@ -11,9 +11,10 @@ namespace internal {
 
 // static
 void CodeDesc::Initialize(CodeDesc* desc, Assembler* assembler,
-                          int safepoint_table_offset, int handler_table_offset,
-                          int constant_pool_offset, int code_comments_offset,
-                          int reloc_info_offset) {
+                          int safepoint_table_offset,
+                          int callee_safepoint_table_offset,
+                          int handler_table_offset, int constant_pool_offset,
+                          int code_comments_offset, int reloc_info_offset) {
   desc->buffer = assembler->buffer_start();
   desc->buffer_size = assembler->buffer_size();
   desc->instr_size = assembler->instruction_size();
@@ -27,9 +28,13 @@ void CodeDesc::Initialize(CodeDesc* desc, Assembler* assembler,
   desc->handler_table_offset = handler_table_offset;
   desc->handler_table_size = desc->constant_pool_offset - handler_table_offset;
 
+  desc->callee_safepoint_table_offset = callee_safepoint_table_offset;
+  desc->callee_safepoint_table_size =
+      desc->handler_table_offset - callee_safepoint_table_offset;
+
   desc->safepoint_table_offset = safepoint_table_offset;
   desc->safepoint_table_size =
-      desc->handler_table_offset - safepoint_table_offset;
+      desc->callee_safepoint_table_offset - safepoint_table_offset;
 
   desc->reloc_offset = reloc_info_offset;
   desc->reloc_size = desc->buffer_size - reloc_info_offset;
@@ -52,7 +57,11 @@ void CodeDesc::Verify(const CodeDesc* desc) {
   // Instruction area layout invariants.
   DCHECK_GE(desc->safepoint_table_size, 0);
   DCHECK_EQ(desc->safepoint_table_size + desc->safepoint_table_offset,
-            desc->handler_table_offset);
+            desc->callee_safepoint_table_offset);
+  DCHECK_GE(desc->callee_safepoint_table_size, 0);
+  DCHECK_EQ(
+      desc->callee_safepoint_table_size + desc->callee_safepoint_table_offset,
+      desc->handler_table_offset);
   DCHECK_GE(desc->handler_table_size, 0);
   DCHECK_EQ(desc->handler_table_size + desc->handler_table_offset,
             desc->constant_pool_offset);

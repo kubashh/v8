@@ -964,6 +964,7 @@ WasmCode* NativeModule::AddCodeForTesting(Handle<Code> code) {
                    stack_slots,             // stack_slots
                    0,                       // tagged_parameter_slots
                    safepoint_table_offset,  // safepoint_table_offset
+                   0,                       // callee_safepoint_table_offset
                    handler_table_offset,    // handler_table_offset
                    constant_pool_offset,    // constant_pool_offset
                    code_comments_offset,    // code_comments_offset
@@ -1046,6 +1047,8 @@ std::unique_ptr<WasmCode> NativeModule::AddCodeWithCodeSpace(
   // 'empty'.
   const int safepoint_table_offset =
       desc.safepoint_table_size == 0 ? 0 : desc.safepoint_table_offset;
+  const int callee_safepoint_table_offset =
+      desc.safepoint_table_size == 0 ? 0 : desc.callee_safepoint_table_offset;
   const int handler_table_offset = desc.handler_table_offset;
   const int constant_pool_offset = desc.constant_pool_offset;
   const int code_comments_offset = desc.code_comments_offset;
@@ -1090,8 +1093,9 @@ std::unique_ptr<WasmCode> NativeModule::AddCodeWithCodeSpace(
 
   std::unique_ptr<WasmCode> code{new WasmCode{
       this, index, dst_code_bytes, stack_slots, tagged_parameter_slots,
-      safepoint_table_offset, handler_table_offset, constant_pool_offset,
-      code_comments_offset, instr_size, protected_instructions_data, reloc_info,
+      safepoint_table_offset, callee_safepoint_table_offset,
+      handler_table_offset, constant_pool_offset, code_comments_offset,
+      instr_size, protected_instructions_data, reloc_info,
       source_position_table, kind, tier, for_debugging}};
   code->MaybePrint();
   code->Validate();
@@ -1212,7 +1216,7 @@ std::unique_ptr<WasmCode> NativeModule::AddDeserializedCode(
 
   return std::unique_ptr<WasmCode>{new WasmCode{
       this, index, instructions, stack_slots, tagged_parameter_slots,
-      safepoint_table_offset, handler_table_offset, constant_pool_offset,
+      safepoint_table_offset, 0, handler_table_offset, constant_pool_offset,
       code_comments_offset, unpadded_binary_size, protected_instructions_data,
       reloc_info, source_position_table, kind, tier, kNoDebugging}};
 }
@@ -1272,6 +1276,7 @@ WasmCode* NativeModule::CreateEmptyJumpTableInRegion(
                    0,                     // stack_slots
                    0,                     // tagged_parameter_slots
                    0,                     // safepoint_table_offset
+                   0,                     // callee_safepoint_table_offset
                    jump_table_size,       // handler_table_offset
                    jump_table_size,       // constant_pool_offset
                    jump_table_size,       // code_comments_offset

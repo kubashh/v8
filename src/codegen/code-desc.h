@@ -30,9 +30,10 @@ namespace internal {
 class CodeDesc {
  public:
   static void Initialize(CodeDesc* desc, Assembler* assembler,
-                         int safepoint_table_offset, int handler_table_offset,
-                         int constant_pool_offset, int code_comments_offset,
-                         int reloc_info_offset);
+                         int safepoint_table_offset,
+                         int callee_safepoint_table_offset,
+                         int handler_table_offset, int constant_pool_offset,
+                         int code_comments_offset, int reloc_info_offset);
 
 #ifdef DEBUG
   static void Verify(const CodeDesc* desc);
@@ -53,6 +54,9 @@ class CodeDesc {
   int safepoint_table_offset = 0;
   int safepoint_table_size = 0;
 
+  int callee_safepoint_table_offset = 0;
+  int callee_safepoint_table_size = 0;
+
   int handler_table_offset = 0;
   int handler_table_size = 0;
 
@@ -69,6 +73,9 @@ class CodeDesc {
   int metadata_size() const { return body_size() - instruction_size(); }
   int safepoint_table_offset_relative() const {
     return safepoint_table_offset - instruction_size();
+  }
+  int callee_safepoint_table_offset_relative() const {
+    return callee_safepoint_table_offset - instruction_size();
   }
   int handler_table_offset_relative() const {
     return handler_table_offset - instruction_size();

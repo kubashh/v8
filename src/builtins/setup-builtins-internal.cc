@@ -113,7 +113,7 @@ Code BuildWithMacroAssembler(Isolate* isolate, int32_t builtin_index,
 
   CodeDesc desc;
   masm.GetCode(isolate, &desc, MacroAssembler::kNoSafepointTable,
-               handler_table_offset);
+               MacroAssembler::kNoSafepointTable, handler_table_offset);
 
   Handle<Code> code = Factory::CodeBuilder(isolate, desc, CodeKind::BUILTIN)
                           .set_self_reference(masm.CodeObject())

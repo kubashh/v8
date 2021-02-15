@@ -411,11 +411,13 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   static constexpr SafepointTableBuilder* kNoSafepointTable = nullptr;
   void GetCode(Isolate* isolate, CodeDesc* desc,
                SafepointTableBuilder* safepoint_table_builder,
+               SafepointTableBuilder* callee_safepoint_table_builder,
                int handler_table_offset);
 
   // Convenience wrapper for code without safepoint or handler tables.
   void GetCode(Isolate* isolate, CodeDesc* desc) {
-    GetCode(isolate, desc, kNoSafepointTable, kNoHandlerTable);
+    GetCode(isolate, desc, kNoSafepointTable, kNoSafepointTable,
+            kNoHandlerTable);
   }
 
   void FinalizeJumpOptimizationInfo();
