@@ -5749,6 +5749,8 @@ Node* WasmGraphBuilder::ArrayNewWithRtt(uint32_t array_index,
   EnsureEnd(mcgraph());
   gasm_->Goto(&loop, start_offset);
   gasm_->Bind(&loop);
+  Node* loop_header = control();
+  DCHECK(loop_header->opcode() == IrOpcode::kLoop);
   {
     Node* offset = loop.PhiAt(0);
     Node* check = gasm_->Uint32LessThan(offset, end_offset);
@@ -5759,6 +5761,7 @@ Node* WasmGraphBuilder::ArrayNewWithRtt(uint32_t array_index,
     gasm_->Goto(&loop, offset);
   }
   gasm_->Bind(&done);
+  if (FLAG_wasm_loop_unrolling) LoopExit(loop_header);
   return a;
 }
 
