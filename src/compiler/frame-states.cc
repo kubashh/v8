@@ -49,7 +49,7 @@ size_t hash_value(FrameStateInfo const& info) {
 
 std::ostream& operator<<(std::ostream& os, FrameStateType type) {
   switch (type) {
-    case FrameStateType::kInterpretedFunction:
+    case FrameStateType::kUnoptimizedFunction:
       os << "INTERPRETED_FRAME";
       break;
     case FrameStateType::kArgumentsAdaptor:
