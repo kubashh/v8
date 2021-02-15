@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7508b4e1_3a97a66e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-02-15T11:12:18Z",
+      "side": 1,
+      "message": "Fixed a small issue in PS4, please take a look and let me know if you still approve.",
+      "revId": "d4de7a1ef3819b54de5bf31ac2b27097ff83f124",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
