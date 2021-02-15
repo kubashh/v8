@@ -486,7 +486,7 @@ class LiftoffCompiler {
             GetLoweredCallDescriptor(compilation_zone, call_descriptor)),
         env_(env),
         debug_sidetable_builder_(debug_sidetable_builder),
-        for_debugging_(for_debugging),
+        for_debugging_(ForDebugging::kForStepping),
         func_index_(func_index),
         out_of_line_code_(compilation_zone),
         source_position_table_builder_(compilation_zone),
@@ -961,12 +961,12 @@ class LiftoffCompiler {
       checked_hook_on_function_call_ = true;
       // Check the "hook on function call" flag. If set, trigger a break.
       DEBUG_CODE_COMMENT("check hook on function call");
-      Register flag = __ GetUnusedRegister(kGpReg, {}).gp();
-      LOAD_INSTANCE_FIELD(flag, HookOnFunctionCallAddress, kSystemPointerSize);
+//    Register flag = __ GetUnusedRegister(kGpReg, {}).gp();
+//    LOAD_INSTANCE_FIELD(flag, HookOnFunctionCallAddress, kSystemPointerSize);
       Label no_break;
-      __ Load(LiftoffRegister{flag}, flag, no_reg, 0, LoadType::kI32Load8U, {});
-      // Unary "equal" means "equals zero".
-      __ emit_cond_jump(kEqual, &no_break, kWasmI32, flag);
+//    __ Load(LiftoffRegister{flag}, flag, no_reg, 0, LoadType::kI32Load8U, {});
+//    // Unary "equal" means "equals zero".
+//    __ emit_cond_jump(kEqual, &no_break, kWasmI32, flag);
       EmitBreakpoint(decoder);
       __ bind(&no_break);
     } else if (dead_breakpoint_ == decoder->position()) {
@@ -1003,6 +1003,7 @@ class LiftoffCompiler {
     DCHECK(for_debugging_);
     source_position_table_builder_.AddPosition(
         __ pc_offset(), SourcePosition(decoder->position()), true);
+    __ DebugBreak();
     __ CallRuntimeStub(WasmCode::kWasmDebugBreak);
     // TODO(ahaas): Define a proper safepoint here.
     safepoint_table_builder_.DefineSafepoint(&asm_, Safepoint::kNoLazyDeopt);

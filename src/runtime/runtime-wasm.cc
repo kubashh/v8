@@ -534,6 +534,10 @@ RUNTIME_FUNCTION(Runtime_WasmTableFill) {
 
 RUNTIME_FUNCTION(Runtime_WasmDebugBreak) {
   ClearThreadInWasmScope flag_scope;
+
+  reinterpret_cast<v8::Isolate*>(isolate)->RequestGarbageCollectionForTesting(
+      v8::Isolate::kFullGarbageCollection);
+
   HandleScope scope(isolate);
   DCHECK_EQ(0, args.length());
   FrameFinder<WasmFrame, StackFrame::EXIT, StackFrame::WASM_DEBUG_BREAK>
