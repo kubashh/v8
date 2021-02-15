@@ -92,6 +92,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dff836e_5baa15c5",
+        "filename": "src/compiler/frame-states.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-15T13:28:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caee1da7_cbb10c3f",
+      "range": {
+        "startLine": 53,
+        "startChar": 13,
+        "endLine": 53,
+        "endChar": 30
+      },
+      "revId": "0f0817290473c798a6656ce0e0cc6f6bd694e06a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6953647a_3925028d",
@@ -105,6 +129,30 @@
       "writtenOn": "2021-02-15T11:12:07Z",
       "side": 1,
       "message": "UnoptimizedFrameConstants (and below for any UnoptimizedFrame functions)",
+      "range": {
+        "startLine": 1726,
+        "startChar": 12,
+        "endLine": 1726,
+        "endChar": 37
+      },
+      "revId": "0f0817290473c798a6656ce0e0cc6f6bd694e06a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd9c0460_559d1c3e",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-15T13:28:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6953647a_3925028d",
       "range": {
         "startLine": 1726,
         "startChar": 12,
