@@ -834,7 +834,10 @@ class JSArrayRef : public JSObjectRef {
 
   Handle<JSArray> object() const;
 
-  ObjectRef length() const;
+  // The `length` property of boilerplate JSArray objects. Boilerplates are
+  // immutable after initialization. Must not be used for non-boilerplate
+  // JSArrays.
+  ObjectRef GetBoilerplateLength() const;
 
   // Return the element at key {index} if the array has a copy-on-write elements
   // storage and {index} is known to be an own data property.

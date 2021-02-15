@@ -1802,7 +1802,10 @@ class JSArrayData : public JSObjectData {
               Handle<JSArray> object);
 
   void Serialize(JSHeapBroker* broker);
-  ObjectData* length() const { return length_; }
+  ObjectData* length() const {
+    CHECK(serialized_);
+    return length_;
+  }
 
   ObjectData* GetOwnElement(
       JSHeapBroker* broker, uint32_t index,
@@ -1824,6 +1827,8 @@ JSArrayData::JSArrayData(JSHeapBroker* broker, ObjectData** storage,
     : JSObjectData(broker, storage, object), own_elements_(broker->zone()) {}
 
 void JSArrayData::Serialize(JSHeapBroker* broker) {
+  CHECK(!FLAG_turbo_direct_heap_access);
+
   if (serialized_) return;
   serialized_ = true;
 
@@ -2439,7 +2444,9 @@ void JSObjectData::SerializeRecursiveAsBoilerplate(JSHeapBroker* broker,
     map()->AsMap()->SerializeOwnDescriptors(broker);
   }
 
-  if (IsJSArray()) AsJSArray()->Serialize(broker);
+  if (IsJSArray() && !FLAG_turbo_direct_heap_access) {
+    AsJSArray()->Serialize(broker);
+  }
 }
 
 void RegExpBoilerplateDescriptionData::Serialize(JSHeapBroker* broker) {
@@ -3489,8 +3496,6 @@ BIMODAL_ACCESSOR(HeapObject, Map, map)
 
 BIMODAL_ACCESSOR_C(HeapNumber, double, value)
 
-BIMODAL_ACCESSOR(JSArray, Object, length)
-
 BIMODAL_ACCESSOR(JSBoundFunction, JSReceiver, bound_target_function)
 BIMODAL_ACCESSOR(JSBoundFunction, Object, bound_this)
 BIMODAL_ACCESSOR(JSBoundFunction, FixedArray, bound_arguments)
@@ -4014,6 +4019,18 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnDataProperty(
       broker(), field_representation, index, policy);
   if (property == nullptr) return base::nullopt;
   return ObjectRef(broker(), property);
+}
+
+ObjectRef JSArrayRef::GetBoilerplateLength() const {
+  if (data_->should_access_heap() || FLAG_turbo_direct_heap_access) {
+    // Safe to read concurrently because:
+    // - boilerplates are immutable after initialization.
+    // - boilerplates are published into the feedback vector.
+    return ObjectRef{broker(),
+                     broker()->CanonicalPersistentHandle(object()->length())};
+  } else {
+    return ObjectRef{broker(), data()->AsJSArray()->length()};
+  }
 }
 
 base::Optional<ObjectRef> JSArrayRef::GetOwnCowElement(
