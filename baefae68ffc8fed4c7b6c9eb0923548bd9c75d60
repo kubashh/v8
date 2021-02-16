@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "baefae68ffc8fed4c7b6c9eb0923548bd9c75d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03011b82_13afa800",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-16T12:23:02Z",
+      "side": 1,
+      "message": "lgtm % add a todo as discussed offline",
+      "revId": "baefae68ffc8fed4c7b6c9eb0923548bd9c75d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
