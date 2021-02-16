@@ -1959,13 +1959,19 @@ Reduction JSNativeContextSpecialization::ReduceElementLoadFromHeapConstant(
       // We didn't find a constant element, but if the receiver is a cow-array
       // we can exploit the fact that any future write to the element will
       // replace the whole elements storage.
-      element = receiver_ref.AsJSArray().GetOwnCowElement(index);
+      JSArrayRef array_ref = receiver_ref.AsJSArray();
+      // As the name says, the `length` read here is unsafe and may not match
+      // `elements`. We rely on the invariant that any `length` change will
+      // also result in an `elements` change to make this safe. The `elements`
+      // equality check below thus also guards the value of `length`.
+      ObjectRef array_length = array_ref.length_unsafe();
+      FixedArrayBaseRef array_elements = array_ref.elements();
+      element = array_ref.GetOwnCowElement(
+          array_elements, array_ref.GetElementsKind(), array_length, index);
       if (element.has_value()) {
         Node* elements = effect = graph()->NewNode(
             simplified()->LoadField(AccessBuilder::ForJSObjectElements()),
             receiver, effect, control);
-        FixedArrayRef array_elements =
-            receiver_ref.AsJSArray().elements().AsFixedArray();
         Node* check = graph()->NewNode(simplified()->ReferenceEqual(), elements,
                                        jsgraph()->Constant(array_elements));
         effect = graph()->NewNode(

@@ -834,13 +834,27 @@ class JSArrayRef : public JSObjectRef {
 
   Handle<JSArray> object() const;
 
-  ObjectRef length() const;
+  // The `length` property of boilerplate JSArray objects. Boilerplates are
+  // immutable after initialization. Must not be used for non-boilerplate
+  // JSArrays.
+  ObjectRef GetBoilerplateLength() const;
 
   // Return the element at key {index} if the array has a copy-on-write elements
   // storage and {index} is known to be an own data property.
+  // The contract is that {elements_ref}, {elements_kind}, {length_ref} must
+  // all be read from the same JSArray instance. Note that due to concurrency,
+  // we cannot rely that all these are consistent at this point, and must be
+  // extra careful.
   base::Optional<ObjectRef> GetOwnCowElement(
-      uint32_t index, SerializationPolicy policy =
-                          SerializationPolicy::kAssumeSerialized) const;
+      FixedArrayBaseRef elements_ref, ElementsKind elements_kind,
+      ObjectRef length_ref, uint32_t index,
+      SerializationPolicy policy =
+          SerializationPolicy::kAssumeSerialized) const;
+
+  // The `JSArray::length` property; not safe to use in general, but can be
+  // used in some special cases that guarantee a valid `length` value despite
+  // concurrent reads.
+  ObjectRef length_unsafe() const;
 };
 
 class ScopeInfoRef : public HeapObjectRef {
