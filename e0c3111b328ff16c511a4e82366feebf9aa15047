@@ -110,6 +110,24 @@
       "parentUuid": "f1576c4d_24acfb7c",
       "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70002d77_8c00eceb",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5185,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-02-16T18:58:53Z",
+      "side": 1,
+      "message": "The pre-created cache approach sgtm.\n\nAnother solution (which ftang@ might find unsavory) is to willfully violate the spec here for this corner case.",
+      "parentUuid": "e28cc326_61ce7fc3",
+      "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
