@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ed146b7_4faddd7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-16T16:34:39Z",
+      "side": 1,
+      "message": "Forgot to add: This is scary enough that it would be really good to have some tests. Since Ulan\u0027s stress test setup is not in place yet, could you write a cctest along the lines of the others we have? https://source.chromium.org/chromium/chromium/src/+/master:v8/test/cctest/test-concurrent-descriptor-array.cc",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a752924b_c5260ce0",
