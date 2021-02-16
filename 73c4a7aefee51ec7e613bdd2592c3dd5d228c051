@@ -16,6 +16,91 @@
       "message": "PTAL, got good hopes for green builds now.",
       "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a752924b_c5260ce0",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-16T16:30:03Z",
+      "side": 1,
+      "message": "I think it would be cleaner if elements kind and length are read by GetOwnCowElement, so the caller doesn\u0027t need to worry about that aspect.",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cfdf193_bb6988bf",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-16T16:30:03Z",
+      "side": 1,
+      "message": "Do you have a plan for when this is no longer guaranteed (i.e. when elements() is not serialized)?",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9402a44_b41e04a6",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4060,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-16T16:30:03Z",
+      "side": 1,
+      "message": "This can be a DCHECK.",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdeb48ac_2267fd0c",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-16T16:30:03Z",
+      "side": 1,
+      "message": "Right, very good point. For GetOwnConstantElement we won\u0027t be able to make that assumption.",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "988b980b_e3f6c3e5",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-16T16:30:03Z",
+      "side": 1,
+      "message": "I assume this doesn\u0027t really matter and is just for hygiene?",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
