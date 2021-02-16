@@ -3429,6 +3429,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
              Condition(0), Condition(1));
       break;
     }
+    case kS390_I64x2Abs: {
+      __ vlp(i.OutputSimd128Register(), i.InputSimd128Register(0), Condition(0),
+             Condition(0), Condition(3));
+      break;
+    }
     case kS390_I32x4Abs: {
       __ vlp(i.OutputSimd128Register(), i.InputSimd128Register(0), Condition(0),
              Condition(0), Condition(2));
