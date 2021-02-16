@@ -188,8 +188,8 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::ExecuteJobImpl() {
   // then ASTs from different functions may be intersperse when printed.
   MaybePrintAst(parse_info(), compilation_info());
 
-  base::Optional<ParkedScope> parked_scope;
-  if (local_isolate_) parked_scope.emplace(local_isolate_);
+  // base::Optional<ParkedScope> parked_scope;
+  // if (local_isolate_) parked_scope.emplace(local_isolate_);
 
   generator()->GenerateBytecode(stack_limit());
 
