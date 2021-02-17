@@ -128,6 +128,24 @@
       "parentUuid": "e28cc326_61ce7fc3",
       "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73e79a49_778e1e8b",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5185,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-02-17T19:09:04Z",
+      "side": 1,
+      "message": "If this is the only corner case (probably is), and the choice is between 1) \"willfully violate the spec here for this corner case.\" and 2) a pre-created cache just for 1.25, then I will choose 1) for now until someone show me a stronger reason to fix it. Thanks",
+      "parentUuid": "70002d77_8c00eceb",
+      "revId": "e0c3111b328ff16c511a4e82366feebf9aa15047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
