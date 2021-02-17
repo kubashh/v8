@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76893edf_2df40bd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-02-17T09:47:10Z",
+      "side": 1,
+      "message": "lgtm non-src/compiler with nits",
+      "revId": "9fa34a7cd5b6d25fbc51f7b48bd46597d7dac0fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ee0b203_d2d5b822",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-02-17T09:47:10Z",
+      "side": 1,
+      "message": ")))))",
+      "revId": "9fa34a7cd5b6d25fbc51f7b48bd46597d7dac0fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a3261a1_714becad",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1297,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-02-17T09:47:10Z",
+      "side": 1,
+      "message": "How about comparing these values as unsigned types to avoid potential overflows to negative side? Once these checks are passed, static_cast\u003cint\u003e() should always be safe since lengths are known to be non-negative values. Maybe also add DCHECK_LE(0, array_length) to sanitize parameters.",
+      "revId": "9fa34a7cd5b6d25fbc51f7b48bd46597d7dac0fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
