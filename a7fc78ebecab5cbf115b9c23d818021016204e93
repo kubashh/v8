@@ -67,6 +67,24 @@
       "message": "nit: both setter and getter as lower case, set_node_observer.\n\nIt also seems like a good candidate for the ISOLATE_INIT_LIST?",
       "revId": "a7fc78ebecab5cbf115b9c23d818021016204e93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce9da288_754df014",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-02-17T11:29:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9109c2b2_b3a660ed",
+      "revId": "a7fc78ebecab5cbf115b9c23d818021016204e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
