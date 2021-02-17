@@ -50,6 +50,24 @@
       "message": "How about comparing these values as unsigned types to avoid potential overflows to negative side? Once these checks are passed, static_cast\u003cint\u003e() should always be safe since lengths are known to be non-negative values. Maybe also add DCHECK_LE(0, array_length) to sanitize parameters.",
       "revId": "9fa34a7cd5b6d25fbc51f7b48bd46597d7dac0fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb5fde49_9ae9cf15",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1297,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T13:06:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a3261a1_714becad",
+      "revId": "9fa34a7cd5b6d25fbc51f7b48bd46597d7dac0fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

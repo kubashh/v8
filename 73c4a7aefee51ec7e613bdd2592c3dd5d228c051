@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7d86ea5_d1ba61d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T13:06:20Z",
+      "side": 1,
+      "message": "Done in the latest PS, and added modified the impl for tsan complaints:\n\n- relaxed getters for elements, length.\n- no handle creation on the bg thread.",
+      "parentUuid": "877a2d2f_621af996",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a752924b_c5260ce0",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "The correctness of GetOwnCowElement relies on that elements check anyways, whether the kind and length are read inside or outside of that function. That\u0027s why I think it\u0027s cleaner to tell the caller only about elements (by making it a parameter and via a comment) and hide the trickyness regarding length and elements kind from the caller by reading them in GetOwnCowElement.",
       "parentUuid": "88951039_cc9b7672",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42a5b5ee_c1ccfddb",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T13:06:20Z",
+      "side": 1,
+      "message": "Fair enough, done.",
+      "parentUuid": "33c8031e_a7abd019",
       "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
