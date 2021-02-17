@@ -298,6 +298,24 @@
       "parentUuid": "b08036b1_0698a645",
       "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68ff961c_ed347bbc",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-17T09:32:46Z",
+      "side": 1,
+      "message": "Okay, fine with me but I can assure you much crazier things happen in dead code.",
+      "parentUuid": "536b2c3e_b4df0e65",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
