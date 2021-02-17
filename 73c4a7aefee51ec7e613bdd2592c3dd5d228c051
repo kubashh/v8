@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "877a2d2f_621af996",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T06:40:35Z",
+      "side": 1,
+      "message": "Ack working on it.",
+      "parentUuid": "7ed146b7_4faddd7b",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a752924b_c5260ce0",
         "filename": "src/compiler/heap-refs.h",
         "patchSetId": 7
@@ -48,6 +66,24 @@
       "writtenOn": "2021-02-16T16:30:03Z",
       "side": 1,
       "message": "I think it would be cleaner if elements kind and length are read by GetOwnCowElement, so the caller doesn\u0027t need to worry about that aspect.",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88951039_cc9b7672",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T06:40:35Z",
+      "side": 1,
+      "message": "There\u0027s reasoning behind the madness: the safety of reading both length/kind relies on the reference equality check that the caller must insert into opt code. Without the check+deopt point, it\u0027s *not* safe to use length/kind with the given elements.\n\nSo I kept these reads outside the function to make these requirements a bit more explicit.",
+      "parentUuid": "a752924b_c5260ce0",
       "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb480966_0112d638",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T06:40:35Z",
+      "side": 1,
+      "message": "Everything stays the same except the elements pointer read is concurrent and this DCHECK must be removed. We only proceed if its map is the fixed_cow_array_map, in which case it\u0027s immutable. We still insert a reference equality check in opt code to guard assumptions. Adding a TODO to remove the DCHECK.",
+      "parentUuid": "9cfdf193_bb6988bf",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9402a44_b41e04a6",
@@ -82,6 +136,24 @@
       "writtenOn": "2021-02-16T16:30:03Z",
       "side": 1,
       "message": "This can be a DCHECK.",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c6f6de0_6139ea26",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4060,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T06:40:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9402a44_b41e04a6",
       "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7693b924_abf5f142",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T06:40:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bdeb48ac_2267fd0c",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "988b980b_e3f6c3e5",
@@ -116,6 +206,24 @@
       "writtenOn": "2021-02-16T16:30:03Z",
       "side": 1,
       "message": "I assume this doesn\u0027t really matter and is just for hygiene?",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1793607_574cc293",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T06:40:35Z",
+      "side": 1,
+      "message": "For holey JSArrays, reading a hole means the result of the GetOwnCowElement operation is \u0027not found\u0027. For packed JSArrays we should never read a hole. Since we can\u0027t trust the given elements_kind matches the given backing store, we need to filter out holes unconditionally.",
+      "parentUuid": "988b980b_e3f6c3e5",
       "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
