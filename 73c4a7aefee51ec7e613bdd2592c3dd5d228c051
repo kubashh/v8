@@ -280,6 +280,24 @@
       "parentUuid": "c1793607_574cc293",
       "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "536b2c3e_b4df0e65",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-17T09:24:26Z",
+      "side": 1,
+      "message": "Right, we\u0027d hit the deopt in generated code; but before that we\u0027d embed the Hole constant in the graph - that doesn\u0027t seem like a good idea. Filtering out holes in general avoids that.",
+      "parentUuid": "b08036b1_0698a645",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
