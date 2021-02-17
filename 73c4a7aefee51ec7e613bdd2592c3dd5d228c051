@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33c8031e_a7abd019",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-17T09:18:51Z",
+      "side": 1,
+      "message": "The correctness of GetOwnCowElement relies on that elements check anyways, whether the kind and length are read inside or outside of that function. That\u0027s why I think it\u0027s cleaner to tell the caller only about elements (by making it a parameter and via a comment) and hide the trickyness regarding length and elements kind from the caller by reading them in GetOwnCowElement.",
+      "parentUuid": "88951039_cc9b7672",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9cfdf193_bb6988bf",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 7
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "Everything stays the same except the elements pointer read is concurrent and this DCHECK must be removed. We only proceed if its map is the fixed_cow_array_map, in which case it\u0027s immutable. We still insert a reference equality check in opt code to guard assumptions. Adding a TODO to remove the DCHECK.",
       "parentUuid": "9cfdf193_bb6988bf",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fc267b5_a0eecb32",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-17T09:18:51Z",
+      "side": 1,
+      "message": "Okay, makes sense. So the DCHECK is more a documentation of the current situation rather than a precondition for correctness.",
+      "parentUuid": "bb480966_0112d638",
       "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -224,6 +260,24 @@
       "side": 1,
       "message": "For holey JSArrays, reading a hole means the result of the GetOwnCowElement operation is \u0027not found\u0027. For packed JSArrays we should never read a hole. Since we can\u0027t trust the given elements_kind matches the given backing store, we need to filter out holes unconditionally.",
       "parentUuid": "988b980b_e3f6c3e5",
+      "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b08036b1_0698a645",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-17T09:18:51Z",
+      "side": 1,
+      "message": "If the elements kind doesn\u0027t match then we are in the situation where the value that we return is probably not the right one (no matter if it\u0027s a hole or not) and any use of it will be in dead code, right?",
+      "parentUuid": "c1793607_574cc293",
       "revId": "73c4a7aefee51ec7e613bdd2592c3dd5d228c051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
