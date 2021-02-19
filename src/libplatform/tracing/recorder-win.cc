@@ -4,7 +4,7 @@
 #ifndef V8_LIBPLATFORM_TRACING_RECORDER_WIN_H_
 #define V8_LIBPLATFORM_TRACING_RECORDER_WIN_H_
 
-#include <windows.h>
+#include <Windows.h>
 #include <TraceLoggingProvider.h>
 
 #include "src/libplatform/tracing/recorder.h"
