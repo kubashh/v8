@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d79b9990_a445bef7",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4047,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-19T10:15:21Z",
+      "side": 1,
+      "message": "It turns out this function isn\u0027t thread-safe when VERIFY_HEAP \u0026\u0026 DEBUG is on.",
+      "revId": "76a2ab06a10e8e4b91328f0d87515a235d26b644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8162b111_52d30a47",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4078,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-19T10:15:21Z",
+      "side": 1,
+      "message": "I didn\u0027t realize that you kept the old on-heap path. Let\u0027s get rid of that and use the new code instead.",
+      "revId": "76a2ab06a10e8e4b91328f0d87515a235d26b644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc5d7182_9eea1b80",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-19T10:15:21Z",
+      "side": 1,
+      "message": "I overlooked an issue here: GetOwnCowElement used to deal with the situation where the array\u0027s elements field hasn\u0027t been serialized:\n\n  } else if (!data()-\u003eAsJSObject()-\u003eserialized_elements()) {\n    TRACE(broker(), \"\u0027elements\u0027 on \" \u003c\u003c this);\n    return base::nullopt;\n  }\n\nBut now we call elements() before GetOwnCowElement and will CHECK-fail in that situation. I believe that\u0027s what\u0027s happening in https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1180012.",
+      "revId": "76a2ab06a10e8e4b91328f0d87515a235d26b644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
