@@ -2497,7 +2497,7 @@ void TurboAssembler::EnterFrame(StackFrame::Type type) {
     // sp[1] : type
     // sp[0] : cp
   } else {
-    DCHECK_EQ(type, StackFrame::MANUAL);
+    DCHECK_EQ(type, StackFrame::BASELINE);
     // Just push a minimal "machine frame", saving the frame pointer and return
     // address, without any markers.
     Push<TurboAssembler::kSignLR>(lr, fp);
