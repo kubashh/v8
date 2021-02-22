@@ -8236,7 +8236,8 @@ CallDescriptor* GetWasmCallDescriptor(
         kJSFunctionRegister.code(), MachineType::TaggedPointer()));
   }
 
-  int parameter_slots = AddArgumentPaddingSlots(params.NumStackSlots());
+  int parameter_slots = params.NumStackSlots();
+  if (ShouldPadArguments(parameter_slots)) parameter_slots++;
 
   // Add return location(s).
   LinkageLocationAllocator rets(wasm::kGpReturnRegisters,
@@ -8337,7 +8338,8 @@ CallDescriptor* ReplaceTypeInCallDescriptorWith(
         kJSFunctionRegister.code(), MachineType::TaggedPointer()));
   }
 
-  int parameter_slots = AddArgumentPaddingSlots(params.NumStackSlots());
+  int parameter_slots = params.NumStackSlots();
+  if (ShouldPadArguments(parameter_slots)) parameter_slots++;
 
   LinkageLocationAllocator rets(wasm::kGpReturnRegisters,
                                 wasm::kFpReturnRegisters, parameter_slots);
