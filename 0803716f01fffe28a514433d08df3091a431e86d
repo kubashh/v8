@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cf62a867_d844d97f",
+        "filename": "src/api/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-22T17:05:26Z",
+      "side": 1,
+      "message": "Here and below: we have to guard the platform specific includes behind ifdef\u0027s.",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 36
+      },
+      "revId": "0803716f01fffe28a514433d08df3091a431e86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "816d032c_076cc90a",
         "filename": "src/diagnostics/etw-jit.cc",
         "patchSetId": 5
@@ -36,6 +59,29 @@
         "startChar": 0,
         "endLine": 24,
         "endChar": 67
+      },
+      "revId": "0803716f01fffe28a514433d08df3091a431e86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "948f926c_9b204fdd",
+        "filename": "src/diagnostics/etw-metadata.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-22T17:05:26Z",
+      "side": 1,
+      "message": "This is no longer needed, just std:unordered_set\u003cint\u003e should be good enough as script ids are unique per isolate.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 63
       },
       "revId": "0803716f01fffe28a514433d08df3091a431e86d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
