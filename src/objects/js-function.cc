@@ -149,9 +149,7 @@ bool JSFunction::ActiveTierIsNCI() const {
 }
 
 bool JSFunction::ActiveTierIsBaseline() const {
-  CodeKind highest_tier;
-  if (!HighestTierOf(GetAvailableCodeKinds(), &highest_tier)) return false;
-  return highest_tier == CodeKind::BASELINE;
+  return GetActiveTier() == CodeKind::BASELINE;
 }
 
 bool JSFunction::ActiveTierIsIgnitionOrBaseline() const {

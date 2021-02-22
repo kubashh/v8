@@ -621,11 +621,9 @@ RUNTIME_FUNCTION(Runtime_GetOptimizationStatus) {
       status |= static_cast<int>(OptimizationStatus::kTurboFanned);
     }
   }
-  // TODO(v8:11429): Clean up code kind predicates to include Baseline.
-  if (function->code().kind() == CodeKind::BASELINE) {
+  if (function->ActiveTierIsBaseline()) {
     status |= static_cast<int>(OptimizationStatus::kBaseline);
-  }
-  if (function->ActiveTierIsIgnition()) {
+  } else if (function->ActiveTierIsIgnition()) {
     status |= static_cast<int>(OptimizationStatus::kInterpreted);
   }
 
