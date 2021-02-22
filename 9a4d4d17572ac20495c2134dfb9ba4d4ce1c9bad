@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7fba295_4eb650b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-22T16:41:33Z",
+      "side": 1,
+      "message": "Jakob, PTAL, followup from sparkplug upstreaming.",
+      "revId": "9a4d4d17572ac20495c2134dfb9ba4d4ce1c9bad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
