@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe624686_4bca1400",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-22T16:59:20Z",
+      "side": 1,
+      "message": "cool!\n\nCould you merge your CL with master to get rid of the merge conflicts?\n",
+      "revId": "0803716f01fffe28a514433d08df3091a431e86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "816d032c_076cc90a",
+        "filename": "src/diagnostics/etw-jit.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-22T16:59:20Z",
+      "side": 1,
+      "message": "Did this now work despite being defined in two places?\nI think at least the constants should be extracted into a separate header file.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 67
+      },
+      "revId": "0803716f01fffe28a514433d08df3091a431e86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
