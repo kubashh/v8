@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6621253_daf7e441",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4047,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-22T08:36:52Z",
+      "side": 1,
+      "message": "You\u0027re probably referring to https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8854931126653780144/+/u/Check__flakes_/ArrayWithCowElements. That\u0027s a different function, not JSObjectRef::GetElementsKind, but JSObject::GetElementsKind, called from the test I added. Indeed that contains non-thread-safe checks. I\u0027ll use the raw map.elements_kind accessor instead.",
+      "parentUuid": "d79b9990_a445bef7",
+      "revId": "76a2ab06a10e8e4b91328f0d87515a235d26b644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8162b111_52d30a47",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d631efee_1453cffa",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4078,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-22T08:36:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8162b111_52d30a47",
+      "revId": "76a2ab06a10e8e4b91328f0d87515a235d26b644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc5d7182_9eea1b80",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-02-19T10:15:21Z",
       "side": 1,
       "message": "I overlooked an issue here: GetOwnCowElement used to deal with the situation where the array\u0027s elements field hasn\u0027t been serialized:\n\n  } else if (!data()-\u003eAsJSObject()-\u003eserialized_elements()) {\n    TRACE(broker(), \"\u0027elements\u0027 on \" \u003c\u003c this);\n    return base::nullopt;\n  }\n\nBut now we call elements() before GetOwnCowElement and will CHECK-fail in that situation. I believe that\u0027s what\u0027s happening in https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1180012.",
+      "revId": "76a2ab06a10e8e4b91328f0d87515a235d26b644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "361db470_111650e6",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-22T08:36:52Z",
+      "side": 1,
+      "message": "Nice catch.. I added JSObjectRef::TryGetElements in the reland.",
+      "parentUuid": "cc5d7182_9eea1b80",
       "revId": "76a2ab06a10e8e4b91328f0d87515a235d26b644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
