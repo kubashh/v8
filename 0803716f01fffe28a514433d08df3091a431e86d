@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e477200_0b5a70b0",
+        "filename": "src/api/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-02-22T21:34:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cf62a867_d844d97f",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 36
+      },
+      "revId": "0803716f01fffe28a514433d08df3091a431e86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "816d032c_076cc90a",
@@ -114,6 +138,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf70cdf8_ac34efc4",
+        "filename": "src/diagnostics/etw-jit.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-02-22T21:34:45Z",
+      "side": 1,
+      "message": "I had to add an exception to the src/DEPS file to make libplatform/tracing/recorder.h visible to etw-jit.cc. Hope that\u0027s OK!",
+      "parentUuid": "05ce7240_f4802dd9",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 67
+      },
+      "revId": "0803716f01fffe28a514433d08df3091a431e86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "948f926c_9b204fdd",
         "filename": "src/diagnostics/etw-metadata.h",
         "patchSetId": 5
@@ -125,6 +173,30 @@
       "writtenOn": "2021-02-22T17:05:26Z",
       "side": 1,
       "message": "This is no longer needed, just std:unordered_set\u003cint\u003e should be good enough as script ids are unique per isolate.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 63
+      },
+      "revId": "0803716f01fffe28a514433d08df3091a431e86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a47bb445_1aef1196",
+        "filename": "src/diagnostics/etw-metadata.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-02-22T21:34:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "948f926c_9b204fdd",
       "range": {
         "startLine": 30,
         "startChar": 0,
