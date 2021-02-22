@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07565c26_6088a88a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-02-22T21:26:31Z",
+      "side": 1,
+      "message": "Hi Deepti, this is a reland that adds missing SSE4_1 scopes, ptal, thanks!",
+      "revId": "dd38b7e47ecf83d1190faccd3a3d83915377284e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
