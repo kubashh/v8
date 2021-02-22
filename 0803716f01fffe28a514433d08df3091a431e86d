@@ -90,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05ce7240_f4802dd9",
+        "filename": "src/diagnostics/etw-jit.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-22T17:54:50Z",
+      "side": 1,
+      "message": "Yes the V8_ETW_GUID,libplatform/tracing should be visible from the rest of the system (just not vice-versa)",
+      "parentUuid": "1747a12b_84e1d645",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 67
+      },
+      "revId": "0803716f01fffe28a514433d08df3091a431e86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "948f926c_9b204fdd",
         "filename": "src/diagnostics/etw-metadata.h",
         "patchSetId": 5
