@@ -16,6 +16,23 @@
       "message": "Hi! Can someone please review? This is the last known blocker for Node.js support of Apple M1.",
       "revId": "5a4f88b8ec0d0cccc93e1b1f5993b094ffa3e93d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43165994_246d0062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-22T08:29:20Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5a4f88b8ec0d0cccc93e1b1f5993b094ffa3e93d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
