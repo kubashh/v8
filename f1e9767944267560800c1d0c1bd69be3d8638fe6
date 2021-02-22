@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42971d0f_e5673bb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-02-22T13:10:44Z",
+      "side": 1,
+      "message": "Addressed",
+      "revId": "f1e9767944267560800c1d0c1bd69be3d8638fe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
