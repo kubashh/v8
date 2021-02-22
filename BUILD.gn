@@ -2738,6 +2738,9 @@ v8_source_set("v8_base_without_compiler") {
     "src/diagnostics/disassembler.h",
     "src/diagnostics/eh-frame.cc",
     "src/diagnostics/eh-frame.h",
+    "src/diagnostics/etw-jit.cc",
+    "src/diagnostics/etw-jit.h",
+    "src/diagnostics/etw-metadata.h",
     "src/diagnostics/gdb-jit.cc",
     "src/diagnostics/gdb-jit.h",
     "src/diagnostics/objects-debug.cc",
@@ -4587,6 +4590,7 @@ v8_component("v8_libplatform") {
     sources -= [
       "//base/trace_event/common/trace_event_common.h",
       "src/libplatform/tracing/recorder-default.cc",
+      "src/libplatform/tracing/recorder.h",
       "src/libplatform/tracing/trace-buffer.cc",
       "src/libplatform/tracing/trace-buffer.h",
       "src/libplatform/tracing/trace-object.cc",

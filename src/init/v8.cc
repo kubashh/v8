@@ -15,6 +15,7 @@
 #include "src/codegen/interface-descriptors.h"
 #include "src/debug/debug.h"
 #include "src/deoptimizer/deoptimizer.h"
+#include "src/diagnostics/etw-jit.h"
 #include "src/execution/frames.h"
 #include "src/execution/isolate.h"
 #include "src/execution/runtime-profiler.h"
@@ -166,10 +167,13 @@ void V8::InitializePlatform(v8::Platform* platform) {
   platform_ = platform;
   v8::base::SetPrintStackTrace(platform_->GetStackTracePrinter());
   v8::tracing::TracingCategoryObserver::SetUp();
+  v8::internal::ETWJITInterface::Register();
+  cppgc::InitializeProcess(platform->GetPageAllocator());
 }
 
 void V8::ShutdownPlatform() {
   CHECK(platform_);
+  v8::internal::ETWJITInterface::Unregister();
   v8::tracing::TracingCategoryObserver::TearDown();
   v8::base::SetPrintStackTrace(nullptr);
   platform_ = nullptr;
