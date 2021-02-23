@@ -16,6 +16,40 @@
       "message": "Andreas: PTAL overall.\nJakob: PTAL at graph-assembler.h.",
       "revId": "c2f9b2161c769c1ac8de8d3d36af99efad2f245f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab711111_7df6fa5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-23T12:14:56Z",
+      "side": 1,
+      "message": "gasm lgtm with a nit, ty!",
+      "revId": "c2f9b2161c769c1ac8de8d3d36af99efad2f245f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b06b0cbf_43062282",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-23T12:14:56Z",
+      "side": 1,
+      "message": "nit: Here and elsewhere please keep the alpha-sorting.",
+      "revId": "c2f9b2161c769c1ac8de8d3d36af99efad2f245f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
