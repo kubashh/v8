@@ -16,6 +16,40 @@
       "message": "@Thibaud: PTAL.\n@Clemens: Please approve as OWNER, and feel free to review as well.",
       "revId": "f8204f639f0ba0d3e66b0fb8dfdf1d8ba3910a59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e7a4481_1363c6b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-24T12:03:30Z",
+      "side": 1,
+      "message": "Looking good from my side, with one comment/suggestion. Feel free to address in a follow-up CL (even though it would change exactly the same locations again, so maybe addressing it here makes more sense...).",
+      "revId": "f8204f639f0ba0d3e66b0fb8dfdf1d8ba3910a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a1c459a_fb70db3f",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-24T12:03:30Z",
+      "side": 1,
+      "message": "Do you think those macros are still worth having? Since a few years we are trying to avoid macros if possible (primarily to reduce code complexity and improve debuggability, i.e. error messages and stepping support).\nI am not sure why the decoder-\u003eok() check is there, maybe we can just drop it, or move it to some other strategically relevant place?",
+      "revId": "f8204f639f0ba0d3e66b0fb8dfdf1d8ba3910a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
