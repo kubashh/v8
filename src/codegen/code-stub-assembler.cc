@@ -9287,7 +9287,7 @@ void CodeStubAssembler::TryLookupElement(
   {
     // Negative and too-large keys must be converted to property names.
     if (Is64()) {
-      GotoIf(UintPtrLessThan(IntPtrConstant(JSArray::kMaxArrayIndex),
+      GotoIf(UintPtrLessThan(IntPtrConstant(JSObject::kMaxElementIndex),
                              intptr_index),
              if_bailout);
     } else {
@@ -9326,7 +9326,7 @@ void CodeStubAssembler::TryLookupElement(
     // Positive OOB indices mean "not found", negative indices and indices
     // out of array index range must be converted to property names.
     if (Is64()) {
-      GotoIf(UintPtrLessThan(IntPtrConstant(JSArray::kMaxArrayIndex),
+      GotoIf(UintPtrLessThan(IntPtrConstant(JSObject::kMaxElementIndex),
                              intptr_index),
              if_bailout);
     } else {
