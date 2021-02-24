@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfdd6ade_f17e80b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-24T15:57:45Z",
+      "side": 1,
+      "message": "Let me know if I can provide more info on the String side of things.",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e146e0f7_825e566d",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3914,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-24T15:57:45Z",
+      "side": 1,
+      "message": "Would these STATIC_ASSERTs bring false sense of security? We are moving by method now instead of by class and it would be possible to not have consistency between `object`, `elements_kind` and `elements` if we move one of these to do direct reads e.g. GetElementsKind()",
+      "range": {
+        "startLine": 3914,
+        "startChar": 4,
+        "endLine": 3914,
+        "endChar": 40
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d5c6275_bde5e845",
@@ -69,6 +109,52 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b68897cd_84f48341",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-24T15:57:45Z",
+      "side": 1,
+      "message": "Nice catch!",
+      "range": {
+        "startLine": 3327,
+        "startChar": 0,
+        "endLine": 3327,
+        "endChar": 58
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdd3699d_451f36dd",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-24T15:57:45Z",
+      "side": 1,
+      "message": "typo: 3",
+      "range": {
+        "startLine": 1329,
+        "startChar": 5,
+        "endLine": 1329,
+        "endChar": 6
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46b82b1e_dda1480f",
@@ -110,6 +196,29 @@
         "startChar": 59,
         "endLine": 1356,
         "endChar": 70
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "302100d5_62b945df",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-24T15:57:45Z",
+      "side": 1,
+      "message": "The SharedStringAccessGuardIfNeeded acquires the string_access [1] shared lock from the isolate. The only place where the main thread acquires this is in MakeExternal. Therefore, what it is guarding against is the MakeExternal transition. I\u0027ll admit the comment in the code is not explicit about this so I marked an action item for myself to make it clear what\u0027s guarding.\n\nSince, from the BG thread, we would be reading only internalized strings we are guaranteed to have either an internalized external string, or an internalized non-external string (and they will remain in that way).\n\nWe did this to limit ourselves to the most common cases of strings that appeared, while not performing the optimization in the other cases. We do encounter non-internalized strings in the compiler, but it is rarer.\n\n[1]: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/execution/isolate.h;l\u003d640;drc\u003d9d1a1d6154cae517f76de279682185c8abc30868\n\nWhat I\u0027d suggest is having a templatized version of the method with LocalIsolate/Isolate and then:\n1) Use that parameter for accessing the lock rather than using the string itself. It is faster, and the lock won\u0027t be acquired on the main thread (i.e. with the proper isolate). This is also solved by calling the String::Get method with a LocalIsoalte/Isolate parameter https://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/string-inl.h;l\u003d582;drc\u003d61219381be5d2405dcd1aac31fc60eaf6342896a\n2) In the lines above (maybe before the length check()) return {} if we have a LocalIsolate and the string is a non-internalized one. We haven\u0027t made sure those are safe to read from the BG yet. I think that we can make them safe but they are not safe yet.",
+      "range": {
+        "startLine": 1370,
+        "startChar": 6,
+        "endLine": 1370,
+        "endChar": 67
       },
       "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
