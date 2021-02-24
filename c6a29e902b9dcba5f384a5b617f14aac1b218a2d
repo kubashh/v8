@@ -16,6 +16,23 @@
       "message": "This should be an entirely mechanical change. PTAL.",
       "revId": "c6a29e902b9dcba5f384a5b617f14aac1b218a2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5146e282_91ecdefa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-24T11:57:42Z",
+      "side": 1,
+      "message": "I guess the idea was that \"WasmGraphBuilder::Int32Constant\" is the \"external API\" for building the nodes for an i32.const, and that internally we would just directly generate the nodes.\nBut since it does not make a difference technically, I am fine with this change. At least it unifies everything to one single method (instead of three).",
+      "revId": "c6a29e902b9dcba5f384a5b617f14aac1b218a2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
