@@ -16,6 +16,23 @@
       "message": "ptal. The upcoming use case is for the single_character_string_cache.",
       "revId": "58e81a4f112f5588c265bcbe684734ea01d51eb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9fdcf57_fae57586",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-02-24T08:38:00Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "58e81a4f112f5588c265bcbe684734ea01d51eb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
