@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "063e4fb4_1158fb98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-24T15:06:59Z",
+      "side": 1,
+      "message": "+Santiago for the string wrapper case in lookup.cc",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d5c6275_bde5e845",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3917,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-24T15:06:59Z",
+      "side": 1,
+      "message": "Please print a warning with TRACE_BROKER_MISSING so that we can trace such situations.\n\nDid you actually observe this case?",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2a343b9_8d23ffc7",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3929,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-24T15:06:59Z",
+      "side": 1,
+      "message": "It would be good if TryGetOwnConstantElement can also print these warnings when it gives up (but not when it successfully determines that the element doesn\u0027t exist).",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46b82b1e_dda1480f",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-24T15:06:59Z",
+      "side": 1,
+      "message": "Please spell that out.",
+      "range": {
+        "startLine": 1333,
+        "startChar": 37,
+        "endLine": 1333,
+        "endChar": 41
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40eab2d4_1c7e9b50",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-24T15:06:59Z",
+      "side": 1,
+      "message": "Is that a guess or did you look at benchmarks or the history of this TF optimization?",
+      "range": {
+        "startLine": 1355,
+        "startChar": 59,
+        "endLine": 1356,
+        "endChar": 70
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
