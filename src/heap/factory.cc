@@ -855,20 +855,26 @@ template Handle<ExternalTwoByteString>
 
 Handle<String> Factory::LookupSingleCharacterStringFromCode(uint16_t code) {
   if (code <= unibrow::Latin1::kMaxChar) {
-    {
-      DisallowGarbageCollection no_gc;
-      Object value = single_character_string_cache()->get(code);
-      if (value != *undefined_value()) {
-        return handle(String::cast(value), isolate());
-      }
+    Handle<String> result;
+    if (TryLookupSingleCharacterStringFromCode(code).ToHandle(&result)) {
+      return result;
     }
     uint8_t buffer[] = {static_cast<uint8_t>(code)};
-    Handle<String> result = InternalizeString(Vector<const uint8_t>(buffer, 1));
+    result = InternalizeString(Vector<const uint8_t>(buffer, 1));
     single_character_string_cache()->set(code, *result);
     return result;
   }
   uint16_t buffer[] = {code};
   return InternalizeString(Vector<const uint16_t>(buffer, 1));
+}
+
+MaybeHandle<String> Factory::TryLookupSingleCharacterStringFromCode(
+    uint16_t code) {
+  DisallowGarbageCollection no_gc;
+  if (code > unibrow::Latin1::kMaxChar) return {};
+  Object value = single_character_string_cache()->get(code);
+  if (value == ReadOnlyRoots(isolate()).undefined_value()) return {};
+  return handle(String::cast(value), isolate());
 }
 
 Handle<String> Factory::NewSurrogatePairString(uint16_t lead, uint16_t trail) {
