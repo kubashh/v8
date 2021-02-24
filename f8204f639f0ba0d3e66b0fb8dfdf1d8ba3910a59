@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a982281_4b1a2546",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-24T03:49:03Z",
+      "side": 1,
+      "message": "@Thibaud: PTAL.\n@Clemens: Please approve as OWNER, and feel free to review as well.",
+      "revId": "f8204f639f0ba0d3e66b0fb8dfdf1d8ba3910a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
