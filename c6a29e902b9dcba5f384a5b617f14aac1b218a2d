@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77839aa8_eedfd3a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-24T03:31:10Z",
+      "side": 1,
+      "message": "This should be an entirely mechanical change. PTAL.",
+      "revId": "c6a29e902b9dcba5f384a5b617f14aac1b218a2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
