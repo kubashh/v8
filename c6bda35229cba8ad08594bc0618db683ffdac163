@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb2cc965_83825290",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-24T15:11:31Z",
+      "side": 1,
+      "message": "Can we now remove GetOwnElementFromHeap?",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46b82b1e_dda1480f",
         "filename": "src/objects/lookup.cc",
         "patchSetId": 9
