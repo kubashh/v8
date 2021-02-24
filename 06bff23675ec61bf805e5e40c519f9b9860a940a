@@ -33,6 +33,23 @@
       "message": "LGTM, thanks!\n\nAnd I think the syntax is fine.",
       "revId": "06bff23675ec61bf805e5e40c519f9b9860a940a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78fe473e_c49e0e37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-02-24T08:32:55Z",
+      "side": 1,
+      "message": "Looks great, thanks for the quick turnaround!",
+      "revId": "06bff23675ec61bf805e5e40c519f9b9860a940a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
