@@ -316,6 +316,10 @@ class ConcurrentLookupIterator final : public AllStatic {
   V8_EXPORT_PRIVATE static base::Optional<Object> TryGetOwnCowElement(
       Isolate* isolate, FixedArray array_elements, ElementsKind elements_kind,
       int array_length, size_t index);
+
+  V8_EXPORT_PRIVATE static base::Optional<Object> TryGetOwnConstantElement(
+      Isolate* isolate, JSObject holder, FixedArrayBase elements,
+      ElementsKind elements_kind, size_t index);
 };
 
 }  // namespace internal
