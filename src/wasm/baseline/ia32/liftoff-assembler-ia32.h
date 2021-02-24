@@ -4973,26 +4973,42 @@ void LiftoffAssembler::DeallocateStackSlot(uint32_t size) {
 }
 
 void LiftoffStackSlots::Construct() {
+  DCHECK_LT(0, slots_.size());
+  int last_stack_slot = slots_[0].stack_slot_ + 1;
   for (auto& slot : slots_) {
+    const int stack_slot = slot.stack_slot_;
+    DCHECK_GT(last_stack_slot, stack_slot);
+    int stack_decrement = (last_stack_slot - stack_slot) * kSystemPointerSize;
+    last_stack_slot = stack_slot;
     const LiftoffAssembler::VarState& src = slot.src_;
     switch (src.loc()) {
       case LiftoffAssembler::VarState::kStack:
         // The combination of AllocateStackSpace and 2 movdqu is usually smaller
         // in code size than doing 4 pushes.
         if (src.kind() == kS128) {
-          asm_->AllocateStackSpace(sizeof(double) * 2);
+          asm_->AllocateStackSpace(stack_decrement);
           asm_->movdqu(liftoff::kScratchDoubleReg,
                        liftoff::GetStackSlot(slot.src_offset_));
           asm_->movdqu(Operand(esp, 0), liftoff::kScratchDoubleReg);
           break;
         }
         if (src.kind() == kF64) {
+          if (stack_decrement > kDoubleSize) {
+            asm_->AllocateStackSpace(stack_decrement - kDoubleSize);
+            stack_decrement -= kSystemPointerSize;
+          }
           DCHECK_EQ(kLowWord, slot.half_);
           asm_->push(liftoff::GetHalfStackSlot(slot.src_offset_, kHighWord));
+        }
+        if (stack_decrement > kSystemPointerSize) {
+          asm_->AllocateStackSpace(stack_decrement - kSystemPointerSize);
         }
         asm_->push(liftoff::GetHalfStackSlot(slot.src_offset_, slot.half_));
         break;
       case LiftoffAssembler::VarState::kRegister:
+        if (stack_decrement > kSystemPointerSize) {
+          asm_->AllocateStackSpace(stack_decrement - kSystemPointerSize);
+        }
         if (src.kind() == kI64) {
           liftoff::push(
               asm_, slot.half_ == kLowWord ? src.reg().low() : src.reg().high(),
@@ -5002,6 +5018,9 @@ void LiftoffStackSlots::Construct() {
         }
         break;
       case LiftoffAssembler::VarState::kIntConst:
+        if (stack_decrement > kSystemPointerSize) {
+          asm_->AllocateStackSpace(stack_decrement - kSystemPointerSize);
+        }
         // The high word is the sign extension of the low word.
         asm_->push(Immediate(slot.half_ == kLowWord ? src.i32_const()
                                                     : src.i32_const() >> 31));
