@@ -51,6 +51,8 @@ class TaggedField : public AllStatic {
   static inline void Relaxed_Store(HeapObject host, int offset, T value);
 
   static inline T Acquire_Load(HeapObject host, int offset = 0);
+  static inline T Acquire_Load_No_Unpack(IsolateRoot isolate, HeapObject host,
+                                         int offset = 0);
   static inline T Acquire_Load(IsolateRoot isolate, HeapObject host,
                                int offset = 0);
 
@@ -59,6 +61,12 @@ class TaggedField : public AllStatic {
 
   static inline Tagged_t Release_CompareAndSwap(HeapObject host, T old,
                                                 T value);
+
+  // Note: Use these *_Map_Word methods only when loading a MapWord from a
+  // MapField.
+  static inline T Relaxed_Load_Map_Word(IsolateRoot isolate, HeapObject host);
+  static inline void Relaxed_Store_Map_Word(HeapObject host, T value);
+  static inline void Release_Store_Map_Word(HeapObject host, T value);
 
  private:
   static inline Tagged_t* location(HeapObject host, int offset = 0);

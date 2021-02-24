@@ -4822,7 +4822,7 @@ namespace {
 void GenerateFieldValueVerifier(const std::string& class_name, bool indexed,
                                 std::string offset, const Field& leaf_field,
                                 std::string indexed_field_size,
-                                std::ostream& cc_contents) {
+                                std::ostream& cc_contents, bool is_map) {
   const Type* field_type = leaf_field.name_and_type.type;
 
   bool maybe_object =
@@ -4837,8 +4837,12 @@ void GenerateFieldValueVerifier(const std::string& class_name, bool indexed,
   const std::string value = leaf_field.name_and_type.name + "__value";
 
   // Read the field.
-  cc_contents << "    " << object_type << " " << value << " = TaggedField<"
-              << object_type << ">::load(o, " << offset << ");\n";
+  if (is_map) {
+    cc_contents << "    " << object_type << " " << value << " = o.map();\n";
+  } else {
+    cc_contents << "    " << object_type << " " << value << " = TaggedField<"
+                << object_type << ">::load(o, " << offset << ");\n";
+  }
 
   // Call VerifyPointer or VerifyMaybeObjectPointer on it.
   cc_contents << "    " << object_type << "::" << verify_fn << "(isolate, "
@@ -4905,13 +4909,13 @@ void GenerateClassFieldVerifier(const std::string& class_name,
             class_name, f.index.has_value(),
             field_start_offset + " + " + std::to_string(*struct_field.offset),
             struct_field, std::to_string((*struct_type)->PackedSize()),
-            cc_contents);
+            cc_contents, f.name_and_type.name == "map");
       }
     }
   } else {
     GenerateFieldValueVerifier(class_name, f.index.has_value(),
                                field_start_offset, f, "kTaggedSize",
-                               cc_contents);
+                               cc_contents, f.name_and_type.name == "map");
   }
 
   cc_contents << "  }\n";

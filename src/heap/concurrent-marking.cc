@@ -179,6 +179,12 @@ class ConcurrentMarkingVisitor final
       }
     }
 
+    void VisitMapPointer(HeapObject object) override {
+      ObjectSlot p = object.map_slot();
+      Map map = Map::unchecked_cast(object.map());
+      slot_snapshot_->add(p, map);
+    }
+
     void VisitPointers(HeapObject host, MaybeObjectSlot start,
                        MaybeObjectSlot end) override {
       // This should never happen, because we don't use snapshotting for objects
@@ -270,7 +276,7 @@ class ConcurrentMarkingVisitor final
   template <typename T, typename TBodyDescriptor>
   const SlotSnapshot& MakeSlotSnapshot(Map map, T object, int size) {
     SlotSnapshottingVisitor visitor(&slot_snapshot_);
-    visitor.VisitPointer(object, object.map_slot());
+    visitor.VisitMapPointer(object);
     TBodyDescriptor::IterateBody(map, object, size, &visitor);
     return slot_snapshot_;
   }

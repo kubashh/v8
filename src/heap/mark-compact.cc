@@ -82,6 +82,7 @@ class MarkingVerifier : public ObjectVisitor, public RootVisitor {
   virtual ConcurrentBitmap<AccessMode::NON_ATOMIC>* bitmap(
       const MemoryChunk* chunk) = 0;
 
+  virtual void VerifyMap(Map map) = 0;
   virtual void VerifyPointers(ObjectSlot start, ObjectSlot end) = 0;
   virtual void VerifyPointers(MaybeObjectSlot start, MaybeObjectSlot end) = 0;
   virtual void VerifyRootPointers(FullObjectSlot start, FullObjectSlot end) = 0;
@@ -104,6 +105,8 @@ class MarkingVerifier : public ObjectVisitor, public RootVisitor {
                          FullObjectSlot start, FullObjectSlot end) override {
     VerifyRootPointers(start, end);
   }
+
+  void VisitMapPointer(HeapObject object) override { VerifyMap(object.map()); }
 
   void VerifyRoots();
   void VerifyMarkingOnPage(const Page* page, Address start, Address end);
@@ -208,6 +211,8 @@ class FullMarkingVerifier : public MarkingVerifier {
     return marking_state_->IsBlackOrGrey(object);
   }
 
+  void VerifyMap(Map map) override { VerifyHeapObjectImpl(map); }
+
   void VerifyPointers(ObjectSlot start, ObjectSlot end) override {
     VerifyPointersImpl(start, end);
   }
@@ -271,11 +276,14 @@ class EvacuationVerifier : public ObjectVisitor, public RootVisitor {
     VerifyRootPointers(start, end);
   }
 
+  void VisitMapPointer(HeapObject object) override { VerifyMap(object.map()); }
+
  protected:
   explicit EvacuationVerifier(Heap* heap) : heap_(heap) {}
 
   inline Heap* heap() { return heap_; }
 
+  virtual void VerifyMap(Map map) = 0;
   virtual void VerifyPointers(ObjectSlot start, ObjectSlot end) = 0;
   virtual void VerifyPointers(MaybeObjectSlot start, MaybeObjectSlot end) = 0;
   virtual void VerifyRootPointers(FullObjectSlot start, FullObjectSlot end) = 0;
@@ -354,7 +362,7 @@ class FullEvacuationVerifier : public EvacuationVerifier {
       }
     }
   }
-
+  void VerifyMap(Map map) override { VerifyHeapObjectImpl(map); }
   void VerifyPointers(ObjectSlot start, ObjectSlot end) override {
     VerifyPointersImpl(start, end);
   }
@@ -954,12 +962,15 @@ class MarkCompactCollector::RootMarkingVisitor final : public RootVisitor {
 
   void VisitRootPointer(Root root, const char* description,
                         FullObjectSlot p) final {
+    DCHECK(!MapWord::IsPacked(p.Relaxed_Load().ptr()));
     MarkObjectByPointer(root, p);
   }
 
   void VisitRootPointers(Root root, const char* description,
                          FullObjectSlot start, FullObjectSlot end) final {
-    for (FullObjectSlot p = start; p < end; ++p) MarkObjectByPointer(root, p);
+    for (FullObjectSlot p = start; p < end; ++p) {
+      MarkObjectByPointer(root, p);
+    }
   }
 
  private:
@@ -991,8 +1002,12 @@ class MarkCompactCollector::CustomRootBodyMarkingVisitor final
     MarkObject(host, *p);
   }
 
+  void VisitMapPointer(HeapObject host) final { MarkObject(host, host.map()); }
+
   void VisitPointers(HeapObject host, ObjectSlot start, ObjectSlot end) final {
     for (ObjectSlot p = start; p < end; ++p) {
+      // The map slot should be handled in VisitMapPointer.
+      DCHECK_NE(host.map_slot(), p);
       DCHECK(!HasWeakHeapObjectTag(*p));
       MarkObject(host, *p);
     }
@@ -1145,6 +1160,7 @@ class RecordMigratedSlotVisitor : public ObjectVisitor {
   }
 
   inline void VisitPointer(HeapObject host, MaybeObjectSlot p) final {
+    DCHECK(!MapWord::IsPacked(p.Relaxed_Load().ptr()));
     RecordMigratedSlot(host, *p, p.address());
   }
 
@@ -2757,6 +2773,7 @@ class PointersUpdatingVisitor : public ObjectVisitor, public RootVisitor {
 
   void VisitRootPointer(Root root, const char* description,
                         FullObjectSlot p) override {
+    DCHECK(!MapWord::IsPacked(p.Relaxed_Load().ptr()));
     UpdateRootSlotInternal(isolate_, p);
   }
 
@@ -4133,6 +4150,8 @@ class YoungGenerationMarkingVerifier : public MarkingVerifier {
   }
 
  protected:
+  void VerifyMap(Map map) override { VerifyHeapObjectImpl(map); }
+
   void VerifyPointers(ObjectSlot start, ObjectSlot end) override {
     VerifyPointersImpl(start, end);
   }
@@ -4201,7 +4220,7 @@ class YoungGenerationEvacuationVerifier : public EvacuationVerifier {
       }
     }
   }
-
+  void VerifyMap(Map map) override { VerifyHeapObjectImpl(map); }
   void VerifyPointers(ObjectSlot start, ObjectSlot end) override {
     VerifyPointersImpl(start, end);
   }
@@ -4470,6 +4489,7 @@ class MinorMarkCompactCollector::RootMarkingVisitor : public RootVisitor {
   void VisitRootPointers(Root root, const char* description,
                          FullObjectSlot start, FullObjectSlot end) final {
     for (FullObjectSlot p = start; p < end; ++p) {
+      DCHECK(!MapWord::IsPacked((*p).ptr()));
       MarkObjectByPointer(p);
     }
   }

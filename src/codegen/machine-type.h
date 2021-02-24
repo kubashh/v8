@@ -21,6 +21,19 @@ enum class MachineRepresentation : uint8_t {
   kWord16,
   kWord32,
   kWord64,
+  // (uncompressed) MapWord
+  // kMapWord is the representation of a map word, i.e. a map in the header
+  // of a HeapObject.
+  // If V8_MAP_PACKING is disabled, a map word is just the map itself. Hence
+  //     kMapWord is equivalent to kTaggedPointer -- in fact it will be
+  //     translated to kTaggedPointer during memory lowering.
+  // If V8_MAP_PACKING is enabled, a map word is a Smi-like encoding of a map
+  //     and some meta data. Memory lowering of kMapWord loads/stores
+  //     produces low-level kTagged loads/stores plus the necessary
+  //     decode/encode operations.
+  // In either case, the kMapWord representation is not used after memory
+  // lowering.
+  kMapWord,
   kTaggedSigned,       // (uncompressed) Smi
   kTaggedPointer,      // (uncompressed) HeapObject
   kTagged,             // (uncompressed) Object (Smi or HeapObject)
@@ -83,6 +96,10 @@ class MachineType {
 
   constexpr bool IsNone() const {
     return representation() == MachineRepresentation::kNone;
+  }
+
+  constexpr bool IsMapWord() const {
+    return representation() == MachineRepresentation::kMapWord;
   }
 
   constexpr bool IsSigned() const {
@@ -169,6 +186,9 @@ class MachineType {
   constexpr static MachineType TaggedPointer() {
     return MachineType(MachineRepresentation::kTaggedPointer,
                        MachineSemantic::kAny);
+  }
+  constexpr static MachineType MapInHeader() {
+    return MachineType(MachineRepresentation::kMapWord, MachineSemantic::kAny);
   }
   constexpr static MachineType TaggedSigned() {
     return MachineType(MachineRepresentation::kTaggedSigned,
@@ -261,7 +281,8 @@ inline bool IsFloatingPoint(MachineRepresentation rep) {
 
 inline bool CanBeTaggedPointer(MachineRepresentation rep) {
   return rep == MachineRepresentation::kTagged ||
-         rep == MachineRepresentation::kTaggedPointer;
+         rep == MachineRepresentation::kTaggedPointer ||
+         rep == MachineRepresentation::kMapWord;
 }
 
 inline bool CanBeTaggedSigned(MachineRepresentation rep) {
@@ -306,6 +327,7 @@ V8_EXPORT_PRIVATE inline constexpr int ElementSizeLog2Of(
     case MachineRepresentation::kTaggedSigned:
     case MachineRepresentation::kTaggedPointer:
     case MachineRepresentation::kTagged:
+    case MachineRepresentation::kMapWord:
     case MachineRepresentation::kCompressedPointer:
     case MachineRepresentation::kCompressed:
       return kTaggedSizeLog2;
