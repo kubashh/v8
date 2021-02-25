@@ -20713,6 +20713,40 @@ THREADED_TEST(InstanceCheckOnPrototypeAccessor) {
   CheckInstanceCheckedAccessors(true);
 }
 
+THREADED_TEST(ApiObjectHasInstanceCheck) {
+  LocalContext context;
+  v8::HandleScope scope(context->GetIsolate());
+
+  Local<FunctionTemplate> templ = FunctionTemplate::New(context->GetIsolate());
+  CHECK(context->Global()
+            ->Set(context.local(), v8_str("f"),
+                  templ->GetFunction(context.local()).ToLocalChecked())
+            .FromJust());
+
+  printf("Testing positive ...\n");
+  CompileRun("var obj = new f();");
+  CHECK(templ->ApiObjectHasInstance(*context->Global()
+                                         ->Get(context.local(), v8_str("obj"))
+                                         .ToLocalChecked()));
+
+  printf("Testing negative ...\n");
+  CompileRun(
+      "var obj = {};"
+      "obj.__proto__ = new f();");
+  CHECK(!templ->ApiObjectHasInstance(*context->Global()
+                                          ->Get(context.local(), v8_str("obj"))
+                                          .ToLocalChecked()));
+
+  printf("Testing positive with modified prototype chain ...\n");
+  CompileRun(
+      "var obj = new f();"
+      "var pro = {};"
+      "pro.__proto__ = obj.__proto__;"
+      "obj.__proto__ = pro;");
+  CHECK(templ->ApiObjectHasInstance(*context->Global()
+                                         ->Get(context.local(), v8_str("obj"))
+                                         .ToLocalChecked()));
+}
 
 TEST(TryFinallyMessage) {
   LocalContext context;
@@ -27649,6 +27683,47 @@ struct UnexpectedObjectChecker
   }
 };
 
+struct EmbedderType {
+  int data;
+};
+
+struct ApiObjectChecker
+    : BasicApiChecker<v8::ApiObject, ApiObjectChecker, void> {
+  ApiObjectChecker(v8::FunctionTemplate* ctor, int data)
+      : ctor_(ctor), initial_data_(data) {}
+
+  static void FastCallback(v8::ApiObject receiver, v8::ApiObject argument,
+                           v8::FastApiCallbackOptions& options) {
+    v8::Object* receiver_obj = reinterpret_cast<v8::Object*>(&receiver);
+    ApiObjectChecker* receiver_ptr =
+        GetInternalField<ApiObjectChecker, kV8WrapperObjectIndex>(receiver_obj);
+    receiver_ptr->result_ |= ApiCheckerResult::kFastCalled;
+
+    v8::Object* argument_obj = reinterpret_cast<v8::Object*>(&argument);
+    EmbedderType* argument_ptr =
+        GetInternalField<EmbedderType, kV8WrapperObjectIndex>(argument_obj);
+    CHECK(receiver_ptr->ctor_->ApiObjectHasInstance(
+        reinterpret_cast<v8::Value*>(argument_obj)));
+
+    argument_ptr->data = receiver_ptr->initial_data_;
+  }
+  static void SlowCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    v8::Object* receiver_obj = v8::Object::Cast(*info.Holder());
+    ApiObjectChecker* receiver_ptr =
+        GetInternalField<ApiObjectChecker, kV8WrapperObjectIndex>(receiver_obj);
+    receiver_ptr->result_ |= ApiCheckerResult::kSlowCalled;
+
+    CHECK(info[0]->IsObject());
+    v8::Object* argument_obj = v8::Object::Cast(*info[0]);
+    CHECK(receiver_ptr->ctor_->ApiObjectHasInstance(
+        reinterpret_cast<v8::Value*>(argument_obj)));
+  }
+
+  v8::FunctionTemplate* ctor_;
+  int fast_value_ = 0;
+  int initial_data_;
+};
+
 template <typename Value, typename Impl, typename Ret>
 bool SetupTest(v8::Local<v8::Value> initial_value, LocalContext* env,
                BasicApiChecker<Value, Impl, Ret>* checker,
@@ -27767,6 +27842,46 @@ void CallAndCheck(
     CHECK(checker.DidCallFast());
     CheckEqual(checker.fast_value_, expected_value);
   }
+}
+
+void CheckApiObjectArg() {
+  LocalContext env;
+  v8::Isolate* isolate = CcTest::isolate();
+  Local<v8::FunctionTemplate> api_obj_ctor = v8::FunctionTemplate::New(isolate);
+  v8::Local<v8::ObjectTemplate> api_obj_template =
+      api_obj_ctor->InstanceTemplate();
+  api_obj_template->SetInternalFieldCount(kV8WrapperObjectIndex + 1);
+
+  EmbedderType embedder_obj;
+  v8::Local<v8::Object> api_obj =
+      api_obj_template->NewInstance(env.local()).ToLocalChecked();
+  api_obj->SetAlignedPointerInInternalField(
+      kV8WrapperObjectIndex, reinterpret_cast<void*>(&embedder_obj));
+  CHECK(env->Global()
+            ->Set(env.local(), v8_str("api_object"), api_obj)
+            .FromJust());
+
+  const int data = 42;
+  ApiObjectChecker checker(*api_obj_ctor, data);
+  bool has_caught =
+      SetupTest(v8_num(data), &env, &checker,
+                "function func() { return receiver.api_func(api_object); }"
+                "%PrepareFunctionForOptimization(func);"
+                "func(value);");
+  checker.result_ = ApiCheckerResult::kNotCalled;
+  CHECK(!has_caught);
+
+  v8::TryCatch try_catch(isolate);
+  v8::Local<v8::Value> result = CompileRun(
+      "%OptimizeFunctionOnNextCall(func);"
+      "func();");
+  if (!try_catch.HasCaught()) {
+    CHECK(result->IsUndefined());
+  }
+
+  CHECK(checker.DidCallFast());
+  CHECK_EQ(embedder_obj.data, data);
+  CHECK(!checker.DidCallSlow());
 }
 
 template <typename T>
@@ -28480,8 +28595,8 @@ TEST(FastApiCalls) {
   CallWithUnexpectedObjectType(v8_str("str"));
   CallWithUnexpectedObjectType(CompileRun("new Proxy({}, {});"));
 
-  // TODO(mslekova): Add corner cases for 64-bit values.
-  // TODO(mslekova): Add main cases for float and double.
+  CheckApiObjectArg();
+
   // TODO(mslekova): Restructure the tests so that the fast optimized calls
   // are compared against the slow optimized calls.
   // TODO(mslekova): Add tests for FTI that requires access check.
