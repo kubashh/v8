@@ -39,6 +39,75 @@
       },
       "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32491ee5_8ee0d0e1",
+        "filename": "src/diagnostics/etw-jit.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-25T17:51:42Z",
+      "side": 1,
+      "message": "nit: Isolate* should work now",
+      "range": {
+        "startLine": 45,
+        "startChar": 25,
+        "endLine": 45,
+        "endChar": 43
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ea6f4a2_ad2c25cd",
+        "filename": "src/diagnostics/etw-jit.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-25T17:51:42Z",
+      "side": 1,
+      "message": "nit: no longer needed I guess 😊",
+      "range": {
+        "startLine": 72,
+        "startChar": 44,
+        "endLine": 72,
+        "endChar": 52
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6525d15b_d906ae60",
+        "filename": "src/diagnostics/etw-jit.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-25T17:51:42Z",
+      "side": 1,
+      "message": "Do you plan on logging this at some (separate CL)?",
+      "range": {
+        "startLine": 96,
+        "startChar": 15,
+        "endLine": 96,
+        "endChar": 58
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
