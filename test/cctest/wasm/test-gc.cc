@@ -497,8 +497,8 @@ WASM_COMPILED_EXEC_TEST(WasmPackedStructS) {
 
   const byte local_index = 0;
 
-  int32_t expected_output_0 = 0x80;
-  int32_t expected_output_1 = 42;
+  const int32_t expected_output_0 = 0x80;
+  const int32_t expected_output_1 = 42;
 
   const byte kF0 = tester.DefineFunction(
       tester.sigs.i_v(), {struct_type},
