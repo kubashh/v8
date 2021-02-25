@@ -51,5 +51,23 @@ TEST_F(TestingTest, OverrideEmbeddertackStateScope) {
   }
 }
 
+TEST_F(TestingTest, CollectGarbageForTesting) {
+  cppgc::testing::Heap testing_heap{GetHeap()->GetHeapHandle()};
+  {
+    auto* gced = MakeGarbageCollected<GCed>(GetHeap()->GetAllocationHandle());
+    WeakPersistent<GCed> weak{gced};
+    testing_heap.CollectGarbage(EmbedderStackState::kMayContainHeapPointers);
+    EXPECT_TRUE(weak);
+    USE(gced);
+  }
+  {
+    auto* gced = MakeGarbageCollected<GCed>(GetHeap()->GetAllocationHandle());
+    WeakPersistent<GCed> weak{gced};
+    USE(gced);  // Will be reclaimed because of overriden stack state.
+    testing_heap.CollectGarbage(EmbedderStackState::kNoHeapPointers);
+    EXPECT_FALSE(weak);
+  }
+}
+
 }  // namespace internal
 }  // namespace cppgc
