@@ -378,6 +378,30 @@
       },
       "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dccd2f5e_4ebf2000",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-02-25T10:09:18Z",
+      "side": 1,
+      "message": "Re string_access_ lock, I guess it is theoretically possible to include those cases but we haven\u0027t taken a look at them. We would need to make sure that the main thread locks exclusively every time their contents are modified and between each possible transition (https://docs.google.com/document/d/1OzMXX-boAMssbCR3s2XsL4-wtX5LxbcagwFXmB6-ns0/edit#heading\u003dh.2wcr3outnpgu). They are quite a lot which is why we ended up only reading / locking for InternalizedStrings which is only recently being close to being done. We could re-assess if other string types are needed.\n\nRe Isolate, we have some cases where we call the same function with either an Isolate or a LocalIsolate (e.g. String::Get https://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/string-inl.h;l\u003d582;drc\u003d9c6d177a45e95e3072de79b5165055b0b955e569). We then do different things whether we have an Isolate or a LocalIsolate. Templating would just be a convenience for the actual solution of \"Have two methods, one that takes an Isolate, and one that takes a LocalIsolate\".\nProbably the TryGetOwnConstantElement method itself doesn\u0027t know if it\u0027s on the main thread or not. However, we know it from the js-heap-broker call using IsMainThread() https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-heap-broker.h;l\u003d318;drc\u003d6531b4f2fda5515c3315e50d1cfb709e607d53e6. We could do:\n  if (IsMainThread()) {\n    TryGetOwnConstantElement(broker()-\u003eisolate(), ...);\n  } else {\n    TryGetOwnConstantElement(broker()-\u003elocal_isolate(), ...);\n  }\n\nThis would help the string case, but we would need to check if we could use a LocalIsolate in the other places where {isolate} is being used.",
+      "parentUuid": "8b727a22_bd79f754",
+      "range": {
+        "startLine": 1370,
+        "startChar": 6,
+        "endLine": 1370,
+        "endChar": 67
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
