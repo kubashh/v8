@@ -5456,22 +5456,6 @@ class V8_EXPORT ArrayBuffer : public Object {
   static Local<ArrayBuffer> New(Isolate* isolate, size_t byte_length);
 
   /**
-   * Create a new ArrayBuffer over an existing memory block.
-   * The created array buffer is by default immediately in externalized state.
-   * In externalized state, the memory block will not be reclaimed when a
-   * created ArrayBuffer is garbage-collected.
-   * In internalized state, the memory block will be released using
-   * |Allocator::Free| once all ArrayBuffers referencing it are collected by
-   * the garbage collector.
-   */
-  V8_DEPRECATED(
-      "Use the version that takes a BackingStore. "
-      "See http://crbug.com/v8/9908.")
-  static Local<ArrayBuffer> New(
-      Isolate* isolate, void* data, size_t byte_length,
-      ArrayBufferCreationMode mode = ArrayBufferCreationMode::kExternalized);
-
-  /**
    * Create a new ArrayBuffer with an existing backing store.
    * The created array keeps a reference to the backing store until the array
    * is garbage collected. Note that the IsExternal bit does not affect this
@@ -5510,15 +5494,6 @@ class V8_EXPORT ArrayBuffer : public Object {
       void* deleter_data);
 
   /**
-   * Returns true if ArrayBuffer is externalized, that is, does not
-   * own its memory block.
-   */
-  V8_DEPRECATED(
-      "With v8::BackingStore externalized ArrayBuffers are "
-      "the same as ordinary ArrayBuffers. See http://crbug.com/v8/9908.")
-  bool IsExternal() const;
-
-  /**
    * Returns true if this ArrayBuffer may be detached.
    */
   bool IsDetachable() const;
@@ -5532,46 +5507,10 @@ class V8_EXPORT ArrayBuffer : public Object {
   void Detach();
 
   /**
-   * Make this ArrayBuffer external. The pointer to underlying memory block
-   * and byte length are returned as |Contents| structure. After ArrayBuffer
-   * had been externalized, it does no longer own the memory block. The caller
-   * should take steps to free memory when it is no longer needed.
-   *
-   * The Data pointer of ArrayBuffer::Contents must be freed using the provided
-   * deleter, which will call ArrayBuffer::Allocator::Free if the buffer
-   * was allocated with ArrayBuffer::Allocator::Allocate.
-   */
-  V8_DEPRECATED("Use GetBackingStore or Detach. See http://crbug.com/v8/9908.")
-  Contents Externalize();
-
-  /**
-   * Marks this ArrayBuffer external given a witness that the embedder
-   * has fetched the backing store using the new GetBackingStore() function.
-   *
-   * With the new lifetime management of backing stores there is no need for
-   * externalizing, so this function exists only to make the transition easier.
-   */
-  V8_DEPRECATED("This will be removed together with IsExternal.")
-  void Externalize(const std::shared_ptr<BackingStore>& backing_store);
-
-  /**
-   * Get a pointer to the ArrayBuffer's underlying memory block without
-   * externalizing it. If the ArrayBuffer is not externalized, this pointer
-   * will become invalid as soon as the ArrayBuffer gets garbage collected.
-   *
-   * The embedder should make sure to hold a strong reference to the
-   * ArrayBuffer while accessing this pointer.
-   */
-  V8_DEPRECATED("Use GetBackingStore. See http://crbug.com/v8/9908.")
-  Contents GetContents();
-
-  /**
    * Get a shared pointer to the backing store of this array buffer. This
    * pointer coordinates the lifetime management of the internal storage
    * with any live ArrayBuffers on the heap, even across isolates. The embedder
    * should not attempt to manage lifetime of the storage through other means.
-   *
-   * This function replaces both Externalize() and GetContents().
    */
   std::shared_ptr<BackingStore> GetBackingStore();
 
@@ -5583,7 +5522,6 @@ class V8_EXPORT ArrayBuffer : public Object {
  private:
   ArrayBuffer();
   static void CheckCast(Value* obj);
-  Contents GetContents(bool externalize);
 };
 
 
@@ -5941,19 +5879,6 @@ class V8_EXPORT SharedArrayBuffer : public Object {
   static Local<SharedArrayBuffer> New(Isolate* isolate, size_t byte_length);
 
   /**
-   * Create a new SharedArrayBuffer over an existing memory block.  The created
-   * array buffer is immediately in externalized state unless otherwise
-   * specified. The memory block will not be reclaimed when a created
-   * SharedArrayBuffer is garbage-collected.
-   */
-  V8_DEPRECATED(
-      "Use the version that takes a BackingStore. "
-      "See http://crbug.com/v8/9908.")
-  static Local<SharedArrayBuffer> New(
-      Isolate* isolate, void* data, size_t byte_length,
-      ArrayBufferCreationMode mode = ArrayBufferCreationMode::kExternalized);
-
-  /**
    * Create a new SharedArrayBuffer with an existing backing store.
    * The created array keeps a reference to the backing store until the array
    * is garbage collected. Note that the IsExternal bit does not affect this
@@ -5992,72 +5917,10 @@ class V8_EXPORT SharedArrayBuffer : public Object {
       void* deleter_data);
 
   /**
-   * Create a new SharedArrayBuffer over an existing memory block. Propagate
-   * flags to indicate whether the underlying buffer can be grown.
-   */
-  V8_DEPRECATED(
-      "Use the version that takes a BackingStore. "
-      "See http://crbug.com/v8/9908.")
-  static Local<SharedArrayBuffer> New(
-      Isolate* isolate, const SharedArrayBuffer::Contents&,
-      ArrayBufferCreationMode mode = ArrayBufferCreationMode::kExternalized);
-
-  /**
-   * Returns true if SharedArrayBuffer is externalized, that is, does not
-   * own its memory block.
-   */
-  V8_DEPRECATED(
-      "With v8::BackingStore externalized SharedArrayBuffers are the same "
-      "as ordinary SharedArrayBuffers. See http://crbug.com/v8/9908.")
-  bool IsExternal() const;
-
-  /**
-   * Make this SharedArrayBuffer external. The pointer to underlying memory
-   * block and byte length are returned as |Contents| structure. After
-   * SharedArrayBuffer had been externalized, it does no longer own the memory
-   * block. The caller should take steps to free memory when it is no longer
-   * needed.
-   *
-   * The memory block is guaranteed to be allocated with |Allocator::Allocate|
-   * by the allocator specified in
-   * v8::Isolate::CreateParams::array_buffer_allocator.
-   *
-   */
-  V8_DEPRECATED("Use GetBackingStore or Detach. See http://crbug.com/v8/9908.")
-  Contents Externalize();
-
-  /**
-   * Marks this SharedArrayBuffer external given a witness that the embedder
-   * has fetched the backing store using the new GetBackingStore() function.
-   *
-   * With the new lifetime management of backing stores there is no need for
-   * externalizing, so this function exists only to make the transition easier.
-   */
-  V8_DEPRECATED("This will be removed together with IsExternal.")
-  void Externalize(const std::shared_ptr<BackingStore>& backing_store);
-
-  /**
-   * Get a pointer to the ArrayBuffer's underlying memory block without
-   * externalizing it. If the ArrayBuffer is not externalized, this pointer
-   * will become invalid as soon as the ArrayBuffer became garbage collected.
-   *
-   * The embedder should make sure to hold a strong reference to the
-   * ArrayBuffer while accessing this pointer.
-   *
-   * The memory block is guaranteed to be allocated with |Allocator::Allocate|
-   * by the allocator specified in
-   * v8::Isolate::CreateParams::array_buffer_allocator.
-   */
-  V8_DEPRECATED("Use GetBackingStore. See http://crbug.com/v8/9908.")
-  Contents GetContents();
-
-  /**
    * Get a shared pointer to the backing store of this array buffer. This
    * pointer coordinates the lifetime management of the internal storage
    * with any live ArrayBuffers on the heap, even across isolates. The embedder
    * should not attempt to manage lifetime of the storage through other means.
-   *
-   * This function replaces both Externalize() and GetContents().
    */
   std::shared_ptr<BackingStore> GetBackingStore();
 
@@ -6068,7 +5931,6 @@ class V8_EXPORT SharedArrayBuffer : public Object {
  private:
   SharedArrayBuffer();
   static void CheckCast(Value* obj);
-  Contents GetContents(bool externalize);
 };
 
 
