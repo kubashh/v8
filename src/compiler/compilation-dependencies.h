@@ -45,6 +45,12 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   // Record the assumption that {map} stays stable.
   void DependOnStableMap(const MapRef& map);
 
+  // Requires that |map| is the map of a dictionary mode prototype. Depend  on
+  // a) no properties being added or removed from the prototype object
+  // associated with |map| and b) none of its constant properties becoming
+  // non-constant.
+  void DependOnDictionaryPrototypeShape(const MapRef& map);
+
   // Return the pretenure mode of {site} and record the assumption that it does
   // not change.
   AllocationType DependOnPretenureMode(const AllocationSiteRef& site);
@@ -79,13 +85,18 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   // Record the assumption that {site}'s {ElementsKind} doesn't change.
   void DependOnElementsKind(const AllocationSiteRef& site);
 
-  // For each given map, depend on the stability of (the maps of) all prototypes
+  // For each given map, depend on the "shape" of (the maps of) all prototypes
   // up to (and including) the {last_prototype}.
+  // For fast mode prototypes, this means depending on the stability of the map.
+  // For dictionary mode prototypes (which are only allowed when loading a
+  // constant and the holder is not the receiver), this means installing a
+  // dependency that is triggered whenever the prototype validity cell would be
+  // invalidated (independently from whether or not it is already invalid).
   template <class MapContainer>
-  void DependOnStablePrototypeChains(
-      MapContainer const& receiver_maps, WhereToStart start,
-      base::Optional<JSObjectRef> last_prototype =
-          base::Optional<JSObjectRef>());
+  void DependOnPrototypeChains(MapContainer const& receiver_maps,
+                               WhereToStart start,
+                               base::Optional<JSObjectRef> last_prototype =
+                                   base::Optional<JSObjectRef>());
 
   // Like DependOnElementsKind but also applies to all nested allocation sites.
   void DependOnElementsKinds(const AllocationSiteRef& site);

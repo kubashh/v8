@@ -63,6 +63,7 @@ class PropertyAccessBuilder {
                            PropertyAccessInfo const& access_info,
                            Node* lookup_start_object, Node** effect,
                            Node** control);
+  Node* BuildLoadDictPrototypeConstant(PropertyAccessInfo const& access_info);
 
   // Builds the load for data-field access for minimorphic loads that use
   // dynamic map checks. These cannot depend on any information from the maps.

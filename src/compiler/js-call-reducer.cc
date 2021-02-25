@@ -7704,9 +7704,9 @@ Reduction JSCallReducer::ReduceRegExpPrototypeTest(Node* node) {
     }
 
     // Add proper dependencies on the {regexp}s [[Prototype]]s.
-    dependencies()->DependOnStablePrototypeChains(
-        ai_exec.lookup_start_object_maps(), kStartAtPrototype,
-        JSObjectRef(broker(), holder));
+    dependencies()->DependOnPrototypeChains(ai_exec.lookup_start_object_maps(),
+                                            kStartAtPrototype,
+                                            JSObjectRef(broker(), holder));
   } else {
     return inference.NoChange();
   }

@@ -347,6 +347,12 @@ class JSObjectRef : public JSReceiverRef {
       Representation field_representation, FieldIndex index,
       SerializationPolicy policy =
           SerializationPolicy::kAssumeSerialized) const;
+  // Return the value of the dictionary property at {index} in the dictionary
+  // if {index} is known to be an own data property of the object.
+  base::Optional<ObjectRef> GetOwnDictionaryProperty(
+      InternalIndex index, SerializationPolicy policy =
+                               SerializationPolicy::kAssumeSerialized) const;
+
   base::Optional<FixedArrayBaseRef> elements() const;
   void SerializeElements();
   void EnsureElementsTenured();

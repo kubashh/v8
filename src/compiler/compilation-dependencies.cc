@@ -87,13 +87,18 @@ class PrototypePropertyDependency final : public CompilationDependency {
   ObjectRef prototype_;
 };
 
-class StableMapDependency final : public CompilationDependency {
+class PrototypeShapeDependency final : public CompilationDependency {
  public:
-  explicit StableMapDependency(const MapRef& map) : map_(map) {
-    DCHECK(map_.is_stable());
+  explicit PrototypeShapeDependency(const MapRef& map) : map_(map) {
+    DCHECK(map_.is_stable() || map_.object()->is_dictionary_map());
   }
 
-  bool IsValid() const override { return map_.object()->is_stable(); }
+  // FIXME: Question for review: In the case of a dictionary mode prototype, we
+  // do not detect invalidation here, meaning that IsValid is always true. Is
+  // that okay?  this always returns true for dict mode prototypes. That okay?
+  bool IsValid() const override {
+    return map_.object()->is_dictionary_map() || map_.object()->is_stable();
+  }
 
   void Install(const MaybeObjectHandle& code) const override {
     SLOW_DCHECK(IsValid());
@@ -396,10 +401,16 @@ ObjectRef CompilationDependencies::DependOnPrototypeProperty(
 void CompilationDependencies::DependOnStableMap(const MapRef& map) {
   DCHECK(!map.IsNeverSerializedHeapObject());
   if (map.CanTransition()) {
-    RecordDependency(zone_->New<StableMapDependency>(map));
+    RecordDependency(zone_->New<PrototypeShapeDependency>(map));
   } else {
     DCHECK(map.is_stable());
   }
+}
+
+void CompilationDependencies::DependOnDictionaryPrototypeShape(
+    const MapRef& map) {
+  DCHECK(!map.IsNeverSerializedHeapObject());
+  RecordDependency(zone_->New<PrototypeShapeDependency>(map));
 }
 
 AllocationType CompilationDependencies::DependOnPretenureMode(
@@ -547,8 +558,8 @@ bool CompilationDependencies::Commit(Handle<Code> code) {
 
 namespace {
 // This function expects to never see a JSProxy.
-void DependOnStablePrototypeChain(CompilationDependencies* deps, MapRef map,
-                                  base::Optional<JSObjectRef> last_prototype) {
+void DependOnPrototypeChain(CompilationDependencies* deps, MapRef map,
+                            base::Optional<JSObjectRef> last_prototype) {
   while (true) {
     HeapObjectRef proto = map.prototype();
     if (!proto.IsJSObject()) {
@@ -556,19 +567,26 @@ void DependOnStablePrototypeChain(CompilationDependencies* deps, MapRef map,
       break;
     }
     map = proto.map();
-    deps->DependOnStableMap(map);
+    if (map.is_dictionary_map()) {
+      deps->DependOnDictionaryPrototypeShape(map);
+    } else {
+      deps->DependOnStableMap(map);
+    }
     if (last_prototype.has_value() && proto.equals(*last_prototype)) break;
   }
 }
 }  // namespace
 
 template <class MapContainer>
-void CompilationDependencies::DependOnStablePrototypeChains(
+void CompilationDependencies::DependOnPrototypeChains(
     MapContainer const& receiver_maps, WhereToStart start,
     base::Optional<JSObjectRef> last_prototype) {
   for (auto map : receiver_maps) {
     MapRef receiver_map(broker_, map);
-    if (start == kStartAtReceiver) DependOnStableMap(receiver_map);
+    if (start == kStartAtReceiver) {
+      DCHECK(!receiver_map.is_dictionary_map());
+      DependOnStableMap(receiver_map);
+    }
     if (receiver_map.IsPrimitiveMap()) {
       // Perform the implicit ToObject for primitives here.
       // Implemented according to ES6 section 7.3.2 GetV (V, P).
@@ -576,13 +594,13 @@ void CompilationDependencies::DependOnStablePrototypeChains(
           broker_->target_native_context().GetConstructorFunction(receiver_map);
       if (constructor.has_value()) receiver_map = constructor->initial_map();
     }
-    DependOnStablePrototypeChain(this, receiver_map, last_prototype);
+    DependOnPrototypeChain(this, receiver_map, last_prototype);
   }
 }
-template void CompilationDependencies::DependOnStablePrototypeChains(
+template void CompilationDependencies::DependOnPrototypeChains(
     ZoneVector<Handle<Map>> const& receiver_maps, WhereToStart start,
     base::Optional<JSObjectRef> last_prototype);
-template void CompilationDependencies::DependOnStablePrototypeChains(
+template void CompilationDependencies::DependOnPrototypeChains(
     ZoneHandleSet<Map> const& receiver_maps, WhereToStart start,
     base::Optional<JSObjectRef> last_prototype);
 
