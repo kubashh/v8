@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7800ebb6_f70b624b",
+        "filename": "src/DEPS",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-02-25T18:21:08Z",
+      "side": 1,
+      "message": "Can you confirm this is the correct way to bypass the presubmit error? I\u0027m still seeing the \"Illegal include\". Do I have to somehow trigger the DEPS file to update the include rules?",
+      "revId": "2a5b6ed0af85ffe0d21a16d7e1f67b4ac05faa0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
