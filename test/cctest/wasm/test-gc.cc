@@ -497,8 +497,8 @@ WASM_COMPILED_EXEC_TEST(WasmPackedStructS) {
 
   const byte local_index = 0;
 
-  int32_t expected_output_0 = 0x80;
-  int32_t expected_output_1 = 42;
+  const int32_t expected_output_0 = 0x80;
+  const int32_t expected_output_1 = 42;
 
   const byte kF0 = tester.DefineFunction(
       tester.sigs.i_v(), {struct_type},
@@ -524,6 +524,28 @@ WASM_COMPILED_EXEC_TEST(WasmPackedStructS) {
 
   tester.CheckResult(kF0, static_cast<int8_t>(expected_output_0));
   tester.CheckResult(kF1, static_cast<int16_t>(expected_output_1));
+}
+
+WASM_COMPILED_EXEC_TEST(CsaOptReproducer) {
+  WasmGCTester tester(execution_tier);
+
+  const byte type_index = tester.DefineStruct({F(kWasmI8, true)});
+
+  const byte local_index = 0;
+
+  const int32_t expected_output_0 = 0x80;
+
+  const byte kF0 = tester.DefineFunction(
+      tester.sigs.i_v(), {},
+      {WASM_STRUCT_GET_S(
+           type_index, local_index,
+           WASM_STRUCT_NEW_WITH_RTT(type_index, WASM_I32V(expected_output_0),
+                                    WASM_RTT_CANON(type_index))),
+       kExprEnd});
+
+  tester.CompileModule();
+
+  tester.CheckResult(kF0, static_cast<int8_t>(expected_output_0));
 }
 
 TEST(WasmLetInstruction) {
