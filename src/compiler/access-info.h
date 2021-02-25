@@ -255,6 +255,11 @@ class AccessInfoFactory final {
                                                Handle<Name> name,
                                                AccessMode access_mode) const;
 
+  PropertyAccessInfo ComputeDictionaryProtoAccessInfo(
+      Handle<Map> receiver_map, Handle<Name> name, Handle<JSObject> holder,
+      InternalIndex dict_index, AccessMode access_details,
+      PropertyDetails details) const;
+
   MinimorphicLoadPropertyAccessInfo ComputePropertyAccessInfo(
       MinimorphicLoadPropertyAccessFeedback const& feedback) const;
 
@@ -297,6 +302,10 @@ class AccessInfoFactory final {
   void MergePropertyAccessInfos(ZoneVector<PropertyAccessInfo> infos,
                                 AccessMode access_mode,
                                 ZoneVector<PropertyAccessInfo>* result) const;
+
+  bool TryLoadPropertyDetails(Handle<Map> map, MaybeHandle<JSObject> holder,
+                              Handle<Name> name, InternalIndex* index_out,
+                              PropertyDetails* details_out) const;
 
   CompilationDependencies* dependencies() const { return dependencies_; }
   JSHeapBroker* broker() const { return broker_; }

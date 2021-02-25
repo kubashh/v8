@@ -434,7 +434,7 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
     // takes over, but that requires the constructor to be callable.
     if (!receiver_map.is_callable()) return NoChange();
 
-    dependencies()->DependOnStablePrototypeChains(
+    dependencies()->DependOnPrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype);
 
     // Monomorphic property access.
@@ -463,7 +463,7 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
       return NoChange();
 
     if (found_on_proto) {
-      dependencies()->DependOnStablePrototypeChains(
+      dependencies()->DependOnPrototypeChains(
           access_info.lookup_start_object_maps(), kStartAtPrototype,
           JSObjectRef(broker(), holder));
     }
@@ -579,8 +579,8 @@ JSNativeContextSpecialization::InferHasInPrototypeChain(
     WhereToStart start = result == NodeProperties::kUnreliableMaps
                              ? kStartAtReceiver
                              : kStartAtPrototype;
-    dependencies()->DependOnStablePrototypeChains(receiver_maps, start,
-                                                  last_prototype);
+    dependencies()->DependOnPrototypeChains(receiver_maps, start,
+                                            last_prototype);
   }
 
   DCHECK_EQ(all, !none);
@@ -750,7 +750,7 @@ Reduction JSNativeContextSpecialization::ReduceJSResolvePromise(Node* node) {
     return inference.NoChange();
   }
 
-  dependencies()->DependOnStablePrototypeChains(
+  dependencies()->DependOnPrototypeChains(
       access_info.lookup_start_object_maps(), kStartAtPrototype);
 
   // Simply fulfill the {promise} with the {resolution}.
@@ -2340,7 +2340,7 @@ JSNativeContextSpecialization::BuildPropertyLoad(
   // Determine actual holder and perform prototype chain checks.
   Handle<JSObject> holder;
   if (access_info.holder().ToHandle(&holder)) {
-    dependencies()->DependOnStablePrototypeChains(
+    dependencies()->DependOnPrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype,
         JSObjectRef(broker(), holder));
   }
@@ -2367,10 +2367,15 @@ JSNativeContextSpecialization::BuildPropertyLoad(
     DCHECK_EQ(receiver, lookup_start_object);
     value = graph()->NewNode(simplified()->StringLength(), receiver);
   } else {
-    DCHECK(access_info.IsDataField() || access_info.IsDataFieldConstant());
+    DCHECK(access_info.IsDataField() || access_info.IsDataFieldConstant() ||
+           access_info.IsDataDictionaryProtoConstant());
     PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
-    value = access_builder.BuildLoadDataField(
-        name, access_info, lookup_start_object, &effect, &control);
+    if (access_info.IsDataDictionaryProtoConstant()) {
+      value = access_builder.BuildLoadDictPrototypeConstant(access_info);
+    } else {
+      value = access_builder.BuildLoadDataField(
+          name, access_info, lookup_start_object, &effect, &control);
+    }
   }
 
   return ValueEffectControl(value, effect, control);
@@ -2382,7 +2387,7 @@ JSNativeContextSpecialization::BuildPropertyTest(
   // Determine actual holder and perform prototype chain checks.
   Handle<JSObject> holder;
   if (access_info.holder().ToHandle(&holder)) {
-    dependencies()->DependOnStablePrototypeChains(
+    dependencies()->DependOnPrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype,
         JSObjectRef(broker(), holder));
   }
@@ -2426,7 +2431,7 @@ JSNativeContextSpecialization::BuildPropertyStore(
   PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
   if (access_info.holder().ToHandle(&holder)) {
     DCHECK_NE(AccessMode::kStoreInLiteral, access_mode);
-    dependencies()->DependOnStablePrototypeChains(
+    dependencies()->DependOnPrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype,
         JSObjectRef(broker(), holder));
   }

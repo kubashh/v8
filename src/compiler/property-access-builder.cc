@@ -148,6 +148,25 @@ MachineRepresentation PropertyAccessBuilder::ConvertRepresentation(
   }
 }
 
+Node* PropertyAccessBuilder::BuildLoadDictPrototypeConstant(
+    PropertyAccessInfo const& access_info) {
+  DCHECK(V8_DICT_PROPERTY_CONST_TRACKING_BOOL);
+  DCHECK(access_info.IsDataDictionaryProtoConstant());
+  DCHECK(!access_info.holder().is_null());
+
+  Handle<JSObject> holder = access_info.holder().ToHandleChecked();
+
+  // FIXME compare against TryBuildLoadConstantDataField
+
+  JSObjectRef holder_ref(broker(), holder);
+  base::Optional<ObjectRef> value =
+      holder_ref.GetOwnDictionaryProperty(access_info.dictionary_index());
+  if (!value.has_value()) {
+    return nullptr;
+  }
+  return jsgraph()->Constant(*value);
+}
+
 Node* PropertyAccessBuilder::TryBuildLoadConstantDataField(
     NameRef const& name, PropertyAccessInfo const& access_info,
     Node* lookup_start_object) {

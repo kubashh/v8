@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// Flags: --allow-natives-syntax
+// Flags: --allow-natives-syntax --opt --no-always-opt
 //
 // Tests tracking of constness of properties stored in dictionary
 // mode prototypes.
@@ -259,4 +259,319 @@ function testbench(o, proto, update_proto, check_constness) {
 
   testbench(o, proto, update_z, false);
 
+})();
+
+//
+// Testing inlining of constant properties on dictionary mode prototypes.
+//
+
+// Test inlining with fast mode receiver.
+(function() {
+  var proto = Object.create(null);
+  proto.x = 1;
+  var o = Object.create(proto);
+  assertTrue(%HasFastProperties(o));
+  assertFalse(%HasFastProperties(proto));
+
+
+  function read_x(arg_o) {
+    return arg_o.x;
+  }
+
+  %PrepareFunctionForOptimization(read_x);
+  read_x(o);
+  %OptimizeFunctionOnNextCall(read_x);
+  read_x(o);
+
+  // Test that we inlined the access:
+  var dummy = {x : 123};
+  read_x(dummy);
+
+  if (%IsDictPropertyConstTrackingEnabled()) {
+    assertTrue(%HasFastProperties(o));
+    assertFalse(%HasFastProperties(proto));
+    assertUnoptimized(read_x);
+  }
+
+})();
+
+// Test inlining with dictionary mode receiver that is a prototype.
+// TODO(v8:11457) This doesn't work yet, see TODO in
+// AccessInfoFactory::TryLoadPropertyDetails
+// (function() {
+
+//   var proto1 = Object.create(null);
+//   proto1.x = 1;
+//   var proto2 = Object.create(null);
+//   var o = Object.create(proto1);
+//   proto1.__proto__ = proto2;
+
+//   assertTrue(%HasFastProperties(o));
+//   assertFalse(%HasFastProperties(proto1));
+//   assertFalse(%HasFastProperties(proto2));
+
+//   function read_x(arg_o) {
+//     return arg_o.x;
+//   }
+
+//   %PrepareFunctionForOptimization(read_x);
+//   read_x(proto1);
+//   %OptimizeFunctionOnNextCall(read_x);
+//   read_x(proto1);
+
+//   // Test that we inlined the access:
+//   var dummy = {x : 123};
+//   read_x(dummy);
+
+//   if (%IsDictPropertyConstTrackingEnabled()) {
+//     assertTrue(%HasFastProperties(o));
+//     assertFalse(%HasFastProperties(proto1));
+//     assertFalse(%HasFastProperties(proto2));
+//     assertUnoptimized(read_x);
+//   }
+// })();
+
+// Test that we do *not* inline with dict mode, non-prototype receiver.
+(function() {
+  var proto = Object.create(null);
+  proto.x = 1;
+  var o = Object.create(null);
+  o.__proto__ = proto;
+  assertFalse(%HasFastProperties(o));
+  assertFalse(%HasFastProperties(proto));
+
+
+  function read_x(arg_o) {
+    return arg_o.x;
+  }
+
+  %PrepareFunctionForOptimization(read_x);
+  read_x(o);
+  %OptimizeFunctionOnNextCall(read_x);
+  read_x(o);
+
+  // Test that we inlined the access:
+  var dummy = {x : 123};
+  read_x(dummy);
+
+  if (%IsDictPropertyConstTrackingEnabled()) {
+    assertFalse(%HasFastProperties(o));
+    assertFalse(%HasFastProperties(proto));
+
+    // We never inlined the acceess, so it's still optimized.
+    assertOptimized(read_x);
+  }
+})();
+
+// Invalidation of by adding property to receiver.
+(function() {
+  var proto = Object.create(null);
+  proto.x = 1;
+  var o = Object.create(proto);
+  assertTrue(%HasFastProperties(o));
+  assertFalse(%HasFastProperties(proto));
+
+  function read_x(arg_o) {
+    return arg_o.x;
+  }
+
+  %PrepareFunctionForOptimization(read_x);
+  read_x(o);
+  %OptimizeFunctionOnNextCall(read_x);
+  read_x(o);
+
+  o.x = 2;
+
+  // if (%IsDictPropertyConstTrackingEnabled()) {
+  //   assertFalse(%HasFastProperties(proto));
+  //   assertUnoptimized(read_x);
+  // }
+
+  assertEquals(read_x(o), 2);
+})();
+
+// Invalidation by adding property to intermediate prototype.
+(function() {
+  var proto = Object.create(null);
+  proto.x = 1;
+  var in_between = Object.create(null);
+  in_between.__proto__ = proto;
+
+  var o = Object.create(in_between);
+  assertTrue(%HasFastProperties(o));
+  assertFalse(%HasFastProperties(in_between));
+  assertFalse(%HasFastProperties(proto));
+
+  function read_x(arg_o) {
+    return arg_o.x;
+  }
+
+  %PrepareFunctionForOptimization(read_x);
+  read_x(o);
+  %OptimizeFunctionOnNextCall(read_x);
+  read_x(o);
+
+  in_between.x = 2;
+
+  if (%IsDictPropertyConstTrackingEnabled()) {
+    assertFalse(%HasFastProperties(in_between));
+    assertFalse(%HasFastProperties(proto));
+    assertUnoptimized(read_x);
+  }
+
+  assertEquals(read_x(o), 2);
+})();
+
+// Invalidation by changing property on prototype itself.
+(function() {
+  var proto = Object.create(null);
+  proto.x = 1;
+  var o = Object.create(proto);
+  assertTrue(%HasFastProperties(o));
+  assertFalse(%HasFastProperties(proto));
+
+  function read_x(arg_o) {
+    return arg_o.x;
+  }
+
+  %PrepareFunctionForOptimization(read_x);
+  read_x(o);
+  %OptimizeFunctionOnNextCall(read_x);
+  read_x(o);
+
+  proto.x = 2;
+
+  if (%IsDictPropertyConstTrackingEnabled()) {
+    assertFalse(%HasFastProperties(proto));
+    assertUnoptimized(read_x);
+  }
+
+  assertEquals(read_x(o), 2);
+})();
+
+// Invalidation by deleting property on prototype.
+(function() {
+  var proto = Object.create(null);
+  proto.x = 1;
+  var o = Object.create(proto);
+  assertTrue(%HasFastProperties(o));
+  assertFalse(%HasFastProperties(proto));
+
+  function read_x(arg_o) {
+    return arg_o.x;
+  }
+
+  %PrepareFunctionForOptimization(read_x);
+  read_x(o);
+  %OptimizeFunctionOnNextCall(read_x);
+  read_x(o);
+
+  delete proto.x;
+
+  if (%IsDictPropertyConstTrackingEnabled()) {
+    assertFalse(%HasFastProperties(proto));
+    assertUnoptimized(read_x);
+  }
+
+  assertNotEquals(read_x(o), 1);
+})();
+
+// Storing the same value does not invalidate const-ness. Store done from runtime.
+(function() {
+  var proto = Object.create(null);
+  var some_object = {bla: 123};
+  proto.x = 1;
+  proto.y = some_object
+
+  var o = Object.create(proto);
+  assertTrue(%HasFastProperties(o));
+  assertFalse(%HasFastProperties(proto));
+
+  function read_xy(arg_o) {
+    return [arg_o.x, arg_o.y];
+  }
+
+  %PrepareFunctionForOptimization(read_xy);
+  read_xy(o);
+  %OptimizeFunctionOnNextCall(read_xy);
+  read_xy(o);
+
+  // Build value 1 without re-using proto.x.
+  var x2 = 0;
+  for(var i = 0; i < 5; ++i) {
+    x2 += 0.2;
+  }
+
+  // Storing the same values for x and y again:
+  proto.x = x2;
+  proto.y = some_object;
+  assertEquals(proto.x, x2);
+
+  if (%IsDictPropertyConstTrackingEnabled()) {
+    assertFalse(%HasFastProperties(proto));
+    assertTrue(%HasOwnConstDataProperty(proto, "x"));
+    assertOptimized(read_xy);
+  }
+
+  proto.x = 2;
+  if (%IsDictPropertyConstTrackingEnabled()) {
+    assertFalse(%HasFastProperties(proto));
+    assertFalse(%HasOwnConstDataProperty(proto, "x"));
+    assertUnoptimized(read_xy);
+  }
+
+  assertNotEquals(read_xy(o)[0], 1);
+})();
+
+// Storing the same value does not invalidate const-ness. Store done by IC handler.
+(function() {
+  var proto = Object.create(null);
+  var some_object = {bla: 123};
+  proto.x = 1;
+  proto.y = some_object
+
+  var o = Object.create(proto);
+  assertTrue(%HasFastProperties(o));
+  assertFalse(%HasFastProperties(proto));
+
+  function read_xy(arg_o) {
+    return [arg_o.x, arg_o.y];
+  }
+
+  %PrepareFunctionForOptimization(read_xy);
+  read_xy(o);
+  %OptimizeFunctionOnNextCall(read_xy);
+  read_xy(o);
+
+  // Build value 1 without re-using proto.x.
+  var x2 = 0;
+  for(var i = 0; i < 5; ++i) {
+    x2 += 0.2;
+  }
+
+  function change_xy(obj, x, y) {
+    obj.x = x;
+    obj.y = y;
+  }
+
+  %PrepareFunctionForOptimization(change_xy);
+  // Storing the same values for x and y again:
+  change_xy(proto, 1, some_object);
+  change_xy(proto, 1, some_object);
+
+  if (%IsDictPropertyConstTrackingEnabled()) {
+    assertFalse(%HasFastProperties(proto));
+    assertTrue(%HasOwnConstDataProperty(proto, "x"));
+    assertOptimized(read_xy);
+  }
+
+  change_xy(proto, 2, some_object);
+
+  if (%IsDictPropertyConstTrackingEnabled()) {
+    assertFalse(%HasFastProperties(proto));
+    assertFalse(%HasOwnConstDataProperty(proto, "x"));
+    assertUnoptimized(read_xy);
+  }
+
+  assertNotEquals(read_xy(o)[0], 1);
 })();

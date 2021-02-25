@@ -4169,6 +4169,20 @@ Handle<Object> JSObject::FastPropertyAt(Handle<JSObject> object,
   return Object::WrapForRead(isolate, raw_value, representation);
 }
 
+// static
+Handle<Object> JSObject::DictionaryPropertyAt(Handle<JSObject> object,
+                                              InternalIndex dict_index) {
+  Isolate* isolate = object->GetIsolate();
+
+  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+    OrderedNameDictionary dict = object->property_dictionary_ordered();
+    return handle(dict.ValueAt(dict_index), isolate);
+  } else {
+    NameDictionary dict = object->property_dictionary();
+    return handle(dict.ValueAt(dict_index), isolate);
+  }
+}
+
 // TODO(cbruni/jkummerow): Consider moving this into elements.cc.
 bool JSObject::HasEnumerableElements() {
   // TODO(cbruni): cleanup
@@ -4580,6 +4594,12 @@ void InvalidateOnePrototypeValidityCellInternal(Map map) {
   if (maybe_prototype_info.IsPrototypeInfo()) {
     PrototypeInfo prototype_info = PrototypeInfo::cast(maybe_prototype_info);
     prototype_info.set_prototype_chain_enum_cache(Object());
+  }
+
+  // FIXME comment
+  if (map.is_dictionary_map()) {
+    map.dependent_code().DeoptimizeDependentCodeGroup(
+        DependentCode::kPrototypeCheckGroup);
   }
 }
 

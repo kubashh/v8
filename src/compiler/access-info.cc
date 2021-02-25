@@ -27,17 +27,28 @@ namespace compiler {
 
 namespace {
 
-bool CanInlinePropertyAccess(Handle<Map> map) {
+bool CanInlinePropertyAccess(Handle<Map> map, AccessMode access_mode) {
   // We can inline property access to prototypes of all primitives, except
   // the special Oddball ones that have no wrapper counterparts (i.e. Null,
   // Undefined and TheHole).
+  // We can only inline accesses to dictionary mode holders if the access is a
+  // load and the holder is a prototype. The latter ensures a 1:1
+  // relationship between the map and the object (and therefore the property
+  // dictionary).
   STATIC_ASSERT(ODDBALL_TYPE == LAST_PRIMITIVE_HEAP_OBJECT_TYPE);
   if (map->IsBooleanMap()) return true;
   if (map->instance_type() < LAST_PRIMITIVE_HEAP_OBJECT_TYPE) return true;
-  return map->IsJSObjectMap() && !map->is_dictionary_map() &&
-         !map->has_named_interceptor() &&
-         // TODO(verwaest): Allowlist contexts to which we have access.
-         !map->is_access_check_needed();
+  if (map->IsJSObjectMap()) {
+    if (map->is_dictionary_map()) {
+      if (!V8_DICT_PROPERTY_CONST_TRACKING_BOOL) return false;
+      return access_mode == AccessMode::kLoad && map->is_prototype_map();
+    }
+
+    return !map->has_named_interceptor() &&
+           // TODO(verwaest): Allowlist contexts to which we have access.
+           !map->is_access_check_needed();
+  }
+  return false;
 }
 
 #ifdef DEBUG
@@ -323,6 +334,18 @@ bool PropertyAccessInfo::Merge(PropertyAccessInfo const* that,
       return false;
     }
 
+    case kDataDictionaryProtoConstant: {
+      DCHECK_EQ(AccessMode::kLoad, access_mode);
+      if (this->dictionary_index_ == that->dictionary_index_) {
+        this->lookup_start_object_maps_.insert(
+            this->lookup_start_object_maps_.end(),
+            that->lookup_start_object_maps_.begin(),
+            that->lookup_start_object_maps_.end());
+        return true;
+      }
+      return false;
+    }
+
     case kNotFound:
     case kStringLength: {
       DCHECK(this->unrecorded_dependencies_.empty());
@@ -336,7 +359,6 @@ bool PropertyAccessInfo::Merge(PropertyAccessInfo const* that,
     case kModuleExport:
       return false;
 
-    case kDataDictionaryProtoConstant:
     case kAccessorDictionaryProtoConstant:
       // TODO(v8:11248) Dealt with in follow-up CLs.
       UNREACHABLE();
@@ -559,6 +581,28 @@ PropertyAccessInfo AccessInfoFactory::ComputeAccessorDescriptorAccessInfo(
                                                    accessor, holder);
 }
 
+PropertyAccessInfo AccessInfoFactory::ComputeDictionaryProtoAccessInfo(
+    Handle<Map> receiver_map, Handle<Name> name, Handle<JSObject> holder,
+    InternalIndex dictionary_index, AccessMode access_mode,
+    PropertyDetails details) const {
+  DCHECK(V8_DICT_PROPERTY_CONST_TRACKING_BOOL);
+  DCHECK(holder->map().is_prototype_map());
+  DCHECK_EQ(access_mode, AccessMode::kLoad);
+
+  // We can only inline accesses to constant properties.
+  if (details.constness() != PropertyConstness::kConst) {
+    return PropertyAccessInfo::Invalid(zone());
+  }
+
+  if (details.kind() == PropertyKind::kData) {
+    return PropertyAccessInfo::DataDictionaryProtoConstant(
+        zone(), receiver_map, holder, dictionary_index);
+  }
+
+  // TODO(v8:11248) Support for accessors is implemented a in follow-up CL.
+  return PropertyAccessInfo::Invalid(zone());
+}
+
 MinimorphicLoadPropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
     MinimorphicLoadPropertyAccessFeedback const& feedback) const {
   DCHECK(feedback.handler()->IsSmi());
@@ -573,6 +617,47 @@ MinimorphicLoadPropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
                                                       field_rep, field_type);
 }
 
+bool AccessInfoFactory::TryLoadPropertyDetails(
+    Handle<Map> map, MaybeHandle<JSObject> holder, Handle<Name> name,
+    InternalIndex* index_out, PropertyDetails* details_out) const {
+  if (map->is_dictionary_map()) {
+    DCHECK(V8_DICT_PROPERTY_CONST_TRACKING_BOOL);
+    DCHECK(map->is_prototype_map());
+    if (holder.is_null()) {
+      // Without the holder, we can't get the property details.
+      return false;
+
+      // TODO(v8:11457): We are guaranteed that |map| is a prototype map, which
+      // would allow us to get the holder from there.
+    }
+
+    Handle<JSObject> handle = holder.ToHandleChecked();
+    if (V8_DICT_MODE_PROTOTYPES_BOOL) {
+      OrderedNameDictionary dict = handle->property_dictionary_ordered();
+      *index_out = dict.FindEntry(isolate(), name);
+      if (index_out->is_found()) {
+        *details_out = dict.DetailsAt(*index_out);
+      }
+    } else {
+      NameDictionary dict = handle->property_dictionary();
+      *index_out = dict.FindEntry(isolate(), name);
+      if (index_out->is_found()) {
+        *details_out = dict.DetailsAt(*index_out);
+      }
+    }
+  } else {
+    Handle<DescriptorArray> descriptors(map->instance_descriptors(kAcquireLoad),
+                                        isolate());
+    *index_out =
+        descriptors->Search(*name, *map, broker()->is_concurrent_inlining());
+    if (index_out->is_found()) {
+      *details_out = descriptors->GetDetails(*index_out);
+    }
+  }
+
+  return true;
+}
+
 PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
     Handle<Map> map, Handle<Name> name, AccessMode access_mode) const {
   CHECK(name->IsUniqueName());
@@ -582,7 +667,7 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
   }
 
   // Check if it is safe to inline property access for the {map}.
-  if (!CanInlinePropertyAccess(map)) {
+  if (!CanInlinePropertyAccess(map, access_mode)) {
     return PropertyAccessInfo::Invalid(zone());
   }
 
@@ -596,15 +681,21 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
   Handle<Map> receiver_map = map;
   MaybeHandle<JSObject> holder;
   while (true) {
-    // Lookup the named property on the {map}.
-    Handle<DescriptorArray> descriptors(map->instance_descriptors(kAcquireLoad),
-                                        isolate());
-    InternalIndex const number =
-        descriptors->Search(*name, *map, broker()->is_concurrent_inlining());
-    if (number.is_found()) {
-      PropertyDetails const details = descriptors->GetDetails(number);
+    PropertyDetails details = PropertyDetails::Empty();
+
+    // The holder is null for non-prototypes, which implies that for dictionary
+    // maps TryLoadPropertyDetails only succeeds for prototypes, which is what
+    // we want.
+    InternalIndex index(InternalIndex::NotFound());
+    if (!TryLoadPropertyDetails(map, holder, name, &index, &details)) {
+      return PropertyAccessInfo::Invalid(zone());
+    }
+
+    if (index.is_found()) {
       if (access_mode == AccessMode::kStore ||
           access_mode == AccessMode::kStoreInLiteral) {
+        DCHECK(!map->is_dictionary_map());
+
         // Don't bother optimizing stores to read-only properties.
         if (details.IsReadOnly()) {
           return PropertyAccessInfo::Invalid(zone());
@@ -617,20 +708,29 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
           return LookupTransition(receiver_map, name, holder);
         }
       }
-      if (details.location() == kField) {
-        if (details.kind() == kData) {
-          return ComputeDataFieldAccessInfo(receiver_map, map, holder, number,
-                                            access_mode);
-        } else {
-          DCHECK_EQ(kAccessor, details.kind());
-          // TODO(turbofan): Add support for general accessors?
-          return PropertyAccessInfo::Invalid(zone());
-        }
+      if (map->is_dictionary_map()) {
+        DCHECK(V8_DICT_PROPERTY_CONST_TRACKING_BOOL);
+
+        // TryLoadPropertyDetails only succeeds if we know the holder.
+        Handle<JSObject> h = holder.ToHandleChecked();
+        return ComputeDictionaryProtoAccessInfo(receiver_map, name, h, index,
+                                                access_mode, details);
       } else {
-        DCHECK_EQ(kDescriptor, details.location());
-        DCHECK_EQ(kAccessor, details.kind());
-        return ComputeAccessorDescriptorAccessInfo(receiver_map, name, map,
-                                                   holder, number, access_mode);
+        if (details.location() == kField) {
+          if (details.kind() == kData) {
+            return ComputeDataFieldAccessInfo(receiver_map, map, holder, index,
+                                              access_mode);
+          } else {
+            DCHECK_EQ(kAccessor, details.kind());
+            // TODO(turbofan): Add support for general accessors?
+            return PropertyAccessInfo::Invalid(zone());
+          }
+        } else {
+          DCHECK_EQ(kDescriptor, details.location());
+          DCHECK_EQ(kAccessor, details.kind());
+          return ComputeAccessorDescriptorAccessInfo(
+              receiver_map, name, map, holder, index, access_mode);
+        }
       }
       UNREACHABLE();
     }
@@ -691,14 +791,15 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
     map = map_prototype_map;
     CHECK(!map->is_deprecated());
 
-    if (!CanInlinePropertyAccess(map)) {
+    if (!CanInlinePropertyAccess(map, access_mode)) {
       return PropertyAccessInfo::Invalid(zone());
     }
 
     // Successful lookup on prototype chain needs to guarantee that all
     // the prototypes up to the holder have stable maps. Let us make sure
-    // the prototype maps are stable here.
-    CHECK(map->is_stable());
+    // the prototype maps are stable here. Stability is not tracked for
+    // dictionary mode protoypes.
+    CHECK_IMPLIES(!map->is_dictionary_map(), map->is_stable());
   }
   UNREACHABLE();
 }
@@ -820,6 +921,10 @@ base::Optional<ElementAccessInfo> AccessInfoFactory::ConsolidateElementLoad(
 
 PropertyAccessInfo AccessInfoFactory::LookupSpecialFieldAccessor(
     Handle<Map> map, Handle<Name> name) const {
+  if (map->is_dictionary_map()) {
+    return PropertyAccessInfo::Invalid(zone());
+  }
+
   // Check for String::length field accessor.
   if (map->IsStringMap()) {
     if (Name::Equals(isolate(), name, isolate()->factory()->length_string())) {
