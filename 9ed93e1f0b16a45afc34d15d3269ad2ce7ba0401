@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fadfce22_58308e7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-25T12:42:44Z",
+      "side": 1,
+      "message": "ptal, imho it fits better this way",
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3874c35a_60e3db6a",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-25T12:42:44Z",
+      "side": 1,
+      "message": "This means that finding a non-empty v8::TracedReference in detached mode will crash with a nullptr deref in the visitor, which is expected.",
+      "range": {
+        "startLine": 296,
+        "startChar": 10,
+        "endLine": 296,
+        "endChar": 18
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fefd681_66fd47bc",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-25T12:42:44Z",
+      "side": 1,
+      "message": "This part is new, and now actually reuses the production code :)\n\nIt also solves the problem in the revert which was not using JSVisitor but encountering an empty v8::TracedReference during tracing. (That\u0027s exactly what happens in Blink platform/ as well.)",
+      "range": {
+        "startLine": 409,
+        "startChar": 2,
+        "endLine": 409,
+        "endChar": 15
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20d769bc_1bfe6f01",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-25T12:42:44Z",
+      "side": 1,
+      "message": "Here and below: This just reverts the initial move to HeapBase.",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 26
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
