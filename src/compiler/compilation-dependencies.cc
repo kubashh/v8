@@ -90,12 +90,13 @@ class PrototypePropertyDependency final : public CompilationDependency {
 class PrototypeShapeDependency final : public CompilationDependency {
  public:
   explicit PrototypeShapeDependency(const MapRef& map) : map_(map) {
+    // FIXME: The call to is_stable must come first to ensure that object()
+    // succeeds. That's horrible.
     DCHECK(map_.is_stable() || map_.object()->is_dictionary_map());
   }
 
-  // FIXME: Question for review: In the case of a dictionary mode prototype, we
-  // do not detect invalidation here, meaning that IsValid is always true. Is
-  // that okay?  this always returns true for dict mode prototypes. That okay?
+  // FIXME this always returns true for dict mode prototypes. That okay?
+  // Need to actually track the validity cell?
   bool IsValid() const override {
     return map_.object()->is_dictionary_map() || map_.object()->is_stable();
   }
@@ -410,6 +411,8 @@ void CompilationDependencies::DependOnStableMap(const MapRef& map) {
 void CompilationDependencies::DependOnDictionaryPrototypeShape(
     const MapRef& map) {
   DCHECK(!map.IsNeverSerializedHeapObject());
+  // FIXME. need this?
+  // if (map.CanTransition()) {
   RecordDependency(zone_->New<PrototypeShapeDependency>(map));
 }
 
@@ -558,8 +561,8 @@ bool CompilationDependencies::Commit(Handle<Code> code) {
 
 namespace {
 // This function expects to never see a JSProxy.
-void DependOnPrototypeChain(CompilationDependencies* deps, MapRef map,
-                            base::Optional<JSObjectRef> last_prototype) {
+void DependOnShapeOfPrototypeChain(CompilationDependencies* deps, MapRef map,
+                                   base::Optional<JSObjectRef> last_prototype) {
   while (true) {
     HeapObjectRef proto = map.prototype();
     if (!proto.IsJSObject()) {
@@ -578,7 +581,7 @@ void DependOnPrototypeChain(CompilationDependencies* deps, MapRef map,
 }  // namespace
 
 template <class MapContainer>
-void CompilationDependencies::DependOnPrototypeChains(
+void CompilationDependencies::DependOnShapeOfPrototypeChains(
     MapContainer const& receiver_maps, WhereToStart start,
     base::Optional<JSObjectRef> last_prototype) {
   for (auto map : receiver_maps) {
@@ -594,13 +597,13 @@ void CompilationDependencies::DependOnPrototypeChains(
           broker_->target_native_context().GetConstructorFunction(receiver_map);
       if (constructor.has_value()) receiver_map = constructor->initial_map();
     }
-    DependOnPrototypeChain(this, receiver_map, last_prototype);
+    DependOnShapeOfPrototypeChain(this, receiver_map, last_prototype);
   }
 }
-template void CompilationDependencies::DependOnPrototypeChains(
+template void CompilationDependencies::DependOnShapeOfPrototypeChains(
     ZoneVector<Handle<Map>> const& receiver_maps, WhereToStart start,
     base::Optional<JSObjectRef> last_prototype);
-template void CompilationDependencies::DependOnPrototypeChains(
+template void CompilationDependencies::DependOnShapeOfPrototypeChains(
     ZoneHandleSet<Map> const& receiver_maps, WhereToStart start,
     base::Optional<JSObjectRef> last_prototype);
 

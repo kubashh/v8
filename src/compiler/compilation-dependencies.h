@@ -45,10 +45,7 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   // Record the assumption that {map} stays stable.
   void DependOnStableMap(const MapRef& map);
 
-  // Requires that |map| is the map of a dictionary mode prototype. Depend  on
-  // a) no properties being added or removed from the prototype object
-  // associated with |map| and b) none of its constant properties becoming
-  // non-constant.
+  // FIXME add comment
   void DependOnDictionaryPrototypeShape(const MapRef& map);
 
   // Return the pretenure mode of {site} and record the assumption that it does
@@ -90,13 +87,14 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   // For fast mode prototypes, this means depending on the stability of the map.
   // For dictionary mode prototypes (which are only allowed when loading a
   // constant and the holder is not the receiver), this means installing a
-  // dependency that is triggered whenever the prototype validity cell would be
-  // invalidated (independently from whether or not it is already invalid).
+  // dependency that is triggered whenever the prototype validity cell is
+  // invalidated.
+  // FIXME: check all use sites.
   template <class MapContainer>
-  void DependOnPrototypeChains(MapContainer const& receiver_maps,
-                               WhereToStart start,
-                               base::Optional<JSObjectRef> last_prototype =
-                                   base::Optional<JSObjectRef>());
+  void DependOnShapeOfPrototypeChains(
+      MapContainer const& receiver_maps, WhereToStart start,
+      base::Optional<JSObjectRef> last_prototype =
+          base::Optional<JSObjectRef>());
 
   // Like DependOnElementsKind but also applies to all nested allocation sites.
   void DependOnElementsKinds(const AllocationSiteRef& site);

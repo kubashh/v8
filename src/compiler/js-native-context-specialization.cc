@@ -434,7 +434,7 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
     // takes over, but that requires the constructor to be callable.
     if (!receiver_map.is_callable()) return NoChange();
 
-    dependencies()->DependOnPrototypeChains(
+    dependencies()->DependOnShapeOfPrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype);
 
     // Monomorphic property access.
@@ -463,7 +463,7 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
       return NoChange();
 
     if (found_on_proto) {
-      dependencies()->DependOnPrototypeChains(
+      dependencies()->DependOnShapeOfPrototypeChains(
           access_info.lookup_start_object_maps(), kStartAtPrototype,
           JSObjectRef(broker(), holder));
     }
@@ -579,8 +579,8 @@ JSNativeContextSpecialization::InferHasInPrototypeChain(
     WhereToStart start = result == NodeProperties::kUnreliableMaps
                              ? kStartAtReceiver
                              : kStartAtPrototype;
-    dependencies()->DependOnPrototypeChains(receiver_maps, start,
-                                            last_prototype);
+    dependencies()->DependOnShapeOfPrototypeChains(receiver_maps, start,
+                                                   last_prototype);
   }
 
   DCHECK_EQ(all, !none);
@@ -750,7 +750,7 @@ Reduction JSNativeContextSpecialization::ReduceJSResolvePromise(Node* node) {
     return inference.NoChange();
   }
 
-  dependencies()->DependOnPrototypeChains(
+  dependencies()->DependOnShapeOfPrototypeChains(
       access_info.lookup_start_object_maps(), kStartAtPrototype);
 
   // Simply fulfill the {promise} with the {resolution}.
@@ -1227,6 +1227,7 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
 
   PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
 
+  // FIXME: Do we need to do something about the map checks?
   // Check for the monomorphic cases.
   if (access_infos.size() == 1) {
     PropertyAccessInfo access_info = access_infos.front();
@@ -2340,7 +2341,7 @@ JSNativeContextSpecialization::BuildPropertyLoad(
   // Determine actual holder and perform prototype chain checks.
   Handle<JSObject> holder;
   if (access_info.holder().ToHandle(&holder)) {
-    dependencies()->DependOnPrototypeChains(
+    dependencies()->DependOnShapeOfPrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype,
         JSObjectRef(broker(), holder));
   }
@@ -2349,7 +2350,8 @@ JSNativeContextSpecialization::BuildPropertyLoad(
   Node* value;
   if (access_info.IsNotFound()) {
     value = jsgraph()->UndefinedConstant();
-  } else if (access_info.IsAccessorFieldConstant()) {
+  } else if (access_info.IsAccessorFieldConstant() ||
+             access_info.IsAccessorDictionaryProtoConstant()) {
     ConvertReceiverMode receiver_mode =
         receiver == lookup_start_object
             ? ConvertReceiverMode::kNotNullOrUndefined
@@ -2387,7 +2389,7 @@ JSNativeContextSpecialization::BuildPropertyTest(
   // Determine actual holder and perform prototype chain checks.
   Handle<JSObject> holder;
   if (access_info.holder().ToHandle(&holder)) {
-    dependencies()->DependOnPrototypeChains(
+    dependencies()->DependOnShapeOfPrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype,
         JSObjectRef(broker(), holder));
   }
@@ -2431,7 +2433,7 @@ JSNativeContextSpecialization::BuildPropertyStore(
   PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
   if (access_info.holder().ToHandle(&holder)) {
     DCHECK_NE(AccessMode::kStoreInLiteral, access_mode);
-    dependencies()->DependOnPrototypeChains(
+    dependencies()->DependOnShapeOfPrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype,
         JSObjectRef(broker(), holder));
   }
