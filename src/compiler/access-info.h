@@ -294,6 +294,18 @@ class AccessInfoFactory final {
                                                 MaybeHandle<JSObject> holder,
                                                 InternalIndex descriptor,
                                                 AccessMode access_mode) const;
+
+  // Only used by AccessorAccessInfoHelper.
+  using get_accessors_t = std::function<Handle<Object>()>;
+  using mk_constant_accessor_info_t = std::function<PropertyAccessInfo(
+      Handle<Object> accessor, MaybeHandle<JSObject> holder)>;
+
+  PropertyAccessInfo AccessorAccessInfoHelper(
+      Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
+      MaybeHandle<JSObject> holder, AccessMode access_mode,
+      get_accessors_t get_accessors,
+      mk_constant_accessor_info_t mk_constant_accessor_info) const;
+
   PropertyAccessInfo ComputeAccessorDescriptorAccessInfo(
       Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
       MaybeHandle<JSObject> holder, InternalIndex descriptor,
