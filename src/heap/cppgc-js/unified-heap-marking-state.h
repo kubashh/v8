@@ -22,7 +22,7 @@ class BasicTracedReferenceExtractor {
 
 class UnifiedHeapMarkingState {
  public:
-  explicit UnifiedHeapMarkingState(Heap& heap) : heap_(heap) {}
+  explicit UnifiedHeapMarkingState(Heap* heap) : heap_(heap) {}
 
   UnifiedHeapMarkingState(const UnifiedHeapMarkingState&) = delete;
   UnifiedHeapMarkingState& operator=(const UnifiedHeapMarkingState&) = delete;
@@ -30,11 +30,11 @@ class UnifiedHeapMarkingState {
   inline void MarkAndPush(const TracedReferenceBase&);
 
  private:
-  Heap& heap_;
+  Heap* heap_;
 };
 
 void UnifiedHeapMarkingState::MarkAndPush(const TracedReferenceBase& ref) {
-  heap_.RegisterExternallyReferencedObject(
+  heap_->RegisterExternallyReferencedObject(
       BasicTracedReferenceExtractor::ObjectReference(ref));
 }
 

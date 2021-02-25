@@ -36,12 +36,18 @@ class V8_EXPORT_PRIVATE Heap final : public HeapBase,
   void StartIncrementalGarbageCollection(Config) final;
   void FinalizeIncrementalGarbageCollectionIfRunning(Config);
 
-  size_t epoch() const final;
+  size_t epoch() const final { return epoch_; }
 
   void DisableHeapGrowingForTesting();
 
  private:
+  void StartGarbageCollection(Config);
+  void FinalizeGarbageCollection(Config::StackState);
+
   void FinalizeIncrementalGarbageCollectionIfNeeded(Config::StackState) final;
+
+  void CollectGarbageForTesting(
+      cppgc::internal::GarbageCollector::Config::StackState) final;
 
   Config config_;
   GCInvoker gc_invoker_;
@@ -49,6 +55,8 @@ class V8_EXPORT_PRIVATE Heap final : public HeapBase,
 
   const MarkingType marking_support_;
   const SweepingType sweeping_support_;
+
+  size_t epoch_;
 };
 
 }  // namespace internal

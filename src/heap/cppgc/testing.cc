@@ -10,10 +10,8 @@
 namespace cppgc {
 namespace testing {
 
-void Heap::CollectGarbage(HeapHandle& heap_handle,
-                          EmbedderStackState stack_state) {
-  auto& heap = internal::HeapBase::From(heap_handle);
-  heap.StandAloneGarbageCollectionForTesting(stack_state);
+void Heap::CollectGarbage(EmbedderStackState stack_state) {
+  internal::HeapBase::From(heap_handle_).CollectGarbageForTesting(stack_state);
 }
 
 OverrideEmbedderStackStateScope::OverrideEmbedderStackStateScope(
@@ -25,8 +23,7 @@ OverrideEmbedderStackStateScope::OverrideEmbedderStackStateScope(
 }
 
 OverrideEmbedderStackStateScope::~OverrideEmbedderStackStateScope() {
-  auto& heap = internal::HeapBase::From(heap_handle_);
-  heap.override_stack_state_.reset();
+  internal::HeapBase::From(heap_handle_).override_stack_state_.reset();
 }
 
 }  // namespace testing
