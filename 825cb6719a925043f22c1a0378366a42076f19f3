@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50d2ac83_a51b6587",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-02-25T15:11:30Z",
+      "side": 1,
+      "message": "Very nice indeed! Thanks for this cleanup!\nNote that there is issue https://crbug.com/v8/10123 to use GraphAssembler more, so if you plan more cleanup in that direction you can link that issue.",
+      "revId": "825cb6719a925043f22c1a0378366a42076f19f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
