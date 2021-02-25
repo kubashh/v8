@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7910094a_1042b9a2",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1969,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-02-25T18:28:36Z",
+      "side": 1,
+      "message": "Probably, having just a Capacity() here will be more readable.",
+      "range": {
+        "startLine": 1969,
+        "startChar": 39,
+        "endLine": 1969,
+        "endChar": 45
+      },
+      "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc34f30e_8a608c1f",
+        "filename": "src/objects/swiss-name-dictionary.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-02-25T18:28:36Z",
+      "side": 1,
+      "message": "Please define a local struct instead:\n  struct Entry {\n    Name key;\n    Value value;\n    PropertyDetails details;\n  };\nSize-wise it\u0027s the same, but more type safe and the casts/conversions below will not be necessary.",
+      "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "452fc0fc_9d8209b1",
+        "filename": "src/objects/swiss-name-dictionary.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-02-25T18:28:36Z",
+      "side": 1,
+      "message": "Will it skip deleted entries?",
+      "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
