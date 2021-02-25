@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec814902_9d7617f2",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-25T22:29:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a720d77d_8a12b081",
+      "range": {
+        "startLine": 167,
+        "startChar": 21,
+        "endLine": 167,
+        "endChar": 22
+      },
+      "revId": "9701a645a28c0ccc6a102cc92de4efcf80882eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4bff4a94_77b2d1c3",
@@ -98,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7be1aa4_f704870a",
+        "filename": "include/cppgc/visitor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-25T22:29:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bff4a94_77b2d1c3",
+      "range": {
+        "startLine": 172,
+        "startChar": 7,
+        "endLine": 172,
+        "endChar": 10
+      },
+      "revId": "9701a645a28c0ccc6a102cc92de4efcf80882eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7530a244_7a9b336d",
@@ -111,6 +159,30 @@
       "writtenOn": "2021-02-25T21:49:06Z",
       "side": 1,
       "message": "If we change the marking heuristics, value may already be marked here, no?\n\nCouldn\u0027t we just call a PreciseGC() and check afterwards that the ephemeron_pair_ is not cleared?",
+      "range": {
+        "startLine": 223,
+        "startChar": 2,
+        "endLine": 223,
+        "endChar": 14
+      },
+      "revId": "9701a645a28c0ccc6a102cc92de4efcf80882eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ddb88e9_caa354f9",
+        "filename": "test/unittests/heap/cppgc/ephemeron-pair-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-25T22:29:12Z",
+      "side": 1,
+      "message": "It\u0027s possible to rewrite the test with PreciseGC but I would prefer to keep it as is.\nI think the current format of the test gives us better certainty that the value is marked due to the ephemeron and not some other reference we forgot about.",
+      "parentUuid": "7530a244_7a9b336d",
       "range": {
         "startLine": 223,
         "startChar": 2,
