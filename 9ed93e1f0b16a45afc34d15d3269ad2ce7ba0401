@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52339c84_eca3fe17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-25T23:55:37Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d990bf83_26f585f3",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-02-25T17:56:32Z",
       "side": 1,
       "message": "After integrating this in Blink, I am inclined to move this call to CppHeap as CollectGarbageForTesting() that is also present for non-test targets, e.g. content_shell. (The call would internally dispatch to V8 or stand-alone)\n\nThe way we have it right now is very strict and only allows for calling the detached version through the testing namespace. This means that platform unittests need to call a utility method whereas other callsites can directly invoke the GC method on ThreadState. The method on ThreadState needs to stay because we also want to be able to GC in fully-featured modes.\n\nThoughts? (I think we could still change this afterwards as well.)\n\nhttps://crrev.com/c/2720155",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 21
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c4dd49c_9a447fd2",
+        "filename": "include/cppgc/testing.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-25T23:55:37Z",
+      "side": 1,
+      "message": "Looking at the followup CL, I tend to agree that the wrapper feels redundant for now. I\u0027m not generally opposed to calling CppHeap::CollectGarbageForTesting directly.\n\nOn the other hand, we will need a wider testing API for blink_heap_unittests, so having a place to encapsulate all the testing methods makes sense to me.\nI would wait until we finish getting all the unittests working and then re-evaluate if this class is needed or not. If we end up keeping testing::Heap, I think it will be better (semantically) to have the CollectGarbage call on it as well.",
+      "parentUuid": "d990bf83_26f585f3",
       "range": {
         "startLine": 33,
         "startChar": 7,
@@ -64,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "516df615_a089df69",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-25T23:55:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3874c35a_60e3db6a",
+      "range": {
+        "startLine": 296,
+        "startChar": 10,
+        "endLine": 296,
+        "endChar": 18
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fefd681_66fd47bc",
@@ -87,6 +152,53 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b286222c_77421b7e",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-25T23:55:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6fefd681_66fd47bc",
+      "range": {
+        "startLine": 409,
+        "startChar": 2,
+        "endLine": 409,
+        "endChar": 15
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47884684_21d2114a",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-25T23:55:37Z",
+      "side": 1,
+      "message": "Replace null-deref with DCHECK_NOT_NULL (for debug builds)?",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 7
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20d769bc_1bfe6f01",
@@ -100,6 +212,30 @@
       "writtenOn": "2021-02-25T12:42:44Z",
       "side": 1,
       "message": "Here and below: This just reverts the initial move to HeapBase.",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 26
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3da10cf4_a85dbdbf",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-25T23:55:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "20d769bc_1bfe6f01",
       "range": {
         "startLine": 119,
         "startChar": 4,
