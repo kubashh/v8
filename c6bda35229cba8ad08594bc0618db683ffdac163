@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a037e3ba_6bfeea02",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3914,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-25T07:38:39Z",
+      "side": 1,
+      "message": "You\u0027re right, there\u0027s no security guarantee. I\u0027m using them more as a reminder of which places to update once e.g. JSObject is no longer serialized.",
+      "parentUuid": "e146e0f7_825e566d",
+      "range": {
+        "startLine": 3914,
+        "startChar": 4,
+        "endLine": 3914,
+        "endChar": 40
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d5c6275_bde5e845",
@@ -71,6 +95,24 @@
       "writtenOn": "2021-02-24T15:06:59Z",
       "side": 1,
       "message": "Please print a warning with TRACE_BROKER_MISSING so that we can trace such situations.\n\nDid you actually observe this case?",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94beac93_ab962e66",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3917,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-25T07:38:39Z",
+      "side": 1,
+      "message": "Yes, it happens because the serializer only handles smi indices, while the optimization understands heap numbers too. Done.",
+      "parentUuid": "8d5c6275_bde5e845",
       "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -105,6 +147,24 @@
       "writtenOn": "2021-02-24T15:11:31Z",
       "side": 1,
       "message": "Can we now remove GetOwnElementFromHeap?",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fb8bf8c_79829883",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-25T07:38:39Z",
+      "side": 1,
+      "message": "It unfortunately still has a few callsites.",
+      "parentUuid": "eb2cc965_83825290",
       "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +215,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76fa8aa8_0be33cb5",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-25T07:38:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdd3699d_451f36dd",
+      "range": {
+        "startLine": 1329,
+        "startChar": 5,
+        "endLine": 1329,
+        "endChar": 6
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46b82b1e_dda1480f",
@@ -168,6 +252,30 @@
       "writtenOn": "2021-02-24T15:06:59Z",
       "side": 1,
       "message": "Please spell that out.",
+      "range": {
+        "startLine": 1333,
+        "startChar": 37,
+        "endLine": 1333,
+        "endChar": 41
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01a8eac8_5110c68f",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-25T07:38:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46b82b1e_dda1480f",
       "range": {
         "startLine": 1333,
         "startChar": 37,
@@ -203,6 +311,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b4f2092_7ccc8889",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-25T07:38:39Z",
+      "side": 1,
+      "message": "It\u0027s an educated guess. I looked at the initial CL: https://chromium-review.googlesource.com/677603, and the motivation back then was frozen elements and string wrappers.\n\nDONT_DELETE|READ_ONLY dictionary elements seem like a very exotic case to optimize for.",
+      "parentUuid": "40eab2d4_1c7e9b50",
+      "range": {
+        "startLine": 1355,
+        "startChar": 59,
+        "endLine": 1356,
+        "endChar": 70
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "302100d5_62b945df",
         "filename": "src/objects/lookup.cc",
         "patchSetId": 9
@@ -214,6 +346,30 @@
       "writtenOn": "2021-02-24T15:57:45Z",
       "side": 1,
       "message": "The SharedStringAccessGuardIfNeeded acquires the string_access [1] shared lock from the isolate. The only place where the main thread acquires this is in MakeExternal. Therefore, what it is guarding against is the MakeExternal transition. I\u0027ll admit the comment in the code is not explicit about this so I marked an action item for myself to make it clear what\u0027s guarding.\n\nSince, from the BG thread, we would be reading only internalized strings we are guaranteed to have either an internalized external string, or an internalized non-external string (and they will remain in that way).\n\nWe did this to limit ourselves to the most common cases of strings that appeared, while not performing the optimization in the other cases. We do encounter non-internalized strings in the compiler, but it is rarer.\n\n[1]: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/execution/isolate.h;l\u003d640;drc\u003d9d1a1d6154cae517f76de279682185c8abc30868\n\nWhat I\u0027d suggest is having a templatized version of the method with LocalIsolate/Isolate and then:\n1) Use that parameter for accessing the lock rather than using the string itself. It is faster, and the lock won\u0027t be acquired on the main thread (i.e. with the proper isolate). This is also solved by calling the String::Get method with a LocalIsoalte/Isolate parameter https://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/string-inl.h;l\u003d582;drc\u003d61219381be5d2405dcd1aac31fc60eaf6342896a\n2) In the lines above (maybe before the length check()) return {} if we have a LocalIsolate and the string is a non-internalized one. We haven\u0027t made sure those are safe to read from the BG yet. I think that we can make them safe but they are not safe yet.",
+      "range": {
+        "startLine": 1370,
+        "startChar": 6,
+        "endLine": 1370,
+        "endChar": 67
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b727a22_bd79f754",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-02-25T07:38:39Z",
+      "side": 1,
+      "message": "I see; what I wanted to prevent with this lock was all in-place rewrites of the string, including flattening and other shape changes. It feels like a string_access_ lock should protect these operations as well, wdyt?\n\nRe efficiency, we don\u0027t have a LocalIsolate here, how did you mean to templatize? Also, this method can run both on main and bg threads, depending on whether concurrent inlining is on.",
+      "parentUuid": "302100d5_62b945df",
       "range": {
         "startLine": 1370,
         "startChar": 6,
