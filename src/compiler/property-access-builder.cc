@@ -177,8 +177,14 @@ Node* PropertyAccessBuilder::TryBuildLoadConstantDataField(
   }
 
   JSObjectRef holder_ref(broker(), holder);
-  base::Optional<ObjectRef> value = holder_ref.GetOwnDataProperty(
-      access_info.field_representation(), access_info.field_index());
+  // TODO: Thread revisit to callers.
+  holder_ref.GetOwnDataProperty(access_info.field_representation(),
+                                access_info.field_index());
+  base::Optional<ObjectRef> value =
+      holder_ref
+          .GetOwnDataProperty(access_info.field_representation(),
+                              access_info.field_index())
+          .maybe_value();
   if (!value.has_value()) {
     return nullptr;
   }

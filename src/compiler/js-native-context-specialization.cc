@@ -456,8 +456,15 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
     bool found_on_proto = access_info.holder().ToHandle(&holder);
     JSObjectRef holder_ref =
         found_on_proto ? JSObjectRef(broker(), holder) : receiver_ref;
-    base::Optional<ObjectRef> constant = holder_ref.GetOwnDataProperty(
+    auto maybe_constant = holder_ref.GetOwnDataProperty(
         access_info.field_representation(), access_info.field_index());
+    if (maybe_constant.IsPostponed()) {
+      // Note this is potentially multiple tasks; they all belong to the same
+      // Node* though.
+      broker()->task_queue_.push_back(node);
+      return NoChange();
+    }
+    base::Optional<ObjectRef> constant = maybe_constant.maybe_value();
     if (!constant.has_value() || !constant->IsHeapObject() ||
         !constant->AsHeapObject().map().is_callable())
       return NoChange();
@@ -1958,7 +1965,14 @@ Reduction JSNativeContextSpecialization::ReduceElementLoadFromHeapConstant(
     base::Optional<ObjectRef> element;
 
     if (receiver_ref.IsJSObject()) {
-      element = receiver_ref.AsJSObject().GetOwnConstantElement(index);
+      auto result = receiver_ref.AsJSObject().GetOwnConstantElement(index);
+      if (result.kind() == RefResultKind::kPostponed) {
+        // Note this is potentially multiple tasks; they all belong to the same
+        // Node* though.
+        broker()->task_queue_.push_back(node);
+        return NoChange();
+      }
+      element = result.maybe_value();
       if (!element.has_value() && receiver_ref.IsJSArray()) {
         // We didn't find a constant element, but if the receiver is a cow-array
         // we can exploit the fact that any future write to the element will

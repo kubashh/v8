@@ -33,6 +33,7 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+class Node;
 class ObjectRef;
 
 std::ostream& operator<<(std::ostream& os, const ObjectRef& ref);
@@ -90,6 +91,8 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
                      CodeKind::TURBOFAN) {}
 
   ~JSHeapBroker();
+
+  std::vector<Node*> task_queue_;
 
   // The compilation target's native context. We need the setter because at
   // broker construction time we don't yet have the canonical handle.

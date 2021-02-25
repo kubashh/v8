@@ -170,6 +170,8 @@ class ObjectData : public ZoneObject {
   mutable Usage used_status = Usage::kUnused;
 #endif  // DEBUG
 
+  bool made_the_main_thread_roundtrip_ = false;
+
  private:
   Handle<Object> const object_;
   ObjectDataKind const kind_;
@@ -3116,15 +3118,20 @@ FeedbackCellRef FeedbackVectorRef::GetClosureFeedbackCell(int index) const {
       data()->AsFeedbackVector()->GetClosureFeedbackCell(broker(), index));
 }
 
-ObjectRef JSObjectRef::RawFastPropertyAt(FieldIndex index) const {
+RefResult<ObjectRef> JSObjectRef::RawFastPropertyAt(FieldIndex index) const {
+  if (FLAG_turbo_stw && !data_->made_the_main_thread_roundtrip_) {
+    data_->made_the_main_thread_roundtrip_ = true;
+    return RefResult<ObjectRef>::Postponed();
+  }
   if (data_->should_access_heap()) {
-    return ObjectRef(broker(), broker()->CanonicalPersistentHandle(
-                                   object()->RawFastPropertyAt(index)));
+    return RefResult<ObjectRef>::Success(
+        ObjectRef(broker(), broker()->CanonicalPersistentHandle(
+                                object()->RawFastPropertyAt(index))));
   }
   JSObjectData* object_data = data()->AsJSObject();
   CHECK(index.is_inobject());
-  return ObjectRef(broker(),
-                   object_data->GetInobjectField(index.property_index()));
+  return RefResult<ObjectRef>::Success(ObjectRef(
+      broker(), object_data->GetInobjectField(index.property_index())));
 }
 
 bool AllocationSiteRef::IsFastLiteral() const {
@@ -3903,8 +3910,12 @@ Maybe<double> ObjectRef::OddballToNumber() const {
   }
 }
 
-base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
+RefResult<ObjectRef> JSObjectRef::GetOwnConstantElement(
     uint32_t index, SerializationPolicy policy) const {
+  if (FLAG_turbo_stw && !data_->made_the_main_thread_roundtrip_) {
+    data_->made_the_main_thread_roundtrip_ = true;
+    return RefResult<ObjectRef>::Postponed();
+  }
   if (data_->should_access_heap() || FLAG_turbo_direct_heap_access) {
     // `elements` are currently still serialized as members of JSObjectRef.
     // TODO(jgruber,v8:7790): Once JSObject is no longer serialized, we must
@@ -3916,7 +3927,7 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
     base::Optional<FixedArrayBaseRef> maybe_elements_ref = elements();
     if (!maybe_elements_ref.has_value()) {
       TRACE_BROKER_MISSING(broker(), "JSObject::elements" << *this);
-      return {};
+      return RefResult<ObjectRef>::Failed();
     }
 
     FixedArrayBaseRef elements_ref = maybe_elements_ref.value();
@@ -3929,30 +3940,38 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
             broker()->isolate(), *object(), *elements_ref.object(),
             elements_kind, index);
 
-    if (!result.has_value()) return {};
+    if (!result.has_value()) return RefResult<ObjectRef>::Failed();
 
-    return ObjectRef{broker(),
-                     broker()->CanonicalPersistentHandle(result.value())};
+    return RefResult<ObjectRef>::Success(ObjectRef{
+        broker(), broker()->CanonicalPersistentHandle(result.value())});
   } else {
     ObjectData* element =
         data()->AsJSObject()->GetOwnConstantElement(broker(), index, policy);
-    if (element == nullptr) return base::nullopt;
-    return ObjectRef(broker(), element);
+    if (element == nullptr) {
+      return RefResult<ObjectRef>::Failed();
+    }
+    return RefResult<ObjectRef>::Success(ObjectRef(broker(), element));
   }
 }
 
-base::Optional<ObjectRef> JSObjectRef::GetOwnDataProperty(
+RefResult<ObjectRef> JSObjectRef::GetOwnDataProperty(
     Representation field_representation, FieldIndex index,
     SerializationPolicy policy) const {
+  if (FLAG_turbo_stw && !data_->made_the_main_thread_roundtrip_) {
+    data_->made_the_main_thread_roundtrip_ = true;
+    return RefResult<ObjectRef>::Postponed();
+  }
   if (data_->should_access_heap()) {
-    return GetOwnDataPropertyFromHeap(broker(),
-                                      Handle<JSObject>::cast(object()),
-                                      field_representation, index);
+    return RefResult<ObjectRef>::FromOptional(
+        GetOwnDataPropertyFromHeap(broker(), Handle<JSObject>::cast(object()),
+                                   field_representation, index));
   }
   ObjectData* property = data()->AsJSObject()->GetOwnDataProperty(
       broker(), field_representation, index, policy);
-  if (property == nullptr) return base::nullopt;
-  return ObjectRef(broker(), property);
+  if (property == nullptr) {
+    return RefResult<ObjectRef>::Failed();
+  }
+  return RefResult<ObjectRef>::Success(ObjectRef(broker(), property));
 }
 
 ObjectRef JSArrayRef::GetBoilerplateLength() const {

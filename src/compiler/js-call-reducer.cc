@@ -7696,8 +7696,15 @@ Reduction JSCallReducer::ReduceRegExpPrototypeTest(Node* node) {
     JSObjectRef holder_ref(broker(), holder);
 
     // Bail out if the exec method is not the original one.
-    base::Optional<ObjectRef> constant = holder_ref.GetOwnDataProperty(
+    auto maybe_constant = holder_ref.GetOwnDataProperty(
         ai_exec.field_representation(), ai_exec.field_index());
+    if (maybe_constant.IsPostponed()) {
+      // Note this is potentially multiple tasks; they all belong to the same
+      // Node* though.
+      broker()->task_queue_.push_back(node);
+      return inference.NoChange();
+    }
+    base::Optional<ObjectRef> constant = maybe_constant.maybe_value();
     if (!constant.has_value() ||
         !constant->equals(native_context().regexp_exec_function())) {
       return inference.NoChange();

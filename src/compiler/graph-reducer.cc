@@ -68,7 +68,10 @@ void GraphReducer::ReduceNode(Node* node) {
   DCHECK(stack_.empty());
   DCHECK(revisit_.empty());
   Push(node);
+  int task_queue_purges = 0;
+  int loop_iters = 0;
   for (;;) {
+    loop_iters++;
     if (!stack_.empty()) {
       // Process the node on the top of the stack, potentially pushing more or
       // popping the node off the stack.
@@ -81,6 +84,15 @@ void GraphReducer::ReduceNode(Node* node) {
         // state can change while in queue.
         Push(node);
       }
+    } else if (broker_ != nullptr && !broker_->task_queue_.empty()) {
+      if (FLAG_trace_turbo_stw) {
+        printf("phase %d iters %d tasks %d\n", task_queue_purges, loop_iters,
+               static_cast<int>(broker_->task_queue_.size()));
+      }
+      task_queue_purges++;
+      loop_iters = 0;
+      for (Node* n : broker_->task_queue_) Push(n);
+      broker_->task_queue_.clear();
     } else {
       // Run all finalizers.
       for (Reducer* const reducer : reducers_) reducer->Finalize();
@@ -88,6 +100,9 @@ void GraphReducer::ReduceNode(Node* node) {
       // Check if we have new nodes to revisit.
       if (revisit_.empty()) break;
     }
+  }
+  if (FLAG_trace_turbo_stw && task_queue_purges != 0) {
+    printf("phase %d iters %d\n", task_queue_purges, loop_iters);
   }
   DCHECK(revisit_.empty());
   DCHECK(stack_.empty());
