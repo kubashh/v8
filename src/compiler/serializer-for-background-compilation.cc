@@ -3016,7 +3016,8 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
 
   // For JSNativeContextSpecialization::InlinePropertySetterCall
   // and InlinePropertyGetterCall.
-  if (access_info.IsAccessorFieldConstant() &&
+  if ((access_info.IsAccessorFieldConstant() ||
+       access_info.IsAccessorDictionaryProtoConstant()) &&
       !access_info.constant().is_null()) {
     if (access_info.constant()->IsJSFunction()) {
       JSFunctionRef function(broker(), access_info.constant());

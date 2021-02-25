@@ -2349,7 +2349,8 @@ JSNativeContextSpecialization::BuildPropertyLoad(
   Node* value;
   if (access_info.IsNotFound()) {
     value = jsgraph()->UndefinedConstant();
-  } else if (access_info.IsAccessorFieldConstant()) {
+  } else if (access_info.IsAccessorFieldConstant() ||
+             access_info.IsAccessorDictionaryProtoConstant()) {
     ConvertReceiverMode receiver_mode =
         receiver == lookup_start_object
             ? ConvertReceiverMode::kNotNullOrUndefined
