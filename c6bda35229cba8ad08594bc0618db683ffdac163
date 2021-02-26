@@ -136,6 +136,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6ba30c48_83a334be",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3929,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-26T14:04:25Z",
+      "side": 1,
+      "message": "Please do that, it will be very helpful to easily see which optimizations had to be skipped when we have to debug performance issues.",
+      "parentUuid": "d2a343b9_8d23ffc7",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb2cc965_83825290",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 9
@@ -165,6 +183,24 @@
       "side": 1,
       "message": "It unfortunately still has a few callsites.",
       "parentUuid": "eb2cc965_83825290",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97e6c275_cdd0173d",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-26T14:04:25Z",
+      "side": 1,
+      "message": "Hmm, after this CL I think they are all essentially obsolete. Might require some refactoring though.",
+      "parentUuid": "6fb8bf8c_79829883",
       "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -323,6 +359,30 @@
       "side": 1,
       "message": "It\u0027s an educated guess. I looked at the initial CL: https://chromium-review.googlesource.com/677603, and the motivation back then was frozen elements and string wrappers.\n\nDONT_DELETE|READ_ONLY dictionary elements seem like a very exotic case to optimize for.",
       "parentUuid": "40eab2d4_1c7e9b50",
+      "range": {
+        "startLine": 1355,
+        "startChar": 59,
+        "endLine": 1356,
+        "endChar": 70
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8719f09_f60caa18",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-02-26T14:04:25Z",
+      "side": 1,
+      "message": "I\u0027d hope so.",
+      "parentUuid": "7b4f2092_7ccc8889",
       "range": {
         "startLine": 1355,
         "startChar": 59,
