@@ -204,6 +204,98 @@
       },
       "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "189155ef_3b34e226",
+        "filename": "src/diagnostics/etw-metadata.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-26T08:45:21Z",
+      "side": 1,
+      "message": "nit: Either drop or turn into a todo.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 77
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "802f6a01_2b3b769b",
+        "filename": "src/diagnostics/etw-metadata.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-26T08:45:21Z",
+      "side": 1,
+      "message": "can you move this to the cc file (we try to keep the h files as small as possible).",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 46
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cf0fa28_bb69e5b9",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-26T08:45:21Z",
+      "side": 1,
+      "message": "add V8_TARGET_OS_WIN guard",
+      "range": {
+        "startLine": 18,
+        "startChar": 35,
+        "endLine": 18,
+        "endChar": 36
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6fcbea6_30a687ef",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-26T08:45:21Z",
+      "side": 1,
+      "message": "Here and below, this needs a V8_TARGET_OS_WIN guard.",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 44
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

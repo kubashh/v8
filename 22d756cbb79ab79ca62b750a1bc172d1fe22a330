@@ -200,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62ba7a12_557818d2",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-26T08:45:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2689ff60_b643c775",
+      "range": {
+        "startLine": 81,
+        "startChar": 20,
+        "endLine": 81,
+        "endChar": 22
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aec3bdbf_35db1bb0",
@@ -270,6 +294,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d98034ac_1b2a3e57",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-26T08:45:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31350dad_8c85f99a",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 33
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d28e16b6_51d03464",
@@ -307,6 +355,30 @@
       "side": 1,
       "message": "Ideally I would use something like script.id(), but in this case, script has type UnboundedScript, whose GetID() method is defined in src/api/api.cc. If I try to invoke script-\u003eGetID() from src/libplatform, I get an undefined symbol linker error.\n\nIt doesn\u0027t really change the output on the ETW side, I think it was a parameter that was more relevant in the Chakra realm.",
       "parentUuid": "d28e16b6_51d03464",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 44
+      },
+      "revId": "22d756cbb79ab79ca62b750a1bc172d1fe22a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37c59396_811455dc",
+        "filename": "src/libplatform/tracing/recorder-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-02-26T08:45:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86d12fd0_41f6302b",
       "range": {
         "startLine": 124,
         "startChar": 0,
