@@ -6823,6 +6823,12 @@ class V8_EXPORT FunctionTemplate : public Template {
    */
   bool HasInstance(Local<Value> object);
 
+  /**
+   * Returns true if this is an API object and is instantiated by this
+   * function template (without checking for inheriting function templates).
+   */
+  bool ApiObjectHasInstance(Value* object);
+
   V8_INLINE static FunctionTemplate* Cast(Data* data);
 
  private:

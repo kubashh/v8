@@ -193,6 +193,7 @@ class EffectControlLinearizer {
   void LowerTransitionElementsKind(Node* node);
   Node* LowerLoadFieldByIndex(Node* node);
   Node* LowerLoadMessage(Node* node);
+  Node* CopyFastApiObjectArgToStackSlot(Node* node, int index);
   Node* LowerFastApiCall(Node* node);
   Node* LowerLoadTypedElement(Node* node);
   Node* LowerLoadDataViewElement(Node* node);
@@ -4977,7 +4978,8 @@ void EffectControlLinearizer::LowerStoreMessage(Node* node) {
   __ StoreField(AccessBuilder::ForExternalIntPtr(), offset, object_pattern);
 }
 
-static MachineType MachineTypeFor(CTypeInfo::Type type) {
+namespace {
+MachineType MachineTypeFor(CTypeInfo::Type type) {
   switch (type) {
     case CTypeInfo::Type::kVoid:
       return MachineType::AnyTagged();
@@ -4998,6 +5000,20 @@ static MachineType MachineTypeFor(CTypeInfo::Type type) {
     case CTypeInfo::Type::kV8Value:
       return MachineType::AnyTagged();
   }
+}
+}  // namespace
+
+Node* EffectControlLinearizer::CopyFastApiObjectArgToStackSlot(Node* node,
+                                                               int index) {
+  int kAlign = alignof(uintptr_t);
+  int kSize = sizeof(uintptr_t);
+  Node* stack_slot = __ StackSlot(kSize, kAlign);
+
+  __ Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                               kNoWriteBarrier),
+           stack_slot, 0, NodeProperties::GetValueInput(node, index));
+
+  return stack_slot;
 }
 
 Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
@@ -5068,7 +5084,10 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
   for (int i = FastApiCallNode::kFastTargetInputCount;
        i < c_arg_count + FastApiCallNode::kFastTargetInputCount; ++i) {
     if (c_signature->ArgumentInfo(i - 1).GetType() ==
-        CTypeInfo::Type::kFloat32) {
+        CTypeInfo::Type::kV8Value) {
+      inputs[i] = CopyFastApiObjectArgToStackSlot(node, i);
+    } else if (c_signature->ArgumentInfo(i - 1).GetType() ==
+               CTypeInfo::Type::kFloat32) {
       inputs[i] =
           __ TruncateFloat64ToFloat32(NodeProperties::GetValueInput(node, i));
     } else {
