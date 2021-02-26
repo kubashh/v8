@@ -229,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0e0ec3f_807c8647",
+        "filename": "src/diagnostics/etw-metadata.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-02-26T21:53:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "189155ef_3b34e226",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 77
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "802f6a01_2b3b769b",
@@ -242,6 +266,30 @@
       "writtenOn": "2021-02-26T08:45:21Z",
       "side": 1,
       "message": "can you move this to the cc file (we try to keep the h files as small as possible).",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 46
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4b148d9_dd9d7362",
+        "filename": "src/diagnostics/etw-metadata.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-02-26T21:53:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "802f6a01_2b3b769b",
       "range": {
         "startLine": 29,
         "startChar": 0,
@@ -275,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b0bc47d_00cb5ddd",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-02-26T21:53:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cf0fa28_bb69e5b9",
+      "range": {
+        "startLine": 18,
+        "startChar": 35,
+        "endLine": 18,
+        "endChar": 36
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6fcbea6_30a687ef",
@@ -288,6 +360,30 @@
       "writtenOn": "2021-02-26T08:45:21Z",
       "side": 1,
       "message": "Here and below, this needs a V8_TARGET_OS_WIN guard.",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 44
+      },
+      "revId": "3a213d0342dcd8298b493498ea8fbe665ec3f452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce9ad82a_d47acae1",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-02-26T21:53:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6fcbea6_30a687ef",
       "range": {
         "startLine": 170,
         "startChar": 0,
