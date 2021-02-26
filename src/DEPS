@@ -70,4 +70,7 @@ specific_include_rules = {
   "builtins-trace\.cc": [
     "+protos/perfetto",
   ],
+  "diagnostics\etw-jit.cc": [
+    "+include/libplatform/tracing/recorder.h",
+  ],
 }
