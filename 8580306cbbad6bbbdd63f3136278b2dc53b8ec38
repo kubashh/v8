@@ -16,6 +16,46 @@
       "message": "@Andreas: PTAL.\n@Michael, @Emanuel, @Adam: FYI.",
       "revId": "8580306cbbad6bbbdd63f3136278b2dc53b8ec38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dcf314d_b9deaf1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-02-26T07:43:47Z",
+      "side": 1,
+      "message": "Please add a test for the new lowering in int64-lowering-unittests.cc.\n\nI think the lowering is incorrect at the moment. If that\u0027s indeed the case, could you write a test that fails because of the incorrect lowering? Or does the representation not even matter?",
+      "revId": "8580306cbbad6bbbdd63f3136278b2dc53b8ec38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2ee65f9_c13a982f",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-02-26T07:43:47Z",
+      "side": 1,
+      "message": "Are you sure the MachineRepresentation here should be kWord64? The int64-lowering replaces all word64 nodes with two int32 nodes so that we can compile it on 32-bit platforms. 32-bit platforms typically cannot deal with kWord64. Also, the low-word and high-word replacements are actually word32 nodes. I think you have to the representation here to kWord32.",
+      "range": {
+        "startLine": 862,
+        "startChar": 66,
+        "endLine": 862,
+        "endChar": 69
+      },
+      "revId": "8580306cbbad6bbbdd63f3136278b2dc53b8ec38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
