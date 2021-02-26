@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e9e6a61_96e85915",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-02-26T10:01:56Z",
+      "side": 1,
+      "message": "LGTM.\n\nFeedback: Ideally finishing the project and flipping the flag are two CLs. The reason is that reverting and relanding the flag flip CL is easier. You may say that you would not revert this CL, you would create a new CL that disables the flag. That may be true, but a sheriff would revert the CL without a closer look.",
+      "revId": "c7db8b25ea2bff39f94fef9d888f9893b4127844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
