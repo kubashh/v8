@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b1d482e_a91c32f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-02-26T08:11:36Z",
+      "side": 1,
+      "message": "otherwise lg",
+      "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7910094a_1042b9a2",
@@ -19,6 +36,29 @@
         "startChar": 39,
         "endLine": 1969,
         "endChar": 45
+      },
+      "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a28446b9_0cef9516",
+        "filename": "src/objects/swiss-name-dictionary.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-02-26T08:11:36Z",
+      "side": 1,
+      "message": "Would it be possible to add a unit test for this? Then we could test Rehash in the presence of deleted elements, which might be cumbersome to test reliably otherwise.",
+      "range": {
+        "startLine": 111,
+        "startChar": 26,
+        "endLine": 111,
+        "endChar": 32
       },
       "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
