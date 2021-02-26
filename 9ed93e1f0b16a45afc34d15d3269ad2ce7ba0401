@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6171c70_ff7d9441",
+        "filename": "include/cppgc/testing.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-02-26T10:16:43Z",
+      "side": 1,
+      "message": "If we can provide all the testing APIs through v8::testing, that would be preferable imo. If not, I\u0027d rather have everything in one place in cppgc::testing.\nWe can deal with it later though.",
+      "parentUuid": "a461fa05_bd273710",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 21
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3874c35a_60e3db6a",
