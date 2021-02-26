@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a461fa05_bd273710",
+        "filename": "include/cppgc/testing.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-26T09:01:56Z",
+      "side": 1,
+      "message": "Changed the API now a to have a stop-the-world CollectGarbageForTesting() on CppHeap. \n\nFor the low-level testing, I think we should definitely have it somewhere in a testing-only target/file.\n\nThe question is whether we want it in cppgc::testing (which requires virtualization for cppgc::Heap and v8::CppHeap), or whether we create it only for v8::CppHeap through e.g. v8::testing.",
+      "parentUuid": "7c4dd49c_9a447fd2",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 21
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3874c35a_60e3db6a",
         "filename": "src/heap/cppgc-js/cpp-heap.cc",
         "patchSetId": 3
@@ -189,6 +213,30 @@
       "writtenOn": "2021-02-25T23:55:37Z",
       "side": 1,
       "message": "Replace null-deref with DCHECK_NOT_NULL (for debug builds)?",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 7
+      },
+      "revId": "9ed93e1f0b16a45afc34d15d3269ad2ce7ba0401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0fa4efe_348ab3ec",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-02-26T09:01:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47884684_21d2114a",
       "range": {
         "startLine": 37,
         "startChar": 2,
