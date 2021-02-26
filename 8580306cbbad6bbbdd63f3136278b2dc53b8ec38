@@ -56,6 +56,30 @@
       },
       "revId": "8580306cbbad6bbbdd63f3136278b2dc53b8ec38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18e4708e_77622696",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-02-26T08:54:48Z",
+      "side": 1,
+      "message": "Right. For some reason, it works with kWord64 as well.",
+      "parentUuid": "b2ee65f9_c13a982f",
+      "range": {
+        "startLine": 862,
+        "startChar": 66,
+        "endLine": 862,
+        "endChar": 69
+      },
+      "revId": "8580306cbbad6bbbdd63f3136278b2dc53b8ec38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
