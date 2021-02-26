@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "213dde41_16c3ddb3",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1969,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-02-26T12:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7910094a_1042b9a2",
+      "range": {
+        "startLine": 1969,
+        "startChar": 39,
+        "endLine": 1969,
+        "endChar": 45
+      },
+      "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a28446b9_0cef9516",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-02-26T08:11:36Z",
       "side": 1,
       "message": "Would it be possible to add a unit test for this? Then we could test Rehash in the presence of deleted elements, which might be cumbersome to test reliably otherwise.",
+      "range": {
+        "startLine": 111,
+        "startChar": 26,
+        "endLine": 111,
+        "endChar": 32
+      },
+      "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be2ec07c_60c95552",
+        "filename": "src/objects/swiss-name-dictionary.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-02-26T12:16:35Z",
+      "side": 1,
+      "message": "See my reply to Igor\u0027s comment: I had a unit test, but it didn\u0027t catch this. Changed now! (The test suite is coming as separate CLs)",
+      "parentUuid": "a28446b9_0cef9516",
       "range": {
         "startLine": 111,
         "startChar": 26,
@@ -81,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d763e7_9b7e3e0c",
+        "filename": "src/objects/swiss-name-dictionary.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-02-26T12:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc34f30e_8a608c1f",
+      "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "452fc0fc_9d8209b1",
@@ -94,6 +160,24 @@
       "writtenOn": "2021-02-25T18:28:36Z",
       "side": 1,
       "message": "Will it skip deleted entries?",
+      "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b085cdd_663948b6",
+        "filename": "src/objects/swiss-name-dictionary.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-02-26T12:16:35Z",
+      "side": 1,
+      "message": "No, they weren\u0027t! This was a genuine bug, thanks for catching this! What\u0027s worse, this wasn\u0027t caught by my test case, which didn\u0027t delete entries before rehashing. \n\nI\u0027ve extended this test now. The test for non-inplace rehashing wasn\u0027t affected, it does delete entries.",
+      "parentUuid": "452fc0fc_9d8209b1",
       "revId": "589c0962f57bbc5d8a24781f097dcdd81323e27d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
