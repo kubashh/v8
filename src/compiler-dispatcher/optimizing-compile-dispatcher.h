@@ -58,6 +58,9 @@ class V8_EXPORT_PRIVATE OptimizingCompileDispatcher {
 
   enum ModeFlag { COMPILE, FLUSH };
 
+  void FlushQueues(BlockingBehavior blocking_behavior,
+                   bool restore_function_code);
+  void FlushInputQueue();
   void FlushOutputQueue(bool restore_function_code);
   void CompileNext(OptimizedCompilationJob* job, RuntimeCallStats* stats,
                    LocalIsolate* local_isolate);
