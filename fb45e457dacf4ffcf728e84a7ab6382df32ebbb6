@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43365d23_a3e815c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-03-01T16:18:47Z",
+      "side": 1,
+      "message": "Thanks Ross!",
+      "revId": "fb45e457dacf4ffcf728e84a7ab6382df32ebbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95834187_714b13a8",
@@ -70,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73df723d_41a55494",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-03-01T16:18:47Z",
+      "side": 1,
+      "message": "Ack. I will drop this in a follow up cl.",
+      "parentUuid": "c7d69a5f_597d4426",
+      "revId": "fb45e457dacf4ffcf728e84a7ab6382df32ebbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "996d7143_87bd5f07",
@@ -83,6 +118,30 @@
       "writtenOn": "2021-03-01T14:41:37Z",
       "side": 1,
       "message": "Should this be \"restore_function_code\" ?",
+      "range": {
+        "startLine": 159,
+        "startChar": 31,
+        "endLine": 159,
+        "endChar": 35
+      },
+      "revId": "fb45e457dacf4ffcf728e84a7ab6382df32ebbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09284c9e_c1f5799c",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-03-01T16:18:47Z",
+      "side": 1,
+      "message": "I set this to be true to be consistent with the current implementation. I think we could drop this and always clear the optimization marker when disposing the compilation job. We set it as false when clearing the output queue in Stop (on Isolate::DeInit). I don\u0027t think it matters either way there since we are disposing the isolate anyway.\n\nThe other place where we pass true is when we try to InstallOptimizedCode but the function already has optimized code of the same code kind (I can\u0027t think of cases where this can happen but not 100% sure). There I think we shouldn\u0027t do JSFunction::set_code but I don\u0027t think we should leave the optimization marker as \"InOptimizationQueue\". \n\nIn short, passing true is current behaviour and I will clean it up in a follow up cl since that is a change in behaviour.",
+      "parentUuid": "996d7143_87bd5f07",
       "range": {
         "startLine": 159,
         "startChar": 31,
