@@ -976,6 +976,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   MemOperand EntryFromBuiltinIndexAsOperand(Builtins::Name builtin_index);
   void CallBuiltinByIndex(Register builtin_index) override;
   void CallBuiltin(int builtin_index);
+  void TailCallBuiltin(int builtin_index);
 
   void LoadCodeObjectEntry(Register destination, Register code_object) override;
   void CallCodeObject(Register code_object) override;
@@ -1446,6 +1447,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 
   void LoadStorePairMacro(const CPURegister& rt, const CPURegister& rt2,
                           const MemOperand& addr, LoadStorePairOp op);
+
+  int64_t CalculateTargetOffset(Address target, RelocInfo::Mode rmode,
+                                byte* pc);
 
   void JumpHelper(int64_t offset, RelocInfo::Mode rmode, Condition cond = al);
 

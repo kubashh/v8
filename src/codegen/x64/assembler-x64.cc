@@ -979,6 +979,7 @@ void Assembler::call(Label* L) {
 
 void Assembler::call(Address entry, RelocInfo::Mode rmode) {
   DCHECK(RelocInfo::IsRuntimeEntry(rmode));
+  DCHECK_NE(options().code_range_start, 0);
   EnsureSpace ensure_space(this);
   // 1110 1000 #32-bit disp.
   emit(0xE8);
@@ -1443,6 +1444,15 @@ void Assembler::j(Condition cc, Handle<Code> target, RelocInfo::Mode rmode) {
   RecordRelocInfo(rmode);
   int code_target_index = AddCodeTarget(target);
   emitl(code_target_index);
+}
+
+void Assembler::jmp(Address entry, RelocInfo::Mode rmode) {
+  DCHECK(RelocInfo::IsRuntimeEntry(rmode));
+  DCHECK_NE(options().code_range_start, 0);
+  EnsureSpace ensure_space(this);
+  // 1110 1001 #32-bit disp.
+  emit(0xE9);
+  emit_runtime_entry(entry, rmode);
 }
 
 void Assembler::jmp_rel(int32_t offset) {

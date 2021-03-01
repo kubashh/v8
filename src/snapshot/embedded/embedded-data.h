@@ -23,6 +23,9 @@ class InstructionStream final : public AllStatic {
   // Returns true, iff the given pc points into an off-heap instruction stream.
   static bool PcIsOffHeap(Isolate* isolate, Address pc);
 
+  static bool TryGetAddressForHashing(Isolate* isolate, Address address,
+                                      uint32_t* result);
+
   // Returns the corresponding Code object if it exists, and nullptr otherwise.
   static Code TryLookupCode(Isolate* isolate, Address address);
 
