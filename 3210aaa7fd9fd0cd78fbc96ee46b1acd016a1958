@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f94d9c4c_809e1358",
+        "filename": "src/api/api.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 8358,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-01T15:34:48Z",
+      "side": 1,
+      "message": "I think this will have a default overhead for windows and we should put it behind a flag. See gdbjit in flag-definitions.h\n\n  if (code_event_handler \u003d\u003d nullptr \u0026\u0026 i::FLAG_etwjit) {\n    ...\n  } \n\nSorry, for trickling in all these informations.",
+      "range": {
+        "startLine": 8358,
+        "startChar": 0,
+        "endLine": 8358,
+        "endChar": 58
+      },
+      "revId": "3210aaa7fd9fd0cd78fbc96ee46b1acd016a1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92dcd632_c6ced2ad",
+        "filename": "src/diagnostics/system-jit-win.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-01T15:34:48Z",
+      "side": 1,
+      "message": "nit: let\u0027s DCHECK(!g_v8Provider)",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 55
+      },
+      "revId": "3210aaa7fd9fd0cd78fbc96ee46b1acd016a1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d92d0bd4_b8420c7f",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-01T15:34:48Z",
+      "side": 1,
+      "message": "Can you add a todo here? I think this should be put into a platform specific diagnostics object (which would be similar for instance for signpost for mac)\n\nTODO(cbruni): Move to platform diagnostics helper",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 44
+      },
+      "revId": "3210aaa7fd9fd0cd78fbc96ee46b1acd016a1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
