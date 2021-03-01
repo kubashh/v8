@@ -4500,8 +4500,10 @@ void WasmGraphBuilder::LowerInt64(CallOrigin origin) {
 }
 
 void WasmGraphBuilder::SimdScalarLoweringForTesting() {
-  SimdScalarLowering(mcgraph(), CreateMachineSignature(mcgraph()->zone(), sig_,
-                                                       kCalledFromWasm))
+  SimplifiedOperatorBuilder simplified(mcgraph()->zone());
+  SimdScalarLowering(
+      mcgraph(), &simplified,
+      CreateMachineSignature(mcgraph()->zone(), sig_, kCalledFromWasm))
       .LowerGraph();
 }
 
@@ -7827,7 +7829,8 @@ bool BuildGraphForWasmFunction(AccountingAllocator* allocator,
                                     WasmGraphBuilder::kCalledFromWasm);
   if (builder.has_simd() &&
       (!CpuFeatures::SupportsWasmSimd128() || env->lower_simd)) {
-    SimdScalarLowering(mcgraph, sig).LowerGraph();
+    SimplifiedOperatorBuilder simplified(mcgraph->zone());
+    SimdScalarLowering(mcgraph, &simplified, sig).LowerGraph();
 
     // SimdScalarLowering changes all v128 to 4 i32, so update the machine
     // signature for the call to LowerInt64.
