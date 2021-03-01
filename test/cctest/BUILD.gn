@@ -57,7 +57,11 @@ v8_header_set("cctest_headers") {
     "../..:internal_config_base",
   ]
 
-  deps = [ "../..:v8_internal_headers" ]
+  deps = [
+    "../..:v8_internal_headers",
+    "../..:v8_libplatform",
+    "../../:v8_libbase",
+  ]
 
   sources = [ "cctest.h" ]
 }
@@ -451,7 +455,9 @@ v8_source_set("cctest_sources") {
   defines = []
   deps = [
     "../..:run_torque",
+    "../..:v8_libsampler",
     "../..:v8_shared_internal_headers",
+    "../../src/inspector:inspector",
   ]
 
   if (v8_enable_i18n_support) {
