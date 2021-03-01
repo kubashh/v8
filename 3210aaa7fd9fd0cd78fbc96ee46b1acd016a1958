@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59c29da9_5ba99e7d",
+        "filename": "src/api/api.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 8358,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-01T19:57:21Z",
+      "side": 1,
+      "message": "SGTM for now. I think we can discuss this again if this is ever enabled by default.",
+      "parentUuid": "f899fad8_d0c24298",
+      "range": {
+        "startLine": 8358,
+        "startChar": 0,
+        "endLine": 8358,
+        "endChar": 58
+      },
+      "revId": "3210aaa7fd9fd0cd78fbc96ee46b1acd016a1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92dcd632_c6ced2ad",
