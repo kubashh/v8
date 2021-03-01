@@ -261,7 +261,7 @@ bool SafeStackFrameIterator::IsNoFrameBytecodeHandlerPc(Isolate* isolate,
   // Return false for builds with non-embedded bytecode handlers.
   if (Isolate::CurrentEmbeddedBlobCode() == nullptr) return false;
 
-  EmbeddedData d = EmbeddedData::FromBlob();
+  EmbeddedData d = EmbeddedData::FromBlob(isolate);
   if (pc < d.InstructionStartOfBytecodeHandlers() ||
       pc >= d.InstructionEndOfBytecodeHandlers()) {
     // Not a bytecode handler pc address.
@@ -2155,9 +2155,10 @@ void InternalFrame::Iterate(RootVisitor* v) const {
 namespace {
 
 uint32_t PcAddressForHashing(Isolate* isolate, Address address) {
-  if (InstructionStream::PcIsOffHeap(isolate, address)) {
+  uint32_t hash;
+  if (InstructionStream::TryGetAddressForHashing(isolate, address, &hash)) {
     // Ensure that we get predictable hashes for addresses in embedded code.
-    return EmbeddedData::FromBlob(isolate).AddressForHashing(address);
+    return hash;
   }
   return ObjectAddressForHashing(address);
 }

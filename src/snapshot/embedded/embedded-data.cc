@@ -13,19 +13,17 @@
 namespace v8 {
 namespace internal {
 
-// static
-bool InstructionStream::PcIsOffHeap(Isolate* isolate, Address pc) {
-  const Address start =
-      reinterpret_cast<Address>(isolate->embedded_blob_code());
-  return start <= pc && pc < start + isolate->embedded_blob_code_size();
+namespace {
+
+bool PcIsOffHeap(const EmbeddedData& d, Address pc) {
+  const Address start = reinterpret_cast<Address>(d.code());
+  return start <= pc && pc < start + d.code_size();
 }
 
-// static
-Code InstructionStream::TryLookupCode(Isolate* isolate, Address address) {
-  if (!PcIsOffHeap(isolate, address)) return Code();
+int32_t TryLookupCode(const EmbeddedData& d, Address address) {
+  if (!PcIsOffHeap(d, address)) return Builtins::kNoBuiltinId;
 
-  EmbeddedData d = EmbeddedData::FromBlob();
-  if (address < d.InstructionStartOfBuiltin(0)) return Code();
+  if (address < d.InstructionStartOfBuiltin(0)) return Builtins::kNoBuiltinId;
 
   // Note: Addresses within the padding section between builtins (i.e. within
   // start + size <= address < start + padded_size) are interpreted as belonging
@@ -42,11 +40,63 @@ Code InstructionStream::TryLookupCode(Isolate* isolate, Address address) {
     } else if (address >= end) {
       l = mid + 1;
     } else {
-      return isolate->builtins()->builtin(mid);
+      return mid;
     }
   }
 
   UNREACHABLE();
+}
+
+}  // namespace
+
+// static
+bool InstructionStream::PcIsOffHeap(Isolate* isolate, Address pc) {
+  if (isolate->embedded_blob_code() == nullptr) return false;
+  if (i::PcIsOffHeap(EmbeddedData::FromBlob(isolate), pc)) return true;
+
+  if (FLAG_experimental_remap_embedded_builtins &&
+      i::PcIsOffHeap(EmbeddedData::FromBlob(), pc))
+    return true;
+  return false;
+}
+
+// static
+bool InstructionStream::TryGetAddressForHashing(Isolate* isolate,
+                                                Address address,
+                                                uint32_t* result) {
+  if (isolate->embedded_blob_code() == nullptr) return false;
+  EmbeddedData d = EmbeddedData::FromBlob(isolate);
+  if (i::PcIsOffHeap(d, address)) {
+    *result = d.AddressForHashing(address);
+    return true;
+  }
+
+  if (FLAG_experimental_remap_embedded_builtins) {
+    d = EmbeddedData::FromBlob();
+    if (i::PcIsOffHeap(d, address)) {
+      *result = d.AddressForHashing(address);
+      return true;
+    }
+  }
+  return false;
+}
+
+// static
+Code InstructionStream::TryLookupCode(Isolate* isolate, Address address) {
+  if (isolate->embedded_blob_code() == nullptr) return Code();
+
+  int32_t builtin_id =
+      i::TryLookupCode(EmbeddedData::FromBlob(isolate), address);
+  if (builtin_id != Builtins::kNoBuiltinId) {
+    return isolate->builtins()->builtin(builtin_id);
+  }
+  if (FLAG_experimental_remap_embedded_builtins) {
+    builtin_id = i::TryLookupCode(EmbeddedData::FromBlob(), address);
+    if (builtin_id != Builtins::kNoBuiltinId) {
+      return isolate->builtins()->builtin(builtin_id);
+    }
+  }
+  return Code();
 }
 
 // static
