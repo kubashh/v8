@@ -1564,28 +1564,109 @@ class LiftoffStackSlots {
   LiftoffStackSlots(const LiftoffStackSlots&) = delete;
   LiftoffStackSlots& operator=(const LiftoffStackSlots&) = delete;
 
-  void Add(const LiftoffAssembler::VarState& src, uint32_t src_offset,
-           RegPairHalf half) {
-    slots_.emplace_back(src, src_offset, half);
-  }
-  void Add(const LiftoffAssembler::VarState& src) { slots_.emplace_back(src); }
+  // Returns the number of logical slots.
+  size_t Size() const { return slots_.size(); }
 
-  void Reverse() { std::reverse(slots_.begin(), slots_.end()); }
+  // Returns the total number of stack slots occupied by the logical slots,
+  // including any padding slots.
+  int TotalStackSlots() const {
+    DCHECK_LT(0, slots_.size());
+    const Slot& first_slot = slots_[0];
+    return first_slot.stack_slot_ + NumStackSlots(first_slot);
+  }
+
+  void Add(const LiftoffAssembler::VarState& src, uint32_t src_offset,
+           RegPairHalf half, int stack_slot) {
+    const size_t position = FindPosition(stack_slot);
+    if (position == Size()) {
+      slots_.emplace_back(src, src_offset, half, stack_slot);
+    } else {
+      GrowSlotsForInsert(position);
+      slots_[position] = Slot(src, src_offset, half, stack_slot);
+    }
+  }
+  void Add(const LiftoffAssembler::VarState& src, int stack_slot) {
+    size_t position = FindPosition(stack_slot);
+    if (position == Size()) {
+      slots_.emplace_back(src, stack_slot);
+    } else {
+      GrowSlotsForInsert(position);
+      slots_[position] = Slot(src, stack_slot);
+    }
+  }
+
+  void Reverse() {
+    DCHECK_LT(0, slots_.size());
+#if DEBUG
+    CheckReversible();
+#endif
+    std::reverse(slots_.begin(), slots_.end());
+  }
+
+#if DEBUG
+  void CheckReversible() const {
+    // Check that the slots are contiguous - i.e. that there are no padding
+    // slots. This is the case when calling Builtins, which take only single
+    // slot JavaScript arguments.
+    for (size_t i = 1; i < slots_.size(); ++i) {
+      const Slot& current = slots_[i];
+      const Slot& previous = slots_[i - 1];
+      DCHECK_EQ(previous.stack_slot_ - NumStackSlots(previous),
+                current.stack_slot_);
+    }
+  }
+#endif
 
   inline void Construct();
 
  private:
+  // A logical slot, which may occupy multiple stack slots.
   struct Slot {
     Slot(const LiftoffAssembler::VarState& src, uint32_t src_offset,
-         RegPairHalf half)
-        : src_(src), src_offset_(src_offset), half_(half) {}
-    explicit Slot(const LiftoffAssembler::VarState& src)
-        : src_(src), half_(kLowWord) {}
+         RegPairHalf half, int stack_slot)
+        : src_(src),
+          src_offset_(src_offset),
+          half_(half),
+          stack_slot_(stack_slot) {}
+    Slot(const LiftoffAssembler::VarState& src, int stack_slot)
+        : src_(src), half_(kLowWord), stack_slot_(stack_slot) {}
+
+    bool operator>(const Slot& other) const {
+      return stack_slot_ > other.stack_slot_;
+    }
 
     LiftoffAssembler::VarState src_;
     uint32_t src_offset_ = 0;
     RegPairHalf half_;
+    int stack_slot_ = 0;
   };
+
+  // Returns the position that a slot with location |stack_slot| should be
+  // inserted into the |slots_| vector.
+  size_t FindPosition(int stack_slot) {
+    // Search from the end, as slots are expected to be added in mostly
+    // descending order.
+    for (size_t i = slots_.size(); i > 0; --i) {
+      if (slots_[i - 1].stack_slot_ > stack_slot) return i;
+    }
+    return 0;
+  }
+
+  void GrowSlotsForInsert(size_t insert_position) {
+    DCHECK_LT(insert_position, Size());
+    // Use the first slot as a dummy value to grow the |slots_| vector.
+    slots_.emplace_back(slots_[0]);
+    // Move slots up by one to make room at |insert_position|.
+    for (size_t i = Size() - 1; i > insert_position; --i) {
+      slots_[i] = slots_[i - 1];
+    }
+  }
+
+  // Returns the number of stack slots making up this logical slot.
+  int NumStackSlots(const Slot& slot) const {
+    return (element_size_bytes(slot.src_.kind()) + kSystemPointerSize - 1) >>
+           kSystemPointerSizeLog2;
+  }
 
   base::SmallVector<Slot, 8> slots_;
   LiftoffAssembler* const asm_;

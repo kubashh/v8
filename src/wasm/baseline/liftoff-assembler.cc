@@ -834,7 +834,8 @@ void PrepareStackTransfers(const ValueKindSig* sig,
         }
       } else {
         DCHECK(loc.IsCallerFrameSlot());
-        stack_slots->Add(slot, stack_offset, half);
+        int param_offset = -loc.GetLocation();
+        stack_slots->Add(slot, stack_offset, half, param_offset);
       }
     }
   }
@@ -851,10 +852,11 @@ void LiftoffAssembler::PrepareBuiltinCall(
   PrepareStackTransfers(sig, call_descriptor, params.begin(), &stack_slots,
                         &stack_transfers, &param_regs);
   SpillAllRegisters();
-  // Create all the slots.
-  // Builtin stack parameters are pushed in reversed order.
-  stack_slots.Reverse();
-  stack_slots.Construct();
+  if (stack_slots.Size() > 0) {
+    // Builtin stack parameters are pushed in reversed order.
+    stack_slots.Reverse();
+    stack_slots.Construct();
+  }
   // Execute the stack transfers before filling the instance register.
   stack_transfers.Execute();
 
@@ -915,14 +917,18 @@ void LiftoffAssembler::PrepareCall(const ValueKindSig* sig,
                                    kIntPtr);
       *target = new_target.gp();
     } else {
+      int last_slot =
+          static_cast<int>(call_descriptor->StackParameterCount() + 1);
       stack_slots.Add(LiftoffAssembler::VarState(LiftoffAssembler::kIntPtr,
-                                                 LiftoffRegister(*target), 0));
+                                                 LiftoffRegister(*target), 0),
+                      last_slot);
       *target = no_reg;
     }
   }
 
-  // Create all the slots.
-  stack_slots.Construct();
+  if (stack_slots.Size() > 0) {
+    stack_slots.Construct();
+  }
   // Execute the stack transfers before filling the instance register.
   stack_transfers.Execute();
   // Pop parameters from the value stack.
