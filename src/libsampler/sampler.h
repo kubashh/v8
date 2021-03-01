@@ -9,7 +9,6 @@
 #include <memory>
 #include <unordered_map>
 
-#include "include/v8.h"
 #include "src/base/lazy-instance.h"
 #include "src/base/macros.h"
 
@@ -18,6 +17,10 @@
 #endif
 
 namespace v8 {
+
+class Isolate;
+struct RegisterState;
+
 namespace sampler {
 
 // ----------------------------------------------------------------------------

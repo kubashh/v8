@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "include/v8.h"
 #include "src/base/macros.h"
 #include "src/debug/debug-interface.h"
 #include "src/debug/interface-types.h"

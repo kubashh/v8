@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "include/v8.h"
 #include "src/inspector/protocol/Protocol.h"
 #include "src/inspector/protocol/Runtime.h"
 

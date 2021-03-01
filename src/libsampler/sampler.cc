@@ -50,13 +50,14 @@ using zx_thread_state_general_regs_t = zx_x86_64_general_regs_t;
 #else
 using zx_thread_state_general_regs_t = zx_arm64_general_regs_t;
 #endif
-#endif  // !defined(ZX_THREAD_STATE_GENERAL_REGS)
+#endif  // defined(ZX_THREAD_STATE_REGSET0)
 
 #endif
 
 #include <algorithm>
 #include <vector>
 
+#include "include/v8.h"
 #include "src/base/atomic-utils.h"
 #include "src/base/platform/platform.h"
 

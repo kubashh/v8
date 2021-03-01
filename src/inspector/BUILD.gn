@@ -58,7 +58,7 @@ inspector_protocol_generate("protocol_generated_sources") {
 config("inspector_config") {
   visibility = [ ":*" ]  # Only targets in this file can depend on this.
 
-  configs = [ "../../:internal_config" ]
+  configs = []
   include_dirs = [ "../../include" ]
 }
 
@@ -79,9 +79,24 @@ v8_source_set("inspector_string_conversions") {
   deps = [ "../..:v8_libbase" ]
 }
 
+v8_header_set("inspector_headers") {
+  configs = [ ":inspector_config" ]
+
+  deps = [ ":protocol_generated_sources" ]
+
+  sources = rebase_path([
+                          "../../include/inspector/Debugger.h",
+                          "../../include/inspector/Runtime.h",
+                          "../../include/inspector/Schema.h",
+                        ],
+                        ".",
+                        target_gen_dir)
+}
+
 v8_source_set("inspector") {
   deps = [
     ":inspector_string_conversions",
+    "../..:v8",
     "../..:v8_tracing",
     "../..:v8_version",
     "../../third_party/inspector_protocol:crdtp",
