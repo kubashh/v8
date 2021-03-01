@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df1f80e9_e5792e19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-03-01T15:00:27Z",
+      "side": 1,
+      "message": "PTAL. Sorry for noticing late.",
+      "revId": "8a5baa0e4f218ddf35520b53eb3fc2eba0f9ccd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
