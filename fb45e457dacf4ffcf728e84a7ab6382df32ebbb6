@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cc995c8_22487cd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-03-01T14:41:37Z",
+      "side": 1,
+      "message": "Nice, LGTM thanks",
+      "revId": "fb45e457dacf4ffcf728e84a7ab6382df32ebbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95834187_714b13a8",
@@ -31,6 +48,47 @@
       "writtenOn": "2021-03-01T14:22:47Z",
       "side": 1,
       "message": "I am not entirely sure why we need to set_code here. I can\u0027t think of any reason why we should. We only do this when disposing compilation jobs with Flush (basically a GC under memory pressure or debugger) so may not be a problem for now but I am also unsure why we need it here. With mid-tier pipeline this may not be the right thing to do always if we have optimized code from a lower tier. I will drop this unless I am missing something and we need it for some reason.",
+      "revId": "fb45e457dacf4ffcf728e84a7ab6382df32ebbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7d69a5f_597d4426",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-03-01T14:41:37Z",
+      "side": 1,
+      "message": "Yes this shouldn\u0027t be necessary, let\u0027s drop this (although maybe as a separate CL just to avoid confusion and allow rollback if needed).",
+      "parentUuid": "95834187_714b13a8",
+      "revId": "fb45e457dacf4ffcf728e84a7ab6382df32ebbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "996d7143_87bd5f07",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-03-01T14:41:37Z",
+      "side": 1,
+      "message": "Should this be \"restore_function_code\" ?",
+      "range": {
+        "startLine": 159,
+        "startChar": 31,
+        "endLine": 159,
+        "endChar": 35
+      },
       "revId": "fb45e457dacf4ffcf728e84a7ab6382df32ebbb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
