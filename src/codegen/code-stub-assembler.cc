@@ -10257,34 +10257,6 @@ TNode<UntaggedT> CodeStubAssembler::PrepareValueForWriteToTypedArray(
   }
 }
 
-Node* CodeStubAssembler::PrepareValueForWriteToTypedArray(
-    TNode<Object> input, ElementsKind elements_kind, TNode<Context> context) {
-  DCHECK(IsTypedArrayElementsKind(elements_kind));
-
-  switch (elements_kind) {
-    case UINT8_ELEMENTS:
-    case INT8_ELEMENTS:
-    case UINT16_ELEMENTS:
-    case INT16_ELEMENTS:
-    case UINT32_ELEMENTS:
-    case INT32_ELEMENTS:
-    case UINT8_CLAMPED_ELEMENTS:
-      return PrepareValueForWriteToTypedArray<Word32T>(input, elements_kind,
-                                                       context);
-    case FLOAT32_ELEMENTS:
-      return PrepareValueForWriteToTypedArray<Float32T>(input, elements_kind,
-                                                        context);
-    case FLOAT64_ELEMENTS:
-      return PrepareValueForWriteToTypedArray<Float64T>(input, elements_kind,
-                                                        context);
-    case BIGINT64_ELEMENTS:
-    case BIGUINT64_ELEMENTS:
-      return ToBigInt(context, input);
-    default:
-      UNREACHABLE();
-  }
-}
-
 void CodeStubAssembler::BigIntToRawBytes(TNode<BigInt> bigint,
                                          TVariable<UintPtrT>* var_low,
                                          TVariable<UintPtrT>* var_high) {
@@ -10318,6 +10290,329 @@ void CodeStubAssembler::BigIntToRawBytes(TNode<BigInt> bigint,
   BIND(&done);
 }
 
+template <>
+void CodeStubAssembler::EmitElementStoreHelper<Word32T>(
+    TNode<JSTypedArray> typed_array, TNode<IntPtrT> key, TNode<Object> value,
+    ElementsKind elements_kind, KeyedAccessStoreMode store_mode, Label* bailout,
+    TNode<Context> context, TVariable<Object>* maybe_converted_value) {
+  Label done(this), update_value_and_bailout(this, Label::kDeferred);
+
+#if DEBUG
+  switch (elements_kind) {
+    case UINT8_ELEMENTS:
+    case INT8_ELEMENTS:
+    case UINT16_ELEMENTS:
+    case INT16_ELEMENTS:
+    case UINT32_ELEMENTS:
+    case INT32_ELEMENTS:
+    case UINT8_CLAMPED_ELEMENTS:
+      break;
+    default:
+      UNREACHABLE();
+  }
+#endif  // DEBUG
+
+  TNode<Word32T> converted_value =
+      PrepareValueForWriteToTypedArray<Word32T>(value, elements_kind, context);
+
+  // There must be no allocations between the buffer load and
+  // and the actual store to backing store, because GC may decide that
+  // the buffer is not alive or move the elements.
+  // TODO(ishell): introduce DisallowGarbageCollectionCode scope here.
+
+  // Check if buffer has been detached.
+  TNode<JSArrayBuffer> buffer = LoadJSArrayBufferViewBuffer(typed_array);
+  if (maybe_converted_value) {
+    GotoIf(IsDetachedBuffer(buffer), &update_value_and_bailout);
+  } else {
+    GotoIf(IsDetachedBuffer(buffer), bailout);
+  }
+
+  // Bounds check.
+  TNode<UintPtrT> length = LoadJSTypedArrayLength(typed_array);
+
+  if (store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
+    // Skip the store if we write beyond the length or
+    // to a property with a negative integer index.
+    GotoIfNot(UintPtrLessThan(key, length), &done);
+  } else {
+    DCHECK_EQ(store_mode, STANDARD_STORE);
+    GotoIfNot(UintPtrLessThan(key, length), &update_value_and_bailout);
+  }
+
+  TNode<RawPtrT> data_ptr = LoadJSTypedArrayDataPtr(typed_array);
+  StoreElement(data_ptr, elements_kind, key, converted_value);
+  Goto(&done);
+
+  BIND(&update_value_and_bailout);
+  // We already prepared the incoming value for storing into a typed array.
+  // This might involve calling ToNumber in some cases. We shouldn't call
+  // ToNumber again in the runtime so pass the converted value to the runtime.
+  // The prepared value is an untagged value. Convert it to a tagged value
+  // to pass it to runtime. It is not possible to do the detached buffer check
+  // before we prepare the value, since ToNumber can detach the ArrayBuffer.
+  // The spec specifies the order of these operations.
+  if (maybe_converted_value != nullptr) {
+    // TODO(solanes): Does it make sense to further specialize within Word32T?
+    switch (elements_kind) {
+      case UINT8_ELEMENTS:
+      case INT8_ELEMENTS:
+      case UINT16_ELEMENTS:
+      case INT16_ELEMENTS:
+      case UINT8_CLAMPED_ELEMENTS:
+        *maybe_converted_value =
+            SmiFromInt32(UncheckedCast<Int32T>(converted_value));
+        break;
+      case UINT32_ELEMENTS:
+        *maybe_converted_value =
+            ChangeUint32ToTagged(UncheckedCast<Uint32T>(converted_value));
+        break;
+      case INT32_ELEMENTS:
+        *maybe_converted_value =
+            ChangeInt32ToTagged(UncheckedCast<Int32T>(converted_value));
+        break;
+      default:
+        UNREACHABLE();
+    }
+  }
+  Goto(bailout);
+
+  BIND(&done);
+}
+
+template <>
+void CodeStubAssembler::EmitElementStoreHelper<Float32T>(
+    TNode<JSTypedArray> typed_array, TNode<IntPtrT> key, TNode<Object> value,
+    ElementsKind elements_kind, KeyedAccessStoreMode store_mode, Label* bailout,
+    TNode<Context> context, TVariable<Object>* maybe_converted_value) {
+  Label done(this), update_value_and_bailout(this, Label::kDeferred);
+
+  DCHECK_EQ(elements_kind, FLOAT32_ELEMENTS);
+
+  TNode<Float32T> converted_value =
+      PrepareValueForWriteToTypedArray<Float32T>(value, elements_kind, context);
+
+  // There must be no allocations between the buffer load and
+  // and the actual store to backing store, because GC may decide that
+  // the buffer is not alive or move the elements.
+  // TODO(ishell): introduce DisallowGarbageCollectionCode scope here.
+
+  // Check if buffer has been detached.
+  TNode<JSArrayBuffer> buffer = LoadJSArrayBufferViewBuffer(typed_array);
+  if (maybe_converted_value) {
+    GotoIf(IsDetachedBuffer(buffer), &update_value_and_bailout);
+  } else {
+    GotoIf(IsDetachedBuffer(buffer), bailout);
+  }
+
+  // Bounds check.
+  TNode<UintPtrT> length = LoadJSTypedArrayLength(typed_array);
+
+  if (store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
+    // Skip the store if we write beyond the length or
+    // to a property with a negative integer index.
+    GotoIfNot(UintPtrLessThan(key, length), &done);
+  } else {
+    DCHECK_EQ(store_mode, STANDARD_STORE);
+    GotoIfNot(UintPtrLessThan(key, length), &update_value_and_bailout);
+  }
+
+  TNode<RawPtrT> data_ptr = LoadJSTypedArrayDataPtr(typed_array);
+  StoreElement(data_ptr, elements_kind, key, converted_value);
+  Goto(&done);
+
+  BIND(&update_value_and_bailout);
+  // We already prepared the incoming value for storing into a typed array.
+  // This might involve calling ToNumber in some cases. We shouldn't call
+  // ToNumber again in the runtime so pass the converted value to the runtime.
+  // The prepared value is an untagged value. Convert it to a tagged value
+  // to pass it to runtime. It is not possible to do the detached buffer check
+  // before we prepare the value, since ToNumber can detach the ArrayBuffer.
+  // The spec specifies the order of these operations.
+  if (maybe_converted_value != nullptr) {
+    Label dont_allocate_heap_number(this), end(this);
+    GotoIf(TaggedIsSmi(value), &dont_allocate_heap_number);
+    GotoIf(IsHeapNumber(CAST(value)), &dont_allocate_heap_number);
+    {
+      *maybe_converted_value =
+          AllocateHeapNumberWithValue(ChangeFloat32ToFloat64(converted_value));
+      Goto(&end);
+    }
+    BIND(&dont_allocate_heap_number);
+    {
+      *maybe_converted_value = value;
+      Goto(&end);
+    }
+    BIND(&end);
+  }
+  Goto(bailout);
+
+  BIND(&done);
+}
+
+template <>
+void CodeStubAssembler::EmitElementStoreHelper<Float64T>(
+    TNode<JSTypedArray> typed_array, TNode<IntPtrT> key, TNode<Object> value,
+    ElementsKind elements_kind, KeyedAccessStoreMode store_mode, Label* bailout,
+    TNode<Context> context, TVariable<Object>* maybe_converted_value) {
+  Label done(this), update_value_and_bailout(this, Label::kDeferred);
+
+  DCHECK_EQ(elements_kind, FLOAT64_ELEMENTS);
+
+  TNode<Float64T> converted_value =
+      PrepareValueForWriteToTypedArray<Float64T>(value, elements_kind, context);
+
+  // There must be no allocations between the buffer load and
+  // and the actual store to backing store, because GC may decide that
+  // the buffer is not alive or move the elements.
+  // TODO(ishell): introduce DisallowGarbageCollectionCode scope here.
+
+  // Check if buffer has been detached.
+  TNode<JSArrayBuffer> buffer = LoadJSArrayBufferViewBuffer(typed_array);
+  if (maybe_converted_value) {
+    GotoIf(IsDetachedBuffer(buffer), &update_value_and_bailout);
+  } else {
+    GotoIf(IsDetachedBuffer(buffer), bailout);
+  }
+
+  // Bounds check.
+  TNode<UintPtrT> length = LoadJSTypedArrayLength(typed_array);
+
+  if (store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
+    // Skip the store if we write beyond the length or
+    // to a property with a negative integer index.
+    GotoIfNot(UintPtrLessThan(key, length), &done);
+  } else {
+    DCHECK_EQ(store_mode, STANDARD_STORE);
+    GotoIfNot(UintPtrLessThan(key, length), &update_value_and_bailout);
+  }
+
+  TNode<RawPtrT> data_ptr = LoadJSTypedArrayDataPtr(typed_array);
+  StoreElement(data_ptr, elements_kind, key, converted_value);
+  Goto(&done);
+
+  BIND(&update_value_and_bailout);
+  // We already prepared the incoming value for storing into a typed array.
+  // This might involve calling ToNumber in some cases. We shouldn't call
+  // ToNumber again in the runtime so pass the converted value to the runtime.
+  // The prepared value is an untagged value. Convert it to a tagged value
+  // to pass it to runtime. It is not possible to do the detached buffer check
+  // before we prepare the value, since ToNumber can detach the ArrayBuffer.
+  // The spec specifies the order of these operations.
+  if (maybe_converted_value != nullptr) {
+    Label dont_allocate_heap_number(this), end(this);
+    GotoIf(TaggedIsSmi(value), &dont_allocate_heap_number);
+    GotoIf(IsHeapNumber(CAST(value)), &dont_allocate_heap_number);
+    {
+      *maybe_converted_value = AllocateHeapNumberWithValue(converted_value);
+      Goto(&end);
+    }
+    BIND(&dont_allocate_heap_number);
+    {
+      *maybe_converted_value = value;
+      Goto(&end);
+    }
+    BIND(&end);
+  }
+  Goto(bailout);
+
+  BIND(&done);
+}
+
+template <>
+void CodeStubAssembler::EmitElementStoreHelper<BigInt>(
+    TNode<JSTypedArray> typed_array, TNode<IntPtrT> key, TNode<Object> value,
+    ElementsKind elements_kind, KeyedAccessStoreMode store_mode, Label* bailout,
+    TNode<Context> context, TVariable<Object>* maybe_converted_value) {
+  Label done(this), update_value_and_bailout(this, Label::kDeferred);
+
+  DCHECK(elements_kind == BIGINT64_ELEMENTS ||
+         elements_kind == BIGUINT64_ELEMENTS);
+
+  TNode<BigInt> converted_value = ToBigInt(context, value);
+
+  // There must be no allocations between the buffer load and
+  // and the actual store to backing store, because GC may decide that
+  // the buffer is not alive or move the elements.
+  // TODO(ishell): introduce DisallowGarbageCollectionCode scope here.
+
+  // Check if buffer has been detached.
+  TNode<JSArrayBuffer> buffer = LoadJSArrayBufferViewBuffer(typed_array);
+  if (maybe_converted_value) {
+    GotoIf(IsDetachedBuffer(buffer), &update_value_and_bailout);
+  } else {
+    GotoIf(IsDetachedBuffer(buffer), bailout);
+  }
+
+  // Bounds check.
+  TNode<UintPtrT> length = LoadJSTypedArrayLength(typed_array);
+
+  if (store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
+    // Skip the store if we write beyond the length or
+    // to a property with a negative integer index.
+    GotoIfNot(UintPtrLessThan(key, length), &done);
+  } else {
+    DCHECK_EQ(store_mode, STANDARD_STORE);
+    GotoIfNot(UintPtrLessThan(key, length), &update_value_and_bailout);
+  }
+
+  TNode<RawPtrT> data_ptr = LoadJSTypedArrayDataPtr(typed_array);
+  StoreElement(data_ptr, elements_kind, key, converted_value);
+  Goto(&done);
+
+  BIND(&update_value_and_bailout);
+  // We already prepared the incoming value for storing into a typed array.
+  // This might involve calling ToNumber in some cases. We shouldn't call
+  // ToNumber again in the runtime so pass the converted value to the runtime.
+  // The prepared value is an untagged value. Convert it to a tagged value
+  // to pass it to runtime. It is not possible to do the detached buffer check
+  // before we prepare the value, since ToNumber can detach the ArrayBuffer.
+  // The spec specifies the order of these operations.
+  if (maybe_converted_value != nullptr) {
+    *maybe_converted_value = converted_value;
+  }
+  Goto(bailout);
+
+  BIND(&done);
+}
+
+void CodeStubAssembler::EmitElementStoreDispatcher(
+    TNode<JSTypedArray> typed_array, TNode<IntPtrT> key, TNode<Object> value,
+    ElementsKind elements_kind, KeyedAccessStoreMode store_mode, Label* bailout,
+    TNode<Context> context, TVariable<Object>* maybe_converted_value) {
+  switch (elements_kind) {
+    case UINT8_ELEMENTS:
+    case INT8_ELEMENTS:
+    case UINT16_ELEMENTS:
+    case INT16_ELEMENTS:
+    case UINT32_ELEMENTS:
+    case INT32_ELEMENTS:
+    case UINT8_CLAMPED_ELEMENTS:
+      EmitElementStoreHelper<Word32T>(typed_array, key, value, elements_kind,
+                                      store_mode, bailout, context,
+                                      maybe_converted_value);
+      break;
+    case FLOAT32_ELEMENTS:
+      EmitElementStoreHelper<Float32T>(typed_array, key, value, elements_kind,
+                                       store_mode, bailout, context,
+                                       maybe_converted_value);
+      break;
+    case FLOAT64_ELEMENTS:
+      EmitElementStoreHelper<Float64T>(typed_array, key, value, elements_kind,
+                                       store_mode, bailout, context,
+                                       maybe_converted_value);
+      break;
+    case BIGINT64_ELEMENTS:
+    case BIGUINT64_ELEMENTS: {
+      EmitElementStoreHelper<BigInt>(typed_array, key, value, elements_kind,
+                                     store_mode, bailout, context,
+                                     maybe_converted_value);
+    } break;
+    default:
+      UNREACHABLE();
+  }
+}
+
 void CodeStubAssembler::EmitElementStore(
     TNode<JSObject> object, TNode<Object> key, TNode<Object> value,
     ElementsKind elements_kind, KeyedAccessStoreMode store_mode, Label* bailout,
@@ -10339,111 +10634,9 @@ void CodeStubAssembler::EmitElementStore(
   // TODO(rmcilroy): TNodify the converted value once this funciton and
   // StoreElement are templated based on the type elements_kind type.
   if (IsTypedArrayElementsKind(elements_kind)) {
-    Label done(this), update_value_and_bailout(this, Label::kDeferred);
-
-    // IntegerIndexedElementSet converts value to a Number/BigInt prior to the
-    // bounds check.
-    Node* converted_value =
-        PrepareValueForWriteToTypedArray(value, elements_kind, context);
-    TNode<JSTypedArray> typed_array = CAST(object);
-
-    // There must be no allocations between the buffer load and
-    // and the actual store to backing store, because GC may decide that
-    // the buffer is not alive or move the elements.
-    // TODO(ishell): introduce DisallowGarbageCollectionCode scope here.
-
-    // Check if buffer has been detached.
-    TNode<JSArrayBuffer> buffer = LoadJSArrayBufferViewBuffer(typed_array);
-    if (maybe_converted_value) {
-      GotoIf(IsDetachedBuffer(buffer), &update_value_and_bailout);
-    } else {
-      GotoIf(IsDetachedBuffer(buffer), bailout);
-    }
-
-    // Bounds check.
-    TNode<UintPtrT> length = LoadJSTypedArrayLength(typed_array);
-
-    if (store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
-      // Skip the store if we write beyond the length or
-      // to a property with a negative integer index.
-      GotoIfNot(UintPtrLessThan(intptr_key, length), &done);
-    } else {
-      DCHECK_EQ(store_mode, STANDARD_STORE);
-      GotoIfNot(UintPtrLessThan(intptr_key, length), &update_value_and_bailout);
-    }
-
-    TNode<RawPtrT> data_ptr = LoadJSTypedArrayDataPtr(typed_array);
-    StoreElement(data_ptr, elements_kind, intptr_key, converted_value);
-    Goto(&done);
-
-    BIND(&update_value_and_bailout);
-    // We already prepared the incoming value for storing into a typed array.
-    // This might involve calling ToNumber in some cases. We shouldn't call
-    // ToNumber again in the runtime so pass the converted value to the runtime.
-    // The prepared value is an untagged value. Convert it to a tagged value
-    // to pass it to runtime. It is not possible to do the detached buffer check
-    // before we prepare the value, since ToNumber can detach the ArrayBuffer.
-    // The spec specifies the order of these operations.
-    if (maybe_converted_value != nullptr) {
-      switch (elements_kind) {
-        case UINT8_ELEMENTS:
-        case INT8_ELEMENTS:
-        case UINT16_ELEMENTS:
-        case INT16_ELEMENTS:
-        case UINT8_CLAMPED_ELEMENTS:
-          *maybe_converted_value = SmiFromInt32(converted_value);
-          break;
-        case UINT32_ELEMENTS:
-          *maybe_converted_value = ChangeUint32ToTagged(converted_value);
-          break;
-        case INT32_ELEMENTS:
-          *maybe_converted_value = ChangeInt32ToTagged(converted_value);
-          break;
-        case FLOAT32_ELEMENTS: {
-          Label dont_allocate_heap_number(this), end(this);
-          GotoIf(TaggedIsSmi(value), &dont_allocate_heap_number);
-          GotoIf(IsHeapNumber(CAST(value)), &dont_allocate_heap_number);
-          {
-            *maybe_converted_value = AllocateHeapNumberWithValue(
-                ChangeFloat32ToFloat64(converted_value));
-            Goto(&end);
-          }
-          BIND(&dont_allocate_heap_number);
-          {
-            *maybe_converted_value = value;
-            Goto(&end);
-          }
-          BIND(&end);
-          break;
-        }
-        case FLOAT64_ELEMENTS: {
-          Label dont_allocate_heap_number(this), end(this);
-          GotoIf(TaggedIsSmi(value), &dont_allocate_heap_number);
-          GotoIf(IsHeapNumber(CAST(value)), &dont_allocate_heap_number);
-          {
-            *maybe_converted_value =
-                AllocateHeapNumberWithValue(converted_value);
-            Goto(&end);
-          }
-          BIND(&dont_allocate_heap_number);
-          {
-            *maybe_converted_value = value;
-            Goto(&end);
-          }
-          BIND(&end);
-          break;
-        }
-        case BIGINT64_ELEMENTS:
-        case BIGUINT64_ELEMENTS:
-          *maybe_converted_value = CAST(converted_value);
-          break;
-        default:
-          UNREACHABLE();
-      }
-    }
-    Goto(bailout);
-
-    BIND(&done);
+    EmitElementStoreDispatcher(CAST(object), intptr_key, value, elements_kind,
+                               store_mode, bailout, context,
+                               maybe_converted_value);
     return;
   }
   DCHECK(IsFastElementsKind(elements_kind) ||
