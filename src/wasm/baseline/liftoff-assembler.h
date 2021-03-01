@@ -1564,28 +1564,90 @@ class LiftoffStackSlots {
   LiftoffStackSlots(const LiftoffStackSlots&) = delete;
   LiftoffStackSlots& operator=(const LiftoffStackSlots&) = delete;
 
-  void Add(const LiftoffAssembler::VarState& src, uint32_t src_offset,
-           RegPairHalf half) {
-    slots_.emplace_back(src, src_offset, half);
-  }
-  void Add(const LiftoffAssembler::VarState& src) { slots_.emplace_back(src); }
+  // Returns the number of logical slots.
+  size_t Size() const { return slots_.size(); }
 
-  void Reverse() { std::reverse(slots_.begin(), slots_.end()); }
+  // Returns the total number of stack slots occupied by the logical slots.
+  int TotalStackSlots() const {
+    DCHECK_LT(0, slots_.size());
+    DCHECK(IsSorted());
+    const Slot& first_slot = slots_[0];
+    return first_slot.stack_slot_ + NumStackSlots(first_slot);
+  }
+
+  void Add(const LiftoffAssembler::VarState& src, uint32_t src_offset,
+           RegPairHalf half, int stack_slot) {
+    slots_.emplace_back(src, src_offset, half, stack_slot);
+  }
+  void Add(const LiftoffAssembler::VarState& src, int stack_slot) {
+    slots_.emplace_back(src, stack_slot);
+  }
+
+  void Reverse() {
+    DCHECK_LT(0, slots_.size());
+    DCHECK(CanReverse());
+    std::reverse(slots_.begin(), slots_.end());
+  }
+
+  void Sort() {
+    DCHECK_LT(0, slots_.size());
+    std::sort(slots_.begin(), slots_.end(), std::greater<Slot>());
+  }
+
+#if DEBUG
+  bool IsSorted() const {
+    for (size_t i = 1; i < slots_.size(); ++i) {
+      DCHECK_NE(slots_[i - 1].stack_slot_, slots_[i].stack_slot_);
+      if (slots_[i - 1].stack_slot_ < slots_[i].stack_slot_) {
+        return false;
+      }
+    }
+    return true;
+  }
+  bool CanReverse() const {
+    // Check that the slots are contiguous, in other words that there are no
+    // padding slots. This will be the case when calling builtins, which only
+    // take single slot (JavaScript) arguments.
+    for (size_t i = 1; i < slots_.size(); ++i) {
+      DCHECK_NE(slots_[i - 1].stack_slot_, slots_[i].stack_slot_);
+      if (slots_[i - 1].stack_slot_ - slots_[i].stack_slot_ !=
+          NumStackSlots(slots_[i - 1])) {
+        return false;
+      }
+    }
+    return true;
+  }
+#endif
 
   inline void Construct();
 
  private:
+  // A logical slot, which may occupy multiple stack slots.
   struct Slot {
     Slot(const LiftoffAssembler::VarState& src, uint32_t src_offset,
-         RegPairHalf half)
-        : src_(src), src_offset_(src_offset), half_(half) {}
-    explicit Slot(const LiftoffAssembler::VarState& src)
-        : src_(src), half_(kLowWord) {}
+         RegPairHalf half, int stack_slot)
+        : src_(src),
+          src_offset_(src_offset),
+          half_(half),
+          stack_slot_(stack_slot) {}
+    Slot(const LiftoffAssembler::VarState& src, int stack_slot)
+        : src_(src), half_(kLowWord), stack_slot_(stack_slot) {}
+
+    bool operator>(const Slot& other) const {
+      return stack_slot_ > other.stack_slot_;
+    }
 
     LiftoffAssembler::VarState src_;
     uint32_t src_offset_ = 0;
     RegPairHalf half_;
+    int stack_slot_ = 0;
   };
+
+  // Gets the number of stack slots making up this logical slot.
+  int NumStackSlots(const Slot& slot) const {
+    return (element_size_bytes(slot.src_.kind()) + kSystemPointerSize - 1) >>
+           kSystemPointerSizeLog2;
+  }
 
   base::SmallVector<Slot, 8> slots_;
   LiftoffAssembler* const asm_;

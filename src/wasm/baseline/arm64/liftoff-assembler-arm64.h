@@ -3215,15 +3215,12 @@ void LiftoffAssembler::DeallocateStackSlot(uint32_t size) {
 }
 
 void LiftoffStackSlots::Construct() {
-  size_t num_slots = 0;
-  for (auto& slot : slots_) {
-    num_slots += slot.src_.kind() == kS128 ? 2 : 1;
-  }
+  DCHECK_LT(0, slots_.size());
+  int num_slots = TotalStackSlots();
   // The stack pointer is required to be quadword aligned.
   asm_->Claim(RoundUp(num_slots, 2));
-  size_t poke_offset = num_slots * kXRegSize;
   for (auto& slot : slots_) {
-    poke_offset -= slot.src_.kind() == kS128 ? kXRegSize * 2 : kXRegSize;
+    int poke_offset = (slot.stack_slot_ - 1) * kSystemPointerSize;
     switch (slot.src_.loc()) {
       case LiftoffAssembler::VarState::kStack: {
         UseScratchRegisterScope temps(asm_);
