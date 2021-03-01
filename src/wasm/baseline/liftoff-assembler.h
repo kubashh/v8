@@ -1564,27 +1564,59 @@ class LiftoffStackSlots {
   LiftoffStackSlots(const LiftoffStackSlots&) = delete;
   LiftoffStackSlots& operator=(const LiftoffStackSlots&) = delete;
 
+  size_t NumSlots() const { return slots_.size(); }
+
   void Add(const LiftoffAssembler::VarState& src, uint32_t src_offset,
-           RegPairHalf half) {
-    slots_.emplace_back(src, src_offset, half);
+           RegPairHalf half, int stack_slot) {
+    slots_.emplace_back(src, src_offset, half, stack_slot);
   }
-  void Add(const LiftoffAssembler::VarState& src) { slots_.emplace_back(src); }
+  void Add(const LiftoffAssembler::VarState& src, int stack_slot) {
+    slots_.emplace_back(src, stack_slot);
+  }
 
-  void Reverse() { std::reverse(slots_.begin(), slots_.end()); }
+  void Reverse() {
+    DCHECK_LT(0, slots_.size());
+    DCHECK(CanReverse());
+    std::reverse(slots_.begin(), slots_.end());
+  }
 
+  void Sort() {
+    DCHECK_LT(0, slots_.size());
+    std::sort(slots_.begin(), slots_.end(), std::greater<Slot>());
+  }
+
+#if DEBUG
+  bool CanReverse() const {
+    // TBD
+    return true;
+  }
+#endif
   inline void Construct();
 
  private:
   struct Slot {
     Slot(const LiftoffAssembler::VarState& src, uint32_t src_offset,
-         RegPairHalf half)
-        : src_(src), src_offset_(src_offset), half_(half) {}
-    explicit Slot(const LiftoffAssembler::VarState& src)
-        : src_(src), half_(kLowWord) {}
+         RegPairHalf half, int stack_slot)
+        : src_(src),
+          src_offset_(src_offset),
+          half_(half),
+          stack_slot_(stack_slot) {}
+    Slot(const LiftoffAssembler::VarState& src, int stack_slot)
+        : src_(src), half_(kLowWord), stack_slot_(stack_slot) {}
+
+    bool operator>(const Slot& other) const {
+      return stack_slot_ > other.stack_slot_;
+    }
+
+    int NumSlots() const {
+      return (element_size_bytes(src_.kind()) + kSystemPointerSize - 1) >>
+             kSystemPointerSizeLog2;
+    }
 
     LiftoffAssembler::VarState src_;
     uint32_t src_offset_ = 0;
     RegPairHalf half_;
+    int stack_slot_ = 0;
   };
 
   base::SmallVector<Slot, 8> slots_;
