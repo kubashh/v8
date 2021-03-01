@@ -612,7 +612,7 @@ TNode<Smi> CodeStubAssembler::NormalizeSmiIndex(TNode<Smi> smi_index) {
 
 TNode<Smi> CodeStubAssembler::SmiFromInt32(SloppyTNode<Int32T> value) {
   if (COMPRESS_POINTERS_BOOL) {
-    static_assert(!COMPRESS_POINTERS_BOOL || (kSmiShiftSize + kSmiTagSize == 1),
+    static_assert(kSmiShiftSize + kSmiTagSize == 1,
                   "Use shifting instead of add");
     return BitcastWordToTaggedSigned(
         ChangeUint32ToWord(Int32Add(value, value)));
