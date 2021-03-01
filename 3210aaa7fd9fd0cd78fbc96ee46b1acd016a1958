@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f899fad8_d0c24298",
+        "filename": "src/api/api.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 8358,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-03-01T19:45:10Z",
+      "side": 1,
+      "message": "Is the V8_ENABLE_SYSTEM_INSTRUMENTATION flag not sufficient? I think that anyone who is running system instrumentation would also expect jitted code events, even if we have to incur an overhead cost.",
+      "parentUuid": "f94d9c4c_809e1358",
+      "range": {
+        "startLine": 8358,
+        "startChar": 0,
+        "endLine": 8358,
+        "endChar": 58
+      },
+      "revId": "3210aaa7fd9fd0cd78fbc96ee46b1acd016a1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92dcd632_c6ced2ad",
         "filename": "src/diagnostics/system-jit-win.cc",
         "patchSetId": 14
@@ -37,6 +61,30 @@
       "writtenOn": "2021-03-01T15:34:48Z",
       "side": 1,
       "message": "nit: let\u0027s DCHECK(!g_v8Provider)",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 55
+      },
+      "revId": "3210aaa7fd9fd0cd78fbc96ee46b1acd016a1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73678fb7_399ab4de",
+        "filename": "src/diagnostics/system-jit-win.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-03-01T19:45:10Z",
+      "side": 1,
+      "message": "g_v8Provider should already exist, it\u0027s just not registered. I updated the DCHECK to reflect that.",
+      "parentUuid": "92dcd632_c6ced2ad",
       "range": {
         "startLine": 25,
         "startChar": 0,
@@ -60,6 +108,30 @@
       "writtenOn": "2021-03-01T15:34:48Z",
       "side": 1,
       "message": "Can you add a todo here? I think this should be put into a platform specific diagnostics object (which would be similar for instance for signpost for mac)\n\nTODO(cbruni): Move to platform diagnostics helper",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 44
+      },
+      "revId": "3210aaa7fd9fd0cd78fbc96ee46b1acd016a1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca9e6258_eb1d9671",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2021-03-01T19:45:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d92d0bd4_b8420c7f",
       "range": {
         "startLine": 174,
         "startChar": 0,
