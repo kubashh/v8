@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2727d0a_3443273a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-03-01T15:38:00Z",
+      "side": 1,
+      "message": "LGTM with one comment.",
+      "revId": "bf43d2062bf058d272210c7e55158d537e0a1f3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce5078cc_988b8aef",
+        "filename": "src/compiler/loop-unrolling.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-03-01T15:38:00Z",
+      "side": 1,
+      "message": "I think you should have this check outside in the pipeline and not call UnrollLoop if the analysis decided that the loop should not be unrolled.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 30
+      },
+      "revId": "bf43d2062bf058d272210c7e55158d537e0a1f3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
