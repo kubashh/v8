@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4800f92_3f2409b9",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-01T19:18:15Z",
+      "side": 1,
+      "message": "If properties can be None then line 21 can fail. Either use a better default or ensure initialization or make it a mandatory parameter. Or:\n\nIdeally I wouldn\u0027t allow manipulating the raw properties in this abstraction in the first place. How about hiding it and just for now expose the builder_group as a parameter?",
+      "range": {
+        "startLine": 16,
+        "startChar": 42,
+        "endLine": 16,
+        "endChar": 46
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "907ac1a4_ea3ba2ac",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-01T19:18:15Z",
+      "side": 1,
+      "message": "Please use named arguments with defaults. kwargs are hard to read... ideally we can see from a function signature and its documentation what the function does.\n\nGenerally I\u0027d also like to reduce the usage of kwargs in the existing code.",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 43
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ffc4b57_11769d60",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-01T19:18:15Z",
+      "side": 1,
+      "message": "How about using GOMA.DEFAULT as the default value for use_goma? I think it\u0027s used in 90% of the cases and will simplify the call site further.",
+      "range": {
+        "startLine": 19,
+        "startChar": 38,
+        "endLine": 19,
+        "endChar": 42
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aff495f2_559a3d45",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-01T19:18:15Z",
+      "side": 1,
+      "message": "nit: If not necessary to write procedurally, I prefer functional style, e.g. avoid the local variable:\n\nreturn [\n  main_multibranch_builder(...),\n  main_multibranch_builder(...),\n]",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 18
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cd0577b_b12e10fb",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-01T19:18:15Z",
+      "side": 1,
+      "message": "This is set by the new function.",
+      "range": {
+        "startLine": 273,
+        "startChar": 52,
+        "endLine": 273,
+        "endChar": 106
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
