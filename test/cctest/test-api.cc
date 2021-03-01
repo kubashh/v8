@@ -514,6 +514,7 @@ THREADED_TEST(ScriptUsingStringResource) {
     CHECK(value->IsNumber());
     CHECK_EQ(7, value->Int32Value(env.local()).FromJust());
     CHECK(source->IsExternalTwoByte());
+    CHECK(source->IsExternal());
     CHECK_EQ(resource,
              static_cast<TestResource*>(source->GetExternalStringResource()));
     String::Encoding encoding = String::UNKNOWN_ENCODING;
@@ -541,6 +542,8 @@ THREADED_TEST(ScriptUsingOneByteStringResource) {
         String::NewExternalOneByte(env->GetIsolate(), resource)
             .ToLocalChecked();
     CHECK(source->IsExternalOneByte());
+    CHECK(source->IsExternal());
+    CHECK(!source->IsExternalTwoByte());
     CHECK_EQ(static_cast<const String::ExternalStringResourceBase*>(resource),
              source->GetExternalOneByteStringResource());
     String::Encoding encoding = String::UNKNOWN_ENCODING;
@@ -574,6 +577,7 @@ THREADED_TEST(ScriptMakingExternalString) {
     CcTest::CollectGarbage(i::NEW_SPACE);  // in old gen now
     CHECK(!source->IsExternalTwoByte());
     CHECK(!source->IsExternalOneByte());
+    CHECK(!source->IsExternal());
     String::Encoding encoding = String::UNKNOWN_ENCODING;
     CHECK(!source->GetExternalStringResourceBase(&encoding));
     CHECK_EQ(String::ONE_BYTE_ENCODING, encoding);
@@ -16805,9 +16809,11 @@ class VisitorImpl : public v8::ExternalResourceVisitor {
   void VisitExternalString(v8::Local<v8::String> string) override {
     if (string->IsExternalOneByte()) {
       CHECK(!string->IsExternalTwoByte());
+      CHECK(!string->IsExternal());
       return;
     }
     CHECK(string->IsExternalTwoByte());
+    CHECK(string->IsExternal());
     v8::String::ExternalStringResource* resource =
         string->GetExternalStringResource();
     CHECK(resource);
@@ -16847,6 +16853,7 @@ TEST(ExternalizeOldSpaceTwoByteCons) {
   cons->MakeExternal(resource);
 
   CHECK(cons->IsExternalTwoByte());
+  CHECK(cons->IsExternal());
   CHECK_EQ(resource, cons->GetExternalStringResource());
   String::Encoding encoding;
   CHECK_EQ(resource, cons->GetExternalStringResourceBase(&encoding));
@@ -16917,6 +16924,14 @@ TEST(VisitExternalStrings) {
   CHECK(string1->IsExternalTwoByte());
   CHECK(string2->IsExternalTwoByte());
   CHECK(string3->IsExternalTwoByte());
+  CHECK(string0->IsExternal());
+  CHECK(string1->IsExternal());
+  CHECK(string2->IsExternal());
+  CHECK(string3->IsExternal());
+  CHECK(!string0->IsExternalOneByte());
+  CHECK(!string1->IsExternalOneByte());
+  CHECK(!string2->IsExternalOneByte());
+  CHECK(!string3->IsExternalOneByte());
 
   VisitorImpl visitor(resource);
   isolate->VisitExternalResources(&visitor);
