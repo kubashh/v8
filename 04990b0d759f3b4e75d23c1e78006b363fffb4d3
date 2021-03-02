@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3fc0a85_7525e20a",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-02T09:11:13Z",
+      "side": 1,
+      "message": "Exactly. I have the complete change locally, but it\u0027s a lot of stuff so I thought it\u0027s easier to review if I break it up in a few CLs. Next one if probably removing wasm frame types.",
+      "parentUuid": "4bc5f4e7_34daf4d0",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea186b20_087ed13f",
         "filename": "src/debug/debug-wasm-objects.h",
         "patchSetId": 4
@@ -65,6 +83,24 @@
       "writtenOn": "2021-03-02T08:24:31Z",
       "side": 1,
       "message": "How about not adding this #if guards around every #include of this header, but instead just guarding everything inside this file with #if V8_ENABLE_WEBASSEMBLY instead? like this\n\n```\n#ifndef V8_DEBUG_DEBUG_WASM_OBJECTS_H_\n#define V8_DEBUG_DEBUG_WASM_OBJECTS_H_\n\n#include \u003cmemory\u003e\n\n#include \"src/objects/js-objects.h\"\n\n#if V8_ENABLE_WEBASSEMBLY\n\n/// ACTUAL CONTENT HERE\n\n#endif  // V8_ENABLE_WEBASSEMBLY\n\n#endif  // V8_DEBUG_DEBUG_WASM_OBJECTS_H_\n```",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "950ebc9a_982637b5",
+        "filename": "src/debug/debug-wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-02T09:11:13Z",
+      "side": 1,
+      "message": "I considered it cleaner to avoid the includes completely. We could certainly also do it the other way around.\nJakob, do you have any preference?",
+      "parentUuid": "ea186b20_087ed13f",
       "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
