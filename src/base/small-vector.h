@@ -107,6 +107,19 @@ class SmallVector {
   const T& operator[](size_t index) const { return at(index); }
 
   template <typename... Args>
+  void emplace(T* position, Args&&... args) {
+    T* end = end_;
+    if (position == end_) {
+      emplace_back(std::forward<Args>(args)...);
+    } else {
+      if (V8_UNLIKELY(end == end_of_storage_)) end = Grow();
+      base::Memcpy(position, position + 1, sizeof(T) * (end - position - 1));
+      new (position) T(std::forward<Args>(args)...);
+      end_ = end + 1;
+    }
+  }
+
+  template <typename... Args>
   void emplace_back(Args&&... args) {
     T* end = end_;
     if (V8_UNLIKELY(end == end_of_storage_)) end = Grow();
