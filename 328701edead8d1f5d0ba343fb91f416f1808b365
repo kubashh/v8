@@ -50,6 +50,24 @@
       "message": "nit: could we now just merge the if case with this switch too by adding \ncase BIGINT64_ELEMENTS:\ncase BIGUINT64_ELEMENTS:\n\nIf we do that maybe we don\u0027t need default anymore too?",
       "revId": "328701edead8d1f5d0ba343fb91f416f1808b365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "193073e7_b5f48408",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-02T17:23:39Z",
+      "side": 1,
+      "message": "SG, done.\nWe can\u0027t really delete the default since it would complain that there are some enum values not handled e.g. PACKED_SMI_ELEMENTS",
+      "parentUuid": "8e21946e_5b275fd8",
+      "revId": "328701edead8d1f5d0ba343fb91f416f1808b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
