@@ -121,6 +121,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "333ed754_64532d64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-02T17:52:21Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4bc5f4e7_34daf4d0",
