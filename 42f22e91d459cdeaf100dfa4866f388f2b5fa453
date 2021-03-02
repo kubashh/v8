@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "534089fb_a98b5893",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-02T10:37:36Z",
+      "side": 1,
+      "message": "Would it also work to add \"test/common/wasm/flag-utils.h\" to the \"wasm_test_common\" source set? Or does it have to be a header set?\nLGTM in any case, but maybe extending \"wasm_test_common\" is nicer. Your call.",
+      "revId": "42f22e91d459cdeaf100dfa4866f388f2b5fa453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
