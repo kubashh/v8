@@ -148,7 +148,10 @@ Address Code::OffHeapInstructionStart() const {
   if (Isolate::CurrentEmbeddedBlobCode() == nullptr) {
     return raw_instruction_size();
   }
-  EmbeddedData d = EmbeddedData::FromBlob();
+  EmbeddedData d =
+      COMPRESS_POINTERS_BOOL && FLAG_experimental_remap_embedded_builtins
+          ? EmbeddedData::FromBlob(GetIsolateFromWritableObject(*this))
+          : EmbeddedData::FromBlob();
   return d.InstructionStartOfBuiltin(builtin_index());
 }
 
@@ -157,7 +160,10 @@ Address Code::OffHeapInstructionEnd() const {
   if (Isolate::CurrentEmbeddedBlobCode() == nullptr) {
     return raw_instruction_size();
   }
-  EmbeddedData d = EmbeddedData::FromBlob();
+  EmbeddedData d =
+      COMPRESS_POINTERS_BOOL && FLAG_experimental_remap_embedded_builtins
+          ? EmbeddedData::FromBlob(GetIsolateFromWritableObject(*this))
+          : EmbeddedData::FromBlob();
   return d.InstructionStartOfBuiltin(builtin_index()) +
          d.InstructionSizeOfBuiltin(builtin_index());
 }

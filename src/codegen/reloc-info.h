@@ -65,6 +65,7 @@ class RelocInfo {
     WASM_CALL,  // FIRST_SHAREABLE_RELOC_MODE
     WASM_STUB_CALL,
 
+    // Address of the runtime function entry stub or on-heap embedded builtin.
     RUNTIME_ENTRY,
 
     EXTERNAL_REFERENCE,  // The address of an external C++ function.
