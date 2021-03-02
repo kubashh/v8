@@ -834,7 +834,8 @@ void PrepareStackTransfers(const ValueKindSig* sig,
         }
       } else {
         DCHECK(loc.IsCallerFrameSlot());
-        stack_slots->Add(slot, stack_offset, half);
+        int param_offset = -loc.GetLocation() - 1;
+        stack_slots->Add(slot, stack_offset, half, param_offset);
       }
     }
   }
@@ -851,10 +852,10 @@ void LiftoffAssembler::PrepareBuiltinCall(
   PrepareStackTransfers(sig, call_descriptor, params.begin(), &stack_slots,
                         &stack_transfers, &param_regs);
   SpillAllRegisters();
-  // Create all the slots.
-  // Builtin stack parameters are pushed in reversed order.
-  stack_slots.Reverse();
-  stack_slots.Construct();
+  if (stack_slots.Size() > 0) {
+    int param_slots = static_cast<int>(call_descriptor->StackParameterCount());
+    stack_slots.Construct(param_slots);
+  }
   // Execute the stack transfers before filling the instance register.
   stack_transfers.Execute();
 
@@ -897,6 +898,7 @@ void LiftoffAssembler::PrepareCall(const ValueKindSig* sig,
                                  LiftoffRegister(*target_instance), kIntPtr);
   }
 
+  int param_slots = static_cast<int>(call_descriptor->StackParameterCount());
   if (num_params) {
     uint32_t param_base = cache_state_.stack_height() - num_params;
     PrepareStackTransfers(sig, call_descriptor,
@@ -916,13 +918,16 @@ void LiftoffAssembler::PrepareCall(const ValueKindSig* sig,
       *target = new_target.gp();
     } else {
       stack_slots.Add(LiftoffAssembler::VarState(LiftoffAssembler::kIntPtr,
-                                                 LiftoffRegister(*target), 0));
+                                                 LiftoffRegister(*target), 0),
+                      param_slots);
+      param_slots++;
       *target = no_reg;
     }
   }
 
-  // Create all the slots.
-  stack_slots.Construct();
+  if (stack_slots.Size() > 0) {
+    stack_slots.Construct(param_slots);
+  }
   // Execute the stack transfers before filling the instance register.
   stack_transfers.Execute();
   // Pop parameters from the value stack.

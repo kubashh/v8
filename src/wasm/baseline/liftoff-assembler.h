@@ -1564,27 +1564,45 @@ class LiftoffStackSlots {
   LiftoffStackSlots(const LiftoffStackSlots&) = delete;
   LiftoffStackSlots& operator=(const LiftoffStackSlots&) = delete;
 
+  // Returns the number of logical slots.
+  size_t Size() const { return slots_.size(); }
+
   void Add(const LiftoffAssembler::VarState& src, uint32_t src_offset,
-           RegPairHalf half) {
-    slots_.emplace_back(src, src_offset, half);
+           RegPairHalf half, int stack_slot) {
+    DCHECK_LE(0, stack_slot);
+    slots_.emplace_back(src, src_offset, half, stack_slot);
   }
-  void Add(const LiftoffAssembler::VarState& src) { slots_.emplace_back(src); }
 
-  void Reverse() { std::reverse(slots_.begin(), slots_.end()); }
+  void Add(const LiftoffAssembler::VarState& src, int stack_slot) {
+    DCHECK_LE(0, stack_slot);
+    slots_.emplace_back(src, stack_slot);
+  }
 
-  inline void Construct();
+  void SortInPushOrder() {
+    DCHECK_LT(0, slots_.size());
+    std::sort(slots_.begin(), slots_.end(), [](const Slot& a, const Slot& b) {
+      return a.stack_slot_ > b.stack_slot_;
+    });
+  }
+
+  inline void Construct(int param_slots);
 
  private:
+  // A logical slot, which may occupy multiple stack slots.
   struct Slot {
     Slot(const LiftoffAssembler::VarState& src, uint32_t src_offset,
-         RegPairHalf half)
-        : src_(src), src_offset_(src_offset), half_(half) {}
-    explicit Slot(const LiftoffAssembler::VarState& src)
-        : src_(src), half_(kLowWord) {}
+         RegPairHalf half, int stack_slot)
+        : src_(src),
+          src_offset_(src_offset),
+          half_(half),
+          stack_slot_(stack_slot) {}
+    Slot(const LiftoffAssembler::VarState& src, int stack_slot)
+        : src_(src), half_(kLowWord), stack_slot_(stack_slot) {}
 
     LiftoffAssembler::VarState src_;
     uint32_t src_offset_ = 0;
     RegPairHalf half_;
+    int stack_slot_ = 0;
   };
 
   base::SmallVector<Slot, 8> slots_;
