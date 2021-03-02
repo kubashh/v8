@@ -16,6 +16,24 @@
       "message": "Would it also work to add \"test/common/wasm/flag-utils.h\" to the \"wasm_test_common\" source set? Or does it have to be a header set?\nLGTM in any case, but maybe extending \"wasm_test_common\" is nicer. Your call.",
       "revId": "42f22e91d459cdeaf100dfa4866f388f2b5fa453",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd8e0284_b04f14f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-03-02T10:56:15Z",
+      "side": 1,
+      "message": "Doesn\u0027t have to be a header set.\n\nTo do that we\u0027d also have to add test/common/flag-utils.h which wasm/flag-utils.h depends on, but otherwise the patch is smaller. That does duplicate the flags headers across a couple of targets but that\u0027s not so bad (especially for a test target) and can be cleaned up later.",
+      "parentUuid": "534089fb_a98b5893",
+      "revId": "42f22e91d459cdeaf100dfa4866f388f2b5fa453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
