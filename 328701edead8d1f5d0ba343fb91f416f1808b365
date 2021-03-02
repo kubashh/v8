@@ -16,6 +16,40 @@
       "message": "Mythri PTAL\nSince we can\u0027t use `if constexpr` until we enable C++17, we have to specialize some cases which ends up bloating the diff a bit",
       "revId": "328701edead8d1f5d0ba343fb91f416f1808b365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dc5b9c1_34f89554",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-03-02T16:56:39Z",
+      "side": 1,
+      "message": "Awesome! Thanks! lgtm with a minor suggestion.\n",
+      "revId": "328701edead8d1f5d0ba343fb91f416f1808b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e21946e_5b275fd8",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-03-02T16:56:39Z",
+      "side": 1,
+      "message": "nit: could we now just merge the if case with this switch too by adding \ncase BIGINT64_ELEMENTS:\ncase BIGUINT64_ELEMENTS:\n\nIf we do that maybe we don\u0027t need default anymore too?",
+      "revId": "328701edead8d1f5d0ba343fb91f416f1808b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
