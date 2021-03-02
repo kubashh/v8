@@ -5512,6 +5512,8 @@ template("v8_fuzzer") {
   name = target_name
   forward_variables_from(invoker, "*")
   v8_executable("v8_simple_" + name) {
+    testonly = true
+
     deps = [
       ":" + name,
       "//build/win:default_exe_manifest",
@@ -5622,6 +5624,8 @@ if (v8_enable_webassembly) {
   }
 
   v8_source_set("wasm_fuzzer") {
+    testonly = true
+
     sources = [ "test/fuzzer/wasm.cc" ]
 
     deps = [
@@ -5640,6 +5644,8 @@ if (v8_enable_webassembly) {
   }
 
   v8_source_set("wasm_async_fuzzer") {
+    testonly = true
+
     sources = [ "test/fuzzer/wasm-async.cc" ]
 
     deps = [
@@ -5658,6 +5664,8 @@ if (v8_enable_webassembly) {
   }
 
   v8_source_set("wasm_code_fuzzer") {
+    testonly = true
+
     sources = [
       "test/common/wasm/test-signatures.h",
       "test/fuzzer/wasm-code.cc",
@@ -5679,6 +5687,8 @@ if (v8_enable_webassembly) {
   }
 
   v8_source_set("lib_wasm_fuzzer_common") {
+    testonly = true
+
     sources = [
       "test/fuzzer/wasm-fuzzer-common.cc",
       "test/fuzzer/wasm-fuzzer-common.h",
@@ -5692,7 +5702,10 @@ if (v8_enable_webassembly) {
       ":wasm_test_common",
     ]
 
-    public_deps = [ ":v8_maybe_icu" ]
+    public_deps = [
+      ":v8_maybe_icu",
+      "test:common_test_headers",
+    ]
 
     configs = [
       ":external_config",
@@ -5701,6 +5714,8 @@ if (v8_enable_webassembly) {
   }
 
   v8_source_set("wasm_compile_fuzzer") {
+    testonly = true
+
     sources = [
       "test/common/wasm/test-signatures.h",
       "test/fuzzer/wasm-compile.cc",
@@ -5723,6 +5738,8 @@ if (v8_enable_webassembly) {
 }
 
 v8_source_set("inspector_fuzzer") {
+  testonly = true
+
   sources = [ "test/fuzzer/inspector-fuzzer.cc" ]
 
   deps = [
