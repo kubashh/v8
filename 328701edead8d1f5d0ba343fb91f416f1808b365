@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0f041a5_d07ccfd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-02T14:59:01Z",
+      "side": 1,
+      "message": "Mythri PTAL\nSince we can\u0027t use `if constexpr` until we enable C++17, we have to specialize some cases which ends up bloating the diff a bit",
+      "revId": "328701edead8d1f5d0ba343fb91f416f1808b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

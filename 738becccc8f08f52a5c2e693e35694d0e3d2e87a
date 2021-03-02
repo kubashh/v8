@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "652463e9_45637f80",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-02T14:59:01Z",
+      "side": 0,
+      "message": "Specialized Untagged here and the method below to have the specific types flowing instead of a base type.",
+      "range": {
+        "startLine": 437,
+        "startChar": 37,
+        "endLine": 437,
+        "endChar": 46
+      },
+      "revId": "738becccc8f08f52a5c2e693e35694d0e3d2e87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58163b25_448fdc08",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10235,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-02T14:59:01Z",
+      "side": 0,
+      "message": "Now inlined in the only call site (StoreJSTypedArrayElementFromTagged), so the method can be removed.",
+      "range": {
+        "startLine": 10235,
+        "startChar": 36,
+        "endLine": 10235,
+        "endChar": 68
+      },
+      "revId": "738becccc8f08f52a5c2e693e35694d0e3d2e87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
