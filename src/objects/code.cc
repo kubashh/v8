@@ -139,7 +139,8 @@ int Code::OffHeapInstructionSize() const {
   if (Isolate::CurrentEmbeddedBlobCode() == nullptr) {
     return raw_instruction_size();
   }
-  EmbeddedData d = EmbeddedData::FromBlob();
+  Isolate* isolate = GetIsolateFromWritableObject(*this);
+  EmbeddedData d = EmbeddedData::FromBlob(isolate);
   return d.InstructionSizeOfBuiltin(builtin_index());
 }
 
@@ -148,7 +149,8 @@ Address Code::OffHeapInstructionStart() const {
   if (Isolate::CurrentEmbeddedBlobCode() == nullptr) {
     return raw_instruction_size();
   }
-  EmbeddedData d = EmbeddedData::FromBlob();
+  Isolate* isolate = GetIsolateFromWritableObject(*this);
+  EmbeddedData d = EmbeddedData::FromBlob(isolate);
   return d.InstructionStartOfBuiltin(builtin_index());
 }
 
@@ -157,7 +159,8 @@ Address Code::OffHeapInstructionEnd() const {
   if (Isolate::CurrentEmbeddedBlobCode() == nullptr) {
     return raw_instruction_size();
   }
-  EmbeddedData d = EmbeddedData::FromBlob();
+  Isolate* isolate = GetIsolateFromWritableObject(*this);
+  EmbeddedData d = EmbeddedData::FromBlob(isolate);
   return d.InstructionStartOfBuiltin(builtin_index()) +
          d.InstructionSizeOfBuiltin(builtin_index());
 }
