@@ -111,10 +111,7 @@ void BaselineAssembler::JumpIfNotSmi(Register value, Label* target,
 }
 
 void BaselineAssembler::CallBuiltin(Builtins::Name builtin) {
-  ScratchRegisterScope temps(this);
-  Register temp = temps.AcquireScratch();
-  __ LoadEntryFromBuiltinIndex(builtin, temp);
-  __ Call(temp);
+  __ CallBuiltin(static_cast<int>(builtin));
 }
 
 void BaselineAssembler::TailCallBuiltin(Builtins::Name builtin) {
@@ -126,8 +123,7 @@ void BaselineAssembler::TailCallBuiltin(Builtins::Name builtin) {
   UseScratchRegisterScope temps(masm());
   temps.Exclude(temp);
 
-  __ LoadEntryFromBuiltinIndex(builtin, temp);
-  __ Jump(temp);
+  __ TailCallBuiltin(static_cast<int>(builtin));
 }
 
 void BaselineAssembler::Test(Register value, int mask) {
