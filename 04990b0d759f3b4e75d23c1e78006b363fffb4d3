@@ -16,6 +16,40 @@
       "message": "Benedikt, PTAL as main reviewer.\nMichael for BUILD.gn changes, Jakob for src/compiler.",
       "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bc5f4e7_34daf4d0",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-03-02T08:24:31Z",
+      "side": 1,
+      "message": "For my understanding: The plan is to eventually also guard these WASM_*_TYPEs as well?",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea186b20_087ed13f",
+        "filename": "src/debug/debug-wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-03-02T08:24:31Z",
+      "side": 1,
+      "message": "How about not adding this #if guards around every #include of this header, but instead just guarding everything inside this file with #if V8_ENABLE_WEBASSEMBLY instead? like this\n\n```\n#ifndef V8_DEBUG_DEBUG_WASM_OBJECTS_H_\n#define V8_DEBUG_DEBUG_WASM_OBJECTS_H_\n\n#include \u003cmemory\u003e\n\n#include \"src/objects/js-objects.h\"\n\n#if V8_ENABLE_WEBASSEMBLY\n\n/// ACTUAL CONTENT HERE\n\n#endif  // V8_ENABLE_WEBASSEMBLY\n\n#endif  // V8_DEBUG_DEBUG_WASM_OBJECTS_H_\n```",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
