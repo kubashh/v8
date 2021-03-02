@@ -70,8 +70,7 @@
  *        return GetInternalField<CustomEmbedderType,
  *                                kV8EmbedderWrapperObjectIndex>(wrapper);
  *      }
- *      static void FastMethod(v8::ApiObject receiver_obj, int param) {
- *        v8::Object* v8_object = reinterpret_cast<v8::Object*>(&api_object);
+ *      static void FastMethod(v8::Object* receiver_obj, int param) {
  *        CustomEmbedderType* receiver = static_cast<CustomEmbedderType*>(
  *          receiver_obj->GetAlignedPointerFromInternalField(
  *            kV8EmbedderWrapperObjectIndex));
@@ -191,6 +190,9 @@
 
 namespace v8 {
 
+class Value;
+class Object;
+
 class CTypeInfo {
  public:
   enum class Type : uint8_t {
@@ -203,6 +205,7 @@ class CTypeInfo {
     kFloat32,
     kFloat64,
     kV8Value,
+    kLegacyV8Value,
   };
 
   // kCallbackOptionsType is not part of the Type enum
@@ -307,6 +310,7 @@ class V8_EXPORT CFunction {
   };
 };
 
+// Deprecated. Use v8::Value* instead.
 struct ApiObject {
   uintptr_t address;
 };
@@ -334,17 +338,17 @@ struct FastApiCallbackOptions {
   /**
    * The `data` passed to the FunctionTemplate constructor, or `undefined`.
    */
-  const ApiObject data;
+  const v8::Value* data;
 };
 
 namespace internal {
 
 // Helper to count the number of occurances of `T` in `List`
 template <typename T, typename... List>
-struct count : std::integral_constant<int, 0> {};
+struct count : std::integral_constant<size_t, 0> {};
 template <typename T, typename... Args>
 struct count<T, T, Args...>
-    : std::integral_constant<std::size_t, 1 + count<T, Args...>::value> {};
+    : std::integral_constant<size_t, 1 + count<T, Args...>::value> {};
 template <typename T, typename U, typename... Args>
 struct count<T, U, Args...> : count<T, Args...> {};
 
@@ -404,11 +408,41 @@ struct TypeInfoHelper {
   V(uint64_t, kUint64)   \
   V(float, kFloat32)     \
   V(double, kFloat64)    \
-  V(ApiObject, kV8Value)
+  V(ApiObject, kLegacyV8Value)
 
 BASIC_C_TYPES(SPECIALIZE_GET_TYPE_INFO_HELPER_FOR)
 
 #undef BASIC_C_TYPES
+
+/* FIX THIS
+template <typename T>
+struct TypeInfoHelper {
+  static constexpr typename std::enable_if<
+      std::is_base_of<Value, typename std::remove_pointer<T>::type>::value,
+      CTypeInfo>::type
+  Type() {
+    return CTypeInfo(CTypeInfo::Type::kV8Value);
+  }
+
+  static constexpr CTypeInfo::Flags() { return CTypeInfo::Flags::kNone; }
+};
+*/
+
+// DELETE THIS
+template <>
+struct TypeInfoHelper<v8::Value*> {
+  static constexpr CTypeInfo::Flags Flags() { return CTypeInfo::Flags::kNone; }
+
+  static constexpr CTypeInfo::Type Type() { return CTypeInfo::Type::kV8Value; }
+};
+
+// DELETE THIS
+template <>
+struct TypeInfoHelper<v8::Object*> {
+  static constexpr CTypeInfo::Flags Flags() { return CTypeInfo::Flags::kNone; }
+
+  static constexpr CTypeInfo::Type Type() { return CTypeInfo::Type::kV8Value; }
+};
 
 template <>
 struct TypeInfoHelper<FastApiCallbackOptions&> {

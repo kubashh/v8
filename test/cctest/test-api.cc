@@ -27530,15 +27530,14 @@ namespace {
 
 template <typename Value, typename Impl, typename Ret>
 struct BasicApiChecker {
-  static Ret FastCallback(v8::ApiObject receiver, Value argument,
+  static Ret FastCallback(v8::Object* receiver, Value argument,
                           v8::FastApiCallbackOptions& options) {
-    const v8::Value* data = reinterpret_cast<const v8::Value*>(&options.data);
-    CHECK(data->IsNumber());
-    CHECK_EQ(reinterpret_cast<const v8::Number*>(data)->Value(), 42.0);
+    CHECK(options.data->IsNumber());
+    CHECK_EQ(reinterpret_cast<const v8::Number*>(options.data)->Value(), 42.0);
     return Impl::FastCallback(receiver, argument, options);
   }
-  static Ret FastCallbackNoFallback(v8::ApiObject receiver, Value argument) {
-    v8::FastApiCallbackOptions options = {false, {0}};
+  static Ret FastCallbackNoFallback(v8::Object* receiver, Value argument) {
+    v8::FastApiCallbackOptions options = {false, nullptr};
     return Impl::FastCallback(receiver, argument, options);
   }
   static void SlowCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
@@ -27572,16 +27571,14 @@ struct ApiNumberChecker : BasicApiChecker<T, ApiNumberChecker<T>, void> {
         write_to_fallback_(write_to_fallback),
         args_count_(args_count) {}
 
-  static void FastCallback(v8::ApiObject receiver, T argument,
+  static void FastCallback(v8::Object* receiver, T argument,
                            v8::FastApiCallbackOptions& options) {
-    v8::Object* receiver_obj = reinterpret_cast<v8::Object*>(&receiver);
-    if (!IsValidUnwrapObject(receiver_obj)) {
+    if (!IsValidUnwrapObject(receiver)) {
       options.fallback = 1;
       return;
     }
     ApiNumberChecker<T>* receiver_ptr =
-        GetInternalField<ApiNumberChecker<T>, kV8WrapperObjectIndex>(
-            receiver_obj);
+        GetInternalField<ApiNumberChecker<T>, kV8WrapperObjectIndex>(receiver);
     receiver_ptr->result_ |= ApiCheckerResult::kFastCalled;
     receiver_ptr->fast_value_ = argument;
     if (receiver_ptr->write_to_fallback_ == FallbackPolicy::kRequestFallback) {
@@ -27623,17 +27620,15 @@ struct ApiNumberChecker : BasicApiChecker<T, ApiNumberChecker<T>, void> {
 };
 
 struct UnexpectedObjectChecker
-    : BasicApiChecker<v8::ApiObject, UnexpectedObjectChecker, void> {
-  static void FastCallback(v8::ApiObject receiver, v8::ApiObject argument,
+    : BasicApiChecker<v8::Value*, UnexpectedObjectChecker, void> {
+  static void FastCallback(v8::Object* receiver, v8::Value* argument,
                            v8::FastApiCallbackOptions& options) {
-    v8::Object* receiver_obj = reinterpret_cast<v8::Object*>(&receiver);
     UnexpectedObjectChecker* receiver_ptr =
         GetInternalField<UnexpectedObjectChecker, kV8WrapperObjectIndex>(
-            receiver_obj);
+            receiver);
     receiver_ptr->result_ |= ApiCheckerResult::kFastCalled;
-    v8::Value* argument_value = reinterpret_cast<v8::Value*>(&argument);
-    if (argument_value->IsObject()) {
-      v8::Object* argument_obj = reinterpret_cast<v8::Object*>(&argument);
+    if (argument->IsObject()) {
+      v8::Object* argument_obj = reinterpret_cast<v8::Object*>(argument);
       CHECK(!IsValidUnwrapObject(argument_obj));
     }
   }
@@ -27773,12 +27768,11 @@ void CallAndCheck(
 
 template <typename T>
 struct ReturnValueChecker : BasicApiChecker<T, ReturnValueChecker<T>, T> {
-  static T FastCallback(v8::ApiObject receiver, T arg,
+  static T FastCallback(v8::Object* receiver, T arg,
                         v8::FastApiCallbackOptions& options) {
-    v8::Object* receiver_obj = reinterpret_cast<v8::Object*>(&receiver);
     ReturnValueChecker<T>* receiver_ptr =
         GetInternalField<ReturnValueChecker<T>, kV8WrapperObjectIndex>(
-            receiver_obj);
+            receiver);
     receiver_ptr->result_ |= ApiCheckerResult::kFastCalled;
     return arg;
   }

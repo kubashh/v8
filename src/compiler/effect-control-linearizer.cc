@@ -4996,6 +4996,7 @@ static MachineType MachineTypeFor(CTypeInfo::Type type) {
     case CTypeInfo::Type::kFloat64:
       return MachineType::Float64();
     case CTypeInfo::Type::kV8Value:
+    case CTypeInfo::Type::kLegacyV8Value:
       return MachineType::AnyTagged();
   }
 }
@@ -5022,6 +5023,14 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
     fast_api_call_stack_slot_ = __ StackSlot(kSize, kAlign);
   }
 
+  auto copy_value_to_slot = [&](Node* value) -> Node* {
+    Node* stack_slot = __ StackSlot(sizeof(Address), alignof(Address));
+    __ Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                                 kNoWriteBarrier),
+             stack_slot, 0, value);
+    return stack_slot;
+  };
+
   // Leave the slot uninit if the callback doesn't use it.
   if (c_signature->HasOptions()) {
     // Generate the stores to `fast_api_call_stack_slot_`.
@@ -5030,11 +5039,13 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
         fast_api_call_stack_slot_,
         static_cast<int>(offsetof(v8::FastApiCallbackOptions, fallback)),
         jsgraph()->ZeroConstant());
+
     __ Store(StoreRepresentation(MachineType::PointerRepresentation(),
                                  kNoWriteBarrier),
              fast_api_call_stack_slot_,
              static_cast<int>(offsetof(v8::FastApiCallbackOptions, data)),
-             n.SlowCallArgument(FastApiCallNode::kSlowCallDataArgumentIndex));
+             copy_value_to_slot(n.SlowCallArgument(
+                 FastApiCallNode::kSlowCallDataArgumentIndex)));
   }
 
   MachineSignature::Builder builder(
@@ -5067,12 +5078,17 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
   inputs[0] = n.target();
   for (int i = FastApiCallNode::kFastTargetInputCount;
        i < c_arg_count + FastApiCallNode::kFastTargetInputCount; ++i) {
-    if (c_signature->ArgumentInfo(i - 1).GetType() ==
-        CTypeInfo::Type::kFloat32) {
-      inputs[i] =
-          __ TruncateFloat64ToFloat32(NodeProperties::GetValueInput(node, i));
-    } else {
-      inputs[i] = NodeProperties::GetValueInput(node, i);
+    switch (c_signature->ArgumentInfo(i - 1).GetType()) {
+      case CTypeInfo::Type::kFloat32:
+        inputs[i] =
+            __ TruncateFloat64ToFloat32(NodeProperties::GetValueInput(node, i));
+        break;
+      case CTypeInfo::Type::kV8Value:
+        inputs[i] = copy_value_to_slot(NodeProperties::GetValueInput(node, i));
+        break;
+      default:
+        inputs[i] = NodeProperties::GetValueInput(node, i);
+        break;
     }
   }
   if (c_signature->HasOptions()) {
@@ -5120,6 +5136,7 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
           c_call_result, CheckForMinusZeroMode::kCheckForMinusZero);
       break;
     case CTypeInfo::Type::kV8Value:
+    case CTypeInfo::Type::kLegacyV8Value:
       UNREACHABLE();
   }
 

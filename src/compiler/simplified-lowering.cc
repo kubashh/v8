@@ -1756,6 +1756,7 @@ class RepresentationSelector {
       case CTypeInfo::Type::kFloat64:
         return UseInfo::CheckedNumberAsFloat64(kDistinguishZeros, feedback);
       case CTypeInfo::Type::kV8Value:
+      case CTypeInfo::Type::kLegacyV8Value:
         return UseInfo::AnyTagged();
     }
   }
