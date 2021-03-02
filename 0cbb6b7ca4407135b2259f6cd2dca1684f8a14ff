@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "183a0952_d34a9b22",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10260,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-02T12:14:48Z",
+      "side": 0,
+      "message": "Now unused, remove",
+      "range": {
+        "startLine": 10260,
+        "startChar": 25,
+        "endLine": 10260,
+        "endChar": 57
+      },
+      "revId": "0cbb6b7ca4407135b2259f6cd2dca1684f8a14ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

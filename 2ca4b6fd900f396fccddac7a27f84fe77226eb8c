@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbdadf23_c09e2561",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 10368,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-02T12:14:48Z",
+      "side": 1,
+      "message": "We have a main template that we use with specializations for both PrepareValueForWriteToTypedArray and EmitElementStoreTypedArrayUpdateValue calls",
+      "range": {
+        "startLine": 10368,
+        "startChar": 24,
+        "endLine": 10368,
+        "endChar": 50
+      },
+      "revId": "2ca4b6fd900f396fccddac7a27f84fe77226eb8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
