@@ -149,20 +149,21 @@
  *
  * Currently supported return types:
  *   - void
+ *   - v8::Value*
  *   - bool
  *   - int32_t
  *   - uint32_t
  *   - float32_t
  *   - float64_t
  * Currently supported argument types:
- *  - pointer to an embedder type
- *  - bool
- *  - int32_t
- *  - uint32_t
- *  - int64_t
- *  - uint64_t
- *  - float32_t
- *  - float64_t
+ *   - v8::Value*
+ *   - bool
+ *   - int32_t
+ *   - uint32_t
+ *   - int64_t
+ *   - uint64_t
+ *   - float32_t
+ *   - float64_t
  *
  * The 64-bit integer types currently have the IDL (unsigned) long long
  * semantics: https://heycam.github.io/webidl/#abstract-opdef-converttoint
@@ -375,9 +376,9 @@ class CFunctionInfoImpl : public CFunctionInfo {
                       kReturnType == CTypeInfo::Type::kInt32 ||
                       kReturnType == CTypeInfo::Type::kUint32 ||
                       kReturnType == CTypeInfo::Type::kFloat32 ||
-                      kReturnType == CTypeInfo::Type::kFloat64,
-                  "64-bit int and api object values are not currently "
-                  "supported return types.");
+                      kReturnType == CTypeInfo::Type::kFloat64 ||
+                      kReturnType == CTypeInfo::Type::kV8Value,
+                  "64-bit ints are not a currently supported return type.");
   }
 
  private:

@@ -5136,6 +5136,8 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
           c_call_result, CheckForMinusZeroMode::kCheckForMinusZero);
       break;
     case CTypeInfo::Type::kV8Value:
+      fast_call_result = __ Load(MachineType::AnyTagged(), c_call_result, 0);
+      break;
     case CTypeInfo::Type::kLegacyV8Value:
       UNREACHABLE();
   }

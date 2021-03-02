@@ -28434,6 +28434,9 @@ TEST(FastApiCalls) {
                                ApiCheckerResult::kFastCalled);
 #endif  // V8_ENABLE_FP_PARAMS_IN_C_LINKAGE
 
+  CheckFastReturnValue<v8::Value*>(v8::Object::New(isolate),
+                                   ApiCheckerResult::kFastCalled);
+
   // Check for the deopt loop protection
   CallAndDeopt();
 
