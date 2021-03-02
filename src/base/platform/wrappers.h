@@ -37,6 +37,10 @@ inline void* Memcpy(void* dest, const void* source, size_t count) {
   return memcpy(dest, source, count);
 }
 
+inline void* Memmove(void* dest, const void* source, size_t count) {
+  return memmove(dest, source, count);
+}
+
 inline FILE* Fopen(const char* filename, const char* mode) {
   return fopen(filename, mode);
 }
