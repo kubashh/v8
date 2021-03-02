@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43eeb76d_1c26247d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-03-02T16:02:06Z",
+      "side": 1,
+      "message": "couple drive-bys...",
+      "revId": "951b2e508587839a0f761ed567608503c1680d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ed4abc2_d526d75c",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-03-02T16:02:06Z",
+      "side": 1,
+      "message": "I think you don\u0027t need the kAcquireLoad because you are on the main thread, and only the main thread creates/modifies the function_data field.",
+      "revId": "951b2e508587839a0f761ed567608503c1680d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53ff2da_d21dcb31",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 20747,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-03-02T16:02:06Z",
+      "side": 1,
+      "message": "This is great! Can you also have templ1 and templ2, and verify that if obj is set to an instantiation of templ1, that templ2-\u003eIsTemplateForApiObject(...) returns false?",
+      "revId": "951b2e508587839a0f761ed567608503c1680d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
