@@ -87,6 +87,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75b5ebaa_4b228eb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-02T17:14:52Z",
+      "side": 1,
+      "message": "Thanks, all. Landing.",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4bc5f4e7_34daf4d0",
@@ -118,6 +135,24 @@
       "side": 1,
       "message": "Exactly. I have the complete change locally, but it\u0027s a lot of stuff so I thought it\u0027s easier to review if I break it up in a few CLs. Next one if probably removing wasm frame types.",
       "parentUuid": "4bc5f4e7_34daf4d0",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7176fcca_f9841491",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-02T17:14:52Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "d3fc0a85_7525e20a",
       "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -189,6 +224,24 @@
       "side": 1,
       "message": "No preference.\n\n*If* it made a measurable difference for compile times, then I\u0027d be strongly in favor of the current approach to not include the headers in the first place. But having the preprocessor skip over thousands of lines that are #ifdef\u0027ed out is probably so fast that it doesn\u0027t matter.\n\nAside from that, unconditional includes are less verbose, but explicit conditional includes make it more obvious what\u0027s going on. Between those two arguments I can\u0027t decide which is better; so feel free to keep what you have. (We can also change it later fairly easily if we discover a reason to do so.)",
       "parentUuid": "5ecad26e_6127f148",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1421104_c99e21a2",
+        "filename": "src/debug/debug-wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-02T17:14:52Z",
+      "side": 1,
+      "message": "I don\u0027t think it makes a measurable difference for compile time, so it\u0027s really just a matter of coding style.\nI found exactly one header where we #ifdef out the whole content: src/zone/type-stats.h. So it doesn\u0027t seem to be a common idiom either.\n\nWith this CL we could only do it for the debug-wasm-objects.h header, and not the headers in src/wasm yet, so we wouldn\u0027t see if we accidentally still use a wasm type somewhere in src/debug. So I am leaving this as-is for now, and as Jakob said, it\u0027s fairly easy to switch to the other style once this project is completed.",
+      "parentUuid": "97ffbabe_3083f949",
       "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
