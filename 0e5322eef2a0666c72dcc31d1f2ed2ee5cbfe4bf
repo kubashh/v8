@@ -16,6 +16,23 @@
       "message": "Mythri PTAL",
       "revId": "0e5322eef2a0666c72dcc31d1f2ed2ee5cbfe4bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4e00c87_b7a9700b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-03-02T11:39:28Z",
+      "side": 1,
+      "message": "Thanks! lgtm.",
+      "revId": "0e5322eef2a0666c72dcc31d1f2ed2ee5cbfe4bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
