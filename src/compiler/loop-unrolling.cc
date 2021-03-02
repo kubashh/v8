@@ -82,8 +82,9 @@ void UnrollLoop(Node* loop_node, ZoneUnorderedSet<Node*>* loop, uint32_t depth,
             DCHECK_EQ(stack_check_effect->InputAt(1)->opcode(),
                       IrOpcode::kCall);
             DCHECK_EQ(stack_check_effect->InputAt(1)->InputAt(1), node);
-            DCHECK_EQ(node->InputAt(1)->opcode(), IrOpcode::kLoad);
-            DCHECK_EQ(node->InputAt(1)->InputAt(2)->opcode(), IrOpcode::kLoad);
+            DCHECK_EQ(node->InputAt(1)->opcode(), IrOpcode::kLoadFromObject);
+            DCHECK_EQ(node->InputAt(1)->InputAt(2)->opcode(),
+                      IrOpcode::kLoadFromObject);
             Node* replacing_effect = node->InputAt(1)->InputAt(2)->InputAt(2);
             FOREACH_COPY_INDEX(i) {
               COPY(stack_check_effect, i)

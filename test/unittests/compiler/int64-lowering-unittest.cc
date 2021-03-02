@@ -32,13 +32,15 @@ class Int64LoweringTest : public GraphTest {
   Int64LoweringTest()
       : GraphTest(),
         machine_(zone(), MachineRepresentation::kWord32,
-                 MachineOperatorBuilder::Flag::kAllOptionalOps) {
+                 MachineOperatorBuilder::Flag::kAllOptionalOps),
+        simplified_(zone()) {
     value_[0] = 0x1234567890ABCDEF;
     value_[1] = 0x1EDCBA098765432F;
     value_[2] = 0x1133557799886644;
   }
 
   MachineOperatorBuilder* machine() { return &machine_; }
+  SimplifiedOperatorBuilder* simplified() { return &simplified_; }
 
   void LowerGraph(Node* node, Signature<MachineRepresentation>* signature) {
     Node* zero = graph()->NewNode(common()->Int32Constant(0));
@@ -46,7 +48,8 @@ class Int64LoweringTest : public GraphTest {
                                  graph()->start(), graph()->start());
     NodeProperties::MergeControlToEnd(graph(), common(), ret);
 
-    Int64Lowering lowering(graph(), machine(), common(), zone(), signature);
+    Int64Lowering lowering(graph(), machine(), common(), simplified(), zone(),
+                           signature);
     lowering.LowerGraph();
   }
 
@@ -64,7 +67,7 @@ class Int64LoweringTest : public GraphTest {
     Signature<MachineRepresentation>::Builder sig_builder(zone(), 1, 0);
     sig_builder.AddReturn(rep);
 
-    Int64Lowering lowering(graph(), machine(), common(), zone(),
+    Int64Lowering lowering(graph(), machine(), common(), simplified(), zone(),
                            sig_builder.Build(), std::move(special_case));
     lowering.LowerGraph();
   }
@@ -134,6 +137,7 @@ class Int64LoweringTest : public GraphTest {
 
  private:
   MachineOperatorBuilder machine_;
+  SimplifiedOperatorBuilder simplified_;
   int64_t value_[3];
 };
 
@@ -243,7 +247,7 @@ TEST_F(Int64LoweringTest, UnalignedInt64Load) {
                                                                              \
   NodeProperties::MergeControlToEnd(graph(), common(), ret);                 \
                                                                              \
-  Int64Lowering lowering(graph(), machine(), common(), zone(),               \
+  Int64Lowering lowering(graph(), machine(), common(), simplified(), zone(), \
                          sig_builder.Build());                               \
   lowering.LowerGraph();                                                     \
                                                                              \
@@ -277,7 +281,7 @@ TEST_F(Int64LoweringTest, Int32Store) {
 
   NodeProperties::MergeControlToEnd(graph(), common(), ret);
 
-  Int64Lowering lowering(graph(), machine(), common(), zone(),
+  Int64Lowering lowering(graph(), machine(), common(), simplified(), zone(),
                          sig_builder.Build());
   lowering.LowerGraph();
 
