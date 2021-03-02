@@ -70,6 +70,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00b5ed92_1f4c7ddd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-02T16:52:23Z",
+      "side": 1,
+      "message": "LGTM.\n\nLooking forward to introducing `#if V8_ENABLE_JAVASCRIPT` one day for wee8 :-)",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4bc5f4e7_34daf4d0",
@@ -154,6 +171,24 @@
       "side": 1,
       "message": "My personal preference would be to not guard the includes. I think that\u0027s more consistent with what we do in other places. But I\u0027ll leave this to you and Jakob.",
       "parentUuid": "950ebc9a_982637b5",
+      "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97ffbabe_3083f949",
+        "filename": "src/debug/debug-wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-02T16:52:23Z",
+      "side": 1,
+      "message": "No preference.\n\n*If* it made a measurable difference for compile times, then I\u0027d be strongly in favor of the current approach to not include the headers in the first place. But having the preprocessor skip over thousands of lines that are #ifdef\u0027ed out is probably so fast that it doesn\u0027t matter.\n\nAside from that, unconditional includes are less verbose, but explicit conditional includes make it more obvious what\u0027s going on. Between those two arguments I can\u0027t decide which is better; so feel free to keep what you have. (We can also change it later fairly easily if we discover a reason to do so.)",
+      "parentUuid": "5ecad26e_6127f148",
       "revId": "04990b0d759f3b4e75d23c1e78006b363fffb4d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
