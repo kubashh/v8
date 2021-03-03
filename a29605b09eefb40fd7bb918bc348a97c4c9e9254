@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cd14a02_b0ee9d0b",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-03-03T16:00:40Z",
+      "side": 1,
+      "message": "The alternatives to this are:\na) to combine torque_generated_initializers and v8_initializers into a single component\nb) Pull out one or more subcomponents that allows the includes to become acyclic\n\n(a) is definitely possible.\n(b) is probably possible but a fair bit of work.\n\nFor now I think the circular include declaration is good enough and maybe we can iterate later if we decide it\u0027s a source of problems:\nhttps://gn.googlesource.com/gn/+/master/docs/reference.md#var_allow_circular_includes_from",
+      "range": {
+        "startLine": 1927,
+        "startChar": 2,
+        "endLine": 1927,
+        "endChar": 69
+      },
+      "revId": "a29605b09eefb40fd7bb918bc348a97c4c9e9254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
