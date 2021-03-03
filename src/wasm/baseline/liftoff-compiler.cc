@@ -1874,7 +1874,7 @@ class LiftoffCompiler {
     __ DeallocateStackSlot(sizeof(int64_t));
   }
 
-  void DoReturn(FullDecoder* decoder) {
+  void DoReturn(FullDecoder* decoder, int /* drop_values */) {
     if (FLAG_trace_wasm) TraceFunctionExit(decoder);
     size_t num_returns = decoder->sig_->return_count();
     if (num_returns > 0) __ MoveToReturnLocations(decoder->sig_, descriptor_);
@@ -2207,9 +2207,9 @@ class LiftoffCompiler {
     __ jmp(target->label.get());
   }
 
-  void BrOrRet(FullDecoder* decoder, uint32_t depth) {
+  void BrOrRet(FullDecoder* decoder, uint32_t depth, int /* drop_values */) {
     if (depth == decoder->control_depth() - 1) {
-      DoReturn(decoder);
+      DoReturn(decoder, 0);
     } else {
       BrImpl(decoder->control_at(depth));
     }
@@ -2243,7 +2243,7 @@ class LiftoffCompiler {
       outstanding_op_ = kNoOutstandingOp;
     }
 
-    BrOrRet(decoder, depth);
+    BrOrRet(decoder, depth, 0);
     __ bind(&cont_false);
   }
 
@@ -2256,7 +2256,7 @@ class LiftoffCompiler {
       __ jmp(label.get());
     } else {
       __ bind(label.get());
-      BrOrRet(decoder, br_depth);
+      BrOrRet(decoder, br_depth, 0);
     }
   }
 
@@ -2908,7 +2908,7 @@ class LiftoffCompiler {
     __ emit_cond_jump(kUnequal, &cont_false, ref_object.type.kind(), ref.gp(),
                       null);
 
-    BrOrRet(decoder, depth);
+    BrOrRet(decoder, depth, 0);
     __ bind(&cont_false);
     __ PushRegister(kRef, ref);
   }
@@ -4741,7 +4741,7 @@ class LiftoffCompiler {
         SubtypeCheck(decoder, obj, rtt, &cont_false, kNullFails);
 
     __ PushRegister(rtt.type.is_bottom() ? kBottom : obj.type.kind(), obj_reg);
-    BrOrRet(decoder, depth);
+    BrOrRet(decoder, depth, 0);
 
     __ bind(&cont_false);
     // Drop the branch's value, restore original value.
@@ -4895,7 +4895,7 @@ class LiftoffCompiler {
 
     __ bind(&match);
     __ PushRegister(result_kind, obj_reg);
-    BrOrRet(decoder, br_depth);
+    BrOrRet(decoder, br_depth, 0);
 
     __ bind(&no_match);
     // Drop the branch's value, restore original value.
