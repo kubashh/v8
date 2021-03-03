@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8306e9dd_5a15800a",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T17:40:01Z",
+      "side": 1,
+      "message": "That\u0027s true, but it looks like function_data is only declared as an acquire load getter and I don\u0027t want to introduce a relaxed getter only for my use case. Also (this is only hypothetical), there\u0027s no guarantee that the IsTemplateForApiObject method will be used only from the main thread in the future.",
+      "parentUuid": "2ed4abc2_d526d75c",
+      "revId": "951b2e508587839a0f761ed567608503c1680d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d53ff2da_d21dcb31",
         "filename": "test/cctest/test-api.cc",
         "patchSetId": 13
@@ -48,6 +66,24 @@
       "writtenOn": "2021-03-02T16:02:06Z",
       "side": 1,
       "message": "This is great! Can you also have templ1 and templ2, and verify that if obj is set to an instantiation of templ1, that templ2-\u003eIsTemplateForApiObject(...) returns false?",
+      "revId": "951b2e508587839a0f761ed567608503c1680d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05c5da6_624dc320",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 20747,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T17:40:01Z",
+      "side": 1,
+      "message": "Very nice idea, thanks!",
+      "parentUuid": "d53ff2da_d21dcb31",
       "revId": "951b2e508587839a0f761ed567608503c1680d54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
