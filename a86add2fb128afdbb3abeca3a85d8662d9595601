@@ -158,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c16b3cf7_286d6c33",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-03-03T17:27:06Z",
+      "side": 1,
+      "message": "I removed the DCHECK, I suppose Quicksort sometimes compares an item with itself (as the pivot?).",
+      "parentUuid": "1e2496f5_54bcddc3",
+      "revId": "a86add2fb128afdbb3abeca3a85d8662d9595601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af277b11_5ef6a4c2",
