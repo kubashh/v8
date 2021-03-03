@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eca19a61_694d86e4",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-03T16:12:54Z",
+      "side": 1,
+      "message": "I have made them instead mandatory parameters (or optional ones with defaults). I am not sure I understand what the ideal situation is. Do you want the parameters not to be modified when passed to the function?\n\nfor now I will mark this comment as resolved (please reopen it if you need more changes)",
+      "parentUuid": "e4800f92_3f2409b9",
+      "range": {
+        "startLine": 16,
+        "startChar": 42,
+        "endLine": 16,
+        "endChar": 46
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "907ac1a4_ea3ba2ac",
@@ -70,6 +94,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75b0e6b3_c09242fd",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-03T16:12:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ffc4b57_11769d60",
+      "range": {
+        "startLine": 19,
+        "startChar": 38,
+        "endLine": 19,
+        "endChar": 42
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec2ca47b_bf2c4d4b",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-03T16:12:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "907ac1a4_ea3ba2ac",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 43
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aff495f2_559a3d45",
@@ -93,6 +165,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22270b3f_5284ba7d",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-03T16:12:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aff495f2_559a3d45",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 18
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cd0577b_b12e10fb",
@@ -106,6 +202,30 @@
       "writtenOn": "2021-03-01T19:18:15Z",
       "side": 1,
       "message": "This is set by the new function.",
+      "range": {
+        "startLine": 273,
+        "startChar": 52,
+        "endLine": 273,
+        "endChar": 106
+      },
+      "revId": "06178c7ce6e9be128ae8dfd218746774fd0a6208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4210239_af36e05e",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-03T16:12:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cd0577b_b12e10fb",
       "range": {
         "startLine": 273,
         "startChar": 52,
