@@ -215,12 +215,14 @@ class ConcurrentMarkingVisitor final
 
   template <typename T, typename TBodyDescriptor = typename T::BodyDescriptor>
   int VisitJSObjectSubclass(Map map, T object) {
+    if (!ShouldVisit(object)) return 0;
     int size = TBodyDescriptor::SizeOf(map, object);
     int used_size = map.UsedInstanceSize();
     DCHECK_LE(used_size, size);
     DCHECK_GE(used_size, JSObject::GetHeaderSize(map));
-    return VisitPartiallyWithSnapshot<T, TBodyDescriptor>(map, object,
-                                                          used_size, size);
+    this->VisitMapPointer(object);
+    TBodyDescriptor::IterateBody(map, object, used_size, this);
+    return size;
   }
 
   template <typename T>
