@@ -94,9 +94,12 @@
 #include "src/tracing/traced-value.h"
 #include "src/utils/ostreams.h"
 #include "src/utils/utils.h"
+
+#if V8_ENABLE_WEBASSEMBLY
 #include "src/wasm/function-body-decoder.h"
 #include "src/wasm/function-compiler.h"
 #include "src/wasm/wasm-engine.h"
+#endif  // V8_ENABLE_WEBASSEMBLY
 
 namespace v8 {
 namespace internal {
@@ -184,6 +187,7 @@ class PipelineData {
         info_->zone()->New<CompilationDependencies>(broker_, info_->zone());
   }
 
+#if V8_ENABLE_WEBASSEMBLY
   // For WebAssembly compile entry point.
   PipelineData(ZoneStats* zone_stats, wasm::WasmEngine* wasm_engine,
                OptimizedCompilationInfo* info, MachineGraph* mcgraph,
@@ -215,6 +219,7 @@ class PipelineData {
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
         assembler_options_(assembler_options) {}
+#endif  // V8_ENABLE_WEBASSEMBLY
 
   // For CodeStubAssembler and machine graph testing entry point.
   PipelineData(ZoneStats* zone_stats, OptimizedCompilationInfo* info,
@@ -225,7 +230,9 @@ class PipelineData {
                const AssemblerOptions& assembler_options,
                const ProfileDataFromFile* profile_data)
       : isolate_(isolate),
+#if V8_ENABLE_WEBASSEMBLY
         wasm_engine_(isolate_->wasm_engine()),
+#endif  // V8_ENABLE_WEBASSEMBLY
         allocator_(allocator),
         info_(info),
         debug_name_(info_->GetDebugName()),
@@ -416,8 +423,10 @@ class PipelineData {
   }
 
   CodeTracer* GetCodeTracer() const {
-    return wasm_engine_ == nullptr ? isolate_->GetCodeTracer()
-                                   : wasm_engine_->GetCodeTracer();
+#if V8_ENABLE_WEBASSEMBLY
+    if (wasm_engine_) return wasm_engine_->GetCodeTracer();
+#endif  // V8_ENABLE_WEBASSEMBLY
+    return isolate_->GetCodeTracer();
   }
 
   Typer* CreateTyper() {
@@ -585,7 +594,9 @@ class PipelineData {
 
  private:
   Isolate* const isolate_;
+#if V8_ENABLE_WEBASSEMBLY
   wasm::WasmEngine* const wasm_engine_ = nullptr;
+#endif  // V8_ENABLE_WEBASSEMBLY
   AccountingAllocator* const allocator_;
   OptimizedCompilationInfo* const info_;
   std::unique_ptr<char[]> debug_name_;
@@ -1002,6 +1013,7 @@ PipelineStatistics* CreatePipelineStatistics(Handle<Script> script,
   return pipeline_statistics;
 }
 
+#if V8_ENABLE_WEBASSEMBLY
 PipelineStatistics* CreatePipelineStatistics(
     wasm::WasmEngine* wasm_engine, wasm::FunctionBody function_body,
     const wasm::WasmModule* wasm_module, OptimizedCompilationInfo* info,
@@ -1043,6 +1055,7 @@ PipelineStatistics* CreatePipelineStatistics(
 
   return pipeline_statistics;
 }
+#endif  // V8_ENABLE_WEBASSEMBLY
 
 }  // namespace
 
@@ -1289,6 +1302,7 @@ void PipelineCompilationJob::RegisterWeakObjectsInOptimizedCode(
   code->set_can_have_weak_objects(true);
 }
 
+#if V8_ENABLE_WEBASSEMBLY
 class WasmHeapStubCompilationJob final : public OptimizedCompilationJob {
  public:
   WasmHeapStubCompilationJob(Isolate* isolate, wasm::WasmEngine* wasm_engine,
@@ -1407,6 +1421,20 @@ CompilationJob::Status WasmHeapStubCompilationJob::FinalizeJobImpl(
   }
   return FAILED;
 }
+#else
+// TODO(clemensb): Remove these methods once src/wasm is excluded from no-wasm
+// builds.
+
+// static
+std::unique_ptr<OptimizedCompilationJob>
+Pipeline::NewWasmHeapStubCompilationJob(
+    Isolate* isolate, wasm::WasmEngine* wasm_engine,
+    CallDescriptor* call_descriptor, std::unique_ptr<Zone> zone, Graph* graph,
+    CodeKind kind, std::unique_ptr<char[]> debug_name,
+    const AssemblerOptions& options, SourcePositionTable* source_positions) {
+  UNREACHABLE();
+}
+#endif  // V8_ENABLE_WEBASSEMBLY
 
 template <typename Phase, typename... Args>
 void PipelineImpl::Run(Args&&... args) {
@@ -3031,6 +3059,7 @@ std::ostream& operator<<(std::ostream& out, const BlockStartsAsJSON& s) {
   return out;
 }
 
+#if V8_ENABLE_WEBASSEMBLY
 // static
 wasm::WasmCompilationResult Pipeline::GenerateCodeForWasmNativeStub(
     wasm::WasmEngine* wasm_engine, CallDescriptor* call_descriptor,
@@ -3127,115 +3156,6 @@ wasm::WasmCompilationResult Pipeline::GenerateCodeForWasmNativeStub(
   }
 
   return result;
-}
-
-// static
-MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
-    OptimizedCompilationInfo* info, Isolate* isolate,
-    std::unique_ptr<JSHeapBroker>* out_broker) {
-  ZoneStats zone_stats(isolate->allocator());
-  std::unique_ptr<PipelineStatistics> pipeline_statistics(
-      CreatePipelineStatistics(Handle<Script>::null(), info, isolate,
-                               &zone_stats));
-
-  PipelineData data(&zone_stats, isolate, info, pipeline_statistics.get(),
-                    i::FLAG_concurrent_inlining);
-  PipelineImpl pipeline(&data);
-
-  Linkage linkage(Linkage::ComputeIncoming(data.instruction_zone(), info));
-
-  {
-    CompilationHandleScope compilation_scope(isolate, info);
-    CanonicalHandleScope canonical(isolate, info);
-    info->ReopenHandlesInNewHandleScope(isolate);
-    pipeline.Serialize();
-    // Emulating the proper pipeline, we call CreateGraph on different places
-    // (i.e before or after creating a LocalIsolateScope) depending on
-    // is_concurrent_inlining.
-    if (!data.broker()->is_concurrent_inlining()) {
-      if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
-    }
-  }
-
-  {
-    LocalIsolateScope local_isolate_scope(data.broker(), info,
-                                          isolate->main_thread_local_isolate());
-    if (data.broker()->is_concurrent_inlining()) {
-      if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
-    }
-    // We selectively Unpark inside OptimizeGraph.
-    if (!pipeline.OptimizeGraph(&linkage)) return MaybeHandle<Code>();
-
-    pipeline.AssembleCode(&linkage);
-  }
-
-  const bool will_retire_broker = out_broker == nullptr;
-  if (!will_retire_broker) {
-    // If the broker is going to be kept alive, pass the persistent and the
-    // canonical handles containers back to the JSHeapBroker since it will
-    // outlive the OptimizedCompilationInfo.
-    data.broker()->SetPersistentAndCopyCanonicalHandlesForTesting(
-        info->DetachPersistentHandles(), info->DetachCanonicalHandles());
-  }
-
-  Handle<Code> code;
-  if (pipeline.FinalizeCode(will_retire_broker).ToHandle(&code) &&
-      pipeline.CommitDependencies(code)) {
-    if (!will_retire_broker) *out_broker = data.ReleaseBroker();
-    return code;
-  }
-  return MaybeHandle<Code>();
-}
-
-// static
-MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
-    OptimizedCompilationInfo* info, Isolate* isolate,
-    CallDescriptor* call_descriptor, Graph* graph,
-    const AssemblerOptions& options, Schedule* schedule) {
-  // Construct a pipeline for scheduling and code generation.
-  ZoneStats zone_stats(isolate->allocator());
-  NodeOriginTable* node_positions = info->zone()->New<NodeOriginTable>(graph);
-  PipelineData data(&zone_stats, info, isolate, isolate->allocator(), graph,
-                    nullptr, schedule, nullptr, node_positions, nullptr,
-                    options, nullptr);
-  std::unique_ptr<PipelineStatistics> pipeline_statistics;
-  if (FLAG_turbo_stats || FLAG_turbo_stats_nvp) {
-    pipeline_statistics.reset(new PipelineStatistics(
-        info, isolate->GetTurboStatistics(), &zone_stats));
-    pipeline_statistics->BeginPhaseKind("V8.TFTestCodegen");
-  }
-
-  PipelineImpl pipeline(&data);
-
-  if (info->trace_turbo_json()) {
-    TurboJsonFile json_of(info, std::ios_base::trunc);
-    json_of << "{\"function\":\"" << info->GetDebugName().get()
-            << "\", \"source\":\"\",\n\"phases\":[";
-  }
-  // TODO(rossberg): Should this really be untyped?
-  pipeline.RunPrintAndVerify("V8.TFMachineCode", true);
-
-  // Ensure we have a schedule.
-  if (data.schedule() == nullptr) {
-    pipeline.ComputeScheduledGraph();
-  }
-
-  Handle<Code> code;
-  if (pipeline.GenerateCode(call_descriptor).ToHandle(&code) &&
-      pipeline.CommitDependencies(code)) {
-    return code;
-  }
-  return MaybeHandle<Code>();
-}
-
-// static
-std::unique_ptr<OptimizedCompilationJob> Pipeline::NewCompilationJob(
-    Isolate* isolate, Handle<JSFunction> function, CodeKind code_kind,
-    bool has_script, BytecodeOffset osr_offset, JavaScriptFrame* osr_frame) {
-  Handle<SharedFunctionInfo> shared =
-      handle(function->shared(), function->GetIsolate());
-  return std::make_unique<PipelineCompilationJob>(
-      isolate, shared, function, osr_offset, osr_frame, code_kind);
 }
 
 // static
@@ -3365,6 +3285,137 @@ void Pipeline::GenerateCodeForWasmFunction(
 
   DCHECK(result->succeeded());
   info->SetWasmCompilationResult(std::move(result));
+}
+#else   // V8_ENABLE_WEBASSEMBLY
+// TODO(clemensb): Remove these methods once src/wasm is excluded from no-wasm
+// builds.
+
+// static
+wasm::WasmCompilationResult Pipeline::GenerateCodeForWasmNativeStub(
+    wasm::WasmEngine* wasm_engine, CallDescriptor* call_descriptor,
+    MachineGraph* mcgraph, CodeKind kind, int wasm_kind, const char* debug_name,
+    const AssemblerOptions& options, SourcePositionTable* source_positions) {
+  UNREACHABLE();
+}
+
+// static
+void Pipeline::GenerateCodeForWasmFunction(
+    OptimizedCompilationInfo* info, wasm::WasmEngine* wasm_engine,
+    MachineGraph* mcgraph, CallDescriptor* call_descriptor,
+    SourcePositionTable* source_positions, NodeOriginTable* node_origins,
+    wasm::FunctionBody function_body, const wasm::WasmModule* module,
+    int function_index, std::vector<compiler::WasmLoopInfo>* loop_info) {
+  UNREACHABLE();
+}
+#endif  // V8_ENABLE_WEBASSEMBLY
+
+// static
+MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
+    OptimizedCompilationInfo* info, Isolate* isolate,
+    std::unique_ptr<JSHeapBroker>* out_broker) {
+  ZoneStats zone_stats(isolate->allocator());
+  std::unique_ptr<PipelineStatistics> pipeline_statistics(
+      CreatePipelineStatistics(Handle<Script>::null(), info, isolate,
+                               &zone_stats));
+
+  PipelineData data(&zone_stats, isolate, info, pipeline_statistics.get(),
+                    i::FLAG_concurrent_inlining);
+  PipelineImpl pipeline(&data);
+
+  Linkage linkage(Linkage::ComputeIncoming(data.instruction_zone(), info));
+
+  {
+    CompilationHandleScope compilation_scope(isolate, info);
+    CanonicalHandleScope canonical(isolate, info);
+    info->ReopenHandlesInNewHandleScope(isolate);
+    pipeline.Serialize();
+    // Emulating the proper pipeline, we call CreateGraph on different places
+    // (i.e before or after creating a LocalIsolateScope) depending on
+    // is_concurrent_inlining.
+    if (!data.broker()->is_concurrent_inlining()) {
+      if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
+    }
+  }
+
+  {
+    LocalIsolateScope local_isolate_scope(data.broker(), info,
+                                          isolate->main_thread_local_isolate());
+    if (data.broker()->is_concurrent_inlining()) {
+      if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
+    }
+    // We selectively Unpark inside OptimizeGraph.
+    if (!pipeline.OptimizeGraph(&linkage)) return MaybeHandle<Code>();
+
+    pipeline.AssembleCode(&linkage);
+  }
+
+  const bool will_retire_broker = out_broker == nullptr;
+  if (!will_retire_broker) {
+    // If the broker is going to be kept alive, pass the persistent and the
+    // canonical handles containers back to the JSHeapBroker since it will
+    // outlive the OptimizedCompilationInfo.
+    data.broker()->SetPersistentAndCopyCanonicalHandlesForTesting(
+        info->DetachPersistentHandles(), info->DetachCanonicalHandles());
+  }
+
+  Handle<Code> code;
+  if (pipeline.FinalizeCode(will_retire_broker).ToHandle(&code) &&
+      pipeline.CommitDependencies(code)) {
+    if (!will_retire_broker) *out_broker = data.ReleaseBroker();
+    return code;
+  }
+  return MaybeHandle<Code>();
+}
+
+// static
+MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
+    OptimizedCompilationInfo* info, Isolate* isolate,
+    CallDescriptor* call_descriptor, Graph* graph,
+    const AssemblerOptions& options, Schedule* schedule) {
+  // Construct a pipeline for scheduling and code generation.
+  ZoneStats zone_stats(isolate->allocator());
+  NodeOriginTable* node_positions = info->zone()->New<NodeOriginTable>(graph);
+  PipelineData data(&zone_stats, info, isolate, isolate->allocator(), graph,
+                    nullptr, schedule, nullptr, node_positions, nullptr,
+                    options, nullptr);
+  std::unique_ptr<PipelineStatistics> pipeline_statistics;
+  if (FLAG_turbo_stats || FLAG_turbo_stats_nvp) {
+    pipeline_statistics.reset(new PipelineStatistics(
+        info, isolate->GetTurboStatistics(), &zone_stats));
+    pipeline_statistics->BeginPhaseKind("V8.TFTestCodegen");
+  }
+
+  PipelineImpl pipeline(&data);
+
+  if (info->trace_turbo_json()) {
+    TurboJsonFile json_of(info, std::ios_base::trunc);
+    json_of << "{\"function\":\"" << info->GetDebugName().get()
+            << "\", \"source\":\"\",\n\"phases\":[";
+  }
+  // TODO(rossberg): Should this really be untyped?
+  pipeline.RunPrintAndVerify("V8.TFMachineCode", true);
+
+  // Ensure we have a schedule.
+  if (data.schedule() == nullptr) {
+    pipeline.ComputeScheduledGraph();
+  }
+
+  Handle<Code> code;
+  if (pipeline.GenerateCode(call_descriptor).ToHandle(&code) &&
+      pipeline.CommitDependencies(code)) {
+    return code;
+  }
+  return MaybeHandle<Code>();
+}
+
+// static
+std::unique_ptr<OptimizedCompilationJob> Pipeline::NewCompilationJob(
+    Isolate* isolate, Handle<JSFunction> function, CodeKind code_kind,
+    bool has_script, BytecodeOffset osr_offset, JavaScriptFrame* osr_frame) {
+  Handle<SharedFunctionInfo> shared =
+      handle(function->shared(), function->GetIsolate());
+  return std::make_unique<PipelineCompilationJob>(
+      isolate, shared, function, osr_offset, osr_frame, code_kind);
 }
 
 bool Pipeline::AllocateRegistersForTesting(const RegisterConfiguration* config,

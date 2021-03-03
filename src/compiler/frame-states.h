@@ -62,12 +62,14 @@ class OutputFrameStateCombine {
 
 // The type of stack frame that a FrameState node represents.
 enum class FrameStateType {
-  kUnoptimizedFunction,            // Represents an UnoptimizedFrame.
-  kArgumentsAdaptor,               // Represents an ArgumentsAdaptorFrame.
-  kConstructStub,                  // Represents a ConstructStubFrame.
-  kBuiltinContinuation,            // Represents a continuation to a stub.
-  kJSToWasmBuiltinContinuation,    // Represents a lazy deopt continuation for a
-                                   // JS to Wasm call.
+  kUnoptimizedFunction,  // Represents an UnoptimizedFrame.
+  kArgumentsAdaptor,     // Represents an ArgumentsAdaptorFrame.
+  kConstructStub,        // Represents a ConstructStubFrame.
+  kBuiltinContinuation,  // Represents a continuation to a stub.
+#if V8_ENABLE_WEBASSEMBLY
+  kJSToWasmBuiltinContinuation,  // Represents a lazy deopt continuation for a
+                                 // JS to Wasm call.
+#endif
   kJavaScriptBuiltinContinuation,  // Represents a continuation to a JavaScipt
                                    // builtin.
   kJavaScriptBuiltinContinuationWithCatch  // Represents a continuation to a
@@ -170,9 +172,11 @@ FrameState CreateStubBuiltinContinuationFrameState(
     ContinuationFrameStateMode mode,
     const wasm::FunctionSig* signature = nullptr);
 
+#if V8_ENABLE_WEBASSEMBLY
 FrameState CreateJSWasmCallBuiltinContinuationFrameState(
     JSGraph* jsgraph, Node* context, Node* outer_frame_state,
     const wasm::FunctionSig* signature);
+#endif  // V8_ENABLE_WEBASSEMBLY
 
 FrameState CreateJavaScriptBuiltinContinuationFrameState(
     JSGraph* graph, const SharedFunctionInfoRef& shared, Builtins::Name name,
