@@ -421,9 +421,21 @@ static void FrameIterationCheck(
     d::StackFrameResultPtr props = d::GetStackFrame(frame->fp(), &ReadMemory);
     if (frame->is_java_script()) {
       JavaScriptFrame* js_frame = JavaScriptFrame::cast(frame);
-      CHECK_EQ(props->num_properties, 1);
+      CHECK_EQ(props->num_properties, 5);
       CheckProp(*props->properties[0], "v8::internal::JSFunction",
                 "currently_executing_jsfunction", js_frame->function().ptr());
+      CheckProp(*props->properties[1], "v8::internal::Object", "script_name");
+      CheckProp(*props->properties[2], "v8::internal::Object", "script_source");
+      CheckProp(*props->properties[3], "v8::internal::Object", "function_name");
+      CheckProp(*props->properties[4], "", "function_character_offset");
+      const d::ObjectProperty& function_character_offset =
+          *props->properties[4];
+      CHECK_EQ(function_character_offset.size, 2 * i::kTaggedSize);
+      CHECK_EQ(function_character_offset.num_struct_fields, 2);
+      CheckStructProp(*function_character_offset.struct_fields[0],
+                      "v8::internal::Object", "start", 0 * i::kTaggedSize);
+      CheckStructProp(*function_character_offset.struct_fields[1],
+                      "v8::internal::Object", "end", 1 * i::kTaggedSize);
     } else {
       CHECK_EQ(props->num_properties, 0);
     }
