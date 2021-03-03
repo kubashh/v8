@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c3e84c8_457dd977",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-03T15:09:45Z",
+      "side": 1,
+      "message": "PTAL. This is rather large, but mostly mechanical. It removes all references to src/wasm from src/codegen and src/compiler, such that we can later exclude src/wasm from compilation completely.",
+      "revId": "d7dd594ffaca0fefc015d650fa8881e89d36de01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
