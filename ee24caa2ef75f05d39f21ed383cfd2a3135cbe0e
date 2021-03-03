@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e5aa039_7179dc70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T16:58:01Z",
+      "side": 1,
+      "message": "Thanks for the clarifications!",
+      "revId": "ee24caa2ef75f05d39f21ed383cfd2a3135cbe0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8856814e_9c730016",
@@ -89,6 +106,30 @@
       "side": 1,
       "message": "These are the \"false\" cases, i.e., a memory barrier cannot allocate. Maybe I am missing something here?",
       "parentUuid": "8856814e_9c730016",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 33
+      },
+      "revId": "ee24caa2ef75f05d39f21ed383cfd2a3135cbe0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cefc73a9_ad0256f1",
+        "filename": "src/compiler/memory-optimizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T16:58:01Z",
+      "side": 1,
+      "message": "Sorry, my misunderstanding.",
+      "parentUuid": "77b08031_bc149dfa",
       "range": {
         "startLine": 40,
         "startChar": 19,
