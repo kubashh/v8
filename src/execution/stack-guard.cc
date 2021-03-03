@@ -309,6 +309,13 @@ Object StackGuard::HandleInterrupts() {
     isolate_->wasm_engine()->ReportLiveCodeFromStackForGC(isolate_);
   }
 
+  if (TestAndClear(&interrupt_flags, PUMP_TASKS_FOR_CONCURRENT_COMPILATION)) {
+    isolate_->SignalSTW();
+  }
+
+  // Ninja.
+  isolate_->PumpHeapBrokerTaskQueues();
+
   isolate_->counters()->stack_interrupts()->Increment();
 
   return ReadOnlyRoots(isolate_).undefined_value();

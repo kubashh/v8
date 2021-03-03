@@ -156,6 +156,50 @@ HEAP_BROKER_BACKGROUND_SERIALIZED_OBJECT_LIST(FORWARD_DECL)
 HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(FORWARD_DECL)
 #undef FORWARD_DECL
 
+enum class RefResultKind {
+  // Got a value for you.
+  kSuccess,
+  // No value yet, try again later.
+  kPostponed,
+  // No value, don't try again.
+  kFailed,
+};
+
+template <class T>
+class RefResult {
+ public:
+  static RefResult<T> Success(T value) {
+    return {RefResultKind::kSuccess, value};
+  }
+  static RefResult<T> Failed() { return {RefResultKind::kFailed}; }
+  static RefResult<T> FromOptional(base::Optional<T> value) {
+    if (value.has_value()) {
+      return {RefResultKind::kSuccess, value.value()};
+    }
+    return {RefResultKind::kFailed};
+  }
+  static RefResult<T> Postponed() { return {RefResultKind::kPostponed}; }
+
+  bool IsPostponed() const { return kind() == RefResultKind::kPostponed; }
+
+  RefResultKind kind() const { return result_; }
+  base::Optional<T> maybe_value() const {
+    CONSTEXPR_DCHECK(result_ != RefResultKind::kPostponed);
+    return maybe_value_;
+  }
+  T value() const {
+    CONSTEXPR_DCHECK(result_ == RefResultKind::kSuccess);
+    return maybe_value_.value();
+  }
+
+ private:
+  RefResult(RefResultKind result, T value)
+      : result_(result), maybe_value_(value) {}
+  RefResult(RefResultKind result) : result_(result), maybe_value_() {}
+  const RefResultKind result_;
+  const base::Optional<T> maybe_value_;
+};
+
 class V8_EXPORT_PRIVATE ObjectRef {
  public:
   enum class BackgroundSerialization {
@@ -172,6 +216,8 @@ class V8_EXPORT_PRIVATE ObjectRef {
     CHECK_NOT_NULL(data_);
   }
   Handle<Object> object() const;
+
+  void SetProcessedOnMainThread();
 
   bool equals(const ObjectRef& other) const;
   bool ShouldHaveBeenSerialized() const;
@@ -333,27 +379,33 @@ class JSObjectRef : public JSReceiverRef {
 
   Handle<JSObject> object() const;
 
-  ObjectRef RawFastPropertyAt(FieldIndex index) const;
+  RefResult<ObjectRef> RawFastPropertyAt(FieldIndex index) const;
 
   // Return the element at key {index} if {index} is known to be an own data
   // property of the object that is non-writable and non-configurable.
-  base::Optional<ObjectRef> GetOwnConstantElement(
+  RefResult<ObjectRef> GetOwnConstantElement(
       uint32_t index, SerializationPolicy policy =
                           SerializationPolicy::kAssumeSerialized) const;
 
   // Return the value of the property identified by the field {index}
   // if {index} is known to be an own data property of the object.
-  base::Optional<ObjectRef> GetOwnDataProperty(
+  RefResult<ObjectRef> GetOwnDataProperty(
       Representation field_representation, FieldIndex index,
       SerializationPolicy policy =
           SerializationPolicy::kAssumeSerialized) const;
-  base::Optional<FixedArrayBaseRef> elements() const;
+  RefResult<ObjectRef> GetOwnDataPropertyDontPostpone(
+      Representation field_representation, FieldIndex index,
+      SerializationPolicy policy =
+          SerializationPolicy::kAssumeSerialized) const;
+  RefResult<FixedArrayBaseRef> elements() const;
   void SerializeElements();
-  void EnsureElementsTenured();
+  RefResultKind EnsureElementsTenured();
   ElementsKind GetElementsKind() const;
 
+  // TODO: elements, GetElementsKind.
+
   void SerializeObjectCreateMap();
-  base::Optional<MapRef> GetObjectCreateMap() const;
+  RefResult<MapRef> GetObjectCreateMap() const;
 };
 
 class JSDataViewRef : public JSObjectRef {
@@ -653,6 +705,8 @@ class BigIntRef : public HeapObjectRef {
 class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
  public:
   DEFINE_REF_CONSTRUCTOR(Map, HeapObjectRef)
+
+  bool MaybePostpone();
 
   Handle<Map> object() const;
 

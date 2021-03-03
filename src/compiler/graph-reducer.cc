@@ -68,8 +68,17 @@ void GraphReducer::ReduceNode(Node* node) {
   DCHECK(stack_.empty());
   DCHECK(revisit_.empty());
   Push(node);
+  int blocked_count = 0;
   for (;;) {
-    if (!stack_.empty()) {
+    TFTask* maybe_task = nullptr;
+    if (broker_ != nullptr &&
+        (maybe_task = broker_->TryPopNextProcessedTask()) != nullptr) {
+      // Draining tasks is done first, just to interleave finished tasks ASAP.
+      do {
+        Node* n = maybe_task->node();
+        if (state_.Get(n) != State::kOnStack) Push(n);
+      } while ((maybe_task = broker_->TryPopNextProcessedTask()) != nullptr);
+    } else if (!stack_.empty()) {
       // Process the node on the top of the stack, potentially pushing more or
       // popping the node off the stack.
       ReduceTop();
@@ -81,14 +90,46 @@ void GraphReducer::ReduceNode(Node* node) {
         // state can change while in queue.
         Push(node);
       }
+    } else if (broker_ != nullptr &&
+               (!broker_->broker_task_queue_backlog_.empty() ||
+                !broker_->TaskQueueIsEmpty())) {
+      while (!broker_->broker_task_queue_backlog_.empty()) {
+        if (!broker_->broker_task_queue_.TryPush(
+                broker_->broker_task_queue_backlog_.back())) {
+          break;
+        }
+        broker_->broker_task_queue_backlog_.pop_back();
+      }
+      if (!broker_->TaskQueueIsEmpty()) {
+        blocked_count++;
+
+        // TODO: Interrupt and potentially block on the main thread.
+        broker_->isolate()
+            ->stack_guard()
+            ->RequestPumpTasksForConcurrentCompilation();
+
+        /*
+        broker_->isolate()->stack_guard()->RequestPumpTasksForConcurrentCompilation();
+        broker_->isolate()->WaitSTW();
+        */
+      }
     } else {
       // Run all finalizers.
       for (Reducer* const reducer : reducers_) reducer->Finalize();
 
       // Check if we have new nodes to revisit.
-      if (revisit_.empty()) break;
+      if (revisit_.empty() &&
+          (broker_ == nullptr || broker_->TaskQueueIsEmpty())) {
+        break;
+      }
     }
   }
+  if (FLAG_trace_turbo_stw) {
+    if (blocked_count != 0) {
+      printf("ReduceNode blocked on MT %d times\n", blocked_count);
+    }
+  }
+  DCHECK(broker_ == nullptr || broker_->TaskQueueIsEmpty());
   DCHECK(revisit_.empty());
   DCHECK(stack_.empty());
 }

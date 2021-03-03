@@ -35,6 +35,8 @@ namespace compiler {
 
 namespace {
 
+constexpr Node* kPostponedMarker = nullptr;
+
 // Retrieves the frame state holding actual argument values.
 FrameState GetArgumentsFrameState(FrameState frame_state) {
   FrameState outer_state{NodeProperties::GetFrameStateInput(frame_state)};
@@ -1106,8 +1108,15 @@ Reduction JSCreateLowering::ReduceJSCreateLiteralArrayOrObject(Node* node) {
       }
       dependencies()->DependOnElementsKinds(site);
       JSObjectRef boilerplate = site.boilerplate().value();
-      Node* value = effect =
+      auto result =
           AllocateFastLiteral(effect, control, boilerplate, allocation);
+      if (result == kPostponedMarker) {
+        // Note this is potentially multiple tasks; they all belong to the same
+        // Node* though.
+        broker()->PushTask(TFTask::None(node));
+        return NoChange();
+      }
+      Node* value = effect = result;
       ReplaceWithValue(node, value, effect, control);
       return Replace(value);
     }
@@ -1319,7 +1328,7 @@ Reduction JSCreateLowering::ReduceJSCreateBlockContext(Node* node) {
 }
 
 namespace {
-base::Optional<MapRef> GetObjectCreateMap(JSHeapBroker* broker,
+base::Optional<MapRef> GetObjectCreateMap(JSHeapBroker* broker, Node* node,
                                           HeapObjectRef prototype) {
   MapRef standard_map =
       broker->target_native_context().object_function().initial_map();
@@ -1331,7 +1340,12 @@ base::Optional<MapRef> GetObjectCreateMap(JSHeapBroker* broker,
         .slow_object_with_null_prototype_map();
   }
   if (prototype.IsJSObject()) {
-    return prototype.AsJSObject().GetObjectCreateMap();
+    auto result = prototype.AsJSObject().GetObjectCreateMap();
+    if (result.kind() == RefResultKind::kPostponed) {
+      broker->PushTask(TFTask::Some(node, prototype));
+      return {};
+    }
+    return result.maybe_value();
   }
   return base::Optional<MapRef>();
 }
@@ -1346,7 +1360,7 @@ Reduction JSCreateLowering::ReduceJSCreateObject(Node* node) {
   if (!prototype_type.IsHeapConstant()) return NoChange();
 
   HeapObjectRef prototype_const = prototype_type.AsHeapConstant()->Ref();
-  auto maybe_instance_map = GetObjectCreateMap(broker(), prototype_const);
+  auto maybe_instance_map = GetObjectCreateMap(broker(), node, prototype_const);
   if (!maybe_instance_map) return NoChange();
   MapRef instance_map = maybe_instance_map.value();
 
@@ -1658,6 +1672,77 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
   ZoneVector<std::pair<FieldAccess, Node*>> inobject_fields(zone());
   inobject_fields.reserve(boilerplate_map.GetInObjectProperties());
   int const boilerplate_nof = boilerplate_map.NumberOfOwnDescriptors();
+  bool gotta_postpone = false;
+  for (InternalIndex i : InternalIndex::Range(boilerplate_nof)) {
+    PropertyDetails const property_details =
+        boilerplate_map.GetPropertyDetails(i);
+    if (property_details.location() != kField) continue;
+    FieldIndex index = boilerplate_map.GetFieldIndexFor(i);
+    if (boilerplate.RawFastPropertyAt(index).kind() ==
+        RefResultKind::kPostponed) {
+      boilerplate.SetProcessedOnMainThread();  // Workaround for TFTask::None().
+      gotta_postpone = true;
+    }
+  }
+  // AllocateFastLiteralElements.
+  {
+    RefResult<FixedArrayBaseRef> r = boilerplate.elements();
+    if (r.IsPostponed()) {
+      boilerplate.SetProcessedOnMainThread();  // Workaround for TFTask::None().
+      gotta_postpone = true;
+    } else {
+      FixedArrayBaseRef boilerplate_elements = r.value();
+      MapRef elements_map = boilerplate_elements.map();
+      if (boilerplate_elements.length() != 0 &&
+          !elements_map.IsFixedCowArrayMap() &&
+          elements_map.instance_type() == FIXED_ARRAY_TYPE) {
+        int const elements_length = boilerplate_elements.length();
+        FixedArrayRef elements = boilerplate_elements.AsFixedArray();
+        for (int i = 0; i < elements_length; ++i) {
+          ObjectRef element_value = elements.get(i);
+          if (element_value.IsJSObject()) {
+            JSObjectRef boilerplate = element_value.AsJSObject();
+            RefResult<FixedArrayBaseRef> r = boilerplate.elements();
+            if (r.IsPostponed()) {
+              boilerplate.SetProcessedOnMainThread();  // Workaround for
+                                                       // TFTask::None().
+              gotta_postpone = true;
+            } else {
+              MapRef boilerplate_map = boilerplate.map();
+              int const boilerplate_nof =
+                  boilerplate_map.NumberOfOwnDescriptors();
+              for (InternalIndex i : InternalIndex::Range(boilerplate_nof)) {
+                PropertyDetails const property_details =
+                    boilerplate_map.GetPropertyDetails(i);
+                if (property_details.location() != kField) continue;
+                FieldIndex index = boilerplate_map.GetFieldIndexFor(i);
+                if (boilerplate.RawFastPropertyAt(index).kind() ==
+                    RefResultKind::kPostponed) {
+                  boilerplate.SetProcessedOnMainThread();  // Workaround for
+                                                           // TFTask::None().
+                  gotta_postpone = true;
+                }
+              }
+            }
+          }
+        }
+      }
+      if (boilerplate_elements.length() == 0 ||
+          elements_map.IsFixedCowArrayMap()) {
+        if (allocation == AllocationType::kOld) {
+          if (boilerplate.EnsureElementsTenured() ==
+              RefResultKind::kPostponed) {
+            boilerplate
+                .SetProcessedOnMainThread();  // Workaround for TFTask::None().
+            gotta_postpone = true;
+          }
+        }
+      }
+    }
+  }
+  // Posted all tasks, now return nullptr to signal 'repeat'.
+  if (gotta_postpone) return kPostponedMarker;
+
   for (InternalIndex i : InternalIndex::Range(boilerplate_nof)) {
     PropertyDetails const property_details =
         boilerplate_map.GetPropertyDetails(i);
@@ -1675,7 +1760,11 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
                           kFullWriteBarrier,
                           LoadSensitivity::kUnsafe,
                           const_field_info};
-    ObjectRef boilerplate_value = boilerplate.RawFastPropertyAt(index);
+    RefResult<ObjectRef> maybe_boilerplate_value =
+        boilerplate.RawFastPropertyAt(index);
+    CHECK(maybe_boilerplate_value.kind() == RefResultKind::kSuccess);
+    ObjectRef boilerplate_value = maybe_boilerplate_value.value();
+
     bool is_uninitialized =
         boilerplate_value.IsHeapObject() &&
         boilerplate_value.AsHeapObject().map().oddball_type() ==
@@ -1686,8 +1775,10 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
     Node* value;
     if (boilerplate_value.IsJSObject()) {
       JSObjectRef boilerplate_object = boilerplate_value.AsJSObject();
-      value = effect =
+      auto result =
           AllocateFastLiteral(effect, control, boilerplate_object, allocation);
+      if (result == kPostponedMarker) return kPostponedMarker;
+      value = effect = result;
     } else if (property_details.representation().IsDouble()) {
       double number = boilerplate_value.AsHeapNumber().value();
       // Allocate a mutable HeapNumber box and store the value into it.
@@ -1753,7 +1844,7 @@ Node* JSCreateLowering::AllocateFastLiteralElements(Node* effect, Node* control,
   MapRef elements_map = boilerplate_elements.map();
   if (boilerplate_elements.length() == 0 || elements_map.IsFixedCowArrayMap()) {
     if (allocation == AllocationType::kOld) {
-      boilerplate.EnsureElementsTenured();
+      CHECK(boilerplate.EnsureElementsTenured() == RefResultKind::kSuccess);
       boilerplate_elements = boilerplate.elements().value();
     }
     return jsgraph()->HeapConstant(boilerplate_elements.object());
@@ -1778,6 +1869,7 @@ Node* JSCreateLowering::AllocateFastLiteralElements(Node* effect, Node* control,
       if (element_value.IsJSObject()) {
         elements_values[i] = effect = AllocateFastLiteral(
             effect, control, element_value.AsJSObject(), allocation);
+        CHECK(effect != kPostponedMarker);
       } else {
         elements_values[i] = jsgraph()->Constant(element_value);
       }

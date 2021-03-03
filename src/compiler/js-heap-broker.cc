@@ -170,10 +170,25 @@ class ObjectData : public ZoneObject {
   mutable Usage used_status = Usage::kUnused;
 #endif  // DEBUG
 
+  bool MaybePostpone(JSHeapBroker* broker) {
+    if (!FLAG_turbo_stw) return false;
+    if (broker->IsMainThread()) return false;
+    if (!broker->is_concurrent_inlining()) return false;
+    if (broker->mode() == JSHeapBroker::kSerializing) return false;
+    return !processed_on_main_thread_;
+  }
+
+  void SetProcessedOnMainThread() { processed_on_main_thread_ = true; }
+
  private:
   Handle<Object> const object_;
   ObjectDataKind const kind_;
+  bool processed_on_main_thread_ = false;
 };
+
+void ObjectRef::SetProcessedOnMainThread() {
+  data_->SetProcessedOnMainThread();
+}
 
 class HeapObjectData : public ObjectData {
  public:
@@ -2473,7 +2488,8 @@ SourceTextModuleRef ContextRef::GetModule(SerializationPolicy policy) const {
 JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
                            bool tracing_enabled, bool is_concurrent_inlining,
                            CodeKind code_kind)
-    : isolate_(isolate),
+    : broker_task_queue_backlog_(broker_zone),
+      isolate_(isolate),
       zone_(broker_zone),
       refs_(zone()->New<RefsMap>(kMinimalRefsBucketCount, AddressMatcher(),
                                  zone())),
@@ -2948,22 +2964,25 @@ int ObjectRef::AsSmi() const {
   return Handle<Smi>::cast(object())->value();
 }
 
-base::Optional<MapRef> JSObjectRef::GetObjectCreateMap() const {
+RefResult<MapRef> JSObjectRef::GetObjectCreateMap() const {
+  if (data_->MaybePostpone(broker())) {
+    return RefResult<MapRef>::Postponed();
+  }
   if (data_->should_access_heap()) {
     Handle<Map> instance_map;
     if (Map::TryGetObjectCreateMap(broker()->isolate(), object())
             .ToHandle(&instance_map)) {
-      return MapRef(broker(), instance_map);
+      return RefResult<MapRef>::Success(MapRef(broker(), instance_map));
     } else {
-      return base::Optional<MapRef>();
+      return RefResult<MapRef>::Failed();
     }
   }
   ObjectData* map_data = data()->AsJSObject()->object_create_map(broker());
-  if (map_data == nullptr) return base::Optional<MapRef>();
+  if (map_data == nullptr) return RefResult<MapRef>::Failed();
   if (map_data->should_access_heap()) {
-    return MapRef(broker(), map_data->object());
+    return RefResult<MapRef>::Success(MapRef(broker(), map_data->object()));
   }
-  return MapRef(broker(), map_data->AsMap());
+  return RefResult<MapRef>::Success(MapRef(broker(), map_data->AsMap()));
 }
 
 #define DEF_TESTER(Type, ...)                              \
@@ -2972,6 +2991,8 @@ base::Optional<MapRef> JSObjectRef::GetObjectCreateMap() const {
   }
 INSTANCE_TYPE_CHECKERS(DEF_TESTER)
 #undef DEF_TESTER
+
+bool MapRef::MaybePostpone() { return data_->MaybePostpone(broker()); }
 
 base::Optional<MapRef> MapRef::AsElementsKind(ElementsKind kind) const {
   if (data_->should_access_heap()) {
@@ -3116,15 +3137,19 @@ FeedbackCellRef FeedbackVectorRef::GetClosureFeedbackCell(int index) const {
       data()->AsFeedbackVector()->GetClosureFeedbackCell(broker(), index));
 }
 
-ObjectRef JSObjectRef::RawFastPropertyAt(FieldIndex index) const {
+RefResult<ObjectRef> JSObjectRef::RawFastPropertyAt(FieldIndex index) const {
+  if (data_->MaybePostpone(broker())) {
+    return RefResult<ObjectRef>::Postponed();
+  }
   if (data_->should_access_heap()) {
-    return ObjectRef(broker(), broker()->CanonicalPersistentHandle(
-                                   object()->RawFastPropertyAt(index)));
+    return RefResult<ObjectRef>::Success(
+        ObjectRef(broker(), broker()->CanonicalPersistentHandle(
+                                object()->RawFastPropertyAt(index))));
   }
   JSObjectData* object_data = data()->AsJSObject();
   CHECK(index.is_inobject());
-  return ObjectRef(broker(),
-                   object_data->GetInobjectField(index.property_index()));
+  return RefResult<ObjectRef>::Success(ObjectRef(
+      broker(), object_data->GetInobjectField(index.property_index())));
 }
 
 bool AllocationSiteRef::IsFastLiteral() const {
@@ -3148,9 +3173,18 @@ void JSObjectRef::SerializeElements() {
   data()->AsJSObject()->SerializeElements(broker());
 }
 
-void JSObjectRef::EnsureElementsTenured() {
+RefResultKind JSObjectRef::EnsureElementsTenured() {
+  // TODO: Currently we assume each ref only makes the round trip once. That's
+  // not true for all ops though.
+  if (data_->MaybePostpone(broker())) {
+    return RefResultKind::kPostponed;
+  }
   if (data_->should_access_heap()) {
-    Handle<FixedArrayBase> object_elements = elements().value().object();
+    auto r = elements();
+    if (r.IsPostponed()) {
+      return RefResultKind::kPostponed;
+    }
+    Handle<FixedArrayBase> object_elements = r.value().object();
     if (ObjectInYoungGeneration(*object_elements)) {
       // If we would like to pretenure a fixed cow array, we must ensure that
       // the array is already in old space, otherwise we'll create too many
@@ -3160,9 +3194,10 @@ void JSObjectRef::EnsureElementsTenured() {
               Handle<FixedArray>::cast(object_elements));
       object()->set_elements(*object_elements);
     }
-    return;
+    return RefResultKind::kSuccess;
   }
   CHECK(data()->AsJSObject()->cow_or_empty_elements_tenured());
+  return RefResultKind::kSuccess;
 }
 
 FieldIndex MapRef::GetFieldIndexFor(InternalIndex descriptor_index) const {
@@ -3903,8 +3938,11 @@ Maybe<double> ObjectRef::OddballToNumber() const {
   }
 }
 
-base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
+RefResult<ObjectRef> JSObjectRef::GetOwnConstantElement(
     uint32_t index, SerializationPolicy policy) const {
+  if (data_->MaybePostpone(broker())) {
+    return RefResult<ObjectRef>::Postponed();
+  }
   if (data_->should_access_heap() || FLAG_turbo_direct_heap_access) {
     // `elements` are currently still serialized as members of JSObjectRef.
     // TODO(jgruber,v8:7790): Once JSObject is no longer serialized, we must
@@ -3913,10 +3951,14 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
     // elements.map?).
     STATIC_ASSERT(IsSerializedHeapObject<JSObject>());
 
-    base::Optional<FixedArrayBaseRef> maybe_elements_ref = elements();
+    auto r = elements();
+    if (r.IsPostponed()) {
+      return RefResult<ObjectRef>::Postponed();
+    }
+    base::Optional<FixedArrayBaseRef> maybe_elements_ref = r.maybe_value();
     if (!maybe_elements_ref.has_value()) {
       TRACE_BROKER_MISSING(broker(), "JSObject::elements" << *this);
-      return {};
+      return RefResult<ObjectRef>::Failed();
     }
 
     FixedArrayBaseRef elements_ref = maybe_elements_ref.value();
@@ -3929,30 +3971,53 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
             broker()->isolate(), *object(), *elements_ref.object(),
             elements_kind, index);
 
-    if (!result.has_value()) return {};
+    if (!result.has_value()) return RefResult<ObjectRef>::Failed();
 
-    return ObjectRef{broker(),
-                     broker()->CanonicalPersistentHandle(result.value())};
+    return RefResult<ObjectRef>::Success(ObjectRef{
+        broker(), broker()->CanonicalPersistentHandle(result.value())});
   } else {
     ObjectData* element =
         data()->AsJSObject()->GetOwnConstantElement(broker(), index, policy);
-    if (element == nullptr) return base::nullopt;
-    return ObjectRef(broker(), element);
+    if (element == nullptr) {
+      return RefResult<ObjectRef>::Failed();
+    }
+    return RefResult<ObjectRef>::Success(ObjectRef(broker(), element));
   }
 }
 
-base::Optional<ObjectRef> JSObjectRef::GetOwnDataProperty(
+RefResult<ObjectRef> JSObjectRef::GetOwnDataProperty(
     Representation field_representation, FieldIndex index,
     SerializationPolicy policy) const {
+  if (data_->MaybePostpone(broker())) {
+    return RefResult<ObjectRef>::Postponed();
+  }
   if (data_->should_access_heap()) {
-    return GetOwnDataPropertyFromHeap(broker(),
-                                      Handle<JSObject>::cast(object()),
-                                      field_representation, index);
+    return RefResult<ObjectRef>::FromOptional(
+        GetOwnDataPropertyFromHeap(broker(), Handle<JSObject>::cast(object()),
+                                   field_representation, index));
   }
   ObjectData* property = data()->AsJSObject()->GetOwnDataProperty(
       broker(), field_representation, index, policy);
-  if (property == nullptr) return base::nullopt;
-  return ObjectRef(broker(), property);
+  if (property == nullptr) {
+    return RefResult<ObjectRef>::Failed();
+  }
+  return RefResult<ObjectRef>::Success(ObjectRef(broker(), property));
+}
+
+RefResult<ObjectRef> JSObjectRef::GetOwnDataPropertyDontPostpone(
+    Representation field_representation, FieldIndex index,
+    SerializationPolicy policy) const {
+  if (data_->should_access_heap()) {
+    return RefResult<ObjectRef>::FromOptional(
+        GetOwnDataPropertyFromHeap(broker(), Handle<JSObject>::cast(object()),
+                                   field_representation, index));
+  }
+  ObjectData* property = data()->AsJSObject()->GetOwnDataProperty(
+      broker(), field_representation, index, policy);
+  if (property == nullptr) {
+    return RefResult<ObjectRef>::Failed();
+  }
+  return RefResult<ObjectRef>::Success(ObjectRef(broker(), property));
 }
 
 ObjectRef JSArrayRef::GetBoilerplateLength() const {
@@ -4124,17 +4189,21 @@ ElementsKind JSObjectRef::GetElementsKind() const {
   return map().elements_kind();
 }
 
-base::Optional<FixedArrayBaseRef> JSObjectRef::elements() const {
+RefResult<FixedArrayBaseRef> JSObjectRef::elements() const {
+  if (data_->MaybePostpone(broker())) {
+    return RefResult<FixedArrayBaseRef>::Postponed();
+  }
   if (data_->should_access_heap()) {
-    return FixedArrayBaseRef(
-        broker(), broker()->CanonicalPersistentHandle(object()->elements()));
+    return RefResult<FixedArrayBaseRef>::Success(FixedArrayBaseRef(
+        broker(), broker()->CanonicalPersistentHandle(object()->elements())));
   }
   const JSObjectData* d = data()->AsJSObject();
   if (!d->serialized_elements()) {
     TRACE(broker(), "'elements' on " << this);
-    return base::nullopt;
+    return RefResult<FixedArrayBaseRef>::Failed();
   }
-  return FixedArrayBaseRef(broker(), d->elements());
+  return RefResult<FixedArrayBaseRef>::Success(
+      FixedArrayBaseRef(broker(), d->elements()));
 }
 
 int FixedArrayBaseRef::length() const {
@@ -5386,18 +5455,26 @@ base::Optional<NameRef> JSHeapBroker::GetNameFeedback(
   return NameRef(this, handle(raw_name, isolate()));
 }
 
-PropertyAccessInfo JSHeapBroker::GetPropertyAccessInfo(
+// TODO.
+RefResult<PropertyAccessInfo> JSHeapBroker::GetPropertyAccessInfo(
     MapRef map, NameRef name, AccessMode access_mode,
     CompilationDependencies* dependencies, SerializationPolicy policy) {
+  if (map.MaybePostpone()) {
+    return RefResult<PropertyAccessInfo>::Postponed();
+  }
+
   PropertyAccessTarget target({map, name, access_mode});
   auto it = property_access_infos_.find(target);
-  if (it != property_access_infos_.end()) return it->second;
+  if (it != property_access_infos_.end()) {
+    return RefResult<PropertyAccessInfo>::Success(it->second);
+  }
 
   if (policy == SerializationPolicy::kAssumeSerialized) {
     TRACE_BROKER_MISSING(this, "PropertyAccessInfo for "
                                    << access_mode << " of property " << name
                                    << " on map " << map);
-    return PropertyAccessInfo::Invalid(zone());
+    return RefResult<PropertyAccessInfo>::Success(
+        PropertyAccessInfo::Invalid(zone()));
   }
 
   CHECK_NOT_NULL(dependencies);
@@ -5411,7 +5488,7 @@ PropertyAccessInfo JSHeapBroker::GetPropertyAccessInfo(
                     << map);
     property_access_infos_.insert({target, access_info});
   }
-  return access_info;
+  return RefResult<PropertyAccessInfo>::Success(access_info);
 }
 
 MinimorphicLoadPropertyAccessInfo JSHeapBroker::GetPropertyAccessInfo(
@@ -5512,6 +5589,12 @@ unsigned CodeRef::GetInlinedBytecodeSize() const {
   }
 
   return ObjectRef::data()->AsCode()->inlined_bytecode_size();
+}
+
+void TFTask::ProcessOnMainThread(Isolate* isolate) {
+  if (kind_ == kSome) {
+    kind_specific_data0_->SetProcessedOnMainThread();
+  }
 }
 
 #undef BIMODAL_ACCESSOR

@@ -161,6 +161,8 @@ class PipelineData {
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
         assembler_options_(AssemblerOptions::Default(isolate)) {
+    isolate->RegisterHeapBrokerTaskQueue(broker_->broker_task_queue_ptr());
+
     PhaseScope scope(pipeline_statistics, "V8.TFInitPipelineData");
     graph_ = graph_zone_->New<Graph>(graph_zone_);
     source_positions_ = graph_zone_->New<SourcePositionTable>(graph_);
@@ -340,6 +342,7 @@ class PipelineData {
 
   JSHeapBroker* broker() const { return broker_; }
   std::unique_ptr<JSHeapBroker> ReleaseBroker() {
+    isolate_->UnregisterHeapBrokerTaskQueue(broker_->broker_task_queue_ptr());
     std::unique_ptr<JSHeapBroker> broker(broker_);
     broker_ = nullptr;
     return broker;
@@ -465,6 +468,9 @@ class PipelineData {
     codegen_zone_scope_.Destroy();
     codegen_zone_ = nullptr;
     dependencies_ = nullptr;
+    if (broker_ != nullptr) {
+      isolate_->UnregisterHeapBrokerTaskQueue(broker_->broker_task_queue_ptr());
+    }
     delete broker_;
     broker_ = nullptr;
     frame_ = nullptr;

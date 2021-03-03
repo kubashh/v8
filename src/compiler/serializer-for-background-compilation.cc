@@ -2664,15 +2664,26 @@ void SerializerForBackgroundCompilation::ProcessMapHintsForPromises(
 
 PropertyAccessInfo SerializerForBackgroundCompilation::ProcessMapForRegExpTest(
     MapRef map) {
-  PropertyAccessInfo ai_exec = broker()->GetPropertyAccessInfo(
+  broker()->GetPropertyAccessInfo(
       map, NameRef(broker(), broker()->isolate()->factory()->exec_string()),
       AccessMode::kLoad, dependencies(),
       SerializationPolicy::kSerializeIfNeeded);
+  PropertyAccessInfo ai_exec =
+      broker()
+          ->GetPropertyAccessInfo(
+              map,
+              NameRef(broker(), broker()->isolate()->factory()->exec_string()),
+              AccessMode::kLoad, dependencies(),
+              SerializationPolicy::kSerializeIfNeeded)
+          .value();
 
   Handle<JSObject> holder;
   if (ai_exec.IsDataConstant() && ai_exec.holder().ToHandle(&holder)) {
     // The property is on the prototype chain.
     JSObjectRef holder_ref(broker(), holder);
+    holder_ref.GetOwnDataProperty(ai_exec.field_representation(),
+                                  ai_exec.field_index(),
+                                  SerializationPolicy::kSerializeIfNeeded);
     holder_ref.GetOwnDataProperty(ai_exec.field_representation(),
                                   ai_exec.field_index(),
                                   SerializationPolicy::kSerializeIfNeeded);
@@ -2692,6 +2703,9 @@ void SerializerForBackgroundCompilation::ProcessHintsForRegExpTest(
     if (ai_exec.IsDataConstant() && !ai_exec.holder().ToHandle(&holder)) {
       // The property is on the object itself.
       JSObjectRef holder_ref(broker(), regexp);
+      holder_ref.GetOwnDataProperty(ai_exec.field_representation(),
+                                    ai_exec.field_index(),
+                                    SerializationPolicy::kSerializeIfNeeded);
       holder_ref.GetOwnDataProperty(ai_exec.field_representation(),
                                     ai_exec.field_index(),
                                     SerializationPolicy::kSerializeIfNeeded);
@@ -3010,9 +3024,15 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
     }
   }
 
-  PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
-      lookup_start_object_map, name, access_mode, dependencies(),
-      SerializationPolicy::kSerializeIfNeeded);
+  broker()->GetPropertyAccessInfo(lookup_start_object_map, name, access_mode,
+                                  dependencies(),
+                                  SerializationPolicy::kSerializeIfNeeded);
+  PropertyAccessInfo access_info =
+      broker()
+          ->GetPropertyAccessInfo(lookup_start_object_map, name, access_mode,
+                                  dependencies(),
+                                  SerializationPolicy::kSerializeIfNeeded)
+          .value();
 
   // For JSNativeContextSpecialization::InlinePropertySetterCall
   // and InlinePropertyGetterCall.
@@ -3075,9 +3095,15 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
         }
 
         if (holder.has_value()) {
-          base::Optional<ObjectRef> constant(holder->GetOwnDataProperty(
-              access_info.field_representation(), access_info.field_index(),
-              SerializationPolicy::kSerializeIfNeeded));
+          holder->GetOwnDataProperty(access_info.field_representation(),
+                                     access_info.field_index(),
+                                     SerializationPolicy::kSerializeIfNeeded);
+          base::Optional<ObjectRef> constant(
+              holder
+                  ->GetOwnDataProperty(access_info.field_representation(),
+                                       access_info.field_index(),
+                                       SerializationPolicy::kSerializeIfNeeded)
+                  .maybe_value());
           if (constant.has_value()) {
             result_hints->AddConstant(constant->object(), zone(), broker());
           }
@@ -3325,13 +3351,19 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
           base::Optional<ObjectRef> element;
           if (receiver_ref.IsJSObject()) {
             receiver_ref.AsJSObject().SerializeElements();
-            element = receiver_ref.AsJSObject().GetOwnConstantElement(
+            receiver_ref.AsJSObject().GetOwnConstantElement(
                 key_ref.AsSmi(), SerializationPolicy::kSerializeIfNeeded);
+            element = receiver_ref.AsJSObject()
+                          .GetOwnConstantElement(
+                              key_ref.AsSmi(),
+                              SerializationPolicy::kSerializeIfNeeded)
+                          .maybe_value();
             if (!element.has_value() && receiver_ref.IsJSArray()) {
               // We didn't find a constant element, but if the receiver is a
               // cow-array we can exploit the fact that any future write to the
               // element will replace the whole elements storage.
               JSArrayRef array_ref = receiver_ref.AsJSArray();
+              array_ref.elements();  // TODO. Workaround.
               array_ref.GetOwnCowElement(
                   array_ref.elements().value(), key_ref.AsSmi(),
                   SerializationPolicy::kSerializeIfNeeded);
@@ -3433,11 +3465,20 @@ void SerializerForBackgroundCompilation::ProcessConstantForInstanceOf(
   if (!constructor.IsHeapObject()) return;
   HeapObjectRef constructor_heap_object = constructor.AsHeapObject();
 
-  PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
+  broker()->GetPropertyAccessInfo(
       constructor_heap_object.map(),
       NameRef(broker(), broker()->isolate()->factory()->has_instance_symbol()),
       AccessMode::kLoad, dependencies(),
       SerializationPolicy::kSerializeIfNeeded);
+  PropertyAccessInfo access_info =
+      broker()
+          ->GetPropertyAccessInfo(
+              constructor_heap_object.map(),
+              NameRef(broker(),
+                      broker()->isolate()->factory()->has_instance_symbol()),
+              AccessMode::kLoad, dependencies(),
+              SerializationPolicy::kSerializeIfNeeded)
+          .value();
 
   if (access_info.IsNotFound()) {
     ProcessConstantForOrdinaryHasInstance(constructor_heap_object,
@@ -3447,9 +3488,15 @@ void SerializerForBackgroundCompilation::ProcessConstantForInstanceOf(
     bool found_on_proto = access_info.holder().ToHandle(&holder);
     JSObjectRef holder_ref = found_on_proto ? JSObjectRef(broker(), holder)
                                             : constructor.AsJSObject();
-    base::Optional<ObjectRef> constant = holder_ref.GetOwnDataProperty(
-        access_info.field_representation(), access_info.field_index(),
-        SerializationPolicy::kSerializeIfNeeded);
+    holder_ref.GetOwnDataProperty(access_info.field_representation(),
+                                  access_info.field_index(),
+                                  SerializationPolicy::kSerializeIfNeeded);
+    base::Optional<ObjectRef> constant =
+        holder_ref
+            .GetOwnDataProperty(access_info.field_representation(),
+                                access_info.field_index(),
+                                SerializationPolicy::kSerializeIfNeeded)
+            .maybe_value();
     CHECK(constant.has_value());
     if (constant->IsJSFunction()) {
       JSFunctionRef function = constant->AsJSFunction();
