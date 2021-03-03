@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72812fe5_3b05c753",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-03-03T14:51:12Z",
+      "side": 0,
+      "message": "AFAICS VisitPartiallyWithSnapshot isn\u0027t used anymore, so it might be worth to merge VisitPartiallyWithSnapshot and VisitFullyWithSnapshot and have a single method VisitWithSnapshot.",
+      "revId": "99af8d491829c0a8d334f9927b473c3a67d171da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
