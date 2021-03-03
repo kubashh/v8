@@ -16,6 +16,69 @@
       "message": "PTAL. This is rather large, but mostly mechanical. It removes all references to src/wasm from src/codegen and src/compiler, such that we can later exclude src/wasm from compilation completely.",
       "revId": "d7dd594ffaca0fefc015d650fa8881e89d36de01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "742c57d3_f2be7034",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T16:53:21Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "d7dd594ffaca0fefc015d650fa8881e89d36de01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6dff513_014d203f",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T16:53:21Z",
+      "side": 1,
+      "message": "Lol.",
+      "range": {
+        "startLine": 282,
+        "startChar": 7,
+        "endLine": 282,
+        "endChar": 18
+      },
+      "revId": "d7dd594ffaca0fefc015d650fa8881e89d36de01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a85f54d0_93f3c59a",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T16:53:21Z",
+      "side": 1,
+      "message": "Is this possible at all if Wasm is compiled out? It\u0027s only passed from WasmInliningPhase and the two modes are mutually exclusive, so IMO we could #if this whole if block (and possibly change the DCHECK below to a CHECK temporarily to ensure this assumption is correct).",
+      "range": {
+        "startLine": 141,
+        "startChar": 16,
+        "endLine": 141,
+        "endChar": 25
+      },
+      "revId": "d7dd594ffaca0fefc015d650fa8881e89d36de01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
