@@ -16,6 +16,24 @@
       "message": "Thanks. But in the future, please use the \"reland\" feature from gerrit and have the fix in a separate patchset. Like that reviewers don\u0027t need to re-review the whole CL.",
       "revId": "c03b299380c64ac22f78fe2ce15a3cbc5a14231d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afd7400d_759e0034",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-03T16:13:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "90be38ff_20a7ad12",
+      "revId": "c03b299380c64ac22f78fe2ce15a3cbc5a14231d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
