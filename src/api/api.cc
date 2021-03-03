@@ -6307,6 +6307,17 @@ bool FunctionTemplate::HasInstance(v8::Local<v8::Value> value) {
   return false;
 }
 
+bool FunctionTemplate::IsTemplateForApiObject(v8::Value* object) {
+  if (!object->IsObject()) return false;
+
+  i::Handle<i::HeapObject> heap_obj(reinterpret_cast<i::Address*>(object));
+  auto self = Utils::OpenHandle(this);
+  if (self->IsTemplateForApiObject(*heap_obj)) {
+    return true;
+  }
+  return false;
+}
+
 Local<External> v8::External::New(Isolate* isolate, void* value) {
   STATIC_ASSERT(sizeof(value) == sizeof(i::Address));
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
