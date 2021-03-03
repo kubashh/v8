@@ -33,6 +33,69 @@
       "message": "Maya can you please help reviewing this? Thanks",
       "revId": "ee24caa2ef75f05d39f21ed383cfd2a3135cbe0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9750b395_2187f08a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T15:28:51Z",
+      "side": 1,
+      "message": "LGTM, thanks!\nJust two questions for my better understanding.",
+      "revId": "ee24caa2ef75f05d39f21ed383cfd2a3135cbe0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8856814e_9c730016",
+        "filename": "src/compiler/memory-optimizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T15:28:51Z",
+      "side": 1,
+      "message": "Why can a memory barrier cause a GC?",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 33
+      },
+      "revId": "ee24caa2ef75f05d39f21ed383cfd2a3135cbe0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b7cc19_9514b131",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-03T15:28:51Z",
+      "side": 1,
+      "message": "What is the plan for this function (and CsaOptimizationPhase::Run)? Because `true` is already the default value in the MachineOperatorReducer constructor, so we might omit this parameter, since it\u0027s currently only called with `true`.",
+      "range": {
+        "startLine": 2029,
+        "startChar": 53,
+        "endLine": 2029,
+        "endChar": 73
+      },
+      "revId": "ee24caa2ef75f05d39f21ed383cfd2a3135cbe0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
