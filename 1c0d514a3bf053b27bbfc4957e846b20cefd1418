@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a45894b7_6ffc2054",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-03T17:00:27Z",
+      "side": 1,
+      "message": "As discussed. PTAL.",
+      "revId": "1c0d514a3bf053b27bbfc4957e846b20cefd1418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9878f90_9051ba82",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4704,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-03T17:00:27Z",
+      "side": 1,
+      "message": "Reviewer\u0027s guidance: start here, continue through the rest of this file, then move on the rest of the CL (including the beginning of this file).",
+      "range": {
+        "startLine": 4704,
+        "startChar": 18,
+        "endLine": 4704,
+        "endChar": 29
+      },
+      "revId": "1c0d514a3bf053b27bbfc4957e846b20cefd1418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
