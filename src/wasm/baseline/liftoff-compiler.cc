@@ -90,10 +90,11 @@ constexpr ValueType kPointerValueType =
     kSystemPointerSize == 8 ? kWasmI64 : kWasmI32;
 
 #if V8_TARGET_ARCH_32_BIT || defined(V8_COMPRESS_POINTERS)
-constexpr ValueType kSmiValueType = kWasmI32;
+constexpr ValueType kTaggedValueType = kWasmI32;
 #else
-constexpr ValueType kSmiValueType = kWasmI64;
+constexpr ValueType kTaggedValueType = kWasmI64;
 #endif
+constexpr ValueType kSmiValueType = kTaggedValueType;
 
 #if V8_TARGET_ARCH_ARM64
 // On ARM64, the Assembler keeps track of pointers to Labels to resolve
@@ -4311,8 +4312,35 @@ class LiftoffCompiler {
   }
 
   void TableFill(FullDecoder* decoder, const TableIndexImmediate<validate>& imm,
-                 const Value& start, const Value& value, const Value& count) {
-    unsupported(decoder, kRefTypes, "table.fill");
+                 const Value&, const Value&, const Value&) {
+    LiftoffRegList pinned;
+
+    LiftoffRegister table_index_reg =
+        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+    LoadSmi(table_index_reg, imm.index);
+    LiftoffAssembler::VarState table_index(kPointerValueType, table_index_reg,
+                                           0);
+
+    LiftoffAssembler::VarState count = __ cache_state()->stack_state.end()[-1];
+    LiftoffAssembler::VarState value = __ cache_state()->stack_state.end()[-2];
+    LiftoffAssembler::VarState start = __ cache_state()->stack_state.end()[-3];
+
+    WasmCode::RuntimeStubId target = WasmCode::kWasmTableFill;
+    compiler::CallDescriptor* call_descriptor =
+        GetBuiltinCallDescriptor<WasmTableFillDescriptor>(compilation_zone_);
+
+    ValueType sig_reps[] = {kWasmI32, kWasmI32, kSmiValueType, kSmiValueType};
+    FunctionSig sig(0, 4, sig_reps);
+
+    __ PrepareBuiltinCall(&sig, call_descriptor,
+                          {table_index, start, count, value});
+    __ CallRuntimeStub(target);
+    DefineSafepoint();
+
+    // Pop parameters from the value stack.
+    __ cache_state()->stack_state.pop_back(3);
+
+    RegisterDebugSideTableEntry(DebugSideTableBuilder::kDidSpill);
   }
 
   void StructNew(FullDecoder* decoder,
