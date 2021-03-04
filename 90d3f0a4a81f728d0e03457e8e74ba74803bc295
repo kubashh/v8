@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58a4297f_bca45004",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3536,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-04T14:42:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a991cc72_3e74203b",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1b77d81_73b89a13",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-03-04T12:18:17Z",
       "side": 1,
       "message": "This get weird coloring in gerrit. Can we name it \"stack_depth\", like the field in Control?",
+      "range": {
+        "startLine": 3609,
+        "startChar": 13,
+        "endLine": 3609,
+        "endChar": 18
+      },
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92506dc0_3a75a2be",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3609,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-04T14:42:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1b77d81_73b89a13",
       "range": {
         "startLine": 3609,
         "startChar": 13,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86464400_54668846",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4746,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-04T14:42:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69c60561_554374b0",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94e896a6_46b97268",
@@ -88,6 +148,24 @@
       "writtenOn": "2021-03-04T12:18:17Z",
       "side": 1,
       "message": "Not sure if it makes any difference, but we could put a V8_UNLIKELY here.",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e6ef99e_5ac4e812",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4786,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-04T14:42:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94e896a6_46b97268",
       "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +187,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba94d5d3_1e4d7725",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4800,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-04T14:42:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8347aecb_4a730cbc",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37fbffdd_bc9c0c83",
@@ -122,6 +218,24 @@
       "writtenOn": "2021-03-04T12:18:17Z",
       "side": 1,
       "message": "We just dropped {arity} many values, so this call should be redundant.",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d186faeb_a70a86e9",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4831,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-04T14:42:00Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s what I thought too, but it isn\u0027t. Added a comment.\n\nAlso, there was another bug here: we should reserve {arity + drop_values} space.",
+      "parentUuid": "37fbffdd_bc9c0c83",
       "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -143,6 +257,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bb341ee_d3153921",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 5043,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-04T14:42:00Z",
+      "side": 1,
+      "message": "Ack. Yes, the index is only used for error messages.",
+      "parentUuid": "cdff726b_7b5d0de3",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efde9bbc_03676c68",
@@ -156,6 +288,24 @@
       "writtenOn": "2021-03-04T12:18:17Z",
       "side": 1,
       "message": "The new parameter is unused.",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f91a27d9_8ce66495",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-04T14:42:00Z",
+      "side": 1,
+      "message": "Good point! Fixed.",
+      "parentUuid": "efde9bbc_03676c68",
       "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
