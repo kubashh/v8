@@ -79,6 +79,30 @@
       },
       "revId": "d7dd594ffaca0fefc015d650fa8881e89d36de01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c97fddeb_45dac6bc",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:35:15Z",
+      "side": 1,
+      "message": "Ack, extended the scope of the #if. I think the DCHECK is still fine. We currently don\u0027t run any bots for no-wasm anyway, and locally I am testing with Optdebug.",
+      "parentUuid": "a85f54d0_93f3c59a",
+      "range": {
+        "startLine": 141,
+        "startChar": 16,
+        "endLine": 141,
+        "endChar": 25
+      },
+      "revId": "d7dd594ffaca0fefc015d650fa8881e89d36de01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
