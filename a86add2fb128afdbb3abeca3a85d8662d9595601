@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d11147e1_291d947a",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 1400,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-03-04T08:17:51Z",
+      "side": 1,
+      "message": "I don\u0027t get it :(.",
+      "parentUuid": "7df88d0d_95fb2cd9",
+      "revId": "a86add2fb128afdbb3abeca3a85d8662d9595601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45c02e96_9f6c38dd",
