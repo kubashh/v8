@@ -33,6 +33,120 @@
       "message": "Hi Camillo, PTAL at include/*, thanks!",
       "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74ac45c9_fafbca5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-03-04T17:45:04Z",
+      "side": 1,
+      "message": "Looks mostly ok to me. Thanks!",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8cce484_0e6192cc",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-03-04T17:45:04Z",
+      "side": 1,
+      "message": "can we use the V8_DEPRECATED_SOON macro?",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0e4a9d9_e1781df6",
+        "filename": "include/v8.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 6829,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-03-04T17:45:04Z",
+      "side": 1,
+      "message": "Can we mark this as experimental?",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "841fcc67_37d91711",
+        "filename": "include/v8.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 6830,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-03-04T17:45:04Z",
+      "side": 1,
+      "message": "Should we name this IsLeafTemplateForApiObject to make it more explicit? Don\u0027t feel too strongly though, up to you.",
+      "range": {
+        "startLine": 6830,
+        "startChar": 7,
+        "endLine": 6830,
+        "endChar": 29
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d4bb2a7_95f21e0b",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 6314,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-03-04T17:45:04Z",
+      "side": 1,
+      "message": "Will this never allocate a handle? Should we wrap this IsTemplateForApiObject function in a DisallowHandleAllocation scope?",
+      "range": {
+        "startLine": 6314,
+        "startChar": 14,
+        "endLine": 6314,
+        "endChar": 31
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3869fd31_b5ca615c",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27863,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-03-04T17:45:04Z",
+      "side": 1,
+      "message": "Should we add mjsunit tests as well to get fuzzer coverage by installing fast api bindings in d8?",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
