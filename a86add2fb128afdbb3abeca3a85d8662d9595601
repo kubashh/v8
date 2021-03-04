@@ -212,6 +212,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0b9616d_6b0f9823",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T09:54:12Z",
+      "side": 1,
+      "message": "Interesting, I would not have expected that. We could still do a \"DCHECK(\u0026a \u003d\u003d \u0026b || a.dst_slot_ !\u003d b.dst_slot_)\" probably. Alternatively, you could write it as \"DCHECK_IMPLIES(a.dst_slot \u003d\u003d b.dst_slot, \u0026a \u003d\u003d \u0026b)\".",
+      "parentUuid": "c16b3cf7_286d6c33",
+      "revId": "a86add2fb128afdbb3abeca3a85d8662d9595601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af277b11_5ef6a4c2",
@@ -243,6 +261,24 @@
       "side": 1,
       "message": "That was my thinking, that struct shouldn\u0027t have any methods. Let\u0027s make it static.",
       "parentUuid": "af277b11_5ef6a4c2",
+      "revId": "a86add2fb128afdbb3abeca3a85d8662d9595601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29474f94_54694e17",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T09:54:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4ad194aa_274458d4",
       "revId": "a86add2fb128afdbb3abeca3a85d8662d9595601",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

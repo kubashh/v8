@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca995081_6d513968",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T09:54:12Z",
+      "side": 1,
+      "message": "Thanks, LGTM. I don\u0027t insist on the DCHECK, your decision if you consider it worth it.",
+      "revId": "747d310be45c482894d994fb6aa39f3f9b1031a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
