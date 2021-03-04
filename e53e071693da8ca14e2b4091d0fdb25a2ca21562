@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5b43d28_e5fb8131",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-04T09:10:01Z",
+      "side": 1,
+      "message": "I wouldn\u0027t expose the raw properties here.\n1) You don\u0027t use it in both builders below. So builder_group can\u0027t be overridden like that.\n2) Users need to inspect this structure.\n3) Potentially bad code due to dict copying.\n\nRather:\nExpose a parameter builder_group with \"client.v8\" as default.\nPass a different dict to the two builders below (maybe inlined). One with that builder_group entry and triggered and one with just the builder_group entry.\n\nIf we in future usage need to manipulate more properties, we can do so with additional parameters.\n\nThe dimensions have a similar problem and require some raw knowledge about swarming dimensions. But let\u0027s keep them for now as they are set fresh each time.",
+      "range": {
+        "startLine": 13,
+        "startChar": 52,
+        "endLine": 13,
+        "endChar": 95
+      },
+      "revId": "e53e071693da8ca14e2b4091d0fdb25a2ca21562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f9334f_349a1c27",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-04T09:10:01Z",
+      "side": 1,
+      "message": "dead code",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "e53e071693da8ca14e2b4091d0fdb25a2ca21562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e31405d0_5714d582",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-04T09:10:01Z",
+      "side": 1,
+      "message": "This is the default.",
+      "range": {
+        "startLine": 267,
+        "startChar": 8,
+        "endLine": 267,
+        "endChar": 52
+      },
+      "revId": "e53e071693da8ca14e2b4091d0fdb25a2ca21562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0164c9d_c8808571",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-04T09:10:01Z",
+      "side": 1,
+      "message": "This is the default.",
+      "range": {
+        "startLine": 268,
+        "startChar": 8,
+        "endLine": 268,
+        "endChar": 32
+      },
+      "revId": "e53e071693da8ca14e2b4091d0fdb25a2ca21562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
