@@ -9,6 +9,7 @@
 #include "src/execution/isolate.h"
 #include "src/execution/runtime-profiler.h"
 #include "src/execution/simulator.h"
+#include "src/handles/handles-inl.h"
 #include "src/logging/counters.h"
 #include "src/objects/backing-store.h"
 #include "src/roots/roots-inl.h"
@@ -307,6 +308,16 @@ Object StackGuard::HandleInterrupts() {
   if (TestAndClear(&interrupt_flags, WASM_CODE_GC)) {
     TRACE_EVENT0("v8.wasm", "V8.WasmCodeGC");
     isolate_->wasm_engine()->ReportLiveCodeFromStackForGC(isolate_);
+  }
+
+  // Ninja.
+  {
+    HandleScope s(isolate_);
+    isolate_->PumpHeapBrokerTaskQueues();
+  }
+
+  if (TestAndClear(&interrupt_flags, PUMP_TASKS_FOR_CONCURRENT_COMPILATION)) {
+    isolate_->SignalSTW();
   }
 
   isolate_->counters()->stack_interrupts()->Increment();

@@ -137,7 +137,7 @@ class PipelineData {
   PipelineData(ZoneStats* zone_stats, Isolate* isolate,
                OptimizedCompilationInfo* info,
                PipelineStatistics* pipeline_statistics,
-               bool is_concurrent_inlining)
+               bool is_concurrent_inlining, Zone* zone2)
       : isolate_(isolate),
         allocator_(isolate->allocator()),
         info_(info),
@@ -154,13 +154,15 @@ class PipelineData {
         instruction_zone_(instruction_zone_scope_.zone()),
         codegen_zone_scope_(zone_stats_, kCodegenZoneName),
         codegen_zone_(codegen_zone_scope_.zone()),
-        broker_(new JSHeapBroker(isolate_, info_->zone(),
-                                 info_->trace_heap_broker(),
-                                 is_concurrent_inlining, info->code_kind())),
+        broker_(new JSHeapBroker(
+            isolate_, info_->zone(), info_->trace_heap_broker(),
+            is_concurrent_inlining, info->code_kind(), zone2)),
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
         assembler_options_(AssemblerOptions::Default(isolate)) {
+    isolate->RegisterHeapBrokerTaskQueue(broker_->broker_task_queue_ptr());
+
     PhaseScope scope(pipeline_statistics, "V8.TFInitPipelineData");
     graph_ = graph_zone_->New<Graph>(graph_zone_);
     source_positions_ = graph_zone_->New<SourcePositionTable>(graph_);
@@ -340,6 +342,7 @@ class PipelineData {
 
   JSHeapBroker* broker() const { return broker_; }
   std::unique_ptr<JSHeapBroker> ReleaseBroker() {
+    isolate_->UnregisterHeapBrokerTaskQueue(broker_->broker_task_queue_ptr());
     std::unique_ptr<JSHeapBroker> broker(broker_);
     broker_ = nullptr;
     return broker;
@@ -465,6 +468,9 @@ class PipelineData {
     codegen_zone_scope_.Destroy();
     codegen_zone_ = nullptr;
     dependencies_ = nullptr;
+    if (broker_ != nullptr) {
+      isolate_->UnregisterHeapBrokerTaskQueue(broker_->broker_task_queue_ptr());
+    }
     delete broker_;
     broker_ = nullptr;
     frame_ = nullptr;
@@ -1069,6 +1075,7 @@ class PipelineCompilationJob final : public OptimizedCompilationJob {
 
  private:
   Zone zone_;
+  Zone zone2_;
   ZoneStats zone_stats_;
   OptimizedCompilationInfo compilation_info_;
   std::unique_ptr<PipelineStatistics> pipeline_statistics_;
@@ -1096,6 +1103,8 @@ PipelineCompilationJob::PipelineCompilationJob(
     : OptimizedCompilationJob(&compilation_info_, "TurboFan"),
       zone_(function->GetIsolate()->allocator(),
             kPipelineCompilationJobZoneName),
+      zone2_(function->GetIsolate()->allocator(),
+             kPipelineCompilationJobZoneName),
       zone_stats_(function->GetIsolate()->allocator()),
       compilation_info_(&zone_, function->GetIsolate(), shared_info, function,
                         code_kind),
@@ -1104,7 +1113,8 @@ PipelineCompilationJob::PipelineCompilationJob(
           compilation_info(), function->GetIsolate(), &zone_stats_)),
       data_(&zone_stats_, function->GetIsolate(), compilation_info(),
             pipeline_statistics_.get(),
-            ShouldUseConcurrentInlining(code_kind, !osr_offset.IsNone())),
+            ShouldUseConcurrentInlining(code_kind, !osr_offset.IsNone()),
+            &zone2_),
       pipeline_(&data_),
       linkage_(nullptr) {
   compilation_info_.SetOptimizingForOsr(osr_offset, osr_frame);
@@ -2592,6 +2602,7 @@ void PipelineImpl::Serialize() {
     Run<HeapBrokerInitializationPhase>();
     Run<SerializationPhase>();
     data->broker()->StopSerializing();
+    data->broker()->ClearCachedPropertyAccessInfosAfterSerialization();
   }
   data->EndPhaseKind();
 }
@@ -3136,7 +3147,7 @@ MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
                                &zone_stats));
 
   PipelineData data(&zone_stats, isolate, info, pipeline_statistics.get(),
-                    i::FLAG_concurrent_inlining);
+                    i::FLAG_concurrent_inlining, nullptr);
   PipelineImpl pipeline(&data);
 
   Linkage linkage(Linkage::ComputeIncoming(data.instruction_zone(), info));

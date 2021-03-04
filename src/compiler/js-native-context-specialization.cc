@@ -412,10 +412,17 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
 
   PropertyAccessInfo access_info = PropertyAccessInfo::Invalid(graph()->zone());
   if (broker()->is_concurrent_inlining()) {
-    access_info = broker()->GetPropertyAccessInfo(
-        receiver_map,
-        NameRef(broker(), isolate()->factory()->has_instance_symbol()),
-        AccessMode::kLoad);
+    NameRef name_ref =
+        NameRef(broker(), isolate()->factory()->has_instance_symbol());
+    auto r = broker()->GetPropertyAccessInfo(receiver_map, name_ref,
+                                             AccessMode::kLoad);
+    if (r.IsPostponed()) {
+      broker()->PushTask(TFTask::GetPropertyAccessInfo(
+          node, receiver_map, name_ref, AccessMode::kLoad, dependencies(),
+          broker()));
+      return NoChange();
+    }
+    access_info = r.value();
   } else {
     AccessInfoFactory access_info_factory(broker(), dependencies(),
                                           graph()->zone());
@@ -456,8 +463,15 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
     bool found_on_proto = access_info.holder().ToHandle(&holder);
     JSObjectRef holder_ref =
         found_on_proto ? JSObjectRef(broker(), holder) : receiver_ref;
-    base::Optional<ObjectRef> constant = holder_ref.GetOwnDataProperty(
+    auto maybe_constant = holder_ref.GetOwnDataProperty(
         access_info.field_representation(), access_info.field_index());
+    if (maybe_constant.IsPostponed()) {
+      // Note this is potentially multiple tasks; they all belong to the same
+      // Node* though.
+      broker()->PushTask(TFTask::Some(node, holder_ref));
+      return NoChange();
+    }
+    base::Optional<ObjectRef> constant = maybe_constant.maybe_value();
     if (!constant.has_value() || !constant->IsHeapObject() ||
         !constant->AsHeapObject().map().is_callable())
       return NoChange();
@@ -731,11 +745,23 @@ Reduction JSNativeContextSpecialization::ReduceJSResolvePromise(Node* node) {
         &access_infos);
   } else {
     // Obtain pre-computed access infos from the broker.
+    bool gotta_postpone = false;
     for (auto map : resolution_maps) {
       MapRef map_ref(broker(), map);
-      access_infos.push_back(broker()->GetPropertyAccessInfo(
-          map_ref, NameRef(broker(), isolate()->factory()->then_string()),
-          AccessMode::kLoad));
+      NameRef name_ref(broker(), isolate()->factory()->then_string());
+      auto r =
+          broker()->GetPropertyAccessInfo(map_ref, name_ref, AccessMode::kLoad);
+      if (r.IsPostponed()) {
+        broker()->PushTask(TFTask::GetPropertyAccessInfo(
+            node, map_ref, name_ref, AccessMode::kLoad, dependencies(),
+            broker()));
+        gotta_postpone = true;
+      } else {
+        access_infos.push_back(r.value());
+      }
+    }
+    if (gotta_postpone) {
+      return NoChange();
     }
   }
   PropertyAccessInfo access_info =
@@ -1192,15 +1218,32 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
 
   ZoneVector<PropertyAccessInfo> access_infos(zone());
   {
+    bool gotta_postpone = false;
     ZoneVector<PropertyAccessInfo> access_infos_for_feedback(zone());
     for (Handle<Map> map_handle : lookup_start_object_maps) {
       MapRef map(broker(), map_handle);
       if (map.is_deprecated()) continue;
-      PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
+      auto r = broker()->GetPropertyAccessInfo(
           map, feedback.name(), access_mode, dependencies(),
           broker()->is_concurrent_inlining()
               ? SerializationPolicy::kAssumeSerialized
               : SerializationPolicy::kSerializeIfNeeded);
+      if (r.IsPostponed()) {
+        broker()->PushTask(TFTask::GetPropertyAccessInfo(
+            node, map, feedback.name(), access_mode, dependencies(), broker()));
+        gotta_postpone = true;
+      }
+    }
+    if (gotta_postpone) return NoChange();
+    for (Handle<Map> map_handle : lookup_start_object_maps) {
+      MapRef map(broker(), map_handle);
+      if (map.is_deprecated()) continue;
+      auto r = broker()->GetPropertyAccessInfo(
+          map, feedback.name(), access_mode, dependencies(),
+          broker()->is_concurrent_inlining()
+              ? SerializationPolicy::kAssumeSerialized
+              : SerializationPolicy::kSerializeIfNeeded);
+      PropertyAccessInfo access_info = r.value();
       access_infos_for_feedback.push_back(access_info);
     }
 
@@ -1958,13 +2001,26 @@ Reduction JSNativeContextSpecialization::ReduceElementLoadFromHeapConstant(
     base::Optional<ObjectRef> element;
 
     if (receiver_ref.IsJSObject()) {
-      element = receiver_ref.AsJSObject().GetOwnConstantElement(index);
+      auto result = receiver_ref.AsJSObject().GetOwnConstantElement(index);
+      if (result.IsPostponed()) {
+        broker()->PushTask(TFTask::JSObjectGetOwnConstantElement(
+            node, receiver_ref.AsJSObject(), index));
+        return NoChange();
+      }
+      element = result.maybe_value();
       if (!element.has_value() && receiver_ref.IsJSArray()) {
         // We didn't find a constant element, but if the receiver is a cow-array
         // we can exploit the fact that any future write to the element will
         // replace the whole elements storage.
         JSArrayRef array_ref = receiver_ref.AsJSArray();
-        base::Optional<FixedArrayBaseRef> array_elements = array_ref.elements();
+        auto r = array_ref.elements();
+        if (r.IsPostponed()) {
+          // Note this is potentially multiple tasks; they all belong to the
+          // same Node* though.
+          broker()->PushTask(TFTask::Some(node, array_ref));
+          return NoChange();
+        }
+        base::Optional<FixedArrayBaseRef> array_elements = r.maybe_value();
         if (array_elements.has_value()) {
           element = array_ref.GetOwnCowElement(*array_elements, index);
           if (element.has_value()) {

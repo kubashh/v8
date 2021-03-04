@@ -386,6 +386,9 @@ class V8_EXPORT_PRIVATE Type {
   static Type For(MapRef const& type) {
     return NewBitset(BitsetType::ExpandInternals(BitsetType::Lub(type)));
   }
+  static Type For(HeapObjectType type) {
+    return NewBitset(BitsetType::ExpandInternals(BitsetType::Lub(type)));
+  }
 
   // Predicates.
   bool IsNone() const { return payload_ == None().payload_; }

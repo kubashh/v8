@@ -39,6 +39,8 @@ class V8_EXPORT_PRIVATE OptimizingCompileDispatcher {
 
   ~OptimizingCompileDispatcher();
 
+  bool IsFlushing() { return mode_ == FLUSH; }
+
   void Stop();
   void Flush(BlockingBehavior blocking_behavior);
   // Takes ownership of |job|.

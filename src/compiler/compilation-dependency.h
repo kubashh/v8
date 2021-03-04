@@ -20,6 +20,13 @@ class CompilationDependency : public ZoneObject {
   virtual void PrepareInstall() const {}
   virtual void Install(const MaybeObjectHandle& code) const = 0;
 
+  virtual CompilationDependency* PersistHandles(Isolate* isolate) {
+    return nullptr;
+  }
+  virtual CompilationDependency* ToRef(JSHeapBroker* broker) const {
+    return nullptr;
+  }
+
 #ifdef DEBUG
   virtual bool IsPretenureModeDependency() const { return false; }
   virtual bool IsFieldRepresentationDependencyOnMap(
