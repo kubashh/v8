@@ -69,6 +69,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7adc3c8c_23d3c8c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-03-04T13:13:34Z",
+      "side": 1,
+      "message": "It looks like a good simplification, thanks for eliminating the TODO!\nLGTM.\n",
+      "revId": "fb45e457dacf4ffcf728e84a7ab6382df32ebbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95834187_714b13a8",
