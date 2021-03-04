@@ -16,6 +16,24 @@
       "message": "Thanks, LGTM. I don\u0027t insist on the DCHECK, your decision if you consider it worth it.",
       "revId": "747d310be45c482894d994fb6aa39f3f9b1031a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd75fee8_da59abe1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-03-04T14:41:48Z",
+      "side": 1,
+      "message": "I think it\u0027s best to leave it out - Quicksort doesn\u0027t compare every element to every other element (because that would be N^2) so it wouldn\u0027t catch every case of duplicate location. After the array is sorted, we will detect duplicates with the new DCHECK_LT(0, stack_decrement) in the Construct functions (except on Arm64, where we don\u0027t need to sort.)",
+      "parentUuid": "ca995081_6d513968",
+      "revId": "747d310be45c482894d994fb6aa39f3f9b1031a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
