@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2880625d_4a122791",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-04T13:37:07Z",
+      "side": 1,
+      "message": "Since this is meant to be a refactoring, I\u0027d always include that information in the CL description. E.g. a sentence like:\n\nRefactoring - no logical changes intended.\n\n(added a comment about why we are seeing changes...)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "5c42b2fbfeb99a051ee7836c56094d706ee76aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3ca6ad8_3cfc6175",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-04T13:37:07Z",
+      "side": 1,
+      "message": "Beautiful code now! Easy to read and concise. One mandatory comment left.",
+      "revId": "5c42b2fbfeb99a051ee7836c56094d706ee76aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff071fba_16b6c78c",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-04T13:37:07Z",
+      "side": 1,
+      "message": "This oddity explains why we see a change in the generated file at all.",
+      "range": {
+        "startLine": 27,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 8
+      },
+      "revId": "5c42b2fbfeb99a051ee7836c56094d706ee76aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
