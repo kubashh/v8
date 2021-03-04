@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bba665b1_00327391",
+        "filename": "src/compiler/backend/ppc/code-generator-ppc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4263,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-03-04T18:41:38Z",
+      "side": 1,
+      "message": "Thanks for reviewing, I have now fixed the issues.",
+      "parentUuid": "f4d3b2c8_682c964b",
+      "range": {
+        "startLine": 4262,
+        "startChar": 0,
+        "endLine": 4263,
+        "endChar": 24
+      },
+      "revId": "d466467a83c95c46b121ad123f429087a82eef68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5af96008_bb771c55",
         "filename": "src/compiler/backend/ppc/code-generator-ppc.cc",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2021-03-04T17:35:23Z",
       "side": 1,
       "message": "These can be combined without further changes.",
+      "range": {
+        "startLine": 4275,
+        "startChar": 0,
+        "endLine": 4276,
+        "endChar": 24
+      },
+      "revId": "d466467a83c95c46b121ad123f429087a82eef68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68c2f60a_06f4d69b",
+        "filename": "src/compiler/backend/ppc/code-generator-ppc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4276,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-03-04T18:41:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5af96008_bb771c55",
       "range": {
         "startLine": 4275,
         "startChar": 0,
