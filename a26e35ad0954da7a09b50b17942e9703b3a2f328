@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25b356bb_fdfcf103",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-04T09:37:03Z",
+      "side": 1,
+      "message": "Thanks, landing",
+      "revId": "a26e35ad0954da7a09b50b17942e9703b3a2f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9679bc97_5bc20a0b",
@@ -37,6 +54,24 @@
       "writtenOn": "2021-03-03T18:50:33Z",
       "side": 1,
       "message": "Nit: DCHECK_EQ",
+      "revId": "a26e35ad0954da7a09b50b17942e9703b3a2f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f948bc9e_4f26fb29",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3601,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-04T09:37:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cfc5671_ade6bf6b",
       "revId": "a26e35ad0954da7a09b50b17942e9703b3a2f328",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
