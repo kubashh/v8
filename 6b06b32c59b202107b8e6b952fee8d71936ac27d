@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2be66980_704ee128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-04T12:55:05Z",
+      "side": 1,
+      "message": "Hi folks,\nCould you PTAL at this CL that adds basic support for leaf interface types to the fast API?\n@Sathya, Toon told me you had some similar idea in mind for the IsTemplateForApiObject method. Should I also loop in Camillo?\nThanks!",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
