@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0914c6a_aa0d9e59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:18:17Z",
+      "side": 1,
+      "message": "Nice, thanks for pushing this through!\nLGTM with some minor comments.\nThanks for placing TODOs at some rough edges.",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a991cc72_3e74203b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3536,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:18:17Z",
+      "side": 1,
+      "message": "I wonder if it\u0027s worth putting this in a V8_INLINE function, and the rest in a V8_NOINLINE. We should keep this in the back of our head for potential performance regressions.",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1b77d81_73b89a13",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3609,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:18:17Z",
+      "side": 1,
+      "message": "This get weird coloring in gerrit. Can we name it \"stack_depth\", like the field in Control?",
+      "range": {
+        "startLine": 3609,
+        "startChar": 13,
+        "endLine": 3609,
+        "endChar": 18
+      },
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69c60561_554374b0",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4746,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:18:17Z",
+      "side": 1,
+      "message": "nit: for (auto\u0026 value : values) Push(value);",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94e896a6_46b97268",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4786,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:18:17Z",
+      "side": 1,
+      "message": "Not sure if it makes any difference, but we could put a V8_UNLIKELY here.",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8347aecb_4a730cbc",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4800,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:18:17Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37fbffdd_bc9c0c83",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4831,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:18:17Z",
+      "side": 1,
+      "message": "We just dropped {arity} many values, so this call should be redundant.",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdff726b_7b5d0de3",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 5043,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:18:17Z",
+      "side": 1,
+      "message": "Argh, it\u0027s really unfortunate that index and depth are inverse. The index is only used for error messages, right? I wonder if that\u0027s worth it, or if we should drop it (and just report the depth instead).\nBut that\u0027s a separate cleanup...",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efde9bbc_03676c68",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T12:18:17Z",
+      "side": 1,
+      "message": "The new parameter is unused.",
+      "revId": "90d3f0a4a81f728d0e03457e8e74ba74803bc295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
