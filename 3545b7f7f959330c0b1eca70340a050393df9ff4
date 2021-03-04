@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84155cdf_012cfd1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-04T17:10:35Z",
+      "side": 1,
+      "message": "simd-scalar-lowering lgtm, thanks!",
+      "revId": "3545b7f7f959330c0b1eca70340a050393df9ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32d290c2_c3f59405",
