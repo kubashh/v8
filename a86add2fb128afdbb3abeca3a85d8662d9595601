@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58b1b74f_b8e61ed7",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 1400,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-04T09:50:59Z",
+      "side": 1,
+      "message": "The thing is that after the while loop above, bytes might have been reduced to zero, so we want to skip the sub instruction.\nWe could duplicate the early exit of course, but I think that\u0027s not worth it. The while loop would just be skipped if bytes\u003d\u003d0, and the two lines before it don\u0027t really do anything.",
+      "parentUuid": "d11147e1_291d947a",
+      "revId": "a86add2fb128afdbb3abeca3a85d8662d9595601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45c02e96_9f6c38dd",
