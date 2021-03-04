@@ -33,6 +33,24 @@
       "message": "Do you think it\u0027s better to duplicate this code, instead of passing a flag to {InstallConstructorFunc}?",
       "revId": "3b61369cb21a363f8dd7dfc7753ab2e56215345c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a457bd6_289c57ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-03-04T13:40:02Z",
+      "side": 1,
+      "message": "I think so, but only because of the naming. \"Install\" implies that the property is added, otherwise it does not really install anything, it just creates the function.",
+      "parentUuid": "6b8b32d0_031c3042",
+      "revId": "3b61369cb21a363f8dd7dfc7753ab2e56215345c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
