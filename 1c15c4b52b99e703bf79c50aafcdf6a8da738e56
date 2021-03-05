@@ -16,6 +16,92 @@
       "message": "ptal. in the past this did show up on all sorts of workloads but I will measure now again to make sure this is actually useful\n\nwill work on grow/shrink afterwards, as I am not yet sure how useful they are",
       "revId": "1c15c4b52b99e703bf79c50aafcdf6a8da738e56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fbcf091_6919e0cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-05T09:29:21Z",
+      "side": 1,
+      "message": "lgtm\n\nI assume that this is a blocker for the library and there is no choice but exposing this footgun.",
+      "revId": "1c15c4b52b99e703bf79c50aafcdf6a8da738e56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2fbb4c7_4f565e72",
+        "filename": "include/cppgc/explicit-management.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-05T09:29:21Z",
+      "side": 1,
+      "message": "How about explicitly stating the consequences: \"If there are any references it will result in a use after free\".",
+      "range": {
+        "startLine": 24,
+        "startChar": 79,
+        "endLine": 24,
+        "endChar": 80
+      },
+      "revId": "1c15c4b52b99e703bf79c50aafcdf6a8da738e56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31155e2e_129b14b5",
+        "filename": "include/cppgc/explicit-management.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-05T09:29:21Z",
+      "side": 1,
+      "message": "This \"Try\" in the name is a bit misleading as it may sound that we internally check whether it is safe to free the object and only free if it is safe (i.e. no harm in trying).\n\nHow about dropping \"Try\" and returning void? We could specify that the destructor is not guaranteed to be invoked immediately.\nName suggestion: FreeUnreferencedObject",
+      "range": {
+        "startLine": 31,
+        "startChar": 5,
+        "endLine": 31,
+        "endChar": 8
+      },
+      "revId": "1c15c4b52b99e703bf79c50aafcdf6a8da738e56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13cb660d_36d26f92",
+        "filename": "src/heap/cppgc/explicit-management.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-05T09:29:21Z",
+      "side": 1,
+      "message": "Why not \"CanExplicitlyFree\" ?",
+      "range": {
+        "startLine": 18,
+        "startChar": 27,
+        "endLine": 18,
+        "endChar": 42
+      },
+      "revId": "1c15c4b52b99e703bf79c50aafcdf6a8da738e56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
