@@ -1336,6 +1336,21 @@ bool FunctionTemplateInfo::IsTemplateFor(Map map) {
   return false;
 }
 
+bool FunctionTemplateInfo::IsLeafTemplateForApiObject(HeapObject object) {
+  if (!object.IsJSApiObject()) return false;
+  Object cons_obj = object.map().GetConstructor();
+  Object type;
+  if (cons_obj.IsJSFunction()) {
+    JSFunction fun = JSFunction::cast(cons_obj);
+    type = fun.shared().function_data(kAcquireLoad);
+  } else if (cons_obj.IsFunctionTemplateInfo()) {
+    type = FunctionTemplateInfo::cast(cons_obj);
+  } else {
+    return false;
+  }
+  return type == *this;
+}
+
 // static
 FunctionTemplateRareData FunctionTemplateInfo::AllocateFunctionTemplateRareData(
     Isolate* isolate, Handle<FunctionTemplateInfo> function_template_info) {
