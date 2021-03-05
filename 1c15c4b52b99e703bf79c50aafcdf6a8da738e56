@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e318143_985450b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-05T10:49:01Z",
+      "side": 1,
+      "message": "I am not yet sure as I only see a few calls to free when running benchmarks locally (browsing, Speedometer). I guess we removed the main caller by avoid having destructors for HeapVector in first place, so we only call out to free() when doing .clear().",
+      "parentUuid": "4fbcf091_6919e0cf",
+      "revId": "1c15c4b52b99e703bf79c50aafcdf6a8da738e56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2fbb4c7_4f565e72",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-03-05T09:29:21Z",
       "side": 1,
       "message": "How about explicitly stating the consequences: \"If there are any references it will result in a use after free\".",
+      "range": {
+        "startLine": 24,
+        "startChar": 79,
+        "endLine": 24,
+        "endChar": 80
+      },
+      "revId": "1c15c4b52b99e703bf79c50aafcdf6a8da738e56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef273bd_ee8cb98a",
+        "filename": "include/cppgc/explicit-management.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-05T10:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2fbb4c7_4f565e72",
       "range": {
         "startLine": 24,
         "startChar": 79,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1090bae_a254688a",
+        "filename": "include/cppgc/explicit-management.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-05T10:49:01Z",
+      "side": 1,
+      "message": "Done: FreeUnreferencedObject\nDone: Mention delayed detor\nDone: Removed return param",
+      "parentUuid": "31155e2e_129b14b5",
+      "range": {
+        "startLine": 31,
+        "startChar": 5,
+        "endLine": 31,
+        "endChar": 8
+      },
+      "revId": "1c15c4b52b99e703bf79c50aafcdf6a8da738e56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13cb660d_36d26f92",
@@ -94,6 +160,30 @@
       "writtenOn": "2021-03-05T09:29:21Z",
       "side": 1,
       "message": "Why not \"CanExplicitlyFree\" ?",
+      "range": {
+        "startLine": 18,
+        "startChar": 27,
+        "endLine": 18,
+        "endChar": 42
+      },
+      "revId": "1c15c4b52b99e703bf79c50aafcdf6a8da738e56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45a82edf_a2d390a0",
+        "filename": "src/heap/cppgc/explicit-management.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-05T10:49:01Z",
+      "side": 1,
+      "message": "Done\n\nI initially started with also supporting Grow/Shrink but we can rename this function when the other stuff lands (in case it\u0027s needed).",
+      "parentUuid": "13cb660d_36d26f92",
       "range": {
         "startLine": 18,
         "startChar": 27,
