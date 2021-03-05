@@ -70,8 +70,8 @@
  *        return GetInternalField<CustomEmbedderType,
  *                                kV8EmbedderWrapperObjectIndex>(wrapper);
  *      }
- *      static void FastMethod(v8::ApiObject receiver_obj, int param) {
- *        v8::Object* v8_object = reinterpret_cast<v8::Object*>(&api_object);
+ *      static void FastMethod(v8::Value* receiver_obj, int param) {
+ *        v8::Object* v8_object = v8::Object::Cast(receiver_obj);
  *        CustomEmbedderType* receiver = static_cast<CustomEmbedderType*>(
  *          receiver_obj->GetAlignedPointerFromInternalField(
  *            kV8EmbedderWrapperObjectIndex));
@@ -189,6 +189,7 @@
 
 #include <type_traits>
 
+#include "v8.h"        // NOLINT(build/include_directory)
 #include "v8config.h"  // NOLINT(build/include_directory)
 
 namespace v8 {
@@ -309,7 +310,7 @@ class V8_EXPORT CFunction {
   };
 };
 
-struct ApiObject {
+struct V8_DEPRECATE_SOON("Use v8::Value* instead.") ApiObject {
   uintptr_t address;
 };
 
@@ -335,8 +336,12 @@ struct FastApiCallbackOptions {
 
   /**
    * The `data` passed to the FunctionTemplate constructor, or `undefined`.
+   * `data_ptr` allows for default constructing FastApiCallbackOptions.
    */
-  const ApiObject data;
+  union {
+    uintptr_t data_ptr;
+    v8::Value data;
+  };
 };
 
 namespace internal {
@@ -406,7 +411,8 @@ struct TypeInfoHelper {
   V(uint64_t, kUint64)   \
   V(float, kFloat32)     \
   V(double, kFloat64)    \
-  V(ApiObject, kV8Value)
+  V(ApiObject, kV8Value) \
+  V(v8::Value*, kV8Value)
 
 BASIC_C_TYPES(SPECIALIZE_GET_TYPE_INFO_HELPER_FOR)
 
