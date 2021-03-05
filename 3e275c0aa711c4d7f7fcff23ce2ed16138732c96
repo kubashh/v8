@@ -16,6 +16,23 @@
       "message": "PTAL\nThanks!",
       "revId": "3e275c0aa711c4d7f7fcff23ce2ed16138732c96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccc60df0_9369ab75",
+        "filename": "dev.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2021-03-05T01:17:51Z",
+      "side": 1,
+      "message": "btw, please switch this to bbagent!",
+      "revId": "3e275c0aa711c4d7f7fcff23ce2ed16138732c96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
