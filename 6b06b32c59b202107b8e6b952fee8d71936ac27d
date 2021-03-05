@@ -240,6 +240,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1a5744d_4ff4608f",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 6314,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T14:26:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52fcea65_5c3c11f1",
+      "range": {
+        "startLine": 6314,
+        "startChar": 14,
+        "endLine": 6314,
+        "endChar": 31
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd14464d_391b2378",
@@ -253,6 +277,30 @@
       "writtenOn": "2021-03-05T10:29:50Z",
       "side": 1,
       "message": "nit: return self-\u003eIsTemplateForApiObject(*heap_obj)",
+      "range": {
+        "startLine": 6315,
+        "startChar": 1,
+        "endLine": 6318,
+        "endChar": 14
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cb8d8f0_8a42d349",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 6318,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T14:26:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd14464d_391b2378",
       "range": {
         "startLine": 6315,
         "startChar": 1,
@@ -286,6 +334,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26fa0bc0_30c5e490",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T14:26:57Z",
+      "side": 1,
+      "message": "Good point, thanks!",
+      "parentUuid": "62333ba6_0f1fc56a",
+      "range": {
+        "startLine": 1340,
+        "startChar": 0,
+        "endLine": 1340,
+        "endChar": 44
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81a074fe_eb5f32aa",
@@ -309,6 +381,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2216b78b_97e4ebea",
+        "filename": "src/objects/templates.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T14:26:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81a074fe_eb5f32aa",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 49
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d4ab1ed_c70d8feb",
@@ -322,6 +418,30 @@
       "writtenOn": "2021-03-05T10:29:50Z",
       "side": 1,
       "message": "I guess we could just keep everything in C++ here?\n\n  Local\u003cObject\u003e instance \u003d child_templ-\u003eGetFunction(context.local()).ToLocalChecked()\n  .NewInstance(context.local()).ToLocalChecked();",
+      "range": {
+        "startLine": 20754,
+        "startChar": 0,
+        "endLine": 20757,
+        "endChar": 23
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b156ad6c_8b621822",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 20757,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T14:26:57Z",
+      "side": 1,
+      "message": "Nice simplification, thanks!",
+      "parentUuid": "0d4ab1ed_c70d8feb",
       "range": {
         "startLine": 20754,
         "startChar": 0,
@@ -408,6 +528,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b6157c2_66c6ab53",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27886,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T14:26:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "304a3347_b203b300",
+      "range": {
+        "startLine": 27886,
+        "startChar": 22,
+        "endLine": 27886,
+        "endChar": 27
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33affba3_7e441317",
@@ -421,6 +565,30 @@
       "writtenOn": "2021-03-05T10:29:50Z",
       "side": 1,
       "message": "nit: checker.Reset() or something similar maybe?",
+      "range": {
+        "startLine": 27887,
+        "startChar": 10,
+        "endLine": 27887,
+        "endChar": 48
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdc73eb3_38f18cca",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27887,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T14:26:57Z",
+      "side": 1,
+      "message": "Good idea, thanks!",
+      "parentUuid": "33affba3_7e441317",
       "range": {
         "startLine": 27887,
         "startChar": 10,
@@ -456,6 +624,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ce74461_f96ef0ff",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27893,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T14:26:57Z",
+      "side": 1,
+      "message": "All good ideas. Will add the machinery and the tests as part of this CL, otherwise it\u0027s not really safe to submit it with the initial limited tests.",
+      "parentUuid": "ab5df2c7_a54834f5",
+      "range": {
+        "startLine": 27891,
+        "startChar": 1,
+        "endLine": 27893,
+        "endChar": 16
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cad726e7_bd50dae7",
         "filename": "test/cctest/test-api.cc",
         "patchSetId": 17
@@ -467,6 +659,30 @@
       "writtenOn": "2021-03-05T10:29:50Z",
       "side": 1,
       "message": "We never throw here, right?",
+      "range": {
+        "startLine": 27894,
+        "startChar": 7,
+        "endLine": 27894,
+        "endChar": 28
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7002250_f76b441a",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27894,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T14:26:57Z",
+      "side": 1,
+      "message": "True, removed the TryCatch and the CompileRun return value.",
+      "parentUuid": "cad726e7_bd50dae7",
       "range": {
         "startLine": 27894,
         "startChar": 7,
