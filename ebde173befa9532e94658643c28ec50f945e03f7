@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35d29aa3_be321e88",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T15:37:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69ba0ba0_796a0dec",
+      "range": {
+        "startLine": 313,
+        "startChar": 7,
+        "endLine": 313,
+        "endChar": 20
+      },
+      "revId": "ebde173befa9532e94658643c28ec50f945e03f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e84bbcf9_d23444f4",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-03-05T15:01:07Z",
       "side": 1,
       "message": "nit: mark as const",
+      "range": {
+        "startLine": 6332,
+        "startChar": 23,
+        "endLine": 6332,
+        "endChar": 49
+      },
+      "revId": "ebde173befa9532e94658643c28ec50f945e03f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4383afb5_3a5b7381",
+        "filename": "src/api/api.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 6332,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T15:37:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e84bbcf9_d23444f4",
       "range": {
         "startLine": 6332,
         "startChar": 23,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1f21592_6a02fe1f",
+        "filename": "src/api/api.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 6333,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T15:37:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f627a12_7ff4eca5",
+      "range": {
+        "startLine": 6333,
+        "startChar": 5,
+        "endLine": 6333,
+        "endChar": 29
+      },
+      "revId": "ebde173befa9532e94658643c28ec50f945e03f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96040c51_44d6114c",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6619b21_6aa40a7c",
+        "filename": "src/api/api.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 6338,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T15:37:00Z",
+      "side": 1,
+      "message": "Cool, I was wondering about the extra work in Value::IsObject. Thanks! 😊",
+      "parentUuid": "96040c51_44d6114c",
+      "range": {
+        "startLine": 6335,
+        "startChar": 0,
+        "endLine": 6338,
+        "endChar": 38
+      },
+      "revId": "ebde173befa9532e94658643c28ec50f945e03f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc57a95f_4e09834f",
@@ -123,6 +219,30 @@
       "writtenOn": "2021-03-05T15:01:07Z",
       "side": 1,
       "message": "This can be a DCHECK, avoiding an additional runtime overhead",
+      "range": {
+        "startLine": 1342,
+        "startChar": 0,
+        "endLine": 1342,
+        "endChar": 44
+      },
+      "revId": "ebde173befa9532e94658643c28ec50f945e03f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bf37a76_b5217de1",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T15:37:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc57a95f_4e09834f",
       "range": {
         "startLine": 1342,
         "startChar": 0,
