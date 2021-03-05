@@ -64,6 +64,7 @@ class HeapObjectHeader {
 
   // The payload starts directly after the HeapObjectHeader.
   inline Address Payload() const;
+  inline Address PayloadEnd() const;
 
   template <AccessMode mode = AccessMode::kNonAtomic>
   inline GCInfoIndex GetGCInfoIndex() const;
@@ -180,6 +181,11 @@ HeapObjectHeader::HeapObjectHeader(size_t size, GCInfoIndex gc_info_index) {
 Address HeapObjectHeader::Payload() const {
   return reinterpret_cast<Address>(const_cast<HeapObjectHeader*>(this)) +
          sizeof(HeapObjectHeader);
+}
+
+Address HeapObjectHeader::PayloadEnd() const {
+  return reinterpret_cast<Address>(const_cast<HeapObjectHeader*>(this)) +
+         GetSize();
 }
 
 template <AccessMode mode>
