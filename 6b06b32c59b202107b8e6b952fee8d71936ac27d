@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "823ee20e_7417352c",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T10:45:26Z",
+      "side": 1,
+      "message": "Added V8_DEPRECATED. Where can I read more about deprecation of certain API types or functions?",
+      "parentUuid": "a8cce484_0e6192cc",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0e4a9d9_e1781df6",
         "filename": "include/v8.h",
         "patchSetId": 17
@@ -82,6 +100,24 @@
       "writtenOn": "2021-03-04T17:45:04Z",
       "side": 1,
       "message": "Can we mark this as experimental?",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ba0d532_5d475ce2",
+        "filename": "include/v8.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 6829,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T10:45:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0e4a9d9_e1781df6",
       "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -99,6 +135,30 @@
       "writtenOn": "2021-03-04T17:45:04Z",
       "side": 1,
       "message": "Should we name this IsLeafTemplateForApiObject to make it more explicit? Don\u0027t feel too strongly though, up to you.",
+      "range": {
+        "startLine": 6830,
+        "startChar": 7,
+        "endLine": 6830,
+        "endChar": 29
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c710b9df_8695172e",
+        "filename": "include/v8.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 6830,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T10:45:26Z",
+      "side": 1,
+      "message": "Sg, thanks!",
+      "parentUuid": "841fcc67_37d91711",
       "range": {
         "startLine": 6830,
         "startChar": 7,
@@ -145,6 +205,30 @@
       "writtenOn": "2021-03-05T10:29:50Z",
       "side": 1,
       "message": "+1",
+      "parentUuid": "4d4bb2a7_95f21e0b",
+      "range": {
+        "startLine": 6314,
+        "startChar": 14,
+        "endLine": 6314,
+        "endChar": 31
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52fcea65_5c3c11f1",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 6314,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T10:45:26Z",
+      "side": 1,
+      "message": "This was my assumption, as the `this` is an object that is already in the JS heap. But it\u0027s good to ensure this, so I\u0027ll add DisallowHandleAllocation as you\u0027re suggesting.",
       "parentUuid": "4d4bb2a7_95f21e0b",
       "range": {
         "startLine": 6314,
@@ -278,6 +362,24 @@
       "writtenOn": "2021-03-05T10:29:50Z",
       "side": 1,
       "message": "+1 on adding mjsunit tests for extended coverage",
+      "parentUuid": "3869fd31_b5ca615c",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a099430f_bf65de0a",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27863,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T10:45:26Z",
+      "side": 1,
+      "message": "That\u0027s a very good idea! For this we\u0027ll need some kind of dummy bindings, which is an idea we\u0027ve already discussed, but didn\u0027t get to implementing it yet. I could add some bindings to d8 as part of this CL (or even better - as a prerequisite).",
       "parentUuid": "3869fd31_b5ca615c",
       "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

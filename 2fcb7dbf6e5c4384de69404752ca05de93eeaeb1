@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6839b53_705520bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-03-05T10:45:26Z",
+      "side": 1,
+      "message": "Thanks, guys! Added fixes for Sathya\u0027s comments, the rest is coming soon..",
+      "revId": "2fcb7dbf6e5c4384de69404752ca05de93eeaeb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
