@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "37d8714c_ad273877",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-05T16:14:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2880625d_4a122791",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "5c42b2fbfeb99a051ee7836c56094d706ee76aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c3ca6ad8_3cfc6175",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 8
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "I\u0027d say so. When they are both tree closers, would be sad to not see what closed it.",
       "parentUuid": "f4d6dd19_b734ee0c",
+      "range": {
+        "startLine": 27,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 8
+      },
+      "revId": "5c42b2fbfeb99a051ee7836c56094d706ee76aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07a4140f_dd6d2201",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-05T16:14:06Z",
+      "side": 1,
+      "message": "Done, Fixed",
+      "parentUuid": "05a24cd4_46e0d39f",
       "range": {
         "startLine": 27,
         "startChar": 5,
