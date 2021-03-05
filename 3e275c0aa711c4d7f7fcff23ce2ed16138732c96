@@ -33,6 +33,24 @@
       "message": "btw, please switch this to bbagent!",
       "revId": "3e275c0aa711c4d7f7fcff23ce2ed16138732c96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32b65634_7fcfc52d",
+        "filename": "dev.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-03-05T08:44:30Z",
+      "side": 1,
+      "message": "The executable is defined in /lib/recipes.star . The cfg file reflects bbagent usage.",
+      "parentUuid": "ccc60df0_9369ab75",
+      "revId": "3e275c0aa711c4d7f7fcff23ce2ed16138732c96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
