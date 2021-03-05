@@ -134,6 +134,122 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72f7bc91_0b0427e8",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 6314,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "4d4bb2a7_95f21e0b",
+      "range": {
+        "startLine": 6314,
+        "startChar": 14,
+        "endLine": 6314,
+        "endChar": 31
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd14464d_391b2378",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 6318,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "nit: return self-\u003eIsTemplateForApiObject(*heap_obj)",
+      "range": {
+        "startLine": 6315,
+        "startChar": 1,
+        "endLine": 6318,
+        "endChar": 14
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62333ba6_0f1fc56a",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "i::DisallowGarbageCollection no_gc;",
+      "range": {
+        "startLine": 1340,
+        "startChar": 0,
+        "endLine": 1340,
+        "endChar": 44
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81a074fe_eb5f32aa",
+        "filename": "src/objects/templates.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "nit: ... const;",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 49
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d4ab1ed_c70d8feb",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 20757,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "I guess we could just keep everything in C++ here?\n\n  Local\u003cObject\u003e instance \u003d child_templ-\u003eGetFunction(context.local()).ToLocalChecked()\n  .NewInstance(context.local()).ToLocalChecked();",
+      "range": {
+        "startLine": 20754,
+        "startChar": 0,
+        "endLine": 20757,
+        "endChar": 23
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3869fd31_b5ca615c",
         "filename": "test/cctest/test-api.cc",
         "patchSetId": 17
@@ -145,6 +261,116 @@
       "writtenOn": "2021-03-04T17:45:04Z",
       "side": 1,
       "message": "Should we add mjsunit tests as well to get fuzzer coverage by installing fast api bindings in d8?",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3ab258b_6c1fbb83",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27863,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "+1 on adding mjsunit tests for extended coverage",
+      "parentUuid": "3869fd31_b5ca615c",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "304a3347_b203b300",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27886,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "unused?",
+      "range": {
+        "startLine": 27886,
+        "startChar": 22,
+        "endLine": 27886,
+        "endChar": 27
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33affba3_7e441317",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27887,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "nit: checker.Reset() or something similar maybe?",
+      "range": {
+        "startLine": 27887,
+        "startChar": 10,
+        "endLine": 27887,
+        "endChar": 48
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab5df2c7_a54834f5",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27893,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "would it make sense to add a second call before *and* after func is optimized with an incompatible receiver and check that we actually threw?\n\n- non-api Object\n- incompatible API object (separate leaf)\n- subclass \n\nMaybe this is easier to do in mjsunit (like Sathya suggested)",
+      "range": {
+        "startLine": 27891,
+        "startChar": 1,
+        "endLine": 27893,
+        "endChar": 16
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cad726e7_bd50dae7",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27894,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T10:29:50Z",
+      "side": 1,
+      "message": "We never throw here, right?",
+      "range": {
+        "startLine": 27894,
+        "startChar": 7,
+        "endLine": 27894,
+        "endChar": 28
+      },
       "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
