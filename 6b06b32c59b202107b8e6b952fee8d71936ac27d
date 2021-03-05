@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f7d8f15_b6e3092b",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-05T15:01:07Z",
+      "side": 1,
+      "message": "You should use V8_DEPRECATE_SOON which then gets promoted to V8_DEPRECATED after a version.",
+      "parentUuid": "d26bcce9_361364fb",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0e4a9d9_e1781df6",
         "filename": "include/v8.h",
         "patchSetId": 17
