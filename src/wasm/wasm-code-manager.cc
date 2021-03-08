@@ -793,12 +793,14 @@ size_t WasmCodeAllocator::GetNumCodeSpaces() const {
 // static
 constexpr base::AddressRegion WasmCodeAllocator::kUnrestrictedRegion;
 
-NativeModule::NativeModule(WasmEngine* engine, const WasmFeatures& enabled,
+NativeModule::NativeModule(WasmEngine* engine, Isolate* isolate,
+                           const WasmFeatures& enabled,
                            VirtualMemory code_space,
                            std::shared_ptr<const WasmModule> module,
                            std::shared_ptr<Counters> async_counters,
                            std::shared_ptr<NativeModule>* shared_this)
     : engine_(engine),
+      isolate_(isolate),
       engine_scope_(engine->GetBarrierForBackgroundCompile()->TryLock()),
       code_allocator_(engine->code_manager(), std::move(code_space),
                       async_counters),
@@ -1405,7 +1407,7 @@ void NativeModule::AddCodeSpace(
             NumWasmFunctionsInFarJumpTable(num_function_slots)),
         region, allocator_lock);
     CHECK(region.contains(far_jump_table->instruction_start()));
-    EmbeddedData embedded_data = EmbeddedData::FromBlob();
+    EmbeddedData embedded_data = EmbeddedData::FromBlob(isolate_);
 #define RUNTIME_STUB(Name) Builtins::k##Name,
 #define RUNTIME_STUB_TRAP(Name) RUNTIME_STUB(ThrowWasm##Name)
     Builtins::Name stub_names[WasmCode::kRuntimeStubCount] = {
@@ -1908,8 +1910,8 @@ std::shared_ptr<NativeModule> WasmCodeManager::NewNativeModule(
   size_t size = code_space.size();
   Address end = code_space.end();
   std::shared_ptr<NativeModule> ret;
-  new NativeModule(engine, enabled, std::move(code_space), std::move(module),
-                   isolate->async_counters(), &ret);
+  new NativeModule(engine, isolate, enabled, std::move(code_space),
+                   std::move(module), isolate->async_counters(), &ret);
   // The constructor initialized the shared_ptr.
   DCHECK_NOT_NULL(ret);
   TRACE_HEAP("New NativeModule %p: Mem: %" PRIuPTR ",+%zu\n", ret.get(), start,

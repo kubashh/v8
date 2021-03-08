@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/codegen/reloc-info.h"
 #if V8_TARGET_ARCH_ARM64
 
 #include "src/base/bits.h"
@@ -1769,25 +1770,27 @@ void TurboAssembler::JumpHelper(int64_t offset, RelocInfo::Mode rmode,
   Bind(&done);
 }
 
-namespace {
-
 // The calculated offset is either:
 // * the 'target' input unmodified if this is a Wasm call, or
 // * the offset of the target from the current PC, in instructions, for any
 //   other type of call.
-static int64_t CalculateTargetOffset(Address target, RelocInfo::Mode rmode,
-                                     byte* pc) {
+int64_t TurboAssembler::CalculateTargetOffset(Address target,
+                                              RelocInfo::Mode rmode, byte* pc) {
   int64_t offset = static_cast<int64_t>(target);
   // The target of WebAssembly calls is still an index instead of an actual
   // address at this point, and needs to be encoded as-is.
   if (rmode != RelocInfo::WASM_CALL && rmode != RelocInfo::WASM_STUB_CALL) {
-    offset -= reinterpret_cast<int64_t>(pc);
+    if (RelocInfo::IsRuntimeEntry(rmode)) {
+      DCHECK_NE(options().code_range_start, 0);
+      offset -= static_cast<int64_t>(options().code_range_start);
+    } else {
+      offset -= reinterpret_cast<int64_t>(pc);
+    }
     DCHECK_EQ(offset % kInstrSize, 0);
     offset = offset / static_cast<int>(kInstrSize);
   }
   return offset;
 }
-}  // namespace
 
 void TurboAssembler::Jump(Address target, RelocInfo::Mode rmode,
                           Condition cond) {
@@ -1803,15 +1806,7 @@ void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
   if (options().inline_offheap_trampolines) {
     int builtin_index = Builtins::kNoBuiltinId;
     if (isolate()->builtins()->IsBuiltinHandle(code, &builtin_index)) {
-      // Inline the trampoline.
-      RecordCommentForOffHeapTrampoline(builtin_index);
-      CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
-      UseScratchRegisterScope temps(this);
-      Register scratch = temps.AcquireX();
-      EmbeddedData d = EmbeddedData::FromBlob();
-      Address entry = d.InstructionStartOfBuiltin(builtin_index);
-      Ldr(scratch, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
-      Jump(scratch, cond);
+      TailCallBuiltin(builtin_index);
       return;
     }
   }
@@ -1923,12 +1918,44 @@ void TurboAssembler::CallBuiltin(int builtin_index) {
   DCHECK(Builtins::IsBuiltinId(builtin_index));
   RecordCommentForOffHeapTrampoline(builtin_index);
   CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
-  UseScratchRegisterScope temps(this);
-  Register scratch = temps.AcquireX();
-  EmbeddedData d = EmbeddedData::FromBlob();
+  EmbeddedData d = EmbeddedData::FromBlob(isolate());
   Address entry = d.InstructionStartOfBuiltin(builtin_index);
-  Ldr(scratch, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
-  Call(scratch);
+  if (FLAG_short_builtin_calls && options().enable_root_array_delta_access &&
+      options().code_range_start) {
+    Call(entry, RelocInfo::RUNTIME_ENTRY);
+
+  } else {
+    UseScratchRegisterScope temps(this);
+    Register scratch = temps.AcquireX();
+    Ldr(scratch, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
+    Call(scratch);
+  }
+  if (FLAG_code_comments) RecordComment("]");
+}
+
+void TurboAssembler::TailCallBuiltin(int builtin_index) {
+  DCHECK(Builtins::IsBuiltinId(builtin_index));
+  RecordCommentForOffHeapTrampoline(builtin_index);
+  CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
+  EmbeddedData d = EmbeddedData::FromBlob(isolate());
+  Address entry = d.InstructionStartOfBuiltin(builtin_index);
+  if (FLAG_short_builtin_calls && options().enable_root_array_delta_access &&
+      options().code_range_start) {
+    Jump(entry, RelocInfo::RUNTIME_ENTRY);
+
+  } else {
+    // x17 is used to allow using "Call" (i.e. `bti c`) rather than "Jump"
+    // (i.e. `bti j`) landing pads for the tail-called code.
+    Register temp = x17;
+
+    // Make sure we're don't use this register as a temporary.
+    UseScratchRegisterScope temps(this);
+    temps.Exclude(temp);
+
+    Ldr(temp, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
+    Jump(temp);
+  }
+  if (FLAG_code_comments) RecordComment("]");
 }
 
 void TurboAssembler::LoadCodeObjectEntry(Register destination,
