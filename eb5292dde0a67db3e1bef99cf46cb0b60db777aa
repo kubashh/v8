@@ -124,6 +124,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3214727_af986f9b",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T15:48:45Z",
+      "side": 1,
+      "message": "I am not an owner here, but I would prefer code comments to be stand-alone. Is there really much value in having these \"[\" .. \"]\" pairs, or can\u0027t we just emit a comment before starting a code block, and then implicitly see where it ends (e.g. before the next comment)?",
+      "parentUuid": "f69845a4_de11dfa0",
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62bc380f_89f70d1b",
         "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
         "patchSetId": 11
