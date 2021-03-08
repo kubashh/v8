@@ -5588,7 +5588,6 @@ TEST(TerminateOnResumeFromOtherThread) {
 
   FutexInterruptionThread timeout_thread(env->GetIsolate(),
                                          delegate.semaphore());
-  CHECK(timeout_thread.Start());
 
   v8::Local<v8::Context> context = env.local();
   {
@@ -5600,6 +5599,8 @@ TEST(TerminateOnResumeFromOtherThread) {
         v8::ScriptCompiler::CompileFunctionInContext(
             env.local(), &script_source, 0, nullptr, 0, nullptr)
             .ToLocalChecked();
+
+    CHECK(timeout_thread.Start());
 
     v8::MaybeLocal<v8::Value> val =
         foo->Call(context, env->Global(), 0, nullptr);
