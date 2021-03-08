@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb81a7e2_3df34100",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-03-08T13:37:57Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "490bf2c1_1afd9952",
+      "revId": "3545b7f7f959330c0b1eca70340a050393df9ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32d290c2_c3f59405",
@@ -82,6 +100,24 @@
       "writtenOn": "2021-03-04T11:04:18Z",
       "side": 1,
       "message": "Why are we using the \"is_packed\" bit for deciding between signed/unsigned here?",
+      "revId": "3545b7f7f959330c0b1eca70340a050393df9ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d263b75_00238c59",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-03-08T13:37:57Z",
+      "side": 1,
+      "message": "I don\u0027t think it really matters, but the idea is the following: there are signed and unsigned loads for packed types in wasm-gc. During optimizations, we might want to optimize loads and stores e.g. as follows:\nstruct.get_u(obj, store(obj, x)) \u003d\u003d truncate_16(x), whereas\nstruct.get_s(obj, store(obj, x)) \u003d\u003d sign_extend_16_to_32(truncate_16(x)).\nSo I chose unsigned stores because they resemble unsigned loads more.",
+      "parentUuid": "32d290c2_c3f59405",
       "revId": "3545b7f7f959330c0b1eca70340a050393df9ff4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +145,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d973a42_1ddccf5a",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3102,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-03-08T13:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09ca1920_4aa507ae",
+      "range": {
+        "startLine": 3102,
+        "startChar": 65,
+        "endLine": 3102,
+        "endChar": 67
+      },
+      "revId": "3545b7f7f959330c0b1eca70340a050393df9ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "881427a5_f21ef536",
@@ -122,6 +182,24 @@
       "writtenOn": "2021-03-04T11:04:18Z",
       "side": 1,
       "message": "Is there a reason to keep this scheme for the undefined node?",
+      "revId": "3545b7f7f959330c0b1eca70340a050393df9ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ebde1e4_066c5f2d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 6058,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-03-08T13:37:57Z",
+      "side": 1,
+      "message": "I had missed it, but looking at it now, I realize there was an optimization in the case of JS-to-JS wrapper. There, we can use HeapConstants directly over loading from the isolate. This means that this change might make BuildJsToJsWrapper slightly worse. I will come back to it and restore it in a future CL. Thanks for pointing it out.",
+      "parentUuid": "881427a5_f21ef536",
       "revId": "3545b7f7f959330c0b1eca70340a050393df9ff4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
