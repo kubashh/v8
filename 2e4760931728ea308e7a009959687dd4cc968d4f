@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc78580f_3ae54bde",
+        "filename": "include/cppgc/explicit-management.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-08T11:49:02Z",
+      "side": 1,
+      "message": "Done, thanks! It should definitely be more open phrasing to allow not doing anything.",
+      "parentUuid": "be9c2f01_26b2271c",
+      "range": {
+        "startLine": 23,
+        "startChar": 3,
+        "endLine": 23,
+        "endChar": 14
+      },
+      "revId": "2e4760931728ea308e7a009959687dd4cc968d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0724dd20_554f2c42",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-03-08T11:26:58Z",
       "side": 1,
       "message": "FreeUnreferencedObject",
+      "range": {
+        "startLine": 27,
+        "startChar": 30,
+        "endLine": 27,
+        "endChar": 37
+      },
+      "revId": "2e4760931728ea308e7a009959687dd4cc968d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2445d05e_635b8d29",
+        "filename": "include/cppgc/explicit-management.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-08T11:49:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0724dd20_554f2c42",
       "range": {
         "startLine": 27,
         "startChar": 30,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ca9c272_16461ee3",
+        "filename": "include/cppgc/explicit-management.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-08T11:49:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c140942_86113ec1",
+      "range": {
+        "startLine": 32,
+        "startChar": 10,
+        "endLine": 32,
+        "endChar": 17
+      },
+      "revId": "2e4760931728ea308e7a009959687dd4cc968d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc051836_c18d748b",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-03-08T11:26:58Z",
       "side": 1,
       "message": "We changed this one so that it returns false for mixins, right?",
+      "range": {
+        "startLine": 36,
+        "startChar": 16,
+        "endLine": 36,
+        "endChar": 39
+      },
+      "revId": "2e4760931728ea308e7a009959687dd4cc968d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f04cb687_73fff668",
+        "filename": "include/cppgc/explicit-management.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-08T11:49:02Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "cc051836_c18d748b",
       "range": {
         "startLine": 36,
         "startChar": 16,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0bfc118_8b3c5c1f",
+        "filename": "src/heap/cppgc/heap-object-header.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-08T11:49:02Z",
+      "side": 1,
+      "message": "Added an AccessMode.",
+      "parentUuid": "4a940907_8e94f19f",
+      "range": {
+        "startLine": 188,
+        "startChar": 9,
+        "endLine": 188,
+        "endChar": 16
+      },
+      "revId": "2e4760931728ea308e7a009959687dd4cc968d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15684a41_452723d5",
@@ -146,6 +266,30 @@
       "writtenOn": "2021-03-08T11:26:58Z",
       "side": 1,
       "message": "Not sure we should test here that the page is freed. It seems very implementation specific to me and will break if we ever want to reuse large pages (and freeing large pages when object is reclaimed is already tested elsewhere).",
+      "range": {
+        "startLine": 93,
+        "startChar": 2,
+        "endLine": 93,
+        "endChar": 14
+      },
+      "revId": "2e4760931728ea308e7a009959687dd4cc968d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0be12a2f_a23fe2a0",
+        "filename": "test/unittests/heap/cppgc/explicit-management-unittest.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-08T11:49:02Z",
+      "side": 1,
+      "message": "I think we can adjust this test if we reuse large pages. After all it\u0027s a good signal that this changes performance on the embedder side.\n\nSame holds true above if we change internals for our free list so that ContainsForTesting() is off.",
+      "parentUuid": "15684a41_452723d5",
       "range": {
         "startLine": 93,
         "startChar": 2,
