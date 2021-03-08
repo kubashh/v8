@@ -786,6 +786,8 @@ DEFINE_BOOL(
     stress_gc_during_compilation, false,
     "simulate GC/compiler thread race related to https://crbug.com/v8/8520")
 DEFINE_BOOL(turbo_fast_api_calls, false, "enable fast API calls from TurboFan")
+DEFINE_NEG_IMPLICATION(turboprop, turbo_fast_api_calls)
+DEFINE_NEG_IMPLICATION(jitless, turbo_fast_api_calls)
 DEFINE_INT(reuse_opt_code_count, 0,
            "don't discard optimized code for the specified number of deopts.")
 DEFINE_BOOL(turbo_dynamic_map_checks, true,
