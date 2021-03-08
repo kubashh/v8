@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "src/codegen/code-factory.h"
+#include "src/codegen/code-stub-assembler.h"
 #include "src/compiler/code-assembler.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/opcodes.h"
@@ -494,6 +495,78 @@ TEST(StaticAssert) {
   CodeAssembler m(asm_tester.state());
   m.StaticAssert(m.ReinterpretCast<BoolT>(m.Int32Constant(1)));
   USE(asm_tester.GenerateCode());
+}
+
+TEST(PopCount) {
+  Isolate* isolate(CcTest::InitIsolateOnce());
+
+  CodeAssemblerTester asm_tester(isolate);
+  // Using CodeStubAssembler to get CSA_CHECK.
+  CodeStubAssembler m(asm_tester.state());
+  CodeAssembler* ca = &m;
+
+  const std::vector<std::pair<uint32_t, int>> test_cases = {
+      {0, 0},
+      {1, 1},
+      {(1 << 31), 1},
+      {0b01010101010101010101010101010101, 16},
+      {0b10101010101010101010101010101010, 16},
+      {0b11100011100000011100011111000111, 17}  // arbitrarily chosen
+  };
+
+  for (std::pair<uint32_t, int> test_case : test_cases) {
+    uint32_t value32 = test_case.first;
+    uint64_t value64 = (static_cast<uint64_t>(value32) << 32) | value32;
+    int expected_pop32 = test_case.second;
+    int expected_pop64 = 2 * expected_pop32;
+
+    TNode<Word32T> pop32 = ca->Word32Popcnt(m.Uint32Constant(value32));
+    TNode<Word64T> pop64 = ca->Word64Popcnt(ca->Uint64Constant(value64));
+
+    CSA_CHECK(&m, m.Word32Equal(pop32, ca->Int32Constant(expected_pop32)));
+    CSA_CHECK(&m, m.Word64Equal(pop64, ca->Int64Constant(expected_pop64)));
+  }
+  ca->Return(ca->UncheckedCast<Object>(UndefinedConstant(ca)));
+
+  FunctionTester ft(asm_tester.GenerateCode());
+  ft.Call();
+}
+
+TEST(CountTrailingZeros) {
+  Isolate* isolate(CcTest::InitIsolateOnce());
+
+  CodeAssemblerTester asm_tester(isolate);
+  // Using CodeStubAssembler to get CSA_CHECK.
+  CodeStubAssembler m(asm_tester.state());
+  CodeAssembler* ca = &m;
+
+  const std::vector<std::pair<uint32_t, int>> test_cases = {
+      {1, 0},
+      {2, 1},
+      {(0b0101010'0000'0000), 9},
+      {(1 << 31), 31},
+      {std::numeric_limits<uint32_t>::max(), 0},
+  };
+
+  for (std::pair<uint32_t, int> test_case : test_cases) {
+    uint32_t value32 = test_case.first;
+    uint64_t value64 = static_cast<uint64_t>(value32) << 32;
+    int expected_ctz32 = test_case.second;
+    int expected_ctz64 = expected_ctz32 + 32;
+
+    TNode<Word32T> pop32 = ca->Word32Ctz(ca->Uint32Constant(value32));
+    TNode<Word64T> pop64_ext = ca->Word64Ctz(ca->Uint64Constant(value32));
+    TNode<Word64T> pop64 = ca->Word64Ctz(ca->Uint64Constant(value64));
+
+    CSA_CHECK(&m, ca->Word32Equal(pop32, ca->Int32Constant(expected_ctz32)));
+    CSA_CHECK(&m,
+              ca->Word64Equal(pop64_ext, ca->Int64Constant(expected_ctz32)));
+    CSA_CHECK(&m, ca->Word64Equal(pop64, ca->Int64Constant(expected_ctz64)));
+  }
+  ca->Return(ca->UncheckedCast<Object>(UndefinedConstant(ca)));
+
+  FunctionTester ft(asm_tester.GenerateCode());
+  ft.Call();
 }
 
 }  // namespace compiler
