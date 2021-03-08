@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "824f822d_9df8cb33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-03-08T16:10:39Z",
+      "side": 1,
+      "message": "This came up. I\u0027m not sure which value kinds we should support here. S128 seems reasonable, and the fuzzer is generating kOptRef\u0027s.",
+      "revId": "4341a31bb36640f9a22d745f4f448f56e246177c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
