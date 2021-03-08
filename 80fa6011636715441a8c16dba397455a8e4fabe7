@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d27ac947_c840ca47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-08T10:37:39Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "80fa6011636715441a8c16dba397455a8e4fabe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5c28800_2c278a19",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-08T10:37:39Z",
+      "side": 1,
+      "message": "Here and below: UncheckedCasts to more generic types are not necessary, you can pass Int64T/Uint64T as parameters expecting Word64T. See how the former two are defined.",
+      "range": {
+        "startLine": 912,
+        "startChar": 18,
+        "endLine": 912,
+        "endChar": 41
+      },
+      "revId": "80fa6011636715441a8c16dba397455a8e4fabe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
