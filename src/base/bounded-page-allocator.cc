@@ -127,7 +127,8 @@ bool BoundedPageAllocator::SetPermissions(void* address, size_t size,
                                           PageAllocator::Permission access) {
   DCHECK(IsAligned(reinterpret_cast<Address>(address), commit_page_size_));
   DCHECK(IsAligned(size, commit_page_size_));
-  DCHECK(region_allocator_.contains(reinterpret_cast<Address>(address), size));
+  //  DCHECK(region_allocator_.contains(reinterpret_cast<Address>(address),
+  //  size));
   return page_allocator_->SetPermissions(address, size, access);
 }
 

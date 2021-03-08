@@ -24,7 +24,7 @@ bool InstructionStream::PcIsOffHeap(Isolate* isolate, Address pc) {
 Code InstructionStream::TryLookupCode(Isolate* isolate, Address address) {
   if (!PcIsOffHeap(isolate, address)) return Code();
 
-  EmbeddedData d = EmbeddedData::FromBlob();
+  EmbeddedData d = EmbeddedData::FromBlob(isolate);
   if (address < d.InstructionStartOfBuiltin(0)) return Code();
 
   // Note: Addresses within the padding section between builtins (i.e. within
