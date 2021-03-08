@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04189b4e_65ef9000",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-03-08T11:35:01Z",
+      "side": 1,
+      "message": "lgtm (didn\u0027t look at wasm-compiler and int64)",
+      "revId": "a02cc58c8682c61e3139f30791c1479b28500e9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
