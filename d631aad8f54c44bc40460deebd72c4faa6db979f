@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dc1c371_a2eb050b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-08T10:30:24Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f9e4812_aa7c13ea",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-08T10:30:24Z",
+      "side": 1,
+      "message": "Here and below: I think this CA methods should just create the respective nodes while the IsSupported() logic and the fallback implementation should be put into CodeStubAssembler.\nSee IsFloat64RoundTruncateSupported() and friends.",
+      "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfbfc793_858e4792",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-08T10:30:24Z",
+      "side": 1,
+      "message": "Signed() call is not necessary here, the ChangeUint32ToUint64 expects Word32T.",
+      "range": {
+        "startLine": 645,
+        "startChar": 59,
+        "endLine": 645,
+        "endChar": 65
+      },
+      "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3fb2d35_61fa18c6",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-08T10:30:24Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 670,
+        "startChar": 56,
+        "endLine": 670,
+        "endChar": 63
+      },
+      "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f986509_09061c10",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-08T10:30:24Z",
+      "side": 1,
+      "message": "Here and below: it\u0027ll probably be simpler to have just one method accepting Word32T and returning Uint32T, since the result is logically non-negative value and can be applied to both Int32T and Uint32T.",
+      "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
