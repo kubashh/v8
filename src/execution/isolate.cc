@@ -31,6 +31,7 @@
 #include "src/common/ptr-compr.h"
 #include "src/compiler-dispatcher/compiler-dispatcher.h"
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
+#include "src/compiler/js-heap-broker.h"
 #include "src/date/date.h"
 #include "src/debug/debug-frames.h"
 #include "src/debug/debug.h"
@@ -2317,6 +2318,67 @@ void Isolate::ReportPendingMessages() {
   }
 }
 
+void Isolate::RegisterHeapBrokerTaskQueue(void* q) {
+#ifdef DEBUG
+  for (auto x : broker_task_queues_) CHECK_NE(x, q);
+#endif  // DEBUG
+  if (FLAG_trace_turbo_stw) {
+    printf("RegisterHeapBrokerTaskQueue %p\n", q);
+  }
+  broker_task_queues_.push_back(q);
+}
+
+void Isolate::UnregisterHeapBrokerTaskQueue(void* q) {
+  if (FLAG_trace_turbo_stw) {
+    printf("UnregisterHeapBrokerTaskQueue %p\n", q);
+  }
+  const size_t size = broker_task_queues_.size();
+  size_t i;
+  for (i = 0; i < size; i++) {
+    if (broker_task_queues_[i] == q) break;
+  }
+  DCHECK_NE(i, size);
+  if (i != size - 1) {
+    broker_task_queues_[i] = broker_task_queues_[size - 1];
+  }
+  broker_task_queues_.pop_back();
+}
+
+void Isolate::PumpHeapBrokerTaskQueues() {
+  const size_t size = broker_task_queues_.size();
+  size_t iters_since_last_work = 0;
+  size_t processed_tasks = 0;
+  size_t i = 0;
+  while (iters_since_last_work < size) {
+    compiler::BrokerTaskQueue* q =
+        static_cast<compiler::BrokerTaskQueue*>(broker_task_queues_[i]);
+    compiler::TFTask* task;
+    if ((task = q->TryGetNextPendingTask()) == nullptr) {
+      // Nothing to do.
+      iters_since_last_work++;
+      i = (i + 1) % size;
+      continue;
+    }
+
+    iters_since_last_work = 0;
+
+    do {
+      DCHECK_NOT_NULL(task);
+      task->ProcessOnMainThread(this);
+      q->MarkNextPendingTaskAsProcessed(task);
+      processed_tasks++;
+    } while ((task = q->TryGetNextPendingTask()) != nullptr);
+
+    i = (i + 1) % size;
+  }
+  if (FLAG_trace_turbo_stw) {
+    if (processed_tasks != 0) {
+      printf("PumpHeapBrokerTaskQueues %zu queues %zu tasks\n", size,
+             processed_tasks);
+    }
+  }
+}
+
 bool Isolate::OptionalRescheduleException(bool clear_exception) {
   DCHECK(has_pending_exception());
   PropagatePendingExceptionToExternalTryCatch();
@@ -2897,7 +2959,8 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator)
 #if V8_SFI_HAS_UNIQUE_ID
       next_unique_sfi_id_(0),
 #endif
-      cancelable_task_manager_(new CancelableTaskManager()) {
+      cancelable_task_manager_(new CancelableTaskManager()),
+      stw_sema_(0) {
   TRACE_ISOLATE(constructor);
   CheckIsolateLayout();
 

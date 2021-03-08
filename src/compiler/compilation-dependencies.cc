@@ -194,6 +194,43 @@ class FieldRepresentationDependency final : public CompilationDependency {
   Representation representation_;
 };
 
+class FieldRepresentationDependency2 final : public CompilationDependency {
+ public:
+  FieldRepresentationDependency2(Handle<Map> owner, InternalIndex descriptor,
+                                 Representation representation)
+      : owner_(owner),
+        descriptor_(descriptor),
+        representation_(representation) {}
+
+  bool IsValid() const override { UNREACHABLE(); }
+
+  void Install(const MaybeObjectHandle& code) const override { UNREACHABLE(); }
+
+  CompilationDependency* PersistHandles(Isolate* isolate) override {
+    owner_ = isolate->AsLocalIsolate()->heap()->NewPersistentHandle(owner_);
+    return this;
+  }
+
+  CompilationDependency* ToRef(JSHeapBroker* broker) const override {
+    MapRef owner =
+        ObjectRef(broker, broker->CanonicalPersistentHandle(owner_)).AsMap();
+    return broker->zone()->New<FieldRepresentationDependency>(
+        owner, descriptor_, representation_);
+  }
+
+#ifdef DEBUG
+  bool IsFieldRepresentationDependencyOnMap(
+      Handle<Map> const& receiver_map) const override {
+    return owner_.equals(receiver_map);
+  }
+#endif
+
+ private:
+  Handle<Map> owner_;
+  InternalIndex descriptor_;
+  Representation representation_;
+};
+
 class FieldTypeDependency final : public CompilationDependency {
  public:
   // TODO(neis): Once the concurrent compiler frontend is always-on, we no
@@ -225,6 +262,36 @@ class FieldTypeDependency final : public CompilationDependency {
   ObjectRef type_;
 };
 
+class FieldTypeDependency2 final : public CompilationDependency {
+ public:
+  FieldTypeDependency2(Handle<Map> owner, InternalIndex descriptor,
+                       Handle<FieldType> type)
+      : owner_(owner), descriptor_(descriptor), type_(type) {}
+
+  bool IsValid() const override { UNREACHABLE(); }
+
+  void Install(const MaybeObjectHandle& code) const override { UNREACHABLE(); }
+
+  CompilationDependency* PersistHandles(Isolate* isolate) override {
+    owner_ = isolate->AsLocalIsolate()->heap()->NewPersistentHandle(owner_);
+    type_ = isolate->AsLocalIsolate()->heap()->NewPersistentHandle(type_);
+    return this;
+  }
+
+  CompilationDependency* ToRef(JSHeapBroker* broker) const override {
+    MapRef owner =
+        ObjectRef(broker, broker->CanonicalPersistentHandle(owner_)).AsMap();
+    ObjectRef type =
+        ObjectRef(broker, broker->CanonicalPersistentHandle(type_));
+    return broker->zone()->New<FieldTypeDependency>(owner, descriptor_, type);
+  }
+
+ private:
+  Handle<Map> owner_;
+  InternalIndex descriptor_;
+  Handle<FieldType> type_;
+};
+
 class FieldConstnessDependency final : public CompilationDependency {
  public:
   FieldConstnessDependency(const MapRef& owner, InternalIndex descriptor)
@@ -252,6 +319,36 @@ class FieldConstnessDependency final : public CompilationDependency {
  private:
   MapRef owner_;
   InternalIndex descriptor_;
+};
+
+class FieldConstnessDependency2 final : public CompilationDependency {
+ public:
+  FieldConstnessDependency2(Handle<Map> owner, InternalIndex descriptor,
+                            Handle<Map> map)
+      : owner_(owner), descriptor_(descriptor), map_(map) {}
+
+  bool IsValid() const override { UNREACHABLE(); }
+
+  void Install(const MaybeObjectHandle& code) const override { UNREACHABLE(); }
+
+  CompilationDependency* PersistHandles(Isolate* isolate) override {
+    owner_ = isolate->AsLocalIsolate()->heap()->NewPersistentHandle(owner_);
+    map_ = isolate->AsLocalIsolate()->heap()->NewPersistentHandle(map_);
+    return this;
+  }
+
+  CompilationDependency* ToRef(JSHeapBroker* broker) const override {
+    MapRef owner =
+        ObjectRef(broker, broker->CanonicalPersistentHandle(owner_)).AsMap();
+    // TODO: map_
+    USE(map_);
+    return broker->zone()->New<FieldConstnessDependency>(owner, descriptor_);
+  }
+
+ private:
+  Handle<Map> owner_;
+  InternalIndex descriptor_;
+  Handle<Map> map_;
 };
 
 class GlobalPropertyDependency final : public CompilationDependency {
@@ -433,6 +530,38 @@ PropertyConstness CompilationDependencies::DependOnFieldConstness(
   DCHECK_EQ(constness, PropertyConstness::kConst);
   RecordDependency(zone_->New<FieldConstnessDependency>(owner, descriptor));
   return PropertyConstness::kConst;
+}
+
+void CompilationDependencies::DependOnFieldConstness2(
+    Isolate* isolate, Zone* zone, Handle<Map> map, InternalIndex descriptor,
+    PropertyConstness* constness_out, CompilationDependency** dependency_out) {
+  Handle<Map> owner(map->FindFieldOwner(isolate, descriptor), isolate);
+  PropertyConstness constness = owner->instance_descriptors(kRelaxedLoad)
+                                    .GetDetails(descriptor)
+                                    .constness();
+  if (constness == PropertyConstness::kMutable) {
+    *constness_out = PropertyConstness::kMutable;
+    *dependency_out = nullptr;
+    return;
+  }
+
+  // If the map can have fast elements transitions, then the field can be only
+  // considered constant if the map does not transition.
+  if (Map::CanHaveFastTransitionableElementsKind(map->instance_type())) {
+    // If the map can already transition away, let us report the field as
+    // mutable.
+    if (!map->is_stable()) {
+      *constness_out = PropertyConstness::kMutable;
+      *dependency_out = nullptr;
+      return;
+    }
+    // TODO later:   DependOnStableMap(map);
+  }
+
+  DCHECK_EQ(constness, PropertyConstness::kConst);
+  *constness_out = PropertyConstness::kConst;
+  *dependency_out = zone->New<FieldConstnessDependency2>(owner, descriptor, map)
+                        ->PersistHandles(isolate);
 }
 
 void CompilationDependencies::DependOnGlobalProperty(
@@ -644,6 +773,19 @@ CompilationDependencies::FieldRepresentationDependencyOffTheRecord(
 }
 
 CompilationDependency const*
+CompilationDependencies::FieldRepresentationDependencyOffTheRecord2(
+    Isolate* isolate, Zone* zone, Handle<Map> map,
+    InternalIndex descriptor) const {
+  Handle<Map> owner(map->FindFieldOwner(isolate, descriptor), isolate);
+  PropertyDetails details =
+      owner->instance_descriptors(kRelaxedLoad).GetDetails(descriptor);
+  return zone
+      ->New<FieldRepresentationDependency2>(owner, descriptor,
+                                            details.representation())
+      ->PersistHandles(isolate);
+}
+
+CompilationDependency const*
 CompilationDependencies::FieldTypeDependencyOffTheRecord(
     const MapRef& map, InternalIndex descriptor) const {
   DCHECK(!map.IsNeverSerializedHeapObject());
@@ -652,6 +794,18 @@ CompilationDependencies::FieldTypeDependencyOffTheRecord(
   ObjectRef type = owner.GetFieldType(descriptor);
   DCHECK(type.equals(map.GetFieldType(descriptor)));
   return zone_->New<FieldTypeDependency>(owner, descriptor, type);
+}
+
+CompilationDependency const*
+CompilationDependencies::FieldTypeDependencyOffTheRecord2(
+    Isolate* isolate, Zone* zone, Handle<Map> map,
+    InternalIndex descriptor) const {
+  Handle<Map> owner(map->FindFieldOwner(isolate, descriptor), isolate);
+  Handle<FieldType> type(
+      owner->instance_descriptors(kRelaxedLoad).GetFieldType(descriptor),
+      isolate);
+  return zone->New<FieldTypeDependency2>(owner, descriptor, type)
+      ->PersistHandles(isolate);
 }
 
 }  // namespace compiler

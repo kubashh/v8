@@ -46,7 +46,7 @@ namespace {
 bool HasOnlyNumberMaps(JSHeapBroker* broker,
                        ZoneVector<Handle<Map>> const& maps) {
   for (auto map : maps) {
-    MapRef map_ref(broker, map);
+    MapRef map_ref(broker, map, ObjectRef::BackgroundSerialization::kAllowed);
     if (map_ref.instance_type() != HEAP_NUMBER_TYPE) return false;
   }
   return true;
@@ -177,8 +177,12 @@ Node* PropertyAccessBuilder::TryBuildLoadConstantDataField(
   }
 
   JSObjectRef holder_ref(broker(), holder);
-  base::Optional<ObjectRef> value = holder_ref.GetOwnDataProperty(
-      access_info.field_representation(), access_info.field_index());
+  // TODO: Thread revisit to callers.
+  base::Optional<ObjectRef> value =
+      holder_ref
+          .GetOwnDataPropertyDontPostpone(access_info.field_representation(),
+                                          access_info.field_index())
+          .maybe_value();
   if (!value.has_value()) {
     return nullptr;
   }
@@ -298,7 +302,8 @@ Node* PropertyAccessBuilder::BuildLoadDataField(
     // used by the LoadElimination to eliminate map checks on the result.
     Handle<Map> field_map;
     if (access_info.field_map().ToHandle(&field_map)) {
-      MapRef field_map_ref(broker(), field_map);
+      MapRef field_map_ref(broker(), field_map,
+                           ObjectRef::BackgroundSerialization::kAllowed);
       if (field_map_ref.is_stable()) {
         dependencies()->DependOnStableMap(field_map_ref);
         field_access.map = field_map;

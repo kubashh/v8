@@ -314,6 +314,61 @@ ConstFieldInfo PropertyAccessInfo::GetConstFieldInfo() const {
   return ConstFieldInfo::None();
 }
 
+void PropertyAccessInfo::CreatePersistentHandles(Isolate* isolate) {
+  for (size_t i = 0; i < lookup_start_object_maps_.size(); i++) {
+    lookup_start_object_maps_[i] =
+        isolate->AsLocalIsolate()->heap()->NewPersistentHandle(
+            lookup_start_object_maps_[i]);
+  }
+  for (size_t i = 0; i < unrecorded_dependencies_.size(); i++) {
+    CHECK_NE(reinterpret_cast<CompilationDependency*>(0xcdcdcdcdcdcdcdcd),
+             unrecorded_dependencies_[i]);
+    const_cast<CompilationDependency*>(unrecorded_dependencies_[i])
+        ->PersistHandles(isolate);
+  }
+  if (!constant_.is_null()) {
+    constant_ =
+        isolate->AsLocalIsolate()->heap()->NewPersistentHandle(constant_);
+  }
+#define CREATE_MHANDLE(name)                                       \
+  if (!name.is_null()) {                                           \
+    name = isolate->AsLocalIsolate()->heap()->NewPersistentHandle( \
+        name.ToHandleChecked());                                   \
+  }
+  CREATE_MHANDLE(transition_map_);
+  CREATE_MHANDLE(holder_);
+  CREATE_MHANDLE(field_owner_map_);
+  CREATE_MHANDLE(field_map_);
+#undef CREATE_MHANDLE
+}
+
+void PropertyAccessInfo::MoveToBackgroundThread(JSHeapBroker* broker) {
+  for (size_t i = 0; i < lookup_start_object_maps_.size(); i++) {
+    lookup_start_object_maps_[i] =
+        broker->CanonicalPersistentHandle(lookup_start_object_maps_[i]);
+  }
+  for (size_t i = 0; i < unrecorded_dependencies_.size(); i++) {
+    // Continue here. These ptrs are occasionally invalid.
+    // Why? The zone should still be alive..
+    unrecorded_dependencies_[i] = unrecorded_dependencies_[i]->ToRef(broker);
+  }
+#define REHANDLE(name)                              \
+  if (!name.is_null()) {                            \
+    name = broker->CanonicalPersistentHandle(name); \
+  }
+#define REMHANDLE(name)                                               \
+  if (!name.is_null()) {                                              \
+    name = broker->CanonicalPersistentHandle(name.ToHandleChecked()); \
+  }
+  REHANDLE(constant_);
+  REMHANDLE(transition_map_);
+  REMHANDLE(holder_);
+  REMHANDLE(field_owner_map_);
+  REMHANDLE(field_map_);
+#undef REHANDLE
+#undef REMHANDLE
+}
+
 AccessInfoFactory::AccessInfoFactory(JSHeapBroker* broker,
                                      CompilationDependencies* dependencies,
                                      Zone* zone)
@@ -439,6 +494,138 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
   } else {
     map_ref.SerializeOwnDescriptor(descriptor);
     constness = dependencies()->DependOnFieldConstness(map_ref, descriptor);
+  }
+  Handle<Map> field_owner_map(map->FindFieldOwner(isolate(), descriptor),
+                              isolate());
+  switch (constness) {
+    case PropertyConstness::kMutable:
+      return PropertyAccessInfo::DataField(
+          zone(), receiver_map, std::move(unrecorded_dependencies), field_index,
+          details_representation, field_type, field_owner_map, field_map,
+          holder);
+    case PropertyConstness::kConst:
+      return PropertyAccessInfo::DataConstant(
+          zone(), receiver_map, std::move(unrecorded_dependencies), field_index,
+          details_representation, field_type, field_owner_map, field_map,
+          holder);
+  }
+  UNREACHABLE();
+}
+
+namespace {
+OddballType GetOddballType(Isolate* isolate, Map map) {
+  if (map.instance_type() != ODDBALL_TYPE) {
+    return OddballType::kNone;
+  }
+  ReadOnlyRoots roots(isolate);
+  if (map == roots.undefined_map()) {
+    return OddballType::kUndefined;
+  }
+  if (map == roots.null_map()) {
+    return OddballType::kNull;
+  }
+  if (map == roots.boolean_map()) {
+    return OddballType::kBoolean;
+  }
+  if (map == roots.the_hole_map()) {
+    return OddballType::kHole;
+  }
+  if (map == roots.uninitialized_map()) {
+    return OddballType::kUninitialized;
+  }
+  DCHECK(map == roots.termination_exception_map() ||
+         map == roots.arguments_marker_map() ||
+         map == roots.optimized_out_map() || map == roots.stale_register_map());
+  return OddballType::kOther;
+}
+}  // namespace
+   // namespace
+
+PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo2(
+    Handle<Map> receiver_map, Handle<Map> map, MaybeHandle<JSObject> holder,
+    InternalIndex descriptor, AccessMode access_mode) const {
+  DCHECK(descriptor.is_found());
+  Handle<DescriptorArray> descriptors(map->instance_descriptors(kRelaxedLoad),
+                                      isolate());
+  PropertyDetails const details = descriptors->GetDetails(descriptor);
+  int index = descriptors->GetFieldIndex(descriptor);
+  Representation details_representation = details.representation();
+  if (details_representation.IsNone()) {
+    // The ICs collect feedback in PREMONOMORPHIC state already,
+    // but at this point the {receiver_map} might still contain
+    // fields for which the representation has not yet been
+    // determined by the runtime. So we need to catch this case
+    // here and fall back to use the regular IC logic instead.
+    return PropertyAccessInfo::Invalid(zone());
+  }
+  FieldIndex field_index =
+      FieldIndex::ForPropertyIndex(*map, index, details_representation);
+  Type field_type = Type::NonInternal();
+  MaybeHandle<Map> field_map;
+  ZoneVector<CompilationDependency const*> unrecorded_dependencies(zone());
+  if (details_representation.IsSmi()) {
+    field_type = Type::SignedSmall();
+    unrecorded_dependencies.push_back(
+        dependencies()->FieldRepresentationDependencyOffTheRecord2(
+            isolate(), zone(), map, descriptor));
+  } else if (details_representation.IsDouble()) {
+    field_type = type_cache_->kFloat64;
+    unrecorded_dependencies.push_back(
+        dependencies()->FieldRepresentationDependencyOffTheRecord2(
+            isolate(), zone(), map, descriptor));
+  } else if (details_representation.IsHeapObject()) {
+    // Extract the field type from the property details (make sure its
+    // representation is TaggedPointer to reflect the heap object case).
+    Handle<FieldType> descriptors_field_type(
+        descriptors->GetFieldType(descriptor), isolate());
+    if (descriptors_field_type->IsNone()) {
+      // Store is not safe if the field type was cleared.
+      if (access_mode == AccessMode::kStore) {
+        return PropertyAccessInfo::Invalid(zone());
+      }
+
+      // The field type was cleared by the GC, so we don't know anything
+      // about the contents now.
+    }
+    unrecorded_dependencies.push_back(
+        dependencies()->FieldRepresentationDependencyOffTheRecord2(
+            isolate(), zone(), map, descriptor));
+    if (descriptors_field_type->IsClass()) {
+      // Remember the field map, and try to infer a useful type.
+      Handle<Map> map(descriptors_field_type->AsClass(), isolate());
+      HeapObjectType::Flags flags(0);
+      if (map->is_undetectable()) flags |= HeapObjectType::kUndetectable;
+      if (map->is_callable()) flags |= HeapObjectType::kCallable;
+      HeapObjectType t(map->instance_type(), flags,
+                       GetOddballType(isolate(), *map));
+      field_type = Type::For(t);
+      field_map = MaybeHandle<Map>(map);
+    }
+  } else {
+    CHECK(details_representation.IsTagged());
+  }
+  // TODO(turbofan): We may want to do this only depending on the use
+  // of the access info.
+  unrecorded_dependencies.push_back(
+      dependencies()->FieldTypeDependencyOffTheRecord2(isolate(), zone(), map,
+                                                       descriptor));
+
+  PropertyConstness constness;
+  if (details.IsReadOnly() && !details.IsConfigurable()) {
+    constness = PropertyConstness::kConst;
+  } else if (broker()->is_turboprop() && !map->is_prototype_map() &&
+             !IsAnyStore(access_mode)) {
+    // The constness feedback is too unstable for the aggresive compilation
+    // of turboprop.
+    constness = PropertyConstness::kMutable;
+  } else {
+    CompilationDependency* dep = nullptr;
+    dependencies()->DependOnFieldConstness2(isolate(), zone(), map, descriptor,
+                                            &constness, &dep);
+    if (dep != nullptr) {
+      // TODO: Could just make the above push multiple deps if needed.
+      unrecorded_dependencies.push_back(dep);
+    }
   }
   Handle<Map> field_owner_map(map->FindFieldOwner(isolate(), descriptor),
                               isolate());
@@ -641,6 +828,149 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
         // Implemented according to ES6 section 9.1.9 [[Set]] (P, V, Receiver)
         if (access_mode == AccessMode::kStore) {
           return LookupTransition(receiver_map, name, holder);
+        }
+        // The property was not found (access returns undefined or throws
+        // depending on the language mode of the load operation.
+        // Implemented according to ES6 section 9.1.8 [[Get]] (P, Receiver)
+        return PropertyAccessInfo::NotFound(zone(), receiver_map, holder);
+      } else {
+        return PropertyAccessInfo::Invalid(zone());
+      }
+    }
+
+    holder = handle(JSObject::cast(map->prototype()), isolate());
+    map = map_prototype_map;
+    CHECK(!map->is_deprecated());
+
+    if (!CanInlinePropertyAccess(map)) {
+      return PropertyAccessInfo::Invalid(zone());
+    }
+
+    // Successful lookup on prototype chain needs to guarantee that all
+    // the prototypes up to the holder have stable maps. Let us make sure
+    // the prototype maps are stable here.
+    CHECK(map->is_stable());
+  }
+  UNREACHABLE();
+}
+
+PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo2(
+    Handle<Map> map, Handle<Name> name, AccessMode access_mode) const {
+  CHECK(name->IsUniqueName());
+
+  if (access_mode == AccessMode::kHas && !map->IsJSReceiverMap()) {
+    return PropertyAccessInfo::Invalid(zone());
+  }
+
+  // Check if it is safe to inline property access for the {map}.
+  if (!CanInlinePropertyAccess(map)) {
+    return PropertyAccessInfo::Invalid(zone());
+  }
+
+  // We support fast inline cases for certain JSObject getters.
+  if (access_mode == AccessMode::kLoad || access_mode == AccessMode::kHas) {
+    PropertyAccessInfo access_info = LookupSpecialFieldAccessor(map, name);
+    if (!access_info.IsInvalid()) return access_info;
+  }
+
+  // Remember the receiver map. We use {map} as loop variable.
+  Handle<Map> receiver_map = map;
+  MaybeHandle<JSObject> holder;
+  while (true) {
+    // Lookup the named property on the {map}.
+    Handle<DescriptorArray> descriptors(map->instance_descriptors(kAcquireLoad),
+                                        isolate());
+    InternalIndex const number = descriptors->Search(*name, *map);
+    if (number.is_found()) {
+      PropertyDetails const details = descriptors->GetDetails(number);
+      if (access_mode == AccessMode::kStore ||
+          access_mode == AccessMode::kStoreInLiteral) {
+        // Don't bother optimizing stores to read-only properties.
+        if (details.IsReadOnly()) {
+          return PropertyAccessInfo::Invalid(zone());
+        }
+        if (details.kind() == kData && !holder.is_null()) {
+          // TODO.
+          return PropertyAccessInfo::Invalid(zone());
+          /*
+          // This is a store to a property not found on the receiver but on a
+          // prototype. According to ES6 section 9.1.9 [[Set]], we need to
+          // create a new data property on the receiver. We can still optimize
+          // if such a transition already exists.
+          return LookupTransition(receiver_map, name, holder);
+          */
+        }
+      }
+      if (details.location() == kField) {
+        if (details.kind() == kData) {
+          return ComputeDataFieldAccessInfo2(receiver_map, map, holder, number,
+                                             access_mode);
+        } else {
+          DCHECK_EQ(kAccessor, details.kind());
+          // TODO(turbofan): Add support for general accessors?
+          return PropertyAccessInfo::Invalid(zone());
+        }
+      } else {
+        DCHECK_EQ(kDescriptor, details.location());
+        DCHECK_EQ(kAccessor, details.kind());
+        // TODO.
+        return PropertyAccessInfo::Invalid(zone());
+        /*
+        return ComputeAccessorDescriptorAccessInfo(receiver_map, name, map,
+                                                   holder, number, access_mode);
+        */
+      }
+      UNREACHABLE();
+    }
+
+    // The property wasn't found on {map}. Look on the prototype if appropriate.
+
+    // Don't search on the prototype chain for special indices in case of
+    // integer indexed exotic objects (see ES6 section 9.4.5).
+    if (map->IsJSTypedArrayMap() && name->IsString() &&
+        IsSpecialIndex(String::cast(*name))) {
+      return PropertyAccessInfo::Invalid(zone());
+    }
+
+    // Don't search on the prototype when storing in literals.
+    if (access_mode == AccessMode::kStoreInLiteral) {
+      // TODO.
+      return PropertyAccessInfo::Invalid(zone());
+      /*
+      return LookupTransition(receiver_map, name, holder);
+      */
+    }
+
+    // Don't lookup private symbols on the prototype chain.
+    if (name->IsPrivate()) {
+      return PropertyAccessInfo::Invalid(zone());
+    }
+
+    // Acquire synchronously the map's prototype's map to guarantee that every
+    // time we use it, we use the same Map.
+    Handle<Map> map_prototype_map(map->prototype().synchronized_map(),
+                                  isolate());
+    if (!map_prototype_map->IsJSObjectMap()) {
+      // Perform the implicit ToObject for primitives here.
+      // Implemented according to ES6 section 7.3.2 GetV (V, P).
+      Handle<JSFunction> constructor;
+      if (Map::GetConstructorFunction(
+              map, broker()->target_native_context().object())
+              .ToHandle(&constructor)) {
+        map = handle(constructor->initial_map(), isolate());
+        map_prototype_map =
+            handle(map->prototype().synchronized_map(), isolate());
+        DCHECK(map_prototype_map->IsJSObjectMap());
+      } else if (map->prototype().IsNull()) {
+        // Store to property not found on the receiver or any prototype, we need
+        // to transition to a new data property.
+        // Implemented according to ES6 section 9.1.9 [[Set]] (P, V, Receiver)
+        if (access_mode == AccessMode::kStore) {
+          // TODO.
+          return PropertyAccessInfo::Invalid(zone());
+          /*
+          return LookupTransition(receiver_map, name, holder);
+          */
         }
         // The property was not found (access returns undefined or throws
         // depending on the language mode of the load operation.

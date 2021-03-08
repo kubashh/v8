@@ -325,7 +325,7 @@ Object OptimizeFunctionOnNextCall(RuntimeArguments& args, Isolate* isolate,
     return ReadOnlyRoots(isolate).undefined_value();
   }
 
-  ConcurrencyMode concurrency_mode = ConcurrencyMode::kNotConcurrent;
+  ConcurrencyMode concurrency_mode = ConcurrencyMode::kConcurrent;
   if (args.length() == 2) {
     CONVERT_ARG_HANDLE_CHECKED(Object, type, 1);
     if (!type->IsString()) return CrashUnlessFuzzing(isolate);

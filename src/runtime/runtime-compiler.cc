@@ -39,6 +39,9 @@ bool MaybeSpawnNativeContextIndependentCompilationJob(
 
 Object CompileOptimized(Isolate* isolate, Handle<JSFunction> function,
                         ConcurrencyMode mode) {
+  // Ninja.
+  isolate->PumpHeapBrokerTaskQueues();
+
   StackLimitCheck check(isolate);
   if (check.JsHasOverflowed(kStackSpaceRequiredForCompilation * KB)) {
     return isolate->StackOverflow();

@@ -115,6 +115,10 @@ class PropertyAccessInfo final {
   bool HasTransitionMap() const { return !transition_map().is_null(); }
   ConstFieldInfo GetConstFieldInfo() const;
 
+  // Canonicalize handles, ToRef deps.
+  void CreatePersistentHandles(Isolate* isolate);
+  void MoveToBackgroundThread(JSHeapBroker* broker);
+
   Kind kind() const { return kind_; }
   MaybeHandle<JSObject> holder() const {
     // TODO(neis): There was a CHECK here that tries to protect against
@@ -204,6 +208,9 @@ class AccessInfoFactory final {
   PropertyAccessInfo ComputePropertyAccessInfo(Handle<Map> map,
                                                Handle<Name> name,
                                                AccessMode access_mode) const;
+  PropertyAccessInfo ComputePropertyAccessInfo2(Handle<Map> map,
+                                                Handle<Name> name,
+                                                AccessMode access_mode) const;
 
   MinimorphicLoadPropertyAccessInfo ComputePropertyAccessInfo(
       MinimorphicLoadPropertyAccessFeedback const& feedback) const;
@@ -239,6 +246,11 @@ class AccessInfoFactory final {
                                                 MaybeHandle<JSObject> holder,
                                                 InternalIndex descriptor,
                                                 AccessMode access_mode) const;
+  PropertyAccessInfo ComputeDataFieldAccessInfo2(Handle<Map> receiver_map,
+                                                 Handle<Map> map,
+                                                 MaybeHandle<JSObject> holder,
+                                                 InternalIndex descriptor,
+                                                 AccessMode access_mode) const;
   PropertyAccessInfo ComputeAccessorDescriptorAccessInfo(
       Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
       MaybeHandle<JSObject> holder, InternalIndex descriptor,

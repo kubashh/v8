@@ -8,6 +8,7 @@
 #include <limits>
 
 #include "src/base/logging.h"
+#include "src/base/platform/mutex.h"
 #include "src/common/globals.h"
 #include "src/utils/utils.h"
 #include "src/zone/accounting-allocator.h"
@@ -54,6 +55,7 @@ class V8_EXPORT_PRIVATE Zone final {
   // associated with the provided TypeTag type.
   template <typename TypeTag>
   void* Allocate(size_t size) {
+    v8::base::MutexGuard guard(&mutex_);
 #ifdef V8_USE_ADDRESS_SANITIZER
     return AsanNew(size);
 #else
@@ -81,6 +83,7 @@ class V8_EXPORT_PRIVATE Zone final {
   // associated with the provided TypeTag type.
   template <typename TypeTag = void>
   void Delete(void* pointer, size_t size) {
+    v8::base::MutexGuard guard(&mutex_);
     DCHECK_NOT_NULL(pointer);
     DCHECK_NE(size, 0);
     size = RoundUp(size, kAlignmentInBytes);
@@ -235,6 +238,8 @@ class V8_EXPORT_PRIVATE Zone final {
   // The number of bytes freed in this zone so far.
   size_t freed_size_for_tracing_ = 0;
 #endif
+
+  v8::base::Mutex mutex_;
 };
 
 // ZoneObject is an abstraction that helps define classes of objects

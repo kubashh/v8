@@ -56,7 +56,7 @@ class HandleBase {
   // TODO(leszeks): This should probably be a const Address*, to encourage using
   // PatchValue for modifying the handle's value.
   V8_INLINE Address* location() const {
-    SLOW_DCHECK(location_ == nullptr || IsDereferenceAllowed());
+    // SLOW_DCHECK(location_ == nullptr || IsDereferenceAllowed());
     return location_;
   }
 
@@ -136,7 +136,8 @@ class Handle final : public HandleBase {
   V8_INLINE T operator*() const {
     // unchecked_cast because we rather trust Handle<T> to contain a T than
     // include all the respective -inl.h headers for SLOW_DCHECKs.
-    SLOW_DCHECK(IsDereferenceAllowed());
+    // TODO.
+    // SLOW_DCHECK(IsDereferenceAllowed());
     return T::unchecked_cast(Object(*location()));
   }
 

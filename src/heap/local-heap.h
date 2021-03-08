@@ -79,6 +79,9 @@ class V8_EXPORT_PRIVATE LocalHeap {
     return kNullMaybeHandle;
   }
 
+  bool has_persistent_handles() const {
+    return persistent_handles_.get() != nullptr;
+  }
   void AttachPersistentHandles(
       std::unique_ptr<PersistentHandles> persistent_handles);
   std::unique_ptr<PersistentHandles> DetachPersistentHandles();
