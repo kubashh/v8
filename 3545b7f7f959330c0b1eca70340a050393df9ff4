@@ -124,6 +124,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "872fa9d1_e443f182",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T13:41:45Z",
+      "side": 1,
+      "message": "I am lacking background knowledge here, but can we just always use unsigned then?\nEither way, please add a short comment to say something about this in the code.",
+      "parentUuid": "1d263b75_00238c59",
+      "revId": "3545b7f7f959330c0b1eca70340a050393df9ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "09ca1920_4aa507ae",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 6
