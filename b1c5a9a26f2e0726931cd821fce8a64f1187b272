@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56dd14da_d50c2aac",
+        "filename": "src/baseline/x64/baseline-assembler-x64-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-03-08T14:51:03Z",
+      "side": 0,
+      "message": "IIRC this was a code-size optimisation, we may not want to remove it? +verwaest who added it.",
+      "range": {
+        "startLine": 122,
+        "startChar": 2,
+        "endLine": 122,
+        "endChar": 54
+      },
+      "revId": "b1c5a9a26f2e0726931cd821fce8a64f1187b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
