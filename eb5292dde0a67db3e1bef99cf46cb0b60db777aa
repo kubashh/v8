@@ -35,6 +35,57 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f752b0b3_181ec047",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t see how this can work for wasm. We should have a design doc to discuss how this can be implemented. Alternatively, we need to skip wasm for now.\n(plus a few nits)",
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2247f492_24dacadd",
+        "filename": "BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "I think this \"\" default is only needed if you want to derive the value in case it\u0027s not explicitly given.\nSince you don\u0027t do this, you can just default to `false` here.",
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bb16790_02512f6d",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "Where is the start of this comment?",
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62bc380f_89f70d1b",
@@ -54,6 +105,149 @@
         "endLine": 1944,
         "endChar": 14
       },
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a143342_b93e63c9",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1958,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "505af742_4742bb82",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 979,
+        "startChar": 33,
+        "endLine": 979,
+        "endChar": 40
+      },
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cf56283_f3453fa4",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 984,
+        "startChar": 33,
+        "endLine": 984,
+        "endChar": 40
+      },
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c7401e7_00f95251",
+        "filename": "src/codegen/x64/macro-assembler-x64.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 528,
+        "startChar": 33,
+        "endLine": 528,
+        "endChar": 40
+      },
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f518c99_060fb986",
+        "filename": "src/codegen/x64/macro-assembler-x64.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 533,
+        "startChar": 33,
+        "endLine": 533,
+        "endChar": 40
+      },
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f777a941_e1c7f9fd",
+        "filename": "src/common/globals.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "This is the wrong comment :)",
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8caa5d2f_0a3caaf2",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-08T14:59:42Z",
+      "side": 1,
+      "message": "A NativeModule is totally isolate-independent. The AddCodeSpace method (where you are using the stored isolate) can be called from any thread, and at that point the original isolate might already be gone.\nIf you temporarily need *any* isolate that currently uses the native module, you could get that via the WasmEngine, but then calling into the embedded blob of that isolate will only work as long as that isolate is alive.\n\nI don\u0027t see a way currently to make this work for wasm.\nWas there a design doc that I missed?",
       "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
