@@ -365,6 +365,7 @@ TNode<Float64T> Float64Add(TNode<Float64T> a, TNode<Float64T> b);
   V(Float64RoundTiesEven, Float64T, Float64T)                  \
   V(Float64RoundTruncate, Float64T, Float64T)                  \
   V(Word32Clz, Int32T, Word32T)                                \
+  V(Word64Clz, Int64T, Word64T)                                \
   V(Word32BitwiseNot, Word32T, Word32T)                        \
   V(WordNot, WordT, WordT)                                     \
   V(Word64Not, Word64T, Word64T)                               \
@@ -983,6 +984,24 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   TNode<BoolT> Word32NotEqual(TNode<Word32T> left, TNode<Word32T> right);
   TNode<BoolT> Word64Equal(TNode<Word64T> left, TNode<Word64T> right);
   TNode<BoolT> Word64NotEqual(TNode<Word64T> left, TNode<Word64T> right);
+
+  TNode<Word32T> Word32Popcnt(TNode<Word32T> value);
+  TNode<Uint32T> Word32Popcnt(TNode<Uint32T> value) {
+    return Unsigned(Word32Popcnt(UncheckedCast<Word32T>(value)));
+  }
+  TNode<Word64T> Word64Popcnt(TNode<Word64T> value);
+  TNode<Uint64T> Word64Popcnt(TNode<Uint64T> value) {
+    return Unsigned(Word64Popcnt(UncheckedCast<Word64T>(value)));
+  }
+
+  TNode<Word32T> Word32Ctz(TNode<Word32T> value);
+  TNode<Uint32T> Word32Ctz(TNode<Uint32T> value) {
+    return Unsigned(Word32Ctz(UncheckedCast<Word32T>(value)));
+  }
+  TNode<Word64T> Word64Ctz(TNode<Word64T> value);
+  TNode<Uint64T> Word64Ctz(TNode<Uint64T> value) {
+    return Unsigned(Word64Ctz(UncheckedCast<Word64T>(value)));
+  }
 
   TNode<BoolT> Word32Or(TNode<BoolT> left, TNode<BoolT> right) {
     return UncheckedCast<BoolT>(Word32Or(static_cast<TNode<Word32T>>(left),
