@@ -197,7 +197,7 @@ class BaselineCompiler {
   }
 
   BaselineLabels** labels_;
-  ZoneSet<int> handler_offsets_;
+  int* next_handler_offset_;
 };
 
 }  // namespace baseline
