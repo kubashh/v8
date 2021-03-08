@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "08c04e5b0bd6bcc81f7536000dd0b31fa208fc01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8a4bf1d_aec20620",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-08T20:35:39Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "08c04e5b0bd6bcc81f7536000dd0b31fa208fc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3464de6_d36b6b6a",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 4994,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-08T20:35:39Z",
+      "side": 1,
+      "message": "I guess the alternative here would be to force/require the v8_enable_webassembly setting when the wee8 target is requested. But off the top of my head I\u0027m not sure whether/how that\u0027s feasible, and at any rate we can figure it out later. This is fine for now.",
+      "range": {
+        "startLine": 4994,
+        "startChar": 21,
+        "endLine": 4994,
+        "endChar": 25
+      },
+      "revId": "08c04e5b0bd6bcc81f7536000dd0b31fa208fc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
