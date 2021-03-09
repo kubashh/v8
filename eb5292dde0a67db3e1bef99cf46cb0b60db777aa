@@ -142,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11d76f2c_950e60cf",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-09T13:00:21Z",
+      "side": 1,
+      "message": "We could probably remove this by now.\n\nIt was quite useful to spot sections in generated sparkplug code, since a lot of code wasn\u0027t properly annotated, looking for the next comment alone usually wasn\u0027t enough.\n\nWe used to have a RecordComment(..) object in the past (again, that\u0027s rather heavyweight)",
+      "parentUuid": "c3214727_af986f9b",
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62bc380f_89f70d1b",
         "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
         "patchSetId": 11
