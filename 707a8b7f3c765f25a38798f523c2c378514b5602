@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dad61e42_02524db6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-09T09:01:27Z",
+      "side": 1,
+      "message": "Jakob: ptal at the usage of the new predicate.\n\nSigurd: ptal at test/cctest/test-debug.cc. The test started failing in Debug::SetTerminateOnResume with scope \u003d\u003d nullptr. IIUC it is a timing issue: the background thread reaches Debug::SetTerminateOnResume when the main thread has already returned from the \"debugger\" break. I added another semaphore to ensure that the main thread waits for the background thread in the break point.\n\nYang: fyi.",
+      "revId": "707a8b7f3c765f25a38798f523c2c378514b5602",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
