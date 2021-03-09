@@ -22,6 +22,30 @@
       },
       "revId": "b1c5a9a26f2e0726931cd821fce8a64f1187b272",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01712881_7980a6c8",
+        "filename": "src/baseline/x64/baseline-assembler-x64-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-03-09T12:51:09Z",
+      "side": 0,
+      "message": "This was a performance optimisation more than code size. The compiler just compiled faster as well. We want these calls to be as fast as possible; wrapping around it in the baseline compiler was simply a way of not just doing what the macro-assembler did, which was slower than the code here. Direct rip-relative is faster; and that\u0027s exactly what Igor was investigating :) rip-relative calls shouldn\u0027t be bigger than RootRegister-indexing indirect calls.",
+      "parentUuid": "56dd14da_d50c2aac",
+      "range": {
+        "startLine": 122,
+        "startChar": 2,
+        "endLine": 122,
+        "endChar": 54
+      },
+      "revId": "b1c5a9a26f2e0726931cd821fce8a64f1187b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
