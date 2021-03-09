@@ -56,6 +56,30 @@
       },
       "revId": "08c04e5b0bd6bcc81f7536000dd0b31fa208fc01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68f8b070_0a44a17d",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 4994,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-09T11:24:15Z",
+      "side": 1,
+      "message": "I am not sure if we can somehow assert that v8_enable_webassembly is set if this target is built. But if the target just does not exists, you will also get a nice error message.\nDoesn\u0027t ninja per default just build all targets? At least I have a few recent libwee8.a in my out folder. So not providing it is the right thing here, for people that just run \"autoninja -C \u003cdir\u003e\" (like I like to do).",
+      "parentUuid": "b3464de6_d36b6b6a",
+      "range": {
+        "startLine": 4994,
+        "startChar": 21,
+        "endLine": 4994,
+        "endChar": 25
+      },
+      "revId": "08c04e5b0bd6bcc81f7536000dd0b31fa208fc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
