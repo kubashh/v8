@@ -140,6 +140,24 @@
       "parentUuid": "990c3b58_b47171fd",
       "revId": "4341a31bb36640f9a22d745f4f448f56e246177c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f39ce9b_692c64f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-03-09T15:51:36Z",
+      "side": 1,
+      "message": "I played around with this a bit more, and I can remove the body of function index #1 and it still works. That makes the first two functions empty. But if I remove either function index #0 or #1 it does not. Somehow 3 functions are needed.",
+      "parentUuid": "fa23324e_063d5f14",
+      "revId": "4341a31bb36640f9a22d745f4f448f56e246177c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
