@@ -104,6 +104,24 @@
       "parentUuid": "62911861_ec17031a",
       "revId": "4341a31bb36640f9a22d745f4f448f56e246177c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "990c3b58_b47171fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-03-09T13:31:56Z",
+      "side": 1,
+      "message": "Yes, I wasn\u0027t able to hit the AcquireByType function without defining 3 functions. I noticed this pattern in another test, and copied it. Do you know why?",
+      "parentUuid": "efe7cbe6_ca15c658",
+      "revId": "4341a31bb36640f9a22d745f4f448f56e246177c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
