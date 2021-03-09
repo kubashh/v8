@@ -122,6 +122,24 @@
       "parentUuid": "efe7cbe6_ca15c658",
       "revId": "4341a31bb36640f9a22d745f4f448f56e246177c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa23324e_063d5f14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-09T13:39:24Z",
+      "side": 1,
+      "message": "AcquireByType is used for moves between stack slots. I would have expected the first call to already hit this then. No idea why the second one was needed. Wouldn\u0027t this produce exactly the same code for functions 1 and 2?",
+      "parentUuid": "990c3b58_b47171fd",
+      "revId": "4341a31bb36640f9a22d745f4f448f56e246177c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
