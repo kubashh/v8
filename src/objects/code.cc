@@ -6,6 +6,7 @@
 
 #include <iomanip>
 
+#include "src/base/logging.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/cpu-features.h"
 #include "src/codegen/reloc-info.h"
@@ -131,8 +132,8 @@ void Code::CopyFromNoFlush(Heap* heap, const CodeDesc& desc) {
   }
 }
 
-SafepointEntry Code::GetSafepointEntry(Address pc) {
-  SafepointTable table(*this);
+SafepointEntry Code::GetSafepointEntry(Isolate* isolate, Address pc) {
+  SafepointTable table(isolate, pc, *this);
   return table.FindEntry(pc);
 }
 
@@ -150,7 +151,11 @@ Address Code::OffHeapInstructionStart() const {
   if (Isolate::CurrentEmbeddedBlobCode() == nullptr) {
     return raw_instruction_size();
   }
-  EmbeddedData d = EmbeddedData::FromBlob();
+  // TODO(11527): pass Isolate as an argument.
+  EmbeddedData d =
+      FLAG_short_builtin_calls
+          ? EmbeddedData::FromBlob(GetIsolateFromWritableObject(*this))
+          : EmbeddedData::FromBlob();
   return d.InstructionStartOfBuiltin(builtin_index());
 }
 
@@ -159,7 +164,30 @@ Address Code::OffHeapInstructionEnd() const {
   if (Isolate::CurrentEmbeddedBlobCode() == nullptr) {
     return raw_instruction_size();
   }
-  EmbeddedData d = EmbeddedData::FromBlob();
+  // TODO(11527): pass Isolate as an argument.
+  EmbeddedData d =
+      FLAG_short_builtin_calls
+          ? EmbeddedData::FromBlob(GetIsolateFromWritableObject(*this))
+          : EmbeddedData::FromBlob();
+  return d.InstructionStartOfBuiltin(builtin_index()) +
+         d.InstructionSizeOfBuiltin(builtin_index());
+}
+
+Address Code::OffHeapInstructionStart(Isolate* isolate, Address pc) const {
+  DCHECK(is_off_heap_trampoline());
+  if (Isolate::CurrentEmbeddedBlobCode() == nullptr) {
+    return raw_instruction_size();
+  }
+  EmbeddedData d = EmbeddedData::GetEmbeddedDataForPC(isolate, pc);
+  return d.InstructionStartOfBuiltin(builtin_index());
+}
+
+Address Code::OffHeapInstructionEnd(Isolate* isolate, Address pc) const {
+  DCHECK(is_off_heap_trampoline());
+  if (Isolate::CurrentEmbeddedBlobCode() == nullptr) {
+    return raw_instruction_size();
+  }
+  EmbeddedData d = EmbeddedData::GetEmbeddedDataForPC(isolate, pc);
   return d.InstructionStartOfBuiltin(builtin_index()) +
          d.InstructionSizeOfBuiltin(builtin_index());
 }
@@ -582,7 +610,7 @@ void Code::Disassemble(const char* name, std::ostream& os, Isolate* isolate,
   os << "\n";
 
   if (has_safepoint_info()) {
-    SafepointTable table(*this);
+    SafepointTable table(isolate, current_pc, *this);
     os << "Safepoints (size = " << table.size() << ")\n";
     for (unsigned i = 0; i < table.length(); i++) {
       unsigned pc_offset = table.GetPcOffset(i);
@@ -889,6 +917,7 @@ void DependentCode::DeoptimizeDependentCodeGroup(
   bool marked = MarkCodeForDeoptimization(group);
   if (marked) {
     DCHECK(AllowCodeDependencyChange::IsAllowed());
+    // TODO(11527): pass Isolate as an argument.
     Deoptimizer::DeoptimizeMarkedCode(GetIsolateFromWritableObject(*this));
   }
 }

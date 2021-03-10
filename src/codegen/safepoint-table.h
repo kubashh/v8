@@ -69,7 +69,9 @@ class SafepointEntry {
 
 class SafepointTable {
  public:
-  explicit SafepointTable(Code code);
+  // The isolate and pc arguments are used for figuring out whether pc
+  // belongs to the embeded or un-embedded code blob.
+  explicit SafepointTable(Isolate* isolate, Address pc, Code code);
   explicit SafepointTable(const wasm::WasmCode* code);
 
   SafepointTable(const SafepointTable&) = delete;
