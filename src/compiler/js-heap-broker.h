@@ -33,6 +33,7 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+class Node;
 class ObjectRef;
 
 std::ostream& operator<<(std::ostream& os, const ObjectRef& ref);
@@ -78,10 +79,166 @@ struct PropertyAccessTarget {
   };
 };
 
+class TFTask {
+ private:
+  enum Kind {
+    // Dummy kinds.
+    kNone,
+    kSome,
+    // Real ops.
+    kJSObjectGetOwnConstantElement,
+    kGetPropertyAccessInfo,
+  };
+
+ public:
+  TFTask() {}
+
+  static TFTask None(Node* node) {
+    return {node, kNone, {}, 0, {}, nullptr, nullptr};
+  }
+  static TFTask Some(Node* node, ObjectRef o) {
+    return {node, kSome, o, 0, {}, nullptr, nullptr};
+  }
+  static TFTask JSObjectGetOwnConstantElement(Node* node, JSObjectRef o,
+                                              uint32_t index) {
+    return {node,   kJSObjectGetOwnConstantElement, o, index, {}, nullptr,
+            nullptr};
+  }
+  static TFTask GetPropertyAccessInfo(Node* node, MapRef map, NameRef name,
+                                      AccessMode access_mode,
+                                      CompilationDependencies* dependencies,
+                                      JSHeapBroker* broker) {
+    return {
+        node, kGetPropertyAccessInfo, map,   static_cast<uint32_t>(access_mode),
+        name, dependencies,           broker};
+  }
+
+  Node* node() const { return node_; }
+
+  void ProcessOnMainThread(Isolate* isolate);
+  void PostprocessOnBackgroundThread(JSHeapBroker* broker);
+
+ private:
+  TFTask(Node* node, Kind kind, base::Optional<ObjectRef> data0, uint32_t data1,
+         base::Optional<ObjectRef> data2, CompilationDependencies* data3,
+         JSHeapBroker* broker)
+      : node_(node),
+        kind_(kind),
+        data0_(data0),
+        data1_(data1),
+        data2_(data2),
+        data3_(data3),
+        broker_(broker) {}
+
+  Node* node_ = nullptr;
+  Kind kind_ = kNone;
+  base::Optional<ObjectRef> data0_;
+  uint32_t data1_ = 0;
+  base::Optional<ObjectRef> data2_;
+  CompilationDependencies* data3_ = nullptr;
+  Handle<Object> result0_;
+  base::Optional<PropertyAccessInfo2> result1_;
+  // For the mt_zone and isolate.
+  JSHeapBroker* broker_ = nullptr;
+};
+
+template <class Task, int kLength>
+class CircularTaskQueue {
+ public:
+  CircularTaskQueue()
+      : first_processed_task_(0), first_pending_task_(0), end_(0) {
+    DCHECK(base::bits::IsPowerOfTwo(kLength));
+  }
+
+  // BT-only.
+  bool TryPush(const Task& task) {
+    const int last_end = end_.load(std::memory_order_relaxed);
+    const int next_end = Index(last_end + 1);
+    DCHECK_LT(last_end, kLength);
+    DCHECK_LT(next_end, kLength);
+    if (next_end == first_processed_task_.load(std::memory_order_relaxed)) {
+      return false;  // Full.
+    }
+    tasks_[last_end] = task;
+    end_.store(next_end, std::memory_order_release);
+    return true;
+  }
+
+  // BT-only.
+  bool IsEmpty() {
+    return first_processed_task_.load(std::memory_order_relaxed) ==
+           end_.load(std::memory_order_relaxed);
+  }
+
+  // MT-only.
+  Task* TryGetNextPendingTask() {
+    const int first_pending_task =
+        first_pending_task_.load(std::memory_order_relaxed);
+    if (first_pending_task == end_.load(std::memory_order_acquire)) {
+      return nullptr;  // No pending tasks.
+    }
+    DCHECK_NE(first_pending_task_, end_);
+    return &tasks_[first_pending_task_];
+  }
+
+  // MT-only.
+  void MarkNextPendingTaskAsProcessed(const Task* task) {
+    DCHECK_EQ(task, TryGetNextPendingTask());
+    DCHECK_NOT_NULL(task);
+    USE(task);
+    first_pending_task_.store(Index(first_pending_task_ + 1),
+                              std::memory_order_release);
+  }
+
+  // BT-only.
+  bool HasNextProcessedTask() {
+    return first_pending_task_.load(std::memory_order_relaxed) !=
+           first_processed_task_.load(std::memory_order_relaxed);
+  }
+
+  // BT-only.
+  Task* TryPopNextProcessedTask() {
+    const int first_pending_task =
+        first_pending_task_.load(std::memory_order_acquire);
+    const int first_processed_task =
+        first_processed_task_.load(std::memory_order_relaxed);
+    if (first_processed_task == first_pending_task) {
+      return nullptr;  // No processed tasks.
+    }
+    DCHECK_NE(first_processed_task_, end_);
+    Task* result = &tasks_[first_processed_task];
+    first_processed_task_.store(Index(first_processed_task + 1),
+                                std::memory_order_relaxed);
+    return result;
+  }
+
+ private:
+  static constexpr int Index(int i) { return i % kLength; }
+
+  Task tasks_[kLength];
+
+  // All indices are modulo kLength. Conceptually:
+  //
+  //  first_processed_task_ <= first_pending_task_ <= end_
+  //  end_ < first_processed_task_
+  //
+  // end_ is only mutated by the owning background thread (BT), when pushing a
+  // new task. first_pending_task_ is only mutated by the main thread (MT), when
+  // marking a task as processed. first_processed_task_ is only mutated by the
+  // BT, when popping a processed task.
+  std::atomic<int> first_processed_task_;
+  std::atomic<int> first_pending_task_;
+  std::atomic<int> end_;
+};
+
+// Avg tasks per compilation: 20 on WTB.
+using BrokerTaskQueue = CircularTaskQueue<TFTask, 64>;
+
 class V8_EXPORT_PRIVATE JSHeapBroker {
  public:
   JSHeapBroker(Isolate* isolate, Zone* broker_zone, bool tracing_enabled,
-               bool is_concurrent_inlining, CodeKind code_kind);
+               bool is_concurrent_inlining, CodeKind code_kind,
+               Zone* mt_broker_zone = nullptr);
 
   // For use only in tests, sets default values for some arguments. Avoids
   // churn when new flags are added.
@@ -90,6 +247,25 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
                      CodeKind::TURBOFAN) {}
 
   ~JSHeapBroker();
+
+  void ClearCachedPropertyAccessInfosAfterSerialization();
+
+  BrokerTaskQueue broker_task_queue_;
+
+  bool attached_own_phs_ = false;
+
+  Zone* mt_zone() { return mt_broker_zone_; }
+  ZoneVector<TFTask> broker_task_queue_backlog_;
+
+  void PushTask(const TFTask& task) {
+    if (broker_task_queue_.TryPush(task)) return;
+    broker_task_queue_backlog_.push_back(task);
+  }
+  bool TaskQueueIsEmpty() { return broker_task_queue_.IsEmpty(); }
+  TFTask* TryPopNextProcessedTask() {
+    return broker_task_queue_.TryPopNextProcessedTask();
+  }
+  BrokerTaskQueue* broker_task_queue_ptr() { return &broker_task_queue_; }
 
   // The compilation target's native context. We need the setter because at
   // broker construction time we don't yet have the canonical handle.
@@ -230,7 +406,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
 
   // If {policy} is {kAssumeSerialized} and the broker doesn't know about the
   // combination of {map}, {name}, and {access_mode}, returns Invalid.
-  PropertyAccessInfo GetPropertyAccessInfo(
+  RefResult<PropertyAccessInfo> GetPropertyAccessInfo(
       MapRef map, NameRef name, AccessMode access_mode,
       CompilationDependencies* dependencies = nullptr,
       SerializationPolicy policy = SerializationPolicy::kAssumeSerialized);
@@ -309,15 +485,16 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
 
   RootIndexMap const& root_index_map() { return root_index_map_; }
 
+  // TODO.
+  bool IsMainThread() const {
+    return local_isolate() == nullptr || local_isolate()->is_main_thread();
+  }
+
  private:
   friend class HeapObjectRef;
   friend class ObjectRef;
   friend class ObjectData;
   friend class PropertyCellData;
-
-  bool IsMainThread() const {
-    return local_isolate() == nullptr || local_isolate()->is_main_thread();
-  }
 
   // If this returns false, the object is guaranteed to be fully initialized and
   // thus safe to read from a memory safety perspective. The converse does not
@@ -383,6 +560,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
 
   Isolate* const isolate_;
   Zone* const zone_ = nullptr;
+  Zone* const mt_broker_zone_ = nullptr;
   base::Optional<NativeContextRef> target_native_context_;
   RefsMap* refs_;
   RootIndexMap root_index_map_;
@@ -405,6 +583,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   ZoneUnorderedMap<PropertyAccessTarget, PropertyAccessInfo,
                    PropertyAccessTarget::Hash, PropertyAccessTarget::Equal>
       property_access_infos_;
+  friend class TFTask;
   ZoneUnorderedMap<FeedbackSource, MinimorphicLoadPropertyAccessInfo,
                    FeedbackSource::Hash, FeedbackSource::Equal>
       minimorphic_property_access_infos_;

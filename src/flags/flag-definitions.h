@@ -633,6 +633,8 @@ DEFINE_BOOL(stress_concurrent_inlining, false,
             "makes concurrent inlining more likely to trigger in tests")
 DEFINE_BOOL(turbo_direct_heap_access, false,
             "access kNeverSerialized objects directly from the heap")
+DEFINE_BOOL(turbo_stw, false, "STOP THE WORLD")
+DEFINE_BOOL(trace_turbo_stw, false, "trace STOP THE WORLD")
 DEFINE_IMPLICATION(stress_concurrent_inlining, concurrent_inlining)
 DEFINE_NEG_IMPLICATION(stress_concurrent_inlining, lazy_feedback_allocation)
 DEFINE_WEAK_VALUE_IMPLICATION(stress_concurrent_inlining, interrupt_budget,

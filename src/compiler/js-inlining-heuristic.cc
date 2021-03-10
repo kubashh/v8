@@ -152,7 +152,6 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
 
   // Check if we already saw that {node} before, and if so, just skip it.
   if (seen_.find(node->id()) != seen_.end()) return NoChange();
-  seen_.insert(node->id());
 
   // Check if the {node} is an appropriate candidate for inlining.
   Candidate candidate = CollectFunctions(node, kMaxCallPolymorphism);
@@ -229,6 +228,9 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
       candidate.frequency.value() < FLAG_min_inlining_frequency) {
     return NoChange();
   }
+
+  // TODO.
+  seen_.insert(node->id());
 
   // Forcibly inline small functions here. In the case of polymorphic inlining
   // candidate_is_small is set only when all functions are small.

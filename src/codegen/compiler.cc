@@ -1104,6 +1104,8 @@ bool GetOptimizedCodeLater(std::unique_ptr<OptimizedCompilationJob> job,
     return false;
   }
 
+  compilation_info->is_background = true;
+
   TimerEventScope<TimerEventRecompileSynchronous> timer(isolate);
   RuntimeCallTimerScope runtimeTimer(
       isolate, RuntimeCallCounterId::kOptimizeConcurrentPrepare);

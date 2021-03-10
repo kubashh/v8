@@ -772,6 +772,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   static int ArchiveSpacePerThread() { return sizeof(ThreadLocalTop); }
   void FreeThreadResources() { thread_local_top()->Free(); }
 
+  void RegisterHeapBrokerTaskQueue(void* q);
+  void UnregisterHeapBrokerTaskQueue(void* q);
+  void PumpHeapBrokerTaskQueues();
+
   // This method is called by the api after operations that may throw
   // exceptions.  If an exception was thrown and not handled by an external
   // handler the exception is scheduled to be rethrown when we return to running
@@ -1078,6 +1082,9 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   ThreadLocalTop const* thread_local_top() const {
     return &isolate_data_.thread_local_top_;
   }
+
+  void WaitSTW() { stw_sema_.Wait(); }
+  void SignalSTW() { stw_sema_.Signal(); }
 
   static uint32_t thread_in_wasm_flag_address_offset() {
     // For WebAssembly trap handlers there is a flag in thread-local storage
@@ -2011,6 +2018,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   CancelableTaskManager* cancelable_task_manager_ = nullptr;
 
+  base::Semaphore stw_sema_;
+
   debug::ConsoleDelegate* console_delegate_ = nullptr;
 
   debug::AsyncEventDelegate* async_event_delegate_ = nullptr;
@@ -2055,6 +2064,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   std::atomic<std::vector<MemoryRange>*> code_pages_{nullptr};
   std::vector<MemoryRange> code_pages_buffer1_;
   std::vector<MemoryRange> code_pages_buffer2_;
+
+  std::vector<void*> broker_task_queues_;
 
   // Enables the host application to provide a mechanism for recording a
   // predefined set of data as crash keys to be used in postmortem debugging

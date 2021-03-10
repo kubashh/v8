@@ -58,6 +58,10 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   // used to mutate fields without deoptimization of the dependent code.
   PropertyConstness DependOnFieldConstness(const MapRef& map,
                                            InternalIndex descriptor);
+  void DependOnFieldConstness2(Isolate* isolate, Zone* zone, Handle<Map> map,
+                               InternalIndex descriptor,
+                               PropertyConstness* constness_out,
+                               CompilationDependency** dependency_out);
 
   // Record the assumption that neither {cell}'s {CellType} changes, nor the
   // {IsReadOnly()} flag of {cell}'s {PropertyDetails}.
@@ -114,11 +118,17 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   // change. The field is identified by the arguments.
   CompilationDependency const* FieldRepresentationDependencyOffTheRecord(
       const MapRef& map, InternalIndex descriptor) const;
+  CompilationDependency const* FieldRepresentationDependencyOffTheRecord2(
+      Isolate* isolate, Zone* zone, Handle<Map> map,
+      InternalIndex descriptor) const;
 
   // Gather the assumption that the field type of a field does not change. The
   // field is identified by the arguments.
   CompilationDependency const* FieldTypeDependencyOffTheRecord(
       const MapRef& map, InternalIndex descriptor) const;
+  CompilationDependency const* FieldTypeDependencyOffTheRecord2(
+      Isolate* isolate, Zone* zone, Handle<Map> map,
+      InternalIndex descriptor) const;
 
  private:
   Zone* const zone_;

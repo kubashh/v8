@@ -8,6 +8,7 @@
 #include <limits>
 
 #include "src/codegen/tick-counter.h"
+#include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
 #include "src/compiler/graph.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/node-observer.h"
@@ -68,8 +69,24 @@ void GraphReducer::ReduceNode(Node* node) {
   DCHECK(stack_.empty());
   DCHECK(revisit_.empty());
   Push(node);
+  int blocked_count = 0;
+  int busy_waits = 0;
+  int busy_waits_in_usec = 0;
+  int tasks = 0;
+  const bool got_broker = broker_ != nullptr;
   for (;;) {
-    if (!stack_.empty()) {
+    TFTask* maybe_task = nullptr;
+    if (FLAG_turbo_stw && got_broker &&
+        (maybe_task = broker_->TryPopNextProcessedTask()) != nullptr) {
+      // Draining tasks is done first, just to interleave finished tasks ASAP.
+      do {
+        tasks++;
+        maybe_task->PostprocessOnBackgroundThread(broker_);
+        Node* n = maybe_task->node();
+        auto s = state_.Get(n);
+        if (s != State::kOnStack && s != State::kRevisit) Push(n);
+      } while ((maybe_task = broker_->TryPopNextProcessedTask()) != nullptr);
+    } else if (!stack_.empty()) {
       // Process the node on the top of the stack, potentially pushing more or
       // popping the node off the stack.
       ReduceTop();
@@ -81,14 +98,63 @@ void GraphReducer::ReduceNode(Node* node) {
         // state can change while in queue.
         Push(node);
       }
+    } else if (FLAG_turbo_stw && got_broker &&
+               (!broker_->broker_task_queue_backlog_.empty() ||
+                !broker_->TaskQueueIsEmpty())) {
+      while (!broker_->broker_task_queue_backlog_.empty()) {
+        if (!broker_->broker_task_queue_.TryPush(
+                broker_->broker_task_queue_backlog_.back())) {
+          break;
+        }
+        broker_->broker_task_queue_backlog_.pop_back();
+      }
+      if (!broker_->TaskQueueIsEmpty()) {
+        blocked_count++;
+
+        // TODO: Interrupt and potentially block on the main thread.
+        // TODO: Potentially spawn a task if no main thread is active.
+        broker_->isolate()
+            ->stack_guard()
+            ->RequestPumpTasksForConcurrentCompilation();
+
+        base::ElapsedTimer t;
+        if (FLAG_trace_turbo_stw) t.Start();
+        while (!broker_->broker_task_queue_.HasNextProcessedTask()) {
+          tick_counter_->TickAndMaybeEnterSafepoint();
+          if (broker_->isolate()
+                  ->optimizing_compile_dispatcher()
+                  ->IsFlushing()) {
+            return;
+          }
+          busy_waits++;
+        }
+
+        if (FLAG_trace_turbo_stw) {
+          busy_waits_in_usec += static_cast<int>(t.Elapsed().InMicroseconds());
+        }
+        /*
+        broker_->isolate()->stack_guard()->RequestPumpTasksForConcurrentCompilation();
+        broker_->isolate()->WaitSTW();
+        */
+      }
     } else {
       // Run all finalizers.
       for (Reducer* const reducer : reducers_) reducer->Finalize();
 
       // Check if we have new nodes to revisit.
-      if (revisit_.empty()) break;
+      if (revisit_.empty() &&
+          (broker_ == nullptr || broker_->TaskQueueIsEmpty())) {
+        break;
+      }
     }
   }
+  if (FLAG_trace_turbo_stw) {
+    if (tasks != 0) {
+      printf("ReduceNode blocked on MT %d times for %d busy-waits %d usec %d tasks\n",
+             blocked_count, busy_waits, busy_waits_in_usec, tasks);
+    }
+  }
+  DCHECK(broker_ == nullptr || broker_->TaskQueueIsEmpty());
   DCHECK(revisit_.empty());
   DCHECK(stack_.empty());
 }

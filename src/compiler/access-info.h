@@ -115,6 +115,10 @@ class PropertyAccessInfo final {
   bool HasTransitionMap() const { return !transition_map().is_null(); }
   ConstFieldInfo GetConstFieldInfo() const;
 
+  // Canonicalize handles, ToRef deps.
+  void CreatePersistentHandles(Isolate* isolate);
+  void MoveToBackgroundThread(JSHeapBroker* broker);
+
   Kind kind() const { return kind_; }
   MaybeHandle<JSObject> holder() const {
     // TODO(neis): There was a CHECK here that tries to protect against
@@ -142,13 +146,86 @@ class PropertyAccessInfo final {
   PropertyAccessInfo(Kind kind, MaybeHandle<JSObject> holder,
                      MaybeHandle<Map> transition_map, FieldIndex field_index,
                      Representation field_representation, Type field_type,
-                     Handle<Map> field_owner_map, MaybeHandle<Map> field_map,
+                     MaybeHandle<Map> field_owner_map,
+                     MaybeHandle<Map> field_map,
                      ZoneVector<Handle<Map>>&& lookup_start_object_maps,
                      ZoneVector<CompilationDependency const*>&& dependencies);
 
   Kind kind_;
   ZoneVector<Handle<Map>> lookup_start_object_maps_;
   ZoneVector<CompilationDependency const*> unrecorded_dependencies_;
+  Handle<Object> constant_;
+  MaybeHandle<Map> transition_map_;
+  MaybeHandle<JSObject> holder_;
+  FieldIndex field_index_;
+  Representation field_representation_;
+  Type field_type_;
+  MaybeHandle<Map> field_owner_map_;
+  MaybeHandle<Map> field_map_;
+
+  friend class PropertyAccessInfo2;
+};
+
+class PropertyAccessInfo2 {
+ public:
+  static PropertyAccessInfo2 FromPAI(const PropertyAccessInfo& that,
+                                     Zone* zone) {
+    PropertyAccessInfo2 p;
+    p.kind_ = that.kind_;
+    p.constant_ = that.constant_;
+    p.transition_map_ = that.transition_map_;
+    p.holder_ = that.holder_;
+    p.field_index_ = that.field_index_;
+    p.field_representation_ = that.field_representation_;
+    p.field_type_ = that.field_type_;
+    p.field_owner_map_ = that.field_owner_map_;
+    p.field_map_ = that.field_map_;
+
+    {
+      const int size = static_cast<int>(that.lookup_start_object_maps_.size());
+      Handle<Map>* ms = zone->NewArray<Handle<Map>>(size);
+      for (int i = 0; i < size; i++) {
+        ms[i] = that.lookup_start_object_maps_[i];
+      }
+      p.lookup_start_object_maps_ = Vector<Handle<Map>>(ms, size);
+    }
+
+    {
+      const int size = static_cast<int>(that.unrecorded_dependencies_.size());
+      const CompilationDependency** ms =
+          zone->NewArray<const CompilationDependency*>(size);
+      for (int i = 0; i < size; i++) {
+        ms[i] = that.unrecorded_dependencies_[i];
+      }
+      p.unrecorded_dependencies_ =
+          Vector<const CompilationDependency*>(ms, size);
+    }
+
+    return p;
+  }
+
+  PropertyAccessInfo ToPAI(Zone* zone) const {
+    ZoneVector<Handle<Map>> lookup_start_object_maps(zone);
+    for (auto i : lookup_start_object_maps_) {
+      lookup_start_object_maps.push_back(i);
+    }
+
+    ZoneVector<CompilationDependency const*> unrecorded_dependencies(zone);
+    for (auto i : unrecorded_dependencies_) {
+      unrecorded_dependencies.push_back(i);
+    }
+
+    return PropertyAccessInfo(kind_, holder_, transition_map_, field_index_,
+                              field_representation_, field_type_,
+                              field_owner_map_, field_map_,
+                              std::move(lookup_start_object_maps),
+                              std::move(unrecorded_dependencies));
+  }
+
+ private:
+  PropertyAccessInfo::Kind kind_;
+  Vector<Handle<Map>> lookup_start_object_maps_;
+  Vector<CompilationDependency const*> unrecorded_dependencies_;
   Handle<Object> constant_;
   MaybeHandle<Map> transition_map_;
   MaybeHandle<JSObject> holder_;
@@ -204,6 +281,15 @@ class AccessInfoFactory final {
   PropertyAccessInfo ComputePropertyAccessInfo(Handle<Map> map,
                                                Handle<Name> name,
                                                AccessMode access_mode) const;
+  PropertyAccessInfo ComputePropertyAccessInfo2(Handle<Map> map,
+                                                Handle<Name> name,
+                                                AccessMode access_mode) const;
+  PropertyAccessInfo2 ComputePropertyAccessInfo2Wrapper(
+      Handle<Map> map, Handle<Name> name, AccessMode access_mode) const {
+    auto pai = ComputePropertyAccessInfo2(map, name, access_mode);
+    pai.CreatePersistentHandles(isolate());
+    return PropertyAccessInfo2::FromPAI(pai, zone());
+  }
 
   MinimorphicLoadPropertyAccessInfo ComputePropertyAccessInfo(
       MinimorphicLoadPropertyAccessFeedback const& feedback) const;
@@ -239,6 +325,11 @@ class AccessInfoFactory final {
                                                 MaybeHandle<JSObject> holder,
                                                 InternalIndex descriptor,
                                                 AccessMode access_mode) const;
+  PropertyAccessInfo ComputeDataFieldAccessInfo2(Handle<Map> receiver_map,
+                                                 Handle<Map> map,
+                                                 MaybeHandle<JSObject> holder,
+                                                 InternalIndex descriptor,
+                                                 AccessMode access_mode) const;
   PropertyAccessInfo ComputeAccessorDescriptorAccessInfo(
       Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
       MaybeHandle<JSObject> holder, InternalIndex descriptor,

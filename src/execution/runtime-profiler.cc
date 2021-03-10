@@ -322,6 +322,12 @@ RuntimeProfiler::MarkCandidatesForOptimizationScope::
 }
 
 void RuntimeProfiler::MarkCandidatesForOptimization(JavaScriptFrame* frame) {
+  // Ninja.
+  {
+    HandleScope handles(isolate_);
+    isolate_->PumpHeapBrokerTaskQueues();
+  }
+
   if (!isolate_->use_optimizer()) return;
   MarkCandidatesForOptimizationScope scope(this);
 

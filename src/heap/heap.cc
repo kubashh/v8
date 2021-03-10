@@ -5072,6 +5072,9 @@ void Heap::DisableInlineAllocation() {
 HeapObject Heap::AllocateRawWithLightRetrySlowPath(
     int size, AllocationType allocation, AllocationOrigin origin,
     AllocationAlignment alignment) {
+  // Ninja.
+  isolate()->PumpHeapBrokerTaskQueues();
+
   HeapObject result;
   AllocationResult alloc = AllocateRaw(size, allocation, origin, alignment);
   if (alloc.To(&result)) {

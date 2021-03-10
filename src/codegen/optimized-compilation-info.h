@@ -255,6 +255,8 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     return std::move(canonical_handles_);
   }
 
+  bool is_background = false;
+
  private:
   void ConfigureFlags();
 
