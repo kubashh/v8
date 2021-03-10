@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87f9739e_3d01e1e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-10T21:40:16Z",
+      "side": 1,
+      "message": "I split the changes in two parts\nPTAL at pt.1",
+      "revId": "5a24fe3bf8d8bdb0df3b645c286c7fb179b28650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

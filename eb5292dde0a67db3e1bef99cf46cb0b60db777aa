@@ -158,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32742af2_2b0238c2",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-10T21:40:16Z",
+      "side": 1,
+      "message": "I agree. Given that the trampoline is usually a one or two instruction sequence having just \n -- Trampoline to Blah\nshould be enough. But let me clean this up in a follow-up CL for all architectures.",
+      "parentUuid": "c3214727_af986f9b",
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62bc380f_89f70d1b",
@@ -194,6 +212,30 @@
       "writtenOn": "2021-03-09T12:51:09Z",
       "side": 1,
       "message": "For the current CL that\u0027s not necessary; but this is a bit problematic for a non-PC version due to evacuation. Talking to hpayer we may need to change how we evacuate pages to a version that just moves code closer towards the chrome binary to defrag memory. A problem for another CL though.",
+      "parentUuid": "62bc380f_89f70d1b",
+      "range": {
+        "startLine": 1944,
+        "startChar": 9,
+        "endLine": 1944,
+        "endChar": 14
+      },
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e30a7c9_ce04a2a2",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1944,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-10T21:40:16Z",
+      "side": 1,
+      "message": "As discussed off-line this shouldn\u0027t be a problem. The builtins code is guaranteed to be in the core range, i.e. within the reach via pc-relative calls/jumps.",
       "parentUuid": "62bc380f_89f70d1b",
       "range": {
         "startLine": 1944,
@@ -512,6 +554,24 @@
       "side": 1,
       "message": "Note that the current approach even for JS is a stop-gap solution to fix the performance issues we have on certain HW; before we have a proper solution.",
       "parentUuid": "6f060f0a_8dc2a2de",
+      "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7e1eabd_a034663d",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-10T21:40:16Z",
+      "side": 1,
+      "message": "I\u0027m removing the controversial Wasm changes and address the issue I wanted to fix by these changes in a follow-up CL.",
+      "parentUuid": "ff1e2d22_a8ad4e63",
       "revId": "eb5292dde0a67db3e1bef99cf46cb0b60db777aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
