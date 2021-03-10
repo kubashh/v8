@@ -87,6 +87,24 @@
       "parentUuid": "6c2f3c43_d6854efe",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fccd005_ba7872ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-03-10T09:41:35Z",
+      "side": 1,
+      "message": "Might be a bad hash function? The hash function seems to be base::hash. If I\u0027m not reading that wrong, then it just casts the address into an unsigned int, which may not work well for aligned pointers?",
+      "parentUuid": "d953dc28_61f2a992",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
