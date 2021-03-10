@@ -111,23 +111,11 @@ void BaselineAssembler::JumpIfNotSmi(Register value, Label* target,
 }
 
 void BaselineAssembler::CallBuiltin(Builtins::Name builtin) {
-  ScratchRegisterScope temps(this);
-  Register temp = temps.AcquireScratch();
-  __ LoadEntryFromBuiltinIndex(builtin, temp);
-  __ Call(temp);
+  __ CallBuiltin(builtin);
 }
 
 void BaselineAssembler::TailCallBuiltin(Builtins::Name builtin) {
-  // x17 is used to allow using "Call" (i.e. `bti c`) rather than "Jump" (i.e.]
-  // `bti j`) landing pads for the tail-called code.
-  Register temp = x17;
-
-  // Make sure we're don't use this register as a temporary.
-  UseScratchRegisterScope temps(masm());
-  temps.Exclude(temp);
-
-  __ LoadEntryFromBuiltinIndex(builtin, temp);
-  __ Jump(temp);
+  __ TailCallBuiltin(builtin);
 }
 
 void BaselineAssembler::Test(Register value, int mask) {
