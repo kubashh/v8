@@ -124,6 +124,61 @@ size_t hash_value(const Signature<T>& sig) {
   return hash;
 }
 
+template <typename T, size_t num_returns = 0, size_t num_params = 0>
+class FixedSizeSignature : public Signature<T> {
+ public:
+  explicit FixedSizeSignature(std::array<T, num_returns + num_params> reps)
+      : Signature<T>(num_returns, num_params, InitReps(reps)) {}
+
+  // Add return types to this signature (only allowed if there are none yet).
+  template <typename... Returns>
+  auto Returns(Returns... returns) {
+    static_assert(num_returns == 0, "Please specify all return types at once");
+    return FixedSizeSignature<T, sizeof...(Returns), num_params>{
+        Concat(std::array<T, sizeof...(Returns)>{{returns...}}, reps_)};
+  }
+
+  // Same for a single return type.
+  template <typename ReturnType>
+  auto Return(ReturnType returnType) {
+    return Returns(returnType);
+  }
+
+  // Add parameters to this signature (only allowed if there are none yet).
+  template <typename... Params>
+  auto Params(Params... params) {
+    static_assert(num_params == 0, "Please specify all parameters at once");
+    return FixedSizeSignature<T, num_returns, sizeof...(Params)>{
+        Concat(reps_, std::array<T, sizeof...(Params)>{{params...}})};
+  }
+
+  // Same for a single parameter.
+  template <typename Param>
+  auto Param(Param param) {
+    return Params(param);
+  }
+
+ private:
+  T* InitReps(const std::array<T, num_returns + num_params>& reps) {
+    reps_ = reps;
+    return reps_.data();
+  }
+
+  template <size_t sizeA, size_t sizeB>
+  static std::array<T, sizeA + sizeB> Concat(const std::array<T, sizeA>& a,
+                                             const std::array<T, sizeB>& b) {
+    return base::make_array<sizeA + sizeB>(
+        [&a, &b](std::size_t i) { return i < sizeA ? a[i] : b[i - sizeA]; });
+  }
+
+  std::array<T, num_returns + num_params> reps_;
+};
+
+template <typename T>
+FixedSizeSignature<T> MakeSig() {
+  return FixedSizeSignature<T>{{}};
+}
+
 }  // namespace internal
 }  // namespace v8
 
