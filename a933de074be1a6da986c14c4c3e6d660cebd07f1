@@ -69,6 +69,24 @@
       "parentUuid": "19ca3ad0_602fbe80",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d953dc28_61f2a992",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-03-10T09:31:01Z",
+      "side": 1,
+      "message": "there\u0027s HandleScopes scattered around the value serializer, and IdentityMap uses raw object ptrs + synchronisation with GC rather than Handles, so I think that particular concern is fine.",
+      "parentUuid": "6c2f3c43_d6854efe",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
