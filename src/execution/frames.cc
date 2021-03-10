@@ -226,9 +226,9 @@ bool IsInterpreterFramePc(Isolate* isolate, Address pc,
   Code interpreter_bytecode_dispatch =
       isolate->builtins()->builtin(Builtins::kInterpreterEnterBytecodeDispatch);
 
-  if (interpreter_entry_trampoline.contains(pc) ||
-      interpreter_bytecode_advance.contains(pc) ||
-      interpreter_bytecode_dispatch.contains(pc)) {
+  if (interpreter_entry_trampoline.contains(isolate, pc) ||
+      interpreter_bytecode_advance.contains(isolate, pc) ||
+      interpreter_bytecode_dispatch.contains(isolate, pc)) {
     return true;
   } else if (FLAG_interpreted_frames_native_stack) {
     intptr_t marker = Memory<intptr_t>(
@@ -261,7 +261,7 @@ bool SafeStackFrameIterator::IsNoFrameBytecodeHandlerPc(Isolate* isolate,
   // Return false for builds with non-embedded bytecode handlers.
   if (Isolate::CurrentEmbeddedBlobCode() == nullptr) return false;
 
-  EmbeddedData d = EmbeddedData::FromBlob();
+  EmbeddedData d = EmbeddedData::FromBlob(isolate);
   if (pc < d.InstructionStartOfBytecodeHandlers() ||
       pc >= d.InstructionEndOfBytecodeHandlers()) {
     // Not a bytecode handler pc address.
@@ -500,8 +500,8 @@ Code GetContainingCode(Isolate* isolate, Address pc) {
 
 Code StackFrame::LookupCode() const {
   Code result = GetContainingCode(isolate(), pc());
-  DCHECK_GE(pc(), result.InstructionStart());
-  DCHECK_LT(pc(), result.InstructionEnd());
+  DCHECK_GE(pc(), result.InstructionStart(isolate(), pc()));
+  DCHECK_LT(pc(), result.InstructionEnd(isolate(), pc()));
   return result;
 }
 
@@ -938,11 +938,12 @@ void CommonFrame::IterateCompiledFrame(RootVisitor* v) const {
     InnerPointerToCodeCache::InnerPointerToCodeCacheEntry* entry =
         isolate()->inner_pointer_to_code_cache()->GetCacheEntry(inner_pointer);
     if (!entry->safepoint_entry.is_valid()) {
-      entry->safepoint_entry = entry->code.GetSafepointEntry(inner_pointer);
+      entry->safepoint_entry =
+          entry->code.GetSafepointEntry(isolate(), inner_pointer);
       DCHECK(entry->safepoint_entry.is_valid());
     } else {
       DCHECK(entry->safepoint_entry.Equals(
-          entry->code.GetSafepointEntry(inner_pointer)));
+          entry->code.GetSafepointEntry(isolate(), inner_pointer)));
     }
 
     code = entry->code;
@@ -1625,7 +1626,7 @@ int OptimizedFrame::LookupExceptionHandlerInTable(
   // a handler for this trampoline. Thus we need to use the return pc that
   // _used to be_ on the stack to get the right ExceptionHandler.
   if (CodeKindCanDeoptimize(code.kind()) && code.marked_for_deoptimization()) {
-    SafepointTable safepoints(code);
+    SafepointTable safepoints(isolate(), pc(), code);
     pc_offset = safepoints.find_return_pc(pc_offset);
   }
   return table.LookupReturn(pc_offset);
@@ -1641,13 +1642,13 @@ DeoptimizationData OptimizedFrame::GetDeoptimizationData(
   // The code object may have been replaced by lazy deoptimization. Fall
   // back to a slow search in this case to find the original optimized
   // code object.
-  if (!code.contains(pc())) {
+  if (!code.contains(isolate(), pc())) {
     code = isolate()->heap()->GcSafeFindCodeForInnerPointer(pc());
   }
   DCHECK(!code.is_null());
   DCHECK(CodeKindCanDeoptimize(code.kind()));
 
-  SafepointEntry safepoint_entry = code.GetSafepointEntry(pc());
+  SafepointEntry safepoint_entry = code.GetSafepointEntry(isolate(), pc());
   if (safepoint_entry.has_deoptimization_index()) {
     *deopt_index = safepoint_entry.deoptimization_index();
     return DeoptimizationData::cast(code.deoptimization_data());
@@ -2168,9 +2169,10 @@ void InternalFrame::Iterate(RootVisitor* v) const {
 namespace {
 
 uint32_t PcAddressForHashing(Isolate* isolate, Address address) {
-  if (InstructionStream::PcIsOffHeap(isolate, address)) {
+  uint32_t hash;
+  if (InstructionStream::TryGetAddressForHashing(isolate, address, &hash)) {
     // Ensure that we get predictable hashes for addresses in embedded code.
-    return EmbeddedData::FromBlob(isolate).AddressForHashing(address);
+    return hash;
   }
   return ObjectAddressForHashing(address);
 }

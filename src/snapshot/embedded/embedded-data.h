@@ -23,8 +23,14 @@ class InstructionStream final : public AllStatic {
   // Returns true, iff the given pc points into an off-heap instruction stream.
   static bool PcIsOffHeap(Isolate* isolate, Address pc);
 
-  // Returns the corresponding Code object if it exists, and nullptr otherwise.
-  static Code TryLookupCode(Isolate* isolate, Address address);
+  // Computes hashable value from address and return true, if the address
+  // corresponds to one of the builtins, and false otherwise.
+  static bool TryGetAddressForHashing(Isolate* isolate, Address address,
+                                      uint32_t* hashable_address);
+
+  // Returns the corresponding builtin ID if lookup succeeds, and kNoBuiltinId
+  // otherwise.
+  static Builtins::Name TryLookupCode(Isolate* isolate, Address address);
 
   // During snapshot creation, we first create an executable off-heap area
   // containing all off-heap code. The area is guaranteed to be contiguous.
@@ -60,6 +66,23 @@ class EmbeddedData final {
   const uint8_t* data() const { return data_; }
   uint32_t data_size() const { return data_size_; }
 
+  bool IsInCodeRange(Address pc) const {
+    Address start = reinterpret_cast<Address>(code_);
+    return base::IsInRangeExclusive(pc, start, start + code_size_);
+  }
+
+  inline static EmbeddedData GetEmbeddedDataForPC(Isolate* isolate,
+                                                  Address maybe_builtin_pc) {
+    EmbeddedData d = EmbeddedData::FromBlob();
+    if (FLAG_short_builtin_calls) {
+      if (d.IsInCodeRange(maybe_builtin_pc)) return d;
+      // If the pc does not belong to the embedded code blob we should be using
+      // the un-embedded one.
+      d = EmbeddedData::FromBlob(isolate);
+    }
+    return d;
+  }
+
   void Dispose() {
     delete[] code_;
     code_ = nullptr;
@@ -78,7 +101,7 @@ class EmbeddedData final {
 
   uint32_t AddressForHashing(Address addr) {
     Address start = reinterpret_cast<Address>(code_);
-    DCHECK(base::IsInRange(addr, start, start + code_size_));
+    DCHECK(base::IsInRangeExclusive(addr, start, start + code_size_));
     return static_cast<uint32_t>(addr - start);
   }
 

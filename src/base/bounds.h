@@ -25,6 +25,21 @@ inline constexpr bool IsInRange(T value, U lower_limit, U higher_limit) {
                                  static_cast<unsigned_T>(lower_limit));
 }
 
+// Checks if value is in range [lower_limit, higher_limit) using a single
+// branch.
+template <typename T, typename U>
+inline constexpr bool IsInRangeExclusive(T value, U lower_limit,
+                                         U higher_limit) {
+  CONSTEXPR_DCHECK(lower_limit < higher_limit);
+  STATIC_ASSERT(sizeof(U) <= sizeof(T));
+  using unsigned_T = typename std::make_unsigned<T>::type;
+  // Use static_cast to support enum classes.
+  return static_cast<unsigned_T>(static_cast<unsigned_T>(value) -
+                                 static_cast<unsigned_T>(lower_limit)) <
+         static_cast<unsigned_T>(static_cast<unsigned_T>(higher_limit) -
+                                 static_cast<unsigned_T>(lower_limit));
+}
+
 // Checks if [index, index+length) is in range [0, max). Note that this check
 // works even if {index+length} would wrap around.
 template <typename T,

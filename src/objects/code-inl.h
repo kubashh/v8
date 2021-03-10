@@ -275,6 +275,18 @@ Address Code::raw_metadata_start() const {
   return raw_instruction_start() + raw_instruction_size();
 }
 
+Address Code::InstructionStart(Isolate* isolate, Address pc) const {
+  return V8_UNLIKELY(is_off_heap_trampoline())
+             ? OffHeapInstructionStart(isolate, pc)
+             : raw_instruction_start();
+}
+
+Address Code::InstructionEnd(Isolate* isolate, Address pc) const {
+  return V8_UNLIKELY(is_off_heap_trampoline())
+             ? OffHeapInstructionEnd(isolate, pc)
+             : raw_instruction_end();
+}
+
 Address Code::MetadataStart() const {
   STATIC_ASSERT(kOnHeapBodyIsContiguous);
   return V8_UNLIKELY(is_off_heap_trampoline()) ? OffHeapMetadataStart()
@@ -322,10 +334,10 @@ int Code::relocation_size() const {
 
 Address Code::entry() const { return raw_instruction_start(); }
 
-bool Code::contains(Address inner_pointer) {
+bool Code::contains(Isolate* isolate, Address inner_pointer) {
   if (is_off_heap_trampoline()) {
-    if (OffHeapInstructionStart() <= inner_pointer &&
-        inner_pointer < OffHeapInstructionEnd()) {
+    if (OffHeapInstructionStart(isolate, inner_pointer) <= inner_pointer &&
+        inner_pointer < OffHeapInstructionEnd(isolate, inner_pointer)) {
       return true;
     }
   }

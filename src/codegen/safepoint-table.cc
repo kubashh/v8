@@ -15,9 +15,9 @@
 namespace v8 {
 namespace internal {
 
-SafepointTable::SafepointTable(Code code)
-    : SafepointTable(code.InstructionStart(), code.SafepointTableAddress(),
-                     code.stack_slots(), true) {}
+SafepointTable::SafepointTable(Isolate* isolate, Address pc, Code code)
+    : SafepointTable(code.InstructionStart(isolate, pc),
+                     code.SafepointTableAddress(), code.stack_slots(), true) {}
 
 SafepointTable::SafepointTable(const wasm::WasmCode* code)
     : SafepointTable(code->instruction_start(),
