@@ -504,16 +504,19 @@ void ValueSerializer::WriteString(Handle<String> string) {
 
 Maybe<bool> ValueSerializer::WriteJSReceiver(Handle<JSReceiver> receiver) {
   // If the object has already been serialized, just write its ID.
-  auto find_result = id_map_.FindOrInsert(receiver);
-  if (find_result.already_exists) {
+  auto find_entry = id_map_.Find(receiver);
+  if (find_entry) {
     WriteTag(SerializationTag::kObjectReference);
-    WriteVarint(*find_result.entry - 1);
+    WriteVarint(*find_entry - 1);
     return ThrowIfOutOfMemory();
   }
 
-  // Otherwise, allocate an ID for it.
-  uint32_t id = next_id_++;
-  *find_result.entry = id + 1;
+  // Otherwise, allocate an ID for it and insert it into id_map_ if not exceed
+  // the threshold.
+  if (id_map_.size() < id_map_threshold) {
+    uint32_t id = next_id_++;
+    id_map_.Insert(receiver, id + 1);
+  }
 
   // Eliminate callable and exotic objects, which should not be serialized.
   InstanceType instance_type = receiver->map().instance_type();
