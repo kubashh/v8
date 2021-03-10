@@ -39,8 +39,9 @@ void BaselineAssembler::GetCode(Isolate* isolate, CodeDesc* desc) {
 }
 int BaselineAssembler::pc_offset() const { return __ pc_offset(); }
 bool BaselineAssembler::emit_debug_code() const { return __ emit_debug_code(); }
-void BaselineAssembler::CodeEntry() const { __ CodeEntry(); }
-void BaselineAssembler::ExceptionHandler() const { __ ExceptionHandler(); }
+void BaselineAssembler::CodeEntry() { __ CodeEntry(); }
+void BaselineAssembler::CodeTargetAlign() { __ CodeTargetAlign(); }
+void BaselineAssembler::ExceptionHandler() { __ ExceptionHandler(); }
 void BaselineAssembler::RecordComment(const char* string) {
   __ RecordComment(string);
 }

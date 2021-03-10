@@ -388,14 +388,17 @@ void BaselineCompiler::AddPosition() {
 }
 
 void BaselineCompiler::PreVisitSingleBytecode() {
-  if (iterator().current_bytecode() == interpreter::Bytecode::kJumpLoop) {
-    EnsureLabels(iterator().GetJumpTargetOffset());
+  if (accessor().current_bytecode() == interpreter::Bytecode::kJumpLoop) {
+    EnsureLabels(iterator().GetJumpTargetOffset())->should_align = true;
   }
 }
 
 void BaselineCompiler::VisitSingleBytecode() {
   int offset = iterator().current_offset();
   if (labels_[offset]) {
+    if (labels_[offset]->should_align) {
+      __ CodeTargetAlign();
+    }
     // Bind labels for this offset that have already been linked to a
     // jump (i.e. forward jumps, excluding jump tables).
     for (auto&& label : labels_[offset]->linked) {
