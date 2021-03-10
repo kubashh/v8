@@ -16,6 +16,23 @@
       "message": "Could you please have a review?",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba1e8caa_2fe6fbb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-03-10T09:08:01Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this simply break the semantics of structured clone for large object graphs?",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
