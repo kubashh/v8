@@ -166,6 +166,9 @@ class ValueSerializer {
   // map (checking if the used identity is zero is the fast way of checking if
   // the entry is new).
   IdentityMap<uint32_t, ZoneAllocationPolicy> id_map_;
+  // To avoid the overhead of map searching and inserting if the identity map is
+  // big, limit the identity map size.
+  static const int id_map_threshold = 64;
   uint32_t next_id_ = 0;
 
   // A similar map, for transferred array buffers.
