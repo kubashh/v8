@@ -16,6 +16,121 @@
       "message": "Nico, PTAL @ src/compiler",
       "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bf99c9c_c5e9fd37",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-11T10:36:23Z",
+      "side": 1,
+      "message": "This requires\n  if (IsWord64PopcntSupported()) {\nIt seems unlikely that Word32Popcnt will not be available while the Word64Popcnt will be, but why not.\n\nI think the real fallback should rather be implemented as the one in Word64PopulationCount but using 32-bit types.",
+      "range": {
+        "startLine": 614,
+        "startChar": 24,
+        "endLine": 614,
+        "endChar": 36
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bdacf21_64ae7feb",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-11T10:36:23Z",
+      "side": 1,
+      "message": "I guess you meant Word64PopulationCount here, because this one might also be not available.",
+      "range": {
+        "startLine": 630,
+        "startChar": 9,
+        "endLine": 630,
+        "endChar": 21
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82b34fe8_6852e57a",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-11T10:36:23Z",
+      "side": 1,
+      "message": "I guess you meant Word64CountTrailingZeros here.",
+      "range": {
+        "startLine": 639,
+        "startChar": 24,
+        "endLine": 639,
+        "endChar": 33
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d873756b_73ea4b3a",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4179,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-11T10:36:23Z",
+      "side": 1,
+      "message": "Unfortunately, 64-bit operations are not available on 32-bit archs yet. \nPlease test 64-bit version inside \n  if (m.Is64()) {\n    // TODO(): enable once 64-bit operations are supported on 32-bit architectures",
+      "range": {
+        "startLine": 4179,
+        "startChar": 28,
+        "endLine": 4179,
+        "endChar": 49
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b6e49f2_4cc5f6c0",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4212,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-11T10:36:23Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 4212,
+        "startChar": 10,
+        "endLine": 4212,
+        "endChar": 34
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
