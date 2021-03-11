@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "b7c8b1bb13c4dec227dad5ed128d70b845d0ef78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52114140_b664cd24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-03-11T07:14:44Z",
+      "side": 1,
+      "message": "Thanks, this is awesome!",
+      "revId": "b7c8b1bb13c4dec227dad5ed128d70b845d0ef78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d77a5b4e_8d1232b1",
+        "filename": "src/codegen/signature.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-03-11T07:14:44Z",
+      "side": 1,
+      "message": "Is it necessary to have both {Return} and {Returns}, and {Param} and {Params}? It seems like you can just use them the same, and having one function for any number of parameters or returns seems more useful.",
+      "revId": "b7c8b1bb13c4dec227dad5ed128d70b845d0ef78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
