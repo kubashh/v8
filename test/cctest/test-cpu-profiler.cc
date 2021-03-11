@@ -178,7 +178,8 @@ TEST(CodeEvents) {
       v8::base::TimeDelta::FromMicroseconds(100), true);
   CHECK(processor->Start());
   ProfilerListener profiler_listener(isolate, processor,
-                                     *code_observer.strings());
+                                     *code_observer.strings(),
+                                     *code_observer.weak_code_registry());
   isolate->logger()->AddCodeEventListener(&profiler_listener);
 
   // Enqueue code creation events.
@@ -243,7 +244,8 @@ TEST(TickEvents) {
   profiles->StartProfiling("");
   CHECK(processor->Start());
   ProfilerListener profiler_listener(isolate, processor,
-                                     *code_observer->strings());
+                                     *code_observer->strings(),
+                                     *code_observer->weak_code_registry());
   isolate->logger()->AddCodeEventListener(&profiler_listener);
 
   profiler_listener.CodeCreateEvent(i::Logger::BUILTIN_TAG, frame1_code, "bbb");
@@ -404,7 +406,8 @@ TEST(Issue1398) {
   profiles->StartProfiling("");
   CHECK(processor->Start());
   ProfilerListener profiler_listener(isolate, processor,
-                                     *code_observer->strings());
+                                     *code_observer->strings(),
+                                     *code_observer->weak_code_registry());
 
   profiler_listener.CodeCreateEvent(i::Logger::BUILTIN_TAG, code, "bbb");
 
@@ -1272,7 +1275,8 @@ static void TickLines(bool optimize) {
   isolate->logger()->LogCompiledFunctions();
   CHECK(processor->Start());
   ProfilerListener profiler_listener(isolate, processor,
-                                     *code_observer->strings());
+                                     *code_observer->strings(),
+                                     *code_observer->weak_code_registry());
 
   // Enqueue code creation events.
   i::Handle<i::String> str = factory->NewStringFromAsciiChecked(func_name);
