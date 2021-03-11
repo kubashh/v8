@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b2745ab_26c94aaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-11T10:15:01Z",
+      "side": 1,
+      "message": "Not locally, the scores from 3 runs each are\n\nwithout-patch:\nRegExp-octane2.1(Score): 6429\nRegExp-octane2.1(Score): 6377\nRegExp-octane2.1(Score): 6308\n\nwith-patch:\nRegExp-octane2.1(Score): 6364\nRegExp-octane2.1(Score): 6295\nRegExp-octane2.1(Score): 6377",
+      "parentUuid": "384f3a11_da055e2b",
+      "revId": "d47db36e746f6c325bc6bba093b38204d9db3d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "177c0102_aaff90fd",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-03-11T07:58:12Z",
       "side": 1,
       "message": "DCHECK_EQ(regexp_stack-\u003estatic_stack_, thread_local_.memory_)?\n\n(Otherwise, the first call to EnsureCapacity() would allocate a dynamic stack.)",
+      "range": {
+        "startLine": 14,
+        "startChar": 6,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "d47db36e746f6c325bc6bba093b38204d9db3d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "931ab176_88646850",
+        "filename": "src/regexp/regexp-stack.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-11T10:15:01Z",
+      "side": 1,
+      "message": "As discussed offline, at this point we don\u0027t care whether the stack is static/dynamic, only that it exists. A DCHECK(not-invalidated) is a good idea though, done.",
+      "parentUuid": "177c0102_aaff90fd",
       "range": {
         "startLine": 14,
         "startChar": 6,
