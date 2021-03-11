@@ -35,7 +35,7 @@ class Symbolizer;
   V(CODE_DISABLE_OPT, CodeDisableOptEventRecord) \
   V(CODE_DEOPT, CodeDeoptEventRecord)            \
   V(REPORT_BUILTIN, ReportBuiltinEventRecord)    \
-  V(BYTECODE_FLUSH, BytecodeFlushEventRecord)
+  V(CODE_DELETE, CodeDeleteEventRecord)
 
 class CodeEventRecord {
  public:
@@ -112,9 +112,9 @@ class TickSampleEventRecord {
   TickSample sample;
 };
 
-class BytecodeFlushEventRecord : public CodeEventRecord {
+class CodeDeleteEventRecord : public CodeEventRecord {
  public:
-  Address instruction_start;
+  CodeEntry* entry;
 
   V8_INLINE void UpdateCodeMap(CodeMap* code_map);
 };
@@ -143,6 +143,9 @@ class V8_NODISCARD ProfilingScope {
   ~ProfilingScope();
 
  private:
+  static void SweepCallback(v8::Isolate*, v8::GCType, v8::GCCallbackFlags,
+                            void* listener);
+
   Isolate* const isolate_;
   ProfilerListener* const listener_;
 };
@@ -255,6 +258,7 @@ class V8_EXPORT_PRIVATE ProfilerCodeObserver : public CodeEventObserver {
   void CodeEventHandler(const CodeEventsContainer& evt_rec) override;
   CodeMap* code_map() { return &code_map_; }
   StringsStorage* strings() { return &strings_; }
+  WeakCodeRegistry* weak_code_registry() { return &weak_code_registry_; }
 
   void ClearCodeMap();
 
@@ -279,6 +283,7 @@ class V8_EXPORT_PRIVATE ProfilerCodeObserver : public CodeEventObserver {
   Isolate* const isolate_;
   StringsStorage strings_;
   CodeMap code_map_;
+  WeakCodeRegistry weak_code_registry_;
   ProfilerEventsProcessor* processor_;
 };
 

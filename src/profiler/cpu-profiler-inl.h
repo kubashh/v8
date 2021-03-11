@@ -64,8 +64,9 @@ TickSample* SamplingEventsProcessor::StartTickSample() {
   return &evt->sample;
 }
 
-void BytecodeFlushEventRecord::UpdateCodeMap(CodeMap* code_map) {
-  code_map->ClearCodesInRange(instruction_start, instruction_start + 1);
+void CodeDeleteEventRecord::UpdateCodeMap(CodeMap* code_map) {
+  code_map->ClearCodesInRange(entry->instruction_start(),
+                              entry->instruction_start() + 1);
 }
 
 void SamplingEventsProcessor::FinishTickSample() {

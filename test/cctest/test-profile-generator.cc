@@ -352,10 +352,6 @@ TEST(CodeMapMoveAndDeleteCode) {
   code_map.MoveCode(ToAddress(0x1500), ToAddress(0x1700));  // Deprecate bbb.
   CHECK(!code_map.FindEntry(ToAddress(0x1500)));
   CHECK_EQ(entry1, code_map.FindEntry(ToAddress(0x1700)));
-  CodeEntry* entry3 = new CodeEntry(i::CodeEventListener::FUNCTION_TAG, "ccc");
-  code_map.AddCode(ToAddress(0x1750), entry3, 0x100);
-  CHECK(!code_map.FindEntry(ToAddress(0x1700)));
-  CHECK_EQ(entry3, code_map.FindEntry(ToAddress(0x1750)));
 }
 
 TEST(CodeMapClear) {
