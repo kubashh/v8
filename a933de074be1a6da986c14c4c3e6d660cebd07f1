@@ -212,6 +212,24 @@
       "parentUuid": "27dcf89b_e602ca88",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f2c2072_e852d303",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-03-11T09:13:30Z",
+      "side": 1,
+      "message": "Sure, broken example:\n\n    // main.js\n    const x \u003d {};\n    const array \u003d [];\n    for (var i \u003d 0; i \u003c 64; i++) {\n      array.push({\"a\":1});\n    }\n    array.push(x);\n    array.push(x);\n    var worker \u003d new Worker(\"worker.js\");\n    worker.postMessage(array);\n\n    // worker.js\n    onmessage \u003d function(array) {\n      console.log(array[64] \u003d\u003d array[65]);\n    }\n\nThis prints true when done correctly, false with your patch.",
+      "parentUuid": "a6d1ec66_07d405fd",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
