@@ -87,6 +87,30 @@
       },
       "revId": "571675806cbed858c786b87e37c2ff3ad9c156a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b919aee_3f933cb0",
+        "filename": "src/builtins/convert.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-11T14:40:35Z",
+      "side": 1,
+      "message": "I was planning to add Int64Constant and Uint64Constant as\nextern macro Int64Constant(constexpr int64): int64;\nextern macro Uint64Constant(constexpr uint64): uint64;\n\nThe problems is that constexpr int31 (or constexpr int31) are not subtypes of constexpr int64, which is why Int64Constant cannot take an constexpr int31 argument. So the only way of not using an intrinsic would be something like \n\nFromConstexpr\u003cuint64, constexpr int31\u003e(i: constexpr int31): uint64 {\n  return Convert\u003cuint64\u003e(Unsigned(Int32Constant(i)));\n}\n\nWould that be okay?",
+      "parentUuid": "444322f4_5e9c4174",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 44
+      },
+      "revId": "571675806cbed858c786b87e37c2ff3ad9c156a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
