@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "952fcb26_8286a28f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-11T06:42:54Z",
+      "side": 1,
+      "message": "PTAL - this is step two of the \u0027introduce-static-stack\u0027 work started 2 years ago 😊 ",
+      "revId": "068213af365624ae879cf665c3a5f7a4f62e00a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
