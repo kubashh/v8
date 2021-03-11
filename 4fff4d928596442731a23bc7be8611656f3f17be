@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88c37972_e52dde4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-11T14:55:03Z",
+      "side": 1,
+      "message": "Had a quick skim and looking good in general, nice work! Will have a closer look on Monday, maybe the design doc is also ready by then ;)",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83c1a303_65bc5499",
+        "filename": "src/codegen/reloc-info.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-11T14:55:03Z",
+      "side": 1,
+      "message": "At some spot we should define properties of \u0027on-heap embedded builtins\u0027 -\u003e they\u0027re still immortal-immovable, live in Code space, and still contain only instruction streams and not Code objects, but are no longer embedded.",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d5f921c_11023c0d",
+        "filename": "src/codegen/x64/macro-assembler-x64.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-11T14:55:03Z",
+      "side": 1,
+      "message": "Does this new overload help in this CL? We could simply remove it and possibly do the change to Builtins::Name later, right?",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ed3e791_6bf5d8a6",
+        "filename": "src/common/globals.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-11T14:55:03Z",
+      "side": 1,
+      "message": "Why not check this in BUILD.gn along with other similar feature implications?",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c52f50d8_ace73176",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3370,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-11T14:55:03Z",
+      "side": 1,
+      "message": "Feels like this function should go into heap/ since it\u0027s closely related to code space logic.",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab101572_00e963ef",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3620,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-11T14:55:03Z",
+      "side": 1,
+      "message": "Given the impl I\u0027d suggest \u0027MaybeRemap...\u0027",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
