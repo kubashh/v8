@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d7b6984_6bdcf208",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-11T10:13:26Z",
+      "side": 1,
+      "message": "Done. I\u0027ve also simplified things a bit by defining value, rhs, and lhs as Uint64Ts.",
+      "parentUuid": "5f9e4812_aa7c13ea",
+      "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfbfc793_858e4792",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-03-08T10:30:24Z",
       "side": 1,
       "message": "Signed() call is not necessary here, the ChangeUint32ToUint64 expects Word32T.",
+      "range": {
+        "startLine": 645,
+        "startChar": 59,
+        "endLine": 645,
+        "endChar": 65
+      },
+      "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8db75f0_f8c9d486",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-11T10:13:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfbfc793_858e4792",
       "range": {
         "startLine": 645,
         "startChar": 59,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ed9b15b_ab26209c",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-11T10:13:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3fb2d35_61fa18c6",
+      "range": {
+        "startLine": 670,
+        "startChar": 56,
+        "endLine": 670,
+        "endChar": 63
+      },
+      "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f986509_09061c10",
@@ -94,6 +160,24 @@
       "writtenOn": "2021-03-08T10:30:24Z",
       "side": 1,
       "message": "Here and below: it\u0027ll probably be simpler to have just one method accepting Word32T and returning Uint32T, since the result is logically non-negative value and can be applied to both Int32T and Uint32T.",
+      "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d629faca_3ba66fc1",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-11T10:13:26Z",
+      "side": 1,
+      "message": "Done, but returning Int32T instead for consistency, because that\u0027s the return type of the existing Word*Clz instructions.",
+      "parentUuid": "4f986509_09061c10",
       "revId": "d631aad8f54c44bc40460deebd72c4faa6db979f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
