@@ -194,6 +194,24 @@
       "parentUuid": "27dcf89b_e602ca88",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6d1ec66_07d405fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2021-03-11T02:42:03Z",
+      "side": 1,
+      "message": "Yes, it could easily blow up the size of the serialized graph if there\u0027s a different microbenchmark with a lot of object duplication. But I think a lot of object duplication is not usual case, my micro case test 2 shows limiting size of id map is faster even half duplicated objects.",
+      "parentUuid": "27dcf89b_e602ca88",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
