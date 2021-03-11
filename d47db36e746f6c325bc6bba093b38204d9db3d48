@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "384f3a11_da055e2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-11T07:58:12Z",
+      "side": 1,
+      "message": "lgtm, in case you know: does it show up on Octane\u0027s regexp score?",
+      "revId": "d47db36e746f6c325bc6bba093b38204d9db3d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "177c0102_aaff90fd",
+        "filename": "src/regexp/regexp-stack.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-11T07:58:12Z",
+      "side": 1,
+      "message": "DCHECK_EQ(regexp_stack-\u003estatic_stack_, thread_local_.memory_)?\n\n(Otherwise, the first call to EnsureCapacity() would allocate a dynamic stack.)",
+      "range": {
+        "startLine": 14,
+        "startChar": 6,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "d47db36e746f6c325bc6bba093b38204d9db3d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
