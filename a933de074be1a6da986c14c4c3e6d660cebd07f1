@@ -140,6 +140,24 @@
       "message": "Thanks for your review comments!",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8db2e7ed_daeb6a2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2021-03-11T01:30:47Z",
+      "side": 1,
+      "message": "I tested below micro case, in console, \"touch worker.js\" for creating an empty worker.js is necessary, I found ~30% for test 1, ~16% for test 2, ~0% for test 3 improvement with my patch.\n\nfunction PostMessage(x) {\n  var start \u003d performance.now();\n  for (var i \u003d 0; i \u003c 100; i++) {\n    worker.postMessage(x);\n  }\n  console.log(performance.now() - start);\n}\n\nvar array1 \u003d new Array(256*64);\nfor (var i \u003d 0; i \u003c 256 * 64; i++) {\n  array1[i] \u003d {\"a\":1};\n}\n\nvar worker \u003d new Worker(\"worker.js\");\n\n// test 1: 0~63 insert into id map, 64~256*64-1 miss id map\nPostMessage(array1);\n\nvar array2 \u003d new Array(256);\nfor (var i \u003d 0; i \u003c 256; i++) {\n  array2[i] \u003d {\"a\":1};\n}\n\nfor (var i \u003d 0; i \u003c 128; i++) {\n  for (var j \u003d 0; j \u003c 64; j++) {\n    array1[i*64+j] \u003d array2[j];\n  }\n}\n\n// test 2: 0~63 insert into id map, 64~128*64-1 hit id map, 128*64~256*64-1 miss id map\nPostMessage(array1);\n\nfor (var i \u003d 128; i \u003c 256; i++) {\n  for (var j \u003d 0; j \u003c 64; j++) {\n    array1[i*64+j] \u003d array2[j];\n  }\n}\n\n// test 3: 0~63 insert into id map, 64~256*64-1 hit id map\nPostMessage(array1);",
+      "parentUuid": "e1421747_577e07bf",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
