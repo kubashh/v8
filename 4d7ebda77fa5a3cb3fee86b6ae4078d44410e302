@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad23e127_6dd178cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-11T09:55:09Z",
+      "side": 1,
+      "message": "Thanks, removed the redundant methods. I also moved {MakeSig} from signature.h to liftoff-compiler.cc, so we can skip the \"\u003cValueKind\u003e\" template argument.",
+      "revId": "4d7ebda77fa5a3cb3fee86b6ae4078d44410e302",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
