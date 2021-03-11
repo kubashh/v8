@@ -39,6 +39,30 @@
       },
       "revId": "571675806cbed858c786b87e37c2ff3ad9c156a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de400268_51fc3633",
+        "filename": "src/builtins/convert.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-11T10:01:16Z",
+      "side": 1,
+      "message": "sorry, could you clarify? I see how to change the first version to use Uint64Constant, but not the second version. How can I convert a constexpr int31 to something that Uint64Constant (or Int64Constant) would accept?",
+      "parentUuid": "a55f2a5b_947d12b2",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 44
+      },
+      "revId": "571675806cbed858c786b87e37c2ff3ad9c156a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
