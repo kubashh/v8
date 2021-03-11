@@ -158,6 +158,24 @@
       "parentUuid": "e1421747_577e07bf",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27dcf89b_e602ca88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2021-03-11T02:25:39Z",
+      "side": 1,
+      "message": "Hash table performance dependency on size is less than linked list and array, but the dependency is existed.\nWhatever hash function, it\u0027s possible two different objects get same hash value, the collision resolution is additional cost, more size increases possibility of collision.",
+      "parentUuid": "c50df9f8_46719e70",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
