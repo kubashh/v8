@@ -176,6 +176,24 @@
       "parentUuid": "c50df9f8_46719e70",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cce6b7ce_7495240b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2021-03-11T02:29:24Z",
+      "side": 1,
+      "message": "I think the semantics of structured clone for large object graphs won\u0027t be broken, could you please make a broken example?",
+      "parentUuid": "27dcf89b_e602ca88",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
