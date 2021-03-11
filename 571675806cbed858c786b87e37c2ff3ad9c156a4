@@ -63,6 +63,30 @@
       },
       "revId": "571675806cbed858c786b87e37c2ff3ad9c156a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "444322f4_5e9c4174",
+        "filename": "src/builtins/convert.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-03-11T14:07:15Z",
+      "side": 1,
+      "message": "I thought of Uint64Constant for the first one and maybe Unsigned(Int64Constant(i)) for the second, similar to how it\u0027s done for uint32.",
+      "parentUuid": "de400268_51fc3633",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 44
+      },
+      "revId": "571675806cbed858c786b87e37c2ff3ad9c156a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
