@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21b6a153_8bebb541",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-12T11:45:37Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "ca8a6d8e7ecf6d1a3e6d6391af82ed034da37486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e8adf86_dd605f2e",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-12T11:45:37Z",
+      "side": 1,
+      "message": "feel free to ignore: Can get a comment here why rwx writing is better for performance?",
+      "range": {
+        "startLine": 614,
+        "startChar": 13,
+        "endLine": 614,
+        "endChar": 17
+      },
+      "revId": "ca8a6d8e7ecf6d1a3e6d6391af82ed034da37486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
