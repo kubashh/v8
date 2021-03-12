@@ -213,7 +213,7 @@ TEST_F(PageTest, LargePageCreationDestruction) {
   const PageBackend* backend = Heap::From(GetHeap())->page_backend();
   auto* space = static_cast<LargePageSpace*>(
       heap.Space(RawHeap::RegularSpaceType::kLarge));
-  auto* page = LargePage::Create(GetPageBackend(), space, kObjectSize);
+  auto* page = LargePage::Create(GetPageBackend(), space, space, kObjectSize);
   EXPECT_NE(nullptr, backend->Lookup(page->PayloadStart()));
 
   space->AddPage(page);
@@ -238,7 +238,7 @@ TEST_F(PageTest, UnsweptPageDestruction) {
   {
     auto* space = static_cast<LargePageSpace*>(
         heap.Space(RawHeap::RegularSpaceType::kLarge));
-    auto* page = LargePage::Create(GetPageBackend(), space,
+    auto* page = LargePage::Create(GetPageBackend(), space, space,
                                    2 * kLargeObjectSizeThreshold);
     space->AddPage(page);
     EXPECT_DEATH_IF_SUPPORTED(LargePage::Destroy(page), "");
