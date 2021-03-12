@@ -4518,6 +4518,23 @@ void Genesis::InitializeGlobal_harmony_relative_indexing_methods() {
   }
 }
 
+#ifdef V8_INTL_SUPPORT
+
+void Genesis::InitializeGlobal_harmony_intl_locale_info() {
+  if (!FLAG_harmony_intl_locale_info) return;
+  Handle<JSObject> prototype(
+      JSObject::cast(native_context()->intl_locale_function().prototype()),
+      isolate_);
+  SimpleInstallGetter(isolate(), prototype, factory()->defaults_string(),
+                      Builtins::kLocalePrototypeDefaults, true);
+  SimpleInstallGetter(isolate(), prototype, factory()->textInfo_string(),
+                      Builtins::kLocalePrototypeTextInfo, true);
+  SimpleInstallGetter(isolate(), prototype, factory()->weekInfo_string(),
+                      Builtins::kLocalePrototypeWeekInfo, true);
+}
+
+#endif  // V8_INTL_SUPPORT
+
 Handle<JSFunction> Genesis::CreateArrayBuffer(
     Handle<String> name, ArrayBufferKind array_buffer_kind) {
   // Create the %ArrayBufferPrototype%
