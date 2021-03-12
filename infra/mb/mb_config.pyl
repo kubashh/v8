@@ -191,6 +191,7 @@
       'v8_fuchsia_rel_ng': 'release_x64_fuchsia_trybot',
       'v8_ios_simulator': 'release_x64_ios_simulator',
       'v8_linux_rel_ng': 'release_x86_gcmole_trybot',
+      'v8_linux_example_rel_ng': 'release_x86_gcmole_trybot',
       'v8_linux_optional_rel_ng': 'release_x86_trybot',
       'v8_linux_verify_csa_rel_ng': 'release_x86_verify_csa',
       'v8_linux_nodcheck_rel_ng': 'release_x86_minimal_symbols',
