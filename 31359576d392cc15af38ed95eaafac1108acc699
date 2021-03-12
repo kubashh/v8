@@ -143,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e35ee1c9_79620084",
+        "filename": "include/cppgc/custom-space.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-03-12T18:04:43Z",
+      "side": 1,
+      "message": "If we\u0027re saying that the embedder needs to check if a GC is in progress (or more specifically that marking is in progress) then we\u0027ll need to provide a stable api to check that and move HeapState out of subtle.",
+      "parentUuid": "2d6f66dc_f29aad95",
+      "range": {
+        "startLine": 63,
+        "startChar": 48,
+        "endLine": 63,
+        "endChar": 53
+      },
+      "revId": "31359576d392cc15af38ed95eaafac1108acc699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af3fdcab_3bc66500",
         "filename": "include/cppgc/custom-space.h",
         "patchSetId": 7
@@ -190,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f1953823_8478a9f1",
+        "filename": "include/cppgc/custom-space.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-03-12T18:04:43Z",
+      "side": 1,
+      "message": "My comment was regarding the gap between annotations being applied to an *object* and being enabled on a *space*. All objects that need annotations need to be allocated on a space that supports it. I think we need to clarify that and/or that annotations are disabled by default for non-custom spaces.\n\nNvm about the mixins. Contiguous containers can be mixin, nothing prevents that, but since they cannot be large object the code should still work.",
+      "parentUuid": "22c5b62b_3a7007b3",
+      "range": {
+        "startLine": 67,
+        "startChar": 3,
+        "endLine": 67,
+        "endChar": 5
+      },
+      "revId": "31359576d392cc15af38ed95eaafac1108acc699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4472e51f_c4433688",
         "filename": "src/heap/cppgc/heap-space.cc",
         "patchSetId": 7
@@ -225,6 +273,30 @@
       "side": 1,
       "message": "I have removed and re-added this block several times before sending it out :) \n\nI see the point of having simple tagging but it would also be a problem if the embedder is built with ASAN and requires annotations and V8 is built without it. This simple CHECK would catch that.",
       "parentUuid": "4472e51f_c4433688",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 32
+      },
+      "revId": "31359576d392cc15af38ed95eaafac1108acc699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b062f25_37e6608d",
+        "filename": "src/heap/cppgc/heap-space.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-03-12T18:04:43Z",
+      "side": 1,
+      "message": "I think it should be up to the embedder to make sure it propagates enabling/disabling asan to v8. I don\u0027t think we need to check it.",
+      "parentUuid": "f4db5419_569527b0",
       "range": {
         "startLine": 27,
         "startChar": 8,
