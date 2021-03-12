@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bec9d9a_153f8c38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-03-12T09:49:37Z",
+      "side": 1,
+      "message": "PTAL. Please tell me how I can fix AssertNull in liftoff.",
+      "revId": "d5982470e9324b304e2b77a4ce5a213a4415abb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
