@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66c2cc62_bec47df1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-12T12:26:33Z",
+      "side": 1,
+      "message": "This allows us to fix all asan-container issues that still pop up on bots. \n\nI think we should also be able to remove the Blink annotation in the custom trace trait completely as we now fully support this from within the GC.",
+      "revId": "a68d42304d6a4fc196ebac1c0ca4e1692237c9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

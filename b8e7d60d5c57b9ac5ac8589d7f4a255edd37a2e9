@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca42f7ec_916e6787",
+        "filename": "test/unittests/heap/cppgc/concurrent-marking-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-12T12:26:33Z",
+      "side": 0,
+      "message": "Drive-by: Saw this was unused.",
+      "range": {
+        "startLine": 49,
+        "startChar": 7,
+        "endLine": 49,
+        "endChar": 18
+      },
+      "revId": "b8e7d60d5c57b9ac5ac8589d7f4a255edd37a2e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
