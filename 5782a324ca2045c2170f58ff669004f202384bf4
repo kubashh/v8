@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7435f11e_4e87fad0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1148006
+      },
+      "writtenOn": "2021-03-12T13:48:16Z",
+      "side": 1,
+      "message": "Hi jgruber@, could you please help to review isolate part?",
+      "revId": "5782a324ca2045c2170f58ff669004f202384bf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
