@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c27982fb_9789144f",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-12T09:45:25Z",
+      "side": 1,
+      "message": "note that we need to include the \"_ng\" suffix.",
+      "range": {
+        "startLine": 194,
+        "startChar": 27,
+        "endLine": 194,
+        "endChar": 30
+      },
+      "revId": "d22b662151aa2fc5d55cd74b6ab688305c2da9ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba98a2f6_a5992764",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-12T09:45:25Z",
+      "side": 1,
+      "message": "we change the mixin and its contents according to the desired features of the builder.",
+      "range": {
+        "startLine": 194,
+        "startChar": 33,
+        "endLine": 194,
+        "endChar": 60
+      },
+      "revId": "d22b662151aa2fc5d55cd74b6ab688305c2da9ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82de4ee6_88632bd0",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-12T09:45:25Z",
+      "side": 1,
+      "message": "note that we need to add the \"_ng_triggered\" suffix",
+      "range": {
+        "startLine": 166,
+        "startChar": 23,
+        "endLine": 166,
+        "endChar": 36
+      },
+      "revId": "d22b662151aa2fc5d55cd74b6ab688305c2da9ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eed2d6d1_7ef2fb55",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-12T09:45:25Z",
+      "side": 1,
+      "message": "you can control what tests do you want to run here.",
+      "range": {
+        "startLine": 171,
+        "startChar": 4,
+        "endLine": 171,
+        "endChar": 11
+      },
+      "revId": "d22b662151aa2fc5d55cd74b6ab688305c2da9ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
