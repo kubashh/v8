@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b9f83ec_4ac6e141",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-12T10:00:08Z",
+      "side": 1,
+      "message": "PTAL. This is similar to https://crrev.com/c/2726300 for switching some V8 Chromium builders to CAS.\n\nLooking for:\nReview: Tikuta\nCommitter +1: Stamp from V8 sheriff.",
+      "revId": "4aad4eea24086c9bd510797362be0b8ebec882c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
