@@ -1500,6 +1500,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   double LoadStartTimeMs();
 
+  void UpdateLoadStartTime();
+
   void IsolateInForegroundNotification();
 
   void IsolateInBackgroundNotification();

@@ -4463,6 +4463,11 @@ double Isolate::LoadStartTimeMs() {
   return load_start_time_ms_;
 }
 
+void Isolate::UpdateLoadStartTime() {
+  base::MutexGuard guard(&rail_mutex_);
+  load_start_time_ms_ = heap()->MonotonicallyIncreasingTimeInMs();
+}
+
 void Isolate::SetRAILMode(RAILMode rail_mode) {
   RAILMode old_rail_mode = rail_mode_.load();
   if (old_rail_mode != PERFORMANCE_LOAD && rail_mode == PERFORMANCE_LOAD) {
