@@ -15,6 +15,7 @@
 #include "src/heap/cppgc/heap-page.h"
 #include "src/heap/cppgc/liveness-broker.h"
 #include "src/heap/cppgc/marking-worklists.h"
+#include "src/heap/cppgc/sanitizers.h"
 
 namespace cppgc {
 namespace internal {
@@ -451,9 +452,14 @@ void DynamicallyTraceMarkedObject(Visitor& visitor,
                                   const HeapObjectHeader& header) {
   DCHECK(!header.IsInConstruction<mode>());
   DCHECK(header.IsMarked<mode>());
-  const GCInfo& gcinfo =
-      GlobalGCInfoTable::GCInfoFromIndex(header.GetGCInfoIndex<mode>());
-  gcinfo.trace(&visitor, header.Payload());
+  header.Trace<mode>(&visitor);
+}
+
+V8_INLINE void StaticallyTraceMarkedObject(Visitor& visitor,
+                                           TraceCallback callback,
+                                           const void* payload) {
+  LSAN_ALLOW_ACCESS_TO_CONTIGUOUS_CONTAINER(payload);
+  callback(&visitor, payload);
 }
 
 }  // namespace internal

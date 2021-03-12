@@ -31,6 +31,27 @@
 
 #endif  // V8_USE_ADDRESS_SANITIZER
 
+#ifdef LEAK_SANITIZER
+
+#include <sanitizer/lsan_interface.h>
+
+#define LSAN_ANNOTATE_CONTIGUOUS_CONTAINER(buffer, capacity, old_mid, new_mid) \
+  __sanitizer_annotate_contiguous_container(buffer, (buffer) + (capacity),     \
+                                            (buffer) + (old_mid),              \
+                                            (buffer) + (new_mid))
+
+#define LSAN_ALLOW_ACCESS_TO_CONTIGUOUS_CONTAINER(payload) \
+  cppgc::internal::LSANAllowAccessToContiguousContainer(payload)
+
+#else  // !LEAK_SANITIZER
+
+#define LSAN_ANNOTATE_CONTIGUOUS_CONTAINER(buffer, capacity, old_mid, new_mid) \
+  ((void)buffer, (void)(capacity), (void)(old_mid), (void)(new_mid))
+
+#define LSAN_ALLOW_ACCESS_TO_CONTIGUOUS_CONTAINER(payload) ((void)payload)
+
+#endif  // !LEAK_SANITIZER
+
 #ifdef V8_USE_MEMORY_SANITIZER
 
 #include <sanitizer/msan_interface.h>
@@ -75,6 +96,12 @@ inline void ZapMemory(void* address, size_t size) {
   static constexpr uint8_t kZappedValue = 0xdc;
   memset(address, kZappedValue, size);
 }
+
+#ifdef LEAK_SANITIZER
+
+void LSANAllowAccessToContiguousContainer(const void* payload);
+
+#endif  // LEAK_SANITIZER
 
 }  // namespace internal
 }  // namespace cppgc

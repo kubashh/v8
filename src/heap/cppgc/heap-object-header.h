@@ -18,6 +18,7 @@
 #include "src/base/macros.h"
 #include "src/heap/cppgc/gc-info-table.h"
 #include "src/heap/cppgc/globals.h"
+#include "src/heap/cppgc/sanitizers.h"
 
 namespace cppgc {
 
@@ -102,6 +103,7 @@ class HeapObjectHeader {
 
   V8_EXPORT_PRIVATE HeapObjectName GetName() const;
 
+  template <AccessMode = AccessMode::kNonAtomic>
   V8_EXPORT_PRIVATE void Trace(Visitor*) const;
 
  private:
@@ -274,6 +276,14 @@ bool HeapObjectHeader::IsFree() const {
 bool HeapObjectHeader::IsFinalizable() const {
   const GCInfo& gc_info = GlobalGCInfoTable::GCInfoFromIndex(GetGCInfoIndex());
   return gc_info.finalize;
+}
+
+template <AccessMode mode>
+void HeapObjectHeader::Trace(Visitor* visitor) const {
+  LSAN_ALLOW_ACCESS_TO_CONTIGUOUS_CONTAINER(Payload());
+  const GCInfo& gc_info =
+      GlobalGCInfoTable::GCInfoFromIndex(GetGCInfoIndex<mode>());
+  return gc_info.trace(visitor, Payload());
 }
 
 template <AccessMode mode, HeapObjectHeader::EncodedHalf part,
