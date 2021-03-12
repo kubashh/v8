@@ -248,6 +248,46 @@
       "parentUuid": "ea7d77f4_559ec0e9",
       "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad88af83_355c46b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-12T09:51:23Z",
+      "side": 1,
+      "message": "lgtm considering the results of the memory evaluation in https://bugs.chromium.org/p/v8/issues/detail?id\u003d10947#c11\n\nSorry for the delay with crbug.com/1079326.",
+      "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "297c5e84_e88d00ec",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 9293,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-12T09:51:23Z",
+      "side": 1,
+      "message": "Nit: Update load start time of the RAIL mode.",
+      "range": {
+        "startLine": 9293,
+        "startChar": 4,
+        "endLine": 9293,
+        "endChar": 43
+      },
+      "revId": "97639ce868a1a8c77d734a5fd6a082125276c8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
