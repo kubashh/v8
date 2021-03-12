@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "040b3c19_df267cf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-03-12T19:40:45Z",
+      "side": 1,
+      "message": "To *all* trivially destructible objects?\nMy 2 concerns about this are:\n1) Performance since this seems inefficient (although it\u0027s only for asan builds so probably ok).\n2) Blindly applying annotations to all objects means we might be hiding issues that could/should otherwise be fixed in a different way (same as why we don\u0027t just use atomics for all operations in the gc and apply atomics only where races actually occur).",
+      "parentUuid": "555306f1_438b87c7",
+      "revId": "31359576d392cc15af38ed95eaafac1108acc699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6cd46c9_542f53b7",
