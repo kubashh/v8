@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46e5cf23_78ac80a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-12T18:18:30Z",
+      "side": 1,
+      "message": "lgtm with last nit",
+      "revId": "9368fcec7ef3236293a614805736a6e51d13f122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b141db03_37e90f66",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-12T18:18:30Z",
+      "side": 1,
+      "message": "The C++ code would be nicer and no casts will be needed if you used 32 bit types and instructions: Word32T, Word32Not(), Word32And().",
+      "revId": "9368fcec7ef3236293a614805736a6e51d13f122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
