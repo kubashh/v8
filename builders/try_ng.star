@@ -316,6 +316,16 @@ try_ng_pair(
 )
 
 try_ng_pair(
+    name = "v8_linux_example_rel",
+    cq_properties_trigger = {"cancel_stale": False},
+    cq_properties_triggered = {"cancel_stale": False},
+    dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+    execution_timeout = 2400,
+    gclient_vars = [GCLIENT_VARS.GCMOLE],
+    use_goma = GOMA.DEFAULT,
+)
+
+try_ng_pair(
     name = "v8_linux_optional_rel",
     cq_properties_trigger = {"location_regexp": [".+/[+]/assembler-ia32.h", ".+/[+]/assembler-ia32.cc"], "cancel_stale": False},
     cq_properties_triggered = {"location_regexp": [".+/[+]/assembler-ia32.h", ".+/[+]/assembler-ia32.cc"], "cancel_stale": False},
