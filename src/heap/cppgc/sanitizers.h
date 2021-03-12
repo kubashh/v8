@@ -23,11 +23,23 @@
 #error "ASAN_POISON_MEMORY_REGION must be defined"
 #endif
 
+#define ASAN_ANNOTATE_CONTIGUOUS_CONTAINER(buffer, capacity, old_mid, new_mid) \
+  __sanitizer_annotate_contiguous_container(buffer, (buffer) + (capacity),     \
+                                            (buffer) + (old_mid),              \
+                                            (buffer) + (new_mid))
+
+#define ASAN_ALLOW_ACCESS_TO_CONTIGUOUS_CONTAINER(payload) \
+  cppgc::internal::AsanAllowAccessToContiguousContainer(payload)
+
 #else  // !V8_USE_ADDRESS_SANITIZER
 
 #define NO_SANITIZE_ADDRESS
 #define ASAN_POISON_MEMORY_REGION(addr, size) ((void)(addr), (void)(size))
 #define ASAN_UNPOISON_MEMORY_REGION(addr, size) ((void)(addr), (void)(size))
+
+#define ASAN_ANNOTATE_CONTIGUOUS_CONTAINER(buffer, capacity, old_mid, new_mid) \
+  ((void)buffer, (void)(capacity), (void)(old_mid), (void)(new_mid))
+#define ASAN_ALLOW_ACCESS_TO_CONTIGUOUS_CONTAINER(payload) ((void)payload)
 
 #endif  // V8_USE_ADDRESS_SANITIZER
 
@@ -75,6 +87,12 @@ inline void ZapMemory(void* address, size_t size) {
   static constexpr uint8_t kZappedValue = 0xdc;
   memset(address, kZappedValue, size);
 }
+
+#ifdef V8_USE_ADDRESS_SANITIZER
+
+void AsanAllowAccessToContiguousContainer(const void* payload);
+
+#endif  // V8_USE_ADDRESS_SANITIZER
 
 }  // namespace internal
 }  // namespace cppgc
