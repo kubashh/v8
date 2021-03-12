@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b8d8fed_fc0e089d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-12T15:32:33Z",
+      "side": 1,
+      "message": "I\u0027ve now implemented the fallback in terms of UintPtrT.",
+      "parentUuid": "0bf99c9c_c5e9fd37",
+      "range": {
+        "startLine": 614,
+        "startChar": 24,
+        "endLine": 614,
+        "endChar": 36
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bdacf21_64ae7feb",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-03-11T10:36:23Z",
       "side": 1,
       "message": "I guess you meant Word64PopulationCount here, because this one might also be not available.",
+      "range": {
+        "startLine": 630,
+        "startChar": 9,
+        "endLine": 630,
+        "endChar": 21
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ac8f2ad_bcf8af13",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-12T15:32:33Z",
+      "side": 1,
+      "message": "Yes, I fell into my own trap of having two similarly named functions ;)",
+      "parentUuid": "9bdacf21_64ae7feb",
       "range": {
         "startLine": 630,
         "startChar": 9,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44cc15bb_f7a8843d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-12T15:32:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82b34fe8_6852e57a",
+      "range": {
+        "startLine": 639,
+        "startChar": 24,
+        "endLine": 639,
+        "endChar": 33
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "167aaaa0_2ed2dc8a",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-03-11T12:05:58Z",
       "side": 1,
       "message": "Word64Ctz?",
+      "range": {
+        "startLine": 241,
+        "startChar": 37,
+        "endLine": 241,
+        "endChar": 47
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4def5de2_5aa875b3",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-12T15:32:33Z",
+      "side": 1,
+      "message": "Yes, thanks!",
+      "parentUuid": "167aaaa0_2ed2dc8a",
       "range": {
         "startLine": 241,
         "startChar": 37,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f601d5a_0c751174",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4179,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-12T15:32:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d873756b_73ea4b3a",
+      "range": {
+        "startLine": 4179,
+        "startChar": 28,
+        "endLine": 4179,
+        "endChar": 49
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b6e49f2_4cc5f6c0",
@@ -146,6 +266,30 @@
       "writtenOn": "2021-03-11T10:36:23Z",
       "side": 1,
       "message": "Same here.",
+      "range": {
+        "startLine": 4212,
+        "startChar": 10,
+        "endLine": 4212,
+        "endChar": 34
+      },
+      "revId": "d2a263e626943a4fe1f166164fd75fadc33115e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f33cac6b_bb43411f",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4212,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-12T15:32:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b6e49f2_4cc5f6c0",
       "range": {
         "startLine": 4212,
         "startChar": 10,
