@@ -7,6 +7,7 @@
 #include "include/cppgc/internal/api-constants.h"
 #include "src/base/macros.h"
 #include "src/heap/cppgc/gc-info-table.h"
+#include "src/heap/cppgc/sanitizers.h"
 
 namespace cppgc {
 namespace internal {
@@ -21,6 +22,7 @@ void HeapObjectHeader::CheckApiConstants() {
 }
 
 void HeapObjectHeader::Finalize() {
+  ASAN_ALLOW_ACCESS_TO_CONTIGUOUS_CONTAINER(Payload());
   const GCInfo& gc_info = GlobalGCInfoTable::GCInfoFromIndex(GetGCInfoIndex());
   if (gc_info.finalize) {
     gc_info.finalize(Payload());
@@ -30,11 +32,6 @@ void HeapObjectHeader::Finalize() {
 HeapObjectName HeapObjectHeader::GetName() const {
   const GCInfo& gc_info = GlobalGCInfoTable::GCInfoFromIndex(GetGCInfoIndex());
   return gc_info.name(Payload());
-}
-
-void HeapObjectHeader::Trace(Visitor* visitor) const {
-  const GCInfo& gc_info = GlobalGCInfoTable::GCInfoFromIndex(GetGCInfoIndex());
-  return gc_info.trace(visitor, Payload());
 }
 
 }  // namespace internal

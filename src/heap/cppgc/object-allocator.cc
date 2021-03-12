@@ -84,9 +84,11 @@ void ReplaceLinearAllocationBuffer(NormalPageSpace* space,
 }
 
 void* AllocateLargeObject(PageBackend* page_backend, LargePageSpace* space,
+                          BaseSpace* original_space,
                           StatsCollector* stats_collector, size_t size,
                           GCInfoIndex gcinfo) {
-  LargePage* page = LargePage::Create(page_backend, space, size);
+  LargePage* page =
+      LargePage::Create(page_backend, space, original_space, size);
   space->AddPage(page);
 
   auto* header = new (page->ObjectHeader())
@@ -127,8 +129,8 @@ void* ObjectAllocator::OutOfLineAllocateImpl(NormalPageSpace* space,
   if (size >= kLargeObjectSizeThreshold) {
     auto* large_space = LargePageSpace::From(
         raw_heap_->Space(RawHeap::RegularSpaceType::kLarge));
-    return AllocateLargeObject(page_backend_, large_space, stats_collector_,
-                               size, gcinfo);
+    return AllocateLargeObject(page_backend_, large_space, space,
+                               stats_collector_, size, gcinfo);
   }
 
   // 2. Try to allocate from the freelist.

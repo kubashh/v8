@@ -105,6 +105,7 @@ v8_source_set("cppgc_unittests_sources") {
     "heap/cppgc/heap-unittest.cc",
     "heap/cppgc/incremental-marking-schedule-unittest.cc",
     "heap/cppgc/logging-unittest.cc",
+    "heap/cppgc/lsan-contiguous-container-unittest.cc",
     "heap/cppgc/marker-unittest.cc",
     "heap/cppgc/marking-verifier-unittest.cc",
     "heap/cppgc/marking-visitor-unittest.cc",

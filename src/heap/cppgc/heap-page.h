@@ -188,7 +188,7 @@ class V8_EXPORT_PRIVATE LargePage final : public BasePage {
   // Returns the allocation size required for a payload of size |size|.
   static size_t AllocationSize(size_t size);
   // Allocates a new page in the detached state.
-  static LargePage* Create(PageBackend*, LargePageSpace*, size_t);
+  static LargePage* Create(PageBackend*, LargePageSpace*, BaseSpace*, size_t);
   // Destroys and frees the page. The page must be detached from the
   // corresponding space (i.e. be swept when called).
   static void Destroy(LargePage*);
@@ -216,10 +216,14 @@ class V8_EXPORT_PRIVATE LargePage final : public BasePage {
     return (PayloadStart() <= address) && (address < PayloadEnd());
   }
 
+  BaseSpace* original_space() const { return original_space_; }
+
  private:
-  LargePage(HeapBase* heap, BaseSpace* space, size_t);
+  LargePage(HeapBase* heap, BaseSpace* space, BaseSpace* original_space,
+            size_t);
   ~LargePage();
 
+  BaseSpace* original_space_;
   size_t payload_size_;
 };
 

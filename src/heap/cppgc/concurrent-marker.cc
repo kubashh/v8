@@ -129,8 +129,9 @@ void ConcurrentMarkingTask::ProcessWorklists(
               DCHECK(!header.IsInConstruction<AccessMode::kAtomic>());
               DCHECK(header.IsMarked<AccessMode::kAtomic>());
               concurrent_marking_state.AccountMarkedBytes(header);
-              item.callback(&concurrent_marking_visitor,
-                            item.base_object_payload);
+              StaticallyTraceMarkedObject(concurrent_marking_visitor,
+                                          item.callback,
+                                          item.base_object_payload);
             })) {
       return;
     }
