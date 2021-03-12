@@ -2252,6 +2252,20 @@ class LiftoffCompiler {
     __ AssertUnreachable(AbortReason::kUnexpectedReturnFromWasmTrap);
   }
 
+  void AssertNull(FullDecoder* decoder, const Value& obj, Value* result) {
+    Label* trap_label =
+        AddOutOfLineTrap(decoder, WasmCode::kThrowWasmTrapIllegalCast);
+    LiftoffRegList pinned;
+    LiftoffRegister obj_reg = pinned.set(__ PopToRegister());
+    LiftoffRegister null = __ GetUnusedRegister(kGpReg, pinned);
+    LiftoffRegister result_reg =
+        __ GetUnusedRegister(kGpReg, {obj_reg}, pinned);
+    LoadNullValue(null.gp(), pinned);
+    __ emit_cond_jump(LiftoffCondition::kUnequal, trap_label, obj.type.kind(),
+                      obj_reg.gp(), null.gp());
+    __ PushRegister(obj.type.kind(), result_reg);
+  }
+
   void NopForTestingUnsupportedInLiftoff(FullDecoder* decoder) {
     unsupported(decoder, kOtherReason, "testing opcode");
   }
