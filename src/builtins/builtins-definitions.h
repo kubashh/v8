@@ -1037,7 +1037,9 @@ namespace internal {
   CPP(LocalePrototypeNumberingSystem)                                  \
   CPP(LocalePrototypeRegion)                                           \
   CPP(LocalePrototypeScript)                                           \
+  CPP(LocalePrototypeTextInfo)                                         \
   CPP(LocalePrototypeToString)                                         \
+  CPP(LocalePrototypeWeekInfo)                                         \
   /* ecma402 #sec-intl.numberformat */                                 \
   CPP(NumberFormatConstructor)                                         \
   /* ecma402 #sec-number-format-functions */                           \
