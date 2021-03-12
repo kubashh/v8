@@ -16,6 +16,47 @@
       "message": "Hey Ulan, here\u0027s an alternate stab at the CodeEntry finalizer work, inspired by your prior suggestions to do a main-thread sweep. Some important notes;\n\n- With this approach, we seem to be able to handle clearing out flushed bytecode during the sweep phase. Looking into whether or not this is a reasonable expectation, or undefined behaviour. I\u0027ve removed the bytecode flush logic in the mean time.\n- The CodeMap is changed to be backed by a |multimap|, as the CodeMap may no longer delete CodeEntry objects that are currently being tracked (as we need to first deregister the finalizer on the isolate thread). Let me know your thoughts on this vs. posting a task to the isolate thread. We generally run into these collisions very infrequently, only for things like EmptyFunction.\n\nPTAL -- and thanks a bunch!",
       "revId": "61a9249f61ffcf5e59ce0d3d3a427551f87fe42d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e093ffad_9901711d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-12T14:49:36Z",
+      "side": 1,
+      "message": "The approach looks good!\n\nI did not expect clearing of flushed bytecode to work, but looks like we are lucky with the order of clearing weak handles and in-place conversion of flushed bytecode.\n\nWhat happens here is:\n1) The shared function info becomes a candidate for bytecode flushing. The marking visitor treats its bytecode array (BA) field as weak.\n2) In MarkCompactCollector::MarkLiveObjects the BA is unmarked.\n3) MarkCompactCollector::MarkLiveObjects clears all weak handles with unmarked targets (including the BA handle): \nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/heap/mark-compact.cc;l\u003d2024;drc\u003d3f9ff062b053155df7897f199e80a8bafe7c34df\n\n4) MarkCompactCollector::ClearNonLiveReferences iterates bytecode flushing candidates and in-place converts the flushed BA to an uncompile data and marks it as live.\n\nIf the order of (3) and (4) would be reversed, the clearing of handles would not work.\n\nLet\u0027s add a comment explaining the the order of clearing of weak handles is important in \nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/heap/mark-compact.cc;l\u003d2024;drc\u003d3f9ff062b053155df7897f199e80a8bafe7c34df\n\n\nRegarding the multimap issue:\nIIUC it is caused by delayed code sweep events. By the time when GC epilogue runs, a new code object may be allocated in place of an old collected code object. We could fix it by moving the code sweep event to MarkCompactCollector::MarkLiveObjects after clearing the weak handles.",
+      "parentUuid": "476ea02f_3c413a06",
+      "revId": "61a9249f61ffcf5e59ce0d3d3a427551f87fe42d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04b3644f_8a7a35a1",
+        "filename": "src/profiler/profiler-listener.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-12T14:49:36Z",
+      "side": 1,
+      "message": "Let\u0027s remove this completely?",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 66
+      },
+      "revId": "61a9249f61ffcf5e59ce0d3d3a427551f87fe42d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
