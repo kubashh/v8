@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f0b2cb1_61e521c5",
+        "filename": "builders/try_ng.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-03-12T09:56:48Z",
+      "side": 1,
+      "message": "This is the only attribute that needs to be different in order for the builder not to be blocking. Otherwise it functions the same a blocking builder (see the CLs https://crrev.com/c/2756207 and https://crrev.com/c/2756209).",
+      "range": {
+        "startLine": 320,
+        "startChar": 29,
+        "endLine": 320,
+        "endChar": 54
+      },
+      "revId": "56476d5fdac487d36e482eb23374f41f8f387f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
