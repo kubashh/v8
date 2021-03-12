@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2848423_85e2673f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-12T17:25:39Z",
+      "side": 1,
+      "message": "Ack, there\u0027s a check against LO size needed.",
+      "parentUuid": "95ac5a8b_5f392ef6",
+      "revId": "31359576d392cc15af38ed95eaafac1108acc699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6cd46c9_542f53b7",
@@ -101,6 +119,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d6f66dc_f29aad95",
+        "filename": "include/cppgc/custom-space.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-12T17:25:39Z",
+      "side": 1,
+      "message": "True, will rephrase. Essentially the embedder must do what Blink does: Check that it doesn\u0027t tighten bounds during GC.",
+      "parentUuid": "3c9fd302_ef43b742",
+      "range": {
+        "startLine": 63,
+        "startChar": 48,
+        "endLine": 63,
+        "endChar": 53
+      },
+      "revId": "31359576d392cc15af38ed95eaafac1108acc699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af3fdcab_3bc66500",
         "filename": "include/cppgc/custom-space.h",
         "patchSetId": 7
@@ -112,6 +154,30 @@
       "writtenOn": "2021-03-12T16:52:54Z",
       "side": 1,
       "message": "Clarify somewhere that a type that requires annotations must go in a custom space with annotations enabled. We can\u0027t have such type in a regular space.\nAlso we need to clarify that mixins cannot require annotations.",
+      "range": {
+        "startLine": 67,
+        "startChar": 3,
+        "endLine": 67,
+        "endChar": 5
+      },
+      "revId": "31359576d392cc15af38ed95eaafac1108acc699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22c5b62b_3a7007b3",
+        "filename": "include/cppgc/custom-space.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-12T17:25:39Z",
+      "side": 1,
+      "message": "\u003e Clarify somewhere that a type that requires annotations must go in a custom space with annotations enabled. We can\u0027t have such type in a regular space.\n\nThat\u0027s why the flag is on a custom space. There\u0027s no mentioning of regular spaces on the API.\n\n\u003e Also we need to clarify that mixins cannot require annotations.\n\nAnnotations may per ASAN only be used with contiguous containers.\n\n(Mixins could actually use annotations but we would always unpoison the whole object.)",
+      "parentUuid": "af3fdcab_3bc66500",
       "range": {
         "startLine": 67,
         "startChar": 3,
@@ -135,6 +201,30 @@
       "writtenOn": "2021-03-12T16:52:54Z",
       "side": 1,
       "message": "I don\u0027t think this is a good idea. I\u0027d rather embedder use a simple tagging for spaces and not depend on build arguments. If asan is disabled, the macros will resolve to noop anyway.",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 32
+      },
+      "revId": "31359576d392cc15af38ed95eaafac1108acc699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4db5419_569527b0",
+        "filename": "src/heap/cppgc/heap-space.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-12T17:25:39Z",
+      "side": 1,
+      "message": "I have removed and re-added this block several times before sending it out :) \n\nI see the point of having simple tagging but it would also be a problem if the embedder is built with ASAN and requires annotations and V8 is built without it. This simple CHECK would catch that.",
+      "parentUuid": "4472e51f_c4433688",
       "range": {
         "startLine": 27,
         "startChar": 8,
