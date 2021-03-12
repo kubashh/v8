@@ -174,8 +174,11 @@ size_t NormalPage::PayloadSize() {
   return kPageSize - 2 * kGuardPageSize - header_size;
 }
 
-LargePage::LargePage(HeapBase* heap, BaseSpace* space, size_t size)
-    : BasePage(heap, space, PageType::kLarge), payload_size_(size) {}
+LargePage::LargePage(HeapBase* heap, BaseSpace* space,
+                     BaseSpace* original_space, size_t size)
+    : BasePage(heap, space, PageType::kLarge),
+      original_space_(original_space),
+      payload_size_(size) {}
 
 LargePage::~LargePage() = default;
 
@@ -188,7 +191,7 @@ size_t LargePage::AllocationSize(size_t payload_size) {
 
 // static
 LargePage* LargePage::Create(PageBackend* page_backend, LargePageSpace* space,
-                             size_t size) {
+                             BaseSpace* original_space, size_t size) {
   DCHECK_NOT_NULL(page_backend);
   DCHECK_NOT_NULL(space);
   DCHECK_LE(kLargeObjectSizeThreshold, size);
@@ -197,7 +200,7 @@ LargePage* LargePage::Create(PageBackend* page_backend, LargePageSpace* space,
 
   auto* heap = space->raw_heap()->heap();
   void* memory = page_backend->AllocateLargePageMemory(allocation_size);
-  LargePage* page = new (memory) LargePage(heap, space, size);
+  LargePage* page = new (memory) LargePage(heap, space, original_space, size);
   page->SynchronizedStore();
   page->heap()->stats_collector()->NotifyAllocatedMemory(allocation_size);
   return page;

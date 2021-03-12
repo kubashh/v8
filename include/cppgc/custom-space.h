@@ -26,6 +26,7 @@ class CustomSpaceBase {
   virtual ~CustomSpaceBase() = default;
   virtual CustomSpaceIndex GetCustomSpaceIndex() const = 0;
   virtual bool IsCompactable() const = 0;
+  virtual bool NeedsLSANContiguousContainerAnnotations() const = 0;
 };
 
 /**
@@ -54,11 +55,28 @@ class CustomSpace : public CustomSpaceBase {
    */
   static constexpr bool kSupportsCompaction = false;
 
+  /**
+   * Instructs the garbage collector to emit LSAN contiguous container
+   * annotations for this particular space. The annotations are emitted before
+   * the garbage collector accesses potentially unsafe areas in the object.
+   *
+   * It is up to the embedder to tighten limits after a garbage collection has
+   * run.
+   *
+   * Note that this flag may only specified when building with LSAN support.
+   */
+  static constexpr bool kNeedsLSANContiguousContainerAnnotations = false;
+
   CustomSpaceIndex GetCustomSpaceIndex() const final {
     return ConcreteCustomSpace::kSpaceIndex;
   }
+
   bool IsCompactable() const final {
     return ConcreteCustomSpace::kSupportsCompaction;
+  }
+
+  bool NeedsLSANContiguousContainerAnnotations() const final {
+    return ConcreteCustomSpace::kNeedsLSANContiguousContainerAnnotations;
   }
 };
 

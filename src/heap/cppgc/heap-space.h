@@ -48,11 +48,15 @@ class V8_EXPORT_PRIVATE BaseSpace {
   Pages RemoveAllPages();
 
   bool is_compactable() const { return is_compactable_; }
+  bool needs_lsan_contiguous_container_annotations() const {
+    return needs_lsan_contiguous_container_annotations_;
+  }
 
  protected:
   enum class PageType { kNormal, kLarge };
   explicit BaseSpace(RawHeap* heap, size_t index, PageType type,
-                     bool is_compactable);
+                     bool is_compactable,
+                     bool needs_lsan_contiguous_container_annotations);
 
  private:
   RawHeap* heap_;
@@ -61,6 +65,7 @@ class V8_EXPORT_PRIVATE BaseSpace {
   const size_t index_;
   const PageType type_;
   const bool is_compactable_;
+  const bool needs_lsan_contiguous_container_annotations_ = false;
 };
 
 class V8_EXPORT_PRIVATE NormalPageSpace final : public BaseSpace {
@@ -96,7 +101,8 @@ class V8_EXPORT_PRIVATE NormalPageSpace final : public BaseSpace {
     return From(const_cast<BaseSpace*>(space));
   }
 
-  NormalPageSpace(RawHeap* heap, size_t index, bool is_compactable);
+  NormalPageSpace(RawHeap* heap, size_t index, bool is_compactable,
+                  bool needs_lsan_contiguous_container_annotations);
 
   LinearAllocationBuffer& linear_allocation_buffer() { return current_lab_; }
   const LinearAllocationBuffer& linear_allocation_buffer() const {
