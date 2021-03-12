@@ -70,6 +70,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "555306f1_438b87c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-12T18:50:41Z",
+      "side": 1,
+      "message": "There\u0027s actually a possible alternative to all of this: We really only need the annotations for trivially destructible backings. We could keep the Blink annotations in destructor and TraceTrait and only add the annotations in ASAN to all our trivially destructible objects. That means no API required.\n\n(We could keep the bottleneck refactorings.)",
+      "revId": "31359576d392cc15af38ed95eaafac1108acc699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6cd46c9_542f53b7",
