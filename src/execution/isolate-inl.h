@@ -14,6 +14,7 @@
 #include "src/objects/property-cell.h"
 #include "src/objects/regexp-match-info.h"
 #include "src/objects/shared-function-info.h"
+#include "src/objects/source-text-module-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -118,6 +119,14 @@ Isolate::ExceptionScope::~ExceptionScope() {
 bool Isolate::IsAnyInitialArrayPrototype(JSArray array) {
   DisallowGarbageCollection no_gc;
   return IsInAnyContext(array, Context::INITIAL_ARRAY_PROTOTYPE_INDEX);
+}
+
+void Isolate::DidFinishModuleAsyncEvaluation(int ordinal) {
+  // TODO(syg): Prove that this is correct to do.
+  if (ordinal == next_module_async_evaluating_ordinal_ - 1) {
+    next_module_async_evaluating_ordinal_ =
+        SourceTextModule::kFirstAsyncEvaluatingOrdinal;
+  }
 }
 
 #define NATIVE_CONTEXT_FIELD_ACCESSOR(index, type, name)    \

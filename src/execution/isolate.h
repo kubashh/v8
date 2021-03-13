@@ -1374,6 +1374,16 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     return id;
   }
 
+  int NextModuleAsyncEvaluatingOrdinal() {
+    int ordinal = next_module_async_evaluating_ordinal_++;
+    // Keep this in sync with the number of bits in source-text-module.tq.
+    constexpr int kMaxOrdinal = (1 << 30) - 1;
+    CHECK(ordinal < kMaxOrdinal);
+    return ordinal;
+  }
+
+  inline void DidFinishModuleAsyncEvaluation(int ordinal);
+
   void AddNearHeapLimitCallback(v8::NearHeapLimitCallback, void* data);
   void RemoveNearHeapLimitCallback(v8::NearHeapLimitCallback callback,
                                    size_t heap_limit);
@@ -1976,6 +1986,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 #if V8_SFI_HAS_UNIQUE_ID
   std::atomic<int> next_unique_sfi_id_;
 #endif
+
+  int next_module_async_evaluating_ordinal_;
 
   // Vector of callbacks before a Call starts execution.
   std::vector<BeforeCallEnteredCallback> before_call_entered_callbacks_;
