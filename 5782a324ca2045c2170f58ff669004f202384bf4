@@ -16,6 +16,23 @@
       "message": "Hi jgruber@, could you please help to review isolate part?",
       "revId": "5782a324ca2045c2170f58ff669004f202384bf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84f3c074_ccf5abc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-15T06:49:26Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5782a324ca2045c2170f58ff669004f202384bf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
