@@ -128,7 +128,7 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
       display: block-inline;
       float: right;
       border-radius: 5px;
-      background-color: #EEE;
+      background-color: #333;
       width: 1em;
       text-align: center;
     }
@@ -252,6 +252,7 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
     let selectedPage;
     let baselineVersion;
     let selectedEntry;
+    let sortByLabel = false;
 
     // Marker to programatically replace the defaultData.
     let defaultData = /*default-data-start*/undefined/*default-data-end*/;
@@ -398,17 +399,23 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
       pushHistoryState();
     }
 
+    function clamp(value, min, max) {
+      if (value < min) return min;
+      if (value > max) return max;
+      return value;
+    }
+
     function diffColorFromRatio(ratio) {
       if (ratio > 1) {
         // ratio > 1: #FFFFFF => #00FF00
-        const red = Math.min(Math.round((ratio - 1) * 255 * 10), 255);
-        const other = (255 - red).toString(16);
-        return `#FF${other}${other}`;
+        const red = clamp(((ratio - 1) * 255 * 10) | 0, 0, 255);
+        const other = (255 - red).toString(16).padStart(2, '0');
+        return `#ff${other}${other}`;
       }
       // ratio < 1: #FF0000 => #FFFFFF
-      const green = Math.min(Math.round((1 - ratio) * 255 * 10), 255);
-      const other = (255 - green).toString(16);
-      return `#${other}FF${other}`;
+      const green = clamp(((1 - ratio) * 255 * 10) | 0, 0, 255);
+      const other = (255 - green).toString(16).padStart(2, '0');
+      return `#${other}ff${other}`;
     }
 
     function showPageInColumn(page, columnIndex) {
@@ -781,11 +788,15 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
         return rowData;
       }
     }
-
+    const collator = new Intl.Collator('en-UK');
     function setDataTableRows(dataTable, rows) {
       let skippedRows = 0;
       // Always sort by the selected entry (first column after the label)
-      rows.sort((a,b) => b.sortValue - a.sortValue);
+      if (sortByLabel) {
+        rows.sort((a,b) => collator.compare(a.label, b.label));
+      } else {
+        rows.sort((a,b) => b.sortValue - a.sortValue);
+      }
       // Aggregate row data for Average/SUM chart entry:
       const aggregateData = rows[0].data.slice().fill(0);
       let maxTotal = 0;
@@ -886,7 +897,10 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
         },
         legend: {position:'top', maxLines: 3, textStyle: { fontSize: 12 }},
         chartArea: {left:200, top:50 },
-        colors: [...groups.map(each => each.color), /* Chart Total */ "#000000"]
+        colors: [
+            ...groups.map(each => each.color),
+            /* Chart Total */ "#000000",
+          ]
       };
       let parentNode = $(id);
       parentNode.querySelector('h2>span, h3>span').textContent = title;
@@ -911,15 +925,24 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
         return page.getEntry(selectedGroup);
       }
       function selectHandler(e) {
-        selectedGroup = getChartEntry(chart.getSelection()[0])
-        if (!selectedGroup) return;
+        const newSelectedGroup = getChartEntry(chart.getSelection()[0]);
+        if (newSelectedGroup == selectedGroup) {
+          sortByLabel = !sortByLabel;
+        } else if (newSelectedGroup === undefined && selectedPage) {
+          sortByLabel = true;
+          return showGraphs(selectedPage);
+        } else {
+          sortByLabel = false;
+        }
+        selectedGroup = newSelectedGroup;
         selectEntry(selectedGroup, true);
       }
 
       // Make our global tooltips work
       google.visualization.events.addListener(chart, 'onmouseover', mouseOverHandler);
       function mouseOverHandler(selection) {
-        graphNode.entry = getChartEntry(selection);
+        const selectedGroup = getChartEntry(selection);
+        graphNode.entry = selectedGroup;
       }
       chart.draw(dataTable, options);
     }
@@ -1218,7 +1241,7 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
         fields.set(name, index);
       });
       if (fields.has('displayLabel') && fields.has('stories')) {
-        handleLoadResultCSV(fields, lines, fileName)
+        handleLoadResultCSV(fields, lines)
       } else if (fields.has('page_name')) {
         handleLoadClusterTelemetryCSV(fields, lines, fileName)
       } else {
@@ -1286,7 +1309,7 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
       }
     }
 
-    function handleLoadResultCSV(fields, lines, fileName) {
+    function handleLoadResultCSV(fields, lines) {
       const version_i = fields.get('displayLabel');
       const page_i = fields.get('stories');
       const category_i = fields.get('name');
@@ -1365,6 +1388,7 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
     }
 
     function handleLoadTXT(txt, append, fileName) {
+      fileName = window.prompt('Version name:', fileName);
       let isFirstLoad = pages === undefined;
       // Load raw RCS output which contains a single page
       if (!append || isFirstLoad) {
@@ -1518,7 +1542,7 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
 
     function handleToggleGroup(event) {
       let group = event.target.parentNode.parentNode.entry;
-      toggleGroup(selectedPage.get(group.name));
+      toggleGroup(selectedPage.get(group.name), 'toggle');
     }
 
     function handleSelectPage(select, event) {
@@ -1580,7 +1604,7 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
         target = target.parentNode;
         if (!target) return undefined;
       }
-      return target.entry;
+      return target.entry === 0 ? undefined : target.entry;
     }
 
     function handleUpdatePopover(event) {
@@ -1802,8 +1826,9 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
 
       static fromTXT(name, txt) {
         let version = new Version(name);
-        let pageName = "RAW DATA";
-        version.add(PageVersion.fromTXT(version, pageName, txt));
+        let defaultName = "RAW DATA";
+        PageVersion.fromTXT(version, defaultName, txt)
+          .forEach(each => version.add(each));
         return version;
       }
     }
@@ -1875,20 +1900,21 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
         return { version: this.version.name, page: this.name};
       }
       add(entry) {
-        // Ignore accidentally added Group entries.
-        if (entry.name.startsWith(GroupedEntry.prefix)) {
-          console.warn("Skipping accidentally added Group entry:", entry, this);
-          return;
-        }
         let existingEntry = this.entryDict.get(entry.name);
         if (existingEntry !== undefined) {
           // Duplicate entries happen when multiple runs are combined into a
           // single file.
           existingEntry.add(entry);
-          for (let group of this.groups) {
+          for (let i =0; i < this.groups.length; i++) {
+            const group = this.groups[i];
             if (group.addTimeAndCount(entry)) return;
           }
         } else {
+          // Ignore accidentally added Group entries.
+          if (entry.name.startsWith(GroupedEntry.prefix)) {
+            console.warn("Skipping accidentally added Group entry:", entry, this);
+            return;
+          }
           entry.page = this;
           this.entryDict.set(entry.name, entry);
           for (let group of this.groups) {
@@ -1971,21 +1997,36 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
         return page
       }
 
-      static fromTXT(version, name, txt) {
-        let pageVersion = new PageVersion(version, pages.get(name));
+      static fromTXT(version, defaultName, txt) {
+        const kPageNameIdentifier = "== Page:";
+        const kCommentStart = "=="
         let lines = txt.split('\n');
         let split = / +/g
-        // Skip the first two lines (HEADER and SEPARATOR)
-        for (let i = 2; i < lines.length; i++) {
-          let line = lines[i].trim().split(split)
-          // Skip header lines
-          if (lines[i].startsWith("======")) continue;
-          if (lines[i+1]?.startsWith("======")) continue;
-          if (line.length != 5) continue;
-          let position = i-2;
-          pageVersion.add(Entry.fromTXT(position, line));
+        let result = [];
+        let pageVersion = undefined;
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          // Skip header separators
+          if (line.startsWith(kCommentStart)) {
+            // Check for page names
+            if (line.startsWith(kPageNameIdentifier)) {
+              const name = line.split(kPageNameIdentifier)[1];
+              pageVersion = new PageVersion(version, pages.get(name));
+              result.push(pageVersion);
+            }
+          }
+          // Skip header lines.
+          if (lines[i+1]?.startsWith(kCommentStart)) continue;
+          const split_line = line.trim().split(split)
+          if (split_line.length != 5) continue;
+          if (pageVersion === undefined) {
+              pageVersion = new PageVersion(version, pages.get(defaultName));
+              result.push(pageVersion);
+          }
+          const position = i-2;
+          pageVersion.add(Entry.fromTXT(position, split_line));
         }
-        return pageVersion;
+        return result;
       }
     }
 
@@ -2014,7 +2055,7 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
       }
 
       add(entry) {
-        if (this.name != entry.name) {
+        if (this.name !== entry.name) {
           console.error("Should not combine entries with different names");
           return;
         }
@@ -2103,10 +2144,15 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
       }
 
       static fromTXT(position, splitLine) {
-        let [name, time, timePercent, count, countPercent] = splitLine;
-        time = time.split('ms')
-        let timeDeviation = 0, countDeviation = 0;
-        let timeDeviationPercent = 0, countDeviationPercent = 0
+        const name = splitLine[0];
+        let time = splitLine[1];
+        let msIndex = time.indexOf('m');
+        if (msIndex > 0) time = time.substring(0, msIndex);
+        const timePercent  = splitLine[2];
+        const count = splitLine[3];
+        const countPercent = splitLine[4];
+        const timeDeviation = 0, countDeviation = 0;
+        const timeDeviationPercent = 0, countDeviationPercent = 0
         return new Entry(position, name,
           Number.parseFloat(time), timeDeviation, timeDeviationPercent,
           Number.parseInt(count), countDeviation, countDeviationPercent)
@@ -2131,9 +2177,9 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
     Group.add('total', new Group('Total', /.*Total.*/, '#BBB', true, false));
     Group.add('ic', new Group('IC', /(.*IC_.*)|IC/, "#3366CC"));
     Group.add('optimize-background', new Group('Optimize-Background',
-        /(.*Optimize-?Background.*)/, "#702000"));
+        /.*Optimize(d?-?)(Background|Concurrent).*/, "#702000"));
     Group.add('optimize', new Group('Optimize',
-        /StackGuard|.*Optimize.*|.*Deoptimize.*|Recompile.*/, "#DC3912"));
+        /(StackGuard|Optimize|Deoptimize|Recompile).*/, "#DC3912"));
     Group.add('compile-background', new Group('Compile-Background',
         /(.*Compile-?Background.*)/, "#b08000"));
     Group.add('compile', new Group('Compile',
