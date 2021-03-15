@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21144854_760bab62",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5214,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-03-15T14:17:20Z",
+      "side": 1,
+      "message": "Good point, moved inside the condition.",
+      "parentUuid": "6544a02f_9438037a",
+      "range": {
+        "startLine": 5213,
+        "startChar": 0,
+        "endLine": 5214,
+        "endChar": 75
+      },
+      "revId": "8db226d1fd9e297fcb7a776e156844d541e3fb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff97594c_9440fc26",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 3
@@ -54,6 +78,24 @@
       "writtenOn": "2021-03-15T09:55:45Z",
       "side": 1,
       "message": "Argh, the naming of that enum is really unfortunate. I just read \"kNoReturnCall\" as \"a call that does not return\". I think I\u0027ll upload a little CL to rename to \"kTailCall\" and \"kStandardCall\", or do you have a better idea for naming?",
+      "revId": "8db226d1fd9e297fcb7a776e156844d541e3fb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83f4f4a4_45209750",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5215,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-03-15T14:17:20Z",
+      "side": 1,
+      "message": "Your suggestion SGTM. Alternatively we can get rid of the enum altogether and just pass a boolean named \"is_tail_call\".",
+      "parentUuid": "ff97594c_9440fc26",
       "revId": "8db226d1fd9e297fcb7a776e156844d541e3fb2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
