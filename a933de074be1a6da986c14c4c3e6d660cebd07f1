@@ -284,6 +284,24 @@
       "parentUuid": "4cec8f23_70c807a8",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcdc720d_3f40e400",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-03-15T08:29:47Z",
+      "side": 1,
+      "message": "Safari has a non-moving GC, so they can use a general hashmap keyed on object addresses. V8 has a moving GC, so we have to make sure we\u0027re aware of the fact that objects can move and thus hashes of object addresses can changed. IdentityMap is like a general hashmap, but on a lookup miss it checks if there was a GC since the last lookup, and if yes, rehashes the keys to make sure any moved objects are updated.",
+      "parentUuid": "f63c7431_37d6636e",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
