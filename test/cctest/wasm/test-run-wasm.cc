@@ -3083,6 +3083,53 @@ WASM_EXEC_TEST(CallIndirect_canonical) {
   CHECK_TRAP(r.Call(5));
 }
 
+WASM_EXEC_TEST(Regress_PushReturns) {
+  ValueType kSigTypes[] = {kWasmI32, kWasmI32, kWasmI32, kWasmI32,
+                           kWasmI32, kWasmI32, kWasmI32, kWasmI32,
+                           kWasmI32, kWasmI32, kWasmI32, kWasmI32};
+  FunctionSig sig(12, 0, kSigTypes);
+  WasmRunner<int32_t> r(execution_tier);
+  uint32_t returns_many = r.builder().AddSignature(&sig);
+
+  WasmFunctionCompiler& f1 = r.NewFunction(&sig);
+  BUILD(f1, WASM_I32V(1), WASM_I32V(2), WASM_I32V(3), WASM_I32V(4),
+        WASM_I32V(5), WASM_I32V(6), WASM_I32V(7), WASM_I32V(8), WASM_I32V(9),
+        WASM_I32V(10), WASM_I32V(11), WASM_I32V(12));
+  f1.SetSigIndex(returns_many);
+
+  BUILD(r, WASM_CALL_FUNCTION0(f1.function_index()), WASM_DROP, WASM_DROP,
+        WASM_DROP, WASM_DROP, WASM_DROP, WASM_DROP, WASM_DROP, WASM_DROP,
+        WASM_DROP, WASM_DROP, WASM_DROP);
+  CHECK_EQ(1, r.Call());
+}
+
+WASM_EXEC_TEST(Regress_EnsureArguments) {
+  ValueType kSigTypes[] = {kWasmI32, kWasmI32, kWasmI32, kWasmI32,
+                           kWasmI32, kWasmI32, kWasmI32, kWasmI32,
+                           kWasmI32, kWasmI32, kWasmI32, kWasmI32};
+  FunctionSig sig(0, 12, kSigTypes);
+  WasmRunner<int32_t> r(execution_tier);
+  uint32_t consumes_many = r.builder().AddSignature(&sig);
+
+  WasmFunctionCompiler& f2 = r.NewFunction(&sig);
+  BUILD(f2, kExprReturn);
+  f2.SetSigIndex(consumes_many);
+
+  BUILD(r, WASM_I32V(42), kExprReturn,
+        WASM_CALL_FUNCTION(f2.function_index(), WASM_I32V(1)));
+  CHECK_EQ(42, r.Call());
+}
+
+WASM_EXEC_TEST(Regress_PushControl) {
+  EXPERIMENTAL_FLAG_SCOPE(mv);
+  WasmRunner<int32_t> r(execution_tier);
+  ValueType kSigTypes[] = {kWasmF64, kWasmI32};
+  FunctionSig sig_d_i(1, 1, kSigTypes);
+  BUILD(r, WASM_I32V(42),
+        WASM_IF(WASM_I32V(0), WASM_UNREACHABLE, kExprIf, kVoidCode, kExprEnd));
+  CHECK_EQ(42, r.Call());
+}
+
 WASM_EXEC_TEST(F32Floor) {
   WasmRunner<float, float> r(execution_tier);
   BUILD(r, WASM_F32_FLOOR(WASM_LOCAL_GET(0)));
