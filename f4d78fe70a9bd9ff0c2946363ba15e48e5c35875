@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9244bb93_0493060b",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-15T14:03:59Z",
+      "side": 1,
+      "message": "still v8testing",
+      "range": {
+        "startLine": 580,
+        "startChar": 16,
+        "endLine": 580,
+        "endChar": 23
+      },
+      "revId": "f4d78fe70a9bd9ff0c2946363ba15e48e5c35875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30080128_a01b89d6",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-15T14:03:59Z",
+      "side": 1,
+      "message": "please limit shards to 4 now as several variants are dropped by this.",
+      "range": {
+        "startLine": 580,
+        "startChar": 58,
+        "endLine": 580,
+        "endChar": 60
+      },
+      "revId": "f4d78fe70a9bd9ff0c2946363ba15e48e5c35875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
