@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fff292c_b5d103d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-15T13:20:13Z",
+      "side": 1,
+      "message": "Thanks, comments addressed.",
+      "revId": "8ae66044b5950d379c16a9f417894726d9ff6f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e9f061b_7d4fc40f",
@@ -48,6 +65,24 @@
       "writtenOn": "2021-03-15T13:12:54Z",
       "side": 1,
       "message": "Can we not disable the declaration and definition of this whole function? There don\u0027t seem to be many callers outside of wasm files.",
+      "revId": "8ae66044b5950d379c16a9f417894726d9ff6f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b89a460d_12a5dd64",
+        "filename": "src/codegen/ia32/assembler-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-15T13:20:13Z",
+      "side": 1,
+      "message": "I would suggest doing this as a follow-up, together with the removal of CpuFeatures::supports_wasm_simd_128_ and the \"supports_wasm_simd_128_address\" externref.\nThe goal of this CL is to remove the flags; of course this enabled more follow-up removals, but each one would make this CL bigger, so I\u0027d like to split this out.",
+      "parentUuid": "3e9f061b_7d4fc40f",
       "revId": "8ae66044b5950d379c16a9f417894726d9ff6f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +104,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1f89037_1cd70e03",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-15T13:20:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ea1ce28_2c2ae467",
+      "revId": "8ae66044b5950d379c16a9f417894726d9ff6f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8212b74_4f617312",
@@ -82,6 +135,24 @@
       "writtenOn": "2021-03-15T13:12:54Z",
       "side": 1,
       "message": "Do you think we should put wasm flags into a separate file?",
+      "revId": "8ae66044b5950d379c16a9f417894726d9ff6f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0b42b87_db5e955f",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-15T13:20:13Z",
+      "side": 1,
+      "message": "I don\u0027t think so. Especially given the special nature of this header file (being included several times with different FLAG_MODE_* being set) I think it would unnecessarily complicate things.",
+      "parentUuid": "e8212b74_4f617312",
       "revId": "8ae66044b5950d379c16a9f417894726d9ff6f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
