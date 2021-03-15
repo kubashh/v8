@@ -302,6 +302,24 @@
       "parentUuid": "f63c7431_37d6636e",
       "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d9f6375_7309cf5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2021-03-15T08:54:44Z",
+      "side": 1,
+      "message": "Thanks for your detail description! I got the key info, moving GC, object addresses can changed after GC. It\u0027s very helpful for me understanding IdentityMap code.",
+      "parentUuid": "dcdc720d_3f40e400",
+      "revId": "a933de074be1a6da986c14c4c3e6d660cebd07f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
