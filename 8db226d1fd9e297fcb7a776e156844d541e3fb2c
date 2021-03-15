@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49f8d6da_1ac85b93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-15T09:55:45Z",
+      "side": 1,
+      "message": "Thanks, LGTM with two comments (one of them actionable).",
+      "revId": "8db226d1fd9e297fcb7a776e156844d541e3fb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6544a02f_9438037a",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5214,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-15T09:55:45Z",
+      "side": 1,
+      "message": "I think these tro are also not needed. The tail call is just a jump, so the position of that \"call\" cannot appear on a stack trace.\n(Same below)",
+      "range": {
+        "startLine": 5213,
+        "startChar": 0,
+        "endLine": 5214,
+        "endChar": 75
+      },
+      "revId": "8db226d1fd9e297fcb7a776e156844d541e3fb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff97594c_9440fc26",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5215,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-15T09:55:45Z",
+      "side": 1,
+      "message": "Argh, the naming of that enum is really unfortunate. I just read \"kNoReturnCall\" as \"a call that does not return\". I think I\u0027ll upload a little CL to rename to \"kTailCall\" and \"kStandardCall\", or do you have a better idea for naming?",
+      "revId": "8db226d1fd9e297fcb7a776e156844d541e3fb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
