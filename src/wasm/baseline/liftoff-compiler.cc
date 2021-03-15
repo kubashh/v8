@@ -5212,9 +5212,10 @@ class LiftoffCompiler {
 
     DefineSafepoint();
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
-    EmitLandingPad(decoder);
-
-    __ FinishCall(sig, call_descriptor);
+    if (call_kind == kNoReturnCall) {
+      EmitLandingPad(decoder);
+      __ FinishCall(sig, call_descriptor);
+    }
   }
 
   void CallIndirect(FullDecoder* decoder, const Value& index_val,
@@ -5383,9 +5384,10 @@ class LiftoffCompiler {
 
     DefineSafepoint();
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
-    EmitLandingPad(decoder);
-
-    __ FinishCall(sig, call_descriptor);
+    if (call_kind == kNoReturnCall) {
+      EmitLandingPad(decoder);
+      __ FinishCall(sig, call_descriptor);
+    }
   }
 
   void CallRef(FullDecoder* decoder, ValueType func_ref_type,
@@ -5592,8 +5594,10 @@ class LiftoffCompiler {
     }
     DefineSafepoint();
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
-    EmitLandingPad(decoder);
-    __ FinishCall(sig, call_descriptor);
+    if (call_kind == kNoReturnCall) {
+      EmitLandingPad(decoder);
+      __ FinishCall(sig, call_descriptor);
+    }
   }
 
   void LoadNullValue(Register null, LiftoffRegList pinned) {
