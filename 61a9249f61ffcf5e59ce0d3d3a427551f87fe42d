@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "433aab3c_35aa20e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-16T05:57:24Z",
+      "side": 1,
+      "message": "Thanks for the explanation Ulan!\n\n\u003e Let\u0027s add a comment explaining the the order of clearing of weak handles is important in  [...]\n\nSounds good to me.\n\n\u003e IIUC it is caused by delayed code sweep events. By the time when GC epilogue runs, a new code object may be allocated in place of an old collected code object. We could fix it by moving the code sweep event to MarkCompactCollector::MarkLiveObjects after clearing the weak handles.\n\nI\u0027m not certain this is the case, since collisions appear to be occurring during heap traversal (LogCompiledFunctions, in particular). I found this after adding some logging to EnumerateCompiledFunctions, where GC is disallowed.\n\nI think next steps are likely to be dependent on how easy it is to establish the invariant that duplicate code will not be reported by ExistingCodeLogger. I\u0027ll take a closer look at the nature of that.",
+      "parentUuid": "e093ffad_9901711d",
+      "revId": "61a9249f61ffcf5e59ce0d3d3a427551f87fe42d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04b3644f_8a7a35a1",
@@ -49,6 +67,30 @@
       "writtenOn": "2021-03-12T14:49:36Z",
       "side": 1,
       "message": "Let\u0027s remove this completely?",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 66
+      },
+      "revId": "61a9249f61ffcf5e59ce0d3d3a427551f87fe42d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8edcba7a_aa0bf749",
+        "filename": "src/profiler/profiler-listener.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-16T05:57:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04b3644f_8a7a35a1",
       "range": {
         "startLine": 68,
         "startChar": 2,
