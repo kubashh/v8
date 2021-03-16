@@ -2003,8 +2003,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   void InitializeDefaultEmbeddedBlob();
   void CreateAndSetEmbeddedBlob();
+  void MaybeRemapEmbeddedBuiltinsIntoCodeRange();
   void TearDownEmbeddedBlob();
-
   void SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
                        const uint8_t* data, uint32_t data_size);
   void ClearEmbeddedBlob();
