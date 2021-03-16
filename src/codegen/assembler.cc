@@ -73,6 +73,8 @@ AssemblerOptions AssemblerOptions::Default(Isolate* isolate) {
   DCHECK_IMPLIES(code_range.begin() != kNullAddress, !code_range.is_empty());
   options.code_range_start = code_range.begin();
 #endif
+  options.short_builtin_calls =
+      FLAG_short_builtin_calls && (options.code_range_start != kNullAddress);
   return options;
 }
 
