@@ -43,6 +43,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f209a6bb_22671873",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-16T21:52:01Z",
+      "side": 1,
+      "message": "We already have helpers in zone-containers.h for this: ZoneSet is your friend",
+      "range": {
+        "startLine": 90,
+        "startChar": 13,
+        "endLine": 92,
+        "endChar": 62
+      },
+      "revId": "f08bcf867f46987b93a2b2ec54640a395c9e7e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f09c8e76_052b3a03",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-16T21:52:01Z",
+      "side": 1,
+      "message": "Separate Issue:\n\nAll these recursive calls can easily stack-overflow :P and for nicety we should probably have some STACK_CHECKs in place.\n\n\nJust realising that we must have very poor fuzzer coverage for modules, since we don\u0027t dynamically generate modules with imports. I wonder whether we should provide some JS-api to do this:\n\n const module \u003d d8.test.createModuleGraph(`\n     import theAnswer from \u0027foo.mjs\u0027;\n     export theAnswer \u003d theAnswer+1;\n   `, {\n   \u0027foo.mjs\u0027: \"export const theAnswer \u003d 42;\"\n   });\n  assertEquals(module.theAnswer, 34);",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 666,
+        "endChar": 77
+      },
+      "revId": "f08bcf867f46987b93a2b2ec54640a395c9e7e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8fd2cf2e_1e46a6cb",
         "filename": "src/objects/source-text-module.h",
         "patchSetId": 6
@@ -59,6 +105,29 @@
         "startChar": 0,
         "endLine": 125,
         "endChar": 51
+      },
+      "revId": "f08bcf867f46987b93a2b2ec54640a395c9e7e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ec461e9_2f1a0163",
+        "filename": "src/objects/source-text-module.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-16T21:52:01Z",
+      "side": 1,
+      "message": "I guess this can be unsigned?",
+      "range": {
+        "startLine": 9,
+        "startChar": 28,
+        "endLine": 9,
+        "endChar": 33
       },
       "revId": "f08bcf867f46987b93a2b2ec54640a395c9e7e97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
