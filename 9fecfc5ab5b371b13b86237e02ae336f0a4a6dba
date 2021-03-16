@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b69fc91f_61c8d9a5",
+        "filename": "src/compiler/machine-operator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-03-16T23:24:05Z",
+      "side": 1,
+      "message": "This could be a struct.",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 207,
+        "endChar": 24
+      },
+      "revId": "9fecfc5ab5b371b13b86237e02ae336f0a4a6dba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3a24b99_116be425",
+        "filename": "src/compiler/machine-operator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-03-16T23:24:05Z",
+      "side": 1,
+      "message": "nit: Do we need \u0027explicit\u0027 if there are multiple parameters?",
+      "range": {
+        "startLine": 209,
+        "startChar": 2,
+        "endLine": 209,
+        "endChar": 10
+      },
+      "revId": "9fecfc5ab5b371b13b86237e02ae336f0a4a6dba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab69b55f_cb59c505",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5187,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-03-16T23:24:05Z",
+      "side": 1,
+      "message": "Maybe \u0027canonical_shuffle\u0027 or \u0027canonicalized\u0027 would be clearer here.",
+      "range": {
+        "startLine": 5187,
+        "startChar": 10,
+        "endLine": 5187,
+        "endChar": 11
+      },
+      "revId": "9fecfc5ab5b371b13b86237e02ae336f0a4a6dba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
