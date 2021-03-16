@@ -334,7 +334,6 @@ CpuProfileNode::SourceType ProfileNode::source_type() const {
     case CodeEventListener::SHARED_FUNC_MOVE_EVENT:
     case CodeEventListener::SNAPSHOT_CODE_NAME_EVENT:
     case CodeEventListener::TICK_EVENT:
-    case CodeEventListener::BYTECODE_FLUSH_EVENT:
     case CodeEventListener::NUMBER_OF_LOG_EVENTS:
       return CpuProfileNode::kInternal;
   }
@@ -755,8 +754,8 @@ void CodeMap::Clear() {
 }
 
 void CodeMap::AddCode(Address addr, CodeEntry* entry, unsigned size) {
-  ClearCodesInRange(addr, addr + size);
   code_map_.emplace(addr, CodeEntryMapInfo{entry, size});
+  entry->set_instruction_start(addr);
 }
 
 void CodeMap::ClearCodesInRange(Address start, Address end) {
@@ -792,7 +791,12 @@ void CodeMap::MoveCode(Address from, Address to) {
   if (from == to) return;
   auto it = code_map_.find(from);
   if (it == code_map_.end()) return;
+
   CodeEntryMapInfo info = it->second;
+  DCHECK(info.entry);
+  DCHECK_EQ(info.entry->instruction_start(), from);
+  info.entry->set_instruction_start(to);
+
   code_map_.erase(it);
   DCHECK(from + info.size <= to || to + info.size <= from);
   ClearCodesInRange(to, to + info.size);

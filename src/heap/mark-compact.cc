@@ -2082,6 +2082,8 @@ void MarkCompactCollector::ClearNonLiveReferences() {
     ClearJSWeakRefs();
   }
 
+  PROFILE(heap()->isolate(), WeakCodeClearEvent());
+
   MarkDependentCodeForDeoptimization();
 
   DCHECK(weak_objects_.transition_arrays.IsEmpty());
@@ -2205,8 +2207,6 @@ void MarkCompactCollector::FlushBytecodeFromSFI(
   // performing the unusual task of decompiling.
   shared_info.set_function_data(uncompiled_data, kReleaseStore);
   DCHECK(!shared_info.is_compiled());
-
-  PROFILE(heap()->isolate(), BytecodeFlushEvent(compiled_data_start));
 }
 
 void MarkCompactCollector::ClearOldBytecodeCandidates() {
