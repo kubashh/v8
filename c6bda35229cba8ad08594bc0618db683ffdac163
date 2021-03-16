@@ -152,6 +152,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea805570_52adfa9b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3929,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-16T12:01:24Z",
+      "side": 1,
+      "message": "Done, we now return a tristate and TRACE_BROKER_MISSING if we gave up (as opposed to the own-element not existing).",
+      "parentUuid": "6ba30c48_83a334be",
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb2cc965_83825290",
@@ -478,6 +496,30 @@
       "side": 1,
       "message": "FYI I created cleanup CLs to fix prompted by these comments:\nA) Naming \u0026 comments of SharedMutexes https://chromium-review.googlesource.com/c/v8/v8/+/2718145\nB) Unification of local_isolate calls https://chromium-review.googlesource.com/c/v8/v8/+/2718609",
       "parentUuid": "dccd2f5e_4ebf2000",
+      "range": {
+        "startLine": 1370,
+        "startChar": 6,
+        "endLine": 1370,
+        "endChar": 67
+      },
+      "revId": "c6bda35229cba8ad08594bc0618db683ffdac163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a01edf81_b4494771",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-16T12:01:24Z",
+      "side": 1,
+      "message": "Thanks - in the latest PS I limited the string access to look at internalized strings only (still protected by the mutex).",
+      "parentUuid": "03175f12_abf34dd8",
       "range": {
         "startLine": 1370,
         "startChar": 6,
