@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "175e9f48_62010bfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-16T16:52:24Z",
+      "side": 1,
+      "message": "superficial review 1",
+      "revId": "f08bcf867f46987b93a2b2ec54640a395c9e7e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "755b86df_bfc83bc2",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-16T16:52:24Z",
+      "side": 1,
+      "message": "let\u0027s move this to globals.h (see comment below on how to tie it back to the tq constants)",
+      "range": {
+        "startLine": 1388,
+        "startChar": 18,
+        "endLine": 1388,
+        "endChar": 29
+      },
+      "revId": "f08bcf867f46987b93a2b2ec54640a395c9e7e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fd2cf2e_1e46a6cb",
+        "filename": "src/objects/source-text-module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-16T16:52:24Z",
+      "side": 1,
+      "message": "let\u0027s be annoying here and move kMaxOrdinal to globals.h and force a valid value via static asserts (DEFINE_TORQUE_GENERATED_SOURCE_TEXT_MODULE_FLAGS exposes the flags I think):\n\n  STATIC_ASSERT(kNotAsyncEvaluated \u003c kAsyncEvaluateDidFinish)\n  STATIC_ASSERT(kAsyncEvaluateDidFinish \u003c kFirstAsyncEvaluatingOrdinal)\n  STATIC_ASSERT(kMaxOrdinal \u003d\u003d AsyncEvaluatingOrdinalBits::kMax)",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 51
+      },
+      "revId": "f08bcf867f46987b93a2b2ec54640a395c9e7e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
