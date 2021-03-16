@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acfbcc91_6a4ea7a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-16T20:00:42Z",
+      "side": 1,
+      "message": "Note this broke some tests on the lite mode bots:\nhttps://ci.chromium.org/p/v8/builders/ci/V8%20Linux%20-%20arm%20-%20sim%20-%20lite/15320",
+      "revId": "05265d882405b8fbf4b7b5189e43c934829a1686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
