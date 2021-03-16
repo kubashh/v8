@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa60acdf_02511d17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-16T08:56:38Z",
+      "side": 1,
+      "message": "\u003e I found this after adding some logging to EnumerateCompiledFunctions, where GC is disallowed.\nI think it is an issue in EnumerateCompiledFunctions. It discovers code objects via SharedFunctionInfos and JSFunctions. The same code object can be referred from a SharedFunctionInfo and multiple JSFunctions.",
+      "parentUuid": "433aab3c_35aa20e2",
+      "revId": "61a9249f61ffcf5e59ce0d3d3a427551f87fe42d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04b3644f_8a7a35a1",
