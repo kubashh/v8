@@ -88,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0900580f_28c1b820",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-16T13:39:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2884e46f_53579968",
+      "range": {
+        "startLine": 1309,
+        "startChar": 42,
+        "endLine": 1309,
+        "endChar": 57
+      },
+      "revId": "9a95207fbb704bbf557e33ad1b0ed00c68c16fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a89ff7f7_f72739c1",
@@ -125,6 +149,30 @@
       "side": 1,
       "message": "You mean as an optimization to avoid the runtime checks? Not sure that\u0027d help much tbh, at some point we\u0027d need to do the dispatch by kind anyways.",
       "parentUuid": "a89ff7f7_f72739c1",
+      "range": {
+        "startLine": 1329,
+        "startChar": 0,
+        "endLine": 1330,
+        "endChar": 1
+      },
+      "revId": "9a95207fbb704bbf557e33ad1b0ed00c68c16fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f62dff64_65e9c6e9",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-16T13:39:24Z",
+      "side": 1,
+      "message": "I was meaning to keep the cases separated from one another. I guess it\u0027s a design choice more than anything.",
+      "parentUuid": "8d7a0808_a5ede387",
       "range": {
         "startLine": 1329,
         "startChar": 0,
