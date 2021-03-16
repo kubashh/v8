@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b5f1947_ed5087dd",
+        "filename": "src/heap/memory-chunk.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-03-16T10:01:01Z",
+      "side": 1,
+      "message": "How about SetReadWriteAndMaybeExecutable()? \n\nIt\u0027s heap-internal, so it anyways doesn\u0027t leak outside.",
+      "range": {
+        "startLine": 79,
+        "startChar": 18,
+        "endLine": 79,
+        "endChar": 36
+      },
+      "revId": "1a88569639ad308d26439b4bce4afc812bbd353e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
