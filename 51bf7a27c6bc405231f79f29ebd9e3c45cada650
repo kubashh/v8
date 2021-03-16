@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f4d2489_72a15812",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-03-16T09:21:43Z",
+      "side": 1,
+      "message": "Thanks! LGTM with nits.",
+      "revId": "51bf7a27c6bc405231f79f29ebd9e3c45cada650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b45dbd3_efd564ae",
+        "filename": "tools/callstats.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-03-16T09:21:43Z",
+      "side": 1,
+      "message": "nit: Missing semicolon\nIn general it seems that there are many lines missing semicolon at the end.",
+      "revId": "51bf7a27c6bc405231f79f29ebd9e3c45cada650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "974ecc23_542c137c",
+        "filename": "tools/callstats.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-03-16T09:21:43Z",
+      "side": 1,
+      "message": "nit: missing space",
+      "range": {
+        "startLine": 1908,
+        "startChar": 21,
+        "endLine": 1908,
+        "endChar": 24
+      },
+      "revId": "51bf7a27c6bc405231f79f29ebd9e3c45cada650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
