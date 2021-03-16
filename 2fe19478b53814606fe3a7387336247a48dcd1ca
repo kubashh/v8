@@ -16,6 +16,29 @@
       "message": "ptal",
       "revId": "2fe19478b53814606fe3a7387336247a48dcd1ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec568b19_490f45b5",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-16T14:20:56Z",
+      "side": 1,
+      "message": "let\u0027s see how ergonomic this is (I guess the horrible linux way would be to write to stdout :P).",
+      "range": {
+        "startLine": 741,
+        "startChar": 19,
+        "endLine": 741,
+        "endChar": 30
+      },
+      "revId": "2fe19478b53814606fe3a7387336247a48dcd1ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
