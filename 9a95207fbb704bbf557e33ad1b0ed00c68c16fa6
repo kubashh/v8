@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2af76741_1cf00bbb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-16T13:28:39Z",
+      "side": 1,
+      "message": "nit: 1 char to long and wraps around",
+      "range": {
+        "startLine": 18,
+        "startChar": 64,
+        "endLine": 18,
+        "endChar": 73
+      },
+      "revId": "9a95207fbb704bbf557e33ad1b0ed00c68c16fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7c926242_7feee0a7",
@@ -14,6 +37,75 @@
       "writtenOn": "2021-03-16T12:01:24Z",
       "side": 1,
       "message": "PTAL again",
+      "revId": "9a95207fbb704bbf557e33ad1b0ed00c68c16fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0b29ff0_09848afb",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-16T13:28:39Z",
+      "side": 1,
+      "message": "Is this copying the JSObject? Would it be better to use either Handle\u003cJSObject\u003e or const JSObject\u0026?\nSame goes for `FixedArrayBase elements`",
+      "range": {
+        "startLine": 1309,
+        "startChar": 42,
+        "endLine": 1309,
+        "endChar": 57
+      },
+      "revId": "9a95207fbb704bbf557e33ad1b0ed00c68c16fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a89ff7f7_f72739c1",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-16T13:28:39Z",
+      "side": 1,
+      "message": "As a follow-up maybe we can templatize based on elements_kind?",
+      "range": {
+        "startLine": 1329,
+        "startChar": 0,
+        "endLine": 1330,
+        "endChar": 1
+      },
+      "revId": "9a95207fbb704bbf557e33ad1b0ed00c68c16fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ba7cea7_f106e2c0",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-16T13:28:39Z",
+      "side": 1,
+      "message": "Can we pass the broker()-\u003elocal_isolate() as a parameter and use it here? Getting the isolate from the string is costly and should be avoided if possible.",
+      "range": {
+        "startLine": 1370,
+        "startChar": 6,
+        "endLine": 1370,
+        "endChar": 67
+      },
       "revId": "9a95207fbb704bbf557e33ad1b0ed00c68c16fa6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
