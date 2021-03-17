@@ -3568,8 +3568,24 @@ void InstructionSelector::VisitI8x16Shuffle(Node* node) { UNREACHABLE(); }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 void InstructionSelector::VisitI8x16Swizzle(Node* node) {
+  InstructionCode op = kX64I8x16Swizzle;
+  using V128ConstMatcher =
+      ValueMatcher<S128ImmediateParameter, IrOpcode::kS128Const>;
+
+  auto m = V128ConstMatcher(node->InputAt(1));
+  if (m.HasResolvedValue()) {
+    // If the indices vector is a const, check if they are in range, or if the
+    // top bit is set, then we can avoid the paddusb in the codegen and simply
+    // emit a pshufb
+    auto imms = m.ResolvedValue().immediate();
+    bool all_in_range_or_top_bit_set =
+        std::all_of(imms.begin(), imms.end(),
+                    [](auto i) { return (i < kSimd128Size) || (i & 0x80); });
+    op |= MiscField::encode(all_in_range_or_top_bit_set);
+  }
+
   X64OperandGenerator g(this);
-  Emit(kX64I8x16Swizzle,
+  Emit(op,
        IsSupported(AVX) ? g.DefineAsRegister(node) : g.DefineSameAsFirst(node),
        g.UseRegister(node->InputAt(0)), g.UseRegister(node->InputAt(1)));
 }
