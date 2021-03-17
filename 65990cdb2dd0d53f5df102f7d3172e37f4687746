@@ -33,6 +33,29 @@
       "message": "Thanks!",
       "revId": "65990cdb2dd0d53f5df102f7d3172e37f4687746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94c7adee_913949fc",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-03-17T14:10:08Z",
+      "side": 1,
+      "message": "Fly-by: Would those flags imply the others? E.g. from left to right? Or do other combinations make sense?\n\nIf these implications are reasonable, maybe we could add them in flag definitions and then clean it up here.",
+      "range": {
+        "startLine": 839,
+        "startChar": 40,
+        "endLine": 839,
+        "endChar": 56
+      },
+      "revId": "65990cdb2dd0d53f5df102f7d3172e37f4687746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
