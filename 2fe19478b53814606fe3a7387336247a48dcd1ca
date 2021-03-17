@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "837fc962_98bbf8da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-03-17T11:05:24Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "2fe19478b53814606fe3a7387336247a48dcd1ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ec568b19_490f45b5",
         "filename": "src/d8/d8.cc",
         "patchSetId": 9
@@ -31,6 +48,30 @@
       "writtenOn": "2021-03-16T14:20:56Z",
       "side": 1,
       "message": "let\u0027s see how ergonomic this is (I guess the horrible linux way would be to write to stdout :P).",
+      "range": {
+        "startLine": 741,
+        "startChar": 19,
+        "endLine": 741,
+        "endChar": 30
+      },
+      "revId": "2fe19478b53814606fe3a7387336247a48dcd1ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c8414cb_9ed81fdf",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-03-17T11:05:24Z",
+      "side": 1,
+      "message": "Following the precedence of various v8 tools which write a file with a known name; but I\u0027m super willing to change this later once we figure the tooling out a bit better.",
+      "parentUuid": "ec568b19_490f45b5",
       "range": {
         "startLine": 741,
         "startChar": 19,
