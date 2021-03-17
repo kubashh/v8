@@ -791,6 +791,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3457cebd_38f27614",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3382,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-17T08:27:37Z",
+      "side": 1,
+      "message": "When we have a code_range() the code_page_allocator is a BoundedPageAllocator within that code range. It guarantees that the pages will not be allocated second time until we free them.\nAnd when we don\u0027t have a code range (and therefore the proper code_page_allocator) then the whole story with remapping doesn\u0027t make sense and doesn\u0027t happen.",
+      "parentUuid": "81dbeea1_e9d5d980",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab101572_00e963ef",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 17
