@@ -16,6 +16,40 @@
       "message": "PTAL.",
       "revId": "c7c48aa86571bed066c1d7758955eb6fdee1b3f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e416d546_690afc2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-17T13:55:08Z",
+      "side": 1,
+      "message": "Nice! LGTM with one comment.",
+      "revId": "c7c48aa86571bed066c1d7758955eb6fdee1b3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2882f8b3_f64f2e40",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-17T13:55:08Z",
+      "side": 1,
+      "message": "Please also remove this comment.",
+      "revId": "c7c48aa86571bed066c1d7758955eb6fdee1b3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
