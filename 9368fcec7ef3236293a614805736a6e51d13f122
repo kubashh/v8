@@ -33,6 +33,24 @@
       "message": "The C++ code would be nicer and no casts will be needed if you used 32 bit types and instructions: Word32T, Word32Not(), Word32And().",
       "revId": "9368fcec7ef3236293a614805736a6e51d13f122",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e55ceee0_1c9d0d70",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-17T15:48:20Z",
+      "side": 1,
+      "message": "Oops, done.\nI had seen that Word32Not doesn\u0027t exist and just assumed that Word32And doesn\u0027t exist, either. As it turns out, Word32Not doesn\u0027t exist because it\u0027s split into Word32BitwiseNot and Word32BinaryNot, which is different to the 64 bit base, where there\u0027s only Word64Not (which is the bitwise version).",
+      "parentUuid": "b141db03_37e90f66",
+      "revId": "9368fcec7ef3236293a614805736a6e51d13f122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
