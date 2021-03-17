@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e1db181_efad4eee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-17T01:56:47Z",
+      "side": 1,
+      "message": "Yup, the issue is indeed multiple SFIs referencing the same code object -- for example, the Uint8Array and Uint8ClampedArray constructor builtins both share the same code (TypedArrayConstructor).\n\n```\n(gdb) p pair.first-\u003ePrint()\n0x8c4081c9b55: [SharedFunctionInfo] in OldSpace\n - map: 0x08c4080425f9 \u003cMap[40]\u003e\n - name: 0x08c408044e2d \u003cString[10]: #Uint8Array\u003e\n - kind: NormalFunction\n - syntax kind: AnonymousExpression\n - function_map_index: 167\n - formal_parameter_count: 65535\n - expected_nof_properties: \n - language_mode: strict\n - data: 547\n - code (from data): 0x08c40004b561 \u003cCode BUILTIN TypedArrayConstructor\u003e\n - script: 0x08c4080423b5 \u003cundefined\u003e\n - function token position: 0\n - start position: 0\n - end position: 0\n - no debug info\n - scope info: 0x08c408042739 \u003cScopeInfo\u003e\n - length: 3\n - feedback_metadata: \u003cnone\u003e\n$9 \u003d void\n(gdb) p it-\u003esecond.Print()\n0x8c4081c9b2d: [SharedFunctionInfo] in OldSpace\n - map: 0x08c4080425f9 \u003cMap[40]\u003e\n - name: 0x08c408044e45 \u003cString[17]: #Uint8ClampedArray\u003e\n - kind: NormalFunction\n - syntax kind: AnonymousExpression\n - function_map_index: 167\n - formal_parameter_count: 65535\n - expected_nof_properties: \n - language_mode: strict\n - data: 547\n - code (from data): 0x08c40004b561 \u003cCode BUILTIN TypedArrayConstructor\u003e\n - script: 0x08c4080423b5 \u003cundefined\u003e\n - function token position: 0\n - start position: 0\n - end position: 0\n - no debug info\n - scope info: 0x08c408042739 \u003cScopeInfo\u003e\n - length: 3\n - feedback_metadata: \u003cnone\u003e\n$10 \u003d void\n```\n\nThis does seem to suggest that we should indeed be tolerant to collisions, as the relationship between code and labels is one-to-many.\n\nPerhaps leveraging a multimap is justifiable for that reason in the short term? It\u0027s also worth noting this collision logic is probably also causing some weird labeling with sampling builtins already.",
+      "parentUuid": "fa60acdf_02511d17",
+      "revId": "61a9249f61ffcf5e59ce0d3d3a427551f87fe42d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04b3644f_8a7a35a1",
