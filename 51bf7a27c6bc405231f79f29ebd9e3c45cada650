@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "121f34ad_20c2dda4",
+        "filename": "tools/callstats.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-17T10:06:30Z",
+      "side": 1,
+      "message": "yeah... we don\u0027t have a autoformatter for inline scripts.\nI should migrate this to .mjs modules at some point 😊",
+      "parentUuid": "2b45dbd3_efd564ae",
+      "revId": "51bf7a27c6bc405231f79f29ebd9e3c45cada650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "974ecc23_542c137c",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-03-16T09:21:43Z",
       "side": 1,
       "message": "nit: missing space",
+      "range": {
+        "startLine": 1908,
+        "startChar": 21,
+        "endLine": 1908,
+        "endChar": 24
+      },
+      "revId": "51bf7a27c6bc405231f79f29ebd9e3c45cada650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92109b2f_697a2e7b",
+        "filename": "tools/callstats.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-17T10:06:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "974ecc23_542c137c",
       "range": {
         "startLine": 1908,
         "startChar": 21,
