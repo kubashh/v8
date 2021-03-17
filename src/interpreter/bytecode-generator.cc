@@ -3111,6 +3111,8 @@ void BytecodeGenerator::BuildCreateArrayLiteral(
           .StoreAccumulatorInRegister(index);
     }
   } else {
+    // TODO(v8:11582): Support allocating boilerplates here.
+
     // In other cases, we prepare an empty array to be filled in below.
     DCHECK(!elements->is_empty());
     int literal_index = feedback_index(feedback_spec()->AddLiteralSlot());
@@ -5027,17 +5029,20 @@ void BytecodeGenerator::VisitCall(Call* expr) {
     return VisitCallSuper(expr);
   }
 
+  int first_spread_index = expr->ComputeFirstSpreadIndex();
+  const int arguments_count = expr->arguments()->length();
+  const bool build_reflect_apply = first_spread_index < arguments_count - 1;
+
   // Grow the args list as we visit receiver / arguments to avoid allocating all
   // the registers up-front. Otherwise these registers are unavailable during
   // receiver / argument visiting and we can end up with memory leaks due to
   // registers keeping objects alive.
-  Register callee = register_allocator()->NewRegister();
   RegisterList args = register_allocator()->NewGrowableRegisterList();
+  Register callee = register_allocator()->GrowRegisterList(&args);
 
   bool implicit_undefined_receiver = false;
   // When a call contains a spread, a Call AST node is only created if there is
   // exactly one spread, and it is the last argument.
-  bool is_spread_call = expr->only_last_arg_is_spread();
   bool optimize_as_one_shot = ShouldOptimizeAsOneShot();
 
   // TODO(petermarshall): We have a lot of call bytecodes that are very similar,
@@ -5057,7 +5062,7 @@ void BytecodeGenerator::VisitCall(Call* expr) {
     }
     case Call::GLOBAL_CALL: {
       // Receiver is undefined for global calls.
-      if (!is_spread_call && !optimize_as_one_shot) {
+      if (first_spread_index == arguments_count && !optimize_as_one_shot) {
         implicit_undefined_receiver = true;
       } else {
         // TODO(leszeks): There's no special bytecode for tail calls or spread
@@ -5093,7 +5098,7 @@ void BytecodeGenerator::VisitCall(Call* expr) {
     }
     case Call::OTHER_CALL: {
       // Receiver is undefined for other calls.
-      if (!is_spread_call && !optimize_as_one_shot) {
+      if (first_spread_index == arguments_count && !optimize_as_one_shot) {
         implicit_undefined_receiver = true;
       } else {
         // TODO(leszeks): There's no special bytecode for tail calls or spread
@@ -5142,25 +5147,55 @@ void BytecodeGenerator::VisitCall(Call* expr) {
     BuildIncrementBlockCoverageCounterIfEnabled(right_range);
   }
 
-  // Evaluate all arguments to the function call and store in sequential args
-  // registers.
-  VisitArguments(expr->arguments(), &args);
-  int receiver_arg_count = implicit_undefined_receiver ? 0 : 1;
-  CHECK_EQ(receiver_arg_count + expr->arguments()->length(),
-           args.register_count());
+  int receiver_arg_count = -1;
+  if (build_reflect_apply) {
+    // If there is a non-final spread, we rewrite calls like
+    //     callee(1, ...x, 2)
+    // to
+    //     %reflect_apply(callee, receiver, [1, ...x, 2])
+    //
+    // The callee and receiver code above already loaded them into the correct
+    // registers in args.
+    DCHECK(!implicit_undefined_receiver);
+    DCHECK_EQ(args.register_count(), 2);
+    BuildCreateArrayLiteral(expr->arguments(), nullptr);
+    builder()->StoreAccumulatorInRegister(
+        register_allocator()->GrowRegisterList(&args));
+  } else {
+    // If we're not building %reflect_apply and don't need to build an array
+    // literal, pop the callee and evaluate all arguments to the function call
+    // and store in sequential args registers.
+    args = args.PopLeft();
+    VisitArguments(expr->arguments(), &args);
+    receiver_arg_count = implicit_undefined_receiver ? 0 : 1;
+    CHECK_EQ(receiver_arg_count + arguments_count, args.register_count());
+  }
 
   // Resolve callee for a potential direct eval call. This block will mutate the
   // callee value.
-  if (expr->is_possibly_eval() && expr->arguments()->length() > 0) {
+  if (expr->is_possibly_eval() && arguments_count > 0) {
     RegisterAllocationScope inner_register_scope(this);
+    RegisterList runtime_call_args = register_allocator()->NewRegisterList(6);
     // Set up arguments for ResolvePossiblyDirectEval by copying callee, source
     // strings and function closure, and loading language and
     // position.
-    Register first_arg = args[receiver_arg_count];
-    RegisterList runtime_call_args = register_allocator()->NewRegisterList(6);
+
+    // Move the first arg.
+    if (build_reflect_apply) {
+      int feedback_slot_index =
+          feedback_index(feedback_spec()->AddKeyedLoadICSlot());
+      Register args_array = args[2];
+      builder()
+          ->LoadLiteral(Smi::FromInt(0))
+          .LoadKeyedProperty(args_array, feedback_slot_index)
+          .StoreAccumulatorInRegister(runtime_call_args[1]);
+    } else {
+      // FIXME(v8:5690): Support final spreads for eval.
+      DCHECK_GE(receiver_arg_count, 0);
+      builder()->MoveRegister(args[receiver_arg_count], runtime_call_args[1]);
+    }
     builder()
         ->MoveRegister(callee, runtime_call_args[0])
-        .MoveRegister(first_arg, runtime_call_args[1])
         .MoveRegister(Register::function_closure(), runtime_call_args[2])
         .LoadLiteral(Smi::FromEnum(language_mode()))
         .StoreAccumulatorInRegister(runtime_call_args[3])
@@ -5177,10 +5212,14 @@ void BytecodeGenerator::VisitCall(Call* expr) {
 
   builder()->SetExpressionPosition(expr);
 
-  if (is_spread_call) {
+  if (first_spread_index == arguments_count - 1) {
+    // If there is only one spread and it's the last argument, there is a
+    // specialized bytecode.
     DCHECK(!implicit_undefined_receiver);
     builder()->CallWithSpread(callee, args,
                               feedback_index(feedback_spec()->AddCallICSlot()));
+  } else if (build_reflect_apply) {
+    builder()->CallJSRuntime(Context::REFLECT_APPLY_INDEX, args);
   } else if (optimize_as_one_shot) {
     DCHECK(!implicit_undefined_receiver);
     builder()->CallNoFeedback(callee, args);
@@ -5203,10 +5242,7 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
   SuperCallReference* super = expr->expression()->AsSuperCallReference();
   const ZonePtrList<Expression>* args = expr->arguments();
 
-  int first_spread_index = 0;
-  for (; first_spread_index < args->length(); first_spread_index++) {
-    if (args->at(first_spread_index)->IsSpread()) break;
-  }
+  int first_spread_index = expr->ComputeFirstSpreadIndex();
 
   // Prepare the constructor to the super call.
   Register this_function = VisitForRegisterValue(super->this_function_var());

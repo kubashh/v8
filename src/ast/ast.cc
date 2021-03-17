@@ -935,6 +935,19 @@ Call::CallType Call::GetCallType() const {
   return OTHER_CALL;
 }
 
+int Call::ComputeFirstSpreadIndex() const {
+  int arguments_length = arguments_.length();
+  if (has_spread()) {
+    for (int first_spread_index = 0; first_spread_index < arguments_length;
+         first_spread_index++) {
+      if (arguments_.at(first_spread_index)->IsSpread()) {
+        return first_spread_index;
+      }
+    }
+  }
+  return arguments_length;
+}
+
 CaseClause::CaseClause(Zone* zone, Expression* label,
                        const ScopedPtrList<Statement>& statements)
     : label_(label), statements_(statements.ToConstVector(), zone) {}

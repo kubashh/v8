@@ -1635,6 +1635,9 @@ class Call final : public Expression {
     return IsOptionalChainLinkField::decode(bit_field_);
   }
 
+  bool has_spread() const { return HasSpreadField::decode(bit_field_); }
+
+  // TODO(syg): Remove this and its users.
   bool only_last_arg_is_spread() {
     return !arguments_.is_empty() && arguments_.last()->IsSpread();
   }
@@ -1662,6 +1665,8 @@ class Call final : public Expression {
   // Helpers to determine how to handle the call.
   CallType GetCallType() const;
 
+  int ComputeFirstSpreadIndex() const;
+
   enum class TaggedTemplateTag { kTrue };
 
  private:
@@ -1669,7 +1674,7 @@ class Call final : public Expression {
   friend Zone;
 
   Call(Zone* zone, Expression* expression,
-       const ScopedPtrList<Expression>& arguments, int pos,
+       const ScopedPtrList<Expression>& arguments, int pos, bool has_spread,
        PossiblyEval possibly_eval, bool optional_chain)
       : Expression(pos, kCall),
         expression_(expression),
@@ -1677,7 +1682,8 @@ class Call final : public Expression {
     bit_field_ |=
         IsPossiblyEvalField::encode(possibly_eval == IS_POSSIBLY_EVAL) |
         IsTaggedTemplateField::encode(false) |
-        IsOptionalChainLinkField::encode(optional_chain);
+        IsOptionalChainLinkField::encode(optional_chain) |
+        HasSpreadField::encode(has_spread);
   }
 
   Call(Zone* zone, Expression* expression,
@@ -1688,12 +1694,14 @@ class Call final : public Expression {
         arguments_(arguments.ToConstVector(), zone) {
     bit_field_ |= IsPossiblyEvalField::encode(false) |
                   IsTaggedTemplateField::encode(true) |
-                  IsOptionalChainLinkField::encode(false);
+                  IsOptionalChainLinkField::encode(false) |
+                  HasSpreadField::encode(false);
   }
 
   using IsPossiblyEvalField = Expression::NextBitField<bool, 1>;
   using IsTaggedTemplateField = IsPossiblyEvalField::Next<bool, 1>;
   using IsOptionalChainLinkField = IsTaggedTemplateField::Next<bool, 1>;
+  using HasSpreadField = IsOptionalChainLinkField::Next<bool, 1>;
 
   Expression* expression_;
   ZonePtrList<Expression> arguments_;
@@ -3064,11 +3072,12 @@ class AstNodeFactory final {
 
   Call* NewCall(Expression* expression,
                 const ScopedPtrList<Expression>& arguments, int pos,
+                bool has_spread,
                 Call::PossiblyEval possibly_eval = Call::NOT_EVAL,
                 bool optional_chain = false) {
     DCHECK_IMPLIES(possibly_eval == Call::IS_POSSIBLY_EVAL, !optional_chain);
-    return zone_->New<Call>(zone_, expression, arguments, pos, possibly_eval,
-                            optional_chain);
+    return zone_->New<Call>(zone_, expression, arguments, pos, has_spread,
+                            possibly_eval, optional_chain);
   }
 
   Call* NewTaggedTemplate(Expression* expression,
