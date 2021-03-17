@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41301a20_9852e31a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-17T06:58:24Z",
+      "side": 1,
+      "message": "Thanks, lgtm from my side. A last q/comment related to x64-specific files, since it looks like we won\u0027t be shipping this on x64 it may make sense to revert all -x64 changes. ",
+      "revId": "8ab896e507ec9f5e16df3e1516d01f36887935a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

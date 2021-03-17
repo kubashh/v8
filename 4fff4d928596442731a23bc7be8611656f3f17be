@@ -806,6 +806,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b71841c2_2a4c6bbc",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-17T06:58:24Z",
+      "side": 1,
+      "message": "Huh, interesting. In that case, IMO the function should be renamed (or a new overload introduced) s.t. \u0027writable\u0027 is not mentioned, and that fails if ptr compression is not enabled. That way the comment isn\u0027t necessary. In a followup is also fine.",
+      "parentUuid": "d63c5725_b1643ec0",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "786e9d2f_72b984c6",
