@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "686e6e45_18e0ea1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-17T11:37:35Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "bbd82095f3776ecacf173c974acca2588fbb8e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a1bb534_67ad54be",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-17T11:37:35Z",
+      "side": 1,
+      "message": "This is the diff compared to the pre-pt.1 CL.",
+      "range": {
+        "startLine": 1414,
+        "startChar": 44,
+        "endLine": 1414,
+        "endChar": 53
+      },
+      "revId": "bbd82095f3776ecacf173c974acca2588fbb8e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
