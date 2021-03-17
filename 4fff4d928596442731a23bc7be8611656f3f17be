@@ -738,6 +738,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "464bc8a0_1fe2c3b3",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3382,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-03-17T07:45:55Z",
+      "side": 1,
+      "message": "One question I still have is, do you ensure that these code pages are never allocated for real Code in the future?",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab101572_00e963ef",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 17
