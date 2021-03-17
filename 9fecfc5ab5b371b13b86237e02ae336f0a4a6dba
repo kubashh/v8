@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce238a21_2b1fa042",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-03-17T17:15:20Z",
+      "side": 1,
+      "message": "This sounds like a good idea (and fun to code).",
+      "parentUuid": "c0318d1c_9a42a247",
+      "revId": "9fecfc5ab5b371b13b86237e02ae336f0a4a6dba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b69fc91f_61c8d9a5",
