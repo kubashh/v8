@@ -5337,8 +5337,29 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
 }
 
 void BytecodeGenerator::VisitCallNew(CallNew* expr) {
-  Register constructor = VisitForRegisterValue(expr->expression());
   RegisterList args = register_allocator()->NewGrowableRegisterList();
+
+  // Load the constructor.
+  VisitAndPushIntoRegisterList(expr->expression(), &args);
+
+  int first_spread_index = expr->ComputeFirstSpreadIndex();
+  const int arguments_count = expr->arguments()->length();
+  if (first_spread_index < arguments_count - 1) {
+    // If there is a non-final spread, we rewrite calls like
+    //     new ctor(1, ...x, 2)
+    // to
+    //     %reflect_construct(ctor, [1, ...x, 2])
+    BuildCreateArrayLiteral(expr->arguments(), nullptr);
+    builder()->SetExpressionPosition(expr);
+    builder()
+        ->StoreAccumulatorInRegister(
+            register_allocator()->GrowRegisterList(&args))
+        .CallJSRuntime(Context::REFLECT_CONSTRUCT_INDEX, args);
+    return;
+  }
+
+  Register constructor = args.first_register();
+  args = args.PopLeft();
   VisitArguments(expr->arguments(), &args);
 
   // The accumulator holds new target which is the same as the
@@ -5347,7 +5368,7 @@ void BytecodeGenerator::VisitCallNew(CallNew* expr) {
   builder()->LoadAccumulatorWithRegister(constructor);
 
   int feedback_slot_index = feedback_index(feedback_spec()->AddCallICSlot());
-  if (expr->only_last_arg_is_spread()) {
+  if (first_spread_index == arguments_count - 1) {
     builder()->ConstructWithSpread(constructor, args, feedback_slot_index);
   } else {
     builder()->Construct(constructor, args, feedback_slot_index);

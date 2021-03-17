@@ -1618,11 +1618,35 @@ class Property final : public Expression {
   Expression* key_;
 };
 
-class Call final : public Expression {
+class CallBase : public Expression {
  public:
   Expression* expression() const { return expression_; }
   const ZonePtrList<Expression>* arguments() const { return &arguments_; }
+  bool has_spread() const { return HasSpreadField::decode(bit_field_); }
 
+  int ComputeFirstSpreadIndex() const;
+
+ protected:
+  CallBase(Zone* zone, NodeType type, Expression* expression,
+           const ScopedPtrList<Expression>& arguments, int pos, bool has_spread)
+      : Expression(pos, type),
+        expression_(expression),
+        arguments_(arguments.ToConstVector(), zone) {
+    DCHECK(type == kCall || type == kCallNew);
+    bit_field_ |= HasSpreadField::encode(has_spread);
+  }
+
+  using HasSpreadField = Expression::NextBitField<bool, 1>;
+
+  template <class T, int size>
+  using NextBitField = HasSpreadField::Next<T, size>;
+
+  Expression* expression_;
+  ZonePtrList<Expression> arguments_;
+};
+
+class Call final : public CallBase {
+ public:
   bool is_possibly_eval() const {
     return IsPossiblyEvalField::decode(bit_field_);
   }
@@ -1633,13 +1657,6 @@ class Call final : public Expression {
 
   bool is_optional_chain_link() const {
     return IsOptionalChainLinkField::decode(bit_field_);
-  }
-
-  bool has_spread() const { return HasSpreadField::decode(bit_field_); }
-
-  // TODO(syg): Remove this and its users.
-  bool only_last_arg_is_spread() {
-    return !arguments_.is_empty() && arguments_.last()->IsSpread();
   }
 
   enum CallType {
@@ -1665,8 +1682,6 @@ class Call final : public Expression {
   // Helpers to determine how to handle the call.
   CallType GetCallType() const;
 
-  int ComputeFirstSpreadIndex() const;
-
   enum class TaggedTemplateTag { kTrue };
 
  private:
@@ -1676,59 +1691,35 @@ class Call final : public Expression {
   Call(Zone* zone, Expression* expression,
        const ScopedPtrList<Expression>& arguments, int pos, bool has_spread,
        PossiblyEval possibly_eval, bool optional_chain)
-      : Expression(pos, kCall),
-        expression_(expression),
-        arguments_(arguments.ToConstVector(), zone) {
+      : CallBase(zone, kCall, expression, arguments, pos, has_spread) {
     bit_field_ |=
         IsPossiblyEvalField::encode(possibly_eval == IS_POSSIBLY_EVAL) |
         IsTaggedTemplateField::encode(false) |
-        IsOptionalChainLinkField::encode(optional_chain) |
-        HasSpreadField::encode(has_spread);
+        IsOptionalChainLinkField::encode(optional_chain);
   }
 
   Call(Zone* zone, Expression* expression,
        const ScopedPtrList<Expression>& arguments, int pos,
        TaggedTemplateTag tag)
-      : Expression(pos, kCall),
-        expression_(expression),
-        arguments_(arguments.ToConstVector(), zone) {
+      : CallBase(zone, kCall, expression, arguments, pos, false) {
     bit_field_ |= IsPossiblyEvalField::encode(false) |
                   IsTaggedTemplateField::encode(true) |
-                  IsOptionalChainLinkField::encode(false) |
-                  HasSpreadField::encode(false);
+                  IsOptionalChainLinkField::encode(false);
   }
 
-  using IsPossiblyEvalField = Expression::NextBitField<bool, 1>;
+  using IsPossiblyEvalField = CallBase::NextBitField<bool, 1>;
   using IsTaggedTemplateField = IsPossiblyEvalField::Next<bool, 1>;
   using IsOptionalChainLinkField = IsTaggedTemplateField::Next<bool, 1>;
-  using HasSpreadField = IsOptionalChainLinkField::Next<bool, 1>;
-
-  Expression* expression_;
-  ZonePtrList<Expression> arguments_;
 };
 
-
-class CallNew final : public Expression {
- public:
-  Expression* expression() const { return expression_; }
-  const ZonePtrList<Expression>* arguments() const { return &arguments_; }
-
-  bool only_last_arg_is_spread() {
-    return !arguments_.is_empty() && arguments_.last()->IsSpread();
-  }
-
+class CallNew final : public CallBase {
  private:
   friend class AstNodeFactory;
   friend Zone;
 
   CallNew(Zone* zone, Expression* expression,
-          const ScopedPtrList<Expression>& arguments, int pos)
-      : Expression(pos, kCallNew),
-        expression_(expression),
-        arguments_(arguments.ToConstVector(), zone) {}
-
-  Expression* expression_;
-  ZonePtrList<Expression> arguments_;
+          const ScopedPtrList<Expression>& arguments, int pos, bool has_spread)
+      : CallBase(zone, kCallNew, expression, arguments, pos, has_spread) {}
 };
 
 // The CallRuntime class does not represent any official JavaScript
@@ -3087,8 +3078,9 @@ class AstNodeFactory final {
   }
 
   CallNew* NewCallNew(Expression* expression,
-                      const ScopedPtrList<Expression>& arguments, int pos) {
-    return zone_->New<CallNew>(zone_, expression, arguments, pos);
+                      const ScopedPtrList<Expression>& arguments, int pos,
+                      bool has_spread) {
+    return zone_->New<CallNew>(zone_, expression, arguments, pos, has_spread);
   }
 
   CallRuntime* NewCallRuntime(Runtime::FunctionId id,
