@@ -773,6 +773,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "81dbeea1_e9d5d980",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3382,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-17T08:19:00Z",
+      "side": 1,
+      "message": "+1 I also don\u0027t see how we prevent allocating other code objects in this range.",
+      "parentUuid": "d075fee0_19061cbc",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab101572_00e963ef",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 17
