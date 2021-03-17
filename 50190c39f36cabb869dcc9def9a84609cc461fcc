@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b003f60_b22d5ec7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-03-17T23:27:12Z",
+      "side": 1,
+      "message": "There\u0027s less immediate reason to do this for CallNew since there\u0027re no cross-cutting concerns with direct eval and optional chaining, but seems good to be consistent.",
+      "revId": "50190c39f36cabb869dcc9def9a84609cc461fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
