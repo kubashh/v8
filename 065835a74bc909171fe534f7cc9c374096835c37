@@ -33,6 +33,24 @@
       "message": "Just noticed that there is also a use of WasmGetOwnProperty for GC code at wasm-compiler.cc:6248.\n+Jakob to double check, but AFAICT that change also makes sense for that use site.",
       "revId": "065835a74bc909171fe534f7cc9c374096835c37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bd0fba1_20401e85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-17T21:48:03Z",
+      "side": 1,
+      "message": "Yes, that change is fine there. Thanks for checking!",
+      "parentUuid": "49ddf1c7_c603f636",
+      "revId": "065835a74bc909171fe534f7cc9c374096835c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
