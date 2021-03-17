@@ -181,11 +181,8 @@ Reduction BranchElimination::ReduceTrapConditional(Node* node) {
         Replace(use, dead());
       }
       Node* effect_input = NodeProperties::GetEffectInput(node);
-      graph()->end()->AppendInput(
-          graph()->zone(),
-          graph()->NewNode(common()->Return(0),
-                           graph()->NewNode(common()->Int32Constant(0)),
-                           effect_input, node));
+      Node* thr = graph()->NewNode(common()->Throw(), effect_input, node);
+      NodeProperties::MergeControlToEnd(graph(), common(), thr);
       return NoChange();
     } else {
       // This will not trap, remove it.

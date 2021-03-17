@@ -1393,7 +1393,8 @@ Node* WasmGraphBuilder::Return(Vector<Node*> vals) {
 Node* WasmGraphBuilder::Trap(wasm::TrapReason reason,
                              wasm::WasmCodePosition position) {
   TrapIfFalse(reason, Int32Constant(0), position);
-  Return(Vector<Node*>{});
+  // Connect control to end via a Throw() node.
+  TerminateThrow(effect(), control());
   return nullptr;
 }
 

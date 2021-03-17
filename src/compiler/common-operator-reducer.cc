@@ -490,11 +490,8 @@ Reduction CommonOperatorReducer::ReduceTrapConditional(Node* trap) {
       Replace(use, dead());
     }
     Node* effect_input = NodeProperties::GetEffectInput(trap);
-    graph()->end()->AppendInput(
-        graph()->zone(),
-        graph()->NewNode(common()->Return(0),
-                         graph()->NewNode(common()->Int32Constant(0)),
-                         effect_input, trap));
+    Node* thr = graph()->NewNode(common()->Throw(), effect_input, trap);
+    NodeProperties::MergeControlToEnd(graph(), common(), thr);
     return NoChange();
   } else {
     // This will not trap, remove it.
