@@ -431,6 +431,9 @@ DEFINE_WEAK_IMPLICATION(future, turbo_inline_js_wasm_calls)
 #if ENABLE_SPARKPLUG
 DEFINE_WEAK_IMPLICATION(future, sparkplug)
 #endif
+#if V8_SHORT_BUILTIN_CALLS
+DEFINE_WEAK_IMPLICATION(future, short_builtin_calls)
+#endif
 
 // Flags for jitless
 DEFINE_BOOL(jitless, V8_LITE_BOOL,
@@ -1535,10 +1538,21 @@ DEFINE_BOOL(adjust_os_scheduling_parameters, true,
             "adjust OS specific scheduling params for the isolate")
 DEFINE_BOOL(experimental_flush_embedded_blob_icache, false,
             "Used in an experiment to evaluate icache flushing on certain CPUs")
-DEFINE_BOOL_READONLY(
-    short_builtin_calls, V8_SHORT_BUILTIN_CALLS_BOOL,
-    "Put embedded builtins code into the code range for shorter "
-    "builtin calls/jumps")
+
+// Flags for short builtin calls feature.
+#undef FLAG
+#if V8_SHORT_BUILTIN_CALLS
+#define FLAG FLAG_FULL
+#else
+#define FLAG FLAG_READONLY
+#endif
+
+DEFINE_BOOL(short_builtin_calls, false,
+            "Put embedded builtins code into the code range for shorter "
+            "builtin calls/jumps")
+
+#undef FLAG
+#define FLAG FLAG_FULL
 
 // runtime.cc
 DEFINE_BOOL(runtime_call_stats, false, "report runtime call counts and times")
