@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cca802d_97f04255",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-17T08:57:49Z",
+      "side": 1,
+      "message": "Please add a comment that this cannot be moved to ClearNonLiveReferences because we rely on clearing weak handles to BytecodeArrays that are going to be flushed.",
+      "range": {
+        "startLine": 2022,
+        "startChar": 4,
+        "endLine": 2022,
+        "endChar": 5
+      },
+      "revId": "e2e321229f8e87317a0cefc010f4dcc8df453ea2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec69bd2b_d00c2627",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-17T08:57:49Z",
+      "side": 1,
+      "message": "Please add a comment that there may be multiple entries corresponding to the given address and we are choosing an arbitrary entry among them.",
+      "range": {
+        "startLine": 779,
+        "startChar": 2,
+        "endLine": 779,
+        "endChar": 40
+      },
+      "revId": "e2e321229f8e87317a0cefc010f4dcc8df453ea2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5650760b_5a8a2ccc",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-17T08:57:49Z",
+      "side": 1,
+      "message": "We should also move other entries with the same address, right?",
+      "range": {
+        "startLine": 795,
+        "startChar": 2,
+        "endLine": 795,
+        "endChar": 37
+      },
+      "revId": "e2e321229f8e87317a0cefc010f4dcc8df453ea2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
