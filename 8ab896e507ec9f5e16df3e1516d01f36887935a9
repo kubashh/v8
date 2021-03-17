@@ -16,6 +16,41 @@
       "message": "Thanks, lgtm from my side. A last q/comment related to x64-specific files, since it looks like we won\u0027t be shipping this on x64 it may make sense to revert all -x64 changes. ",
       "revId": "8ab896e507ec9f5e16df3e1516d01f36887935a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c02ec0e_1d92d2e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-17T08:32:03Z",
+      "side": 1,
+      "message": "Thanks for the comments!",
+      "revId": "8ab896e507ec9f5e16df3e1516d01f36887935a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44a96e5b_03970cbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-17T08:32:03Z",
+      "side": 1,
+      "message": "Shipping yes, but on x64 Canaries we\u0027d still like to try the platform-independent implementation (mainly the one that\u0027s in the follow-up pt.2 CL).",
+      "parentUuid": "41301a20_9852e31a",
+      "revId": "8ab896e507ec9f5e16df3e1516d01f36887935a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -895,6 +895,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30cd1450_50bb4ddb",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-17T08:32:03Z",
+      "side": 1,
+      "message": "I guess the proper fix would be to just pass the Isolate from outside, but given that these changes are rather temporary...",
+      "parentUuid": "b71841c2_2a4c6bbc",
+      "revId": "4fff4d928596442731a23bc7be8611656f3f17be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "786e9d2f_72b984c6",
