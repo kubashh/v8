@@ -55,6 +55,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "962a4021_34739f99",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-03-18T14:05:29Z",
+      "side": 1,
+      "message": "I\u0027d just do\n  return *this \u003d\u003d fun.shared().function_data(kAcquireLoad);\nhere, that avoids the outside-declared and oddly-named \"type\" variable.",
+      "revId": "951b2e508587839a0f761ed567608503c1680d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d53ff2da_d21dcb31",
         "filename": "test/cctest/test-api.cc",
         "patchSetId": 13
