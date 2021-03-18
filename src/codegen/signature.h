@@ -132,6 +132,12 @@ class FixedSizeSignature : public Signature<T> {
     std::copy(reps.begin(), reps.end(), reps_);
   }
 
+  constexpr FixedSizeSignature() : Signature<T>(0, 0, nullptr) {
+    static_assert(kNumReturns == 0 && kNumParams == 0,
+                  "The default constructor can only be used if there are no "
+                  "return types and no parameters.");
+  }
+
   // Add return types to this signature (only allowed if there are none yet).
   template <typename... ReturnTypes>
   auto Returns(ReturnTypes... return_types) const {
