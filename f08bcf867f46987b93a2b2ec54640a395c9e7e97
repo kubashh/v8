@@ -161,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3058d377_c12d6cdf",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-18T17:18:39Z",
+      "side": 1,
+      "message": "let\u0027s deal with module-code fuzzing separately I\u0027d say.\n\n- Either we create a fuzzer that runs with --module can creates multiple files (that I don\u0027t know directly how to do),\n- or we create something like the above interface in d8 to programatically create modules from JS, which will give us some fuzzing support",
+      "parentUuid": "6e3685ce_6e01a9be",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 666,
+        "endChar": 77
+      },
+      "revId": "f08bcf867f46987b93a2b2ec54640a395c9e7e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8fd2cf2e_1e46a6cb",
         "filename": "src/objects/source-text-module.h",
         "patchSetId": 6
