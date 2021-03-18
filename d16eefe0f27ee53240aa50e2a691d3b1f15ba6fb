@@ -33,6 +33,24 @@
       "message": "Hi Zhi,\n\nWe only use the \"vector permute\" instruction on ppc and s390 to perform a shuffle,\nessentially, src inputs are selected based on the indices input and put into destination.\nSeems like x86 has a similar instruction: https://www.felixcloutier.com/x86/vpermb\n\nI was wondering why isn\u0027t this used instead of all the \"TryMatch\" operations done during instruction selection?\n\n",
       "revId": "d16eefe0f27ee53240aa50e2a691d3b1f15ba6fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a08b39f_16b22976",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-18T16:36:45Z",
+      "side": 1,
+      "message": "vpermb requires AVX512, which V8 doesn\u0027t support right now. We go up to AVX2 currently (see https://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/cpu-features.h;l\u003d23;drc\u003d9960f69ffd82bc9d3a6f121d5a8168b7234eabc7).\nAlso I think there are special cases of shuffles where we have faster instructions than vpermb (or pshufb), e.g. VPUNPCKHQDQ has a latency of 1 cycle, and vpermb looks like 3 cycles (based on https://uops.info/table.html).",
+      "parentUuid": "d7dca70f_643fb6e7",
+      "revId": "d16eefe0f27ee53240aa50e2a691d3b1f15ba6fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
