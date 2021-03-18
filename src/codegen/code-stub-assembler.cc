@@ -5626,6 +5626,10 @@ TNode<Number> CodeStubAssembler::ChangeUintPtrToTagged(TNode<UintPtrT> value) {
   return var_result.value();
 }
 
+TNode<Int32T> CodeStubAssembler::ChangeBoolToInt32(TNode<BoolT> b) {
+  return UncheckedCast<Int32T>(b);
+}
+
 TNode<String> CodeStubAssembler::ToThisString(TNode<Context> context,
                                               TNode<Object> value,
                                               TNode<String> method_name) {
@@ -14309,5 +14313,37 @@ TNode<SwissNameDictionary> CodeStubAssembler::AllocateSwissNameDictionary(
   return AllocateSwissNameDictionary(IntPtrConstant(at_least_space_for));
 }
 
+TNode<Uint64T> CodeStubAssembler::LoadSwissNameDictionaryCtrlTableGroup(
+    TNode<IntPtrT> address) {
+  TNode<RawPtrT> ptr = ReinterpretCast<RawPtrT>(address);
+  TNode<Uint64T> data = UnalignedLoad<Uint64T>(ptr, IntPtrConstant(0));
+
+#ifdef V8_TARGET_LITTLE_ENDIAN
+  return data;
+#else
+  // Reverse byte order.
+  // TODO(v8:11330) Doing this without using dedicated instructions (which we
+  // don't have access to here) will destroy any performance benefit Swiss
+  // Tables have. So we just support this so that we don't have to disable the
+  // test suite for SwissNameDictionary on big endian platforms.
+
+  TNode<Uint64T> result = Uint64Constant(0);
+  constexpr int count = sizeof(uint64_t);
+  for (int i = 0; i < count; ++i) {
+    int src_offset = i * 8;
+    int dest_offset = (count - i - 1) * 8;
+
+    TNode<Uint64T> mask = Uint64Constant(0xffULL << src_offset);
+    TNode<Uint64T> src_data = Word64And(data, mask);
+
+    TNode<Uint64T> shifted =
+        src_offset < dest_offset
+            ? Word64Shl(src_data, Uint64Constant(dest_offset - src_offset))
+            : Word64Shr(src_data, Uint64Constant(src_offset - dest_offset));
+    result = Unsigned(Word64Or(result, shifted));
+  }
+  return result;
+#endif
+}
 }  // namespace internal
 }  // namespace v8

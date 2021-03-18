@@ -733,6 +733,20 @@ TNode<Object> CodeAssembler::LoadRoot(RootIndex root_index) {
       LoadFullTagged(isolate_root, IntPtrConstant(offset)));
 }
 
+template <typename T>
+TNode<T> CodeAssembler::UnalignedLoad(TNode<RawPtrT> base,
+                                      TNode<IntPtrT> offset) {
+  MachineRepresentation rep = MachineRepresentationOf<T>::value;
+
+  // Passing "false" below indicates unsigned, which is irrelevant here.
+  MachineType mt = MachineType::TypeForRepresentation(rep, false);
+  return UncheckedCast<T>(
+      raw_assembler()->UnalignedLoad(mt, static_cast<Node*>(base), offset));
+}
+
+template TNode<Uint64T> CodeAssembler::UnalignedLoad(TNode<RawPtrT> base,
+                                                     TNode<IntPtrT> offset);
+
 void CodeAssembler::Store(Node* base, Node* value) {
   raw_assembler()->Store(MachineRepresentation::kTagged, base, value,
                          kFullWriteBarrier);
