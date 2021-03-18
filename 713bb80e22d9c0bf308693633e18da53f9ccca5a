@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0935a20_e45d2e1d",
+        "filename": "src/wasm/wasm-feature-flags.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-03-18T04:13:47Z",
+      "side": 1,
+      "message": "Why not use it to gate the decode of FMA opcodes?",
+      "revId": "713bb80e22d9c0bf308693633e18da53f9ccca5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
