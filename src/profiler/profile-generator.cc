@@ -334,7 +334,6 @@ CpuProfileNode::SourceType ProfileNode::source_type() const {
     case CodeEventListener::SHARED_FUNC_MOVE_EVENT:
     case CodeEventListener::SNAPSHOT_CODE_NAME_EVENT:
     case CodeEventListener::TICK_EVENT:
-    case CodeEventListener::BYTECODE_FLUSH_EVENT:
     case CodeEventListener::NUMBER_OF_LOG_EVENTS:
       return CpuProfileNode::kInternal;
   }
@@ -755,8 +754,20 @@ void CodeMap::Clear() {
 }
 
 void CodeMap::AddCode(Address addr, CodeEntry* entry, unsigned size) {
-  ClearCodesInRange(addr, addr + size);
   code_map_.emplace(addr, CodeEntryMapInfo{entry, size});
+  entry->set_instruction_start(addr);
+}
+
+bool CodeMap::RemoveCode(CodeEntry* entry) {
+  auto range = code_map_.equal_range(entry->instruction_start());
+  for (auto i = range.first; i != range.second; ++i) {
+    if (i->second.entry == entry) {
+      DeleteCodeEntry(entry);
+      code_map_.erase(i);
+      return true;
+    }
+  }
+  return false;
 }
 
 void CodeMap::ClearCodesInRange(Address start, Address end) {
@@ -777,6 +788,9 @@ void CodeMap::ClearCodesInRange(Address start, Address end) {
 }
 
 CodeEntry* CodeMap::FindEntry(Address addr, Address* out_instruction_start) {
+  // Note that an address may correspond to multiple CodeEntry objects. An
+  // arbitrary selection is made (as per multimap spec) in the event of a
+  // collision.
   auto it = code_map_.upper_bound(addr);
   if (it == code_map_.begin()) return nullptr;
   --it;
@@ -790,13 +804,24 @@ CodeEntry* CodeMap::FindEntry(Address addr, Address* out_instruction_start) {
 
 void CodeMap::MoveCode(Address from, Address to) {
   if (from == to) return;
-  auto it = code_map_.find(from);
-  if (it == code_map_.end()) return;
-  CodeEntryMapInfo info = it->second;
-  code_map_.erase(it);
-  DCHECK(from + info.size <= to || to + info.size <= from);
-  ClearCodesInRange(to, to + info.size);
-  code_map_.emplace(to, info);
+
+  // Collect and remove matching CodeEntries before to avoid modifying the
+  // [first, last) iterator range from equal_range.
+  std::vector<CodeEntryMapInfo> from_infos;
+  auto range = code_map_.equal_range(from);
+  for (auto it = range.first; it != range.second; ++it) {
+    from_infos.push_back(it->second);
+  }
+  code_map_.erase(range.first, range.second);
+
+  for (auto& info : from_infos) {
+    DCHECK(info.entry);
+    DCHECK_EQ(info.entry->instruction_start(), from);
+    info.entry->set_instruction_start(to);
+
+    DCHECK(from + info.size <= to || to + info.size <= from);
+    code_map_.emplace(to, info);
+  }
 }
 
 void CodeMap::DeleteCodeEntry(CodeEntry* entry) {
