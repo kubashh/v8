@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afe4b261_db783971",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-18T08:30:15Z",
+      "side": 1,
+      "message": "lgtm with one comment and one nit.",
+      "revId": "fbf3aa409c8323fda1f978bb803405a8627f51ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c1f5243_59ff1b99",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-18T08:30:15Z",
+      "side": 1,
+      "message": "Nit: the following should also work\n\nauto range \u003d code_map_.equal_range(from);\nstd::vector\u003cCodeEntryMapInfo\u003e from_infos(range.first, range.second);",
+      "range": {
+        "startLine": 812,
+        "startChar": 1,
+        "endLine": 814,
+        "endChar": 3
+      },
+      "revId": "fbf3aa409c8323fda1f978bb803405a8627f51ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
