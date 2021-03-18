@@ -33,6 +33,24 @@
       "message": "++ for general consistency, at a glance similar comments as on the previous CL around first_spread_index and having a bool for the last-arg-spread fast path",
       "revId": "50190c39f36cabb869dcc9def9a84609cc461fcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb7ea5d5_e129cdad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-03-18T14:50:44Z",
+      "side": 1,
+      "message": "This CL refactors the ComputeFirstSpreadIndex and the \"has spread\" bitfield to a CallBase that\u0027s the superclass of both Call and CallNew nodes, so both nodes share the logic for computing the first spread index.",
+      "parentUuid": "0660bdfe_11fd35a1",
+      "revId": "50190c39f36cabb869dcc9def9a84609cc461fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
