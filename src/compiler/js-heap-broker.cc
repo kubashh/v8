@@ -1300,7 +1300,7 @@ MapData::MapData(JSHeapBroker* broker, ObjectData** storage, Handle<Map> object,
     : HeapObjectData(broker, storage, object, kind),
       instance_type_(object->instance_type()),
       instance_size_(object->instance_size()),
-      bit_field_(object->bit_field()),
+      bit_field_(object->relaxed_bit_field()),
       bit_field2_(object->bit_field2()),
       bit_field3_(object->bit_field3()),
       can_be_deprecated_(object->NumberOfOwnDescriptors() > 0
