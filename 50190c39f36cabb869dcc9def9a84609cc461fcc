@@ -16,6 +16,23 @@
       "message": "There\u0027s less immediate reason to do this for CallNew since there\u0027re no cross-cutting concerns with direct eval and optional chaining, but seems good to be consistent.",
       "revId": "50190c39f36cabb869dcc9def9a84609cc461fcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0660bdfe_11fd35a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-03-18T09:55:54Z",
+      "side": 1,
+      "message": "++ for general consistency, at a glance similar comments as on the previous CL around first_spread_index and having a bool for the last-arg-spread fast path",
+      "revId": "50190c39f36cabb869dcc9def9a84609cc461fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
