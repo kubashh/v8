@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bcd6ebe_b8cbe401",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-03-18T16:12:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8ee16cc_00172dbd",
+      "revId": "4856481a65d64c17a100ac01d6d78f891536a67e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5828853c_acc008b9",
@@ -65,6 +83,30 @@
       "writtenOn": "2021-03-18T13:27:32Z",
       "side": 1,
       "message": "This should be kTrueValue?",
+      "range": {
+        "startLine": 1622,
+        "startChar": 62,
+        "endLine": 1622,
+        "endChar": 73
+      },
+      "revId": "4856481a65d64c17a100ac01d6d78f891536a67e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bb6921b_82a15256",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-03-18T16:12:32Z",
+      "side": 1,
+      "message": "Good catch! Fixed.",
+      "parentUuid": "5828853c_acc008b9",
       "range": {
         "startLine": 1622,
         "startChar": 62,
