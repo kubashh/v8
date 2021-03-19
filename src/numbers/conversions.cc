@@ -14,6 +14,7 @@
 #include "src/handles/handles.h"
 #include "src/heap/factory.h"
 #include "src/numbers/dtoa.h"
+#include "src/numbers/ryu.cpp"
 #include "src/numbers/strtod.h"
 #include "src/objects/bigint.h"
 #include "src/objects/objects-inl.h"
@@ -991,13 +992,21 @@ const char* DoubleToCString(double v, Vector<char> buffer) {
       SimpleStringBuilder builder(buffer.begin(), buffer.length());
       int decimal_point;
       int sign;
-      const int kV8DtoaBufferCapacity = kBase10MaximalLength + 1;
-      char decimal_rep[kV8DtoaBufferCapacity];
+      // const int kV8DtoaBufferCapacity = kBase10MaximalLength + 1;
+      // char decimal_rep[kV8DtoaBufferCapacity];
       int length;
 
-      DoubleToAscii(v, DTOA_SHORTEST, 0,
-                    Vector<char>(decimal_rep, kV8DtoaBufferCapacity), &sign,
-                    &length, &decimal_point);
+      // DoubleToAscii(v, DTOA_SHORTEST, 0,
+      //               Vector<char>(decimal_rep, kV8DtoaBufferCapacity), &sign,
+      //               &length, &decimal_point);
+
+      const ecmascript_result res = d2s_buffered_n(v);
+      sign = res.is_negative;
+      length = res.k;
+      decimal_point = res.n;
+      auto decimal_rep = res.buf;
+
+      // decimal_rep[length] = '\0';
 
       if (sign) builder.AddCharacter('-');
 
