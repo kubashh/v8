@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3bbaed7_7f97f7e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-19T14:26:14Z",
+      "side": 1,
+      "message": "PTAL. Patch set 1 is the original patch, patch set 2 is the UBSan fix. Sorry for the trouble.\n\nSometimes I like C++, and sometimes I don\u0027t...",
+      "revId": "890e75f327fc682f1b4bafa6d8c362267fcb54a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
