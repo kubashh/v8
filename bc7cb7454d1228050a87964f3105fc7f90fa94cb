@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "bc7cb7454d1228050a87964f3105fc7f90fa94cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c475556e_c3403499",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-03-19T13:38:20Z",
+      "side": 1,
+      "message": "Could you explain why {Store} is called in this case and not StoreTaggedField? Why do you not need to execute the write barrier here so that he GC knows about this store?",
+      "revId": "bc7cb7454d1228050a87964f3105fc7f90fa94cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c332e4c3_35d15620",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-03-19T13:38:20Z",
+      "side": 1,
+      "message": "Would it not be better to use {StoreTaggedField} instead of {movq}?",
+      "revId": "bc7cb7454d1228050a87964f3105fc7f90fa94cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
