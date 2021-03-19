@@ -39,6 +39,30 @@
       },
       "revId": "fbf3aa409c8323fda1f978bb803405a8627f51ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b73e5f4_9f5f3a39",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-19T01:55:39Z",
+      "side": 1,
+      "message": "While thinking about this suggestion, I came up with an in-place solution leveraging the fact that std::multimap guarantees iterator validity even after insertion (which avoids the extra allocation altogether).",
+      "parentUuid": "9c1f5243_59ff1b99",
+      "range": {
+        "startLine": 812,
+        "startChar": 1,
+        "endLine": 814,
+        "endChar": 3
+      },
+      "revId": "fbf3aa409c8323fda1f978bb803405a8627f51ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
