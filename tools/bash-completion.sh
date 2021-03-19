@@ -118,3 +118,42 @@ _maybe_setup_gdb_completions() {
 }
 _maybe_setup_gdb_completions
 unset _maybe_setup_gdb_completions
+
+_get_gm_python_list_to_arr() {
+  joined_gm_py=$1
+  list_name=$2
+  grep "^$list_name =" <<< "$joined_gm_py" | sed -e 's/[^"]\+\([^]]\+\)\]/\1/;s/[",]/ /g'
+}
+
+_get_gm_flags() {
+  # Same as the sed expression in_get_v8_flags(), but for line ending with ",".
+  local joined=$(sed -e :a -e '/,$/N; s/,\n\s*/,/; ta' < tools/dev/gm.py)
+  local arches=($(_get_gm_python_list_to_arr "$joined" "ARCHES"))
+  local modes=($(_get_gm_python_list_to_arr "$joined" "MODES"))
+  local targets=($(_get_gm_python_list_to_arr "$joined" "TARGETS"))
+
+  for a in "${arches[@]}"; do
+    echo "$a"
+    for m in "${modes[@]}"; do
+      echo "$a.$m"
+      for t in "${targets[@]}" all tests check checkall; do
+        echo "$a.$m.$t"
+      done
+    done
+  done
+
+  # cctest ignore directory structure, it's always "cctest/filename".
+  find "$v8_source/test/cctest/" -type f -name 'test-*' -print0 | \
+    xargs -0 basename -a -s ".cc" | \
+    while read -r item; do echo "cctest/$item/*"; done
+}
+
+_gm_flag() {
+  local targets
+  targets=$(_get_gm_flags)
+  COMPREPLY=($(compgen -W "$targets" -- "${COMP_WORDS[COMP_CWORD]}"))
+  return 0
+}
+
+# gm might be an alias, based on https://v8.dev/docs/build-gn#gm.
+complete -F _gm_flag gm.py gm
