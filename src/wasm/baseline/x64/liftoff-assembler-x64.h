@@ -117,6 +117,10 @@ inline void Store(LiftoffAssembler* assm, Operand dst, LiftoffRegister src,
       assm->movl(dst, src.gp());
       break;
     case kI64:
+    case kOptRef:
+    case kRef:
+    case kRtt:
+    case kRttWithDepth:
       assm->movq(dst, src.gp());
       break;
     case kF32:
