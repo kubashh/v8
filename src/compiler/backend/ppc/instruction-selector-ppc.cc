@@ -2147,6 +2147,7 @@ void InstructionSelector::VisitInt64AbsWithOverflow(Node* node) {
 #define SIMD_TYPES(V) \
   V(F64x2)            \
   V(F32x4)            \
+  V(I64x2)            \
   V(I32x4)            \
   V(I16x8)            \
   V(I8x16)
@@ -2257,6 +2258,9 @@ void InstructionSelector::VisitInt64AbsWithOverflow(Node* node) {
   V(F64x2Floor)                \
   V(F64x2Trunc)                \
   V(F64x2NearestInt)           \
+  V(F64x2ConvertLowI32x4S)     \
+  V(F64x2ConvertLowI32x4U)     \
+  V(F64x2PromoteLowF32x4)      \
   V(F32x4Abs)                  \
   V(F32x4Neg)                  \
   V(F32x4RecipApprox)          \
@@ -2268,6 +2272,7 @@ void InstructionSelector::VisitInt64AbsWithOverflow(Node* node) {
   V(F32x4Floor)                \
   V(F32x4Trunc)                \
   V(F32x4NearestInt)           \
+  V(F32x4DemoteF64x2Zero)      \
   V(I64x2Neg)                  \
   V(I64x2SConvertI32x4Low)     \
   V(I64x2SConvertI32x4High)    \
@@ -2283,6 +2288,8 @@ void InstructionSelector::VisitInt64AbsWithOverflow(Node* node) {
   V(I32x4UConvertI16x8High)    \
   V(I32x4ExtAddPairwiseI16x8S) \
   V(I32x4ExtAddPairwiseI16x8U) \
+  V(I32x4TruncSatF64x2SZero)   \
+  V(I32x4TruncSatF64x2UZero)   \
   V(I16x8Neg)                  \
   V(I16x8Abs)                  \
   V(I8x16Neg)                  \
@@ -2334,6 +2341,7 @@ SIMD_TYPES(SIMD_VISIT_SPLAT)
   }
 SIMD_VISIT_EXTRACT_LANE(F64x2, )
 SIMD_VISIT_EXTRACT_LANE(F32x4, )
+SIMD_VISIT_EXTRACT_LANE(I64x2, )
 SIMD_VISIT_EXTRACT_LANE(I32x4, )
 SIMD_VISIT_EXTRACT_LANE(I16x8, U)
 SIMD_VISIT_EXTRACT_LANE(I16x8, S)
@@ -2484,24 +2492,6 @@ void InstructionSelector::VisitS128Const(Node* node) {
 }
 
 void InstructionSelector::VisitI8x16Popcnt(Node* node) { UNIMPLEMENTED(); }
-void InstructionSelector::VisitF64x2ConvertLowI32x4S(Node* node) {
-  UNIMPLEMENTED();
-}
-void InstructionSelector::VisitF64x2ConvertLowI32x4U(Node* node) {
-  UNIMPLEMENTED();
-}
-void InstructionSelector::VisitF64x2PromoteLowF32x4(Node* node) {
-  UNIMPLEMENTED();
-}
-void InstructionSelector::VisitF32x4DemoteF64x2Zero(Node* node) {
-  UNIMPLEMENTED();
-}
-void InstructionSelector::VisitI32x4TruncSatF64x2SZero(Node* node) {
-  UNIMPLEMENTED();
-}
-void InstructionSelector::VisitI32x4TruncSatF64x2UZero(Node* node) {
-  UNIMPLEMENTED();
-}
 void InstructionSelector::VisitI64x2GtS(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitI64x2GeS(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitI64x2Abs(Node* node) { UNIMPLEMENTED(); }
