@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "879de523_5b72b81d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-19T15:42:01Z",
+      "side": 1,
+      "message": "On empty signature, we can also use \"::\", but only for the first things added:\n  auto sig \u003d MakeSig::Returns(kI32).Params(kI32);\n\nDo you think that would be nicer? It would certainly be more technically correct. Alternatively, we could make the method non-static, to enforce the use of \".\". Now that I wrote this, I think this would actually be nicer :)",
+      "parentUuid": "7ca2fd66_d01f3a83",
+      "revId": "11ad90ba713920e5ead22b0dfc396166cd74aa0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8676f2c_a7636a9e",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "writtenOn": "2021-03-19T15:30:03Z",
       "side": 1,
       "message": "Why don\u0027t you define MakeSig in signature.h?",
+      "revId": "11ad90ba713920e5ead22b0dfc396166cd74aa0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49dbb6ea_8f77cbf2",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-19T15:42:01Z",
+      "side": 1,
+      "message": "Because we need signatures of different kind. Here it\u0027s ValueKind, in tests it\u0027s ValueType. And adding that as a template argument would add clutter to each use.",
+      "parentUuid": "d8676f2c_a7636a9e",
       "revId": "11ad90ba713920e5ead22b0dfc396166cd74aa0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
