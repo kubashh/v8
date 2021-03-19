@@ -16,6 +16,41 @@
       "message": "@Nico: I addressed the problem you spotted, is this okay now?",
       "revId": "f0f52a9272d0b2310c8b145e8db399939ea9f07b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75f10b30_c641be05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-03-19T07:50:31Z",
+      "side": 1,
+      "message": "Yes, thanks!",
+      "parentUuid": "95e5d0f0_57e26f3e",
+      "revId": "f0f52a9272d0b2310c8b145e8db399939ea9f07b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9a073c5_72be6efc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-03-19T07:50:31Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "f0f52a9272d0b2310c8b145e8db399939ea9f07b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
