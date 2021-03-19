@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9464c936_bc144062",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14315,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d546fece_4916f15e",
+      "range": {
+        "startLine": 14315,
+        "startChar": 6,
+        "endLine": 14315,
+        "endChar": 25
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1353dddf_01163564",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-03-19T11:43:55Z",
       "side": 1,
       "message": "\"Load\" or even \"LoadByIndex\" to follow the naming convention in CSA.",
+      "range": {
+        "startLine": 14321,
+        "startChar": 17,
+        "endLine": 14321,
+        "endChar": 21
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1873529_9b21278e",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14321,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1353dddf_01163564",
       "range": {
         "startLine": 14321,
         "startChar": 17,
@@ -81,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf797664_f096d5b0",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14323,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done, but added to the overall_offset (now overallOffset) function so it handles both load and store.",
+      "parentUuid": "f418fdf7_2eac4302",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9d704c7_d7b9c0de",
@@ -94,6 +160,30 @@
       "writtenOn": "2021-03-19T11:43:55Z",
       "side": 1,
       "message": "Store",
+      "range": {
+        "startLine": 14328,
+        "startChar": 7,
+        "endLine": 14328,
+        "endChar": 12
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d21e1055_6c234fc7",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14328,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9d704c7_d7b9c0de",
       "range": {
         "startLine": 14328,
         "startChar": 7,
@@ -121,6 +211,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d127612_ae3d5c0f",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14331,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46f4e714_4b9df929",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36ed2283_f46fbabf",
@@ -134,6 +242,24 @@
       "writtenOn": "2021-03-19T11:43:55Z",
       "side": 1,
       "message": "Also camel case please and please add a TODO: consider using ElementOffsetFromIndex() instead (I\u0027m not sure if the IntPtrMul() will be generated as a shift).",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a07eb70_cae5ebc0",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14343,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36ed2283_f46fbabf",
       "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +281,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f87905f2_0c168d0e",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14363,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0870957_2289eab7",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88ef4242_372048af",
@@ -168,6 +312,30 @@
       "writtenOn": "2021-03-19T11:43:55Z",
       "side": 1,
       "message": "builder_t is too generic for such a big file and namespace, please rename it to MetaTableAccessFunction.",
+      "range": {
+        "startLine": 14369,
+        "startChar": 6,
+        "endLine": 14369,
+        "endChar": 15
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c20b745_f866e4d3",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14369,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88ef4242_372048af",
       "range": {
         "startLine": 14369,
         "startChar": 6,
@@ -201,6 +369,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccb796e7_2d25a1c1",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14375,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b15cc10_df41c7d5",
+      "range": {
+        "startLine": 14375,
+        "startChar": 5,
+        "endLine": 14375,
+        "endChar": 27
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24f82028_ff4670e9",
@@ -214,6 +406,30 @@
       "writtenOn": "2021-03-19T11:43:55Z",
       "side": 1,
       "message": "Is it offset or index? I think it\u0027s worth renaming the constant to XXXFieldIndex and adding a comment there.",
+      "range": {
+        "startLine": 14420,
+        "startChar": 44,
+        "endLine": 14420,
+        "endChar": 72
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b7ddfc1_71163d5a",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14420,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "This is indeed an index, not an offset. Renamed the variable.",
+      "parentUuid": "24f82028_ff4670e9",
       "range": {
         "startLine": 14420,
         "startChar": 44,
@@ -247,6 +463,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55c3dd10_0b8b3e2f",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14435,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e39f8191_c5b0ee67",
+      "range": {
+        "startLine": 14435,
+        "startChar": 29,
+        "endLine": 14435,
+        "endChar": 64
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c6e1725_dc756e42",
@@ -260,6 +500,30 @@
       "writtenOn": "2021-03-19T11:43:55Z",
       "side": 1,
       "message": "Same here. Maybe kMetaTableEnumerationTableStartIndex or kMetaTableEnumerationDataStartIndex or something?",
+      "range": {
+        "startLine": 14448,
+        "startChar": 41,
+        "endLine": 14448,
+        "endChar": 78
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a2fab19_b491bcd4",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14448,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c6e1725_dc756e42",
       "range": {
         "startLine": 14448,
         "startChar": 41,
@@ -287,6 +551,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05b744d8_599e122d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14466,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f22990c_aacb73a6",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d537dca2_e8ffa386",
@@ -300,6 +582,30 @@
       "writtenOn": "2021-03-19T11:43:55Z",
       "side": 1,
       "message": "Please introduce Uint32Sub and use it here (smaller constants might produce smaller code).",
+      "range": {
+        "startLine": 14491,
+        "startChar": 29,
+        "endLine": 14491,
+        "endChar": 38
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "845aa753_470c7cca",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14491,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-19T19:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d537dca2_e8ffa386",
       "range": {
         "startLine": 14491,
         "startChar": 29,
