@@ -1,0 +1,313 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b0cdc3c_30bdba8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "looks good, mostly nits",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d546fece_4916f15e",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14315,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "Please use CamelCaseNaming for classes.",
+      "range": {
+        "startLine": 14315,
+        "startChar": 6,
+        "endLine": 14315,
+        "endChar": 25
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1353dddf_01163564",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14321,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "\"Load\" or even \"LoadByIndex\" to follow the naming convention in CSA.",
+      "range": {
+        "startLine": 14321,
+        "startChar": 17,
+        "endLine": 14321,
+        "endChar": 21
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f418fdf7_2eac4302",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14323,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "It would be nice to CSA_ASSERT the access is within the bounds of the byte array.",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9d704c7_d7b9c0de",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14328,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "Store",
+      "range": {
+        "startLine": 14328,
+        "startChar": 7,
+        "endLine": 14328,
+        "endChar": 12
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f4e714_4b9df929",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14331,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "Please add an OOB access check.",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36ed2283_f46fbabf",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14343,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "Also camel case please and please add a TODO: consider using ElementOffsetFromIndex() instead (I\u0027m not sure if the IntPtrMul() will be generated as a shift).",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0870957_2289eab7",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14363,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "I think it\u0027ll be nicer if you add the meta_table as argument to the Load/Store functions instead.",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88ef4242_372048af",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14369,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "builder_t is too generic for such a big file and namespace, please rename it to MetaTableAccessFunction.",
+      "range": {
+        "startLine": 14369,
+        "startChar": 6,
+        "endLine": 14369,
+        "endChar": 15
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b15cc10_df41c7d5",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14375,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "Not a simple accessor or something, so GenerateMetaTableAccess please.",
+      "range": {
+        "startLine": 14375,
+        "startChar": 5,
+        "endLine": 14375,
+        "endChar": 27
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24f82028_ff4670e9",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14420,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "Is it offset or index? I think it\u0027s worth renaming the constant to XXXFieldIndex and adding a comment there.",
+      "range": {
+        "startLine": 14420,
+        "startChar": 44,
+        "endLine": 14420,
+        "endChar": 72
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e39f8191_c5b0ee67",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14435,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 14435,
+        "startChar": 29,
+        "endLine": 14435,
+        "endChar": 64
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c6e1725_dc756e42",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14448,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "Same here. Maybe kMetaTableEnumerationTableStartIndex or kMetaTableEnumerationDataStartIndex or something?",
+      "range": {
+        "startLine": 14448,
+        "startChar": 41,
+        "endLine": 14448,
+        "endChar": 78
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f22990c_aacb73a6",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14466,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "It might be nicer to have a Load/Store overloads with int index type.",
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d537dca2_e8ffa386",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14491,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-19T11:43:55Z",
+      "side": 1,
+      "message": "Please introduce Uint32Sub and use it here (smaller constants might produce smaller code).",
+      "range": {
+        "startLine": 14491,
+        "startChar": 29,
+        "endLine": 14491,
+        "endChar": 38
+      },
+      "revId": "b42346fa18290cfb7bd7b9a773020fb85ade01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
