@@ -207,6 +207,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39f68be1_5e1d49ca",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-19T10:19:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "824ec060_44fa1215",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 666,
+        "endChar": 77
+      },
+      "revId": "f08bcf867f46987b93a2b2ec54640a395c9e7e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fd2cf2e_1e46a6cb",

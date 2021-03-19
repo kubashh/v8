@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce3b1ea1_a48d8c4f",
+        "filename": "src/common/globals.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-19T10:19:11Z",
+      "side": 1,
+      "message": "unsigned for consistency?",
+      "range": {
+        "startLine": 369,
+        "startChar": 10,
+        "endLine": 369,
+        "endChar": 13
+      },
+      "revId": "55c5148d91032841b1bf52086defa6bb46733503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9fbcbbc_6aeafd48",
+        "filename": "src/execution/isolate-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-19T10:19:11Z",
+      "side": 1,
+      "message": "name nit: DidFinishModuleAsyncEvaluation sounds like a bool getter to me. Maybe just Finish(ed)ModuleAsyncEvaluation is better?",
+      "range": {
+        "startLine": 124,
+        "startChar": 14,
+        "endLine": 124,
+        "endChar": 44
+      },
+      "revId": "55c5148d91032841b1bf52086defa6bb46733503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe3911ee_18686444",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-19T10:19:11Z",
+      "side": 1,
+      "message": "nit: for clarity we could make this a ZoneStack",
+      "range": {
+        "startLine": 619,
+        "startChar": 2,
+        "endLine": 619,
+        "endChar": 12
+      },
+      "revId": "55c5148d91032841b1bf52086defa6bb46733503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11347675_414b9d2d",
+        "filename": "src/objects/source-text-module.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-03-19T10:19:11Z",
+      "side": 1,
+      "message": "unsigned for consistency?",
+      "range": {
+        "startLine": 77,
+        "startChar": 19,
+        "endLine": 77,
+        "endChar": 22
+      },
+      "revId": "55c5148d91032841b1bf52086defa6bb46733503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
