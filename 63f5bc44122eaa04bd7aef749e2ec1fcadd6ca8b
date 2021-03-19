@@ -50,6 +50,24 @@
       "message": "lgtm but there\u0027s a compile error.",
       "revId": "63f5bc44122eaa04bd7aef749e2ec1fcadd6ca8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7e99a11_50a516f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-19T16:50:56Z",
+      "side": 1,
+      "message": "Thanks, that\u0027s a experimental bot, fixed it in the latest PS.",
+      "parentUuid": "f9ddefd1_503d4b9b",
+      "revId": "63f5bc44122eaa04bd7aef749e2ec1fcadd6ca8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
