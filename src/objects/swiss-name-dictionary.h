@@ -217,9 +217,9 @@ class V8_EXPORT_PRIVATE SwissNameDictionary : public HeapObject {
   static constexpr int kDataTableKeyEntryIndex = 0;
   static constexpr int kDataTableValueEntryIndex = kDataTableKeyEntryIndex + 1;
 
-  static constexpr int kMetaTableElementCountOffset = 0;
-  static constexpr int kMetaTableDeletedElementCountOffset = 1;
-  static constexpr int kMetaTableEnumerationTableStartOffset = 2;
+  static constexpr int kMetaTableElementCountFieldIndex = 0;
+  static constexpr int kMetaTableDeletedElementCountFieldIndex = 1;
+  static constexpr int kMetaTableEnumerationDataStartIndex = 2;
 
   // The maximum capacity of any SwissNameDictionary whose meta table can use 1
   // byte per entry.
