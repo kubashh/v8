@@ -5099,6 +5099,7 @@ void ImplementationVisitor::GenerateExportedMacrosAssembler(
       cc_contents << "#include \"src/objects/js-collator.h\"\n";
       cc_contents << "#include \"src/objects/js-date-time-format.h\"\n";
       cc_contents << "#include \"src/objects/js-display-names.h\"\n";
+      cc_contents << "#include \"src/objects/js-duration-format.h\"\n";
       cc_contents << "#include \"src/objects/js-list-format.h\"\n";
       cc_contents << "#include \"src/objects/js-locale.h\"\n";
       cc_contents << "#include \"src/objects/js-number-format.h\"\n";

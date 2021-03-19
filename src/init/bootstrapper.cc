@@ -43,6 +43,7 @@
 #include "src/objects/js-collator.h"
 #include "src/objects/js-date-time-format.h"
 #include "src/objects/js-display-names.h"
+#include "src/objects/js-duration-format.h"
 #include "src/objects/js-list-format.h"
 #include "src/objects/js-locale.h"
 #include "src/objects/js-number-format.h"
@@ -4517,6 +4518,49 @@ void Genesis::InitializeGlobal_harmony_relative_indexing_methods() {
                           Builtins::kTypedArrayPrototypeAt, 1, true);
   }
 }
+
+#ifdef V8_INTL_SUPPORT
+
+void Genesis::InitializeGlobal_harmony_intl_duration_format() {
+  if (!FLAG_harmony_intl_duration_format) return;
+
+  Handle<JSObject> intl = Handle<JSObject>::cast(
+      JSReceiver::GetProperty(
+          isolate(),
+          Handle<JSReceiver>(native_context()->global_object(), isolate()),
+          factory()->InternalizeUtf8String("Intl"))
+          .ToHandleChecked());
+
+  Handle<JSFunction> duration_format_fun = InstallFunction(
+      isolate(), intl, "DurationFormat", JS_DURATION_FORMAT_TYPE,
+      JSDurationFormat::kHeaderSize, 0, factory()->the_hole_value(),
+      Builtins::kDurationFormatConstructor);
+  duration_format_fun->shared().set_length(2);
+  duration_format_fun->shared().DontAdaptArguments();
+  InstallWithIntrinsicDefaultProto(
+      isolate(), duration_format_fun,
+      Context::INTL_DURATION_FORMAT_FUNCTION_INDEX);
+
+  SimpleInstallFunction(isolate(), duration_format_fun, "supportedLocalesOf",
+                        Builtins::kDurationFormatSupportedLocalesOf, 1, false);
+
+  Handle<JSObject> prototype(
+      JSObject::cast(duration_format_fun->instance_prototype()), isolate());
+
+  InstallToStringTag(isolate(), prototype, "Intl.DurationFormat");
+
+  SimpleInstallFunction(isolate(), prototype, "resolvedOptions",
+                        Builtins::kDurationFormatPrototypeResolvedOptions, 0,
+                        false);
+
+  SimpleInstallFunction(isolate(), prototype, "format",
+                        Builtins::kDurationFormatPrototypeFormat, 1, false);
+  SimpleInstallFunction(isolate(), prototype, "formatToParts",
+                        Builtins::kDurationFormatPrototypeFormatToParts, 1,
+                        false);
+}
+
+#endif  // V8_INTL_SUPPORT
 
 Handle<JSFunction> Genesis::CreateArrayBuffer(
     Handle<String> name, ArrayBufferKind array_buffer_kind) {

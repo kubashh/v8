@@ -259,9 +259,10 @@ DEFINE_IMPLICATION(harmony_weak_refs_with_cleanup_some, harmony_weak_refs)
   V(harmony_import_assertions, "harmony import assertions")
 
 #ifdef V8_INTL_SUPPORT
-#define HARMONY_INPROGRESS(V) \
-  HARMONY_INPROGRESS_BASE(V)  \
-  V(harmony_intl_displaynames_date_types, "Intl.DisplayNames date types")
+#define HARMONY_INPROGRESS(V)                                             \
+  HARMONY_INPROGRESS_BASE(V)                                              \
+  V(harmony_intl_displaynames_date_types, "Intl.DisplayNames date types") \
+  V(harmony_intl_duration_format, "Intl.DurationFormat")
 #else
 #define HARMONY_INPROGRESS(V) HARMONY_INPROGRESS_BASE(V)
 #endif

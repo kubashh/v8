@@ -237,6 +237,7 @@ class ZoneForwardList;
   V(JSCollator)                           \
   V(JSDateTimeFormat)                     \
   V(JSDisplayNames)                       \
+  V(JSDurationFormat)                     \
   V(JSListFormat)                         \
   V(JSLocale)                             \
   V(JSNumberFormat)                       \
