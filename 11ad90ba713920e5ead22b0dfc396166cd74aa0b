@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2425b11_7f37575d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-19T17:28:37Z",
+      "side": 1,
+      "message": "Ack, refactor to call static methods appropriately.",
+      "parentUuid": "7be53d36_c9817738",
+      "revId": "11ad90ba713920e5ead22b0dfc396166cd74aa0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8676f2c_a7636a9e",
