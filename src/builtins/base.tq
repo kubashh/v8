@@ -113,6 +113,9 @@ type bool generates 'TNode<BoolT>' constexpr 'bool';
 type bint generates 'TNode<BInt>' constexpr 'BInt';
 type string constexpr 'const char*';
 
+type Simd128 generates 'TNode<Simd128T>';
+type I8X16 extends Simd128 generates 'TNode<I8x16T>';
+
 // Represents a std::function which produces the generated TNode type of T.
 // Useful for passing values to and from CSA code that uses LazyNode<T>, which
 // is a typedef for std::function<TNode<T>()>. Can be created with %MakeLazy and
@@ -457,11 +460,12 @@ const kNameDictionaryInitialCapacity:
     constexpr int32 generates 'NameDictionary::kInitialCapacity';
 const kSwissNameDictionaryInitialCapacity:
     constexpr int32 generates 'SwissNameDictionary::kInitialCapacity';
-const kSwissNameDictionaryGroupWidth:
-    constexpr int32 generates 'SwissNameDictionary::kGroupWidth';
 
 const kWasmArrayHeaderSize:
     constexpr int32 generates 'WasmArray::kHeaderSize';
+
+const kHeapObjectHeaderSize:
+    constexpr int32 generates 'HeapObject::kHeaderSize';
 
 const kDictModePrototypes:
     constexpr bool generates 'V8_DICT_MODE_PROTOTYPES_BOOL';
@@ -904,16 +908,21 @@ extern operator '&' macro WordAnd(uintptr, uintptr): uintptr;
 extern operator '|' macro WordOr(uintptr, uintptr): uintptr;
 
 extern operator '+' macro Int32Add(int32, int32): int32;
+extern operator '+' macro Uint32Add(uint32, uint32): uint32;
 extern operator '+' macro ConstexprUint32Add(
     constexpr uint32, constexpr int32): constexpr uint32;
 extern operator '+' macro ConstexprInt31Add(
     constexpr int31, constexpr int31): constexpr int31;
+extern operator '+' macro ConstexprInt32Add(
+    constexpr int32, constexpr int32): constexpr int32;
 extern operator '*' macro ConstexprInt31Mul(
     constexpr int31, constexpr int31): constexpr int31;
 extern operator '-' macro Int32Sub(int16, int16): int32;
 extern operator '-' macro Int32Sub(uint16, uint16): int32;
 extern operator '-' macro Int32Sub(int32, int32): int32;
+extern operator '-' macro UInt32Sub(uint32, uint32): uint32;
 extern operator '*' macro Int32Mul(int32, int32): int32;
+extern operator '*' macro Uint32Mul(uint32, uint32): uint32;
 extern operator '/' macro Int32Div(int32, int32): int32;
 extern operator '%' macro Int32Mod(int32, int32): int32;
 extern operator '&' macro Word32And(int32, int32): int32;
@@ -950,18 +959,23 @@ extern operator '==' macro Word32Equal(bool, bool): bool;
 extern operator '!=' macro Word32NotEqual(bool, bool): bool;
 extern operator '|' macro ConstexprWord32Or(
     constexpr int32, constexpr int32): constexpr int32;
+extern operator '^' macro Word32Xor(int32, int32): int32;
+extern operator '^' macro Word32Xor(uint32, uint32): uint32;
 
 extern operator '==' macro Word64Equal(int64, int64): bool;
 extern operator '==' macro Word64Equal(uint64, uint64): bool;
 extern operator '!=' macro Word64NotEqual(int64, int64): bool;
 extern operator '!=' macro Word64NotEqual(uint64, uint64): bool;
 extern operator '>>>' macro Word64Shr(uint64, uint64): uint64;
+extern operator '>>>' macro Word64Shr(int64, int64): int64;
 extern operator '>>' macro Word64Sar(int64, int64): int64;
 extern operator '<<' macro Word64Shl(int64, int64): int64;
 extern operator '<<' macro Word64Shl(uint64, uint64): uint64;
 extern operator '|' macro Word64Or(int64, int64): int64;
 extern operator '|' macro Word64Or(uint64, uint64): uint64;
 extern operator '&' macro Word64And(uint64, uint64): uint64;
+extern operator '^' macro Word64Xor(int64, int64): int64;
+extern operator '^' macro Word64Xor(uint64, uint64): uint64;
 
 extern operator '+' macro Float64Add(float64, float64): float64;
 extern operator '-' macro Float64Sub(float64, float64): float64;
@@ -1009,6 +1023,8 @@ ConstexprInt31Equal(
     constexpr InstanceType, constexpr InstanceType): constexpr bool;
 extern operator '-' macro ConstexprUint32Sub(
     constexpr InstanceType, constexpr InstanceType): constexpr int32;
+extern operator '-' macro ConstexprInt32Sub(
+    constexpr int32, constexpr int32): constexpr int32;
 
 extern operator '.instanceType' macro LoadInstanceType(HeapObject):
     InstanceType;
@@ -1036,6 +1052,10 @@ operator '==' macro PromiseStateEquals(
     s1: PromiseState, s2: PromiseState): bool {
   return Word32Equal(s1, s2);
 }
+
+extern macro CountLeadingZeros64(uint64): int64;
+extern macro CountTrailingZeros32(uint32): int32;
+extern macro CountTrailingZeros64(uint64): int64;
 
 extern macro TaggedIsSmi(Object): bool;
 extern macro TaggedIsNotSmi(Object): bool;
@@ -1082,6 +1102,7 @@ extern macro IntPtrToTaggedIndex(intptr): TaggedIndex;
 extern macro TaggedIndexToSmi(TaggedIndex): Smi;
 extern macro SmiToTaggedIndex(Smi): TaggedIndex;
 extern macro RoundIntPtrToFloat64(intptr): float64;
+extern macro IntPtrRoundUpToPowerOfTwo32(intptr): intptr;
 extern macro ChangeFloat32ToFloat64(float32): float64;
 extern macro ChangeNumberToFloat64(Number): float64;
 extern macro ChangeNumberToUint32(Number): uint32;
@@ -1091,6 +1112,7 @@ extern macro ChangeTaggedToFloat64(implicit context: Context)(JSAny): float64;
 extern macro ChangeFloat64ToTagged(float64): Number;
 extern macro ChangeFloat64ToUintPtr(float64): uintptr;
 extern macro ChangeFloat64ToIntPtr(float64): intptr;
+extern macro ChangeBoolToInt32(bool): int32;
 extern macro ChangeInt32ToFloat64(int32): float64;
 extern macro ChangeInt32ToIntPtr(int32): intptr;    // Sign-extends.
 extern macro ChangeUint32ToWord(uint32): uintptr;   // Doesn't sign-extend.
@@ -1824,3 +1846,20 @@ extern macro FeedbackIteratorEntrySize(): intptr;
 extern macro FeedbackIteratorHandlerOffset(): intptr;
 extern operator '[]' macro LoadWeakFixedArrayElement(
     WeakFixedArray, intptr): MaybeObject;
+
+const kNoHashSentinel:
+    constexpr int32 generates 'PropertyArray::kNoHashSentinel';
+extern macro LoadNameHash(Name): uint32;
+
+// V(S128Load, Simd128T, WordT)                                 \
+
+extern macro LoadSimd128(intptr): Simd128;
+extern macro I8x16BitMask(I8X16): int32;
+extern macro I8x16Eq(I8X16, I8X16): I8X16;
+extern macro I8x16Splat(int32): I8X16;
+
+// V(I8x16Splat, I8x16T, Int32T)                                \
+
+// V(I8x16Eq, I8x16T, I8x16T, I8x16T)                                    \
+// V(I8x16BitMask, Int32T, I8x16T)                              \
+// extern macro

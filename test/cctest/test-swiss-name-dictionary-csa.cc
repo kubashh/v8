@@ -2,7 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/codegen/code-stub-assembler.h"
+#include "src/init/v8.h"
+#include "src/objects/objects-inl.h"
+#include "src/objects/swiss-name-dictionary-inl.h"
+#include "test/cctest/cctest.h"
+#include "test/cctest/compiler/code-assembler-tester.h"
+#include "test/cctest/compiler/function-tester.h"
 #include "test/cctest/test-swiss-name-dictionary-infra.h"
+#include "test/cctest/test-swiss-name-dictionary-shared-tests.h"
 
 namespace v8 {
 namespace internal {
@@ -34,6 +42,10 @@ class CSATestRunner {
   Handle<SwissNameDictionary> table;
 
  private:
+  using Label = compiler::CodeAssemblerLabel;
+  template <class T>
+  using TVariable = compiler::TypedCodeAssemblerVariable<T>;
+
   void CheckAgainstReference();
 
   void Allocate(Handle<Smi> capacity);
@@ -51,6 +63,8 @@ class CSATestRunner {
   compiler::FunctionTester delete_ft_;
   compiler::FunctionTester add_ft_;
   compiler::FunctionTester allocate_ft_;
+  compiler::FunctionTester get_counts_ft_;
+  compiler::FunctionTester copy_ft_;
 
   // Used to create the FunctionTesters above.
   static Handle<Code> create_get_data(Isolate* isolate);
@@ -59,6 +73,8 @@ class CSATestRunner {
   static Handle<Code> create_delete(Isolate* isolate);
   static Handle<Code> create_add(Isolate* isolate);
   static Handle<Code> create_allocate(Isolate* isolate);
+  static Handle<Code> create_get_counts(Isolate* isolate);
+  static Handle<Code> create_copy(Isolate* isolate);
 
   // Number of parameters of each of the tester functions above.
   static constexpr int kFindEntryParams = 2;  // (table, key)
@@ -67,11 +83,10 @@ class CSATestRunner {
   static constexpr int kDeleteParams = 2;     // (table, entry)
   static constexpr int kAddParams = 4;        // (table, key, value, details)
   static constexpr int kAllocateParams = 1;   // (capacity)
+  static constexpr int kGetCountsParams = 1;  // (table)
+  static constexpr int kCopyParams = 1;       // (table)
 };
 
-// TODO(v8:11330): Currently, the CSATestRunner isn't doing much, except
-// generating runtime calls. That will change once we have the CSA
-// implementations ready.
 CSATestRunner::CSATestRunner(Isolate* isolate, int initial_capacity,
                              KeyCache& keys)
     : isolate_{isolate},
@@ -82,7 +97,9 @@ CSATestRunner::CSATestRunner(Isolate* isolate, int initial_capacity,
       put_ft_{create_put(isolate), kPutParams},
       delete_ft_{create_delete(isolate), kDeleteParams},
       add_ft_{create_add(isolate), kAddParams},
-      allocate_ft_{create_allocate(isolate), kAllocateParams} {
+      allocate_ft_{create_allocate(isolate), kAllocateParams},
+      get_counts_ft_{create_get_counts(isolate), kGetCountsParams},
+      copy_ft_{create_copy(isolate), kCopyParams} {
   int at_least_space_for =
       SwissNameDictionary::MaxUsableCapacity(initial_capacity);
   Allocate(handle(Smi::FromInt(at_least_space_for), isolate));
@@ -90,18 +107,37 @@ CSATestRunner::CSATestRunner(Isolate* isolate, int initial_capacity,
 
 void CSATestRunner::Add(Handle<Name> key, Handle<Object> value,
                         PropertyDetails details) {
+  ReadOnlyRoots roots(isolate_);
   reference_ =
       SwissNameDictionary::Add(isolate_, reference_, key, value, details);
 
   Handle<Smi> details_smi = handle(details.AsSmi(), isolate_);
-  table =
-      add_ft_.CallChecked<SwissNameDictionary>(table, key, value, details_smi);
+  Handle<Oddball> success =
+      add_ft_.CallChecked<Oddball>(table, key, value, details_smi);
+
+  if (*success == roots.false_value()) {
+    // |add_ft_| does not resize and indicates the need to do so by returning
+    // false.
+    int capacity = table->Capacity();
+    int used_capacity = table->UsedCapacity();
+    CHECK_GT(used_capacity + 1,
+             SwissNameDictionary::MaxUsableCapacity(capacity));
+
+    table = SwissNameDictionary::Add(isolate_, table, key, value, details);
+  }
 
   CheckAgainstReference();
 }
 
 void CSATestRunner::Allocate(Handle<Smi> capacity) {
-  table = allocate_ft_.CallChecked<SwissNameDictionary>(capacity);
+  // FIXME: capacity 0 will return a non-zero dict at the moment
+
+  if (capacity->value() == 0) {
+    table = handle(ReadOnlyRoots(isolate_).empty_swiss_property_dictionary(),
+                   isolate_);
+  } else {
+    table = allocate_ft_.CallChecked<SwissNameDictionary>(capacity);
+  }
 
   CheckAgainstReference();
 }
@@ -125,7 +161,20 @@ Handle<FixedArray> CSATestRunner::GetData(InternalIndex entry) {
 void CSATestRunner::CheckCounts(base::Optional<int> capacity,
                                 base::Optional<int> elements,
                                 base::Optional<int> deleted) {
-  // TODO(v8:11330) Do actual check here once CSA/Torque version exists.
+  Handle<FixedArray> counts = get_counts_ft_.CallChecked<FixedArray>(table);
+
+  if (capacity.has_value()) {
+    CHECK_EQ(Smi::FromInt(capacity.value()), counts->get(0));
+  }
+
+  if (elements.has_value()) {
+    CHECK_EQ(Smi::FromInt(elements.value()), counts->get(1));
+  }
+
+  if (deleted.has_value()) {
+    CHECK_EQ(Smi::FromInt(deleted.value()), counts->get(2));
+  }
+
   CheckAgainstReference();
 }
 
@@ -171,7 +220,15 @@ void CSATestRunner::Shrink() {
 }
 
 void CSATestRunner::CheckCopy() {
-  // TODO(v8:11330) Do actual check here once CSA/Torque version exists.
+  int capacity = table->Capacity();
+  int size = SwissNameDictionary::SizeFor(capacity);
+  if (size <= kMaxRegularHeapObjectSize) {
+    // The CSA version can only handle none-large objects.
+
+    Handle<SwissNameDictionary> copy =
+        copy_ft_.CallChecked<SwissNameDictionary>(table);
+    CHECK(table->EqualsForTesting(*copy));
+  }
 }
 
 void CSATestRunner::VerifyHeap() {
@@ -194,10 +251,14 @@ Handle<Code> CSATestRunner::create_find_entry(Isolate* isolate) {
     TNode<SwissNameDictionary> table = m.Parameter<SwissNameDictionary>(1);
     TNode<Name> key = m.Parameter<Name>(2);
 
-    TNode<Smi> index = m.CallRuntime<Smi>(Runtime::kSwissTableFindEntry,
-                                          m.NoContextConstant(), table, key);
+    Label done(&m);
+    TVariable<IntPtrT> entry_var(
+        m.IntPtrConstant(SwissNameDictionary::kNotFoundSentinel), &m);
 
-    m.Return(index);
+    m.SwissNameDictionaryFindEntry(table, key, &done, &entry_var, &done);
+
+    m.Bind(&done);
+    m.Return(m.SmiFromIntPtr(entry_var.value()));
   }
 
   return asm_tester.GenerateCodeCloseAndEscape();
@@ -207,10 +268,10 @@ Handle<Code> CSATestRunner::create_get_data(Isolate* isolate) {
   STATIC_ASSERT(kGetDataParams == 2);  // (table, entry)
   compiler::CodeAssemblerTester asm_tester(isolate, kGetDataParams + 1);
   CodeStubAssembler m(asm_tester.state());
-  using Label = compiler::CodeAssemblerLabel;
   {
     TNode<SwissNameDictionary> table = m.Parameter<SwissNameDictionary>(1);
     TNode<Smi> index = m.Parameter<Smi>(2);
+    TNode<IntPtrT> index_intptr = m.SmiToIntPtr(index);
 
     Label not_found(&m);
 
@@ -220,12 +281,10 @@ Handle<Code> CSATestRunner::create_get_data(Isolate* isolate) {
 
     TNode<FixedArray> data = m.AllocateZeroedFixedArray(m.IntPtrConstant(3));
 
-    TNode<Object> key = m.CallRuntime(Runtime::kSwissTableKeyAt,
-                                      m.NoContextConstant(), table, index);
-    TNode<Object> value = m.CallRuntime(Runtime::kSwissTableValueAt,
-                                        m.NoContextConstant(), table, index);
-    TNode<Smi> details = m.UncheckedCast<Smi>(m.CallRuntime(
-        Runtime::kSwissTableDetailsAt, m.NoContextConstant(), table, index));
+    TNode<Object> key = m.LoadSwissNameDictionaryKey(table, index_intptr);
+    TNode<Object> value = m.LoadValueByKeyIndex(table, index_intptr);
+    TNode<Smi> details =
+        m.SmiFromInt32(m.Signed(m.LoadDetailsByKeyIndex(table, index_intptr)));
 
     m.StoreFixedArrayElement(data, 0, key);
     m.StoreFixedArrayElement(data, 1, value);
@@ -250,8 +309,12 @@ Handle<Code> CSATestRunner::create_put(Isolate* isolate) {
     TNode<Object> value = m.Parameter<Object>(3);
     TNode<Smi> details = m.Parameter<Smi>(4);
 
-    m.CallRuntime(Runtime::kSwissTableUpdate, m.NoContextConstant(), table,
-                  entry, value, details);
+    TNode<IntPtrT> entry_intptr = m.SmiToIntPtr(entry);
+
+    m.StoreValueByKeyIndex(table, entry_intptr, value,
+                           WriteBarrierMode::UPDATE_WRITE_BARRIER);
+    m.StoreDetailsByKeyIndex(table, entry_intptr, details);
+
     m.Return(m.UndefinedConstant());
   }
   return asm_tester.GenerateCodeCloseAndEscape();
@@ -263,12 +326,16 @@ Handle<Code> CSATestRunner::create_delete(Isolate* isolate) {
   CodeStubAssembler m(asm_tester.state());
   {
     TNode<SwissNameDictionary> table = m.Parameter<SwissNameDictionary>(1);
-    TNode<Smi> entry = m.Parameter<Smi>(2);
+    TNode<IntPtrT> entry = m.SmiToIntPtr(m.Parameter<Smi>(2));
 
-    TNode<SwissNameDictionary> new_table = m.CallRuntime<SwissNameDictionary>(
-        Runtime::kSwissTableDelete, m.NoContextConstant(), table, entry);
+    TVariable<SwissNameDictionary> shrunk_table_var(table, &m);
+    Label done(&m);
 
-    m.Return(new_table);
+    m.SwissNameDictionaryDelete(table, entry, &done, &shrunk_table_var);
+    m.Goto(&done);
+
+    m.Bind(&done);
+    m.Return(shrunk_table_var.value());
   }
   return asm_tester.GenerateCodeCloseAndEscape();
 }
@@ -283,11 +350,17 @@ Handle<Code> CSATestRunner::create_add(Isolate* isolate) {
     TNode<Object> value = m.Parameter<Object>(3);
     TNode<Smi> details = m.Parameter<Smi>(4);
 
-    TNode<SwissNameDictionary> new_table = m.CallRuntime<SwissNameDictionary>(
-        Runtime::kSwissTableAdd, m.NoContextConstant(), table, key, value,
-        details);
+    Label needs_resize(&m);
 
-    m.Return(new_table);
+    // We don't need the clamped part.
+    TNode<Int32T> d32 = m.SmiToInt32(details);
+    TNode<Uint8T> d = m.Int32ToUint8Clamped(d32);
+
+    m.SwissNameDictionaryAdd(table, key, value, d, &needs_resize);
+    m.Return(m.TrueConstant());
+
+    m.Bind(&needs_resize);
+    m.Return(m.FalseConstant());
   }
   return asm_tester.GenerateCodeCloseAndEscape();
 }
@@ -297,13 +370,66 @@ Handle<Code> CSATestRunner::create_allocate(Isolate* isolate) {
   compiler::CodeAssemblerTester asm_tester(isolate, kAllocateParams + 1);
   CodeStubAssembler m(asm_tester.state());
   {
-    TNode<Smi> at_least_space_for = m.Parameter<Smi>(1);
+    TNode<Smi> at_least_space_for_smi = m.Parameter<Smi>(1);
+    TNode<IntPtrT> at_least_space_for = m.SmiToIntPtr(at_least_space_for_smi);
 
-    TNode<SwissNameDictionary> table = m.CallRuntime<SwissNameDictionary>(
-        Runtime::kSwissTableAllocate, m.NoContextConstant(),
-        at_least_space_for);
+    TNode<SwissNameDictionary> table =
+        m.AllocateSwissNameDictionary(at_least_space_for);
 
     m.Return(table);
+  }
+  return asm_tester.GenerateCodeCloseAndEscape();
+}
+
+Handle<Code> CSATestRunner::create_get_counts(Isolate* isolate) {
+  STATIC_ASSERT(kGetCountsParams == 1);  // (table)
+  compiler::CodeAssemblerTester asm_tester(isolate, kGetCountsParams + 1);
+  CodeStubAssembler m(asm_tester.state());
+  {
+    TNode<SwissNameDictionary> table = m.Parameter<SwissNameDictionary>(1);
+
+    TNode<IntPtrT> capacity =
+        m.ChangeInt32ToIntPtr(m.LoadSwissNameDictionaryCapacity(table));
+    TNode<IntPtrT> elements =
+        m.LoadSwissNameDictionaryNumberOfElements(table, capacity);
+    TNode<IntPtrT> deleted =
+        m.LoadSwissNameDictionaryNumberOfDeletedElements(table, capacity);
+
+    TNode<FixedArray> results = m.AllocateZeroedFixedArray(m.IntPtrConstant(3));
+
+    auto check_and_add = [&](TNode<IntPtrT> value, int array_index) {
+      CSA_ASSERT(&m, m.IntPtrLessThanOrEqual(m.IntPtrConstant(0), value));
+      CSA_ASSERT(
+          &m, m.IntPtrLessThanOrEqual(value, m.IntPtrConstant(Smi::kMaxValue)));
+      TNode<Smi> smi = m.SmiFromIntPtr(value);
+      m.StoreFixedArrayElement(results, array_index, smi);
+    };
+
+    check_and_add(capacity, 0);
+    check_and_add(elements, 1);
+    check_and_add(deleted, 2);
+
+    m.Return(results);
+  }
+  // FIXME: Or just GenerateCode?
+  return asm_tester.GenerateCodeCloseAndEscape();
+}
+
+Handle<Code> CSATestRunner::create_copy(Isolate* isolate) {
+  STATIC_ASSERT(kCopyParams == 1);  // (table)
+  compiler::CodeAssemblerTester asm_tester(isolate, kCopyParams + 1);
+  CodeStubAssembler m(asm_tester.state());
+  {
+    TNode<SwissNameDictionary> table = m.Parameter<SwissNameDictionary>(1);
+
+    Label too_big(&m);
+    TNode<SwissNameDictionary> copy =
+        m.CopySwissNameDictionary(table, &too_big);
+    m.Return(copy);
+
+    m.Bind(&too_big);
+    // We can't use this copy function for objects in large object space.
+    m.Unreachable();
   }
   return asm_tester.GenerateCodeCloseAndEscape();
 }
@@ -311,6 +437,13 @@ Handle<Code> CSATestRunner::create_allocate(Isolate* isolate) {
 void CSATestRunner::CheckAgainstReference() {
   CHECK(table->EqualsForTesting(*reference_));
 }
+
+// Executes the tests defined in test-swiss-name-dictionary-shared-tests.h as if
+// they were defined in this file, using the CSATestRunner. See comments in
+// test-swiss-name-dictionary-shared-tests.h and in
+// swiss-name-dictionary-infra.h for details.
+const char kCSATestFileName[] = __FILE__;
+SharedSwissTableTests<CSATestRunner, kCSATestFileName> execute_shared_tests_csa;
 
 }  // namespace test_swiss_hash_table
 }  // namespace internal

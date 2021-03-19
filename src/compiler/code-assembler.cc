@@ -8,9 +8,11 @@
 
 #include "src/base/bits.h"
 #include "src/codegen/code-factory.h"
+#include "src/codegen/code-stub-assembler.h"
 #include "src/codegen/interface-descriptors.h"
 #include "src/codegen/machine-type.h"
 #include "src/codegen/macro-assembler.h"
+#include "src/codegen/tnode.h"
 #include "src/compiler/backend/instruction-selector.h"
 #include "src/compiler/graph.h"
 #include "src/compiler/js-graph.h"
@@ -732,6 +734,20 @@ TNode<Object> CodeAssembler::LoadRoot(RootIndex root_index) {
   return UncheckedCast<Object>(
       LoadFullTagged(isolate_root, IntPtrConstant(offset)));
 }
+
+template <typename T>
+TNode<T> CodeAssembler::UnalignedLoad(TNode<RawPtrT> base,
+                                      TNode<IntPtrT> offset) {
+  MachineRepresentation rep = MachineRepresentationOf<T>::value;
+
+  // Passing "false" below indicates unsigned, which is irrelevant here.
+  MachineType mt = MachineType::TypeForRepresentation(rep, false);
+  return UncheckedCast<T>(
+      raw_assembler()->UnalignedLoad(mt, static_cast<Node*>(base), offset));
+}
+
+template TNode<Uint64T> CodeAssembler::UnalignedLoad(TNode<RawPtrT> base,
+                                                     TNode<IntPtrT> offset);
 
 void CodeAssembler::Store(Node* base, Node* value) {
   raw_assembler()->Store(MachineRepresentation::kTagged, base, value,

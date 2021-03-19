@@ -541,10 +541,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                       int* value);
 
   TNode<IntPtrT> PopulationCountFallback(TNode<UintPtrT> value);
-  TNode<Int64T> Word64PopulationCount(TNode<Word64T> value);
-  TNode<Int32T> Word32PopulationCount(TNode<Word32T> value);
-  TNode<Int64T> Word64CountTrailingZeros(TNode<Word64T> value);
-  TNode<Int32T> Word32CountTrailingZeros(TNode<Word32T> value);
+  TNode<Int64T> PopulationCount64(TNode<Word64T> value);
+  TNode<Int32T> PopulationCount32(TNode<Word32T> value);
+  TNode<Int64T> CountTrailingZeros64(TNode<Word64T> value);
+  TNode<Int32T> CountTrailingZeros32(TNode<Word32T> value);
+  TNode<Int64T> CountLeadingZeros64(TNode<Word64T> value);
+  TNode<Int32T> CountLeadingZeros32(TNode<Word32T> value);
 
   // Round the 32bits payload of the provided word up to the next power of two.
   TNode<IntPtrT> IntPtrRoundUpToPowerOfTwo32(TNode<IntPtrT> value);
@@ -1133,6 +1135,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Object> LoadConstructorOrBackPointer(TNode<Map> map) {
     return LoadObjectField(map,
                            Map::kConstructorOrBackPointerOrNativeContextOffset);
+  }
+
+  // FIXME: Use raw ptr?
+  TNode<Simd128T> LoadSimd128(TNode<IntPtrT> ptr) {
+    return UncheckedCast<Simd128T>(Load(MachineType::Simd128(), ptr));
   }
 
   // Reference is the CSA-equivalent of a Torque reference value, representing
@@ -2256,6 +2263,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Float64T> ChangeTaggedToFloat64(TNode<Context> context,
                                         TNode<Object> input);
 
+  TNode<Int32T> ChangeBoolToInt32(TNode<BoolT> b);
+
   void TaggedToNumeric(TNode<Context> context, TNode<Object> value,
                        TVariable<Numeric>* var_numeric);
   void TaggedToNumericWithFeedback(TNode<Context> context, TNode<Object> value,
@@ -2833,42 +2842,32 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                                           kKeyToDetailsOffset));
   }
 
+  TNode<Uint32T> LoadDetailsByKeyIndex(TNode<SwissNameDictionary> container,
+                                       TNode<IntPtrT> key_index) {
+    TNode<IntPtrT> capacity =
+        ChangeInt32ToIntPtr(LoadSwissNameDictionaryCapacity(container));
+    return LoadSwissNameDictionaryPropertyDetails(container, capacity,
+                                                  key_index);
+  }
+
   // Loads the value for the entry with the given key_index.
   // Returns a tagged value.
   template <class ContainerType>
   TNode<Object> LoadValueByKeyIndex(TNode<ContainerType> container,
-                                    TNode<IntPtrT> key_index) {
-    static_assert(!std::is_same<ContainerType, DescriptorArray>::value,
-                  "Use the non-templatized version for DescriptorArray");
-    const int kKeyToValueOffset =
-        (ContainerType::kEntryValueIndex - ContainerType::kEntryKeyIndex) *
-        kTaggedSize;
-    return LoadFixedArrayElement(container, key_index, kKeyToValueOffset);
-  }
+                                    TNode<IntPtrT> key_index);
 
   // Stores the details for the entry with the given key_index.
   // |details| must be a Smi.
   template <class ContainerType>
   void StoreDetailsByKeyIndex(TNode<ContainerType> container,
-                              TNode<IntPtrT> key_index, TNode<Smi> details) {
-    const int kKeyToDetailsOffset =
-        (ContainerType::kEntryDetailsIndex - ContainerType::kEntryKeyIndex) *
-        kTaggedSize;
-    StoreFixedArrayElement(container, key_index, details, kKeyToDetailsOffset);
-  }
+                              TNode<IntPtrT> key_index, TNode<Smi> details);
 
   // Stores the value for the entry with the given key_index.
   template <class ContainerType>
   void StoreValueByKeyIndex(
       TNode<ContainerType> container, TNode<IntPtrT> key_index,
       TNode<Object> value,
-      WriteBarrierMode write_barrier = UPDATE_WRITE_BARRIER) {
-    const int kKeyToValueOffset =
-        (ContainerType::kEntryValueIndex - ContainerType::kEntryKeyIndex) *
-        kTaggedSize;
-    StoreFixedArrayElement(container, key_index, value, write_barrier,
-                           kKeyToValueOffset);
-  }
+      WriteBarrierMode write_barrier = UPDATE_WRITE_BARRIER);
 
   // Calculate a valid size for the a hash table.
   TNode<IntPtrT> HashTableComputeCapacity(TNode<IntPtrT> at_least_space_for);
@@ -2884,12 +2883,18 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   template <class Dictionary>
   void SetNumberOfElements(TNode<Dictionary> dictionary,
                            TNode<Smi> num_elements_smi) {
+    // Not supposed to be used for SwissNameDictionary.
+    STATIC_ASSERT(!(std::is_same<Dictionary, SwissNameDictionary>::value));
+
     StoreFixedArrayElement(dictionary, Dictionary::kNumberOfElementsIndex,
                            num_elements_smi, SKIP_WRITE_BARRIER);
   }
 
   template <class Dictionary>
   TNode<Smi> GetNumberOfDeletedElements(TNode<Dictionary> dictionary) {
+    // Not supposed to be used for SwissNameDictionary.
+    STATIC_ASSERT(!(std::is_same<Dictionary, SwissNameDictionary>::value));
+
     return CAST(LoadFixedArrayElement(
         dictionary, Dictionary::kNumberOfDeletedElementsIndex));
   }
@@ -2897,6 +2902,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   template <class Dictionary>
   void SetNumberOfDeletedElements(TNode<Dictionary> dictionary,
                                   TNode<Smi> num_deleted_smi) {
+    // Not supposed to be used for SwissNameDictionary.
+    STATIC_ASSERT(!(std::is_same<Dictionary, SwissNameDictionary>::value));
+
     StoreFixedArrayElement(dictionary,
                            Dictionary::kNumberOfDeletedElementsIndex,
                            num_deleted_smi, SKIP_WRITE_BARRIER);
@@ -2904,6 +2912,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   template <class Dictionary>
   TNode<Smi> GetCapacity(TNode<Dictionary> dictionary) {
+    // Not supposed to be used for SwissNameDictionary.
+    STATIC_ASSERT(!(std::is_same<Dictionary, SwissNameDictionary>::value));
+
     return CAST(
         UnsafeLoadFixedArrayElement(dictionary, Dictionary::kCapacityIndex));
   }
@@ -3044,13 +3055,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                   TNode<IntPtrT> name_index, TNode<Uint32T>,
                                   TVariable<Object>* var_value);
 
-  void LoadPropertyFromNameDictionary(TNode<NameDictionary> dictionary,
-                                      TNode<IntPtrT> name_index,
-                                      TVariable<Uint32T>* var_details,
-                                      TVariable<Object>* var_value);
-  void LoadPropertyFromSwissNameDictionary(
-      TNode<SwissNameDictionary> dictionary, TNode<IntPtrT> name_index,
-      TVariable<Uint32T>* var_details, TVariable<Object>* var_value);
+  template <typename Dictionary>
+  void LoadPropertyFromNonGlobalDictionary(TNode<Dictionary> dictionary,
+                                           TNode<IntPtrT> name_index,
+                                           TVariable<Uint32T>* var_details,
+                                           TVariable<Object>* var_value);
   void LoadPropertyFromGlobalDictionary(TNode<GlobalDictionary> dictionary,
                                         TNode<IntPtrT> name_index,
                                         TVariable<Uint32T>* var_details,
@@ -3555,6 +3564,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   bool ConstexprInt32GreaterThanEqual(int32_t a, int32_t b) { return a >= b; }
   uint32_t ConstexprUint32Add(uint32_t a, uint32_t b) { return a + b; }
   int32_t ConstexprUint32Sub(uint32_t a, uint32_t b) { return a - b; }
+  int32_t ConstexprInt32Sub(int32_t a, int32_t b) { return a - b; }
+  int32_t ConstexprInt32Add(int32_t a, int32_t b) { return a + b; }
   int31_t ConstexprInt31Add(int31_t a, int31_t b) {
     int32_t val;
     CHECK(!base::bits::SignedAddOverflow32(a, b, &val));
@@ -3713,6 +3724,73 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       TNode<IntPtrT> at_least_space_for);
   TNode<SwissNameDictionary> AllocateSwissNameDictionary(
       int at_least_space_for);
+
+  TNode<SwissNameDictionary> AllocateSwissNameDictionaryWithCapacity(
+      TNode<IntPtrT> capacity);
+
+  // MT stands for "minus tag".
+  TNode<IntPtrT> SwissNameDictionaryOffsetIntoDataTableMT(
+      TNode<SwissNameDictionary> dict, TNode<IntPtrT> index, int field_index);
+
+  // MT stands for "minus tag".
+  TNode<IntPtrT> SwissNameDictionaryOffsetIntoPropertyDetailsTableMT(
+      TNode<SwissNameDictionary> dict, TNode<IntPtrT> capacity,
+      TNode<IntPtrT> index);
+
+  TNode<IntPtrT> LoadSwissNameDictionaryNumberOfElements(
+      TNode<SwissNameDictionary> table, TNode<IntPtrT> capacity);
+
+  TNode<IntPtrT> LoadSwissNameDictionaryNumberOfDeletedElements(
+      TNode<SwissNameDictionary> table, TNode<IntPtrT> capacity);
+
+  // Specialized operation to be used when adding entries:
+  // If used capacity (= number of present + deleted elements) is less than
+  // |max_usable|, increment the number of present entries and return the used
+  // capacity value (prior to the incrementation). Otherwise, goto |bailout|.
+  TNode<Uint32T> SwissNameDictionaryIncreaseElementCountOrBailout(
+      TNode<ByteArray> meta_table, TNode<IntPtrT> capacity,
+      TNode<Uint32T> max_usable_capacity, Label* bailout);
+
+  // Specialized operation to be used when deleting entries: Decreases the
+  // number of present entries and increases the number of deleted ones. Returns
+  // new (= decremented) number of present entries.
+  TNode<Uint32T> SwissNameDictionaryUpdateCountsForDeletion(
+      TNode<ByteArray> meta_table, TNode<IntPtrT> capacity);
+
+  void StoreSwissNameDictionaryCapacity(TNode<SwissNameDictionary> table,
+                                        TNode<Int32T> capacity);
+
+  void StoreSwissNameDictionaryEnumToEntryMapping(
+      TNode<SwissNameDictionary> table, TNode<IntPtrT> capacity,
+      TNode<IntPtrT> enum_index, TNode<Int32T> entry);
+
+  TNode<Name> LoadSwissNameDictionaryKey(TNode<SwissNameDictionary> dict,
+                                         TNode<IntPtrT> index);
+
+  void StoreSwissNameDictionaryKeyAndValue(TNode<SwissNameDictionary> dict,
+                                           TNode<IntPtrT> index,
+                                           TNode<Object> key,
+                                           TNode<Object> value);
+
+  // Equivalent to SwissNameDictionary::SetCtrl, therefore preserves the copy of
+  // the first group at the end of the control table.
+  void SwissNameDictionarySetCtrl(TNode<SwissNameDictionary> table,
+                                  TNode<IntPtrT> capacity, TNode<IntPtrT> entry,
+                                  TNode<Uint8T> ctrl);
+
+  TNode<Uint64T> LoadSwissNameDictionaryCtrlTableGroup(TNode<IntPtrT> address);
+
+  TNode<Uint8T> LoadSwissNameDictionaryPropertyDetails(
+      TNode<SwissNameDictionary> table, TNode<IntPtrT> capacity,
+      TNode<IntPtrT> entry);
+
+  void StoreSwissNameDictionaryPropertyDetails(TNode<SwissNameDictionary> table,
+                                               TNode<IntPtrT> capacity,
+                                               TNode<IntPtrT> entry,
+                                               TNode<Uint8T> details);
+
+  TNode<SwissNameDictionary> CopySwissNameDictionary(
+      TNode<SwissNameDictionary> original, Label* large_object_fallback);
 
  private:
   friend class CodeStubArguments;
