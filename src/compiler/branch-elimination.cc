@@ -42,6 +42,9 @@ Reduction BranchElimination::Reduce(Node* node) {
       return ReduceIf(node, false);
     case IrOpcode::kIfTrue:
       return ReduceIf(node, true);
+    case IrOpcode::kTrapIf:
+    case IrOpcode::kTrapUnless:
+      return ReduceTrapConditional(node);
     case IrOpcode::kStart:
       return ReduceStart(node);
     default:
@@ -71,9 +74,9 @@ void BranchElimination::SimplifyBranchCondition(Node* branch) {
   //    |  \           /                      \           /
   //    |   \         /                        \         /
   //    |  first_merge           ==>          first_merge
-  //    |       |                                   |
-  //   second_branch                    1    0      |
-  //    /          \                     \  /       |
+  //    |       |                              /    |
+  //   second_branch                    1  0  /     |
+  //    /          \                     \ | /      |
   //   /            \                     phi       |
   // second_true  second_false              \       |
   //                                      second_branch
@@ -152,6 +155,51 @@ Reduction BranchElimination::ReduceBranch(Node* node) {
     Revisit(use);
   }
   return TakeConditionsFromFirstControl(node);
+}
+
+Reduction BranchElimination::ReduceTrapConditional(Node* node) {
+  DCHECK(node->opcode() == IrOpcode::kTrapIf ||
+         node->opcode() == IrOpcode::kTrapUnless);
+  bool trapping_condition = node->opcode() == IrOpcode::kTrapIf;
+  Node* condition = node->InputAt(0);
+  Node* control_input = NodeProperties::GetControlInput(node, 0);
+  // If we do not know anything about the predecessor, do not propagate just
+  // yet because we will have to recompute anyway once we compute the
+  // predecessor.
+  if (!reduced_.Get(control_input)) {
+    return NoChange();
+  }
+  ControlPathConditions from_input = node_conditions_.Get(control_input);
+
+  Node* branch;
+  bool condition_value;
+
+  if (from_input.LookupCondition(condition, &branch, &condition_value)) {
+    if (condition_value == trapping_condition) {
+      // This will trap, all that follows is dead.
+      for (Edge const edge : node->use_edges()) {
+        switch (edge.from()->opcode()) {
+          case IrOpcode::kMerge:
+          case IrOpcode::kLoop:
+            edge.from()->ReplaceInput(edge.index(), dead());
+            Revisit(edge.from());
+            break;
+          default:
+            Replace(edge.from(), dead());
+            break;
+        }
+      }
+      Node* effect_input = NodeProperties::GetEffectInput(node);
+      Node* thr = graph()->NewNode(common()->Throw(), effect_input, node);
+      NodeProperties::MergeControlToEnd(graph(), common(), thr);
+      return NoChange();
+    } else {
+      // This will not trap, remove it.
+      return Replace(control_input);
+    }
+  }
+  return UpdateConditions(node, from_input, condition, node,
+                          !trapping_condition);
 }
 
 Reduction BranchElimination::ReduceDeoptimizeConditional(Node* node) {
@@ -302,7 +350,9 @@ bool BranchElimination::ControlPathConditions::LookupCondition(
 
 void BranchElimination::MarkAsSafetyCheckIfNeeded(Node* branch, Node* node) {
   // Check if {branch} is dead because we might have a stale side-table entry.
-  if (!branch->IsDead() && branch->opcode() != IrOpcode::kDead) {
+  if (!branch->IsDead() && branch->opcode() != IrOpcode::kDead &&
+      branch->opcode() != IrOpcode::kTrapIf &&
+      branch->opcode() != IrOpcode::kTrapUnless) {
     IsSafetyCheck branch_safety = IsSafetyCheckOf(branch->op());
     IsSafetyCheck combined_safety =
         CombineSafetyChecks(branch_safety, IsSafetyCheckOf(node->op()));
