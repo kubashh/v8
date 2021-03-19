@@ -33,6 +33,23 @@
       "message": "LGTM",
       "revId": "345f23635191eebf15a4f6dc4b930d1d71efa566",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a72b737_3e47b2c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-03-19T10:15:27Z",
+      "side": 1,
+      "message": "Thanks Dominik!\nUlan TBR",
+      "revId": "345f23635191eebf15a4f6dc4b930d1d71efa566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
