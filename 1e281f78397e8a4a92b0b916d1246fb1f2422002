@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e90dbf8_4bb54a0e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-03-19T09:00:19Z",
+      "side": 1,
+      "message": "Please list the issue number below.",
+      "revId": "1e281f78397e8a4a92b0b916d1246fb1f2422002",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c805c5_53e6ff68",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-03-19T09:00:19Z",
+      "side": 1,
+      "message": "I\u0027d like to do something more canonical here. I think the following should work:\n\n      ReplaceWithValue(node, dead(), dead(), dead());                 \n      Node* control \u003d graph()-\u003eNewNode(common()-\u003eThrow(), effect, node);\n      NodeProperties::MergeControlToEnd(graph(), common(), control);\n      Revisit(graph()-\u003eend());\n      return Changed(node);",
+      "revId": "1e281f78397e8a4a92b0b916d1246fb1f2422002",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
