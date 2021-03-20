@@ -331,6 +331,9 @@ class Intl {
 
   static const std::set<std::string>& GetAvailableLocalesForDateFormat();
 
+  static const icu::UnicodeString NumberingSystemFromSkeleton(
+      const icu::UnicodeString& skeleton);
+
   // ecma402/#sec-getoptionsobject
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetOptionsObject(
       Isolate* isolate, Handle<Object> options, const char* service);
