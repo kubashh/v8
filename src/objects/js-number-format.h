@@ -72,6 +72,10 @@ class JSNumberFormat
       const icu::number::LocalizedNumberFormatter& icu_number_formatter,
       const Intl::NumberFormatDigitOptions& digit_options);
 
+  // Helper functions shared with JSDurationFormat.
+  static const icu::UnicodeString NumberingSystemFromSkeleton(
+      const icu::UnicodeString& skeleton);
+
   DECL_PRINTER(JSNumberFormat)
 
   DECL_ACCESSORS(icu_number_formatter,
