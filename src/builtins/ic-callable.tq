@@ -6,6 +6,8 @@ namespace ic {
 namespace callable {
 
 extern macro IncrementCallCount(FeedbackVector, uintptr): void;
+extern macro ShouldCollectReceiver(JSAny): bool;
+extern macro SetCallFeedbackContent(FeedbackVector, uintptr): void;
 
 macro IsMonomorphic(feedback: MaybeObject, target: JSAny): bool {
   return IsWeakReferenceToObject(feedback, target);
@@ -51,7 +53,7 @@ macro TransitionToMegamorphic(implicit context: Context)(
 }
 
 macro CollectCallFeedback(
-    maybeTarget: JSAny, context: Context,
+    maybeTarget: JSAny, maybeReceiver: JSAny, context: Context,
     maybeFeedbackVector: Undefined|FeedbackVector, slotId: uintptr): void {
   // TODO(v8:9891): Remove this assert once all callers are ported to Torque.
   // This assert ensures correctness of maybeFeedbackVector's type which can
@@ -63,10 +65,15 @@ macro CollectCallFeedback(
       Cast<FeedbackVector>(maybeFeedbackVector) otherwise return;
   IncrementCallCount(feedbackVector, slotId);
 
+  let callTarget = maybeTarget;
   try {
+    if (ShouldCollectReceiver(maybeTarget)) {
+      callTarget = maybeReceiver;
+      SetCallFeedbackContent(feedbackVector, slotId);
+    }
     const feedback: MaybeObject =
         LoadFeedbackVectorSlot(feedbackVector, slotId);
-    if (IsMonomorphic(feedback, maybeTarget)) return;
+    if (IsMonomorphic(feedback, callTarget)) return;
     if (IsMegamorphic(feedback)) return;
     if (IsUninitialized(feedback)) goto TryInitializeAsMonomorphic;
 
@@ -77,7 +84,7 @@ macro CollectCallFeedback(
     // Try transitioning to a feedback cell.
     // Check if {target}s feedback cell matches the {feedbackValue}.
     const target =
-        Cast<JSFunction>(maybeTarget) otherwise TransitionToMegamorphic;
+        Cast<JSFunction>(callTarget) otherwise TransitionToMegamorphic;
     const targetFeedbackCell: FeedbackCell = target.feedback_cell;
     if (TaggedEqual(feedbackValue, targetFeedbackCell)) return;
 
@@ -93,7 +100,7 @@ macro CollectCallFeedback(
     StoreWeakReferenceInFeedbackVector(feedbackVector, slotId, feedbackCell);
     ReportFeedbackUpdate(feedbackVector, slotId, 'Call:FeedbackVectorCell');
   } label TryInitializeAsMonomorphic {
-    TryInitializeAsMonomorphic(maybeTarget, feedbackVector, slotId)
+    TryInitializeAsMonomorphic(callTarget, feedbackVector, slotId)
         otherwise TransitionToMegamorphic;
   } label TransitionToMegamorphic {
     TransitionToMegamorphic(feedbackVector, slotId);

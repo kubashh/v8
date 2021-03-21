@@ -853,12 +853,16 @@ const Operator* JSOperatorBuilder::CallForwardVarargs(size_t arity,
       parameters);                                               // parameter
 }
 
-const Operator* JSOperatorBuilder::Call(
-    size_t arity, CallFrequency const& frequency,
-    FeedbackSource const& feedback, ConvertReceiverMode convert_mode,
-    SpeculationMode speculation_mode, CallFeedbackRelation feedback_relation) {
+const Operator* JSOperatorBuilder::Call(size_t arity,
+                                        CallFrequency const& frequency,
+                                        FeedbackSource const& feedback,
+                                        ConvertReceiverMode convert_mode,
+                                        SpeculationMode speculation_mode,
+                                        CallFeedbackRelation feedback_relation,
+                                        CallFeedbackContent feedback_content) {
   CallParameters parameters(arity, frequency, feedback, convert_mode,
-                            speculation_mode, feedback_relation);
+                            speculation_mode, feedback_relation,
+                            feedback_content);
   return zone()->New<Operator1<CallParameters>>(   // --
       IrOpcode::kJSCall, Operator::kNoProperties,  // opcode
       "JSCall",                                    // name
@@ -868,11 +872,13 @@ const Operator* JSOperatorBuilder::Call(
 
 const Operator* JSOperatorBuilder::CallWithArrayLike(
     const CallFrequency& frequency, const FeedbackSource& feedback,
-    SpeculationMode speculation_mode, CallFeedbackRelation feedback_relation) {
+    SpeculationMode speculation_mode, CallFeedbackRelation feedback_relation,
+    CallFeedbackContent feedback_content) {
   static constexpr int kTheArrayLikeObject = 1;
   CallParameters parameters(
       JSCallWithArrayLikeNode::ArityForArgc(kTheArrayLikeObject), frequency,
-      feedback, ConvertReceiverMode::kAny, speculation_mode, feedback_relation);
+      feedback, ConvertReceiverMode::kAny, speculation_mode, feedback_relation,
+      feedback_content);
   return zone()->New<Operator1<CallParameters>>(                // --
       IrOpcode::kJSCallWithArrayLike, Operator::kNoProperties,  // opcode
       "JSCallWithArrayLike",                                    // name
@@ -883,12 +889,13 @@ const Operator* JSOperatorBuilder::CallWithArrayLike(
 const Operator* JSOperatorBuilder::CallWithSpread(
     uint32_t arity, CallFrequency const& frequency,
     FeedbackSource const& feedback, SpeculationMode speculation_mode,
-    CallFeedbackRelation feedback_relation) {
+    CallFeedbackRelation feedback_relation,
+    CallFeedbackContent feedback_content) {
   DCHECK_IMPLIES(speculation_mode == SpeculationMode::kAllowSpeculation,
                  feedback.IsValid());
   CallParameters parameters(arity, frequency, feedback,
                             ConvertReceiverMode::kAny, speculation_mode,
-                            feedback_relation);
+                            feedback_relation, feedback_content);
   return zone()->New<Operator1<CallParameters>>(             // --
       IrOpcode::kJSCallWithSpread, Operator::kNoProperties,  // opcode
       "JSCallWithSpread",                                    // name

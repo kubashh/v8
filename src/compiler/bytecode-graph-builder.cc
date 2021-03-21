@@ -345,6 +345,7 @@ class BytecodeGraphBuilder {
   // Helper function to extract the speculation mode from the recorded type
   // feedback. Returns kDisallowSpeculation if feedback is insufficient.
   SpeculationMode GetSpeculationMode(int slot_id) const;
+  CallFeedbackContent GetCallFeedbackContent(int slot_id) const;
 
   // Helpers for building the implicit FunctionEntry and IterationBody
   // StackChecks.
@@ -2508,9 +2509,10 @@ void BytecodeGraphBuilder::BuildCall(ConvertReceiverMode receiver_mode,
   FeedbackSource feedback = CreateFeedbackSource(slot_id);
   CallFrequency frequency = ComputeCallFrequency(slot_id);
   SpeculationMode speculation_mode = GetSpeculationMode(slot_id);
-  const Operator* op =
-      javascript()->Call(arg_count, frequency, feedback, receiver_mode,
-                         speculation_mode, CallFeedbackRelation::kRelated);
+  CallFeedbackContent call_feedback_content = GetCallFeedbackContent(slot_id);
+  const Operator* op = javascript()->Call(
+      arg_count, frequency, feedback, receiver_mode, speculation_mode,
+      CallFeedbackRelation::kRelated, call_feedback_content);
   DCHECK(IrOpcode::IsFeedbackCollectingOpcode(op->opcode()));
 
   JSTypeHintLowering::LoweringResult lowering = TryBuildSimplifiedCall(
@@ -3086,6 +3088,14 @@ SpeculationMode BytecodeGraphBuilder::GetSpeculationMode(int slot_id) const {
   ProcessedFeedback const& feedback = broker()->GetFeedbackForCall(source);
   return feedback.IsInsufficient() ? SpeculationMode::kDisallowSpeculation
                                    : feedback.AsCall().speculation_mode();
+}
+
+CallFeedbackContent BytecodeGraphBuilder::GetCallFeedbackContent(
+    int slot_id) const {
+  FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
+  FeedbackSource source(feedback_vector(), slot);
+  ProcessedFeedback const& feedback = broker()->GetFeedbackForCall(source);
+  return feedback.AsCall().call_feedback_content();
 }
 
 void BytecodeGraphBuilder::VisitBitwiseNot() {
