@@ -43,6 +43,9 @@ class JSListFormat
   static Handle<JSObject> ResolvedOptions(Isolate* isolate,
                                           Handle<JSListFormat> format_holder);
 
+  // Utility function shared with JSDurationFormat
+  static Handle<String> ToType(Isolate* isolate, int32_t field_id);
+
   // ecma402 #sec-formatlist
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> FormatList(
       Isolate* isolate, Handle<JSListFormat> format_holder,
