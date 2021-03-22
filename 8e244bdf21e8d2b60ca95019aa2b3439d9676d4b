@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0addaf59_f08b4471",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-03-22T13:49:37Z",
+      "side": 1,
+      "message": "Minor comments; deferring the actual review to neis@",
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4481e1bf_2a2e5828",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-03-22T13:49:37Z",
+      "side": 1,
+      "message": "This could still be a member of AccessInfoFactory, I don\u0027t see a point in moving it out.",
+      "range": {
+        "startLine": 523,
+        "startChar": 19,
+        "endLine": 523,
+        "endChar": 43
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "720027fe_593dcd86",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-03-22T13:49:37Z",
+      "side": 1,
+      "message": "TODO w/ a bug number?",
+      "range": {
+        "startLine": 544,
+        "startChar": 58,
+        "endLine": 544,
+        "endChar": 61
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcb0937b_c6caed79",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-03-22T13:49:37Z",
+      "side": 1,
+      "message": "Unfortunately, does\u0027t look like we can DCHECK that here anymore. Would it make sense to DCHECK somewhere higher up and add a comment that points here?",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 183,
+        "endChar": 18
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
