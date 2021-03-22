@@ -16,6 +16,74 @@
       "message": "PTAL, thanks",
       "revId": "fe29427d8f03ba87186aa5e65409d5338e55727c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c312969_ee04dcac",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-03-22T13:12:23Z",
+      "side": 1,
+      "message": "Nit: remove empty line now that both are always available.",
+      "revId": "fe29427d8f03ba87186aa5e65409d5338e55727c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af8d7d03_b4707027",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4650,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-03-22T13:12:23Z",
+      "side": 1,
+      "message": "I think this is always true so you can just remove it in favor of the CHECK_EQ next line.",
+      "revId": "fe29427d8f03ba87186aa5e65409d5338e55727c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ad1b181_83285e41",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4655,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-03-22T13:12:23Z",
+      "side": 1,
+      "message": "Handlify or use DisallowGarbageCollection scope.",
+      "revId": "fe29427d8f03ba87186aa5e65409d5338e55727c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccb19458_c510c620",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-03-22T13:12:23Z",
+      "side": 1,
+      "message": "Even then it will still provide test coverage for a situation we didn\u0027t have coverage for so far.",
+      "revId": "fe29427d8f03ba87186aa5e65409d5338e55727c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
