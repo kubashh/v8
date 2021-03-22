@@ -16,6 +16,24 @@
       "message": "I expected PS1 to be the original CL. Are there other changes?",
       "revId": "00e3d180a6d3e52400e1c0ffffb470670a0b2273",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82094ee2_f55b894e",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3060,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-03-22T14:32:56Z",
+      "side": 1,
+      "message": "PS1 is the orignal CL except for this CHECK (used this to have bots find a test that reaches this branch). Sorry for that.",
+      "parentUuid": "cb223de5_5e701027",
+      "revId": "00e3d180a6d3e52400e1c0ffffb470670a0b2273",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
