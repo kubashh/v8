@@ -221,7 +221,36 @@ struct CodeEntryAndLineNumber {
   int line_number;
 };
 
-using ProfileStackTrace = std::vector<CodeEntryAndLineNumber>;
+struct ProfileStackFrame {
+  CodeEntryAndLineNumber entry;
+  Address native_context;
+  bool filterable;  // If true, the frame should be filtered by context (if a
+                    // filter is present).
+};
+
+using ProfileStackTrace = std::vector<ProfileStackFrame>;
+
+// Filters stack frames from sources other than a target native context.
+class ContextFilter {
+ public:
+  explicit ContextFilter(Address native_context_address)
+      : native_context_address_(native_context_address) {}
+
+  // Returns true if the stack frame passes a context check.
+  bool Accept(const ProfileStackFrame&);
+
+  // Invoked when a native context has changed address.
+  void OnMoveEvent(Address from_address, Address to_address);
+
+  // Update the context's tracked address based on VM-thread events.
+  void set_native_context_address(Address address) {
+    native_context_address_ = address;
+  }
+  Address native_context_address() const { return native_context_address_; }
+
+ private:
+  Address native_context_address_;
+};
 
 class ProfileTree;
 
@@ -309,7 +338,8 @@ class V8_EXPORT_PRIVATE ProfileTree {
       const ProfileStackTrace& path,
       int src_line = v8::CpuProfileNode::kNoLineNumberInfo,
       bool update_stats = true,
-      ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers);
+      ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers,
+      ContextFilter* context_filter = nullptr);
   ProfileNode* root() const { return root_; }
   unsigned next_node_id() { return next_node_id_++; }
 
@@ -372,6 +402,7 @@ class CpuProfile {
   base::TimeTicks start_time() const { return start_time_; }
   base::TimeTicks end_time() const { return end_time_; }
   CpuProfiler* cpu_profiler() const { return profiler_; }
+  ContextFilter* context_filter() const { return context_filter_.get(); }
 
   void UpdateTicksScale();
 
@@ -383,6 +414,7 @@ class CpuProfile {
   const char* title_;
   const CpuProfilingOptions options_;
   std::unique_ptr<DiscardedSamplesDelegate> delegate_;
+  std::unique_ptr<ContextFilter> context_filter_;
   base::TimeTicks start_time_;
   base::TimeTicks end_time_;
   std::deque<SampleInfo> samples_;
@@ -469,6 +501,9 @@ class V8_EXPORT_PRIVATE CpuProfilesCollection {
                                 const ProfileStackTrace& path, int src_line,
                                 bool update_stats,
                                 base::TimeDelta sampling_interval);
+
+  // Called from profile generator thread.
+  void UpdateNativeContextAddressForCurrentProfiles(Address from, Address to);
 
   // Limits the number of profiles that can be simultaneously collected.
   static const int kMaxSimultaneousProfiles = 100;
