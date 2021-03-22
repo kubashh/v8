@@ -2220,6 +2220,13 @@ void JSDisplayNames::JSDisplayNamesPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintBody(os, *this);
 }
 
+void JSDurationFormat::JSDurationFormatPrint(std::ostream& os) {  // NOLINT
+  JSObjectPrintHeader(os, *this, "JSDurationFormat");
+  os << "\n - locale: " << Brief(locale());
+  os << "\n - internal: " << Brief(internal());
+  JSObjectPrintBody(os, *this);
+}
+
 void JSListFormat::JSListFormatPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, *this, "JSListFormat");
   os << "\n - locale: " << Brief(locale());
