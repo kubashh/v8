@@ -33,6 +33,86 @@
       "message": "src/compiler LGTM",
       "revId": "4a1bb5d3d5abfe5e3690ab5370104eb81bdd82a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91459f25_38c16ab7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-22T16:43:38Z",
+      "side": 1,
+      "message": "lgtm with very last nits",
+      "revId": "4a1bb5d3d5abfe5e3690ab5370104eb81bdd82a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "babfd530_d94d1772",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 14358,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-22T16:43:38Z",
+      "side": 1,
+      "message": "OverallOffset please ))",
+      "range": {
+        "startLine": 14358,
+        "startChar": 17,
+        "endLine": 14358,
+        "endChar": 30
+      },
+      "revId": "4a1bb5d3d5abfe5e3690ab5370104eb81bdd82a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4351053_514407ad",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 14383,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-22T16:43:38Z",
+      "side": 1,
+      "message": "UintPtrLessThan please.",
+      "range": {
+        "startLine": 14383,
+        "startChar": 25,
+        "endLine": 14383,
+        "endChar": 39
+      },
+      "revId": "4a1bb5d3d5abfe5e3690ab5370104eb81bdd82a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6357b62_30370b92",
+        "filename": "src/objects/swiss-name-dictionary.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-22T16:43:38Z",
+      "side": 1,
+      "message": "Please add a comment about the meaning of these fields indices.",
+      "revId": "4a1bb5d3d5abfe5e3690ab5370104eb81bdd82a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
