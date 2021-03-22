@@ -105,7 +105,7 @@ class PropertyAccessInfo final {
       InternalIndex dict_index, Handle<Name> name);
   static PropertyAccessInfo DictionaryProtoAccessorConstant(
       Zone* zone, Handle<Map> receiver_map, MaybeHandle<JSObject> holder,
-      Handle<Object> constant);
+      Handle<Object> constant, Handle<Name> property_name);
 
   bool Merge(PropertyAccessInfo const* that, AccessMode access_mode,
              Zone* zone) V8_WARN_UNUSED_RESULT;
@@ -183,7 +183,7 @@ class PropertyAccessInfo final {
   PropertyAccessInfo(Zone* zone, Kind kind, MaybeHandle<JSObject> holder,
                      ZoneVector<Handle<Map>>&& lookup_start_object_maps);
   PropertyAccessInfo(Zone* zone, Kind kind, MaybeHandle<JSObject> holder,
-                     Handle<Object> constant,
+                     Handle<Object> constant, MaybeHandle<Name> property_name,
                      ZoneVector<Handle<Map>>&& lookup_start_object_maps);
   PropertyAccessInfo(Kind kind, MaybeHandle<JSObject> holder,
                      MaybeHandle<Map> transition_map, FieldIndex field_index,
@@ -300,6 +300,18 @@ class AccessInfoFactory final {
                                                 MaybeHandle<JSObject> holder,
                                                 InternalIndex descriptor,
                                                 AccessMode access_mode) const;
+
+  // Only used by AccessorAccessInfoHelper.
+  using get_accessors_t = std::function<Handle<Object>()>;
+  using mk_constant_accessor_info_t = std::function<PropertyAccessInfo(
+      Handle<Object> accessor, MaybeHandle<JSObject> holder)>;
+
+  PropertyAccessInfo AccessorAccessInfoHelper(
+      Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
+      MaybeHandle<JSObject> holder, AccessMode access_mode,
+      get_accessors_t get_accessors,
+      mk_constant_accessor_info_t mk_constant_accessor_info) const;
+
   PropertyAccessInfo ComputeAccessorDescriptorAccessInfo(
       Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
       MaybeHandle<JSObject> holder, InternalIndex descriptor,
