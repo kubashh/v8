@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3010dd_0769ce05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-22T19:09:42Z",
+      "side": 1,
+      "message": "Patch Set 1 reflects the original CL",
+      "revId": "989222f11b157db5cf6b1cee80b83b27c0d6996e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
