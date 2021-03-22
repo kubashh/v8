@@ -239,7 +239,9 @@ MaybeHandle<T> FormatListCommon(
   return formatToResult(isolate, formatted);
 }
 
-Handle<String> IcuFieldIdToType(Isolate* isolate, int32_t field_id) {
+}  // namespace
+
+Handle<String> JSListFormat::ToType(Isolate* isolate, int32_t field_id) {
   switch (field_id) {
     case ULISTFMT_LITERAL_FIELD:
       return isolate->factory()->literal_string();
@@ -251,6 +253,8 @@ Handle<String> IcuFieldIdToType(Isolate* isolate, int32_t field_id) {
       return Handle<String>();
   }
 }
+
+namespace {
 
 // A helper function to convert the FormattedList to a
 // MaybeHandle<JSArray> for the implementation of formatToParts.
@@ -269,7 +273,8 @@ MaybeHandle<JSArray> FormattedListToJSArray(
         Intl::ToString(isolate, string, cfpos.getStart(), cfpos.getLimit()),
         JSArray);
     Intl::AddElement(isolate, array, index++,
-                     IcuFieldIdToType(isolate, cfpos.getField()), substring);
+                     JSListFormat::ToType(isolate, cfpos.getField()),
+                     substring);
   }
   if (U_FAILURE(status)) {
     THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kIcuError), JSArray);
