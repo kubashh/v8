@@ -16,6 +16,23 @@
       "message": "Leszek, Toon,\nthis is the reland of my CL. Nothing has changed outside of compiler and test-api, but need your owner\u0027s LGMTs again. Thanks!",
       "revId": "f97f3ba8db941079eef8f9bcb73f9cfcf6f11afd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "506d9f1d_91a221f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-03-22T14:36:46Z",
+      "side": 1,
+      "message": "No changes rubber stamp.",
+      "revId": "f97f3ba8db941079eef8f9bcb73f9cfcf6f11afd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
