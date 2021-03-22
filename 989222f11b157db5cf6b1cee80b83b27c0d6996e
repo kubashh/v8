@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "99ba0d2f_ccb64ba6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-22T19:16:29Z",
+      "side": 1,
+      "message": "Please add a comment about what was fixed compared to the original one.",
+      "revId": "989222f11b157db5cf6b1cee80b83b27c0d6996e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "af3010dd_0769ce05",
@@ -14,6 +31,23 @@
       "writtenOn": "2021-03-22T19:09:42Z",
       "side": 1,
       "message": "Patch Set 1 reflects the original CL",
+      "revId": "989222f11b157db5cf6b1cee80b83b27c0d6996e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3358afc_4a51f8ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-22T19:16:29Z",
+      "side": 1,
+      "message": "lgtm with a nit",
       "revId": "989222f11b157db5cf6b1cee80b83b27c0d6996e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
