@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68047100_754ddc0e",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-03-23T11:34:56Z",
+      "side": 1,
+      "message": "Deferring to the compiler owners on that decision",
+      "parentUuid": "14870894_77ef3cad",
+      "range": {
+        "startLine": 523,
+        "startChar": 19,
+        "endLine": 523,
+        "endChar": 43
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "720027fe_593dcd86",
         "filename": "src/compiler/access-info.cc",
         "patchSetId": 6
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "Sorry, do you mean that I should add a TODO without a bug number? The idea of the comment was just to justify the DCHECK. If we ever were to support kHas, the DCHECK should tell you that you may want to touch this line ;)",
       "parentUuid": "720027fe_593dcd86",
+      "range": {
+        "startLine": 544,
+        "startChar": 58,
+        "endLine": 544,
+        "endChar": 61
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5020fa32_c9a8885e",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-03-23T11:34:56Z",
+      "side": 1,
+      "message": "Yes, this was just about adding a TODO with a bug number here. :) *If* it\u0027s planned to support it in the mid-term future. (Otherwise, remove the \"yet\".)",
+      "parentUuid": "24f2659c_98396e30",
       "range": {
         "startLine": 544,
         "startChar": 58,
