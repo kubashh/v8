@@ -16,6 +16,23 @@
       "message": "LGTM, thanks!",
       "revId": "b6d920cb4d588bfd8d3b0c66dee150949fec8ecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "368e8996_b59ff98c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-23T16:56:19Z",
+      "side": 1,
+      "message": "Oh, seems like this was fixed in https://chromium.googlesource.com/v8/v8/+/6bb058298bdd149288fc06ee6646f7343443951b, we can abandon this, thanks Milad!",
+      "revId": "b6d920cb4d588bfd8d3b0c66dee150949fec8ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
