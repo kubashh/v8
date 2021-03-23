@@ -16,6 +16,24 @@
       "message": "FYI, this breaks the gcov bot: https://ci.chromium.org/p/v8/builders/ci/V8%20Linux64%20-%20gcov%20coverage/26151",
       "revId": "8c9213a1911535405726d9aa06d7097679e0112c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf94946_09ab0b0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-23T16:46:28Z",
+      "side": 1,
+      "message": "Milad helped fix this in https://crrev.com/c/2780014. I don\u0027t see an gcov trybot to test it on though, can we add it?",
+      "parentUuid": "791cfec9_bd841efa",
+      "revId": "8c9213a1911535405726d9aa06d7097679e0112c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
