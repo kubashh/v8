@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "14870894_77ef3cad",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "This is a fairly specific function, and I\u0027m usually happy not to have them in the class itself (even if it would just be private). Of course, in this case this means having to pass a few things around (isolate, zone, broker). In the interest of time, I would prefer keeping it as a namespace function. Are you okay with that?",
+      "parentUuid": "4481e1bf_2a2e5828",
+      "range": {
+        "startLine": 523,
+        "startChar": 19,
+        "endLine": 523,
+        "endChar": 43
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "720027fe_593dcd86",
         "filename": "src/compiler/access-info.cc",
         "patchSetId": 6
@@ -54,6 +78,30 @@
       "writtenOn": "2021-03-22T13:49:37Z",
       "side": 1,
       "message": "TODO w/ a bug number?",
+      "range": {
+        "startLine": 544,
+        "startChar": 58,
+        "endLine": 544,
+        "endChar": 61
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24f2659c_98396e30",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Sorry, do you mean that I should add a TODO without a bug number? The idea of the comment was just to justify the DCHECK. If we ever were to support kHas, the DCHECK should tell you that you may want to touch this line ;)",
+      "parentUuid": "720027fe_593dcd86",
       "range": {
         "startLine": 544,
         "startChar": 58,
@@ -81,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eea186a_6d974765",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77288854_a08344bf",
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23a73a87_31fc7ad4",
@@ -94,6 +160,30 @@
       "writtenOn": "2021-03-22T16:57:12Z",
       "side": 1,
       "message": "While you\u0027re here, please rename this to \"holder_map\".",
+      "range": {
+        "startLine": 605,
+        "startChar": 61,
+        "endLine": 605,
+        "endChar": 64
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5139c1f9_19030860",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23a73a87_31fc7ad4",
       "range": {
         "startLine": 605,
         "startChar": 61,
@@ -121,6 +211,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36f2f5f7_1582dc2b",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f6329c2f_2e367d86",
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "314fb0d5_507d44da",
@@ -134,6 +242,30 @@
       "writtenOn": "2021-03-22T16:57:12Z",
       "side": 1,
       "message": "Nit: \"name\" for consistency with the DictionaryProtoDataConstant.",
+      "range": {
+        "startLine": 108,
+        "startChar": 44,
+        "endLine": 108,
+        "endChar": 57
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9034a7d_32af3c17",
+        "filename": "src/compiler/access-info.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "314fb0d5_507d44da",
       "range": {
         "startLine": 108,
         "startChar": 44,
@@ -167,6 +299,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd625243_fbdedb3e",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fd61a1f_8122e08b",
+      "range": {
+        "startLine": 173,
+        "startChar": 55,
+        "endLine": 173,
+        "endChar": 63
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77f54238_4d727f42",
@@ -180,6 +336,24 @@
       "writtenOn": "2021-03-22T16:57:12Z",
       "side": 1,
       "message": "I think it\u0027s cleaner if we always do this check (i.e. move it above 178).",
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa5b0625_b92c7562",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77f54238_4d727f42",
       "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -209,6 +383,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0c065d4_3cbe24c2",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "DependOnConstantInDictionaryPrototypeChain (which leads to the creation of an instance of this class) is only called from \n\nPropertyAccessBuilder::FoldLoadDictPrototypeConstant and in JSNativeContextSpecialization::InlinePropertyGetterCall. So either call site implies that we\u0027re loading a property.\n\nI do agree that it would be nicer to verify this within this class, but I do see a nice way of doing it...",
+      "parentUuid": "bcb0937b_c6caed79",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 183,
+        "endChar": 18
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b662779_bfa3217e",
         "filename": "src/compiler/compilation-dependencies.cc",
         "patchSetId": 6
@@ -220,6 +418,24 @@
       "writtenOn": "2021-03-22T16:57:12Z",
       "side": 1,
       "message": "There are at least two representations of accessors, AccessorPair and AccessorInfo. Are you sure that you can assume here that it\u0027s an AccessorPair? Please put a CHECK(...-\u003eIsAccessorPair) or use a conditional.",
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "551a9b03_d6b64e04",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b662779_bfa3217e",
       "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -237,6 +453,30 @@
       "writtenOn": "2021-03-22T16:57:12Z",
       "side": 1,
       "message": "the value of the",
+      "range": {
+        "startLine": 54,
+        "startChar": 45,
+        "endLine": 54,
+        "endChar": 48
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd0634e_030ea913",
+        "filename": "src/compiler/compilation-dependencies.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c54d4641_e6a47ab4",
       "range": {
         "startLine": 54,
         "startChar": 45,
@@ -270,6 +510,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60e896db_2376fb65",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2229,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb3e40ae_8c6e5e95",
+      "range": {
+        "startLine": 2229,
+        "startChar": 32,
+        "endLine": 2229,
+        "endChar": 41
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76662f8e_465537b5",
@@ -283,6 +547,24 @@
       "writtenOn": "2021-03-22T16:57:12Z",
       "side": 1,
       "message": "I\u0027d drop the setter to make it clearer that this example is about the getter only.",
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2e57a0c_656ea317",
+        "filename": "test/mjsunit/const-dict-tracking.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T10:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76662f8e_465537b5",
       "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
