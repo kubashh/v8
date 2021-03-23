@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc05d2e_dac4bf50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-03-23T15:18:58Z",
+      "side": 1,
+      "message": "As discussed, storing a ref on the stack does not require a write barrier.",
+      "parentUuid": "c475556e_c3403499",
+      "revId": "bc7cb7454d1228050a87964f3105fc7f90fa94cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c332e4c3_35d15620",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-03-19T13:38:20Z",
       "side": 1,
       "message": "Would it not be better to use {StoreTaggedField} instead of {movq}?",
+      "revId": "bc7cb7454d1228050a87964f3105fc7f90fa94cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3c1496c_aeaa3c44",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-03-23T15:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c332e4c3_35d15620",
       "revId": "bc7cb7454d1228050a87964f3105fc7f90fa94cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
