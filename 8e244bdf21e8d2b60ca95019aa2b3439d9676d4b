@@ -113,6 +113,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8b2ab6a_4e33bbfd",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T15:05:38Z",
+      "side": 1,
+      "message": "Let\u0027s keep it like it is then.",
+      "parentUuid": "5b2f2a65_079865a2",
+      "range": {
+        "startLine": 523,
+        "startChar": 19,
+        "endLine": 523,
+        "endChar": 43
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "720027fe_593dcd86",
@@ -491,6 +515,30 @@
       "side": 1,
       "message": "DependOnConstantInDictionaryPrototypeChain (which leads to the creation of an instance of this class) is only called from \n\nPropertyAccessBuilder::FoldLoadDictPrototypeConstant and in JSNativeContextSpecialization::InlinePropertyGetterCall. So either call site implies that we\u0027re loading a property.\n\nI do agree that it would be nicer to verify this within this class, but I do see a nice way of doing it...",
       "parentUuid": "bcb0937b_c6caed79",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 183,
+        "endChar": 18
+      },
+      "revId": "8e244bdf21e8d2b60ca95019aa2b3439d9676d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d70b395_9a528c95",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1459205
+      },
+      "writtenOn": "2021-03-23T15:05:38Z",
+      "side": 1,
+      "message": "(resolved offline)",
+      "parentUuid": "a0c065d4_3cbe24c2",
       "range": {
         "startLine": 182,
         "startChar": 8,
