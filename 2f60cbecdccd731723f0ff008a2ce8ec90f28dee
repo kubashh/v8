@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc4235df_df0899fd",
+        "filename": "tools/bash-completion.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-23T21:49:09Z",
+      "side": 1,
+      "message": "Removed this section.",
+      "parentUuid": "4bdea79a_aeb43857",
+      "range": {
+        "startLine": 125,
+        "startChar": 80,
+        "endLine": 125,
+        "endChar": 89
+      },
+      "revId": "2f60cbecdccd731723f0ff008a2ce8ec90f28dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d59612a6_2b3c2148",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3608ee93_017edf49",
+        "filename": "tools/bash-completion.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-23T21:49:09Z",
+      "side": 1,
+      "message": "good idea! updated gm.py.",
+      "parentUuid": "d59612a6_2b3c2148",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 13
+      },
+      "revId": "2f60cbecdccd731723f0ff008a2ce8ec90f28dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e9696a2_c5e80516",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-03-22T13:38:44Z",
       "side": 1,
       "message": "nit: missing space",
+      "range": {
+        "startLine": 129,
+        "startChar": 33,
+        "endLine": 129,
+        "endChar": 34
+      },
+      "revId": "2f60cbecdccd731723f0ff008a2ce8ec90f28dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93c4a218_729635b5",
+        "filename": "tools/bash-completion.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-23T21:49:09Z",
+      "side": 1,
+      "message": "Resolving since i moved this to gm.py.",
+      "parentUuid": "2e9696a2_c5e80516",
       "range": {
         "startLine": 129,
         "startChar": 33,
@@ -112,6 +184,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "920be1fc_0bf36f07",
+        "filename": "tools/bash-completion.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-23T21:49:09Z",
+      "side": 1,
+      "message": "I added \"$m\" and \"$t\". \"$a.$t\" is tricky due to the nesting of the loops, this current set looks reasonable enough for completion.",
+      "parentUuid": "c6026eec_a1a8c586",
+      "range": {
+        "startLine": 138,
+        "startChar": 6,
+        "endLine": 138,
+        "endChar": 18
+      },
+      "revId": "2f60cbecdccd731723f0ff008a2ce8ec90f28dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e9e96498_69aea9db",
         "filename": "tools/bash-completion.sh",
         "patchSetId": 1
@@ -123,6 +219,30 @@
       "writtenOn": "2021-03-22T13:38:44Z",
       "side": 1,
       "message": "Curiosity question: is there a particular reason to use `-print0` here? In local testing, it seems you\u0027d get the same result by just dropping it, and correspondingly dropping `-0` below, leaving just:\n\n  find \"$v8_source/test/cctest\" -type f -name \u0027test-*\u0027 | \\\n  xargs basename -a -s \".cc\" | \\ ...\n\nI\u0027m fine with it either way.",
+      "range": {
+        "startLine": 146,
+        "startChar": 56,
+        "endLine": 146,
+        "endChar": 63
+      },
+      "revId": "2f60cbecdccd731723f0ff008a2ce8ec90f28dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8248a772_23c7bdf9",
+        "filename": "tools/bash-completion.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-23T21:49:09Z",
+      "side": 1,
+      "message": "likely to deal with weird chars in file names, I don\u0027t remember why I did it, probably to workaround some issues in this pipeline, or I saw it on stackoverflow. I removed it, thanks!",
+      "parentUuid": "e9e96498_69aea9db",
       "range": {
         "startLine": 146,
         "startChar": 56,
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cae8f3f_5e4b3ed9",
+        "filename": "tools/bash-completion.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-23T21:49:09Z",
+      "side": 1,
+      "message": "Yea that\u0027s a good idea. We could do both, we can try to find an existing cctest and use it, which should give a good enough list of tests.",
+      "parentUuid": "6c69dcb2_14a36d60",
+      "range": {
+        "startLine": 148,
+        "startChar": 46,
+        "endLine": 148,
+        "endChar": 47
+      },
+      "revId": "2f60cbecdccd731723f0ff008a2ce8ec90f28dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd4bf1d4_20856bfe",
@@ -169,6 +313,30 @@
       "writtenOn": "2021-03-22T13:38:44Z",
       "side": 1,
       "message": "I think this part doesn\u0027t make sense for gm.py: it maintains the default completions (i.e. file names in the current directory) and adds our custom flags to them. So probably better to drop this? I don\u0027t think there\u0027s ever a reason to invoke `gm src/foo/bar.cc`.",
+      "range": {
+        "startLine": 154,
+        "startChar": 37,
+        "endLine": 154,
+        "endChar": 67
+      },
+      "revId": "2f60cbecdccd731723f0ff008a2ce8ec90f28dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86727d40_e7e3c966",
+        "filename": "tools/bash-completion.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-23T21:49:09Z",
+      "side": 1,
+      "message": "This doesn\u0027t use file names in current directory, file names is requested using \"-f\", see line 117 above for an example used for completing \"gdb\".",
+      "parentUuid": "cd4bf1d4_20856bfe",
       "range": {
         "startLine": 154,
         "startChar": 37,
