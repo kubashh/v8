@@ -809,24 +809,20 @@ RUNTIME_FUNCTION(Runtime_DeleteProperty) {
                         static_cast<LanguageMode>(language_mode));
 }
 
-RUNTIME_FUNCTION(Runtime_ShrinkPropertyDictionary) {
+RUNTIME_FUNCTION(Runtime_ShrinkNameDictionary) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, receiver, 0);
-  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
-    Handle<SwissNameDictionary> dictionary(
-        receiver->property_dictionary_swiss(), isolate);
-    Handle<SwissNameDictionary> new_properties =
-        SwissNameDictionary::Shrink(isolate, dictionary);
-    receiver->SetProperties(*new_properties);
-  } else {
-    Handle<NameDictionary> dictionary(receiver->property_dictionary(), isolate);
-    Handle<NameDictionary> new_properties =
-        NameDictionary::Shrink(isolate, dictionary);
-    receiver->SetProperties(*new_properties);
-  }
+  CONVERT_ARG_HANDLE_CHECKED(NameDictionary, dictionary, 0);
 
-  return Smi::zero();
+  return *NameDictionary::Shrink(isolate, dictionary);
+}
+
+RUNTIME_FUNCTION(Runtime_ShrinkSwissNameDictionary) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(SwissNameDictionary, dictionary, 0);
+
+  return *SwissNameDictionary::Shrink(isolate, dictionary);
 }
 
 // ES6 section 12.9.3, operator in.

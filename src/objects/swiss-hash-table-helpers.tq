@@ -67,6 +67,27 @@ struct ByteMask {
   mask: uint64;
 }
 
+// Counterpart to swiss_table::BitMask<uint32t, kWidth, 0>, as used by
+// swiss_table::GroupSse2Impl in C++ implementation.
+struct BitMask {
+  // FIXME: factor these out
+  macro HasBitsSet(): bool {
+    return this.mask != FromConstexpr<uint32>(0);
+  }
+
+  macro LowestBitSet(): int32 {
+    return Convert<int32>(CountTrailingZeros32(this.mask));
+  }
+
+  // Counterpart to operator++() in C++ version.
+  macro ClearLowestSetBit() {
+    // FIXMe: use - here
+    this.mask = this.mask & (this.mask + FromConstexpr<uint32>(-1));
+  }
+
+  mask: uint32;
+}
+
 macro H1(hash: uint32): uint32 {
   return hash >>> Unsigned(FromConstexpr<int32>(kH2Bits));
 }
@@ -95,6 +116,27 @@ struct GroupPortableImpl {
   const ctrl: uint64;
 }
 
+// FIXMEL are we using the _mm_cmpgt_epi8_fixed function that gets a fix?
+struct GroupSse2Impl {
+  macro Match(h2: uint32): BitMask {
+    const searchPattern = I8x16Splat(Signed(h2));
+    const matches128 = I8x16Eq(searchPattern, this.ctrl);
+    const matches32 = Unsigned(I8x16BitMask(matches128));
+    return BitMask{mask: matches32};
+  }
+
+  macro MatchEmpty(): BitMask {
+    // FIXME: The C++ version uses a nice trick here, to avoid the splat.
+    const searchPattern =
+        I8x16Splat(Convert<int32>(FromConstexpr<uint8>(ctrl::kEmpty)));
+    const matches128 = I8x16Eq(searchPattern, this.ctrl);
+    const matches32 = Unsigned(I8x16BitMask(matches128));
+    return BitMask{mask: matches32};
+  }
+
+  const ctrl: I8X16;
+}
+
 struct GroupPortableLoader {
   macro LoadGroup(ctrlPtr: intptr): GroupPortableImpl {
     return GroupPortableImpl{
@@ -103,26 +145,9 @@ struct GroupPortableLoader {
   }
 }
 
-// TODO(v8:11330) Temporary nonsense code that supresses warnings about unused
-// macros.
-@export
-macro SwissTableWarningSuppresser(): never {
-  const group = GroupPortableLoader{}.LoadGroup(0);
-  let mask = group.Match(0);
-  let seq = ProbeSequence{mask: 0, offset: 0, index: 0};
-
-  const _bla2 = group.MatchEmpty();
-
-  const _bla3 = H1(0);
-  const _bla4 = H2(0);
-
-  const _bla5 = seq.Next();
-  const _bla6 = seq.Offset(0);
-
-  const _bla7 = mask.HasBitsSet();
-  const _bla8 = mask.LowestBitSet();
-  const _bla9 = mask.ClearLowestSetBit();
-
-  unreachable;
+struct GroupSse2Loader {
+  macro LoadGroup(ctrlPtr: intptr): GroupSse2Impl {
+    return GroupSse2Impl{ctrl: Convert<I8X16>(LoadSimd128(ctrlPtr))};
+  }
 }
 }

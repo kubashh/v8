@@ -105,6 +105,14 @@ class V8_EXPORT_PRIVATE CpuFeatures : public AllStatic {
   }
 
   static bool IsSupported(CpuFeature f) {
+    // FIXME: Hotfix for building builtins with Swiss Table support
+#if V8_TARGET_ARCH_IA32 || V8_TARGET_ARCH_X64
+    if (V8_DICT_MODE_PROTOTYPES_BOOL &&
+        (f == CpuFeature::AVX || f == CpuFeature::AVX2 ||
+         f == CpuFeature::SSSE3 || f == CpuFeature::SSSE3)) {
+      return true;
+    }
+#endif
     return (supported_ & (1u << f)) != 0;
   }
 
