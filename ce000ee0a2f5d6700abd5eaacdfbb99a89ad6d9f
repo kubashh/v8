@@ -16,6 +16,23 @@
       "message": "Done, thanks",
       "revId": "ce000ee0a2f5d6700abd5eaacdfbb99a89ad6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d388a34_b6234c60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-03-23T09:14:05Z",
+      "side": 1,
+      "message": "Just realized that Ross reviewed the original CL.\n\n@Ross: Can you please take a quick look at the changes. Need your owner\u0027s LGTM.\n\nThanks!",
+      "revId": "ce000ee0a2f5d6700abd5eaacdfbb99a89ad6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
