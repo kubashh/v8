@@ -1137,6 +1137,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                            Map::kConstructorOrBackPointerOrNativeContextOffset);
   }
 
+  // FIXME: Use raw ptr?
+  TNode<Simd128T> LoadSimd128(TNode<IntPtrT> ptr) {
+    return UncheckedCast<Simd128T>(Load(MachineType::Simd128(), ptr));
+  }
+
   // Reference is the CSA-equivalent of a Torque reference value, representing
   // an inner pointer into a HeapObject.
   //
@@ -1724,6 +1729,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<UintPtrT> LoadBigIntDigit(TNode<BigInt> bigint, intptr_t digit_index);
   TNode<UintPtrT> LoadBigIntDigit(TNode<BigInt> bigint,
                                   TNode<IntPtrT> digit_index);
+
+  // Allocate a ByteArray with the given non-zero length.
+  TNode<ByteArray> AllocateNonEmptyByteArray(TNode<UintPtrT> length,
+                                             AllocationFlags flags);
 
   // Allocate a ByteArray with the given length.
   TNode<ByteArray> AllocateByteArray(TNode<UintPtrT> length,
@@ -2837,42 +2846,32 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                                           kKeyToDetailsOffset));
   }
 
+  TNode<Uint32T> LoadDetailsByKeyIndex(TNode<SwissNameDictionary> container,
+                                       TNode<IntPtrT> key_index) {
+    TNode<IntPtrT> capacity =
+        ChangeInt32ToIntPtr(LoadSwissNameDictionaryCapacity(container));
+    return LoadSwissNameDictionaryPropertyDetails(container, capacity,
+                                                  key_index);
+  }
+
   // Loads the value for the entry with the given key_index.
   // Returns a tagged value.
   template <class ContainerType>
   TNode<Object> LoadValueByKeyIndex(TNode<ContainerType> container,
-                                    TNode<IntPtrT> key_index) {
-    static_assert(!std::is_same<ContainerType, DescriptorArray>::value,
-                  "Use the non-templatized version for DescriptorArray");
-    const int kKeyToValueOffset =
-        (ContainerType::kEntryValueIndex - ContainerType::kEntryKeyIndex) *
-        kTaggedSize;
-    return LoadFixedArrayElement(container, key_index, kKeyToValueOffset);
-  }
+                                    TNode<IntPtrT> key_index);
 
   // Stores the details for the entry with the given key_index.
   // |details| must be a Smi.
   template <class ContainerType>
   void StoreDetailsByKeyIndex(TNode<ContainerType> container,
-                              TNode<IntPtrT> key_index, TNode<Smi> details) {
-    const int kKeyToDetailsOffset =
-        (ContainerType::kEntryDetailsIndex - ContainerType::kEntryKeyIndex) *
-        kTaggedSize;
-    StoreFixedArrayElement(container, key_index, details, kKeyToDetailsOffset);
-  }
+                              TNode<IntPtrT> key_index, TNode<Smi> details);
 
   // Stores the value for the entry with the given key_index.
   template <class ContainerType>
   void StoreValueByKeyIndex(
       TNode<ContainerType> container, TNode<IntPtrT> key_index,
       TNode<Object> value,
-      WriteBarrierMode write_barrier = UPDATE_WRITE_BARRIER) {
-    const int kKeyToValueOffset =
-        (ContainerType::kEntryValueIndex - ContainerType::kEntryKeyIndex) *
-        kTaggedSize;
-    StoreFixedArrayElement(container, key_index, value, write_barrier,
-                           kKeyToValueOffset);
-  }
+      WriteBarrierMode write_barrier = UPDATE_WRITE_BARRIER);
 
   // Calculate a valid size for the a hash table.
   TNode<IntPtrT> HashTableComputeCapacity(TNode<IntPtrT> at_least_space_for);
@@ -2888,12 +2887,18 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   template <class Dictionary>
   void SetNumberOfElements(TNode<Dictionary> dictionary,
                            TNode<Smi> num_elements_smi) {
+    // Not supposed to be used for SwissNameDictionary.
+    STATIC_ASSERT(!(std::is_same<Dictionary, SwissNameDictionary>::value));
+
     StoreFixedArrayElement(dictionary, Dictionary::kNumberOfElementsIndex,
                            num_elements_smi, SKIP_WRITE_BARRIER);
   }
 
   template <class Dictionary>
   TNode<Smi> GetNumberOfDeletedElements(TNode<Dictionary> dictionary) {
+    // Not supposed to be used for SwissNameDictionary.
+    STATIC_ASSERT(!(std::is_same<Dictionary, SwissNameDictionary>::value));
+
     return CAST(LoadFixedArrayElement(
         dictionary, Dictionary::kNumberOfDeletedElementsIndex));
   }
@@ -2901,6 +2906,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   template <class Dictionary>
   void SetNumberOfDeletedElements(TNode<Dictionary> dictionary,
                                   TNode<Smi> num_deleted_smi) {
+    // Not supposed to be used for SwissNameDictionary.
+    STATIC_ASSERT(!(std::is_same<Dictionary, SwissNameDictionary>::value));
+
     StoreFixedArrayElement(dictionary,
                            Dictionary::kNumberOfDeletedElementsIndex,
                            num_deleted_smi, SKIP_WRITE_BARRIER);
@@ -2908,6 +2916,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   template <class Dictionary>
   TNode<Smi> GetCapacity(TNode<Dictionary> dictionary) {
+    // Not supposed to be used for SwissNameDictionary.
+    STATIC_ASSERT(!(std::is_same<Dictionary, SwissNameDictionary>::value));
+
     return CAST(
         UnsafeLoadFixedArrayElement(dictionary, Dictionary::kCapacityIndex));
   }
@@ -3048,13 +3059,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                   TNode<IntPtrT> name_index, TNode<Uint32T>,
                                   TVariable<Object>* var_value);
 
-  void LoadPropertyFromNameDictionary(TNode<NameDictionary> dictionary,
-                                      TNode<IntPtrT> name_index,
-                                      TVariable<Uint32T>* var_details,
-                                      TVariable<Object>* var_value);
-  void LoadPropertyFromSwissNameDictionary(
-      TNode<SwissNameDictionary> dictionary, TNode<IntPtrT> name_index,
-      TVariable<Uint32T>* var_details, TVariable<Object>* var_value);
+  template <typename Dictionary>
+  void LoadPropertyFromNonGlobalDictionary(TNode<Dictionary> dictionary,
+                                           TNode<IntPtrT> name_index,
+                                           TVariable<Uint32T>* var_details,
+                                           TVariable<Object>* var_value);
   void LoadPropertyFromGlobalDictionary(TNode<GlobalDictionary> dictionary,
                                         TNode<IntPtrT> name_index,
                                         TVariable<Uint32T>* var_details,
@@ -3720,6 +3729,18 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<SwissNameDictionary> AllocateSwissNameDictionary(
       int at_least_space_for);
 
+  TNode<SwissNameDictionary> AllocateSwissNameDictionaryWithCapacity(
+      TNode<IntPtrT> capacity);
+
+  // MT stands for "minus tag".
+  TNode<IntPtrT> SwissNameDictionaryOffsetIntoDataTableMT(
+      TNode<SwissNameDictionary> dict, TNode<IntPtrT> index, int field_index);
+
+  // MT stands for "minus tag".
+  TNode<IntPtrT> SwissNameDictionaryOffsetIntoPropertyDetailsTableMT(
+      TNode<SwissNameDictionary> dict, TNode<IntPtrT> capacity,
+      TNode<IntPtrT> index);
+
   TNode<IntPtrT> LoadSwissNameDictionaryNumberOfElements(
       TNode<SwissNameDictionary> table, TNode<IntPtrT> capacity);
 
@@ -3740,11 +3761,40 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Uint32T> SwissNameDictionaryUpdateCountsForDeletion(
       TNode<ByteArray> meta_table, TNode<IntPtrT> capacity);
 
+  void StoreSwissNameDictionaryCapacity(TNode<SwissNameDictionary> table,
+                                        TNode<Int32T> capacity);
+
   void StoreSwissNameDictionaryEnumToEntryMapping(
       TNode<SwissNameDictionary> table, TNode<IntPtrT> capacity,
       TNode<IntPtrT> enum_index, TNode<Int32T> entry);
 
+  TNode<Name> LoadSwissNameDictionaryKey(TNode<SwissNameDictionary> dict,
+                                         TNode<IntPtrT> index);
+
+  void StoreSwissNameDictionaryKeyAndValue(TNode<SwissNameDictionary> dict,
+                                           TNode<IntPtrT> index,
+                                           TNode<Object> key,
+                                           TNode<Object> value);
+
+  // Equivalent to SwissNameDictionary::SetCtrl, therefore preserves the copy of
+  // the first group at the end of the control table.
+  void SwissNameDictionarySetCtrl(TNode<SwissNameDictionary> table,
+                                  TNode<IntPtrT> capacity, TNode<IntPtrT> entry,
+                                  TNode<Uint8T> ctrl);
+
   TNode<Uint64T> LoadSwissNameDictionaryCtrlTableGroup(TNode<IntPtrT> address);
+
+  TNode<Uint8T> LoadSwissNameDictionaryPropertyDetails(
+      TNode<SwissNameDictionary> table, TNode<IntPtrT> capacity,
+      TNode<IntPtrT> entry);
+
+  void StoreSwissNameDictionaryPropertyDetails(TNode<SwissNameDictionary> table,
+                                               TNode<IntPtrT> capacity,
+                                               TNode<IntPtrT> entry,
+                                               TNode<Uint8T> details);
+
+  TNode<SwissNameDictionary> CopySwissNameDictionary(
+      TNode<SwissNameDictionary> original);
 
  private:
   friend class CodeStubArguments;

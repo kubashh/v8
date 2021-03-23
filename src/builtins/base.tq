@@ -113,6 +113,9 @@ type bool generates 'TNode<BoolT>' constexpr 'bool';
 type bint generates 'TNode<BInt>' constexpr 'BInt';
 type string constexpr 'const char*';
 
+type Simd128 generates 'TNode<Simd128T>';
+type I8X16 extends Simd128 generates 'TNode<I8x16T>';
+
 // Represents a std::function which produces the generated TNode type of T.
 // Useful for passing values to and from CSA code that uses LazyNode<T>, which
 // is a typedef for std::function<TNode<T>()>. Can be created with %MakeLazy and
@@ -457,11 +460,12 @@ const kNameDictionaryInitialCapacity:
     constexpr int32 generates 'NameDictionary::kInitialCapacity';
 const kSwissNameDictionaryInitialCapacity:
     constexpr int32 generates 'SwissNameDictionary::kInitialCapacity';
-const kSwissNameDictionaryGroupWidth:
-    constexpr int32 generates 'SwissNameDictionary::kGroupWidth';
 
 const kWasmArrayHeaderSize:
     constexpr int32 generates 'WasmArray::kHeaderSize';
+
+const kHeapObjectHeaderSize:
+    constexpr int32 generates 'HeapObject::kHeaderSize';
 
 const kDictModePrototypes:
     constexpr bool generates 'V8_DICT_MODE_PROTOTYPES_BOOL';
@@ -963,6 +967,7 @@ extern operator '==' macro Word64Equal(uint64, uint64): bool;
 extern operator '!=' macro Word64NotEqual(int64, int64): bool;
 extern operator '!=' macro Word64NotEqual(uint64, uint64): bool;
 extern operator '>>>' macro Word64Shr(uint64, uint64): uint64;
+extern operator '>>>' macro Word64Shr(int64, int64): int64;
 extern operator '>>' macro Word64Sar(int64, int64): int64;
 extern operator '<<' macro Word64Shl(int64, int64): int64;
 extern operator '<<' macro Word64Shl(uint64, uint64): uint64;
@@ -1018,6 +1023,8 @@ ConstexprInt31Equal(
     constexpr InstanceType, constexpr InstanceType): constexpr bool;
 extern operator '-' macro ConstexprUint32Sub(
     constexpr InstanceType, constexpr InstanceType): constexpr int32;
+extern operator '-' macro ConstexprInt32Sub(
+    constexpr int32, constexpr int32): constexpr int32;
 
 extern operator '.instanceType' macro LoadInstanceType(HeapObject):
     InstanceType;
@@ -1047,6 +1054,7 @@ operator '==' macro PromiseStateEquals(
 }
 
 extern macro CountLeadingZeros64(uint64): int64;
+extern macro CountTrailingZeros32(uint32): int32;
 extern macro CountTrailingZeros64(uint64): int64;
 
 extern macro TaggedIsSmi(Object): bool;
@@ -1094,6 +1102,7 @@ extern macro IntPtrToTaggedIndex(intptr): TaggedIndex;
 extern macro TaggedIndexToSmi(TaggedIndex): Smi;
 extern macro SmiToTaggedIndex(Smi): TaggedIndex;
 extern macro RoundIntPtrToFloat64(intptr): float64;
+extern macro IntPtrRoundUpToPowerOfTwo32(intptr): intptr;
 extern macro ChangeFloat32ToFloat64(float32): float64;
 extern macro ChangeNumberToFloat64(Number): float64;
 extern macro ChangeNumberToUint32(Number): uint32;
@@ -1837,3 +1846,20 @@ extern macro FeedbackIteratorEntrySize(): intptr;
 extern macro FeedbackIteratorHandlerOffset(): intptr;
 extern operator '[]' macro LoadWeakFixedArrayElement(
     WeakFixedArray, intptr): MaybeObject;
+
+const kNoHashSentinel:
+    constexpr int32 generates 'PropertyArray::kNoHashSentinel';
+extern macro LoadNameHash(Name): uint32;
+
+// V(S128Load, Simd128T, WordT)                                 \
+
+extern macro LoadSimd128(intptr): Simd128;
+extern macro I8x16BitMask(I8X16): int32;
+extern macro I8x16Eq(I8X16, I8X16): I8X16;
+extern macro I8x16Splat(int32): I8X16;
+
+// V(I8x16Splat, I8x16T, Int32T)                                \
+
+// V(I8x16Eq, I8x16T, I8x16T, I8x16T)                                    \
+// V(I8x16BitMask, Int32T, I8x16T)                              \
+// extern macro

@@ -435,24 +435,16 @@ class DeletePropertyBaseAssembler : public AccessorAssembler {
   explicit DeletePropertyBaseAssembler(compiler::CodeAssemblerState* state)
       : AccessorAssembler(state) {}
 
-  void DeleteDictionaryProperty(TNode<Object> receiver,
+  void DictionarySpecificDelete(TNode<JSReceiver> receiver,
                                 TNode<NameDictionary> properties,
-                                TNode<Name> name, TNode<Context> context,
-                                Label* dont_delete, Label* notfound) {
-    TVARIABLE(IntPtrT, var_name_index);
-    Label dictionary_found(this, &var_name_index);
-    NameDictionaryLookup<NameDictionary>(properties, name, &dictionary_found,
-                                         &var_name_index, notfound);
-
-    BIND(&dictionary_found);
-    TNode<IntPtrT> key_index = var_name_index.value();
-    TNode<Uint32T> details = LoadDetailsByKeyIndex(properties, key_index);
-    GotoIf(IsSetWord32(details, PropertyDetails::kAttributesDontDeleteMask),
-           dont_delete);
+                                TNode<IntPtrT> key_index,
+                                TNode<Context> context) {
     // Overwrite the entry itself (see NameDictionary::SetEntry).
     TNode<Oddball> filler = TheHoleConstant();
     DCHECK(RootsTable::IsImmortalImmovable(RootIndex::kTheHoleValue));
+
     StoreFixedArrayElement(properties, key_index, filler, SKIP_WRITE_BARRIER);
+
     StoreValueByKeyIndex<NameDictionary>(properties, key_index, filler,
                                          SKIP_WRITE_BARRIER);
     StoreDetailsByKeyIndex<NameDictionary>(properties, key_index,
@@ -472,9 +464,49 @@ class DeletePropertyBaseAssembler : public AccessorAssembler {
     TNode<Smi> capacity = GetCapacity<NameDictionary>(properties);
     GotoIf(SmiGreaterThan(new_nof, SmiShr(capacity, 2)), &shrinking_done);
     GotoIf(SmiLessThan(new_nof, SmiConstant(16)), &shrinking_done);
-    CallRuntime(Runtime::kShrinkPropertyDictionary, context, receiver);
+
+    TNode<NameDictionary> new_properties =
+        CAST(CallRuntime(Runtime::kShrinkNameDictionary, context, properties));
+
+    StoreJSReceiverPropertiesOrHash(receiver, new_properties);
+
     Goto(&shrinking_done);
     BIND(&shrinking_done);
+  }
+
+  void DictionarySpecificDelete(TNode<JSReceiver> receiver,
+                                TNode<SwissNameDictionary> properties,
+                                TNode<IntPtrT> key_index,
+                                TNode<Context> context) {
+    Label shrunk(this), done(this);
+    TVARIABLE(SwissNameDictionary, shrunk_table);
+
+    SwissNameDictionaryDelete(properties, key_index, &shrunk, &shrunk_table);
+    Goto(&done);
+    BIND(&shrunk);
+    StoreJSReceiverPropertiesOrHash(receiver, shrunk_table.value());
+    Goto(&done);
+
+    BIND(&done);
+  }
+
+  template <typename Dictionary>
+  void DeleteDictionaryProperty(TNode<JSReceiver> receiver,
+                                TNode<Dictionary> properties, TNode<Name> name,
+                                TNode<Context> context, Label* dont_delete,
+                                Label* notfound) {
+    TVARIABLE(IntPtrT, var_name_index);
+    Label dictionary_found(this, &var_name_index);
+    NameDictionaryLookup<Dictionary>(properties, name, &dictionary_found,
+                                     &var_name_index, notfound);
+
+    BIND(&dictionary_found);
+    TNode<IntPtrT> key_index = var_name_index.value();
+    TNode<Uint32T> details = LoadDetailsByKeyIndex(properties, key_index);
+    GotoIf(IsSetWord32(details, PropertyDetails::kAttributesDontDeleteMask),
+           dont_delete);
+
+    DictionarySpecificDelete(receiver, properties, key_index, context);
 
     Return(TrueConstant());
   }
@@ -490,11 +522,6 @@ TF_BUILTIN(DeleteProperty, DeletePropertyBaseAssembler) {
   TVARIABLE(Name, var_unique);
   Label if_index(this, &var_index), if_unique_name(this), if_notunique(this),
       if_notfound(this), slow(this), if_proxy(this);
-
-  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
-    // TODO(v8:11167) remove once SwissNameDictionary supported.
-    GotoIf(Int32TrueConstant(), &slow);
-  }
 
   GotoIf(TaggedIsSmi(receiver), &slow);
   TNode<Map> receiver_map = LoadMap(CAST(receiver));
@@ -526,9 +553,9 @@ TF_BUILTIN(DeleteProperty, DeletePropertyBaseAssembler) {
     {
       InvalidateValidityCellIfPrototype(receiver_map);
 
-      TNode<NameDictionary> properties =
+      TNode<PropertyDictionary> properties =
           CAST(LoadSlowProperties(CAST(receiver)));
-      DeleteDictionaryProperty(receiver, properties, var_unique.value(),
+      DeleteDictionaryProperty(CAST(receiver), properties, var_unique.value(),
                                context, &dont_delete, &if_notfound);
     }
 
@@ -961,11 +988,6 @@ TF_BUILTIN(GetProperty, CodeStubAssembler) {
   Label if_notfound(this), if_proxy(this, Label::kDeferred),
       if_slow(this, Label::kDeferred);
 
-  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
-    // TODO(v8:11167) remove once SwissNameDictionary supported.
-    GotoIf(Int32TrueConstant(), &if_slow);
-  }
-
   CodeStubAssembler::LookupPropertyInHolder lookup_property_in_holder =
       [=](TNode<HeapObject> receiver, TNode<HeapObject> holder,
           TNode<Map> holder_map, TNode<Int32T> holder_instance_type,
@@ -1020,11 +1042,6 @@ TF_BUILTIN(GetPropertyWithReceiver, CodeStubAssembler) {
   auto on_non_existent = Parameter<Object>(Descriptor::kOnNonExistent);
   Label if_notfound(this), if_proxy(this, Label::kDeferred),
       if_slow(this, Label::kDeferred);
-
-  if (V8_DICT_MODE_PROTOTYPES_BOOL) {
-    // TODO(v8:11167) remove once SwissNameDictionary supported.
-    GotoIf(Int32TrueConstant(), &if_slow);
-  }
 
   CodeStubAssembler::LookupPropertyInHolder lookup_property_in_holder =
       [=](TNode<HeapObject> receiver, TNode<HeapObject> holder,
