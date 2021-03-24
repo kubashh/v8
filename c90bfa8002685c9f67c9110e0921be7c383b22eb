@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "224dfa44_ea63b1e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-24T14:11:47Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "c90bfa8002685c9f67c9110e0921be7c383b22eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de7de33b_7dd07249",
+        "filename": "tools/bash-completion.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-24T14:11:47Z",
+      "side": 1,
+      "message": "nit: you can combine this with the previous line:\n\n  local targets\u003d$(_get_gm_flags)",
+      "range": {
+        "startLine": 133,
+        "startChar": 2,
+        "endLine": 133,
+        "endChar": 9
+      },
+      "revId": "c90bfa8002685c9f67c9110e0921be7c383b22eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

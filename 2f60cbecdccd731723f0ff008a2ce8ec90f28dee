@@ -345,6 +345,30 @@
       },
       "revId": "2f60cbecdccd731723f0ff008a2ce8ec90f28dee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00a80f23_aeb0a960",
+        "filename": "tools/bash-completion.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-03-24T14:11:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "86727d40_e7e3c966",
+      "range": {
+        "startLine": 154,
+        "startChar": 37,
+        "endLine": 154,
+        "endChar": 67
+      },
+      "revId": "2f60cbecdccd731723f0ff008a2ce8ec90f28dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
