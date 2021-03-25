@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49c2d70_d4ac3c45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-25T15:21:09Z",
+      "side": 1,
+      "message": "Hi Andrew,\n\nDo you have a link to the original CL? I don\u0027t remember reviewing it, sorry if my questions were already discussed there.\n\n\n\n",
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eaeeaaf_22819650",
+        "filename": "src/api/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9372,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-25T15:21:09Z",
+      "side": 1,
+      "message": "Should we make this weak? Otherwise it seems that we won\u0027t be able to GC a context that has an active profiler. (There is a cycle: context keeps the profiler alive and the profiler keeps a strong handle to the context).\n\nAlso see my comment about context ID below.",
+      "range": {
+        "startLine": 9372,
+        "startChar": 4,
+        "endLine": 9372,
+        "endChar": 19
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bde391ed_d77ff1d8",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-25T15:21:09Z",
+      "side": 1,
+      "message": "The check doesn\u0027t seem to match the comment. What if the non-JS frame by accident has a tagged value here? Would we try to access it as a pointer?",
+      "range": {
+        "startLine": 163,
+        "startChar": 6,
+        "endLine": 163,
+        "endChar": 50
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef8f3e70_fb8843bd",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-25T15:21:09Z",
+      "side": 1,
+      "message": "Is this dereference safe?\n\nI see a comment below \"Since the sampler can interrupt execution at any point the bytecode_array might be garbage, so don\u0027t actually dereference it.\" Doesn\u0027t the same reasoning apply here?\n\nI wonder if we could make use of the fact that cross-origin functions cannot synchronously script with each other. In theory Blink callbacks could switch to another context, but AFAIK that doesn\u0027t happen currently. Maybe we could add a CHECK there?\n\nWith that assumption all JSFunctions activated on the stack should have the same native context. We could get the native context from isolate-\u003econtext(). IIRC it is cleared when entering C++ from JS. So if it is null, we could get the native context from the bottom-most JS function frame.",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 63
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71acf347_2a063b23",
+        "filename": "src/profiler/tick-sample.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-03-25T15:21:09Z",
+      "side": 1,
+      "message": "IIUC these raw pointers are sent to the profiler thread and processed there.\n\nIn the meantime the contexts may be GCed and may move. How do we ensure that the raw pointers are properly updated? (I see the move event handling for ContextFilter, but don\u0027t see one for entries in contexts[]).\n\nInstead of dealing with raw pointers, I wonder if we could reuse the context IDs  from https://source.chromium.org/chromium/chromium/src/+/master:v8/include/v8-metrics.h;l\u003d130;drc\u003d2ff3bbbc70d61bcace3f3b15e082d065ac1f45c2\n\nThey were added for metrics recording. They are guaranteed to be unique and stable.",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 16
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
