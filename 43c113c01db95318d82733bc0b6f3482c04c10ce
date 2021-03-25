@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c88797da_b73ff1ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-25T05:59:36Z",
+      "side": 1,
+      "message": "Hi Ulan and Yang, PTAL. This reverts the (itself a revert) change at https://chromium-review.googlesource.com/c/v8/v8/+/2386144, which we determined was still needed with COOP/COEP (see email thread). There are a few modifications to account for refactors, but otherwise is exclusively a revert.\n\nPlease let me know if you have any questions or suggestions -- and thank you!",
+      "revId": "43c113c01db95318d82733bc0b6f3482c04c10ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
