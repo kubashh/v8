@@ -157,6 +157,20 @@ void CodeStubAssembler::IncrementCallCount(
                           SKIP_WRITE_BARRIER, kTaggedSize);
 }
 
+void CodeStubAssembler::SetCallFeedbackContent(
+    TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot_id,
+    CallFeedbackContent call_feedback_content) {
+  Comment("Update CallFeedback Content");
+  TNode<Int32T> call_count = ReinterpretCast<Int32T>(
+      LoadFeedbackVectorSlot(feedback_vector, slot_id, kTaggedSize));
+  TNode<Int32T> new_count = Word32Or(
+      call_count, Int32Constant(static_cast<uint32_t>(call_feedback_content)
+                                << FeedbackNexus::CallCountField::kShift));
+  StoreFeedbackVectorSlot(feedback_vector, slot_id,
+                          ReinterpretCast<Smi>(new_count),
+                          UNSAFE_SKIP_WRITE_BARRIER, kTaggedSize);
+}
+
 void CodeStubAssembler::FastCheck(TNode<BoolT> condition) {
   Label ok(this), not_ok(this, Label::kDeferred);
   Branch(condition, &ok, &not_ok);
@@ -10120,6 +10134,29 @@ CodeStubAssembler::LoadFeedbackVectorForStubWithTrampoline() {
       LoadFullTagged(parent_frame_pointer,
                      IntPtrConstant(StandardFrameConstants::kFunctionOffset)));
   return CAST(LoadFeedbackVector(function));
+}
+
+TNode<BoolT> CodeStubAssembler::ShouldCollectReceiver(TNode<Object> target) {
+  TVARIABLE(BoolT, result_val, Int32FalseConstant());
+
+  Label out(this);
+
+  GotoIf(TaggedIsSmi(target), &out);
+
+  GotoIfNot(IsJSFunction(CAST(target)), &out);
+  {
+    TNode<Code> code =
+        LoadObjectField<Code>(CAST(target), JSFunction::kCodeOffset);
+    TNode<Int32T> builtin_index =
+        LoadObjectField<Int32T>(code, Code::kBuiltinIndexOffset);
+
+    result_val = Word32Equal(builtin_index,
+                             Int32Constant(Builtins::kFunctionPrototypeApply));
+    Goto(&out);
+  }
+
+  BIND(&out);
+  return result_val.value();
 }
 
 void CodeStubAssembler::UpdateFeedback(TNode<Smi> feedback,

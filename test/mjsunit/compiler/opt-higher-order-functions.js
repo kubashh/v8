@@ -28,6 +28,21 @@ assertOptimized(TestFunctionPrototypeApply);
 TestFunctionPrototypeApply("abc");
 assertUnoptimized(TestFunctionPrototypeApply);
 
+// Testing: FunctionPrototypeApply with non-HeapConstant Receiver
+var MathMin = (function() { return Math.min.apply(null, arguments); })
+function TestFunctionPrototypeApplyReceiver(func, x, y) {
+  return func(x, y);
+}
+
+%PrepareFunctionForOptimization(MathMin);
+%PrepareFunctionForOptimization(TestFunctionPrototypeApplyReceiver);
+assertEquals(TestFunctionPrototypeApplyReceiver(MathMin, -13, 42), -13);
+assertEquals(TestFunctionPrototypeApplyReceiver(MathMin, 3, -4), -4);
+%OptimizeFunctionOnNextCall(TestFunctionPrototypeApplyReceiver);
+assertEquals(TestFunctionPrototypeApplyReceiver(MathMin, 7, 9), 7);
+assertOptimized(TestFunctionPrototypeApplyReceiver);
+TestFunctionPrototypeApplyReceiver(MathMin, "abc");
+assertUnoptimized(TestFunctionPrototypeApplyReceiver);
 
 // Testing: FunctionPrototypeCall
 function TestFunctionPrototypeCall(x) {

@@ -1978,6 +1978,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void IncrementCallCount(TNode<FeedbackVector> feedback_vector,
                           TNode<UintPtrT> slot_id);
 
+  void SetCallFeedbackContent(TNode<FeedbackVector> feedback_vector,
+                              TNode<UintPtrT> slot_id,
+                              CallFeedbackContent call_feedback_content);
+
   // Specify DestroySource::kYes if {from_array} is being supplanted by
   // {to_array}. This offers a slight performance benefit by simply copying the
   // array word by word. The source may be destroyed at the end of this macro.
@@ -3197,6 +3201,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // or available from the feedback vector's header.
   TNode<ClosureFeedbackCellArray> LoadClosureFeedbackArray(
       TNode<JSFunction> closure);
+
+  TNode<BoolT> ShouldCollectReceiver(TNode<Object> target);
 
   // Update the type feedback vector.
   bool UpdateFeedbackModeEqual(UpdateFeedbackMode a, UpdateFeedbackMode b) {

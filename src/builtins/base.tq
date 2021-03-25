@@ -262,6 +262,8 @@ extern enum UpdateFeedbackMode { kOptionalFeedback, kGuaranteedFeedback }
 extern operator '==' macro UpdateFeedbackModeEqual(
     constexpr UpdateFeedbackMode, constexpr UpdateFeedbackMode): constexpr bool;
 
+extern enum CallFeedbackContent { kTarget, kReceiver }
+
 extern enum UnicodeEncoding { UTF16, UTF32 }
 
 // Promise constants
