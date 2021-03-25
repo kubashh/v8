@@ -485,7 +485,8 @@ class ContextRef : public HeapObjectRef {
   V(Map, js_array_packed_double_elements_map)      \
   V(Map, js_array_packed_elements_map)             \
   V(Map, js_array_packed_smi_elements_map)         \
-  V(ScriptContextTable, script_context_table)
+  V(ScriptContextTable, script_context_table)      \
+  V(JSFunction, function_prototype_apply)
 
 #define BROKER_OPTIONAL_NATIVE_CONTEXT_FIELDS(V) \
   V(JSFunction, regexp_exec_function)

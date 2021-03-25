@@ -2447,6 +2447,10 @@ Reduction JSCallReducer::ReduceObjectConstructor(Node* node) {
 Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
   JSCallNode n(node);
   CallParameters const& p = n.Parameters();
+  CallFeedbackRelation feedback_relation =
+      p.feedback_content() == CallFeedbackContent::kReceiver
+          ? CallFeedbackRelation::kRelated
+          : CallFeedbackRelation::kUnrelated;
   int arity = p.arity_without_implicit_args();
   ConvertReceiverMode convert_mode = ConvertReceiverMode::kAny;
   if (arity == 0) {
@@ -2481,7 +2485,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
       NodeProperties::ChangeOp(
           node, javascript()->CallWithArrayLike(
                     p.frequency(), p.feedback(), p.speculation_mode(),
-                    CallFeedbackRelation::kUnrelated));
+                    feedback_relation, CallFeedbackContent::kTarget));
       return Changed(node).FollowedBy(ReduceJSCallWithArrayLike(node));
     } else {
       // Check whether {arguments_list} is null.
@@ -2507,9 +2511,9 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
       Node* effect0 = effect;
       Node* control0 = control;
       Node* value0 = effect0 = control0 = graph()->NewNode(
-          javascript()->CallWithArrayLike(p.frequency(), p.feedback(),
-                                          p.speculation_mode(),
-                                          CallFeedbackRelation::kUnrelated),
+          javascript()->CallWithArrayLike(
+              p.frequency(), p.feedback(), p.speculation_mode(),
+              feedback_relation, CallFeedbackContent::kTarget),
           target, this_argument, arguments_list, n.feedback_vector(), context,
           frame_state, effect0, control0);
 
@@ -2557,9 +2561,10 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
   }
   // Change {node} to the new {JSCall} operator.
   NodeProperties::ChangeOp(
-      node, javascript()->Call(JSCallNode::ArityForArgc(arity), p.frequency(),
-                               p.feedback(), convert_mode, p.speculation_mode(),
-                               CallFeedbackRelation::kUnrelated));
+      node,
+      javascript()->Call(JSCallNode::ArityForArgc(arity), p.frequency(),
+                         p.feedback(), convert_mode, p.speculation_mode(),
+                         feedback_relation, CallFeedbackContent::kTarget));
   // Try to further reduce the JSCall {node}.
   return Changed(node).FollowedBy(ReduceJSCall(node));
 }
@@ -3447,7 +3452,6 @@ bool CanInlineJSToWasmCall(const wasm::FunctionSig* wasm_signature) {
       return false;
     }
   }
-
   return true;
 }
 }  // namespace
@@ -3971,10 +3975,9 @@ Reduction JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpread(
 
   if (IsCallWithArrayLikeOrSpread(node)) {
     NodeProperties::ChangeOp(
-        node,
-        javascript()->Call(JSCallNode::ArityForArgc(argc), frequency, feedback,
-                           ConvertReceiverMode::kAny, speculation_mode,
-                           CallFeedbackRelation::kUnrelated));
+        node, javascript()->Call(JSCallNode::ArityForArgc(argc), frequency,
+                                 feedback, ConvertReceiverMode::kAny,
+                                 speculation_mode, feedback_relation));
     return Changed(node).FollowedBy(ReduceJSCall(node));
   } else {
     NodeProperties::ChangeOp(
@@ -4213,7 +4216,14 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
         node, DeoptimizeReason::kInsufficientTypeFeedbackForCall);
   }
 
-  base::Optional<HeapObjectRef> feedback_target = feedback.AsCall().target();
+  base::Optional<HeapObjectRef> feedback_target;
+  if (p.feedback_content() == CallFeedbackContent::kTarget) {
+    feedback_target = feedback.AsCall().target();
+  } else {
+    DCHECK_EQ(p.feedback_content(), CallFeedbackContent::kReceiver);
+    feedback_target = native_context().function_prototype_apply();
+  }
+
   if (feedback_target.has_value() && feedback_target->map().is_callable()) {
     Node* target_function = jsgraph()->Constant(*feedback_target);
 

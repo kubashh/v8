@@ -8,10 +8,10 @@ namespace ic {
 
 @export
 macro CollectCallFeedback(
-    maybeTarget: JSAny, context: Context,
+    maybeTarget: JSAny, maybeReceiver: JSAny, context: Context,
     maybeFeedbackVector: Undefined|FeedbackVector, slotId: uintptr): void {
   callable::CollectCallFeedback(
-      maybeTarget, context, maybeFeedbackVector, slotId);
+      maybeTarget, maybeReceiver, context, maybeFeedbackVector, slotId);
 }
 
 @export
