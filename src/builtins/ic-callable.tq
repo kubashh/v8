@@ -6,6 +6,10 @@ namespace ic {
 namespace callable {
 
 extern macro IncrementCallCount(FeedbackVector, uintptr): void;
+const kCallFeedbackContentFieldMask: constexpr int32
+    generates 'FeedbackNexus::CallFeedbackContentField::kMask';
+const kCallFeedbackContentFieldShift: constexpr uint32
+    generates 'FeedbackNexus::CallFeedbackContentField::kShift';
 
 macro IsMonomorphic(feedback: MaybeObject, target: JSAny): bool {
   return IsWeakReferenceToObject(feedback, target);
@@ -50,8 +54,36 @@ macro TransitionToMegamorphic(implicit context: Context)(
   ReportFeedbackUpdate(feedbackVector, slotId, 'Call:TransitionMegamorphic');
 }
 
+macro TaggedEqualPrototypeApplyFunction(implicit context: Context)(
+    target: JSAny): bool {
+  return TaggedEqual(target, GetPrototypeApplyFunction());
+}
+
+macro FeedbackValueIsReceiver(implicit context: Context)(
+    feedbackVector: FeedbackVector, slotId: uintptr): bool {
+  const callCount: intptr = SmiUntag(Cast<Smi>(LoadFeedbackVectorSlot(
+      feedbackVector, slotId, kTaggedSize)) otherwise return false);
+  return (callCount & IntPtrConstant(kCallFeedbackContentFieldMask)) !=
+      IntPtrConstant(0);
+}
+
+macro SetCallFeedbackContent(implicit context: Context)(
+    feedbackVector: FeedbackVector, slotId: uintptr,
+    callFeedbackContent: constexpr CallFeedbackContent): void {
+  const callCount: intptr = SmiUntag(Cast<Smi>(LoadFeedbackVectorSlot(
+      feedbackVector, slotId, kTaggedSize)) otherwise return );
+  const newCount: intptr =
+      (callCount & (~IntPtrConstant(kCallFeedbackContentFieldMask))) |
+      Convert<intptr>(Signed(
+          %RawConstexprCast<constexpr uint32>(callFeedbackContent)
+          << kCallFeedbackContentFieldShift));
+  StoreFeedbackVectorSlot(
+      feedbackVector, slotId, SmiTag(newCount), SKIP_WRITE_BARRIER,
+      kTaggedSize);
+}
+
 macro CollectCallFeedback(
-    maybeTarget: JSAny, context: Context,
+    maybeTarget: JSAny, maybeReceiver: JSAny, context: Context,
     maybeFeedbackVector: Undefined|FeedbackVector, slotId: uintptr): void {
   // TODO(v8:9891): Remove this assert once all callers are ported to Torque.
   // This assert ensures correctness of maybeFeedbackVector's type which can
@@ -63,12 +95,29 @@ macro CollectCallFeedback(
       Cast<FeedbackVector>(maybeFeedbackVector) otherwise return;
   IncrementCallCount(feedbackVector, slotId);
 
+  // If the Receiver is recorded and the target is Function.prototype.apply,
+  // try if the receiver is monomorphic. If not, reinitialize the feedback
+  // with target.
   try {
     const feedback: MaybeObject =
         LoadFeedbackVectorSlot(feedbackVector, slotId);
     if (IsMonomorphic(feedback, maybeTarget)) return;
     if (IsMegamorphic(feedback)) return;
     if (IsUninitialized(feedback)) goto TryInitializeAsMonomorphic;
+
+    if (FeedbackValueIsReceiver(feedbackVector, slotId)) {
+      if (TaggedEqualPrototypeApplyFunction(maybeTarget) &&
+          IsMonomorphic(feedback, maybeReceiver))
+        return;
+      if (TaggedEqualPrototypeApplyFunction(maybeTarget)) {
+        SetCallFeedbackContent(
+            feedbackVector, slotId, CallFeedbackContent::kTarget);
+        TryInitializeAsMonomorphic(maybeTarget, feedbackVector, slotId)
+            otherwise TransitionToMegamorphic;
+        return;
+      }
+      goto TransitionToMegamorphic;
+    }
 
     // If cleared, we have a new chance to become monomorphic.
     const feedbackValue: HeapObject =
@@ -93,7 +142,13 @@ macro CollectCallFeedback(
     StoreWeakReferenceInFeedbackVector(feedbackVector, slotId, feedbackCell);
     ReportFeedbackUpdate(feedbackVector, slotId, 'Call:FeedbackVectorCell');
   } label TryInitializeAsMonomorphic {
-    TryInitializeAsMonomorphic(maybeTarget, feedbackVector, slotId)
+    let recordedFunction = maybeTarget;
+    if (TaggedEqualPrototypeApplyFunction(maybeTarget)) {
+      recordedFunction = maybeReceiver;
+      SetCallFeedbackContent(
+          feedbackVector, slotId, CallFeedbackContent::kReceiver);
+    }
+    TryInitializeAsMonomorphic(recordedFunction, feedbackVector, slotId)
         otherwise TransitionToMegamorphic;
   } label TransitionToMegamorphic {
     TransitionToMegamorphic(feedbackVector, slotId);

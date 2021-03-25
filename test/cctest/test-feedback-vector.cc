@@ -184,6 +184,45 @@ TEST(VectorCallICStates) {
   CHECK_EQ(GENERIC, nexus.ic_state());
 }
 
+// Test the Call IC states transfer with Function.prototype.apply
+TEST(VectorCallICStateApply) {
+  if (!i::FLAG_use_ic) return;
+  if (i::FLAG_always_opt) return;
+  FLAG_allow_natives_syntax = true;
+
+  CcTest::InitializeVM();
+  LocalContext context;
+  v8::HandleScope scope(context->GetIsolate());
+  Isolate* isolate = CcTest::i_isolate();
+  // Make sure function f has a call that uses a type feedback slot.
+  CompileRun(
+      "var F;"
+      "%EnsureFeedbackVectorForFunction(foo);"
+      "function foo() { return F.apply(null, arguments); }"
+
+      "function f(a) { a(); }"
+      "F = Math.min;"
+      "f(foo);");
+  Handle<JSFunction> foo = GetFunction("foo");
+  Handle<FeedbackVector> feedback_vector =
+      Handle<FeedbackVector>(foo->feedback_vector(), isolate);
+  FeedbackSlot slot(4);
+  FeedbackNexus nexus(feedback_vector, slot);
+  CHECK_EQ(MONOMORPHIC, nexus.ic_state());
+  CHECK_EQ(CallFeedbackContent::kReceiver, nexus.GetCallFeedbackContent());
+
+  CompileRun(
+      "F = Math.max;"
+      "f(foo);");
+  CHECK_EQ(MONOMORPHIC, nexus.ic_state());
+  CHECK_EQ(CallFeedbackContent::kTarget, nexus.GetCallFeedbackContent());
+
+  CompileRun(
+      "F.apply = (function () { return; });"
+      "f(foo);");
+  CHECK_EQ(GENERIC, nexus.ic_state());
+}
+
 TEST(VectorCallFeedback) {
   if (!i::FLAG_use_ic) return;
   if (i::FLAG_always_opt) return;
