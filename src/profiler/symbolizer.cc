@@ -66,9 +66,11 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
       // Don't use PC when in external callback code, as it can point
       // inside a callback's code, and we will erroneously report
       // that a callback calls itself.
-      stack_trace.push_back(
-          {FindEntry(reinterpret_cast<Address>(sample.external_callback_entry)),
-           no_line_info});
+      stack_trace.push_back({{FindEntry(reinterpret_cast<Address>(
+                                  sample.external_callback_entry)),
+                              no_line_info},
+                             reinterpret_cast<Address>(sample.top_context),
+                             true});
     } else {
       Address attributed_pc = reinterpret_cast<Address>(sample.pc);
       Address pc_entry_instruction_start = kNullAddress;
@@ -94,7 +96,9 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
           src_line = pc_entry->line_number();
         }
         src_line_not_found = false;
-        stack_trace.push_back({pc_entry, src_line});
+        stack_trace.push_back({{pc_entry, src_line},
+                               reinterpret_cast<Address>(sample.top_context),
+                               true});
 
         if (pc_entry->builtin_id() == Builtins::kFunctionPrototypeApply ||
             pc_entry->builtin_id() == Builtins::kFunctionPrototypeCall) {
@@ -108,7 +112,9 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
             ProfilerStats::Instance()->AddReason(
                 ProfilerStats::Reason::kInCallOrApply);
             stack_trace.push_back(
-                {CodeEntry::unresolved_entry(), no_line_info});
+                {{CodeEntry::unresolved_entry(), no_line_info},
+                 kNullAddress,
+                 true});
           }
         }
       }
@@ -116,6 +122,7 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
 
     for (unsigned i = 0; i < sample.frames_count; ++i) {
       Address stack_pos = reinterpret_cast<Address>(sample.stack[i]);
+      Address native_context = reinterpret_cast<Address>(sample.contexts[i]);
       Address instruction_start = kNullAddress;
       CodeEntry* entry = FindEntry(stack_pos, &instruction_start);
       int line_number = no_line_info;
@@ -128,7 +135,10 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
         if (inline_stack) {
           int most_inlined_frame_line_number = entry->GetSourceLine(pc_offset);
           for (auto entry : *inline_stack) {
-            stack_trace.push_back(entry);
+            // Set the native context of inlined frames to be equal to that of
+            // their parent. This is safe, as functions cannot inline themselves
+            // into a parent from another native context.
+            stack_trace.push_back({entry, native_context, true});
           }
 
           // This is a bit of a messy hack. The line number for the most-inlined
@@ -140,7 +150,7 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
           // inlining_id.
           DCHECK(!inline_stack->empty());
           size_t index = stack_trace.size() - inline_stack->size();
-          stack_trace[index].line_number = most_inlined_frame_line_number;
+          stack_trace[index].entry.line_number = most_inlined_frame_line_number;
         }
         // Skip unresolved frames (e.g. internal frame) and get source line of
         // the first JS caller.
@@ -159,14 +169,14 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
         // so we use it instead of pushing entry to stack_trace.
         if (inline_stack) continue;
       }
-      stack_trace.push_back({entry, line_number});
+      stack_trace.push_back({{entry, line_number}, native_context, true});
     }
   }
 
   if (FLAG_prof_browser_mode) {
     bool no_symbolized_entries = true;
     for (auto e : stack_trace) {
-      if (e.code_entry != nullptr) {
+      if (e.entry.code_entry != nullptr) {
         no_symbolized_entries = false;
         break;
       }
@@ -179,7 +189,8 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
         ProfilerStats::Instance()->AddReason(
             ProfilerStats::Reason::kNoSymbolizedFrames);
       }
-      stack_trace.push_back({EntryForVMState(sample.state), no_line_info});
+      stack_trace.push_back(
+          {{EntryForVMState(sample.state), no_line_info}, kNullAddress, false});
     }
   }
 
