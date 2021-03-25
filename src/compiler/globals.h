@@ -53,13 +53,15 @@ inline size_t hash_value(StackCheckKind kind) {
 // JSCall is related to the call. If, during lowering, a JSCall (e.g. of a
 // higher order function) is replaced by a JSCall with another target, the
 // feedback has to be kept but is now unrelated.
-enum class CallFeedbackRelation { kRelated, kUnrelated };
+enum class CallFeedbackRelation { kReceiver, kTarget, kUnrelated };
 
 inline std::ostream& operator<<(std::ostream& os,
                                 CallFeedbackRelation call_feedback_relation) {
   switch (call_feedback_relation) {
-    case CallFeedbackRelation::kRelated:
-      return os << "CallFeedbackRelation::kRelated";
+    case CallFeedbackRelation::kReceiver:
+      return os << "CallFeedbackRelation::kReceiver";
+    case CallFeedbackRelation::kTarget:
+      return os << "CallFeedbackRelation::kTarget";
     case CallFeedbackRelation::kUnrelated:
       return os << "CallFeedbackRelation::kUnrelated";
   }
