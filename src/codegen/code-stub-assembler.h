@@ -1978,6 +1978,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void IncrementCallCount(TNode<FeedbackVector> feedback_vector,
                           TNode<UintPtrT> slot_id);
 
+  void SetCallFeedbackContent(TNode<FeedbackVector> feedback_vector,
+                              TNode<UintPtrT> slot_id,
+                              CallFeedbackContent call_feedback_content);
+
   // Specify DestroySource::kYes if {from_array} is being supplanted by
   // {to_array}. This offers a slight performance benefit by simply copying the
   // array word by word. The source may be destroyed at the end of this macro.
@@ -3632,6 +3636,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   }
 
   int32_t ConstexprWord32Or(int32_t a, int32_t b) { return a | b; }
+  uint32_t ConstexprWord32Shl(uint32_t a, uint32_t b) { return a << b; }
 
   bool ConstexprUintPtrLessThan(uintptr_t a, uintptr_t b) { return a < b; }
 

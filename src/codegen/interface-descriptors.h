@@ -1163,6 +1163,7 @@ class CallWithSpread_BaselineDescriptor
                          MachineType::Int32(),      // kArgumentsCount
                          MachineType::AnyTagged(),  // kSpread
                          MachineType::UintPtr())    // kSlot
+  const static ParameterIndices kReceiver = ParameterIndices::kParameterCount;
   DECLARE_DESCRIPTOR(CallWithSpread_BaselineDescriptor)
 };
 
@@ -1171,12 +1172,13 @@ class CallWithSpread_WithFeedbackDescriptor
           CallWithSpread_WithFeedbackDescriptor> {
  public:
   DEFINE_PARAMETERS_VARARGS(kTarget, kArgumentsCount, kSpread, kSlot,
-                            kFeedbackVector)
+                            kFeedbackVector, kReceiver)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kTarget
                          MachineType::Int32(),      // kArgumentsCount
                          MachineType::AnyTagged(),  // kSpread
                          MachineType::UintPtr(),    // kSlot
-                         MachineType::AnyTagged())  // kFeedbackVector
+                         MachineType::AnyTagged(),  // kFeedbackVector
+                         MachineType::AnyTagged())  // kReceiver
   DECLARE_DESCRIPTOR(CallWithSpread_WithFeedbackDescriptor)
 };
 
@@ -1195,11 +1197,12 @@ class CallWithArrayLike_WithFeedbackDescriptor
     : public StaticCallInterfaceDescriptor<
           CallWithArrayLike_WithFeedbackDescriptor> {
  public:
-  DEFINE_PARAMETERS(kTarget, kArgumentsList, kSlot, kFeedbackVector)
+  DEFINE_PARAMETERS(kTarget, kArgumentsList, kSlot, kFeedbackVector, kReceiver)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kTarget
                          MachineType::AnyTagged(),  // kArgumentsList
                          MachineType::UintPtr(),    // kSlot
-                         MachineType::AnyTagged())  // kFeedbackVector
+                         MachineType::AnyTagged(),  // kFeedbackVector
+                         MachineType::AnyTagged())  // kReceiver
   DECLARE_DESCRIPTOR(CallWithArrayLike_WithFeedbackDescriptor)
 };
 
@@ -1851,6 +1854,7 @@ class CallTrampoline_BaselineDescriptor
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kFunction
                          MachineType::Int32(),      // kActualArgumentsCount
                          MachineType::UintPtr())    // kSlot
+  const static ParameterIndices kReceiver = ParameterIndices::kParameterCount;
   DECLARE_DESCRIPTOR(CallTrampoline_BaselineDescriptor)
 };
 
@@ -1859,11 +1863,12 @@ class CallTrampoline_WithFeedbackDescriptor
           CallTrampoline_WithFeedbackDescriptor> {
  public:
   DEFINE_PARAMETERS_VARARGS(kFunction, kActualArgumentsCount, kSlot,
-                            kFeedbackVector)
+                            kFeedbackVector, kReceiver)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kFunction
                          MachineType::Int32(),      // kActualArgumentsCount
                          MachineType::UintPtr(),    // kSlot
-                         MachineType::AnyTagged())  // kFeedbackVector
+                         MachineType::AnyTagged(),  // kFeedbackVector
+                         MachineType::AnyTagged())  // kReceiver
   DECLARE_DESCRIPTOR(CallTrampoline_WithFeedbackDescriptor)
 };
 

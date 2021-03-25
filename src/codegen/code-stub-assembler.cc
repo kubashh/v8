@@ -157,6 +157,21 @@ void CodeStubAssembler::IncrementCallCount(
                           SKIP_WRITE_BARRIER, kTaggedSize);
 }
 
+void CodeStubAssembler::SetCallFeedbackContent(
+    TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot_id,
+    CallFeedbackContent call_feedback_content) {
+  Comment("Update CallFeedback Content");
+  TNode<IntPtrT> call_count = SmiUntag(
+      CAST(LoadFeedbackVectorSlot(feedback_vector, slot_id, kTaggedSize)));
+  TNode<IntPtrT> new_count = Signed(WordOr(
+      WordAnd(call_count,
+              IntPtrConstant(~FeedbackNexus::CallFeedbackContentField::kMask)),
+      IntPtrConstant(static_cast<uint32_t>(call_feedback_content)
+                     << FeedbackNexus::CallFeedbackContentField::kShift)));
+  StoreFeedbackVectorSlot(feedback_vector, slot_id, SmiTag(new_count),
+                          SKIP_WRITE_BARRIER, kTaggedSize);
+}
+
 void CodeStubAssembler::FastCheck(TNode<BoolT> condition) {
   Label ok(this), not_ok(this, Label::kDeferred);
   Branch(condition, &ok, &not_ok);
