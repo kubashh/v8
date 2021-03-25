@@ -16,6 +16,24 @@
       "message": "This looks good. I was a bit surprised to see that the shared part is in the parent codegen directory, since it is platform-dependent, but I guess that was an earlier change. I would have expected it to be in a directory with a name like \u0027intel\u0027 or \u0027shared_ia32_x64\u0027.",
       "revId": "ec0094b478620af60e92a485d20de4a0ef5470b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "738a97da_aa1d44a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-03-25T00:20:20Z",
+      "side": 1,
+      "message": "sg, I will move into a directory called shared_ia32_x64 or similar.",
+      "parentUuid": "465c5aff_dba523bd",
+      "revId": "ec0094b478620af60e92a485d20de4a0ef5470b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
