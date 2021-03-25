@@ -472,6 +472,7 @@ class ContextRef : public HeapObjectRef {
 };
 
 #define BROKER_COMPULSORY_NATIVE_CONTEXT_FIELDS(V) \
+  V(JSFunction, function_prototype_apply)          \
   V(JSFunction, array_function)                    \
   V(JSFunction, boolean_function)                  \
   V(JSFunction, bigint_function)                   \
