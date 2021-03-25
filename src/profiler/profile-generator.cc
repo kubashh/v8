@@ -468,16 +468,18 @@ ProfileNode* ProfileTree::AddPathFromEnd(const std::vector<CodeEntry*>& path,
 
 ProfileNode* ProfileTree::AddPathFromEnd(const ProfileStackTrace& path,
                                          int src_line, bool update_stats,
-                                         ProfilingMode mode) {
+                                         ProfilingMode mode,
+                                         ContextFilter* context_filter) {
   ProfileNode* node = root_;
   CodeEntry* last_entry = nullptr;
   int parent_line_number = v8::CpuProfileNode::kNoLineNumberInfo;
   for (auto it = path.rbegin(); it != path.rend(); ++it) {
-    if (it->code_entry == nullptr) continue;
-    last_entry = it->code_entry;
-    node = node->FindOrAddChild(it->code_entry, parent_line_number);
+    if (it->entry.code_entry == nullptr) continue;
+    if (context_filter && !context_filter->Accept(*it)) continue;
+    last_entry = it->entry.code_entry;
+    node = node->FindOrAddChild(it->entry.code_entry, parent_line_number);
     parent_line_number = mode == ProfilingMode::kCallerLineNumbers
-                             ? it->line_number
+                             ? it->entry.line_number
                              : v8::CpuProfileNode::kNoLineNumberInfo;
   }
   if (last_entry && last_entry->has_deopt_info()) {
@@ -533,6 +535,21 @@ void ProfileTree::TraverseDepthFirst(Callback* callback) {
   }
 }
 
+bool ContextFilter::Accept(const ProfileStackFrame& frame) {
+  // If a frame should always be included in profiles (e.g. metadata frames),
+  // skip the context check.
+  if (!frame.filterable) return true;
+
+  // Strip heap object tag from frame.
+  return (frame.native_context & ~kHeapObjectTag) == native_context_address_;
+}
+
+void ContextFilter::OnMoveEvent(Address from_address, Address to_address) {
+  if (native_context_address() != from_address) return;
+
+  set_native_context_address(to_address);
+}
+
 using v8::tracing::TracedValue;
 
 std::atomic<uint32_t> CpuProfile::last_id_;
@@ -557,6 +574,13 @@ CpuProfile::CpuProfile(CpuProfiler* profiler, const char* title,
   value->SetDouble("startTime", start_time_.since_origin().InMicroseconds());
   TRACE_EVENT_SAMPLE_WITH_ID1(TRACE_DISABLED_BY_DEFAULT("v8.cpu_profiler"),
                               "Profile", id_, "data", std::move(value));
+
+  if (options_.has_filter_context()) {
+    DisallowHeapAllocation no_gc;
+    i::Address raw_filter_context =
+        reinterpret_cast<i::Address>(options_.raw_filter_context());
+    context_filter_ = std::make_unique<ContextFilter>(raw_filter_context);
+  }
 }
 
 bool CpuProfile::CheckSubsample(base::TimeDelta source_sampling_interval) {
@@ -581,8 +605,8 @@ void CpuProfile::AddPath(base::TimeTicks timestamp,
                          bool update_stats, base::TimeDelta sampling_interval) {
   if (!CheckSubsample(sampling_interval)) return;
 
-  ProfileNode* top_frame_node =
-      top_down_.AddPathFromEnd(path, src_line, update_stats, options_.mode());
+  ProfileNode* top_frame_node = top_down_.AddPathFromEnd(
+      path, src_line, update_stats, options_.mode(), context_filter_.get());
 
   bool should_record_sample =
       !timestamp.IsNull() && timestamp >= start_time_ &&
@@ -706,6 +730,8 @@ void CpuProfile::StreamPendingTraceEvents() {
 
 void CpuProfile::FinishProfile() {
   end_time_ = base::TimeTicks::HighResolutionNow();
+  // Stop tracking context movements after profiling stops.
+  context_filter_ = nullptr;
   StreamPendingTraceEvents();
   auto value = TracedValue::Create();
   // The endTime timestamp is not converted to Perfetto's clock domain and will
@@ -950,6 +976,17 @@ void CpuProfilesCollection::AddPathToCurrentProfiles(
   for (const std::unique_ptr<CpuProfile>& profile : current_profiles_) {
     profile->AddPath(timestamp, path, src_line, update_stats,
                      sampling_interval);
+  }
+  current_profiles_semaphore_.Signal();
+}
+
+void CpuProfilesCollection::UpdateNativeContextAddressForCurrentProfiles(
+    Address from, Address to) {
+  current_profiles_semaphore_.Wait();
+  for (const std::unique_ptr<CpuProfile>& profile : current_profiles_) {
+    if (auto* context_filter = profile->context_filter()) {
+      context_filter->OnMoveEvent(from, to);
+    }
   }
   current_profiles_semaphore_.Signal();
 }
