@@ -1616,6 +1616,7 @@ inline std::ostream& operator<<(std::ostream& os,
 }
 
 enum class SpeculationMode { kAllowSpeculation, kDisallowSpeculation };
+enum class CallFeedbackContent { kTarget, kReceiver };
 
 inline std::ostream& operator<<(std::ostream& os,
                                 SpeculationMode speculation_mode) {
