@@ -60,7 +60,7 @@ Address IsolateAllocator::InitReservation() {
   // resevation address plus |kIsolateRootBiasPageSize| is 4Gb aligned.
   const size_t reservation_size =
       kPtrComprHeapReservationSize + kIsolateRootBiasPageSize;
-  const size_t base_alignment = kPtrComprIsolateRootAlignment;
+  const size_t base_alignment = kPtrComprCageBaseAlignment;
 
   const int kMaxAttempts = 4;
   for (int attempt = 0; attempt < kMaxAttempts; ++attempt) {
@@ -137,7 +137,7 @@ void IsolateAllocator::CommitPagesForIsolate(Address heap_reservation_address) {
       GetIsolateRootBiasPageSize(platform_page_allocator);
 
   Address isolate_root = heap_reservation_address + kIsolateRootBiasPageSize;
-  CHECK(IsAligned(isolate_root, kPtrComprIsolateRootAlignment));
+  CHECK(IsAligned(isolate_root, kPtrComprCageBaseAlignment));
 
   CHECK(reservation_.InVM(
       heap_reservation_address,

@@ -273,12 +273,12 @@ inline TResult StringShape::DispatchToSpecificType(String str,
 }
 
 DEF_GETTER(String, IsOneByteRepresentation, bool) {
-  uint32_t type = map(isolate).instance_type();
+  uint32_t type = map(cage_base).instance_type();
   return (type & kStringEncodingMask) == kOneByteStringTag;
 }
 
 DEF_GETTER(String, IsTwoByteRepresentation, bool) {
-  uint32_t type = map(isolate).instance_type();
+  uint32_t type = map(cage_base).instance_type();
   return (type & kStringEncodingMask) == kTwoByteStringTag;
 }
 
@@ -811,7 +811,7 @@ Object ConsString::unchecked_second() {
 }
 
 DEF_GETTER(ThinString, unchecked_actual, HeapObject) {
-  return TaggedField<HeapObject, kActualOffset>::load(isolate, *this);
+  return TaggedField<HeapObject, kActualOffset>::load(cage_base, *this);
 }
 
 bool ExternalString::is_uncached() const {
@@ -826,7 +826,7 @@ void ExternalString::AllocateExternalPointerEntries(Isolate* isolate) {
 }
 
 DEF_GETTER(ExternalString, resource_as_address, Address) {
-  return ReadExternalPointerField(kResourceOffset, isolate,
+  return ReadExternalPointerField(kResourceOffset, cage_base,
                                   kExternalStringResourceTag);
 }
 
@@ -874,7 +874,7 @@ DEF_GETTER(ExternalOneByteString, resource,
 
 DEF_GETTER(ExternalOneByteString, mutable_resource,
            ExternalOneByteString::Resource*) {
-  return reinterpret_cast<Resource*>(resource_as_address(isolate));
+  return reinterpret_cast<Resource*>(resource_as_address(cage_base));
 }
 
 void ExternalOneByteString::update_data_cache(Isolate* isolate) {
@@ -939,7 +939,7 @@ DEF_GETTER(ExternalTwoByteString, resource,
 
 DEF_GETTER(ExternalTwoByteString, mutable_resource,
            ExternalTwoByteString::Resource*) {
-  return reinterpret_cast<Resource*>(resource_as_address(isolate));
+  return reinterpret_cast<Resource*>(resource_as_address(cage_base));
 }
 
 void ExternalTwoByteString::update_data_cache(Isolate* isolate) {

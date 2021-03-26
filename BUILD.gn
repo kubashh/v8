@@ -554,6 +554,7 @@ external_v8_defines = [
   "V8_ENABLE_CHECKS",
   "V8_COMPRESS_POINTERS",
   "V8_COMPRESS_POINTERS_IN_SHARED_CAGE",
+  "V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE",
   "V8_31BIT_SMIS_ON_64BIT_ARCH",
   "V8_COMPRESS_ZONES",
   "V8_HEAP_SANDBOX",
@@ -573,6 +574,8 @@ if (v8_enable_pointer_compression) {
 }
 if (v8_enable_pointer_compression_shared_cage) {
   enabled_external_v8_defines += [ "V8_COMPRESS_POINTERS_IN_SHARED_CAGE" ]
+} else if (v8_enable_pointer_compression) {
+  enabled_external_v8_defines += [ "V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE" ]
 }
 if (v8_enable_pointer_compression || v8_enable_31bit_smis_on_64bit_arch) {
   enabled_external_v8_defines += [ "V8_31BIT_SMIS_ON_64BIT_ARCH" ]

@@ -27,8 +27,9 @@
 namespace v8 {
 namespace internal {
 
-void CopyAndRebaseRoots(Address* src, Address* dst, Address new_base) {
-  Address src_base = GetIsolateRootAddress(src[0]);
+void CopyAndRebaseRoots(Isolate* src_isolate, Address* src, Address* dst,
+                        Address new_base) {
+  Address src_base = src_isolate->isolate_root();
   for (size_t i = 0; i < ReadOnlyHeap::kEntriesCount; ++i) {
     dst[i] = src[i] - src_base + new_base;
   }
@@ -108,13 +109,13 @@ void SingleCopyReadOnlyArtifacts::VerifyHeapAndSpaceRelationships(
 void PointerCompressedReadOnlyArtifacts::InitializeRootsFrom(Isolate* isolate) {
   auto isolate_ro_roots =
       isolate->roots_table().read_only_roots_begin().location();
-  CopyAndRebaseRoots(isolate_ro_roots, read_only_roots_, 0);
+  CopyAndRebaseRoots(isolate, isolate_ro_roots, read_only_roots_, 0);
 }
 
 void PointerCompressedReadOnlyArtifacts::InitializeRootsIn(Isolate* isolate) {
   auto isolate_ro_roots =
       isolate->roots_table().read_only_roots_begin().location();
-  CopyAndRebaseRoots(read_only_roots_, isolate_ro_roots,
+  CopyAndRebaseRoots(isolate, read_only_roots_, isolate_ro_roots,
                      isolate->isolate_root());
 }
 
