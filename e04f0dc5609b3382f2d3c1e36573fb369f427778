@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cc8f9d3_e7403715",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-03-26T07:36:08Z",
+      "side": 1,
+      "message": "Thanks for the fix, LGTM.\nIt looks like this is your first contribution to v8, so please add yourself to the AUTHORS file. I see that you already signed the CLA in 2016, so that\u0027s fine.",
+      "revId": "e04f0dc5609b3382f2d3c1e36573fb369f427778",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
