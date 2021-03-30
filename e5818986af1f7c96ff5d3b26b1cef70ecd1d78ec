@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "392afbfa_cd3e5220",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4222,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-03-30T06:30:41Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "6b7e3199_c262c2cb",
+      "revId": "e5818986af1f7c96ff5d3b26b1cef70ecd1d78ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4d1c91ee_ef2cfe13",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 2
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "44b0de8c_7c44c5bb",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-03-30T06:30:41Z",
+      "side": 1,
+      "message": "Thanks for the detailed insights! F.prototype.apply is added to the native context in patchset 3. For the second point, does it mean by genreating code like this?\n    movl r15,0x8203761      ;; (compressed) object: 0x156508203761 \u003cJSFunction apply (sfi \u003d 0x15650818420d)\u003e \n    cmpl [r12+0x7],r15 \n    jnz 0x15650008440a  \u003c+0x2aa\u003e \n    REX.W movq rdi,0x156508213c39    ;; object: 0x156508213c39 \u003cJSFunction js-to-wasm::i (sfi \u003d 0x156508213c15)\u003e \n    cmpl r9,rdi \n    jnz 0x156500084411  \u003c+0x2b1\u003e\nA ReferenceEqual check on receiver will be added when that call node go through the ReduceJSCall a second time after ReduceFunctionPrototypeApply.",
+      "parentUuid": "4d1c91ee_ef2cfe13",
+      "revId": "e5818986af1f7c96ff5d3b26b1cef70ecd1d78ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d75473a_8f88f19c",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 2
@@ -65,6 +101,24 @@
       "writtenOn": "2021-03-23T11:05:36Z",
       "side": 1,
       "message": "?",
+      "revId": "e5818986af1f7c96ff5d3b26b1cef70ecd1d78ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb9fd62f_4f74f75f",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4229,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-03-30T06:30:41Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "9d75473a_8f88f19c",
       "revId": "e5818986af1f7c96ff5d3b26b1cef70ecd1d78ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
