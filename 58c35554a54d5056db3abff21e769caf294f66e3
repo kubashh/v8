@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "906f3cd9_8a722969",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-30T03:11:02Z",
+      "side": 1,
+      "message": "For sure, here\u0027s the original CL (I don\u0027t think you were a reviewer on it, actually):\n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1580020",
+      "parentUuid": "f49c2d70_d4ac3c45",
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4eaeeaaf_22819650",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-03-25T15:21:09Z",
       "side": 1,
       "message": "Should we make this weak? Otherwise it seems that we won\u0027t be able to GC a context that has an active profiler. (There is a cycle: context keeps the profiler alive and the profiler keeps a strong handle to the context).\n\nAlso see my comment about context ID below.",
+      "range": {
+        "startLine": 9372,
+        "startChar": 4,
+        "endLine": 9372,
+        "endChar": 19
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c28fe3c6_3835cc76",
+        "filename": "src/api/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9372,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-30T03:11:02Z",
+      "side": 1,
+      "message": "Yup, I think this makes sense. Will do.",
+      "parentUuid": "4eaeeaaf_22819650",
       "range": {
         "startLine": 9372,
         "startChar": 4,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "977b4ac9_d8f2e980",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-30T03:11:02Z",
+      "side": 1,
+      "message": "Looks like this logic was also changed here:\n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1866469\n\nI\u0027m not sure why these checks caused problems, but they were removed for the reasons mentioned in the CL (crashes, false positives). It seems that we\u0027re able to detect partially set up frames more accurately on x86 such that they may have been redundant.",
+      "parentUuid": "bde391ed_d77ff1d8",
+      "range": {
+        "startLine": 163,
+        "startChar": 6,
+        "endLine": 163,
+        "endChar": 50
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ef8f3e70_fb8843bd",
         "filename": "src/profiler/tick-sample.cc",
         "patchSetId": 3
@@ -89,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31f745df_46cb3ae5",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-30T03:11:02Z",
+      "side": 1,
+      "message": "\u003e Is this dereference safe?\n\nAccording to the linked CL above, I believe so.\n\n\u003e I wonder if we could make use of the fact that cross-origin functions cannot synchronously script with each other. In theory Blink callbacks could switch to another context, but AFAIK that doesn\u0027t happen currently. Maybe we could add a CHECK there?\n\nI\u0027m a fan of this idea in general if the invariant works out. Will dig into this some more.",
+      "parentUuid": "ef8f3e70_fb8843bd",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 63
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71acf347_2a063b23",
         "filename": "src/profiler/tick-sample.h",
         "patchSetId": 3
@@ -100,6 +190,30 @@
       "writtenOn": "2021-03-25T15:21:09Z",
       "side": 1,
       "message": "IIUC these raw pointers are sent to the profiler thread and processed there.\n\nIn the meantime the contexts may be GCed and may move. How do we ensure that the raw pointers are properly updated? (I see the move event handling for ContextFilter, but don\u0027t see one for entries in contexts[]).\n\nInstead of dealing with raw pointers, I wonder if we could reuse the context IDs  from https://source.chromium.org/chromium/chromium/src/+/master:v8/include/v8-metrics.h;l\u003d130;drc\u003d2ff3bbbc70d61bcace3f3b15e082d065ac1f45c2\n\nThey were added for metrics recording. They are guaranteed to be unique and stable.",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 16
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ede238a6_708d99f5",
+        "filename": "src/profiler/tick-sample.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-03-30T03:11:02Z",
+      "side": 1,
+      "message": "While the contexts may move, the profiler thread\u0027s ability to check equality on the contexts shouldn\u0027t change. If the sample is taken in the middle of native context movement, the profiler thread will compare the stale native context stack with the stale target native context, as any movements will be enqueued for processing after the tick sample.",
+      "parentUuid": "71acf347_2a063b23",
       "range": {
         "startLine": 94,
         "startChar": 8,
