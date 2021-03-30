@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d40aa0_be9d6cc3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6264,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-03-30T15:23:42Z",
+      "side": 1,
+      "message": "No. HeapType::Representation is not a real enumeration. There are some fixed values that represent the abstract types (kAny, kEq etc.), but also a large number on anonymous values corresponding to the user-defined types.",
+      "parentUuid": "d19a2c02_30485a17",
+      "range": {
+        "startLine": 6264,
+        "startChar": 10,
+        "endLine": 6264,
+        "endChar": 17
+      },
+      "revId": "921258dd4b90d29b640f7d89530808f15c9e1116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4934e5ed_30d8228d",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-03-30T14:07:32Z",
       "side": 1,
       "message": "assertEquals(null, instance.exports.struct_null());",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 10
+      },
+      "revId": "921258dd4b90d29b640f7d89530808f15c9e1116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca98ea53_e8a4393c",
+        "filename": "test/mjsunit/wasm/wasm-gc-js-roundtrip.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-03-30T15:23:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4934e5ed_30d8228d",
       "range": {
         "startLine": 68,
         "startChar": 0,
