@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d19a2c02_30485a17",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6264,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-03-30T14:07:32Z",
+      "side": 1,
+      "message": "Isn\u0027t there only a single case left? Could you just handle that final case, so that we get a compilation error here if someone later adds a new type and forgets to handle it here?",
+      "range": {
+        "startLine": 6264,
+        "startChar": 10,
+        "endLine": 6264,
+        "endChar": 17
+      },
+      "revId": "921258dd4b90d29b640f7d89530808f15c9e1116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4934e5ed_30d8228d",
+        "filename": "test/mjsunit/wasm/wasm-gc-js-roundtrip.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-03-30T14:07:32Z",
+      "side": 1,
+      "message": "assertEquals(null, instance.exports.struct_null());",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 10
+      },
+      "revId": "921258dd4b90d29b640f7d89530808f15c9e1116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
