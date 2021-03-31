@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78c06a84_ab319ca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1450118
+      },
+      "writtenOn": "2021-03-31T10:08:34Z",
+      "side": 1,
+      "message": "Hi, I expanded the comments of `ScriptCompiler::CompileUnboundScript()` to describe the duty of embedder when consuming the cached data.",
+      "revId": "9c7acebbe1958bff254169d7fad0ef1078e107e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
