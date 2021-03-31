@@ -33,6 +33,23 @@
       "message": "Adding some base/OWNERS to review.",
       "revId": "c24df27241f7f1483cf18e7c9ef4453aa9680267",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c1a224_89859e96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-03-31T10:14:07Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "c24df27241f7f1483cf18e7c9ef4453aa9680267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
