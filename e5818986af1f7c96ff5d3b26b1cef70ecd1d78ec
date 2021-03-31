@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3734d91_13658b0e",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-03-31T10:19:54Z",
+      "side": 1,
+      "message": "You\u0027re right about (2), I missed how you rewrite CallFeedbackContent from kReceiver to kTarget when rewriting the call in ReduceFunctionPrototypeApply (though I think this needs to be tied to the change of CallFeedbackRelation to be fully correct).",
+      "parentUuid": "44b0de8c_7c44c5bb",
+      "revId": "e5818986af1f7c96ff5d3b26b1cef70ecd1d78ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d75473a_8f88f19c",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 2
