@@ -5,7 +5,8 @@
 #ifndef V8_OBJECTS_COMPRESSED_SLOTS_INL_H_
 #define V8_OBJECTS_COMPRESSED_SLOTS_INL_H_
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 
 #include "src/common/ptr-compr-inl.h"
 #include "src/objects/compressed-slots.h"
@@ -191,6 +192,7 @@ void OffHeapCompressedObjectSlot::Release_CompareAndSwap(Object old,
 }  // namespace internal
 }  // namespace v8
 
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 #endif  // V8_OBJECTS_COMPRESSED_SLOTS_INL_H_

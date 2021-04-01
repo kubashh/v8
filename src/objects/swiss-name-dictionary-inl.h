@@ -564,7 +564,9 @@ void SwissNameDictionary::Initialize(LocalIsolate* isolate,
 SwissNameDictionary::IndexIterator::IndexIterator(
     Handle<SwissNameDictionary> dict, int start)
     : enum_index_{start}, dict_{dict} {
-  if (!COMPRESS_POINTERS_BOOL && dict.is_null()) {
+  if (!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+      dict.is_null()) {
     used_capacity_ = 0;
   } else {
     used_capacity_ = dict->UsedCapacity();
@@ -609,7 +611,9 @@ SwissNameDictionary::IndexIterator SwissNameDictionary::IndexIterable::begin() {
 }
 
 SwissNameDictionary::IndexIterator SwissNameDictionary::IndexIterable::end() {
-  if (!COMPRESS_POINTERS_BOOL && dict_.is_null()) {
+  if (!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+      dict_.is_null()) {
     return IndexIterator(dict_, 0);
   } else {
     DCHECK(!dict_.is_null());
@@ -625,7 +629,9 @@ SwissNameDictionary::IterateEntriesOrdered() {
   // TODO(emrich): Consider always using roots.empty_swiss_dictionary_handle()
   // in the condition once this function gets Isolate as a parameter in order to
   // avoid empty dict checks.
-  if (!COMPRESS_POINTERS_BOOL && Capacity() == 0)
+  if (!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+      Capacity() == 0)
     return IndexIterable(Handle<SwissNameDictionary>::null());
 
   Isolate* isolate;

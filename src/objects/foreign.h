@@ -26,7 +26,8 @@ class Foreign : public TorqueGeneratedForeign<Foreign, HeapObject> {
   // Dispatched behavior.
   DECL_PRINTER(Foreign)
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // TODO(ishell, v8:8875): When pointer compression is enabled the
   // kForeignAddressOffset is only kTaggedSize aligned but we can keep using
   // unaligned access since both x64 and arm64 architectures (where pointer

@@ -101,7 +101,8 @@ STATIC_ASSERT(V8_DEFAULT_STACK_SIZE_KB* KB +
 
 // Determine whether the short builtin calls optimization is enabled.
 #ifdef V8_SHORT_BUILTIN_CALLS
-#ifndef V8_COMPRESS_POINTERS
+#if !defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) && \
+    !defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 // TODO(11527): Fix this by passing Isolate* to Code::OffHeapInstructionStart()
 // and friends.
 #error Short builtin calls feature requires pointer compression
@@ -128,7 +129,9 @@ const size_t kShortBuiltinCallsOldSpaceSizeThreshold = size_t{2} * GB;
 
 // Determine whether tagged pointers are 8 bytes (used in Torque layouts for
 // choosing where to insert padding).
-#if V8_TARGET_ARCH_64_BIT && !defined(V8_COMPRESS_POINTERS)
+#if V8_TARGET_ARCH_64_BIT &&                           \
+    !(defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+      defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE))
 #define TAGGED_SIZE_8_BYTES true
 #else
 #define TAGGED_SIZE_8_BYTES false
@@ -274,7 +277,8 @@ STATIC_ASSERT(kSystemPointerSize == (1 << kSystemPointerSizeLog2));
 // TurboFan graphs or not.
 static constexpr bool kCompressGraphZone = COMPRESS_ZONES_BOOL;
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 static_assert(
     kSystemPointerSize == kInt64Size,
     "Pointer compression can be enabled only for 64-bit architectures");
@@ -297,7 +301,8 @@ constexpr int kTaggedSizeLog2 = kSystemPointerSizeLog2;
 using Tagged_t = Address;
 using AtomicTagged_t = base::AtomicWord;
 
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 STATIC_ASSERT(kTaggedSize == (1 << kTaggedSizeLog2));
 STATIC_ASSERT((kTaggedSize == 8) == TAGGED_SIZE_8_BYTES);
@@ -309,7 +314,8 @@ STATIC_ASSERT(sizeof(AtomicTagged_t) == kTaggedSize);
 STATIC_ASSERT(kTaggedSize == kApiTaggedSize);
 
 // TODO(ishell): use kTaggedSize or kSystemPointerSize instead.
-#ifndef V8_COMPRESS_POINTERS
+#if !defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) && \
+    !defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 constexpr int kPointerSize = kSystemPointerSize;
 constexpr int kPointerSizeLog2 = kSystemPointerSizeLog2;
 STATIC_ASSERT(kPointerSize == (1 << kPointerSizeLog2));
@@ -727,7 +733,8 @@ class Variable;
 // Slots are either full-pointer slots or compressed slots depending on whether
 // pointer compression is enabled or not.
 struct SlotTraits {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   using TObjectSlot = CompressedObjectSlot;
   using TMaybeObjectSlot = CompressedMaybeObjectSlot;
   using THeapObjectSlot = CompressedHeapObjectSlot;
@@ -1747,7 +1754,8 @@ enum class DynamicCheckMapsStatus : uint8_t {
   kDeopt = 2
 };
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 class PtrComprCageBase {
  public:
   explicit constexpr PtrComprCageBase(Address address) : address_(address) {}

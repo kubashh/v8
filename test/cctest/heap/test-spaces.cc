@@ -885,7 +885,8 @@ TEST(ReadOnlySpaceMetrics_AlignedAllocations) {
 
 // TODO(v8:8875): Pointer compression does not enable aligned memory allocation
 // yet.
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   int alignment = kInt32Size;
 #else
   int alignment = kDoubleSize;

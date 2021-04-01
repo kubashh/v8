@@ -13,7 +13,8 @@
 namespace v8 {
 namespace internal {
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 
 #if defined V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
 
@@ -37,8 +38,8 @@ PtrComprCageBase::PtrComprCageBase(const LocalIsolate* isolate)
 
 #error "Pointer compression build configuration error"
 
-#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE,
-        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE_IN_ISOLATE_CAGE
 
 Address PtrComprCageBase::address() const {
   Address ret = address_;
@@ -116,7 +117,8 @@ V8_INLINE Address DecompressTaggedAny(TOnHeapAddress on_heap_addr,
   UNREACHABLE();
 }
 
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 inline PtrComprCageBase GetPtrComprCageBase(HeapObject object) {
   return GetPtrComprCageBaseFromOnHeapAddress(object.ptr());

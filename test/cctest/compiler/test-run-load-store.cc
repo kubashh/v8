@@ -199,7 +199,8 @@ void CheckEq(CType in_value, CType out_value) {
   CHECK_EQ(in_value, out_value);
 }
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 // Specializations for checking the result of compressing store.
 template <>
 void CheckEq<Object>(Object in_value, Object out_value) {
@@ -266,7 +267,8 @@ void RunLoadImmIndex(MachineType type, TestAlignment t) {
       BufferedRawMachineAssemblerTester<CType> m;
       CType* base_pointer = reinterpret_cast<CType*>(
           ComputeOffset(&buffer[0], offset * sizeof(CType)));
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
       if (type.IsTagged()) {
         // When pointer compression is enabled then we need to access only
         // the lower 32-bit of the tagged value while the buffer contains

@@ -309,7 +309,8 @@ void CopyDoubleToDoubleElements(FixedArrayBase from_base, uint32_t from_start,
   Address from_address = from.address() + FixedDoubleArray::kHeaderSize;
   to_address += kDoubleSize * to_start;
   from_address += kDoubleSize * from_start;
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // TODO(ishell, v8:8875): we use CopyTagged() in order to avoid unaligned
   // access to double values in the arrays. This will no longed be necessary
   // once the allocations alignment issue is fixed.
@@ -451,7 +452,8 @@ void SortIndices(Isolate* isolate, Handle<FixedArray> indices,
   AtomicSlot start(indices->GetFirstElementAddress());
   AtomicSlot end(start + sort_size);
   std::sort(start, end, [isolate](Tagged_t elementA, Tagged_t elementB) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     Object a(DecompressTaggedAny(isolate, elementA));
     Object b(DecompressTaggedAny(isolate, elementB));
 #else
@@ -3013,7 +3015,9 @@ class TypedElementsAccessor
     // JavaScript memory model to have tear-free reads of overlapping accesses,
     // and using relaxed atomics may introduce overhead.
     TSAN_ANNOTATE_IGNORE_WRITES_BEGIN;
-    if (COMPRESS_POINTERS_BOOL && alignof(ElementType) > kTaggedSize) {
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+        alignof(ElementType) > kTaggedSize) {
       // TODO(ishell, v8:8875): When pointer compression is enabled 8-byte size
       // fields (external pointers, doubles and BigInt data) are only
       // kTaggedSize aligned so we have to use unaligned pointer friendly way of
@@ -3053,7 +3057,9 @@ class TypedElementsAccessor
     // and using relaxed atomics may introduce overhead.
     TSAN_ANNOTATE_IGNORE_READS_BEGIN;
     ElementType result;
-    if (COMPRESS_POINTERS_BOOL && alignof(ElementType) > kTaggedSize) {
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+        alignof(ElementType) > kTaggedSize) {
       // TODO(ishell, v8:8875): When pointer compression is enabled 8-byte size
       // fields (external pointers, doubles and BigInt data) are only
       // kTaggedSize aligned so we have to use unaligned pointer friendly way of
@@ -3164,7 +3170,9 @@ class TypedElementsAccessor
     DisallowGarbageCollection no_gc;
     ElementType scalar = FromHandle(value);
     ElementType* data = static_cast<ElementType*>(typed_array->DataPtr());
-    if (COMPRESS_POINTERS_BOOL && alignof(ElementType) > kTaggedSize) {
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+        alignof(ElementType) > kTaggedSize) {
       // TODO(ishell, v8:8875): See UnalignedSlot<T> for details.
       std::fill(UnalignedSlot<ElementType>(data + start),
                 UnalignedSlot<ElementType>(data + end), scalar);
@@ -3350,7 +3358,9 @@ class TypedElementsAccessor
     if (len == 0) return;
 
     ElementType* data = static_cast<ElementType*>(typed_array.DataPtr());
-    if (COMPRESS_POINTERS_BOOL && alignof(ElementType) > kTaggedSize) {
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+        alignof(ElementType) > kTaggedSize) {
       // TODO(ishell, v8:8875): See UnalignedSlot<T> for details.
       std::reverse(UnalignedSlot<ElementType>(data),
                    UnalignedSlot<ElementType>(data + len));

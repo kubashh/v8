@@ -403,7 +403,9 @@ void JSObject::JSObjectVerify(Isolate* isolate) {
         DCHECK_EQ(kData, details.kind());
         Representation r = details.representation();
         FieldIndex index = FieldIndex::ForDescriptor(map(), i);
-        if (COMPRESS_POINTERS_BOOL && index.is_inobject()) {
+        if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+             COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+            index.is_inobject()) {
           VerifyObjectField(isolate, index.offset());
         }
         Object value = RawFastPropertyAt(index);

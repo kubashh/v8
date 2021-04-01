@@ -49,7 +49,8 @@ using F0 = int();
 #define __ masm.
 
 TEST(EmbeddedObj) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
 
@@ -88,7 +89,8 @@ TEST(EmbeddedObj) {
       CHECK_EQ(*old_array, it.rinfo()->target_object());
     }
   }
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 }
 
 TEST(DeoptExitSizeIsFixed) {

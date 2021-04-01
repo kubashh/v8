@@ -7,7 +7,8 @@
 
 #include "src/objects/tagged-impl.h"
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 #include "src/execution/isolate.h"
 #endif
 #include "src/common/ptr-compr-inl.h"

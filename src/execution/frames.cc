@@ -1066,7 +1066,8 @@ void CommonFrame::IterateCompiledFrame(RootVisitor* v) const {
     int bit_index = index & (kBitsPerByte - 1);
     if ((safepoint_bits[byte_index] & (1U << bit_index)) != 0) {
       FullObjectSlot spill_slot = parameters_limit + index;
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
       // Spill slots may contain compressed values in which case the upper
       // 32-bits will contain zeros. In order to simplify handling of such
       // slots in GC we ensure that the slot always contains full value.

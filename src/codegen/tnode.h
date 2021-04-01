@@ -97,7 +97,8 @@ struct Float64T : UntaggedT {
   static constexpr MachineType kMachineType = MachineType::Float64();
 };
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 using TaggedT = Int32T;
 #else
 using TaggedT = IntPtrT;

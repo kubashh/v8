@@ -3871,7 +3871,9 @@ class LiftoffCompiler {
   }
 
   void ToSmi(Register reg) {
-    if (COMPRESS_POINTERS_BOOL || kSystemPointerSize == 4) {
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) ||
+        kSystemPointerSize == 4) {
       __ emit_i32_shli(reg, reg, kSmiShiftSize + kSmiTagSize);
     } else {
       __ emit_i64_shli(LiftoffRegister{reg}, LiftoffRegister{reg},

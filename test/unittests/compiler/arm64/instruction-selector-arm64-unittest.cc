@@ -3244,7 +3244,9 @@ TEST_P(InstructionSelectorStoreWithBarrierTest,
     EXPECT_EQ(kArchStoreWithWriteBarrier, s[0]->arch_opcode());
     // With compressed pointers, a store with barrier is a 32-bit str which has
     // a smaller immediate range.
-    if (COMPRESS_POINTERS_BOOL && (index > 16380)) {
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+        (index > 16380)) {
       EXPECT_EQ(kMode_MRR, s[0]->addressing_mode());
     } else {
       EXPECT_EQ(kMode_MRI, s[0]->addressing_mode());

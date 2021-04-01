@@ -280,7 +280,8 @@ class WasmGraphAssembler : public GraphAssembler {
   }
 
   Node* IsI31(Node* object) {
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       return Word32Equal(Word32And(object, Int32Constant(kSmiTagMask)),
                          Int32Constant(kSmiTag));
     } else {
@@ -3347,14 +3348,16 @@ Node* WasmGraphBuilder::BuildChangeIntPtrToInt64(Node* value) {
 
 Node* WasmGraphBuilder::BuildChangeInt32ToSmi(Node* value) {
   // With pointer compression, only the lower 32 bits are used.
-  return COMPRESS_POINTERS_BOOL
+  return (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+          COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
              ? gasm_->Word32Shl(value, BuildSmiShiftBitsConstant32())
              : gasm_->WordShl(BuildChangeInt32ToIntPtr(value),
                               BuildSmiShiftBitsConstant());
 }
 
 Node* WasmGraphBuilder::BuildChangeUint31ToSmi(Node* value) {
-  return COMPRESS_POINTERS_BOOL
+  return (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+          COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
              ? gasm_->Word32Shl(value, BuildSmiShiftBitsConstant32())
              : gasm_->WordShl(Uint32ToUintptr(value),
                               BuildSmiShiftBitsConstant());
@@ -3369,14 +3372,16 @@ Node* WasmGraphBuilder::BuildSmiShiftBitsConstant32() {
 }
 
 Node* WasmGraphBuilder::BuildChangeSmiToInt32(Node* value) {
-  return COMPRESS_POINTERS_BOOL
+  return (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+          COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
              ? gasm_->Word32Sar(gasm_->TruncateInt64ToInt32(value),
                                 BuildSmiShiftBitsConstant32())
              : BuildTruncateIntPtrToInt32(BuildChangeSmiToIntPtr(value));
 }
 
 Node* WasmGraphBuilder::BuildChangeSmiToIntPtr(Node* value) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     value = BuildChangeSmiToInt32(value);
     return BuildChangeInt32ToIntPtr(value);
   }
@@ -3841,7 +3846,9 @@ const Operator* WasmGraphBuilder::GetSafeLoadOperator(int offset,
                                                       wasm::ValueType type) {
   int alignment = offset % type.element_size_bytes();
   MachineType mach_type = type.machine_type();
-  if (COMPRESS_POINTERS_BOOL && mach_type.IsTagged()) {
+  if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+      mach_type.IsTagged()) {
     // We are loading tagged value from off-heap location, so we need to load
     // it as a full word otherwise we will not be able to decompress it.
     mach_type = MachineType::Pointer();
@@ -3857,7 +3864,9 @@ const Operator* WasmGraphBuilder::GetSafeStoreOperator(int offset,
                                                        wasm::ValueType type) {
   int alignment = offset % type.element_size_bytes();
   MachineRepresentation rep = type.machine_representation();
-  if (COMPRESS_POINTERS_BOOL && IsAnyTagged(rep)) {
+  if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+      IsAnyTagged(rep)) {
     // We are storing tagged value to off-heap location, so we need to store
     // it as a full word otherwise we will not be able to decompress it.
     rep = MachineType::PointerRepresentation();

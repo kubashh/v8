@@ -668,18 +668,24 @@ HeapObject MapWord::ToForwardingAddress() {
 #ifdef VERIFY_HEAP
 void HeapObject::VerifyObjectField(Isolate* isolate, int offset) {
   VerifyPointer(isolate, TaggedField<Object>::load(isolate, *this, offset));
-  STATIC_ASSERT(!COMPRESS_POINTERS_BOOL || kTaggedSize == kInt32Size);
+  STATIC_ASSERT(!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                  COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) ||
+                kTaggedSize == kInt32Size);
 }
 
 void HeapObject::VerifyMaybeObjectField(Isolate* isolate, int offset) {
   MaybeObject::VerifyMaybeObjectPointer(
       isolate, TaggedField<MaybeObject>::load(isolate, *this, offset));
-  STATIC_ASSERT(!COMPRESS_POINTERS_BOOL || kTaggedSize == kInt32Size);
+  STATIC_ASSERT(!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                  COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) ||
+                kTaggedSize == kInt32Size);
 }
 
 void HeapObject::VerifySmiField(int offset) {
   CHECK(TaggedField<Object>::load(*this, offset).IsSmi());
-  STATIC_ASSERT(!COMPRESS_POINTERS_BOOL || kTaggedSize == kInt32Size);
+  STATIC_ASSERT(!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                  COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) ||
+                kTaggedSize == kInt32Size);
 }
 
 #endif
@@ -892,12 +898,14 @@ AllocationAlignment HeapObject::RequiredAlignment(Map map) {
   // TODO(bmeurer, v8:4153): We should think about requiring double alignment
   // in general for ByteArray, since they are used as backing store for typed
   // arrays now.
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // TODO(ishell, v8:8875): Consider using aligned allocations once the
   // allocation alignment inconsistency is fixed. For now we keep using
   // unaligned access since both x64 and arm64 architectures (where pointer
   // compression is supported) allow unaligned access to doubles and full words.
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 #ifdef V8_HOST_ARCH_32_BIT
   int instance_type = map.instance_type();
   if (instance_type == FIXED_DOUBLE_ARRAY_TYPE) return kDoubleAligned;

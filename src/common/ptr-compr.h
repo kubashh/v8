@@ -7,7 +7,8 @@
 
 #include "src/common/globals.h"
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 
 namespace v8 {
 namespace internal {
@@ -19,6 +20,7 @@ constexpr size_t kPtrComprCageBaseAlignment = size_t{4} * GB;
 }  // namespace internal
 }  // namespace v8
 
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 #endif  // V8_COMMON_PTR_COMPR_H_

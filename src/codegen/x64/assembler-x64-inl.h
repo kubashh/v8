@@ -374,7 +374,8 @@ void RelocInfo::set_target_object(Heap* heap, HeapObject target,
                                   ICacheFlushMode icache_flush_mode) {
   DCHECK(IsCodeTarget(rmode_) || IsEmbeddedObjectMode(rmode_));
   if (IsCompressedEmbeddedObject(rmode_)) {
-    DCHECK(COMPRESS_POINTERS_BOOL);
+    DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+           COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL);
     Tagged_t tagged = CompressTagged(target.ptr());
     WriteUnalignedValue(pc_, tagged);
   } else {

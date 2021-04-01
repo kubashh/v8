@@ -116,7 +116,8 @@ class RelocInfo {
         data_(data),
         host_(host),
         constant_pool_(constant_pool) {
-    DCHECK_IMPLIES(!COMPRESS_POINTERS_BOOL,
+    DCHECK_IMPLIES(!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                     COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL),
                    rmode != COMPRESSED_EMBEDDED_OBJECT);
   }
 
@@ -142,7 +143,9 @@ class RelocInfo {
     return mode == FULL_EMBEDDED_OBJECT;
   }
   static constexpr bool IsCompressedEmbeddedObject(Mode mode) {
-    return COMPRESS_POINTERS_BOOL && mode == COMPRESSED_EMBEDDED_OBJECT;
+    return (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+            COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+           mode == COMPRESSED_EMBEDDED_OBJECT;
   }
   static constexpr bool IsDataEmbeddedObject(Mode mode) {
     return mode == DATA_EMBEDDED_OBJECT;

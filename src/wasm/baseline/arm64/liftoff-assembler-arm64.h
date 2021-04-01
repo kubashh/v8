@@ -474,7 +474,8 @@ void LiftoffAssembler::StoreTaggedPointer(Register dst_addr,
   b(&exit);
   bind(&write_barrier);
   JumpIfSmi(src.gp(), &exit);
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DecompressTaggedPointer(src.gp(), src.gp());
   }
   CheckPageFlag(src.gp(), MemoryChunk::kPointersToHereAreInterestingMask, ne,

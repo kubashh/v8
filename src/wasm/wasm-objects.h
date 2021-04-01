@@ -485,9 +485,11 @@ class V8_EXPORT_PRIVATE WasmInstanceObject : public JSObject {
   // fields (external pointers, doubles and BigInt data) are only kTaggedSize
   // aligned so checking for alignments of fields bigger than kTaggedSize
   // doesn't make sense until v8:8875 is fixed.
-#define ASSERT_FIELD_ALIGNED(offset, size)                                 \
-  STATIC_ASSERT(size == 0 || IsAligned(offset, size) ||                    \
-                (COMPRESS_POINTERS_BOOL && (size == kSystemPointerSize) && \
+#define ASSERT_FIELD_ALIGNED(offset, size)                  \
+  STATIC_ASSERT(size == 0 || IsAligned(offset, size) ||     \
+                ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL || \
+                  COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) && \
+                 (size == kSystemPointerSize) &&            \
                  IsAligned(offset, kTaggedSize)));
   WASM_INSTANCE_OBJECT_FIELDS(ASSERT_FIELD_ALIGNED)
 #undef ASSERT_FIELD_ALIGNED

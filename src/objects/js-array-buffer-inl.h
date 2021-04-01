@@ -214,7 +214,8 @@ void JSTypedArray::set_external_pointer(Isolate* isolate, Address value) {
 
 Address JSTypedArray::ExternalPointerCompensationForOnHeapArray(
     PtrComprCageBase cage_base) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   return cage_base.address();
 #else
   return 0;

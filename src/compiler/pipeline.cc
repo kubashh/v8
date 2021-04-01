@@ -1988,7 +1988,8 @@ struct DecompressionOptimizationPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(DecompressionOptimization)
 
   void Run(PipelineData* data, Zone* temp_zone) {
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       DecompressionOptimizer decompression_optimizer(
           temp_zone, data->graph(), data->common(), data->machine());
       decompression_optimizer.Reduce();

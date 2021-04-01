@@ -782,7 +782,8 @@ static uint32_t flag_hash = 0;
 
 void ComputeFlagListHash() {
   std::ostringstream modified_args_as_string;
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     modified_args_as_string << "ptr-compr";
   }
   if (DEBUG_BOOL) {

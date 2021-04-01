@@ -285,7 +285,8 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
     if (mode_ > RecordWriteMode::kValueIsPointer) {
       __ JumpIfSmi(value_, exit());
     }
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       __ DecompressTaggedPointer(value_, value_);
     }
     __ CheckPageFlag(value_, MemoryChunk::kPointersToHereAreInterestingMask, ne,

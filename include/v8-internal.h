@@ -97,7 +97,8 @@ struct SmiTagging<8> {
   }
 };
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 static_assert(
     kApiSystemPointerSize == kApiInt64Size,
     "Pointer compression can be enabled only for 64-bit architectures");
@@ -340,7 +341,8 @@ class Internals {
   V8_INLINE static T ReadRawField(internal::Address heap_object_ptr,
                                   int offset) {
     internal::Address addr = heap_object_ptr + offset - kHeapObjectTag;
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     if (sizeof(T) > kApiTaggedSize) {
       // TODO(ishell, v8:8875): When pointer compression is enabled 8-byte size
       // fields (external pointers, doubles and BigInt data) are only
@@ -356,7 +358,8 @@ class Internals {
 
   V8_INLINE static internal::Address ReadTaggedPointerField(
       internal::Address heap_object_ptr, int offset) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     uint32_t value = ReadRawField<uint32_t>(heap_object_ptr, offset);
     internal::Address base =
         GetPtrComprCageBaseFromOnHeapAddress(heap_object_ptr);
@@ -368,7 +371,8 @@ class Internals {
 
   V8_INLINE static internal::Address ReadTaggedSignedField(
       internal::Address heap_object_ptr, int offset) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     uint32_t value = ReadRawField<uint32_t>(heap_object_ptr, offset);
     return static_cast<internal::Address>(static_cast<uintptr_t>(value));
 #else
@@ -410,7 +414,8 @@ class Internals {
 #endif
   }
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // See v8:7703 or src/ptr-compr.* for details about pointer compression.
   static constexpr size_t kPtrComprCageReservationSize = size_t{1} << 32;
   static constexpr size_t kPtrComprCageBaseAlignment = size_t{1} << 32;
@@ -427,7 +432,8 @@ class Internals {
     return base + static_cast<internal::Address>(static_cast<uintptr_t>(value));
   }
 
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 };
 
 // Only perform cast check for types derived from v8::Data since
