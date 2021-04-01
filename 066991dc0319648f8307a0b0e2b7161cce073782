@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97e7cbef_07434923",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-04-01T16:38:02Z",
+      "side": 1,
+      "message": "Daan, this looks really good! Thanks for the cleanups along the way.\n+clemensb for review and OWNERS, I looked at these changes and they look fine. Not sure if I missed something subtle about isolate-independent stuff here, so please keep an eye out. Thanks!",
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19a4be11_1ca8c63c",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-04-01T16:38:02Z",
+      "side": 1,
+      "message": "Not sure if we want to call AddBuiltins etc. here too (the ones that don\u0027t need an isolate)",
+      "range": {
+        "startLine": 86,
+        "startChar": 2,
+        "endLine": 86,
+        "endChar": 24
+      },
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
