@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3bb22ae_ccd3e339",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-04-01T16:48:09Z",
+      "side": 1,
+      "message": "this should be \"v8:11373\".",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 10
+      },
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "97e7cbef_07434923",
@@ -14,6 +37,40 @@
       "writtenOn": "2021-04-01T16:38:02Z",
       "side": 1,
       "message": "Daan, this looks really good! Thanks for the cleanups along the way.\n+clemensb for review and OWNERS, I looked at these changes and they look fine. Not sure if I missed something subtle about isolate-independent stuff here, so please keep an eye out. Thanks!",
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96857610_a28ad151",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-04-01T16:48:09Z",
+      "side": 1,
+      "message": "Added some minor comments. This generally looks good, but I am also no expert in this area.\nJakob, maybe?",
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a0c524a_5e35cd3f",
+        "filename": "src/codegen/external-reference-encoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-04-01T16:48:09Z",
+      "side": 1,
+      "message": "Isn\u0027t this a memory leak?",
       "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -37,6 +94,23 @@
         "endLine": 86,
         "endChar": 24
       },
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f7ba5d6_b8d5800b",
+        "filename": "src/codegen/external-reference.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-04-01T16:48:09Z",
+      "side": 1,
+      "message": "This undef\u0027s the wrong macro. I would actually prefer just using COUNT_EXTERNAL_REFERENCE for both constants, and only undef\u0027ing it here.",
       "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
