@@ -78,12 +78,29 @@ const char* const
 BUILTIN_LIST_C(FORWARD_DECLARE)
 #undef FORWARD_DECLARE
 
+void ExternalReferenceTable::Init() {
+  int index = 0;
+
+  // kNullAddress is preserved through serialization/deserialization.
+  Add(kNullAddress, &index);
+  AddReferences(&index);
+  is_initialized_ = static_cast<uint32_t>(true);
+
+  // Zero out remainder
+  while (index < kSize) {
+    Add(kNullAddress, &index);
+  }
+
+  CHECK_EQ(kSize, index);
+}
+
 void ExternalReferenceTable::Init(Isolate* isolate) {
   int index = 0;
 
   // kNullAddress is preserved through serialization/deserialization.
   Add(kNullAddress, &index);
-  AddReferences(isolate, &index);
+  AddReferences(&index);
+  AddIsolateReferences(isolate, &index);
   AddBuiltins(&index);
   AddRuntimeFunctions(&index);
   AddIsolateAddresses(isolate, &index);
@@ -112,7 +129,7 @@ void ExternalReferenceTable::Add(Address address, int* index) {
   ref_addr_[(*index)++] = address;
 }
 
-void ExternalReferenceTable::AddReferences(Isolate* isolate, int* index) {
+void ExternalReferenceTable::AddReferences(int* index) {
   CHECK_EQ(kSpecialReferenceCount, *index);
 
 #define ADD_EXTERNAL_REFERENCE(name, desc) \
@@ -120,16 +137,27 @@ void ExternalReferenceTable::AddReferences(Isolate* isolate, int* index) {
   EXTERNAL_REFERENCE_LIST(ADD_EXTERNAL_REFERENCE)
 #undef ADD_EXTERNAL_REFERENCE
 
+  CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount, *index);
+}
+
+void ExternalReferenceTable::AddIsolateReferences(Isolate* isolate,
+                                                  int* index) {
+  CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount, *index);
+
 #define ADD_EXTERNAL_REFERENCE(name, desc) \
   Add(ExternalReference::name(isolate).address(), index);
   EXTERNAL_REFERENCE_LIST_WITH_ISOLATE(ADD_EXTERNAL_REFERENCE)
 #undef ADD_EXTERNAL_REFERENCE
 
-  CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount, *index);
+  CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
+               kExternalReferenceWithIsolateCount,
+           *index);
 }
 
 void ExternalReferenceTable::AddBuiltins(int* index) {
-  CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount, *index);
+  CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
+               kExternalReferenceWithIsolateCount,
+           *index);
 
   static const Address c_builtins[] = {
 #define DEF_ENTRY(Name, ...) FUNCTION_ADDR(&Builtin_##Name),
@@ -141,13 +169,13 @@ void ExternalReferenceTable::AddBuiltins(int* index) {
   }
 
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount,
            *index);
 }
 
 void ExternalReferenceTable::AddRuntimeFunctions(int* index) {
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount,
+               +kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount,
            *index);
 
   static constexpr Runtime::FunctionId runtime_functions[] = {
@@ -161,13 +189,15 @@ void ExternalReferenceTable::AddRuntimeFunctions(int* index) {
   }
 
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount + kRuntimeReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+               kRuntimeReferenceCount,
            *index);
 }
 
 void ExternalReferenceTable::AddIsolateAddresses(Isolate* isolate, int* index) {
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount + kRuntimeReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+               kRuntimeReferenceCount,
            *index);
 
   for (int i = 0; i < IsolateAddressId::kIsolateAddressCount; ++i) {
@@ -175,15 +205,15 @@ void ExternalReferenceTable::AddIsolateAddresses(Isolate* isolate, int* index) {
   }
 
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount + kRuntimeReferenceCount +
-               kIsolateAddressReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+               kRuntimeReferenceCount + kIsolateAddressReferenceCount,
            *index);
 }
 
 void ExternalReferenceTable::AddAccessors(int* index) {
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount + kRuntimeReferenceCount +
-               kIsolateAddressReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+               kRuntimeReferenceCount + kIsolateAddressReferenceCount,
            *index);
 
   static const Address accessors[] = {
@@ -203,15 +233,17 @@ void ExternalReferenceTable::AddAccessors(int* index) {
   }
 
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount + kRuntimeReferenceCount +
-               kIsolateAddressReferenceCount + kAccessorReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+               kRuntimeReferenceCount + kIsolateAddressReferenceCount +
+               kAccessorReferenceCount,
            *index);
 }
 
 void ExternalReferenceTable::AddStubCache(Isolate* isolate, int* index) {
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount + kRuntimeReferenceCount +
-               kIsolateAddressReferenceCount + kAccessorReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+               kRuntimeReferenceCount + kIsolateAddressReferenceCount +
+               kAccessorReferenceCount,
            *index);
 
   StubCache* load_stub_cache = isolate->load_stub_cache();
@@ -236,9 +268,9 @@ void ExternalReferenceTable::AddStubCache(Isolate* isolate, int* index) {
   Add(store_stub_cache->map_reference(StubCache::kSecondary).address(), index);
 
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount + kRuntimeReferenceCount +
-               kIsolateAddressReferenceCount + kAccessorReferenceCount +
-               kStubCacheReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+               kRuntimeReferenceCount + kIsolateAddressReferenceCount +
+               kAccessorReferenceCount + kStubCacheReferenceCount,
            *index);
 }
 
@@ -252,9 +284,9 @@ Address ExternalReferenceTable::GetStatsCounterAddress(StatsCounter* counter) {
 void ExternalReferenceTable::AddNativeCodeStatsCounters(Isolate* isolate,
                                                         int* index) {
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount + kRuntimeReferenceCount +
-               kIsolateAddressReferenceCount + kAccessorReferenceCount +
-               kStubCacheReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+               kRuntimeReferenceCount + kIsolateAddressReferenceCount +
+               kAccessorReferenceCount + kStubCacheReferenceCount,
            *index);
 
   Counters* counters = isolate->counters();
@@ -264,9 +296,10 @@ void ExternalReferenceTable::AddNativeCodeStatsCounters(Isolate* isolate,
 #undef SC
 
   CHECK_EQ(kSpecialReferenceCount + kExternalReferenceCount +
-               kBuiltinsReferenceCount + kRuntimeReferenceCount +
-               kIsolateAddressReferenceCount + kAccessorReferenceCount +
-               kStubCacheReferenceCount + kStatsCountersReferenceCount,
+               kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+               kRuntimeReferenceCount + kIsolateAddressReferenceCount +
+               kAccessorReferenceCount + kStubCacheReferenceCount +
+               kStatsCountersReferenceCount,
            *index);
   CHECK_EQ(kSize, *index);
 }

@@ -238,9 +238,9 @@ static void PrintRelocInfo(StringBuilder* out, Isolate* isolate,
                       is_compressed ? "(compressed) " : "", obj_name.get());
   } else if (rmode == RelocInfo::EXTERNAL_REFERENCE) {
     const char* reference_name =
-        ref_encoder ? ref_encoder->NameOfAddress(
-                          isolate, relocinfo->target_external_reference())
-                    : "unknown";
+        ref_encoder
+            ? ref_encoder->NameOfAddress(relocinfo->target_external_reference())
+            : "unknown";
     out->AddFormatted("    ;; external reference (%s)", reference_name);
   } else if (RelocInfo::IsCodeTargetMode(rmode)) {
     out->AddFormatted("    ;; code:");
@@ -441,16 +441,19 @@ int Disassembler::Decode(Isolate* isolate, std::ostream* os, byte* begin,
                   "Builtins disassembly requires a readable .text section");
   V8NameConverter v8NameConverter(isolate, code);
   if (isolate) {
-    // We have an isolate, so support external reference names.
+    // We have an isolate, so support external reference names from V8 and
+    // embedder.
     SealHandleScope shs(isolate);
     DisallowGarbageCollection no_alloc;
     ExternalReferenceEncoder ref_encoder(isolate);
     return DecodeIt(isolate, &ref_encoder, os, code, v8NameConverter, begin,
                     end, current_pc);
   } else {
-    // No isolate => isolate-independent code. No external reference names.
-    return DecodeIt(nullptr, nullptr, os, code, v8NameConverter, begin, end,
-                    current_pc);
+    // No isolate => isolate-independent code. Only V8 External references
+    // available.
+    ExternalReferenceEncoder ref_encoder;
+    return DecodeIt(nullptr, &ref_encoder, os, code, v8NameConverter, begin,
+                    end, current_pc);
   }
 }
 

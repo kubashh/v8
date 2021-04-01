@@ -21,15 +21,10 @@ ExternalReferenceEncoder::ExternalReferenceEncoder(Isolate* isolate) {
   if (map_ != nullptr) return;
   map_ = new AddressToIndexHashMap();
   isolate->set_external_reference_map(map_);
-  // Add V8's external references.
-  ExternalReferenceTable* table = isolate->external_reference_table();
-  for (uint32_t i = 0; i < ExternalReferenceTable::kSize; ++i) {
-    Address addr = table->address(i);
-    // Ignore duplicate references.
-    // This can happen due to ICF. See http://crbug.com/726896.
-    if (map_->Get(addr).IsNothing()) map_->Set(addr, Value::Encode(i, false));
-    DCHECK(map_->Get(addr).IsJust());
-  }
+  table_ = isolate->external_reference_table();
+
+  InitializeV8ExternalReferences();
+
   // Add external references provided by the embedder.
   const intptr_t* api_references = isolate->api_external_references();
   if (api_references == nullptr) return;
@@ -38,6 +33,25 @@ ExternalReferenceEncoder::ExternalReferenceEncoder(Isolate* isolate) {
     // Ignore duplicate references.
     // This can happen due to ICF. See http://crbug.com/726896.
     if (map_->Get(addr).IsNothing()) map_->Set(addr, Value::Encode(i, true));
+    DCHECK(map_->Get(addr).IsJust());
+  }
+}
+
+ExternalReferenceEncoder::ExternalReferenceEncoder() {
+  map_ = new AddressToIndexHashMap();
+  table_ = new ExternalReferenceTable();
+  table_->Init();
+
+  InitializeV8ExternalReferences();
+}
+
+void ExternalReferenceEncoder::InitializeV8ExternalReferences() {
+  // Add V8's external references.
+  for (uint32_t i = 0; i < ExternalReferenceTable::kSize; ++i) {
+    Address addr = table_->address(i);
+    // Ignore duplicate references.
+    // This can happen due to ICF. See http://crbug.com/726896.
+    if (map_->Get(addr).IsNothing()) map_->Set(addr, Value::Encode(i, false));
     DCHECK(map_->Get(addr).IsJust());
   }
 }
@@ -84,13 +98,12 @@ ExternalReferenceEncoder::Value ExternalReferenceEncoder::Encode(
   return result;
 }
 
-const char* ExternalReferenceEncoder::NameOfAddress(Isolate* isolate,
-                                                    Address address) const {
+const char* ExternalReferenceEncoder::NameOfAddress(Address address) const {
   Maybe<uint32_t> maybe_index = map_->Get(address);
   if (maybe_index.IsNothing()) return "<unknown>";
   Value value(maybe_index.FromJust());
   if (value.is_from_api()) return "<from api>";
-  return isolate->external_reference_table()->name(value.index());
+  return table_->name(value.index());
 }
 
 }  // namespace internal
