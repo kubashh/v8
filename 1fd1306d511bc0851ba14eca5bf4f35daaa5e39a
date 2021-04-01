@@ -33,6 +33,24 @@
       "message": "You mentioned performance tests. Could you please share the results of those? Thanks!",
       "revId": "1fd1306d511bc0851ba14eca5bf4f35daaa5e39a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57d05126_8923c491",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-01T06:47:45Z",
+      "side": 1,
+      "message": "Sure. We have run test with --js-flags\u003d\"--no-opt\" on Speedometer2 and JetStream2 to see the overhead of this change in call feedback collection (https://docs.google.com/document/d/1AJKCWDMpugu31_mor3dd55UMO9oJ-85nyL5M748Zevc/edit#bookmark\u003did.avy4rexaf4wu). Currently we haven\u0027t found large regression on Speedometer2 and JetStream2 overall under --no-opt. By the way, this change may still improve the runTime of JetStream2/richard-wasm by 38% at Chrome 91.0.4457.2.",
+      "parentUuid": "086e5624_8084449d",
+      "revId": "1fd1306d511bc0851ba14eca5bf4f35daaa5e39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
