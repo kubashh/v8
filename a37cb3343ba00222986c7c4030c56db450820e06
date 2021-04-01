@@ -39,6 +39,30 @@
       },
       "revId": "a37cb3343ba00222986c7c4030c56db450820e06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80fe9d88_c555b163",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2489,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-01T15:37:38Z",
+      "side": 1,
+      "message": "Exactly - we are not going to return here, so why generate more code. That\u0027s the common practice in our builtins.",
+      "parentUuid": "decc4f31_7a33d2d8",
+      "range": {
+        "startLine": 2489,
+        "startChar": 43,
+        "endLine": 2489,
+        "endChar": 49
+      },
+      "revId": "a37cb3343ba00222986c7c4030c56db450820e06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
