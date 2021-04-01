@@ -27,10 +27,10 @@
 namespace v8 {
 namespace internal {
 
-void CopyAndRebaseRoots(Address* src, Address* dst, Address new_base) {
-  Address src_base = GetIsolateRootAddress(src[0]);
+void CopyAndRebaseRoots(Address* src, Address* dst, Address src_base,
+                        Address dst_base) {
   for (size_t i = 0; i < ReadOnlyHeap::kEntriesCount; ++i) {
-    dst[i] = src[i] - src_base + new_base;
+    dst[i] = src[i] - src_base + dst_base;
   }
 }
 
@@ -108,14 +108,16 @@ void SingleCopyReadOnlyArtifacts::VerifyHeapAndSpaceRelationships(
 void PointerCompressedReadOnlyArtifacts::InitializeRootsFrom(Isolate* isolate) {
   auto isolate_ro_roots =
       isolate->roots_table().read_only_roots_begin().location();
-  CopyAndRebaseRoots(isolate_ro_roots, read_only_roots_, 0);
+  Address src_base = isolate->isolate_root();
+  CopyAndRebaseRoots(isolate_ro_roots, read_only_roots_, src_base, 0);
 }
 
 void PointerCompressedReadOnlyArtifacts::InitializeRootsIn(Isolate* isolate) {
   auto isolate_ro_roots =
       isolate->roots_table().read_only_roots_begin().location();
-  CopyAndRebaseRoots(read_only_roots_, isolate_ro_roots,
-                     isolate->isolate_root());
+  Address dst_base = isolate->isolate_root();
+  // read_only_roots_ already had the base subtracted in InitializeRootsFrom.
+  CopyAndRebaseRoots(read_only_roots_, isolate_ro_roots, 0, dst_base);
 }
 
 SharedReadOnlySpace* PointerCompressedReadOnlyArtifacts::CreateReadOnlySpace(
@@ -755,9 +757,10 @@ SharedReadOnlySpace::SharedReadOnlySpace(
     Heap* heap, PointerCompressedReadOnlyArtifacts* artifacts)
     : SharedReadOnlySpace(heap) {
   // This constructor should only be used when RO_SPACE is shared with pointer
-  // compression.
+  // compression in a per-Isolate cage.
   DCHECK(V8_SHARED_RO_HEAP_BOOL);
   DCHECK(COMPRESS_POINTERS_BOOL);
+  DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
   DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
   DCHECK(!artifacts->pages().empty());
 
@@ -776,6 +779,7 @@ SharedReadOnlySpace::SharedReadOnlySpace(
     : SharedReadOnlySpace(heap) {
   DCHECK(V8_SHARED_RO_HEAP_BOOL);
   DCHECK(COMPRESS_POINTERS_BOOL);
+  DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
   DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
 
   accounting_stats_ = std::move(new_stats);
