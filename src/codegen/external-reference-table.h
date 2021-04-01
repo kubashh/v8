@@ -26,6 +26,8 @@ class ExternalReferenceTable {
   static constexpr int kSpecialReferenceCount = 1;
   static constexpr int kExternalReferenceCount =
       ExternalReference::kExternalReferenceCount;
+  static constexpr int kExternalReferenceWithIsolateCount =
+      ExternalReference::kExternalReferenceWithIsolateCount;
   static constexpr int kBuiltinsReferenceCount =
 #define COUNT_C_BUILTIN(...) +1
       BUILTIN_LIST_C(COUNT_C_BUILTIN);
@@ -44,9 +46,10 @@ class ExternalReferenceTable {
 #undef SC
   static constexpr int kSize =
       kSpecialReferenceCount + kExternalReferenceCount +
-      kBuiltinsReferenceCount + kRuntimeReferenceCount +
-      kIsolateAddressReferenceCount + kAccessorReferenceCount +
-      kStubCacheReferenceCount + kStatsCountersReferenceCount;
+      kExternalReferenceWithIsolateCount + kBuiltinsReferenceCount +
+      kRuntimeReferenceCount + kIsolateAddressReferenceCount +
+      kAccessorReferenceCount + kStubCacheReferenceCount +
+      kStatsCountersReferenceCount;
   static constexpr uint32_t kEntrySize =
       static_cast<uint32_t>(kSystemPointerSize);
   static constexpr uint32_t kSizeInBytes = kSize * kEntrySize + 2 * kUInt32Size;
@@ -73,12 +76,14 @@ class ExternalReferenceTable {
   ExternalReferenceTable() = default;
   ExternalReferenceTable(const ExternalReferenceTable&) = delete;
   ExternalReferenceTable& operator=(const ExternalReferenceTable&) = delete;
+  void Init();
   void Init(Isolate* isolate);
 
  private:
   void Add(Address address, int* index);
 
-  void AddReferences(Isolate* isolate, int* index);
+  void AddReferences(int* index);
+  void AddIsolateReferences(Isolate* isolate, int* index);
   void AddBuiltins(int* index);
   void AddRuntimeFunctions(int* index);
   void AddIsolateAddresses(Isolate* isolate, int* index);

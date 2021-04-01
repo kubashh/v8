@@ -464,8 +464,7 @@ void RelocInfo::Print(Isolate* isolate, std::ostream& os) {  // NOLINT
   } else if (rmode_ == EXTERNAL_REFERENCE) {
     if (isolate) {
       ExternalReferenceEncoder ref_encoder(isolate);
-      os << " ("
-         << ref_encoder.NameOfAddress(isolate, target_external_reference())
+      os << " (" << ref_encoder.NameOfAddress(target_external_reference())
          << ") ";
     }
     os << " (" << reinterpret_cast<const void*>(target_external_reference())

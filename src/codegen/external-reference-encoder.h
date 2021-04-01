@@ -6,6 +6,7 @@
 #define V8_CODEGEN_EXTERNAL_REFERENCE_ENCODER_H_
 
 #include "src/base/bit-field.h"
+#include "src/codegen/external-reference-table.h"
 #include "src/common/globals.h"
 #include "src/utils/address-map.h"
 
@@ -34,6 +35,7 @@ class ExternalReferenceEncoder {
   };
 
   explicit ExternalReferenceEncoder(Isolate* isolate);
+  ExternalReferenceEncoder();
   ExternalReferenceEncoder(const ExternalReferenceEncoder&) = delete;
   ExternalReferenceEncoder& operator=(const ExternalReferenceEncoder&) = delete;
 #ifdef DEBUG
@@ -43,10 +45,13 @@ class ExternalReferenceEncoder {
   Value Encode(Address key);
   Maybe<Value> TryEncode(Address key);
 
-  const char* NameOfAddress(Isolate* isolate, Address address) const;
+  const char* NameOfAddress(Address address) const;
 
  private:
   AddressToIndexHashMap* map_;
+  ExternalReferenceTable* table_;
+
+  void InitializeV8ExternalReferences();
 
 #ifdef DEBUG
   std::vector<int> count_;
