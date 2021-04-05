@@ -42,7 +42,8 @@ class EmbedderDataSlot
   static constexpr int kTaggedPayloadOffset = 0;
 #endif
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // The raw payload is located in the other "tagged" part of the full pointer
   // and cotains the upper part of aligned address. The raw part is not expected
   // to look like a tagged value.

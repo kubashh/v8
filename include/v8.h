@@ -11548,7 +11548,8 @@ Local<Value> Object::GetInternalField(int index) {
       instance_type == I::kJSSpecialApiObjectType) {
     int offset = I::kJSObjectHeaderSize + (I::kEmbedderDataSlotSize * index);
     A value = I::ReadRawField<A>(obj, offset);
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     // We read the full pointer value and then decompress it in order to avoid
     // dealing with potential endiannes issues.
     value = I::DecompressTaggedAnyField(obj, static_cast<uint32_t>(value));
@@ -12190,7 +12191,8 @@ Local<Value> Context::GetEmbedderData(int index) {
   int value_offset =
       I::kEmbedderDataArrayHeaderSize + (I::kEmbedderDataSlotSize * index);
   A value = I::ReadRawField<A>(embedder_data, value_offset);
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // We read the full pointer value and then decompress it in order to avoid
   // dealing with potential endiannes issues.
   value =

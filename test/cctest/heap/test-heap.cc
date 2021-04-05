@@ -7062,7 +7062,8 @@ UNINITIALIZED_TEST(HugeHeapLimit) {
   create_params.constraints.ConfigureDefaults(kMemoryGB * GB, kMemoryGB * GB);
   v8::Isolate* isolate = v8::Isolate::New(create_params);
   Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   size_t kExpectedHeapLimit = Heap::AllocatorLimitOnMaxOldGenerationSize();
 #else
   size_t kExpectedHeapLimit = size_t{4} * GB;

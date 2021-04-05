@@ -497,7 +497,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   uintptr_t ConstexprWordNot(uintptr_t a) { return ~a; }
 
   TNode<BoolT> TaggedEqual(TNode<AnyTaggedT> a, TNode<AnyTaggedT> b) {
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       return Word32Equal(ReinterpretCast<Word32T>(a),
                          ReinterpretCast<Word32T>(b));
     } else {

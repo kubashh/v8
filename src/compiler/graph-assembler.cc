@@ -461,7 +461,8 @@ Node* GraphAssembler::IntPtrEqual(Node* left, Node* right) {
 }
 
 Node* GraphAssembler::TaggedEqual(Node* left, Node* right) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     return Word32Equal(left, right);
   } else {
     return WordEqual(left, right);
@@ -469,7 +470,8 @@ Node* GraphAssembler::TaggedEqual(Node* left, Node* right) {
 }
 
 Node* GraphAssembler::SmiSub(Node* left, Node* right) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     return Int32Sub(left, right);
   } else {
     return IntSub(left, right);
@@ -477,7 +479,8 @@ Node* GraphAssembler::SmiSub(Node* left, Node* right) {
 }
 
 Node* GraphAssembler::SmiLessThan(Node* left, Node* right) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     return Int32LessThan(left, right);
   } else {
     return IntLessThan(left, right);

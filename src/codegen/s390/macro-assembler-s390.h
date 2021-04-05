@@ -1153,7 +1153,8 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
 
   template <class T>
   void CompareTagged(Register src1, T src2) {
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       CmpS32(src1, src2);
     } else {
       CmpS64(src1, src2);

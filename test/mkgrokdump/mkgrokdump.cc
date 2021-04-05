@@ -179,7 +179,8 @@ static int DumpHeapConstants(FILE* out, const char* argv0) {
       i::PrintF(out, "}\n");
     }
 
-    if (COMPRESS_POINTERS_BOOL) {
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)) {
       // Dump a list of addresses for the first page of each space that contains
       // objects in the other tables above. This is only useful if two
       // assumptions hold:

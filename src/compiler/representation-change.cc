@@ -1030,7 +1030,8 @@ Node* RepresentationChanger::GetBitRepresentationFor(
       }
     }
   } else if (output_rep == MachineRepresentation::kTaggedSigned) {
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       node = jsgraph()->graph()->NewNode(machine()->Word32Equal(), node,
                                          jsgraph()->Int32Constant(0));
     } else {
@@ -1306,15 +1307,21 @@ const Operator* RepresentationChanger::TaggedSignedOperatorFor(
     IrOpcode::Value opcode) {
   switch (opcode) {
     case IrOpcode::kSpeculativeNumberLessThan:
-      return (COMPRESS_POINTERS_BOOL || machine()->Is32())
+      return ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+               COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) ||
+              machine()->Is32())
                  ? machine()->Int32LessThan()
                  : machine()->Int64LessThan();
     case IrOpcode::kSpeculativeNumberLessThanOrEqual:
-      return (COMPRESS_POINTERS_BOOL || machine()->Is32())
+      return ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+               COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) ||
+              machine()->Is32())
                  ? machine()->Int32LessThanOrEqual()
                  : machine()->Int64LessThanOrEqual();
     case IrOpcode::kSpeculativeNumberEqual:
-      return (COMPRESS_POINTERS_BOOL || machine()->Is32())
+      return ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+               COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) ||
+              machine()->Is32())
                  ? machine()->Word32Equal()
                  : machine()->Word64Equal();
     default:

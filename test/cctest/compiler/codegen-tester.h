@@ -131,7 +131,9 @@ class BufferedRawMachineAssemblerTester
   // Store node is provided as a parameter. By storing the return value in
   // memory it is possible to return 64 bit values.
   void Return(Node* input) {
-    if (COMPRESS_POINTERS_BOOL && MachineTypeForC<ReturnType>().IsTagged()) {
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+        MachineTypeForC<ReturnType>().IsTagged()) {
       // Since we are returning values via storing to off-heap location
       // generate full-word store here.
       Store(MachineType::PointerRepresentation(),

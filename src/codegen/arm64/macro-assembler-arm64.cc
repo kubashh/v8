@@ -1896,7 +1896,8 @@ void TurboAssembler::LoadEntryFromBuiltinIndex(Register builtin_index) {
     Ldr(builtin_index, MemOperand(kRootRegister, builtin_index));
   } else {
     DCHECK(SmiValuesAre31Bits());
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       Add(builtin_index, kRootRegister,
           Operand(builtin_index.W(), SXTW, kSystemPointerSizeLog2 - kSmiShift));
     } else {
@@ -2802,7 +2803,8 @@ void MacroAssembler::JumpIfIsInRange(const Register& value,
 
 void TurboAssembler::LoadTaggedPointerField(const Register& destination,
                                             const MemOperand& field_operand) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DecompressTaggedPointer(destination, field_operand);
   } else {
     Ldr(destination, field_operand);
@@ -2811,7 +2813,8 @@ void TurboAssembler::LoadTaggedPointerField(const Register& destination,
 
 void TurboAssembler::LoadAnyTaggedField(const Register& destination,
                                         const MemOperand& field_operand) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DecompressAnyTagged(destination, field_operand);
   } else {
     Ldr(destination, field_operand);
@@ -2820,7 +2823,8 @@ void TurboAssembler::LoadAnyTaggedField(const Register& destination,
 
 void TurboAssembler::LoadTaggedSignedField(const Register& destination,
                                            const MemOperand& field_operand) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DecompressTaggedSigned(destination, field_operand);
   } else {
     Ldr(destination, field_operand);
@@ -2833,7 +2837,8 @@ void TurboAssembler::SmiUntagField(Register dst, const MemOperand& src) {
 
 void TurboAssembler::StoreTaggedField(const Register& value,
                                       const MemOperand& dst_field_operand) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     Str(value.W(), dst_field_operand);
   } else {
     Str(value, dst_field_operand);

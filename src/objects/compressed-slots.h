@@ -11,7 +11,8 @@
 namespace v8 {
 namespace internal {
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 // A CompressedObjectSlot instance describes a kTaggedSize-sized field ("slot")
 // holding a compressed tagged pointer (smi or heap object).
 // Its address() is the address of the slot.
@@ -141,7 +142,8 @@ class OffHeapCompressedObjectSlot
   inline void Release_CompareAndSwap(Object old, Object target) const;
 };
 
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 }  // namespace internal
 }  // namespace v8

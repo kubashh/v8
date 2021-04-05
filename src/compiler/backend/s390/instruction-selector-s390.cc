@@ -156,11 +156,15 @@ class S390OperandGenerator final : public OperandGenerator {
       case kS390_Cmp64:
       case kS390_LoadAndTestWord64:
         return rep == MachineRepresentation::kWord64 ||
-               (!COMPRESS_POINTERS_BOOL && IsAnyTagged(rep));
+               (!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                  COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+                IsAnyTagged(rep));
       case kS390_LoadAndTestWord32:
       case kS390_Cmp32:
         return rep == MachineRepresentation::kWord32 ||
-               (COMPRESS_POINTERS_BOOL && IsAnyTagged(rep));
+               ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                 COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+                IsAnyTagged(rep));
       default:
         break;
     }
@@ -293,13 +297,15 @@ ArchOpcode SelectLoadOpcode(Node* node) {
       break;
     case MachineRepresentation::kCompressedPointer:  // Fall through.
     case MachineRepresentation::kCompressed:
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
       opcode = kS390_LoadWordS32;
       break;
 #else
       UNREACHABLE();
 #endif
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     case MachineRepresentation::kTaggedSigned:
       opcode = kS390_LoadDecompressTaggedSigned;
       break;
@@ -773,7 +779,8 @@ static void VisitGeneralStore(
         break;
       case MachineRepresentation::kCompressedPointer:  // Fall through.
       case MachineRepresentation::kCompressed:
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
         opcode = kS390_StoreCompressTagged;
         break;
 #else
@@ -1528,7 +1535,8 @@ void InstructionSelector::VisitTryTruncateFloat64ToUint64(Node* node) {
 
 void InstructionSelector::VisitBitcastWord32ToWord64(Node* node) {
   DCHECK(SmiValuesAre31Bits());
-  DCHECK(COMPRESS_POINTERS_BOOL);
+  DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL);
   EmitIdentity(node);
 }
 

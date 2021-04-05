@@ -13,7 +13,8 @@ namespace internal {
 namespace debug_helper_internal {
 
 bool IsPointerCompressed(uintptr_t address) {
-#if COMPRESS_POINTERS_BOOL
+#if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL || \
+     COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
   return address < i::kPtrComprCageReservationSize;
 #else
   return false;
@@ -22,7 +23,10 @@ bool IsPointerCompressed(uintptr_t address) {
 
 uintptr_t EnsureDecompressed(uintptr_t address,
                              uintptr_t any_uncompressed_ptr) {
-  if (!COMPRESS_POINTERS_BOOL || !IsPointerCompressed(address)) return address;
+  if (!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) ||
+      !IsPointerCompressed(address))
+    return address;
   return i::DecompressTaggedAny(any_uncompressed_ptr,
                                 static_cast<i::Tagged_t>(address));
 }

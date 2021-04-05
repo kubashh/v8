@@ -135,7 +135,8 @@ TEST_F(HeapTest, ExternalLimitStaysAboveDefaultForExplicitHandling) {
   EXPECT_GE(heap->external_memory_limit(), kExternalAllocationSoftLimit);
 }
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 TEST_F(HeapTest, HeapLayout) {
   // Produce some garbage.
   RunJS(
@@ -162,7 +163,8 @@ TEST_F(HeapTest, HeapLayout) {
     EXPECT_TRUE(heap_reservation.contains(address, size));
   }
 }
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 }  // namespace internal
 }  // namespace v8

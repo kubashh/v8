@@ -69,7 +69,9 @@ CAST_ACCESSOR(WasmArray)
 
 #define PRIMITIVE_ACCESSORS(holder, name, type, offset)                       \
   type holder::name() const {                                                 \
-    if (COMPRESS_POINTERS_BOOL && alignof(type) > kTaggedSize) {              \
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||                            \
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&                            \
+        alignof(type) > kTaggedSize) {                                        \
       /* TODO(ishell, v8:8875): When pointer compression is enabled 8-byte */ \
       /* size fields (external pointers, doubles and BigInt data) are only */ \
       /* kTaggedSize aligned so we have to use unaligned pointer friendly  */ \
@@ -81,7 +83,9 @@ CAST_ACCESSOR(WasmArray)
     }                                                                         \
   }                                                                           \
   void holder::set_##name(type value) {                                       \
-    if (COMPRESS_POINTERS_BOOL && alignof(type) > kTaggedSize) {              \
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||                            \
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&                            \
+        alignof(type) > kTaggedSize) {                                        \
       /* TODO(ishell, v8:8875): When pointer compression is enabled 8-byte */ \
       /* size fields (external pointers, doubles and BigInt data) are only */ \
       /* kTaggedSize aligned so we have to use unaligned pointer friendly  */ \
@@ -462,7 +466,7 @@ void WasmTypeInfo::clear_foreign_address(Isolate* isolate) {
 #ifdef V8_HEAP_SANDBOX
 
   // TODO(syg): V8_HEAP_SANDBOX doesn't work with pointer cage
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifndef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
 #error "V8_HEAP_SANDBOX requires per-Isolate pointer compression cage"
 #endif
 

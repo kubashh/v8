@@ -94,7 +94,8 @@ void TurboAssembler::Ccmp(const Register& rn, const Operand& operand,
 
 void TurboAssembler::CcmpTagged(const Register& rn, const Operand& operand,
                                 StatusFlags nzcv, Condition cond) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     Ccmp(rn.W(), operand.ToW(), nzcv, cond);
   } else {
     Ccmp(rn, operand, nzcv, cond);
@@ -166,7 +167,8 @@ void TurboAssembler::Cmp(const Register& rn, const Operand& operand) {
 }
 
 void TurboAssembler::CmpTagged(const Register& rn, const Operand& operand) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     Cmp(rn.W(), operand.ToW());
   } else {
     Cmp(rn, operand);
@@ -1055,7 +1057,8 @@ void TurboAssembler::SmiUntag(Register dst, Register src) {
     AssertSmi(src);
   }
   DCHECK(SmiValuesAre32Bits() || SmiValuesAre31Bits());
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     Asr(dst.W(), src.W(), kSmiShift);
     Sxtw(dst, dst);
   } else {
@@ -1080,7 +1083,8 @@ void TurboAssembler::SmiUntag(Register dst, const MemOperand& src) {
     }
   } else {
     DCHECK(SmiValuesAre31Bits());
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       Ldr(dst.W(), src);
     } else {
       Ldr(dst, src);
@@ -1412,7 +1416,8 @@ void TurboAssembler::CompareAndBranch(const Register& lhs, const Operand& rhs,
 void TurboAssembler::CompareTaggedAndBranch(const Register& lhs,
                                             const Operand& rhs, Condition cond,
                                             Label* label) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     CompareAndBranch(lhs.W(), rhs.ToW(), cond, label);
   } else {
     CompareAndBranch(lhs, rhs, cond, label);

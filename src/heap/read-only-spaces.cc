@@ -307,8 +307,10 @@ void ReadOnlySpace::DetachPagesAndAddToArtifacts(
   // Without pointer compression, ReadOnlySpace pages are directly shared
   // between all heaps and so must be unregistered from their originating
   // allocator.
-  Seal(COMPRESS_POINTERS_BOOL ? SealMode::kDetachFromHeap
-                              : SealMode::kDetachFromHeapAndUnregisterMemory);
+  Seal((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+           ? SealMode::kDetachFromHeap
+           : SealMode::kDetachFromHeapAndUnregisterMemory);
   artifacts->Initialize(heap->isolate(), std::move(pages_), accounting_stats_);
 }
 
@@ -757,7 +759,6 @@ SharedReadOnlySpace::SharedReadOnlySpace(
   // This constructor should only be used when RO_SPACE is shared with pointer
   // compression in a per-Isolate cage.
   DCHECK(V8_SHARED_RO_HEAP_BOOL);
-  DCHECK(COMPRESS_POINTERS_BOOL);
   DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
   DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
   DCHECK(!artifacts->pages().empty());
@@ -776,7 +777,6 @@ SharedReadOnlySpace::SharedReadOnlySpace(
     AllocationStats&& new_stats)
     : SharedReadOnlySpace(heap) {
   DCHECK(V8_SHARED_RO_HEAP_BOOL);
-  DCHECK(COMPRESS_POINTERS_BOOL);
   DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
   DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
 
@@ -791,7 +791,8 @@ SharedReadOnlySpace::SharedReadOnlySpace(Heap* heap,
   // This constructor should only be used when RO_SPACE is shared without
   // pointer compression.
   DCHECK(V8_SHARED_RO_HEAP_BOOL);
-  DCHECK(!COMPRESS_POINTERS_BOOL);
+  DCHECK(!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+           COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL));
   accounting_stats_ = artifacts->accounting_stats();
   pages_ = artifacts->pages();
 }
