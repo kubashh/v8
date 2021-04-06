@@ -260,13 +260,14 @@ void Serializer::PutSmiRoot(FullObjectSlot slot) {
   // deserialization (endianness or smi sequences).
   STATIC_ASSERT(decltype(slot)::kSlotDataSize == sizeof(Address));
   STATIC_ASSERT(decltype(slot)::kSlotDataSize == kSystemPointerSize);
-  static constexpr int bytes_to_output = decltype(slot)::kSlotDataSize;
-  static constexpr int size_in_tagged = bytes_to_output >> kTaggedSizeLog2;
-  sink_.Put(FixedRawDataWithSize::Encode(size_in_tagged), "Smi");
+  static constexpr int kBytesToOutput = decltype(slot)::kSlotDataSize;
+  sink_.Put(NonPtrFieldWithSize::Encode(kBytesToOutput), "Smi");
 
   Address raw_value = Smi::cast(*slot).ptr();
-  const byte* raw_value_as_bytes = reinterpret_cast<const byte*>(&raw_value);
-  sink_.PutRaw(raw_value_as_bytes, bytes_to_output, "Bytes");
+  byte raw_value_as_bytes[kBytesToOutput];
+  base::WriteTargetEndianValue(reinterpret_cast<Address>(raw_value_as_bytes),
+                               raw_value);
+  sink_.PutRaw(raw_value_as_bytes, kBytesToOutput, "Bytes");
 }
 
 void Serializer::PutBackReference(Handle<HeapObject> object,
@@ -446,16 +447,55 @@ void Serializer::ObjectSerializer::SerializePrologue(SnapshotSpace space,
 }
 
 uint32_t Serializer::ObjectSerializer::SerializeBackingStore(
-    void* backing_store, int32_t byte_length) {
+    void* backing_store, int32_t byte_length, size_t element_size) {
   const SerializerReference* reference_ptr =
       serializer_->reference_map()->LookupBackingStore(backing_store);
 
   // Serialize the off-heap backing store.
   if (!reference_ptr) {
+    byte elem_te[8];
+    Address elem_te_addr = reinterpret_cast<Address>(elem_te);
+    int32_t i;
+
+    CHECK_EQ(byte_length % element_size, 0);
+
     sink_->Put(kOffHeapBackingStore, "Off-heap backing store");
     sink_->PutInt(byte_length, "length");
-    sink_->PutRaw(static_cast<byte*>(backing_store), byte_length,
-                  "BackingStore");
+    sink_->PutInt(element_size, "element_size");
+
+    switch (element_size) {
+      case 1:
+        sink_->PutRaw(static_cast<const byte*>(backing_store), byte_length,
+                      "BackingStore");
+        break;
+      case 2: {
+        const uint16_t* array = static_cast<const uint16_t*>(backing_store);
+        for (i = 0; i != byte_length / 2; ++i) {
+          base::WriteTargetEndianValue(elem_te_addr, array[i]);
+          sink_->PutRaw(elem_te, 2, "BackingStore");
+        }
+        break;
+      }
+      case 4: {
+        const uint32_t* array = static_cast<const uint32_t*>(backing_store);
+        for (i = 0; i != byte_length / 4; ++i) {
+          base::WriteTargetEndianValue(elem_te_addr, array[i]);
+          sink_->PutRaw(elem_te, 4, "BackingStore");
+        }
+        break;
+      }
+      case 8: {
+        const uint64_t* array = static_cast<const uint64_t*>(backing_store);
+        for (i = 0; i != byte_length / 8; ++i) {
+          base::WriteTargetEndianValue(elem_te_addr, array[i]);
+          sink_->PutRaw(elem_te, 8, "BackingStore");
+        }
+        break;
+      }
+      default:
+        UNREACHABLE();
+    }
+
     DCHECK_NE(0, serializer_->seen_backing_stores_index_);
     SerializerReference reference =
         SerializerReference::OffHeapBackingStoreReference(
@@ -486,7 +526,8 @@ void Serializer::ObjectSerializer::SerializeJSTypedArray() {
       void* backing_store = reinterpret_cast<void*>(
           reinterpret_cast<Address>(typed_array->DataPtr()) - byte_offset);
 
-      uint32_t ref = SerializeBackingStore(backing_store, byte_length);
+      uint32_t ref = SerializeBackingStore(backing_store, byte_length,
+                                           typed_array->element_size());
       typed_array->SetExternalBackingStoreRefForSerialization(ref);
     } else {
       typed_array->SetExternalBackingStoreRefForSerialization(0);
@@ -509,7 +550,7 @@ void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
       buffer->GetBackingStoreRefForDeserialization();
 #endif
   if (backing_store != nullptr) {
-    uint32_t ref = SerializeBackingStore(backing_store, byte_length);
+    uint32_t ref = SerializeBackingStore(backing_store, byte_length, 1);
     buffer->SetBackingStoreRefForSerialization(ref);
 
     // Ensure deterministic output by setting extension to null during
@@ -565,7 +606,8 @@ void Serializer::ObjectSerializer::SerializeExternalStringAsSequentialString() {
   Map map;
   int content_size;
   int allocation_size;
-  const byte* resource;
+  Address resource;
+  int char_size;
   // Find the map and size for the imaginary sequential string.
   bool internalized = object_->IsInternalizedString();
   if (object_->IsExternalOneByteString()) {
@@ -573,43 +615,36 @@ void Serializer::ObjectSerializer::SerializeExternalStringAsSequentialString() {
                        : roots.one_byte_string_map();
     allocation_size = SeqOneByteString::SizeFor(length);
     content_size = length * kCharSize;
-    resource = reinterpret_cast<const byte*>(
+    resource = reinterpret_cast<Address>(
         Handle<ExternalOneByteString>::cast(string)->resource()->data());
+    char_size = kCharSize;
   } else {
     map = internalized ? roots.internalized_string_map() : roots.string_map();
     allocation_size = SeqTwoByteString::SizeFor(length);
     content_size = length * kShortSize;
-    resource = reinterpret_cast<const byte*>(
+    resource = reinterpret_cast<Address>(
         Handle<ExternalTwoByteString>::cast(string)->resource()->data());
+    char_size = kShortSize;
   }
 
   SnapshotSpace space = SnapshotSpace::kOld;
   SerializePrologue(space, allocation_size, map);
+  CHECK_EQ(0, bytes_processed_so_far_);
+  bytes_processed_so_far_ = kTaggedSize;
 
   // Output the rest of the imaginary string.
-  int bytes_to_output = allocation_size - HeapObject::kHeaderSize;
-  DCHECK(IsAligned(bytes_to_output, kTaggedSize));
-  int slots_to_output = bytes_to_output >> kTaggedSizeLog2;
-
-  // Output raw data header. Do not bother with common raw length cases here.
-  sink_->Put(kVariableRawData, "RawDataForString");
-  sink_->PutInt(slots_to_output, "length");
 
   // Serialize string header (except for map).
-  byte* string_start = reinterpret_cast<byte*>(string->address());
-  for (int i = HeapObject::kHeaderSize; i < SeqString::kHeaderSize; i++) {
-    sink_->Put(string_start[i], "StringHeader");
-  }
+  VisitNonPointer(*object_, String::kRawHashFieldOffset, kUInt32Size);
+  VisitNonPointer(*object_, String::kLengthOffset, kInt32Size);
+  CHECK_EQ(bytes_processed_so_far_, SeqString::kHeaderSize);
 
   // Serialize string content.
-  sink_->PutRaw(resource, content_size, "StringContent");
+  OutputNonPtrField(resource, length, char_size);
 
   // Since the allocation size is rounded up to object alignment, there
   // maybe left-over bytes that need to be padded.
-  int padding_size = allocation_size - SeqString::kHeaderSize - content_size;
-  DCHECK(0 <= padding_size && padding_size < kObjectAlignment);
-  for (int i = 0; i < padding_size; i++)
-    sink_->Put(static_cast<byte>(0), "StringPadding");
+  OutputPadBytes(SeqString::kHeaderSize + content_size, allocation_size);
 }
 
 // Clear and later restore the next link in the weak cell or allocation site.
@@ -794,10 +829,10 @@ void Serializer::ObjectSerializer::SerializeContent(Map map, int size) {
     // For code objects, perform a custom serialization.
     SerializeCode(map, size);
   } else {
-    // For other objects, iterate references first.
-    object_->IterateBody(map, size, this);
-    // Then output data payload, if any.
-    OutputRawData(object_->address() + size);
+    // For other objects, iterate fields in order.
+    object_->IterateBodyFull(map, size, this);
+    // Then trailing padding, if any.
+    OutputPadBytes(bytes_processed_so_far_, size);
   }
 }
 
@@ -815,12 +850,14 @@ void Serializer::ObjectSerializer::VisitPointers(HeapObject host,
 
   MaybeObjectSlot current = start;
   while (current < end) {
-    while (current < end && (*current)->IsSmi()) {
+    int byte_offset = static_cast<int>(current.address() - host.address());
+    if ((*current)->IsSmi()) {
+      VisitNonPointer(host, byte_offset, kTaggedSize);
       ++current;
+      continue;
     }
-    if (current < end) {
-      OutputRawData(current.address());
-    }
+    OutputPadBytes(bytes_processed_so_far_, byte_offset);
+    bytes_processed_so_far_ = byte_offset;
     // TODO(ishell): Revisit this change once we stick to 32-bit compressed
     // tagged values.
     while (current < end && (*current)->IsCleared()) {
@@ -1021,76 +1058,42 @@ void Serializer::ObjectSerializer::VisitCodeTarget(Code host,
   bytes_processed_so_far_ += kTaggedSize;
 }
 
-namespace {
+void Serializer::ObjectSerializer::VisitNonPointer(HeapObject host, int offset,
+                                                   int size) {
+  OutputPadBytes(bytes_processed_so_far_, offset);
 
-// Similar to OutputRawData, but substitutes the given field with the given
-// value instead of reading it from the object.
-void OutputRawWithCustomField(SnapshotByteSink* sink, Address object_start,
-                              int written_so_far, int bytes_to_write,
-                              int field_offset, int field_size,
-                              const byte* field_value) {
-  int offset = field_offset - written_so_far;
-  if (0 <= offset && offset < bytes_to_write) {
-    DCHECK_GE(bytes_to_write, offset + field_size);
-    sink->PutRaw(reinterpret_cast<byte*>(object_start + written_so_far), offset,
-                 "Bytes");
-    sink->PutRaw(field_value, field_size, "Bytes");
-    written_so_far += offset + field_size;
-    bytes_to_write -= offset + field_size;
-    sink->PutRaw(reinterpret_cast<byte*>(object_start + written_so_far),
-                 bytes_to_write, "Bytes");
+  Address addr;
+  if (host.IsBytecodeArray() && offset == BytecodeArray::kBytecodeAgeOffset) {
+    // The bytecode age field can be changed by GC concurrently.
+    static const byte value = BytecodeArray::kNoAgeBytecodeAge;
+    DCHECK(size == sizeof(value));
+    addr = reinterpret_cast<Address>(&value);
+  } else if (host.IsDescriptorArray() &&
+             offset == DescriptorArray::kRawNumberOfMarkedDescriptorsOffset) {
+    // The number of marked descriptors field can be changed by GC
+    // concurrently.
+    static const uint16_t value = 0;
+    DCHECK(size == sizeof(value));
+    addr = reinterpret_cast<Address>(&value);
   } else {
-    sink->PutRaw(reinterpret_cast<byte*>(object_start + written_so_far),
-                 bytes_to_write, "Bytes");
+    addr = host.address() + offset;
   }
-}
-}  // anonymous namespace
-
-void Serializer::ObjectSerializer::OutputRawData(Address up_to) {
-  Address object_start = object_->address();
-  int base = bytes_processed_so_far_;
-  int up_to_offset = static_cast<int>(up_to - object_start);
-  int to_skip = up_to_offset - bytes_processed_so_far_;
-  int bytes_to_output = to_skip;
-  DCHECK(IsAligned(bytes_to_output, kTaggedSize));
-  int tagged_to_output = bytes_to_output / kTaggedSize;
-  bytes_processed_so_far_ += to_skip;
-  DCHECK_GE(to_skip, 0);
-  if (bytes_to_output != 0) {
-    DCHECK(to_skip == bytes_to_output);
-    if (tagged_to_output <= kFixedRawDataCount) {
-      sink_->Put(FixedRawDataWithSize::Encode(tagged_to_output),
-                 "FixedRawData");
-    } else {
-      sink_->Put(kVariableRawData, "VariableRawData");
-      sink_->PutInt(tagged_to_output, "length");
-    }
 #ifdef MEMORY_SANITIZER
-    // Check that we do not serialize uninitialized memory.
-    __msan_check_mem_is_initialized(
-        reinterpret_cast<void*>(object_start + base), bytes_to_output);
+  // Check that we do not serialize uninitialized memory.
+  __msan_check_mem_is_initialized(reinterpret_cast<const void*>(addr), size);
 #endif  // MEMORY_SANITIZER
-    if (object_->IsBytecodeArray()) {
-      // The bytecode age field can be changed by GC concurrently.
-      byte field_value = BytecodeArray::kNoAgeBytecodeAge;
-      OutputRawWithCustomField(sink_, object_start, base, bytes_to_output,
-                               BytecodeArray::kBytecodeAgeOffset,
-                               sizeof(field_value), &field_value);
-    } else if (object_->IsDescriptorArray()) {
-      // The number of marked descriptors field can be changed by GC
-      // concurrently.
-      byte field_value[2];
-      field_value[0] = 0;
-      field_value[1] = 0;
-      OutputRawWithCustomField(
-          sink_, object_start, base, bytes_to_output,
-          DescriptorArray::kRawNumberOfMarkedDescriptorsOffset,
-          sizeof(field_value), field_value);
-    } else {
-      sink_->PutRaw(reinterpret_cast<byte*>(object_start + base),
-                    bytes_to_output, "Bytes");
-    }
-  }
+  OutputNonPtrField(addr, 1, size);
+
+  bytes_processed_so_far_ = offset + size;
+}
+
+void Serializer::ObjectSerializer::VisitNonPointers(HeapObject host,
+                                                    int start_offset,
+                                                    int end_offset, int size) {
+  OutputPadBytes(bytes_processed_so_far_, start_offset);
+  OutputNonPtrField(host.address() + start_offset,
+                    (end_offset - start_offset) / size, size);
+  bytes_processed_so_far_ = end_offset;
 }
 
 void Serializer::ObjectSerializer::SerializeCode(Map map, int size) {
@@ -1105,6 +1108,7 @@ void Serializer::ObjectSerializer::SerializeCode(Map map, int size) {
       RelocInfo::ModeMask(RelocInfo::RUNTIME_ENTRY);
 
   DCHECK_EQ(HeapObject::kHeaderSize, bytes_processed_so_far_);
+  DCHECK_GE(size, Code::kHeaderSize);
   Handle<Code> on_heap_code = Handle<Code>::cast(object_);
 
   // With enabled pointer compression normal accessors no longer work for
@@ -1142,7 +1146,16 @@ void Serializer::ObjectSerializer::SerializeCode(Map map, int size) {
   __msan_check_mem_is_initialized(reinterpret_cast<void*>(start),
                                   bytes_to_output);
 #endif  // MEMORY_SANITIZER
-  sink_->PutRaw(reinterpret_cast<byte*>(start), bytes_to_output, "Code");
+  const uint32_t* src = reinterpret_cast<const uint32_t*>(start);
+  byte data[Code::kHeaderSize - Code::kDataStart];
+  STATIC_ASSERT(IsAligned(sizeof(data), sizeof(uint32_t)));
+  for (int i = 0; i != sizeof(data) / sizeof(uint32_t); ++i) {
+    base::WriteTargetEndianValue(
+        reinterpret_cast<Address>(data + i * sizeof(uint32_t)), src[i]);
+  }
+  sink_->PutRaw(data, sizeof(data), "CodeHeader");
+  sink_->PutRaw(reinterpret_cast<byte*>(start + sizeof(data)),
+                bytes_to_output - sizeof(data), "Code");
 
   // Manually serialize the code header. We don't use Code::BodyDescriptor
   // here as we don't yet want to walk the RelocInfos.
@@ -1196,6 +1209,55 @@ Serializer::HotObjectsList::HotObjectsList(Heap* heap) : heap_(heap) {
 }
 Serializer::HotObjectsList::~HotObjectsList() {
   heap_->UnregisterStrongRoots(strong_roots_entry_);
+}
+
+void Serializer::ObjectSerializer::OutputPadBytes(int start, int end) {
+  DCHECK(start <= end);
+  if (start < end) {
+    sink_->Put(PadBytesWithSize::Encode(end - start), "PadBytes");
+  }
+}
+
+void Serializer::ObjectSerializer::OutputNonPtrField(Address addr,
+                                                     int array_length,
+                                                     int element_size) {
+  if (array_length == 1) {
+    sink_->Put(NonPtrFieldWithSize::Encode(element_size), "NonPtrField");
+  } else if (array_length > 1) {
+    sink_->Put(kVariableNonPtrArray, "NonPtrArray");
+    sink_->PutInt(array_length, "array_length");
+    sink_->PutInt(element_size, "element_size");
+  } else {
+    DCHECK_EQ(array_length, 0);
+    return;
+  }
+
+  do {
+    const void* ptr = reinterpret_cast<const void*>(addr);
+    byte buf_te[8];
+    Address buf_te_addr = reinterpret_cast<Address>(buf_te);
+    switch (element_size) {
+      case 1:
+        buf_te[0] = *static_cast<const byte*>(ptr);
+        break;
+      case 2:
+        base::WriteTargetEndianValue(buf_te_addr,
+                                     *static_cast<const uint16_t*>(ptr));
+        break;
+      case 4:
+        base::WriteTargetEndianValue(buf_te_addr,
+                                     *static_cast<const uint32_t*>(ptr));
+        break;
+      case 8:
+        base::WriteTargetEndianValue(buf_te_addr,
+                                     base::ReadUnalignedValue<uint64_t>(addr));
+        break;
+      default:
+        UNREACHABLE();
+    }
+    sink_->PutRaw(buf_te, element_size, "field value");
+    addr += element_size;
+  } while (--array_length);
 }
 
 }  // namespace internal

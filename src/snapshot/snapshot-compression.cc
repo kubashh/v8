@@ -13,9 +13,8 @@ namespace v8 {
 namespace internal {
 
 uint32_t GetUncompressedSize(const Bytef* compressed_data) {
-  uint32_t size;
-  MemCopy(&size, compressed_data, sizeof(size));
-  return size;
+  return base::ReadTargetEndianValue<uint32_t>(
+      reinterpret_cast<Address>(compressed_data));
 }
 
 SnapshotData SnapshotCompression::Compress(
@@ -39,7 +38,8 @@ SnapshotData SnapshotCompression::Compress(
   byte* compressed_data = const_cast<byte*>(snapshot_data.RawData().begin());
   // Since we are doing raw compression (no zlib or gzip headers), we need to
   // manually store the uncompressed size.
-  MemCopy(compressed_data, &payload_length, sizeof(payload_length));
+  base::WriteTargetEndianValue(reinterpret_cast<Address>(compressed_data),
+                               payload_length);
 
   CHECK_EQ(zlib_internal::CompressHelper(
                zlib_internal::ZRAW, compressed_data + sizeof(payload_length),

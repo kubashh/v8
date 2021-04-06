@@ -39,14 +39,26 @@ enum class EmbeddedTargetArch {
   kArm,
   kArm64,
   kIA32,
+  kMips,
+  kMips64,
+  kPpc,
+  kPpc64,
+  kS390,
+  kS390x,
   kX64,
   kGeneric,  // Everything not covered above falls in here.
+};
+
+enum class EmbeddedTargetByteOrder {
+  kLittle,
+  kBig,
 };
 
 // The platform-dependent logic for emitting assembly code for the generated
 // embedded.S file.
 class PlatformEmbeddedFileWriterBase {
  public:
+  explicit PlatformEmbeddedFileWriterBase(EmbeddedTargetArch target_arch);
   virtual ~PlatformEmbeddedFileWriterBase() = default;
 
   void SetFile(FILE* fp) { fp_ = fp; }
@@ -96,6 +108,7 @@ class PlatformEmbeddedFileWriterBase {
 
  protected:
   FILE* fp_ = nullptr;
+  EmbeddedTargetByteOrder target_byte_order_;
 };
 
 // The factory function. Returns the appropriate platform-specific instance.

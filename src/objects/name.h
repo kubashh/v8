@@ -188,7 +188,7 @@ class Symbol : public TorqueGeneratedSymbol<Symbol, Name> {
   DECL_PRINTER(Symbol)
   DECL_VERIFIER(Symbol)
 
-  using BodyDescriptor = FixedBodyDescriptor<kDescriptionOffset, kSize, kSize>;
+  class BodyDescriptor;
 
   void SymbolShortPrint(std::ostream& os);
 

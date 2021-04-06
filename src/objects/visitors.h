@@ -136,6 +136,12 @@ class ObjectVisitor {
     VisitPointer(host, value);
   }
 
+  virtual void VisitNonPointers(HeapObject host, int start_offset,
+                                int end_offset, int size) {}
+  virtual void VisitNonPointer(HeapObject host, int offset, int size) {
+    VisitNonPointers(host, offset, offset + size, size);
+  }
+
   // To allow lazy clearing of inline caches the visitor has
   // a rich interface for iterating over Code objects ...
 

@@ -48,12 +48,12 @@ class SerializedData {
 
  protected:
   void SetHeaderValue(uint32_t offset, uint32_t value) {
-    base::WriteLittleEndianValue(reinterpret_cast<Address>(data_) + offset,
+    base::WriteTargetEndianValue(reinterpret_cast<Address>(data_) + offset,
                                  value);
   }
 
   uint32_t GetHeaderValue(uint32_t offset) const {
-    return base::ReadLittleEndianValue<uint32_t>(
+    return base::ReadTargetEndianValue<uint32_t>(
         reinterpret_cast<Address>(data_) + offset);
   }
 
