@@ -29,6 +29,7 @@
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
 #include "src/objects/lookup.h"
+#include "src/objects/map-updater.h"
 #include "src/objects/objects-inl.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-break-iterator.h"
@@ -3161,7 +3162,8 @@ void JSObject::AllocateStorageForMap(Handle<JSObject> object, Handle<Map> map) {
     } else {
       TransitionElementsKind(object, to_kind);
     }
-    map = Map::ReconfigureElementsKind(object->GetIsolate(), map, to_kind);
+    map =
+        MapUpdater{object->GetIsolate(), map}.ReconfigureElementsKind(to_kind);
   }
   int number_of_fields = map->NumberOfFields();
   int inobject = map->GetInObjectProperties();
