@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ead8baf6_52a30e36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-06T12:31:53Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "836949fa5b8e43efb128a962f73ee6bbddcd86a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59c1a8e5_1e3f092e",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3166,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-06T12:31:53Z",
+      "side": 1,
+      "message": "Please hoist GetIsolate() above the if - it seems to be needed anyway.",
+      "range": {
+        "startLine": 3166,
+        "startChar": 19,
+        "endLine": 3166,
+        "endChar": 39
+      },
+      "revId": "836949fa5b8e43efb128a962f73ee6bbddcd86a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
