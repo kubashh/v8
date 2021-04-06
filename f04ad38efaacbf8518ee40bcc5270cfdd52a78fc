@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a219a0f2_29317d9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T10:49:35Z",
+      "side": 1,
+      "message": "Please describe here how that\u0027s done.",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "643fd7cc_13c93f39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T10:49:35Z",
+      "side": 1,
+      "message": "I left a few comments below, but have a suggestion that would make most of them obsolete:\n\n- Avoid adding a new, partial, ExternalReferenceTable. This\u0027d be a new special case that makes reasoning more complex. I\u0027d prefer we stay in a world where every ERT is complete.\n- The extrefs you\u0027re interested in (EXTERNAL_REFERENCE_LIST) are immutable per process; so I\u0027d propose to add a static array that stores all related metadata, and initialize it in V8::InitializeOncePerProcess.\n- Essentially just put this into the static table: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/external-reference-table.cc;l\u003d119;drc\u003dba681fdb939007147cdb5ad339be9a5264daa2d3\n- The code in AddReferences should then read from the table instead of generating Add() calls.\n- The static table could live next to ref_name_.\n- Then the address-name lookup is easy: search the new-proposed-table to find the index, use the index to look up and return the name from ref_name_. Ofc you could also optimize by using a map but I\u0027m not sure that necessary for purposes of disassembly.\n\nWdyt?",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a2b1ba2_f3c95230",
+        "filename": "src/codegen/external-reference-encoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T10:49:35Z",
+      "side": 1,
+      "message": "Please pick a name that describes the contents, e.g. InitializeMapFromExternalReferenceTable.",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcc2ddf5_caae8dac",
+        "filename": "src/codegen/external-reference-encoder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T10:49:35Z",
+      "side": 1,
+      "message": "Please forward-decl the classes you need instead of the include.",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7929006_7722b480",
+        "filename": "src/codegen/external-reference-encoder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T10:49:35Z",
+      "side": 1,
+      "message": "This and the new method below could use comments describing the wasm-specific usecase.",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85d06797_4b0a2e6e",
+        "filename": "src/codegen/external-reference.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T10:49:35Z",
+      "side": 1,
+      "message": "This change is a bit subtle, previously kExternalReferenceCount meant \u0027all extrefs\u0027, now it means non-isolate-extrefs. Given this change, I\u0027d prefer to rename these constants to something intuitive, like\n\n- kExternalReferenceCountIsolateDependent\n- kExternalReferenceCountIsolateIndependent\n- kExternalReferenceCount (the sum of the above)",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

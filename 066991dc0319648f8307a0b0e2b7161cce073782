@@ -77,6 +77,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a7d1bc0_36d7d2a7",
+        "filename": "src/codegen/external-reference-encoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T10:49:35Z",
+      "side": 1,
+      "message": "+1. In fact I\u0027d suggest approaching this a bit differently. It\u0027d be nice to avoid adding a new ExternalReferenceTable variant that only contains a subset of extrefs.\n\nAll you need is a method that takes an address and returns a name, right? It doesn\u0027t have to be fast since it\u0027s used only for wasm disassembly.\n\nWhat about a static method on ExternalReferenceTable that uses the ref_name_ table (https://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/external-reference-table.cc;l\u003d35;drc\u003dba681fdb939007147cdb5ad339be9a5264daa2d3)? The address-index-name translation could happen either through a generated switch using  EXTERNAL_REFERENCE_LIST or one could optimize.",
+      "parentUuid": "0a0c524a_5e35cd3f",
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19a4be11_1ca8c63c",
         "filename": "src/codegen/external-reference-table.cc",
         "patchSetId": 1
