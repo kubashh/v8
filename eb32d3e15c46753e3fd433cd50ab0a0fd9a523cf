@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c27da4f7_312fc872",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-04-06T10:51:57Z",
+      "side": 1,
+      "message": "Thanks a lot Leszek for looking into the reason for the revert and fixing it!\nI only fixed the arm bot.\n\nJakob, PTAL",
+      "revId": "eb32d3e15c46753e3fd433cd50ab0a0fd9a523cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
