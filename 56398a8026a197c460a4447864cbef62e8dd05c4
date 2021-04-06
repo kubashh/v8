@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a221323_5e97227a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-04-06T14:08:42Z",
+      "side": 1,
+      "message": "Great idea to add some fuzzer coverage here. One comment though (below). I don\u0027t really like the complexity of the conditions, but I don\u0027t see a way around it. Also, both arms of the if call to ExecuteLiftoffCompilation, but again merging it to a single call (just with different arguments) seems to make it even worse :/ ",
+      "revId": "56398a8026a197c460a4447864cbef62e8dd05c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
