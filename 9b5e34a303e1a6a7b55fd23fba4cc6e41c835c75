@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e7b3b1a_7ea5c596",
+        "filename": "src/objects/map-updater.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-06T15:16:16Z",
+      "side": 1,
+      "message": "This is the only such case. Jakob is working on making the MapUpdater the bottleneck responsible for locking the mutex when updating maps. So, we\u0027ll not need non-locking functionality in the public API.",
+      "parentUuid": "2ee8dcf6_4c942ff7",
+      "range": {
+        "startLine": 147,
+        "startChar": 26,
+        "endLine": 147,
+        "endChar": 41
+      },
+      "revId": "9b5e34a303e1a6a7b55fd23fba4cc6e41c835c75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a82134e_04194770",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-04-06T14:58:07Z",
       "side": 1,
       "message": "is this the only place where we call the map updater recursively?",
+      "range": {
+        "startLine": 238,
+        "startChar": 2,
+        "endLine": 238,
+        "endChar": 12
+      },
+      "revId": "9b5e34a303e1a6a7b55fd23fba4cc6e41c835c75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27602a74_fffd33e9",
+        "filename": "src/objects/map-updater.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-06T15:16:16Z",
+      "side": 1,
+      "message": "Yes, this is the only case.",
+      "parentUuid": "3a82134e_04194770",
       "range": {
         "startLine": 238,
         "startChar": 2,

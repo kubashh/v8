@@ -39,6 +39,30 @@
       },
       "revId": "44532a2e82b1ca53ab5f550c592f7a3439891578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e57c9efc_928ac74f",
+        "filename": "src/objects/map-updater.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-06T15:16:16Z",
+      "side": 1,
+      "message": "It would be nice to have such a DCHECK, but unfortunately base::SharedMutex we are using doesn\u0027t provide a way of checking whether the lock is held. So, we are relying just on the fact that the UpdateMapNoLock is private.",
+      "parentUuid": "0e597f49_d7664dd1",
+      "range": {
+        "startLine": 239,
+        "startChar": 16,
+        "endLine": 239,
+        "endChar": 31
+      },
+      "revId": "44532a2e82b1ca53ab5f550c592f7a3439891578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
