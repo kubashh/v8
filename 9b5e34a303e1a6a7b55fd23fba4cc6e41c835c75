@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1247b2d5_cf77caa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-06T16:02:50Z",
+      "side": 1,
+      "message": "Ok, SG, shame that this edge case requires the one single recursive MapUpdater we (will now) have but it\u0027s better than re-implementing MapUpdater functionality for this edge case.",
+      "revId": "9b5e34a303e1a6a7b55fd23fba4cc6e41c835c75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ee8dcf6_4c942ff7",
