@@ -33,6 +33,24 @@
       "message": "This will be undefined behaviour if the function index is \u003e\u003d 32. The condition above is carefully crafted to\na) avoid UB, and\nb) only execute a single check in production code (the first line).\n\nI don\u0027t see an easy way to get back (b) (without code duplication or using goto), but we should at least fix the UB.",
       "revId": "59d761384629a7a2170a2e13420eb26d7b8e7dd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24bb999e_8d5f198d",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-04-06T15:48:41Z",
+      "side": 1,
+      "message": "Thanks, I fixed a). I agree that it\u0027s not worth making the code too complicated for b) which would probably have a negligible impact.",
+      "parentUuid": "76e7ca26_96c14a6e",
+      "revId": "59d761384629a7a2170a2e13420eb26d7b8e7dd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
