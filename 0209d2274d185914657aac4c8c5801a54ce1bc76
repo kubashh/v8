@@ -16,6 +16,23 @@
       "message": "Thanks, guys!\n\nGeneral question: WDYT about adding the following helper to the FastApiCallbackOptions class, in order to not expose implementation details to the embedder:\n\n    static const FastApiCallbackOptions\u0026 CreateForTesting();\n\nFor context: https://chromium-review.googlesource.com/c/chromium/src/+/2796032/1..9/third_party/blink/renderer/bindings/scripts/bind_gen/interface.py#b2241\n\n",
       "revId": "0209d2274d185914657aac4c8c5801a54ce1bc76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ef62cc7_a9c1040c",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-06T08:25:22Z",
+      "side": 1,
+      "message": "What I meant by taking Object is that this function shouldn\u0027t assume anything about the argument. (i.e. move the JSApiObject check from the other version of the function in api.cc to this one here.)",
+      "revId": "0209d2274d185914657aac4c8c5801a54ce1bc76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
