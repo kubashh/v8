@@ -67,6 +67,13 @@ class V8_EXPORT_PRIVATE MapUpdater {
   // version and performs the steps 1-6.
   Handle<Map> Update();
 
+  static Handle<Map> ReconfigureExistingProperty(Isolate* isolate,
+                                                 Handle<Map> map,
+                                                 InternalIndex descriptor,
+                                                 PropertyKind kind,
+                                                 PropertyAttributes attributes,
+                                                 PropertyConstness constness);
+
  private:
   enum State {
     kInitialized,
@@ -163,6 +170,12 @@ class V8_EXPORT_PRIVATE MapUpdater {
                        Handle<FieldType> new_field_type);
 
   bool TrySaveIntegrityLevelTransitions();
+
+  /*
+  void PrintReconfiguration(FILE* file,
+                            InternalIndex modify_index, PropertyKind kind,
+                            PropertyAttributes attributes);
+                            */
 
   Isolate* isolate_;
   Handle<Map> old_map_;

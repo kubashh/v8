@@ -4,6 +4,7 @@
 
 #include "src/objects/map-updater.h"
 
+#include "src/execution/frames.h"
 #include "src/execution/isolate.h"
 #include "src/handles/handles.h"
 #include "src/objects/field-type.h"
@@ -860,6 +861,52 @@ MapUpdater::State MapUpdater::ConstructNewMapWithIntegrityLevelTransition() {
 
   state_ = kEnd;
   return state_;
+}
+
+namespace {
+
+void PrintReconfiguration(Isolate* isolate, Handle<Map> map, FILE* file,
+                          InternalIndex modify_index, PropertyKind kind,
+                          PropertyAttributes attributes) {
+  OFStream os(file);
+  os << "[reconfiguring]";
+  Name name = map->instance_descriptors(isolate).GetKey(modify_index);
+  if (name.IsString()) {
+    String::cast(name).PrintOn(file);
+  } else {
+    os << "{symbol " << reinterpret_cast<void*>(name.ptr()) << "}";
+  }
+  os << ": " << (kind == kData ? "kData" : "ACCESSORS") << ", attrs: ";
+  os << attributes << " [";
+  JavaScriptFrame::PrintTop(isolate, file, false, true);
+  os << "]\n";
+}
+
+}  // namespace
+
+// static
+Handle<Map> MapUpdater::ReconfigureExistingProperty(
+    Isolate* isolate, Handle<Map> map, InternalIndex descriptor,
+    PropertyKind kind, PropertyAttributes attributes,
+    PropertyConstness constness) {
+  // Dictionaries have to be reconfigured in-place.
+  DCHECK(!map->is_dictionary_map());
+  DCHECK_EQ(kData, kind);  // Only kData case is supported so far.
+
+  if (!map->GetBackPointer().IsMap()) {
+    // There is no benefit from reconstructing transition tree for maps without
+    // back pointers, normalize and try to hit the map cache instead.
+    return Map::Normalize(isolate, map, CLEAR_INOBJECT_PROPERTIES,
+                          "Normalize_AttributesMismatchProtoMap");
+  }
+
+  if (FLAG_trace_generalization) {
+    PrintReconfiguration(isolate, map, stdout, descriptor, kind, attributes);
+  }
+
+  return MapUpdater{isolate, map}.ReconfigureToDataField(
+      descriptor, attributes, constness, Representation::None(),
+      FieldType::None(isolate));
 }
 
 }  // namespace internal
