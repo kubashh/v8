@@ -29,5 +29,3 @@ obj.foo = 'bar';
 foo(obj, obj);
 
 d8.test.verifySourcePositions(foo);
-
-d8.test.verifySourcePositions(new Proxy(foo, {}));
