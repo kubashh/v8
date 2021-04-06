@@ -59,23 +59,6 @@ MaybeHandle<JSFunction> Map::GetConstructorFunction(
   return MaybeHandle<JSFunction>();
 }
 
-void Map::PrintReconfiguration(Isolate* isolate, FILE* file,
-                               InternalIndex modify_index, PropertyKind kind,
-                               PropertyAttributes attributes) {
-  OFStream os(file);
-  os << "[reconfiguring]";
-  Name name = instance_descriptors(isolate).GetKey(modify_index);
-  if (name.IsString()) {
-    String::cast(name).PrintOn(file);
-  } else {
-    os << "{symbol " << reinterpret_cast<void*>(name.ptr()) << "}";
-  }
-  os << ": " << (kind == kData ? "kData" : "ACCESSORS") << ", attrs: ";
-  os << attributes << " [";
-  JavaScriptFrame::PrintTop(isolate, file, false, true);
-  os << "]\n";
-}
-
 Map Map::GetInstanceTypeMap(ReadOnlyRoots roots, InstanceType type) {
   Map map;
   switch (type) {
@@ -2154,33 +2137,6 @@ Handle<Map> Map::TransitionToDataProperty(Isolate* isolate, Handle<Map> map,
   }
 
   return result;
-}
-
-Handle<Map> Map::ReconfigureExistingProperty(Isolate* isolate, Handle<Map> map,
-                                             InternalIndex descriptor,
-                                             PropertyKind kind,
-                                             PropertyAttributes attributes,
-                                             PropertyConstness constness) {
-  // Dictionaries have to be reconfigured in-place.
-  DCHECK(!map->is_dictionary_map());
-
-  if (!map->GetBackPointer().IsMap()) {
-    // There is no benefit from reconstructing transition tree for maps without
-    // back pointers, normalize and try to hit the map cache instead.
-    return Map::Normalize(isolate, map, CLEAR_INOBJECT_PROPERTIES,
-                          "Normalize_AttributesMismatchProtoMap");
-  }
-
-  if (FLAG_trace_generalization) {
-    map->PrintReconfiguration(isolate, stdout, descriptor, kind, attributes);
-  }
-
-  MapUpdater mu(isolate, map);
-  DCHECK_EQ(kData, kind);  // Only kData case is supported so far.
-  Handle<Map> new_map = mu.ReconfigureToDataField(
-      descriptor, attributes, constness, Representation::None(),
-      FieldType::None(isolate));
-  return new_map;
 }
 
 Handle<Map> Map::TransitionToAccessorProperty(Isolate* isolate, Handle<Map> map,
