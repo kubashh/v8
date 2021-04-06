@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c87ac83_3085cc42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-06T13:48:19Z",
+      "side": 1,
+      "message": "ptal. I added DCHECKs instead of a test because WriteBarrierForRangeImpl is not thread-safe yet.",
+      "revId": "bf8fa1e7e170af760665f9d754587af739329fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
