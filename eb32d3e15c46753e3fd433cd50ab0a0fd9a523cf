@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "95b9d5a7_8e4392a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T11:17:30Z",
+      "side": 1,
+      "message": "\u0027This can happen when ...\u0027",
+      "revId": "eb32d3e15c46753e3fd433cd50ab0a0fd9a523cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c27da4f7_312fc872",
@@ -14,6 +31,40 @@
       "writtenOn": "2021-04-06T10:51:57Z",
       "side": 1,
       "message": "Thanks a lot Leszek for looking into the reason for the revert and fixing it!\nI only fixed the arm bot.\n\nJakob, PTAL",
+      "revId": "eb32d3e15c46753e3fd433cd50ab0a0fd9a523cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e600646c_3cf43c76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T11:17:30Z",
+      "side": 1,
+      "message": "lgtm with comments (didn\u0027t review asm in detail).",
+      "revId": "eb32d3e15c46753e3fd433cd50ab0a0fd9a523cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07c623e0_0a02dbaf",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4475,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T11:17:30Z",
+      "side": 1,
+      "message": "Would it make sense to preserve the `if (__ emit_debug_code` part from above here?",
       "revId": "eb32d3e15c46753e3fd433cd50ab0a0fd9a523cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
