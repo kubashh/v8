@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 @generateCppClass
+@generateBodyDescriptor
 extern class HeapNumber extends PrimitiveHeapObject {
   value: float64;
 }

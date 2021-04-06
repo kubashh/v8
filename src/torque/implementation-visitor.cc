@@ -4726,6 +4726,154 @@ base::Optional<std::string> MatchSimpleBodyDescriptor(const ClassType* type) {
   return base::nullopt;
 }
 
+void ImplementationVisitor::GenerateIterateBody(
+    std::ostream& o, const AggregateType& type,
+    const std::vector<Field>& fields, const std::vector<ObjectSlotKind>& slots,
+    const base::Optional<std::string>& outer_offset_s, const size_t skip_slots,
+    const bool has_array_fields) {
+  size_t end_offset = skip_slots * TargetArchitecture::TaggedSize();
+  std::string offset_s;
+  size_t slot_index;
+
+  for (const Field& f : fields) {
+    // Get type, full offset and size
+    const Type* f_type = f.name_and_type.type;
+    if (f.offset) {
+      offset_s = ToString(*f.offset);
+      slot_index = *f.offset / TargetArchitecture::TaggedSize();
+    }
+    std::stringstream full_offset_ss;
+    if (outer_offset_s) {
+      full_offset_ss << *outer_offset_s << " + " << offset_s;
+    } else {
+      full_offset_ss << offset_s;
+    }
+    size_t element_size;
+    std::string element_size_s;
+    std::tie(element_size, element_size_s) = *SizeOf(f_type);
+    if (element_size == 0) {
+      return;
+    }
+
+    // If this field was part of a group of tagged slots we already
+    // handled, do nothing
+    if (f.offset && *f.offset < end_offset) {
+      continue;
+    }
+
+    // Otherwise if it's a tagged slot, look for following similar
+    // slots and generate a call to iterate over it/them
+    if (f.offset && slot_index < slots.size() &&
+        slots[slot_index] != ObjectSlotKind::kNoPointer) {
+      size_t start_offset = *f.offset;
+      ObjectSlotKind section_kind = slots[slot_index];
+      while (++slot_index < slots.size()) {
+        if (auto combined = Combine(section_kind, slots[slot_index])) {
+          section_kind = *combined;
+        } else {
+          break;
+        }
+      }
+      end_offset = slot_index * TargetArchitecture::TaggedSize();
+      bool is_array_slot = slot_index == slots.size() && has_array_fields;
+      bool multiple_slots = is_array_slot || (end_offset - start_offset >
+                                              TargetArchitecture::TaggedSize());
+      std::string iterate_command;
+      switch (section_kind) {
+        case ObjectSlotKind::kStrongPointer:
+          iterate_command = "IteratePointer";
+          break;
+        case ObjectSlotKind::kMaybeObjectPointer:
+          iterate_command = "IterateMaybeWeakPointer";
+          break;
+        case ObjectSlotKind::kCustomWeakPointer:
+          iterate_command = "IterateCustomWeakPointer";
+          break;
+        case ObjectSlotKind::kNoPointer:
+          UNREACHABLE();
+          break;
+      }
+      if (multiple_slots) iterate_command += "s";
+      o << "    " << iterate_command << "(obj, " << start_offset;
+      if (multiple_slots) {
+        o << ", "
+          << (slot_index == slots.size() ? "object_size"
+                                         : std::to_string(end_offset));
+      }
+      o << ", v);\n";
+      if (multiple_slots && slot_index == slots.size()) {
+        break;
+      }
+      continue;
+    }
+
+    auto struct_type = f_type->StructSupertype();
+
+    std::string array_length_s;
+    if (f.index) {
+      // We don't yet support arrays in nested structures
+      CHECK(!outer_offset_s);
+
+      std::stringstream array_length_ss;
+      if (auto size_type_name =
+              ExtractSimpleFieldArraySize(type, f.index->expr)) {
+        array_length_ss << type.name() << "::cast(obj)." << size_type_name->name
+                        << "()";
+      } else {
+        auto literal = NumberLiteralExpression::DynamicCast(f.index->expr);
+        CHECK(literal);
+        array_length_ss << literal->number;
+      }
+      array_length_s = array_length_ss.str();
+
+      // If it's an array of structures, generate a loop
+      if (struct_type) {
+        o << "    for (int i = 0, n = " << array_length_s
+          << "; i != n; ++i) {\n";
+        full_offset_ss << " + i * " << element_size_s;
+      }
+    }
+
+    std::string full_offset_s = full_offset_ss.str();
+
+    if (struct_type && f_type != TypeOracle::GetFloat64OrHoleType()) {
+      GenerateIterateBody(o, **struct_type, (*struct_type)->fields(),
+                          std::vector<ObjectSlotKind>(), full_offset_s, 0,
+                          false);
+    } else {
+      o << "    IterateNonPointer" << (f.index ? "s" : "") << "(obj, "
+        << full_offset_s << ", ";
+      if (f.index) {
+        // If this is the last field in the object, we must use the
+        // object size to find the length as the length field may not
+        // always be valid
+        if (&f == &fields.back()) {
+          o << "object_size, ";
+        } else {
+          o << full_offset_s << " + " << array_length_s << " * "
+            << element_size_s << ", ";
+        }
+      }
+      o << element_size_s << ", v);\n";
+    }
+
+    if (f.index) {
+      if (struct_type) {
+        o << "    }\n";
+      }
+
+      // In case this is a variable-length array, set offset for
+      // the next field
+      std::stringstream offset_ss;
+      offset_ss << offset_s << " + " << array_length_s << " * "
+                << element_size_s;
+      offset_s = offset_ss.str();
+    } else {
+      DCHECK(f.offset.has_value());
+    }
+  }
+}
+
 void ImplementationVisitor::GenerateBodyDescriptors(
     const std::string& output_directory) {
   std::string file_name = "objects-body-descriptors-inl.inc";
@@ -4769,74 +4917,17 @@ void ImplementationVisitor::GenerateBodyDescriptors(
                      << ";\n";
         }
         h_contents << "  }\n\n";
-
-        h_contents << "  template <typename ObjectVisitor>\n";
-        h_contents
-            << "  static inline void IterateBody(Map map, HeapObject obj, "
-               "int object_size, ObjectVisitor* v) {\n";
-
-        std::vector<ObjectSlotKind> slots = std::move(header_slot_kinds);
-        if (has_array_fields) slots.push_back(*array_slot_kind);
-
-        // Skip the map slot.
-        slots.erase(slots.begin());
-        size_t start_offset = TargetArchitecture::TaggedSize();
-
-        size_t end_offset = start_offset;
-        ObjectSlotKind section_kind;
-        for (size_t i = 0; i <= slots.size(); ++i) {
-          base::Optional<ObjectSlotKind> next_section_kind;
-          bool finished_section = false;
-          if (i == 0) {
-            next_section_kind = slots[i];
-          } else if (i < slots.size()) {
-            if (auto combined = Combine(section_kind, slots[i])) {
-              next_section_kind = *combined;
-            } else {
-              next_section_kind = slots[i];
-              finished_section = true;
-            }
-          } else {
-            finished_section = true;
-          }
-          if (finished_section) {
-            bool is_array_slot = i == slots.size() && has_array_fields;
-            bool multiple_slots =
-                is_array_slot ||
-                (end_offset - start_offset > TargetArchitecture::TaggedSize());
-            base::Optional<std::string> iterate_command;
-            switch (section_kind) {
-              case ObjectSlotKind::kStrongPointer:
-                iterate_command = "IteratePointer";
-                break;
-              case ObjectSlotKind::kMaybeObjectPointer:
-                iterate_command = "IterateMaybeWeakPointer";
-                break;
-              case ObjectSlotKind::kCustomWeakPointer:
-                iterate_command = "IterateCustomWeakPointer";
-                break;
-              case ObjectSlotKind::kNoPointer:
-                break;
-            }
-            if (iterate_command) {
-              if (multiple_slots) *iterate_command += "s";
-              h_contents << "    " << *iterate_command << "(obj, "
-                         << start_offset;
-              if (multiple_slots) {
-                h_contents << ", "
-                           << (i == slots.size() ? "object_size"
-                                                 : std::to_string(end_offset));
-              }
-              h_contents << ", v);\n";
-            }
-            start_offset = end_offset;
-          }
-          if (i < slots.size()) section_kind = *next_section_kind;
-          end_offset += TargetArchitecture::TaggedSize();
-        }
-
-        h_contents << "  }\n\n";
       }
+
+      h_contents << "  template <typename ObjectVisitor>\n";
+      h_contents << "  static inline void IterateBody(Map map, HeapObject obj, "
+                    "int object_size, ObjectVisitor* v) {\n";
+      std::vector<Field> fields = type->ComputeAllFields();
+      std::vector<ObjectSlotKind> slots = std::move(header_slot_kinds);
+      if (has_array_fields) slots.push_back(*array_slot_kind);
+      GenerateIterateBody(h_contents, *type, fields, slots, base::nullopt, 1,
+                          has_array_fields);
+      h_contents << "  }\n\n";
 
       h_contents
           << "  static inline int SizeOf(Map map, HeapObject raw_object) {\n";

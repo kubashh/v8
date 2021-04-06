@@ -1998,10 +1998,10 @@ int BigInt::DigitsByteLengthForBitfield(uint32_t bitfield) {
 void BigInt::SerializeDigits(uint8_t* storage) {
   void* digits =
       reinterpret_cast<void*>(ptr() + kDigitsOffset - kHeapObjectTag);
-#if defined(V8_TARGET_LITTLE_ENDIAN)
+#if defined(V8_HOST_LITTLE_ENDIAN)
   int bytelength = length() * kDigitSize;
   base::Memcpy(storage, digits, bytelength);
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   digit_t* digit_storage = reinterpret_cast<digit_t*>(storage);
   const digit_t* digit = reinterpret_cast<const digit_t*>(digits);
   for (int i = 0; i < length(); i++) {
@@ -2009,7 +2009,7 @@ void BigInt::SerializeDigits(uint8_t* storage) {
     digit_storage++;
     digit++;
   }
-#endif  // V8_TARGET_BIG_ENDIAN
+#endif  // V8_HOST_BIG_ENDIAN
 }
 
 // The serialization format MUST NOT CHANGE without updating the format
@@ -2025,12 +2025,12 @@ MaybeHandle<BigInt> BigInt::FromSerializedDigits(
   result->initialize_bitfield(sign, length);
   void* digits =
       reinterpret_cast<void*>(result->ptr() + kDigitsOffset - kHeapObjectTag);
-#if defined(V8_TARGET_LITTLE_ENDIAN)
+#if defined(V8_HOST_LITTLE_ENDIAN)
   base::Memcpy(digits, digits_storage.begin(), bytelength);
   void* padding_start =
       reinterpret_cast<void*>(reinterpret_cast<Address>(digits) + bytelength);
   memset(padding_start, 0, length * kDigitSize - bytelength);
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   digit_t* digit = reinterpret_cast<digit_t*>(digits);
   const digit_t* digit_storage =
       reinterpret_cast<const digit_t*>(digits_storage.begin());
@@ -2051,7 +2051,7 @@ MaybeHandle<BigInt> BigInt::FromSerializedDigits(
       digit_storage_byte++;
     }
   }
-#endif  // V8_TARGET_BIG_ENDIAN
+#endif  // V8_HOST_BIG_ENDIAN
   return MutableBigInt::MakeImmutable(result);
 }
 
@@ -2555,7 +2555,7 @@ uint64_t BigInt::AsUint64(bool* lossless) {
 
 // Digit arithmetic helpers.
 
-#if V8_TARGET_ARCH_32_BIT
+#if V8_HOST_ARCH_32_BIT
 #define HAVE_TWODIGIT_T 1
 using twodigit_t = uint64_t;
 #elif defined(__SIZEOF_INT128__)
@@ -2636,7 +2636,7 @@ inline BigInt::digit_t MutableBigInt::digit_mul(digit_t a, digit_t b,
 BigInt::digit_t MutableBigInt::digit_div(digit_t high, digit_t low,
                                          digit_t divisor, digit_t* remainder) {
   DCHECK(high < divisor);
-#if V8_TARGET_ARCH_X64 && (__GNUC__ || __clang__)
+#if V8_HOST_ARCH_X64 && (__GNUC__ || __clang__)
   digit_t quotient;
   digit_t rem;
   __asm__("divq  %[divisor]"
@@ -2647,7 +2647,7 @@ BigInt::digit_t MutableBigInt::digit_div(digit_t high, digit_t low,
           : "d"(high), "a"(low), [divisor] "rm"(divisor));
   *remainder = rem;
   return quotient;
-#elif V8_TARGET_ARCH_IA32 && (__GNUC__ || __clang__)
+#elif V8_HOST_ARCH_IA32 && (__GNUC__ || __clang__)
   digit_t quotient;
   digit_t rem;
   __asm__("divl  %[divisor]"

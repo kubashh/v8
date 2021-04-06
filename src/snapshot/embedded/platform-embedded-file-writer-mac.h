@@ -15,7 +15,9 @@ class PlatformEmbeddedFileWriterMac : public PlatformEmbeddedFileWriterBase {
  public:
   PlatformEmbeddedFileWriterMac(EmbeddedTargetArch target_arch,
                                 EmbeddedTargetOs target_os)
-      : target_arch_(target_arch), target_os_(target_os) {
+      : PlatformEmbeddedFileWriterBase(target_arch),
+        target_arch_(target_arch),
+        target_os_(target_os) {
     USE(target_arch_);
     USE(target_os_);
     DCHECK_EQ(target_os_, EmbeddedTargetOs::kMac);

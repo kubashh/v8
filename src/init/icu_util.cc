@@ -44,10 +44,10 @@ bool InitializeICUDefaultLocation(const char* exec_path,
   if (icu_data_file) {
     return InitializeICU(icu_data_file);
   }
-#if defined(V8_TARGET_LITTLE_ENDIAN)
+#if defined(V8_HOST_LITTLE_ENDIAN)
   std::unique_ptr<char[]> icu_data_file_default =
       base::RelativePath(exec_path, "icudtl.dat");
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   std::unique_ptr<char[]> icu_data_file_default =
       base::RelativePath(exec_path, "icudtb.dat");
 #else
