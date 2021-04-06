@@ -488,18 +488,11 @@ class Map : public HeapObject {
   bool InstancesNeedRewriting(Map target, int target_number_of_fields,
                               int target_inobject, int target_unused,
                               int* old_number_of_fields) const;
-  V8_WARN_UNUSED_RESULT static Handle<FieldType> GeneralizeFieldType(
-      Representation rep1, Handle<FieldType> type1, Representation rep2,
-      Handle<FieldType> type2, Isolate* isolate);
-  static void GeneralizeField(Isolate* isolate, Handle<Map> map,
-                              InternalIndex modify_index,
-                              PropertyConstness new_constness,
-                              Representation new_representation,
-                              Handle<FieldType> new_field_type);
   // Returns true if the |field_type| is the most general one for
   // given |representation|.
   static inline bool IsMostGeneralFieldType(Representation representation,
                                             FieldType field_type);
+  static bool FieldTypeIsCleared(Representation rep, FieldType type);
 
   // Generalizes representation and field_type if objects with given
   // instance type can have fast elements that can be transitioned by
@@ -715,10 +708,6 @@ class Map : public HeapObject {
       Isolate* isolate, Handle<Map> map, Handle<Name> name,
       InternalIndex descriptor, Handle<Object> getter, Handle<Object> setter,
       PropertyAttributes attributes);
-  V8_EXPORT_PRIVATE static Handle<Map> ReconfigureExistingProperty(
-      Isolate* isolate, Handle<Map> map, InternalIndex descriptor,
-      PropertyKind kind, PropertyAttributes attributes,
-      PropertyConstness constness);
 
   inline void AppendDescriptor(Isolate* isolate, Descriptor* desc);
 
@@ -919,10 +908,6 @@ class Map : public HeapObject {
                        Representation new_representation,
                        const MaybeObjectHandle& new_wrapped_type);
 
-  // TODO(ishell): Move to MapUpdater.
-  void PrintReconfiguration(Isolate* isolate, FILE* file,
-                            InternalIndex modify_index, PropertyKind kind,
-                            PropertyAttributes attributes);
   // TODO(ishell): Move to MapUpdater.
   void PrintGeneralization(
       Isolate* isolate, FILE* file, const char* reason,
