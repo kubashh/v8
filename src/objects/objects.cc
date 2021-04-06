@@ -1350,6 +1350,23 @@ bool FunctionTemplateInfo::IsTemplateFor(Map map) {
   return false;
 }
 
+bool FunctionTemplateInfo::IsLeafTemplateForApiObject(Object object) const {
+  i::DisallowGarbageCollection no_gc;
+
+  if (!object.IsJSApiObject()) {
+    return false;
+  }
+
+  Object cons_obj = HeapObject::cast(object).map().GetConstructor();
+  if (cons_obj.IsJSFunction()) {
+    JSFunction fun = JSFunction::cast(cons_obj);
+    return *this == fun.shared().function_data(kAcquireLoad);
+  } else if (cons_obj.IsFunctionTemplateInfo()) {
+    return *this == cons_obj;
+  }
+  return false;
+}
+
 // static
 FunctionTemplateRareData FunctionTemplateInfo::AllocateFunctionTemplateRareData(
     Isolate* isolate, Handle<FunctionTemplateInfo> function_template_info) {
