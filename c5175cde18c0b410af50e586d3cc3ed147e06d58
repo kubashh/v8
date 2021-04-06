@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc0f49d1_9ee832e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-04-06T15:06:21Z",
+      "side": 1,
+      "message": "nit: remove one \"by default\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 22,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "c5175cde18c0b410af50e586d3cc3ed147e06d58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "61b3b285_8144a0c9",
@@ -14,6 +37,23 @@
       "writtenOn": "2021-04-06T15:02:33Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "c5175cde18c0b410af50e586d3cc3ed147e06d58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "936dba4b_56c6f30c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-04-06T15:06:21Z",
+      "side": 1,
+      "message": "LGTM just with a small nit in the commit message.",
       "revId": "c5175cde18c0b410af50e586d3cc3ed147e06d58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
