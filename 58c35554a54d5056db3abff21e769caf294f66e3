@@ -130,6 +130,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3bf78d5_8727be12",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-06T10:47:01Z",
+      "side": 1,
+      "message": "Ack. Adding Toon to reviewers.",
+      "parentUuid": "977b4ac9_d8f2e980",
+      "range": {
+        "startLine": 163,
+        "startChar": 6,
+        "endLine": 163,
+        "endChar": 50
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef8f3e70_fb8843bd",
@@ -179,6 +203,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "664ac75d_5785972d",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-06T10:47:01Z",
+      "side": 1,
+      "message": "Toon since you worked with this before (https://chromium-review.googlesource.com/c/v8/v8/+/1866469)\n\nCould you please take a look at this function?",
+      "parentUuid": "31f745df_46cb3ae5",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 63
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71acf347_2a063b23",
         "filename": "src/profiler/tick-sample.h",
         "patchSetId": 3
@@ -214,6 +262,30 @@
       "side": 1,
       "message": "While the contexts may move, the profiler thread\u0027s ability to check equality on the contexts shouldn\u0027t change. If the sample is taken in the middle of native context movement, the profiler thread will compare the stale native context stack with the stale target native context, as any movements will be enqueued for processing after the tick sample.",
       "parentUuid": "71acf347_2a063b23",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 16
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6414d995_5b12aa49",
+        "filename": "src/profiler/tick-sample.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-06T10:47:01Z",
+      "side": 1,
+      "message": "Ah, I see. Thanks for the explanation! If the stack processing and the move events are ordered, then it should work.",
+      "parentUuid": "ede238a6_708d99f5",
       "range": {
         "startLine": 94,
         "startChar": 8,

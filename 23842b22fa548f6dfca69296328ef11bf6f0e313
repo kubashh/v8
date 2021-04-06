@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0240485c_c68e26f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-06T10:47:01Z",
+      "side": 1,
+      "message": "The CL looks good to me.\n\nAdding Toon for the question regarding safety of ScrapeNativeContextAddress.",
+      "revId": "23842b22fa548f6dfca69296328ef11bf6f0e313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
