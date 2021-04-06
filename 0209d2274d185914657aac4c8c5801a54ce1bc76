@@ -33,6 +33,24 @@
       "message": "What I meant by taking Object is that this function shouldn\u0027t assume anything about the argument. (i.e. move the JSApiObject check from the other version of the function in api.cc to this one here.)",
       "revId": "0209d2274d185914657aac4c8c5801a54ce1bc76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd78da5f_85642888",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-06T08:32:03Z",
+      "side": 1,
+      "message": "Gotcha, thanks! Applied your suggestion, PTAL again.",
+      "parentUuid": "2ef62cc7_a9c1040c",
+      "revId": "0209d2274d185914657aac4c8c5801a54ce1bc76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
