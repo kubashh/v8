@@ -26,7 +26,8 @@ constexpr char kObject[] = "v8::internal::Object";
 constexpr char kTaggedValue[] = "v8::internal::TaggedValue";
 constexpr char kSmi[] = "v8::internal::Smi";
 constexpr char kHeapObject[] = "v8::internal::HeapObject";
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 constexpr char kObjectAsStoredInHeap[] = "v8::internal::TaggedValue";
 #else
 constexpr char kObjectAsStoredInHeap[] = "v8::internal::Object";
@@ -346,14 +347,16 @@ class ReadStringVisitor : public TqObjectVisitor {
     if (IsExternalStringCached(object)) {
       ExternalPointer_t resource_data =
           GetOrFinish(object->GetResourceDataValue(accessor_));
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
       uintptr_t data_address = static_cast<uintptr_t>(
           DecodeExternalPointer(GetPtrComprCageBaseFromOnHeapAddress(
                                     heap_addresses_.any_heap_pointer),
                                 resource_data, kExternalStringResourceDataTag));
 #else
       uintptr_t data_address = static_cast<uintptr_t>(resource_data);
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
       if (done_) return;
       ReadStringCharacters<TChar>(object, data_address);
     } else {

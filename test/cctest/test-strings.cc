@@ -2105,13 +2105,15 @@ TEST(CheckCachedDataInternalExternalUncachedString) {
 
   // Due to different size restrictions the string needs to be small but not too
   // small. One of these restrictions is whether pointer compression is enabled.
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   const char* raw_small = "small string";
 #elif V8_TARGET_ARCH_32_BIT
   const char* raw_small = "smol";
 #else
   const char* raw_small = "smalls";
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
   Handle<String> string =
       factory->InternalizeString(factory->NewStringFromAsciiChecked(raw_small));
@@ -2144,13 +2146,15 @@ TEST(CheckCachedDataInternalExternalUncachedStringTwoByte) {
 
   // Due to different size restrictions the string needs to be small but not too
   // small. One of these restrictions is whether pointer compression is enabled.
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   const char* raw_small = "small string";
 #elif V8_TARGET_ARCH_32_BIT
   const char* raw_small = "smol";
 #else
   const char* raw_small = "smalls";
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
   Handle<String> string =
       factory->InternalizeString(factory->NewStringFromAsciiChecked(raw_small));

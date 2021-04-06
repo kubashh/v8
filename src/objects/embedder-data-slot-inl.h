@@ -46,7 +46,8 @@ Object EmbedderDataSlot::load_tagged() const {
 
 void EmbedderDataSlot::store_smi(Smi value) {
   ObjectSlot(address() + kTaggedPayloadOffset).Relaxed_Store(value);
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // See gc_safe_store() for the reasons behind two stores.
   ObjectSlot(address() + kRawPayloadOffset).Relaxed_Store(Smi::zero());
 #endif
@@ -59,7 +60,8 @@ void EmbedderDataSlot::store_tagged(EmbedderDataArray array, int entry_index,
   ObjectSlot(FIELD_ADDR(array, slot_offset + kTaggedPayloadOffset))
       .Relaxed_Store(value);
   WRITE_BARRIER(array, slot_offset + kTaggedPayloadOffset, value);
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // See gc_safe_store() for the reasons behind two stores.
   ObjectSlot(FIELD_ADDR(array, slot_offset + kRawPayloadOffset))
       .Relaxed_Store(Smi::zero());
@@ -73,7 +75,8 @@ void EmbedderDataSlot::store_tagged(JSObject object, int embedder_field_index,
   ObjectSlot(FIELD_ADDR(object, slot_offset + kTaggedPayloadOffset))
       .Relaxed_Store(value);
   WRITE_BARRIER(object, slot_offset + kTaggedPayloadOffset, value);
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // See gc_safe_store() for the reasons behind two stores and why the second is
   // only done if !V8_HEAP_SANDBOX_BOOL
   ObjectSlot(FIELD_ADDR(object, slot_offset + kRawPayloadOffset))
@@ -91,7 +94,7 @@ bool EmbedderDataSlot::ToAlignedPointer(PtrComprCageBase isolate_root,
 #ifdef V8_HEAP_SANDBOX
 
   // TODO(syg): V8_HEAP_SANDBOX doesn't work with pointer cage
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifndef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
 #error "V8_HEAP_SANDBOX requires per-Isolate pointer compression cage"
 #endif
 
@@ -100,7 +103,8 @@ bool EmbedderDataSlot::ToAlignedPointer(PtrComprCageBase isolate_root,
   raw_value = isolate->external_pointer_table().get(index) ^
               kEmbedderDataSlotPayloadTag;
 #else
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     // TODO(ishell, v8:8875): When pointer compression is enabled 8-byte size
     // fields (external pointers, doubles and BigInt data) are only kTaggedSize
     // aligned so we have to use unaligned pointer friendly way of accessing
@@ -119,7 +123,7 @@ bool EmbedderDataSlot::ToAlignedPointerSafe(PtrComprCageBase isolate_root,
 #ifdef V8_HEAP_SANDBOX
 
   // TODO(syg): V8_HEAP_SANDBOX doesn't work with pointer cage
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifndef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
 #error "V8_HEAP_SANDBOX requires per-Isolate pointer compression cage"
 #endif
 
@@ -164,7 +168,8 @@ EmbedderDataSlot::RawData EmbedderDataSlot::load_raw(
   // are accessed this way only by serializer from the main thread when
   // GC is not active (concurrent marker may still look at the tagged part
   // of the embedder slot but read-only access is ok).
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // TODO(ishell, v8:8875): When pointer compression is enabled 8-byte size
   // fields (external pointers, doubles and BigInt data) are only kTaggedSize
   // aligned so we have to use unaligned pointer friendly way of accessing them
@@ -182,7 +187,8 @@ void EmbedderDataSlot::store_raw(Isolate* isolate,
 }
 
 void EmbedderDataSlot::gc_safe_store(Isolate* isolate, Address value) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   STATIC_ASSERT(kSmiShiftSize == 0);
   STATIC_ASSERT(SmiValuesAre31Bits());
   STATIC_ASSERT(kTaggedSize == kInt32Size);

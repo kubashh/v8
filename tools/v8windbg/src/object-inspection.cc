@@ -35,7 +35,8 @@ HRESULT V8CachedObject::Create(IModelObject* p_v8_object_instance,
   // compressed pointers, then the value is compressed. Other types such as
   // v8::internal::Object represent uncompressed tagged values.
   bool is_compressed =
-      COMPRESS_POINTERS_BOOL &&
+      (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
       static_cast<const char*>(type_name) == std::string(kTaggedValue);
 
   const char* uncompressed_type_name =

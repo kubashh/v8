@@ -13,7 +13,8 @@ namespace v8 {
 namespace internal {
 
 IsolateAllocator::IsolateAllocator() {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   Address heap_reservation_address = InitReservation();
   CommitPagesForIsolate(heap_reservation_address);
 #else
@@ -21,7 +22,8 @@ IsolateAllocator::IsolateAllocator() {
   page_allocator_ = GetPlatformPageAllocator();
   isolate_memory_ = ::operator new(sizeof(Isolate));
   DCHECK(!reservation_.IsReserved());
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 }
 
 IsolateAllocator::~IsolateAllocator() {
@@ -34,7 +36,8 @@ IsolateAllocator::~IsolateAllocator() {
   ::operator delete(isolate_memory_);
 }
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
 
 namespace {
 
@@ -188,7 +191,8 @@ void IsolateAllocator::CommitPagesForIsolate(Address heap_reservation_address) {
   }
   isolate_memory_ = reinterpret_cast<void*>(isolate_address);
 }
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 }  // namespace internal
 }  // namespace v8

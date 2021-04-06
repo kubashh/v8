@@ -735,7 +735,8 @@ TNode<TaggedIndex> CodeStubAssembler::SmiToTaggedIndex(TNode<Smi> value) {
 }
 
 TNode<Smi> CodeStubAssembler::NormalizeSmiIndex(TNode<Smi> smi_index) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     TNode<Int32T> raw =
         TruncateWordToInt32(BitcastTaggedToWordForTagAndSmiBits(smi_index));
     smi_index = BitcastWordToTaggedSigned(ChangeInt32ToIntPtr(raw));
@@ -744,8 +745,11 @@ TNode<Smi> CodeStubAssembler::NormalizeSmiIndex(TNode<Smi> smi_index) {
 }
 
 TNode<Smi> CodeStubAssembler::SmiFromInt32(TNode<Int32T> value) {
-  if (COMPRESS_POINTERS_BOOL) {
-    static_assert(!COMPRESS_POINTERS_BOOL || (kSmiShiftSize + kSmiTagSize == 1),
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
+    static_assert(!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                    COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) ||
+                      (kSmiShiftSize + kSmiTagSize == 1),
                   "Use shifting instead of add");
     return BitcastWordToTaggedSigned(
         ChangeUint32ToWord(Int32Add(value, value)));
@@ -777,7 +781,8 @@ TNode<Smi> CodeStubAssembler::SmiTag(TNode<IntPtrT> value) {
       Smi::IsValid(constant_value)) {
     return SmiConstant(constant_value);
   }
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     return SmiFromInt32(TruncateIntPtrToInt32(value));
   }
   TNode<Smi> smi =
@@ -791,7 +796,8 @@ TNode<IntPtrT> CodeStubAssembler::SmiUntag(TNode<Smi> value) {
     return IntPtrConstant(constant_value >> (kSmiShiftSize + kSmiTagSize));
   }
   TNode<IntPtrT> raw_bits = BitcastTaggedToWordForTagAndSmiBits(value);
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     // Clear the upper half using sign-extension.
     raw_bits = ChangeInt32ToIntPtr(TruncateIntPtrToInt32(raw_bits));
   }
@@ -799,7 +805,8 @@ TNode<IntPtrT> CodeStubAssembler::SmiUntag(TNode<Smi> value) {
 }
 
 TNode<Int32T> CodeStubAssembler::SmiToInt32(TNode<Smi> value) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     return Signed(Word32SarShiftOutZeros(
         TruncateIntPtrToInt32(BitcastTaggedToWordForTagAndSmiBits(value)),
         SmiShiftBitsConstant32()));
@@ -1344,12 +1351,14 @@ TNode<HeapObject> CodeStubAssembler::AllocateRawDoubleAligned(
   return AllocateRaw(size_in_bytes, flags | kDoubleAlignment, top_address,
                      limit_address);
 #elif defined(V8_HOST_ARCH_64_BIT)
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // TODO(ishell, v8:8875): Consider using aligned allocations once the
   // allocation alignment inconsistency is fixed. For now we keep using
   // unaligned access since both x64 and arm64 architectures (where pointer
   // compression is supported) allow unaligned access to doubles and full words.
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
   // Allocation on 64 bit machine is naturally double aligned
   return AllocateRaw(size_in_bytes, flags & ~kDoubleAlignment, top_address,
                      limit_address);
@@ -2079,7 +2088,8 @@ TNode<HeapObject> CodeStubAssembler::GetHeapObjectAssumeWeak(
 TNode<BoolT> CodeStubAssembler::IsWeakReferenceToObject(
     TNode<MaybeObject> maybe_object, TNode<Object> value) {
   CSA_ASSERT(this, TaggedIsNotSmi(maybe_object));
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     return Word32Equal(
         Word32And(TruncateWordToInt32(BitcastMaybeObjectToWord(maybe_object)),
                   Uint32Constant(~static_cast<uint32_t>(kWeakHeapObjectMask))),
@@ -2097,7 +2107,8 @@ TNode<BoolT> CodeStubAssembler::IsWeakReferenceToObject(
 // uses a small constant for mask.
 TNode<BoolT> CodeStubAssembler::IsWeakReferenceTo(
     TNode<MaybeObject> maybe_object, TNode<HeapObject> heap_object) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     return Word32Equal(
         TruncateWordToInt32(BitcastMaybeObjectToWord(maybe_object)),
         Word32Or(TruncateWordToInt32(BitcastTaggedToWord(heap_object)),
@@ -2260,7 +2271,8 @@ TNode<RawPtrT> CodeStubAssembler::LoadJSTypedArrayDataPtr(
       LoadJSTypedArrayExternalPointerPtr(typed_array);
 
   TNode<IntPtrT> base_pointer;
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     TNode<Int32T> compressed_base =
         LoadObjectField<Int32T>(typed_array, JSTypedArray::kBasePointerOffset);
     // Zero-extend TaggedT to WordT according to current compression scheme
@@ -9949,7 +9961,8 @@ TNode<IntPtrT> CodeStubAssembler::ElementOffsetFromIndex(
     if (constant_index) {
       index = smi_index.value();
     } else {
-      if (COMPRESS_POINTERS_BOOL) {
+      if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+          COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
         smi_index_node = NormalizeSmiIndex(smi_index_node);
       }
     }

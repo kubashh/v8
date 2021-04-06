@@ -2746,7 +2746,8 @@ namespace {
 
 inline i::Object GetObjectFromRaw(void* object) {
   i::Address object_ptr = reinterpret_cast<i::Address>(object);
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   if (RoundDown<i::kPtrComprCageBaseAlignment>(object_ptr) == i::kNullAddress) {
     // Try to decompress pointer.
     i::Isolate* isolate = i::Isolate::Current();

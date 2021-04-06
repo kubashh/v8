@@ -4975,7 +4975,8 @@ TEST(RunRefDiamond) {
   m.Goto(&end);
   m.Bind(&end);
   Node* phi = m.Phi(MachineRepresentation::kTagged, k2, k1);
-  if (COMPRESS_POINTERS_BOOL) {
+  if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)) {
     // Since |buffer| is located off-heap, use full pointer store.
     m.Store(MachineType::PointerRepresentation(), m.PointerConstant(&buffer),
             m.Int32Constant(0), m.BitcastTaggedToWord(phi), kNoWriteBarrier);
@@ -5015,7 +5016,8 @@ TEST(RunDoubleRefDiamond) {
   Node* rphi = m.Phi(MachineRepresentation::kTagged, r2, r1);
   m.Store(MachineRepresentation::kFloat64, m.PointerConstant(&dbuffer),
           m.Int32Constant(0), dphi, kNoWriteBarrier);
-  if (COMPRESS_POINTERS_BOOL) {
+  if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)) {
     // Since |buffer| is located off-heap, use full pointer store.
     m.Store(MachineType::PointerRepresentation(), m.PointerConstant(&rbuffer),
             m.Int32Constant(0), m.BitcastTaggedToWord(rphi), kNoWriteBarrier);
@@ -5066,7 +5068,8 @@ TEST(RunDoubleRefDoubleDiamond) {
 
   m.Store(MachineRepresentation::kFloat64, m.PointerConstant(&dbuffer),
           m.Int32Constant(0), dphi2, kNoWriteBarrier);
-  if (COMPRESS_POINTERS_BOOL) {
+  if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)) {
     // Since |buffer| is located off-heap, use full pointer store.
     m.Store(MachineType::PointerRepresentation(), m.PointerConstant(&rbuffer),
             m.Int32Constant(0), m.BitcastTaggedToWord(rphi2), kNoWriteBarrier);

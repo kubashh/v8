@@ -689,7 +689,10 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
   __ RecordWriteField(rdx, JSGeneratorObject::kInputOrDebugPosOffset, rax, rcx,
                       kDontSaveFPRegs);
 
-  Register decompr_scratch1 = COMPRESS_POINTERS_BOOL ? r11 : no_reg;
+  Register decompr_scratch1 = (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                               COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+                                  ? r11
+                                  : no_reg;
 
   // Load suspended function and context.
   __ LoadTaggedPointerField(
@@ -4053,7 +4056,10 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   Register holder = ApiGetterDescriptor::HolderRegister();
   Register callback = ApiGetterDescriptor::CallbackRegister();
   Register scratch = rax;
-  Register decompr_scratch1 = COMPRESS_POINTERS_BOOL ? r11 : no_reg;
+  Register decompr_scratch1 = (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                               COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+                                  ? r11
+                                  : no_reg;
 
   DCHECK(!AreAliased(receiver, holder, callback, scratch, decompr_scratch1));
 

@@ -303,7 +303,8 @@ bool String::SupportsExternalization() {
     return false;
   }
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // Small strings may not be in-place externalizable.
   if (this->Size() < ExternalString::kUncachedSize) return false;
 #else

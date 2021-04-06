@@ -5590,7 +5590,8 @@ Local<Value> Symbol::Description() const {
     // RO_SPACE. Since RO_SPACE objects are immovable we can use the
     // Handle(Address*) constructor with the address of the description
     // field in the Symbol object without needing an isolate.
-    DCHECK(!COMPRESS_POINTERS_BOOL);
+    DCHECK(!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+             COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL));
     i::Handle<i::HeapObject> ro_description(reinterpret_cast<i::Address*>(
         sym->GetFieldAddress(i::Symbol::kDescriptionOffset)));
     return Utils::ToLocal(ro_description);
@@ -5735,12 +5736,16 @@ void v8::V8::ShutdownPlatform() { i::V8::ShutdownPlatform(); }
 bool v8::V8::Initialize(const int build_config) {
   const bool kEmbedderPointerCompression =
       (build_config & kPointerCompression) != 0;
-  if (kEmbedderPointerCompression != COMPRESS_POINTERS_BOOL) {
+  if (kEmbedderPointerCompression != (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                                      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)) {
     FATAL(
         "Embedder-vs-V8 build configuration mismatch. On embedder side "
         "pointer compression is %s while on V8 side it's %s.",
         kEmbedderPointerCompression ? "ENABLED" : "DISABLED",
-        COMPRESS_POINTERS_BOOL ? "ENABLED" : "DISABLED");
+        (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+            ? "ENABLED"
+            : "DISABLED");
   }
 
   const int kEmbedderSmiValueSize = (build_config & k31BitSmis) ? 31 : 32;

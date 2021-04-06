@@ -179,7 +179,8 @@ TEST(GetObjectProperties) {
     // object is on the right page. This response can only happen in builds
     // without pointer compression, because otherwise heap addresses would be at
     // deterministic locations within the heap reservation.
-    CHECK(COMPRESS_POINTERS_BOOL
+    CHECK((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+           COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
               ? StartsWith(props->brief, "EmptyFixedArray")
               : Contains(props->brief, "maybe EmptyFixedArray"));
 
@@ -238,7 +239,8 @@ TEST(GetObjectProperties) {
     MemoryFailureRegion failure(map_address, map_address + i::Map::kSize);
     props2 = d::GetObjectProperties(second_string_address, &ReadMemory,
                                     heap_addresses, "v8::internal::String");
-    if (COMPRESS_POINTERS_BOOL) {
+    if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)) {
       // The first page of each heap space can be automatically detected when
       // pointer compression is active, so we expect to use known maps instead
       // of the type hint.

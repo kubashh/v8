@@ -441,7 +441,8 @@ void TestSmiIndex(MacroAssembler* masm, Label* exit, int id, int x) {
 }
 
 TEST(EmbeddedObj) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   FLAG_always_compact = true;
   v8::V8::Initialize();
 
@@ -491,7 +492,8 @@ TEST(EmbeddedObj) {
       CHECK_EQ(*old_array, it.rinfo()->target_object());
     }
   }
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 }
 
 TEST(SmiIndex) {

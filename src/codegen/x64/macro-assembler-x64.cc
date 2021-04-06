@@ -198,7 +198,8 @@ void TurboAssembler::LoadMap(Register destination, Register object) {
 
 void TurboAssembler::LoadTaggedPointerField(Register destination,
                                             Operand field_operand) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DecompressTaggedPointer(destination, field_operand);
   } else {
     mov_tagged(destination, field_operand);
@@ -207,7 +208,8 @@ void TurboAssembler::LoadTaggedPointerField(Register destination,
 
 void TurboAssembler::LoadTaggedSignedField(Register destination,
                                            Operand field_operand) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DecompressTaggedSigned(destination, field_operand);
   } else {
     mov_tagged(destination, field_operand);
@@ -216,7 +218,8 @@ void TurboAssembler::LoadTaggedSignedField(Register destination,
 
 void TurboAssembler::LoadAnyTaggedField(Register destination,
                                         Operand field_operand) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DecompressAnyTagged(destination, field_operand);
   } else {
     mov_tagged(destination, field_operand);
@@ -225,7 +228,8 @@ void TurboAssembler::LoadAnyTaggedField(Register destination,
 
 void TurboAssembler::PushTaggedPointerField(Operand field_operand,
                                             Register scratch) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DCHECK(!field_operand.AddressUsesRegister(scratch));
     DecompressTaggedPointer(scratch, field_operand);
     Push(scratch);
@@ -236,7 +240,8 @@ void TurboAssembler::PushTaggedPointerField(Operand field_operand,
 
 void TurboAssembler::PushTaggedAnyField(Operand field_operand,
                                         Register scratch) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DCHECK(!field_operand.AddressUsesRegister(scratch));
     DecompressAnyTagged(scratch, field_operand);
     Push(scratch);
@@ -251,7 +256,8 @@ void TurboAssembler::SmiUntagField(Register dst, Operand src) {
 
 void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
                                       Immediate value) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     movl(dst_field_operand, value);
   } else {
     movq(dst_field_operand, value);
@@ -260,7 +266,8 @@ void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
 
 void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
                                       Register value) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     movl(dst_field_operand, value);
   } else {
     movq(dst_field_operand, value);
@@ -1125,7 +1132,8 @@ void MacroAssembler::Cmp(Register dst, int32_t src) {
 void MacroAssembler::SmiTag(Register reg) {
   STATIC_ASSERT(kSmiTag == 0);
   DCHECK(SmiValuesAre32Bits() || SmiValuesAre31Bits());
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     shll(reg, Immediate(kSmiShift));
   } else {
     shlq(reg, Immediate(kSmiShift));
@@ -1134,7 +1142,8 @@ void MacroAssembler::SmiTag(Register reg) {
 
 void MacroAssembler::SmiTag(Register dst, Register src) {
   DCHECK(dst != src);
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     movl(dst, src);
   } else {
     movq(dst, src);
@@ -1147,7 +1156,8 @@ void TurboAssembler::SmiUntag(Register reg) {
   DCHECK(SmiValuesAre32Bits() || SmiValuesAre31Bits());
   // TODO(v8:7703): Is there a way to avoid this sign extension when pointer
   // compression is enabled?
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     movsxlq(reg, reg);
   }
   sarq(reg, Immediate(kSmiShift));
@@ -1155,7 +1165,8 @@ void TurboAssembler::SmiUntag(Register reg) {
 
 void TurboAssembler::SmiUntag(Register dst, Register src) {
   DCHECK(dst != src);
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     movsxlq(dst, src);
   } else {
     movq(dst, src);
@@ -1174,7 +1185,8 @@ void TurboAssembler::SmiUntag(Register dst, Operand src) {
     movsxlq(dst, dst);
   } else {
     DCHECK(SmiValuesAre31Bits());
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       movsxlq(dst, src);
     } else {
       movq(dst, src);

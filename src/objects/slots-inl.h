@@ -145,7 +145,8 @@ inline void CopyTagged(Address dst, const Address src, size_t num_tagged) {
 
 // Sets |counter| number of kTaggedSize-sized values starting at |start| slot.
 inline void MemsetTagged(Tagged_t* start, Object value, size_t counter) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   Tagged_t raw_value = CompressTagged(value.ptr());
   MemsetUint32(start, raw_value, counter);
 #else

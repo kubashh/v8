@@ -20,7 +20,8 @@ namespace internal {
 
 inline StrongTaggedValue::StrongTaggedValue(Object o)
     :
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
       TaggedImpl(CompressTagged(o.ptr()))
 #else
       TaggedImpl(o.ptr())
@@ -29,7 +30,8 @@ inline StrongTaggedValue::StrongTaggedValue(Object o)
 }
 
 Object StrongTaggedValue::ToObject(Isolate* isolate, StrongTaggedValue object) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   return Object(DecompressTaggedAny(isolate, object.ptr()));
 #else
   return Object(object.ptr());
@@ -38,7 +40,8 @@ Object StrongTaggedValue::ToObject(Isolate* isolate, StrongTaggedValue object) {
 
 inline TaggedValue::TaggedValue(MaybeObject o)
     :
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
       TaggedImpl(CompressTagged(o.ptr()))
 #else
       TaggedImpl(o.ptr())
@@ -47,7 +50,8 @@ inline TaggedValue::TaggedValue(MaybeObject o)
 }
 
 MaybeObject TaggedValue::ToMaybeObject(Isolate* isolate, TaggedValue object) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   return MaybeObject(DecompressTaggedAny(isolate, object.ptr()));
 #else
   return MaybeObject(object.ptr());

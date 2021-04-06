@@ -120,7 +120,9 @@ RUNTIME_FUNCTION(Runtime_TypedArraySortFast) {
                             : static_cast<ctype*>(array->DataPtr());       \
     if (kExternal##Type##Array == kExternalFloat64Array ||                 \
         kExternal##Type##Array == kExternalFloat32Array) {                 \
-      if (COMPRESS_POINTERS_BOOL && alignof(ctype) > kTaggedSize) {        \
+      if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||                       \
+           COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&                       \
+          alignof(ctype) > kTaggedSize) {                                  \
         /* TODO(ishell, v8:8875): See UnalignedSlot<T> for details. */     \
         std::sort(UnalignedSlot<ctype>(data),                              \
                   UnalignedSlot<ctype>(data + length), CompareNum<ctype>); \
@@ -128,7 +130,9 @@ RUNTIME_FUNCTION(Runtime_TypedArraySortFast) {
         std::sort(data, data + length, CompareNum<ctype>);                 \
       }                                                                    \
     } else {                                                               \
-      if (COMPRESS_POINTERS_BOOL && alignof(ctype) > kTaggedSize) {        \
+      if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||                       \
+           COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&                       \
+          alignof(ctype) > kTaggedSize) {                                  \
         /* TODO(ishell, v8:8875): See UnalignedSlot<T> for details. */     \
         std::sort(UnalignedSlot<ctype>(data),                              \
                   UnalignedSlot<ctype>(data + length));                    \

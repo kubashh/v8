@@ -404,7 +404,8 @@ class MachineRepresentationChecker {
             break;
           case IrOpcode::kBitcastTaggedToWord:
           case IrOpcode::kBitcastTaggedToWordForTagAndSmiBits:
-            if (COMPRESS_POINTERS_BOOL) {
+            if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
               CheckValueInputIsCompressedOrTagged(node, 0);
             } else {
               CheckValueInputIsTagged(node, 0);
@@ -426,7 +427,8 @@ class MachineRepresentationChecker {
             CheckValueInputForFloat64Op(node, 0);
             break;
           case IrOpcode::kWord64Equal:
-            if (Is64() && !COMPRESS_POINTERS_BOOL) {
+            if (Is64() && !(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                            COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)) {
               CheckValueInputIsTaggedOrPointer(node, 0);
               CheckValueInputIsTaggedOrPointer(node, 1);
               if (!is_stub_) {
@@ -493,7 +495,8 @@ class MachineRepresentationChecker {
                     node, 1, inferrer_->GetRepresentation(node->InputAt(0)));
               }
             } else {
-              if (COMPRESS_POINTERS_BOOL) {
+              if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                  COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
                 CheckValueInputIsCompressedOrTaggedOrInt32(node, 0);
                 CheckValueInputIsCompressedOrTaggedOrInt32(node, 1);
               } else {
@@ -604,7 +607,8 @@ class MachineRepresentationChecker {
               case MachineRepresentation::kTagged:
               case MachineRepresentation::kTaggedPointer:
               case MachineRepresentation::kTaggedSigned:
-                if (COMPRESS_POINTERS_BOOL &&
+                if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                     COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
                     node->opcode() == IrOpcode::kStore &&
                     IsAnyTagged(
                         StoreRepresentationOf(node->op()).representation())) {
@@ -653,7 +657,8 @@ class MachineRepresentationChecker {
                 break;
               case MachineRepresentation::kTaggedSigned:
                 for (int i = 0; i < node->op()->ValueInputCount(); ++i) {
-                  if (COMPRESS_POINTERS_BOOL) {
+                  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
                     CheckValueInputIsCompressedOrTagged(node, i);
                   } else {
                     CheckValueInputIsTagged(node, i);

@@ -497,11 +497,19 @@ class Code : public HeapObject {
   // This documents the amount of free space we have in each Code object header
   // due to padding for code alignment.
 #if V8_TARGET_ARCH_ARM64
-  static constexpr int kHeaderPaddingSize = COMPRESS_POINTERS_BOOL ? 12 : 24;
+  static constexpr int kHeaderPaddingSize =
+      (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+          ? 12
+          : 24;
 #elif V8_TARGET_ARCH_MIPS64
   static constexpr int kHeaderPaddingSize = 24;
 #elif V8_TARGET_ARCH_X64
-  static constexpr int kHeaderPaddingSize = COMPRESS_POINTERS_BOOL ? 12 : 24;
+  static constexpr int kHeaderPaddingSize =
+      (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+          ? 12
+          : 24;
 #elif V8_TARGET_ARCH_ARM
   static constexpr int kHeaderPaddingSize = 12;
 #elif V8_TARGET_ARCH_IA32
@@ -510,10 +518,21 @@ class Code : public HeapObject {
   static constexpr int kHeaderPaddingSize = 12;
 #elif V8_TARGET_ARCH_PPC64
   static constexpr int kHeaderPaddingSize =
-      FLAG_enable_embedded_constant_pool ? (COMPRESS_POINTERS_BOOL ? 8 : 20)
-                                         : (COMPRESS_POINTERS_BOOL ? 12 : 24);
+      FLAG_enable_embedded_constant_pool
+          ? ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+              COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+                 ? 8
+                 : 20)
+          : ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+              COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+                 ? 12
+                 : 24);
 #elif V8_TARGET_ARCH_S390X
-  static constexpr int kHeaderPaddingSize = COMPRESS_POINTERS_BOOL ? 12 : 24;
+  static constexpr int kHeaderPaddingSize =
+      (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+          ? 12
+          : 24;
 #elif V8_TARGET_ARCH_RISCV64
   static constexpr int kHeaderPaddingSize = 24;
 #else

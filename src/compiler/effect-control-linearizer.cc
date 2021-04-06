@@ -4688,8 +4688,10 @@ Node* EffectControlLinearizer::ChangeTaggedInt32ToSmi(Node* value) {
   DCHECK(SmiValuesAre31Bits());
   // In pointer compression, we smi-corrupt. Then, the upper bits are not
   // important.
-  return COMPRESS_POINTERS_BOOL ? __ BitcastWord32ToWord64(value)
-                                : ChangeInt32ToIntPtr(value);
+  return (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+          COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+             ? __ BitcastWord32ToWord64(value)
+             : ChangeInt32ToIntPtr(value);
 }
 
 Node* EffectControlLinearizer::ChangeInt32ToIntPtr(Node* value) {
@@ -4732,8 +4734,10 @@ Node* EffectControlLinearizer::ChangeUint32ToSmi(Node* value) {
     Node* smi_value = __ Word32Shl(value, SmiShiftBitsConstant());
     // In pointer compression, we smi-corrupt. Then, the upper bits are not
     // important.
-    return COMPRESS_POINTERS_BOOL ? __ BitcastWord32ToWord64(smi_value)
-                                  : __ ChangeUint32ToUint64(smi_value);
+    return (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+            COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+               ? __ BitcastWord32ToWord64(smi_value)
+               : __ ChangeUint32ToUint64(smi_value);
   } else {
     return __ WordShl(ChangeUint32ToUintPtr(value), SmiShiftBitsConstant());
   }
@@ -5413,7 +5417,8 @@ Node* EffectControlLinearizer::BuildTypedArrayDataPointer(Node* base,
   if (IntPtrMatcher(base).Is(0)) {
     return external;
   } else {
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       base = __ BitcastTaggedToWord(base);
       // Zero-extend Tagged_t to UintPtr according to current compression
       // scheme so that the addition with |external_pointer| (which already
@@ -6441,7 +6446,8 @@ Node* EffectControlLinearizer::BuildStrongReferenceFromWeakReference(
 
 Node* EffectControlLinearizer::BuildIsWeakReferenceTo(Node* maybe_object,
                                                       Node* value) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     return __ Word32Equal(
         __ Word32And(
             TruncateWordToInt32(__ BitcastMaybeObjectToWord(maybe_object)),

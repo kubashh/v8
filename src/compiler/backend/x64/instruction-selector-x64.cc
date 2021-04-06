@@ -87,7 +87,9 @@ class X64OperandGenerator final : public OperandGenerator {
         // When pointer compression is enabled 64-bit memory operands can't be
         // used for tagged values.
         return rep == MachineRepresentation::kWord64 ||
-               (!COMPRESS_POINTERS_BOOL && IsAnyTagged(rep));
+               (!(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                  COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+                IsAnyTagged(rep));
       case kX64And32:
       case kX64Or32:
       case kX64Xor32:
@@ -98,7 +100,8 @@ class X64OperandGenerator final : public OperandGenerator {
         // When pointer compression is enabled 32-bit memory operands can be
         // used for tagged values.
         return rep == MachineRepresentation::kWord32 ||
-               (COMPRESS_POINTERS_BOOL &&
+               ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+                 COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
                 (IsAnyTagged(rep) || IsAnyCompressed(rep)));
       case kAVXFloat64Add:
       case kAVXFloat64Sub:
@@ -270,13 +273,15 @@ ArchOpcode GetLoadOpcode(LoadRepresentation load_rep) {
       break;
     case MachineRepresentation::kCompressedPointer:  // Fall through.
     case MachineRepresentation::kCompressed:
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
       opcode = kX64Movl;
       break;
 #else
       UNREACHABLE();
 #endif
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     case MachineRepresentation::kTaggedSigned:
       opcode = kX64MovqDecompressTaggedSigned;
       break;
@@ -318,7 +323,8 @@ ArchOpcode GetStoreOpcode(StoreRepresentation store_rep) {
       return kX64Movl;
     case MachineRepresentation::kCompressedPointer:  // Fall through.
     case MachineRepresentation::kCompressed:
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
       return kX64MovqCompressTagged;
 #else
       UNREACHABLE();
@@ -1350,7 +1356,8 @@ void InstructionSelector::VisitTryTruncateFloat64ToUint64(Node* node) {
 
 void InstructionSelector::VisitBitcastWord32ToWord64(Node* node) {
   DCHECK(SmiValuesAre31Bits());
-  DCHECK(COMPRESS_POINTERS_BOOL);
+  DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+         COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL);
   EmitIdentity(node);
 }
 
@@ -1972,7 +1979,8 @@ InstructionCode TryNarrowOpcodeSize(InstructionCode opcode, Node* left,
           return kX64Cmp16;
         }
         break;
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
       case MachineRepresentation::kTaggedSigned:
       case MachineRepresentation::kTaggedPointer:
       case MachineRepresentation::kTagged:
@@ -2063,7 +2071,9 @@ void VisitWord64EqualImpl(InstructionSelector* selector, Node* node,
 
 void VisitWord32EqualImpl(InstructionSelector* selector, Node* node,
                           FlagsContinuation* cont) {
-  if (COMPRESS_POINTERS_BOOL && selector->CanUseRootsRegister()) {
+  if ((COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+       COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+      selector->CanUseRootsRegister()) {
     X64OperandGenerator g(selector);
     const RootsTable& roots_table = selector->isolate()->roots_table();
     RootIndex root_index;

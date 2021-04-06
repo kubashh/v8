@@ -313,7 +313,9 @@ VisitorId Map::GetVisitorId(Map map) {
 #endif  // V8_ENABLE_WEBASSEMBLY
     case JS_BOUND_FUNCTION_TYPE: {
       const bool has_raw_data_fields =
-          COMPRESS_POINTERS_BOOL && JSObject::GetEmbedderFieldCount(map) > 0;
+          (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+           COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) &&
+          JSObject::GetEmbedderFieldCount(map) > 0;
       return has_raw_data_fields ? kVisitJSObject : kVisitJSObjectFast;
     }
     case JS_API_OBJECT_TYPE:

@@ -484,7 +484,8 @@ void TurboAssembler::LoadRoot(Register destination, RootIndex index,
 void TurboAssembler::LoadTaggedPointerField(const Register& destination,
                                             const MemOperand& field_operand,
                                             const Register& scratch) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DecompressTaggedPointer(destination, field_operand);
   } else {
     LoadP(destination, field_operand, scratch);
@@ -494,7 +495,8 @@ void TurboAssembler::LoadTaggedPointerField(const Register& destination,
 void TurboAssembler::LoadAnyTaggedField(const Register& destination,
                                         const MemOperand& field_operand,
                                         const Register& scratch) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     DecompressAnyTagged(destination, field_operand);
   } else {
     LoadP(destination, field_operand, scratch);
@@ -519,7 +521,8 @@ void TurboAssembler::SmiUntagField(Register dst, const MemOperand& src,
 void TurboAssembler::StoreTaggedFieldX(const Register& value,
                                        const MemOperand& dst_field_operand,
                                        const Register& scratch) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     RecordComment("[ StoreTagged");
     stwx(value, dst_field_operand);
     RecordComment("]");
@@ -531,7 +534,8 @@ void TurboAssembler::StoreTaggedFieldX(const Register& value,
 void TurboAssembler::StoreTaggedField(const Register& value,
                                       const MemOperand& dst_field_operand,
                                       const Register& scratch) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+      COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
     RecordComment("[ StoreTagged");
     StoreWord(value, dst_field_operand, scratch);
     RecordComment("]");

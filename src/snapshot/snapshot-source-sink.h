@@ -67,7 +67,8 @@ class SnapshotByteSource final {
     }
   }
 
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   void CopySlots(Tagged_t* dest, int number_of_slots) {
     AtomicTagged_t* start = reinterpret_cast<AtomicTagged_t*>(dest);
     AtomicTagged_t* end = start + number_of_slots;

@@ -195,7 +195,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void Cmpwi(Register src1, const Operand& src2, Register scratch,
              CRegister cr = cr7);
   void CompareTagged(Register src1, Register src2, CRegister cr = cr7) {
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       cmpw(src1, src2, cr);
     } else {
       cmp(src1, src2, cr);
@@ -513,7 +514,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void SmiUntag(Register reg, RCBit rc = LeaveRC) { SmiUntag(reg, reg, rc); }
 
   void SmiUntag(Register dst, Register src, RCBit rc = LeaveRC) {
-    if (COMPRESS_POINTERS_BOOL) {
+    if (COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
+        COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
       srawi(dst, src, kSmiShift, rc);
     } else {
       ShiftRightArithImm(dst, src, kSmiShift, rc);
