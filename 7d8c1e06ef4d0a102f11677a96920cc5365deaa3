@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "7d8c1e06ef4d0a102f11677a96920cc5365deaa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2765a97a_de778bae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-06T15:07:33Z",
+      "side": 1,
+      "message": "LGTM with nit",
+      "revId": "7d8c1e06ef4d0a102f11677a96920cc5365deaa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5e67aa0_cf37060a",
+        "filename": "test/mjsunit/regress/regress-crbug-1195717.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-06T15:07:33Z",
+      "side": 1,
+      "message": "nit: can you move this into test/mjsunit/baseline/verify-bytecode-offsets.js ? \n\nGiven that this is mostly internal debugging, I\u0027m fine to reduce testing overhead a bit.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 72
+      },
+      "revId": "7d8c1e06ef4d0a102f11677a96920cc5365deaa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
