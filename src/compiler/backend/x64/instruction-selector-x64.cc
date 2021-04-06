@@ -1871,11 +1871,15 @@ void VisitCompareWithMemoryOperand(InstructionSelector* selector,
   DCHECK_EQ(IrOpcode::kLoad, left->opcode());
   X64OperandGenerator g(selector);
   size_t input_count = 0;
-  InstructionOperand inputs[4];
+  InstructionOperand inputs[6];
   AddressingMode addressing_mode =
       g.GetEffectiveAddressMemoryOperand(left, inputs, &input_count);
   opcode |= AddressingModeField::encode(addressing_mode);
   inputs[input_count++] = right;
+  if (cont->IsSelect()) {
+    inputs[input_count++] = g.UseRegister(cont->false_value());
+    inputs[input_count++] = g.Use(cont->true_value());
+  }
 
   selector->EmitWithContinuation(opcode, 0, nullptr, input_count, inputs, cont);
 }
@@ -1884,6 +1888,14 @@ void VisitCompareWithMemoryOperand(InstructionSelector* selector,
 void VisitCompare(InstructionSelector* selector, InstructionCode opcode,
                   InstructionOperand left, InstructionOperand right,
                   FlagsContinuation* cont) {
+  if (cont->IsSelect()) {
+    X64OperandGenerator g(selector);
+    InstructionOperand inputs[] = {left, right,
+                                   g.UseRegister(cont->false_value()),
+                                   g.Use(cont->true_value())};
+    selector->EmitWithContinuation(opcode, 0, nullptr, 4, inputs, cont);
+    return;
+  }
   selector->EmitWithContinuation(opcode, left, right, cont);
 }
 
@@ -3725,7 +3737,9 @@ InstructionSelector::SupportedMachineOperatorFlags() {
              MachineOperatorBuilder::kFloat32RoundTruncate |
              MachineOperatorBuilder::kFloat64RoundTruncate |
              MachineOperatorBuilder::kFloat32RoundTiesEven |
-             MachineOperatorBuilder::kFloat64RoundTiesEven;
+             MachineOperatorBuilder::kFloat64RoundTiesEven |
+             MachineOperatorBuilder::kWord32Select |
+             MachineOperatorBuilder::kWord64Select;
   }
   return flags;
 }

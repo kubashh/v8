@@ -880,8 +880,13 @@ Instruction* InstructionSelector::EmitWithContinuation(
     AppendDeoptimizeArguments(&continuation_inputs_, cont->kind(),
                               cont->reason(), cont->feedback(),
                               FrameState{cont->frame_state()});
-  } else if (cont->IsSet() || cont->IsSelect()) {
+  } else if (cont->IsSet()) {
     continuation_outputs_.push_back(g.DefineAsRegister(cont->result()));
+  } else if (cont->IsSelect()) {
+    // The last two inputs are for the select. The result has to be the same
+    // register as the first input because of the Intel cmov instruction.
+    continuation_outputs_.push_back(
+        g.DefineSameAsInput(cont->result(), static_cast<int>(input_count) - 2));
   } else if (cont->IsTrap()) {
     int trap_id = static_cast<int>(cont->trap_id());
     continuation_inputs_.push_back(g.UseImmediate(trap_id));
@@ -1554,6 +1559,8 @@ void InstructionSelector::VisitNode(Node* node) {
       return MarkAsWord32(node), VisitWord32Popcnt(node);
     case IrOpcode::kWord64Popcnt:
       return MarkAsWord32(node), VisitWord64Popcnt(node);
+    case IrOpcode::kWord32Select:
+      return MarkAsWord32(node), VisitSelect(node);
     case IrOpcode::kWord64And:
       return MarkAsWord64(node), VisitWord64And(node);
     case IrOpcode::kWord64Or:
@@ -1584,6 +1591,8 @@ void InstructionSelector::VisitNode(Node* node) {
       return MarkAsWord64(node), VisitInt64AbsWithOverflow(node);
     case IrOpcode::kWord64Equal:
       return VisitWord64Equal(node);
+    case IrOpcode::kWord64Select:
+      return MarkAsWord64(node), VisitSelect(node);
     case IrOpcode::kInt32Add:
       return MarkAsWord32(node), VisitInt32Add(node);
     case IrOpcode::kInt32AddWithOverflow:

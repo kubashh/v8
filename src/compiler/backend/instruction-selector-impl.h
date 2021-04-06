@@ -86,9 +86,14 @@ class OperandGenerator {
   }
 
   InstructionOperand DefineSameAsFirst(Node* node) {
-    return Define(node,
-                  UnallocatedOperand(UnallocatedOperand::SAME_AS_FIRST_INPUT,
-                                     GetVReg(node)));
+    return Define(node, UnallocatedOperand(UnallocatedOperand::SAME_AS_INPUT,
+                                           GetVReg(node)));
+  }
+
+  InstructionOperand DefineSameAsInput(Node* node, int input_index) {
+    return Define(
+        node, UnallocatedOperand(input_index, UnallocatedOperand::SAME_AS_INPUT,
+                                 GetVReg(node)));
   }
 
   InstructionOperand DefineAsFixed(Node* node, Register reg) {
@@ -224,7 +229,7 @@ class OperandGenerator {
   int AllocateVirtualRegister() { return sequence()->NextVirtualRegister(); }
 
   InstructionOperand DefineSameAsFirstForVreg(int vreg) {
-    return UnallocatedOperand(UnallocatedOperand::SAME_AS_FIRST_INPUT, vreg);
+    return UnallocatedOperand(UnallocatedOperand::SAME_AS_INPUT, vreg);
   }
 
   InstructionOperand DefineAsRegistertForVreg(int vreg) {
