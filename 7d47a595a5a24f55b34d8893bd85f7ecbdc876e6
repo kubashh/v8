@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23d7dbde_807eca5e",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-06T08:00:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36b8b083_f35bcf15",
+      "revId": "7d47a595a5a24f55b34d8893bd85f7ecbdc876e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9276b141_910e867a",
@@ -64,6 +82,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b68c9ba2_60da550e",
+        "filename": "include/v8.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 6845,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-06T08:00:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49fd6774_e1307683",
+      "range": {
+        "startLine": 6845,
+        "startChar": 21,
+        "endLine": 6845,
+        "endChar": 25
+      },
+      "revId": "7d47a595a5a24f55b34d8893bd85f7ecbdc876e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c55fa09f_bd98a2ba",
+        "filename": "include/v8.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 6845,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-06T08:00:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9276b141_910e867a",
+      "range": {
+        "startLine": 6845,
+        "startChar": 43,
+        "endLine": 6845,
+        "endChar": 70
+      },
+      "revId": "7d47a595a5a24f55b34d8893bd85f7ecbdc876e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "492fbad9_8b8b9074",
@@ -77,6 +143,24 @@
       "writtenOn": "2021-03-18T14:05:29Z",
       "side": 1,
       "message": "Please put this whole stuff here into a helper function:\n\ninputs[i] \u003d AdaptFastCallArgument(\n    NodeProperties::GetValueInput(node, i),\n    c_signature-\u003eArgumentInfo(i - 1).GetType());\n\n(You can probably inline CopyFastApiObjectArgToStackSlot in there.)",
+      "revId": "7d47a595a5a24f55b34d8893bd85f7ecbdc876e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6358cb5f_6d91337d",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 5095,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-06T08:00:50Z",
+      "side": 1,
+      "message": "Really nice simplification, thanks! Done.",
+      "parentUuid": "492fbad9_8b8b9074",
       "revId": "7d47a595a5a24f55b34d8893bd85f7ecbdc876e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -106,6 +190,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4b7d2626_32e9d9e3",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-06T08:00:50Z",
+      "side": 1,
+      "message": "Looks like we don\u0027t have a class defined for JSApiObject, so I\u0027ll use Object.",
+      "parentUuid": "96bdce45_be066ff2",
+      "range": {
+        "startLine": 1339,
+        "startChar": 54,
+        "endLine": 1339,
+        "endChar": 64
+      },
+      "revId": "7d47a595a5a24f55b34d8893bd85f7ecbdc876e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d7572eeb_050b682e",
         "filename": "src/objects/objects.cc",
         "patchSetId": 22
@@ -117,6 +225,30 @@
       "writtenOn": "2021-03-18T14:05:29Z",
       "side": 1,
       "message": "The cast is unnecessary.",
+      "range": {
+        "startLine": 1349,
+        "startChar": 10,
+        "endLine": 1349,
+        "endChar": 37
+      },
+      "revId": "7d47a595a5a24f55b34d8893bd85f7ecbdc876e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5ad32b6_da32c062",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-06T08:00:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7572eeb_050b682e",
       "range": {
         "startLine": 1349,
         "startChar": 10,
