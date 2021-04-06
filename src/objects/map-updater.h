@@ -67,6 +67,13 @@ class V8_EXPORT_PRIVATE MapUpdater {
   // version and performs the steps 1-6.
   Handle<Map> Update();
 
+  static Handle<Map> ReconfigureExistingProperty(Isolate* isolate,
+                                                 Handle<Map> map,
+                                                 InternalIndex descriptor,
+                                                 PropertyKind kind,
+                                                 PropertyAttributes attributes,
+                                                 PropertyConstness constness);
+
  private:
   enum State {
     kInitialized,

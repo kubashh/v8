@@ -715,10 +715,6 @@ class Map : public HeapObject {
       Isolate* isolate, Handle<Map> map, Handle<Name> name,
       InternalIndex descriptor, Handle<Object> getter, Handle<Object> setter,
       PropertyAttributes attributes);
-  V8_EXPORT_PRIVATE static Handle<Map> ReconfigureExistingProperty(
-      Isolate* isolate, Handle<Map> map, InternalIndex descriptor,
-      PropertyKind kind, PropertyAttributes attributes,
-      PropertyConstness constness);
 
   inline void AppendDescriptor(Isolate* isolate, Descriptor* desc);
 
@@ -919,10 +915,6 @@ class Map : public HeapObject {
                        Representation new_representation,
                        const MaybeObjectHandle& new_wrapped_type);
 
-  // TODO(ishell): Move to MapUpdater.
-  void PrintReconfiguration(Isolate* isolate, FILE* file,
-                            InternalIndex modify_index, PropertyKind kind,
-                            PropertyAttributes attributes);
   // TODO(ishell): Move to MapUpdater.
   void PrintGeneralization(
       Isolate* isolate, FILE* file, const char* reason,
