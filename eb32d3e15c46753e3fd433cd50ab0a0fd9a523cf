@@ -103,6 +103,24 @@
       "parentUuid": "07c623e0_0a02dbaf",
       "revId": "eb32d3e15c46753e3fd433cd50ab0a0fd9a523cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c28c7fb_df6b1a65",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4475,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-06T11:56:07Z",
+      "side": 1,
+      "message": "The debug code would fail explicitly, but yeah, not necessary.",
+      "parentUuid": "7878bc22_10b85c18",
+      "revId": "eb32d3e15c46753e3fd433cd50ab0a0fd9a523cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
