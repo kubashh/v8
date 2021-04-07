@@ -54,6 +54,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e0a0fd5_161e7389",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-04-07T07:54:18Z",
+      "side": 1,
+      "message": "nit: DCHECK_EQ?",
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "931b2876_9fe13bb1",
+        "filename": "src/compiler/backend/register-allocator-verifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-04-07T07:54:18Z",
+      "side": 1,
+      "message": "Can we make this CHECK stronger by replacing this with op_constraints[count].value_?",
+      "range": {
+        "startLine": 94,
+        "startChar": 17,
+        "endLine": 94,
+        "endChar": 18
+      },
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96982012_8e01992f",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 2
@@ -65,6 +105,29 @@
       "writtenOn": "2021-04-07T06:39:03Z",
       "side": 1,
       "message": "This seems related to the \u00272\u0027 mentioned before?\n\nShould we DCHECK output_reg \u003d\u003d input_reg_n?",
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c24dbc_c95ad57b",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3743,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-04-07T07:54:18Z",
+      "side": 1,
+      "message": "Why is this guarded by SSE4 support? Isn\u0027t cmov always available on supported intel architectures?",
+      "range": {
+        "startLine": 3741,
+        "startChar": 0,
+        "endLine": 3743,
+        "endChar": 0
+      },
       "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
