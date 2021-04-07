@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98618f50_ac1cd4c8",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-07T12:08:03Z",
+      "side": 1,
+      "message": "I clarified the comment. I don\u0027t know how we could tie this together in the code.",
+      "parentUuid": "f705be8d_74a80c67",
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2aaf1cc_cb358df3",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1711f839_8fed0c04",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-07T12:08:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2aaf1cc_cb358df3",
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e0a0fd5_161e7389",
@@ -82,6 +118,24 @@
       "writtenOn": "2021-04-07T07:54:18Z",
       "side": 1,
       "message": "nit: DCHECK_EQ?",
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91603672_8831c258",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-07T12:08:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e0a0fd5_161e7389",
       "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +163,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "352da07d_ed59b3cc",
+        "filename": "src/compiler/backend/register-allocator-verifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-07T12:08:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "931b2876_9fe13bb1",
+      "range": {
+        "startLine": 94,
+        "startChar": 17,
+        "endLine": 94,
+        "endChar": 18
+      },
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96982012_8e01992f",
@@ -122,6 +200,24 @@
       "writtenOn": "2021-04-07T06:39:03Z",
       "side": 1,
       "message": "This seems related to the \u00272\u0027 mentioned before?\n\nShould we DCHECK output_reg \u003d\u003d input_reg_n?",
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84a8efd9_cc1ccd6e",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4457,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-07T12:08:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96982012_8e01992f",
       "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -149,6 +245,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27b18ead_d1add1ac",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3743,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-07T12:08:03Z",
+      "side": 1,
+      "message": "Thanks for noticing!",
+      "parentUuid": "05c24dbc_c95ad57b",
+      "range": {
+        "startLine": 3741,
+        "startChar": 0,
+        "endLine": 3743,
+        "endChar": 0
+      },
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "020cddbb_12292d82",
@@ -162,6 +282,24 @@
       "writtenOn": "2021-04-07T06:39:03Z",
       "side": 1,
       "message": "Please document what the inputs are, either here or in the .cc file.",
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a9f20e7_93f630e2",
+        "filename": "src/compiler/machine-operator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-07T12:08:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "020cddbb_12292d82",
       "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
