@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21d92cd9_8594ce0c",
+        "filename": "src/objects/map.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-07T21:08:16Z",
+      "side": 1,
+      "message": "Please move it to map-inl.h.",
+      "revId": "9e3f20134872890733d3f1fc609daa4cb10f434e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

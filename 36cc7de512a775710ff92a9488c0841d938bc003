@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd906676_72de2077",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-07T21:08:16Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "36cc7de512a775710ff92a9488c0841d938bc003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19b40ea5_eaaac68f",
+        "filename": "src/objects/map-updater.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-07T21:08:16Z",
+      "side": 1,
+      "message": "This seems unnecessary.",
+      "range": {
+        "startLine": 216,
+        "startChar": 4,
+        "endLine": 216,
+        "endChar": 16
+      },
+      "revId": "36cc7de512a775710ff92a9488c0841d938bc003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
