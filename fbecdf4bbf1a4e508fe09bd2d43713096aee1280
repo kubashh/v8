@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73fd640f_380ff169",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1501644
+      },
+      "writtenOn": "2021-04-07T13:22:04Z",
+      "side": 1,
+      "message": "I\u0027m not sure what I\u0027m supposed to do about the AUTHORS file. My colleague Hugo Cornelis has executed the CLA for Essensium-Mind (i.e. *@mind.be). Should I submit a separate changelist to add the address pattern to AUTHORS, or should that be done by a maintainer?",
+      "revId": "fbecdf4bbf1a4e508fe09bd2d43713096aee1280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
