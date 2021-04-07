@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2aaf1cc_cb358df3",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2021-04-07T10:09:56Z",
+      "side": 1,
+      "message": "Why make architecture specific choices here? Can this be pushed into the x64 backend instead? It would be good to not have this limitation when arm64 supported is added too.",
+      "revId": "61cc47b8dbc23496fbbaa9c86177a6ea701b2ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e0a0fd5_161e7389",
         "filename": "src/compiler/backend/instruction.h",
         "patchSetId": 2
