@@ -16,6 +16,23 @@
       "message": "compiler lgtm. Let me know if you want me to look at more.",
       "revId": "15ad8c50d0083bbc4a9fcecc5806357933db4f0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "920d2ba4_5f1cff1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2021-04-07T17:42:23Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "15ad8c50d0083bbc4a9fcecc5806357933db4f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
