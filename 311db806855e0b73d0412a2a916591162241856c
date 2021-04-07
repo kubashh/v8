@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02f123b6_d49cd204",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-04-07T19:56:00Z",
+      "side": 1,
+      "message": "Hello,\n\nThe only Big endian machines on V8 are currently S390x and AIX on PowerPC (Big endian Linux on PPC is not supported). S390x snapshots are working correctly and are getting generated in BE order on either platforms (BE Native or LE Simulator), it\u0027s the simulators job to interpret them correctly. We don\u0027t simulate AIX and only BE snapshots are generated on native machines, so I was wondering what platform(s) is this CL trying to fix?",
+      "revId": "311db806855e0b73d0412a2a916591162241856c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
