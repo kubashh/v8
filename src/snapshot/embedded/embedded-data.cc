@@ -278,10 +278,14 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
     uint32_t metadata_size = static_cast<uint32_t>(code.raw_metadata_size());
 
     DCHECK_EQ(0, raw_code_size % kCodeAlignment);
-    layout_descriptions[i].instruction_offset = raw_code_size;
-    layout_descriptions[i].instruction_length = instruction_size;
-    layout_descriptions[i].metadata_offset = raw_data_size;
-    layout_descriptions[i].metadata_length = metadata_size;
+    base::WriteTargetEndianValue(&layout_descriptions[i].instruction_offset,
+                                 raw_code_size);
+    base::WriteTargetEndianValue(&layout_descriptions[i].instruction_length,
+                                 instruction_size);
+    base::WriteTargetEndianValue(&layout_descriptions[i].metadata_offset,
+                                 raw_data_size);
+    base::WriteTargetEndianValue(&layout_descriptions[i].metadata_length,
+                                 metadata_size);
 
     // Align the start of each section.
     raw_code_size += PadAndAlignCode(instruction_size);
@@ -311,7 +315,8 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
   {
     STATIC_ASSERT(IsolateHashSize() == kSizetSize);
     const size_t hash = isolate->HashIsolateForEmbeddedBlob();
-    std::memcpy(blob_data + IsolateHashOffset(), &hash, IsolateHashSize());
+    base::WriteTargetEndianValue(
+        reinterpret_cast<Address>(blob_data + IsolateHashOffset()), hash);
   }
 
   // Write the layout_descriptions tables.
@@ -325,7 +330,8 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
   STATIC_ASSERT(Builtins::kAllBuiltinsAreIsolateIndependent);
   for (int i = 0; i < Builtins::builtin_count; i++) {
     Code code = builtins->builtin(i);
-    uint32_t offset = layout_descriptions[i].metadata_offset;
+    uint32_t offset =
+        base::ReadTargetEndianValue(&layout_descriptions[i].metadata_offset);
     uint8_t* dst = raw_metadata_start + offset;
     DCHECK_LE(RawMetadataOffset() + offset + code.raw_metadata_size(),
               blob_data_size);
@@ -338,7 +344,8 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
   STATIC_ASSERT(Builtins::kAllBuiltinsAreIsolateIndependent);
   for (int i = 0; i < Builtins::builtin_count; i++) {
     Code code = builtins->builtin(i);
-    uint32_t offset = layout_descriptions[i].instruction_offset;
+    uint32_t offset =
+        base::ReadTargetEndianValue(&layout_descriptions[i].instruction_offset);
     uint8_t* dst = raw_code_start + offset;
     DCHECK_LE(RawCodeOffset() + offset + code.raw_instruction_size(),
               blob_code_size);
@@ -355,13 +362,15 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
   {
     STATIC_ASSERT(EmbeddedBlobDataHashSize() == kSizetSize);
     const size_t data_hash = d.CreateEmbeddedBlobDataHash();
-    std::memcpy(blob_data + EmbeddedBlobDataHashOffset(), &data_hash,
-                EmbeddedBlobDataHashSize());
+    base::WriteTargetEndianValue(
+        reinterpret_cast<Address>(blob_data + EmbeddedBlobDataHashOffset()),
+        data_hash);
 
     STATIC_ASSERT(EmbeddedBlobCodeHashSize() == kSizetSize);
     const size_t code_hash = d.CreateEmbeddedBlobCodeHash();
-    std::memcpy(blob_data + EmbeddedBlobCodeHashOffset(), &code_hash,
-                EmbeddedBlobCodeHashSize());
+    base::WriteTargetEndianValue(
+        reinterpret_cast<Address>(blob_data + EmbeddedBlobCodeHashOffset()),
+        code_hash);
 
     DCHECK_EQ(data_hash, d.CreateEmbeddedBlobDataHash());
     DCHECK_EQ(data_hash, d.EmbeddedBlobDataHash());
@@ -377,7 +386,8 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
 Address EmbeddedData::InstructionStartOfBuiltin(int i) const {
   DCHECK(Builtins::IsBuiltinId(i));
   const struct LayoutDescription* descs = LayoutDescription();
-  const uint8_t* result = RawCode() + descs[i].instruction_offset;
+  const uint8_t* result =
+      RawCode() + base::ReadTargetEndianValue(&descs[i].instruction_offset);
   DCHECK_LT(result, code_ + code_size_);
   return reinterpret_cast<Address>(result);
 }
@@ -385,21 +395,22 @@ Address EmbeddedData::InstructionStartOfBuiltin(int i) const {
 uint32_t EmbeddedData::InstructionSizeOfBuiltin(int i) const {
   DCHECK(Builtins::IsBuiltinId(i));
   const struct LayoutDescription* descs = LayoutDescription();
-  return descs[i].instruction_length;
+  return base::ReadTargetEndianValue(&descs[i].instruction_length);
 }
 
 Address EmbeddedData::MetadataStartOfBuiltin(int i) const {
   DCHECK(Builtins::IsBuiltinId(i));
   const struct LayoutDescription* descs = LayoutDescription();
-  const uint8_t* result = RawMetadata() + descs[i].metadata_offset;
-  DCHECK_LE(descs[i].metadata_offset, data_size_);
+  const uint8_t* result =
+      RawMetadata() + base::ReadTargetEndianValue(&descs[i].metadata_offset);
+  DCHECK_LE(base::ReadTargetEndianValue(&descs[i].metadata_offset), data_size_);
   return reinterpret_cast<Address>(result);
 }
 
 uint32_t EmbeddedData::MetadataSizeOfBuiltin(int i) const {
   DCHECK(Builtins::IsBuiltinId(i));
   const struct LayoutDescription* descs = LayoutDescription();
-  return descs[i].metadata_length;
+  return base::ReadTargetEndianValue(&descs[i].metadata_length);
 }
 
 Address EmbeddedData::InstructionStartOfBytecodeHandlers() const {

@@ -841,6 +841,13 @@ class ImplementationVisitor {
     }
   }
 
+  void GenerateIterateBody(std::ostream& o, const AggregateType& type,
+                           const std::vector<Field>& fields,
+                           const std::vector<ObjectSlotKind>& slots,
+                           const base::Optional<std::string>& outer_offset_s,
+                           const size_t skip_slots,
+                           const bool has_array_fields);
+
   base::Optional<CfgAssembler> assembler_;
   NullOStream null_stream_;
   bool is_dry_run_;

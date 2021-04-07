@@ -58,6 +58,15 @@ class BodyDescriptorBase {
   static inline void IterateMaybeWeakPointer(HeapObject obj, int offset,
                                              ObjectVisitor* v);
 
+  template <typename ObjectVisitor>
+  static inline void IterateNonPointers(HeapObject obj, int start_offset,
+                                        int end_offset, int size,
+                                        ObjectVisitor* v);
+
+  template <typename ObjectVisitor>
+  static inline void IterateNonPointer(HeapObject obj, int offset, int size,
+                                       ObjectVisitor* v);
+
  protected:
   // Returns true for all header and embedder fields.
   static inline bool IsValidJSObjectSlotImpl(Map map, HeapObject obj,

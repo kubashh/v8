@@ -45,8 +45,7 @@ class FeedbackCell : public TorqueGeneratedFeedbackCell<FeedbackCell, Struct> {
   // creation by updating the map.
   inline void IncrementClosureCount(Isolate* isolate);
 
-  using BodyDescriptor =
-      FixedBodyDescriptor<kValueOffset, kInterruptBudgetOffset, kAlignedSize>;
+  class BodyDescriptor;
 
   TQ_OBJECT_CONSTRUCTORS(FeedbackCell)
 };

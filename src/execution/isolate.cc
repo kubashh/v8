@@ -409,8 +409,9 @@ size_t Isolate::HashIsolateForEmbeddedBlob() {
     STATIC_ASSERT(Code::kBuiltinIndexOffset == Code::kFlagsOffsetEnd + 1);
     static constexpr int kStartOffset = Code::kBuiltinIndexOffset;
 
-    for (int j = kStartOffset; j < Code::kUnalignedHeaderSize; j++) {
-      hash = base::hash_combine(hash, size_t{code_ptr[j]});
+    for (int j = kStartOffset; j < Code::kUnalignedHeaderSize; j += kIntSize) {
+      hash = base::hash_combine(
+          hash, size_t{*reinterpret_cast<unsigned int*>(&code_ptr[j])});
     }
   }
 
