@@ -33,6 +33,24 @@
       "message": "Thanks, LGTM! Should we also add the DCHECK to MarkValue? That\u0027s the method Heap::CopyRange is using.",
       "revId": "bf8fa1e7e170af760665f9d754587af739329fe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a9339c4_ff66bc17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-07T08:42:58Z",
+      "side": 1,
+      "message": "Done. I had to introduce a helper method to access the thread local from the inl file.",
+      "parentUuid": "99d1a58a_31775f36",
+      "revId": "bf8fa1e7e170af760665f9d754587af739329fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
