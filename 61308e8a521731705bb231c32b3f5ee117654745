@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b80484eb_ef16068a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-04-07T13:34:08Z",
+      "side": 1,
+      "message": "Sorry, I didn\u0027t get a mail about the latest response. LGTM.",
+      "revId": "61308e8a521731705bb231c32b3f5ee117654745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
