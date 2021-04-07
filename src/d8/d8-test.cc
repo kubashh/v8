@@ -23,14 +23,13 @@ namespace v8 {
 namespace {
 class FastCApiObject {
  public:
-  static double AddAllFastCallback(ApiObject receiver, bool should_fallback,
+  static double AddAllFastCallback(v8::Value* receiver, bool should_fallback,
                                    int32_t arg_i32, uint32_t arg_u32,
                                    int64_t arg_i64, uint64_t arg_u64,
                                    float arg_f32, double arg_f64,
                                    FastApiCallbackOptions& options) {
-    Value* receiver_value = reinterpret_cast<Value*>(&receiver);
-    CHECK(receiver_value->IsObject());
-    FastCApiObject* self = UnwrapObject(Object::Cast(receiver_value));
+    CHECK(receiver->IsObject());
+    FastCApiObject* self = UnwrapObject(Object::Cast(receiver));
     self->fast_call_count_++;
 
     if (should_fallback) {
@@ -77,12 +76,11 @@ class FastCApiObject {
     args.GetReturnValue().Set(Number::New(isolate, sum));
   }
 
-  static int Add32BitIntFastCallback(ApiObject receiver, bool should_fallback,
+  static int Add32BitIntFastCallback(v8::Value* receiver, bool should_fallback,
                                      int32_t arg_i32, uint32_t arg_u32,
                                      FastApiCallbackOptions& options) {
-    Value* receiver_value = reinterpret_cast<Value*>(&receiver);
-    CHECK(receiver_value->IsObject());
-    FastCApiObject* self = UnwrapObject(Object::Cast(receiver_value));
+    CHECK(receiver->IsObject());
+    FastCApiObject* self = UnwrapObject(Object::Cast(receiver));
     self->fast_call_count_++;
 
     if (should_fallback) {
