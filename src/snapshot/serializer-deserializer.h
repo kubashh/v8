@@ -40,10 +40,8 @@ class SerializerDeserializer : public RootVisitor {
   /* Free range 0x30..0x3f */                                     \
   V(0x30) V(0x31) V(0x32) V(0x33) V(0x34) V(0x35) V(0x36) V(0x37) \
   V(0x38) V(0x39) V(0x3a) V(0x3b) V(0x3c) V(0x3d) V(0x3e) V(0x3f) \
-  /* Free range 0x97..0x9f */                                     \
-  V(0x98) V(0x99) V(0x9a) V(0x9b) V(0x9c) V(0x9d) V(0x9e) V(0x9f) \
   /* Free range 0xa0..0xaf */                                     \
-  V(0xa0) V(0xa1) V(0xa2) V(0xa3) V(0xa4) V(0xa5) V(0xa6) V(0xa7) \
+  V(0xa4) V(0xa5) V(0xa6) V(0xa7)                                 \
   V(0xa8) V(0xa9) V(0xaa) V(0xab) V(0xac) V(0xad) V(0xae) V(0xaf) \
   /* Free range 0xb0..0xbf */                                     \
   V(0xb0) V(0xb1) V(0xb2) V(0xb3) V(0xb4) V(0xb5) V(0xb6) V(0xb7) \
@@ -78,6 +76,14 @@ class SerializerDeserializer : public RootVisitor {
   // 8 hot (recently seen or back-referenced) objects with optional skip.
   static const int kHotObjectCount = 8;
 
+  // 8 padding lengths.
+  static const int kPadBytesCount = 8;
+  // 4 non-pointer field sizes.
+  static const int kNonPtrFieldCount = 4;
+
+  // 3 alignment prefixes
+  static const int kAlignmentPrefixCount = 3;
+
   enum Bytecode : byte {
     //
     // ---------- byte code range 0x00..0x1b ----------
@@ -111,8 +117,8 @@ class SerializerDeserializer : public RootVisitor {
     kOffHeapBackingStore,
     // Used for embedder-provided serialization data for embedder fields.
     kEmbedderFieldsData,
-    // Raw data of variable length.
-    kVariableRawData,
+    // Array-of-non-pointer field, variable length.
+    kVariableNonPtrArray,
     // Used to encode external references provided through the API.
     kApiReference,
     // External reference referenced by id.
@@ -166,6 +172,16 @@ class SerializerDeserializer : public RootVisitor {
 
     // 0x90..0x97
     kHotObject = 0x90,
+
+    // 0x98..0x9f
+    kPadBytes = 0x98,
+
+    //
+    // ---------- byte code range 0xa0..0xbf ----------
+    //
+
+    // 0xa0..0xa3
+    kNonPtrField = 0xa0,
   };
 
   // Helper class for encoding and decoding a value into and from a bytecode.
@@ -254,6 +270,41 @@ class SerializerDeserializer : public RootVisitor {
       BytecodeValueEncoder<kRootArrayConstants, 0, kRootArrayConstantsCount - 1,
                            RootIndex>;
   using HotObject = BytecodeValueEncoder<kHotObject, 0, kHotObjectCount - 1>;
+
+  // Padding bytes encoding helpers.
+  static const int kFirstEncodablePadBytes = 0;
+  static const int kLastEncodablePadBytes = 7;
+
+  using PadBytesWithSize =
+      BytecodeValueEncoder<kPadBytes, kFirstEncodablePadBytes,
+                           kLastEncodablePadBytes>;
+
+  // Integer field encoding helper.
+  struct NonPtrFieldWithSize {
+    static constexpr bool IsEncodable(int value) {
+      return value == 1 || value == 2 || value == 4 || value == 8;
+    }
+
+    static constexpr byte Encode(int value) {
+      CONSTEXPR_DCHECK(IsEncodable(value));
+      switch (value) {
+        case 1:
+          return kNonPtrField;
+        case 2:
+          return kNonPtrField + 1;
+        case 4:
+          return kNonPtrField + 2;
+        case 8:
+          return kNonPtrField + 3;
+      }
+      return 0xff;  // UNREACHABLE isn't allowed in constexpr
+    }
+
+    static constexpr int Decode(byte bytecode) {
+      CONSTEXPR_DCHECK(base::IsInRange(bytecode, Encode(1), Encode(8)));
+      return static_cast<int>(1 << (bytecode - kNonPtrField));
+    }
+  };
 
   // This backing store reference value represents nullptr values during
   // serialization/deserialization.

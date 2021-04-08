@@ -2219,8 +2219,21 @@ void HeapObject::IterateBody(Map map, int object_size, ObjectVisitor* v) {
   IterateBodyFast<ObjectVisitor>(map, object_size, v);
 }
 
+template <typename BodyDescriptor>
+struct CallIterateBodyFull {
+  static void apply(Map map, HeapObject obj, int object_size,
+                    ObjectVisitor* v) {
+    BodyDescriptor::IterateBody(map, obj, object_size, v);
+  }
+};
+
+void HeapObject::IterateBodyFull(Map map, int object_size, ObjectVisitor* v) {
+  BodyDescriptorApply<CallIterateBodyFull, void>(map.instance_type(), map,
+                                                 *this, object_size, v);
+}
+
+template <typename BodyDescriptor>
 struct CallIsValidSlot {
-  template <typename BodyDescriptor>
   static bool apply(Map map, HeapObject obj, int offset, int) {
     return BodyDescriptor::IsValidSlot(map, obj, offset);
   }

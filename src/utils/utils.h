@@ -297,13 +297,13 @@ inline uint32_t ComputeAddressHash(Address address) {
 // Miscellaneous
 
 // Memory offset for lower and higher bits in a 64 bit integer.
-#if defined(V8_TARGET_LITTLE_ENDIAN)
+#if defined(V8_HOST_LITTLE_ENDIAN)
 static const int kInt64LowerHalfMemoryOffset = 0;
 static const int kInt64UpperHalfMemoryOffset = 4;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 static const int kInt64LowerHalfMemoryOffset = 4;
 static const int kInt64UpperHalfMemoryOffset = 0;
-#endif  // V8_TARGET_LITTLE_ENDIAN
+#endif  // V8_HOST_LITTLE_ENDIAN
 
 // A pointer that can only be set once and doesn't allow NULL values.
 template <typename T>

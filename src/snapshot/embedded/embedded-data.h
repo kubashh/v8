@@ -126,16 +126,17 @@ class EmbeddedData final {
   size_t CreateEmbeddedBlobDataHash() const;
   size_t CreateEmbeddedBlobCodeHash() const;
   size_t EmbeddedBlobDataHash() const {
-    return *reinterpret_cast<const size_t*>(data_ +
-                                            EmbeddedBlobDataHashOffset());
+    return base::ReadTargetEndianValue<size_t>(
+        reinterpret_cast<const size_t*>(data_ + EmbeddedBlobDataHashOffset()));
   }
   size_t EmbeddedBlobCodeHash() const {
-    return *reinterpret_cast<const size_t*>(data_ +
-                                            EmbeddedBlobCodeHashOffset());
+    return base::ReadTargetEndianValue<size_t>(
+        reinterpret_cast<const size_t*>(data_ + EmbeddedBlobCodeHashOffset()));
   }
 
   size_t IsolateHash() const {
-    return *reinterpret_cast<const size_t*>(data_ + IsolateHashOffset());
+    return base::ReadTargetEndianValue<size_t>(
+        reinterpret_cast<const size_t*>(data_ + IsolateHashOffset()));
   }
 
   // Blob layout information for a single instruction stream. Corresponds

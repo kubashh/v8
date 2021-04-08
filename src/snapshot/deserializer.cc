@@ -718,6 +718,52 @@ int Deserializer::ReadRepeatedObject(SlotAccessor slot_accessor,
   return repeat_count;
 }
 
+void Deserializer::ReadOffHeapBackingStore(int byte_length,
+                                           size_t element_size) {
+  CHECK_EQ(byte_length % element_size, 0);
+  std::unique_ptr<BackingStore> backing_store =
+      BackingStore::Allocate(isolate(), byte_length, SharedFlag::kNotShared,
+                             InitializedFlag::kUninitialized);
+  CHECK_NOT_NULL(backing_store);
+  byte elem_te[8];
+  Address elem_te_addr = reinterpret_cast<Address>(elem_te);
+  int i;
+
+  switch (element_size) {
+    case 1:
+      source_.CopyRaw(backing_store->buffer_start(), byte_length);
+      break;
+    case 2: {
+      uint16_t* array = static_cast<uint16_t*>(backing_store->buffer_start());
+      for (i = 0; i != byte_length / 2; ++i) {
+        source_.CopyRaw(elem_te, 2);
+        array[i] = base::ReadTargetEndianValue<uint16_t>(elem_te_addr);
+      }
+      break;
+    }
+    case 4: {
+      uint32_t* array = static_cast<uint32_t*>(backing_store->buffer_start());
+      for (i = 0; i != byte_length / 4; ++i) {
+        source_.CopyRaw(elem_te, 4);
+        array[i] = base::ReadTargetEndianValue<uint32_t>(elem_te_addr);
+      }
+      break;
+    }
+    case 8: {
+      uint64_t* array = static_cast<uint64_t*>(backing_store->buffer_start());
+      for (i = 0; i != byte_length / 8; ++i) {
+        source_.CopyRaw(elem_te, 8);
+        array[i] = base::ReadTargetEndianValue<uint64_t>(elem_te_addr);
+      }
+      break;
+    }
+    default:
+      UNREACHABLE();
+  }
+
+  backing_stores_.push_back(std::move(backing_store));
+}
+
 namespace {
 
 void NoExternalReferencesCallback() {
@@ -927,18 +973,6 @@ int Deserializer::ReadSingleBytecodeData(byte data,
       // the number of GC roots when serializing and deserializing.
       UNREACHABLE();
 
-    // Deserialize raw data of variable length.
-    case kVariableRawData: {
-      // This operation is only supported for tagged-size slots, else we might
-      // become misaligned.
-      DCHECK_EQ(TSlot::kSlotDataSize, kTaggedSize);
-      int size_in_tagged = source_.GetInt();
-      // TODO(leszeks): Only copy slots when there are Smis in the serialized
-      // data.
-      source_.CopySlots(slot_accessor.slot().location(), size_in_tagged);
-      return size_in_tagged;
-    }
-
     // Deserialize raw code directly into the body of the code object.
     case kCodeBody: {
       // This operation is only supported for tagged-size slots, else we might
@@ -954,13 +988,25 @@ int Deserializer::ReadSingleBytecodeData(byte data,
         DisallowGarbageCollection no_gc;
         Code code = Code::cast(*slot_accessor.object());
 
-        // First deserialize the code itself.
+        // First deserialize the non-pointer header fields.
+        uint32_t* dest =
+            reinterpret_cast<uint32_t*>(code.address() + Code::kDataStart);
+        byte data[Code::kHeaderSize - Code::kDataStart];
+        DCHECK_GE(static_cast<size_t>(size_in_bytes), sizeof(data));
+        STATIC_ASSERT(IsAligned(sizeof(data), sizeof(uint32_t)));
+        source_.CopyRaw(data, sizeof(data));
+        for (int i = 0; i != sizeof(data) / sizeof(uint32_t); ++i) {
+          dest[i] = base::ReadTargetEndianValue<uint32_t>(
+              reinterpret_cast<Address>(data + i * sizeof(uint32_t)));
+        }
+
+        // Then the code itself.
         source_.CopyRaw(
-            reinterpret_cast<void*>(code.address() + Code::kDataStart),
-            size_in_bytes);
+            reinterpret_cast<void*>(code.address() + Code::kHeaderSize),
+            size_in_bytes - sizeof(data));
       }
 
-      // Then deserialize the code header
+      // Then deserialize the rest of the header
       ReadData(slot_accessor.object(), HeapObject::kHeaderSize / kTaggedSize,
                Code::kDataStart / kTaggedSize);
 
@@ -1002,12 +1048,8 @@ int Deserializer::ReadSingleBytecodeData(byte data,
     case kOffHeapBackingStore: {
       AlwaysAllocateScope scope(isolate()->heap());
       int byte_length = source_.GetInt();
-      std::unique_ptr<BackingStore> backing_store =
-          BackingStore::Allocate(isolate(), byte_length, SharedFlag::kNotShared,
-                                 InitializedFlag::kUninitialized);
-      CHECK_NOT_NULL(backing_store);
-      source_.CopyRaw(backing_store->buffer_start(), byte_length);
-      backing_stores_.push_back(std::move(backing_store));
+      size_t element_size = source_.GetInt();
+      ReadOffHeapBackingStore(byte_length, element_size);
       return 0;
     }
 
@@ -1078,6 +1120,67 @@ int Deserializer::ReadSingleBytecodeData(byte data,
       // data.
       source_.CopySlots(slot_accessor.slot().location(), size_in_slots);
       return size_in_slots;
+    }
+
+    case kVariableNonPtrArray:
+    case CASE_RANGE(kPadBytes, 8):
+    case CASE_RANGE(kNonPtrField, 4): {
+      Address field_addr = slot_accessor.slot().address();
+      unsigned int byte_count = 0;
+      for (;;) {
+        int array_length, element_size;
+        switch (data) {
+          case kVariableNonPtrArray:
+            array_length = source_.GetInt();
+            element_size = source_.GetInt();
+            break;
+          case CASE_RANGE(kPadBytes, 8): {
+            array_length = 0;
+            element_size = 0;
+            unsigned int pad_byte_count = PadBytesWithSize::Decode(data);
+            field_addr += pad_byte_count;
+            byte_count += pad_byte_count;
+            break;
+          }
+          case CASE_RANGE(kNonPtrField, 4):
+            array_length = 1;
+            element_size = NonPtrFieldWithSize::Decode(data);
+            break;
+          default:
+            UNREACHABLE();
+        }
+        while (array_length--) {
+          void* field_ptr = reinterpret_cast<void*>(field_addr);
+          byte field_te[8];
+          Address field_te_addr = reinterpret_cast<Address>(field_te);
+          source_.CopyRaw(field_te, element_size);
+          switch (element_size) {
+            case 1:
+              *static_cast<byte*>(field_ptr) = field_te[0];
+              break;
+            case 2:
+              *static_cast<uint16_t*>(field_ptr) =
+                  base::ReadTargetEndianValue<uint16_t>(field_te_addr);
+              break;
+            case 4:
+              *static_cast<uint32_t*>(field_ptr) =
+                  base::ReadTargetEndianValue<uint32_t>(field_te_addr);
+              break;
+            case 8:
+              base::WriteUnalignedValue(
+                  field_addr,
+                  base::ReadTargetEndianValue<uint64_t>(field_te_addr));
+              break;
+          }
+          field_addr += element_size;
+          byte_count += element_size;
+        }
+        // Break at slot boundary
+        if ((byte_count & (TSlot::kSlotDataSize - 1)) == 0) {
+          return byte_count / TSlot::kSlotDataSize;
+        }
+        data = source_.Get();
+      }
     }
 
     case CASE_RANGE(kFixedRepeat, 16): {

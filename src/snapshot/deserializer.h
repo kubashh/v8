@@ -200,6 +200,8 @@ class V8_EXPORT_PRIVATE Deserializer : public SerializerDeserializer {
   template <typename SlotGetter>
   int ReadRepeatedObject(SlotGetter slot_getter, int repeat_count);
 
+  void ReadOffHeapBackingStore(int byte_length, size_t element_size);
+
   // Special handling for serialized code like hooking up internalized strings.
   void PostProcessNewObject(Handle<Map> map, Handle<HeapObject> obj,
                             SnapshotSpace space);

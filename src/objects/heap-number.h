@@ -31,10 +31,10 @@ class HeapNumber
   // is a mixture of sign, exponent and mantissa. The offsets of two 32 bit
   // words within double numbers are endian dependent and they are set
   // accordingly.
-#if defined(V8_TARGET_LITTLE_ENDIAN)
+#if defined(V8_HOST_LITTLE_ENDIAN)
   static const int kMantissaOffset = kValueOffset;
   static const int kExponentOffset = kValueOffset + 4;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   static const int kMantissaOffset = kValueOffset + 4;
   static const int kExponentOffset = kValueOffset;
 #else
@@ -55,6 +55,8 @@ class HeapNumber
 
   DECL_PRINTER(HeapNumber)
   V8_EXPORT_PRIVATE void HeapNumberShortPrint(std::ostream& os);
+
+  class BodyDescriptor;
 
   TQ_OBJECT_CONSTRUCTORS(HeapNumber)
 };

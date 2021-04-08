@@ -430,6 +430,9 @@ class Serializer::ObjectSerializer : public ObjectVisitor {
   void VisitCodeTarget(Code host, RelocInfo* target) override;
   void VisitRuntimeEntry(Code host, RelocInfo* reloc) override;
   void VisitOffHeapTarget(Code host, RelocInfo* target) override;
+  void VisitNonPointer(HeapObject host, int offset, int size) override;
+  void VisitNonPointers(HeapObject host, int start_offset, int end_offset,
+                        int size) override;
 
   Isolate* isolate() { return isolate_; }
 
@@ -445,7 +448,10 @@ class Serializer::ObjectSerializer : public ObjectVisitor {
                                bool sandboxify);
   void OutputRawData(Address up_to);
   void SerializeCode(Map map, int size);
-  uint32_t SerializeBackingStore(void* backing_store, int32_t byte_length);
+  void OutputPadBytes(int start, int end);
+  void OutputNonPtrField(Address addr, int array_length, int element_size);
+  uint32_t SerializeBackingStore(void* backing_store, int32_t byte_length,
+                                 size_t element_size);
   void SerializeJSTypedArray();
   void SerializeJSArrayBuffer();
   void SerializeExternalString();

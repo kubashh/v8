@@ -43,10 +43,7 @@ static inline void WriteUnalignedValue(Address p, V value) {
 }
 
 template <typename V>
-static inline V ReadLittleEndianValue(Address p) {
-#if defined(V8_TARGET_LITTLE_ENDIAN)
-  return ReadUnalignedValue<V>(p);
-#elif defined(V8_TARGET_BIG_ENDIAN)
+static inline V ReadByteReversedValue(Address p) {
   V ret{};
   const byte* src = reinterpret_cast<const byte*>(p);
   byte* dst = reinterpret_cast<byte*>(&ret);
@@ -54,20 +51,33 @@ static inline V ReadLittleEndianValue(Address p) {
     dst[i] = src[sizeof(V) - i - 1];
   }
   return ret;
-#endif  // V8_TARGET_LITTLE_ENDIAN
 }
 
 template <typename V>
-static inline void WriteLittleEndianValue(Address p, V value) {
-#if defined(V8_TARGET_LITTLE_ENDIAN)
-  WriteUnalignedValue<V>(p, value);
-#elif defined(V8_TARGET_BIG_ENDIAN)
-  byte* src = reinterpret_cast<byte*>(&value);
+static inline void WriteByteReversedValue(Address p, V value) {
+  const byte* src = reinterpret_cast<const byte*>(&value);
   byte* dst = reinterpret_cast<byte*>(p);
   for (size_t i = 0; i < sizeof(V); i++) {
     dst[i] = src[sizeof(V) - i - 1];
   }
-#endif  // V8_TARGET_LITTLE_ENDIAN
+}
+
+template <typename V>
+static inline V ReadLittleEndianValue(Address p) {
+#if defined(V8_HOST_LITTLE_ENDIAN)
+  return ReadUnalignedValue<V>(p);
+#elif defined(V8_HOST_BIG_ENDIAN)
+  return ReadByteReversedValue<V>(p);
+#endif
+}
+
+template <typename V>
+static inline void WriteLittleEndianValue(Address p, V value) {
+#if defined(V8_HOST_LITTLE_ENDIAN)
+  WriteUnalignedValue<V>(p, value);
+#elif defined(V8_HOST_BIG_ENDIAN)
+  WriteByteReversedValue<V>(p, value);
+#endif
 }
 
 template <typename V>
@@ -81,6 +91,68 @@ static inline void WriteLittleEndianValue(V* p, V value) {
       !std::is_array<V>::value,
       "Passing an array decays to pointer, causing unexpected results.");
   WriteLittleEndianValue<V>(reinterpret_cast<Address>(p), value);
+}
+
+template <typename V>
+static inline V ReadBigEndianValue(Address p) {
+#if defined(V8_HOST_BIG_ENDIAN)
+  return ReadUnalignedValue<V>(p);
+#elif defined(V8_HOST_LITTLE_ENDIAN)
+  return ReadByteReversedValue<V>(p);
+#endif
+}
+
+template <typename V>
+static inline void WriteBigEndianValue(Address p, V value) {
+#if defined(V8_HOST_BIG_ENDIAN)
+  WriteUnalignedValue<V>(p, value);
+#elif defined(V8_HOST_LITTLE_ENDIAN)
+  WriteByteReversedValue<V>(p, value);
+#endif
+}
+
+template <typename V>
+static inline V ReadBigEndianValue(const V* p) {
+  return ReadBigEndianValue<V>(reinterpret_cast<Address>(p));
+}
+
+template <typename V>
+static inline void WriteBigEndianValue(V* p, V value) {
+  static_assert(
+      !std::is_array<V>::value,
+      "Passing an array decays to pointer, causing unexpected results.");
+  WriteBigEndianValue<V>(reinterpret_cast<Address>(p), value);
+}
+
+template <typename V>
+static inline V ReadTargetEndianValue(Address p) {
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+  return ReadLittleEndianValue<V>(p);
+#elif defined(V8_TARGET_BIG_ENDIAN)
+  return ReadBigEndianValue<V>(p);
+#endif
+}
+
+template <typename V>
+static inline void WriteTargetEndianValue(Address p, V value) {
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+  WriteLittleEndianValue<V>(p, value);
+#elif defined(V8_TARGET_BIG_ENDIAN)
+  WriteBigEndianValue<V>(p, value);
+#endif
+}
+
+template <typename V>
+static inline V ReadTargetEndianValue(const V* p) {
+  return ReadTargetEndianValue<V>(reinterpret_cast<Address>(p));
+}
+
+template <typename V>
+static inline void WriteTargetEndianValue(V* p, V value) {
+  static_assert(
+      !std::is_array<V>::value,
+      "Passing an array decays to pointer, causing unexpected results.");
+  WriteTargetEndianValue<V>(reinterpret_cast<Address>(p), value);
 }
 
 }  // namespace base

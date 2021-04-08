@@ -132,6 +132,10 @@ class HeapObject : public Object {
   template <typename ObjectVisitor>
   inline void IterateBodyFast(Map map, int object_size, ObjectVisitor* v);
 
+  // Iterates over all fields contained in the object except the
+  // first map pointer.
+  void IterateBodyFull(Map map, int object_size, ObjectVisitor* v);
+
   // Returns true if the object contains a tagged value at given offset.
   // It is used for invalid slots filtering. If the offset points outside
   // of the object or to the map word, the result is UNDEFINED (!!!).
