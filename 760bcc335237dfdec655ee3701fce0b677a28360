@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7c28e1a0_04082550",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-04-08T08:13:29Z",
+      "side": 1,
+      "message": "I see. I thought you were referring to C. I think the static_assert will fire if/when you allocate C.",
+      "parentUuid": "275478de_b32e1b0d",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "760bcc335237dfdec655ee3701fce0b677a28360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "85487381_667f6831",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
