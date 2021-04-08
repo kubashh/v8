@@ -39,6 +39,30 @@
       },
       "revId": "36cc7de512a775710ff92a9488c0841d938bc003",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4699fd82_5978aa5f",
+        "filename": "src/objects/map-updater.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-08T06:16:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19b40ea5_eaaac68f",
+      "range": {
+        "startLine": 216,
+        "startChar": 4,
+        "endLine": 216,
+        "endChar": 16
+      },
+      "revId": "36cc7de512a775710ff92a9488c0841d938bc003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
