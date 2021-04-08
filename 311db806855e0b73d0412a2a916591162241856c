@@ -33,6 +33,24 @@
       "message": "fyi I\u0027m aware of this CL, will wait with the review until Milad\u0027s questions are answered.",
       "revId": "311db806855e0b73d0412a2a916591162241856c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cc6331b_cddcdb4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1501644
+      },
+      "writtenOn": "2021-04-08T20:12:20Z",
+      "side": 1,
+      "message": "I have another CL to follow this, that revives support for 32-bit big-endian PowerPC on Linux. I currently cross-build for this target from x86.\n\nI thought big-endian MIPS was also supposed to work, through I have no involvement with that port.",
+      "parentUuid": "02f123b6_d49cd204",
+      "revId": "311db806855e0b73d0412a2a916591162241856c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
