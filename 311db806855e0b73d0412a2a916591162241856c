@@ -69,6 +69,24 @@
       "parentUuid": "5cc6331b_cddcdb4d",
       "revId": "311db806855e0b73d0412a2a916591162241856c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "944e0de8_34b5416c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1501644
+      },
+      "writtenOn": "2021-04-08T21:15:44Z",
+      "side": 1,
+      "message": "I have no idea about the simulator. It\u0027s not something I\u0027ve looked at.\n\nI am continuing with the work that Wouter was doing with that CL, but I didn\u0027t realise he\u0027d already created a CL.\n\nI don\u0027t know how often we (Essensium-Mind) will be able to do maintenance of the ppc32 port, as this is done on behalf of a specific customer. I will make sure they understand that some ongoing effort will be needed to keep the port working.",
+      "parentUuid": "64502a07_7466a523",
+      "revId": "311db806855e0b73d0412a2a916591162241856c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
