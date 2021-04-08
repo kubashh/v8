@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "275478de_b32e1b0d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-04-08T08:01:09Z",
+      "side": 1,
+      "message": "We check whether A is a child of TopMostGCedType which is B which is fine.",
+      "parentUuid": "9450ea60_c1542596",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "760bcc335237dfdec655ee3701fce0b677a28360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "85487381_667f6831",
