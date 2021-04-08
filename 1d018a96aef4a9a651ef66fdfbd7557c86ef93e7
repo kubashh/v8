@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9837a07_d914f9fa",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-08T14:32:56Z",
+      "side": 1,
+      "message": "Should be moved down.",
+      "revId": "1d018a96aef4a9a651ef66fdfbd7557c86ef93e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b949eba_88158c90",
+        "filename": "src/codegen/interface-descriptors-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-08T14:32:56Z",
+      "side": 1,
+      "message": "It doesn\u0027t belong here.",
+      "range": {
+        "startLine": 151,
+        "startChar": 9,
+        "endLine": 151,
+        "endChar": 12
+      },
+      "revId": "1d018a96aef4a9a651ef66fdfbd7557c86ef93e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c4929f1_68377198",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-08T14:32:56Z",
+      "side": 1,
+      "message": "What does it mean?",
+      "range": {
+        "startLine": 430,
+        "startChar": 26,
+        "endLine": 430,
+        "endChar": 30
+      },
+      "revId": "1d018a96aef4a9a651ef66fdfbd7557c86ef93e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
