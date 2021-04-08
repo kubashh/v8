@@ -1293,14 +1293,14 @@ bool Is32BitIntegralType(const Type* type) {
 }
 
 base::Optional<NameAndType> ExtractSimpleFieldArraySize(
-    const ClassType& class_type, Expression* array_size) {
+    const AggregateType& aggr_type, Expression* array_size) {
   IdentifierExpression* identifier =
       IdentifierExpression::DynamicCast(array_size);
   if (!identifier || !identifier->generic_arguments.empty() ||
       !identifier->namespace_qualification.empty())
     return {};
-  if (!class_type.HasField(identifier->name->value)) return {};
-  return class_type.LookupField(identifier->name->value).name_and_type;
+  if (!aggr_type.HasField(identifier->name->value)) return {};
+  return aggr_type.LookupField(identifier->name->value).name_and_type;
 }
 
 std::string Type::GetRuntimeType() const {

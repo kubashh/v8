@@ -57,7 +57,7 @@ class PropertyArray : public HeapObject {
                                 TORQUE_GENERATED_PROPERTY_ARRAY_FIELDS)
 
   // Garbage collection support.
-  using BodyDescriptor = FlexibleBodyDescriptor<kHeaderSize>;
+  class BodyDescriptor;
 
   static const int kLengthFieldSize = 10;
   using LengthField = base::BitField<int, 0, kLengthFieldSize>;

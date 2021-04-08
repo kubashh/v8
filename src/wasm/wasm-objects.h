@@ -741,8 +741,7 @@ class WasmIndirectFunctionTable : public Struct {
       HeapObject::kHeaderSize,
       TORQUE_GENERATED_WASM_INDIRECT_FUNCTION_TABLE_FIELDS)
 
-  STATIC_ASSERT(kStartOfStrongFieldsOffset == kManagedNativeAllocationsOffset);
-  using BodyDescriptor = FlexibleBodyDescriptor<kStartOfStrongFieldsOffset>;
+  class BodyDescriptor;
 
   OBJECT_CONSTRUCTORS(WasmIndirectFunctionTable, Struct);
 };

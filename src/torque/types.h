@@ -928,7 +928,7 @@ bool IsPointerSizeIntegralType(const Type* type);
 bool Is32BitIntegralType(const Type* type);
 
 base::Optional<NameAndType> ExtractSimpleFieldArraySize(
-    const ClassType& class_type, Expression* array_size);
+    const AggregateType& aggr_type, Expression* array_size);
 
 }  // namespace torque
 }  // namespace internal

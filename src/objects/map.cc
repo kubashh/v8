@@ -330,7 +330,6 @@ VisitorId Map::GetVisitorId(Map map) {
 
     case FILLER_TYPE:
     case FOREIGN_TYPE:
-    case HEAP_NUMBER_TYPE:
       return kVisitDataObject;
 
     case BIGINT_TYPE:

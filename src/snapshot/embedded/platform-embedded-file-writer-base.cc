@@ -6,6 +6,7 @@
 
 #include <string>
 
+#include "src/base/memory.h"
 #include "src/base/platform/wrappers.h"
 #include "src/common/globals.h"
 #include "src/snapshot/embedded/platform-embedded-file-writer-aix.h"
@@ -22,6 +23,37 @@ DataDirective PointerSizeDirective() {
   } else {
     CHECK_EQ(4, kSystemPointerSize);
     return kLong;
+  }
+}
+
+PlatformEmbeddedFileWriterBase::PlatformEmbeddedFileWriterBase(
+    EmbeddedTargetArch target_arch) {
+  switch (target_arch) {
+    case EmbeddedTargetArch::kArm:
+    case EmbeddedTargetArch::kArm64:
+    case EmbeddedTargetArch::kIA32:
+    case EmbeddedTargetArch::kX64:
+    case EmbeddedTargetArch::kGeneric:
+      target_byte_order_ = EmbeddedTargetByteOrder::kLittle;
+      break;
+    case EmbeddedTargetArch::kMips:
+    case EmbeddedTargetArch::kMips64:
+    case EmbeddedTargetArch::kPpc:
+    case EmbeddedTargetArch::kS390:
+    case EmbeddedTargetArch::kS390x:
+      target_byte_order_ = EmbeddedTargetByteOrder::kBig;
+      break;
+    case EmbeddedTargetArch::kPpc64:
+      // TODO(bwh): Straighten out ppc64 architecture naming so the
+      // byte order is explicit
+#if V8_TARGET_ARCH_LITTLE_ENDIAN
+      target_byte_order_ = EmbeddedTargetByteOrder::kLittle;
+#else
+      target_byte_order_ = EmbeddedTargetByteOrder::kBig;
+#endif
+      break;
+    default:
+      UNREACHABLE();
   }
 }
 
@@ -53,19 +85,33 @@ int PlatformEmbeddedFileWriterBase::WriteByteChunk(const uint8_t* data) {
       low = *data;
       break;
     case 4:
-      low = *reinterpret_cast<const uint32_t*>(data);
+      if (target_byte_order_ == EmbeddedTargetByteOrder::kLittle)
+        low = base::ReadLittleEndianValue<uint32_t>(
+            reinterpret_cast<Address>(data));
+      else
+        low =
+            base::ReadBigEndianValue<uint32_t>(reinterpret_cast<Address>(data));
       break;
     case 8:
-      low = *reinterpret_cast<const uint64_t*>(data);
+      if (target_byte_order_ == EmbeddedTargetByteOrder::kLittle)
+        low = base::ReadLittleEndianValue<uint64_t>(
+            reinterpret_cast<Address>(data));
+      else
+        low =
+            base::ReadBigEndianValue<uint64_t>(reinterpret_cast<Address>(data));
       break;
     case 16:
-#ifdef V8_TARGET_BIG_ENDIAN
-      base::Memcpy(&high, data, kHalfSize);
-      base::Memcpy(&low, data + kHalfSize, kHalfSize);
-#else
-      base::Memcpy(&high, data + kHalfSize, kHalfSize);
-      base::Memcpy(&low, data, kHalfSize);
-#endif  // V8_TARGET_BIG_ENDIAN
+      if (target_byte_order_ == EmbeddedTargetByteOrder::kLittle) {
+        high = base::ReadLittleEndianValue<uint64_t>(
+            reinterpret_cast<Address>(data) + kHalfSize);
+        low = base::ReadLittleEndianValue<uint64_t>(
+            reinterpret_cast<Address>(data));
+      } else {
+        high =
+            base::ReadBigEndianValue<uint64_t>(reinterpret_cast<Address>(data));
+        low = base::ReadBigEndianValue<uint64_t>(
+            reinterpret_cast<Address>(data) + kHalfSize);
+      }
       break;
     default:
       UNREACHABLE();
@@ -87,6 +133,18 @@ EmbeddedTargetArch DefaultEmbeddedTargetArch() {
   return EmbeddedTargetArch::kArm64;
 #elif defined(V8_TARGET_ARCH_IA32)
   return EmbeddedTargetArch::kIA32;
+#elif defined(V8_TARGET_ARCH_MIPS) && defined(V8_TARGET_ARCH_BIG_ENDIAN)
+  return EmbeddedTargetArch::kMips;
+#elif defined(V8_TARGET_ARCH_MIPS64) && defined(V8_TARGET_ARCH_BIG_ENDIAN)
+  return EmbeddedTargetArch::kMips64;
+#elif defined(V8_TARGET_ARCH_PPC)
+  return EmbeddedTargetArch::kPpc;
+#elif defined(V8_TARGET_ARCH_PPC64)
+  return EmbeddedTargetArch::kPpc64;
+#elif defined(V8_TARGET_ARCH_S390)
+  return EmbeddedTargetArch::kS390;
+#elif defined(V8_TARGET_ARCH_S390X)
+  return EmbeddedTargetArch::kS390x;
 #elif defined(V8_TARGET_ARCH_X64)
   return EmbeddedTargetArch::kX64;
 #else
@@ -106,6 +164,18 @@ EmbeddedTargetArch ToEmbeddedTargetArch(const char* s) {
     return EmbeddedTargetArch::kArm64;
   } else if (string == "ia32") {
     return EmbeddedTargetArch::kIA32;
+  } else if (string == "mips") {
+    return EmbeddedTargetArch::kMips;
+  } else if (string == "mips64") {
+    return EmbeddedTargetArch::kMips64;
+  } else if (string == "ppc") {
+    return EmbeddedTargetArch::kPpc;
+  } else if (string == "ppc64") {
+    return EmbeddedTargetArch::kPpc64;
+  } else if (string == "s390") {
+    return EmbeddedTargetArch::kS390;
+  } else if (string == "s390x") {
+    return EmbeddedTargetArch::kS390x;
   } else if (string == "x64") {
     return EmbeddedTargetArch::kX64;
   } else {
