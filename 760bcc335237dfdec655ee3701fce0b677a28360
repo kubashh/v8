@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "41002ef5_ef73e638",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-04-08T09:22:19Z",
+      "side": 1,
+      "message": "Yup, it covers some cases.",
+      "parentUuid": "7c28e1a0_04082550",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "760bcc335237dfdec655ee3701fce0b677a28360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "85487381_667f6831",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
