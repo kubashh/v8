@@ -781,6 +781,11 @@ int Map::InstanceSizeFromSlack(int slack) const {
   return instance_size() - slack * kTaggedSize;
 }
 
+// static
+bool Map::FieldTypeIsCleared(Representation rep, FieldType type) {
+  return type.IsNone() && rep.IsHeapObject();
+}
+
 OBJECT_CONSTRUCTORS_IMPL(NormalizedMapCache, WeakFixedArray)
 CAST_ACCESSOR(NormalizedMapCache)
 NEVER_READ_ONLY_SPACE_IMPL(NormalizedMapCache)
