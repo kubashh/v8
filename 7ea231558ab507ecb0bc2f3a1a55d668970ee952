@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a293f2e3_0a4cb960",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-08T11:43:56Z",
+      "side": 1,
+      "message": "Igor, Jakob, this is a WIP to embed CallInterfaceDescriptor register information directly as static constexpr functions in the call descriptor, to allow compile-time CallBuiltin argument setup in Sparkplug (rather than the current runtime decisions based on loading the CallInterfaceDescriptor instance).\n\nEach static-enabled descriptor shares a CRTP base, and exposes a \u0027registers()\u0027 method for custom registers, or uses the default registers otherwise. I\u0027ve had to move register definitions to -inl.h, otherwise it\u0027s surprisingly similar to existing CallInterfaceDescriptor.\n\nI haven\u0027t ported to other archs yet, but WDYT? I could port all remaining CallInterfaceDescriptor to have this static info and get rid of the runtime platform specific info entirely.\n\nWith this CL, libv8.so size increases by 40 bytes, which might just be random.",
+      "revId": "7ea231558ab507ecb0bc2f3a1a55d668970ee952",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
