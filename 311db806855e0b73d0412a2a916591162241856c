@@ -51,6 +51,24 @@
       "parentUuid": "02f123b6_d49cd204",
       "revId": "311db806855e0b73d0412a2a916591162241856c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64502a07_7466a523",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-04-08T20:28:12Z",
+      "side": 1,
+      "message": "In that case would it make sense to follow S390s model and emit big endian at all times, and rely on the simulator to interpret it correctly on LE?\n\nGlad to hear your are working on the 32 bit BE ppc, something to mention (as it has come up before) is, you will need to also keep up with the changes upstream as we only maintain the LE 64 bit version on Linux (and BE on AIX). Main branch usually breaks within a week if not maintained.\n\nHere is an older CL on this topic which seems to be abandoned: https://chromium-review.googlesource.com/c/v8/v8/+/2083019",
+      "parentUuid": "5cc6331b_cddcdb4d",
+      "revId": "311db806855e0b73d0412a2a916591162241856c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
