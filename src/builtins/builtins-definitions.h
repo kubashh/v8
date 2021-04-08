@@ -1173,6 +1173,10 @@ namespace internal {
   BUILTIN_LIST(IGNORE_BUILTIN, IGNORE_BUILTIN, V, IGNORE_BUILTIN, \
                IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN)
 
+#define BUILTIN_LIST_TFH(V)                                                    \
+  BUILTIN_LIST(IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN, \
+               V, IGNORE_BUILTIN, IGNORE_BUILTIN)
+
 }  // namespace internal
 }  // namespace v8
 

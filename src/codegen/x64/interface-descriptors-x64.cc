@@ -4,23 +4,12 @@
 
 #if V8_TARGET_ARCH_X64
 
+#include "src/codegen/interface-descriptors-inl.h"
 #include "src/codegen/interface-descriptors.h"
-
 #include "src/execution/frames.h"
 
 namespace v8 {
 namespace internal {
-
-const Register CallInterfaceDescriptor::ContextRegister() { return rsi; }
-
-void CallInterfaceDescriptor::DefaultInitializePlatformSpecific(
-    CallInterfaceDescriptorData* data, int register_parameter_count) {
-  const Register default_stub_registers[] = {rax, rbx, rcx, rdx, rdi};
-  CHECK_LE(static_cast<size_t>(register_parameter_count),
-           arraysize(default_stub_registers));
-  data->InitializePlatformSpecific(register_parameter_count,
-                                   default_stub_registers);
-}
 
 void RecordWriteDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
@@ -63,56 +52,6 @@ void EphemeronKeyBarrierDescriptor::InitializePlatformSpecific(
   CHECK_LE(static_cast<size_t>(kParameterCount),
            arraysize(default_stub_registers));
   data->InitializePlatformSpecific(kParameterCount, default_stub_registers);
-}
-
-const Register LoadDescriptor::ReceiverRegister() { return rdx; }
-const Register LoadDescriptor::NameRegister() { return rcx; }
-const Register LoadDescriptor::SlotRegister() { return rax; }
-
-const Register LoadWithVectorDescriptor::VectorRegister() { return rbx; }
-
-const Register
-LoadWithReceiverAndVectorDescriptor::LookupStartObjectRegister() {
-  return rdi;
-}
-
-const Register StoreDescriptor::ReceiverRegister() { return rdx; }
-const Register StoreDescriptor::NameRegister() { return rcx; }
-const Register StoreDescriptor::ValueRegister() { return rax; }
-const Register StoreDescriptor::SlotRegister() { return rdi; }
-
-const Register StoreWithVectorDescriptor::VectorRegister() { return rbx; }
-
-const Register StoreTransitionDescriptor::SlotRegister() { return rdi; }
-const Register StoreTransitionDescriptor::VectorRegister() { return rbx; }
-const Register StoreTransitionDescriptor::MapRegister() { return r11; }
-
-const Register ApiGetterDescriptor::HolderRegister() { return rcx; }
-const Register ApiGetterDescriptor::CallbackRegister() { return rbx; }
-
-const Register GrowArrayElementsDescriptor::ObjectRegister() { return rax; }
-const Register GrowArrayElementsDescriptor::KeyRegister() { return rbx; }
-
-const Register BaselineLeaveFrameDescriptor::ParamsSizeRegister() {
-  return rbx;
-}
-const Register BaselineLeaveFrameDescriptor::WeightRegister() { return rcx; }
-
-void TypeofDescriptor::InitializePlatformSpecific(
-    CallInterfaceDescriptorData* data) {
-  Register registers[] = {rbx};
-  data->InitializePlatformSpecific(arraysize(registers), registers);
-}
-
-// static
-const Register TypeConversionDescriptor::ArgumentRegister() { return rax; }
-
-void CallTrampolineDescriptor::InitializePlatformSpecific(
-    CallInterfaceDescriptorData* data) {
-  // rax : number of arguments
-  // rdi : the target to call
-  Register registers[] = {rdi, rax};
-  data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
 void CallVarargsDescriptor::InitializePlatformSpecific(
@@ -221,21 +160,9 @@ void CompareDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
-void Compare_BaselineDescriptor::InitializePlatformSpecific(
-    CallInterfaceDescriptorData* data) {
-  Register registers[] = {rdx, rax, rbx};
-  data->InitializePlatformSpecific(arraysize(registers), registers);
-}
-
 void BinaryOpDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   Register registers[] = {rdx, rax};
-  data->InitializePlatformSpecific(arraysize(registers), registers);
-}
-
-void BinaryOp_BaselineDescriptor::InitializePlatformSpecific(
-    CallInterfaceDescriptorData* data) {
-  Register registers[] = {rdx, rax, rbx};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
