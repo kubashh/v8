@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "258a7c6a_53f7550e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1476864
+      },
+      "writtenOn": "2021-04-08T22:55:56Z",
+      "side": 1,
+      "message": "2683221: [parser] Disallow `for (async of expr)` | https://chromium-review.googlesource.com/c/v8/v8/+/2683221",
+      "revId": "bd82cdbd2ab2c6c982f305d7df3836362fa165d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
