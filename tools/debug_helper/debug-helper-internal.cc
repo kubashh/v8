@@ -13,7 +13,8 @@ namespace internal {
 namespace debug_helper_internal {
 
 bool IsPointerCompressed(uintptr_t address) {
-#if COMPRESS_POINTERS_BOOL
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_SHARED_CAGE)
   return address < i::kPtrComprCageReservationSize;
 #else
   return false;

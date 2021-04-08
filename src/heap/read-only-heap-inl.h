@@ -27,7 +27,8 @@ ReadOnlyRoots ReadOnlyHeap::GetReadOnlyRoots(HeapObject object) {
   }
 #endif  // V8_SHARED_RO_HEAP
   return ReadOnlyRoots(GetHeapFromWritableObject(object));
-#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE ||
+        // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 }
 
 }  // namespace internal

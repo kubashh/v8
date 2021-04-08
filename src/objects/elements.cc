@@ -309,7 +309,8 @@ void CopyDoubleToDoubleElements(FixedArrayBase from_base, uint32_t from_start,
   Address from_address = from.address() + FixedDoubleArray::kHeaderSize;
   to_address += kDoubleSize * to_start;
   from_address += kDoubleSize * from_start;
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
   // TODO(ishell, v8:8875): we use CopyTagged() in order to avoid unaligned
   // access to double values in the arrays. This will no longed be necessary
   // once the allocations alignment issue is fixed.
@@ -451,7 +452,8 @@ void SortIndices(Isolate* isolate, Handle<FixedArray> indices,
   AtomicSlot start(indices->GetFirstElementAddress());
   AtomicSlot end(start + sort_size);
   std::sort(start, end, [isolate](Tagged_t elementA, Tagged_t elementB) {
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     Object a(DecompressTaggedAny(isolate, elementA));
     Object b(DecompressTaggedAny(isolate, elementB));
 #else

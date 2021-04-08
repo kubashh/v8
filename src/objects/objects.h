@@ -637,7 +637,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
                                              int>::type = 0>
   inline T ReadField(size_t offset) const {
     // Pointer compression causes types larger than kTaggedSize to be unaligned.
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     constexpr bool v8_pointer_compression_unaligned = sizeof(T) > kTaggedSize;
 #else
     constexpr bool v8_pointer_compression_unaligned = false;
@@ -654,7 +655,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
                                              int>::type = 0>
   inline void WriteField(size_t offset, T value) const {
     // Pointer compression causes types larger than kTaggedSize to be unaligned.
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     constexpr bool v8_pointer_compression_unaligned = sizeof(T) > kTaggedSize;
 #else
     constexpr bool v8_pointer_compression_unaligned = false;

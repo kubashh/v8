@@ -4231,7 +4231,8 @@ TEST(SmiUntagComparisonOptimization) {
     TNode<Smi> a = m.UncheckedParameter<Smi>(0);
     TNode<Smi> b = m.UncheckedParameter<Smi>(1);
     TNode<BoolT> unoptimized = m.UintPtrLessThan(m.SmiUntag(a), m.SmiUntag(b));
-#ifdef V8_COMPRESS_POINTERS
+#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
     TNode<BoolT> optimized = m.Uint32LessThan(
         m.TruncateIntPtrToInt32(m.BitcastTaggedToWordForTagAndSmiBits(a)),
         m.TruncateIntPtrToInt32(m.BitcastTaggedToWordForTagAndSmiBits(b)));

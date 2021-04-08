@@ -757,7 +757,6 @@ SharedReadOnlySpace::SharedReadOnlySpace(
   // This constructor should only be used when RO_SPACE is shared with pointer
   // compression in a per-Isolate cage.
   DCHECK(V8_SHARED_RO_HEAP_BOOL);
-  DCHECK(COMPRESS_POINTERS_BOOL);
   DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
   DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
   DCHECK(!artifacts->pages().empty());
@@ -776,7 +775,6 @@ SharedReadOnlySpace::SharedReadOnlySpace(
     AllocationStats&& new_stats)
     : SharedReadOnlySpace(heap) {
   DCHECK(V8_SHARED_RO_HEAP_BOOL);
-  DCHECK(COMPRESS_POINTERS_BOOL);
   DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
   DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
 

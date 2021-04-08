@@ -462,7 +462,7 @@ void WasmTypeInfo::clear_foreign_address(Isolate* isolate) {
 #ifdef V8_HEAP_SANDBOX
 
   // TODO(syg): V8_HEAP_SANDBOX doesn't work with pointer cage
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifndef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
 #error "V8_HEAP_SANDBOX requires per-Isolate pointer compression cage"
 #endif
 
