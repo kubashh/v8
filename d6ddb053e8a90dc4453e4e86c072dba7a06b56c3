@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "062e9251_62016099",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-09T12:49:17Z",
+      "side": 1,
+      "message": "Hi Georg, PTAL. I\u0027ve disabled the test on gc_stress earlier today, since it started failing for an unrelated CL, which happened to change GC timing (https://chromium-review.googlesource.com/c/v8/v8/+/2814740). When --stress-flush-bytecode is enabled, this test becomes dependent on the point in time that the GC will collect some of the functions\u0027 bytecodes, as it relies on certain functions being optimized. So IMO the fix for this is specifying --no-stress-flush-bytecode for it.",
+      "revId": "d6ddb053e8a90dc4453e4e86c072dba7a06b56c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
