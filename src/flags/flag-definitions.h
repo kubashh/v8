@@ -286,10 +286,7 @@ DEFINE_IMPLICATION(harmony_weak_refs_with_cleanup_some, harmony_weak_refs)
   V(harmony_class_static_blocks, "harmony static initializer blocks")
 
 #ifdef V8_INTL_SUPPORT
-#define HARMONY_STAGED(V)               \
-  HARMONY_STAGED_BASE(V)                \
-  V(harmony_intl_dateformat_day_period, \
-    "Add dayPeriod option to DateTimeFormat")
+#define HARMONY_STAGED(V) HARMONY_STAGED_BASE(V)
 #else
 #define HARMONY_STAGED(V) HARMONY_STAGED_BASE(V)
 #endif
@@ -304,7 +301,10 @@ DEFINE_IMPLICATION(harmony_weak_refs_with_cleanup_some, harmony_weak_refs)
   V(harmony_top_level_await, "harmony top level await")
 
 #ifdef V8_INTL_SUPPORT
-#define HARMONY_SHIPPING(V) HARMONY_SHIPPING_BASE(V)
+#define HARMONY_SHIPPING(V)             \
+  HARMONY_SHIPPING_BASE(V)              \
+  V(harmony_intl_dateformat_day_period, \
+    "Add dayPeriod option to DateTimeFormat")
 #else
 #define HARMONY_SHIPPING(V) HARMONY_SHIPPING_BASE(V)
 #endif
