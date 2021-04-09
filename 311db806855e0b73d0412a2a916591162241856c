@@ -87,6 +87,24 @@
       "parentUuid": "64502a07_7466a523",
       "revId": "311db806855e0b73d0412a2a916591162241856c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5b869b2_e7572860",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-04-09T15:45:47Z",
+      "side": 1,
+      "message": "Hello Ben, we have never cross compile ppc on a x86 machine. Why not just use native machine for compilation?",
+      "parentUuid": "944e0de8_34b5416c",
+      "revId": "311db806855e0b73d0412a2a916591162241856c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
