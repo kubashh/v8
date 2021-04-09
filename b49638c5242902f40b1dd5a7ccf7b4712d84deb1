@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5b6606d_d1d6578f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-09T08:45:37Z",
+      "side": 1,
+      "message": "I find this code rather hard to read. Some comments below.\n\nIf this code contained any bugs, how\u0027d we know? Would we then silently stop testing certain cpu features? Do we have some place, e.g. a test that additionally ensures that this code works?",
+      "revId": "b49638c5242902f40b1dd5a7ccf7b4712d84deb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "863f7081_7549ab90",
+        "filename": "src/codegen/ia32/assembler-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-09T08:45:37Z",
+      "side": 1,
+      "message": "I find this call confusing now that the code above has moved. This reads supported_. It was previously set to include possibly AVX, but now it can\u0027t be in there anymore, right?\n\nIsn\u0027t this even returning false on the first call? And wouldn\u0027t that mean that also avx2 is set to not supported?",
+      "range": {
+        "startLine": 144,
+        "startChar": 44,
+        "endLine": 144,
+        "endChar": 55
+      },
+      "revId": "b49638c5242902f40b1dd5a7ccf7b4712d84deb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aa36226_4a7a4e7f",
+        "filename": "src/codegen/ia32/assembler-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-09T08:45:37Z",
+      "side": 1,
+      "message": "Hmm, but isn\u0027t this now always overruling the --no-sse42 flag (if not also --no-avx is passed)? All our hardware has avx support, and e.g. on clusterfuzz trials we just pass single flags like --no-sse42. Those won\u0027t have an effect any longer now, right?\n\nCould we also add a logic that gives the \"no\" flags precedence and infers the \"higher\" no flags?",
+      "range": {
+        "startLine": 156,
+        "startChar": 49,
+        "endLine": 156,
+        "endChar": 65
+      },
+      "revId": "b49638c5242902f40b1dd5a7ccf7b4712d84deb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
