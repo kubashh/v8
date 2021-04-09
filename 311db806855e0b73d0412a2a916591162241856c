@@ -105,6 +105,24 @@
       "parentUuid": "944e0de8_34b5416c",
       "revId": "311db806855e0b73d0412a2a916591162241856c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09cde36f_f91047a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1501644
+      },
+      "writtenOn": "2021-04-09T16:26:40Z",
+      "side": 1,
+      "message": "ppc32 is mostly used in embedded systems with limited resources, which are not suitable for building software. Currently we cross-build a complete system, including an older version of Node.js, on x86. We currently disable use of snapshots, but that option is no longer available.\n\nIn principle we could build natively in a 32-bit environment on ppc64 hardware, but we don\u0027t have such hardware.",
+      "parentUuid": "a5b869b2_e7572860",
+      "revId": "311db806855e0b73d0412a2a916591162241856c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
