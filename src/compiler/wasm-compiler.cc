@@ -2944,7 +2944,7 @@ Node* WasmGraphBuilder::BuildImportCall(const wasm::FunctionSig* sig,
   Node* imported_function_refs =
       LOAD_INSTANCE_FIELD(ImportedFunctionRefs, MachineType::TaggedPointer());
   // Access fixed array at {header_size - tag + func_index * kTaggedSize}.
-  Node* func_index_intptr = Uint32ToUintptr(func_index);
+  Node* func_index_intptr = BuildChangeUint32ToUintPtr(func_index);
   Node* ref_node = gasm_->LoadFixedArrayElement(
       imported_function_refs, func_index_intptr, MachineType::TaggedPointer());
 
@@ -3080,7 +3080,7 @@ Node* WasmGraphBuilder::BuildIndirectCall(uint32_t table_index,
       table_type.is_nullable();
   if (needs_signature_check) {
     Node* int32_scaled_key =
-        Uint32ToUintptr(gasm_->Word32Shl(key, Int32Constant(2)));
+        BuildChangeUint32ToUintPtr(gasm_->Word32Shl(key, Int32Constant(2)));
 
     Node* loaded_sig = gasm_->LoadFromObject(MachineType::Int32(), ift_sig_ids,
                                              int32_scaled_key);
@@ -3099,7 +3099,7 @@ Node* WasmGraphBuilder::BuildIndirectCall(uint32_t table_index,
     }
   }
 
-  Node* key_intptr = Uint32ToUintptr(key);
+  Node* key_intptr = BuildChangeUint32ToUintPtr(key);
 
   Node* target_instance = gasm_->LoadFixedArrayElement(
       ift_instances, key_intptr, MachineType::TaggedPointer());
@@ -3345,18 +3345,22 @@ Node* WasmGraphBuilder::BuildChangeIntPtrToInt64(Node* value) {
                                       : value;
 }
 
+Node* WasmGraphBuilder::BuildChangeUint32ToUintPtr(Node* node) {
+  if (mcgraph()->machine()->Is32()) return node;
+  // Fold instances of ChangeUint32ToUint64(IntConstant) directly.
+  Uint32Matcher matcher(node);
+  if (matcher.HasResolvedValue()) {
+    uintptr_t value = matcher.ResolvedValue();
+    return mcgraph()->IntPtrConstant(bit_cast<intptr_t>(value));
+  }
+  return gasm_->ChangeUint32ToUint64(node);
+}
+
 Node* WasmGraphBuilder::BuildChangeInt32ToSmi(Node* value) {
   // With pointer compression, only the lower 32 bits are used.
   return COMPRESS_POINTERS_BOOL
              ? gasm_->Word32Shl(value, BuildSmiShiftBitsConstant32())
              : gasm_->WordShl(BuildChangeInt32ToIntPtr(value),
-                              BuildSmiShiftBitsConstant());
-}
-
-Node* WasmGraphBuilder::BuildChangeUint31ToSmi(Node* value) {
-  return COMPRESS_POINTERS_BOOL
-             ? gasm_->Word32Shl(value, BuildSmiShiftBitsConstant32())
-             : gasm_->WordShl(Uint32ToUintptr(value),
                               BuildSmiShiftBitsConstant());
 }
 
@@ -3368,19 +3372,32 @@ Node* WasmGraphBuilder::BuildSmiShiftBitsConstant32() {
   return Int32Constant(kSmiShiftSize + kSmiTagSize);
 }
 
+Node* WasmGraphBuilder::BuildChangeUint31ToSmi(Node* value) {
+  return COMPRESS_POINTERS_BOOL
+             ? gasm_->Word32Shl(value, BuildSmiShiftBitsConstant32())
+             : gasm_->WordShl(BuildChangeUint32ToUintPtr(value),
+                              BuildSmiShiftBitsConstant());
+}
+
 Node* WasmGraphBuilder::BuildChangeSmiToInt32(Node* value) {
   return COMPRESS_POINTERS_BOOL
-             ? gasm_->Word32Sar(gasm_->TruncateInt64ToInt32(value),
+             ? gasm_->Word32Sar(BuildTruncateIntPtrToInt32(value),
                                 BuildSmiShiftBitsConstant32())
              : BuildTruncateIntPtrToInt32(BuildChangeSmiToIntPtr(value));
 }
 
+Node* WasmGraphBuilder::BuildChangeSmiToUint32(Node* value) {
+  return COMPRESS_POINTERS_BOOL
+             ? gasm_->Word32Shr(BuildTruncateIntPtrToInt32(value),
+                                BuildSmiShiftBitsConstant32())
+             : BuildTruncateIntPtrToInt32(
+                   gasm_->WordShr(value, BuildSmiShiftBitsConstant32()));
+}
+
 Node* WasmGraphBuilder::BuildChangeSmiToIntPtr(Node* value) {
-  if (COMPRESS_POINTERS_BOOL) {
-    value = BuildChangeSmiToInt32(value);
-    return BuildChangeInt32ToIntPtr(value);
-  }
-  return gasm_->WordSar(value, BuildSmiShiftBitsConstant());
+  return COMPRESS_POINTERS_BOOL
+             ? BuildChangeInt32ToIntPtr(BuildChangeSmiToInt32(value))
+             : gasm_->WordSar(value, BuildSmiShiftBitsConstant());
 }
 
 Node* WasmGraphBuilder::BuildConvertUint32ToSmiWithSaturation(Node* value,
@@ -3565,8 +3582,8 @@ void WasmGraphBuilder::GetBaseAndOffsetForImportedMutableExternRefGlobal(
   // From the index, calculate the actual offset in the FixedArray. This
   // is kHeaderSize + (index * kTaggedSize). kHeaderSize can be acquired with
   // wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(0).
-  Node* index_times_tagged_size =
-      gasm_->IntMul(Uint32ToUintptr(index), Int32Constant(kTaggedSize));
+  Node* index_times_tagged_size = gasm_->IntMul(
+      BuildChangeUint32ToUintPtr(index), Int32Constant(kTaggedSize));
   *offset = gasm_->IntAdd(
       index_times_tagged_size,
       mcgraph()->IntPtrConstant(
@@ -3763,7 +3780,7 @@ Node* WasmGraphBuilder::BoundsCheckMem(uint8_t access_size, Node* index,
                                        wasm::WasmCodePosition position,
                                        EnforceBoundsCheck enforce_check) {
   DCHECK_LE(1, access_size);
-  if (!env_->module->is_memory64) index = Uint32ToUintptr(index);
+  if (!env_->module->is_memory64) index = BuildChangeUint32ToUintPtr(index);
   if (!FLAG_wasm_bounds_checks) return index;
 
   if (use_trap_handler() && enforce_check == kCanOmitBoundsCheck) {
@@ -4317,7 +4334,7 @@ Node* WasmGraphBuilder::BuildAsmjsLoadMem(MachineType type, Node* index) {
   // Note that we check against the memory size ignoring the size of the
   // stored value, which is conservative if misaligned. Technically, asm.js
   // should never have misaligned accesses.
-  index = Uint32ToUintptr(index);
+  index = BuildChangeUint32ToUintPtr(index);
   Diamond bounds_check(graph(), mcgraph()->common(),
                        gasm_->UintLessThan(index, mem_size), BranchHint::kTrue);
   bounds_check.Chain(control());
@@ -4356,17 +4373,6 @@ Node* WasmGraphBuilder::BuildAsmjsLoadMem(MachineType type, Node* index) {
   return bounds_check.Phi(type.representation(), load, oob_value);
 }
 
-Node* WasmGraphBuilder::Uint32ToUintptr(Node* node) {
-  if (mcgraph()->machine()->Is32()) return node;
-  // Fold instances of ChangeUint32ToUint64(IntConstant) directly.
-  Uint32Matcher matcher(node);
-  if (matcher.HasResolvedValue()) {
-    uintptr_t value = matcher.ResolvedValue();
-    return mcgraph()->IntPtrConstant(bit_cast<intptr_t>(value));
-  }
-  return gasm_->ChangeUint32ToUint64(node);
-}
-
 Node* WasmGraphBuilder::BuildAsmjsStoreMem(MachineType type, Node* index,
                                            Node* val) {
   DCHECK_NOT_NULL(instance_cache_);
@@ -4391,7 +4397,7 @@ Node* WasmGraphBuilder::BuildAsmjsStoreMem(MachineType type, Node* index,
     index = gasm_->Word32And(index, mem_mask);
   }
 
-  index = Uint32ToUintptr(index);
+  index = BuildChangeUint32ToUintPtr(index);
   const Operator* store_op = mcgraph()->machine()->Store(StoreRepresentation(
       type.representation(), WriteBarrierKind::kNoWriteBarrier));
   Node* store = graph()->NewNode(store_op, mem_start, index, val, effect(),
@@ -5969,36 +5975,16 @@ Node* WasmGraphBuilder::ArrayLen(Node* array_object, CheckForNull null_check,
   return gasm_->LoadWasmArrayLength(array_object);
 }
 
-// 1 bit V8 Smi tag, 31 bits V8 Smi shift, 1 bit i31ref high-bit truncation.
-constexpr int kI31To32BitSmiShift = 33;
-
 Node* WasmGraphBuilder::I31New(Node* input) {
-  if (SmiValuesAre31Bits()) {
-    return gasm_->Word32Shl(input, BuildSmiShiftBitsConstant32());
-  }
-  DCHECK(SmiValuesAre32Bits());
-  input = BuildChangeInt32ToIntPtr(input);
-  return gasm_->WordShl(input, gasm_->IntPtrConstant(kI31To32BitSmiShift));
+  return BuildChangeInt32ToSmi(input);
 }
 
 Node* WasmGraphBuilder::I31GetS(Node* input) {
-  if (SmiValuesAre31Bits()) {
-    input = BuildTruncateIntPtrToInt32(input);
-    return gasm_->Word32SarShiftOutZeros(input, BuildSmiShiftBitsConstant32());
-  }
-  DCHECK(SmiValuesAre32Bits());
-  return BuildTruncateIntPtrToInt32(
-      gasm_->WordSar(input, gasm_->IntPtrConstant(kI31To32BitSmiShift)));
+  return BuildChangeSmiToInt32(input);
 }
 
 Node* WasmGraphBuilder::I31GetU(Node* input) {
-  if (SmiValuesAre31Bits()) {
-    input = BuildTruncateIntPtrToInt32(input);
-    return gasm_->Word32Shr(input, BuildSmiShiftBitsConstant32());
-  }
-  DCHECK(SmiValuesAre32Bits());
-  return BuildTruncateIntPtrToInt32(
-      gasm_->WordShr(input, gasm_->IntPtrConstant(kI31To32BitSmiShift)));
+  return BuildChangeSmiToUint32(input);
 }
 
 class WasmDecorator final : public GraphDecorator {
