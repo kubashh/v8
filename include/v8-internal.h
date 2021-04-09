@@ -33,6 +33,7 @@ const int kApiSystemPointerSize = sizeof(void*);
 const int kApiDoubleSize = sizeof(double);
 const int kApiInt32Size = sizeof(int32_t);
 const int kApiInt64Size = sizeof(int64_t);
+const int kApiSizetSize = sizeof(size_t);
 
 // Tag information for HeapObject.
 const int kHeapObjectTag = 1;
@@ -209,8 +210,10 @@ class Internals {
       kIsolateFastCCallCallerFpOffset + kApiSystemPointerSize;
   static const int kIsolateFastApiCallTargetOffset =
       kIsolateFastCCallCallerPcOffset + kApiSystemPointerSize;
-  static const int kIsolateStackGuardOffset =
+  static const int kIsolateLongTaskStatsCounterOffset =
       kIsolateFastApiCallTargetOffset + kApiSystemPointerSize;
+  static const int kIsolateStackGuardOffset =
+      kIsolateLongTaskStatsCounterOffset + kApiSizetSize;
   static const int kIsolateRootsOffset =
       kIsolateStackGuardOffset + 7 * kApiSystemPointerSize;
 
@@ -327,6 +330,12 @@ class Internals {
                              kIsolateEmbedderDataOffset +
                              slot * kApiSystemPointerSize;
     return *reinterpret_cast<void* const*>(addr);
+  }
+
+  V8_INLINE static void IncrementLongTasksStatsCounter(v8::Isolate* isolate) {
+    internal::Address addr = reinterpret_cast<internal::Address>(isolate) +
+                             kIsolateLongTaskStatsCounterOffset;
+    ++(*reinterpret_cast<size_t*>(addr));
   }
 
   V8_INLINE static internal::Address* GetRoot(v8::Isolate* isolate, int index) {
