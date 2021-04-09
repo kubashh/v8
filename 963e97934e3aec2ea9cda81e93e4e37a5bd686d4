@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06b6b346_5610766b",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-09T14:31:40Z",
+      "side": 1,
+      "message": "Please remove. We don\u0027t have a numfuzz builder for linux32. Maybe we should get one as well, but let\u0027s take this another time.",
+      "range": {
+        "startLine": 152,
+        "startChar": 22,
+        "endLine": 152,
+        "endChar": 58
+      },
+      "revId": "963e97934e3aec2ea9cda81e93e4e37a5bd686d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51bb85ac_468cc4b0",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-09T14:31:40Z",
+      "side": 1,
+      "message": "Is this target_bits config needed? Did you copy that from somewhere?\n\nIt actually might be. Despite building being on MB config, the upload script might rely on the bits to upload to a different archive location. Could you verify that in the code around here?\nhttps://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/archive/api.py;l\u003d231\n\nI.e. check that this target_bits indeed ends up in this archive url.",
+      "range": {
+        "startLine": 152,
+        "startChar": 199,
+        "endLine": 152,
+        "endChar": 216
+      },
+      "revId": "963e97934e3aec2ea9cda81e93e4e37a5bd686d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
