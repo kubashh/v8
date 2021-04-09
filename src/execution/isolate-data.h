@@ -142,6 +142,7 @@ class IsolateData final {
   V(kFastCCallCallerFPOffset, kSystemPointerSize)                             \
   V(kFastCCallCallerPCOffset, kSystemPointerSize)                             \
   V(kFastApiCallTargetOffset, kSystemPointerSize)                             \
+  V(kLongTaskStatsCounterOffset, kSizetSize)                                  \
   V(kStackGuardOffset, StackGuard::kSizeInBytes)                              \
   V(kRootsTableOffset, RootsTable::kEntriesCount* kSystemPointerSize)         \
   V(kExternalReferenceTableOffset, ExternalReferenceTable::kSizeInBytes)      \
@@ -179,6 +180,10 @@ class IsolateData final {
   Address fast_c_call_caller_fp_ = kNullAddress;
   Address fast_c_call_caller_pc_ = kNullAddress;
   Address fast_api_call_target_ = kNullAddress;
+
+  // Used for implementation of LongTaskStats. Counts the number of potential
+  // long tasks.
+  size_t long_task_stats_counter_ = 0;
 
   // Fields related to the system and JS stack. In particular, this contains
   // the stack limit used by stack checks in generated code.
@@ -245,6 +250,8 @@ void IsolateData::AssertPredictableLayout() {
                 kFastCCallCallerPCOffset);
   STATIC_ASSERT(offsetof(IsolateData, fast_api_call_target_) ==
                 kFastApiCallTargetOffset);
+  STATIC_ASSERT(offsetof(IsolateData, long_task_stats_counter_) ==
+                kLongTaskStatsCounterOffset);
   STATIC_ASSERT(offsetof(IsolateData, stack_guard_) == kStackGuardOffset);
 #ifdef V8_HEAP_SANDBOX
   STATIC_ASSERT(offsetof(IsolateData, external_pointer_table_) ==
