@@ -16,6 +16,40 @@
       "message": "Hi Georg, PTAL. I\u0027ve disabled the test on gc_stress earlier today, since it started failing for an unrelated CL, which happened to change GC timing (https://chromium-review.googlesource.com/c/v8/v8/+/2814740). When --stress-flush-bytecode is enabled, this test becomes dependent on the point in time that the GC will collect some of the functions\u0027 bytecodes, as it relies on certain functions being optimized. So IMO the fix for this is specifying --no-stress-flush-bytecode for it.",
       "revId": "d6ddb053e8a90dc4453e4e86c072dba7a06b56c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8316b5f_bba4a46d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-09T13:24:30Z",
+      "side": 1,
+      "message": "lgtm but see my comment",
+      "revId": "d6ddb053e8a90dc4453e4e86c072dba7a06b56c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e65de4c5_27880b0d",
+        "filename": "test/mjsunit/compiler/fast-api-calls.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-09T13:24:30Z",
+      "side": 1,
+      "message": "I think the better fix is to move this up to line 129 or so, to prevent bytecode flushing after the first optimization.",
+      "revId": "d6ddb053e8a90dc4453e4e86c072dba7a06b56c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
