@@ -35,6 +35,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ad6f02a_96f12de1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T08:55:28Z",
+      "side": 1,
+      "message": "That sounds like a good idea, I agree it\u0027s not great to have a partially populated table. I\u0027ll implement your suggestion, let\u0027s see how that turns out ;)",
+      "parentUuid": "643fd7cc_13c93f39",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "463e5249_761bfd49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T08:55:28Z",
+      "side": 1,
+      "message": "Thanks all!\n\nI will take a look at the alternative suggestion Jakob proposed before resolving the other comments.",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a2b1ba2_f3c95230",
