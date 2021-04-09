@@ -6,6 +6,7 @@
 // functionality.
 
 // Flags: --turbo-fast-api-calls --allow-natives-syntax --opt
+// Flags: --no-stress-flush-bytecode
 // --always-opt is disabled because we rely on particular feedback for
 // optimizing to the fastest path.
 // Flags: --no-always-opt
