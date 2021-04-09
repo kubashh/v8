@@ -13,6 +13,7 @@ namespace v8 {
 namespace internal {
 
 class Isolate;
+class ExternalReferenceTable;
 
 class ExternalReferenceEncoder {
  public:
@@ -43,10 +44,13 @@ class ExternalReferenceEncoder {
   Value Encode(Address key);
   Maybe<Value> TryEncode(Address key);
 
-  const char* NameOfAddress(Isolate* isolate, Address address) const;
+  const char* NameOfAddress(Address address) const;
 
  private:
   AddressToIndexHashMap* map_;
+  ExternalReferenceTable* table_;
+
+  void InitializeMapFromExternalReferenceTable();
 
 #ifdef DEBUG
   std::vector<int> count_;
