@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "57631314_11286b39",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T17:14:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a219a0f2_29317d9f",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "643fd7cc_13c93f39",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -87,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd5182fb_66397c93",
+        "filename": "src/codegen/external-reference-encoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T17:14:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a2b1ba2_f3c95230",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcc2ddf5_caae8dac",
@@ -100,6 +136,24 @@
       "writtenOn": "2021-04-06T10:49:35Z",
       "side": 1,
       "message": "Please forward-decl the classes you need instead of the include.",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a61dc10e_9a3942dd",
+        "filename": "src/codegen/external-reference-encoder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T17:14:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcc2ddf5_caae8dac",
       "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -121,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "940e4f68_854e3fcf",
+        "filename": "src/codegen/external-reference-encoder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T17:14:43Z",
+      "side": 1,
+      "message": "Obsolete with new changes.",
+      "parentUuid": "e7929006_7722b480",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85d06797_4b0a2e6e",
@@ -134,6 +206,24 @@
       "writtenOn": "2021-04-06T10:49:35Z",
       "side": 1,
       "message": "This change is a bit subtle, previously kExternalReferenceCount meant \u0027all extrefs\u0027, now it means non-isolate-extrefs. Given this change, I\u0027d prefer to rename these constants to something intuitive, like\n\n- kExternalReferenceCountIsolateDependent\n- kExternalReferenceCountIsolateIndependent\n- kExternalReferenceCount (the sum of the above)",
+      "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3ff9bee_e1bbd267",
+        "filename": "src/codegen/external-reference.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T17:14:43Z",
+      "side": 1,
+      "message": "Done. (I don\u0027t think anything needs kExternalReferenceCount as the sum of both)",
+      "parentUuid": "85d06797_4b0a2e6e",
       "revId": "f04ad38efaacbf8518ee40bcc5270cfdd52a78fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

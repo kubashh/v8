@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1d510de1_c6ddcaa1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T17:14:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3bb22ae_ccd3e339",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 10
+      },
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "97e7cbef_07434923",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -93,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25269f99_8ef44369",
+        "filename": "src/codegen/external-reference-encoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T17:14:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a7d1bc0_36d7d2a7",
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19a4be11_1ca8c63c",
@@ -116,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "189ceaae_7cfbc784",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T17:14:43Z",
+      "side": 1,
+      "message": "Since these are known statically, I guess it makes sense to add them too. Thanks!",
+      "parentUuid": "19a4be11_1ca8c63c",
+      "range": {
+        "startLine": 86,
+        "startChar": 2,
+        "endLine": 86,
+        "endChar": 24
+      },
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f7ba5d6_b8d5800b",
@@ -129,6 +195,24 @@
       "writtenOn": "2021-04-01T16:48:09Z",
       "side": 1,
       "message": "This undef\u0027s the wrong macro. I would actually prefer just using COUNT_EXTERNAL_REFERENCE for both constants, and only undef\u0027ing it here.",
+      "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92d11de5_5ec98538",
+        "filename": "src/codegen/external-reference.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-09T17:14:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f7ba5d6_b8d5800b",
       "revId": "066991dc0319648f8307a0b0e2b7161cce073782",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
