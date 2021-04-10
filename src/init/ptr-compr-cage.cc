@@ -121,9 +121,7 @@ void PtrComprCage::Free() {
 #ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 namespace {
-
 DEFINE_LAZY_LEAKY_OBJECT_GETTER(PtrComprCage, GetSharedProcessWideCage)
-
 }  // anonymous namespace
 
 // static
