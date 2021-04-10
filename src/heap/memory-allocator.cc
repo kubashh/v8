@@ -20,30 +20,6 @@
 namespace v8 {
 namespace internal {
 
-static base::LazyInstance<CodeRangeAddressHint>::type code_range_address_hint =
-    LAZY_INSTANCE_INITIALIZER;
-
-namespace {
-void FunctionInStaticBinaryForAddressHint() {}
-}  // namespace
-
-Address CodeRangeAddressHint::GetAddressHint(size_t code_range_size) {
-  base::MutexGuard guard(&mutex_);
-  auto it = recently_freed_.find(code_range_size);
-  if (it == recently_freed_.end() || it->second.empty()) {
-    return FUNCTION_ADDR(&FunctionInStaticBinaryForAddressHint);
-  }
-  Address result = it->second.back();
-  it->second.pop_back();
-  return result;
-}
-
-void CodeRangeAddressHint::NotifyFreedCodeRange(Address code_range_start,
-                                                size_t code_range_size) {
-  base::MutexGuard guard(&mutex_);
-  recently_freed_[code_range_size].push_back(code_range_start);
-}
-
 // -----------------------------------------------------------------------------
 // MemoryAllocator
 //
@@ -64,74 +40,25 @@ MemoryAllocator::MemoryAllocator(Isolate* isolate, size_t capacity,
 
 void MemoryAllocator::InitializeCodePageAllocator(
     v8::PageAllocator* page_allocator, size_t requested) {
-  DCHECK_NULL(code_page_allocator_instance_.get());
-
   code_page_allocator_ = page_allocator;
 
-  if (requested == 0) {
-    if (!isolate_->RequiresCodeRange()) return;
+#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+  code_page_allocator_ =
+      CodeRange::GetProcessWideRange()->code_page_allocator();
+#else
+  if (isolate_->RequiresCodeRange() || requested != 0) {
     // When a target requires the code range feature, we put all code objects
-    // in a kMaximalCodeRangeSize range of virtual address space, so that
+    // in a contiguous range of virtual address space, so that
     // they can call each other with near calls.
-    requested = kMaximalCodeRangeSize;
-  } else if (requested <= kMinimumCodeRangeSize) {
-    requested = kMinimumCodeRangeSize;
+    code_range_.InitReservationOrDie(
+        page_allocator, requested == 0 ? kMaximalCodeRangeSize : requested);
+    isolate_->AddCodeRange(code_range_.code_region().begin(),
+                           code_range_.code_region().size());
+    code_page_allocator_ = code_range_.code_page_allocator();
   }
+#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
-  const size_t reserved_area =
-      kReservedCodeRangePages * MemoryAllocator::GetCommitPageSize();
-  if (requested < (kMaximalCodeRangeSize - reserved_area)) {
-    requested += RoundUp(reserved_area, MemoryChunk::kPageSize);
-    // Fullfilling both reserved pages requirement and huge code area
-    // alignments is not supported (requires re-implementation).
-    DCHECK_LE(kMinExpectedOSPageSize, page_allocator->AllocatePageSize());
-  }
-  DCHECK(!isolate_->RequiresCodeRange() || requested <= kMaximalCodeRangeSize);
-
-  Address hint =
-      RoundDown(code_range_address_hint.Pointer()->GetAddressHint(requested),
-                page_allocator->AllocatePageSize());
-  VirtualMemory reservation(
-      page_allocator, requested, reinterpret_cast<void*>(hint),
-      std::max(kMinExpectedOSPageSize, page_allocator->AllocatePageSize()));
-  if (!reservation.IsReserved()) {
-    V8::FatalProcessOutOfMemory(isolate_,
-                                "CodeRange setup: allocate virtual memory");
-  }
-  code_range_ = reservation.region();
-  isolate_->AddCodeRange(code_range_.begin(), code_range_.size());
-
-  // We are sure that we have mapped a block of requested addresses.
-  DCHECK_GE(reservation.size(), requested);
-  Address base = reservation.address();
-
-  // On some platforms, specifically Win64, we need to reserve some pages at
-  // the beginning of an executable space. See
-  //   https://cs.chromium.org/chromium/src/components/crash/content/
-  //     app/crashpad_win.cc?rcl=fd680447881449fba2edcf0589320e7253719212&l=204
-  // for details.
-  if (reserved_area > 0) {
-    if (!reservation.SetPermissions(base, reserved_area,
-                                    PageAllocator::kReadWrite))
-      V8::FatalProcessOutOfMemory(isolate_, "CodeRange setup: set permissions");
-
-    base += reserved_area;
-  }
-  Address aligned_base = RoundUp(base, MemoryChunk::kAlignment);
-  size_t size =
-      RoundDown(reservation.size() - (aligned_base - base) - reserved_area,
-                MemoryChunk::kPageSize);
-  DCHECK(IsAligned(aligned_base, kMinExpectedOSPageSize));
-
-  LOG(isolate_,
-      NewEvent("CodeRange", reinterpret_cast<void*>(reservation.address()),
-               requested));
-
-  code_reservation_ = std::move(reservation);
-  code_page_allocator_instance_ = std::make_unique<base::BoundedPageAllocator>(
-      page_allocator, aligned_base, size,
-      static_cast<size_t>(MemoryChunk::kAlignment));
-  code_page_allocator_ = code_page_allocator_instance_.get();
+  DCHECK_NOT_NULL(code_page_allocator_);
 }
 
 void MemoryAllocator::TearDown() {
@@ -147,13 +74,10 @@ void MemoryAllocator::TearDown() {
     last_chunk_.Free();
   }
 
-  if (code_page_allocator_instance_.get()) {
-    DCHECK(!code_range_.is_empty());
-    code_range_address_hint.Pointer()->NotifyFreedCodeRange(code_range_.begin(),
-                                                            code_range_.size());
-    code_range_ = base::AddressRegion();
-    code_page_allocator_instance_.reset();
-  }
+#ifndef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+  code_range_.Free();
+#endif
+
   code_page_allocator_ = nullptr;
   data_page_allocator_ = nullptr;
 }
