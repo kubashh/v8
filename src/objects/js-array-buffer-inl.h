@@ -43,7 +43,7 @@ void JSArrayBuffer::set_byte_length(size_t value) {
 }
 
 DEF_GETTER(JSArrayBuffer, backing_store, void*) {
-  Isolate* isolate = GetIsolateForHeapSandbox(*this);
+  Isolate* isolate = Internals::GetIsolateForHeapSandbox(ptr());
   Address value = ReadExternalPointerField(kBackingStoreOffset, isolate,
                                            kArrayBufferBackingStoreTag);
   return reinterpret_cast<void*>(value);
@@ -200,7 +200,7 @@ void JSTypedArray::set_length(size_t value) {
 }
 
 DEF_GETTER(JSTypedArray, external_pointer, Address) {
-  Isolate* isolate = GetIsolateForHeapSandbox(*this);
+  Isolate* isolate = Internals::GetIsolateForHeapSandbox(ptr());
   return ReadExternalPointerField(kExternalPointerOffset, isolate,
                                   kTypedArrayExternalPointerTag);
 }
@@ -322,7 +322,7 @@ MaybeHandle<JSTypedArray> JSTypedArray::Validate(Isolate* isolate,
 }
 
 DEF_GETTER(JSDataView, data_pointer, void*) {
-  Isolate* isolate = GetIsolateForHeapSandbox(*this);
+  Isolate* isolate = Internals::GetIsolateForHeapSandbox(ptr());
   return reinterpret_cast<void*>(ReadExternalPointerField(
       kDataPointerOffset, isolate, kDataViewDataPointerTag));
 }

@@ -862,7 +862,7 @@ void ExternalString::AllocateExternalPointerEntries(Isolate* isolate) {
 }
 
 DEF_GETTER(ExternalString, resource_as_address, Address) {
-  Isolate* isolate = GetIsolateForHeapSandbox(*this);
+  Isolate* isolate = Internals::GetIsolateForHeapSandbox(ptr());
   return ReadExternalPointerField(kResourceOffset, isolate,
                                   kExternalStringResourceTag);
 }

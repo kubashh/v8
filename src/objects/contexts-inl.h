@@ -242,7 +242,7 @@ Map Context::GetInitialJSArrayMap(ElementsKind kind) const {
 }
 
 DEF_GETTER(NativeContext, microtask_queue, MicrotaskQueue*) {
-  Isolate* isolate = GetIsolateForHeapSandbox(*this);
+  Isolate* isolate = Internals::GetIsolateForHeapSandbox(ptr());
   return reinterpret_cast<MicrotaskQueue*>(ReadExternalPointerField(
       kMicrotaskQueueOffset, isolate, kNativeContextMicrotaskQueueTag));
 }

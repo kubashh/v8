@@ -347,7 +347,11 @@ class ReadStringVisitor : public TqObjectVisitor {
       ExternalPointer_t resource_data =
           GetOrFinish(object->GetResourceDataValue(accessor_));
 #ifdef V8_COMPRESS_POINTERS
-      Isolate* isolate = GetIsolateForHeapSandbox(
+      // This should use Internals::GetIsolateForHeapSandbox, but that uses
+      // HeapObject::cast, which has a slow DCHECK that depends on the
+      // FLAG_enable_slow_asserts symbol, which isn't linked in. So use
+      // unchecked_cast.
+      Isolate* isolate = GetIsolateFromWritableObject(
           HeapObject::unchecked_cast(Object(heap_addresses_.any_heap_pointer)));
       uintptr_t data_address = static_cast<uintptr_t>(DecodeExternalPointer(
           isolate, resource_data, kExternalStringResourceDataTag));
