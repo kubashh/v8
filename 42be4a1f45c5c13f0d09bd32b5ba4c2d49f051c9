@@ -16,6 +16,75 @@
       "message": "ptal\n\nexample error here (when turning on microtask consistency checks): https://logs.chromium.org/logs/chromium/buildbucket/cr-buildbucket.appspot.com/8888223657323071056/+/steps/compile__with_patch_/0/stdout",
       "revId": "42be4a1f45c5c13f0d09bd32b5ba4c2d49f051c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f74173ff_474c2c14",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4342,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-12T14:35:39Z",
+      "side": 1,
+      "message": "i::JSProxy::SetPrototype",
+      "range": {
+        "startLine": 4342,
+        "startChar": 8,
+        "endLine": 4342,
+        "endChar": 35
+      },
+      "revId": "42be4a1f45c5c13f0d09bd32b5ba4c2d49f051c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7339ca7_e4fac83e",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4348,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-12T14:35:39Z",
+      "side": 1,
+      "message": "i::JSObject::SetPrototype",
+      "range": {
+        "startLine": 4348,
+        "startChar": 11,
+        "endLine": 4348,
+        "endChar": 21
+      },
+      "revId": "42be4a1f45c5c13f0d09bd32b5ba4c2d49f051c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a4e3615_8d042934",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4353,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-12T14:35:39Z",
+      "side": 1,
+      "message": "I know we already have precedence for this pattern, but in theory this doesn\u0027t give proper guarantes.\n\nIn the long run we should have something like:\n\n  Maybe\u003cbool\u003e v8::Object::SetPrototypeNoScript(...)\n\nWhich will not do anything (or crash) on JSProxies.",
+      "range": {
+        "startLine": 4345,
+        "startChar": 0,
+        "endLine": 4353,
+        "endChar": 3
+      },
+      "revId": "42be4a1f45c5c13f0d09bd32b5ba4c2d49f051c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
