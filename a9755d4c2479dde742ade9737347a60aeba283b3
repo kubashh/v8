@@ -33,6 +33,23 @@
       "message": "Hi Stephen, \n\nFrom clusterfuzz we got the following issue:\n\n  d8.promise.setHooks(\n    () \u003d\u003e {throw \"asdfasd\"},\n    () \u003d\u003e {throw \"asdfasd\"},\n    () \u003d\u003e {throw \"asdfasd\"},\n    () \u003d\u003e {throw \"asdfasd\"},\n    () \u003d\u003e {throw \"asdfasd\"}\n  );\n\n  Promise.reject().catch()\n\n\nEssentially we don\u0027t handle throwing promise hooks well in the runtime (contexts.cc).\nCould you take a look?\n",
       "revId": "a9755d4c2479dde742ade9737347a60aeba283b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d96c61d_6ea9b744",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-12T15:26:01Z",
+      "side": 1,
+      "message": "Execution::Call(isolate, hook, receiver, argc, argv).Check();\n\nshould probably be replaced by \n\n  if (Execution::Call().is_null()) {\n    DCHECK(isolate-\u003ehas_pending_exception());\n    ... handle pending exception.\n  }",
+      "revId": "a9755d4c2479dde742ade9737347a60aeba283b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
