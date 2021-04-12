@@ -18,6 +18,74 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebf2c8ea_f8ecfb55",
+        "filename": "src/codegen/external-reference-encoder.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T07:50:14Z",
+      "side": 1,
+      "message": "Do we still need the changes in e-r-e? If not, let\u0027s please revert them.",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8ba68b7_49881b5d",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T07:50:14Z",
+      "side": 1,
+      "message": "This new form of Add doesn\u0027t seem very useful; I\u0027d suggest keeping the old form for \u0027real\u0027 extref table initialization, and for the once-per-process initialization, add a dedicated AddIsolateIndependent or so.",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f67e1f0b_37a2db7f",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T07:50:14Z",
+      "side": 1,
+      "message": "Also   CHECK_EQ(kSizeIsolateIndependent, *index);?",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00b31cac_b1f1755f",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T07:50:14Z",
+      "side": 1,
+      "message": "The annotation is outdated.",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6e073b65_c662ff66",
@@ -37,6 +105,81 @@
         "endLine": 72,
         "endChar": 52
       },
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61d17d27_55fd74a3",
+        "filename": "src/codegen/external-reference-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T07:50:14Z",
+      "side": 1,
+      "message": "The current spot is okay for me.",
+      "parentUuid": "6e073b65_c662ff66",
+      "range": {
+        "startLine": 72,
+        "startChar": 21,
+        "endLine": 72,
+        "endChar": 52
+      },
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05047719_e3af44ea",
+        "filename": "src/codegen/external-reference-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T07:50:14Z",
+      "side": 1,
+      "message": "naming nit: is the \u0027All\u0027 meaningful? It\u0027s not clear what the difference is to the related method in L95. Personally I\u0027d just remove the \u0027All\u0027.",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5111432_be8e3007",
+        "filename": "src/codegen/external-reference-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T07:50:14Z",
+      "side": 1,
+      "message": "nit: \u0027AddIsolateDependentReferences\u0027 seems more readable and consistent with the above.",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d25155d_2f6f3670",
+        "filename": "src/codegen/external-reference-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T07:50:14Z",
+      "side": 1,
+      "message": "I\u0027d tend towards not keeping this in the class, instead have it in an anonymous namespace in the .cc file. Wdyt?",
       "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
