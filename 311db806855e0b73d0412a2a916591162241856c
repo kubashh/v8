@@ -141,6 +141,24 @@
       "parentUuid": "09cde36f_f91047a7",
       "revId": "311db806855e0b73d0412a2a916591162241856c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "495015f9_18f861a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-12T07:47:37Z",
+      "side": 1,
+      "message": "+1 on having a doc about this. In regards to infra, we\u0027ve had PPC32 bots at some point but removed them. Happy to get simulators back. We don\u0027t have BE hardware. So we can only test what can be simulated.",
+      "parentUuid": "8665f023_e5aa92a5",
+      "revId": "311db806855e0b73d0412a2a916591162241856c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
