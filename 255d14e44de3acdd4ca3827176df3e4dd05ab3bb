@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40839bb8_05d3afb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-12T18:18:11Z",
+      "side": 1,
+      "message": "Hi Georg, PTAL at the fix for this issue and the regression test.",
+      "revId": "255d14e44de3acdd4ca3827176df3e4dd05ab3bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
