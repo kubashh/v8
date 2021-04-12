@@ -123,6 +123,24 @@
       "parentUuid": "a5b869b2_e7572860",
       "revId": "311db806855e0b73d0412a2a916591162241856c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8665f023_e5aa92a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T06:53:55Z",
+      "side": 1,
+      "message": "The goal \"[revive] support for 32-bit big-endian PowerPC on Linux\" is big enough such that a design doc sounds like a good idea. A few thoughts:\n\n- we don\u0027t keep unmaintained platform ports in our tree.\n- a new platform port would require infra support (e.g. bots to test at least the build), and signoffs from V8 folks.\n- coordination with other folks interested in ppc would be good, both on the general idea and also design decisions.\n\nSee also https://v8.dev/docs/design-review-guidelines",
+      "parentUuid": "09cde36f_f91047a7",
+      "revId": "311db806855e0b73d0412a2a916591162241856c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
