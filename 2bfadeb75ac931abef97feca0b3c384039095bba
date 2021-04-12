@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be36214b_cf84ff58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T06:25:49Z",
+      "side": 1,
+      "message": "Afaict the major contents of this CL is to actually implement pc-relative builtin-to-builtin calls. Please describe that in the message. Currently, it looks like a simple port, which it\u0027s not.",
+      "revId": "2bfadeb75ac931abef97feca0b3c384039095bba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01e9d094_c6677720",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T06:25:49Z",
+      "side": 1,
+      "message": "lgtm on the non-risc64 parts, with comments.",
+      "revId": "2bfadeb75ac931abef97feca0b3c384039095bba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2924d186_910edd14",
+        "filename": "src/codegen/riscv64/constants-riscv64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T06:25:49Z",
+      "side": 1,
+      "message": "Should be removed now.",
+      "revId": "2bfadeb75ac931abef97feca0b3c384039095bba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
