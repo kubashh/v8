@@ -157,6 +157,30 @@
       },
       "revId": "42be4a1f45c5c13f0d09bd32b5ba4c2d49f051c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bcdab0a_924357a8",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4353,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-12T17:49:24Z",
+      "side": 1,
+      "message": "That would work as well, and is probably cleaner.",
+      "parentUuid": "c85c59e2_781c7611",
+      "range": {
+        "startLine": 4345,
+        "startChar": 0,
+        "endLine": 4353,
+        "endChar": 3
+      },
+      "revId": "42be4a1f45c5c13f0d09bd32b5ba4c2d49f051c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
