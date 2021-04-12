@@ -413,6 +413,9 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
 
   // ===========================================================================
 
+  Address GetAddressOfV128Constant(
+      std::tuple<uint32_t, uint32_t, uint32_t, uint32_t> constant);
+
   struct HandlerInfo {
     Label* handler;
     int pc_offset;
@@ -486,7 +489,8 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   ZoneVector<int> block_starts_;
   TurbolizerCodeOffsetsInfo offsets_info_;
   ZoneVector<TurbolizerInstructionStartInfo> instr_starts_;
-
+  std::map<std::tuple<uint32_t, uint32_t, uint32_t, uint32_t>, Address>
+      memory_leak_constant_map;
   const char* debug_name_ = nullptr;
 };
 

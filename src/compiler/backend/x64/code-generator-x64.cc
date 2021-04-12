@@ -32,7 +32,7 @@ namespace compiler {
 
 #define __ tasm()->
 
-// Adds X64 specific methods for decoding operands.
+/// Adds X64 specific methods for decoding operands.
 class X64OperandConverter : public InstructionOperandConverter {
  public:
   X64OperandConverter(CodeGenerator* gen, Instruction* instr)
@@ -724,6 +724,25 @@ void EmitWordLoadPoisoningIfNeeded(CodeGenerator* codegen,
       __ ASM_INSTR(dst, src, i.InputOperand(2), laneidx);             \
     }                                                                 \
   } while (false)
+
+Address CodeGenerator::GetAddressOfV128Constant(
+    std::tuple<uint32_t, uint32_t, uint32_t, uint32_t> constant) {
+  auto it = memory_leak_constant_map.find(constant);
+  Address addr;
+  if (it != memory_leak_constant_map.end()) {
+    addr = it->second;
+  } else {
+    uint32_t* p128 = reinterpret_cast<uint32_t*>(aligned_alloc(16, 16));
+    addr = reinterpret_cast<Address>(p128);
+    DCHECK_EQ(addr % 16, 0);
+    p128[0] = std::get<0>(constant);
+    p128[1] = std::get<1>(constant);
+    p128[2] = std::get<2>(constant);
+    p128[3] = std::get<3>(constant);
+    memory_leak_constant_map.insert(std::make_pair(constant, addr));
+  }
+  return addr;
+}
 
 void CodeGenerator::AssembleDeconstructFrame() {
   unwinding_info_writer_.MarkFrameDeconstructed(__ pc_offset());
@@ -3130,14 +3149,24 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kX64S128Const: {
-      // Emit code for generic constants as all zeros, or ones cases will be
-      // handled separately by the selector.
-      XMMRegister dst = i.OutputSimd128Register();
-      uint32_t imm[4] = {};
-      for (int j = 0; j < 4; j++) {
-        imm[j] = i.InputUint32(j);
+      if (FLAG_wasm_simd_constant_pool) {
+        auto constant = std::make_tuple(i.InputUint32(0), i.InputUint32(1),
+                                        i.InputUint32(2), i.InputUint32(3));
+        Address addr = GetAddressOfV128Constant(constant);
+        XMMRegister dst = i.OutputSimd128Register();
+        Operand src = __ ExternalReferenceAsOperand(
+            ExternalReference::FromRawAddress(addr));
+        __ Movdqa(dst, src);
+      } else {
+        // Emit code for generic constants as all zeros, or ones cases will be
+        // handled separately by the selector.
+        XMMRegister dst = i.OutputSimd128Register();
+        uint32_t imm[4] = {};
+        for (int j = 0; j < 4; j++) {
+          imm[j] = i.InputUint32(j);
+        }
+        SetupSimdImmediateInRegister(tasm(), imm, dst);
       }
-      SetupSimdImmediateInRegister(tasm(), imm, dst);
       break;
     }
     case kX64S128Zero: {
@@ -3711,18 +3740,25 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       XMMRegister tmp_simd = i.TempSimd128Register(0);
       DCHECK_NE(tmp_simd, i.InputSimd128Register(0));
       if (instr->InputCount() == 5) {  // only one input operand
-        uint32_t mask[4] = {};
         DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
-        for (int j = 4; j > 0; j--) {
-          mask[j - 1] = i.InputUint32(j);
+        if (FLAG_wasm_simd_constant_pool) {
+          Address maskAddr = GetAddressOfV128Constant(
+              std::make_tuple(i.InputUint32(0), i.InputUint32(1),
+                              i.InputUint32(2), i.InputUint32(3)));
+          Operand src = __ ExternalReferenceAsOperand(
+              ExternalReference::FromRawAddress(maskAddr));
+          __ Pshufb(dst, src);
+        } else {
+          uint32_t mask[4] = {};
+          for (int j = 4; j > 0; j--) {
+            mask[j - 1] = i.InputUint32(j);
+          }
+          SetupSimdImmediateInRegister(tasm(), mask, tmp_simd);
+          __ Pshufb(dst, tmp_simd);
         }
-
-        SetupSimdImmediateInRegister(tasm(), mask, tmp_simd);
-        __ Pshufb(dst, tmp_simd);
       } else {  // two input operands
         DCHECK_NE(tmp_simd, i.InputSimd128Register(1));
         DCHECK_EQ(6, instr->InputCount());
-        ASSEMBLE_SIMD_INSTR(Movdqu, kScratchDoubleReg, 0);
         uint32_t mask1[4] = {};
         for (int j = 5; j > 1; j--) {
           uint32_t lanes = i.InputUint32(j);
@@ -3731,8 +3767,19 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
             mask1[j - 2] |= (lane < kSimd128Size ? lane : 0x80) << k;
           }
         }
-        SetupSimdImmediateInRegister(tasm(), mask1, tmp_simd);
-        __ Pshufb(kScratchDoubleReg, tmp_simd);
+
+        ASSEMBLE_SIMD_INSTR(Movdqu, kScratchDoubleReg, 0);
+        if (FLAG_wasm_simd_constant_pool) {
+          Address mask1Addr = GetAddressOfV128Constant(
+              std::make_tuple(mask1[0], mask1[1], mask1[2], mask1[3]));
+          Operand mask1Op = __ ExternalReferenceAsOperand(
+              ExternalReference::FromRawAddress(mask1Addr));
+          __ Pshufb(kScratchDoubleReg, mask1Op);
+        } else {
+          SetupSimdImmediateInRegister(tasm(), mask1, tmp_simd);
+          __ Pshufb(kScratchDoubleReg, tmp_simd);
+        }
+
         uint32_t mask2[4] = {};
         if (instr->InputAt(1)->IsSimd128Register()) {
           XMMRegister src1 = i.InputSimd128Register(1);
@@ -3747,8 +3794,18 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
             mask2[j - 2] |= (lane >= kSimd128Size ? (lane & 0x0F) : 0x80) << k;
           }
         }
-        SetupSimdImmediateInRegister(tasm(), mask2, tmp_simd);
-        __ Pshufb(dst, tmp_simd);
+
+        if (FLAG_wasm_simd_constant_pool) {
+          Address mask2Addr = GetAddressOfV128Constant(
+              std::make_tuple(mask2[0], mask2[1], mask2[2], mask2[3]));
+          Operand mask2Op = __ ExternalReferenceAsOperand(
+              ExternalReference::FromRawAddress(mask2Addr));
+          __ Pshufb(dst, mask2Op);
+        } else {
+          SetupSimdImmediateInRegister(tasm(), mask2, tmp_simd);
+          __ Pshufb(dst, tmp_simd);
+        }
+
         __ Por(dst, kScratchDoubleReg);
       }
       break;

@@ -987,6 +987,15 @@ DEFINE_BOOL(wasm_lazy_validation, false,
             "enable lazy validation for lazily compiled wasm functions")
 DEFINE_BOOL(wasm_simd_ssse3_codegen, false, "allow wasm SIMD SSSE3 codegen")
 
+//
+// Wasm SIMD Optimizations
+//
+DEFINE_BOOL(wasm_simd_constant_pool, false,
+            "On x64, add a way to materialize v128 constants in a memory "
+            "region. This flag benefits v128.const and i8x16.shuffle but "
+            "could be extended in the future to improve codegen for more "
+            "instructions.")
+
 DEFINE_BOOL(wasm_code_gc, true, "enable garbage collection of wasm code")
 DEFINE_BOOL(trace_wasm_code_gc, false, "trace garbage collection of wasm code")
 DEFINE_BOOL(stress_wasm_code_gc, false,
