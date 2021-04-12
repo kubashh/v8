@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "936f9983_b0d5ec41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-12T07:16:54Z",
+      "side": 1,
+      "message": "ptal\n\nThis adds a new API for tracking V8 work durations in tasks. The initial implementation supports only V8 GC durations. More will be added in the future.\n\nFor V8 GC we hook into GCTracer:\n- The scope destructor for the incremental steps.\n- Stop() for the atomic pause (full and young).",
+      "revId": "ced42a2250f98c1dc73a4a5c55f31d975f3c8fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
