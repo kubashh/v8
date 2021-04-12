@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7fbea5e_990cfbb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-12T10:24:51Z",
+      "side": 1,
+      "message": "Hi Georg, could you PTAL at this fix for the deopt fuzzer? The issue was that with --deopt-every-n-times\u003d1 the add_32bit_int_mismatch was getting deoptimized on x64 after this call:\n\n    add_32bit_int_mismatch(false, -42, 3.14)\n\nso the assert that fast_call_count \u003d\u003d 1 was failing. It was an eager deoptimization with \"reason: not a heap number\".",
+      "revId": "1162bb9396a954726ba83ada1c5af37fa6428002",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
