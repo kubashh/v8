@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "cc9c72cd_4e877d8a",
         "filename": "/COMMIT_MSG",
@@ -20,10 +21,10 @@
         "endChar": 10
       },
       "revId": "bf428d26cfe2d671c3f54b20d9f62f6d8301530e",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "87f921a2_86fe4e03",
         "filename": "/PATCHSET_LEVEL",
@@ -37,10 +38,27 @@
       "side": 1,
       "message": "Hi Wouter, do you still want to land this?",
       "revId": "bf428d26cfe2d671c3f54b20d9f62f6d8301530e",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1da08dc0_9b3f8e32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-12T06:27:10Z",
+      "side": 1,
+      "message": "Also removing my vote due to CL age, please ping me directly if some further action is necessary here.",
+      "revId": "bf428d26cfe2d671c3f54b20d9f62f6d8301530e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "5d2d538e_f13f7397",
         "filename": "src/compiler/backend/ppc64/instruction-codes-ppc64.h",
@@ -60,10 +78,10 @@
         "endChar": 0
       },
       "revId": "bf428d26cfe2d671c3f54b20d9f62f6d8301530e",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "02881a00_c8e3f870",
         "filename": "src/compiler/backend/ppc64/instruction-codes-ppc64.h",
@@ -84,8 +102,7 @@
         "endChar": 0
       },
       "revId": "bf428d26cfe2d671c3f54b20d9f62f6d8301530e",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
