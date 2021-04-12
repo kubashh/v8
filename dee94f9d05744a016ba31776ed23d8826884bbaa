@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e019c39_71762a2c",
+        "filename": "src/codegen/external-reference-encoder.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-12T09:19:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebf2c8ea_f8ecfb55",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8ba68b7_49881b5d",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-04-12T07:50:14Z",
       "side": 1,
       "message": "This new form of Add doesn\u0027t seem very useful; I\u0027d suggest keeping the old form for \u0027real\u0027 extref table initialization, and for the once-per-process initialization, add a dedicated AddIsolateIndependent or so.",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82f51ed3_fc93d530",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-12T09:19:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8ba68b7_49881b5d",
       "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fffc942d_4ecc8b0e",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-12T09:19:58Z",
+      "side": 1,
+      "message": "kSizeIsolateIndependent is larger, it also contains e.g. accessors, builtins etc.",
+      "parentUuid": "f67e1f0b_37a2db7f",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00b31cac_b1f1755f",
@@ -82,6 +136,24 @@
       "writtenOn": "2021-04-12T07:50:14Z",
       "side": 1,
       "message": "The annotation is outdated.",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3044b418_27652095",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-12T09:19:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00b31cac_b1f1755f",
       "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -150,6 +222,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6587629c_bb0f5201",
+        "filename": "src/codegen/external-reference-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-12T09:19:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05047719_e3af44ea",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5111432_be8e3007",
@@ -167,6 +257,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc22ef33_30d54a19",
+        "filename": "src/codegen/external-reference-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-12T09:19:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5111432_be8e3007",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d25155d_2f6f3670",
@@ -180,6 +288,24 @@
       "writtenOn": "2021-04-12T07:50:14Z",
       "side": 1,
       "message": "I\u0027d tend towards not keeping this in the class, instead have it in an anonymous namespace in the .cc file. Wdyt?",
+      "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ed35387_ec033a21",
+        "filename": "src/codegen/external-reference-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1505282
+      },
+      "writtenOn": "2021-04-12T09:19:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d25155d_2f6f3670",
       "revId": "dee94f9d05744a016ba31776ed23d8826884bbaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
