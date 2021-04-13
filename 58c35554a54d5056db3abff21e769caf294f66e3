@@ -227,6 +227,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e4f429f0_0e6899de",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-04-13T12:58:53Z",
+      "side": 1,
+      "message": "Unfortunately this indeed isn\u0027t safe. I hacked on the code a bit in the other CL because the profiler started failing on me out of the blue when I changed what we dereferenced; and I didn\u0027t manage to get it fully working either but stopped when it stopped crashing in the tests that were blocking me. Last I checked the current IsNoFrameRegion at least didn\u0027t work for RegExp. For Sparkplug we\u0027ll need to make sure we filter out the sparkplug prologue builtin in IsNoFrameRegion.\n\nIs there a design doc explaining how we should be able to find a properly set up parent frame (set up enough for the context slot to contain valid data) given a current PC? I think we need a good discussion on that before we reland this code.\n\nNote that the code attempting to find the bytecode position in a JS frame is also unsafe, but since we don\u0027t dereference it won\u0027t crash (I presume we just emit the bytecode offset for post-processing). In the worst case we either get a sample that\u0027s not in any live function, or we get a sample in a wrong function. Here since we are dereferencing a supposedly live object we\u0027d need to know whether it\u0027s actually a valid pointer. We don\u0027t have a quick way to filter that.",
+      "parentUuid": "664ac75d_5785972d",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 63
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71acf347_2a063b23",
         "filename": "src/profiler/tick-sample.h",
         "patchSetId": 3
