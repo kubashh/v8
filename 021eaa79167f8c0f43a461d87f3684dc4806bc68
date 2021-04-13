@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac982ac2_b22767a9",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3177,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-13T06:49:13Z",
+      "side": 1,
+      "message": "Nit: UNIMPLEMENTED();",
+      "range": {
+        "startLine": 3177,
+        "startChar": 2,
+        "endLine": 3177,
+        "endChar": 13
+      },
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcf7d7b2_1778e9a3",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4019,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-13T06:49:13Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be UNIMPLEMENTED too?",
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94ed38d7_a6c46a41",
+        "filename": "src/compiler/backend/instruction-selector-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-13T06:49:13Z",
+      "side": 1,
+      "message": "return DefineSameAsInput(node, 0)\nfor clarity",
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be857931_d9b93042",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-13T06:49:13Z",
+      "side": 1,
+      "message": "Don\u0027t you want the stronger DCHECK(HasSameAsInputPolicy()) here?",
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6f0ae3_883a96cf",
+        "filename": "src/compiler/backend/register-allocator-verifier.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-13T06:49:13Z",
+      "side": 1,
+      "message": "I\u0027d use a local variable for this value here to make it more readable.",
+      "range": {
+        "startLine": 94,
+        "startChar": 17,
+        "endLine": 94,
+        "endChar": 45
+      },
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
