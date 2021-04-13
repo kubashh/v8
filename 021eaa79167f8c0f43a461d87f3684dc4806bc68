@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19fc57f8_28fb96cc",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3177,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-13T10:35:09Z",
+      "side": 1,
+      "message": "I think UNREACHABLE is correct here, because this is a function that cannot be called on arm, at least at the moment. And there is no concrete plan to do that.",
+      "parentUuid": "ac982ac2_b22767a9",
+      "range": {
+        "startLine": 3177,
+        "startChar": 2,
+        "endLine": 3177,
+        "endChar": 13
+      },
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcf7d7b2_1778e9a3",
@@ -37,6 +61,24 @@
       "writtenOn": "2021-04-13T06:49:13Z",
       "side": 1,
       "message": "Shouldn\u0027t this be UNIMPLEMENTED too?",
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e0a1282_7cd01165",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4019,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-13T10:35:09Z",
+      "side": 1,
+      "message": "No, on arm64 this function gets called. This code here existed originally in instruction-selector.cc for the arm64 implementation of the float conditional select. However, with the additional special implementation of select on x64 in this CL, this code had to be turned into platform-specific code. That\u0027s why there is no an implementation on arm64, which is the original code, and an implementation on x64, which gets introduced in this CL.",
+      "parentUuid": "dcf7d7b2_1778e9a3",
       "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9f6f631_aabafb79",
+        "filename": "src/compiler/backend/instruction-selector-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-13T10:35:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94ed38d7_a6c46a41",
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be857931_d9b93042",
@@ -75,6 +135,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06e8e830_6b2ed83b",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-13T10:35:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be857931_d9b93042",
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf6f0ae3_883a96cf",
@@ -88,6 +166,30 @@
       "writtenOn": "2021-04-13T06:49:13Z",
       "side": 1,
       "message": "I\u0027d use a local variable for this value here to make it more readable.",
+      "range": {
+        "startLine": 94,
+        "startChar": 17,
+        "endLine": 94,
+        "endChar": 45
+      },
+      "revId": "021eaa79167f8c0f43a461d87f3684dc4806bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6563f22c_106fe73d",
+        "filename": "src/compiler/backend/register-allocator-verifier.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-04-13T10:35:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf6f0ae3_883a96cf",
       "range": {
         "startLine": 94,
         "startChar": 17,
