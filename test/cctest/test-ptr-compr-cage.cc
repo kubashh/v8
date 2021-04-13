@@ -39,6 +39,26 @@ UNINITIALIZED_TEST(PtrComprCageAndIsolateRoot) {
   isolate2->Dispose();
 }
 
+UNINITIALIZED_TEST(PtrComprCageCodeRange) {
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
+
+  PtrComprCage* cage = i_isolate->GetPtrComprCage();
+  if (i_isolate->RequiresCodeRange()) {
+    CHECK(cage->code_range()->IsReserved());
+    CHECK_EQ(i_isolate->heap()->memory_allocator()->code_page_allocator(),
+             cage->code_range()->code_page_allocator());
+    CHECK(cage->reservation()->InVM(
+        cage->code_range()->code_page_allocator()->begin(),
+        cage->code_range()->code_page_allocator()->size()));
+  }
+
+  isolate->Dispose();
+}
+
 #ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 UNINITIALIZED_TEST(SharedPtrComprCage) {
   v8::Isolate::CreateParams create_params;
@@ -67,6 +87,27 @@ UNINITIALIZED_TEST(SharedPtrComprCage) {
                                     isolate1_object->Size()));
     CHECK(cage->reservation()->InVM(isolate2_object->ptr(),
                                     isolate2_object->Size()));
+  }
+
+  isolate1->Dispose();
+  isolate2->Dispose();
+}
+
+UNINITIALIZED_TEST(SharedPtrComprCageCodeRange) {
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+
+  v8::Isolate* isolate1 = v8::Isolate::New(create_params);
+  Isolate* i_isolate1 = reinterpret_cast<Isolate*>(isolate1);
+  v8::Isolate* isolate2 = v8::Isolate::New(create_params);
+  Isolate* i_isolate2 = reinterpret_cast<Isolate*>(isolate2);
+
+  if (i_isolate1->RequiresCodeRange() || i_isolate2->RequiresCodeRange()) {
+    PtrComprCage* cage = PtrComprCage::GetProcessWideCage();
+    CHECK_EQ(cage->code_range()->code_region(),
+             i_isolate1->heap()->code_region());
+    CHECK_EQ(cage->code_range()->code_region(),
+             i_isolate2->heap()->code_region());
   }
 
   isolate1->Dispose();

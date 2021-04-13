@@ -53,6 +53,10 @@ class V8_EXPORT_PRIVATE IsolateAllocator final {
   // compression cage reservation. Otherwise returns kNullAddress.
   Address GetPtrComprCageBaseAddress() const;
 
+  // Only used when V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE is defined.
+  PtrComprCage* isolate_cage();
+  const PtrComprCage* isolate_cage() const;
+
  private:
   void CommitPagesForIsolate(Address heap_reservation_address);
 
