@@ -106,6 +106,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "58a056ac_10cdb82d",
+        "filename": "src/heap/code-range.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-13T20:44:16Z",
+      "side": 1,
+      "message": "Interesting, you mean make a generic MemoryCage class that can be used for both scenarios? Worth a try to refactor here, I\u0027ll see how it turns out. The main differences are how hard each cage tries to get the reservation (the pointer cage tries harder) and the permission setting.",
+      "parentUuid": "b89ef016_885ff75f",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 41,
+        "endChar": 15
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "df66e70b_53adacc1",
         "filename": "src/heap/memory-allocator.h",
         "patchSetId": 8
@@ -123,6 +147,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2423ade0_7ee1fa12",
+        "filename": "src/heap/memory-allocator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-13T20:44:16Z",
+      "side": 1,
+      "message": "I did that in a previous iteration of the CL and also found it to be awkward. There are 3 ownership scenarios:\n\n1. Pointer compression w/ Isolate cage. The Isolate owns the cage and the CodeRange.\n2. Pointer compression w/ shared cage. The Isolate doesn\u0027t own either the cage and the CodeRange, both of which are shared.\n3. Full pointer mode. The Isolate doesn\u0027t have a cage, and the Isolate\u0027s MemoryAllocator owns the CodeRange.\n\n(2) means the Isolate doesn\u0027t always own a CodeRange, so to implement this suggestion, the sensible thing is to mirror PtrComprCage with a GetProcessWideCodeRange in the case of sharing a cage.\n\nBut I ended up not going with that approach and made PtrComprCage own the CodeRange for two reasons.\n\nA. The CodeRange has to be contained in the ptr cage if one exists. (This of course would change for the long term fix.)\nB. If we end up exposing PtrComprCage to API for more embedder configurability, it\u0027d be easier for it own a CodeRange.\n\nGiven this reasoning, does that change your opinion at all?\n\nTo be clear I don\u0027t have a very strong an opinion here, especially since if the long term fix is ready before long, none of this matters.",
+      "parentUuid": "df66e70b_53adacc1",
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c1ec809_1d9dd508",
         "filename": "src/profiler/tick-sample.cc",
         "patchSetId": 8
@@ -134,6 +176,30 @@
       "writtenOn": "2021-04-13T20:13:42Z",
       "side": 1,
       "message": "Maybe it makes sense to add a\n  const AddressRegion\u0026 Heap::code_region()\nto make this kind of calls less wordy.",
+      "range": {
+        "startLine": 235,
+        "startChar": 6,
+        "endLine": 235,
+        "endChar": 70
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "996f3bdf_22b5f38a",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-13T20:44:16Z",
+      "side": 1,
+      "message": "Heap::code_region actually exists but delegates to the 3p heap when V8_ENABLE_THIRD_PARTY_HEAP. This code, I guess, assumes that 3p heap isn\u0027t enabled. I\u0027m not exactly sure when I should be checking for 3p heap being enabled.",
+      "parentUuid": "9c1ec809_1d9dd508",
       "range": {
         "startLine": 235,
         "startChar": 6,
