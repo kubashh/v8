@@ -7093,8 +7093,12 @@ UNINITIALIZED_TEST(HeapLimit) {
 TEST(NoCodeRangeInJitlessMode) {
   if (!FLAG_jitless) return;
   CcTest::InitializeVM();
-  CHECK(
-      CcTest::i_isolate()->heap()->memory_allocator()->code_range().is_empty());
+  CHECK(CcTest::i_isolate()
+            ->heap()
+            ->memory_allocator()
+            ->code_range()
+            ->code_region()
+            .is_empty());
 }
 
 TEST(Regress978156) {

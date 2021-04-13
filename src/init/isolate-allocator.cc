@@ -115,6 +115,11 @@ void IsolateAllocator::CommitPagesForIsolate(Address heap_reservation_address) {
   }
   isolate_memory_ = reinterpret_cast<void*>(isolate_address);
 }
+
+PtrComprCage* IsolateAllocator::isolate_cage() { return &isolate_cage_; }
+const PtrComprCage* IsolateAllocator::isolate_cage() const {
+  return &isolate_cage_;
+}
 #endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
 
 }  // namespace internal
