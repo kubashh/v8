@@ -130,6 +130,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "950a26b5_6b682cf1",
+        "filename": "src/heap/code-range.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T22:00:30Z",
+      "side": 1,
+      "message": "Yes, kind of. Although, I didn\u0027t think this idea through deeply.\nI guess, when the code range is needed we are trying to allocate it with the same amount of hardness as we do for the PtrComprCage.\nAt the same time, when pointer compression is enabled - allocating a code range inside a fresh PtrComprCage should succeed from the first try anyway (so, hardness shouldn\u0027t matter here).\n\nAh! I didn\u0027t notice that we are setting the RW permissions for the first page.",
+      "parentUuid": "58a056ac_10cdb82d",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 41,
+        "endChar": 15
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "df66e70b_53adacc1",
         "filename": "src/heap/memory-allocator.h",
         "patchSetId": 8
@@ -159,6 +183,24 @@
       "side": 1,
       "message": "I did that in a previous iteration of the CL and also found it to be awkward. There are 3 ownership scenarios:\n\n1. Pointer compression w/ Isolate cage. The Isolate owns the cage and the CodeRange.\n2. Pointer compression w/ shared cage. The Isolate doesn\u0027t own either the cage and the CodeRange, both of which are shared.\n3. Full pointer mode. The Isolate doesn\u0027t have a cage, and the Isolate\u0027s MemoryAllocator owns the CodeRange.\n\n(2) means the Isolate doesn\u0027t always own a CodeRange, so to implement this suggestion, the sensible thing is to mirror PtrComprCage with a GetProcessWideCodeRange in the case of sharing a cage.\n\nBut I ended up not going with that approach and made PtrComprCage own the CodeRange for two reasons.\n\nA. The CodeRange has to be contained in the ptr cage if one exists. (This of course would change for the long term fix.)\nB. If we end up exposing PtrComprCage to API for more embedder configurability, it\u0027d be easier for it own a CodeRange.\n\nGiven this reasoning, does that change your opinion at all?\n\nTo be clear I don\u0027t have a very strong an opinion here, especially since if the long term fix is ready before long, none of this matters.",
       "parentUuid": "df66e70b_53adacc1",
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "910fc391_dff07479",
+        "filename": "src/heap/memory-allocator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T22:00:30Z",
+      "side": 1,
+      "message": "I also don\u0027t have a strong opinion here. Given that the majority of changes are on the heap side, I\u0027d defer the final decision to Ulan.",
+      "parentUuid": "2423ade0_7ee1fa12",
       "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
