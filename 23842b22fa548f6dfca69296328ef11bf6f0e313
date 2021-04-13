@@ -50,6 +50,69 @@
       "message": "Hi Toon, friendly ping re: Ulan\u0027s comment. Thanks!",
       "revId": "23842b22fa548f6dfca69296328ef11bf6f0e313",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c20f9ba8_12a5ace2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-13T07:52:39Z",
+      "side": 1,
+      "message": "some random comments, sorry :P",
+      "revId": "23842b22fa548f6dfca69296328ef11bf6f0e313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d17a4b0d_9acd09b9",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-13T07:52:39Z",
+      "side": 1,
+      "message": "drive-by-comment: Any particular reason ContextFilter isn\u0027t inlined in the Profile directly? This would prevent a few indirections here and below.",
+      "range": {
+        "startLine": 967,
+        "startChar": 8,
+        "endLine": 968,
+        "endChar": 65
+      },
+      "revId": "23842b22fa548f6dfca69296328ef11bf6f0e313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f473a3f_a4621785",
+        "filename": "src/profiler/profile-generator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-13T07:52:39Z",
+      "side": 1,
+      "message": "drive-by-comment: While this isn\u0027t particularly expensive, I would store the tagged address in native_context_address_ to prevent any additional operations in Accept.",
+      "range": {
+        "startLine": 250,
+        "startChar": 11,
+        "endLine": 251,
+        "endChar": 34
+      },
+      "revId": "23842b22fa548f6dfca69296328ef11bf6f0e313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
