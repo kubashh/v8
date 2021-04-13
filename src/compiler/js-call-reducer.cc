@@ -5393,6 +5393,14 @@ Reduction JSCallReducer::ReduceArrayPrototypePop(Node* node) {
       length = graph()->NewNode(simplified()->NumberSubtract(), length,
                                 jsgraph()->OneConstant());
 
+      // This extra check exists solely to break a widely-used exploitation
+      // technique for typer vulnerabilities.
+      length = efalse = graph()->NewNode(
+          simplified()->CheckBounds(p.feedback(),
+                                    CheckBoundsFlag::kAbortOnOutOfBounds),
+          length, jsgraph()->Constant(FixedArray::kMaxLength), efalse,
+          if_false);
+
       // Store the new {length} to the {receiver}.
       efalse = graph()->NewNode(
           simplified()->StoreField(AccessBuilder::ForJSArrayLength(kind)),
@@ -5585,6 +5593,14 @@ Reduction JSCallReducer::ReduceArrayPrototypeShift(Node* node) {
         // Compute the new {length}.
         length = graph()->NewNode(simplified()->NumberSubtract(), length,
                                   jsgraph()->OneConstant());
+
+        // This extra check exists solely to break a widely-used exploitation
+        // technique for typer vulnerabilities.
+        length = etrue1 = graph()->NewNode(
+            simplified()->CheckBounds(p.feedback(),
+                                      CheckBoundsFlag::kAbortOnOutOfBounds),
+            length, jsgraph()->Constant(FixedArray::kMaxLength), etrue1,
+            if_true1);
 
         // Store the new {length} to the {receiver}.
         etrue1 = graph()->NewNode(
