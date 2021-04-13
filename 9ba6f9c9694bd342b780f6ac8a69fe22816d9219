@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1daed2b_9296ba23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T20:13:42Z",
+      "side": 1,
+      "message": "looks good to me, just nits and suggestions to discuss with heap OWNERs.",
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e9bfa66_bb79af2f",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 7143,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T20:13:42Z",
+      "side": 1,
+      "message": "v8:11460",
+      "range": {
+        "startLine": 7143,
+        "startChar": 10,
+        "endLine": 7143,
+        "endChar": 15
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b241ece7_a98815ae",
+        "filename": "src/common/globals.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T20:13:42Z",
+      "side": 1,
+      "message": "Not sure, why should the minimum code range size be affected at all.",
+      "range": {
+        "startLine": 241,
+        "startChar": 17,
+        "endLine": 241,
+        "endChar": 38
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60ee8ab6_dbafe821",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4959,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T20:13:42Z",
+      "side": 1,
+      "message": "I think isolate-inl.h is a better place for these two functions.",
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b89ef016_885ff75f",
+        "filename": "src/heap/code-range.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T20:13:42Z",
+      "side": 1,
+      "message": "Hm... It looks very much like PtrComprCage. The differences are mostly the way we initalize and use this second cage and |embedded_blob_code_copy_| which will go away soon.\nI wonder if it makes sense to just have two respectively initialized cages instead?",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 41,
+        "endChar": 15
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df66e70b_53adacc1",
+        "filename": "src/heap/memory-allocator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T20:13:42Z",
+      "side": 1,
+      "message": "Idea: given that CodeRange is a separate self-containing thing anyway, it might be cleaner/simpler to always create/initialize it somewhere in Isolate and just pass the code_page_allocator here. The MemoryAllocator doesn\u0027t need the code_range_, just a code_page_allocator_.",
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c1ec809_1d9dd508",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T20:13:42Z",
+      "side": 1,
+      "message": "Maybe it makes sense to add a\n  const AddressRegion\u0026 Heap::code_region()\nto make this kind of calls less wordy.",
+      "range": {
+        "startLine": 235,
+        "startChar": 6,
+        "endLine": 235,
+        "endChar": 70
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure how we should arrive at the right size for the shared CodeRange. Any ideas?\n\nAnd perhaps it\u0027s mostly a moot point if the long term fix of allocating code close to the binary outside of the cage is going to be ready later in the year.",
       "revId": "82a76294310ea0210e2472fd7230f0ab930b6aac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d7e68c6_7b78f1cf",
+        "filename": "src/common/globals.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-13T20:13:42Z",
+      "side": 1,
+      "message": "Power of 2 feels better )) \nMaybe we can start with 1.",
+      "parentUuid": "6d637258_f26c9263",
+      "revId": "82a76294310ea0210e2472fd7230f0ab930b6aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
