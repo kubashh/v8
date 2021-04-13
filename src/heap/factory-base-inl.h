@@ -6,9 +6,10 @@
 #define V8_HEAP_FACTORY_BASE_INL_H_
 
 #include "src/heap/factory-base.h"
-
 #include "src/numbers/conversions.h"
 #include "src/objects/heap-number.h"
+#include "src/objects/map.h"
+#include "src/objects/slots-inl.h"
 #include "src/objects/smi.h"
 #include "src/roots/roots.h"
 
@@ -91,6 +92,19 @@ template <typename Impl>
 template <AllocationType allocation>
 Handle<HeapNumber> FactoryBase<Impl>::NewHeapNumberWithHoleNaN() {
   return NewHeapNumberFromBits<allocation>(kHoleNanInt64);
+}
+
+template <typename Impl>
+Struct FactoryBase<Impl>::NewStructInternal(InstanceType type,
+                                            AllocationType allocation) {
+  ReadOnlyRoots roots = read_only_roots();
+  Map map = Map::GetInstanceTypeMap(roots, type);
+  int size = map.instance_size();
+  HeapObject result = AllocateRawWithImmortalMap(size, allocation, map);
+  Struct str = Struct::cast(result);
+  Object value = roots.undefined_value();
+  MemsetTagged(str.RawField(Struct::kStartOfStrongFieldsOffset), value, size);
+  return str;
 }
 
 }  // namespace internal

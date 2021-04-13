@@ -57,17 +57,6 @@ Handle<Struct> FactoryBase<Impl>::NewStruct(InstanceType type,
 }
 
 template <typename Impl>
-Struct FactoryBase<Impl>::NewStructInternal(InstanceType type,
-                                            AllocationType allocation) {
-  Map map = Map::GetInstanceTypeMap(read_only_roots(), type);
-  int size = map.instance_size();
-  HeapObject result = AllocateRawWithImmortalMap(size, allocation, map);
-  Struct str = Struct::cast(result);
-  str.InitializeBody(size);
-  return str;
-}
-
-template <typename Impl>
 Handle<AccessorPair> FactoryBase<Impl>::NewAccessorPair() {
   Handle<AccessorPair> accessors = Handle<AccessorPair>::cast(
       NewStruct(ACCESSOR_PAIR_TYPE, AllocationType::kOld));
