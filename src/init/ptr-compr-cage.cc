@@ -15,6 +15,10 @@ PtrComprCage::PtrComprCage() = default;
 void PtrComprCage::InitializeOncePerProcess() {
 #ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
   GetProcessWideCage()->InitReservationOrDie();
+  if (RequiresProcessWideCodeRange()) {
+    // TODO(11460): Make the size configurable.
+    GetProcessWideCage()->InitCodeRangeOrDie(kMaximalCodeRangeSize);
+  }
 #endif
 }
 
@@ -110,8 +114,22 @@ void PtrComprCage::InitReservationOrDie() {
   }
 }
 
+bool PtrComprCage::InitCodeRange(size_t requested_code_range_size) {
+  CHECK(!V8_ENABLE_THIRD_PARTY_HEAP_BOOL);
+  DCHECK_NOT_NULL(page_allocator());
+  return code_range_.InitReservation(page_allocator(),
+                                     requested_code_range_size);
+}
+
+void PtrComprCage::InitCodeRangeOrDie(size_t requested_code_range_size) {
+  CHECK(!V8_ENABLE_THIRD_PARTY_HEAP_BOOL);
+  DCHECK_NOT_NULL(page_allocator());
+  code_range_.InitReservationOrDie(page_allocator(), requested_code_range_size);
+}
+
 void PtrComprCage::Free() {
   if (IsReserved()) {
+    code_range_.Free();
     base_ = kNullAddress;
     page_allocator_.reset();
     reservation_.Free();
@@ -127,6 +145,12 @@ DEFINE_LAZY_LEAKY_OBJECT_GETTER(PtrComprCage, GetSharedProcessWideCage)
 // static
 PtrComprCage* PtrComprCage::GetProcessWideCage() {
   return GetSharedProcessWideCage();
+}
+
+// static
+bool PtrComprCage::RequiresProcessWideCodeRange() {
+  return !V8_ENABLE_THIRD_PARTY_HEAP_BOOL && kPlatformRequiresCodeRange &&
+         !FLAG_jitless;
 }
 
 #endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
