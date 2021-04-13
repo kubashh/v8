@@ -154,8 +154,9 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
       DCHECK(IsAligned(code->address(), kCodeAlignment));
       DCHECK_IMPLIES(
           !V8_ENABLE_THIRD_PARTY_HEAP_BOOL &&
-              !heap->memory_allocator()->code_range().is_empty(),
-          heap->memory_allocator()->code_range().contains(code->address()));
+              !heap->memory_allocator()->code_range()->code_region().is_empty(),
+          heap->memory_allocator()->code_range()->code_region().contains(
+              code->address()));
     }
 
     constexpr bool kIsNotOffHeapTrampoline = false;
@@ -2082,8 +2083,9 @@ Handle<Code> Factory::CopyCode(Handle<Code> code) {
   DCHECK(IsAligned(new_code->address(), kCodeAlignment));
   DCHECK_IMPLIES(
       !V8_ENABLE_THIRD_PARTY_HEAP_BOOL &&
-      !heap->memory_allocator()->code_range().is_empty(),
-      heap->memory_allocator()->code_range().contains(new_code->address()));
+          !heap->memory_allocator()->code_range()->code_region().is_empty(),
+      heap->memory_allocator()->code_range()->code_region().contains(
+          new_code->address()));
   return new_code;
 }
 

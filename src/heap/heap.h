@@ -812,12 +812,6 @@ class Heap {
   // Create ObjectStats if live_object_stats_ or dead_object_stats_ are nullptr.
   void CreateObjectStats();
 
-  // If the code range exists, allocates executable pages in the code range and
-  // copies the embedded builtins code blob there. Returns address of the copy.
-  // The builtins code region will be freed with the code range at tear down.
-  uint8_t* RemapEmbeddedBuiltinsIntoCodeRange(const uint8_t* embedded_blob_code,
-                                              size_t embedded_blob_code_size);
-
   // Sets the TearDown state, so no new GC tasks get posted.
   void StartTearDown();
 
@@ -870,7 +864,7 @@ class Heap {
     return array_buffer_sweeper_.get();
   }
 
-  const base::AddressRegion& code_range();
+  const base::AddressRegion& code_region();
 
   // ===========================================================================
   // Root set access. ==========================================================

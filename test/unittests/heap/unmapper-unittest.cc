@@ -244,7 +244,7 @@ class SequentialUnmapperTest : public TestWithIsolate {
     // Reinitialize the process-wide pointer cage so it can pick up the
     // TrackingPageAllocator.
     PtrComprCage::GetProcessWideCage()->Free();
-    PtrComprCage::GetProcessWideCage()->InitReservationOrDie();
+    PtrComprCage::InitializeOncePerProcess();
 #endif
     TestWithIsolate::SetUpTestCase();
   }
