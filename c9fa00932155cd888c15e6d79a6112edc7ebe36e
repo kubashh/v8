@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dca890a5_098aabfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2021-04-14T22:47:34Z",
+      "side": 1,
+      "message": "Yep, done. Sorry, I must have picked the wrong email when searching for selections when I opened the new CL. 👍",
+      "parentUuid": "858f1274_c4212cb7",
+      "revId": "c9fa00932155cd888c15e6d79a6112edc7ebe36e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12d3db90_cf3fe6d1",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-04-14T07:55:56Z",
       "side": 1,
       "message": "Could you add a test for this? (or did I miss that?)",
+      "range": {
+        "startLine": 549,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 3
+      },
+      "revId": "c9fa00932155cd888c15e6d79a6112edc7ebe36e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42fad04c_0d76ad8d",
+        "filename": "src/objects/contexts.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2021-04-14T22:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12d3db90_cf3fe6d1",
       "range": {
         "startLine": 549,
         "startChar": 0,
