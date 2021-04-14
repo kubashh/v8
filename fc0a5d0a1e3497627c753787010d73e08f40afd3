@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6799c13c_e6e667a9",
+        "filename": "src/heap/factory-base-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-14T14:06:48Z",
+      "side": 1,
+      "message": "We can postpone a deref by doing this, plus it encourages a bit the pattern of using raw pointers to initialize objects (which I prefer for the factory).\n\nThis should not be used publicly of course.",
+      "parentUuid": "aaf1e146_166d77a9",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 10
+      },
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9bbe7f1_1c3e68ac",
         "filename": "src/heap/factory-base-inl.h",
         "patchSetId": 4
@@ -71,6 +95,30 @@
       "writtenOn": "2021-04-14T12:39:49Z",
       "side": 1,
       "message": "Do we really need this function as a separate one? Can we inline it?",
+      "range": {
+        "startLine": 108,
+        "startChar": 26,
+        "endLine": 108,
+        "endChar": 43
+      },
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5894eeb4_a70c7ace",
+        "filename": "src/heap/factory-base-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-14T14:06:48Z",
+      "side": 1,
+      "message": "We still have thew NewStruct(...) public helper for Structs that are not initialised in the factory.",
+      "parentUuid": "a9bbe7f1_1c3e68ac",
       "range": {
         "startLine": 108,
         "startChar": 26,
@@ -100,6 +148,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "79c86e2a_cea79041",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-14T14:06:48Z",
+      "side": 1,
+      "message": "I\u0027m kind of assuming that we know what we\u0027re doing inside factory (I would not encourage this pattern too much outside of it though)",
+      "parentUuid": "a753d252_62909d9c",
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fad71f55_2935d558",
         "filename": "src/heap/factory-base.cc",
         "patchSetId": 4
@@ -111,6 +177,24 @@
       "writtenOn": "2021-04-14T12:39:49Z",
       "side": 1,
       "message": "For the \"raw\" optimization we are missing no_gc scope, but probably it\u0027s an overkill here anyway.",
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ffccf64_4627c1e9",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-14T14:06:48Z",
+      "side": 1,
+      "message": "Adding it, to stay consistent!",
+      "parentUuid": "fad71f55_2935d558",
       "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
