@@ -4067,6 +4067,7 @@ class LiftoffCompiler {
     __ emit_jump(&skip_handler);
 
     // Handler: merge into the catch state, and jump to the catch body.
+    DEBUG_CODE_COMMENT("-- landing pad --");
     __ bind(handler.get());
     __ ExceptionHandler();
     __ PushException();
