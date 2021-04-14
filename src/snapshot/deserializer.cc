@@ -688,6 +688,7 @@ void Deserializer::RelocInfoVisitor::VisitOffHeapTarget(Code host,
 
   int builtin_index = source().GetInt();
   DCHECK(Builtins::IsBuiltinId(builtin_index));
+  // printf("OffHeapTarget builtin: %s\n", Builtins::name(builtin_index));
 
   CHECK_NOT_NULL(isolate()->embedded_blob_code());
   EmbeddedData d = EmbeddedData::FromBlob(isolate());

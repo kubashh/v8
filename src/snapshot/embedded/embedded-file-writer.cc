@@ -157,8 +157,9 @@ void EmbeddedFileWriter::WriteCodeSection(PlatformEmbeddedFileWriterBase* w,
   w->DeclareLabel(EmbeddedBlobCodeDataSymbol().c_str());
 
   STATIC_ASSERT(Builtins::kAllBuiltinsAreIsolateIndependent);
-  for (int i = 0; i < i::Builtins::builtin_count; i++) {
-    WriteBuiltin(w, blob, i);
+  for (int i = 0; i < i::EmbeddedData::kBuiltinCount; i++) {
+    const int builtin_index = MapEmbeddedIndexToBuiltinIndex(i);
+    WriteBuiltin(w, blob, builtin_index);
   }
   w->Newline();
 }
