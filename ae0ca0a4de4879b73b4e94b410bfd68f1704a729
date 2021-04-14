@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eaaad09_21003a78",
+        "filename": "test/mjsunit/compiler/fast-api-interface-types.js",
+        "patchSetId": 29
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-14T15:46:13Z",
+      "side": 1,
+      "message": "It can\u0027t throw an exception and return false at the same time.",
+      "revId": "ae0ca0a4de4879b73b4e94b410bfd68f1704a729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d973dcf5_a5fda046",
+        "filename": "test/mjsunit/compiler/fast-api-interface-types.js",
+        "patchSetId": 29
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-14T15:46:13Z",
+      "side": 1,
+      "message": "assertThrows should take a function as argument (or a string but I\u0027d avoid that usage).",
+      "revId": "ae0ca0a4de4879b73b4e94b410bfd68f1704a729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
