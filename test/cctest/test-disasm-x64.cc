@@ -559,6 +559,8 @@ TEST(DisasmX64) {
       __ cmpltps(xmm5, Operand(rbx, rcx, times_4, 10000));
       __ cmpleps(xmm5, xmm1);
       __ cmpleps(xmm5, Operand(rbx, rcx, times_4, 10000));
+      __ cmpunordps(xmm5, xmm1);
+      __ cmpunordps(xmm5, Operand(rbx, rcx, times_4, 10000));
       __ cmpneqps(xmm5, xmm1);
       __ cmpneqps(xmm5, Operand(rbx, rcx, times_4, 10000));
       __ cmpnltps(xmm5, xmm1);
@@ -573,6 +575,8 @@ TEST(DisasmX64) {
       __ cmpltpd(xmm5, Operand(rbx, rcx, times_4, 10000));
       __ cmplepd(xmm5, xmm1);
       __ cmplepd(xmm5, Operand(rbx, rcx, times_4, 10000));
+      __ cmpunordpd(xmm5, xmm1);
+      __ cmpunordpd(xmm5, Operand(rbx, rcx, times_4, 10000));
       __ cmpneqpd(xmm5, xmm1);
       __ cmpneqpd(xmm5, Operand(rbx, rcx, times_4, 10000));
       __ cmpnltpd(xmm5, xmm1);
