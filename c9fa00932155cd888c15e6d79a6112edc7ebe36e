@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "858f1274_c4212cb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-14T10:25:01Z",
+      "side": 1,
+      "message": "Oh, and could you please remove my personal email address from the reviewer list?",
+      "revId": "c9fa00932155cd888c15e6d79a6112edc7ebe36e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12d3db90_cf3fe6d1",
