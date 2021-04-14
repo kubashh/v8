@@ -158,7 +158,8 @@ Address Code::OffHeapInstructionStart() const {
   // because if the short builtin calls wasn't actually enabled because of not
   // enough memory, the FromBlob(isolate) would still be the correct one to use.
   EmbeddedData d =
-      FLAG_short_builtin_calls
+      (FLAG_short_builtin_calls &&
+       builtin_index() < Builtins::kFirstBytecodeHandler)
           ? EmbeddedData::FromBlob(GetIsolateFromWritableObject(*this))
           : EmbeddedData::FromBlob();
   return d.InstructionStartOfBuiltin(builtin_index());
@@ -177,7 +178,8 @@ Address Code::OffHeapInstructionEnd() const {
   // because if the short builtin calls wasn't actually enabled because of not
   // enough memory, the FromBlob(isolate) would still be the correct one to use.
   EmbeddedData d =
-      FLAG_short_builtin_calls
+      (FLAG_short_builtin_calls &&
+       builtin_index() < Builtins::kFirstBytecodeHandler)
           ? EmbeddedData::FromBlob(GetIsolateFromWritableObject(*this))
           : EmbeddedData::FromBlob();
   return d.InstructionStartOfBuiltin(builtin_index()) +

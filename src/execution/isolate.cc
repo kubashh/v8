@@ -3416,6 +3416,10 @@ void Isolate::MaybeRemapEmbeddedBuiltinsIntoCodeRange() {
   CHECK_NOT_NULL(embedded_blob_code_);
   CHECK_NE(embedded_blob_code_size_, 0);
 
+  EmbeddedData d = EmbeddedData::FromBlob();
+  embedded_blob_code_size_ =
+      static_cast<uint32_t>(d.InstructionStartOfBytecodeHandlers() -
+                            reinterpret_cast<Address>(embedded_blob_code_));
   embedded_blob_code_ = heap_.RemapEmbeddedBuiltinsIntoCodeRange(
       embedded_blob_code_, embedded_blob_code_size_);
   CHECK_NOT_NULL(embedded_blob_code_);
