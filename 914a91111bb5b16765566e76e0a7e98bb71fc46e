@@ -39,6 +39,30 @@
       },
       "revId": "914a91111bb5b16765566e76e0a7e98bb71fc46e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2403171a_bb571ef8",
+        "filename": "test/cctest/test-disasm-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-04-14T23:04:30Z",
+      "side": 1,
+      "message": "Good catch, added the AVX tests.",
+      "parentUuid": "71e5f618_70363596",
+      "range": {
+        "startLine": 562,
+        "startChar": 0,
+        "endLine": 564,
+        "endChar": 0
+      },
+      "revId": "914a91111bb5b16765566e76e0a7e98bb71fc46e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
