@@ -288,13 +288,21 @@ bool Builtins::IsIsolateIndependentBuiltin(const Code code) {
 // static
 void Builtins::InitializeBuiltinEntryTable(Isolate* isolate) {
   EmbeddedData d = EmbeddedData::FromBlob(isolate);
+  EmbeddedData d_off_heap = EmbeddedData::FromBlob();
   Address* builtin_entry_table = isolate->builtin_entry_table();
-  for (int i = 0; i < builtin_count; i++) {
+  for (int i = 0; i < Builtins::kFirstBytecodeHandler; i++) {
     // TODO(jgruber,chromium:1020986): Remove the CHECK once the linked issue is
     // resolved.
     CHECK(Builtins::IsBuiltinId(isolate->heap()->builtin(i).builtin_index()));
     DCHECK(isolate->heap()->builtin(i).is_off_heap_trampoline());
     builtin_entry_table[i] = d.InstructionStartOfBuiltin(i);
+  }
+  for (int i = Builtins::kFirstBytecodeHandler; i < builtin_count; i++) {
+    // TODO(jgruber,chromium:1020986): Remove the CHECK once the linked issue is
+    // resolved.
+    CHECK(Builtins::IsBuiltinId(isolate->heap()->builtin(i).builtin_index()));
+    DCHECK(isolate->heap()->builtin(i).is_off_heap_trampoline());
+    builtin_entry_table[i] = d_off_heap.InstructionStartOfBuiltin(i);
   }
 }
 
