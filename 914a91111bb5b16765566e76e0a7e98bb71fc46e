@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea652a6a_3e932958",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-04-14T20:44:23Z",
+      "side": 1,
+      "message": "Another nice one.",
+      "revId": "914a91111bb5b16765566e76e0a7e98bb71fc46e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71e5f618_70363596",
+        "filename": "test/cctest/test-disasm-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2021-04-14T20:44:23Z",
+      "side": 1,
+      "message": "Are there AVX tests already or should we add them?",
+      "range": {
+        "startLine": 562,
+        "startChar": 0,
+        "endLine": 564,
+        "endChar": 0
+      },
+      "revId": "914a91111bb5b16765566e76e0a7e98bb71fc46e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
