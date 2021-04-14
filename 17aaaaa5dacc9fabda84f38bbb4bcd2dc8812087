@@ -46,6 +46,30 @@
       },
       "revId": "17aaaaa5dacc9fabda84f38bbb4bcd2dc8812087",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5cafcf8_503ca602",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-14T15:05:55Z",
+      "side": 1,
+      "message": "Btw: Since we are in V8, I\u0027d use a prefix that differentiates infra work, e.g.:\n[infra]\nor\n[MB]\n\nWhen doing changes in the build repo (which shares, e.g. V8, Chromium and other projects), the prefix [V8] makes sense.",
+      "parentUuid": "ba49dc87_b6cfbe7e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 63
+      },
+      "revId": "17aaaaa5dacc9fabda84f38bbb4bcd2dc8812087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
