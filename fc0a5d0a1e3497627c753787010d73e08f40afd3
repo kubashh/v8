@@ -33,6 +33,86 @@
       "message": "PTAL",
       "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaf1e146_166d77a9",
+        "filename": "src/heap/factory-base-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-14T12:39:49Z",
+      "side": 1,
+      "message": "I think it\u0027s safer to return Handle\u003cStructType\u003e - we\u0027ll have to create the handle anyway.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 10
+      },
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9bbe7f1_1c3e68ac",
+        "filename": "src/heap/factory-base-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-14T12:39:49Z",
+      "side": 1,
+      "message": "Do we really need this function as a separate one? Can we inline it?",
+      "range": {
+        "startLine": 108,
+        "startChar": 26,
+        "endLine": 108,
+        "endChar": 43
+      },
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a753d252_62909d9c",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-14T12:39:49Z",
+      "side": 1,
+      "message": "I think it\u0027s safer to always return a respective Handle\u003cStructType\u003e and do the raw* optimization where necessary?",
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fad71f55_2935d558",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-14T12:39:49Z",
+      "side": 1,
+      "message": "For the \"raw\" optimization we are missing no_gc scope, but probably it\u0027s an overkill here anyway.",
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
