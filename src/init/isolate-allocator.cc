@@ -69,8 +69,9 @@ inline size_t GetIsolateRootBiasPageSize(
 }  // namespace
 
 void IsolateAllocator::CommitPagesForIsolate(Address heap_reservation_address) {
+  v8::PageAllocator* platform_page_allocator = GetPlatformPageAllocator();
   const size_t kIsolateRootBiasPageSize =
-      GetIsolateRootBiasPageSize(page_allocator_);
+      GetIsolateRootBiasPageSize(platform_page_allocator);
 
   Address isolate_root = heap_reservation_address + kIsolateRootBiasPageSize;
   CHECK(IsAligned(isolate_root, kPtrComprCageBaseAlignment));
@@ -96,7 +97,7 @@ void IsolateAllocator::CommitPagesForIsolate(Address heap_reservation_address) {
 
   // Commit pages where the Isolate will be stored.
   {
-    size_t commit_page_size = page_allocator_->CommitPageSize();
+    size_t commit_page_size = platform_page_allocator->CommitPageSize();
     Address committed_region_address =
         RoundDown(isolate_address, commit_page_size);
     size_t committed_region_size =
