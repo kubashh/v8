@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c95325_52dd0721",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-14T15:30:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9837a07_d914f9fa",
+      "revId": "1d018a96aef4a9a651ef66fdfbd7557c86ef93e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b949eba_88158c90",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a4eaac0_b277f391",
+        "filename": "src/codegen/interface-descriptors-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-14T15:30:33Z",
+      "side": 1,
+      "message": "No longer relevant",
+      "parentUuid": "5b949eba_88158c90",
+      "range": {
+        "startLine": 151,
+        "startChar": 9,
+        "endLine": 151,
+        "endChar": 12
+      },
+      "revId": "1d018a96aef4a9a651ef66fdfbd7557c86ef93e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c4929f1_68377198",
@@ -54,6 +96,30 @@
       "writtenOn": "2021-04-08T14:32:56Z",
       "side": 1,
       "message": "What does it mean?",
+      "range": {
+        "startLine": 430,
+        "startChar": 26,
+        "endLine": 430,
+        "endChar": 30
+      },
+      "revId": "1d018a96aef4a9a651ef66fdfbd7557c86ef93e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eab6be3_e9063246",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-14T15:30:33Z",
+      "side": 1,
+      "message": "I\u0027ve added some heavy commenting.",
+      "parentUuid": "0c4929f1_68377198",
       "range": {
         "startLine": 430,
         "startChar": 26,
