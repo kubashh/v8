@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74f4153b_8ad8d9d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-14T18:25:43Z",
+      "side": 1,
+      "message": "Could you please check if this CL fixes the s390 issue?",
+      "revId": "4b7d02b238c832cc91971b99bef7a5d4045f9a2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
