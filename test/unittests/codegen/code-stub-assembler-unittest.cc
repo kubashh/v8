@@ -5,6 +5,7 @@
 #include "test/unittests/codegen/code-stub-assembler-unittest.h"
 
 #include "src/codegen/code-factory.h"
+#include "src/codegen/interface-descriptors-inl.h"
 #include "src/codegen/interface-descriptors.h"
 #include "src/compiler/node.h"
 #include "src/execution/isolate.h"
