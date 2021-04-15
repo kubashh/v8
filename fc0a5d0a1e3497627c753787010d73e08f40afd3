@@ -82,6 +82,47 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e57219c9_366b7ae2",
+        "filename": "src/heap/factory-base-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:07:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6799c13c_e6e667a9",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 10
+      },
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16d27991_8dd2a6a7",
+        "filename": "src/heap/factory-base-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:07:39Z",
+      "side": 1,
+      "message": "As discussed off-line it would be nice to deduce the Map from the StructType and remove the type parameter.",
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9bbe7f1_1c3e68ac",
@@ -129,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45b6f37c_fb53ca74",
+        "filename": "src/heap/factory-base-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:07:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5894eeb4_a70c7ace",
+      "range": {
+        "startLine": 108,
+        "startChar": 26,
+        "endLine": 108,
+        "endChar": 43
+      },
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a753d252_62909d9c",
@@ -164,6 +229,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecaa8ad0_a86d81e9",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:07:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "79c86e2a_cea79041",
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fad71f55_2935d558",
@@ -195,6 +278,23 @@
       "side": 1,
       "message": "Adding it, to stay consistent!",
       "parentUuid": "fad71f55_2935d558",
+      "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c91cb971_35575e15",
+        "filename": "src/heap/factory-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:07:39Z",
+      "side": 1,
+      "message": "Maybe inline",
       "revId": "fc0a5d0a1e3497627c753787010d73e08f40afd3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
