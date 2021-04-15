@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "a83ee8d7f4043b5fcc5d020637f051b0643e697c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b60857a_8d0f2d6f",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4073,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-15T15:08:28Z",
+      "side": 1,
+      "message": "how I love magic constants!",
+      "range": {
+        "startLine": 4073,
+        "startChar": 53,
+        "endLine": 4073,
+        "endChar": 55
+      },
+      "revId": "a83ee8d7f4043b5fcc5d020637f051b0643e697c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
