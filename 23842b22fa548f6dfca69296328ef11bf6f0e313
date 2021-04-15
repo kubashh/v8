@@ -161,6 +161,30 @@
       },
       "revId": "23842b22fa548f6dfca69296328ef11bf6f0e313",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e425b344_21cd3574",
+        "filename": "src/profiler/profile-generator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-15T14:18:34Z",
+      "side": 1,
+      "message": "I think the current solution is acceptable 😊",
+      "parentUuid": "1f2ed359_6e597f42",
+      "range": {
+        "startLine": 250,
+        "startChar": 11,
+        "endLine": 251,
+        "endChar": 34
+      },
+      "revId": "23842b22fa548f6dfca69296328ef11bf6f0e313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
