@@ -69,6 +69,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ab9b7cd_8e072cad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Locally, testing on Octane, I see around a 4-5% CompileBaseline improvement.",
+      "parentUuid": "ef546a94_8b76a089",
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69f1614a_ca13b437",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Comments addressed, a couple left unresolved.",
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c7be647_6dce3df6",
@@ -82,6 +117,30 @@
       "writtenOn": "2021-04-15T07:20:41Z",
       "side": 1,
       "message": "2021, also in other new files",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fc836d4_0c0268d4",
+        "filename": "src/codegen/interface-descriptors-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done here, I wasn\u0027t sure to do with the \u003carch\u003e-inl.h files, they\u0027re mostly just moves of the \u003carch\u003e.cc files",
+      "parentUuid": "8c7be647_6dce3df6",
       "range": {
         "startLine": 1,
         "startChar": 13,
@@ -115,6 +174,48 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f19c00f1_936f6900",
+        "filename": "src/codegen/interface-descriptors.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea5b77a8_35f8c500",
+      "range": {
+        "startLine": 25,
+        "startChar": 16,
+        "endLine": 25,
+        "endChar": 21
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d391119_ec6e9a2b",
+        "filename": "src/codegen/interface-descriptors.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "They were (mostly) in Initialize, but I moved them back here since they don\u0027t actually need the CRTP methods.",
+      "parentUuid": "9a3b56c1_6259d138",
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09243d3d_2423bdf4",
@@ -128,6 +229,30 @@
       "writtenOn": "2021-04-15T07:20:41Z",
       "side": 1,
       "message": "nit: Since you\u0027re here, could you please do !\u003d kUninitialized (and \u003d kUninitialized below).",
+      "range": {
+        "startLine": 213,
+        "startChar": 22,
+        "endLine": 213,
+        "endChar": 26
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb1ae418_a007e0cf",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09243d3d_2423bdf4",
       "range": {
         "startLine": 213,
         "startChar": 22,
@@ -163,6 +288,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37432484_5e4a5042",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "unique_ptr doesn\u0027t work with the idea of using static locals unfortunately; I considered using a custom \u0027smart\u0027 ptr type here as an annotation but it felt like overkill.",
+      "parentUuid": "f13a776d_35a09712",
+      "range": {
+        "startLine": 242,
+        "startChar": 25,
+        "endLine": 242,
+        "endChar": 31
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50b4ac3e_d028542f",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 3
@@ -174,6 +323,30 @@
       "writtenOn": "2021-04-15T07:20:41Z",
       "side": 1,
       "message": "nit: this sounds like there\u0027s a class called CallInterfaceDescriptors, suggest \u0027call interface descriptors\u0027.",
+      "range": {
+        "startLine": 278,
+        "startChar": 30,
+        "endLine": 278,
+        "endChar": 54
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3779fae8_5e17ee4a",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50b4ac3e_d028542f",
       "range": {
         "startLine": 278,
         "startChar": 30,
@@ -203,6 +376,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8535347a_9bcbf909",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "This is kept as CallInterfaceDescriptor by design, as it it still used for runtime CID lookups where the subclass is unknown, e.g. those in TF. Forcing those to use \"CIDBase\" feel unintuitive. SCIDBase could be ok though, WDYT?",
+      "parentUuid": "7c144e76_95d71e52",
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7e882e4_063b0675",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 3
@@ -214,6 +405,30 @@
       "writtenOn": "2021-04-15T07:20:41Z",
       "side": 1,
       "message": "nit: use a named constant please.",
+      "range": {
+        "startLine": 354,
+        "startChar": 47,
+        "endLine": 354,
+        "endChar": 48
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55f2ecfa_649eced3",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7e882e4_063b0675",
       "range": {
         "startLine": 354,
         "startChar": 47,
@@ -247,6 +462,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f0ab64e_025492d8",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0ed672b_92389aca",
+      "range": {
+        "startLine": 393,
+        "startChar": 23,
+        "endLine": 393,
+        "endChar": 47
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a574484_0af0f737",
@@ -260,6 +499,30 @@
       "writtenOn": "2021-04-15T07:20:41Z",
       "side": 1,
       "message": "DerivedDescriptor?",
+      "range": {
+        "startLine": 401,
+        "startChar": 8,
+        "endLine": 401,
+        "endChar": 18
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "572537ab_6162100f",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a574484_0af0f737",
       "range": {
         "startLine": 401,
         "startChar": 8,
@@ -293,6 +556,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e8fa721_f3842032",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b6154ac_ba7c5397",
+      "range": {
+        "startLine": 411,
+        "startChar": 21,
+        "endLine": 411,
+        "endChar": 30
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8321a68a_6c39fb3e",
@@ -306,6 +593,24 @@
       "writtenOn": "2021-04-15T07:20:41Z",
       "side": 1,
       "message": "q: what are these --- markers?",
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8299c3b4_d6dd565d",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "These were supposed to be the \"customization points\" for subclasses, maybe it\u0027s not clear enough?",
+      "parentUuid": "8321a68a_6c39fb3e",
       "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -333,6 +638,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f976043_0b5aa59c",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1e15fce_c85c63b8",
+      "range": {
+        "startLine": 460,
+        "startChar": 67,
+        "endLine": 460,
+        "endChar": 72
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "935f916d_6a9527fe",
@@ -346,6 +675,24 @@
       "writtenOn": "2021-04-15T07:20:41Z",
       "side": 1,
       "message": "nit: could remove this, same in other files",
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "564a96ad_08351a2f",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T08:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "935f916d_6a9527fe",
       "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
