@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1449db6_d1a9c4a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-15T10:59:16Z",
+      "side": 1,
+      "message": "PS7 lgtm, thanks!",
+      "revId": "042f67e6e17c17958b8318289f2c1f65d4d53acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf3fe8d6_6b654868",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-15T10:59:16Z",
+      "side": 1,
+      "message": "If this turns out to be an issue in the future we could \n- modify Isolate::set_context() to stash the context in another isolate field that is not clobbered by the generated code.\n- or try to fetch the context from the bottom-most JS frame (which should be properly set up  because we entered C++ from JS in this case)",
+      "range": {
+        "startLine": 284,
+        "startChar": 27,
+        "endLine": 284,
+        "endChar": 49
+      },
+      "revId": "042f67e6e17c17958b8318289f2c1f65d4d53acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ddffb19_6018b196",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-15T10:59:16Z",
+      "side": 1,
+      "message": "If the context is not set, then we are going to ignore this sample, right?",
+      "range": {
+        "startLine": 287,
+        "startChar": 17,
+        "endLine": 287,
+        "endChar": 24
+      },
+      "revId": "042f67e6e17c17958b8318289f2c1f65d4d53acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
