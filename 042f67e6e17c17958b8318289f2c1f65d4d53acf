@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ebcfa56_f440b771",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-04-15T22:05:10Z",
+      "side": 1,
+      "message": "Sounds good to me!",
+      "parentUuid": "cf3fe8d6_6b654868",
+      "range": {
+        "startLine": 284,
+        "startChar": 27,
+        "endLine": 284,
+        "endChar": 49
+      },
+      "revId": "042f67e6e17c17958b8318289f2c1f65d4d53acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ddffb19_6018b196",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-04-15T10:59:16Z",
       "side": 1,
       "message": "If the context is not set, then we are going to ignore this sample, right?",
+      "range": {
+        "startLine": 287,
+        "startChar": 17,
+        "endLine": 287,
+        "endChar": 24
+      },
+      "revId": "042f67e6e17c17958b8318289f2c1f65d4d53acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebc7fd0e_4db9688d",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-04-15T22:05:10Z",
+      "side": 1,
+      "message": "That\u0027s correct, yeah. ContextFilter::Accept will return false if provided a non-null address and currently tracking a native context.",
+      "parentUuid": "9ddffb19_6018b196",
       "range": {
         "startLine": 287,
         "startChar": 17,
