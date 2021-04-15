@@ -83,6 +83,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e3a06ed_a75dc9e4",
+        "filename": "src/api/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9372,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-04-15T08:50:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c28fe3c6_3835cc76",
+      "range": {
+        "startLine": 9372,
+        "startChar": 4,
+        "endLine": 9372,
+        "endChar": 19
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bde391ed_d77ff1d8",
@@ -239,6 +263,30 @@
       "side": 1,
       "message": "Unfortunately this indeed isn\u0027t safe. I hacked on the code a bit in the other CL because the profiler started failing on me out of the blue when I changed what we dereferenced; and I didn\u0027t manage to get it fully working either but stopped when it stopped crashing in the tests that were blocking me. Last I checked the current IsNoFrameRegion at least didn\u0027t work for RegExp. For Sparkplug we\u0027ll need to make sure we filter out the sparkplug prologue builtin in IsNoFrameRegion.\n\nIs there a design doc explaining how we should be able to find a properly set up parent frame (set up enough for the context slot to contain valid data) given a current PC? I think we need a good discussion on that before we reland this code.\n\nNote that the code attempting to find the bytecode position in a JS frame is also unsafe, but since we don\u0027t dereference it won\u0027t crash (I presume we just emit the bytecode offset for post-processing). In the worst case we either get a sample that\u0027s not in any live function, or we get a sample in a wrong function. Here since we are dereferencing a supposedly live object we\u0027d need to know whether it\u0027s actually a valid pointer. We don\u0027t have a quick way to filter that.",
       "parentUuid": "664ac75d_5785972d",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 63
+      },
+      "revId": "58c35554a54d5056db3abff21e769caf294f66e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "312e0c53_d482eaf0",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-04-15T08:50:03Z",
+      "side": 1,
+      "message": "Thanks for the response Toon! Makes sense to me.\n\nI think we could probably sidestep the safety issues here entirely by only checking the context set on the isolate, rather than scrape the context from the stack. Ulan suggested doing this before, and I think this would work for our use case in blink. AFAICT outside of a GC (where sampling is prohibited), we should always be able to read the native context from it.\n\nI\u0027ve updated the CL to do this instead, let me know what you think!",
+      "parentUuid": "e4f429f0_0e6899de",
       "range": {
         "startLine": 166,
         "startChar": 8,
