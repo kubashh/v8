@@ -33,6 +33,24 @@
       "message": "Since this might not be a FixedArray but a FixedDoubleArray (with a differnt kMaxLength) I think it would be clearer to compare the new length against the old length, i.e. CheckBounds(new_length, old_length, ...). Note that CheckBounds is exclusive in the second argument (i.e. the above enforces new_length \u003c old_length).",
       "revId": "46606914a180ebd7a55295a649f9627e66438b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49eccca_d8a7f761",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5403,
+      "author": {
+        "id": 1439801
+      },
+      "writtenOn": "2021-04-15T10:00:34Z",
+      "side": 1,
+      "message": "Thanks, didn\u0027t think of that option.",
+      "parentUuid": "36704c9f_2fd6ec99",
+      "revId": "46606914a180ebd7a55295a649f9627e66438b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
