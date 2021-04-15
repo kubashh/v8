@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a108b1d6_33a7b685",
+        "filename": "src/codegen/arm/interface-descriptors-arm-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T13:30:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f78c14d_6d38a51b",
+      "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c604e5d6_ecb0b151",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-04-15T12:05:26Z",
       "side": 1,
       "message": "Here and below: static",
+      "range": {
+        "startLine": 73,
+        "startChar": 3,
+        "endLine": 73,
+        "endChar": 8
+      },
+      "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbba1382_55d27425",
+        "filename": "src/codegen/ia32/interface-descriptors-ia32-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T13:30:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c604e5d6_ecb0b151",
       "range": {
         "startLine": 73,
         "startChar": 3,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5463e93b_29f93772",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T13:30:15Z",
+      "side": 1,
+      "message": "It\u0027s a classic static polymorphism trick, I really like it too :)",
+      "parentUuid": "0ea9aa28_753e56aa",
+      "range": {
+        "startLine": 405,
+        "startChar": 67,
+        "endLine": 405,
+        "endChar": 79
+      },
+      "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d8ba837_aa13976d",
@@ -94,6 +160,24 @@
       "writtenOn": "2021-04-15T12:05:26Z",
       "side": 1,
       "message": "Thinking out loud: it seems that now it should be possible to constexpr-ally resolve queries like \"Register r \u003d LoadDescriptor::register\u003ckReceiver\u003e()\" and thus\n1) making the registers() function the one and only place where the registers are defined.\n2) making all the interface descriptors uniform regarding the (non) existence of such Register getters.",
+      "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdb2b14a_38f837e7",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-15T13:30:15Z",
+      "side": 1,
+      "message": "You\u0027re right, they\u0027re indeed accessible consexpr-ly as `Register r \u003d LoadDescriptor::GetRegisterParameter(LoadDescriptor::kReceiver)`, it\u0027s just a bit verbose. It gets a bit messy in the LoadDescriptor \"family\", e.g.\n\n    constexpr auto LoadWithVectorDescriptor::registers() {\n      return RegisterArray(LoadDescriptor::ReceiverRegister(),\n                           LoadDescriptor::NameRegister(),\n                           LoadDescriptor::SlotRegister(), VectorRegister());\n    }\n\nwould become\n\n    constexpr auto LoadWithVectorDescriptor::registers() {\n      return RegisterArray(\n        LoadDescriptor::GetRegisterParameter(LoadDescriptor::kReceiver),\n        LoadDescriptor::GetRegisterParameter(LoadDescriptor::kNameRegister),\n        LoadDescriptor::GetRegisterParameter(LoadDescriptor::kSlotRegister),\n        rbx\n      );\n    }\n\nor something similar. Maybe there would be a better way of defining these that supports common patterns better. I won\u0027t do this now, but I\u0027ll think about it.",
+      "parentUuid": "9d8ba837_aa13976d",
       "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
