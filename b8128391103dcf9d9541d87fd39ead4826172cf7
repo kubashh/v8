@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c17c3370_6e0bc0ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:05:26Z",
+      "side": 1,
+      "message": "lgtm with final nits",
+      "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f78c14d_6d38a51b",
+        "filename": "src/codegen/arm/interface-descriptors-arm-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:05:26Z",
+      "side": 1,
+      "message": "Nit: They are all static, aren\u0027t they? Having \"// static\" comments only for some of them is a bit confusing.",
+      "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c604e5d6_ecb0b151",
+        "filename": "src/codegen/ia32/interface-descriptors-ia32-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:05:26Z",
+      "side": 1,
+      "message": "Here and below: static",
+      "range": {
+        "startLine": 73,
+        "startChar": 3,
+        "endLine": 73,
+        "endChar": 8
+      },
+      "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ea9aa28_753e56aa",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:05:26Z",
+      "side": 1,
+      "message": "Nice trick!",
+      "range": {
+        "startLine": 405,
+        "startChar": 67,
+        "endLine": 405,
+        "endChar": 79
+      },
+      "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d8ba837_aa13976d",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-15T12:05:26Z",
+      "side": 1,
+      "message": "Thinking out loud: it seems that now it should be possible to constexpr-ally resolve queries like \"Register r \u003d LoadDescriptor::register\u003ckReceiver\u003e()\" and thus\n1) making the registers() function the one and only place where the registers are defined.\n2) making all the interface descriptors uniform regarding the (non) existence of such Register getters.",
+      "revId": "b8128391103dcf9d9541d87fd39ead4826172cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
