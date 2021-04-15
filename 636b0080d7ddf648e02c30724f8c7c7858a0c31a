@@ -104,6 +104,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff3abb2b_0b6070ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-15T08:56:57Z",
+      "side": 1,
+      "message": "Nice :)",
+      "parentUuid": "1ab9b7cd_8e072cad",
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c7be647_6dce3df6",
@@ -141,6 +159,30 @@
       "side": 1,
       "message": "Done here, I wasn\u0027t sure to do with the \u003carch\u003e-inl.h files, they\u0027re mostly just moves of the \u003carch\u003e.cc files",
       "parentUuid": "8c7be647_6dce3df6",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5540eeda_b34ca725",
+        "filename": "src/codegen/interface-descriptors-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-15T08:56:57Z",
+      "side": 1,
+      "message": "Personally I\u0027ve always updated the date for all new files.",
+      "parentUuid": "7fc836d4_0c0268d4",
       "range": {
         "startLine": 1,
         "startChar": 13,
@@ -312,6 +354,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "541064d2_8b4738c5",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-15T08:56:57Z",
+      "side": 1,
+      "message": "Ack. (You\u0027ve probably done this locally but the comment still needs fixing.)",
+      "parentUuid": "37432484_5e4a5042",
+      "range": {
+        "startLine": 242,
+        "startChar": 25,
+        "endLine": 242,
+        "endChar": 31
+      },
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50b4ac3e_d028542f",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 3
@@ -388,6 +454,24 @@
       "side": 1,
       "message": "This is kept as CallInterfaceDescriptor by design, as it it still used for runtime CID lookups where the subclass is unknown, e.g. those in TF. Forcing those to use \"CIDBase\" feel unintuitive. SCIDBase could be ok though, WDYT?",
       "parentUuid": "7c144e76_95d71e52",
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46b3bd61_74e6e7cf",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-15T08:56:57Z",
+      "side": 1,
+      "message": "Got an example where this happens, do they ref CID by name?",
+      "parentUuid": "8535347a_9bcbf909",
       "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -611,6 +695,24 @@
       "side": 1,
       "message": "These were supposed to be the \"customization points\" for subclasses, maybe it\u0027s not clear enough?",
       "parentUuid": "8321a68a_6c39fb3e",
+      "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d5e3d8b_70e148b7",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-15T08:56:57Z",
+      "side": 1,
+      "message": "Oh I see; yeah, to me it wasn\u0027t clear that --- marks the start/end boundaries.",
+      "parentUuid": "8299c3b4_d6dd565d",
       "revId": "636b0080d7ddf648e02c30724f8c7c7858a0c31a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
