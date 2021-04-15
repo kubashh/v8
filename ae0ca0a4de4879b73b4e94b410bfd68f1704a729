@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1da1dbe3_364a592d",
+        "filename": "test/mjsunit/compiler/fast-api-interface-types.js",
+        "patchSetId": 29
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-15T16:22:24Z",
+      "side": 1,
+      "message": "Thanks, fixed the comment.",
+      "parentUuid": "4eaaad09_21003a78",
+      "revId": "ae0ca0a4de4879b73b4e94b410bfd68f1704a729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d973dcf5_a5fda046",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-04-14T15:46:13Z",
       "side": 1,
       "message": "assertThrows should take a function as argument (or a string but I\u0027d avoid that usage).",
+      "revId": "ae0ca0a4de4879b73b4e94b410bfd68f1704a729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e43700d_25ceb866",
+        "filename": "test/mjsunit/compiler/fast-api-interface-types.js",
+        "patchSetId": 29
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-15T16:22:24Z",
+      "side": 1,
+      "message": "Good point, thanks. This actually uncovered an issue with my implementation.",
+      "parentUuid": "d973dcf5_a5fda046",
       "revId": "ae0ca0a4de4879b73b4e94b410bfd68f1704a729",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
