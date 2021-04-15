@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a3b56c1_6259d138",
+        "filename": "src/codegen/interface-descriptors.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-15T07:20:41Z",
+      "side": 0,
+      "message": "Are the checks starting here preserved somewhere?",
+      "revId": "a04c6680e5eba7666d399abf00c788e5eda782ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
