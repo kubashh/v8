@@ -1133,6 +1133,7 @@ TEST(TerminateExecutionTopLevelAwaitAsync) {
   CHECK(!try_catch.HasTerminated());
 
   eval_promise->Resolve(env.local(), v8::Undefined(isolate)).ToChecked();
+  isolate->PerformMicrotaskCheckpoint();
 
   CHECK(try_catch.HasCaught());
   CHECK(try_catch.HasTerminated());

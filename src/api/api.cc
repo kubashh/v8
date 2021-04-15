@@ -7268,8 +7268,8 @@ Local<Promise> Promise::Resolver::GetPromise() {
 Maybe<bool> Promise::Resolver::Resolve(Local<Context> context,
                                        Local<Value> value) {
   auto isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
-  ENTER_V8(isolate, context, Promise_Resolver, Resolve, Nothing<bool>(),
-           i::HandleScope);
+  ENTER_V8_NO_SCRIPT(isolate, context, Promise_Resolver, Resolve,
+                     Nothing<bool>(), i::HandleScope);
   auto self = Utils::OpenHandle(this);
   auto promise = i::Handle<i::JSPromise>::cast(self);
 
@@ -7286,8 +7286,8 @@ Maybe<bool> Promise::Resolver::Resolve(Local<Context> context,
 Maybe<bool> Promise::Resolver::Reject(Local<Context> context,
                                       Local<Value> value) {
   auto isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
-  ENTER_V8(isolate, context, Promise_Resolver, Reject, Nothing<bool>(),
-           i::HandleScope);
+  ENTER_V8_NO_SCRIPT(isolate, context, Promise_Resolver, Reject,
+                     Nothing<bool>(), i::HandleScope);
   auto self = Utils::OpenHandle(this);
   auto promise = i::Handle<i::JSPromise>::cast(self);
 
