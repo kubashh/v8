@@ -161,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c5ac04b8_fa609bdb",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-16T18:37:27Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s workable to move it to the outside. The original reason for it being inside is that it\u0027s needed inside InitializeOncePerProcess, and the pattern is to call InitializeOncePerProcess methods unconditionally.",
+      "parentUuid": "64711297_9ad182ef",
+      "range": {
+        "startLine": 150,
+        "startChar": 50,
+        "endLine": 151,
+        "endChar": 23
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06496a0a_4a3a9cc6",
         "filename": "src/heap/code-range.cc",
         "patchSetId": 11
