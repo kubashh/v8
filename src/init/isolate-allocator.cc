@@ -3,9 +3,11 @@
 // found in the LICENSE file.
 
 #include "src/init/isolate-allocator.h"
+
 #include "src/base/bounded-page-allocator.h"
 #include "src/common/ptr-compr.h"
 #include "src/execution/isolate.h"
+#include "src/heap/code-range.h"
 #include "src/utils/memcopy.h"
 #include "src/utils/utils.h"
 
@@ -60,6 +62,7 @@ DEFINE_LAZY_LEAKY_OBJECT_GETTER(VirtualMemoryCage, GetProcessWidePtrComprCage)
 
 // static
 void IsolateAllocator::FreeProcessWidePtrComprCageForTesting() {
+  CodeRange::GetProcessWideCodeRange()->Free();
   GetProcessWidePtrComprCage()->Free();
 }
 #endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
@@ -69,10 +72,13 @@ void IsolateAllocator::InitializeOncePerProcess() {
 #ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
   PtrComprCageReservationParams params;
   if (!GetProcessWidePtrComprCage()->InitReservation(params)) {
-    V8::FatalProcessOutOfMemory(nullptr,
-                                "Failed to reserve memory for process-wide V8 "
-                                "pointer compression cage");
+    V8::FatalProcessOutOfMemory(
+        nullptr,
+        "Failed to reserve virtual memory for process-wide V8 "
+        "pointer compression cage");
   }
+  CodeRange::InitializeOncePerProcess(
+      GetProcessWidePtrComprCage()->page_allocator());
 #endif
 }
 
