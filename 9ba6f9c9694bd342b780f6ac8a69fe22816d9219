@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b63bc900_c6725778",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 7143,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-16T00:13:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e9bfa66_bb79af2f",
+      "range": {
+        "startLine": 7143,
+        "startChar": 10,
+        "endLine": 7143,
+        "endChar": 15
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b241ece7_a98815ae",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee36be5e_a32d47bc",
+        "filename": "src/common/globals.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-16T00:13:43Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "b241ece7_a98815ae",
+      "range": {
+        "startLine": 241,
+        "startChar": 17,
+        "endLine": 241,
+        "endChar": 38
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60ee8ab6_dbafe821",
@@ -94,6 +142,24 @@
       "writtenOn": "2021-04-13T20:13:42Z",
       "side": 1,
       "message": "I think isolate-inl.h is a better place for these two functions.",
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e94ce9b7_d1331d05",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4959,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-16T00:13:43Z",
+      "side": 1,
+      "message": "With the VirtualMemoryCage refactor they not live in isolate.h",
+      "parentUuid": "60ee8ab6_dbafe821",
       "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -169,6 +235,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b7c04a2_b02250a6",
+        "filename": "src/heap/code-range.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-16T00:13:43Z",
+      "side": 1,
+      "message": "Ran with this idea w/ VirtualMemoryCage, so resolving.",
+      "parentUuid": "950a26b5_6b682cf1",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 41,
+        "endChar": 15
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df66e70b_53adacc1",
@@ -224,6 +314,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac645671_64625c39",
+        "filename": "src/heap/memory-allocator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-16T00:13:43Z",
+      "side": 1,
+      "message": "VirtualMemoryCage took care of this too. They\u0027re now two separate cages.",
+      "parentUuid": "910fc391_dff07479",
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c1ec809_1d9dd508",
         "filename": "src/profiler/tick-sample.cc",
         "patchSetId": 8
@@ -259,6 +367,30 @@
       "side": 1,
       "message": "Heap::code_region actually exists but delegates to the 3p heap when V8_ENABLE_THIRD_PARTY_HEAP. This code, I guess, assumes that 3p heap isn\u0027t enabled. I\u0027m not exactly sure when I should be checking for 3p heap being enabled.",
       "parentUuid": "9c1ec809_1d9dd508",
+      "range": {
+        "startLine": 235,
+        "startChar": 6,
+        "endLine": 235,
+        "endChar": 70
+      },
+      "revId": "9ba6f9c9694bd342b780f6ac8a69fe22816d9219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97570b90_e490115c",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-16T00:13:43Z",
+      "side": 1,
+      "message": "Switched over to using heap()-\u003ecode_region() here and elsewhere.",
+      "parentUuid": "996f3bdf_22b5f38a",
       "range": {
         "startLine": 235,
         "startChar": 6,
