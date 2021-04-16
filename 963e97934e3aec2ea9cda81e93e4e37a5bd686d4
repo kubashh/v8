@@ -45,6 +45,54 @@
       },
       "revId": "963e97934e3aec2ea9cda81e93e4e37a5bd686d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38610d37_8489e4ff",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-16T11:27:07Z",
+      "side": 1,
+      "message": "Done, I think we need the bitness instead (https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/archive/api.py;drc\u003d8b474fd132948e317d994e82fb10f389b83f1fc9;l\u003d219)",
+      "parentUuid": "51bb85ac_468cc4b0",
+      "range": {
+        "startLine": 152,
+        "startChar": 199,
+        "endLine": 152,
+        "endChar": 216
+      },
+      "revId": "963e97934e3aec2ea9cda81e93e4e37a5bd686d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6718729_c5851f2a",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-16T11:27:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06b6b346_5610766b",
+      "range": {
+        "startLine": 152,
+        "startChar": 22,
+        "endLine": 152,
+        "endChar": 58
+      },
+      "revId": "963e97934e3aec2ea9cda81e93e4e37a5bd686d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
