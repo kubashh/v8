@@ -101,11 +101,10 @@ STATIC_ASSERT(V8_DEFAULT_STACK_SIZE_KB* KB +
 
 // Determine whether the short builtin calls optimization is enabled.
 #ifdef V8_SHORT_BUILTIN_CALLS
-#ifndef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
+#ifndef V8_COMPRESS_POINTERS
 // TODO(11527): Fix this by passing Isolate* to Code::OffHeapInstructionStart()
 // and friends.
-#error Short builtin calls feature require pointer compression with per- \
-       Isolate cage
+#error Short builtin calls feature requires pointer compression
 #endif
 #endif
 
@@ -222,15 +221,20 @@ constexpr int kSystemPointerSizeLog2 = 3;
 constexpr intptr_t kIntptrSignBit =
     static_cast<intptr_t>(uintptr_t{0x8000000000000000});
 constexpr bool kPlatformRequiresCodeRange = true;
+#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+constexpr int kCodeRangeSizeMultiplier = 1;
+#else
+constexpr int kCodeRangeSizeMultiplier = 1;
+#endif
 #if (V8_HOST_ARCH_PPC || V8_HOST_ARCH_PPC64) && \
     (V8_TARGET_ARCH_PPC || V8_TARGET_ARCH_PPC64) && V8_OS_LINUX
-constexpr size_t kMaximalCodeRangeSize = 512 * MB;
+constexpr size_t kMaximalCodeRangeSize = 512 * MB * kCodeRangeSizeMultiplier;
 constexpr size_t kMinExpectedOSPageSize = 64 * KB;  // OS page on PPC Linux
 #elif V8_TARGET_ARCH_ARM64
-constexpr size_t kMaximalCodeRangeSize = 128 * MB;
+constexpr size_t kMaximalCodeRangeSize = 128 * MB * kCodeRangeSizeMultiplier;
 constexpr size_t kMinExpectedOSPageSize = 4 * KB;  // OS page.
 #else
-constexpr size_t kMaximalCodeRangeSize = 128 * MB;
+constexpr size_t kMaximalCodeRangeSize = 128 * MB * kCodeRangeSizeMultiplier;
 constexpr size_t kMinExpectedOSPageSize = 4 * KB;  // OS page.
 #endif
 #if V8_OS_WIN
