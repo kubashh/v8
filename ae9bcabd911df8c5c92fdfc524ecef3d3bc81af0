@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d322120_a6b4785a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-16T12:39:26Z",
+      "side": 1,
+      "message": "lgtm! I like how it composes with the shared cage.",
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98b98933_9a7ca775",
+        "filename": "src/common/globals.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-16T12:39:26Z",
+      "side": 1,
+      "message": "This looks redundant since both branches have the same value. Let\u0027s remove the constant until we decide to use large code ranges for the shared cage?",
+      "range": {
+        "startLine": 225,
+        "startChar": 41,
+        "endLine": 225,
+        "endChar": 42
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f5e63d5_b212f75d",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-16T12:39:26Z",
+      "side": 1,
+      "message": "We also need to prevent page_allocator() from allocating in this area in the future. The the old code did: base +\u003d reserved_area here.\nHere we can use page_allocator()-\u003eAllocatePageSize() similar to how RemapEmbeddedBuiltins does it.",
+      "range": {
+        "startLine": 78,
+        "startChar": 3,
+        "endLine": 81,
+        "endChar": 5
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f02357_bdea1800",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-16T12:39:26Z",
+      "side": 1,
+      "message": "Can we use Isolate::RequiresCodeRange() here instead of duplicating it?",
+      "range": {
+        "startLine": 150,
+        "startChar": 50,
+        "endLine": 151,
+        "endChar": 23
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06496a0a_4a3a9cc6",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-16T12:39:26Z",
+      "side": 1,
+      "message": "Should this be a DCHECK?",
+      "range": {
+        "startLine": 170,
+        "startChar": 9,
+        "endLine": 170,
+        "endChar": 39
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
