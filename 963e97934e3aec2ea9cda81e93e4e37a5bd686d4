@@ -93,6 +93,30 @@
       },
       "revId": "963e97934e3aec2ea9cda81e93e4e37a5bd686d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b453dd47_1639f72b",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-16T11:36:46Z",
+      "side": 1,
+      "message": "Yes, it\u0027s extracted from the config here for reference:\nhttps://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/v8/api.py;l\u003d858?q\u003dclusterfuzz_archive\u0026ss\u003dchromium%2Fchromium%2Ftools%2Fbuild\n\nThinking process: Trace back where each function was called on code search. The bitness parameter in your links could be misleading. In the link above it get\u0027s the property out of the clusterfuzz_archive dict, which we pass here indeed.",
+      "parentUuid": "38610d37_8489e4ff",
+      "range": {
+        "startLine": 152,
+        "startChar": 199,
+        "endLine": 152,
+        "endChar": 216
+      },
+      "revId": "963e97934e3aec2ea9cda81e93e4e37a5bd686d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
