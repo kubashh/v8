@@ -16,6 +16,40 @@
       "message": "Thanks Jakob!",
       "revId": "09f3f05ab8e465e6220e8f12a5df820e895f812b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0392f577_b3dacef0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-04-16T11:06:34Z",
+      "side": 1,
+      "message": "Nice, LGTM from my side.",
+      "revId": "09f3f05ab8e465e6220e8f12a5df820e895f812b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d19e4b_f0b585ca",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-04-16T11:06:34Z",
+      "side": 1,
+      "message": "I wonder if this copying is needed. We should be able just use the isolate independent array directly. But that can be a follow-up optimization.",
+      "revId": "09f3f05ab8e465e6220e8f12a5df820e895f812b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
