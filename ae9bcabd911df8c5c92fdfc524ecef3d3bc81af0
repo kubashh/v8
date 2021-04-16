@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eee74025_30e037c0",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-16T14:39:11Z",
+      "side": 1,
+      "message": "This part is actually done in VirtualMemoryCage::InitReservation. The newest patchset of that is sufficiently generic to support both this \"reserved page\" case and the per-Isolate cage\u0027s \"bias\" case.\n\nI don\u0027t know how to link to a line in a CL, but take a look at L329 and L330 in https://chromium-review.googlesource.com/c/v8/v8/+/2824098.\n\nThat change came after you had already taken a look, and I\u0027ve asked Igor to re-review, but please free to take a look as well. It was to fix a mis-factoring I did for the pointer cage that mishandled the IsolateRoot bias on systems that had it.",
+      "parentUuid": "5f5e63d5_b212f75d",
+      "range": {
+        "startLine": 78,
+        "startChar": 3,
+        "endLine": 81,
+        "endChar": 5
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b6f02357_bdea1800",
         "filename": "src/heap/code-range.cc",
         "patchSetId": 11
@@ -77,6 +101,30 @@
       "writtenOn": "2021-04-16T12:39:26Z",
       "side": 1,
       "message": "Can we use Isolate::RequiresCodeRange() here instead of duplicating it?",
+      "range": {
+        "startLine": 150,
+        "startChar": 50,
+        "endLine": 151,
+        "endChar": 23
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87d93ab1_e1708326",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-16T14:39:11Z",
+      "side": 1,
+      "message": "So Isolate::RequiresCodeRange consults the per-instance jitless_ field instead of FLAG_jitless. During construction time, jitless_ gets the value of FLAG_jitless. I guess it\u0027s to be threadsafe? Though I don\u0027t see why we would ever support the use case of modifying FLAG_ globals concurrently with execution...\n\nHappy to refactor to something that makes sense here, like making Isolate::RequiresCodeRange() static and consult FLAG_jitless. Do you know why it uses a jitless_ field to begin with?",
+      "parentUuid": "b6f02357_bdea1800",
       "range": {
         "startLine": 150,
         "startChar": 50,
