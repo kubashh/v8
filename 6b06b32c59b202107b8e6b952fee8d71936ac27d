@@ -577,6 +577,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "941b5da6_26e94676",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27863,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-16T11:31:36Z",
+      "side": 1,
+      "message": "Thanks guys, incorporated your advice.",
+      "parentUuid": "a099430f_bf65de0a",
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "304a3347_b203b300",
@@ -708,6 +726,30 @@
       "side": 1,
       "message": "All good ideas. Will add the machinery and the tests as part of this CL, otherwise it\u0027s not really safe to submit it with the initial limited tests.",
       "parentUuid": "ab5df2c7_a54834f5",
+      "range": {
+        "startLine": 27891,
+        "startChar": 1,
+        "endLine": 27893,
+        "endChar": 16
+      },
+      "revId": "6b06b32c59b202107b8e6b952fee8d71936ac27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f8c4a0d_b087716d",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 27893,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-16T11:31:36Z",
+      "side": 1,
+      "message": "Added such tests, thanks for the ideas!",
+      "parentUuid": "5ce74461_f96ef0ff",
       "range": {
         "startLine": 27891,
         "startChar": 1,
