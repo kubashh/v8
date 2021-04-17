@@ -7128,6 +7128,11 @@ class V8_EXPORT ResourceConstraints {
   /**
    * The amount of virtual memory reserved for generated code. This is relevant
    * for 64-bit architectures that rely on code range for calls in code.
+   *
+   * TODO(v8::11460): When V8_COMPRESS_POINTERS_IN_SHARED_CAGE is defined, this
+   * value is ignored as Isolates share a code range. In this case, the size is
+   * currently not configurable and the maximal size is always chosen depending
+   * on the underlying architecture.
    */
   size_t code_range_size_in_bytes() const { return code_range_size_; }
   void set_code_range_size_in_bytes(size_t limit) { code_range_size_ = limit; }
