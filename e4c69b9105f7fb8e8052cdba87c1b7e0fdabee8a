@@ -67,6 +67,24 @@
       "message": "I just landed a change to assert that promise hooks don\u0027t execute javascript, as we need this for blink.\n\nTo enable this change for node, I added a compile time flag to switch between the two behaviors (V8_ALLOW_JAVASCRIPT_IN_PROMISE_HOOKS)\n\nCould you please update your CL to only conditionally enable the JS promise hooks?",
       "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaf43e44_b0164b36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2021-04-19T16:14:05Z",
+      "side": 1,
+      "message": "Not sure if this actually matters given that they are two separate APIs. You shouldn\u0027t ever actually _have_ JavaScript executing within the native hook API.\n\nAlso, I suspect it\u0027d be fairly complicated to do the compile flag conditions given that a lot of this is in torque and I have no idea if/how flags work there so this would likely take a bunch more time to figure out which I don\u0027t have right now. This change has already been dragging on for six months, I\u0027d really like to just get this landed already as DataDog has been in urgent need of it for quite awhile now. 😞",
+      "parentUuid": "9644992b_3ada3f1e",
+      "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
