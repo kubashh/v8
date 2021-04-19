@@ -5,7 +5,12 @@
 import("../../gni/v8.gni")
 
 config("crdtp_config") {
-  visibility = [ "../../src/inspector:*", ":*" ]
+  visibility = [
+    ":*",
+    "../../src/inspector:*",
+    "//test/unittests:*",
+    "//third_party/googletest:*",
+  ]
   configs = [ "../../:internal_config" ]
   include_dirs = [ "../../include" ]
 }
