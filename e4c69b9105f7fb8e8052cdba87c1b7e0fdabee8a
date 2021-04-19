@@ -50,6 +50,23 @@
       "message": "lgtm for heap/",
       "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9644992b_3ada3f1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2021-04-19T13:40:34Z",
+      "side": 1,
+      "message": "I just landed a change to assert that promise hooks don\u0027t execute javascript, as we need this for blink.\n\nTo enable this change for node, I added a compile time flag to switch between the two behaviors (V8_ALLOW_JAVASCRIPT_IN_PROMISE_HOOKS)\n\nCould you please update your CL to only conditionally enable the JS promise hooks?",
+      "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
