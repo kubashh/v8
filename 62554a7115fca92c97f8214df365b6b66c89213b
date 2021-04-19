@@ -22,6 +22,30 @@
       },
       "revId": "62554a7115fca92c97f8214df365b6b66c89213b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d5ed32a_20d8f881",
+        "filename": "src/compiler/backend/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2411,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-04-19T21:41:50Z",
+      "side": 1,
+      "message": "Good catch, thanks. I extracted out i64x2.neg in instruction-selector-x64.cc, and also fixed both to not require unique registers if AVX is supported.",
+      "parentUuid": "bdfb3110_b66e949f",
+      "range": {
+        "startLine": 2411,
+        "startChar": 0,
+        "endLine": 2411,
+        "endChar": 42
+      },
+      "revId": "62554a7115fca92c97f8214df365b6b66c89213b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
