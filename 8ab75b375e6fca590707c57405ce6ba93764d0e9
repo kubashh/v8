@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cc9187a_f2b03109",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-19T07:41:06Z",
+      "side": 1,
+      "message": "I think this is fundamentally incompatible when promise hooks are present (see https://crrev.com/c/2823917).\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/objects.cc;l\u003d5370;drc\u003d1aa1254f5b527b89b190837892d5928c8d0f7bfc",
+      "revId": "8ab75b375e6fca590707c57405ce6ba93764d0e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
