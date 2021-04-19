@@ -2408,6 +2408,7 @@ void InstructionSelector::VisitI64x2ReplaceLaneI32Pair(Node* node) {
 
 void InstructionSelector::VisitI64x2Neg(Node* node) {
   IA32OperandGenerator g(this);
+  // Make sure dst != src to avoid a move.
   InstructionOperand operand0 = g.UseUnique(node->InputAt(0));
   Emit(kIA32I64x2Neg, g.DefineAsRegister(node), operand0);
 }
