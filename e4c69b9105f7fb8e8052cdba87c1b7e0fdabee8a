@@ -120,6 +120,23 @@
       "message": "Also for CSA code the #ifdef approach should work out of the box.\nI\u0027ve asked about he tq code in our internal chat room and will come back if we have a solution (I think the obvious way would be to migrate the RunPromiseHook helper to CSA and do the #ifdef trick there)",
       "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aea094a_4cfcf19a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-19T16:40:16Z",
+      "side": 1,
+      "message": "I think you can use the generates helpers in torque: see https://source.chromium.org/search?q\u003dkDictModePrototypes\u0026sq\u003d\u0026ss\u003dchromium%2Fchromium%2Fsrc",
+      "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
