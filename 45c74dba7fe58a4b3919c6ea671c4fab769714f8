@@ -16,6 +16,46 @@
       "message": "PTAL\n\nWdyt about having the conditional there? We could also improve performance by storing main_thread_local_heap() directly in Heap.",
       "revId": "45c74dba7fe58a4b3919c6ea671c4fab769714f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c31da8e1_c93f25a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-19T14:56:55Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "45c74dba7fe58a4b3919c6ea671c4fab769714f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "200d81e0_d83f2d85",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-19T14:56:55Z",
+      "side": 1,
+      "message": "How about wrapping this into a general CanSafepoint() that checks for the deserializer with the comment from the CL description?",
+      "range": {
+        "startLine": 200,
+        "startChar": 6,
+        "endLine": 200,
+        "endChar": 32
+      },
+      "revId": "45c74dba7fe58a4b3919c6ea671c4fab769714f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
