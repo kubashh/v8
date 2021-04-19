@@ -324,6 +324,10 @@
 
   # BUG(v8:11240)
   'regress/regress-v8-9267-1': [SKIP],
+
+  # BUG(v8:11666)
+  'compiler/load-elimination-const-field': [SKIP],
+
 }],  # 'gc_stress'
 
 ##############################################################################
