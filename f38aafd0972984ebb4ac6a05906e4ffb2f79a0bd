@@ -16,6 +16,24 @@
       "message": "it seems that the bitness was excluded from this CL https://crrev.com/c/2817612 (perhaps there was a mistake in rebasing) is it possible to merge this again?",
       "revId": "f38aafd0972984ebb4ac6a05906e4ffb2f79a0bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "367befde_fbf42186",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-19T15:21:03Z",
+      "side": 1,
+      "message": "Uh indeed. It seems the rebase in https://chromium-review.googlesource.com/c/v8/v8/+/2817612/3..4 also mistakenly changed this piece. I had review +1 on patch 3.\n\nPlease always self-review changes after rebase or any other changes that go in after the reviewer\u0027s +1\u0027s patchset. E.g. ideally always check the delta after the reviewer +1, like the one above 3..4.",
+      "parentUuid": "5826ca8c_de5bef5b",
+      "revId": "f38aafd0972984ebb4ac6a05906e4ffb2f79a0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
