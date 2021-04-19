@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "642c8679_592204dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2021-04-19T11:15:52Z",
+      "side": 1,
+      "message": "Hi Michael, hi Sigurd,\n\nI\u0027m adding the flag ¨-fvisbility-hidden\" to the group of tests that use functionality from gtest that are declared as hidden. This should unblock the v8 deps roller for gtest.\n\nI\u0027ve also manually rolled gtest here, is that fine like that or should I remove the DEPS change, and let the autoroller do that later?\n\nSigurd, I\u0027m adding you too since Wolfgang mentioned that you both had a look at this.\n\nPTAL!",
+      "revId": "1153e899c8c4f419556ffe9d469119065a8c68e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
