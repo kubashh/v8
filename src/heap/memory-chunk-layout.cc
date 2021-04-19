@@ -11,40 +11,40 @@
 namespace v8 {
 namespace internal {
 
-size_t MemoryChunkLayout::CodePageGuardStartOffset() {
+constexpr size_t MemoryChunkLayout::CodePageGuardStartOffset() {
   // We are guarding code pages: the first OS page after the header
   // will be protected as non-writable.
   return ::RoundUp(MemoryChunk::kHeaderSize + Bitmap::kSize,
                    MemoryAllocator::GetCommitPageSize());
 }
 
-size_t MemoryChunkLayout::CodePageGuardSize() {
+constexpr size_t MemoryChunkLayout::CodePageGuardSize() {
   return MemoryAllocator::GetCommitPageSize();
 }
 
-intptr_t MemoryChunkLayout::ObjectStartOffsetInCodePage() {
+constexpr intptr_t MemoryChunkLayout::ObjectStartOffsetInCodePage() {
   // We are guarding code pages: the first OS page after the header
   // will be protected as non-writable.
   return CodePageGuardStartOffset() + CodePageGuardSize();
 }
 
-intptr_t MemoryChunkLayout::ObjectEndOffsetInCodePage() {
+constexpr intptr_t MemoryChunkLayout::ObjectEndOffsetInCodePage() {
   // We are guarding code pages: the last OS page will be protected as
   // non-writable.
   return MemoryChunk::kPageSize -
          static_cast<int>(MemoryAllocator::GetCommitPageSize());
 }
 
-size_t MemoryChunkLayout::AllocatableMemoryInCodePage() {
+constexpr size_t MemoryChunkLayout::AllocatableMemoryInCodePage() {
   size_t memory = ObjectEndOffsetInCodePage() - ObjectStartOffsetInCodePage();
   return memory;
 }
 
-intptr_t MemoryChunkLayout::ObjectStartOffsetInDataPage() {
+constexpr intptr_t MemoryChunkLayout::ObjectStartOffsetInDataPage() {
   return RoundUp(MemoryChunk::kHeaderSize + Bitmap::kSize, kDoubleSize);
 }
 
-size_t MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(
+constexpr size_t MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(
     AllocationSpace space) {
   if (space == CODE_SPACE) {
     return ObjectStartOffsetInCodePage();
@@ -52,13 +52,13 @@ size_t MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(
   return ObjectStartOffsetInDataPage();
 }
 
-size_t MemoryChunkLayout::AllocatableMemoryInDataPage() {
+constexpr size_t MemoryChunkLayout::AllocatableMemoryInDataPage() {
   size_t memory = MemoryChunk::kPageSize - ObjectStartOffsetInDataPage();
   DCHECK_LE(kMaxRegularHeapObjectSize, memory);
   return memory;
 }
 
-size_t MemoryChunkLayout::AllocatableMemoryInMemoryChunk(
+constexpr size_t MemoryChunkLayout::AllocatableMemoryInMemoryChunk(
     AllocationSpace space) {
   if (space == CODE_SPACE) {
     return AllocatableMemoryInCodePage();
@@ -66,7 +66,7 @@ size_t MemoryChunkLayout::AllocatableMemoryInMemoryChunk(
   return AllocatableMemoryInDataPage();
 }
 
-int MemoryChunkLayout::MaxRegularCodeObjectSize() {
+constexpr int MemoryChunkLayout::MaxRegularCodeObjectSize() {
   int size = static_cast<int>(AllocatableMemoryInCodePage() / 2);
   DCHECK_LE(size, kMaxRegularHeapObjectSize);
   return size;

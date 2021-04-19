@@ -150,11 +150,13 @@ void AlignedFree(void* ptr) {
 #endif
 }
 
-size_t AllocatePageSize() {
+constexpr size_t AllocatePageSize() {
   return GetPlatformPageAllocator()->AllocatePageSize();
 }
 
-size_t CommitPageSize() { return GetPlatformPageAllocator()->CommitPageSize(); }
+constexpr size_t CommitPageSize() {
+  return GetPlatformPageAllocator()->CommitPageSize();
+}
 
 void SetRandomMmapSeed(int64_t seed) {
   GetPlatformPageAllocator()->SetRandomMmapSeed(seed);

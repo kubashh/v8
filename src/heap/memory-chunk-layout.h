@@ -74,17 +74,17 @@ class V8_EXPORT_PRIVATE MemoryChunkLayout {
     kBasicMemoryChunkHeaderSize = kMemoryChunkHeaderStart,
     kBasicMemoryChunkHeaderStart = 0,
   };
-  static size_t CodePageGuardStartOffset();
-  static size_t CodePageGuardSize();
-  static intptr_t ObjectStartOffsetInCodePage();
-  static intptr_t ObjectEndOffsetInCodePage();
-  static size_t AllocatableMemoryInCodePage();
-  static intptr_t ObjectStartOffsetInDataPage();
-  static size_t AllocatableMemoryInDataPage();
-  static size_t ObjectStartOffsetInMemoryChunk(AllocationSpace space);
-  static size_t AllocatableMemoryInMemoryChunk(AllocationSpace space);
+  static constexpr size_t CodePageGuardStartOffset();
+  static constexpr size_t CodePageGuardSize();
+  static constexpr intptr_t ObjectStartOffsetInCodePage();
+  static constexpr intptr_t ObjectEndOffsetInCodePage();
+  static constexpr size_t AllocatableMemoryInCodePage();
+  static constexpr intptr_t ObjectStartOffsetInDataPage();
+  static constexpr size_t AllocatableMemoryInDataPage();
+  static constexpr size_t ObjectStartOffsetInMemoryChunk(AllocationSpace space);
+  static constexpr size_t AllocatableMemoryInMemoryChunk(AllocationSpace space);
 
-  static int MaxRegularCodeObjectSize();
+  static constexpr int MaxRegularCodeObjectSize();
 };
 
 }  // namespace internal

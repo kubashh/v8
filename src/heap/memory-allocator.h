@@ -164,7 +164,7 @@ class MemoryAllocator {
     kPooledAndQueue,
   };
 
-  V8_EXPORT_PRIVATE static intptr_t GetCommitPageSize();
+  V8_EXPORT_PRIVATE static constexpr intptr_t GetCommitPageSize();
 
   // Computes the memory area of discardable memory within a given memory area
   // [addr, addr+size) and returns the result as base::AddressRegion. If the

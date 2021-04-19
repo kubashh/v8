@@ -728,7 +728,7 @@ void MemoryAllocator::ZapBlock(Address start, size_t size,
                size >> kTaggedSizeLog2);
 }
 
-intptr_t MemoryAllocator::GetCommitPageSize() {
+constexpr intptr_t MemoryAllocator::GetCommitPageSize() {
   if (FLAG_v8_os_page_size != 0) {
     DCHECK(base::bits::IsPowerOfTwo(FLAG_v8_os_page_size));
     return FLAG_v8_os_page_size * KB;
