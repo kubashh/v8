@@ -103,6 +103,23 @@
       "parentUuid": "aaf43e44_b0164b36",
       "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c58e95f2_97407d40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-19T16:38:58Z",
+      "side": 1,
+      "message": "Also for CSA code the #ifdef approach should work out of the box.\nI\u0027ve asked about he tq code in our internal chat room and will come back if we have a solution (I think the obvious way would be to migrate the RunPromiseHook helper to CSA and do the #ifdef trick there)",
+      "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
