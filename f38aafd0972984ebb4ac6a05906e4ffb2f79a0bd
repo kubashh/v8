@@ -34,6 +34,23 @@
       "parentUuid": "5826ca8c_de5bef5b",
       "revId": "f38aafd0972984ebb4ac6a05906e4ffb2f79a0bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d669a33_fcd48cd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-19T15:34:44Z",
+      "side": 1,
+      "message": "Thanks! For the future, please use gerrit\u0027s reland button to reland CLs. You first get the original CL (and reviewers can rely on that). Then you fix it in the second patchset. Reviewers can then review the delta 1..2 instead of everything.\n\nI\u0027ll +1 tomorrow when we can land this and watch the bot together right after landing. The impact is too huge here in case something is wrong as archives of other bots might get overwritten.",
+      "revId": "f38aafd0972984ebb4ac6a05906e4ffb2f79a0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
