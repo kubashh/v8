@@ -88,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e19858_38c9271c",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-19T10:11:15Z",
+      "side": 1,
+      "message": "I see, thanks! The new version of the function look good.",
+      "parentUuid": "eee74025_30e037c0",
+      "range": {
+        "startLine": 78,
+        "startChar": 3,
+        "endLine": 81,
+        "endChar": 5
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6f02357_bdea1800",
@@ -173,6 +197,30 @@
       "side": 1,
       "message": "Yeah, it\u0027s workable to move it to the outside. The original reason for it being inside is that it\u0027s needed inside InitializeOncePerProcess, and the pattern is to call InitializeOncePerProcess methods unconditionally.",
       "parentUuid": "64711297_9ad182ef",
+      "range": {
+        "startLine": 150,
+        "startChar": 50,
+        "endLine": 151,
+        "endChar": 23
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43178817_50812752",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-19T10:11:15Z",
+      "side": 1,
+      "message": "+1 to moving this outside and initializing lazily in Heap::SetUp using CallOnce.\nThis would also solve the TODO about using code_range_size API parameter.",
+      "parentUuid": "c5ac04b8_fa609bdb",
       "range": {
         "startLine": 150,
         "startChar": 50,
