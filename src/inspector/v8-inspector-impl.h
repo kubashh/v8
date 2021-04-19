@@ -36,17 +36,18 @@
 #include <memory>
 #include <unordered_map>
 
+#include "include/v8-inspector.h"
 #include "src/base/macros.h"
 #include "src/base/platform/mutex.h"
 #include "src/inspector/injected-script.h"
 #include "src/inspector/protocol/Protocol.h"
-
-#include "include/v8-inspector.h"
+#include "src/inspector/v8-console.h"
 
 namespace v8_inspector {
 
 class InspectedContext;
 class V8Console;
+
 class V8ConsoleMessageStorage;
 class V8Debugger;
 class V8DebuggerAgentImpl;
