@@ -33,6 +33,23 @@
       "message": "lgtm",
       "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e85c8e6e_a0f1d28e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-04-19T09:10:13Z",
+      "side": 1,
+      "message": "lgtm for heap/",
+      "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
