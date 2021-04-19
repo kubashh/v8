@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6baf1607_bd9419f9",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-19T12:07:10Z",
+      "side": 1,
+      "message": "I think this should be more along the line of html-spec compliant.\nSince node might still have C++ promise hooks that maybe execute JS before we have complete js-hook integration on the node side.\n\nMaybe a bit clumsy v8_allow_javascript_in_promise_hooks ?\n\nPlease also land a CL that flips this flag for node-ci",
+      "range": {
+        "startLine": 308,
+        "startChar": 2,
+        "endLine": 308,
+        "endChar": 28
+      },
+      "revId": "eccab3d2101ff47623da5602909694c327f1f94b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
