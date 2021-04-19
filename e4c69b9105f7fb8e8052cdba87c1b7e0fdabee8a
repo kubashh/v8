@@ -85,6 +85,24 @@
       "parentUuid": "9644992b_3ada3f1e",
       "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7ab663e_f3370a08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-19T16:36:06Z",
+      "side": 1,
+      "message": "let\u0027s start by having all the C++ code ifdef\u0027ed. I\u0027m not sure either how to handle the tq code yet (but that shouldn\u0027t matter that much, since we\u0027ve reduced it to a single branch check and nothing get\u0027s executing if the hooks aren\u0027t set)",
+      "parentUuid": "aaf43e44_b0164b36",
+      "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
