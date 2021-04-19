@@ -291,12 +291,21 @@ void ScopeIterator::TryParseAndRetrieveScopes(ReparseStrategy strategy) {
                          ? scope_chain_retriever.ClosureScope()
                          : literal_scope;
 
+    // If the debugger breaks on the definition of a static member of a
+    // class defined inside a function, the context scope is set to the top
+    // element of the scope chain (the class), which doesn't match the
+    // function context.
+    ignore_nested_scopes = ignore_nested_scopes ||
+                           (scope_info->scope_type() == FUNCTION_SCOPE &&
+                            context_->scope_info().scope_type() == CLASS_SCOPE);
+
     if (ignore_nested_scopes) {
       current_scope_ = closure_scope_;
       start_scope_ = current_scope_;
       // ignore_nested_scopes is only used for the return-position breakpoint,
-      // so we can safely assume that the closure context for the current
-      // function exists if it needs one.
+      // and on breaks of a static initializer inside a class inside a
+      // function so we can safely assume that the closure context for the
+      // current function exists if it needs one.
       if (closure_scope_->NeedsContext()) {
         context_ = handle(context_->closure_context(), isolate_);
       }
