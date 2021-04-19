@@ -887,7 +887,8 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
 
         Handle<Smi> smi_handler;
 
-        CallOptimization call_optimization(isolate(), getter);
+        CallOptimization call_optimization(
+            isolate(), getter, [&](Object o) { return handle(o, isolate()); });
         if (call_optimization.is_simple_api_call()) {
           CallOptimization::HolderLookup holder_lookup;
           Handle<JSObject> api_holder =
@@ -1749,7 +1750,8 @@ MaybeObjectHandle StoreIC::ComputeHandler(LookupIterator* lookup) {
           return MaybeObjectHandle(StoreHandler::StoreSlow(isolate()));
         }
 
-        CallOptimization call_optimization(isolate(), setter);
+        CallOptimization call_optimization(
+            isolate(), setter, [&](Object o) { return handle(o, isolate()); });
         if (call_optimization.is_simple_api_call()) {
           CallOptimization::HolderLookup holder_lookup;
           Handle<JSObject> api_holder =

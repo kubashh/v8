@@ -8,11 +8,9 @@
 namespace v8 {
 namespace internal {
 
-CallOptimization::CallOptimization(Isolate* isolate, Handle<Object> function) {
-  constant_function_ = Handle<JSFunction>::null();
-  is_simple_api_call_ = false;
-  expected_receiver_type_ = Handle<FunctionTemplateInfo>::null();
-  api_call_info_ = Handle<CallHandlerInfo>::null();
+CallOptimization::CallOptimization(Isolate* isolate, Handle<Object> function,
+                                   MakeHandleFunction make_handle)
+    : make_handle_(make_handle) {
   if (function->IsJSFunction()) {
     Initialize(isolate, Handle<JSFunction>::cast(function));
   } else if (function->IsFunctionTemplateInfo()) {
@@ -49,8 +47,8 @@ Handle<JSObject> CallOptimization::LookupHolderOfExpectedType(
   }
   if (object_map->IsJSGlobalProxyMap() && !object_map->prototype().IsNull()) {
     JSObject raw_prototype = JSObject::cast(object_map->prototype());
-    Handle<JSObject> prototype(raw_prototype, raw_prototype.GetIsolate());
-    object_map = handle(prototype->map(), prototype->GetIsolate());
+    Handle<JSObject> prototype = MakeHandle<JSObject>(raw_prototype);
+    object_map = MakeHandle<Map>(prototype->map());
     if (expected_receiver_type_->IsTemplateFor(*object_map)) {
       *holder_lookup = kHolderFound;
       return prototype;
@@ -90,12 +88,11 @@ void CallOptimization::Initialize(
     Isolate* isolate, Handle<FunctionTemplateInfo> function_template_info) {
   HeapObject call_code = function_template_info->call_code(kAcquireLoad);
   if (call_code.IsUndefined(isolate)) return;
-  api_call_info_ = handle(CallHandlerInfo::cast(call_code), isolate);
+  api_call_info_ = MakeHandle<CallHandlerInfo>(call_code);
 
   HeapObject signature = function_template_info->signature();
   if (!signature.IsUndefined(isolate)) {
-    expected_receiver_type_ =
-        handle(FunctionTemplateInfo::cast(signature), isolate);
+    expected_receiver_type_ = MakeHandle<FunctionTemplateInfo>(signature);
   }
   is_simple_api_call_ = true;
 }
@@ -111,17 +108,17 @@ void CallOptimization::Initialize(Isolate* isolate,
 void CallOptimization::AnalyzePossibleApiFunction(Isolate* isolate,
                                                   Handle<JSFunction> function) {
   if (!function->shared().IsApiFunction()) return;
-  Handle<FunctionTemplateInfo> info(function->shared().get_api_func_data(),
-                                    isolate);
+  Handle<FunctionTemplateInfo> info =
+      MakeHandle<FunctionTemplateInfo>(function->shared().get_api_func_data());
 
   // Require a C++ callback.
   HeapObject call_code = info->call_code(kAcquireLoad);
   if (call_code.IsUndefined(isolate)) return;
-  api_call_info_ = handle(CallHandlerInfo::cast(call_code), isolate);
+  api_call_info_ = MakeHandle<CallHandlerInfo>(call_code);
 
   if (!info->signature().IsUndefined(isolate)) {
     expected_receiver_type_ =
-        handle(FunctionTemplateInfo::cast(info->signature()), isolate);
+        MakeHandle<FunctionTemplateInfo>(info->signature());
   }
 
   is_simple_api_call_ = true;

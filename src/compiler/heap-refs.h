@@ -700,6 +700,7 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
   void SerializeBackPointer();
   HeapObjectRef GetBackPointer() const;
 
+  bool TrySerializePrototype();
   void SerializePrototype();
   bool serialized_prototype() const;
   HeapObjectRef prototype() const;
@@ -711,6 +712,7 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
       ZoneVector<MapRef>* prototype_maps);
 
   // Concerning the underlying instance_descriptors:
+  bool TrySerializeOwnDescriptor(InternalIndex descriptor_index);
   void SerializeOwnDescriptor(InternalIndex descriptor_index);
   bool serialized_own_descriptor(InternalIndex descriptor_index) const;
   MapRef FindFieldOwner(InternalIndex descriptor_index) const;

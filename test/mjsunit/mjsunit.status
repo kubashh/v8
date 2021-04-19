@@ -1458,9 +1458,11 @@
 }],  # variant == experimental_regexp
 
 ##############################################################################
-['variant == concurrent_inlining', {
+# Note: This block contains other variants besides concurrent_inlining since
+# they also enable concurrent inlining.
+['variant == concurrent_inlining or variant == turboprop or variant == turboprop_as_toptier or variant == future or variant == stress_concurrent_inlining', {
   'concurrent-initial-prototype-change-1': [SKIP],
-}],  # variant == concurrent_inlining
+}],  # variant == concurrent_inlining or variant == turboprop or variant == turboprop_as_toptier or variant == future or variant == stress_concurrent_inlining
 
 ##############################################################################
 ['pointer_compression_shared_cage', {

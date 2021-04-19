@@ -10,10 +10,14 @@
 
 namespace v8 {
 namespace internal {
+
 // Holds information about possible function call optimizations.
 class CallOptimization {
+  using MakeHandleFunction = std::function<Handle<Object>(Object)>;
+
  public:
-  CallOptimization(Isolate* isolate, Handle<Object> function);
+  CallOptimization(Isolate* isolate, Handle<Object> function,
+                   MakeHandleFunction make_handle);
 
   Context GetAccessorContext(Map holder_map) const;
   bool IsCrossContextLazyAccessorPair(Context native_context,
@@ -55,11 +59,18 @@ class CallOptimization {
   void AnalyzePossibleApiFunction(Isolate* isolate,
                                   Handle<JSFunction> function);
 
+  template <class T>
+  Handle<T> MakeHandle(Object o) const {
+    return Handle<T>::cast(make_handle_(o));
+  }
+
   Handle<JSFunction> constant_function_;
-  bool is_simple_api_call_;
+  bool is_simple_api_call_ = false;
   Handle<FunctionTemplateInfo> expected_receiver_type_;
   Handle<CallHandlerInfo> api_call_info_;
+  const MakeHandleFunction make_handle_;
 };
+
 }  // namespace internal
 }  // namespace v8
 

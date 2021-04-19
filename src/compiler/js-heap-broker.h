@@ -146,7 +146,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   void PrintRefsAnalysis() const;
 #endif  // DEBUG
 
-  // Retruns the handle from root index table for read only heap objects.
+  // Returns the handle from root index table for read only heap objects.
   Handle<Object> GetRootHandle(Object object);
 
   // Never returns nullptr.
@@ -163,6 +163,10 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   // smis, read-only objects and never-serialized objects.
   ObjectData* TryGetOrCreateData(
       Handle<Object>, bool crash_on_error = false,
+      ObjectRef::BackgroundSerialization background_serialization =
+          ObjectRef::BackgroundSerialization::kDisallowed);
+  ObjectData* TryGetOrCreateData(
+      Object object, bool crash_on_error = false,
       ObjectRef::BackgroundSerialization background_serialization =
           ObjectRef::BackgroundSerialization::kDisallowed);
 
@@ -240,6 +244,21 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
       MinimorphicLoadPropertyAccessFeedback const& feedback,
       FeedbackSource const& source,
       SerializationPolicy policy = SerializationPolicy::kAssumeSerialized);
+
+  // Used to separate the problem of a concurrent GetPropertyAccessInfo (GPAI)
+  // from serialization. GPAI is currently called both during the serialization
+  // phase, and on the background thread. While some crucial objects (like
+  // JSObject) still must be serialized, we do the following:
+  // - Run GPAI during serialization to discover and serialize required objects.
+  // - After the serialization phase, clear cached property access infos.
+  // - On the background thread, rerun GPAI in a concurrent setting. The cache
+  //   has been cleared, thus the actual logic runs again.
+  // Once all required object kinds no longer require serialization, this
+  // should be removed together with all GPAI calls during serialization.
+  void ClearCachedPropertyAccessInfos() {
+    CHECK(FLAG_turbo_concurrent_get_property_access_info);
+    property_access_infos_.clear();
+  }
 
   StringRef GetTypedArrayStringTag(ElementsKind kind);
 

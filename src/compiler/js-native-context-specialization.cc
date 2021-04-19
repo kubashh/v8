@@ -421,7 +421,7 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
     access_info = broker()->GetPropertyAccessInfo(
         receiver_map,
         NameRef(broker(), isolate()->factory()->has_instance_symbol()),
-        AccessMode::kLoad);
+        AccessMode::kLoad, dependencies());
   } else {
     AccessInfoFactory access_info_factory(broker(), dependencies(),
                                           graph()->zone());
@@ -745,7 +745,7 @@ Reduction JSNativeContextSpecialization::ReduceJSResolvePromise(Node* node) {
       MapRef map_ref(broker(), map);
       access_infos.push_back(broker()->GetPropertyAccessInfo(
           map_ref, NameRef(broker(), isolate()->factory()->then_string()),
-          AccessMode::kLoad));
+          AccessMode::kLoad, dependencies()));
     }
   }
   PropertyAccessInfo access_info =
@@ -2364,11 +2364,13 @@ JSNativeContextSpecialization::BuildPropertyLoad(
     ZoneVector<Node*>* if_exceptions, PropertyAccessInfo const& access_info) {
   // Determine actual holder and perform prototype chain checks.
   Handle<JSObject> holder;
+  ObjectData* holder_data;
   if (access_info.holder().ToHandle(&holder) &&
-      !access_info.HasDictionaryHolder()) {
+      !access_info.HasDictionaryHolder() &&
+      (holder_data = broker()->TryGetOrCreateData(holder)) != nullptr) {
     dependencies()->DependOnStablePrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype,
-        JSObjectRef(broker(), holder));
+        JSObjectRef(broker(), holder_data));
   }
 
   // Generate the actual property access.
@@ -2458,12 +2460,14 @@ JSNativeContextSpecialization::BuildPropertyStore(
     PropertyAccessInfo const& access_info, AccessMode access_mode) {
   // Determine actual holder and perform prototype chain checks.
   Handle<JSObject> holder;
+  ObjectData* holder_data;
   PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
-  if (access_info.holder().ToHandle(&holder)) {
+  if (access_info.holder().ToHandle(&holder) &&
+      (holder_data = broker()->TryGetOrCreateData(holder)) != nullptr) {
     DCHECK_NE(AccessMode::kStoreInLiteral, access_mode);
     dependencies()->DependOnStablePrototypeChains(
         access_info.lookup_start_object_maps(), kStartAtPrototype,
-        JSObjectRef(broker(), holder));
+        JSObjectRef(broker(), holder_data));
   }
 
   DCHECK(!access_info.IsNotFound());
