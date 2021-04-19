@@ -21,6 +21,12 @@ if (is_fuchsia) {
   }
 }
 
+config("visibility_hidden") {
+  if (!is_win) {
+    cflags = [ "-fvisibility=hidden" ]
+  }
+}
+
 v8_executable("v8_cppgc_shared_unittests") {
   testonly = true
 
@@ -138,6 +144,7 @@ v8_source_set("cppgc_unittests_sources") {
     "../..:external_config",
     "../..:internal_config_base",
     "../..:cppgc_base_config",
+    ":visibility_hidden",
   ]
 
   deps = [
@@ -489,6 +496,7 @@ v8_source_set("unittests_sources") {
     "../..:cppgc_base_config",
     "../..:external_config",
     "../..:internal_config_base",
+    ":visibility_hidden",
   ]
 
   deps = [
