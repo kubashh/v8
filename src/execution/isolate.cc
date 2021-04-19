@@ -3586,6 +3586,8 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   main_thread_local_isolate_.reset(new LocalIsolate(this, ThreadKind::kMain));
   main_thread_local_heap()->Unpark();
 
+  heap_.InitializeMainThreadLocalHeap(main_thread_local_heap());
+
   isolate_data_.external_reference_table()->Init(this);
 
 #if V8_ENABLE_WEBASSEMBLY
