@@ -512,5 +512,7 @@ v8_source_set("unittests_sources") {
     # bytecode-utils.h.
     # C4309: 'static_cast': truncation of constant value
     cflags = [ "/wd4309" ]
+  } else {
+    cflags = [ "-fvisibility=hidden" ]
   }
 }
