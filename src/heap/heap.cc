@@ -5324,6 +5324,11 @@ void Heap::SetUpSpaces() {
   write_protect_code_memory_ = FLAG_write_protect_code_memory;
 }
 
+void Heap::InitializeMainThreadLocalHeap(LocalHeap* main_thread_local_heap) {
+  DCHECK_NULL(main_thread_local_heap_);
+  main_thread_local_heap_ = main_thread_local_heap;
+}
+
 void Heap::InitializeHashSeed() {
   DCHECK(!deserialization_complete_);
   uint64_t new_hash_seed;
