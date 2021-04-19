@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8517cbbd_8595348a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-19T06:59:58Z",
+      "side": 1,
+      "message": "lgtm, thank you. In general, mostly unrelated to this change, I\u0027m a bit unhappy with the brittleness of the extref table setup (like having to keep the order in sync in several spots). But we can clean this up in the future.",
+      "revId": "09f3f05ab8e465e6220e8f12a5df820e895f812b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82d19e4b_f0b585ca",
@@ -65,6 +82,24 @@
       "writtenOn": "2021-04-16T11:06:34Z",
       "side": 1,
       "message": "I wonder if this copying is needed. We should be able just use the isolate independent array directly. But that can be a follow-up optimization.",
+      "revId": "09f3f05ab8e465e6220e8f12a5df820e895f812b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86eede6f_0bae34b3",
+        "filename": "src/codegen/external-reference-table.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-19T06:59:58Z",
+      "side": 1,
+      "message": "That\u0027s a bit tricky atm since generated code, specifically builtins, reference these extrefs through the root register. Builtins must be PIC so we can\u0027t reloc them.",
+      "parentUuid": "82d19e4b_f0b585ca",
       "revId": "09f3f05ab8e465e6220e8f12a5df820e895f812b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
