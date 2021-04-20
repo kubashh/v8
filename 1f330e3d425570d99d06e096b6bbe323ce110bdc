@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78bc014f_31818791",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-20T08:22:46Z",
+      "side": 1,
+      "message": "Thanks Georg for the comments! The changed has been revised. PTAL, thanks!",
+      "revId": "1f330e3d425570d99d06e096b6bbe323ce110bdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
