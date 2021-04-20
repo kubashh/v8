@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4120b66b_8551b4d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-20T07:31:19Z",
+      "side": 1,
+      "message": "Thanks Maya, landing.",
+      "revId": "8562e564280e30ed7c49456ab620cec045aece84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47b25664_98cc07aa",
@@ -41,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e195e651_7a5aed4e",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-20T07:31:19Z",
+      "side": 1,
+      "message": "Both of these methods use a lot of the ObjectData infrastructure, which is all implemented (and hidden in) this file.",
+      "parentUuid": "47b25664_98cc07aa",
+      "range": {
+        "startLine": 2604,
+        "startChar": 19,
+        "endLine": 2604,
+        "endChar": 48
+      },
+      "revId": "8562e564280e30ed7c49456ab620cec045aece84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "080b2c62_058c433b",
@@ -54,6 +95,30 @@
       "writtenOn": "2021-04-20T07:28:53Z",
       "side": 1,
       "message": "Why is this method moved? Does it depend on something from the *-inl.h includes that got moved?",
+      "range": {
+        "startLine": 2655,
+        "startChar": 26,
+        "endLine": 2655,
+        "endChar": 44
+      },
+      "revId": "8562e564280e30ed7c49456ab620cec045aece84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "394bb590_40603e7b",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2655,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-20T07:31:19Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "080b2c62_058c433b",
       "range": {
         "startLine": 2655,
         "startChar": 26,
