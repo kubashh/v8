@@ -153,5 +153,5 @@ source_set("gmock") {
 static_library("gmock_main") {
   testonly = true
   sources = [ "src/googlemock/src/gmock_main.cc" ]
-  deps = [ ":gmock" ]
+  public_deps = [ ":gmock" ]
 }
