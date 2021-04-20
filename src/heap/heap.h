@@ -761,6 +761,11 @@ class Heap {
   inline bool CanAllocateInReadOnlySpace();
   bool deserialization_complete() const { return deserialization_complete_; }
 
+  // We can only invoke Safepoint() on the main thread local heap after
+  // deserialization is complete. Before that, main_thread_local_heap_ might be
+  // null.
+  V8_INLINE bool CanSafepoint() const { return deserialization_complete(); }
+
   bool HasLowAllocationRate();
   bool HasHighFragmentation();
   bool HasHighFragmentation(size_t used, size_t committed);
@@ -802,6 +807,9 @@ class Heap {
 
   // Sets up the heap memory without creating any objects.
   void SetUpSpaces();
+
+  // Prepares the heap, setting up for deserialization.
+  void InitializeMainThreadLocalHeap(LocalHeap* main_thread_local_heap);
 
   // (Re-)Initialize hash seed from flag or RNG.
   void InitializeHashSeed();
@@ -873,6 +881,8 @@ class Heap {
   }
 
   const base::AddressRegion& code_range();
+
+  LocalHeap* main_thread_local_heap() { return main_thread_local_heap_; }
 
   // ===========================================================================
   // Root set access. ==========================================================
@@ -2022,7 +2032,7 @@ class Heap {
       AllocationAlignment alignment = kWordAligned);
 
   // Allocates a heap object based on the map.
-  V8_WARN_UNUSED_RESULT AllocationResult Allocate(Map map,
+  V8_WARN_UNUSED_RESULT AllocationResult Allocate(Handle<Map> map,
                                                   AllocationType allocation);
 
   // Allocates a partial map for bootstrapping.
@@ -2119,8 +2129,11 @@ class Heap {
   CodeLargeObjectSpace* code_lo_space_ = nullptr;
   NewLargeObjectSpace* new_lo_space_ = nullptr;
   ReadOnlySpace* read_only_space_ = nullptr;
+
   // Map from the space id to the space.
   Space* space_[LAST_SPACE + 1];
+
+  LocalHeap* main_thread_local_heap_ = nullptr;
 
   // List for tracking ArrayBufferExtensions
   ArrayBufferExtension* old_array_buffer_extensions_ = nullptr;
