@@ -155,6 +155,23 @@
       "parentUuid": "5aea094a_4cfcf19a",
       "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f32e312d_f5458b33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-04-20T12:51:42Z",
+      "side": 1,
+      "message": "As discussed, let\u0027s land this CL as is, and postpone the flag dependency",
+      "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
