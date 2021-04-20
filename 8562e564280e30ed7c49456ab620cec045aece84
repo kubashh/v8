@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9e71d19_b3a28b6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-20T07:28:53Z",
+      "side": 1,
+      "message": "LGTM % questions, thanks for revising the includes as well!",
+      "revId": "8562e564280e30ed7c49456ab620cec045aece84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47b25664_98cc07aa",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-20T07:28:53Z",
+      "side": 1,
+      "message": "Same as below, why can\u0027t we keep this in js-heap-broker.cc?",
+      "range": {
+        "startLine": 2604,
+        "startChar": 19,
+        "endLine": 2604,
+        "endChar": 48
+      },
+      "revId": "8562e564280e30ed7c49456ab620cec045aece84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "080b2c62_058c433b",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2655,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-20T07:28:53Z",
+      "side": 1,
+      "message": "Why is this method moved? Does it depend on something from the *-inl.h includes that got moved?",
+      "range": {
+        "startLine": 2655,
+        "startChar": 26,
+        "endLine": 2655,
+        "endChar": 44
+      },
+      "revId": "8562e564280e30ed7c49456ab620cec045aece84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
