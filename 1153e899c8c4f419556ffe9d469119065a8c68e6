@@ -33,6 +33,24 @@
       "message": "IIUC, this just sets visibility to hidden for crdtp and unittests.\n\nCould you comment on why this isn\u0027t going counter:\n\nif ((is_posix || is_fuchsia) \u0026\u0026\n    (v8_enable_backtrace || v8_monolithic || v8_expose_symbols)) {\n  v8_remove_configs +\u003d [ \"//build/config/gcc:symbol_visibility_hidden\" ]\n  v8_add_configs +\u003d [ \"//build/config/gcc:symbol_visibility_default\" ]\n}\n\nfrom\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/gni/v8.gni;l\u003d182;drc\u003de101c057af71c88e79256c31eab10b88466809e9\n\nMy impression was (but I might be wrong) that for these particular flags, we don\u0027t want a hidden visibility.\n\nTo test if things are still working: Are you getting the same quality stack-traces with e.g. v8_enable_backtrace in unittests with your change?\n\nLooking at the googletest documentation, I wonder if we defined the matchers \"correctly\", i.e. in the currently indented way, and whether this is causing the problem with the reference to the vtable we are seeing? I would have thought that googletest exports (i.e. makes explicitly visible) all symbols it expects to be used by implementations that use the library.\n\n",
       "revId": "1153e899c8c4f419556ffe9d469119065a8c68e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "659f7287_03540cae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2021-04-20T12:47:19Z",
+      "side": 1,
+      "message": "Thanks for your input Sigurd. I\u0027ve been looking more into this, and I agree that it\u0027s not the correct solution. I\u0027ll abandon the change, and add more information on the bug report itself!",
+      "parentUuid": "03898e35_468f93eb",
+      "revId": "1153e899c8c4f419556ffe9d469119065a8c68e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
