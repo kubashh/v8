@@ -360,7 +360,7 @@ struct ProtocolTypeTraits<
   friend DeserializableBase<ProtocolType>;                           \
   static const DeserializerDescriptorType& deserializer_descriptor()
 
-#define V8_CRDTP_DESERIALIZE_FILED_IMPL(name, field, is_optional)  \
+#define V8_CRDTP_DESERIALIZE_FILED_IMPL(name, field, is_optional)     \
   {                                                                \
     MakeSpan(name), is_optional,                                   \
         [](DeserializerState* __state, void* __obj) -> bool {      \
