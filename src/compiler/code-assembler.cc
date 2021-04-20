@@ -785,7 +785,7 @@ void CodeAssembler::StoreToObject(MachineRepresentation rep,
       write_barrier_kind = WriteBarrierKind::kMapWriteBarrier;
       break;
     case StoreToObjectWriteBarrier::kNone:
-      if (CanBeTaggedPointer(rep)) {
+      if (CanBeTaggedPointer(rep) && !FLAG_single_generation) {
         write_barrier_kind = WriteBarrierKind::kAssertNoWriteBarrier;
       } else {
         write_barrier_kind = WriteBarrierKind::kNoWriteBarrier;
@@ -806,8 +806,10 @@ void CodeAssembler::OptimizedStoreField(MachineRepresentation rep,
 void CodeAssembler::OptimizedStoreFieldAssertNoWriteBarrier(
     MachineRepresentation rep, TNode<HeapObject> object, int offset,
     Node* value) {
-  raw_assembler()->OptimizedStoreField(rep, object, offset, value,
-                                       WriteBarrierKind::kAssertNoWriteBarrier);
+  raw_assembler()->OptimizedStoreField(
+      rep, object, offset, value,
+      FLAG_single_generation ? WriteBarrierKind::kNoWriteBarrier
+                             : WriteBarrierKind::kAssertNoWriteBarrier);
 }
 
 void CodeAssembler::OptimizedStoreFieldUnsafeNoWriteBarrier(
@@ -837,18 +839,20 @@ void CodeAssembler::StoreEphemeronKey(Node* base, Node* offset, Node* value) {
 
 void CodeAssembler::StoreNoWriteBarrier(MachineRepresentation rep, Node* base,
                                         Node* value) {
-  raw_assembler()->Store(
-      rep, base, value,
-      CanBeTaggedPointer(rep) ? kAssertNoWriteBarrier : kNoWriteBarrier);
+  raw_assembler()->Store(rep, base, value,
+                         CanBeTaggedPointer(rep) && !FLAG_single_generation
+                             ? kAssertNoWriteBarrier
+                             : kNoWriteBarrier);
 }
 
 void CodeAssembler::StoreNoWriteBarrier(MachineRepresentation rep, Node* base,
                                         Node* offset, Node* value) {
   // Please use OptimizedStoreMap(base, value) instead.
   DCHECK(!raw_assembler()->IsMapOffsetConstantMinusTag(offset));
-  raw_assembler()->Store(
-      rep, base, offset, value,
-      CanBeTaggedPointer(rep) ? kAssertNoWriteBarrier : kNoWriteBarrier);
+  raw_assembler()->Store(rep, base, offset, value,
+                         CanBeTaggedPointer(rep) && !FLAG_single_generation
+                             ? kAssertNoWriteBarrier
+                             : kNoWriteBarrier);
 }
 
 void CodeAssembler::UnsafeStoreNoWriteBarrier(MachineRepresentation rep,

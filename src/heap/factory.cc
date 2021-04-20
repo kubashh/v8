@@ -1180,7 +1180,7 @@ Handle<Context> Factory::NewCatchContext(Handle<Context> previous,
       isolate()->catch_context_map(), Context::SizeFor(variadic_part_length),
       variadic_part_length, AllocationType::kYoung);
   DisallowGarbageCollection no_gc;
-  DCHECK(Heap::InYoungGeneration(context));
+  DCHECK_IMPLIES(!FLAG_single_generation, Heap::InYoungGeneration(context));
   context.set_scope_info(*scope_info, SKIP_WRITE_BARRIER);
   context.set_previous(*previous, SKIP_WRITE_BARRIER);
   context.set(Context::THROWN_OBJECT_INDEX, *thrown_object, SKIP_WRITE_BARRIER);
@@ -1205,7 +1205,7 @@ Handle<Context> Factory::NewDebugEvaluateContext(Handle<Context> previous,
                          Context::SizeFor(variadic_part_length),
                          variadic_part_length, AllocationType::kYoung);
   DisallowGarbageCollection no_gc;
-  DCHECK(Heap::InYoungGeneration(context));
+  DCHECK_IMPLIES(!FLAG_single_generation, Heap::InYoungGeneration(context));
   context.set_scope_info(*scope_info, SKIP_WRITE_BARRIER);
   context.set_previous(*previous, SKIP_WRITE_BARRIER);
   context.set_extension(*ext, SKIP_WRITE_BARRIER);
@@ -1228,7 +1228,7 @@ Handle<Context> Factory::NewWithContext(Handle<Context> previous,
       isolate()->with_context_map(), Context::SizeFor(variadic_part_length),
       variadic_part_length, AllocationType::kYoung);
   DisallowGarbageCollection no_gc;
-  DCHECK(Heap::InYoungGeneration(context));
+  DCHECK_IMPLIES(!FLAG_single_generation, Heap::InYoungGeneration(context));
   context.set_scope_info(*scope_info, SKIP_WRITE_BARRIER);
   context.set_previous(*previous, SKIP_WRITE_BARRIER);
   context.set_extension(*extension, SKIP_WRITE_BARRIER);
@@ -1244,7 +1244,7 @@ Handle<Context> Factory::NewBlockContext(Handle<Context> previous,
       isolate()->block_context_map(), Context::SizeFor(variadic_part_length),
       variadic_part_length, AllocationType::kYoung);
   DisallowGarbageCollection no_gc;
-  DCHECK(Heap::InYoungGeneration(context));
+  DCHECK_IMPLIES(!FLAG_single_generation, Heap::InYoungGeneration(context));
   context.set_scope_info(*scope_info, SKIP_WRITE_BARRIER);
   context.set_previous(*previous, SKIP_WRITE_BARRIER);
   return handle(context, isolate());
@@ -1257,7 +1257,7 @@ Handle<Context> Factory::NewBuiltinContext(Handle<NativeContext> native_context,
       isolate()->function_context_map(), Context::SizeFor(variadic_part_length),
       variadic_part_length, AllocationType::kYoung);
   DisallowGarbageCollection no_gc;
-  DCHECK(Heap::InYoungGeneration(context));
+  DCHECK_IMPLIES(!FLAG_single_generation, Heap::InYoungGeneration(context));
   context.set_scope_info(read_only_roots().empty_scope_info(),
                          SKIP_WRITE_BARRIER);
   context.set_previous(*native_context, SKIP_WRITE_BARRIER);
