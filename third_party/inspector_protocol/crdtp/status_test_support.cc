@@ -12,39 +12,19 @@ void PrintTo(const Status& status, std::ostream* os) {
 }
 
 namespace {
-class StatusIsMatcher : public testing::MatcherInterface<Status> {
- public:
-  explicit StatusIsMatcher(Status status) : expected_(status) {}
-
-  bool MatchAndExplain(Status status,
-                       testing::MatchResultListener* listener) const override {
-    return status.error == expected_.error && status.pos == expected_.pos;
-  }
-
-  void DescribeTo(std::ostream* os) const override {
-    *os << "equals to ";
-    PrintTo(expected_, os);
-  }
-
- private:
-  Status expected_;
-};
-
-class StatusIsOkMatcher : public testing::MatcherInterface<Status> {
-  bool MatchAndExplain(Status status,
-                       testing::MatchResultListener* listener) const override {
-    return status.ok();
-  }
-
-  void DescribeTo(std::ostream* os) const override { *os << "is ok"; }
-};
+MATCHER_P(StatusIsMatcher, status, "") {
+  return arg.error == status.error && arg.pos == status.pos;
+}
+MATCHER(StatusIsOKMatcher, "is ok") {
+  return arg.ok();
+}
 }  // namespace
 
 testing::Matcher<Status> StatusIsOk() {
-  return MakeMatcher(new StatusIsOkMatcher());
+  return StatusIsOKMatcher();
 }
 
 testing::Matcher<Status> StatusIs(Error error, size_t pos) {
-  return MakeMatcher(new StatusIsMatcher(Status(error, pos)));
+  return StatusIsMatcher(Status(error, pos));
 }
 }  // namespace v8_crdtp
