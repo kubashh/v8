@@ -137,6 +137,24 @@
       "message": "I think you can use the generates helpers in torque: see https://source.chromium.org/search?q\u003dkDictModePrototypes\u0026sq\u003d\u0026ss\u003dchromium%2Fchromium%2Fsrc",
       "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39ac0c5f_c9d71efa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-20T05:27:58Z",
+      "side": 1,
+      "message": "Torque has @if/@ifnot for defines. Currently it\u0027s used only in class defs, but it\u0027s possible it\u0027d just work in code as well? Not sure. nicohartmann@ would be the right contact.",
+      "parentUuid": "5aea094a_4cfcf19a",
+      "revId": "e4c69b9105f7fb8e8052cdba87c1b7e0fdabee8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
