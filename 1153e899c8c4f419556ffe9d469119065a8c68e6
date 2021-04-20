@@ -69,6 +69,24 @@
       "parentUuid": "659f7287_03540cae",
       "revId": "1153e899c8c4f419556ffe9d469119065a8c68e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "563d402e_83e7da66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2021-04-20T13:05:57Z",
+      "side": 1,
+      "message": "OH, one thing that I can add which is not relevant to the bug:\nthe tests are doing the correct thing, they are just using the matchers which is already correct (there\u0027s a better way using macros, but it is still OK to use the current way); I had a look after you mentioned it. The problem is the visibility setting which is enforced through the v8 build system (see bug).\n\nThanks to your concern I dug a bit deeper to better understand what happens, such that I can also agree that it\u0027s not the correct way.",
+      "parentUuid": "4d72620a_deabf1be",
+      "revId": "1153e899c8c4f419556ffe9d469119065a8c68e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
