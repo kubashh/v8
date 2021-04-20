@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d800e277_302ebaf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2021-04-20T00:16:07Z",
+      "side": 1,
+      "message": "Hi Toon.\n\nI uploaded a fix for  bug chromium:1156498 and included some comments and insights of what I think is happening. Could you  review the change and confirm if what I am saying is correct?.\n\nThe original report had a large script as a test. I made a minimal repro that is included as the regress test. The problem was caused by a \"pause on exception\" called on a static initializer inside a class inside a function that needed context. As I comment in the description, my fix changes some behavior of the scope chain for this scenario, so I had to modify the expected output of one of the inspector tests.\n\nThanks,\nLuis Fernando Pardo Sixtos",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
