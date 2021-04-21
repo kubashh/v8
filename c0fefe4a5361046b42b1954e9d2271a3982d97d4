@@ -1,0 +1,221 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30f72662_149d1906",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "Thanks, JSCallReducer looks very nice now!\n\nPlease add a few mjsunit tests.",
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deebe714_df44510d",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "Since this may end up being the receiver, please use a different name, e.g. feedbackValue or recordedFunction.",
+      "range": {
+        "startLine": 68,
+        "startChar": 6,
+        "endLine": 68,
+        "endChar": 16
+      },
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "603d667d_b729cf3b",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "Please move this out of the try block.",
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7104bf41_b5376ee3",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 10129,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "This name doesn\u0027t match the code.",
+      "range": {
+        "startLine": 10129,
+        "startChar": 39,
+        "endLine": 10129,
+        "endChar": 47
+      },
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8288fb75_001124d0",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 10137,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "Are you planning to add other builtins to that list?",
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e61dee3_65e3df19",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1980,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "Please make the CallFeedbackContent value an argument to this method.",
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e504c337_646840a6",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "Please add a newline and comment as well.",
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dd5c384_6237072e",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3103,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "Although it doesn\u0027t matter, kUnrelated feels like a safer default.",
+      "range": {
+        "startLine": 3103,
+        "startChar": 58,
+        "endLine": 3103,
+        "endChar": 65
+      },
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf389468_60a64800",
+        "filename": "src/compiler/globals.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "Please update, e.g. as follows:\n\nThe CallFeedbackRelation provides the meaning of call feedback for a Turbofan JSCall operator:\n- kReceiver: the call target was Function.prototype.apply, and its receiver was recorded as the feedback value\n- kTarget: the call target was recorded as the feedback value\n- kUnrelated: the feedback is no longer related to the call (typically because the call has been rewritten)",
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef858891_ebd49950",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2451,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "\"new_feedback_relation\" for clarity.",
+      "range": {
+        "startLine": 2451,
+        "startChar": 23,
+        "endLine": 2451,
+        "endChar": 40
+      },
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "007d2270_8c8468c3",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5091,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-21T14:55:56Z",
+      "side": 1,
+      "message": "I think this should be p.feedback_relation() here and below.",
+      "range": {
+        "startLine": 5091,
+        "startChar": 45,
+        "endLine": 5091,
+        "endChar": 74
+      },
+      "revId": "c0fefe4a5361046b42b1954e9d2271a3982d97d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
