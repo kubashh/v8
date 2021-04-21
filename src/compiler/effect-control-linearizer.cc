@@ -2937,9 +2937,10 @@ Node* EffectControlLinearizer::LowerCheckBigInt(Node* node, Node* frame_state) {
 Node* EffectControlLinearizer::LowerBigIntAsUintN(Node* node,
                                                   Node* frame_state) {
   DCHECK(machine()->Is64());
-
-  const int bits = OpParameter<int>(node->op());
-  DCHECK(0 <= bits && bits <= 64);
+  UNREACHABLE();
+#if 0
+  const auto p = BigIntAsUintNParametersOf(node->op());
+  DCHECK(0 <= p.bits() && p.bits() <= 64);
 
   if (bits == 64) {
     // Reduce to nop.
@@ -2948,6 +2949,7 @@ Node* EffectControlLinearizer::LowerBigIntAsUintN(Node* node,
     const uint64_t msk = (1ULL << bits) - 1ULL;
     return __ Word64And(node->InputAt(0), __ Int64Constant(msk));
   }
+#endif
 }
 
 Node* EffectControlLinearizer::LowerChangeUint64ToBigInt(Node* node) {
