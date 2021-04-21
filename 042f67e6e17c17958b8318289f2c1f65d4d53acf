@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e52b630b_b3c002e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2021-04-21T07:29:05Z",
+      "side": 1,
+      "message": "Friendly ping :)",
+      "parentUuid": "b0aa9a84_0c855d0e",
+      "revId": "042f67e6e17c17958b8318289f2c1f65d4d53acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf3fe8d6_6b654868",
         "filename": "src/profiler/tick-sample.cc",
         "patchSetId": 7
