@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5537683_b9d4d7db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-04-21T13:07:07Z",
+      "side": 1,
+      "message": "PTAL (since it\u0027s an Arm thing). This avoids trying to use the Addr1Mode encoding for handles/external refs, and goes directly to using a full 32-bit constant pool value.",
+      "revId": "35f760143428d1fb2f2717b164641084b54c75bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
