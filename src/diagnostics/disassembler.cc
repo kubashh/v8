@@ -285,8 +285,7 @@ static int DecodeIt(Isolate* isolate, ExternalReferenceEncoder* ref_encoder,
   v8::internal::EmbeddedVector<char, kOutBufferSize> out_buffer;
   StringBuilder out(out_buffer.begin(), out_buffer.length());
   byte* pc = begin;
-  disasm::Disassembler d(converter,
-                         disasm::Disassembler::kContinueOnUnimplementedOpcode);
+  disasm::Disassembler d(converter);
   RelocIterator* it = nullptr;
   CodeCommentsIterator cit(code.code_comments(), code.code_comments_size());
   // Relocation exists if we either have no isolate (wasm code),

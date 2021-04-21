@@ -205,16 +205,13 @@ int32_t Imm32(const uint8_t* data) {
 // The IA32 disassembler implementation.
 class DisassemblerIA32 {
  public:
-  DisassemblerIA32(
-      const NameConverter& converter,
-      Disassembler::UnimplementedOpcodeAction unimplemented_opcode_action)
+  explicit DisassemblerIA32(const NameConverter& converter)
       : converter_(converter),
         vex_byte0_(0),
         vex_byte1_(0),
         vex_byte2_(0),
         instruction_table_(InstructionTable::get_instance()),
-        tmp_buffer_pos_(0),
-        unimplemented_opcode_action_(unimplemented_opcode_action) {
+        tmp_buffer_pos_(0) {
     tmp_buffer_[0] = '\0';
   }
 
@@ -232,7 +229,6 @@ class DisassemblerIA32 {
   InstructionTable* instruction_table_;
   v8::internal::EmbeddedVector<char, 128> tmp_buffer_;
   unsigned int tmp_buffer_pos_;
-  Disassembler::UnimplementedOpcodeAction unimplemented_opcode_action_;
 
   enum {
     eax = 0,
@@ -363,13 +359,8 @@ class DisassemblerIA32 {
   int AVXInstruction(byte* data);
   PRINTF_FORMAT(2, 3) void AppendToBuffer(const char* format, ...);
 
-  void UnimplementedInstruction() {
-    if (unimplemented_opcode_action_ ==
-        Disassembler::kAbortOnUnimplementedOpcode) {
-      FATAL("Unimplemented instruction in disassembler");
-    } else {
-      AppendToBuffer("'Unimplemented Instruction'");
-    }
+  [[noreturn]] void UnimplementedInstruction() {
+    FATAL("Unimplemented instruction");
   }
 };
 
@@ -413,7 +404,6 @@ int DisassemblerIA32::PrintRightOperandHelper(
           return 2;
         } else {
           UnimplementedInstruction();
-          return 1;
         }
       } else {
         AppendToBuffer("[%s]", (this->*register_name)(rm));
@@ -449,7 +439,6 @@ int DisassemblerIA32::PrintRightOperandHelper(
       return 1;
     default:
       UnimplementedInstruction();
-      return 1;
   }
   UNREACHABLE();
 }
@@ -2864,7 +2853,6 @@ int DisassemblerIA32::InstructionDecode(v8::internal::Vector<char> out_buffer,
 
       default:
         UnimplementedInstruction();
-        data++;
     }
   }
 
@@ -2935,7 +2923,7 @@ const char* NameConverter::NameInCode(byte* addr) const {
 
 int Disassembler::InstructionDecode(v8::internal::Vector<char> buffer,
                                     byte* instruction) {
-  DisassemblerIA32 d(converter_, unimplemented_opcode_action());
+  DisassemblerIA32 d(converter_);
   return d.InstructionDecode(buffer, instruction);
 }
 
@@ -2943,10 +2931,9 @@ int Disassembler::InstructionDecode(v8::internal::Vector<char> buffer,
 int Disassembler::ConstantPoolSizeAt(byte* instruction) { return -1; }
 
 // static
-void Disassembler::Disassemble(FILE* f, byte* begin, byte* end,
-                               UnimplementedOpcodeAction unimplemented_action) {
+void Disassembler::Disassemble(FILE* f, byte* begin, byte* end) {
   NameConverter converter;
-  Disassembler d(converter, unimplemented_action);
+  Disassembler d(converter);
   for (byte* pc = begin; pc < end;) {
     v8::internal::EmbeddedVector<char, 128> buffer;
     buffer[0] = '\0';

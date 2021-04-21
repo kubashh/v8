@@ -282,12 +282,9 @@ int64_t Imm64(const uint8_t* data) {
 // The object can only disassemble a single instruction.
 class DisassemblerX64 {
  public:
-  DisassemblerX64(const NameConverter& converter,
-                  Disassembler::UnimplementedOpcodeAction unimplemented_action)
+  explicit DisassemblerX64(const NameConverter& converter)
       : converter_(converter),
         tmp_buffer_pos_(0),
-        abort_on_unimplemented_(unimplemented_action ==
-                                Disassembler::kAbortOnUnimplementedOpcode),
         rex_(0),
         operand_size_(0),
         group_1_prefix_(0),
@@ -314,7 +311,6 @@ class DisassemblerX64 {
   const NameConverter& converter_;
   v8::internal::EmbeddedVector<char, 128> tmp_buffer_;
   unsigned int tmp_buffer_pos_;
-  bool abort_on_unimplemented_;
   // Prefixes parsed
   byte rex_;
   byte operand_size_;    // 0x66 or (if no group 3 prefix is present) 0x0.
@@ -465,12 +461,8 @@ class DisassemblerX64 {
   int AVXInstruction(byte* data);
   PRINTF_FORMAT(2, 3) void AppendToBuffer(const char* format, ...);
 
-  void UnimplementedInstruction() {
-    if (abort_on_unimplemented_) {
-      FATAL("'Unimplemented Instruction'");
-    } else {
-      AppendToBuffer("'Unimplemented Instruction'");
-    }
+  [[noreturn]] void UnimplementedInstruction() {
+    FATAL("Unimplemented instruction");
   }
 };
 
@@ -522,7 +514,6 @@ int DisassemblerX64::PrintRightOperandHelper(
           return 2;
         } else {
           UnimplementedInstruction();
-          return 1;
         }
       } else {
         AppendToBuffer("[%s]", NameOfCPURegister(rm));
@@ -562,7 +553,6 @@ int DisassemblerX64::PrintRightOperandHelper(
       return 1;
     default:
       UnimplementedInstruction();
-      return 1;
   }
   UNREACHABLE();
 }
@@ -744,7 +734,6 @@ int DisassemblerX64::F6F7Instruction(byte* data) {
       return 1 + count;
     } else {
       UnimplementedInstruction();
-      return 2;
     }
   } else if (regop == 0) {
     AppendToBuffer("test%c ", operand_size_code());
@@ -754,7 +743,6 @@ int DisassemblerX64::F6F7Instruction(byte* data) {
     return 1 + count;
   } else {
     UnimplementedInstruction();
-    return 2;
   }
 }
 
@@ -763,7 +751,6 @@ int DisassemblerX64::ShiftInstruction(byte* data) {
   int count = 1;
   if (op != 0xD0 && op != 0xD2 && op != 0xC0) {
     UnimplementedInstruction();
-    return count;
   }
   // Print mneumonic.
   {
@@ -796,7 +783,6 @@ int DisassemblerX64::ShiftInstruction(byte* data) {
         break;
       default:
         UnimplementedInstruction();
-        return count + 1;
     }
     DCHECK_NOT_NULL(mnem);
     AppendToBuffer("%s%c ", mnem, operand_size_code());
@@ -2714,7 +2700,6 @@ int DisassemblerX64::InstructionDecode(v8::internal::Vector<char> out_buffer,
           }
           default:
             UnimplementedInstruction();
-            data += 2;
         }
         break;
 
@@ -2784,7 +2769,6 @@ int DisassemblerX64::InstructionDecode(v8::internal::Vector<char> out_buffer,
 
       default:
         UnimplementedInstruction();
-        data += 1;
     }
   }  // !processed
 
@@ -2855,17 +2839,16 @@ const char* NameConverter::NameInCode(byte* addr) const {
 
 int Disassembler::InstructionDecode(v8::internal::Vector<char> buffer,
                                     byte* instruction) {
-  DisassemblerX64 d(converter_, unimplemented_opcode_action());
+  DisassemblerX64 d(converter_);
   return d.InstructionDecode(buffer, instruction);
 }
 
 // The X64 assembler does not use constant pools.
 int Disassembler::ConstantPoolSizeAt(byte* instruction) { return -1; }
 
-void Disassembler::Disassemble(FILE* f, byte* begin, byte* end,
-                               UnimplementedOpcodeAction unimplemented_action) {
+void Disassembler::Disassemble(FILE* f, byte* begin, byte* end) {
   NameConverter converter;
-  Disassembler d(converter, unimplemented_action);
+  Disassembler d(converter);
   for (byte* pc = begin; pc < end;) {
     v8::internal::EmbeddedVector<char, 128> buffer;
     buffer[0] = '\0';

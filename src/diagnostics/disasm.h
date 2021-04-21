@@ -37,21 +37,9 @@ class V8_EXPORT_PRIVATE NameConverter {
 // A generic Disassembler interface
 class Disassembler {
  public:
-  enum UnimplementedOpcodeAction : int8_t {
-    kContinueOnUnimplementedOpcode,
-    kAbortOnUnimplementedOpcode
-  };
-
   // Caller deallocates converter.
-  explicit Disassembler(const NameConverter& converter,
-                        UnimplementedOpcodeAction unimplemented_opcode_action =
-                            kAbortOnUnimplementedOpcode)
-      : converter_(converter),
-        unimplemented_opcode_action_(unimplemented_opcode_action) {}
-
-  UnimplementedOpcodeAction unimplemented_opcode_action() const {
-    return unimplemented_opcode_action_;
-  }
+  explicit Disassembler(const NameConverter& converter)
+      : converter_(converter) {}
 
   // Writes one disassembled instruction into 'buffer' (0-terminated).
   // Returns the length of the disassembled machine instruction in bytes.
@@ -64,14 +52,10 @@ class Disassembler {
 
   // Write disassembly into specified file 'f' using specified NameConverter
   // (see constructor).
-  V8_EXPORT_PRIVATE static void Disassemble(
-      FILE* f, byte* begin, byte* end,
-      UnimplementedOpcodeAction unimplemented_action =
-          kAbortOnUnimplementedOpcode);
+  V8_EXPORT_PRIVATE static void Disassemble(FILE* f, byte* begin, byte* end);
 
  private:
   const NameConverter& converter_;
-  const UnimplementedOpcodeAction unimplemented_opcode_action_;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Disassembler);
 };

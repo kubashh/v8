@@ -1863,10 +1863,9 @@ int Disassembler::ConstantPoolSizeAt(byte* instruction) {
       reinterpret_cast<v8::internal::Instruction*>(instruction));
 }
 
-void Disassembler::Disassemble(FILE* f, byte* begin, byte* end,
-                               UnimplementedOpcodeAction unimplemented_action) {
+void Disassembler::Disassemble(FILE* f, byte* begin, byte* end) {
   NameConverter converter;
-  Disassembler d(converter, unimplemented_action);
+  Disassembler d(converter);
   for (byte* pc = begin; pc < end;) {
     v8::internal::EmbeddedVector<char, 128> buffer;
     buffer[0] = '\0';

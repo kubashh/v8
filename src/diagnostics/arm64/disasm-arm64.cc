@@ -4388,8 +4388,7 @@ int Disassembler::ConstantPoolSizeAt(byte* instr) {
       reinterpret_cast<v8::internal::Instruction*>(instr));
 }
 
-void Disassembler::Disassemble(FILE* file, byte* start, byte* end,
-                               UnimplementedOpcodeAction) {
+void Disassembler::Disassemble(FILE* file, byte* start, byte* end) {
   v8::internal::Decoder<v8::internal::DispatchingDecoderVisitor> decoder;
   v8::internal::PrintDisassembler disasm(file);
   decoder.AppendVisitor(&disasm);

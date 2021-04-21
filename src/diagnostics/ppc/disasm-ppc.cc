@@ -1683,10 +1683,9 @@ int Disassembler::InstructionDecode(v8::internal::Vector<char> buffer,
 // The PPC assembler does not currently use constant pools.
 int Disassembler::ConstantPoolSizeAt(byte* instruction) { return -1; }
 
-void Disassembler::Disassemble(FILE* f, byte* begin, byte* end,
-                               UnimplementedOpcodeAction unimplemented_action) {
+void Disassembler::Disassemble(FILE* f, byte* begin, byte* end, ) {
   NameConverter converter;
-  Disassembler d(converter, unimplemented_action);
+  Disassembler d(converter);
   for (byte* pc = begin; pc < end;) {
     v8::internal::EmbeddedVector<char, 128> buffer;
     buffer[0] = '\0';
