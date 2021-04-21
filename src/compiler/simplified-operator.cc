@@ -1299,8 +1299,10 @@ const Operator* SimplifiedOperatorBuilder::RuntimeAbort(AbortReason reason) {
 const Operator* SimplifiedOperatorBuilder::BigIntAsUintN(int bits) {
   CHECK(0 <= bits && bits <= 64);
 
-  return zone()->New<Operator1<int>>(IrOpcode::kBigIntAsUintN, Operator::kPure,
-                                     "BigIntAsUintN", 1, 0, 0, 1, 0, 0, bits);
+  return zone()->New<Operator1<int>>(IrOpcode::kBigIntAsUintN,
+                                     // Operator::kNoDeopt, //::kPure,
+                                     Operator::kNoProperties, "BigIntAsUintN",
+                                     1, 1, 1, 1, 1, 0, bits);
 }
 
 const Operator* SimplifiedOperatorBuilder::UpdateInterruptBudget(int delta) {
