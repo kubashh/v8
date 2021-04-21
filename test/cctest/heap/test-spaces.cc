@@ -269,7 +269,6 @@ TEST(ComputeDiscardMemoryAreas) {
 }
 
 TEST(NewSpace) {
-  if (FLAG_single_generation) return;
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
   TestMemoryAllocatorScope test_allocator_scope(isolate, heap->MaxReserved(),
@@ -517,7 +516,6 @@ void testAllocationObserver(Isolate* i_isolate, T* space) {
 }
 
 UNINITIALIZED_TEST(AllocationObserver) {
-  if (FLAG_single_generation) return;
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
@@ -540,7 +538,6 @@ UNINITIALIZED_TEST(AllocationObserver) {
 }
 
 UNINITIALIZED_TEST(InlineAllocationObserverCadence) {
-  if (FLAG_single_generation) return;
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
@@ -620,7 +617,6 @@ HEAP_TEST(Regress777177) {
 }
 
 HEAP_TEST(Regress791582) {
-  if (FLAG_single_generation) return;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();

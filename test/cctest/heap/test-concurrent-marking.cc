@@ -104,7 +104,6 @@ TEST(ConcurrentMarkingPreemptAndReschedule) {
 }
 
 TEST(ConcurrentMarkingMarkedBytes) {
-  if (!FLAG_incremental_marking) return;
   if (!i::FLAG_concurrent_marking) return;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -119,7 +118,6 @@ TEST(ConcurrentMarkingMarkedBytes) {
 }
 
 UNINITIALIZED_TEST(ConcurrentMarkingStoppedOnTeardown) {
-  if (!FLAG_incremental_marking) return;
   if (!i::FLAG_concurrent_marking) return;
 
   v8::Isolate::CreateParams create_params;

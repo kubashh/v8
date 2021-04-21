@@ -16,7 +16,6 @@ namespace internal {
 namespace heap {
 
 HEAP_TEST(WriteBarrier_Marking) {
-  if (!FLAG_incremental_marking) return;
   ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -56,7 +55,6 @@ HEAP_TEST(WriteBarrier_Marking) {
 }
 
 HEAP_TEST(WriteBarrier_MarkingExtension) {
-  if (!FLAG_incremental_marking) return;
   ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();

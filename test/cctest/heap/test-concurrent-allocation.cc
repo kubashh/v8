@@ -340,7 +340,6 @@ class ConcurrentBlackAllocationThread final : public v8::base::Thread {
 };
 
 UNINITIALIZED_TEST(ConcurrentBlackAllocation) {
-  if (!FLAG_incremental_marking) return;
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
@@ -400,7 +399,6 @@ class ConcurrentWriteBarrierThread final : public v8::base::Thread {
 };
 
 UNINITIALIZED_TEST(ConcurrentWriteBarrier) {
-  if (!FLAG_incremental_marking) return;
   if (!FLAG_concurrent_marking) {
     // The test requires concurrent marking barrier.
     return;
@@ -465,7 +463,6 @@ class ConcurrentRecordRelocSlotThread final : public v8::base::Thread {
 };
 
 UNINITIALIZED_TEST(ConcurrentRecordRelocSlot) {
-  if (!FLAG_incremental_marking) return;
   if (!FLAG_concurrent_marking) {
     // The test requires concurrent marking barrier.
     return;

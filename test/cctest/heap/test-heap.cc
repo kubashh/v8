@@ -1265,7 +1265,6 @@ UNINITIALIZED_TEST(Regress10843) {
 
 // Tests that spill slots from optimized code don't have weak pointers.
 TEST(Regress10774) {
-  if (FLAG_single_generation) return;
   i::FLAG_allow_natives_syntax = true;
   i::FLAG_turboprop = true;
   i::FLAG_turbo_dynamic_map_checks = true;
@@ -1326,7 +1325,6 @@ TEST(Regress10774) {
 #ifndef V8_LITE_MODE
 
 TEST(TestOptimizeAfterBytecodeFlushingCandidate) {
-  if (FLAG_single_generation) return;
   FLAG_opt = true;
   FLAG_always_opt = false;
 #if ENABLE_SPARKPLUG
@@ -1805,7 +1803,6 @@ static Address AlignNewSpace(AllocationAlignment alignment, int offset) {
 
 
 TEST(TestAlignedAllocation) {
-  if (FLAG_single_generation) return;
   // Double misalignment is 4 on 32-bit platforms or when pointer compression
   // is enabled, 0 on 64-bit ones when pointer compression is disabled.
   const intptr_t double_misalignment = kDoubleSize - kTaggedSize;
@@ -6571,7 +6568,6 @@ HEAP_TEST(RegressMissingWriteBarrierInAllocate) {
 }
 
 HEAP_TEST(MarkCompactEpochCounter) {
-  if (!FLAG_incremental_marking) return;
   ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
@@ -6938,7 +6934,6 @@ TEST(Regress8014) {
 }
 
 TEST(Regress8617) {
-  if (!FLAG_incremental_marking) return;
   ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
   LocalContext env;
@@ -6981,7 +6976,6 @@ TEST(Regress8617) {
 }
 
 HEAP_TEST(MemoryReducerActivationForSmallHeaps) {
-  if (FLAG_single_generation) return;
   ManualGCScope manual_gc_scope;
   LocalContext env;
   Isolate* isolate = CcTest::i_isolate();
@@ -7151,7 +7145,6 @@ TEST(GarbageCollectionWithLocalHeap) {
 }
 
 TEST(Regress10698) {
-  if (!FLAG_incremental_marking) return;
   CcTest::InitializeVM();
   Heap* heap = CcTest::i_isolate()->heap();
   Factory* factory = CcTest::i_isolate()->factory();
