@@ -16,6 +16,29 @@
       "message": "Nice, LGTM!",
       "revId": "e1edbbde7d2d657fcb2e0c1598447ffc10ca759c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41564de5_3489db82",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-04-21T12:23:33Z",
+      "side": 1,
+      "message": "This is not a good way to handle this. The two expressions\nIsYoungGenerationAllocation() and\nallocation() \u003d\u003d AllocationType::kYoung\nwould evaluate to different results which is dangerous. Can you please instead try to construct the AllocationGroup with the correct AllocationType so that the object is an a consistent state.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 77
+      },
+      "revId": "e1edbbde7d2d657fcb2e0c1598447ffc10ca759c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
