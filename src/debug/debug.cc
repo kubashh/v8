@@ -35,6 +35,7 @@
 #include "src/objects/js-generator-inl.h"
 #include "src/objects/js-promise-inl.h"
 #include "src/objects/slots.h"
+#include "src/snapshot/embedded/embedded-data.h"
 #include "src/snapshot/snapshot.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -1249,6 +1250,27 @@ class DiscardBaselineCodeVisitor : public ThreadVisitor {
         PointerAuthentication::ReplacePC(pc_addr, advance, kSystemPointerSize);
         InterpretedFrame::cast(it.Reframe())
             ->PatchBytecodeOffset(bytecode_offset);
+      } else if (it.frame()->type() == StackFrame::INTERPRETED) {
+        // Check if the PC is a baseline entry trampoline. If it is replace it
+        // with the corresponding interpreter entry trampoline.
+        // This is the case if a baseline function was inlined into a function
+        // we deoptimized in the debugger.
+        JavaScriptFrame* frame = it.frame();
+        Address pc = frame->pc();
+        Builtins::Name builtin_index =
+            InstructionStream::TryLookupCode(isolate, pc);
+        if (builtin_index == Builtins::kBaselineEnterAtBytecode ||
+            builtin_index == Builtins::kBaselineEnterAtNextBytecode) {
+          Address* pc_addr = frame->pc_address();
+          Builtins::Name advance =
+              builtin_index == Builtins::kBaselineEnterAtBytecode
+                  ? Builtins::kInterpreterEnterAtBytecode
+                  : Builtins::kInterpreterEnterAtNextBytecode;
+          Address advance_pc =
+              isolate->builtins()->builtin(advance).InstructionStart();
+          PointerAuthentication::ReplacePC(pc_addr, advance_pc,
+                                           kSystemPointerSize);
+        }
       }
     }
   }
