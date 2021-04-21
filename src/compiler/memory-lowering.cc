@@ -31,7 +31,7 @@ class MemoryLowering::AllocationGroup final : public ZoneObject {
   void Add(Node* object);
   bool Contains(Node* object) const;
   bool IsYoungGenerationAllocation() const {
-    return allocation() == AllocationType::kYoung;
+    return allocation() == AllocationType::kYoung && !FLAG_single_generation;
   }
 
   AllocationType allocation() const { return allocation_; }
@@ -99,6 +99,9 @@ Reduction MemoryLowering::ReduceAllocateRaw(
   DCHECK_EQ(IrOpcode::kAllocateRaw, node->opcode());
   DCHECK_IMPLIES(allocation_folding_ == AllocationFolding::kDoAllocationFolding,
                  state_ptr != nullptr);
+  if (FLAG_single_generation && allocation_type == AllocationType::kYoung) {
+    allocation_type = AllocationType::kOld;
+  }
   // Code objects may have a maximum size smaller than kMaxHeapObjectSize due to
   // guard pages. If we need to support allocating code here we would need to
   // call MemoryChunkLayout::MaxRegularCodeObjectSize() at runtime.
@@ -561,6 +564,9 @@ WriteBarrierKind MemoryLowering::ComputeWriteBarrierKind(
     write_barrier_kind = kNoWriteBarrier;
   }
   if (!ValueNeedsWriteBarrier(value, isolate())) {
+    write_barrier_kind = kNoWriteBarrier;
+  }
+  if (FLAG_disable_write_barriers) {
     write_barrier_kind = kNoWriteBarrier;
   }
   if (write_barrier_kind == WriteBarrierKind::kAssertNoWriteBarrier) {
