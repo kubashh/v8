@@ -1300,7 +1300,7 @@ const Operator* SimplifiedOperatorBuilder::BigIntAsUintN(int bits) {
   CHECK(0 <= bits && bits <= 64);
 
   return zone()->New<Operator1<int>>(IrOpcode::kBigIntAsUintN, Operator::kPure,
-                                     "BigIntAsUintN", 1, 0, 0, 1, 0, 0, bits);
+                                     "BigIntAsUintN", 1, 1, 1, 1, 1, 0, bits);
 }
 
 const Operator* SimplifiedOperatorBuilder::UpdateInterruptBudget(int delta) {

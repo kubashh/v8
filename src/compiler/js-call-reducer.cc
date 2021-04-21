@@ -7829,9 +7829,13 @@ Reduction JSCallReducer::ReduceBigIntAsUintN(Node* node) {
   NumberMatcher matcher(bits);
   if (matcher.IsInteger() && matcher.IsInRange(0, 64)) {
     const int bits_value = static_cast<int>(matcher.ResolvedValue());
+    value = effect = graph()->NewNode(simplified()->BigIntAsUintN(bits_value),
+      value, effect, control);
+#if 0
     value = effect = graph()->NewNode(simplified()->CheckBigInt(p.feedback()),
                                       value, effect, control);
     value = graph()->NewNode(simplified()->BigIntAsUintN(bits_value), value);
+#endif
     ReplaceWithValue(node, value, effect);
     return Replace(value);
   }

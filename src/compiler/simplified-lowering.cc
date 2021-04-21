@@ -2764,7 +2764,8 @@ class RepresentationSelector {
         return;
       }
       case IrOpcode::kBigIntAsUintN: {
-        ProcessInput<T>(node, 0, UseInfo::TruncatingWord64());
+        ProcessInput<T>(node, 0, UseInfo::CheckedBigIntTruncatingWord64(FeedbackSource()));
+//        ProcessInput<T>(node, 0, UseInfo::TruncatingWord64());
         SetOutput<T>(node, MachineRepresentation::kWord64, Type::BigInt());
         return;
       }
