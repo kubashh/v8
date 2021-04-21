@@ -136,7 +136,10 @@
       'V8 Clusterfuzz Linux64 - debug builder': 'debug_x64',
       'V8 Clusterfuzz Linux64 ASAN no inline - release builder':
           'release_x64_asan_symbolized_verify_heap',
+      'V8 Clusterfuzz Linux ASAN no inline - release builder':
+          'release_x64_asan_symbolized_verify_heap',
       'V8 Clusterfuzz Linux64 ASAN - debug builder': 'debug_x64_asan',
+      'V8 Clusterfuzz Linux ASAN - debug builder': 'debug_x64_asan',
       'V8 Clusterfuzz Linux64 ASAN arm64 - debug builder':
           'debug_simulate_arm64_asan',
       'V8 Clusterfuzz Linux - debug builder': 'debug_x86',
