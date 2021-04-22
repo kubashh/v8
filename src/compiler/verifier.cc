@@ -955,7 +955,7 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       CheckTypeIs(node, Type::BigInt());
       break;
     case IrOpcode::kBigIntAsUintN:
-      CheckValueInputIs(node, 0, Type::BigInt());
+      CheckValueInputIs(node, 0, Type::Any());
       CheckTypeIs(node, Type::BigInt());
       break;
     case IrOpcode::kBigIntAdd:
