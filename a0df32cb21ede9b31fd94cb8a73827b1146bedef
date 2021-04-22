@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e35d58e_360dd93a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-22T08:58:23Z",
+      "side": 1,
+      "message": "nit: versions",
+      "range": {
+        "startLine": 9,
+        "startChar": 14,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "a0df32cb21ede9b31fd94cb8a73827b1146bedef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cd8a55a_5bd40f31",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-22T08:58:23Z",
+      "side": 1,
+      "message": "nit: Could you move all the linux32 builders together into the same spot? I.e. keep them alpha sorted.",
+      "range": {
+        "startLine": 108,
+        "startChar": 7,
+        "endLine": 108,
+        "endChar": 71
+      },
+      "revId": "a0df32cb21ede9b31fd94cb8a73827b1146bedef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f717d8c_70f5dc60",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-22T08:58:23Z",
+      "side": 1,
+      "message": "Here is a lot of repetitive boiler plate, even though there is the clusterfuzz_builder abstraction. Could you in a follow up try to tied this a bit and e.g. pull up the common things as defaults into clusterfuzz_builder and only overwrite the defaults where needed?",
+      "range": {
+        "startLine": 109,
+        "startChar": 8,
+        "endLine": 114,
+        "endChar": 10
+      },
+      "revId": "a0df32cb21ede9b31fd94cb8a73827b1146bedef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
