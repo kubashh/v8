@@ -615,6 +615,25 @@ NumberOperationParameters const& NumberOperationParametersOf(
   return OpParameter<NumberOperationParameters>(op);
 }
 
+bool operator==(BigIntAsUintNParameters const& lhs,
+                BigIntAsUintNParameters const& rhs) {
+  return lhs.bits() == rhs.bits() && lhs.feedback() == rhs.feedback();
+}
+
+size_t hash_value(BigIntAsUintNParameters const& p) {
+  FeedbackSource::Hash feedback_hash;
+  return base::hash_combine(p.bits(), feedback_hash(p.feedback()));
+}
+
+std::ostream& operator<<(std::ostream& os, BigIntAsUintNParameters const& p) {
+  return os << p.bits() << ", " << p.feedback();
+}
+
+BigIntAsUintNParameters const& BigIntAsUintNParametersOf(Operator const* op) {
+  DCHECK_EQ(IrOpcode::kBigIntAsUintN, op->opcode());
+  return OpParameter<BigIntAsUintNParameters>(op);
+}
+
 size_t hash_value(AllocateParameters info) {
   return base::hash_combine(info.type(),
                             static_cast<int>(info.allocation_type()));
@@ -1296,11 +1315,15 @@ const Operator* SimplifiedOperatorBuilder::RuntimeAbort(AbortReason reason) {
       static_cast<int>(reason));                // parameter
 }
 
-const Operator* SimplifiedOperatorBuilder::BigIntAsUintN(int bits) {
+const Operator* SimplifiedOperatorBuilder::BigIntAsUintN(
+    int bits, const FeedbackSource& feedback) {
   CHECK(0 <= bits && bits <= 64);
 
-  return zone()->New<Operator1<int>>(IrOpcode::kBigIntAsUintN, Operator::kPure,
-                                     "BigIntAsUintN", 1, 0, 0, 1, 0, 0, bits);
+  return zone()->New<Operator1<BigIntAsUintNParameters>>(
+      IrOpcode::kBigIntAsUintN,
+      // Operator::kNoDeopt, //::kPure,
+      Operator::kNoProperties, "BigIntAsUintN", 1, 1, 1, 1, 1, 0,
+      BigIntAsUintNParameters(bits, feedback));
 }
 
 const Operator* SimplifiedOperatorBuilder::UpdateInterruptBudget(int delta) {
