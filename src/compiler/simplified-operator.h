@@ -606,6 +606,26 @@ bool operator==(NumberOperationParameters const&,
 const NumberOperationParameters& NumberOperationParametersOf(const Operator* op)
     V8_WARN_UNUSED_RESULT;
 
+class BigIntAsUintNParameters {
+ public:
+  BigIntAsUintNParameters(int bits, const FeedbackSource& feedback)
+      : bits_(bits), feedback_(feedback) {}
+
+  int bits() const { return bits_; }
+  const FeedbackSource& feedback() const { return feedback_; }
+
+ private:
+  int bits_;
+  FeedbackSource feedback_;
+};
+
+size_t hash_value(BigIntAsUintNParameters const&);
+V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&,
+                                           const BigIntAsUintNParameters&);
+bool operator==(BigIntAsUintNParameters const&, BigIntAsUintNParameters const&);
+const BigIntAsUintNParameters& BigIntAsUintNParametersOf(const Operator* op)
+    V8_WARN_UNUSED_RESULT;
+
 int FormalParameterCountOf(const Operator* op) V8_WARN_UNUSED_RESULT;
 
 class AllocateParameters {
@@ -813,7 +833,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* SpeculativeBigIntAdd(BigIntOperationHint hint);
   const Operator* SpeculativeBigIntSubtract(BigIntOperationHint hint);
   const Operator* SpeculativeBigIntNegate(BigIntOperationHint hint);
-  const Operator* BigIntAsUintN(int bits);
+  const Operator* BigIntAsUintN(int bits, const FeedbackSource& feedback);
 
   const Operator* ReferenceEqual();
   const Operator* SameValue();
