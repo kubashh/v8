@@ -180,9 +180,6 @@ class UseInfo {
   static UseInfo TruncatingWord32() {
     return UseInfo(MachineRepresentation::kWord32, Truncation::Word32());
   }
-  static UseInfo TruncatingWord64() {
-    return UseInfo(MachineRepresentation::kWord64, Truncation::Word64());
-  }
   static UseInfo CheckedBigIntTruncatingWord64(const FeedbackSource& feedback) {
     return UseInfo(MachineRepresentation::kWord64, Truncation::Word64(),
                    TypeCheckKind::kBigInt, feedback);
