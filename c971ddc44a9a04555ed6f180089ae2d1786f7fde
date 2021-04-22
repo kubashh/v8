@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04a9e280_a5e50585",
+        "filename": "test/unittests/heap/cppgc/allocation-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-04-22T22:04:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b65d9cf_e019c2d8",
+      "range": {
+        "startLine": 75,
+        "startChar": 21,
+        "endLine": 75,
+        "endChar": 22
+      },
+      "revId": "c971ddc44a9a04555ed6f180089ae2d1786f7fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98d10fa1_79c488d6",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95fe3cb1_d7efd84e",
+        "filename": "test/unittests/heap/cppgc/member-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-04-22T22:04:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98d10fa1_79c488d6",
+      "range": {
+        "startLine": 438,
+        "startChar": 2,
+        "endLine": 438,
+        "endChar": 11
+      },
+      "revId": "c971ddc44a9a04555ed6f180089ae2d1786f7fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a05a7b2_b2115a1b",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-04-22T18:26:38Z",
       "side": 1,
       "message": "Would EXPECT_EQ and EXPECT_NE work?",
+      "range": {
+        "startLine": 695,
+        "startChar": 4,
+        "endLine": 695,
+        "endChar": 15
+      },
+      "revId": "c971ddc44a9a04555ed6f180089ae2d1786f7fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1f61856_f5bd4a1a",
+        "filename": "test/unittests/heap/cppgc/persistent-family-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-04-22T22:04:40Z",
+      "side": 1,
+      "message": "We\u0027re trying to test operator\u003d\u003d and operator!\u003d, so I think it makes sense to use EXPECT_TRUE and EXPECT_FALSE with \"explicit\" calls to the operators here (similar to the equality tests for members).",
+      "parentUuid": "0a05a7b2_b2115a1b",
       "range": {
         "startLine": 695,
         "startChar": 4,
