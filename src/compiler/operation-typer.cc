@@ -577,7 +577,6 @@ Type OperationTyper::NumberSilenceNaN(Type type) {
 }
 
 Type OperationTyper::BigIntAsUintN(Type type) {
-  DCHECK(type.Is(Type::BigInt()));
   return Type::BigInt();
 }
 
