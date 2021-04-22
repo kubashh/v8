@@ -39,6 +39,30 @@
       },
       "revId": "e1edbbde7d2d657fcb2e0c1598447ffc10ca759c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3844ded_56b700ff",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1424220
+      },
+      "writtenOn": "2021-04-22T05:00:10Z",
+      "side": 1,
+      "message": "Done\nNow allocation_ is updated in the constructors.",
+      "parentUuid": "41564de5_3489db82",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 77
+      },
+      "revId": "e1edbbde7d2d657fcb2e0c1598447ffc10ca759c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

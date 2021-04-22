@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42e8fac0_84c09393",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1424220
+      },
+      "writtenOn": "2021-04-22T05:00:10Z",
+      "side": 1,
+      "message": "Ho Nico,\n\nThanks for the review. I\u0027ve fixed IsYoungGenerationAllocation. Cheers.",
+      "revId": "f710730bc1d3344c60da24ee93c2007a930f9572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
