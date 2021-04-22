@@ -16,6 +16,23 @@
       "message": "Ho Nico,\n\nThanks for the review. I\u0027ve fixed IsYoungGenerationAllocation. Cheers.",
       "revId": "f710730bc1d3344c60da24ee93c2007a930f9572",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e77ee700_35049617",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-04-22T07:52:27Z",
+      "side": 1,
+      "message": "LGTM, thanks",
+      "revId": "f710730bc1d3344c60da24ee93c2007a930f9572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
