@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3401e3dd_12823931",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-22T11:12:45Z",
+      "side": 1,
+      "message": "Georg, I originally tried merging the Inlining and TypedLowering phases together to reduce TurboProp overhead, but that had some issues that make it tricky. As an alternative I disabled some reducers in TurboProp that are ether optional or repeated between inlining and typed lowering. WDYT?",
+      "revId": "206018019e78c19749405f9bef1d434cb5d14e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c4e7574_9f214561",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-22T11:12:45Z",
+      "side": 1,
+      "message": "Georg, I\u0027m not sure whether this is safe, if we are verifying then the dead-code won\u0027t correctly verify, so we need to run this dead code elimination, but we do dead-code elimination again in the TypedLowering phase, so should have removed all dead code before we go any further. Thouhghts?",
+      "revId": "206018019e78c19749405f9bef1d434cb5d14e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
