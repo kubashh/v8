@@ -107,6 +107,24 @@
       "message": "Here\u0027s another test you can add, one where the receiver is passed in from the outside. It also asserts that there\u0027s no obvious deopt loop:\n\nfunction foo(f) {\n  return f.apply(null, arguments);\n}\n\nfunction TestFunctionPrototypeApplyReceiver(f, x, y) {\n  return f(x, y);\n}\n\n%PrepareFunctionForOptimization(foo);\n%PrepareFunctionForOptimization(TestFunctionPrototypeApplyReceiver);\n\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.min, -13, 42), -13);\n%OptimizeFunctionOnNextCall(TestFunctionPrototypeApplyReceiver);\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.min, -13, 42), -13);\nassertOptimized(TestFunctionPrototypeApplyReceiver);\n\n%PrepareFunctionForOptimization(TestFunctionPrototypeApplyReceiver);\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.max, 7, 9), 9);\nassertUnoptimized(TestFunctionPrototypeApplyReceiver);\n%OptimizeFunctionOnNextCall(TestFunctionPrototypeApplyReceiver);\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.max, 7, 9), 9);\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.min, -13, 42), -13);\nassertOptimized(TestFunctionPrototypeApplyReceiver);\n\n(you\u0027ll have to rename the function to avoid a clash.)",
       "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb4804eb_8b2e5436",
+        "filename": "test/mjsunit/compiler/opt-higher-order-functions.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T09:56:42Z",
+      "side": 1,
+      "message": "Sorry, this test isn\u0027t good. Let me think.",
+      "parentUuid": "318240fd_b41d8681",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
