@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "403d6cf9_dbc5850b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-23T07:39:01Z",
+      "side": 1,
+      "message": "Thanks Georg for the comments! The change is revised based on the comments. Test is added to opt-higher-order-functions.js to make sure the Math function is optimized. A d8 before this change will meet an assertUnoptimized failed at opt-higher-order-functions.js. PTAL, thanks!",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
