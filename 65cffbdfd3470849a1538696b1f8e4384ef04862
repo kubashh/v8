@@ -52,6 +52,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14f9f00a_9ec00adc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-23T17:04:59Z",
+      "side": 1,
+      "message": "Thanks for the change, a couple of comments below:",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4abeb14e_7487ed9c",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-23T17:04:59Z",
+      "side": 1,
+      "message": "Is this correct? Shouldn\u0027t it be Descriptor::kReceiver ?",
+      "range": {
+        "startLine": 489,
+        "startChar": 48,
+        "endLine": 489,
+        "endChar": 63
+      },
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7a5ffeb_1c7e4482",
@@ -77,6 +117,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70dc292c_4de5a20e",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-23T17:04:59Z",
+      "side": 1,
+      "message": "I\u0027d prefer we keep the general IsMonomorphic check as early and quick as possible, rather than checking every function on the (usually unlikely) chance it is prototype.apply. Rather than transforming the feedback to be collected initially, could we maintain the IsMonomorphic check for only the case where feedback \u003d\u003d maybeTarget, but then after we have checked for mono/mega/uninitialized we then check for ShouldCollectReceiver and check feedback against the reciever if this is the case. This would be similar to how we perform Array constructor specialization in CollectConstructFeedback (see https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/ic-callable.tq;l\u003d183?q\u003dic-call\u0026ss\u003dchromium)",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff58b272_2e7eb9a9",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-23T17:04:59Z",
+      "side": 1,
+      "message": "This means that we will transition to megamorphic if receiver.apply is called with different recievers, however previously we would stay monomorphic (wrt the apply target function). I think it would be good to maintain this ability to transition from monomorphic on apply\u0027s reciever -\u003e monomorphic on apply function, rather than regressing directly to megamorphic.\n\nIf you change the code above to do the IsMonomorphic(feedback, maybeTarget) check first, and only after checking for ShouldCollectReceiver and treating that as a special-case, then we would be able to do this.",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e97b4a70_0a4d1c86",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-23T17:04:59Z",
+      "side": 1,
+      "message": "Is there any reason this code can\u0027t be implemented in torque?",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8bd3c3b_ab4fcc96",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 7
@@ -88,6 +179,40 @@
       "writtenOn": "2021-04-23T09:43:46Z",
       "side": 1,
       "message": "This code isn\u0027t quite right. It shouldn\u0027t be using CallCountField, and the ReinterpretCast is wrong.\n\nYou could write:\n\n  TNode\u003cIntPtrT\u003e call_count \u003d SmiUntag(\n      CAST(LoadFeedbackVectorSlot(feedback_vector, slot_id, kTaggedSize)));\n  TNode\u003cIntPtrT\u003e new_count \u003d Signed(WordOr(\n      WordAnd(call_count,\n              IntPtrConstant(~FeedbackNexus::CallFeedbackContentField::kMask)),\n      IntPtrConstant(static_cast\u003cuint32_t\u003e(call_feedback_content)\n                     \u003c\u003c FeedbackNexus::CallFeedbackContentField::kShift)));\n  StoreFeedbackVectorSlot(feedback_vector, slot_id, SmiTag(new_count),\n                          SKIP_WRITE_BARRIER, kTaggedSize);",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9b9c2ba_9f0b39d3",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10139,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-23T17:04:59Z",
+      "side": 1,
+      "message": "Is there any reason this code can\u0027t be implemented in torque?",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7affbe82_a9e3e080",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10155,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-23T17:04:59Z",
+      "side": 1,
+      "message": "I\u0027m still a bit worried about the overhead of doing all this checking on every single JS call on unoptimzed code. WDYT about adding function_prototype_apply\u0027s JSFunction as a NATIVE_CONTEXT_SLOT (like array_function), then we can do a simple reference comparison with the JSFunction to check whether we need to collect different feedback, similar to what we do for CollectConstructFeedback with BothTaggedEqualArrayFunction.",
       "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
