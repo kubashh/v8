@@ -16,6 +16,40 @@
       "message": "Hi Toon.\n\nI uploaded a fix for  bug chromium:1156498 and included some comments and insights of what I think is happening. Could you  review the change and confirm if what I am saying is correct?.\n\nThe original report had a large script as a test. I made a minimal repro that is included as the regress test. The problem was caused by a \"pause on exception\" called on a static initializer inside a class inside a function that needed context. As I comment in the description, my fix changes some behavior of the scope chain for this scenario, so I had to modify the expected output of one of the inspector tests.\n\nThanks,\nLuis Fernando Pardo Sixtos",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be7278c1_1cd126f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-04-23T14:54:10Z",
+      "side": 1,
+      "message": "Thanks Luis! Sorry for the delay in reviewing. I have a question though",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b6d3c4f_582ebe83",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-04-23T14:54:10Z",
+      "side": 1,
+      "message": "Are we certain that context_-\u003escope_info() as scope_info as a parent scope_info? I\u0027d guess context_ could also be an outer class of a function that doesn\u0027t have a context itself? Something like\n\nclass {\n  static var1 \u003d (function() { unreferenced })();\n}\n\nIf that sets ignore_nested_scopes, that would possibly break nested scope support if unreferenced is nested somewhere?",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
