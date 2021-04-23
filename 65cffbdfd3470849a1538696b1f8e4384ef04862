@@ -16,6 +16,80 @@
       "message": "Thanks Georg for the comments! The change is revised based on the comments. Test is added to opt-higher-order-functions.js to make sure the Math function is optimized. A d8 before this change will meet an assertUnoptimized failed at opt-higher-order-functions.js. PTAL, thanks!",
       "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7a5ffeb_1c7e4482",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T09:43:46Z",
+      "side": 1,
+      "message": "Nit: Let\u0027s call this ShouldRecordReceiver.",
+      "range": {
+        "startLine": 70,
+        "startChar": 6,
+        "endLine": 70,
+        "endChar": 27
+      },
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8bd3c3b_ab4fcc96",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T09:43:46Z",
+      "side": 1,
+      "message": "This code isn\u0027t quite right. It shouldn\u0027t be using CallCountField, and the ReinterpretCast is wrong.\n\nYou could write:\n\n  TNode\u003cIntPtrT\u003e call_count \u003d SmiUntag(\n      CAST(LoadFeedbackVectorSlot(feedback_vector, slot_id, kTaggedSize)));\n  TNode\u003cIntPtrT\u003e new_count \u003d Signed(WordOr(\n      WordAnd(call_count,\n              IntPtrConstant(~FeedbackNexus::CallFeedbackContentField::kMask)),\n      IntPtrConstant(static_cast\u003cuint32_t\u003e(call_feedback_content)\n                     \u003c\u003c FeedbackNexus::CallFeedbackContentField::kShift)));\n  StoreFeedbackVectorSlot(feedback_vector, slot_id, SmiTag(new_count),\n                          SKIP_WRITE_BARRIER, kTaggedSize);",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "924385c7_630f8571",
+        "filename": "test/mjsunit/compiler/opt-higher-order-functions.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T09:43:46Z",
+      "side": 1,
+      "message": "Please pass the expected value as first argument to assertEquals, otherwise the error message would be misleading.",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "318240fd_b41d8681",
+        "filename": "test/mjsunit/compiler/opt-higher-order-functions.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T09:43:46Z",
+      "side": 1,
+      "message": "Here\u0027s another test you can add, one where the receiver is passed in from the outside. It also asserts that there\u0027s no obvious deopt loop:\n\nfunction foo(f) {\n  return f.apply(null, arguments);\n}\n\nfunction TestFunctionPrototypeApplyReceiver(f, x, y) {\n  return f(x, y);\n}\n\n%PrepareFunctionForOptimization(foo);\n%PrepareFunctionForOptimization(TestFunctionPrototypeApplyReceiver);\n\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.min, -13, 42), -13);\n%OptimizeFunctionOnNextCall(TestFunctionPrototypeApplyReceiver);\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.min, -13, 42), -13);\nassertOptimized(TestFunctionPrototypeApplyReceiver);\n\n%PrepareFunctionForOptimization(TestFunctionPrototypeApplyReceiver);\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.max, 7, 9), 9);\nassertUnoptimized(TestFunctionPrototypeApplyReceiver);\n%OptimizeFunctionOnNextCall(TestFunctionPrototypeApplyReceiver);\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.max, 7, 9), 9);\nassertEquals(TestFunctionPrototypeApplyReceiver(Math.min, -13, 42), -13);\nassertOptimized(TestFunctionPrototypeApplyReceiver);\n\n(you\u0027ll have to rename the function to avoid a clash.)",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
