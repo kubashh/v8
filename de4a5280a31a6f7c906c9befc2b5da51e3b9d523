@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c21676c_91c2f9b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-23T16:47:42Z",
+      "side": 1,
+      "message": "Please land the CL on main branch first, so that the tree doesn\u0027t get closed by missing MB config.",
+      "revId": "de4a5280a31a6f7c906c9befc2b5da51e3b9d523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
