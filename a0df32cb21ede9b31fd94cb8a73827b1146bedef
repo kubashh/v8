@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2af4ccf6_1f6ea10e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-23T14:36:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e35d58e_360dd93a",
+      "range": {
+        "startLine": 9,
+        "startChar": 14,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "a0df32cb21ede9b31fd94cb8a73827b1146bedef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cd8a55a_5bd40f31",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "170ab134_85feb922",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-23T14:36:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cd8a55a_5bd40f31",
+      "range": {
+        "startLine": 108,
+        "startChar": 7,
+        "endLine": 108,
+        "endChar": 71
+      },
+      "revId": "a0df32cb21ede9b31fd94cb8a73827b1146bedef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f717d8c_70f5dc60",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-04-22T08:58:23Z",
       "side": 1,
       "message": "Here is a lot of repetitive boiler plate, even though there is the clusterfuzz_builder abstraction. Could you in a follow up try to tied this a bit and e.g. pull up the common things as defaults into clusterfuzz_builder and only overwrite the defaults where needed?",
+      "range": {
+        "startLine": 109,
+        "startChar": 8,
+        "endLine": 114,
+        "endChar": 10
+      },
+      "revId": "a0df32cb21ede9b31fd94cb8a73827b1146bedef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7677a16_9ad2e77a",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-23T14:36:27Z",
+      "side": 1,
+      "message": "Ack, will address this in another CL",
+      "parentUuid": "3f717d8c_70f5dc60",
       "range": {
         "startLine": 109,
         "startChar": 8,
