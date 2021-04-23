@@ -16,6 +16,86 @@
       "message": "PTAL, thanks",
       "revId": "ca32fdb856bddbee8f81fd41bcf7cf2b26c15244",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bad0e3b_6874b374",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 7833,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T07:24:53Z",
+      "side": 1,
+      "message": "Would SpeculativeBigIntAsUintN now be a better name?",
+      "range": {
+        "startLine": 7833,
+        "startChar": 39,
+        "endLine": 7833,
+        "endChar": 52
+      },
+      "revId": "ca32fdb856bddbee8f81fd41bcf7cf2b26c15244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "883509fd_8fb157fb",
+        "filename": "src/compiler/representation-change.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T07:24:53Z",
+      "side": 1,
+      "message": "Do I understand correctly that the identify-zero aspect of this truncation doesn\u0027t matter for CheckedBigIntTruncatingWord64 because we\u0027d deopt for -0 (in fact, for any Number) in either case?",
+      "range": {
+        "startLine": 184,
+        "startChar": 51,
+        "endLine": 184,
+        "endChar": 71
+      },
+      "revId": "ca32fdb856bddbee8f81fd41bcf7cf2b26c15244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57dbe5d2_0ac6e900",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T07:24:53Z",
+      "side": 1,
+      "message": "dcheck new_input_index \u003d\u003d 0?",
+      "revId": "ca32fdb856bddbee8f81fd41bcf7cf2b26c15244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a719c0b_6f545e21",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T07:24:53Z",
+      "side": 1,
+      "message": "DCHECK_GE(bits, 0)",
+      "revId": "ca32fdb856bddbee8f81fd41bcf7cf2b26c15244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
