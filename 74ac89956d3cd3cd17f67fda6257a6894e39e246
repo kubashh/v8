@@ -50,6 +50,24 @@
       "message": "Are we certain that context_-\u003escope_info() as scope_info as a parent scope_info? I\u0027d guess context_ could also be an outer class of a function that doesn\u0027t have a context itself? Something like\n\nclass {\n  static var1 \u003d (function() { unreferenced })();\n}\n\nIf that sets ignore_nested_scopes, that would possibly break nested scope support if unreferenced is nested somewhere?",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a84a33_8677dcd6",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2021-04-23T20:06:57Z",
+      "side": 1,
+      "message": "Yes, that sets the ignore_nested_scopes flag, but since the function doesn\u0027t need context, context_ is not updated on line 310. If the functions does need context, I think that context_-\u003escope_info().scope_type() would be a function scope, which would not set the ignore_nested_scopes flag.",
+      "parentUuid": "9b6d3c4f_582ebe83",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
