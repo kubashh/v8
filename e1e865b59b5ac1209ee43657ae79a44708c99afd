@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f72fa3e_3f7feea5",
+        "filename": "src/codegen/riscv64/macro-assembler-riscv64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4489,
+      "author": {
+        "id": 1477547
+      },
+      "writtenOn": "2021-04-23T09:13:05Z",
+      "side": 1,
+      "message": "Since we hard code the target address into t6, this DCHECK can be removed, right?",
+      "revId": "e1e865b59b5ac1209ee43657ae79a44708c99afd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
