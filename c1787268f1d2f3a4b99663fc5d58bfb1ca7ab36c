@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bd54f67_495a8164",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-23T14:27:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9549b25d_ae00b2ad",
+      "range": {
+        "startLine": 9,
+        "startChar": 14,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "c1787268f1d2f3a4b99663fc5d58bfb1ca7ab36c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d21021b_af12eddf",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cbd0fd5_40c3a4e5",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-23T14:27:53Z",
+      "side": 1,
+      "message": "Ack, will solve this in another CL",
+      "parentUuid": "9d21021b_af12eddf",
+      "range": {
+        "startLine": 139,
+        "startChar": 22,
+        "endLine": 139,
+        "endChar": 27
+      },
+      "revId": "c1787268f1d2f3a4b99663fc5d58bfb1ca7ab36c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87932c5c_870a3e29",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-04-22T11:28:34Z",
       "side": 1,
       "message": "This needs to change, as we otherwise don\u0027t get different builders, but the same once more... also below. You\u0027d need to create two new mixins and there add the x86 mixin.",
+      "range": {
+        "startLine": 140,
+        "startChar": 19,
+        "endLine": 140,
+        "endChar": 22
+      },
+      "revId": "c1787268f1d2f3a4b99663fc5d58bfb1ca7ab36c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf162fad_5fb40fd6",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-23T14:27:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87932c5c_870a3e29",
       "range": {
         "startLine": 140,
         "startChar": 19,
