@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daaa974b_4a38f372",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-23T07:36:23Z",
+      "side": 1,
+      "message": "Context specialization isn\u0027t repeated actually.\n\nBTW, for my understanding: Turboprop already disables function context specialization, right?",
+      "revId": "ef40a53a85e9772f06fd747672a16275783a2301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
