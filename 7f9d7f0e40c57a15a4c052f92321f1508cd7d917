@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fded60c8_cf64efe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-04-26T17:44:34Z",
+      "side": 1,
+      "message": "Hi Maya,\n\nGCC seems to have problems compiling the new changes:\n\nsrc/googletest/include/gtest/gtest-matchers.h:302:54: error: \u0027\u003canonymous\u003e.testing::internal::MatcherBase\u003ccppgc::internal::GarbageCollector::Config\u003e::buffer_\u0027 is used uninitialized in this function [-Werror\u003duninitialized]\n       : vtable_(other.vtable_), buffer_(other.buffer_) {\n\nDo we need to add fixes upstream to googletest repository?",
+      "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
