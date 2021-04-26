@@ -56,6 +56,30 @@
       },
       "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a9f6517_0f5c0287",
+        "filename": "generated/luci-scheduler.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-26T11:25:55Z",
+      "side": 1,
+      "message": "@almuthanna or liviurau: Maybe one of you didn\u0027t re-run lucicfg on rebase. I don\u0027t know which CL landed first.\n\nI thought that presubmit would check if the checked in configs and the config to generate are the same, not?",
+      "parentUuid": "a1de76ee_f3755cbb",
+      "range": {
+        "startLine": 263,
+        "startChar": 2,
+        "endLine": 263,
+        "endChar": 13
+      },
+      "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
