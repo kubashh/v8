@@ -16,6 +16,29 @@
       "message": "ptal",
       "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d8a5702_40dfb4d7",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-26T12:47:23Z",
+      "side": 1,
+      "message": "Nit: \"Racy\" doesn\u0027t seem to fit here because there is no race condition as the array is immutable.",
+      "range": {
+        "startLine": 792,
+        "startChar": 10,
+        "endLine": 792,
+        "endChar": 45
+      },
+      "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
