@@ -63,6 +63,30 @@
       },
       "revId": "dd5aca1b9e3607c19826e217b249ea8b305ab234",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e35338a_439733a6",
+        "filename": "main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-04-26T12:50:19Z",
+      "side": 1,
+      "message": "I think we need it everywhere indeed. A warning about current user having a newer version than the one we try to enforce, would be nice.",
+      "parentUuid": "b5139de0_5b3893e2",
+      "range": {
+        "startLine": 6,
+        "startChar": 23,
+        "endLine": 6,
+        "endChar": 29
+      },
+      "revId": "dd5aca1b9e3607c19826e217b249ea8b305ab234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
