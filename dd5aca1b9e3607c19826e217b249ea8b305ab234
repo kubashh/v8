@@ -39,6 +39,30 @@
       },
       "revId": "dd5aca1b9e3607c19826e217b249ea8b305ab234",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5139de0_5b3893e2",
+        "filename": "main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2021-04-26T12:42:57Z",
+      "side": 1,
+      "message": "This is merely a failsafe to ensure a nice error message to coworkers. It\u0027s OK if it becomes stale. It\u0027s the most useful when you are trying a cutting edge feature OR your colleagues live on very old depot_tools or have custom lucicfg builds in $PATH 😊",
+      "parentUuid": "e0e1d16f_8b5fa413",
+      "range": {
+        "startLine": 6,
+        "startChar": 23,
+        "endLine": 6,
+        "endChar": 29
+      },
+      "revId": "dd5aca1b9e3607c19826e217b249ea8b305ab234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
