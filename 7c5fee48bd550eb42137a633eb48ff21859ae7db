@@ -104,6 +104,30 @@
       },
       "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d86d48b_b2715a9e",
+        "filename": "generated/luci-scheduler.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-26T11:29:40Z",
+      "side": 1,
+      "message": "IC, Liviu, could you add that please?",
+      "parentUuid": "a121b6fa_fb38eb43",
+      "range": {
+        "startLine": 263,
+        "startChar": 2,
+        "endLine": 263,
+        "endChar": 13
+      },
+      "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
