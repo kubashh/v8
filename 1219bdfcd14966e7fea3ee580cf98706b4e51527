@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a810e756_9d4b28c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-26T14:58:45Z",
+      "side": 1,
+      "message": "Thanks, Michael! I\u0027ll try landing this and monitor the bots. Hope this unblocks the autoroller.",
+      "revId": "1219bdfcd14966e7fea3ee580cf98706b4e51527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
