@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1184754_aa124890",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-04-26T12:48:03Z",
+      "side": 1,
+      "message": "LGTM\n\nHave you reviewed the new failing test case?",
+      "revId": "dc9fae2b0f19e2334b2609ed689a913527c9e182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
