@@ -34,6 +34,24 @@
       "parentUuid": "fded60c8_cf64efe7",
       "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55f59ac3_759d8fbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-04-26T19:19:09Z",
+      "side": 1,
+      "message": "I see, thank you. Seems like a problem with gcc 8, as it\u0027s compiling fine with gcc 6.",
+      "parentUuid": "8b424802_abe8923c",
+      "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
