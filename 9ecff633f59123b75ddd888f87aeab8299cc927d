@@ -16,6 +16,23 @@
       "message": "lgtm",
       "revId": "9ecff633f59123b75ddd888f87aeab8299cc927d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce27912d_f33e0a35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-04-26T10:51:11Z",
+      "side": 1,
+      "message": "Could you please mention in the commit message, that TPH doesn\u0027t have multiple mutators at the moment and therefore also disables concurrent_inlining. Which is the reason why we do not need to support that.",
+      "revId": "9ecff633f59123b75ddd888f87aeab8299cc927d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
