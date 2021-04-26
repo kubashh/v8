@@ -121,11 +121,12 @@ class IncrementalMarkingRootMarkingVisitor : public RootVisitor {
 
  private:
   void MarkObjectByPointer(FullObjectSlot p) {
-    Object obj = *p;
-    if (!obj.IsHeapObject()) return;
-    DCHECK(!MapWord::IsPacked(obj.ptr()));
-
-    heap_->incremental_marking()->WhiteToGreyAndPush(HeapObject::cast(obj));
+    Object object = *p;
+    if (!object.IsHeapObject()) return;
+    DCHECK(!MapWord::IsPacked(object.ptr()));
+    HeapObject heap_object = HeapObject::cast(object);
+    if (BasicMemoryChunk::FromHeapObject(heap_object)->InSharedHeap()) return;
+    heap_->incremental_marking()->WhiteToGreyAndPush(heap_object);
   }
 
   Heap* heap_;

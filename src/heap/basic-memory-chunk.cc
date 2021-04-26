@@ -49,6 +49,7 @@ BasicMemoryChunk* BasicMemoryChunk::Initialize(Heap* heap, Address base,
   chunk->allocated_bytes_ = chunk->area_size();
   chunk->wasted_memory_ = 0;
   chunk->marking_bitmap<AccessMode::NON_ATOMIC>()->Clear();
+  if (heap->IsShared()) chunk->SetFlag(IN_SHARED_HEAP);
 
   return chunk;
 }

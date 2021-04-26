@@ -1752,6 +1752,17 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     using IsDebugActive = HasAsyncEventDelegate::Next<bool, 1>;
   };
 
+  void UseAsSharedIsolate() {
+    DCHECK(!is_shared_);
+    is_shared_ = true;
+  }
+
+  bool is_shared() { return is_shared_; }
+  Isolate* shared_isolate() { return shared_isolate_; }
+
+  void AttachToSharedIsolate(Isolate* shared);
+  void DetachFromSharedIsolate();
+
  private:
   explicit Isolate(std::unique_ptr<IsolateAllocator> isolate_allocator);
   ~Isolate();
@@ -1863,6 +1874,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   // Returns the Exception sentinel.
   Object ThrowInternal(Object exception, MessageLocation* location);
+
+  // Methods for appending and removing to/from client isolates list.
+  void AppendAsClientIsolate(Isolate* client);
+  void RemoveAsClientIsolate(Isolate* client);
 
   // This class contains a collection of data accessible from both C++ runtime
   // and compiled code (including assembly stubs, builtins, interpreter bytecode
@@ -2137,6 +2152,17 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // know if this is the case, so I'm preserving it for now.
   base::Mutex thread_data_table_mutex_;
   ThreadDataTable thread_data_table_;
+
+  // Set to true, if this isolate is used as shared heap for client isolate;
+  bool is_shared_ = false;
+
+  Isolate* shared_isolate_ = nullptr;
+
+  base::Mutex client_isolate_mutex_;
+  Isolate* client_isolate_head_ = nullptr;
+
+  Isolate* prev_client_isolate_ = nullptr;
+  Isolate* next_client_isolate_ = nullptr;
 
   // A signal-safe vector of heap pages containing code. Used with the
   // v8::Unwinder API.
