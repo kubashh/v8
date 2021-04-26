@@ -117,13 +117,13 @@ def led_users(*, pool_realm, builder_realms, groups):
 led_users(
     pool_realm = "pools/ci",
     builder_realms = ["ci", "ci.br.beta", "ci.br.stable"],
-    groups = "projcect-v8-ci-led-users",
+    groups = "project-v8-led-users",
 )
 
 led_users(
     pool_realm = "pools/try",
     builder_realms = ["try", "try.triggered"],
-    groups = "projcect-v8-ci-led-users",
+    groups = "project-v8-led-users",
 )
 
 luci.logdog(gs_bucket = "chromium-luci-logdog")
