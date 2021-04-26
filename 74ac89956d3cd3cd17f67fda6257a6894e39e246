@@ -68,6 +68,24 @@
       "parentUuid": "9b6d3c4f_582ebe83",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7186eb6c_a6d72e6e",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-04-26T09:27:37Z",
+      "side": 1,
+      "message": "You are right that it won\u0027t run line 310, but it will run 303 and 304. This resets where variable lookup starts to the closure scope (both current_scope and start_scope are set to closure_scope), and may hence skip stack-allocated variables that are supposed to mask outer context-allocated variables. I\u0027m thinking of something like:\n\n class {\n   static var \u003d (function () {\n     let x \u003d 10; // will be observable\n     if (true) {\n       let x \u003d 20; // will be skipped since we ignore nested scopes\n       unreferenced;\n     }\n   })();\n }",
+      "parentUuid": "e9a84a33_8677dcd6",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
