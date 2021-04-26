@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "317fe69c_3a38f6b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-26T13:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f0377ca_6e845aef",
+      "revId": "a70385891e1764435b76d22511278ea80ef0fc87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "17b50fde_39469ea1",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3ae6e8b_b966122f",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-26T13:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9707e24_e2697c32",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 82
+      },
+      "revId": "a70385891e1764435b76d22511278ea80ef0fc87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3105f96_b80c1f23",
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "150addbf_bb1eee87",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-26T13:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3105f96_b80c1f23",
+      "range": {
+        "startLine": 8,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "a70385891e1764435b76d22511278ea80ef0fc87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9e7f1d4_9777fc40",
@@ -94,6 +160,30 @@
       "writtenOn": "2021-04-26T12:12:35Z",
       "side": 1,
       "message": "Note to self: Need to earmark somewhere to check on if this is still needed. It seems a relic from the past, but it costs considerable compile time.",
+      "range": {
+        "startLine": 29,
+        "startChar": 22,
+        "endLine": 29,
+        "endChar": 37
+      },
+      "revId": "a70385891e1764435b76d22511278ea80ef0fc87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "706039bf_f8a9eeb3",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-04-26T13:59:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e9e7f1d4_9777fc40",
       "range": {
         "startLine": 29,
         "startChar": 22,
