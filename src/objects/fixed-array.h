@@ -231,6 +231,9 @@ class FixedDoubleArray
   // Setter and getter for elements.
   inline double get_scalar(int index);
   inline uint64_t get_representation(int index);
+  // As above, but with TSAN annotations to ignore racy reads. Only use this if
+  // racy reads are know to be safe for some reason.
+  inline uint64_t get_representation_unsafe(int index);
   static inline Handle<Object> get(FixedDoubleArray array, int index,
                                    Isolate* isolate);
   inline void set(int index, double value);

@@ -1272,7 +1272,7 @@ AllocationSiteData::AllocationSiteData(JSHeapBroker* broker,
       GetAllocationType_(object->GetAllocationType()) {
   if (PointsToLiteral_) {
     IsFastLiteral_ = IsInlinableFastLiteral(
-        handle(object->boilerplate(), broker->isolate()));
+        handle(object->boilerplate(kAcquireLoad), broker->isolate()));
   } else {
     GetElementsKind_ = object->GetElementsKind();
     CanInlineCall_ = object->CanInlineCall();
@@ -1288,7 +1288,7 @@ void AllocationSiteData::SerializeBoilerplate(JSHeapBroker* broker) {
 
   CHECK(IsFastLiteral_);
   DCHECK_NULL(boilerplate_);
-  boilerplate_ = broker->GetOrCreateData(site->boilerplate());
+  boilerplate_ = broker->GetOrCreateData(site->boilerplate(kAcquireLoad));
   if (!boilerplate_->should_access_heap()) {
     boilerplate_->AsJSObject()->SerializeAsBoilerplate(broker);
   }
@@ -1805,41 +1805,12 @@ void FixedArrayData::SerializeContents(JSHeapBroker* broker) {
 
 class FixedDoubleArrayData : public FixedArrayBaseData {
  public:
-  FixedDoubleArrayData(JSHeapBroker* broker, ObjectData** storage,
-                       Handle<FixedDoubleArray> object);
-
-  // Serializes all elements of the fixed array.
-  void SerializeContents(JSHeapBroker* broker);
-
-  Float64 Get(int i) const;
-
- private:
-  bool serialized_contents_ = false;
-  ZoneVector<Float64> contents_;
+  FixedDoubleArrayData(
+      JSHeapBroker* broker, ObjectData** storage,
+      Handle<FixedDoubleArray> object,
+      ObjectDataKind kind = ObjectDataKind::kNeverSerializedHeapObject)
+      : FixedArrayBaseData(broker, storage, object, kind) {}
 };
-
-FixedDoubleArrayData::FixedDoubleArrayData(JSHeapBroker* broker,
-                                           ObjectData** storage,
-                                           Handle<FixedDoubleArray> object)
-    : FixedArrayBaseData(broker, storage, object,
-                         ObjectDataKind::kSerializedHeapObject),
-      contents_(broker->zone()) {}
-
-void FixedDoubleArrayData::SerializeContents(JSHeapBroker* broker) {
-  if (serialized_contents_) return;
-  serialized_contents_ = true;
-
-  TraceScope tracer(broker, this, "FixedDoubleArrayData::SerializeContents");
-  Handle<FixedDoubleArray> self = Handle<FixedDoubleArray>::cast(object());
-  CHECK_EQ(self->length(), length());
-  CHECK(contents_.empty());
-  contents_.reserve(static_cast<size_t>(length()));
-
-  for (int i = 0; i < length(); i++) {
-    contents_.push_back(Float64::FromBits(self->get_representation(i)));
-  }
-  TRACE(broker, "Copied " << contents_.size() << " elements");
-}
 
 class BytecodeArrayData : public FixedArrayBaseData {
  public:
@@ -2471,8 +2442,6 @@ void JSObjectData::SerializeRecursiveAsBoilerplate(JSHeapBroker* broker,
   } else {
     CHECK(boilerplate->HasDoubleElements());
     CHECK_LE(elements_object->Size(), kMaxRegularHeapObjectSize);
-    DCHECK_EQ(elements_->kind(), ObjectDataKind::kSerializedHeapObject);
-    elements_->AsFixedDoubleArray()->SerializeContents(broker);
   }
 
   // TODO(turbofan): Do we want to support out-of-object properties?
@@ -3113,7 +3082,7 @@ bool AllocationSiteRef::IsFastLiteral() const {
   if (data_->should_access_heap()) {
     CHECK_NE(data_->kind(), ObjectDataKind::kNeverSerializedHeapObject);
     return IsInlinableFastLiteral(
-        handle(object()->boilerplate(), broker()->isolate()));
+        handle(object()->boilerplate(kAcquireLoad), broker()->isolate()));
   }
   return data()->AsAllocationSite()->IsFastLiteral();
 }
@@ -3289,12 +3258,10 @@ ObjectRef FixedArrayRef::get(int i) const {
   return ObjectRef(broker(), data()->AsFixedArray()->Get(i));
 }
 
-Float64 FixedDoubleArrayRef::get(int i) const {
-  if (data_->should_access_heap()) {
-    return Float64::FromBits(object()->get_representation(i));
-  } else {
-    return data()->AsFixedDoubleArray()->Get(i);
-  }
+Float64 FixedDoubleArrayRef::RacyGetFromConstantFixedDoubleArray(int i) const {
+  STATIC_ASSERT(RefSerializationKindOf<FixedDoubleArray>() ==
+                RefSerializationKind::kNeverSerialized);
+  return Float64::FromBits(object()->get_representation_unsafe(i));
 }
 
 Handle<ByteArray> BytecodeArrayRef::SourcePositionTable() const {
@@ -4167,8 +4134,8 @@ HeapObjectType HeapObjectRef::GetHeapObjectType() const {
 }
 base::Optional<JSObjectRef> AllocationSiteRef::boilerplate() const {
   if (data_->should_access_heap()) {
-    return JSObjectRef(
-        broker(), broker()->CanonicalPersistentHandle(object()->boilerplate()));
+    return JSObjectRef(broker(), broker()->CanonicalPersistentHandle(
+                                     object()->boilerplate(kAcquireLoad)));
   }
   ObjectData* boilerplate = data()->AsAllocationSite()->boilerplate();
   if (boilerplate) {
@@ -4203,11 +4170,6 @@ int FixedArrayBaseRef::length() const {
 ObjectData* FixedArrayData::Get(int i) const {
   CHECK_LT(i, static_cast<int>(contents_.size()));
   CHECK_NOT_NULL(contents_[i]);
-  return contents_[i];
-}
-
-Float64 FixedDoubleArrayData::Get(int i) const {
-  CHECK_LT(i, static_cast<int>(contents_.size()));
   return contents_[i];
 }
 

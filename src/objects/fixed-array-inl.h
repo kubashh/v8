@@ -382,6 +382,13 @@ uint64_t FixedDoubleArray::get_representation(int index) {
   return base::ReadUnalignedValue<uint64_t>(field_address(offset));
 }
 
+uint64_t FixedDoubleArray::get_representation_unsafe(int index) {
+  TSAN_ANNOTATE_IGNORE_READS_BEGIN;
+  const uint64_t result = get_representation(index);
+  TSAN_ANNOTATE_IGNORE_READS_END;
+  return result;
+}
+
 Handle<Object> FixedDoubleArray::get(FixedDoubleArray array, int index,
                                      Isolate* isolate) {
   if (array.is_the_hole(index)) {
