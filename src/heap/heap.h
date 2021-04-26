@@ -2631,6 +2631,7 @@ class V8_EXPORT_PRIVATE HeapObjectIterator {
   SpaceIterator* space_iterator_;
   // Object iterator for the space currently being iterated.
   std::unique_ptr<ObjectIterator> object_iterator_;
+  bool third_party_heap_iterator_initialized_;
 };
 
 // Abstract base class for checking whether a weak object should be retained.

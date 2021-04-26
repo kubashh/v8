@@ -6136,7 +6136,8 @@ HeapObjectIterator::HeapObjectIterator(
       filtering_(filtering),
       filter_(nullptr),
       space_iterator_(nullptr),
-      object_iterator_(nullptr) {
+      object_iterator_(nullptr),
+      third_party_heap_iterator_initialized_(false) {
   heap_->MakeHeapIterable();
   // Start the iteration.
   space_iterator_ = new SpaceIterator(heap_);
@@ -6171,6 +6172,13 @@ HeapObject HeapObjectIterator::Next() {
 }
 
 HeapObject HeapObjectIterator::NextObject() {
+  if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
+    if (!third_party_heap_iterator_initialized_) {
+      third_party_heap_iterator_initialized_ = true;
+      heap_->tp_heap_->ResetIterator();
+    }
+    return heap_->tp_heap_->NextObject();
+  }
   // No iterator means we are done.
   if (object_iterator_.get() == nullptr) return HeapObject();
 
