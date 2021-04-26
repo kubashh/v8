@@ -128,6 +128,30 @@
       },
       "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48d8b209_dc73e18f",
+        "filename": "generated/luci-scheduler.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2021-04-26T11:30:42Z",
+      "side": 1,
+      "message": "Your PRESUBMIT is using *old* non-LUCICFG way to check stuff\nPlease use https://source.chromium.org/chromium/infra/infra/+/master:infra/config/PRESUBMIT.py;drc\u003d2085d45f08d793bcbd5671c06de8f78e7fb0175a",
+      "parentUuid": "a121b6fa_fb38eb43",
+      "range": {
+        "startLine": 263,
+        "startChar": 2,
+        "endLine": 263,
+        "endChar": 13
+      },
+      "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
