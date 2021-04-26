@@ -16,6 +16,24 @@
       "message": "Hi Maya,\n\nGCC seems to have problems compiling the new changes:\n\nsrc/googletest/include/gtest/gtest-matchers.h:302:54: error: \u0027\u003canonymous\u003e.testing::internal::MatcherBase\u003ccppgc::internal::GarbageCollector::Config\u003e::buffer_\u0027 is used uninitialized in this function [-Werror\u003duninitialized]\n       : vtable_(other.vtable_), buffer_(other.buffer_) {\n\nDo we need to add fixes upstream to googletest repository?",
       "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b424802_abe8923c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-26T18:36:20Z",
+      "side": 1,
+      "message": "Hmm, I don\u0027t know... our gcc bots didn\u0027t have this problem. Feel free to add more conditions for your case. Upstream googletest changes are fine too, but they don\u0027t roll very frequently.",
+      "parentUuid": "fded60c8_cf64efe7",
+      "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
