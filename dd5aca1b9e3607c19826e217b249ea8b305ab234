@@ -16,6 +16,29 @@
       "message": "PTAL\nThanks!",
       "revId": "dd5aca1b9e3607c19826e217b249ea8b305ab234",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0e1d16f_8b5fa413",
+        "filename": "main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-26T12:38:44Z",
+      "side": 1,
+      "message": "Who is supposed to bump this and how frequently? Also I assume we need this in all our infra/config branches, right?",
+      "range": {
+        "startLine": 6,
+        "startChar": 23,
+        "endLine": 6,
+        "endChar": 29
+      },
+      "revId": "dd5aca1b9e3607c19826e217b249ea8b305ab234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
