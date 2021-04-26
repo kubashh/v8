@@ -13,7 +13,7 @@ in_category = in_console("clusterfuzz")
 in_category(
     "Windows",
     clusterfuzz_builder(
-        name = "V8 Clusterfuzz Win64 ASAN - release builder",
+        name = "V8 Clusterfuzz Win64 ASAN - debug builder",
         bucket = "ci",
         triggered_by = ["v8-trigger"],
         triggering_policy = scheduler.policy(
@@ -25,7 +25,7 @@ in_category(
         use_goma = GOMA.ATS,
     ),
     clusterfuzz_builder(
-        name = "V8 Clusterfuzz Win64 ASAN - debug builder",
+        name = "V8 Clusterfuzz Win64 ASAN - release builder",
         bucket = "ci",
         triggered_by = ["v8-trigger"],
         triggering_policy = scheduler.policy(
@@ -41,7 +41,7 @@ in_category(
 in_category(
     "Mac",
     clusterfuzz_builder(
-        name = "V8 Clusterfuzz Mac64 ASAN - release builder",
+        name = "V8 Clusterfuzz Mac64 ASAN - debug builder",
         bucket = "ci",
         triggered_by = ["v8-trigger"],
         triggering_policy = scheduler.policy(
@@ -53,7 +53,7 @@ in_category(
         use_goma = GOMA.DEFAULT,
     ),
     clusterfuzz_builder(
-        name = "V8 Clusterfuzz Mac64 ASAN - debug builder",
+        name = "V8 Clusterfuzz Mac64 ASAN - release builder",
         bucket = "ci",
         triggered_by = ["v8-trigger"],
         triggering_policy = scheduler.policy(
@@ -69,18 +69,6 @@ in_category(
 in_category(
     "Linux",
     clusterfuzz_builder(
-        name = "V8 Clusterfuzz Linux64 - release builder",
-        bucket = "ci",
-        triggered_by = ["v8-trigger"],
-        triggering_policy = scheduler.policy(
-            kind = scheduler.GREEDY_BATCHING_KIND,
-            max_batch_size = 1,
-        ),
-        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
-        properties = {"triggers": ["V8 NumFuzz"], "builder_group": "client.v8.clusterfuzz", "clusterfuzz_archive": {"bucket": "v8-asan", "name": "d8"}, "default_targets": ["v8_clusterfuzz"]},
-        use_goma = GOMA.DEFAULT,
-    ),
-    clusterfuzz_builder(
         name = "V8 Clusterfuzz Linux64 - debug builder",
         bucket = "ci",
         triggered_by = ["v8-trigger"],
@@ -93,7 +81,7 @@ in_category(
         use_goma = GOMA.DEFAULT,
     ),
     clusterfuzz_builder(
-        name = "V8 Clusterfuzz Linux64 ASAN no inline - release builder",
+        name = "V8 Clusterfuzz Linux64 - release builder",
         bucket = "ci",
         triggered_by = ["v8-trigger"],
         triggering_policy = scheduler.policy(
@@ -101,7 +89,7 @@ in_category(
             max_batch_size = 1,
         ),
         dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
-        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "clusterfuzz_archive": {"bucket": "v8-asan", "name": "d8-asan-no-inline"}, "default_targets": ["v8_clusterfuzz"]},
+        properties = {"triggers": ["V8 NumFuzz"], "builder_group": "client.v8.clusterfuzz", "clusterfuzz_archive": {"bucket": "v8-asan", "name": "d8"}, "default_targets": ["v8_clusterfuzz"]},
         use_goma = GOMA.DEFAULT,
     ),
     clusterfuzz_builder(
@@ -129,7 +117,7 @@ in_category(
         use_goma = GOMA.DEFAULT,
     ),
     clusterfuzz_builder(
-        name = "V8 Clusterfuzz Linux ASAN - debug builder",
+        name = "V8 Clusterfuzz Linux64 ASAN no inline - release builder",
         bucket = "ci",
         triggered_by = ["v8-trigger"],
         triggering_policy = scheduler.policy(
@@ -137,69 +125,7 @@ in_category(
             max_batch_size = 1,
         ),
         dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
-        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "clusterfuzz_archive": {"bitness": "32", "bucket": "v8-asan", "name": "d8-asan"}, "default_targets": ["v8_clusterfuzz"]},
-        use_goma = GOMA.DEFAULT,
-    ),
-    clusterfuzz_builder(
-        name = "V8 Clusterfuzz Linux ASAN no inline - release builder",
-        bucket = "ci",
-        triggered_by = ["v8-trigger"],
-        triggering_policy = scheduler.policy(
-            kind = scheduler.GREEDY_BATCHING_KIND,
-            max_batch_size = 1,
-        ),
-        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
-        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "clusterfuzz_archive": {"bitness": "32", "bucket": "v8-asan", "name": "d8-asan-no-inline"}, "default_targets": ["v8_clusterfuzz"]},
-        use_goma = GOMA.DEFAULT,
-    ),
-    clusterfuzz_builder(
-        name = "V8 Clusterfuzz Linux - debug builder",
-        bucket = "ci",
-        triggered_by = ["v8-trigger"],
-        triggering_policy = scheduler.policy(
-            kind = scheduler.GREEDY_BATCHING_KIND,
-            max_batch_size = 1,
-        ),
-        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
-        properties = {"builder_group": "client.v8.clusterfuzz", "clusterfuzz_archive": {"bitness": "32", "bucket": "v8-asan", "name": "d8"}, "default_targets": ["v8_clusterfuzz"]},
-        use_goma = GOMA.DEFAULT,
-    ),
-    clusterfuzz_builder(
-        name = "V8 Clusterfuzz Linux ASAN arm - debug builder",
-        bucket = "ci",
-        triggered_by = ["v8-trigger"],
-        triggering_policy = scheduler.policy(
-            kind = scheduler.GREEDY_BATCHING_KIND,
-            max_batch_size = 1,
-        ),
-        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
-        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "clusterfuzz_archive": {"bucket": "v8-asan", "name": "d8-arm-asan"}, "default_targets": ["v8_clusterfuzz"]},
-        use_goma = GOMA.DEFAULT,
-    ),
-    clusterfuzz_builder(
-        name = "V8 Clusterfuzz Linux MSAN no origins",
-        bucket = "ci",
-        triggered_by = ["v8-trigger"],
-        triggering_policy = scheduler.policy(
-            kind = scheduler.GREEDY_BATCHING_KIND,
-            max_batch_size = 1,
-        ),
-        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
-        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "default_targets": ["v8_clusterfuzz"], "clusterfuzz_archive": {"bucket": "v8-msan", "name": "d8-msan-no-origins"}},
-        gclient_vars = [GCLIENT_VARS.INSTRUMENTED_LIBRARIES],
-        use_goma = GOMA.DEFAULT,
-    ),
-    clusterfuzz_builder(
-        name = "V8 Clusterfuzz Linux MSAN chained origins",
-        bucket = "ci",
-        triggered_by = ["v8-trigger"],
-        triggering_policy = scheduler.policy(
-            kind = scheduler.GREEDY_BATCHING_KIND,
-            max_batch_size = 1,
-        ),
-        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
-        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "default_targets": ["v8_clusterfuzz"], "clusterfuzz_archive": {"bucket": "v8-msan", "name": "d8-msan-chained-origins"}},
-        gclient_vars = [GCLIENT_VARS.INSTRUMENTED_LIBRARIES],
+        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "clusterfuzz_archive": {"bucket": "v8-asan", "name": "d8-asan-no-inline"}, "default_targets": ["v8_clusterfuzz"]},
         use_goma = GOMA.DEFAULT,
     ),
     clusterfuzz_builder(
@@ -236,6 +162,80 @@ in_category(
         ),
         dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "clusterfuzz_archive": {"bucket": "v8-ubsan", "name": "d8-ubsan"}, "default_targets": ["v8_clusterfuzz"]},
+        use_goma = GOMA.DEFAULT,
+    ),
+    clusterfuzz_builder(
+        name = "V8 Clusterfuzz Linux - debug builder",
+        bucket = "ci",
+        triggered_by = ["v8-trigger"],
+        triggering_policy = scheduler.policy(
+            kind = scheduler.GREEDY_BATCHING_KIND,
+            max_batch_size = 1,
+        ),
+        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+        properties = {"builder_group": "client.v8.clusterfuzz", "clusterfuzz_archive": {"bitness": "32", "bucket": "v8-asan", "name": "d8"}, "default_targets": ["v8_clusterfuzz"]},
+        use_goma = GOMA.DEFAULT,
+    ),
+    clusterfuzz_builder(
+        name = "V8 Clusterfuzz Linux ASAN - debug builder",
+        bucket = "ci",
+        triggered_by = ["v8-trigger"],
+        triggering_policy = scheduler.policy(
+            kind = scheduler.GREEDY_BATCHING_KIND,
+            max_batch_size = 1,
+        ),
+        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "clusterfuzz_archive": {"bitness": "32", "bucket": "v8-asan", "name": "d8-asan"}, "default_targets": ["v8_clusterfuzz"]},
+        use_goma = GOMA.DEFAULT,
+    ),
+    clusterfuzz_builder(
+        name = "V8 Clusterfuzz Linux ASAN arm - debug builder",
+        bucket = "ci",
+        triggered_by = ["v8-trigger"],
+        triggering_policy = scheduler.policy(
+            kind = scheduler.GREEDY_BATCHING_KIND,
+            max_batch_size = 1,
+        ),
+        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "clusterfuzz_archive": {"bucket": "v8-asan", "name": "d8-arm-asan"}, "default_targets": ["v8_clusterfuzz"]},
+        use_goma = GOMA.DEFAULT,
+    ),
+    clusterfuzz_builder(
+        name = "V8 Clusterfuzz Linux ASAN no inline - release builder",
+        bucket = "ci",
+        triggered_by = ["v8-trigger"],
+        triggering_policy = scheduler.policy(
+            kind = scheduler.GREEDY_BATCHING_KIND,
+            max_batch_size = 1,
+        ),
+        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "clusterfuzz_archive": {"bitness": "32", "bucket": "v8-asan", "name": "d8-asan-no-inline"}, "default_targets": ["v8_clusterfuzz"]},
+        use_goma = GOMA.DEFAULT,
+    ),
+    clusterfuzz_builder(
+        name = "V8 Clusterfuzz Linux MSAN chained origins",
+        bucket = "ci",
+        triggered_by = ["v8-trigger"],
+        triggering_policy = scheduler.policy(
+            kind = scheduler.GREEDY_BATCHING_KIND,
+            max_batch_size = 1,
+        ),
+        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "default_targets": ["v8_clusterfuzz"], "clusterfuzz_archive": {"bucket": "v8-msan", "name": "d8-msan-chained-origins"}},
+        gclient_vars = [GCLIENT_VARS.INSTRUMENTED_LIBRARIES],
+        use_goma = GOMA.DEFAULT,
+    ),
+    clusterfuzz_builder(
+        name = "V8 Clusterfuzz Linux MSAN no origins",
+        bucket = "ci",
+        triggered_by = ["v8-trigger"],
+        triggering_policy = scheduler.policy(
+            kind = scheduler.GREEDY_BATCHING_KIND,
+            max_batch_size = 1,
+        ),
+        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+        properties = {"builder_group": "client.v8.clusterfuzz", "clobber": True, "default_targets": ["v8_clusterfuzz"], "clusterfuzz_archive": {"bucket": "v8-msan", "name": "d8-msan-no-origins"}},
+        gclient_vars = [GCLIENT_VARS.INSTRUMENTED_LIBRARIES],
         use_goma = GOMA.DEFAULT,
     ),
 )
