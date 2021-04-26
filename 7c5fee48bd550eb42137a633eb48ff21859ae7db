@@ -152,6 +152,30 @@
       },
       "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c925a97e_ba479085",
+        "filename": "generated/luci-scheduler.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2021-04-26T12:29:12Z",
+      "side": 1,
+      "message": "I have another CL (https://crrev.com/c/2850703) that I think is more important. I will add the check and presubmit there. Then rebase here",
+      "parentUuid": "48d8b209_dc73e18f",
+      "range": {
+        "startLine": 263,
+        "startChar": 2,
+        "endLine": 263,
+        "endChar": 13
+      },
+      "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
