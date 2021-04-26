@@ -16,6 +16,23 @@
       "message": "lgtm",
       "revId": "ed5950cec3122f2d2cd1c60651f025894246652e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "852aa1e6_c14f9259",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-04-26T10:48:48Z",
+      "side": 1,
+      "message": "Could you please add a commit message as well?",
+      "revId": "ed5950cec3122f2d2cd1c60651f025894246652e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
