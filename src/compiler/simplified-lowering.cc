@@ -787,9 +787,9 @@ class RepresentationSelector {
     // TODO(jarin,turbofan) Find a way to unify/merge this insertion with
     // InsertUnreachableIfNecessary.
     Node* unreachable = effect =
-        graph()->NewNode(jsgraph_->common()->Unreachable(), effect, control);
+        graph()->NewNode(common()->Unreachable(), effect, control);
     const Operator* dead_value =
-        jsgraph_->common()->DeadValue(GetInfo(node)->representation());
+        common()->DeadValue(GetInfo(node)->representation());
     node->ReplaceInput(0, unreachable);
     node->TrimInputCount(dead_value->ValueInputCount());
     ReplaceEffectControlUses(node, effect, control);
@@ -937,7 +937,7 @@ class RepresentationSelector {
     if (lower<T>() &&
         // Nodes of type None may not actually be "unused", so ignore them here.
         // That's because we typically propagate Truncation::None based on type
-        // checks that are vacuously true when the type is None.  It's really
+        // checks that are vacuously true when the type is None. It's really
         // the code that does these checks and truncation propagations that is
         // to blame, but requiring such code to rule out None types currently
         // seems infeasible since it's so easy to forget.
@@ -1258,7 +1258,7 @@ class RepresentationSelector {
             DeoptMachineTypeOf(GetInfo(input)->representation(), TypeOf(input));
       }
       SparseInputMask mask = SparseInputMaskOf(node->op());
-      ChangeOp(node, jsgraph_->common()->TypedStateValues(types, mask));
+      ChangeOp(node, common()->TypedStateValues(types, mask));
     }
     SetOutput<T>(node, MachineRepresentation::kTagged);
   }
@@ -1307,9 +1307,9 @@ class RepresentationSelector {
 
         node->ReplaceInput(
             FrameState::kFrameStateStackInput,
-            jsgraph_->graph()->NewNode(jsgraph_->common()->TypedStateValues(
-                                           types, SparseInputMask::Dense()),
-                                       node.stack()));
+            jsgraph_->graph()->NewNode(
+                common()->TypedStateValues(types, SparseInputMask::Dense()),
+                node.stack()));
       }
     }
 
@@ -1348,8 +1348,7 @@ class RepresentationSelector {
           ConvertInput(node, i, UseInfo::AnyTagged());
         }
       }
-      ChangeOp(node, jsgraph_->common()->TypedObjectState(
-                         ObjectIdOf(node->op()), types));
+      ChangeOp(node, common()->TypedObjectState(ObjectIdOf(node->op()), types));
     }
     SetOutput<T>(node, MachineRepresentation::kTagged);
   }
@@ -1996,10 +1995,10 @@ class RepresentationSelector {
         for (int i = 0; i < node->op()->ValueInputCount(); i++) {
           Node* input = node->InputAt(i);
           if (TypeOf(input).IsNone()) {
-            MachineRepresentation rep = GetInfo(node)->representation();
-            DeferReplacement(
-                node,
-                graph()->NewNode(jsgraph_->common()->DeadValue(rep), input));
+            node->ReplaceInput(0, input);
+            node->TrimInputCount(1);
+            ChangeOp(node,
+                     common()->DeadValue(GetInfo(node)->representation()));
             return;
           }
         }
