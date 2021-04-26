@@ -1557,6 +1557,10 @@ struct SerializationPhase {
       data->broker()->ClearCachedPropertyAccessInfos();
       data->dependencies()->ClearForConcurrentGetPropertyAccessInfo();
     }
+    if (FLAG_stress_concurrent_inlining) {
+      // Force re-serialization from the background thread.
+      data->broker()->ClearReconstructibleData();
+    }
   }
 };
 
