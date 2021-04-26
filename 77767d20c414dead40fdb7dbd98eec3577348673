@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b3f4ad0_013c5380",
+        "filename": "generated/cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2021-04-26T12:32:38Z",
+      "side": 1,
+      "message": "How sure I understand what is going on here.",
+      "range": {
+        "startLine": 756,
+        "startChar": 13,
+        "endLine": 756,
+        "endChar": 54
+      },
+      "revId": "77767d20c414dead40fdb7dbd98eec3577348673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
