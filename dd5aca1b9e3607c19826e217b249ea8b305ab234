@@ -87,6 +87,30 @@
       },
       "revId": "dd5aca1b9e3607c19826e217b249ea8b305ab234",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77e3a403_f162e175",
+        "filename": "main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2021-04-26T13:47:26Z",
+      "side": 1,
+      "message": "1. not a warning, it\u0027s an error message. It\u0027ll abort the generation of config files.\n2. not for *newer* version, but for *older* version. For code above,\n\n  # user @ 1.20.0\n  ./main.star   # fail with an ERROR!\n\n  # user @ 1.30.0\n  ./main.star   # proceeds just fine.",
+      "parentUuid": "0e35338a_439733a6",
+      "range": {
+        "startLine": 6,
+        "startChar": 23,
+        "endLine": 6,
+        "endChar": 29
+      },
+      "revId": "dd5aca1b9e3607c19826e217b249ea8b305ab234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
