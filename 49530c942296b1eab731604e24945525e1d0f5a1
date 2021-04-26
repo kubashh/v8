@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "190ca345_6ecd8910",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-26T14:01:43Z",
+      "side": 1,
+      "message": "Hi Michael, I couldn\u0027t find a simpler way to workaround this - the v8_enable_backtrace is defined in v8.gni, so it needs to be included anyway. Then, there\u0027s probably a way to avoid the duplication of the logic between gtest and gmock, but I\u0027m not sure what\u0027s the proper way to do it in GN. So any advice is welcome, thanks!",
+      "revId": "49530c942296b1eab731604e24945525e1d0f5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
