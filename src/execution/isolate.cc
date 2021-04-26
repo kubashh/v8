@@ -4908,7 +4908,8 @@ void Isolate::AddCodeRange(Address begin, size_t length_in_bytes) {
 }
 
 bool Isolate::RequiresCodeRange() const {
-  return kPlatformRequiresCodeRange && !jitless_;
+  return kPlatformRequiresCodeRange && !jitless_ &&
+         !FLAG_enable_third_party_heap;
 }
 
 v8::metrics::Recorder::ContextId Isolate::GetOrRegisterRecorderContextId(
