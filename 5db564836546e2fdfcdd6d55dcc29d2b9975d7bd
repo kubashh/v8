@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eee0cb89_37280b08",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4912,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-04-26T10:02:34Z",
+      "side": 1,
+      "message": "As discussed offline, let\u0027s keep the code range for TPH",
+      "range": {
+        "startLine": 4912,
+        "startChar": 9,
+        "endLine": 4912,
+        "endChar": 39
+      },
+      "revId": "5db564836546e2fdfcdd6d55dcc29d2b9975d7bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
