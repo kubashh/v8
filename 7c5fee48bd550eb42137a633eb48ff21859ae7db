@@ -80,6 +80,30 @@
       },
       "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a121b6fa_fb38eb43",
+        "filename": "generated/luci-scheduler.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2021-04-26T11:26:51Z",
+      "side": 1,
+      "message": "I suspect whoever generated that reordering CL used old `lucicfg`.\nConsider adding \n    `lucicfg.check_version(x.y.z, \"update depot_tools\")\n\nwhere x.y.z is whatever you\u0027ve used to generate this cL.",
+      "parentUuid": "a1de76ee_f3755cbb",
+      "range": {
+        "startLine": 263,
+        "startChar": 2,
+        "endLine": 263,
+        "endChar": 13
+      },
+      "revId": "7c5fee48bd550eb42137a633eb48ff21859ae7db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
