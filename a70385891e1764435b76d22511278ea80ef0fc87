@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f0377ca_6e845aef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-26T12:12:35Z",
+      "side": 1,
+      "message": "nit: You could keep tracking this as part of the add-clusterfuzz-builders bug, since this is a related clean-up.",
+      "revId": "a70385891e1764435b76d22511278ea80ef0fc87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "17b50fde_39469ea1",
@@ -14,6 +31,75 @@
       "writtenOn": "2021-04-26T11:52:24Z",
       "side": 1,
       "message": "note that no changes happened in the generated files after running luci generate",
+      "revId": "a70385891e1764435b76d22511278ea80ef0fc87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9707e24_e2697c32",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-26T12:12:35Z",
+      "side": 1,
+      "message": "I\u0027d drop parameters that aren\u0027t overridden. I.e. YAGNI pattern. As soon as we need to overwrite them, we can add them.\n\nclose_tree is the exception as we might need it when firefighting problems.",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 82
+      },
+      "revId": "a70385891e1764435b76d22511278ea80ef0fc87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3105f96_b80c1f23",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-26T12:12:35Z",
+      "side": 1,
+      "message": "I find excessive use of kwargs makes code harder to read and to reason. The trivial parameters like those could just get passed to v8_builder as parameters, right?\n\nAlso the triggering_policy could be passed as param, since we currently don\u0027t overwrite it.\n\nThe properties might need some more massaging:\nThe expression kwargs[\"properties\"] expects a param properties and would fail if such a param doesn\u0027t exist. In this case rather just add a param properties to clusterfuzz_builder?",
+      "range": {
+        "startLine": 8,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "a70385891e1764435b76d22511278ea80ef0fc87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9e7f1d4_9777fc40",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-26T12:12:35Z",
+      "side": 1,
+      "message": "Note to self: Need to earmark somewhere to check on if this is still needed. It seems a relic from the past, but it costs considerable compile time.",
+      "range": {
+        "startLine": 29,
+        "startChar": 22,
+        "endLine": 29,
+        "endChar": 37
+      },
       "revId": "a70385891e1764435b76d22511278ea80ef0fc87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
