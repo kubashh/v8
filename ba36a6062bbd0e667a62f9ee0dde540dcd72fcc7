@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5339d9c_41a3d2a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-04-26T13:53:23Z",
+      "side": 1,
+      "message": "What do you mean by this? I don\u0027t see an explicit annotation in the CL.",
+      "range": {
+        "startLine": 17,
+        "startChar": 54,
+        "endLine": 18,
+        "endChar": 4
+      },
+      "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8a979f17_67e4672b",
@@ -14,6 +37,29 @@
       "writtenOn": "2021-04-26T12:45:28Z",
       "side": 1,
       "message": "ptal",
+      "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49d91a95_5a374426",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-04-26T13:53:23Z",
+      "side": 1,
+      "message": "Please add `DCHECK(!broker-\u003eis_concurrent_inlining());` in the body of the constructor",
+      "range": {
+        "startLine": 1812,
+        "startChar": 58,
+        "endLine": 1812,
+        "endChar": 60
+      },
       "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
