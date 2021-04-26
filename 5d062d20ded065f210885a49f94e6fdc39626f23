@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a793d79_9f2f24e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-04-26T11:02:44Z",
+      "side": 1,
+      "message": "PTAL\n\nWhat would be good time gap between the previous 20% CL and this one? 48h feels right to me.\n\nThanks!\n",
+      "revId": "5d062d20ded065f210885a49f94e6fdc39626f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
