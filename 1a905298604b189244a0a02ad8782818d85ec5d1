@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fde6ae6_df4aa96d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-27T09:12:24Z",
+      "side": 1,
+      "message": "Nice cleanup, thanks!",
+      "revId": "1a905298604b189244a0a02ad8782818d85ec5d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b850979b_6e01cc60",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-27T09:12:24Z",
+      "side": 1,
+      "message": "small nit: Maybe find some ordering. Either alpha or maybe by importance? I at least feel the triggered_by should be next to the triggering_policy.",
+      "range": {
+        "startLine": 13,
+        "startChar": 8,
+        "endLine": 13,
+        "endChar": 38
+      },
+      "revId": "1a905298604b189244a0a02ad8782818d85ec5d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
