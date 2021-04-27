@@ -16,6 +16,23 @@
       "message": "Thanks Georg and Ross for the comments! The change is revised based on the comments. PTAL, thanks!",
       "revId": "5e9e9d004e0fc01644d927786e7a40b48d854ff7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69bc519f_29312c3e",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-27T09:30:41Z",
+      "side": 1,
+      "message": "Please add a comment here stating what this block of code is doing.",
+      "revId": "5e9e9d004e0fc01644d927786e7a40b48d854ff7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

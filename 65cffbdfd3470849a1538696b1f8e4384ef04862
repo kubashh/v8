@@ -252,6 +252,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c186ab32_11af9e16",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-27T09:30:41Z",
+      "side": 1,
+      "message": "I don\u0027t really know enough about torque to comment (maybe Jakob or Georg have an idea), but the one difference I can see is that here you are doing:\n  TNode\u003cIntPtrT\u003e new_count \u003d Signed(WordOr(...))\nWhere the Signed should turning the WordT output into IntPtrT type. Maybe you need to add a Signed operation to the torque too?",
+      "parentUuid": "ced151ae_bdb2a97a",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8bd3c3b_ab4fcc96",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 7
