@@ -81,6 +81,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4acc2e27_669cb748",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5065,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-04-27T17:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37ab5c59_16bb4eec",
+      "range": {
+        "startLine": 5065,
+        "startChar": 2,
+        "endLine": 5065,
+        "endChar": 41
+      },
+      "revId": "21045e2b19f04f71e552077af05cf04b7af69215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c24d392b_8d1c9472",
@@ -104,6 +128,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d731fe63_9201145a",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5078,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-04-27T17:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c24d392b_8d1c9472",
+      "range": {
+        "startLine": 5078,
+        "startChar": 34,
+        "endLine": 5078,
+        "endChar": 35
+      },
+      "revId": "21045e2b19f04f71e552077af05cf04b7af69215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2141293e_59f2fe3e",
@@ -117,6 +165,30 @@
       "writtenOn": "2021-04-27T12:07:22Z",
       "side": 1,
       "message": "Nit: DCHECK that the head is equal to the client.",
+      "range": {
+        "startLine": 5082,
+        "startChar": 4,
+        "endLine": 5082,
+        "endChar": 5
+      },
+      "revId": "21045e2b19f04f71e552077af05cf04b7af69215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa44921_96d3edf6",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5082,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-04-27T17:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2141293e_59f2fe3e",
       "range": {
         "startLine": 5082,
         "startChar": 4,
