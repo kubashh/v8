@@ -52,6 +52,24 @@
       "parentUuid": "8b424802_abe8923c",
       "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eb5cc9a_c5ea9cd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-04-27T08:05:13Z",
+      "side": 1,
+      "message": "Thanks for letting us know! I guess an upstream fix in googletest should be fine - recently there\u0027s an effort to keep it up-to-date in Chromium, so if there\u0027s a critical fix, we might ping them to roll sooner. Please let me know if I can be of help!\nOTOH, is gcc 6 available for you as a workaround?",
+      "parentUuid": "55f59ac3_759d8fbd",
+      "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
