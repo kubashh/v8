@@ -6806,6 +6806,7 @@ template void Heap::WriteBarrierForRange<MaybeObjectSlot>(
 template <typename TSlot>
 void Heap::WriteBarrierForRange(HeapObject object, TSlot start_slot,
                                 TSlot end_slot) {
+  if (FLAG_disable_write_barriers) return;
   MemoryChunk* source_page = MemoryChunk::FromHeapObject(object);
   base::Flags<RangeWriteBarrierMode> mode;
 
