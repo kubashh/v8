@@ -70,6 +70,24 @@
       "parentUuid": "55f59ac3_759d8fbd",
       "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b76b5fc7_137e0ff0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-04-27T08:16:33Z",
+      "side": 1,
+      "message": "Note, we\u0027ll soon upgrade to 7.4 as part of the Linux upgrades: https://crbug.com/v8/9686#c16 - possibly this comes back to us as well sooner or later.",
+      "parentUuid": "7eb5cc9a_c5ea9cd7",
+      "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
