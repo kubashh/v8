@@ -94,6 +94,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "733c8df2_4b570e63",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-27T05:47:19Z",
+      "side": 1,
+      "message": "The kParameterCount is fit to the index of the receiver. But it seems that the kParameterCount is reference somewhere else and adding the receiver to the CallTrampoline_BaselineDescriptor may cause some issue. Revised it by adding an alias of kParameterCount in Patchset 8. WDYT?",
+      "parentUuid": "4abeb14e_7487ed9c",
+      "range": {
+        "startLine": 489,
+        "startChar": 48,
+        "endLine": 489,
+        "endChar": 63
+      },
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f7a5ffeb_1c7e4482",
         "filename": "src/builtins/ic-callable.tq",
         "patchSetId": 7
@@ -105,6 +129,30 @@
       "writtenOn": "2021-04-23T09:43:46Z",
       "side": 1,
       "message": "Nit: Let\u0027s call this ShouldRecordReceiver.",
+      "range": {
+        "startLine": 70,
+        "startChar": 6,
+        "endLine": 70,
+        "endChar": 27
+      },
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "515a3225_522c452f",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-27T05:47:19Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "f7a5ffeb_1c7e4482",
       "range": {
         "startLine": 70,
         "startChar": 6,
@@ -151,6 +199,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37f2be9c_b387cafe",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-27T05:47:19Z",
+      "side": 1,
+      "message": "Thanks for the suggestion! Changes are made following this idea in Patchset 8. PTAL, thanks!",
+      "parentUuid": "ff58b272_2e7eb9a9",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e97b4a70_0a4d1c86",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 7
@@ -168,6 +234,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ced151ae_bdb2a97a",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-27T05:47:19Z",
+      "side": 1,
+      "message": "I tried to implement the SetCallFeedbackContent in torque (the commented lines in ic-callable.tq:70) but got an error when compiling the generated .cc file (ic-callable-tq.csa.cc) as below.\n\ngen/torque-generated/src/builtins/ic-callable-tq-csa.cc:590:10: error: no viable overloaded \u0027\u003d\u0027\n    tmp5 \u003d CodeStubAssembler(state_).WordOr(TNode\u003cIntPtrT\u003e{tmp3}, TNode\u003cIntPtrT\u003e{tmp4});\n    ~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n../../src/codegen/tnode.h:354:9: note: candidate function not viable: no known conversion from \u0027TNode\u003cv8::internal::WordT\u003e\u0027 to \u0027TNode\u003cv8::internal::IntPtrT\u003e\u0027 for 1st argument\n  TNode operator\u003d(TNode other) {\n        ^\n1 error generated.\n\nIt seems that the WordOr (at callCount | IntPtrConstant(kCallFeedbackContentFieldMask) generated a return value of type TNode\u003cWordT\u003e which won\u0027t fit the tmp5. I\u0027m not quite sure. Does it mean that I will need to add a explicit cast from intptr to intptr in torque and insert a UncheckedCast to the generated .cc file?",
+      "parentUuid": "e97b4a70_0a4d1c86",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8bd3c3b_ab4fcc96",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 7
@@ -179,6 +263,24 @@
       "writtenOn": "2021-04-23T09:43:46Z",
       "side": 1,
       "message": "This code isn\u0027t quite right. It shouldn\u0027t be using CallCountField, and the ReinterpretCast is wrong.\n\nYou could write:\n\n  TNode\u003cIntPtrT\u003e call_count \u003d SmiUntag(\n      CAST(LoadFeedbackVectorSlot(feedback_vector, slot_id, kTaggedSize)));\n  TNode\u003cIntPtrT\u003e new_count \u003d Signed(WordOr(\n      WordAnd(call_count,\n              IntPtrConstant(~FeedbackNexus::CallFeedbackContentField::kMask)),\n      IntPtrConstant(static_cast\u003cuint32_t\u003e(call_feedback_content)\n                     \u003c\u003c FeedbackNexus::CallFeedbackContentField::kShift)));\n  StoreFeedbackVectorSlot(feedback_vector, slot_id, SmiTag(new_count),\n                          SKIP_WRITE_BARRIER, kTaggedSize);",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "144f9d3d_43f95cb2",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-27T05:47:19Z",
+      "side": 1,
+      "message": "Thanks for the suggestion! Revised in Patchset 8.",
+      "parentUuid": "a8bd3c3b_ab4fcc96",
       "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -202,6 +304,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4290f2b8_cdd63503",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10139,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-27T05:47:19Z",
+      "side": 1,
+      "message": "Replaced it with TaggedEqualPrototypeApplyFunction is Patchset 8.",
+      "parentUuid": "d9b9c2ba_9f0b39d3",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7affbe82_a9e3e080",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 7
@@ -219,6 +339,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae111d68_34673c4d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10155,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-27T05:47:19Z",
+      "side": 1,
+      "message": "That would be good. Use TaggedEqualPrototypeApplyFunction to handle this check in Patchset 8.",
+      "parentUuid": "7affbe82_a9e3e080",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "924385c7_630f8571",
         "filename": "test/mjsunit/compiler/opt-higher-order-functions.js",
         "patchSetId": 7
@@ -230,6 +368,24 @@
       "writtenOn": "2021-04-23T09:43:46Z",
       "side": 1,
       "message": "Please pass the expected value as first argument to assertEquals, otherwise the error message would be misleading.",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60bd1221_a894c68f",
+        "filename": "test/mjsunit/compiler/opt-higher-order-functions.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-27T05:47:19Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "924385c7_630f8571",
       "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -283,6 +439,24 @@
       "side": 1,
       "message": "(function() {\n  var F;\n  function foo() {\n    return F.apply(null, arguments);\n  }\n  function test(x, y) {\n    return foo(x, y);\n  }\n\n  F \u003d Math.min;\n  %PrepareFunctionForOptimization(foo);\n  %PrepareFunctionForOptimization(test);\n  assertEquals(-13, test(-13, 42));\n\n  %OptimizeFunctionOnNextCall(test);\n  assertEquals(-13, test(-13, 42));\n  assertOptimized(test);\n  %PrepareFunctionForOptimization(test);\n  F \u003d Math.max;\n  assertEquals(42, test(-13, 42));\n  assertUnoptimized(test);\n\n  %OptimizeFunctionOnNextCall(test);\n  assertEquals(42, test(-13, 42));\n  F \u003d Math.min;\n  assertEquals(-13, test(-13, 42));\n  assertOptimized(test);\n})();                                   \n\nThis one should make sense.",
       "parentUuid": "eb4804eb_8b2e5436",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7e15271_a4ae968a",
+        "filename": "test/mjsunit/compiler/opt-higher-order-functions.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-04-27T05:47:19Z",
+      "side": 1,
+      "message": "Thanks for provided the test! Add it in Patchset 8.",
+      "parentUuid": "1fc40b80_a139a3a4",
       "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
