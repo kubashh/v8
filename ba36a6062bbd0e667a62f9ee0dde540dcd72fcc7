@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0e6ddfd9_0020d4d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-27T08:12:19Z",
+      "side": 1,
+      "message": "Thanks, the message was outdated and described an old version of this CL.",
+      "parentUuid": "c5339d9c_41a3d2a6",
+      "range": {
+        "startLine": 17,
+        "startChar": 54,
+        "endLine": 18,
+        "endChar": 4
+      },
+      "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8a979f17_67e4672b",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca5ae8ce_86cf6c2c",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-27T08:12:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49d91a95_5a374426",
+      "range": {
+        "startLine": 1812,
+        "startChar": 58,
+        "endLine": 1812,
+        "endChar": 60
+      },
+      "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d8a5702_40dfb4d7",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-04-26T12:47:23Z",
       "side": 1,
       "message": "Nit: \"Racy\" doesn\u0027t seem to fit here because there is no race condition as the array is immutable.",
+      "range": {
+        "startLine": 792,
+        "startChar": 10,
+        "endLine": 792,
+        "endChar": 45
+      },
+      "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7079d78_8a44a962",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-27T08:12:19Z",
+      "side": 1,
+      "message": "Good point, removed \u0027Racy\u0027.",
+      "parentUuid": "8d8a5702_40dfb4d7",
       "range": {
         "startLine": 792,
         "startChar": 10,
