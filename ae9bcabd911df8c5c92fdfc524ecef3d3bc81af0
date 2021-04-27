@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77139f0a_95b2b5d5",
+        "filename": "src/common/globals.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-27T01:51:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98b98933_9a7ca775",
+      "range": {
+        "startLine": 225,
+        "startChar": 41,
+        "endLine": 225,
+        "endChar": 42
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f5e63d5_b212f75d",
@@ -233,6 +257,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67c514a1_14be1e01",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-27T01:51:28Z",
+      "side": 1,
+      "message": "Moved it out.\n\nI had to extend CallOnce a little bit to support passing a second argument that\u0027s not a pointer. We should move to absl\u0027s CallOnce whenever the absl thing happens, so I tried to keep the CallOnce extension here minimal instead of making CallOnce more modern with perfect forwarding.",
+      "parentUuid": "43178817_50812752",
+      "range": {
+        "startLine": 150,
+        "startChar": 50,
+        "endLine": 151,
+        "endChar": 23
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06496a0a_4a3a9cc6",
         "filename": "src/heap/code-range.cc",
         "patchSetId": 11
@@ -244,6 +292,30 @@
       "writtenOn": "2021-04-16T12:39:26Z",
       "side": 1,
       "message": "Should this be a DCHECK?",
+      "range": {
+        "startLine": 170,
+        "startChar": 9,
+        "endLine": 170,
+        "endChar": 39
+      },
+      "revId": "ae9bcabd911df8c5c92fdfc524ecef3d3bc81af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37bc22f8_dc41d7ff",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-27T01:51:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06496a0a_4a3a9cc6",
       "range": {
         "startLine": 170,
         "startChar": 9,
