@@ -157,6 +157,30 @@
       },
       "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd5c1760_35163f2a",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-04-27T11:27:36Z",
+      "side": 1,
+      "message": "Actually, renamed once more to GetFromImmutableFixedDoubleArray.",
+      "parentUuid": "d7079d78_8a44a962",
+      "range": {
+        "startLine": 792,
+        "startChar": 10,
+        "endLine": 792,
+        "endChar": 45
+      },
+      "revId": "ba36a6062bbd0e667a62f9ee0dde540dcd72fcc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
