@@ -33,6 +33,24 @@
       "message": "Can spaces other than large_space contain large pages?",
       "revId": "2522f30c48290f80745e4feed8d6aa03687f1c98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59d81ca7_ad86faf7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3133,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-04-27T07:33:52Z",
+      "side": 1,
+      "message": "There are also large code objects.",
+      "parentUuid": "abbb48e0_daa44785",
+      "revId": "2522f30c48290f80745e4feed8d6aa03687f1c98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
