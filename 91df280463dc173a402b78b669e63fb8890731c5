@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4758796a_de2cc3b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-28T10:25:49Z",
+      "side": 1,
+      "message": "Unnecessary because we don\u0027t call VisitUnused on effectful operations",
+      "revId": "91df280463dc173a402b78b669e63fb8890731c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
