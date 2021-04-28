@@ -158,6 +158,24 @@
       "parentUuid": "2dc86ced_505d7d3a",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf581664_f3a1709e",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2021-04-28T17:11:00Z",
+      "side": 1,
+      "message": "Yes. Looks like when the static initializer fails, the next source position is set to the word class, hence, the start_scope for that frame is and outer scope for the class context. That is why I believe that a hacky solution like identifying this case and stepping to an outer context could work. Would it be worth to try and change either the source position or the initial context for this frame?",
+      "parentUuid": "884657a1_e3d39a7a",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
