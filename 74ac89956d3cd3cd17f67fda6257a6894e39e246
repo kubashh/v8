@@ -176,6 +176,24 @@
       "parentUuid": "884657a1_e3d39a7a",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4b2eb78_ef6fa889",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2021-04-28T18:47:04Z",
+      "side": 1,
+      "message": "Regarding the class scope positional info. While the class scopes do have positional information, we can\u0027t access the actual scope from context_, but only its scope_info, which doesn\u0027t contain positional information for CLASS and BLOCK scopes:\n\nbool ScopeInfo::HasPositionInfo() const {\n  if (IsEmpty()) return false;\n  return NeedsPositionInfo(scope_type());\n}\n\n// static\nbool ScopeInfo::NeedsPositionInfo(ScopeType type) {\n  return type \u003d\u003d FUNCTION_SCOPE || type \u003d\u003d SCRIPT_SCOPE || type \u003d\u003d EVAL_SCOPE ||\n         type \u003d\u003d MODULE_SCOPE;\n}\n\nHaving this information available for the class context would make it easier to decide if skip to an outer context. \n\nI need to do more research on how this information is assigned to the context in order to decide if it would be better to add this positional info, or maybe modify something about the source position, start scope, or context for this frame.",
+      "parentUuid": "cf581664_f3a1709e",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
