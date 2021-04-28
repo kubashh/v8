@@ -140,6 +140,24 @@
       "parentUuid": "2dc86ced_505d7d3a",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "884657a1_e3d39a7a",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-04-28T16:29:27Z",
+      "side": 1,
+      "message": "Actually no, the initializer works fine. It\u0027s complaining while looking at the (empty/default) class constructor one frame up the stack. Its source position is set to the \"class\" keyword I believe; and the \"GetSourcePosition()\" for that frame returns 230, while the class scope itself starts later (235 to 278). The scope walker won\u0027t walk into the class scope to find the scope for the initializer, and hence it won\u0027t know how to interpret the context chain.\n\n  class { // (0x5650c50e0058) (235, 278)\n    // strict mode scope\n    // 2 heap slots\n\n    function () { // (0x5650c50e0588) (230, 230)\n      // strict mode scope\n      // \u003d\u003d\u003d PROBLEM HERE \u003d\u003d\u003d\n      // We won\u0027t be able to find this function\u0027s scope while walking the scope\n      // chain inwards\n    }\n\n    function () { // (0x5650c50e02b0) (244, 271)\n      // strict mode scope\n      // will be compiled\n    }\n  }",
+      "parentUuid": "2dc86ced_505d7d3a",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
