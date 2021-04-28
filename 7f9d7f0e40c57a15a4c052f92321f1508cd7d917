@@ -16,6 +16,24 @@
       "message": "This line was dropped in the new version.\nI\u0027m not sure why do we need to log this, but maybe it makes sense to keep logging it in Heap::SetUp(). I think it\u0027s fine to log this event for each isolate even when shared cage mode is enabled.",
       "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2beb1f48_07fde222",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-28T18:07:21Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "2b52be99_89f96fd1",
+      "revId": "7f9d7f0e40c57a15a4c052f92321f1508cd7d917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
