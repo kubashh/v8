@@ -86,6 +86,24 @@
       "parentUuid": "e9a84a33_8677dcd6",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70c1fe0a_f469cf38",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2021-04-28T00:30:45Z",
+      "side": 1,
+      "message": "I\u0027ve been exploring this and other cases. I believe that the initial solution is just not good and I\u0027m having some trouble figuring out a new one, so I would appreciate some feedback on the following insights.\n\n1) The problem arises from the static variable declaration failing on a class inside a scope that needs context, not only function scopes. In the case of block scopes, the code will pass the first DCHECK because the context type is BLOCK, but will fail when trying to retrieve a variable\u0027s value from the context.\n\n2) In this particular case, the value of context_ doesn\u0027t match the scope chain (which starts with an outer scope than context_\u0027s), and we could step to a parent context without updating the current and start scopes.\n\n3) As you pointed out, the initial solution catches more cases that intended, including those were the context_ value is actually useful for the scope chain.\n\n4) By comparing the position information from context_.scope_info, and the start position of start_scope_, we should be able to determine if we need to move to an outer context, however, the position information is not available for scope_info of type CLASS.\n\nDo you think it is feasible to add position information for the CLASS contexts?",
+      "parentUuid": "7186eb6c_a6d72e6e",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
