@@ -122,6 +122,24 @@
       "parentUuid": "70c1fe0a_f469cf38",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da5c21e7_89a3bb78",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-04-28T15:37:52Z",
+      "side": 1,
+      "message": "Had a quick look at the test. GetSourcePosition points at the constructor\u0027s source range rather than the initializer function; so I guess the actual bug is in how the frame-inspector gets the source position.",
+      "parentUuid": "2dc86ced_505d7d3a",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
