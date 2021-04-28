@@ -104,6 +104,24 @@
       "parentUuid": "7186eb6c_a6d72e6e",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dc86ced_505d7d3a",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-04-28T12:21:54Z",
+      "side": 1,
+      "message": "Afaict class scopes have position information too, see --print-scopes. I\u0027m guessing there\u0027s a bug in the ScopeChainRetriever, causing it to find an outer scope to the class scope.",
+      "parentUuid": "70c1fe0a_f469cf38",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
