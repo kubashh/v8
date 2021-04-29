@@ -194,6 +194,24 @@
       "parentUuid": "cf581664_f3a1709e",
       "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22e23593_d77e0cbd",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-04-29T07:48:50Z",
+      "side": 1,
+      "message": "I have an alternative proposed fix based on what I mentioned above: https://chromium-review.googlesource.com/c/v8/v8/+/2857957\n\nTo answer your question: We don\u0027t need to include positions in scope_info for scopes that we\u0027ll find by reparsing. We need source positions for functions because we start parsing on function boundaries.",
+      "parentUuid": "f4b2eb78_ef6fa889",
+      "revId": "74ac89956d3cd3cd17f67fda6257a6894e39e246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
