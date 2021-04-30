@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e321f6b1_82247bba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-30T09:06:19Z",
+      "side": 1,
+      "message": "lgtm from my side\nadding Jakob for src/snapshot changes",
+      "revId": "45e44acfd1dc3aeb2e5a1fb0a72cb5ec9c01950c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d9f8a92_44bf4d38",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-04-30T02:01:03Z",
       "side": 1,
       "message": "I\u0027m not very happy with this, but it was the best I could come up with.\n\nI tried to change these methods to start passing Isolates and was quickly discouraged -- the amount of code that would need to change was quite daunting.\n\nIgor, I still need to read over your long-term fix design doc, but hopefully that removes the need to un-embed copies, and we can go back to always using the EmbeddedData::FromBlob() form?",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 6
+      },
+      "revId": "45e44acfd1dc3aeb2e5a1fb0a72cb5ec9c01950c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2546f252_cec14320",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-04-30T09:06:19Z",
+      "side": 1,
+      "message": "I think it\u0027s ok to keep it this way.\nYes, with the long-term fix we should be able to use EmbeddedData::FromBlob().",
+      "parentUuid": "3d9f8a92_44bf4d38",
       "range": {
         "startLine": 155,
         "startChar": 0,
