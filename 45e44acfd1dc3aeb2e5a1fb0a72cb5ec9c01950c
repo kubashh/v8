@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66937936_52b43235",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-04-30T02:03:09Z",
+      "side": 1,
+      "message": "Dan, I\u0027m very happy for the most part, everything \"just worked\" with reusing the code for sharing RO space in full pointer mode.\n\nI\u0027d like to cut down on the number of configurations going forward and plan to push for only having the shared cage mode. If/when that happens, we can also remove the PointerCompressionReadOnlyArtifacts complexity.",
+      "revId": "45e44acfd1dc3aeb2e5a1fb0a72cb5ec9c01950c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d9f8a92_44bf4d38",
