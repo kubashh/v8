@@ -77,7 +77,7 @@ experiment_builder_pair(
     name = "V8 Linux64 - debug - perfetto",
     bucket = "ci",
     triggered_by = ["v8-trigger"],
-    dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+    dimensions = {"os": "Ubuntu", "cpu": "x86-64"},
     properties = {"builder_group": "client.v8"},
     use_goma = GOMA.DEFAULT,
     to_notify = ["skyostil@google.com"],
@@ -98,7 +98,7 @@ experiment_builder(
     name = "V8 Linux64 - Fuzzilli",
     bucket = "ci",
     triggered_by = ["v8-trigger"],
-    dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+    dimensions = {"os": "Ubuntu", "cpu": "x86-64"},
     properties = {"builder_group": "client.v8"},
     use_goma = GOMA.DEFAULT,
     to_notify = ["mvstanton@google.com", "msarm@google.com"],
@@ -126,7 +126,7 @@ experiment_builder_pair(
     name = "V8 Linux64 - dict tracking - debug",
     bucket = "ci",
     triggered_by = ["v8-trigger"],
-    dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+    dimensions = {"os": "Ubuntu", "cpu": "x86-64"},
     properties = {"builder_group": "client.v8"},
     use_goma = GOMA.DEFAULT,
     to_notify = ["ishell@chromium.org"],
@@ -143,10 +143,20 @@ experiment_builder(
 )
 
 experiment_builder(
+    name = "V8 Linux64 - heap sandbox - debug",
+    bucket = "ci",
+    triggered_by = ["v8-trigger"],
+    dimensions = {"os": "Ubuntu", "cpu": "x86-64"},
+    properties = {"builder_group": "client.v8"},
+    use_goma = GOMA.DEFAULT,
+    to_notify = ["saelo@chromium.org", "v8-waterfall-sheriff@grotations.appspotmail.com"],
+)
+
+experiment_builder(
     name = "V8 Linux64 - no wasm - builder",
     bucket = "ci",
     triggered_by = ["v8-trigger"],
-    dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+    dimensions = {"os": "Ubuntu", "cpu": "x86-64"},
     properties = {"builder_group": "client.v8", "track_build_dependencies": True, "binary_size_tracking": {"category": "linux64_no_wasm", "binary": "d8"}},
     use_goma = GOMA.DEFAULT,
     to_notify = ["clemensb@chromium.org", "v8-waterfall-sheriff@grotations.appspotmail.com"],
@@ -156,7 +166,7 @@ experiment_builder(
     name = "V8 Linux - predictable",
     bucket = "ci",
     triggered_by = ["v8-trigger"],
-    dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+    dimensions = {"os": "Ubuntu", "cpu": "x86-64"},
     properties = {"builder_group": "client.v8"},
     use_goma = GOMA.DEFAULT,
     to_notify = ["v8-waterfall-sheriff@grotations.appspotmail.com"],
@@ -201,7 +211,6 @@ experiment_builder(
     properties = {"builder_group": "client.v8"},
     to_notify = ["v8-waterfall-sheriff@grotations.appspotmail.com"],
 )
-
 
 experiment_builder(
     name = "V8 Mac - arm64 - debug builder",
@@ -259,4 +268,3 @@ experiment_builder(
     properties = {"builder_group": "client.v8"},
     to_notify = ["v8-waterfall-sheriff@grotations.appspotmail.com"],
 )
-

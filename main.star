@@ -14,8 +14,8 @@ load(
 # Enable LUCI Realms support.
 lucicfg.enable_experiment("crbug.com/1085650")
 
-# Launch 20% of Swarming tasks for builds in "realms-aware mode"
-luci.builder.defaults.experiments.set({"luci.use_realms": 20})
+# Launch 100% of Swarming tasks for builds in "realms-aware mode"
+luci.builder.defaults.experiments.set({"luci.use_realms": 100})
 
 lucicfg.config(
     config_dir = "generated",
@@ -82,6 +82,15 @@ luci.project(
             roles = "role/swarming.poolViewer",
             groups = "all",
         ),
+        # Allow any V8 build to trigger a test ran under chromium-tester@ & 
+        # chrome-gpu-gold@ task service accounts.
+        luci.binding(
+            roles = "role/swarming.taskServiceAccount",
+            users = [
+                "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+                "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com",
+            ],
+        ),
     ],
 )
 
@@ -116,6 +125,7 @@ def led_users(*, pool_realm, builder_realms, groups):
             roles = "role/swarming.taskTriggerer",
             groups = groups,
         )
+
 led_users(
     pool_realm = "pools/ci",
     builder_realms = ["ci", "ci.br.beta", "ci.br.stable"],

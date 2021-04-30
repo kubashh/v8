@@ -10,7 +10,7 @@ def auto_builder(name, execution_timeout = None, properties = None, **kwargs):
         defaults_ci,
         name = name,
         bucket = "ci",
-        dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+        dimensions = {"os": "Ubuntu", "cpu": "x86-64"},
         service_account = "v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
         execution_timeout = execution_timeout,
         properties = properties,
@@ -64,8 +64,6 @@ auto_builder(
                 # https://crrev.com/c/1547863
                 "third_party/perfetto",
                 "third_party/protobuf",
-                # https://crbug.com/1191946
-                "third_party/googletest/src",
                 # Skip these dependencies (list without solution name prefix).
                 "test/mozilla/data",
                 "test/simdjs/data",
