@@ -54,6 +54,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f362ad6_a14fed6a",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-04-30T09:27:07Z",
+      "side": 1,
+      "message": "nit: update this comment",
+      "range": {
+        "startLine": 312,
+        "startChar": 5,
+        "endLine": 312,
+        "endChar": 32
+      },
+      "revId": "45e44acfd1dc3aeb2e5a1fb0a72cb5ec9c01950c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a32bd122_d78a1d3f",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-04-30T09:27:07Z",
+      "side": 1,
+      "message": "nit: update this comment",
+      "range": {
+        "startLine": 798,
+        "startChar": 5,
+        "endLine": 799,
+        "endChar": 25
+      },
+      "revId": "45e44acfd1dc3aeb2e5a1fb0a72cb5ec9c01950c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32057185_449716bf",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-04-30T09:27:07Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 161,
+        "startChar": 34,
+        "endLine": 161,
+        "endChar": 41
+      },
+      "revId": "45e44acfd1dc3aeb2e5a1fb0a72cb5ec9c01950c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3d9f8a92_44bf4d38",
         "filename": "src/objects/code.cc",
         "patchSetId": 2
@@ -94,6 +163,52 @@
         "startChar": 0,
         "endLine": 173,
         "endChar": 6
+      },
+      "revId": "45e44acfd1dc3aeb2e5a1fb0a72cb5ec9c01950c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f2bb8bc_6d073c3d",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-04-30T09:27:07Z",
+      "side": 1,
+      "message": "This code seems to be exactly duplicated in OffHeapInstructionHead. Please factor it out.",
+      "range": {
+        "startLine": 149,
+        "startChar": 2,
+        "endLine": 173,
+        "endChar": 6
+      },
+      "revId": "45e44acfd1dc3aeb2e5a1fb0a72cb5ec9c01950c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20565e29_24f217b8",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-04-30T09:27:07Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 191,
+        "startChar": 34,
+        "endLine": 191,
+        "endChar": 41
       },
       "revId": "45e44acfd1dc3aeb2e5a1fb0a72cb5ec9c01950c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
