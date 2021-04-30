@@ -116,6 +116,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9580f71f_5ef6d17d",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-30T14:38:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "733c8df2_4b570e63",
+      "range": {
+        "startLine": 489,
+        "startChar": 48,
+        "endLine": 489,
+        "endChar": 63
+      },
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7a5ffeb_1c7e4482",
@@ -180,6 +204,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec71eb6f_8f80a58a",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-30T14:38:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "70dc292c_4de5a20e",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff58b272_2e7eb9a9",
@@ -211,6 +253,24 @@
       "side": 1,
       "message": "Thanks for the suggestion! Changes are made following this idea in Patchset 8. PTAL, thanks!",
       "parentUuid": "ff58b272_2e7eb9a9",
+      "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebf9324d_1a30a558",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-30T14:38:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "37f2be9c_b387cafe",
       "revId": "65cffbdfd3470849a1538696b1f8e4384ef04862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

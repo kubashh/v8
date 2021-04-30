@@ -37,6 +37,97 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "528374f0_b8612703",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-30T14:38:41Z",
+      "side": 1,
+      "message": "Please add some comments here describing what is being extracted / inserted.",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d5f4ee9_30ee0f75",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-30T14:38:41Z",
+      "side": 1,
+      "message": "Please split this up on a few lines (e.g., pulling out (~IntPtrConstant(kCallFeedbackContentFieldMask) as a separate well nameed variable) to make the operation more clear.",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5472d83f_ada52026",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 10
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-30T14:38:41Z",
+      "side": 1,
+      "message": "Please add a ReportFeedbackUpdate here like other feedback vector updates",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cca6ea62_9276f4c9",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 10
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-30T14:38:41Z",
+      "side": 1,
+      "message": "Move this down to the \"if (FeedbackValueIsReceiver(feedbackVector, slotId)) {\" block",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32a89dfd_e3d24571",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 10
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-30T14:38:41Z",
+      "side": 1,
+      "message": "I don\u0027t think this code is right, I think we should just immediately fall through after this point. We shouldn\u0027t replace the feedback with the reciever feedback at this point if the value in the feedback doesn\u0027t match, we should only do that in the TryInitializeAsMonomorphic case (either when we have no initial feedback or when the feedback is cleared (below) and we try to reinitialize. Doing this here would lose any feedback that already existed, which may not be related to PrototypeApply.  I think this whole highlighted block should just be removed.",
+      "range": {
+        "startLine": 112,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 35
+      },
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdcef67d_7056edb6",
         "filename": "src/builtins/ic-callable.tq",
         "patchSetId": 10
@@ -48,6 +139,24 @@
       "writtenOn": "2021-04-30T09:31:12Z",
       "side": 1,
       "message": "It would be good to assert somewhere that the CallFeedbackContent is kTarget if there is no explicit seting of kReceiver. Perhaps you can add an else-branch branch here that asserts that FeedbackValueIsReceiver is false.",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30816040_bd0e7648",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 10
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-04-30T14:38:41Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "bdcef67d_7056edb6",
       "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
