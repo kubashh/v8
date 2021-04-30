@@ -16,6 +16,74 @@
       "message": "Hi Ross, the Cl is revised based on the comments. A test is added to make sure the transition of call IC states is right. PTAL, thanks!",
       "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ce3d036_4d816234",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-30T09:21:33Z",
+      "side": 1,
+      "message": "lgtm from my side. I didn\u0027t look super closely at the Torque code.",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "222cdbb8_3186174b",
+        "filename": "test/cctest/test-feedback-vector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-30T09:21:33Z",
+      "side": 1,
+      "message": "Function f isn\u0027t needed for this test, you can just call foo directly.",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07cf73a1_6fe9314d",
+        "filename": "test/cctest/test-feedback-vector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-30T09:21:33Z",
+      "side": 1,
+      "message": "You could also check that the recorded function is Math.min.",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e186406b_f5871e83",
+        "filename": "test/cctest/test-feedback-vector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-30T09:21:33Z",
+      "side": 1,
+      "message": "... and that here it is Function.prototype.apply.",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
