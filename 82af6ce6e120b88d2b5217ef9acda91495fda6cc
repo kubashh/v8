@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bdcef67d_7056edb6",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 10
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-04-30T09:31:12Z",
+      "side": 1,
+      "message": "It would be good to assert somewhere that the CallFeedbackContent is kTarget if there is no explicit seting of kReceiver. Perhaps you can add an else-branch branch here that asserts that FeedbackValueIsReceiver is false.",
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "222cdbb8_3186174b",
         "filename": "test/cctest/test-feedback-vector.cc",
         "patchSetId": 10
