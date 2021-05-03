@@ -56,6 +56,30 @@
       },
       "revId": "40a042392c961156b3488d2d5c16ab6cc34b07d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7684fd92_87d6aeb3",
+        "filename": "src/heap/finalization-registry-cleanup-task.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2021-05-03T09:36:21Z",
+      "side": 1,
+      "message": "MicrotasksScope is not copyable / movable :/",
+      "parentUuid": "e54263b8_e82d2ab2",
+      "range": {
+        "startLine": 65,
+        "startChar": 2,
+        "endLine": 65,
+        "endChar": 17
+      },
+      "revId": "40a042392c961156b3488d2d5c16ab6cc34b07d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
