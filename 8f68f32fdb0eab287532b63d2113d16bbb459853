@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1df791a_17ab219e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-03T18:52:34Z",
+      "side": 1,
+      "message": "I didn\u0027t see the follow up https://crrev.com/99f4bb84003ca4ea506a67de399a605406632a71 - maybe it fixes the original revert reason? The builds weren\u0027t ready until then...",
+      "revId": "8f68f32fdb0eab287532b63d2113d16bbb459853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
