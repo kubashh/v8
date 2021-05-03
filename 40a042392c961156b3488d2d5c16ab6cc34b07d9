@@ -16,6 +16,46 @@
       "message": "ptal\n\nwithout this, the DCHECK in the CallDepthScope dtor triggers",
       "revId": "40a042392c961156b3488d2d5c16ab6cc34b07d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7765f60_b0019994",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-05-03T09:28:35Z",
+      "side": 1,
+      "message": "lgtm with a comment",
+      "revId": "40a042392c961156b3488d2d5c16ab6cc34b07d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e54263b8_e82d2ab2",
+        "filename": "src/heap/finalization-registry-cleanup-task.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-05-03T09:28:35Z",
+      "side": 1,
+      "message": "Could we use base::Optional here?",
+      "range": {
+        "startLine": 65,
+        "startChar": 2,
+        "endLine": 65,
+        "endChar": 17
+      },
+      "revId": "40a042392c961156b3488d2d5c16ab6cc34b07d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
