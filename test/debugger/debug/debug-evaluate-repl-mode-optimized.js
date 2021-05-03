@@ -30,3 +30,19 @@ assertEquals(21, foo());
 // script context.
 evaluate('x; let x;');
 assertEquals(undefined, foo());
+
+// Test that a const declared variable 'y' bound by an optimized function is
+// updated properly.
+evaluate('const y = 42;');
+
+evaluate('function foo1() { return y; }');
+
+%PrepareFunctionForOptimization(foo1);
+foo1();
+foo1();
+%OptimizeFunctionOnNextCall(foo1);
+assertEquals(42, foo1());
+assertOptimized(foo1);
+
+evaluate('const y = 21');
+assertEquals(21, foo1());
