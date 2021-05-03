@@ -16,6 +16,40 @@
       "message": "Jakob, PTAL thanks.",
       "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ed2174d_b3d89408",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-03T07:40:43Z",
+      "side": 1,
+      "message": "Left a minor comment but I don\u0027t feel qualified to review this. Georg, do you know the scheduler or know someone who does? (If not, happy to take a closer look.)",
+      "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae6c8f66_99e0cd70",
+        "filename": "src/compiler/scheduler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-03T07:40:43Z",
+      "side": 1,
+      "message": "Please use a named constant or an alternative pattern (like Optional\u003cint\u003e or `bool GetFoo(int*)`.",
+      "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
