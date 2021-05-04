@@ -20,6 +20,108 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1b19727c_6253d86b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-04T22:44:57Z",
+      "side": 1,
+      "message": "Mostly lgtm, mostly nits and style suggestions.",
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec9f4ec2_8cb3bfb3",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-04T22:44:57Z",
+      "side": 1,
+      "message": "Nit: missing space before */",
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "315e87e4_f150b6e7",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-04T22:44:57Z",
+      "side": 1,
+      "message": "Thanks for adding these section ids!",
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52e2c441_351c32cf",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-04T22:44:57Z",
+      "side": 1,
+      "message": "I didn\u0027t see any callsites where the return value is checked for its contents, only whether a preferred value exists. How about return a 2-value enum that signals a preferred value was found/not found?",
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "747f44ab_53015d2e",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-04T22:44:57Z",
+      "side": 1,
+      "message": "Nit: I find \u0027filters\u0027 slightly misleading. How about \u0027substitutions\u0027?",
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ed47aca_c1a6d4da",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-04T22:44:57Z",
+      "side": 1,
+      "message": "I\u0027d prefer that we create FixedArrays with the values and do NewJSArrayWithElements, but I guess icu::StringEnumeration doesn\u0027t know how many items are to be enumerated ahead of time? Additionally, I guess performance isn\u0027t too important for these APIs, so no worries if it\u0027s not easy to change these.",
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5ea2c6dd_5a42aace",
         "filename": "src/objects/js-locale.cc",
         "patchSetId": 21
@@ -60,6 +162,23 @@
         "endLine": 752,
         "endChar": 15
       },
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf89cda0_705ac744",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-04T22:44:57Z",
+      "side": 1,
+      "message": "For these DCHECK(); USE(); statement sequences here and below, how about CHECK(JSReceiver::CreateDataProperty(...).FromJust())?",
       "revId": "3159147d2062078f228073c24329153fc2d0e953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
