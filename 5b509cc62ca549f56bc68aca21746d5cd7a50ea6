@@ -16,6 +16,23 @@
       "message": "marja@ for OWNER review of parser-base",
       "revId": "5b509cc62ca549f56bc68aca21746d5cd7a50ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e30c1b37_e3affc60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-04T11:11:10Z",
+      "side": 1,
+      "message": "parser owner rubberstamp",
+      "revId": "5b509cc62ca549f56bc68aca21746d5cd7a50ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
