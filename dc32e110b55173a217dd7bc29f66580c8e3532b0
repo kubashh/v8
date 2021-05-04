@@ -35,6 +35,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bb9b9f1_2ca61d52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-05-04T09:36:58Z",
+      "side": 1,
+      "message": "LGTM % comments",
+      "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79119e5d_4acbe698",
+        "filename": "src/compiler/scheduler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-05-04T09:36:58Z",
+      "side": 1,
+      "message": "The name feels a bit off now. Since we are visiting the inputs of node only after we have finished Post(node), this doesn\u0027t really reflect a post order traversal anymore. I think it makes sense to rename Pre and Post (maybe to something like TryPlacement/InitializePlacement and CountUnscheduledUses).",
+      "range": {
+        "startLine": 1252,
+        "startChar": 0,
+        "endLine": 1252,
+        "endChar": 25
+      },
+      "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae6c8f66_99e0cd70",
@@ -48,6 +88,24 @@
       "writtenOn": "2021-05-03T07:40:43Z",
       "side": 1,
       "message": "Please use a named constant or an alternative pattern (like Optional\u003cint\u003e or `bool GetFoo(int*)`.",
+      "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c895dabc_28215fad",
+        "filename": "src/compiler/scheduler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-05-04T09:36:58Z",
+      "side": 1,
+      "message": "+1 for Optional\u003cint\u003e",
+      "parentUuid": "ae6c8f66_99e0cd70",
       "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
