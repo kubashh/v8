@@ -1452,8 +1452,9 @@ class ParserBase {
 
   // Convenience method which determines the type of return statement to emit
   // depending on the current function type.
-  inline StatementT BuildReturnStatement(ExpressionT expr, int pos,
-                                         int end_pos = kNoSourcePosition) {
+  inline StatementT BuildReturnStatement(
+      ExpressionT expr, int pos,
+      int end_pos = ReturnStatement::kFunctionLiteralReturnPosition) {
     if (impl()->IsNull(expr)) {
       expr = factory()->NewUndefinedLiteral(kNoSourcePosition);
     } else if (is_async_generator()) {
@@ -4629,7 +4630,7 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseClassLiteral(
   ClassInfo class_info(this);
   class_info.is_anonymous = is_anonymous;
 
-  scope()->set_start_position(end_position());
+  scope()->set_start_position(class_token_pos);
   if (Check(Token::EXTENDS)) {
     ClassScope::HeritageParsingScope heritage(class_scope);
     FuncNameInferrerState fni_state(&fni_);

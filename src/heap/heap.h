@@ -66,7 +66,9 @@ class ArrayBufferCollector;
 class ArrayBufferSweeper;
 class BasicMemoryChunk;
 class CodeLargeObjectSpace;
+class CodeRange;
 class CollectionBarrier;
+class ConcurrentAllocator;
 class ConcurrentMarking;
 class CppHeap;
 class GCIdleTimeHandler;
@@ -197,7 +199,7 @@ class StrongRootsEntry {
 
 class AllocationResult {
  public:
-  static inline AllocationResult Retry(AllocationSpace space = NEW_SPACE) {
+  static inline AllocationResult Retry(AllocationSpace space) {
     return AllocationResult(space);
   }
 
@@ -516,6 +518,9 @@ class Heap {
   inline Address* OldSpaceAllocationTopAddress();
   inline Address* OldSpaceAllocationLimitAddress();
 
+  size_t NewSpaceSize();
+  size_t NewSpaceCapacity();
+
   // Move len non-weak tagged elements from src_slot to dst_slot of dst_object.
   // The source and destination memory ranges can overlap.
   V8_EXPORT_PRIVATE void MoveRange(HeapObject dst_object, ObjectSlot dst_slot,
@@ -749,7 +754,7 @@ class Heap {
 
   size_t backing_store_bytes() const { return backing_store_bytes_; }
 
-  void CompactWeakArrayLists(AllocationType allocation);
+  void CompactWeakArrayLists();
 
   V8_EXPORT_PRIVATE void AddRetainedMap(Handle<NativeContext> context,
                                         Handle<Map> map);
@@ -826,12 +831,6 @@ class Heap {
   // Create ObjectStats if live_object_stats_ or dead_object_stats_ are nullptr.
   void CreateObjectStats();
 
-  // If the code range exists, allocates executable pages in the code range and
-  // copies the embedded builtins code blob there. Returns address of the copy.
-  // The builtins code region will be freed with the code range at tear down.
-  uint8_t* RemapEmbeddedBuiltinsIntoCodeRange(const uint8_t* embedded_blob_code,
-                                              size_t embedded_blob_code_size);
-
   // Sets the TearDown state, so no new GC tasks get posted.
   void StartTearDown();
 
@@ -840,6 +839,12 @@ class Heap {
 
   // Returns whether SetUp has been called.
   bool HasBeenSetUp() const;
+
+  // Initialializes shared spaces.
+  void InitSharedSpaces();
+
+  // Removes shared spaces again.
+  void DeinitSharedSpaces();
 
   // ===========================================================================
   // Getters for spaces. =======================================================
@@ -885,7 +890,7 @@ class Heap {
     return array_buffer_sweeper_.get();
   }
 
-  const base::AddressRegion& code_range();
+  const base::AddressRegion& code_region();
 
   LocalHeap* main_thread_local_heap() { return main_thread_local_heap_; }
 
@@ -1217,9 +1222,17 @@ class Heap {
   // heaps is required.
   V8_EXPORT_PRIVATE bool Contains(HeapObject value) const;
 
+  // Checks whether an address/object is in the non-read-only heap (including
+  // auxiliary area and unused area). Use IsValidHeapObject if checking both
+  // heaps is required.
+  V8_EXPORT_PRIVATE bool SharedHeapContains(HeapObject value) const;
+
   // Checks whether an address/object in a space.
   // Currently used by tests, serialization and heap verification only.
   V8_EXPORT_PRIVATE bool InSpace(HeapObject value, AllocationSpace space) const;
+
+  // Returns true when this heap is shared.
+  V8_EXPORT_PRIVATE bool IsShared();
 
   // Slow methods that can be used for verification as they can also be used
   // with off-heap Addresses.
@@ -1360,9 +1373,9 @@ class Heap {
     survived_since_last_expansion_ += survived;
   }
 
-  inline void UpdateNewSpaceAllocationCounter();
+  void UpdateNewSpaceAllocationCounter();
 
-  inline size_t NewSpaceAllocationCounter();
+  V8_EXPORT_PRIVATE size_t NewSpaceAllocationCounter();
 
   // This should be used only for testing.
   void set_new_space_allocation_counter(size_t new_value) {
@@ -2150,6 +2163,12 @@ class Heap {
   NewLargeObjectSpace* new_lo_space_ = nullptr;
   ReadOnlySpace* read_only_space_ = nullptr;
 
+  OldSpace* shared_old_space_ = nullptr;
+  MapSpace* shared_map_space_ = nullptr;
+
+  std::unique_ptr<ConcurrentAllocator> shared_old_allocator_;
+  std::unique_ptr<ConcurrentAllocator> shared_map_allocator_;
+
   // Map from the space id to the space.
   Space* space_[LAST_SPACE + 1];
 
@@ -2283,6 +2302,13 @@ class Heap {
   std::unique_ptr<AllocationObserver> stress_concurrent_allocation_observer_;
   std::unique_ptr<LocalEmbedderHeapTracer> local_embedder_heap_tracer_;
   std::unique_ptr<MarkingBarrier> marking_barrier_;
+
+  // This object controls virtual space reserved for code on the V8 heap. This
+  // is only valid for 64-bit architectures where kRequiresCodeRange.
+  //
+  // Owned by the heap when !V8_COMPRESS_POINTERS_IN_SHARED_CAGE, otherwise is
+  // process-wide.
+  std::shared_ptr<CodeRange> code_range_;
 
   // The embedder owns the C++ heap.
   v8::CppHeap* cpp_heap_ = nullptr;

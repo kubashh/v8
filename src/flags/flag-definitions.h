@@ -276,10 +276,11 @@ DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
   V(harmony_import_assertions, "harmony import assertions")
 
 #ifdef V8_INTL_SUPPORT
-#define HARMONY_INPROGRESS(V)                             \
-  HARMONY_INPROGRESS_BASE(V)                              \
-  V(harmony_intl_best_fit_matcher, "Intl BestFitMatcher") \
-  V(harmony_intl_displaynames_date_types, "Intl.DisplayNames date types")
+#define HARMONY_INPROGRESS(V)                                             \
+  HARMONY_INPROGRESS_BASE(V)                                              \
+  V(harmony_intl_best_fit_matcher, "Intl BestFitMatcher")                 \
+  V(harmony_intl_displaynames_date_types, "Intl.DisplayNames date types") \
+  V(harmony_intl_locale_info, "Intl locale info")
 #else
 #define HARMONY_INPROGRESS(V) HARMONY_INPROGRESS_BASE(V)
 #endif
@@ -416,13 +417,13 @@ DEFINE_BOOL_READONLY(enable_unconditional_write_barriers,
                      "always use full write barriers")
 
 #ifdef V8_ENABLE_SINGLE_GENERATION
-#define V8_GENERATION_BOOL true
+#define V8_SINGLE_GENERATION_BOOL true
 #else
-#define V8_GENERATION_BOOL false
+#define V8_SINGLE_GENERATION_BOOL false
 #endif
 
 DEFINE_BOOL_READONLY(
-    single_generation, V8_GENERATION_BOOL,
+    single_generation, V8_SINGLE_GENERATION_BOOL,
     "allocate all objects from young generation to old generation")
 
 #ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING

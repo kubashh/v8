@@ -119,11 +119,7 @@ struct LiveEditResult {
     OK,
     COMPILE_ERROR,
     BLOCKED_BY_RUNNING_GENERATOR,
-    BLOCKED_BY_FUNCTION_ABOVE_BREAK_FRAME,
-    BLOCKED_BY_FUNCTION_BELOW_NON_DROPPABLE_FRAME,
-    BLOCKED_BY_ACTIVE_FUNCTION,
-    BLOCKED_BY_NEW_TARGET_IN_RESTART_FRAME,
-    FRAME_RESTART_IS_NOT_SUPPORTED
+    BLOCKED_BY_ACTIVE_FUNCTION
   };
   Status status = OK;
   bool stack_changed = false;
@@ -195,9 +191,8 @@ class WasmScript : public Script {
 };
 #endif  // V8_ENABLE_WEBASSEMBLY
 
-V8_EXPORT_PRIVATE void GetLoadedScripts(
-    Isolate* isolate,
-    PersistentValueVector<Script>& scripts);  // NOLINT(runtime/references)
+V8_EXPORT_PRIVATE void GetLoadedScripts(Isolate* isolate,
+                                        PersistentValueVector<Script>& scripts);
 
 MaybeLocal<UnboundScript> CompileInspectorScript(Isolate* isolate,
                                                  Local<String> source);
@@ -480,7 +475,6 @@ class V8_EXPORT_PRIVATE StackTraceIterator {
   virtual v8::Local<v8::Function> GetFunction() const = 0;
   virtual std::unique_ptr<ScopeIterator> GetScopeIterator() const = 0;
 
-  virtual bool Restart() = 0;
   virtual v8::MaybeLocal<v8::Value> Evaluate(v8::Local<v8::String> source,
                                              bool throw_on_side_effect) = 0;
 };

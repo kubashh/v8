@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 #include <atomic>
-#include <fstream>  // NOLINT(readability/streams)
+#include <fstream>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -19,6 +19,7 @@
 #include "src/ast/scopes.h"
 #include "src/base/hashmap.h"
 #include "src/base/logging.h"
+#include "src/base/platform/mutex.h"
 #include "src/base/platform/platform.h"
 #include "src/base/sys-info.h"
 #include "src/base/utils/random-number-generator.h"
@@ -1403,11 +1404,13 @@ Object Isolate::StackOverflow() {
       MessageFormatter::TemplateString(MessageTemplate::kStackOverflow));
   Handle<Object> options = factory()->undefined_value();
   Handle<Object> no_caller;
-  Handle<Object> exception;
+  Handle<JSObject> exception;
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
       this, exception,
       ErrorUtils::Construct(this, fun, fun, msg, options, SKIP_NONE, no_caller,
                             ErrorUtils::StackTraceCollection::kSimple));
+  JSObject::AddProperty(this, exception, factory()->wasm_uncatchable_symbol(),
+                        factory()->true_value(), NONE);
 
   Throw(*exception);
 
@@ -2691,9 +2694,10 @@ void Isolate::UnregisterManagedPtrDestructor(ManagedPtrDestructor* destructor) {
 }
 
 #if V8_ENABLE_WEBASSEMBLY
-void Isolate::SetWasmEngine(std::shared_ptr<wasm::WasmEngine> engine) {
+void Isolate::SetWasmEngine(wasm::WasmEngine* engine) {
   DCHECK_NULL(wasm_engine_);  // Only call once before {Init}.
-  wasm_engine_ = std::move(engine);
+  DCHECK_NOT_NULL(engine);
+  wasm_engine_ = engine;
   wasm_engine_->AddIsolate(this);
 }
 
@@ -2707,7 +2711,6 @@ void Isolate::AddSharedWasmMemory(Handle<WasmMemoryObject> memory_object) {
 }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
-// NOLINTNEXTLINE
 Isolate::PerIsolateThreadData::~PerIsolateThreadData() {
 #if defined(USE_SIMULATOR)
   delete simulator_;
@@ -3051,9 +3054,8 @@ void Isolate::Deinit() {
 #if defined(V8_OS_WIN64)
   if (win64_unwindinfo::CanRegisterUnwindInfoForNonABICompliantCodeRange() &&
       heap()->memory_allocator() && RequiresCodeRange()) {
-    const base::AddressRegion& code_range =
-        heap()->memory_allocator()->code_range();
-    void* start = reinterpret_cast<void*>(code_range.begin());
+    const base::AddressRegion& code_region = heap()->code_region();
+    void* start = reinterpret_cast<void*>(code_region.begin());
     win64_unwindinfo::UnregisterNonABICompliantCodeRange(start);
   }
 #endif  // V8_OS_WIN64
@@ -3073,6 +3075,9 @@ void Isolate::Deinit() {
     delete optimizing_compile_dispatcher_;
     optimizing_compile_dispatcher_ = nullptr;
   }
+
+  // All client isolates should already be detached.
+  DCHECK_NULL(client_isolate_head_);
 
   // Help sweeper threads complete sweeping to stop faster.
   heap_.mark_compact_collector()->DrainSweepingWorklists();
@@ -3120,6 +3125,10 @@ void Isolate::Deinit() {
 
   main_thread_local_isolate_->heap()->FreeLinearAllocationArea();
 
+  if (shared_isolate_) {
+    DetachFromSharedIsolate();
+  }
+
   heap_.TearDown();
 
   main_thread_local_isolate_.reset();
@@ -3128,10 +3137,7 @@ void Isolate::Deinit() {
   if (logfile != nullptr) base::Fclose(logfile);
 
 #if V8_ENABLE_WEBASSEMBLY
-  if (wasm_engine_) {
-    wasm_engine_->RemoveIsolate(this);
-    wasm_engine_.reset();
-  }
+  wasm_engine_->RemoveIsolate(this);
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   TearDownEmbeddedBlob();
@@ -3421,8 +3427,9 @@ void Isolate::MaybeRemapEmbeddedBuiltinsIntoCodeRange() {
   CHECK_NOT_NULL(embedded_blob_code_);
   CHECK_NE(embedded_blob_code_size_, 0);
 
-  embedded_blob_code_ = heap_.RemapEmbeddedBuiltinsIntoCodeRange(
-      embedded_blob_code_, embedded_blob_code_size_);
+  DCHECK_NOT_NULL(heap_.code_range_);
+  embedded_blob_code_ = heap_.code_range_->RemapEmbeddedBuiltins(
+      this, embedded_blob_code_, embedded_blob_code_size_);
   CHECK_NOT_NULL(embedded_blob_code_);
   // The un-embedded code blob is already a part of the registered code range
   // so it's not necessary to register it again.
@@ -3579,7 +3586,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
 
   metrics_recorder_ = std::make_shared<metrics::Recorder>();
 
-  {  // NOLINT
+  {
     // Ensure that the thread has a valid stack guard.  The v8::Locker object
     // will ensure this too, but we don't have to use lockers if we are only
     // using one thread.
@@ -3594,10 +3601,20 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   heap_.SetUpSpaces();
 
   if (V8_SHORT_BUILTIN_CALLS_BOOL && FLAG_short_builtin_calls) {
-    // Check if the system has more than 4GB of physical memory by comaring
-    // the old space size with respective threshod value.
-    is_short_builtin_calls_enabled_ =
-        heap_.MaxOldGenerationSize() >= kShortBuiltinCallsOldSpaceSizeThreshold;
+    // Check if the system has more than 4GB of physical memory by comparing the
+    // old space size with respective threshold value.
+    //
+    // Additionally, enable if there is already a process-wide CodeRange that
+    // has re-embedded builtins.
+    is_short_builtin_calls_enabled_ = (heap_.MaxOldGenerationSize() >=
+                                       kShortBuiltinCallsOldSpaceSizeThreshold);
+    if (COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
+      std::shared_ptr<CodeRange> code_range =
+          CodeRange::GetProcessWideCodeRange();
+      if (code_range && code_range->embedded_blob_code_copy() != nullptr) {
+        is_short_builtin_calls_enabled_ = true;
+      }
+    }
   }
 
   // Create LocalIsolate/LocalHeap for the main thread and set state to Running.
@@ -3609,11 +3626,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   isolate_data_.external_reference_table()->Init(this);
 
 #if V8_ENABLE_WEBASSEMBLY
-  // Setup the wasm engine.
-  if (wasm_engine_ == nullptr) {
-    SetWasmEngine(wasm::WasmEngine::GetWasmEngine());
-  }
-  DCHECK_NOT_NULL(wasm_engine_);
+  SetWasmEngine(wasm::WasmEngine::GetWasmEngine());
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   if (setup_delegate_ == nullptr) {
@@ -3772,10 +3785,9 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
 
 #if defined(V8_OS_WIN64)
   if (win64_unwindinfo::CanRegisterUnwindInfoForNonABICompliantCodeRange()) {
-    const base::AddressRegion& code_range =
-        heap()->memory_allocator()->code_range();
-    void* start = reinterpret_cast<void*>(code_range.begin());
-    size_t size_in_bytes = code_range.size();
+    const base::AddressRegion& code_region = heap()->code_region();
+    void* start = reinterpret_cast<void*>(code_region.begin());
+    size_t size_in_bytes = code_region.size();
     win64_unwindinfo::RegisterNonABICompliantCodeRange(start, size_in_bytes);
   }
 #endif  // V8_OS_WIN64
@@ -5032,6 +5044,55 @@ Address Isolate::store_to_stack_count_address(const char* function_name) {
   // It is safe to return the address of std::map values.
   // Only iterators and references to the erased elements are invalidated.
   return reinterpret_cast<Address>(&map[name].second);
+}
+
+void Isolate::AttachToSharedIsolate(Isolate* shared) {
+  DCHECK(shared->is_shared());
+  DCHECK_NULL(shared_isolate_);
+  shared->AppendAsClientIsolate(this);
+  shared_isolate_ = shared;
+  heap()->InitSharedSpaces();
+}
+
+void Isolate::DetachFromSharedIsolate() {
+  DCHECK_NOT_NULL(shared_isolate_);
+  shared_isolate_->RemoveAsClientIsolate(this);
+  shared_isolate_ = nullptr;
+  heap()->DeinitSharedSpaces();
+}
+
+void Isolate::AppendAsClientIsolate(Isolate* client) {
+  base::MutexGuard guard(&client_isolate_mutex_);
+
+  DCHECK_NULL(client->prev_client_isolate_);
+  DCHECK_NULL(client->next_client_isolate_);
+  DCHECK_NE(client_isolate_head_, client);
+
+  if (client_isolate_head_) {
+    client_isolate_head_->prev_client_isolate_ = client;
+  }
+
+  client->prev_client_isolate_ = nullptr;
+  client->next_client_isolate_ = client_isolate_head_;
+
+  client_isolate_head_ = client;
+}
+
+void Isolate::RemoveAsClientIsolate(Isolate* client) {
+  base::MutexGuard guard(&client_isolate_mutex_);
+
+  if (client->next_client_isolate_) {
+    client->next_client_isolate_->prev_client_isolate_ =
+        client->prev_client_isolate_;
+  }
+
+  if (client->prev_client_isolate_) {
+    client->prev_client_isolate_->next_client_isolate_ =
+        client->next_client_isolate_;
+  } else {
+    DCHECK_EQ(client_isolate_head_, client);
+    client_isolate_head_ = client->next_client_isolate_;
+  }
 }
 
 }  // namespace internal

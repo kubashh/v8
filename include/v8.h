@@ -596,7 +596,7 @@ template <class T> class PersistentBase {
    */
   V8_INLINE uint16_t WrapperClassId() const;
 
-  PersistentBase(const PersistentBase& other) = delete;  // NOLINT
+  PersistentBase(const PersistentBase& other) = delete;
   void operator=(const PersistentBase&) = delete;
 
  private:
@@ -708,7 +708,7 @@ template <class T, class M> class Persistent : public PersistentBase<T> {
     return *this;
   }
   template <class S, class M2>
-  V8_INLINE Persistent& operator=(const Persistent<S, M2>& that) { // NOLINT
+  V8_INLINE Persistent& operator=(const Persistent<S, M2>& that) {
     Copy(that);
     return *this;
   }
@@ -723,7 +723,7 @@ template <class T, class M> class Persistent : public PersistentBase<T> {
 
   // TODO(dcarney): this is pretty useless, fix or remove
   template <class S>
-  V8_INLINE static Persistent<T>& Cast(const Persistent<S>& that) {  // NOLINT
+  V8_INLINE static Persistent<T>& Cast(const Persistent<S>& that) {
 #ifdef V8_ENABLE_CHECKS
     // If we're going to perform the type check then we have to check
     // that the handle isn't empty before doing the checked cast.
@@ -734,7 +734,7 @@ template <class T, class M> class Persistent : public PersistentBase<T> {
 
   // TODO(dcarney): this is pretty useless, fix or remove
   template <class S>
-  V8_INLINE Persistent<S>& As() const {  // NOLINT
+  V8_INLINE Persistent<S>& As() const {
     return Persistent<S>::Cast(*this);
   }
 
@@ -803,7 +803,7 @@ class Global : public PersistentBase<T> {
   /**
    * Pass allows returning uniques from functions, etc.
    */
-  Global Pass() { return static_cast<Global&&>(*this); }  // NOLINT
+  Global Pass() { return static_cast<Global&&>(*this); }
 
   /*
    * For compatibility with Chromium's base::Bind (base::Passed).
@@ -1674,10 +1674,12 @@ class V8_EXPORT Module : public Data {
   /**
    * Evaluates the module and its dependencies.
    *
-   * If status is kInstantiated, run the module's code. On success, set status
-   * to kEvaluated and return the completion value; on failure, set status to
-   * kErrored and propagate the thrown exception (which is then also available
-   * via |GetException|).
+   * If status is kInstantiated, run the module's code and return a Promise
+   * object. On success, set status to kEvaluated and resolve the Promise with
+   * the completion value; on failure, set status to kErrored and reject the
+   * Promise with the error.
+   *
+   * If IsGraphAsync() is false, the returned Promise is settled.
    */
   V8_WARN_UNUSED_RESULT MaybeLocal<Value> Evaluate(Local<Context> context);
 
@@ -3276,7 +3278,7 @@ class V8_EXPORT String : public Name {
    */
   bool IsExternalOneByte() const;
 
-  class V8_EXPORT ExternalStringResourceBase {  // NOLINT
+  class V8_EXPORT ExternalStringResourceBase {
    public:
     virtual ~ExternalStringResourceBase() = default;
 
@@ -3979,8 +3981,7 @@ class V8_EXPORT Object : public Value {
   //
   // Returns true on success.
   V8_WARN_UNUSED_RESULT Maybe<bool> DefineProperty(
-      Local<Context> context, Local<Name> key,
-      PropertyDescriptor& descriptor);  // NOLINT(runtime/references)
+      Local<Context> context, Local<Name> key, PropertyDescriptor& descriptor);
 
   V8_WARN_UNUSED_RESULT MaybeLocal<Value> Get(Local<Context> context,
                                               Local<Value> key);
@@ -5346,7 +5347,7 @@ class V8_EXPORT ArrayBuffer : public Object {
    * Note that it is unsafe to call back into V8 from any of the allocator
    * functions.
    */
-  class V8_EXPORT Allocator { // NOLINT
+  class V8_EXPORT Allocator {
    public:
     virtual ~Allocator() = default;
 
@@ -7032,7 +7033,7 @@ class V8_EXPORT AccessorSignature : public Data {
 /**
  * Ignore
  */
-class V8_EXPORT Extension {  // NOLINT
+class V8_EXPORT Extension {
  public:
   // Note that the strings passed into this constructor must live as long
   // as the Extension itself.
@@ -7134,6 +7135,11 @@ class V8_EXPORT ResourceConstraints {
   /**
    * The amount of virtual memory reserved for generated code. This is relevant
    * for 64-bit architectures that rely on code range for calls in code.
+   *
+   * When V8_COMPRESS_POINTERS_IN_SHARED_CAGE is defined, there is a shared
+   * process-wide code range that is lazily initialized. This value is used to
+   * configure that shared code range when the first Isolate is
+   * created. Subsequent Isolates ignore this value.
    */
   size_t code_range_size_in_bytes() const { return code_range_size_; }
   void set_code_range_size_in_bytes(size_t limit) { code_range_size_ = limit; }
@@ -7905,17 +7911,16 @@ using UnhandledExceptionCallback =
 /**
  * Interface for iterating through all external resources in the heap.
  */
-class V8_EXPORT ExternalResourceVisitor {  // NOLINT
+class V8_EXPORT ExternalResourceVisitor {
  public:
   virtual ~ExternalResourceVisitor() = default;
   virtual void VisitExternalString(Local<String> string) {}
 };
 
-
 /**
  * Interface for iterating through all the persistent handles in the heap.
  */
-class V8_EXPORT PersistentHandleVisitor {  // NOLINT
+class V8_EXPORT PersistentHandleVisitor {
  public:
   virtual ~PersistentHandleVisitor() = default;
   virtual void VisitPersistentHandle(Persistent<Value>* value,

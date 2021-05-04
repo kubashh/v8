@@ -311,7 +311,7 @@ class FeedbackVector
 
   DECL_PRINTER(FeedbackVector)
 
-  void FeedbackSlotPrint(std::ostream& os, FeedbackSlot slot);  // NOLINT
+  void FeedbackSlotPrint(std::ostream& os, FeedbackSlot slot);
 
   // Clears the vector slots. Return true if feedback has changed.
   bool ClearSlots(Isolate* isolate);
@@ -591,7 +591,6 @@ class FeedbackMetadata : public HeapObject {
 
 // Verify that an empty hash field looks like a tagged object, but can't
 // possibly be confused with a pointer.
-// NOLINTNEXTLINE(runtime/references) (false positive)
 STATIC_ASSERT((Name::kEmptyHashField & kHeapObjectTag) == kHeapObjectTag);
 STATIC_ASSERT(Name::kEmptyHashField == 0x3);
 // Verify that a set hash field will not look like a tagged object.
@@ -731,7 +730,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   bool IsMegamorphic() const { return ic_state() == MEGAMORPHIC; }
   bool IsGeneric() const { return ic_state() == GENERIC; }
 
-  void Print(std::ostream& os);  // NOLINT
+  void Print(std::ostream& os);
 
   // For map-based ICs (load, keyed-load, store, keyed-store).
   Map GetFirstMap() const;
@@ -836,7 +835,6 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
 
   // Add a type to the list of types for source position <position>.
   void Collect(Handle<String> type, int position);
-  JSObject GetTypeProfile() const;
 
   std::vector<int> GetSourcePositions() const;
   std::vector<Handle<String>> GetTypesForSourcePositions(uint32_t pos) const;

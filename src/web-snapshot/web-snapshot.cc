@@ -390,18 +390,35 @@ void WebSnapshotSerializer::WriteValue(Handle<Object> object,
                                        ValueSerializer& serializer) {
   uint32_t id = 0;
   if (object->IsSmi()) {
-    // TODO(v8:11525): Implement.
-    UNREACHABLE();
+    serializer.WriteUint32(ValueType::INTEGER);
+    serializer.WriteZigZag<int32_t>(Smi::cast(*object).value());
+    return;
   }
 
   DCHECK(object->IsHeapObject());
   switch (HeapObject::cast(*object).map().instance_type()) {
     case ODDBALL_TYPE:
-      // TODO(v8:11525): Implement.
-      UNREACHABLE();
+      switch (Oddball::cast(*object).kind()) {
+        case Oddball::kFalse:
+          serializer.WriteUint32(ValueType::FALSE_CONSTANT);
+          return;
+        case Oddball::kTrue:
+          serializer.WriteUint32(ValueType::TRUE_CONSTANT);
+          return;
+        case Oddball::kNull:
+          serializer.WriteUint32(ValueType::NULL_CONSTANT);
+          return;
+        case Oddball::kUndefined:
+          serializer.WriteUint32(ValueType::UNDEFINED_CONSTANT);
+          return;
+        default:
+          UNREACHABLE();
+      }
     case HEAP_NUMBER_TYPE:
-      // TODO(v8:11525): Implement.
-      UNREACHABLE();
+      // TODO(v8:11525): Handle possible endianness mismatch.
+      serializer.WriteUint32(ValueType::DOUBLE);
+      serializer.WriteDouble(HeapNumber::cast(*object).value());
+      break;
     case JS_FUNCTION_TYPE:
       SerializeFunction(Handle<JSFunction>::cast(object), id);
       serializer.WriteUint32(ValueType::FUNCTION_ID);
@@ -843,6 +860,46 @@ void WebSnapshotDeserializer::ReadValue(Handle<Object>& value,
     return;
   }
   switch (value_type) {
+    case ValueType::FALSE_CONSTANT: {
+      value = handle(ReadOnlyRoots(isolate_).false_value(), isolate_);
+      representation = Representation::Tagged();
+      break;
+    }
+    case ValueType::TRUE_CONSTANT: {
+      value = handle(ReadOnlyRoots(isolate_).true_value(), isolate_);
+      representation = Representation::Tagged();
+      break;
+    }
+    case ValueType::NULL_CONSTANT: {
+      value = handle(ReadOnlyRoots(isolate_).null_value(), isolate_);
+      representation = Representation::Tagged();
+      break;
+    }
+    case ValueType::UNDEFINED_CONSTANT: {
+      value = handle(ReadOnlyRoots(isolate_).undefined_value(), isolate_);
+      representation = Representation::Tagged();
+      break;
+    }
+    case ValueType::INTEGER: {
+      Maybe<int32_t> number = deserializer_->ReadZigZag<int32_t>();
+      if (number.IsNothing()) {
+        Throw("Web snapshot: Malformed integer");
+        return;
+      }
+      value = isolate_->factory()->NewNumberFromInt(number.FromJust());
+      representation = Representation::Tagged();
+      break;
+    }
+    case ValueType::DOUBLE: {
+      double number;
+      if (!deserializer_->ReadDouble(&number)) {
+        Throw("Web snapshot: Malformed double");
+        return;
+      }
+      value = isolate_->factory()->NewNumber(number);
+      representation = Representation::Tagged();
+      break;
+    }
     case ValueType::STRING_ID: {
       value = ReadString(false);
       representation = Representation::Tagged();

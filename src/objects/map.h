@@ -68,9 +68,12 @@ enum InstanceType : uint16_t;
   V(Symbol)                             \
   V(SyntheticModule)                    \
   V(TransitionArray)                    \
+  IF_WASM(V, WasmArray)                 \
+  IF_WASM(V, WasmExportedFunctionData)  \
+  IF_WASM(V, WasmFunctionData)          \
   IF_WASM(V, WasmIndirectFunctionTable) \
   IF_WASM(V, WasmInstanceObject)        \
-  IF_WASM(V, WasmArray)                 \
+  IF_WASM(V, WasmJSFunctionData)        \
   IF_WASM(V, WasmStruct)                \
   IF_WASM(V, WasmTypeInfo)              \
   V(WeakCell)
@@ -558,6 +561,7 @@ class Map : public HeapObject {
   // and with the Wasm type info for WebAssembly object maps.
   DECL_ACCESSORS(constructor_or_back_pointer, Object)
   DECL_ACCESSORS(native_context, NativeContext)
+  DECL_ACCESSORS(native_context_or_null, Object)
   DECL_ACCESSORS(wasm_type_info, WasmTypeInfo)
   DECL_GETTER(GetConstructor, Object)
   DECL_GETTER(GetFunctionTemplateInfo, FunctionTemplateInfo)
@@ -607,6 +611,7 @@ class Map : public HeapObject {
   // chain state.
   inline bool IsPrototypeValidityCellValid() const;
 
+  inline Name GetLastDescriptorName(Isolate* isolate) const;
   inline PropertyDetails GetLastDescriptorDetails(Isolate* isolate) const;
 
   inline InternalIndex LastAdded() const;

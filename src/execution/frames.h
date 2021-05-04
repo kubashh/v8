@@ -138,9 +138,7 @@ class StackFrame {
     INNER_JSENTRY_FRAME = (0 << kSmiTagSize) | kSmiTag,
     OUTERMOST_JSENTRY_FRAME = (1 << kSmiTagSize) | kSmiTag
   };
-  // NOLINTNEXTLINE(runtime/references) (false positive)
   STATIC_ASSERT((INNER_JSENTRY_FRAME & kHeapObjectTagMask) != kHeapObjectTag);
-  // NOLINTNEXTLINE(runtime/references) (false positive)
   STATIC_ASSERT((OUTERMOST_JSENTRY_FRAME & kHeapObjectTagMask) !=
                 kHeapObjectTag);
 
@@ -964,7 +962,7 @@ class WasmFrame : public TypedFrame {
   V8_EXPORT_PRIVATE WasmInstanceObject wasm_instance() const;
   V8_EXPORT_PRIVATE wasm::NativeModule* native_module() const;
   wasm::WasmCode* wasm_code() const;
-  uint32_t function_index() const;
+  int function_index() const;
   Script script() const;
   // Byte position in the module, or asm.js source position.
   int position() const override;

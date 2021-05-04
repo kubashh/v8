@@ -40,7 +40,12 @@ struct WasmModule;
 
 namespace compiler {
 
+class CompilationDependencies;
+struct FeedbackSource;
+class JSHeapBroker;
 class ObjectData;
+class PerIsolateCompilerCache;
+class PropertyAccessInfo;
 
 // Whether we are loading a property or storing to a property.
 // For a store during literal creation, do not walk up the prototype chain.
@@ -91,15 +96,13 @@ enum class RefSerializationKind {
   /* Subtypes of Context */                                               \
   V(NativeContext, RefSerializationKind::kSerialized)                     \
   /* Subtypes of FixedArray */                                            \
-  V(Context, RefSerializationKind::kSerialized)                           \
   V(ObjectBoilerplateDescription, RefSerializationKind::kNeverSerialized) \
-  V(ScopeInfo, RefSerializationKind::kNeverSerialized)                    \
-  V(ScriptContextTable, RefSerializationKind::kSerialized)                \
+  V(ScriptContextTable, RefSerializationKind::kBackgroundSerialized)      \
   /* Subtypes of String */                                                \
   V(InternalizedString, RefSerializationKind::kNeverSerialized)           \
   /* Subtypes of FixedArrayBase */                                        \
   V(BytecodeArray, RefSerializationKind::kNeverSerialized)                \
-  V(FixedArray, RefSerializationKind::kSerialized)                        \
+  V(FixedArray, RefSerializationKind::kBackgroundSerialized)              \
   V(FixedDoubleArray, RefSerializationKind::kNeverSerialized)             \
   /* Subtypes of Name */                                                  \
   V(String, RefSerializationKind::kNeverSerialized)                       \
@@ -110,10 +113,11 @@ enum class RefSerializationKind {
   V(AccessorInfo, RefSerializationKind::kNeverSerialized)                 \
   V(AllocationSite, RefSerializationKind::kSerialized)                    \
   V(ArrayBoilerplateDescription, RefSerializationKind::kNeverSerialized)  \
-  V(BigInt, RefSerializationKind::kPossiblyBackgroundSerialized)          \
+  V(BigInt, RefSerializationKind::kBackgroundSerialized)                  \
   V(CallHandlerInfo, RefSerializationKind::kNeverSerialized)              \
   V(Cell, RefSerializationKind::kNeverSerialized)                         \
   V(Code, RefSerializationKind::kNeverSerialized)                         \
+  V(Context, RefSerializationKind::kSerialized)                           \
   V(DescriptorArray, RefSerializationKind::kNeverSerialized)              \
   V(FeedbackCell, RefSerializationKind::kNeverSerialized)                 \
   V(FeedbackVector, RefSerializationKind::kNeverSerialized)               \
@@ -125,21 +129,40 @@ enum class RefSerializationKind {
   V(Name, RefSerializationKind::kNeverSerialized)                         \
   V(PropertyCell, RefSerializationKind::kBackgroundSerialized)            \
   V(RegExpBoilerplateDescription, RefSerializationKind::kNeverSerialized) \
+  V(ScopeInfo, RefSerializationKind::kNeverSerialized)                    \
   V(SharedFunctionInfo, RefSerializationKind::kNeverSerialized)           \
   V(SourceTextModule, RefSerializationKind::kSerialized)                  \
   V(TemplateObjectDescription, RefSerializationKind::kNeverSerialized)    \
   /* Subtypes of Object */                                                \
   V(HeapObject, RefSerializationKind::kBackgroundSerialized)
 
-class CompilationDependencies;
-struct FeedbackSource;
-class JSHeapBroker;
-class ObjectData;
-class PerIsolateCompilerCache;
-class PropertyAccessInfo;
 #define FORWARD_DECL(Name, ...) class Name##Ref;
 HEAP_BROKER_OBJECT_LIST(FORWARD_DECL)
 #undef FORWARD_DECL
+
+class ObjectRef;
+
+template <class T>
+struct ref_traits;
+
+#define REF_TRAITS(Name, Kind)                                           \
+  template <>                                                            \
+  struct ref_traits<Name> {                                              \
+    using ref_type = Name##Ref;                                          \
+    static constexpr RefSerializationKind ref_serialization_kind = Kind; \
+  };
+HEAP_BROKER_OBJECT_LIST(REF_TRAITS)
+#undef REF_TYPE
+
+template <>
+struct ref_traits<Object> {
+  using ref_type = ObjectRef;
+  // Note: While a bit awkward, this artificial ref serialization kind value is
+  // okay: smis are never-serialized, and we never create raw non-smi
+  // ObjectRefs (they would at least be HeapObjectRefs instead).
+  static constexpr RefSerializationKind ref_serialization_kind =
+      RefSerializationKind::kNeverSerialized;
+};
 
 class V8_EXPORT_PRIVATE ObjectRef {
  public:
@@ -538,13 +561,6 @@ class NameRef : public HeapObjectRef {
   bool IsUniqueName() const;
 };
 
-class ScriptContextTableRef : public HeapObjectRef {
- public:
-  DEFINE_REF_CONSTRUCTOR(ScriptContextTable, HeapObjectRef)
-
-  Handle<ScriptContextTable> object() const;
-};
-
 class DescriptorArrayRef : public HeapObjectRef {
  public:
   DEFINE_REF_CONSTRUCTOR(DescriptorArray, HeapObjectRef)
@@ -763,14 +779,6 @@ class ArrayBoilerplateDescriptionRef : public HeapObjectRef {
   int constants_elements_length() const;
 };
 
-class ObjectBoilerplateDescriptionRef : public HeapObjectRef {
- public:
-  using HeapObjectRef::HeapObjectRef;
-  Handle<ObjectBoilerplateDescription> object() const;
-
-  int size() const;
-};
-
 class FixedArrayRef : public FixedArrayBaseRef {
  public:
   DEFINE_REF_CONSTRUCTOR(FixedArray, FixedArrayBaseRef)
@@ -778,6 +786,12 @@ class FixedArrayRef : public FixedArrayBaseRef {
   Handle<FixedArray> object() const;
 
   ObjectRef get(int i) const;
+
+  // As above but may fail if Ref construction is not possible (e.g. for
+  // serialized types on the background thread).
+  // TODO(jgruber): Remove once all Ref types are never-serialized or
+  // background-serialized and can thus be created on background threads.
+  base::Optional<ObjectRef> TryGet(int i) const;
 };
 
 class FixedDoubleArrayRef : public FixedArrayBaseRef {
@@ -811,6 +825,22 @@ class BytecodeArrayRef : public FixedArrayBaseRef {
   // Exception handler table.
   Address handler_table_address() const;
   int handler_table_size() const;
+};
+
+class ScriptContextTableRef : public FixedArrayRef {
+ public:
+  DEFINE_REF_CONSTRUCTOR(ScriptContextTable, FixedArrayRef)
+
+  Handle<ScriptContextTable> object() const;
+};
+
+class ObjectBoilerplateDescriptionRef : public FixedArrayRef {
+ public:
+  DEFINE_REF_CONSTRUCTOR(ObjectBoilerplateDescription, FixedArrayRef)
+
+  Handle<ObjectBoilerplateDescription> object() const;
+
+  int size() const;
 };
 
 class JSArrayRef : public JSObjectRef {

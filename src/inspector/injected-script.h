@@ -164,7 +164,7 @@ class InjectedScript final {
     v8::HandleScope m_handleScope;
     v8::TryCatch m_tryCatch;
     v8::Local<v8::Context> m_context;
-    std::unique_ptr<V8CommandLineAPIScope> m_commandLineAPIScope;
+    std::unique_ptr<V8Console::CommandLineAPIScope> m_commandLineAPIScope;
     bool m_ignoreExceptionsAndMuteConsole;
     v8::debug::ExceptionBreakState m_previousPauseOnExceptionsState;
     bool m_userGesture;
@@ -173,7 +173,8 @@ class InjectedScript final {
     int m_sessionId;
   };
 
-  class ContextScope : public Scope {
+  class ContextScope : public Scope,
+                       public V8InspectorSession::CommandLineAPIScope {
    public:
     ContextScope(V8InspectorSessionImpl*, int executionContextId);
     ~ContextScope() override;

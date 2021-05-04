@@ -568,7 +568,7 @@ StartupData SnapshotCreator::CreateBlob(
       i::GarbageCollectionReason::kSnapshotCreator);
   {
     i::HandleScope scope(isolate);
-    isolate->heap()->CompactWeakArrayLists(internal::AllocationType::kOld);
+    isolate->heap()->CompactWeakArrayLists();
   }
 
   i::Snapshot::ClearReconstructableDataForSerialization(
@@ -8560,10 +8560,11 @@ bool Isolate::GetHeapSpaceStatistics(HeapSpaceStatistics* space_statistics,
     }
   } else {
     i::Space* space = heap->space(static_cast<int>(index));
-    space_statistics->space_size_ = space->CommittedMemory();
-    space_statistics->space_used_size_ = space->SizeOfObjects();
-    space_statistics->space_available_size_ = space->Available();
-    space_statistics->physical_space_size_ = space->CommittedPhysicalMemory();
+    space_statistics->space_size_ = space ? space->CommittedMemory() : 0;
+    space_statistics->space_used_size_ = space ? space->SizeOfObjects() : 0;
+    space_statistics->space_available_size_ = space ? space->Available() : 0;
+    space_statistics->physical_space_size_ =
+        space ? space->CommittedPhysicalMemory() : 0;
   }
   return true;
 }
@@ -8911,10 +8912,9 @@ void Isolate::SetStackLimit(uintptr_t stack_limit) {
 
 void Isolate::GetCodeRange(void** start, size_t* length_in_bytes) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
-  const base::AddressRegion& code_range =
-      isolate->heap()->memory_allocator()->code_range();
-  *start = reinterpret_cast<void*>(code_range.begin());
-  *length_in_bytes = code_range.size();
+  const base::AddressRegion& code_region = isolate->heap()->code_region();
+  *start = reinterpret_cast<void*>(code_region.begin());
+  *length_in_bytes = code_region.size();
 }
 
 void Isolate::GetEmbeddedCodeRange(const void** start,

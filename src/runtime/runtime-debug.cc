@@ -61,13 +61,6 @@ RUNTIME_FUNCTION_RETURN_PAIR(Runtime_DebugBreakOnBytecode) {
                             handle(it.frame()->function(), isolate));
   }
 
-  // If we are dropping frames, there is no need to get a return value or
-  // bytecode, since we will be restarting execution at a different frame.
-  if (isolate->debug()->will_restart()) {
-    return MakePair(ReadOnlyRoots(isolate).undefined_value(),
-                    Smi::FromInt(static_cast<uint8_t>(Bytecode::kIllegal)));
-  }
-
   // Return the handler from the original bytecode array.
   DCHECK(it.frame()->is_interpreted());
   InterpretedFrame* interpreted_frame =
@@ -868,22 +861,9 @@ RUNTIME_FUNCTION(Runtime_LiveEditPatchScript) {
     case v8::debug::LiveEditResult::BLOCKED_BY_RUNNING_GENERATOR:
       return isolate->Throw(*isolate->factory()->NewStringFromAsciiChecked(
           "LiveEdit failed: BLOCKED_BY_RUNNING_GENERATOR"));
-    case v8::debug::LiveEditResult::BLOCKED_BY_FUNCTION_ABOVE_BREAK_FRAME:
-      return isolate->Throw(*isolate->factory()->NewStringFromAsciiChecked(
-          "LiveEdit failed: BLOCKED_BY_FUNCTION_ABOVE_BREAK_FRAME"));
-    case v8::debug::LiveEditResult::
-        BLOCKED_BY_FUNCTION_BELOW_NON_DROPPABLE_FRAME:
-      return isolate->Throw(*isolate->factory()->NewStringFromAsciiChecked(
-          "LiveEdit failed: BLOCKED_BY_FUNCTION_BELOW_NON_DROPPABLE_FRAME"));
     case v8::debug::LiveEditResult::BLOCKED_BY_ACTIVE_FUNCTION:
       return isolate->Throw(*isolate->factory()->NewStringFromAsciiChecked(
           "LiveEdit failed: BLOCKED_BY_ACTIVE_FUNCTION"));
-    case v8::debug::LiveEditResult::BLOCKED_BY_NEW_TARGET_IN_RESTART_FRAME:
-      return isolate->Throw(*isolate->factory()->NewStringFromAsciiChecked(
-          "LiveEdit failed: BLOCKED_BY_NEW_TARGET_IN_RESTART_FRAME"));
-    case v8::debug::LiveEditResult::FRAME_RESTART_IS_NOT_SUPPORTED:
-      return isolate->Throw(*isolate->factory()->NewStringFromAsciiChecked(
-          "LiveEdit failed: FRAME_RESTART_IS_NOT_SUPPORTED"));
     case v8::debug::LiveEditResult::OK:
       return ReadOnlyRoots(isolate).undefined_value();
   }
@@ -897,7 +877,7 @@ RUNTIME_FUNCTION(Runtime_ProfileCreateSnapshotDataBlob) {
   // Used only by the test/memory/Memory.json benchmark. This creates a snapshot
   // blob and outputs various statistics around it.
 
-  DCHECK(FLAG_profile_deserialization);
+  DCHECK(FLAG_profile_deserialization && FLAG_serialization_statistics);
 
   DisableEmbeddedBlobRefcounting();
 

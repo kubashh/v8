@@ -128,7 +128,30 @@ bool LiftoffAssembler::NeedsAlignment(ValueKind kind) {
 
 void LiftoffAssembler::LoadConstant(LiftoffRegister reg, WasmValue value,
                                     RelocInfo::Mode rmode) {
-  bailout(kUnsupportedArchitecture, "LoadConstant");
+  switch (value.type().kind()) {
+    case kI32:
+      mov(reg.gp(), Operand(value.to_i32(), rmode));
+      break;
+    case kI64:
+      mov(reg.gp(), Operand(value.to_i64(), rmode));
+      break;
+    case kF32: {
+      UseScratchRegisterScope temps(this);
+      Register scratch = temps.Acquire();
+      mov(scratch, Operand(value.to_f32_boxed().get_scalar()));
+      MovIntToFloat(reg.fp(), scratch);
+      break;
+    }
+    case kF64: {
+      UseScratchRegisterScope temps(this);
+      Register scratch = temps.Acquire();
+      mov(scratch, Operand(value.to_f32_boxed().get_scalar()));
+      MovInt64ToDouble(reg.fp(), scratch);
+      break;
+    }
+    default:
+      UNREACHABLE();
+  }
 }
 
 void LiftoffAssembler::LoadInstanceFromFrame(Register dst) {
@@ -645,25 +668,45 @@ void LiftoffAssembler::emit_i32_set_cond(LiftoffCondition liftoff_cond,
 }
 
 void LiftoffAssembler::emit_i64_eqz(Register dst, LiftoffRegister src) {
-  bailout(kUnsupportedArchitecture, "emit_i64_eqz");
+  Label done;
+  cmpi(src.gp(), Operand(0));
+  mov(dst, Operand(1));
+  beq(&done);
+  mov(dst, Operand::Zero());
+  bind(&done);
 }
 
 void LiftoffAssembler::emit_i64_set_cond(LiftoffCondition liftoff_cond,
                                          Register dst, LiftoffRegister lhs,
                                          LiftoffRegister rhs) {
-  bailout(kUnsupportedArchitecture, "emit_i64_set_cond");
+  bool use_signed = liftoff::UseSignedOp(liftoff_cond);
+  if (use_signed) {
+    cmp(lhs.gp(), rhs.gp());
+  } else {
+    cmpl(lhs.gp(), rhs.gp());
+  }
+  Label done;
+  mov(dst, Operand(1));
+  b(liftoff::ToCondition(liftoff_cond), &done);
+  mov(dst, Operand::Zero());
+  bind(&done);
 }
 
 void LiftoffAssembler::emit_f32_set_cond(LiftoffCondition liftoff_cond,
                                          Register dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
-  bailout(kUnsupportedArchitecture, "emit_f32_set_cond");
+  fcmpu(lhs, rhs);
+  Label done;
+  mov(dst, Operand(1));
+  b(liftoff::ToCondition(liftoff_cond), &done);
+  mov(dst, Operand::Zero());
+  bind(&done);
 }
 
 void LiftoffAssembler::emit_f64_set_cond(LiftoffCondition liftoff_cond,
                                          Register dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
-  bailout(kUnsupportedArchitecture, "emit_f64_set_cond");
+  emit_f32_set_cond(liftoff_cond, dst, lhs, rhs);
 }
 
 bool LiftoffAssembler::emit_select(LiftoffRegister dst, Register condition,

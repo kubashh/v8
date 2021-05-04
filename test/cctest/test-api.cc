@@ -34,7 +34,7 @@
 #include <string>
 
 #if V8_OS_POSIX
-#include <unistd.h>  // NOLINT
+#include <unistd.h>
 #endif
 
 #include "include/v8-fast-api-calls.h"
@@ -8534,12 +8534,8 @@ THREADED_TEST(StringWrite) {
   CHECK_EQ(0, str->Write(isolate, nullptr, 0, 0, String::NO_NULL_TERMINATION));
 }
 
-
-static void Utf16Helper(
-    LocalContext& context,  // NOLINT
-    const char* name,
-    const char* lengths_name,
-    int len) {
+static void Utf16Helper(LocalContext& context, const char* name,
+                        const char* lengths_name, int len) {
   Local<v8::Array> a = Local<v8::Array>::Cast(
       context->Global()->Get(context.local(), v8_str(name)).ToLocalChecked());
   Local<v8::Array> alens =
@@ -16758,7 +16754,10 @@ THREADED_TEST(GetHeapStatistics) {
   CHECK_EQ(0u, heap_statistics.used_heap_size());
   c1->GetIsolate()->GetHeapStatistics(&heap_statistics);
   CHECK_NE(static_cast<int>(heap_statistics.total_heap_size()), 0);
-  CHECK_NE(static_cast<int>(heap_statistics.used_heap_size()), 0);
+  if (!v8::internal::FLAG_enable_third_party_heap) {
+    // TODO(wenyuzhao): Get used size from third_party_heap interface
+    CHECK_NE(static_cast<int>(heap_statistics.used_heap_size()), 0);
+  }
 }
 
 TEST(GetHeapSpaceStatistics) {

@@ -190,6 +190,10 @@ bool Map::TooManyFastProperties(StoreOrigin store_origin) const {
   }
 }
 
+Name Map::GetLastDescriptorName(Isolate* isolate) const {
+  return instance_descriptors(isolate).GetKey(LastAdded());
+}
+
 PropertyDetails Map::GetLastDescriptorDetails(Isolate* isolate) const {
   return instance_descriptors(isolate).GetDetails(LastAdded());
 }
@@ -744,6 +748,9 @@ ACCESSORS_CHECKED2(Map, constructor_or_back_pointer, Object,
 ACCESSORS_CHECKED(Map, native_context, NativeContext,
                   kConstructorOrBackPointerOrNativeContextOffset,
                   IsContextMap())
+ACCESSORS_CHECKED(Map, native_context_or_null, Object,
+                  kConstructorOrBackPointerOrNativeContextOffset,
+                  (value.IsNull() || value.IsNativeContext()) && IsContextMap())
 #if V8_ENABLE_WEBASSEMBLY
 ACCESSORS_CHECKED(Map, wasm_type_info, WasmTypeInfo,
                   kConstructorOrBackPointerOrNativeContextOffset,
