@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a6118a7_19af6bb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1390085
+      },
+      "writtenOn": "2021-05-04T00:23:51Z",
+      "side": 1,
+      "message": "Thanks! Added in patch set 4.",
+      "revId": "18a11acbcca09339045a5bb6a2a17d11c47d91bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
