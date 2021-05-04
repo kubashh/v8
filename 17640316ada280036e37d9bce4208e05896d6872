@@ -16,6 +16,23 @@
       "message": "Hi Ulan \u0026 Dominik, could you please review this CL? This line was fixed previously... but I accidentally reverted it in some other CL. So this one changes it back.",
       "revId": "17640316ada280036e37d9bce4208e05896d6872",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87f6a7fd_4e18ccec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-05-04T09:17:50Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "17640316ada280036e37d9bce4208e05896d6872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
