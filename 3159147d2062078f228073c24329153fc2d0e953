@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d1c13ef_ed91cbfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-04T21:37:44Z",
+      "side": 1,
+      "message": "LGTM with a nit.",
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ea2c6dd_5a42aace",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-04T21:37:44Z",
+      "side": 1,
+      "message": "This is one of the few cases where using `auto` would be fine. (You may also keep the type spelled out if you prefer.)",
+      "range": {
+        "startLine": 502,
+        "startChar": 4,
+        "endLine": 502,
+        "endChar": 54
+      },
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd4c347c_b46e0152",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-04T21:37:44Z",
+      "side": 1,
+      "message": "nit: thursday",
+      "range": {
+        "startLine": 752,
+        "startChar": 7,
+        "endLine": 752,
+        "endChar": 15
+      },
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
