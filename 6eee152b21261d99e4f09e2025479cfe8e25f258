@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0bb03c4_653ac1a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1507192
+      },
+      "writtenOn": "2021-05-04T07:50:41Z",
+      "side": 1,
+      "message": "google/cloud/vision/v1/image_annotator.proto",
+      "revId": "6eee152b21261d99e4f09e2025479cfe8e25f258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
