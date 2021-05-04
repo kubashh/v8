@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bb647ea_4f88a389",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2021-05-04T18:16:03Z",
+      "side": 1,
+      "message": "Hi Toon and Leszek.\n\nI implemented the support for `const` redeclaration on REPL mode with the preferred semantics on https://goo.gle/devtools-const-rep. Also modified some of the existing REPL mode tests to cover the new functionality for `const`. Could you take a look a it?\n\nThanks!",
+      "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
