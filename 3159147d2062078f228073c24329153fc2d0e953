@@ -331,6 +331,24 @@
       "parentUuid": "96353cc2_2eccf945",
       "revId": "3159147d2062078f228073c24329153fc2d0e953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6988c74_4c3198cc",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-05T23:34:42Z",
+      "side": 1,
+      "message": "Good to know, thanks.",
+      "parentUuid": "960faaf6_c7aff691",
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
