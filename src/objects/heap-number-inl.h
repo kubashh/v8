@@ -25,6 +25,22 @@ uint64_t HeapNumber::value_as_bits() const {
   return base::ReadUnalignedValue<uint64_t>(field_address(kValueOffset));
 }
 
+uint64_t HeapNumber::value_as_bits_relaxed() const {
+  constexpr size_t kNumWords = sizeof(uint64_t) / sizeof(uint32_t);
+  CHECK_EQ(kNumWords, 2);
+  uint32_t words[kNumWords];
+  for (size_t word = 0; word < kNumWords; ++word) {
+    words[word] = reinterpret_cast<std::atomic<uint32_t>*>(
+                      field_address(kValueOffset + word * sizeof(uint32_t)))
+                      ->load(std::memory_order_relaxed);
+  }
+
+  uint64_t output;
+  CHECK_EQ(sizeof(words), sizeof(output));
+  memcpy(&output, words, sizeof(output));
+  return output;
+}
+
 void HeapNumber::set_value_as_bits(uint64_t bits) {
   base::WriteUnalignedValue<uint64_t>(field_address(kValueOffset), bits);
 }
