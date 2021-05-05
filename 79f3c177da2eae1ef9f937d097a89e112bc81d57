@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23825734_5df37f88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-05-05T15:21:49Z",
+      "side": 1,
+      "message": "Shu-yu- could yo check my FixedArray / JSArray code is correctly constructed? Thanks.",
+      "revId": "79f3c177da2eae1ef9f937d097a89e112bc81d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
