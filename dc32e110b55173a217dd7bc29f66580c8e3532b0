@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3ef36a_1a273eec",
+        "filename": "src/compiler/scheduler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-05-05T08:13:54Z",
+      "side": 1,
+      "message": "SGTM, I was struggling with these names too. I called the second one VisitInputs since it hopefully makes it clearer how the traversal happens. Done.",
+      "parentUuid": "79119e5d_4acbe698",
+      "range": {
+        "startLine": 1252,
+        "startChar": 0,
+        "endLine": 1252,
+        "endChar": 25
+      },
+      "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae6c8f66_99e0cd70",
@@ -106,6 +130,24 @@
       "side": 1,
       "message": "+1 for Optional\u003cint\u003e",
       "parentUuid": "ae6c8f66_99e0cd70",
+      "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21c986b0_e2089f59",
+        "filename": "src/compiler/scheduler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-05-05T08:13:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c895dabc_28215fad",
       "revId": "dc32e110b55173a217dd7bc29f66580c8e3532b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
