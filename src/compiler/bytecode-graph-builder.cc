@@ -1590,8 +1590,7 @@ void BytecodeGraphBuilder::VisitLdaSmi() {
 }
 
 void BytecodeGraphBuilder::VisitLdaConstant() {
-  ObjectRef object(broker(), GetConstantForIndexOperand(0),
-                   ObjectRef::BackgroundSerialization::kAllowed);
+  ObjectRef object(broker(), GetConstantForIndexOperand(0));
   Node* node = jsgraph()->Constant(object);
   environment()->BindAccumulator(node);
 }
