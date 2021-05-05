@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f83433e_5e0bfc11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-05-05T15:04:35Z",
+      "side": 1,
+      "message": "Thanks! lgtm with a suggestion.",
+      "revId": "ac046ca073346658dd7e0dfeb6b80bf3cf6e7754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "312778c2_be16414f",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-05-05T15:04:35Z",
+      "side": 1,
+      "message": "Should we have some kind of check maybe a static assert that the bytecodes are still ordered.\n\nMaybe something like Bytecode::kLdaImmutableCurrentContextSlot - Bytecode::kLdar \u003d\u003d expected_number_of_bytecodes.",
+      "revId": "ac046ca073346658dd7e0dfeb6b80bf3cf6e7754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
