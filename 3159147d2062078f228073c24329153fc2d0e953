@@ -313,6 +313,24 @@
       "parentUuid": "bf89cda0_705ac744",
       "revId": "3159147d2062078f228073c24329153fc2d0e953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "960faaf6_c7aff691",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-05T13:24:54Z",
+      "side": 1,
+      "message": "For the record, I prefer DCHECK/USE, because it avoids size+performance impact on Release-mode binaries. Certainly, a single CHECK doesn\u0027t make a huge difference, but it\u0027s \"death by a thousand paper cuts\".\n(There are a few places where we want CHECKs in Release mode for security purposes, such as where any failure of the condition would likely be an exploitable bug. In the case at hand, it\u0027s statically guaranteed that there can be no failure, so DCHECK is the appropriate semantics.)\nThat said, since you\u0027ve changed it for one reviewer, I don\u0027t want to make you undo it; just stating my opinion for the future :-)",
+      "parentUuid": "96353cc2_2eccf945",
+      "revId": "3159147d2062078f228073c24329153fc2d0e953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

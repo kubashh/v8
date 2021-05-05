@@ -16,6 +16,23 @@
       "message": "I change a lot of code while addressing feedback from syg.\n\nPTAL",
       "revId": "5792ad5ee801f0e92cfb87104a0056e41402265b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77714a3c_c3a0d2d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-05T13:24:54Z",
+      "side": 1,
+      "message": "Still LGTM.",
+      "revId": "5792ad5ee801f0e92cfb87104a0056e41402265b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
