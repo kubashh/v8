@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c02c9cd_257e464a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-05-06T10:48:28Z",
+      "side": 1,
+      "message": "Have to revert this because it blocks the V8 roll into chromium. See https://ci.chromium.org/ui/p/chromium/builders/try/android-pie-arm64-rel/369203/overview",
+      "revId": "15d0a0df74293a455c8d26911c9c436193b1a988",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
