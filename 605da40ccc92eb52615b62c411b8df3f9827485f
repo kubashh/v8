@@ -53,6 +53,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99aa860f_05a394ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-06T16:29:55Z",
+      "side": 1,
+      "message": "lgtm w/ comment to address",
+      "revId": "605da40ccc92eb52615b62c411b8df3f9827485f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b65b666_b6b530cc",
@@ -90,6 +107,30 @@
       "side": 1,
       "message": "My understanding is that we can either get a \"reused\" page from BPA or we get a new page from the OS. If we can get a \"reused\" page from another allocator then we could have the situation with normal pages and we\u0027ll need to always zero on page allocation.",
       "parentUuid": "0b65b666_b6b530cc",
+      "range": {
+        "startLine": 217,
+        "startChar": 2,
+        "endLine": 217,
+        "endChar": 8
+      },
+      "revId": "605da40ccc92eb52615b62c411b8df3f9827485f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92b09b16_cfc01d9f",
+        "filename": "src/heap/cppgc/heap-page.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-06T16:29:55Z",
+      "side": 1,
+      "message": "I missed that we do not yet share BPA with V8 but rather create our own cage (for now).\n\nYeah, I see how the current way prevents issues with going from large to regular. I did not understand that from the comment though. \n\nIs it possible to move the clearing into FreeLargePageMemory() and have memset() work on the writeable region? The comment then could mention that we need to clear memory in case it is later on recycled.",
+      "parentUuid": "6e41a027_eddc68e3",
       "range": {
         "startLine": 217,
         "startChar": 2,
