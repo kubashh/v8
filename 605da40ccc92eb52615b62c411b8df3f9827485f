@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "605da40ccc92eb52615b62c411b8df3f9827485f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c63ac43_5db5dc23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-06T15:01:05Z",
+      "side": 1,
+      "message": "You mentioned a DCHECK for the payload being zero: Should we add a check somewhere just for some fixed amount of memory as a canary for the whole payload?",
+      "revId": "605da40ccc92eb52615b62c411b8df3f9827485f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b65b666_b6b530cc",
+        "filename": "src/heap/cppgc/heap-page.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-06T15:01:05Z",
+      "side": 1,
+      "message": "I am actually wondering whether we should put it in LargePage::Create(). BPA doesn\u0027t guarantee zeroing and so we may actually get a large page memory from some other allocator, e.g. V8 which may be non-zeroed.",
+      "range": {
+        "startLine": 217,
+        "startChar": 2,
+        "endLine": 217,
+        "endChar": 8
+      },
+      "revId": "605da40ccc92eb52615b62c411b8df3f9827485f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
