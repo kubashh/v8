@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8369ac0c_2d74e15b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-06T16:11:51Z",
+      "side": 1,
+      "message": "We had a DCHECK in Blink. I don\u0027t think the DCHECK is necessary if we have the test.",
+      "parentUuid": "5c63ac43_5db5dc23",
+      "revId": "605da40ccc92eb52615b62c411b8df3f9827485f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b65b666_b6b530cc",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-05-06T15:01:05Z",
       "side": 1,
       "message": "I am actually wondering whether we should put it in LargePage::Create(). BPA doesn\u0027t guarantee zeroing and so we may actually get a large page memory from some other allocator, e.g. V8 which may be non-zeroed.",
+      "range": {
+        "startLine": 217,
+        "startChar": 2,
+        "endLine": 217,
+        "endChar": 8
+      },
+      "revId": "605da40ccc92eb52615b62c411b8df3f9827485f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e41a027_eddc68e3",
+        "filename": "src/heap/cppgc/heap-page.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-06T16:11:51Z",
+      "side": 1,
+      "message": "My understanding is that we can either get a \"reused\" page from BPA or we get a new page from the OS. If we can get a \"reused\" page from another allocator then we could have the situation with normal pages and we\u0027ll need to always zero on page allocation.",
+      "parentUuid": "0b65b666_b6b530cc",
       "range": {
         "startLine": 217,
         "startChar": 2,
