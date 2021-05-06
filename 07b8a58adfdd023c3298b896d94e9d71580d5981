@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e92c19f_4ebd3459",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2021-05-06T17:18:15Z",
+      "side": 1,
+      "message": "The test was already there on line 368.",
+      "parentUuid": "4fa4f94c_145dc9e1",
+      "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d113e64_442d24bf",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-05-06T09:34:40Z",
       "side": 1,
       "message": "Although it\u0027s a bit out of scope for this CL, it seems a bit weird to handle is_repl_mode here and pass references to all other fields of LookupResult to ContextSlotIndex. Other users of ContextSlotIndex could also just use LookupResult rather than locally declaring all the fields and passing them in independently; that way we could just let ContextSlotIndex accept LookupResult* as input.",
+      "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4703fd7_6471563d",
+        "filename": "src/objects/contexts.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2021-05-06T17:18:15Z",
+      "side": 1,
+      "message": "I agree, I would prefer this to be handled inside ContextSlotIndex, and I think it would look cleaner to let others users of ContextSlotIndex use LookupResult. I can refactor ContextSlotIndex later on a new CL, just to keep this one local to the REPL mode changes.",
+      "parentUuid": "2d113e64_442d24bf",
       "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
