@@ -212,6 +212,9 @@ void LargePage::Destroy(LargePage* page) {
 #endif
   page->~LargePage();
   PageBackend* backend = page->heap()->page_backend();
+  // Clear the payload since freed pages are not guaranteed to be zeroed by the
+  // OS or the allocator.
+  memset(page->PayloadStart(), 0, page->PayloadSize());
   page->heap()->stats_collector()->NotifyFreedMemory(
       AllocationSize(page->PayloadSize()));
   backend->FreeLargePageMemory(reinterpret_cast<Address>(page));
