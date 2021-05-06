@@ -16,6 +16,40 @@
       "message": "Hi Toon and Leszek.\n\nI implemented the support for `const` redeclaration on REPL mode with the preferred semantics on https://goo.gle/devtools-const-rep. Also modified some of the existing REPL mode tests to cover the new functionality for `const`. Could you take a look a it?\n\nThanks!",
       "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa4f94c_145dc9e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-05-06T09:34:40Z",
+      "side": 1,
+      "message": "Nice, I like it!\n\nDid you actually add a test for a conflict between a non-repl-declared const and a repl const? Perhaps I skipped over it. Nice thorough testing otherwise, thanks!",
+      "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d113e64_442d24bf",
+        "filename": "src/objects/contexts.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-05-06T09:34:40Z",
+      "side": 1,
+      "message": "Although it\u0027s a bit out of scope for this CL, it seems a bit weird to handle is_repl_mode here and pass references to all other fields of LookupResult to ContextSlotIndex. Other users of ContextSlotIndex could also just use LookupResult rather than locally declaring all the fields and passing them in independently; that way we could just let ContextSlotIndex accept LookupResult* as input.",
+      "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
