@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53634a38_c794d558",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1424220
+      },
+      "writtenOn": "2021-05-06T08:51:59Z",
+      "side": 1,
+      "message": "Hi Ulan, as discussed offline, I have updated UnreachableObjectsFilter to use logical chunks instead of BasicMemoryChunks. Could you please take a look again? Thanks!",
+      "revId": "15ddc8c3b59b3404fe0a281338b82745eb0e9036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
