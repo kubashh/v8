@@ -81,6 +81,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "962d37ea_0a41abc9",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-05-06T15:45:05Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "4283a23b_1fd619f1",
+      "range": {
+        "startLine": 111,
+        "startChar": 7,
+        "endLine": 112,
+        "endChar": 42
+      },
+      "revId": "578ae51428fd7799ce10280f47da53a904840097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "957c3cbe_347a5385",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-05-06T15:45:05Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "cdea0ac4_fde280d5",
+      "range": {
+        "startLine": 112,
+        "startChar": 7,
+        "endLine": 112,
+        "endChar": 41
+      },
+      "revId": "578ae51428fd7799ce10280f47da53a904840097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13ac150c_52a02027",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-05-06T13:42:10Z",
       "side": 1,
       "message": "nit - move this into the else block",
+      "range": {
+        "startLine": 112,
+        "startChar": 43,
+        "endLine": 113,
+        "endChar": 18
+      },
+      "revId": "578ae51428fd7799ce10280f47da53a904840097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3d08458_49f60e37",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2021-05-06T15:45:05Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "13ac150c_52a02027",
       "range": {
         "startLine": 112,
         "startChar": 43,
