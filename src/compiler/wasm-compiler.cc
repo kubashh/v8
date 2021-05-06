@@ -1993,7 +1993,7 @@ Node* ConvertTrapTest(WasmGraphBuilder* builder, wasm::WasmOpcode opcode,
     return builder->Binop(NeOp(float_ty), trunc, check);
   }
   return builder->graph()->NewNode(builder->mcgraph()->common()->Projection(1),
-                                   trunc, builder->graph()->start());
+                                   trunc);
 }
 
 Node* ConvertSaturateTest(WasmGraphBuilder* builder, wasm::WasmOpcode opcode,
@@ -2025,8 +2025,7 @@ Node* WasmGraphBuilder::BuildIntConvertFloat(Node* input,
     converted_value = graph()->NewNode(conv_op, trunc);
   } else {
     trunc = graph()->NewNode(conv_op, input);
-    converted_value = graph()->NewNode(mcgraph()->common()->Projection(0),
-                                       trunc, graph()->start());
+    converted_value = gasm_->Projection(0, trunc);
   }
   if (IsTrappingConvertOp(opcode)) {
     Node* test =
@@ -2904,9 +2903,8 @@ Node* WasmGraphBuilder::BuildWasmCall(const wasm::FunctionSig* sig,
     rets[0] = call;
   } else {
     // Create projections for all return values.
-    for (size_t i = 0; i < ret_count; i++) {
-      rets[i] = graph()->NewNode(mcgraph()->common()->Projection(i), call,
-                                 graph()->start());
+    for (int i = 0; i < static_cast<int>(ret_count); i++) {
+      rets[i] = gasm_->Projection(i, call);
     }
   }
   return call;
@@ -7128,10 +7126,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     pos = 0;
     offset = 0;
     for (wasm::ValueType type : sig_->returns()) {
-      Node* value = sig_->return_count() == 1
-                        ? call
-                        : graph()->NewNode(mcgraph()->common()->Projection(pos),
-                                           call, control());
+      Node* value =
+          sig_->return_count() == 1 ? call : gasm_->Projection(pos, call);
       SetEffect(graph()->NewNode(GetSafeStoreOperator(offset, type), arg_buffer,
                                  Int32Constant(offset), value, effect(),
                                  control()));
