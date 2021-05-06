@@ -139,6 +139,30 @@
       },
       "revId": "605da40ccc92eb52615b62c411b8df3f9827485f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6c400c2_af4719e8",
+        "filename": "src/heap/cppgc/heap-page.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-06T17:10:30Z",
+      "side": 1,
+      "message": "Discussed offline and decided to go with CppgcBoundedPageAllocator that memsets all pages on freeing.\nIn normal execution only large pages get to FreePages so the additional cost of resetting permissions to read/write and zeroing the guard pages should be negligible.\nNormal pages are freed only on heap destruction which happens (in chrome) only on process termination.\nWe\u0027ll upload a revised patchset soon.",
+      "parentUuid": "92b09b16_cfc01d9f",
+      "range": {
+        "startLine": 217,
+        "startChar": 2,
+        "endLine": 217,
+        "endChar": 8
+      },
+      "revId": "605da40ccc92eb52615b62c411b8df3f9827485f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
