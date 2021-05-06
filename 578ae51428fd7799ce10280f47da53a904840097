@@ -16,6 +16,92 @@
       "message": "Thanks Ross and Georg for the comments! This CL is revised base on the comments. PTAL, thanks!",
       "revId": "578ae51428fd7799ce10280f47da53a904840097",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28b7c6c5_013a9672",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-05-06T13:42:10Z",
+      "side": 1,
+      "message": "LGTM with a couple of final suggestions, thanks!",
+      "revId": "578ae51428fd7799ce10280f47da53a904840097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4283a23b_1fd619f1",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-05-06T13:42:10Z",
+      "side": 1,
+      "message": "nit - move this inside the if block",
+      "range": {
+        "startLine": 111,
+        "startChar": 7,
+        "endLine": 112,
+        "endChar": 42
+      },
+      "revId": "578ae51428fd7799ce10280f47da53a904840097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdea0ac4_fde280d5",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-05-06T13:42:10Z",
+      "side": 1,
+      "message": "\"try if the receiver is monomorphic\" -\u003e \"check whether we can stay monomorphic based on the receiver\"",
+      "range": {
+        "startLine": 112,
+        "startChar": 7,
+        "endLine": 112,
+        "endChar": 41
+      },
+      "revId": "578ae51428fd7799ce10280f47da53a904840097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13ac150c_52a02027",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-05-06T13:42:10Z",
+      "side": 1,
+      "message": "nit - move this into the else block",
+      "range": {
+        "startLine": 112,
+        "startChar": 43,
+        "endLine": 113,
+        "endChar": 18
+      },
+      "revId": "578ae51428fd7799ce10280f47da53a904840097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

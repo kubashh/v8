@@ -222,6 +222,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7979b1c0_03d17b0b",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 10
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-05-06T13:42:10Z",
+      "side": 1,
+      "message": "Sorry you are right, I thought this was setting kReciever feedback again. The comment you added makes this clearer, thanks.",
+      "parentUuid": "1a117582_46ceebf2",
+      "range": {
+        "startLine": 112,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 35
+      },
+      "revId": "82af6ce6e120b88d2b5217ef9acda91495fda6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdcef67d_7056edb6",
