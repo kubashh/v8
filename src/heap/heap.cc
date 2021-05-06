@@ -2622,6 +2622,8 @@ bool Heap::ExternalStringTable::Contains(String string) {
 void Heap::UpdateExternalString(String string, size_t old_payload,
                                 size_t new_payload) {
   DCHECK(string.IsExternalString());
+  if (FLAG_enable_third_party_heap) return;
+
   Page* page = Page::FromHeapObject(string);
 
   if (old_payload > new_payload) {
@@ -6122,28 +6124,15 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
     MarkReachableObjects();
   }
 
-  ~UnreachableObjectsFilter() override {
-    for (auto it : reachable_) {
-      delete it.second;
-      it.second = nullptr;
-    }
-  }
-
   bool SkipObject(HeapObject object) override {
     if (object.IsFreeSpaceOrFiller()) return true;
-    BasicMemoryChunk* chunk = BasicMemoryChunk::FromHeapObject(object);
-    if (reachable_.count(chunk) == 0) return true;
-    return reachable_[chunk]->count(object) == 0;
+    return reachable_.count(object) == 0;
   }
 
  private:
   bool MarkAsReachable(HeapObject object) {
-    BasicMemoryChunk* chunk = BasicMemoryChunk::FromHeapObject(object);
-    if (reachable_.count(chunk) == 0) {
-      reachable_[chunk] = new std::unordered_set<HeapObject, Object::Hasher>();
-    }
-    if (reachable_[chunk]->count(object)) return false;
-    reachable_[chunk]->insert(object);
+    if (reachable_.count(object)) return false;
+    reachable_.insert(object);
     return true;
   }
 
@@ -6229,9 +6218,7 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
 
   Heap* heap_;
   DISALLOW_GARBAGE_COLLECTION(no_gc_)
-  std::unordered_map<BasicMemoryChunk*,
-                     std::unordered_set<HeapObject, Object::Hasher>*>
-      reachable_;
+  std::unordered_set<HeapObject, Object::Hasher> reachable_;
 };
 
 HeapObjectIterator::HeapObjectIterator(
