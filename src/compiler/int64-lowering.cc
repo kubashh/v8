@@ -391,9 +391,8 @@ void Int64Lowering::LowerNode(Node* node) {
             }
             if (call_descriptor->GetReturnType(old_index).representation() ==
                 MachineRepresentation::kWord64) {
-              Node* high_node = graph()->NewNode(
-                  common()->Projection(new_index + 1), node,
-                  graph()->start());
+              Node* high_node =
+                  graph()->NewNode(common()->Projection(new_index + 1), node);
               ReplaceNode(use_node, use_node, high_node);
               ++new_index;
             }
@@ -1133,10 +1132,8 @@ void Int64Lowering::PreparePhiReplacement(Node* phi) {
 
 void Int64Lowering::ReplaceNodeWithProjections(Node* node) {
   DCHECK(node != nullptr);
-  Node* low_node =
-      graph()->NewNode(common()->Projection(0), node, graph()->start());
-  Node* high_node =
-      graph()->NewNode(common()->Projection(1), node, graph()->start());
+  Node* low_node = graph()->NewNode(common()->Projection(0), node);
+  Node* high_node = graph()->NewNode(common()->Projection(1), node);
   ReplaceNode(node, low_node, high_node);
 }
 
