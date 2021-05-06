@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e83de18_3ecd0bcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-06T10:34:29Z",
+      "side": 1,
+      "message": "PTAL. This will use roughly 50% Bionic bots from the mixed pool.",
+      "revId": "b4e2e57453957c5af1ffa110cf46a099566d938f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
