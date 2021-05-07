@@ -16,6 +16,24 @@
       "message": "Change LGTM in general, just 2 questions out of curiosity:\n1.) Do we have a clue why this had a control input in the first place? Was this required at some point?\n2.) What is the benefit of removing it? You wrote it introduced complications in reducers but you didn\u0027t change anything in any reducer. Are you working on a follow up where this is necessary?\n\nThanks",
       "revId": "aba8e147bd025a24f50657a75fd9586ae9882011",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26846d41_bc4ab72e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-05-07T12:09:15Z",
+      "side": 1,
+      "message": "Thanks for the review. I will wait for Georg to LGTM also, since he specifically mentioned he wants to look into this change.\n1) I have no idea, and when I asked in the V8 compiler questions chat, nobody replied. So I am assuming that, if it once had a use, it is long gone.\n2) As it stands now, projections generate floating control. If we change that and switch to chaining the current control node, there is an interaction with optimizations which breaks graph validity: If multiple projected nodes get merged during, say, value numbering reduction, we end up with multiple projections of the same node (and with the same index). Those cannot be merged anymore, as they now have different control inputs. Of course we could special-case this somewhere in the optimizations, but it might be complicated, and I do not see the reason to do it if the input is not used anyway.",
+      "parentUuid": "4d7d8c1f_d39c95dc",
+      "revId": "aba8e147bd025a24f50657a75fd9586ae9882011",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
