@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "392bc977_a953049d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-07T11:59:22Z",
+      "side": 1,
+      "message": "PTAL. Trying to switch this directly and watch the builder...",
+      "revId": "b765ec755320380dbdd87141436e59f2317c439e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
