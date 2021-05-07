@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d7d8c1f_d39c95dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-05-07T11:11:18Z",
+      "side": 1,
+      "message": "Change LGTM in general, just 2 questions out of curiosity:\n1.) Do we have a clue why this had a control input in the first place? Was this required at some point?\n2.) What is the benefit of removing it? You wrote it introduced complications in reducers but you didn\u0027t change anything in any reducer. Are you working on a follow up where this is necessary?\n\nThanks",
+      "revId": "aba8e147bd025a24f50657a75fd9586ae9882011",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
