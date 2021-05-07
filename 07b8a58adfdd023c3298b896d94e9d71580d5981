@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee340844_3f1d163b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-05-07T07:21:18Z",
+      "side": 1,
+      "message": "Oh I see, that makes sense, thanks!",
+      "parentUuid": "2e92c19f_4ebd3459",
+      "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d113e64_442d24bf",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "I agree, I would prefer this to be handled inside ContextSlotIndex, and I think it would look cleaner to let others users of ContextSlotIndex use LookupResult. I can refactor ContextSlotIndex later on a new CL, just to keep this one local to the REPL mode changes.",
       "parentUuid": "2d113e64_442d24bf",
+      "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae424050_7a3b7684",
+        "filename": "src/objects/contexts.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-05-07T07:21:18Z",
+      "side": 1,
+      "message": "Sounds great, thanks!",
+      "parentUuid": "d4703fd7_6471563d",
       "revId": "07b8a58adfdd023c3298b896d94e9d71580d5981",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
