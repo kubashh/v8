@@ -16,6 +16,23 @@
       "message": "Hi everyone,\nCould you please take a look?\n\nThis is a reland. The diff is:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/2880215/1..2",
       "revId": "8127de5ca6e39630ebea984921a334ffd6e54e9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c19f299f_7145ef84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1415097
+      },
+      "writtenOn": "2021-05-07T11:39:22Z",
+      "side": 1,
+      "message": "Thanks Arthur!!!",
+      "revId": "8127de5ca6e39630ebea984921a334ffd6e54e9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
