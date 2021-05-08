@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f34fb604_19d1ba83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-08T21:38:06Z",
+      "side": 1,
+      "message": "Hello Jakob, please take a look.\n\nI know this might be a hacky solution. Please advice if you have better idea.\n\nThanks.\n",
+      "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
