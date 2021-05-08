@@ -1334,12 +1334,6 @@ class Assembler : public AssemblerBase {
   }
 
   inline void UntrackBranch();
-  void CheckTrampolinePoolQuick() {
-    if (pc_offset() >= next_trampoline_check_) {
-      CheckTrampolinePool();
-    }
-  }
-
   // Instruction generation
   void a_form(Instr instr, DoubleRegister frt, DoubleRegister fra,
               DoubleRegister frb, RCBit r);
@@ -1414,6 +1408,14 @@ class Assembler : public AssemblerBase {
   friend class BlockTrampolinePoolScope;
   friend class EnsureSpace;
   friend class UseScratchRegisterScope;
+
+ public:
+  inline void CheckTrampolinePoolQuick(int extra_instructions = 1) {
+    if (pc_offset() >=
+        next_trampoline_check_ - extra_instructions * kInstrSize) {
+      CheckTrampolinePool();
+    }
+  }
 };
 
 class EnsureSpace {
