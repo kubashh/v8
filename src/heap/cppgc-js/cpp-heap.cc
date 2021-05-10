@@ -550,6 +550,11 @@ constexpr v8::base::TimeDelta
 constexpr v8::base::TimeDelta
     CollectCustomSpaceStatisticsAtLastGCTask::kStepSizeMs;
 
+constexpr v8::base::TimeDelta
+    CollectCustomSpaceStatisticsAtLastGCTask::kTaskDelayMs;
+constexpr v8::base::TimeDelta
+    CollectCustomSpaceStatisticsAtLastGCTask::kStepSizeMs;
+
 }  // namespace
 
 void CppHeap::CollectCustomSpaceStatisticsAtLastGC(
