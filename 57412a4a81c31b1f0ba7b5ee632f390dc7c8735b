@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6bd19587_78cfe78f",
+        "filename": "test/mjsunit/regress/regress-1206412.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-10T16:56:48Z",
+      "side": 1,
+      "message": "Unfortunately not. I think it plays together with the loop below: We just need to give background compilation enough time to finish the function. I can remove the loop below if I increase to 250 here - that gives me a ~4.5% change of reproduction (45 out of 1000 runs). I could also make this time based:\n\n  let start \u003d performance.now();\n  while (performance.now() - start \u003c 100) {\n    try {\n      await new WasmModuleBuilder().instantiate();\n    } catch {}\n  }\n\nThat has a ~50% chance on my machine.\nOr should I just drop the regression test, since this is \"just\" a disassembler bug anyway?",
+      "parentUuid": "5c6a0b40_5b5de4ae",
+      "range": {
+        "startLine": 122,
+        "startChar": 30,
+        "endLine": 122,
+        "endChar": 33
+      },
+      "revId": "57412a4a81c31b1f0ba7b5ee632f390dc7c8735b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd910920_fe5141db",
         "filename": "test/mjsunit/regress/regress-1206412.js",
         "patchSetId": 2
@@ -71,6 +95,30 @@
       "writtenOn": "2021-05-10T16:25:23Z",
       "side": 1,
       "message": "Is this loop really necessary?",
+      "range": {
+        "startLine": 127,
+        "startChar": 2,
+        "endLine": 129,
+        "endChar": 3
+      },
+      "revId": "57412a4a81c31b1f0ba7b5ee632f390dc7c8735b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba31175c_8e6109b9",
+        "filename": "test/mjsunit/regress/regress-1206412.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-10T16:56:48Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "dd910920_fe5141db",
       "range": {
         "startLine": 127,
         "startChar": 2,
