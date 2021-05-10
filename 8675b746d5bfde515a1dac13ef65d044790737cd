@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cdbc50b_44c86182",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-05-10T06:59:26Z",
+      "side": 1,
+      "message": "Here\u0027s the explanation for why we have control inputs on Projection:\nhttps://codereview.chromium.org/2082993002/\n\nUnfortunately that CL doesn\u0027t seem to include a test for that situation. It would be good to construct one in order to illustrate the consequence that removing the control input would have.",
+      "revId": "8675b746d5bfde515a1dac13ef65d044790737cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
