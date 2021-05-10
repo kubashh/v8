@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "57412a4a81c31b1f0ba7b5ee632f390dc7c8735b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65aaa71f_311353b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-10T16:25:23Z",
+      "side": 1,
+      "message": "LGTM, with the hope that test case can be made at least a little bit faster.",
+      "revId": "57412a4a81c31b1f0ba7b5ee632f390dc7c8735b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c6a0b40_5b5de4ae",
+        "filename": "test/mjsunit/regress/regress-1206412.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-10T16:25:23Z",
+      "side": 1,
+      "message": "Can this count be reduced?",
+      "range": {
+        "startLine": 122,
+        "startChar": 30,
+        "endLine": 122,
+        "endChar": 33
+      },
+      "revId": "57412a4a81c31b1f0ba7b5ee632f390dc7c8735b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd910920_fe5141db",
+        "filename": "test/mjsunit/regress/regress-1206412.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-10T16:25:23Z",
+      "side": 1,
+      "message": "Is this loop really necessary?",
+      "range": {
+        "startLine": 127,
+        "startChar": 2,
+        "endLine": 129,
+        "endChar": 3
+      },
+      "revId": "57412a4a81c31b1f0ba7b5ee632f390dc7c8735b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
