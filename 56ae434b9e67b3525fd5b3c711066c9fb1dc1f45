@@ -50,6 +50,23 @@
       "message": "LGTM.\n+Jakob FYI",
       "revId": "56ae434b9e67b3525fd5b3c711066c9fb1dc1f45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae122625_8498917e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2021-05-10T09:57:47Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "56ae434b9e67b3525fd5b3c711066c9fb1dc1f45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
