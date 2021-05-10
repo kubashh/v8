@@ -213,6 +213,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "842ef23c_90f33c0b",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T14:22:38Z",
+      "side": 1,
+      "message": "(Fine as a follow up)",
+      "parentUuid": "b71937ea_94290e11",
+      "range": {
+        "startLine": 555,
+        "startChar": 14,
+        "endLine": 555,
+        "endChar": 50
+      },
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a93f260c_961ad24d",
         "filename": "src/heap/cppgc-js/cpp-heap.cc",
         "patchSetId": 3
