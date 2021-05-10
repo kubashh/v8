@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c56e6fe_f87f65c2",
+        "filename": "src/codegen/ppc/assembler-ppc.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-10T12:55:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e45220d1_ea1e7a68",
+      "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bfd933a_a5717108",
@@ -65,6 +83,24 @@
       "writtenOn": "2021-05-10T09:55:18Z",
       "side": 1,
       "message": "Please comment briefly on extra_instructions. Actually, looking at the use-site, I\u0027d suggest changing it to be byte_offset and avoid the kInstrSize application on both ends.",
+      "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "368a5405_8238b2ef",
+        "filename": "src/codegen/ppc/assembler-ppc.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-10T12:55:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bfd933a_a5717108",
       "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eab7115_5cfba3ae",
+        "filename": "src/codegen/ppc/assembler-ppc.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-10T12:55:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "606670da_15da1d5e",
+      "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9a06b20_55519a5d",
@@ -99,6 +153,24 @@
       "writtenOn": "2021-05-10T09:55:18Z",
       "side": 1,
       "message": "This method also seems like a good fit for the trampoline pool logic.",
+      "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec85f7bb_d6f15929",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-10T12:55:47Z",
+      "side": 1,
+      "message": "Yes, I move the CheckTrampolinePoolQuick call inside this. but BlockTrampolinePoolScope will have to be in code-generator.cc",
+      "parentUuid": "d9a06b20_55519a5d",
       "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1872d26_dc57fc04",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-10T12:55:47Z",
+      "side": 1,
+      "message": "that\u0027s a good call. calling CheckTrampolinePool below will have a potential problem. moving it above should work ok.",
+      "parentUuid": "52993440_95dd8fd8",
+      "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea4f8d37_de4d117a",
@@ -133,6 +223,24 @@
       "writtenOn": "2021-05-10T09:55:18Z",
       "side": 1,
       "message": "Since you use these constants here, please STATIC_ASSERT(Deoptimizer::kSupportsFixedDeoptExitSizes).",
+      "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6426361e_ce095082",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-10T12:55:47Z",
+      "side": 1,
+      "message": "I won\u0027t be able to STATIC_ASSERT here, as initializer is defined in deoptimizer-arch.cc. maybe DCHECK would work?",
+      "parentUuid": "ea4f8d37_de4d117a",
       "revId": "6e25f17b9bfab690fd40a1c116dcac36389e287f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
