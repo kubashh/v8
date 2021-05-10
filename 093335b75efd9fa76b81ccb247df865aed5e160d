@@ -56,6 +56,30 @@
       },
       "revId": "093335b75efd9fa76b81ccb247df865aed5e160d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77aec3c9_d045971b",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-10T11:44:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1aee5fa3_6b3a19c9",
+      "range": {
+        "startLine": 73,
+        "startChar": 6,
+        "endLine": 73,
+        "endChar": 19
+      },
+      "revId": "093335b75efd9fa76b81ccb247df865aed5e160d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
