@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "093335b75efd9fa76b81ccb247df865aed5e160d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "843c88d5_053f8567",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T10:58:29Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "093335b75efd9fa76b81ccb247df865aed5e160d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aee5fa3_6b3a19c9",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T10:58:29Z",
+      "side": 1,
+      "message": "std::move()",
+      "range": {
+        "startLine": 73,
+        "startChar": 6,
+        "endLine": 73,
+        "endChar": 19
+      },
+      "revId": "093335b75efd9fa76b81ccb247df865aed5e160d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
