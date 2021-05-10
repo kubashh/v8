@@ -33,6 +33,23 @@
       "message": "+Marja for d8 OWNERS",
       "revId": "744b49d39e9a3b503f105e29ae52be600116a6b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9956f98a_c675fb27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-10T14:49:50Z",
+      "side": 1,
+      "message": "d8 owner rubberstamp lgtm",
+      "revId": "744b49d39e9a3b503f105e29ae52be600116a6b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
