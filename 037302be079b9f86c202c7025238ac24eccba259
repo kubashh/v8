@@ -16,6 +16,172 @@
       "message": "ptal.\n\nThis removes the TODO Ulan left for sweeping in tasks.",
       "revId": "037302be079b9f86c202c7025238ac24eccba259",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0b2fe97_91865507",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T13:53:45Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4f32860_a01e5512",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T13:53:45Z",
+      "side": 1,
+      "message": "Move to private section below.",
+      "range": {
+        "startLine": 514,
+        "startChar": 9,
+        "endLine": 514,
+        "endChar": 18
+      },
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0d47ca7_7f7ca466",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T13:53:45Z",
+      "side": 1,
+      "message": "std::move",
+      "range": {
+        "startLine": 526,
+        "startChar": 23,
+        "endLine": 526,
+        "endChar": 36
+      },
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a524b5a4_646907f8",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T13:53:45Z",
+      "side": 1,
+      "message": "newline",
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd234d73_c4b76d6f",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T13:53:45Z",
+      "side": 1,
+      "message": "Optional: Is it hard to create a unit test? (We should have incremental sweeping tests around that already have a platform that can execute tasks?)",
+      "range": {
+        "startLine": 555,
+        "startChar": 14,
+        "endLine": 555,
+        "endChar": 50
+      },
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a93f260c_961ad24d",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T13:53:45Z",
+      "side": 1,
+      "message": "return here?",
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf26ca1e_d06ee136",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T13:53:45Z",
+      "side": 1,
+      "message": "internal_scope_id",
+      "range": {
+        "startLine": 669,
+        "startChar": 59,
+        "endLine": 669,
+        "endChar": 76
+      },
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "667337e9_56d8598e",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T13:53:45Z",
+      "side": 1,
+      "message": "You can return bool here and simplify the caller.",
+      "range": {
+        "startLine": 816,
+        "startChar": 0,
+        "endLine": 816,
+        "endChar": 4
+      },
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
