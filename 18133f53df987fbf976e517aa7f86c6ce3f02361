@@ -16,6 +16,23 @@
       "message": "Hi Ulan \u0026 Dominik, this one fixes the build errors and failed tests that introduced recently into the master branch. Could you please take a look? Thanks!",
       "revId": "18133f53df987fbf976e517aa7f86c6ce3f02361",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd93a404_972bb9e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-05-10T08:43:12Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "18133f53df987fbf976e517aa7f86c6ce3f02361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
