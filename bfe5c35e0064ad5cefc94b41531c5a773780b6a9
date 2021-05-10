@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24dda011_b33a4710",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-10T11:04:33Z",
+      "side": 1,
+      "message": "ptal, delta in https://chromium-review.googlesource.com/c/v8/v8/+/2882804/1..3",
+      "revId": "bfe5c35e0064ad5cefc94b41531c5a773780b6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
