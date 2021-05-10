@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fec1e3b_20e9d879",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-10T10:14:30Z",
+      "side": 1,
+      "message": "nit: space between the tag and title, and a proper message, e.g. \"Skip cpu-profiler cctests\"",
+      "revId": "9553cec40ebd1806d6576d81094befa831d0f01f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae2f6cee_22d58211",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-10T10:14:30Z",
+      "side": 1,
+      "message": "nit: Remove the indent, typos \u0027Decheck\u0027, \u0027segment fault\u0027. Full sentences please.",
+      "revId": "9553cec40ebd1806d6576d81094befa831d0f01f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c8555d8_2f84c662",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-10T10:14:30Z",
+      "side": 1,
+      "message": "Is that all of them? If so, you could do a wildcard skip (see above).",
+      "revId": "9553cec40ebd1806d6576d81094befa831d0f01f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b734b412_4271d904",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-10T10:14:30Z",
+      "side": 1,
+      "message": "please add the usual end annotation `# arch \u003d\u003d riscv64` to make this more readable.",
+      "revId": "9553cec40ebd1806d6576d81094befa831d0f01f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
