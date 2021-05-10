@@ -33,6 +33,23 @@
       "message": "Can you PTAL at this CL?\n\nWe\u0027ve discussed introducing a wrapper for LiftoffAssembler::StoreTaggedPointer to set skip_write_barrier to the right value already in architecture-independent code. But I guess you might have a different opinion or better idea.",
       "revId": "56ae434b9e67b3525fd5b3c711066c9fb1dc1f45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e7d820e_3e662d87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-10T08:50:39Z",
+      "side": 1,
+      "message": "LGTM.\n+Jakob FYI",
+      "revId": "56ae434b9e67b3525fd5b3c711066c9fb1dc1f45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
