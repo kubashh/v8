@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09a63578_d0807716",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-10T13:33:18Z",
+      "side": 1,
+      "message": "ptal.\n\nThis removes the TODO Ulan left for sweeping in tasks.",
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
