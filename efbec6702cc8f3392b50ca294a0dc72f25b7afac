@@ -16,6 +16,114 @@
       "message": "Could you take a look, Clemens?",
       "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aee3205_fdddf370",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-10T11:30:52Z",
+      "side": 1,
+      "message": "Thanks, looking good. Also just a few code style comments.",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3ff55c2_a0819896",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-10T11:30:52Z",
+      "side": 1,
+      "message": "nit: No need for the parentheses.",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbb0f678_8e982b61",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-10T11:30:52Z",
+      "side": 1,
+      "message": "Why not returning directly?",
+      "range": {
+        "startLine": 773,
+        "startChar": 0,
+        "endLine": 775,
+        "endChar": 17
+      },
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "961b9573_21e8984a",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-10T11:30:52Z",
+      "side": 1,
+      "message": "No initialization needed here; removing it also has the benefit that the compiler will warn you if one branch does not assign it.",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "970aa364_428d82ea",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-10T11:30:52Z",
+      "side": 1,
+      "message": "I know that this was here before your additions, but it would actually be nicer to have this in the code instead of a comment, so the compiler can also make use of this information:\n  if (V8_UNLIKELY(!success)) { ...",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53abc7fc_29782530",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-10T11:30:52Z",
+      "side": 1,
+      "message": "Looks like this is resolved already?",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
