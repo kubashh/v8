@@ -16,6 +16,23 @@
       "message": "Hi Ulan \u0026 Dominik, this CL fixes the problem that liftoff compiler does not check FLAG_disable_write_barriers when performing RecordWrite. -- This will finally calls CodeStubAssembler::PageFromAddress when TPH is enabled.\n\nI\u0027m not quite confident if this fix is correct or not... but looks like it works fine for TPH.",
       "revId": "56ae434b9e67b3525fd5b3c711066c9fb1dc1f45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "576af964_fbdd7590",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-05-10T08:42:19Z",
+      "side": 1,
+      "message": "Can you PTAL at this CL?\n\nWe\u0027ve discussed introducing a wrapper for LiftoffAssembler::StoreTaggedPointer to set skip_write_barrier to the right value already in architecture-independent code. But I guess you might have a different opinion or better idea.",
+      "revId": "56ae434b9e67b3525fd5b3c711066c9fb1dc1f45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
