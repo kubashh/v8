@@ -235,6 +235,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49a1a222_d469a58d",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-10T17:18:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "842ef23c_90f33c0b",
+      "range": {
+        "startLine": 555,
+        "startChar": 14,
+        "endLine": 555,
+        "endChar": 50
+      },
+      "revId": "037302be079b9f86c202c7025238ac24eccba259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a93f260c_961ad24d",
