@@ -16,6 +16,23 @@
       "message": "Hi Jakob, PTAL. I\u0027ve followed your advice and removed the FlagScope usage. Thanks!",
       "revId": "cb711df961f937bd33ff7d36bdffb6540b3ce7ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96da2e9e_6f0237f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-10T09:12:50Z",
+      "side": 1,
+      "message": "thanks, lgtm",
+      "revId": "cb711df961f937bd33ff7d36bdffb6540b3ce7ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
