@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13436cf6_2807ab3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-05-10T09:08:18Z",
+      "side": 1,
+      "message": "Hi Jakob, PTAL. I\u0027ve followed your advice and removed the FlagScope usage. Thanks!",
+      "revId": "cb711df961f937bd33ff7d36bdffb6540b3ce7ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
