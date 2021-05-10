@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2865abe4_14a81b9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-05-10T09:59:35Z",
+      "side": 1,
+      "message": "PTAL. I had forgotten to propagate the exception in TryFastArrayFill.",
+      "revId": "4a30f0c5e2ee3f17d27c5f1b8cb17105b5ec2365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
