@@ -7,8 +7,6 @@
 
 #include <windows.h>
 
-#include "src/base/macros.h"
-
 namespace v8 {
 namespace internal {
 namespace trap_handler {
