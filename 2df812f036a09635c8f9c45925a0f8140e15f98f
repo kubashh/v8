@@ -39,6 +39,30 @@
       },
       "revId": "2df812f036a09635c8f9c45925a0f8140e15f98f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70efe7fa_4c64538a",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-05-10T12:12:47Z",
+      "side": 1,
+      "message": "Done. And I also hoisted definition of lookup_start_object up to make it usable in a second \"if\" too.",
+      "parentUuid": "2255a103_bff3c4d1",
+      "range": {
+        "startLine": 738,
+        "startChar": 23,
+        "endLine": 738,
+        "endChar": 32
+      },
+      "revId": "2df812f036a09635c8f9c45925a0f8140e15f98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
