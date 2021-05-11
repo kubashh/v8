@@ -220,6 +220,24 @@
       "parentUuid": "53abc7fc_29782530",
       "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58d54cbe_e68cd8aa",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-11T11:04:05Z",
+      "side": 1,
+      "message": "I guess this was added at some point because there was some path (maybe from tests) where we passed nullptr. Replacing it by a DCHECK is great, and if this passes all tests there is nothing to worry about.",
+      "parentUuid": "4352e65f_f22263ba",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
