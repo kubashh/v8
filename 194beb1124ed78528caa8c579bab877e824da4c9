@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd67a0d9_b54a9c45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-05-11T15:05:15Z",
+      "side": 1,
+      "message": "Hi Camillo, this is an improved version of the list of types allowed by the fast C API - receivers will be passed as Local\u003cObject\u003e (as V8 already ensures they are Objects), while the rest of the \"API obejct\" arguments will still be received as Local\u003cValue\u003e (as the JS developer is allowed to pass any JS value there). Please let me know if this makes sense to you, thanks!",
+      "revId": "194beb1124ed78528caa8c579bab877e824da4c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
