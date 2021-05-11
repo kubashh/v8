@@ -68,11 +68,14 @@ void FreeMemoryProtectionKey(int key);
 // any protection key from a region. This also means "plain" {SetPermissions()}
 // disassociates the key from a region, making the key's access restrictions
 // irrelevant/inactive for that region.
-// Returns true if changing permissions and key was successful. (Returns a bool
-// to be consistent with {SetPermissions()}).
-// The {page_permissions} are the permissions of the page, not the key. For
+// Returns true if changing permissions and key was successful. The
+// {page_permissions} are the permissions of the page, not the key. For
 // changing the permissions of the key, use
 // {SetPermissionsForMemoryProtectionKey()} instead.
+// TODO(dlehmann): Unlike {pkey_free()}, this returns the sucess as a boolean
+// instead of failing, similar to {SetPermissions()}. Why is this the case for
+// {SetPermissions()}? Do we want custom error reporting for {SetPermissions()}
+// etc.?
 bool SetPermissionsAndMemoryProtectionKey(
     PageAllocator* page_allocator, base::AddressRegion region,
     PageAllocator::Permission page_permissions, int key);

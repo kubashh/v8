@@ -62,7 +62,7 @@ int AllocateMemoryProtectionKey() {
   // Try to to find {pkey_alloc()} support in glibc.
   typedef int (*pkey_alloc_t)(unsigned int, unsigned int);
   // Cache the {dlsym()} lookup in a {static} variable.
-  static auto* pkey_alloc =
+  static auto pkey_alloc =
       bit_cast<pkey_alloc_t>(dlsym(RTLD_DEFAULT, "pkey_alloc"));
   if (pkey_alloc != nullptr) {
     // If there is support in glibc, try to allocate a new key.
@@ -85,7 +85,7 @@ void FreeMemoryProtectionKey(int key) {
 
 #if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
   typedef int (*pkey_free_t)(int);
-  static auto* pkey_free =
+  static auto pkey_free =
       bit_cast<pkey_free_t>(dlsym(RTLD_DEFAULT, "pkey_free"));
   // If a valid key was allocated, {pkey_free()} must also be available.
   DCHECK_NOT_NULL(pkey_free);
@@ -131,17 +131,10 @@ bool SetPermissionsAndMemoryProtectionKey(
 
 #if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
   typedef int (*pkey_mprotect_t)(void*, size_t, int, int);
-  static auto* pkey_mprotect =
+  static auto pkey_mprotect =
       bit_cast<pkey_mprotect_t>(dlsym(RTLD_DEFAULT, "pkey_mprotect"));
 
-  if (pkey_mprotect == nullptr) {
-    // If there is no runtime support for {pkey_mprotect()}, no key should have
-    // been allocated in the first place.
-    DCHECK_EQ(kNoMemoryProtectionKey, key);
-
-    // Without PKU support, fallback to regular {mprotect()}.
-    return page_allocator->SetPermissions(address, size, page_permissions);
-  } else {
+  if (pkey_mprotect != nullptr) {
     // Copied with slight modifications from base/platform/platform-posix.cc
     // {OS::SetPermissions()}.
     // TODO(dlehmann): Move this block into its own function at the right
@@ -156,11 +149,14 @@ bool SetPermissionsAndMemoryProtectionKey(
     int ret = pkey_mprotect(address, size, protection, key);
 
     return ret == /* success */ 0;
+  } else {
+    // If there is no runtime support for {pkey_mprotect()}, no key should have
+    // been allocated in the first place.
+    DCHECK_EQ(kNoMemoryProtectionKey, key);
   }
-#else
+#endif
   // Without PKU support, fallback to regular {mprotect()}.
   return page_allocator->SetPermissions(address, size, page_permissions);
-#endif
 }
 
 DISABLE_CFI_ICALL
@@ -170,7 +166,7 @@ bool SetPermissionsForMemoryProtectionKey(
 
 #if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
   typedef int (*pkey_set_t)(int, unsigned int);
-  static auto* pkey_set = bit_cast<pkey_set_t>(dlsym(RTLD_DEFAULT, "pkey_set"));
+  static auto pkey_set = bit_cast<pkey_set_t>(dlsym(RTLD_DEFAULT, "pkey_set"));
   // If a valid key was allocated, {pkey_set()} must also be available.
   DCHECK_NOT_NULL(pkey_set);
 
