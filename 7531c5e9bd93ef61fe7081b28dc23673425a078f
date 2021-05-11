@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72adeecd_4fc45901",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-11T13:17:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3bfa1f_6d7d02b1",
+      "revId": "7531c5e9bd93ef61fe7081b28dc23673425a078f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "216c6cab_6716820e",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30dfa623_97f31cf5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-11T13:17:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "216c6cab_6716820e",
+      "revId": "7531c5e9bd93ef61fe7081b28dc23673425a078f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e465a720_711ef3b0",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-05-11T12:16:03Z",
       "side": 1,
       "message": "Is there an associated bug?",
+      "revId": "7531c5e9bd93ef61fe7081b28dc23673425a078f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecff4fed_760266cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-11T13:17:12Z",
+      "side": 1,
+      "message": "Added a bug number.",
+      "parentUuid": "e465a720_711ef3b0",
       "revId": "7531c5e9bd93ef61fe7081b28dc23673425a078f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aba164a_f463afe9",
+        "filename": "src/codegen/ppc/assembler-ppc.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-11T13:17:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddd83eef_5fe95d97",
+      "revId": "7531c5e9bd93ef61fe7081b28dc23673425a078f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf04cbfd_4d8ac6d1",
@@ -116,6 +188,24 @@
       "writtenOn": "2021-05-11T12:16:03Z",
       "side": 1,
       "message": "This DCHECK makes more sense in CodeGenerator::PrepareForDeoptimizationExits where the sizes are used.",
+      "revId": "7531c5e9bd93ef61fe7081b28dc23673425a078f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e2b1db7_884d66ab",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-05-11T13:17:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf04cbfd_4d8ac6d1",
       "revId": "7531c5e9bd93ef61fe7081b28dc23673425a078f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
