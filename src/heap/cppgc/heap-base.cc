@@ -63,6 +63,7 @@ HeapBase::HeapBase(
       lsan_page_allocator_(std::make_unique<v8::base::LsanPageAllocator>(
           platform_->GetPageAllocator())),
 #endif  // LEAK_SANITIZER
+      heap_registry_subscription_(*this),
 #if defined(CPPGC_CAGED_HEAP)
       caged_heap_(this, page_allocator()),
       page_backend_(std::make_unique<PageBackend>(&caged_heap_.allocator())),
