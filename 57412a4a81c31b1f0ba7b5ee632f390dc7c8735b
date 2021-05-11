@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f9ae5ed_ff0afc63",
+        "filename": "test/mjsunit/regress/regress-1206412.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-11T14:29:42Z",
+      "side": 1,
+      "message": "So the test relies on a race condition, that\u0027s even worse than just being slow...\n\nI think dropping the test would be an option. While it\u0027s nice to ensure that the disassembler is correct and complete, I\u0027m not sure how much of our testing budget we should be spending on that.\n\nMaking the test faster and more reliable would also be an option, if you think it\u0027s worth the effort. Since you mention background compilation, presumably it was optimized code that triggered the issue? The usual pattern is to collect type feedback and then force (synchronous) optimization:\n\n  let builder \u003d new WasmModuleBuilder();\n  %PrepareFunctionForOptimization(builder.toBuffer);\n  for (var i \u003d 0; i \u003c 3; i++) {\n    await builder.instantiate();\n  }\n  %OptimizeFunctionOnNextCall(builder.toBuffer);\n  await builder.instantiate();",
+      "parentUuid": "6bd19587_78cfe78f",
+      "range": {
+        "startLine": 122,
+        "startChar": 30,
+        "endLine": 122,
+        "endChar": 33
+      },
+      "revId": "57412a4a81c31b1f0ba7b5ee632f390dc7c8735b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd910920_fe5141db",
         "filename": "test/mjsunit/regress/regress-1206412.js",
         "patchSetId": 2
