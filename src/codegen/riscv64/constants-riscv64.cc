@@ -106,6 +106,9 @@ int FPURegisters::Number(const char* name) {
 }
 
 InstructionBase::Type InstructionBase::InstructionType() const {
+  if (IsIllegalInstruction()) {
+    return kUnsupported;
+  }
   // RV64C Instruction
   if (IsShortInstruction()) {
     switch (InstructionBits() & kRvcOpcodeMask) {
