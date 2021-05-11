@@ -33,6 +33,24 @@
       "message": "ptal.\n\nUnfortunately I didn\u0027t find a way to properly test the case of calling it during sweeping. I test that the callback is not called immediately but I can\u0027t check that it\u0027s called later without pumping the message loop somehow. If you know of a way to pump the message loop from a unittest please let me know because I couldn\u0027t find any.\nI can override the platform just for this tests and provide an implementation that gives me a manual pump method, but I don\u0027t think it\u0027s worth it.",
       "revId": "03e3c5cfe39fbe2848e59ca1b6bc72b6d4efcde0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2b29787_d11e36b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-11T07:43:14Z",
+      "side": 1,
+      "message": "I think this PumpMessageLoop() should work if you want to give it a try.\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/include/libplatform/libplatform.h;l\u003d77;drc\u003d834cb0651d5b24307b3df8007c2bc6bd5db93c29;bpv\u003d1;bpt\u003d1",
+      "parentUuid": "3f322d22_89ffffcb",
+      "revId": "03e3c5cfe39fbe2848e59ca1b6bc72b6d4efcde0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
