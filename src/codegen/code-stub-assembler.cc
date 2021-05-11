@@ -14027,7 +14027,7 @@ TNode<BoolT> CodeStubAssembler::IsDebugActive() {
 }
 
 TNode<BoolT> CodeStubAssembler::IsSideEffectFreeDebuggingActive() {
-  TNode<Uint8T> debug_execution_mode = Load<Uint8T>(ExternalConstant(
+  TNode<Int32T> debug_execution_mode = Load<Int32T>(ExternalConstant(
       ExternalReference::debug_execution_mode_address(isolate())));
 
   TNode<BoolT> is_active =
