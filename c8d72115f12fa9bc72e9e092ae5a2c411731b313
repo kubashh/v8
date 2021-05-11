@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e4651e_e239f0de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-05-11T17:58:27Z",
+      "side": 1,
+      "message": "Hi Igore, could you pleas take a look at this CL.\n\nAfter https://crrev.com/c/2857634, newly added cctests started failing on\nS390. Loading the same size as `Word32Equal` has fixed the issue.",
+      "revId": "c8d72115f12fa9bc72e9e092ae5a2c411731b313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
