@@ -10,7 +10,35 @@
 namespace cppgc {
 namespace internal {
 
+class HeapBase;
+
 extern v8::base::LazyMutex g_process_mutex;
+
+class HeapRegistry final {
+ public:
+  class Subscription final {
+   public:
+    inline explicit Subscription(HeapBase&);
+    inline ~Subscription();
+
+   private:
+    HeapBase& heap_;
+  };
+
+  static HeapBase* TryFromManagedPointer(const void* needle);
+
+ private:
+  static void RegisterHeap(HeapBase&);
+  static void UnregisterHeap(HeapBase&);
+};
+
+HeapRegistry::Subscription::Subscription(HeapBase& heap) : heap_(heap) {
+  HeapRegistry::RegisterHeap(heap_);
+}
+
+HeapRegistry::Subscription::~Subscription() {
+  HeapRegistry::UnregisterHeap(heap_);
+}
 
 }  // namespace internal
 }  // namespace cppgc

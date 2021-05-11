@@ -12,6 +12,7 @@
 #include "src/heap/cppgc/heap-object-header.h"
 #include "src/heap/cppgc/heap-page.h"
 #include "src/heap/cppgc/heap.h"
+#include "src/heap/cppgc/process-heap.h"
 
 namespace cppgc {
 namespace internal {
@@ -27,8 +28,11 @@ bool IsOnStack(const void* address) {
 
 }  // namespace
 
-void EnabledCheckingPolicy::CheckPointerImpl(const void* ptr,
-                                             bool points_to_payload) {
+EnabledMemberCheckingPolicy::EnabledMemberCheckingPolicy()
+    : EnabledCheckingPolicyBase(HeapRegistry::TryFromManagedPointer(this)) {}
+
+void EnabledCheckingPolicyBase::CheckPointerImpl(const void* ptr,
+                                                 bool points_to_payload) {
   // `ptr` must not reside on stack.
   DCHECK(!IsOnStack(ptr));
   auto* base_page = BasePage::FromPayload(ptr);
