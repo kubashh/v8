@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6489f97d_3fd307be",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 7
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-11T08:29:00Z",
+      "side": 1,
+      "message": "nit: the convention is to wrap this in single quotes:\n\n }], \u0027# arch \u003d\u003d riscv64\u0027\n\nThis is a super-small point, but in general please try to follow existing  conventions more (e.g. also in commit messages).",
+      "revId": "077f9ea068b62d2e2223cb604456a1f9076d005b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "faf3dc4a_02e8ba14",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-11T08:29:00Z",
+      "side": 1,
+      "message": "Doesn\u0027t look done? Anyways, fixed that for you.",
+      "parentUuid": "747d6d9a_b68ae994",
+      "revId": "9553cec40ebd1806d6576d81094befa831d0f01f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae2f6cee_22d58211",
