@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9946d447_b604b68a",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-05-11T06:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3ff55c2_a0819896",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbb0f678_8e982b61",
@@ -65,6 +83,30 @@
       "writtenOn": "2021-05-10T11:30:52Z",
       "side": 1,
       "message": "Why not returning directly?",
+      "range": {
+        "startLine": 773,
+        "startChar": 0,
+        "endLine": 775,
+        "endChar": 17
+      },
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bbcdb98_6e3cd0c6",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-05-11T06:44:54Z",
+      "side": 1,
+      "message": "No good reason, so changed 😊",
+      "parentUuid": "cbb0f678_8e982b61",
       "range": {
         "startLine": 773,
         "startChar": 0,
@@ -92,6 +134,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c689fac_ffe14c17",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-05-11T06:44:54Z",
+      "side": 1,
+      "message": "Thanks, cool tip with not initializing. Done.",
+      "parentUuid": "961b9573_21e8984a",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "970aa364_428d82ea",
@@ -109,6 +169,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89071516_f6b34c99",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-05-11T06:44:54Z",
+      "side": 1,
+      "message": "Perfect, thanks for the tip and done.",
+      "parentUuid": "970aa364_428d82ea",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53abc7fc_29782530",
@@ -122,6 +200,24 @@
       "writtenOn": "2021-05-10T11:30:52Z",
       "side": 1,
       "message": "Looks like this is resolved already?",
+      "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4352e65f_f22263ba",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-05-11T06:44:54Z",
+      "side": 1,
+      "message": "Ups, good catch. I actually wanted to ask you a question about this:\n\nOriginally, the if condition checked {FLAG_wasm_write_protect_code_memory \u0026\u0026 native_module_}, but I could not find a reason why/how the {native_module_} could be a nullptr (and I added most of the {NativeModuleModificationScope}s in the mprotect CL before). For that reason, I would like to remove the check of {native_module_}. To ensure that I didn\u0027t miss a nullptr, I ran the test suite locally with DCHECKs enabled (passed). Now the question: Should there be a DCHECK to catch any such nullptrs in the future and to document the invariant? Or do you know some other rationale why originally there was a check for {native_module_}?",
+      "parentUuid": "53abc7fc_29782530",
       "revId": "efbec6702cc8f3392b50ca294a0dc72f25b7afac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

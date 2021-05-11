@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b1bfdc7_d830f82f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-05-11T06:44:54Z",
+      "side": 1,
+      "message": "Thanks for your comments, one question on the DCHECK inside {NativeModuleModificationScope}.",
+      "revId": "98d01c7ddf5a6bd63d348bb02512c5db7ca61905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
