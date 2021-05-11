@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "580d5eca_ba778863",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-11T16:26:34Z",
+      "side": 1,
+      "message": "ptal, seems very costly to do it this way. Not sure we should slow down builds with those checks that much.",
+      "revId": "e5f989ba6f91759226cde341774d0593e1b4a499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
