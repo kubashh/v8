@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8f0411f_b66616d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2021-05-12T07:21:50Z",
+      "side": 1,
+      "message": "I think you meant to cc me instead of mathias.nyman@gmail.com? :) Anyhow, thanks for your work on this!",
+      "revId": "0acdf36510e72d5dac5777d893e77716235b7c39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
