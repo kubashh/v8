@@ -39,6 +39,30 @@
       },
       "revId": "ac31bfbba0f17d9a2cff69818a031c90d9d8bfec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bc44c4e_ead9fbbc",
+        "filename": "src/debug/debug-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-05-12T07:06:57Z",
+      "side": 1,
+      "message": "Proxies and other callables end up here and simply return \"function () { [native code] }\" just like with Function.prototype.toString()",
+      "parentUuid": "e39bf7e7_01ce59c0",
+      "range": {
+        "startLine": 71,
+        "startChar": 16,
+        "endLine": 71,
+        "endChar": 23
+      },
+      "revId": "ac31bfbba0f17d9a2cff69818a031c90d9d8bfec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
