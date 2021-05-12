@@ -16,6 +16,29 @@
       "message": "Hey Yang,\n\nHere\u0027s the fix to get function descriptions right in the CDP.\nPlease take a look.\n\nthanks,\nBenedikt",
       "revId": "ac31bfbba0f17d9a2cff69818a031c90d9d8bfec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e39bf7e7_01ce59c0",
+        "filename": "src/debug/debug-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-05-12T05:46:06Z",
+      "side": 1,
+      "message": "In what case do we fall through to here?\n\nand what happens to function proxies?",
+      "range": {
+        "startLine": 71,
+        "startChar": 16,
+        "endLine": 71,
+        "endChar": 23
+      },
+      "revId": "ac31bfbba0f17d9a2cff69818a031c90d9d8bfec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
