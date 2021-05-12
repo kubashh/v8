@@ -51,6 +51,24 @@
       "parentUuid": "3f322d22_89ffffcb",
       "revId": "03e3c5cfe39fbe2848e59ca1b6bc72b6d4efcde0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fca5d94_8ef44ff5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-12T08:20:33Z",
+      "side": 1,
+      "message": "I tried that already but it didn\u0027t get the job done.\nThe problem (I think) is that I\u0027m posting a delayed task, so PumpMessageLoop doesn\u0027t see any messages to pump. Telling PumpMessageLoop to wait for tasks caused it to freeze for some reason (I didn\u0027t dig deeper into that).\nI could \"sleep\" for a bit so the delayed timer passes but I don\u0027t think that\u0027s a good way to implement this test.\nI\u0027ll try again later today.",
+      "parentUuid": "c2b29787_d11e36b8",
+      "revId": "03e3c5cfe39fbe2848e59ca1b6bc72b6d4efcde0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

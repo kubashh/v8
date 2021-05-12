@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b1da125_76a41701",
+        "filename": "test/unittests/heap/unified-heap-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-12T08:20:33Z",
+      "side": 1,
+      "message": "Done (it was meant for shutting up the compiler but on 2nd thought there\u0027s no need for a variable here)",
+      "parentUuid": "1421f582_52f85c26",
+      "range": {
+        "startLine": 289,
+        "startChar": 1,
+        "endLine": 289,
+        "endChar": 19
+      },
+      "revId": "43a5ce4b4075814eb08960f944527e5cfd1cfab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0894ab7_be4937c7",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-05-11T07:43:14Z",
       "side": 1,
       "message": "nit: DCHECK(!cpp_heap().sweeper().IsSweepingInProgress()) ?",
+      "revId": "43a5ce4b4075814eb08960f944527e5cfd1cfab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d7f6e02_c5f7b00e",
+        "filename": "test/unittests/heap/unified-heap-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-12T08:20:33Z",
+      "side": 1,
+      "message": "We will still be in sweeping at this stage. The EXPECT_EQ checks that the callback wasn\u0027t called yet because sweeping is in progress.\nI added a dtor to GCed above to make sure sweeping needs to run on the main thread before it can finish to make sure we don\u0027t have any surprises.",
+      "parentUuid": "c0894ab7_be4937c7",
       "revId": "43a5ce4b4075814eb08960f944527e5cfd1cfab8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
