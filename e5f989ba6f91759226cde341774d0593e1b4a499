@@ -84,6 +84,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4b4bd77_7cdd84a2",
+        "filename": "src/heap/cppgc/pointer-policies.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-12T11:50:13Z",
+      "side": 1,
+      "message": "Alternative approach:\nNever initialize state. On first allocation, check that heap containing the values also contains the Member. Only if not, check that no other heap contains the member.\nThis should provide the same guarantees but for on-heap members will only check a single heap even if multiple heaps exist in the process. On-stack and off-heap still check all heap same as in the current implementation.\nOverall, I think this should be a performance win.",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 13
+      },
+      "revId": "e5f989ba6f91759226cde341774d0593e1b4a499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca393709_ffd9f4be",
         "filename": "src/heap/cppgc/process-heap.cc",
         "patchSetId": 2
