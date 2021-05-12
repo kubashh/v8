@@ -16,6 +16,46 @@
       "message": "Hi Camillo, this is an improved version of the list of types allowed by the fast C API - receivers will be passed as Local\u003cObject\u003e (as V8 already ensures they are Objects), while the rest of the \"API obejct\" arguments will still be received as Local\u003cValue\u003e (as the JS developer is allowed to pass any JS value there). Please let me know if this makes sense to you, thanks!",
       "revId": "194beb1124ed78528caa8c579bab877e824da4c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feb6f3c4_42949284",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-12T08:43:48Z",
+      "side": 1,
+      "message": "LGTM with mini-nit",
+      "revId": "194beb1124ed78528caa8c579bab877e824da4c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f443f989_866920e2",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 27740,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-12T08:43:48Z",
+      "side": 1,
+      "message": "nit: test-api.cc is somewhat documentation, maybe let\u0027s only deref the handle once which will give slightly better performance :P",
+      "range": {
+        "startLine": 27740,
+        "startChar": 46,
+        "endLine": 27740,
+        "endChar": 55
+      },
+      "revId": "194beb1124ed78528caa8c579bab877e824da4c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
