@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5f94a8f_66b54160",
+        "filename": "src/heap/cppgc/heap-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-12T10:13:40Z",
+      "side": 1,
+      "message": "Considered that but heap creation is not a fast path so this registry should be fine.",
+      "parentUuid": "50f30a4d_275d53a4",
+      "range": {
+        "startLine": 213,
+        "startChar": 2,
+        "endLine": 213,
+        "endChar": 57
+      },
+      "revId": "e5f989ba6f91759226cde341774d0593e1b4a499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca393709_ffd9f4be",
@@ -94,6 +118,30 @@
       "writtenOn": "2021-05-12T10:09:19Z",
       "side": 1,
       "message": "Do we still support on-stack members?\nI think the clang plugin reports on these and states that they should be raw pointers.",
+      "range": {
+        "startLine": 540,
+        "startChar": 28,
+        "endLine": 540,
+        "endChar": 70
+      },
+      "revId": "e5f989ba6f91759226cde341774d0593e1b4a499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e3d30af_5d9be370",
+        "filename": "test/unittests/heap/cppgc/member-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-12T10:13:40Z",
+      "side": 1,
+      "message": "We still support them\n\n  HeapVector\u003cMember\u003cT\u003e, 1\u003e vec;\n\n(Due to PDFium we actually have to support on-heap, off-heap and on-stack)",
+      "parentUuid": "4637318c_eda0f351",
       "range": {
         "startLine": 540,
         "startChar": 28,
