@@ -201,6 +201,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc8101f_f4f3178c",
+        "filename": "src/heap/cppgc/pointer-policies.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-17T12:40:16Z",
+      "side": 1,
+      "message": "Oh, yeah, you\u0027re right. I guess it\u0027s just not what I expected.\n\nWhat I intended to suggest is:\nif (!state_) {\n  auto* heap \u003d base_page-\u003eheap();\n  if (!heap-\u003epage_backend()-\u003eLookup(this)) {\n    CHECK(!HeapRegistry::TryFromManagedPointer(this));\n  }\n  state_ \u003d heap;\n}\n\nIf the slot is not on the same heap as the object, the CHECK above verifies that the slot is on no heap, meaning it is either on-stack or off-heap.\n\nIf there\u0027s a single heap, both versions are mostly the same.\nIf there are multiple heaps, I think this version wins because for on-heap Members you don\u0027t need to iterate over all heaps and you only do the iteration for on-stack and off-heap slots.\n\nwdyt?",
+      "parentUuid": "04890a11_8fd37e80",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 13
+      },
+      "revId": "e5f989ba6f91759226cde341774d0593e1b4a499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca393709_ffd9f4be",
