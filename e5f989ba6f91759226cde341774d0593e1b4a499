@@ -107,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "80c0f120_5615eaec",
+        "filename": "src/heap/cppgc/pointer-policies.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-17T10:30:13Z",
+      "side": 1,
+      "message": "Yip, that should indeed be better, cool idea! Will try to implement and report back.",
+      "parentUuid": "a4b4bd77_7cdd84a2",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 13
+      },
+      "revId": "e5f989ba6f91759226cde341774d0593e1b4a499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca393709_ffd9f4be",
         "filename": "src/heap/cppgc/process-heap.cc",
         "patchSetId": 2
