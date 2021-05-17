@@ -12,6 +12,7 @@
 #include "src/heap/cppgc/heap-object-header.h"
 #include "src/heap/cppgc/heap-page.h"
 #include "src/heap/cppgc/heap.h"
+#include "src/heap/cppgc/process-heap.h"
 
 namespace cppgc {
 namespace internal {
@@ -36,19 +37,18 @@ void EnabledCheckingPolicy::CheckPointerImpl(const void* ptr,
   // valid for large objects.
   DCHECK_IMPLIES(base_page->is_large(), points_to_payload);
 
+  // References cannot change their heap association which means that state is
+  // immutable once it is set.
   if (!state_) {
     state_ = base_page->heap();
-    // Member references are used from within objects that cannot change their
-    // heap association which means that state is immutable once it is set.
-    //
-    // TODO(chromium:1056170): Binding state late allows for getting the initial
-    // state wrong which requires a check that `this` is contained in heap that
-    // is itself expensive. Investigate options on non-caged builds to improve
-    // coverage.
+    const auto* heap = HeapRegistry::TryFromManagedPointer(this);
+    // If we found a heap this reference is contained in, then it must be the
+    // same heap as for value.
+    DCHECK_IMPLIES(heap, base_page->heap() == heap);
   }
 
+  DCHECK(state_);
   HeapBase* heap = static_cast<HeapBase*>(state_);
-  if (!heap) return;
 
   // Member references should never mix heaps.
   DCHECK_EQ(heap, base_page->heap());
