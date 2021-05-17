@@ -177,6 +177,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04890a11_8fd37e80",
+        "filename": "src/heap/cppgc/pointer-policies.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-17T11:59:31Z",
+      "side": 1,
+      "message": "I think it should implement what you suggested:\n- First assignment creates state_\n- We get the heap from `this` (slot), which returns nullptr for off heap and stack and a valid HeapBase* for a valid heap.\n- In case HeapBase* is non-null, it must match the heap from `ptr` (\u003d\u003d same heap).",
+      "parentUuid": "8cff72c8_dddc9f3e",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 13
+      },
+      "revId": "e5f989ba6f91759226cde341774d0593e1b4a499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca393709_ffd9f4be",
