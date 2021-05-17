@@ -153,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cff72c8_dddc9f3e",
+        "filename": "src/heap/cppgc/pointer-policies.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-05-17T11:53:18Z",
+      "side": 1,
+      "message": "I don\u0027t this in the code. Did you forget to upload it or are you keeping it for a followup?",
+      "parentUuid": "0a4aba7d_e079197c",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 13
+      },
+      "revId": "e5f989ba6f91759226cde341774d0593e1b4a499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca393709_ffd9f4be",
