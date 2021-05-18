@@ -796,49 +796,101 @@ MaybeHandle<Map> JSFunction::GetDerivedMap(Isolate* isolate,
   return map;
 }
 
+namespace {
+// Assert that ElementsKinds, TypedArray constructors and RAB / GSAB TypedArray
+// maps are in the same order.
+STATIC_ASSERT(ElementsKind::INT8_ELEMENTS == ElementsKind::UINT8_ELEMENTS + 1);
+STATIC_ASSERT(ElementsKind::UINT16_ELEMENTS ==
+              ElementsKind::UINT8_ELEMENTS + 2);
+STATIC_ASSERT(ElementsKind::INT16_ELEMENTS == ElementsKind::UINT8_ELEMENTS + 3);
+STATIC_ASSERT(ElementsKind::UINT32_ELEMENTS ==
+              ElementsKind::UINT8_ELEMENTS + 4);
+STATIC_ASSERT(ElementsKind::INT32_ELEMENTS == ElementsKind::UINT8_ELEMENTS + 5);
+STATIC_ASSERT(ElementsKind::FLOAT32_ELEMENTS ==
+              ElementsKind::UINT8_ELEMENTS + 6);
+STATIC_ASSERT(ElementsKind::FLOAT64_ELEMENTS ==
+              ElementsKind::UINT8_ELEMENTS + 7);
+STATIC_ASSERT(ElementsKind::UINT8_CLAMPED_ELEMENTS ==
+              ElementsKind::UINT8_ELEMENTS + 8);
+STATIC_ASSERT(ElementsKind::BIGUINT64_ELEMENTS ==
+              ElementsKind::UINT8_ELEMENTS + 9);
+STATIC_ASSERT(ElementsKind::BIGINT64_ELEMENTS ==
+              ElementsKind::UINT8_ELEMENTS + 10);
+
+STATIC_ASSERT(Context::INT8_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 1);
+STATIC_ASSERT(Context::UINT16_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 2);
+STATIC_ASSERT(Context::INT16_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 3);
+STATIC_ASSERT(Context::UINT32_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 4);
+STATIC_ASSERT(Context::INT32_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 5);
+STATIC_ASSERT(Context::FLOAT32_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 6);
+STATIC_ASSERT(Context::FLOAT64_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 7);
+STATIC_ASSERT(Context::UINT8_CLAMPED_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 8);
+STATIC_ASSERT(Context::BIGUINT64_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 9);
+STATIC_ASSERT(Context::BIGINT64_ARRAY_FUN_INDEX ==
+              Context::UINT8_ARRAY_FUN_INDEX + 10);
+
+STATIC_ASSERT(Context::RAB_GSAB_INT8_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 1);
+STATIC_ASSERT(Context::RAB_GSAB_UINT16_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 2);
+STATIC_ASSERT(Context::RAB_GSAB_INT16_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 3);
+STATIC_ASSERT(Context::RAB_GSAB_UINT32_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 4);
+STATIC_ASSERT(Context::RAB_GSAB_INT32_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 5);
+STATIC_ASSERT(Context::RAB_GSAB_FLOAT32_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 6);
+STATIC_ASSERT(Context::RAB_GSAB_FLOAT64_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 7);
+STATIC_ASSERT(Context::RAB_GSAB_UINT8_CLAMPED_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 8);
+STATIC_ASSERT(Context::RAB_GSAB_BIGUINT64_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 9);
+STATIC_ASSERT(Context::RAB_GSAB_BIGINT64_ARRAY_MAP_INDEX ==
+              Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + 10);
+
+int TypedArrayElementsKindToConstructorIndex(ElementsKind elements_kind) {
+  return Context::UINT8_ARRAY_FUN_INDEX + elements_kind -
+         ElementsKind::UINT8_ELEMENTS;
+}
+
+int TypedArrayElementsKindToRabGsabCtorIndex(ElementsKind elements_kind) {
+  return Context::RAB_GSAB_UINT8_ARRAY_MAP_INDEX + elements_kind -
+         ElementsKind::UINT8_ELEMENTS;
+}
+
+}  // namespace
+
 Handle<Map> JSFunction::GetDerivedRabGsabMap(Isolate* isolate,
                                              Handle<JSFunction> constructor,
                                              Handle<JSReceiver> new_target) {
+  Handle<Map> map =
+      GetDerivedMap(isolate, constructor, new_target).ToHandleChecked();
   {
     DisallowHeapAllocation no_alloc;
     NativeContext context = isolate->context().native_context();
-    if (*new_target == context.uint8_array_fun()) {
-      return handle(context.rab_gsab_uint8_array_map(), isolate);
-    }
-    if (*new_target == context.int8_array_fun()) {
-      return handle(context.rab_gsab_int8_array_map(), isolate);
-    }
-    if (*new_target == context.uint16_array_fun()) {
-      return handle(context.rab_gsab_uint16_array_map(), isolate);
-    }
-    if (*new_target == context.int16_array_fun()) {
-      return handle(context.rab_gsab_int16_array_map(), isolate);
-    }
-    if (*new_target == context.uint32_array_fun()) {
-      return handle(context.rab_gsab_uint32_array_map(), isolate);
-    }
-    if (*new_target == context.int32_array_fun()) {
-      return handle(context.rab_gsab_int32_array_map(), isolate);
-    }
-    if (*new_target == context.float32_array_fun()) {
-      return handle(context.rab_gsab_float32_array_map(), isolate);
-    }
-    if (*new_target == context.float64_array_fun()) {
-      return handle(context.rab_gsab_float64_array_map(), isolate);
-    }
-    if (*new_target == context.biguint64_array_fun()) {
-      return handle(context.rab_gsab_biguint64_array_map(), isolate);
-    }
-    if (*new_target == context.bigint64_array_fun()) {
-      return handle(context.rab_gsab_bigint64_array_map(), isolate);
+    int ctor_index =
+        TypedArrayElementsKindToConstructorIndex(map->elements_kind());
+    if (*new_target == context.get(ctor_index)) {
+      ctor_index =
+          TypedArrayElementsKindToRabGsabCtorIndex(map->elements_kind());
+      return handle(Map::cast(context.get(ctor_index)), isolate);
     }
   }
 
   // This only happens when subclassing TypedArrays. Create a new map with the
   // corresponding RAB / GSAB ElementsKind. Note: the map is not cached and
   // reused -> every array gets a unique map, making ICs slow.
-  Handle<Map> map =
-      GetDerivedMap(isolate, constructor, new_target).ToHandleChecked();
   Handle<Map> rab_gsab_map = Map::Copy(isolate, map, "RAB / GSAB");
   rab_gsab_map->set_elements_kind(
       GetCorrespondingRabGsabElementsKind(map->elements_kind()));
