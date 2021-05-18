@@ -511,6 +511,10 @@ class BaseTestRunner(object):
       else:
         options.j = multiprocessing.cpu_count()
 
+      if self.build_config.tsan:
+        # TSAN has timeouts with too many parallel tests.
+        options.j = max(1, int(options.j / 2))
+
     options.command_prefix = shlex.split(options.command_prefix)
     options.extra_flags = sum(map(shlex.split, options.extra_flags), [])
 
