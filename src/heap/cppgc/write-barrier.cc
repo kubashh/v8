@@ -25,6 +25,12 @@ AtomicEntryFlag WriteBarrier::incremental_or_concurrent_marking_flag_;
 
 namespace {
 
+enum class ProcessMode {
+  kPush,
+  kTrace,
+};
+
+template <ProcessMode mode>
 void ProcessMarkValue(HeapObjectHeader& header, MarkerBase* marker,
                       const void* value) {
 #if defined(CPPGC_CAGED_HEAP)
@@ -46,7 +52,14 @@ void ProcessMarkValue(HeapObjectHeader& header, MarkerBase* marker,
     return;
   }
 
-  marker->WriteBarrierForObject(header);
+  switch (mode) {
+    case ProcessMode::kPush:
+      marker->WriteBarrierForObject(header);
+      break;
+    case ProcessMode::kTrace:
+      header.Trace(&marker->Visitor());
+      break;
+  }
 }
 
 }  // namespace
@@ -73,7 +86,7 @@ void WriteBarrier::DijkstraMarkingBarrierSlow(const void* value) {
       const_cast<HeapObjectHeader&>(page->ObjectHeaderFromInnerAddress(value));
   if (!header.TryMarkAtomic()) return;
 
-  ProcessMarkValue(header, heap->marker(), value);
+  ProcessMarkValue<ProcessMode::kPush>(header, heap->marker(), value);
 }
 
 // static
@@ -117,7 +130,9 @@ void WriteBarrier::SteeleMarkingBarrierSlow(const void* value) {
       const_cast<HeapObjectHeader&>(page->ObjectHeaderFromInnerAddress(value));
   if (!header.IsMarked<AccessMode::kAtomic>()) return;
 
-  ProcessMarkValue(header, heap->marker(), value);
+  // Retrace object directly to avoid incrementing marked bytes when retrieving
+  // the object in the main marking loop.
+  ProcessMarkValue<ProcessMode::kTrace>(header, heap->marker(), value);
 }
 
 #if defined(CPPGC_YOUNG_GENERATION)
