@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fdc172d_29238e44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-18T20:37:53Z",
+      "side": 1,
+      "message": "ptal, we just talked today about Steele and black-gray... :) ",
+      "revId": "7b2fb03f77b8fbccba91b7a5adaaf1f365b3fb0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
