@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4f48a84_1c2f1f3d",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-18T21:23:15Z",
+      "side": 1,
+      "message": "Obsolete.",
+      "parentUuid": "1a8c5e43_4684e57a",
+      "range": {
+        "startLine": 60,
+        "startChar": 6,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "7b2fb03f77b8fbccba91b7a5adaaf1f365b3fb0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57d29a79_edd0aa32",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-05-18T20:54:02Z",
       "side": 1,
       "message": "I\u0027m concerned this one will appear on metrics. Unlike the case we had before for conservative tracing of weak containers (which anyway happened during the atomic pause and didn\u0027t really affect jank), this case will inline tracing into application code. Specifically expanding a hash table would result in retracing the entire backing store (which might already be large).\nI now think that it might be better to had some mechanism (not necessarily decrementation) that would just skip the marked bytes accounting but will still allow to push the object to the worklist.",
+      "range": {
+        "startLine": 135,
+        "startChar": 2,
+        "endLine": 135,
+        "endChar": 39
+      },
+      "revId": "7b2fb03f77b8fbccba91b7a5adaaf1f365b3fb0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5539db70_4d48b55d",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-18T21:23:15Z",
+      "side": 1,
+      "message": "Done, although I have a hard time seeing how this can show up on metrics at all. Expand should be dominated by copying/moving.",
+      "parentUuid": "57d29a79_edd0aa32",
       "range": {
         "startLine": 135,
         "startChar": 2,
