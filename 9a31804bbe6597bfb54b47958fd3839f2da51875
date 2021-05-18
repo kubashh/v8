@@ -16,6 +16,24 @@
       "message": "It looks like this might have broken perf integration. We have a test in the Node.js test suite that validates that we can find interpreted functions and it\u0027s failing as we try to upgrade to V8 version 9.1. The comment seems to say INTERPRETED_FUNCTION_TAG is not used, but that may not be the case since we can see a functional difference?\n\nSome more details in: \n\nhttps://github.com/nodejs/node-v8/issues/198\nhttps://github.com/nodejs/node/pull/38273#issuecomment-842880855 \n\nwe no longer see entries that say InterpretedFunction like these in the perf output\n\n 2d1a7f643522 InterpretedFunction:functionTwo /home/mzasso/git/nodejs/v8-91/test/fixtures/linux-perf.js:11+0xc2 (/tmp/perf-329643.map)\n\t    2d1a7f643122 InterpretedFunction:functionOne /home/mzasso/git/nodejs/v8-91/test/fixtures/linux-perf.js:7+0xc2 (/tmp/perf-329643.map)\n\t    2d1a7f637122 InterpretedFunction: /home/mzasso/git/nodejs/v8-91/test/fixtures/linux-perf.js:1+0xc2 (/tmp/perf-329643.map)\n\t    2d1a7f634d22 InterpretedFunction:Module._compile node:internal/modules/cjs/loader:1046+0xc2 (/tmp/perf-329643.map)\n\t    2d1a7f62dd22 InterpretedFunction:Module._extensions..js node:internal/modules/cjs/loader:1101+0xc2 (/tmp/perf-329643.map)\n\nfrom perf.\n",
       "revId": "9a31804bbe6597bfb54b47958fd3839f2da51875",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45927735_ea5b136e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-05-18T14:56:00Z",
+      "side": 1,
+      "message": "I see your issue here; the issue on our end was that _bytecode_ wasn\u0027t using INTERPRETED_FUNCTION_TAG, so we ended up having function execution sometimes be counted as INTERPRETED_FUNCTION_TAG and sometimes as other tags, and thus not getting property deduplicated in the CPU profiles. I\u0027d expect you should be able to restore the perf integration by just ignoring the tag, and filtering instead based on the marker (~ for interpreted functions, * for optimized ones, etc).",
+      "parentUuid": "eb481484_cd117ce5",
+      "revId": "9a31804bbe6597bfb54b47958fd3839f2da51875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
