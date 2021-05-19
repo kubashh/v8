@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c1851a5_95491a37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-19T11:34:29Z",
+      "side": 1,
+      "message": "Thanks for review!",
+      "revId": "8de638066bc399602612f7fce2e4948309b28d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f2043d7_6c585d7c",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-05-19T11:29:02Z",
       "side": 1,
       "message": "Maybe ..._TYPED_ARRAY_ ?",
+      "range": {
+        "startLine": 539,
+        "startChar": 19,
+        "endLine": 539,
+        "endChar": 46
+      },
+      "revId": "8de638066bc399602612f7fce2e4948309b28d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f7df046_8e42b93d",
+        "filename": "src/objects/contexts.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-19T11:34:29Z",
+      "side": 1,
+      "message": "Ooops. Yes.",
+      "parentUuid": "0f2043d7_6c585d7c",
       "range": {
         "startLine": 539,
         "startChar": 19,
