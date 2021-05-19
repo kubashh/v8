@@ -140,6 +140,7 @@ class WasmInitExpr {
   std::unique_ptr<WasmInitExpr> operand_ = nullptr;
 };
 
+// This is for use in test/fuzzer/ only.
 V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
                                            const WasmInitExpr& expr);
 
