@@ -16,6 +16,24 @@
       "message": "I would like to move this to the fuzzer, but I could not make it work with PrintCollection: PrintCollection creates a PrintIteratorRange whose \u003c\u003c operator needs to be able to find WasmInitExpr\u0027s \u003c\u003c operator. If you have an idea of how to do it better it would be very welcome.",
       "revId": "0bf2c72258252fbee202a2e35c35fae40f045673",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2673ed2_2f94b188",
+        "filename": "src/wasm/wasm-init-expr.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-19T09:50:31Z",
+      "side": 1,
+      "message": "You could just avoid PrintCollection, and print the comma-separated list manually.",
+      "parentUuid": "a9d93df6_5d12f5fb",
+      "revId": "0bf2c72258252fbee202a2e35c35fae40f045673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
