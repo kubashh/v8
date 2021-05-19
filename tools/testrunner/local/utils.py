@@ -31,9 +31,12 @@ from __future__ import print_function
 from os.path import exists
 from os.path import isdir
 from os.path import join
+from time import sleep
+
 import os
 import platform
 import re
+import resource
 import urllib
 
 
@@ -209,3 +212,36 @@ def Freeze(obj):
     # Make sure object is hashable.
     hash(obj)
     return obj
+
+
+class MemoryMonitor:
+  def __init__(self):
+    self.active = True
+
+  def measure_usage(self):
+    it = 0
+    ru_maxrss = 0
+    ru_minflt = 0
+    ru_majflt = 0
+    ru_nvcsw = 0
+    ru_nivcsw = 0
+    while self.active:
+      usage_self = resource.getrusage(resource.RUSAGE_SELF)
+      usage_children = resource.getrusage(resource.RUSAGE_CHILDREN)
+      ru_maxrss = max(ru_maxrss, usage_self.ru_maxrss + usage_children.ru_maxrss)
+      ru_minflt = max(ru_minflt, usage_self.ru_minflt + usage_children.ru_minflt)
+      ru_majflt = max(ru_majflt, usage_self.ru_majflt + usage_children.ru_majflt)
+      ru_nvcsw = max(ru_nvcsw, usage_self.ru_nvcsw + usage_children.ru_nvcsw)
+      ru_nivcsw = max(ru_nivcsw, usage_self.ru_nivcsw + usage_children.ru_nivcsw)
+
+      if it >= 10:
+        print('Memory usage: %d, minflt: %d, majflt: %d, switches: %d, %d' % (ru_maxrss, ru_minflt, ru_majflt, ru_nvcsw, ru_nivcsw))
+        ru_maxrss = 0
+        ru_minflt = 0
+        ru_majflt = 0
+        ru_nvcsw = 0
+        ru_nivcsw = 0
+        it = 0
+
+      it += 1
+      sleep(0.1)

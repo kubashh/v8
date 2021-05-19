@@ -13,6 +13,7 @@ import optparse
 import os
 import shlex
 import sys
+import threading
 import traceback
 
 
@@ -302,7 +303,16 @@ class BaseTestRunner(object):
       self._setup_env()
       print(">>> Running tests for %s.%s" % (self.build_config.arch,
                                              self.mode_options.label))
-      exit_code = self._do_execute(tests, args, options)
+
+      monitor = utils.MemoryMonitor()
+      x = threading.Thread(target=monitor.measure_usage)
+      x.start()
+      try:
+        exit_code = self._do_execute(tests, args, options)
+      finally:
+          monitor.active = False
+          x.join()
+            
       if exit_code == utils.EXIT_CODE_FAILURES and options.json_test_results:
         print("Force exit code 0 after failures. Json test results file "
               "generated with failure information.")
