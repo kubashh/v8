@@ -9,47 +9,36 @@ namespace internal {
 namespace wasm {
 
 std::ostream& operator<<(std::ostream& os, const WasmInitExpr& expr) {
-  os << "(";
+  os << "WasmInitExpr.";
   switch (expr.kind()) {
     case WasmInitExpr::kNone:
       UNREACHABLE();
+    case WasmInitExpr::kS128Const:
+    case WasmInitExpr::kRttCanon:
+    case WasmInitExpr::kRttSub:
+    case WasmInitExpr::kRefNullConst:
+      // TODO(manoskouk): Implement these.
+      UNIMPLEMENTED();
     case WasmInitExpr::kGlobalGet:
-      os << "global.get " << expr.immediate().index;
+      os << "GlobalGet(" << expr.immediate().index;
       break;
     case WasmInitExpr::kI32Const:
-      os << "i32.const " << expr.immediate().i32_const;
+      os << "I32Const(" << expr.immediate().i32_const;
       break;
     case WasmInitExpr::kI64Const:
-      os << "i64.const " << expr.immediate().i64_const;
+      os << "I64Const(" << expr.immediate().i64_const;
       break;
     case WasmInitExpr::kF32Const:
-      os << "f32.const " << expr.immediate().f32_const;
+      os << "F32Const(" << expr.immediate().f32_const;
       break;
     case WasmInitExpr::kF64Const:
-      os << "f64.const " << expr.immediate().f64_const;
-      break;
-    case WasmInitExpr::kS128Const:
-      os << "s128.const 0x" << std::hex;
-      for (uint8_t b : expr.immediate().s128_const) {
-        os << b;
-      }
-      os << std::dec;
-      break;
-    case WasmInitExpr::kRefNullConst:
-      os << "ref.null " << expr.immediate().heap_type;
+      os << "F64Const(" << expr.immediate().f64_const;
       break;
     case WasmInitExpr::kRefFuncConst:
-      os << "ref.func " << expr.immediate().index;
-      break;
-    case WasmInitExpr::kRttCanon:
-      os << "rtt.canon " << expr.immediate().heap_type;
-      break;
-    case WasmInitExpr::kRttSub:
-      os << "rtt.sub " << *expr.operand();
+      os << "RefFunc(" << expr.immediate().index;
       break;
   }
-  os << ")";
-  return os;
+  return os << ")";
 }
 
 }  // namespace wasm
