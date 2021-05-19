@@ -213,7 +213,7 @@ void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
 
   for (WasmGlobal& glob : module->globals) {
     os << "builder.addGlobal(" << ValueTypeToConstantName(glob.type) << ", "
-       << glob.mutability << ");\n";
+       << glob.mutability << ", " << glob.init << ");\n";
   }
 
   // TODO(7748): Support array/struct types.
@@ -231,6 +231,8 @@ void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
   Zone tmp_zone(isolate->allocator(), ZONE_NAME);
 
   // There currently cannot be more than one table.
+  // TODO(manoskouk): Add support for more tables.
+  // TODO(9495): Add support for talbes with explicit initializers.
   DCHECK_GE(1, module->tables.size());
   for (const WasmTable& table : module->tables) {
     os << "builder.setTableBounds(" << table.initial_size << ", ";
@@ -241,19 +243,18 @@ void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
     }
   }
   for (const WasmElemSegment& elem_segment : module->elem_segments) {
-    os << "builder.addElementSegment(";
-    os << elem_segment.table_index << ", ";
-    switch (elem_segment.offset.kind()) {
-      case WasmInitExpr::kGlobalGet:
-        os << elem_segment.offset.immediate().index << ", true";
-        break;
-      case WasmInitExpr::kI32Const:
-        os << elem_segment.offset.immediate().i32_const << ", false";
-        break;
-      default:
-        UNREACHABLE();
+    const char* status_str =
+        elem_segment.status == WasmElemSegment::kStatusActive
+            ? "Active"
+            : elem_segment.status == WasmElemSegment::kStatusPassive
+                  ? "Passive"
+                  : "Declarative";
+    os << "builder.add" << status_str << "ElementSegment(";
+    if (elem_segment.status == WasmElemSegment::kStatusActive) {
+      os << elem_segment.table_index << ", " << elem_segment.offset << ", ";
     }
-    os << ", " << PrintCollection(elem_segment.entries) << ");\n";
+    os << PrintCollection<std::vector<WasmInitExpr>>(elem_segment.entries)
+       << ", " << ValueTypeToConstantName(elem_segment.type) << ");\n";
   }
 
   for (const WasmFunction& func : module->functions) {
@@ -299,8 +300,7 @@ void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
   }
 
   if (compiles) {
-    os << "const instance = builder.instantiate();\n"
-          "print(instance.exports.main(1, 2, 3));\n";
+    os << "builder.instantiate();\n";
   } else {
     os << "assertThrows(function() { builder.instantiate(); }, "
           "WebAssembly.CompileError);\n";
