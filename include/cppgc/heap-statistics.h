@@ -5,8 +5,9 @@
 #ifndef INCLUDE_CPPGC_HEAP_STATISTICS_H_
 #define INCLUDE_CPPGC_HEAP_STATISTICS_H_
 
-#include <memory>
-#include <string>
+#include <cstdint>
+#include <ctime>
+#include <iosfwd>
 #include <vector>
 
 namespace cppgc {
