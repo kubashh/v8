@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc43700c_192d4817",
+        "filename": "test/mjsunit/regress/regress-1206412.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-19T12:01:28Z",
+      "side": 1,
+      "message": "I tried that (in different variants) but it did not reliably reproduce. I thus decided to drop the test.",
+      "parentUuid": "6f9ae5ed_ff0afc63",
+      "range": {
+        "startLine": 122,
+        "startChar": 30,
+        "endLine": 122,
+        "endChar": 33
+      },
+      "revId": "57412a4a81c31b1f0ba7b5ee632f390dc7c8735b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd910920_fe5141db",
