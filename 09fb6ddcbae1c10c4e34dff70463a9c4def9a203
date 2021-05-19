@@ -52,6 +52,24 @@
       "parentUuid": "74455f7e_d3728042",
       "revId": "09fb6ddcbae1c10c4e34dff70463a9c4def9a203",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e4de579_f5242242",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-19T08:22:11Z",
+      "side": 1,
+      "message": "Ah, I actually want to skip to save computation time, which I think is wasted and to clean up explicit skip entries in status files that exist here and there.",
+      "parentUuid": "f3913bd5_27753582",
+      "revId": "09fb6ddcbae1c10c4e34dff70463a9c4def9a203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
