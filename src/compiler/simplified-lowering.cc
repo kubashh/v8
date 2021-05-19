@@ -1053,7 +1053,8 @@ class RepresentationSelector {
     } else if (type.Is(Type::BigInt()) && use.IsUsedAsWord64()) {
       return MachineRepresentation::kWord64;
     } else if (type.Is(Type::ExternalPointer()) ||
-               type.Is(Type::SandboxedExternalPointer())) {
+               type.Is(Type::SandboxedExternalPointer()) ||
+               type.Is(Type::CagedExternalPointer())) {
       return MachineType::PointerRepresentation();
     }
     return MachineRepresentation::kTagged;

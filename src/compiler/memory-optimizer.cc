@@ -334,19 +334,23 @@ void MemoryOptimizer::VisitLoadElement(Node* node,
 
 void MemoryOptimizer::VisitLoadField(Node* node, AllocationState const* state) {
   DCHECK_EQ(IrOpcode::kLoadField, node->opcode());
+#ifdef DEBUG
+  FieldAccess const& access = FieldAccessOf(node->op());
+#endif
   Reduction reduction = memory_lowering()->ReduceLoadField(node);
   DCHECK(reduction.Changed());
   // In case of replacement, the replacement graph should not require futher
   // lowering, so we can proceed iterating the graph from the node uses.
   EnqueueUses(node, state);
 
-  // Node can be replaced under two cases:
+  // Node can be replaced under three cases:
   //   1. V8_HEAP_SANDBOX_BOOL is enabled and loading an external pointer value.
   //   2. V8_MAP_PACKING_BOOL is enabled.
-  DCHECK_IMPLIES(!V8_HEAP_SANDBOX_BOOL && !V8_MAP_PACKING_BOOL,
+  //   3. Loading a caged external pointer value.
+  DCHECK_IMPLIES(!V8_HEAP_SANDBOX_BOOL && !V8_MAP_PACKING_BOOL &&
+                     !access.type.Is(Type::CagedExternalPointer()),
                  reduction.replacement() == node);
-  if ((V8_HEAP_SANDBOX_BOOL || V8_MAP_PACKING_BOOL) &&
-      reduction.replacement() != node) {
+  if (reduction.replacement() != node) {
     ReplaceUsesAndKillNode(node, reduction.replacement());
   }
 }

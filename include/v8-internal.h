@@ -150,6 +150,20 @@ enum ExternalPointerTag : uint64_t {
 
 constexpr uint64_t kExternalPointerTagMask = 0xffff000000000000;
 
+//
+// ArrayBuffer cage
+//
+// Use a dummy value != zero here to prevent turbofan from eliminating parts of
+// the uncaging procedure.
+// const Address kArrayBufferCageBase = static_cast<Address>(0);
+const Address kArrayBufferCageBase = static_cast<Address>(-0x100000000);
+constexpr size_t kArrayBufferCageSize = 0x1000000000000;
+constexpr uint64_t kArrayBufferCageMask = kArrayBufferCageSize - 1;
+constexpr uint64_t kArrayBufferCageShift = 16;
+// Arbitrary value used in debug builds to ensure all array buffer accesses are
+// caged.
+constexpr uint64_t kArrayBufferCageSalt = 0x1111111111111111;
+
 #ifdef V8_31BIT_SMIS_ON_64BIT_ARCH
 using PlatformSmiTagging = SmiTagging<kApiInt32Size>;
 #else

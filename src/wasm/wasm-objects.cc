@@ -779,8 +779,9 @@ void SetInstanceMemory(Handle<WasmInstanceObject> instance,
   CHECK_IMPLIES(is_wasm_module && use_trap_handler,
                 buffer->GetBackingStore()->has_guard_regions());
 
-  instance->SetRawMemory(reinterpret_cast<byte*>(buffer->backing_store()),
-                         buffer->byte_length());
+  instance->SetRawMemory(
+      reinterpret_cast<byte*>(buffer->backing_store_or_nullptr()),
+      buffer->byte_length());
 #if DEBUG
   if (!FLAG_mock_arraybuffer_allocator) {
     // To flush out bugs earlier, in DEBUG mode, check that all pages of the

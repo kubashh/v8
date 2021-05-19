@@ -1760,6 +1760,14 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   }
 #endif
 
+  Address array_buffer_cage_base() const {
+    return isolate_data_.array_buffer_cage_base_;
+  }
+
+  Address array_buffer_cage_base_address() {
+    return reinterpret_cast<Address>(&isolate_data_.array_buffer_cage_base_);
+  }
+
   struct PromiseHookFields {
     using HasContextPromiseHook = base::BitField<bool, 0, 1>;
     using HasIsolatePromiseHook = HasContextPromiseHook::Next<bool, 1>;

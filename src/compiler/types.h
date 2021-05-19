@@ -132,6 +132,7 @@ namespace compiler {
   /* TODO(v8:10391): Remove this type once all ExternalPointer usages are */ \
   /* sandbox-ready. */                   \
   V(SandboxedExternalPointer, 1u << 28)  \
+  V(CagedExternalPointer, 1u << 29)  \
   \
   V(Signed31,                     kUnsigned30 | kNegative31) \
   V(Signed32,                     kSigned31 | kOtherUnsigned31 | \
@@ -196,7 +197,8 @@ namespace compiler {
   V(Unique,                       kBoolean | kUniqueName | kNull | \
                                   kUndefined | kHole | kReceiver) \
   V(Internal,                     kHole | kExternalPointer | \
-                                  kSandboxedExternalPointer | kOtherInternal) \
+                                  kSandboxedExternalPointer | \
+                                  kCagedExternalPointer | kOtherInternal) \
   V(NonInternal,                  kPrimitive | kReceiver) \
   V(NonBigInt,                    kNonBigIntPrimitive | kReceiver) \
   V(NonNumber,                    kBigInt | kUnique | kString | kInternal) \

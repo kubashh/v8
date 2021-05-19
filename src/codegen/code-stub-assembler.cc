@@ -1504,6 +1504,37 @@ void CodeStubAssembler::BranchIfToBooleanIsTrue(TNode<Object> value,
   }
 }
 
+TNode<RawPtrT> CodeStubAssembler::LoadCagedPointerFromObject(
+    TNode<HeapObject> object, TNode<IntPtrT> field_offset) {
+  TNode<IntPtrT> base = IntPtrConstant(kArrayBufferCageBase);
+  TNode<IntPtrT> pointer = LoadObjectField<IntPtrT>(object, field_offset);
+#ifdef DEBUG
+  pointer = UncheckedCast<IntPtrT>(
+      WordXor(pointer, IntPtrConstant(kArrayBufferCageSalt)));
+#endif
+  // Not yet possible...
+  // CSA_ASSERT(this, WordNotEqual(pointer, IntPtrConstant(kNullAddress)));
+  TNode<IntPtrT> offset =
+      Signed(WordShr(pointer, IntPtrConstant(kArrayBufferCageShift)));
+  return ReinterpretCast<RawPtrT>(IntPtrAdd(base, offset));
+}
+
+void CodeStubAssembler::StoreCagedPointerToObject(TNode<HeapObject> object,
+                                                  TNode<IntPtrT> offset,
+                                                  TNode<RawPtrT> pointer) {
+  // Needed to compensate for the dummy cage base, see isolate-data.h
+  // TNode<IntPtrT> value = WordAnd(ReinterpretCast<IntPtrT>(pointer),
+  //                               IntPtrConstant(kArrayBufferCageMask));
+  TNode<IntPtrT> value = IntPtrSub(ReinterpretCast<IntPtrT>(pointer),
+                                   IntPtrConstant(kArrayBufferCageBase));
+  value = Signed(WordShl(value, IntPtrConstant(kArrayBufferCageShift)));
+#ifdef DEBUG
+  value = UncheckedCast<IntPtrT>(
+      WordXor(value, IntPtrConstant(kArrayBufferCageSalt)));
+#endif
+  StoreObjectFieldNoWriteBarrier<IntPtrT>(object, offset, value);
+}
+
 TNode<ExternalPointerT> CodeStubAssembler::ChangeUint32ToExternalPointer(
     TNode<Uint32T> value) {
   STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
@@ -13633,9 +13664,8 @@ void CodeStubAssembler::ThrowIfArrayBufferViewBufferIsDetached(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSArrayBufferBackingStorePtr(
     TNode<JSArrayBuffer> array_buffer) {
-  return LoadExternalPointerFromObject(array_buffer,
-                                       JSArrayBuffer::kBackingStoreOffset,
-                                       kArrayBufferBackingStoreTag);
+  return LoadCagedPointerFromObject(array_buffer,
+                                    JSArrayBuffer::kBackingStoreOffset);
 }
 
 TNode<JSArrayBuffer> CodeStubAssembler::LoadJSArrayBufferViewBuffer(

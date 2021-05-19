@@ -1281,7 +1281,7 @@ class JSArrayBufferDataEntryAllocator : public HeapEntriesAllocator {
 void V8HeapExplorer::ExtractJSArrayBufferReferences(HeapEntry* entry,
                                                     JSArrayBuffer buffer) {
   // Setup a reference to a native memory backing_store object.
-  if (!buffer.backing_store()) return;
+  if (!buffer.has_backing_store()) return;
   size_t data_size = buffer.byte_length();
   JSArrayBufferDataEntryAllocator allocator(data_size, this);
   HeapEntry* data_entry =

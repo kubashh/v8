@@ -83,6 +83,10 @@ class IsolateData final {
   }
 #endif
 
+  static constexpr int array_buffer_cage_base_offset() {
+    return kArrayBufferCageBaseOffset - kIsolateRootBias;
+  }
+
   static constexpr int fast_c_call_caller_fp_offset() {
     return kFastCCallCallerFPOffset - kIsolateRootBias;
   }
@@ -168,6 +172,7 @@ class IsolateData final {
   V(kBuiltinEntryTableOffset, Builtins::builtin_count* kSystemPointerSize)    \
   V(kBuiltinsTableOffset, Builtins::builtin_count* kSystemPointerSize)        \
   FIELDS_HEAP_SANDBOX(V)                                                      \
+  V(kArrayBufferCageBaseOffset, kSystemPointerSize)                           \
   V(kStackIsIterableOffset, kUInt8Size)                                       \
   /* This padding aligns IsolateData size by 8 bytes. */                      \
   V(kPaddingOffset,                                                           \
@@ -228,6 +233,8 @@ class IsolateData final {
   ExternalPointerTable external_pointer_table_;
 #endif
 
+  Address array_buffer_cage_base_ = kArrayBufferCageBase;
+
   // Whether the SafeStackFrameIterator can successfully iterate the current
   // stack. Only valid values are 0 or 1.
   uint8_t stack_is_iterable_ = 1;
@@ -278,6 +285,8 @@ void IsolateData::AssertPredictableLayout() {
   STATIC_ASSERT(offsetof(IsolateData, external_pointer_table_) ==
                 kExternalPointerTableOffset);
 #endif
+  STATIC_ASSERT(offsetof(IsolateData, array_buffer_cage_base_) ==
+                kArrayBufferCageBaseOffset);
   STATIC_ASSERT(offsetof(IsolateData, stack_is_iterable_) ==
                 kStackIsIterableOffset);
   STATIC_ASSERT(sizeof(IsolateData) == IsolateData::kSize);

@@ -338,6 +338,31 @@ Reduction MemoryLowering::ReduceLoadElement(Node* node) {
   return Changed(node);
 }
 
+Node* MemoryLowering::UncageExternalPointer(Node* node) {
+  DCHECK(node->opcode() == IrOpcode::kLoad ||
+         node->opcode() == IrOpcode::kPoisonedLoad);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  __ InitializeEffectControl(effect, control);
+
+  // Clone the load node and put it here.
+  // TODO(turbofan): consider adding GraphAssembler::Clone() suitable for
+  // cloning nodes from arbitrary locaions in effect/control chains.
+  Node* pointer = __ AddNode(graph()->CloneNode(node));
+
+  // Uncomment this to generate a breakpoint for debugging purposes.
+  // __ DebugBreak();
+
+  // Uncage loaded external pointer.
+  STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
+#ifdef DEBUG
+  pointer = __ WordXor(pointer, __ IntPtrConstant(kArrayBufferCageSalt));
+#endif
+  Node* base = __ IntPtrConstant(kArrayBufferCageBase);
+  Node* offset = __ WordShr(pointer, __ IntPtrConstant(kArrayBufferCageShift));
+  return __ IntAdd(base, offset);
+}
+
 Node* MemoryLowering::DecodeExternalPointer(
     Node* node, ExternalPointerTag external_pointer_tag) {
 #ifdef V8_HEAP_SANDBOX
@@ -428,6 +453,12 @@ Reduction MemoryLowering::ReduceLoadField(Node* node) {
   } else {
     DCHECK(!access.type.Is(Type::SandboxedExternalPointer()));
   }
+
+  if (access.type.Is(Type::CagedExternalPointer())) {
+    node = UncageExternalPointer(node);
+    return Replace(node);
+  }
+
   return Changed(node);
 }
 
@@ -475,6 +506,7 @@ Reduction MemoryLowering::ReduceStoreField(Node* node,
   DCHECK_IMPLIES(V8_HEAP_SANDBOX_BOOL,
                  !access.type.Is(Type::ExternalPointer()) &&
                      !access.type.Is(Type::SandboxedExternalPointer()));
+  DCHECK(!access.type.Is(Type::CagedExternalPointer()));
   MachineType machine_type = access.machine_type;
   Node* object = node->InputAt(0);
   Node* value = node->InputAt(1);
