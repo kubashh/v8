@@ -16,6 +16,40 @@
       "message": "heap lgtm",
       "revId": "50afad1dffd49c5bf2e2bc1f0d444d39866ade1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c5c2e9a_c56dc08d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-19T14:45:46Z",
+      "side": 1,
+      "message": "Really nice! This also fixes a surprising number of TODOs :) \n+Thibaud as the author of the wrapper cache, and one question.\nLGTM otherwise. Bots are still unhappy though.",
+      "revId": "50afad1dffd49c5bf2e2bc1f0d444d39866ade1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c5e453a_041fbc80",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-19T14:45:46Z",
+      "side": 1,
+      "message": "Is there a reason to not use the same mechanism as for other imports, i.e. add compilation units in CompileImportWrappers, and then DCHECK that the code exists here? That would allow for parallel compilation of c-api wrappers.",
+      "revId": "50afad1dffd49c5bf2e2bc1f0d444d39866ade1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
