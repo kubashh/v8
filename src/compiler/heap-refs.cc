@@ -3093,7 +3093,10 @@ base::Optional<ObjectRef> StringRef::GetCharAsStringOrUndefined(
 base::Optional<int> StringRef::length() const {
   if (data_->should_access_heap()) {
     if (data_->kind() == kNeverSerializedHeapObject &&
-        !this->IsInternalizedString()) {
+        !(this->IsInternalizedString() ||
+          (object()->IsThinString() && Handle<ThinString>::cast(object())
+                                           ->actual()
+                                           .IsInternalizedString()))) {
       TRACE_BROKER_MISSING(
           broker(),
           "length for kNeverSerialized non-internalized string " << *this);
@@ -3108,7 +3111,10 @@ base::Optional<int> StringRef::length() const {
 base::Optional<uint16_t> StringRef::GetFirstChar() {
   if (data_->should_access_heap()) {
     if (data_->kind() == kNeverSerializedHeapObject &&
-        !this->IsInternalizedString()) {
+        !(this->IsInternalizedString() ||
+          (object()->IsThinString() && Handle<ThinString>::cast(object())
+                                           ->actual()
+                                           .IsInternalizedString()))) {
       TRACE_BROKER_MISSING(
           broker(),
           "first char for kNeverSerialized non-internalized string " << *this);
@@ -3129,7 +3135,10 @@ base::Optional<uint16_t> StringRef::GetFirstChar() {
 base::Optional<double> StringRef::ToNumber() {
   if (data_->should_access_heap()) {
     if (data_->kind() == kNeverSerializedHeapObject &&
-        !this->IsInternalizedString()) {
+        !(this->IsInternalizedString() ||
+          (object()->IsThinString() && Handle<ThinString>::cast(object())
+                                           ->actual()
+                                           .IsInternalizedString()))) {
       TRACE_BROKER_MISSING(
           broker(),
           "number for kNeverSerialized non-internalized string " << *this);
