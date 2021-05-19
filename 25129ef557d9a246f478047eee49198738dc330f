@@ -16,6 +16,23 @@
       "message": "Mythri / Toon PTAL thanks.",
       "revId": "25129ef557d9a246f478047eee49198738dc330f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a43bf93d_e35b7d9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-05-19T15:57:59Z",
+      "side": 1,
+      "message": "Do you have an estimate of bytecode size implications from having \u0027dead\u0027 feedback slots? I assume it\u0027s not high but it\u0027d be good to verify.",
+      "revId": "25129ef557d9a246f478047eee49198738dc330f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
