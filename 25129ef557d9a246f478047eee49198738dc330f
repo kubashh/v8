@@ -69,6 +69,24 @@
       "parentUuid": "0c03202d_85224554",
       "revId": "25129ef557d9a246f478047eee49198738dc330f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68b38204_66c6ec7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-05-19T16:19:45Z",
+      "side": 1,
+      "message": "I just checked and at least for Octane (which I admit isn\u0027t likely a bit source of IIFEs) it was 0.2% increase in bytecode size [1]\n\n[1] https://chromeperf.appspot.com/report?sid\u003df075302df4e1eb91b99418e2279cf997e18581a641b644f1259a64922ca60c40\u0026start_rev\u003d65808\u0026end_rev\u003d66587",
+      "parentUuid": "a2e09316_ee5d07a8",
+      "revId": "25129ef557d9a246f478047eee49198738dc330f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
