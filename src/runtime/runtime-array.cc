@@ -33,7 +33,7 @@ RUNTIME_FUNCTION(Runtime_TransitionElementsKind) {
           .IsNothing()) {
     // TODO(victorgomes): EffectControlLinearizer::LowerTransitionElementsKind
     // does not handle exceptions.
-    FATAL("Fatal JavaScript invalid array size");
+    FATAL("Fatal JavaScript invalid size error");
     UNREACHABLE();
   }
   return *object;
