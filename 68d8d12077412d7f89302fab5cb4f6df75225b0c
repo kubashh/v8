@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c3950cf_47bad29e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-05-19T09:58:52Z",
+      "side": 1,
+      "message": "I think this is only safe to land when IsAllocationPending-checking is on.",
+      "revId": "68d8d12077412d7f89302fab5cb4f6df75225b0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
