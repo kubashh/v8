@@ -34,6 +34,24 @@
       "parentUuid": "a9d93df6_5d12f5fb",
       "revId": "0bf2c72258252fbee202a2e35c35fae40f045673",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f621e7ab_7300923e",
+        "filename": "src/wasm/wasm-init-expr.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-05-19T11:01:54Z",
+      "side": 1,
+      "message": "I was hoping to reuse that code, but if that is not possible, I think a bit of duplication is better than having this here.",
+      "parentUuid": "d2673ed2_2f94b188",
+      "revId": "0bf2c72258252fbee202a2e35c35fae40f045673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
