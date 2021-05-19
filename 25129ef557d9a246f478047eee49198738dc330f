@@ -51,6 +51,24 @@
       "parentUuid": "a43bf93d_e35b7d9d",
       "revId": "25129ef557d9a246f478047eee49198738dc330f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2e09316_ee5d07a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-05-19T16:11:49Z",
+      "side": 1,
+      "message": "For configurations that ship sparkplug we might even want to remove all feedback-related code from Ignition since we\u0027ll tier up to sparkplug once we allocate a feedback vector.\n\nWe\u0027d need to add a separate set of handlers for --jitless, but I think that would be a good idea anyway. Otherwise we\u0027re spending time tracking even feedback that\u0027s unhelpful to the interpreter, as well as dealing with interruptbudgets. (Although that part is still helpful to allocate the feedback vector; but perhaps it\u0027s a bit expensive just for lazy feedback allocation.)",
+      "parentUuid": "0c03202d_85224554",
+      "revId": "25129ef557d9a246f478047eee49198738dc330f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
