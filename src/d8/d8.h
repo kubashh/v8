@@ -476,6 +476,9 @@ class Shell : public i::AllStatic {
                              const PropertyCallbackInfo<Value>& info);
   static void RealmSharedSet(Local<String> property, Local<Value> value,
                              const PropertyCallbackInfo<void>& info);
+  static void RealmTakeSnapshot(
+      const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void RealmUseSnapshot(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void LogGetAndStop(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void TestVerifySourcePositions(
@@ -641,6 +644,7 @@ class Shell : public i::AllStatic {
   static Local<ObjectTemplate> CreateTestRunnerTemplate(Isolate* isolate);
   static Local<ObjectTemplate> CreatePerformanceTemplate(Isolate* isolate);
   static Local<ObjectTemplate> CreateRealmTemplate(Isolate* isolate);
+  static Local<ObjectTemplate> CreateSnapshotTemplate(Isolate* isolate);
   static Local<ObjectTemplate> CreateD8Template(Isolate* isolate);
   static Local<FunctionTemplate> CreateTestFastCApiTemplate(Isolate* isolate);
   static Local<FunctionTemplate> CreateLeafInterfaceTypeTemplate(
