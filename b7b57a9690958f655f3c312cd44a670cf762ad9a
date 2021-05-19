@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbef203a_931251cb",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-05-19T14:27:22Z",
+      "side": 0,
+      "message": "Here and below: please keep the suffixes of the error messages.",
+      "range": {
+        "startLine": 485,
+        "startChar": 46,
+        "endLine": 485,
+        "endChar": 66
+      },
+      "revId": "b7b57a9690958f655f3c312cd44a670cf762ad9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
