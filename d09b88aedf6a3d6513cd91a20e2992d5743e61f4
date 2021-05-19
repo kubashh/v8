@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "d09b88aedf6a3d6513cd91a20e2992d5743e61f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d9812f9_8fab4e9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-05-19T12:02:50Z",
+      "side": 1,
+      "message": "Is there any value in supporting such a low --wasm-max-initial-code-space-reservation? Can we not just define a minimum value for this flag?\n\nIf not, this CL LGTM, but I think checking the value of the flag would be a nicer solution.",
+      "revId": "d09b88aedf6a3d6513cd91a20e2992d5743e61f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
