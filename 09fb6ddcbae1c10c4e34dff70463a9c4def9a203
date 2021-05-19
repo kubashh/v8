@@ -34,6 +34,24 @@
       "parentUuid": "d08921f6_6dbceb03",
       "revId": "09fb6ddcbae1c10c4e34dff70463a9c4def9a203",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3913bd5_27753582",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-19T08:03:44Z",
+      "side": 1,
+      "message": "Ack, I didn\u0027t mean actually skipping though, just treating the test as skipped for purposes of the progress display.\n\nThe suggestion was that tests that have an expected-fail due to flag incompats should not count as \u0027success\u0027.",
+      "parentUuid": "74455f7e_d3728042",
+      "revId": "09fb6ddcbae1c10c4e34dff70463a9c4def9a203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
