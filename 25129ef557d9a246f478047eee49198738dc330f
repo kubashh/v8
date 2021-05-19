@@ -87,6 +87,41 @@
       "parentUuid": "a2e09316_ee5d07a8",
       "revId": "25129ef557d9a246f478047eee49198738dc330f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a68a1a77_67e14b5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-05-19T16:58:53Z",
+      "side": 1,
+      "message": "Thanks! lgtm.",
+      "revId": "25129ef557d9a246f478047eee49198738dc330f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "568feb06_71c72350",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-05-19T16:58:53Z",
+      "side": 1,
+      "message": "There was some regression in the bytecode size but it was too small to impact overall memory. I collected some data on number of loads / stores / calls / literal creation that would have a feedback slot with one shot optimisation disabled here: https://docs.google.com/document/d/1YfbRCNNxdZDfi0nCJblWKfHkrUmMgvOWcKiWgCTzMu8/edit#heading\u003dh.loqtb24chn30\nApart from maps and sheets it\u0027s more in the order of 1000s. For maps and sheets it was more like 20-40K. I didn\u0027t record it as a percentage.\n\n\nToon, regarding interrupt budget handling in interpreter, don\u0027t we anyway need it even to tier up to sparkplug? Or are you suggesting that we could just use invocation count for tier up / lazy FV allocation and drop interrupt budget tracking in interpreter?",
+      "parentUuid": "68b38204_66c6ec7c",
+      "revId": "25129ef557d9a246f478047eee49198738dc330f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
