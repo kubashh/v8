@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce1fea3a_fe4a5c80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-19T07:58:35Z",
+      "side": 1,
+      "message": "+Al, FYI",
+      "revId": "9751e77fe19912e0c2f89fe8013d4fbc7e458150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc251862_0e22ff54",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-19T07:58:35Z",
+      "side": 1,
+      "message": "Please make this more robust to parameters passed like this:\n--flag stuff\ninstead of\n--flag\u003dstuff\nBoth ways are possible in d8. I.e. ensure that flag starts with -- Maybe only the upper version is in use in practice right now, but this might change. Also passing js files is possible, but the files are kept separate in the test runner.",
+      "range": {
+        "startLine": 182,
+        "startChar": 14,
+        "endLine": 182,
+        "endChar": 48
+      },
+      "revId": "9751e77fe19912e0c2f89fe8013d4fbc7e458150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -16,6 +16,24 @@
       "message": "I noticed this is never printed anywhere and tests with incompatible flags are treated as \u0027passed\u0027 completely silently. The only way to find out that a test actually failed is to run it without the test runner locally. That feels a bit dangerous.. Should we perhaps treat it as \u0027skipped\u0027 instead?",
       "revId": "09fb6ddcbae1c10c4e34dff70463a9c4def9a203",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74455f7e_d3728042",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-19T07:58:35Z",
+      "side": 1,
+      "message": "See https://crbug.com/v8/10926 - I think skipping is more desired than fast fail, but it\u0027d need to be implemented at a different stage before tests are selected and created.",
+      "parentUuid": "d08921f6_6dbceb03",
+      "revId": "09fb6ddcbae1c10c4e34dff70463a9c4def9a203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
