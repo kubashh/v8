@@ -104,6 +104,76 @@
       },
       "revId": "2aa354d5708c0603a7ba8f953febe544b779c302",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b0fb42b_599067f8",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-05-19T09:45:19Z",
+      "side": 1,
+      "message": "+1 modulo using ElementsKind::FIRST_FIXED_TYPED_ARRAY_ELEMENTS_KIND and adding a similar alias for Context indices.",
+      "parentUuid": "d484a621_53293cc2",
+      "range": {
+        "startLine": 802,
+        "startChar": 0,
+        "endLine": 860,
+        "endChar": 60
+      },
+      "revId": "2aa354d5708c0603a7ba8f953febe544b779c302",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "630fd966_cb2b5e8a",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-05-19T09:45:19Z",
+      "side": 1,
+      "message": "Maybe FIRST_FIXED_TYPED_ARRAY_ELEMENTS_KIND ?",
+      "range": {
+        "startLine": 864,
+        "startChar": 23,
+        "endLine": 864,
+        "endChar": 37
+      },
+      "revId": "2aa354d5708c0603a7ba8f953febe544b779c302",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9db6c5c7_bfdc7d6e",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-05-19T09:45:19Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 869,
+        "startChar": 23,
+        "endLine": 869,
+        "endChar": 37
+      },
+      "revId": "2aa354d5708c0603a7ba8f953febe544b779c302",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
