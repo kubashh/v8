@@ -139,6 +139,30 @@
       },
       "revId": "9751e77fe19912e0c2f89fe8013d4fbc7e458150",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fef8ddf8_7866f1d8",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-19T12:13:02Z",
+      "side": 1,
+      "message": "Sorry, had to change this again - with the current approach that checks the intersection of `flags` and `negate_flags(flags)` is empty, we have to filter out non-flag members. I added that to `normalize_flags`.",
+      "parentUuid": "db54ef9c_3bb86b7d",
+      "range": {
+        "startLine": 182,
+        "startChar": 14,
+        "endLine": 182,
+        "endChar": 48
+      },
+      "revId": "9751e77fe19912e0c2f89fe8013d4fbc7e458150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
