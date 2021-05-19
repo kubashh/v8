@@ -33,6 +33,24 @@
       "message": "Do you have an estimate of bytecode size implications from having \u0027dead\u0027 feedback slots? I assume it\u0027s not high but it\u0027d be good to verify.",
       "revId": "25129ef557d9a246f478047eee49198738dc330f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c03202d_85224554",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-05-19T16:08:12Z",
+      "side": 1,
+      "message": "I think it was negligible. Mythri do you remember if we saw any change in bytecode size when we disabled the flag a while ago?",
+      "parentUuid": "a43bf93d_e35b7d9d",
+      "revId": "25129ef557d9a246f478047eee49198738dc330f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
