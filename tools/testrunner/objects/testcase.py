@@ -34,6 +34,7 @@ from ..outproc import base as outproc
 from ..local import command
 from ..local import statusfile
 from ..local import utils
+from ..local.variants import ALL_VARIANT_FLAGS
 from ..local.variants import INCOMPATIBLE_FLAGS_PER_VARIANT
 from ..local.variants import INCOMPATIBLE_FLAGS_PER_BUILD_VARIABLE
 from ..local.variants import INCOMPATIBLE_FLAGS_PER_EXTRA_FLAG
@@ -169,6 +170,20 @@ class TestCase(object):
     def normalize_flag(flag):
       return flag.replace("_", "-").replace("--no-", "--no")
 
+    def normalize_flags(flags):
+      return [normalize_flag(flag) for flag in flags]
+
+    # Note this can get it wrong if the flag name starts with the characters
+    # "--no" where "no" is part of the flag name, e.g. "--nobodys-perfect".
+    # In that case the negation "--bodys-perfect" would be returned. This is
+    # a weakness we accept and hope to never run into.
+    def negate_flag(normalized_flag):
+      return ("--" + normalized_flag[4:] if normalized_flag.startswith("--no")
+              else "--no" + normalized_flag[2:])
+
+    def negate_flags(normalized_flags):
+      return [negate_flag(flag) for flag in normalized_flags]
+
     def has_flag(conflicting_flag, flags):
       conflicting_flag = normalize_flag(conflicting_flag)
       if conflicting_flag in flags:
@@ -191,8 +206,15 @@ class TestCase(object):
 
       file_specific_flags = (self._get_source_flags() + self._get_suite_flags()
                              + self._get_statusfile_flags())
-      file_specific_flags = [normalize_flag(flag) for flag in file_specific_flags]
-      extra_flags = [normalize_flag(flag) for flag in self._get_extra_flags()]
+      file_specific_flags = normalize_flags(file_specific_flags)
+      extra_flags = normalize_flags(self._get_extra_flags())
+
+      if self.variant in ALL_VARIANT_FLAGS:
+        for flags in ALL_VARIANT_FLAGS[self.variant]:
+          check_flags(negate_flags(normalize_flags(flags)), file_specific_flags,
+                      "Negated ALL_VARIANT_FLAGS[\""+self.variant+"\"]")
+          check_flags(negate_flags(normalize_flags(flags)), extra_flags,
+                      "Negated ALL_VARIANT_FLAGS[\""+self.variant+"\"]")
 
       if self.variant in INCOMPATIBLE_FLAGS_PER_VARIANT:
         check_flags(INCOMPATIBLE_FLAGS_PER_VARIANT[self.variant], file_specific_flags,
