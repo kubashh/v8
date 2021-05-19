@@ -50,6 +50,24 @@
       "message": "Is there a reason to not use the same mechanism as for other imports, i.e. add compilation units in CompileImportWrappers, and then DCHECK that the code exists here? That would allow for parallel compilation of c-api wrappers.",
       "revId": "50afad1dffd49c5bf2e2bc1f0d444d39866ade1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d5b2fb7_4389937c",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-05-19T15:45:06Z",
+      "side": 1,
+      "message": "Mostly because that seemed to be more work (the existing infrastructure targets WasmToJS wrappers), and there\u0027s no evidence of demand for it. I\u0027ll add a TODO :-)",
+      "parentUuid": "2c5e453a_041fbc80",
+      "revId": "50afad1dffd49c5bf2e2bc1f0d444d39866ade1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
