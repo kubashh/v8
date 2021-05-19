@@ -16,6 +16,46 @@
       "message": "Manos: PTAL.\n\nUlan: FYI. Thanks again for helping me debug this!",
       "revId": "00fbe5c554110e9b35a9d876fb5957007e83f4ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7264cb4f_9c143073",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-05-19T14:31:52Z",
+      "side": 1,
+      "message": "LGTM with one minor comment.",
+      "revId": "00fbe5c554110e9b35a9d876fb5957007e83f4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b45fac17_7cd82024",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-05-19T14:31:52Z",
+      "side": 1,
+      "message": "Please explain that, as discussed privately, this is meant to be called at (some? all?) API entry points.",
+      "range": {
+        "startLine": 268,
+        "startChar": 25,
+        "endLine": 268,
+        "endChar": 43
+      },
+      "revId": "00fbe5c554110e9b35a9d876fb5957007e83f4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
