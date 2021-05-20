@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be80d125_60687688",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-20T07:47:49Z",
+      "side": 1,
+      "message": "nit: I prefer example code over text",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 51
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90fddcdd_9ec10276",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-20T07:47:49Z",
+      "side": 1,
+      "message": "some early comments and nits.",
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c7ed5c9_90896477",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-20T07:47:49Z",
+      "side": 1,
+      "message": "You create a new Snapshot template here on every call, you should reuse them and only instantiate it.",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1836,
+        "endChar": 76
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e54017f1_86e9d945",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1857,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-20T07:47:49Z",
+      "side": 1,
+      "message": "nit: reuse isolate",
+      "range": {
+        "startLine": 1857,
+        "startChar": 4,
+        "endLine": 1857,
+        "endChar": 21
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a069e255_2aadd144",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-20T07:47:49Z",
+      "side": 1,
+      "message": "Maybe this could be simplified a bit:\n\n i::Managed\u003ci::WebSnapshotData\u003e\u003e::cast(\n  *Utils::OpenHandle(*snapshot_data))-\u003eget()",
+      "range": {
+        "startLine": 1863,
+        "startChar": 0,
+        "endLine": 1865,
+        "endChar": 75
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d0cd264_127c4621",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1866,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-20T07:47:49Z",
+      "side": 1,
+      "message": "At this point I don\u0027t know what type snapshot_data_shared has, maybe it\u0027s a bit clearer by not using \"auto\" here.",
+      "range": {
+        "startLine": 1866,
+        "startChar": 2,
+        "endLine": 1866,
+        "endChar": 6
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b429728f_40dde082",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-20T07:47:49Z",
+      "side": 1,
+      "message": "Follow-up cleanup suggestion: As suggested in our offline discussion, something like a Realm::Scope would help cleaning up the code a bit.",
+      "range": {
+        "startLine": 1877,
+        "startChar": 0,
+        "endLine": 1879,
+        "endChar": 62
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e8a307a_11c31c3c",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-20T07:47:49Z",
+      "side": 1,
+      "message": "über-nit: here and below, const (since r1 is not assigned anymore)",
+      "range": {
+        "startLine": 12,
+        "startChar": 4,
+        "endLine": 12,
+        "endChar": 7
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
