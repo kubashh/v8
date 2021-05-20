@@ -1786,6 +1786,99 @@ void Shell::RealmSharedSet(Local<String> property, Local<Value> value,
   data->realm_shared_.Reset(isolate, value);
 }
 
+// Realm.takeSnapshot(i, l) takes a snapshot of the list of exports l in realm i
+// and returns the result.
+void Shell::RealmTakeSnapshot(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if (!options.d8_web_snapshot_api) {
+    return;
+  }
+  Isolate* isolate = args.GetIsolate();
+  PerIsolateData* data = PerIsolateData::Get(isolate);
+  int index = data->RealmIndexOrThrow(args, 0);
+  if (index == -1) return;
+  if (args.Length() < 2 || !args[1]->IsArray()) {
+    args.GetIsolate()->ThrowError("Invalid argument");
+    return;
+  }
+  // Create a std::vector<std::string> from the list of exports.
+  Local<Context> current_context = isolate->GetCurrentContext();
+  Local<Array> exports_array = args[1].As<Array>();
+  std::vector<std::string> exports;
+  for (int i = 0, length = exports_array->Length(); i < length; ++i) {
+    Local<String> local_str = exports_array->Get(current_context, i)
+                                  .ToLocalChecked()
+                                  ->ToString(current_context)
+                                  .ToLocalChecked();
+    std::string str = ToSTLString(isolate, local_str);
+    exports.push_back(str);
+  }
+  // Enter realm i.
+  Local<Context> realm = Local<Context>::New(isolate, data->realms_[index]);
+  realm->Enter();
+  int previous_index = data->realm_current_;
+  data->realm_current_ = data->realm_switch_ = index;
+  // Take the snapshot.
+  i::WebSnapshotSerializer serializer(isolate);
+  auto snapshot_data_shared = std::make_shared<i::WebSnapshotData>();
+  if (!serializer.TakeSnapshot(realm, exports, *snapshot_data_shared)) {
+    realm->Exit();
+    data->realm_current_ = data->realm_switch_ = previous_index;
+    args.GetReturnValue().Set(Undefined(isolate));
+    return;
+  }
+  // Create a snapshot object and store the WebSnapshotData as an embedder
+  // field.
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  i::Handle<i::Object> snapshot_data_managed =
+      i::Managed<i::WebSnapshotData>::FromSharedPtr(
+          i_isolate, snapshot_data_shared->buffer_size, snapshot_data_shared);
+  v8::Local<v8::Value> shapshot_data = Utils::ToLocal(snapshot_data_managed);
+  Local<ObjectTemplate> snapshot_template = CreateSnapshotTemplate(isolate);
+  Local<Object> snapshot_instance =
+      snapshot_template->NewInstance(realm).ToLocalChecked();
+  snapshot_instance->SetInternalField(0, shapshot_data);
+  // Set the return value.
+  args.GetReturnValue().Set(snapshot_instance);
+  // Exit realm i.
+  realm->Exit();
+  data->realm_current_ = data->realm_switch_ = previous_index;
+}
+
+// Realm.useSnapshot(i, s) deserializes snapshot s in realm i.
+void Shell::RealmUseSnapshot(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if (!options.d8_web_snapshot_api) {
+    return;
+  }
+  Isolate* isolate = args.GetIsolate();
+  PerIsolateData* data = PerIsolateData::Get(isolate);
+  int index = data->RealmIndexOrThrow(args, 0);
+  if (index == -1) return;
+  if (args.Length() < 2) {
+    args.GetIsolate()->ThrowError("Invalid argument");
+    return;
+  }
+  // Restore the snapshot data from the snapshot object.
+  Local<Object> snapshot_instance = args[1].As<Object>();
+  v8::Local<v8::Value> snapshot_data = snapshot_instance->GetInternalField(0);
+  i::Handle<i::Object> snapshot_data_handle = Utils::OpenHandle(*snapshot_data);
+  auto snapshot_data_managed =
+      i::Handle<i::Managed<i::WebSnapshotData>>::cast(snapshot_data_handle);
+  auto snapshot_data_shared = snapshot_data_managed->get();
+  // Enter realm i.
+  Local<Context> realm = Local<Context>::New(isolate, data->realms_[index]);
+  realm->Enter();
+  int previous_index = data->realm_current_;
+  data->realm_current_ = data->realm_switch_ = index;
+  // Deserialize the snapshot.
+  i::WebSnapshotDeserializer deserializer(isolate);
+  bool success = deserializer.UseWebSnapshot(snapshot_data_shared->buffer,
+                                             snapshot_data_shared->buffer_size);
+  args.GetReturnValue().Set(success);
+  // Exit realm i.
+  realm->Exit();
+  data->realm_current_ = data->realm_switch_ = previous_index;
+}
+
 void Shell::LogGetAndStop(const v8::FunctionCallbackInfo<v8::Value>& args) {
   Isolate* isolate = args.GetIsolate();
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
@@ -2647,6 +2740,8 @@ Local<ObjectTemplate> Shell::CreateGlobalTemplate(Isolate* isolate) {
   global_template->Set(isolate, "testRunner",
                        Shell::CreateTestRunnerTemplate(isolate));
   global_template->Set(isolate, "Realm", Shell::CreateRealmTemplate(isolate));
+  global_template->Set(isolate, "Snapshot",
+                       Shell::CreateSnapshotTemplate(isolate));
   global_template->Set(isolate, "performance",
                        Shell::CreatePerformanceTemplate(isolate));
   global_template->Set(isolate, "Worker", Shell::CreateWorkerTemplate(isolate));
@@ -2768,7 +2863,17 @@ Local<ObjectTemplate> Shell::CreateRealmTemplate(Isolate* isolate) {
                       FunctionTemplate::New(isolate, RealmEval));
   realm_template->SetAccessor(String::NewFromUtf8Literal(isolate, "shared"),
                               RealmSharedGet, RealmSharedSet);
+  realm_template->Set(isolate, "takeSnapshot",
+                      FunctionTemplate::New(isolate, RealmTakeSnapshot));
+  realm_template->Set(isolate, "useSnapshot",
+                      FunctionTemplate::New(isolate, RealmUseSnapshot));
   return realm_template;
+}
+
+Local<ObjectTemplate> Shell::CreateSnapshotTemplate(Isolate* isolate) {
+  Local<ObjectTemplate> snapshot_template = ObjectTemplate::New(isolate);
+  snapshot_template->SetInternalFieldCount(1);
+  return snapshot_template;
 }
 
 Local<ObjectTemplate> Shell::CreateD8Template(Isolate* isolate) {
@@ -4119,6 +4224,9 @@ bool Shell::SetOptions(int argc, char* argv[]) {
       argv[i] = nullptr;
     } else if (strncmp(argv[i], "--web-snapshot-config=", 22) == 0) {
       options.web_snapshot_config = argv[i] + 22;
+      argv[i] = nullptr;
+    } else if (strcmp(argv[i], "--d8-web-snapshot-api") == 0) {
+      options.d8_web_snapshot_api = true;
       argv[i] = nullptr;
     } else if (strcmp(argv[i], "--compile-only") == 0) {
       options.compile_only = true;
