@@ -245,6 +245,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa9b1ac3_6248e7ef",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1862,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-20T10:24:50Z",
+      "side": 1,
+      "message": "We should probably bail out if args[1] is not an instance of the Snapshot ObjectTemplate.",
+      "parentUuid": "04a8dd14_d70b5f63",
+      "range": {
+        "startLine": 1862,
+        "startChar": 2,
+        "endLine": 1862,
+        "endChar": 78
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a069e255_2aadd144",
         "filename": "src/d8/d8.cc",
         "patchSetId": 2
