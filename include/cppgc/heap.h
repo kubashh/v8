@@ -5,12 +5,13 @@
 #ifndef INCLUDE_CPPGC_HEAP_H_
 #define INCLUDE_CPPGC_HEAP_H_
 
+#include <cstddef>
+#include <cstdint>
 #include <memory>
 #include <vector>
 
 #include "cppgc/common.h"
 #include "cppgc/custom-space.h"
-#include "cppgc/platform.h"
 #include "v8config.h"  // NOLINT(build/include_directory)
 
 /**
@@ -19,6 +20,7 @@
 namespace cppgc {
 
 class AllocationHandle;
+class Platform;
 
 /**
  * Implementation details of cppgc. Those details are considered internal and
