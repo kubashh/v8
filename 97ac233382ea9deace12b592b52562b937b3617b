@@ -16,6 +16,63 @@
       "message": "ptal",
       "revId": "97ac233382ea9deace12b592b52562b937b3617b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ca8944_0712200a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-05-20T14:02:56Z",
+      "side": 1,
+      "message": "lgtm with comments",
+      "revId": "97ac233382ea9deace12b592b52562b937b3617b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7feb738_e153992d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10859,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-05-20T14:02:56Z",
+      "side": 1,
+      "message": "It seems that these IsDetachedBuffer checks make sense only for the !is_rab_gsab case because LoadVariableLengthJSTypedArrayLength() also does it.\n\nAlso, while you are here, could you please replace this if/else with just\n  GotoIf(IsDetachedBuffer(buffer), \u0026update_value_and_bailout);\nsince |update_value_and_bailout| is doing the right thing for both cases.",
+      "revId": "97ac233382ea9deace12b592b52562b937b3617b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a074ecc_5c9b18c8",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10864,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-05-20T14:02:56Z",
+      "side": 1,
+      "message": "Drive-by-comment: the LoadVariableLengthJSTypedArrayLength() doesn\u0027t seem to check if the buffer is detached for the is_gsab case. Is that OK?",
+      "range": {
+        "startLine": 10864,
+        "startChar": 13,
+        "endLine": 10864,
+        "endChar": 50
+      },
+      "revId": "97ac233382ea9deace12b592b52562b937b3617b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
