@@ -21,12 +21,12 @@ namespace internal {
 GlobalSafepoint::GlobalSafepoint(Heap* heap)
     : heap_(heap), local_heaps_head_(nullptr), active_safepoint_scopes_(0) {}
 
-void GlobalSafepoint::EnterSafepointScope() {
+void GlobalSafepoint::EnterSafepointScope(ThreadKind thread_kind) {
   if (++active_safepoint_scopes_ > 1) return;
 
   TimedHistogramScope timer(
       heap_->isolate()->counters()->gc_time_to_safepoint());
-  TRACE_GC(heap_->tracer(), GCTracer::Scope::TIME_TO_SAFEPOINT);
+  TRACE_GC1(heap_->tracer(), GCTracer::Scope::TIME_TO_SAFEPOINT, thread_kind);
 
   local_heaps_mutex_.Lock();
 

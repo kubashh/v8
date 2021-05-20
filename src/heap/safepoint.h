@@ -51,6 +51,9 @@ class GlobalSafepoint {
 
   bool IsActive() { return active_safepoint_scopes_ > 0; }
 
+  void EnterSafepointScope(ThreadKind thread_kind = ThreadKind::kMain);
+  void LeaveSafepointScope();
+
  private:
   class Barrier {
     base::Mutex mutex_;
@@ -73,9 +76,6 @@ class GlobalSafepoint {
     void WaitInUnpark();
     void NotifyPark();
   };
-
-  void EnterSafepointScope();
-  void LeaveSafepointScope();
 
   template <typename Callback>
   void AddLocalHeap(LocalHeap* local_heap, Callback callback) {
