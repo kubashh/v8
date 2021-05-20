@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a445e5d9_181ccc7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1424220
+      },
+      "writtenOn": "2021-05-20T07:03:41Z",
+      "side": 1,
+      "message": "Hi Ulan \u0026 Dominik, could you pleas review this CL? This change is necessary for MMTk\u0027s non-moving GC to work. Thanks.",
+      "revId": "4e7e8d3d13552719cb6dabc646dca6425884fda3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
