@@ -22,6 +22,30 @@
       },
       "revId": "e04d059b44ece0576ae9d1377d8ad8901936a781",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25345fa3_561df31e",
+        "filename": "include/cppgc/heap-statistics.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-05-20T08:38:53Z",
+      "side": 1,
+      "message": "Looks like a known issue: https://github.com/include-what-you-use/include-what-you-use/issues/375",
+      "parentUuid": "4ee5d41c_441d6ea2",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "e04d059b44ece0576ae9d1377d8ad8901936a781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
