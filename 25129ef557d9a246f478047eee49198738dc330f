@@ -122,6 +122,24 @@
       "parentUuid": "68b38204_66c6ec7c",
       "revId": "25129ef557d9a246f478047eee49198738dc330f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "265d0ec6_ac214373",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-05-20T08:04:16Z",
+      "side": 1,
+      "message": "2 independent issues:\n- for jitless we don\u0027t tier up at all (beyond the feedback vector), so keeping track of interrupt budgets during the entire execution time is just overhead. Not just interrupt budgets, but also e.g., binary op and compare op feedback that doesn\u0027t benefit performance of the interpreter.\n- for default we always check if we have a feedback vector in the handlers and do the generic access if we don\u0027t; but if we do tier up to sparkplug we allocate the feedback vector at the same time (or roughly the same time) as we allocate the feedback vector, so I\u0027m not sure there\u0027s value to the bytecode handlers dealing with feedback at all. Not dealing with it avoids loading the feedback vector and checking whether it\u0027s present for many bytecodes.\n\nIf we want to fix the former we should have different handlers for jitless probably, but I\u0027d guess that would have quite a big impact at least on loops.",
+      "parentUuid": "568feb06_71c72350",
+      "revId": "25129ef557d9a246f478047eee49198738dc330f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
