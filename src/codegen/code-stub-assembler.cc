@@ -10834,6 +10834,14 @@ void CodeStubAssembler::EmitElementStoreTypedArray(
     TNode<Context> context, TVariable<Object>* maybe_converted_value) {
   Label done(this), update_value_and_bailout(this, Label::kDeferred);
 
+  bool is_rab_gsab = false;
+  if (IsRabGsabTypedArrayElementsKind(elements_kind)) {
+    is_rab_gsab = true;
+    // For the rest of the function, use the corresponding non-RAB/GSAB
+    // ElementsKind.
+    elements_kind = GetCorrespondingNonRabGsabElementsKind(elements_kind);
+  }
+
   TNode<TValue> converted_value =
       PrepareValueForWriteToTypedArray<TValue>(value, elements_kind, context);
 
@@ -10851,7 +10859,15 @@ void CodeStubAssembler::EmitElementStoreTypedArray(
   }
 
   // Bounds check.
-  TNode<UintPtrT> length = LoadJSTypedArrayLength(typed_array);
+  TNode<UintPtrT> length;
+  if (is_rab_gsab) {
+    length = LoadVariableLengthJSTypedArrayLength(
+        typed_array, buffer,
+        store_mode == STORE_IGNORE_OUT_OF_BOUNDS ? &done
+                                                 : &update_value_and_bailout);
+  } else {
+    length = LoadJSTypedArrayLength(typed_array);
+  }
 
   if (store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
     // Skip the store if we write beyond the length or
@@ -10889,12 +10905,6 @@ void CodeStubAssembler::EmitElementStore(
     TNode<Context> context, TVariable<Object>* maybe_converted_value) {
   CSA_ASSERT(this, Word32BinaryNot(IsJSProxy(object)));
 
-  // TODO(v8:11111): Fast path for RAB / GSAB backed TypedArrays.
-  if (IsRabGsabTypedArrayElementsKind(elements_kind)) {
-    GotoIf(Int32TrueConstant(), bailout);
-    return;
-  }
-
   TNode<FixedArrayBase> elements = LoadElements(object);
   if (!(IsSmiOrObjectElementsKind(elements_kind) ||
         IsSealedElementsKind(elements_kind) ||
@@ -10909,7 +10919,7 @@ void CodeStubAssembler::EmitElementStore(
 
   // TODO(rmcilroy): TNodify the converted value once this funciton and
   // StoreElement are templated based on the type elements_kind type.
-  if (IsTypedArrayElementsKind(elements_kind)) {
+  if (IsTypedArrayOrRabGsabTypedArrayElementsKind(elements_kind)) {
     TNode<JSTypedArray> typed_array = CAST(object);
     switch (elements_kind) {
       case UINT8_ELEMENTS:
@@ -10919,22 +10929,33 @@ void CodeStubAssembler::EmitElementStore(
       case UINT32_ELEMENTS:
       case INT32_ELEMENTS:
       case UINT8_CLAMPED_ELEMENTS:
+      case RAB_GSAB_UINT8_ELEMENTS:
+      case RAB_GSAB_INT8_ELEMENTS:
+      case RAB_GSAB_UINT16_ELEMENTS:
+      case RAB_GSAB_INT16_ELEMENTS:
+      case RAB_GSAB_UINT32_ELEMENTS:
+      case RAB_GSAB_INT32_ELEMENTS:
+      case RAB_GSAB_UINT8_CLAMPED_ELEMENTS:
         EmitElementStoreTypedArray<Word32T>(typed_array, intptr_key, value,
                                             elements_kind, store_mode, bailout,
                                             context, maybe_converted_value);
         break;
       case FLOAT32_ELEMENTS:
+      case RAB_GSAB_FLOAT32_ELEMENTS:
         EmitElementStoreTypedArray<Float32T>(typed_array, intptr_key, value,
                                              elements_kind, store_mode, bailout,
                                              context, maybe_converted_value);
         break;
       case FLOAT64_ELEMENTS:
+      case RAB_GSAB_FLOAT64_ELEMENTS:
         EmitElementStoreTypedArray<Float64T>(typed_array, intptr_key, value,
                                              elements_kind, store_mode, bailout,
                                              context, maybe_converted_value);
         break;
       case BIGINT64_ELEMENTS:
       case BIGUINT64_ELEMENTS:
+      case RAB_GSAB_BIGINT64_ELEMENTS:
+      case RAB_GSAB_BIGUINT64_ELEMENTS:
         EmitElementStoreTypedArray<BigInt>(typed_array, intptr_key, value,
                                            elements_kind, store_mode, bailout,
                                            context, maybe_converted_value);
