@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a322b02e_1097714c",
+        "filename": "src/heap/cppgc/allocation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-20T08:02:07Z",
+      "side": 1,
+      "message": "`i-w-y-u` thinks the style guide allows depending on associated headers (allocation.h in this case) and would not include that here. Our style guide suggests this is needed.\n\nI filed this upstream as a feature request: https://github.com/include-what-you-use/include-what-you-use/issues/919",
+      "range": {
+        "startLine": 7,
+        "startChar": 37,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "5e4aaa6b4c88cceb241e8db0f522fb4206400cc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
