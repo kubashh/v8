@@ -148,6 +148,8 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
     // passed on the stack.
     // This does not indicate if arguments adaption is used or not.
     kAllowVarArgs = 1u << 2,
+    // Callee save allocatable_registers.
+    kCalleeSaveRegisters = 1u << 3,
   };
   using Flags = base::Flags<Flag>;
 
@@ -320,6 +322,10 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
     return flags() & CallInterfaceDescriptorData::kAllowVarArgs;
   }
 
+  bool CalleeSaveRegisters() const {
+    return flags() & CallInterfaceDescriptorData::kCalleeSaveRegisters;
+  }
+
   int GetReturnCount() const { return data()->return_count(); }
 
   MachineType GetReturnType(int index) const {
@@ -430,6 +436,9 @@ class StaticCallInterfaceDescriptor : public CallInterfaceDescriptor {
   // the first kParameterCount registers() are the parameters of the builtin.
   static constexpr bool kRestrictAllocatableRegisters = false;
 
+  // If set to true, builtins will callee save the set returned by registers().
+  static constexpr bool kCalleeSaveRegisters = false;
+
   // End of customization points.
   // ===========================================================================
 
@@ -442,6 +451,9 @@ class StaticCallInterfaceDescriptor : public CallInterfaceDescriptor {
                       : 0) |
                  (DerivedDescriptor::kNoStackScan
                       ? CallInterfaceDescriptorData::kNoStackScan
+                      : 0) |
+                 (DerivedDescriptor::kCalleeSaveRegisters
+                      ? CallInterfaceDescriptorData::kCalleeSaveRegisters
                       : 0));
   }
   static constexpr inline bool AllowVarArgs() {
@@ -1001,6 +1013,7 @@ class WriteBarrierDescriptor final
   DECLARE_DESCRIPTOR(WriteBarrierDescriptor)
   static constexpr auto registers();
   static constexpr bool kRestrictAllocatableRegisters = true;
+  static constexpr bool kCalleeSaveRegisters = true;
 };
 
 class TypeConversionDescriptor final

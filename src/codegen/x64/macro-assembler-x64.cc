@@ -431,8 +431,6 @@ void TurboAssembler::CallRecordWriteStub(
     RememberedSetAction remembered_set_action, SaveFPRegsMode fp_mode,
     StubCallMode mode) {
   WriteBarrierDescriptor descriptor;
-  RegList registers = descriptor.allocatable_registers();
-  SaveRegisters(registers);
 
   Register object_parameter(
       descriptor.GetRegisterParameter(WriteBarrierDescriptor::kObject));
@@ -464,8 +462,6 @@ void TurboAssembler::CallRecordWriteStub(
       Call(code_target, RelocInfo::CODE_TARGET);
     }
   }
-
-  RestoreRegisters(registers);
 }
 
 void MacroAssembler::RecordWrite(Register object, Register address,

@@ -69,6 +69,8 @@ void StaticCallInterfaceDescriptor<DerivedDescriptor>::Initialize(
 
   if (DerivedDescriptor::kRestrictAllocatableRegisters) {
     data->RestrictAllocatableRegisters(registers.data(), registers.size());
+  } else {
+    DCHECK(!DerivedDescriptor::kCalleeSaveRegisters);
   }
 
   data->InitializeRegisters(
