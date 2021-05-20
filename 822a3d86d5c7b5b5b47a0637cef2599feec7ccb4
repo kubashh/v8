@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f2e865d_bc921ac7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "This could be left out of the CL description altogether; the paragraph above is enough imo.",
+      "parentUuid": "be80d125_60687688",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 51
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "90fddcdd_9ec10276",
@@ -37,6 +61,92 @@
       "writtenOn": "2021-05-20T07:47:49Z",
       "side": 1,
       "message": "some early comments and nits.",
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccdeb58d_6072fcc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "Generally looks good, some small comments below:",
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71acc228_20e65afd",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "Mega-nit: since `l` is so similar to 1 and |, it should be avoided as a variable name. \"list\" or \"exports\".",
+      "range": {
+        "startLine": 1789,
+        "startChar": 68,
+        "endLine": 1789,
+        "endChar": 69
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb15ef98_0abd066b",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "Instead of this, you could add a snapshoting API which takes Handle\u003cString\u003es. Now you first create a std::string out of your Handle\u003cString\u003e and then create a Handle\u003cString\u003e out of your std::string on the snapshotter side.",
+      "range": {
+        "startLine": 1807,
+        "startChar": 0,
+        "endLine": 1814,
+        "endChar": 3
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcf321c8_8ecb7927",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "I was reading this and at this point I was confused: \"what i\"? \"i\" is a surprising name for a variable which is a realm and also doesn\u0027t bring much value here, since there\u0027s only one realm we\u0027re dealing with (not like we first enter realm i and then realm j). -\u003e Suggesting leaving it out. // Enter the realm.",
+      "range": {
+        "startLine": 1815,
+        "startChar": 11,
+        "endLine": 1815,
+        "endChar": 18
+      },
       "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -66,6 +176,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e041a9a_dfb7ec64",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1840,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "This comment is unnecessary.",
+      "range": {
+        "startLine": 1840,
+        "startChar": 2,
+        "endLine": 1840,
+        "endChar": 26
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e54017f1_86e9d945",
         "filename": "src/d8/d8.cc",
         "patchSetId": 2
@@ -82,6 +215,29 @@
         "startChar": 4,
         "endLine": 1857,
         "endChar": 21
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04a8dd14_d70b5f63",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1862,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "What if the object doesn\u0027t have the internal field? You should handle those cases gracefully too: when we turn the d8_web_snapshot_api flag on, the fuzzer will find those cases too.\n\nE.g.:\nRealm.useSnapshot(some_realm, 123);\nRealm.useSnapshot(some_realm, undefined);\nRealm.useSnapshot(some_realm, some_object_which_is_not_a_snapshot);",
+      "range": {
+        "startLine": 1862,
+        "startChar": 2,
+        "endLine": 1862,
+        "endChar": 78
       },
       "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -158,6 +314,53 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f02362b5_d0a4d0ba",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "Suggesting to do this as a separate CL",
+      "parentUuid": "b429728f_40dde082",
+      "range": {
+        "startLine": 1877,
+        "startChar": 0,
+        "endLine": 1879,
+        "endChar": 62
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2516d48b_e545d82b",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "This is not really \"call\", since it doesn\u0027t call the function.",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8e8a307a_11c31c3c",
         "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
         "patchSetId": 2
@@ -174,6 +377,52 @@
         "startChar": 4,
         "endLine": 12,
         "endChar": 7
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4f32e8b_1c75a24e",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "Follow-up: You could add support for passing the function directly to Realm.eval:\n\nRealm.eval(r1, initialize);\n\nThat\u0027d make this simpler and more fuzzable.",
+      "range": {
+        "startLine": 19,
+        "startChar": 19,
+        "endLine": 19,
+        "endChar": 35
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e704f26_6cabd0f0",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-20T08:35:52Z",
+      "side": 1,
+      "message": "You could assert the return value of this too.",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 34
       },
       "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
