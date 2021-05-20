@@ -33,6 +33,24 @@
       "message": "Jakob, does it look good to you?",
       "revId": "19030b6821e5766bade0dcbeb91a0f4196260dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c490ffbd_672e8128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-20T07:38:28Z",
+      "side": 1,
+      "message": "To me it\u0027d be more obvious to make sure the C++ function is never called when TPH is enabled s.t. we can `DCHECK(!FLAG_enable_third_part_heap)` inside it. Doesn\u0027t make sense to me to emit known dead code in builtins.\n\nIf that\u0027s not feasible for some reason, I guess a runtime `CSA_CHECK(this, Int32FalseConstant())` would be fine too in non-production builds.",
+      "parentUuid": "86935d34_998a369e",
+      "revId": "19030b6821e5766bade0dcbeb91a0f4196260dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
