@@ -11200,7 +11200,7 @@ void CodeStubAssembler::TrapAllocationMemento(TNode<JSObject> object,
 }
 
 TNode<IntPtrT> CodeStubAssembler::PageFromAddress(TNode<IntPtrT> address) {
-  if (FLAG_enable_third_party_heap) Unreachable();
+  DCHECK(!FLAG_enable_third_party_heap);
   return WordAnd(address, IntPtrConstant(~kPageAlignmentMask));
 }
 
