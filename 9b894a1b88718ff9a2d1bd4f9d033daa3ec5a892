@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f490cd7_043408e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-05-21T14:18:56Z",
+      "side": 1,
+      "message": "Yes, my idea was to provide this base for you to land your CL on top.",
+      "parentUuid": "bb016be9_f3af85d4",
+      "revId": "9b894a1b88718ff9a2d1bd4f9d033daa3ec5a892",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60c1b717_504811da",
@@ -84,6 +102,24 @@
       "writtenOn": "2021-05-21T07:46:17Z",
       "side": 1,
       "message": "In line with GetFunctionClosure above I\u0027d just call this GetParameter.",
+      "revId": "9b894a1b88718ff9a2d1bd4f9d033daa3ec5a892",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97cfd681_d91f292f",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-05-21T14:18:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60c1b717_504811da",
       "revId": "9b894a1b88718ff9a2d1bd4f9d033daa3ec5a892",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -111,6 +147,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b8d8fc5_a265ab7a",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-05-21T14:18:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c1233f1_907b5cd5",
+      "range": {
+        "startLine": 1140,
+        "startChar": 8,
+        "endLine": 1140,
+        "endChar": 13
+      },
+      "revId": "9b894a1b88718ff9a2d1bd4f9d033daa3ec5a892",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "255b7aa9_229964b1",
@@ -124,6 +184,24 @@
       "writtenOn": "2021-05-21T07:46:17Z",
       "side": 1,
       "message": "How about using kJSCallClosureParamIndex instead of -1?",
+      "revId": "9b894a1b88718ff9a2d1bd4f9d033daa3ec5a892",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d77ca6e_8253a480",
+        "filename": "src/compiler/common-operator.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-05-21T14:18:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "255b7aa9_229964b1",
       "revId": "9b894a1b88718ff9a2d1bd4f9d033daa3ec5a892",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
