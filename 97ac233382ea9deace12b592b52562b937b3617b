@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86a9967e_20ce0548",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-21T09:18:07Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "97ac233382ea9deace12b592b52562b937b3617b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7feb738_e153992d",
@@ -52,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "951bcd81_293fd380",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10859,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-21T09:18:07Z",
+      "side": 1,
+      "message": "Ah, thanks for pointing that out. Did this:\n  // Check if buffer has been detached. (For RAB / GSAB this is part of loading\n  // the length, so no additional check is needed.)\n  if (!is_rab_gsab) {\n    GotoIf(IsDetachedBuffer(buffer), \u0026update_value_and_bailout);\n  }",
+      "parentUuid": "c7feb738_e153992d",
+      "revId": "97ac233382ea9deace12b592b52562b937b3617b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a074ecc_5c9b18c8",
@@ -65,6 +100,30 @@
       "writtenOn": "2021-05-20T14:02:56Z",
       "side": 1,
       "message": "Drive-by-comment: the LoadVariableLengthJSTypedArrayLength() doesn\u0027t seem to check if the buffer is detached for the is_gsab case. Is that OK?",
+      "range": {
+        "startLine": 10864,
+        "startChar": 13,
+        "endLine": 10864,
+        "endChar": 50
+      },
+      "revId": "97ac233382ea9deace12b592b52562b937b3617b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d93aec6_260ed23f",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10864,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-21T09:18:07Z",
+      "side": 1,
+      "message": "Yes, GSABs can\u0027t be detached.",
+      "parentUuid": "4a074ecc_5c9b18c8",
       "range": {
         "startLine": 10864,
         "startChar": 13,
