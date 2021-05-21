@@ -362,15 +362,6 @@ void MacroAssembler::RecordWriteField(Register object, int offset,
   }
 }
 
-void TurboAssembler::SaveRegisters(RegList registers) {
-  DCHECK_GT(NumRegs(registers), 0);
-  for (int i = 0; i < Register::kNumRegisters; ++i) {
-    if ((registers >> i) & 1u) {
-      pushq(Register::from_code(i));
-    }
-  }
-}
-
 void TurboAssembler::LoadExternalPointerField(
     Register destination, Operand field_operand, ExternalPointerTag tag,
     Register scratch, IsolateRootLocation isolateRootLocation) {
@@ -398,6 +389,23 @@ void TurboAssembler::LoadExternalPointerField(
 #endif  // V8_HEAP_SANDBOX
 }
 
+void TurboAssembler::MaybeSaveRegisters(RegList registers) {
+  if (registers) SaveRegisters(registers);
+}
+
+void TurboAssembler::SaveRegisters(RegList registers) {
+  DCHECK_GT(NumRegs(registers), 0);
+  for (int i = 0; i < Register::kNumRegisters; ++i) {
+    if ((registers >> i) & 1u) {
+      pushq(Register::from_code(i));
+    }
+  }
+}
+
+void TurboAssembler::MaybeRestoreRegisters(RegList registers) {
+  if (registers) RestoreRegisters(registers);
+}
+
 void TurboAssembler::RestoreRegisters(RegList registers) {
   DCHECK_GT(NumRegs(registers), 0);
   for (int i = Register::kNumRegisters - 1; i >= 0; --i) {
@@ -409,41 +417,48 @@ void TurboAssembler::RestoreRegisters(RegList registers) {
 
 void TurboAssembler::CallEphemeronKeyBarrier(Register object, Register address,
                                              SaveFPRegsMode fp_mode) {
-  WriteBarrierDescriptor descriptor;
-  RegList registers = descriptor.allocatable_registers();
+  RegList registers =
+      WriteBarrierDescriptor::ComputeSavedRegisters(object, address);
+  MaybeSaveRegisters(registers);
 
-  SaveRegisters(registers);
-
-  Register object_parameter(
-      descriptor.GetRegisterParameter(WriteBarrierDescriptor::kObject));
-  Register slot_parameter(
-      descriptor.GetRegisterParameter(WriteBarrierDescriptor::kSlotAddress));
+  Register object_parameter = WriteBarrierDescriptor::ObjectRegister();
+  Register slot_parameter = WriteBarrierDescriptor::SlotAddressRegister();
 
   MovePair(slot_parameter, address, object_parameter, object);
   Call(isolate()->builtins()->builtin_handle(
            Builtins::GetEphemeronKeyBarrierStub(fp_mode)),
        RelocInfo::CODE_TARGET);
-  RestoreRegisters(registers);
+  MaybeRestoreRegisters(registers);
+}
+
+void TurboAssembler::CallRecordWriteStubSaveRegisters(
+    Register object, Register slot_address,
+    RememberedSetAction remembered_set_action, SaveFPRegsMode fp_mode,
+    StubCallMode mode) {
+  RegList registers =
+      WriteBarrierDescriptor::ComputeSavedRegisters(object, slot_address);
+  MaybeSaveRegisters(registers);
+
+  // Prepare argument registers for calling RecordWrite
+  // object_parameter <= object
+  // slot_parameter   <= address
+  Register object_parameter = WriteBarrierDescriptor::ObjectRegister();
+  Register slot_address_parameter =
+      WriteBarrierDescriptor::SlotAddressRegister();
+  MovePair(object_parameter, object, slot_address_parameter, slot_address);
+
+  CallRecordWriteStub(object_parameter, slot_address_parameter,
+                      remembered_set_action, fp_mode, mode);
+
+  MaybeRestoreRegisters(registers);
 }
 
 void TurboAssembler::CallRecordWriteStub(
-    Register object, Register address,
+    Register object, Register slot_address,
     RememberedSetAction remembered_set_action, SaveFPRegsMode fp_mode,
     StubCallMode mode) {
-  WriteBarrierDescriptor descriptor;
-  RegList registers = descriptor.allocatable_registers();
-  SaveRegisters(registers);
-
-  Register object_parameter(
-      descriptor.GetRegisterParameter(WriteBarrierDescriptor::kObject));
-  Register slot_parameter(
-      descriptor.GetRegisterParameter(WriteBarrierDescriptor::kSlotAddress));
-
-  // Prepare argument registers for calling RecordWrite
-  // slot_parameter   <= address
-  // object_parameter <= object
-  MovePair(slot_parameter, address, object_parameter, object);
-
+  DCHECK_EQ(WriteBarrierDescriptor::ObjectRegister(), object);
+  DCHECK_EQ(WriteBarrierDescriptor::SlotAddressRegister(), slot_address);
 #if V8_ENABLE_WEBASSEMBLY
   if (mode == StubCallMode::kCallWasmRuntimeStub) {
     // Use {near_call} for direct Wasm call within a module.
@@ -464,8 +479,6 @@ void TurboAssembler::CallRecordWriteStub(
       Call(code_target, RelocInfo::CODE_TARGET);
     }
   }
-
-  RestoreRegisters(registers);
 }
 
 void MacroAssembler::RecordWrite(Register object, Register address,

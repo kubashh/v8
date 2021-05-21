@@ -148,6 +148,8 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
     // passed on the stack.
     // This does not indicate if arguments adaption is used or not.
     kAllowVarArgs = 1u << 2,
+    // Callee save allocatable_registers.
+    kCalleeSaveRegisters = 1u << 3,
   };
   using Flags = base::Flags<Flag>;
 
@@ -320,6 +322,10 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
     return flags() & CallInterfaceDescriptorData::kAllowVarArgs;
   }
 
+  bool CalleeSaveRegisters() const {
+    return flags() & CallInterfaceDescriptorData::kCalleeSaveRegisters;
+  }
+
   int GetReturnCount() const { return data()->return_count(); }
 
   MachineType GetReturnType(int index) const {
@@ -430,6 +436,9 @@ class StaticCallInterfaceDescriptor : public CallInterfaceDescriptor {
   // the first kParameterCount registers() are the parameters of the builtin.
   static constexpr bool kRestrictAllocatableRegisters = false;
 
+  // If set to true, builtins will callee save the set returned by registers().
+  static constexpr bool kCalleeSaveRegisters = false;
+
   // End of customization points.
   // ===========================================================================
 
@@ -442,6 +451,9 @@ class StaticCallInterfaceDescriptor : public CallInterfaceDescriptor {
                       : 0) |
                  (DerivedDescriptor::kNoStackScan
                       ? CallInterfaceDescriptorData::kNoStackScan
+                      : 0) |
+                 (DerivedDescriptor::kCalleeSaveRegisters
+                      ? CallInterfaceDescriptorData::kCalleeSaveRegisters
                       : 0));
   }
   static constexpr inline bool AllowVarArgs() {
@@ -500,11 +512,25 @@ struct EmptyRegisterArray {
   Register operator[](size_t i) const { UNREACHABLE(); }
 };
 
-// Helper method for defining an array of registers for the various
+void constexpr DCHECKUniqueRegisters(int current_position, Register current,
+                                     int next_position) {}
+template <typename Register, typename... Registers>
+void constexpr DCHECKUniqueRegisters(int current_position, Register current,
+                                     int next_position, Register next,
+                                     Registers... regs) {
+#ifdef DEBUG
+  DCHECK_NE(current, next);
+  DCHECKUniqueRegisters(current_position, current, next_position + 1, regs...);
+  DCHECKUniqueRegisters(next_position, next, next_position + 1, regs...);
+#endif
+}
+
+// Helper method for defining an array of unique registers for the various
 // Descriptor::registers() methods.
 template <typename... Registers>
 constexpr std::array<Register, 1 + sizeof...(Registers)> RegisterArray(
     Register first_reg, Registers... regs) {
+  DCHECKUniqueRegisters(0, first_reg, 1, regs...);
   return {first_reg, regs...};
 }
 constexpr EmptyRegisterArray RegisterArray() { return {}; }
@@ -1001,6 +1027,11 @@ class WriteBarrierDescriptor final
   DECLARE_DESCRIPTOR(WriteBarrierDescriptor)
   static constexpr auto registers();
   static constexpr bool kRestrictAllocatableRegisters = true;
+  static constexpr bool kCalleeSaveRegisters = true;
+  static constexpr inline Register ObjectRegister();
+  static constexpr inline Register SlotAddressRegister();
+  static constexpr inline RegList ComputeSavedRegisters(Register object,
+                                                        Register slot_address);
 };
 
 class TypeConversionDescriptor final

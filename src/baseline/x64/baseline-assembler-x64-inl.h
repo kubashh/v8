@@ -320,8 +320,7 @@ void BaselineAssembler::StoreTaggedFieldWithWriteBarrier(Register target,
                                                          int offset,
 
                                                          Register value) {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(this);
-  Register scratch = scratch_scope.AcquireScratch();
+  Register scratch = WriteBarrierDescriptor::SlotAddressRegister();
   DCHECK_NE(target, scratch);
   DCHECK_NE(value, scratch);
   __ StoreTaggedField(FieldOperand(target, offset), value);

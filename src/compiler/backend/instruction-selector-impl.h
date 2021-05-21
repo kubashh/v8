@@ -223,6 +223,11 @@ class OperandGenerator {
                               sequence()->NextVirtualRegister());
   }
 
+  InstructionOperand FixedRegister(Register reg) {
+    return UnallocatedOperand(UnallocatedOperand::FIXED_REGISTER, reg.code(),
+                              sequence()->NextVirtualRegister());
+  }
+
   int AllocateVirtualRegister() { return sequence()->NextVirtualRegister(); }
 
   InstructionOperand DefineSameAsFirstForVreg(int vreg) {

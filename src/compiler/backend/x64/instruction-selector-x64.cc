@@ -9,6 +9,7 @@
 #include "src/base/overflowing-math.h"
 #include "src/base/platform/wrappers.h"
 #include "src/codegen/cpu-features.h"
+#include "src/codegen/interface-descriptors-inl.h"
 #include "src/codegen/machine-type.h"
 #include "src/compiler/backend/instruction-codes.h"
 #include "src/compiler/backend/instruction-selector-impl.h"
@@ -494,13 +495,20 @@ void InstructionSelector::VisitStore(Node* node) {
   if (write_barrier_kind != kNoWriteBarrier && !FLAG_disable_write_barriers) {
     DCHECK(CanBeTaggedOrCompressedPointer(store_rep.representation()));
     AddressingMode addressing_mode;
+    WriteBarrierDescriptor descriptor;
+    Register object_parameter(
+        descriptor.GetRegisterParameter(WriteBarrierDescriptor::kObject));
+    Register slot_parameter(
+        descriptor.GetRegisterParameter(WriteBarrierDescriptor::kSlotAddress));
+
     InstructionOperand inputs[] = {
-        g.UseUniqueRegister(base),
+        g.UseFixed(base, object_parameter),
         g.GetEffectiveIndexOperand(index, &addressing_mode),
         g.UseUniqueRegister(value)};
     RecordWriteMode record_write_mode =
         WriteBarrierKindToRecordWriteMode(write_barrier_kind);
-    InstructionOperand temps[] = {g.TempRegister(), g.TempRegister()};
+    InstructionOperand temps[] = {g.TempRegister(),
+                                  g.FixedRegister(slot_parameter)};
     InstructionCode code = kArchStoreWithWriteBarrier;
     code |= AddressingModeField::encode(addressing_mode);
     code |= MiscField::encode(static_cast<int>(record_write_mode));
