@@ -457,7 +457,7 @@ THREADED_TEST(QueryInterceptor) {
       .ToLocalChecked();
   CHECK_EQ(8, query_counter_int);
 
-  v8_compile("Object.isFrozen('obj.x');")->Run(env.local()).ToLocalChecked();
+  v8_compile("Object.isFrozen(obj.x);")->Run(env.local()).ToLocalChecked();
   CHECK_EQ(8, query_counter_int);
 
   v8_compile("'x' in obj;")->Run(env.local()).ToLocalChecked();
