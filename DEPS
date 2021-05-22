@@ -47,7 +47,7 @@ vars = {
   'gn_version': 'git_revision:39a87c0b36310bdf06b692c098f199a0d97fc810',
 
   # luci-go CIPD package version.
-  'luci_go': 'git_revision:9cd9603def7a649cd3e29517180d6622be2fa898',
+  'luci_go': 'git_revision:ff0c02e960b17be5a8d02c13afc28373f236a860',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling android_sdk_build-tools_version
@@ -85,15 +85,15 @@ vars = {
 
 deps = {
   'build':
-    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'd3e82442026484fbb9410f3e47036f1dc00f0a4a',
+    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'cd5b955866c4d2665a1fe2a7c0a557ccf6047de3',
   'third_party/depot_tools':
-    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + '51e37088411bd9626f8cccde403538668d4dcd00',
+    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + '6097a92db01433615e08810c2db5fa1e68fb92a7',
   'third_party/icu':
     Var('chromium_url') + '/chromium/deps/icu.git' + '@' + 'f022e298b4f4a782486bb6d5ce6589c998b51fe2',
   'third_party/instrumented_libraries':
     Var('chromium_url') + '/chromium/src/third_party/instrumented_libraries.git' + '@' + '4ae2535e8e894c3cd81d46aacdaf151b5df30709',
   'buildtools':
-    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + 'b9af93e79fee9a13ec3d09d144ec42a6bd20a418',
+    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + 'fba2905150c974240f14aa5334c3e5c93f873032',
   'buildtools/clang_format/script':
     Var('chromium_url') + '/external/github.com/llvm/llvm-project/clang/tools/clang-format.git' + '@' + '99803d74e35962f63a775f29477882afd4d57d94',
   'buildtools/linux64': {
@@ -119,7 +119,7 @@ deps = {
   'buildtools/third_party/libc++/trunk':
     Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxx.git' + '@' + '8fa87946779682841e21e2da977eccfb6cb3bded',
   'buildtools/third_party/libc++abi/trunk':
-    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxxabi.git' + '@' + '767de317f97343db64af048e3d198ab8b10fee5d',
+    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxxabi.git' + '@' + '8b015a79820b89c26297264e3bc3ec409567ae65',
   'buildtools/third_party/libunwind/trunk':
     Var('chromium_url') + '/external/github.com/llvm/llvm-project/libunwind.git' + '@' + '7846d256355e40273f7cc192c8f5893e8665a1f9',
   'buildtools/win': {
@@ -181,7 +181,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'third_party/catapult': {
-    'url': Var('chromium_url') + '/catapult.git' + '@' + '7da48e9f874a0eec2d81aed2426c9da0af0d25ff',
+    'url': Var('chromium_url') + '/catapult.git' + '@' + 'cde766ee8a5ae51c7096dc51da56168f602baf33',
     'condition': 'checkout_android',
   },
   'third_party/colorama/src': {
@@ -195,7 +195,7 @@ deps = {
   'third_party/googletest/src':
     Var('chromium_url') + '/external/github.com/google/googletest.git' + '@' + '23ef29555ef4789f555f1ba8c51b4c52975f0907',
   'third_party/google_benchmark/src': {
-    'url': Var('chromium_url') + '/external/github.com/google/benchmark.git' + '@' + 'e539e807daa0bc779bb6768b33ee4747624b4ec9',
+    'url': Var('chromium_url') + '/external/github.com/google/benchmark.git' + '@' + 'db2de74cc8c34131a6f673e35751935cc1897a0d',
   },
   'third_party/jinja2':
     Var('chromium_url') + '/chromium/src/third_party/jinja2.git' + '@' + '11b6b3e5971d760bd2d310f77643f55a818a6d25',
@@ -235,7 +235,7 @@ deps = {
       'packages': [
           {
               'package': 'fuchsia/third_party/aemu/linux-amd64',
-              'version': 'uDQJbkoDWGwLYtnDu3A7LnRVwsKkaFQkUWtChrVO_hYC'
+              'version': 'Hf11zqHzrfja2miAIic8j5jVjfs3rcuSFj8vUK-AVYAC'
           },
       ],
       'condition': 'host_os == "linux" and checkout_fuchsia',
@@ -252,7 +252,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'tools/clang':
-    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + 'a38f01b956e091d5e698d2af484c81cd4e9a2a2d',
+    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + 'b02b99e45d5e95431b3cca7d1e6b93c996df900b',
   'tools/luci-go': {
       'packages': [
         {
