@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "81958492_9620106a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "I removed this part, but added an explanation about the snapshot data.",
+      "parentUuid": "4f2e865d_bc921ac7",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 51
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "90fddcdd_9ec10276",
@@ -107,6 +131,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "54c0b949_b215f947",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Changed this to `x` to match the rest of the cases that use single-letter names.",
+      "parentUuid": "71acc228_20e65afd",
+      "range": {
+        "startLine": 1789,
+        "startChar": 68,
+        "endLine": 1789,
+        "endChar": 69
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb15ef98_0abd066b",
         "filename": "src/d8/d8.cc",
         "patchSetId": 2
@@ -118,6 +166,30 @@
       "writtenOn": "2021-05-20T08:35:52Z",
       "side": 1,
       "message": "Instead of this, you could add a snapshoting API which takes Handle\u003cString\u003es. Now you first create a std::string out of your Handle\u003cString\u003e and then create a Handle\u003cString\u003e out of your std::string on the snapshotter side.",
+      "range": {
+        "startLine": 1807,
+        "startChar": 0,
+        "endLine": 1814,
+        "endChar": 3
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ed433c9_e239229e",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Will do. But more things need to change, so let\u0027s do that in a separate CL.",
+      "parentUuid": "cb15ef98_0abd066b",
       "range": {
         "startLine": 1807,
         "startChar": 0,
@@ -151,6 +223,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acb754ae_5c0cd49d",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcf321c8_8ecb7927",
+      "range": {
+        "startLine": 1815,
+        "startChar": 11,
+        "endLine": 1815,
+        "endChar": 18
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c7ed5c9_90896477",
@@ -164,6 +260,30 @@
       "writtenOn": "2021-05-20T07:47:49Z",
       "side": 1,
       "message": "You create a new Snapshot template here on every call, you should reuse them and only instantiate it.",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1836,
+        "endChar": 76
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84b1bc00_53737824",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Changed this, so now a `FunctionTemplate` is stored under `PerIsolateData`.",
+      "parentUuid": "4c7ed5c9_90896477",
       "range": {
         "startLine": 1836,
         "startChar": 0,
@@ -197,6 +317,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f748762f_fcf5a933",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1840,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e041a9a_dfb7ec64",
+      "range": {
+        "startLine": 1840,
+        "startChar": 2,
+        "endLine": 1840,
+        "endChar": 26
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e54017f1_86e9d945",
@@ -210,6 +354,30 @@
       "writtenOn": "2021-05-20T07:47:49Z",
       "side": 1,
       "message": "nit: reuse isolate",
+      "range": {
+        "startLine": 1857,
+        "startChar": 4,
+        "endLine": 1857,
+        "endChar": 21
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e472913_23f585bb",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1857,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e54017f1_86e9d945",
       "range": {
         "startLine": 1857,
         "startChar": 4,
@@ -292,6 +460,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "caec63a5_07752d27",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "By both combining these two lines and specifying a proper type for the result, this becomes a bit visually complicated. Should I still do this?",
+      "parentUuid": "a069e255_2aadd144",
+      "range": {
+        "startLine": 1863,
+        "startChar": 0,
+        "endLine": 1865,
+        "endChar": 75
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1d0cd264_127c4621",
         "filename": "src/d8/d8.cc",
         "patchSetId": 2
@@ -303,6 +495,30 @@
       "writtenOn": "2021-05-20T07:47:49Z",
       "side": 1,
       "message": "At this point I don\u0027t know what type snapshot_data_shared has, maybe it\u0027s a bit clearer by not using \"auto\" here.",
+      "range": {
+        "startLine": 1866,
+        "startChar": 2,
+        "endLine": 1866,
+        "endChar": 6
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fe720cb_2910c29a",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1866,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d0cd264_127c4621",
       "range": {
         "startLine": 1866,
         "startChar": 2,
@@ -360,6 +576,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb7e8b20_d0db80f2",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "I\u0027ll address this in a separate CL.",
+      "parentUuid": "f02362b5_d0a4d0ba",
+      "range": {
+        "startLine": 1877,
+        "startChar": 0,
+        "endLine": 1879,
+        "endChar": 62
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2516d48b_e545d82b",
@@ -373,6 +613,30 @@
       "writtenOn": "2021-05-20T08:35:52Z",
       "side": 1,
       "message": "This is not really \"call\", since it doesn\u0027t call the function.",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e2a662_b6ffcf18",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2516d48b_e545d82b",
       "range": {
         "startLine": 7,
         "startChar": 9,
@@ -406,6 +670,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c102ab11_2fa8a31c",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e8a307a_11c31c3c",
+      "range": {
+        "startLine": 12,
+        "startChar": 4,
+        "endLine": 12,
+        "endChar": 7
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4f32e8b_1c75a24e",
@@ -429,6 +717,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0873e6f0_a5d487fd",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Yes, I think it would be nice to look into that as a follow-up (separate CL).",
+      "parentUuid": "b4f32e8b_1c75a24e",
+      "range": {
+        "startLine": 19,
+        "startChar": 19,
+        "endLine": 19,
+        "endChar": 35
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e704f26_6cabd0f0",
@@ -442,6 +754,30 @@
       "writtenOn": "2021-05-20T08:35:52Z",
       "side": 1,
       "message": "You could assert the return value of this too.",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 34
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2bd12b6_3043a13b",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-24T11:06:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e704f26_6cabd0f0",
       "range": {
         "startLine": 26,
         "startChar": 4,
