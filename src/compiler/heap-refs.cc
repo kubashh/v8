@@ -4,6 +4,8 @@
 
 #include "src/compiler/heap-refs.h"
 
+#include "src/common/globals.h"
+
 #ifdef ENABLE_SLOW_DCHECKS
 #include <algorithm>
 #endif
@@ -3335,7 +3337,12 @@ BIMODAL_ACCESSOR_C(BytecodeArray, interpreter::Register,
 
 BIMODAL_ACCESSOR_C(FeedbackVector, double, invocation_count)
 
-BIMODAL_ACCESSOR(HeapObject, Map, map)
+MapRef HeapObjectRef::map() const {
+  if (data_->should_access_heap()) {
+    return MakeRef(broker(), object()->map(kAcquireLoad));
+  }
+  return MapRef(broker(), data()->AsHeapObject()->map());
+}
 
 BIMODAL_ACCESSOR_C(HeapNumber, double, value)
 
@@ -3871,6 +3878,63 @@ Maybe<double> ObjectRef::OddballToNumber() const {
   }
 }
 
+ConcurrentLookupIterator::Result JSObjectRef::TryGetOwnConstantElement(
+    Object* result_out, ElementsKind elements_kind, size_t index) const {
+  // Own 'constant' elements (PropertyAttributes READ_ONLY|DONT_DELETE) occur in
+  // three main cases:
+  //
+  // 1. String wrapper elements: guaranteed constant.
+  // 2. Frozen elements: guaranteed constant.
+  // 3. Dictionary elements: may be constant.
+
+  if (IsStringWrapperElementsKind(elements_kind)) {
+    auto result = ConcurrentLookupIterator::TryGetOwnConstantElementString(
+        result_out, broker()->isolate(), broker()->local_isolate(), *object(),
+        elements_kind, index);
+
+    // After reading the value, re-read the JSObject's ElementsKind. If it got
+    // updated, then the read might have happened on an inconsistent view of the
+    // world and thus we return kGaveUp.
+    // TODO(solanes): Maybe change this to a compilation dependency on JSObject
+    // obj has Map m?
+    if (elements_kind == GetElementsKind()) {
+      return result;
+    } else {
+      return ConcurrentLookupIterator::kGaveUp;
+    }
+  } else if (IsFrozenElementsKind(elements_kind) ||
+             IsDictionaryElementsKind(elements_kind)) {
+    base::Optional<FixedArrayBaseRef> maybe_elements_ref = elements();
+    if (!maybe_elements_ref.has_value()) {
+      TRACE_BROKER_MISSING(broker(), "JSObject::elements" << *this);
+      return ConcurrentLookupIterator::kGaveUp;
+    }
+    FixedArrayBaseRef elements_ref = maybe_elements_ref.value();
+    auto result =
+        ConcurrentLookupIterator::TryGetOwnConstantElementFrozenOrDictionary(
+            result_out, broker()->isolate(), *elements_ref.object(),
+            elements_kind, index);
+
+    // After reading the value, re-read the JSObject's ElementsKind. If it got
+    // updated, then the read might have happened on an inconsistent view of the
+    // world and thus we return kGaveUp.
+    // TODO(solanes): Maybe change this to a two compilation dependencies: on
+    // JSObject obj with elements kind (or has Map m) and JSObject obj with its
+    // elements()?
+    if (elements_kind == GetElementsKind() && elements().has_value() &&
+        elements().value().equals(elements_ref)) {
+      return result;
+    } else {
+      return ConcurrentLookupIterator::kGaveUp;
+    }
+  }
+
+  DCHECK(!IsFrozenElementsKind(elements_kind));
+  DCHECK(!IsDictionaryElementsKind(elements_kind));
+  DCHECK(!IsStringWrapperElementsKind(elements_kind));
+  return ConcurrentLookupIterator::kGaveUp;
+}
+
 base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
     uint32_t index, SerializationPolicy policy) const {
   if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
@@ -3880,22 +3944,9 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
     // through other means (store/load order? locks? storing elements_kind in
     // elements.map?).
     STATIC_ASSERT(IsSerializedRef<JSObject>());
-
-    base::Optional<FixedArrayBaseRef> maybe_elements_ref = elements();
-    if (!maybe_elements_ref.has_value()) {
-      TRACE_BROKER_MISSING(broker(), "JSObject::elements" << *this);
-      return {};
-    }
-
-    FixedArrayBaseRef elements_ref = maybe_elements_ref.value();
-    ElementsKind elements_kind = GetElementsKind();
-
-    DCHECK_LE(index, JSObject::kMaxElementIndex);
-
     Object maybe_element;
-    auto result = ConcurrentLookupIterator::TryGetOwnConstantElement(
-        &maybe_element, broker()->isolate(), broker()->local_isolate(),
-        *object(), *elements_ref.object(), elements_kind, index);
+    auto result =
+        TryGetOwnConstantElement(&maybe_element, GetElementsKind(), index);
 
     if (result == ConcurrentLookupIterator::kGaveUp) {
       TRACE_BROKER_MISSING(broker(), "JSObject::GetOwnConstantElement on "

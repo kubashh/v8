@@ -10,6 +10,7 @@
 #include "src/objects/elements-kind.h"
 #include "src/objects/feedback-vector.h"
 #include "src/objects/instance-type.h"
+#include "src/objects/lookup.h"
 #include "src/utils/boxed-float.h"
 
 namespace v8 {
@@ -342,6 +343,10 @@ class JSObjectRef : public JSReceiverRef {
 
   void SerializeObjectCreateMap();
   base::Optional<MapRef> GetObjectCreateMap() const;
+
+ private:
+  ConcurrentLookupIterator::Result TryGetOwnConstantElement(
+      Object* result_out, ElementsKind elements_kind, size_t index) const;
 };
 
 class JSDataViewRef : public JSObjectRef {
