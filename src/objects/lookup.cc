@@ -1365,8 +1365,9 @@ ConcurrentLookupIterator::TryGetOwnConstantElement(
     // The access guard below protects only internalized string accesses.
     // TODO(jgruber): Support other string kinds.
     Map wrapped_string_map = wrapped_string.map(isolate, kAcquireLoad);
-    if (!InstanceTypeChecker::IsInternalizedString(
-            wrapped_string_map.instance_type())) {
+    InstanceType wrapped_type = wrapped_string_map.instance_type();
+    if (!(InstanceTypeChecker::IsInternalizedString(wrapped_type)) ||
+        InstanceTypeChecker::IsThinString(wrapped_type)) {
       return kGaveUp;
     }
 
