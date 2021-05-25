@@ -687,7 +687,10 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
   // Store input value into generator object.
   __ StoreTaggedField(
       FieldOperand(rdx, JSGeneratorObject::kInputOrDebugPosOffset), rax);
-  __ RecordWriteField(rdx, JSGeneratorObject::kInputOrDebugPosOffset, rax, rcx,
+  Register object = WriteBarrierDescriptor::ObjectRegister();
+  __ Move(object, rdx);
+  __ RecordWriteField(object, JSGeneratorObject::kInputOrDebugPosOffset, rax,
+                      WriteBarrierDescriptor::SlotAddressRegister(),
                       SaveFPRegsMode::kIgnore);
 
   Register decompr_scratch1 = COMPRESS_POINTERS_BOOL ? r8 : no_reg;
@@ -835,8 +838,11 @@ static void ReplaceClosureCodeWithOptimizedCode(MacroAssembler* masm,
   // Store the optimized code in the closure.
   __ StoreTaggedField(FieldOperand(closure, JSFunction::kCodeOffset),
                       optimized_code);
-  __ movq(scratch1, optimized_code);  // Write barrier clobbers scratch1 below.
-  __ RecordWriteField(closure, JSFunction::kCodeOffset, scratch1, scratch2,
+  // Write barrier clobbers scratch1 below.
+  Register value = scratch1;
+  __ movq(value, optimized_code);
+
+  __ RecordWriteField(closure, JSFunction::kCodeOffset, value, scratch2,
                       SaveFPRegsMode::kIgnore, RememberedSetAction::kOmit,
                       SmiCheck::kOmit);
 }
@@ -926,9 +932,10 @@ static void TailCallOptimizedCodeSlot(MacroAssembler* masm,
                                       Register scratch1, Register scratch2,
                                       JumpMode jump_mode) {
   // ----------- S t a t e -------------
-  //  -- rax : actual argument count
-  //  -- rdx : new target (preserved for callee if needed, and caller)
-  //  -- rdi : target function (preserved for callee if needed, and caller)
+  //  rax : actual argument count
+  //  rdx : new target (preserved for callee if needed, and caller)
+  //  rdi : target function (preserved for callee if needed, and caller)
+  //  rsi : current context, used for the runtime call
   // -----------------------------------
 
   Register closure = rdi;
@@ -1081,7 +1088,7 @@ static void MaybeOptimizeCodeOrTailCallOptimizedCodeSlot(
   __ LoadAnyTaggedField(
       optimized_code_entry,
       FieldOperand(feedback_vector, FeedbackVector::kMaybeOptimizedCodeOffset));
-  TailCallOptimizedCodeSlot(masm, optimized_code_entry, r8, r15, jump_mode);
+  TailCallOptimizedCodeSlot(masm, optimized_code_entry, r8, rbx, jump_mode);
 }
 
 // Generate code for entering a JS function with the interpreter.
@@ -1321,9 +1328,9 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
                               FieldOperand(kInterpreterBytecodeArrayRegister,
                                            BaselineData::kBaselineCodeOffset));
     static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
-    ReplaceClosureCodeWithOptimizedCode(masm, rcx, closure,
-                                        kInterpreterBytecodeArrayRegister,
-                                        kInterpreterBytecodeOffsetRegister);
+    ReplaceClosureCodeWithOptimizedCode(
+        masm, rcx, closure, kInterpreterBytecodeArrayRegister,
+        WriteBarrierDescriptor::SlotAddressRegister());
     __ JumpCodeObject(rcx);
 
     __ bind(&install_baseline_code);
@@ -1846,7 +1853,8 @@ void Builtins::Generate_NotifyDeoptimized(MacroAssembler* masm) {
 
 void Builtins::Generate_TailCallOptimizedCodeSlot(MacroAssembler* masm) {
   Register optimized_code_entry = kJavaScriptCallCodeStartRegister;
-  TailCallOptimizedCodeSlot(masm, optimized_code_entry, r8, r15,
+  TailCallOptimizedCodeSlot(masm, optimized_code_entry, r8,
+                            WriteBarrierDescriptor::SlotAddressRegister(),
                             JumpMode::kJump);
 }
 
@@ -4506,7 +4514,7 @@ void Builtins::Generate_DynamicCheckMapsTrampoline(MacroAssembler* masm) {
   // FLAG_debug_code is enabled CSA checks will call C function and so we need
   // to save all CallerSaved registers too.
   if (FLAG_debug_code) registers |= kCallerSaved;
-  __ SaveRegisters(registers);
+  __ MaybeSaveRegisters(registers);
 
   // Load the immediate arguments from the deopt exit to pass to the builtin.
   Register slot_arg =
@@ -4527,7 +4535,7 @@ void Builtins::Generate_DynamicCheckMapsTrampoline(MacroAssembler* masm) {
   __ cmpq(rax, Immediate(static_cast<int>(DynamicCheckMapsStatus::kSuccess)));
   __ j(not_equal, &deopt);
 
-  __ RestoreRegisters(registers);
+  __ MaybeRestoreRegisters(registers);
   __ LeaveFrame(StackFrame::INTERNAL);
   __ Ret();
 
@@ -4539,14 +4547,14 @@ void Builtins::Generate_DynamicCheckMapsTrampoline(MacroAssembler* masm) {
     __ cmpq(rax, Immediate(static_cast<int>(DynamicCheckMapsStatus::kDeopt)));
     __ Assert(equal, AbortReason::kUnexpectedDynamicCheckMapsStatus);
   }
-  __ RestoreRegisters(registers);
+  __ MaybeRestoreRegisters(registers);
   __ LeaveFrame(StackFrame::INTERNAL);
   Handle<Code> deopt_eager = masm->isolate()->builtins()->builtin_handle(
       Deoptimizer::GetDeoptimizationEntry(DeoptimizeKind::kEager));
   __ Jump(deopt_eager, RelocInfo::CODE_TARGET);
 
   __ bind(&bailout);
-  __ RestoreRegisters(registers);
+  __ MaybeRestoreRegisters(registers);
   __ LeaveFrame(StackFrame::INTERNAL);
   Handle<Code> deopt_bailout = masm->isolate()->builtins()->builtin_handle(
       Deoptimizer::GetDeoptimizationEntry(DeoptimizeKind::kBailout));
