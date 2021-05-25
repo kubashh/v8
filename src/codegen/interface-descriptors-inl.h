@@ -69,6 +69,8 @@ void StaticCallInterfaceDescriptor<DerivedDescriptor>::Initialize(
 
   if (DerivedDescriptor::kRestrictAllocatableRegisters) {
     data->RestrictAllocatableRegisters(registers.data(), registers.size());
+  } else {
+    DCHECK(!DerivedDescriptor::kCalleeSaveRegisters);
   }
 
   data->InitializeRegisters(
@@ -184,6 +186,33 @@ constexpr Register FastNewObjectDescriptor::TargetRegister() {
 // static
 constexpr Register FastNewObjectDescriptor::NewTargetRegister() {
   return kJavaScriptCallNewTargetRegister;
+}
+
+// static
+constexpr Register WriteBarrierDescriptor::ObjectRegister() {
+  return registers()[kObject];
+}
+// static
+constexpr Register WriteBarrierDescriptor::SlotAddressRegister() {
+  return registers()[kSlotAddress];
+}
+
+// static
+constexpr Register WriteBarrierDescriptor::ValueRegister() {
+  return registers()[kSlotAddress + 1];
+}
+
+// static
+constexpr RegList WriteBarrierDescriptor::ComputeSavedRegisters(
+    Register object, Register slot_address) {
+  DCHECK(!AreAliased(object, slot_address));
+  // Only push clobbered registers.
+  RegList registers = 0;
+  if (object != ObjectRegister()) registers |= ObjectRegister().bit();
+  if (slot_address != SlotAddressRegister()) {
+    registers |= SlotAddressRegister().bit();
+  }
+  return registers;
 }
 
 // static
