@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0512d5c4_56400494",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-05-25T22:38:25Z",
+      "side": 1,
+      "message": "Tests mjsunit/compiler/call-with-arraylike-or-spread* also need to disable --stress-background-compile.",
+      "revId": "1cfea803cf39d1a21fbf732bf36e1c4d9824188e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
