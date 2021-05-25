@@ -705,14 +705,13 @@ void BaselineCompiler::VisitLdaImmutableCurrentContextSlot() {
 }
 
 void BaselineCompiler::VisitStaContextSlot() {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
-  Register context = scratch_scope.AcquireScratch();
+  Register context = WriteBarrierDescriptor::ObjectRegister();
   LoadRegister(context, 0);
   int depth = Uint(2);
   for (; depth > 0; --depth) {
     __ LoadTaggedPointerField(context, context, Context::kPreviousOffset);
   }
-  Register value = scratch_scope.AcquireScratch();
+  Register value = WriteBarrierDescriptor::ValueRegister();
   __ Move(value, kInterpreterAccumulatorRegister);
   __ StoreTaggedFieldWithWriteBarrier(
       context, Context::OffsetOfElementAt(iterator().GetIndexOperand(1)),
@@ -720,10 +719,9 @@ void BaselineCompiler::VisitStaContextSlot() {
 }
 
 void BaselineCompiler::VisitStaCurrentContextSlot() {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
-  Register context = scratch_scope.AcquireScratch();
+  Register context = WriteBarrierDescriptor::ObjectRegister();
   __ LoadContext(context);
-  Register value = scratch_scope.AcquireScratch();
+  Register value = WriteBarrierDescriptor::ValueRegister();
   __ Move(value, kInterpreterAccumulatorRegister);
   __ StoreTaggedFieldWithWriteBarrier(
       context, Context::OffsetOfElementAt(Index(0)), value);
@@ -849,8 +847,7 @@ void BaselineCompiler::VisitLdaModuleVariable() {
 }
 
 void BaselineCompiler::VisitStaModuleVariable() {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
-  Register scratch = scratch_scope.AcquireScratch();
+  Register scratch = WriteBarrierDescriptor::ObjectRegister();
   __ LoadContext(scratch);
   int depth = Uint(1);
   for (; depth > 0; --depth) {
