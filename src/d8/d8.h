@@ -274,6 +274,9 @@ class PerIsolateData {
   Local<FunctionTemplate> GetTestApiObjectCtor() const;
   void SetTestApiObjectCtor(Local<FunctionTemplate> ctor);
 
+  Local<FunctionTemplate> GetSnapshotObjectCtor() const;
+  void SetSnapshotObjectCtor(Local<FunctionTemplate> ctor);
+
  private:
   friend class Shell;
   friend class RealmScope;
@@ -293,6 +296,7 @@ class PerIsolateData {
   std::unordered_set<DynamicImportData*> import_data_;
 #endif
   Global<FunctionTemplate> test_api_object_ctor_;
+  Global<FunctionTemplate> snapshot_object_ctor_;
 
   int RealmIndexOrThrow(const v8::FunctionCallbackInfo<v8::Value>& args,
                         int arg_offset);
@@ -406,6 +410,8 @@ class ShellOptions {
       "enable-system-instrumentation", false};
   DisallowReassignment<const char*> web_snapshot_config = {
       "web-snapshot-config", nullptr};
+  DisallowReassignment<bool> d8_web_snapshot_api = {"d8-web-snapshot-api",
+                                                    false};
   DisallowReassignment<bool> compile_only = {"compile-only", false};
   DisallowReassignment<int> repeat_compile = {"repeat-compile", 1};
 };
@@ -476,6 +482,10 @@ class Shell : public i::AllStatic {
                              const PropertyCallbackInfo<Value>& info);
   static void RealmSharedSet(Local<String> property, Local<Value> value,
                              const PropertyCallbackInfo<void>& info);
+  static void RealmTakeWebSnapshot(
+      const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void RealmUseWebSnapshot(
+      const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void LogGetAndStop(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void TestVerifySourcePositions(
@@ -641,6 +651,7 @@ class Shell : public i::AllStatic {
   static Local<ObjectTemplate> CreateTestRunnerTemplate(Isolate* isolate);
   static Local<ObjectTemplate> CreatePerformanceTemplate(Isolate* isolate);
   static Local<ObjectTemplate> CreateRealmTemplate(Isolate* isolate);
+  static Local<FunctionTemplate> CreateSnapshotTemplate(Isolate* isolate);
   static Local<ObjectTemplate> CreateD8Template(Isolate* isolate);
   static Local<FunctionTemplate> CreateTestFastCApiTemplate(Isolate* isolate);
   static Local<FunctionTemplate> CreateLeafInterfaceTypeTemplate(
