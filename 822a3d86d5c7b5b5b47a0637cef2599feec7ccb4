@@ -177,6 +177,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a689de1a_9b4a53ec",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-25T12:58:16Z",
+      "side": 1,
+      "message": "I changed the names.",
+      "parentUuid": "8f4a0352_d024a751",
+      "range": {
+        "startLine": 1789,
+        "startChar": 68,
+        "endLine": 1789,
+        "endChar": 69
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb15ef98_0abd066b",
@@ -449,6 +473,30 @@
       "side": 1,
       "message": "We should probably bail out if args[1] is not an instance of the Snapshot ObjectTemplate.",
       "parentUuid": "04a8dd14_d70b5f63",
+      "range": {
+        "startLine": 1862,
+        "startChar": 2,
+        "endLine": 1862,
+        "endChar": 78
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7483baa0_c0f14972",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1862,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-25T12:58:16Z",
+      "side": 1,
+      "message": "This check is not possible here without a lot of refactoring. I added a check for the number of internal fields for now and a TODO for later.",
+      "parentUuid": "aa9b1ac3_6248e7ef",
       "range": {
         "startLine": 1862,
         "startChar": 2,
