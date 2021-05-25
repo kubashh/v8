@@ -507,6 +507,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6f0792a_ae9fb842",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1862,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-25T14:06:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7483baa0_c0f14972",
+      "range": {
+        "startLine": 1862,
+        "startChar": 2,
+        "endLine": 1862,
+        "endChar": 78
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a069e255_2aadd144",
@@ -544,6 +568,30 @@
       "side": 1,
       "message": "By both combining these two lines and specifying a proper type for the result, this becomes a bit visually complicated. Should I still do this?",
       "parentUuid": "a069e255_2aadd144",
+      "range": {
+        "startLine": 1863,
+        "startChar": 0,
+        "endLine": 1865,
+        "endChar": 75
+      },
+      "revId": "822a3d86d5c7b5b5b47a0637cef2599feec7ccb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15e52885_85d5709b",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-25T14:06:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "caec63a5_07752d27",
       "range": {
         "startLine": 1863,
         "startChar": 0,
