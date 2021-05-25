@@ -485,9 +485,7 @@ void MacroAssembler::RecordWrite(Register object, Register address,
                                  Register value, SaveFPRegsMode fp_mode,
                                  RememberedSetAction remembered_set_action,
                                  SmiCheck smi_check) {
-  DCHECK(object != value);
-  DCHECK(object != address);
-  DCHECK(value != address);
+  DCHECK(!AreAliased(object, value, address));
   AssertNotSmi(object);
 
   if ((remembered_set_action == RememberedSetAction::kOmit &&
