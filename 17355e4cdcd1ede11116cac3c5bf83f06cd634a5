@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96cac2ac_6502ce2d",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1803,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-25T07:08:55Z",
+      "side": 1,
+      "message": "If you only install RealmTakeWebSnapshot in the realm FunctionTemplate when options.d8_web_snapshot_api is set you don\u0027t have to check here.",
+      "range": {
+        "startLine": 1801,
+        "startChar": 0,
+        "endLine": 1803,
+        "endChar": 3
+      },
+      "revId": "17355e4cdcd1ede11116cac3c5bf83f06cd634a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84f62374_ff7ca4e6",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-25T07:08:55Z",
+      "side": 1,
+      "message": "probably you want to push this first before you touch args (RealmIndexOrThrow or does the full checks though)",
+      "range": {
+        "startLine": 1808,
+        "startChar": 0,
+        "endLine": 1811,
+        "endChar": 3
+      },
+      "revId": "17355e4cdcd1ede11116cac3c5bf83f06cd634a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a30b2f4_92125a79",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2878,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-25T07:08:55Z",
+      "side": 1,
+      "message": "As commented above:\n\n  if (options.d8_web_snapshot_api) {\n    realm_template-\u003eSet(...);\n    ..\n  }",
+      "range": {
+        "startLine": 2875,
+        "startChar": 0,
+        "endLine": 2878,
+        "endChar": 75
+      },
+      "revId": "17355e4cdcd1ede11116cac3c5bf83f06cd634a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69504f3e_3573c3e8",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2883,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-25T07:08:55Z",
+      "side": 1,
+      "message": "snapshot_obj_ctor \u003d\u003e snapshot_template? (we use \"_template\" for all others)",
+      "range": {
+        "startLine": 2883,
+        "startChar": 26,
+        "endLine": 2883,
+        "endChar": 43
+      },
+      "revId": "17355e4cdcd1ede11116cac3c5bf83f06cd634a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "432e08d5_f3448321",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2890,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-25T07:08:55Z",
+      "side": 1,
+      "message": "nit: technically no need for a block here (we use this below to enforce the a pattern to not leak objects.",
+      "range": {
+        "startLine": 2890,
+        "startChar": 2,
+        "endLine": 2890,
+        "endChar": 3
+      },
+      "revId": "17355e4cdcd1ede11116cac3c5bf83f06cd634a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
