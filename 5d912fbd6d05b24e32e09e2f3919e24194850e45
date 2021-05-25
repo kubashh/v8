@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37951d5c_4ae7c53a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-25T14:11:16Z",
+      "side": 1,
+      "message": "I see an inconsistency in which archs are updated and which ones are not. Is there a reason the macro assembler on arm64, and codegen in arm32/arm64 didn\u0027t get the same DCHECK?\nI\u0027d rather update both macro-assembler and code-generator at the same time on the archs that we will modify on this CL.",
+      "revId": "5d912fbd6d05b24e32e09e2f3919e24194850e45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

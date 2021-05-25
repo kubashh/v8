@@ -87,6 +87,30 @@
       },
       "revId": "21a0b08479ca3c6d58b512dff7b4b1a9a6fc4ca6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcaa029f_15917291",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-25T14:11:16Z",
+      "side": 1,
+      "message": "Ack. I do feel like it is weird that we pass both object and value as seemingly separate register and e.g. in x64 we decompress value in place.\nCan we make it the same parameter on archs that we know are passing the same register as parameter (e.g x64 and ia32) and assert that they are not aliased in the others?",
+      "parentUuid": "894e778d_80ab488c",
+      "range": {
+        "startLine": 320,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 51
+      },
+      "revId": "21a0b08479ca3c6d58b512dff7b4b1a9a6fc4ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
