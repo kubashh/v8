@@ -705,26 +705,24 @@ void BaselineCompiler::VisitLdaImmutableCurrentContextSlot() {
 }
 
 void BaselineCompiler::VisitStaContextSlot() {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
-  Register context = scratch_scope.AcquireScratch();
+  Register value = WriteBarrierDescriptor::ValueRegister();
+  __ Move(value, kInterpreterAccumulatorRegister);
+  Register context = WriteBarrierDescriptor::ObjectRegister();
   LoadRegister(context, 0);
   int depth = Uint(2);
   for (; depth > 0; --depth) {
     __ LoadTaggedPointerField(context, context, Context::kPreviousOffset);
   }
-  Register value = scratch_scope.AcquireScratch();
-  __ Move(value, kInterpreterAccumulatorRegister);
   __ StoreTaggedFieldWithWriteBarrier(
       context, Context::OffsetOfElementAt(iterator().GetIndexOperand(1)),
       value);
 }
 
 void BaselineCompiler::VisitStaCurrentContextSlot() {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
-  Register context = scratch_scope.AcquireScratch();
-  __ LoadContext(context);
-  Register value = scratch_scope.AcquireScratch();
+  Register value = WriteBarrierDescriptor::ValueRegister();
   __ Move(value, kInterpreterAccumulatorRegister);
+  Register context = WriteBarrierDescriptor::ObjectRegister();
+  __ LoadContext(context);
   __ StoreTaggedFieldWithWriteBarrier(
       context, Context::OffsetOfElementAt(Index(0)), value);
 }
@@ -849,8 +847,10 @@ void BaselineCompiler::VisitLdaModuleVariable() {
 }
 
 void BaselineCompiler::VisitStaModuleVariable() {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
-  Register scratch = scratch_scope.AcquireScratch();
+  SaveAccumulatorScope save_accumulator(&basm_);
+  Register value = WriteBarrierDescriptor::ValueRegister();
+  __ Move(value, kInterpreterAccumulatorRegister);
+  Register scratch = WriteBarrierDescriptor::ObjectRegister();
   __ LoadContext(scratch);
   int depth = Uint(1);
   for (; depth > 0; --depth) {
@@ -863,10 +863,9 @@ void BaselineCompiler::VisitStaModuleVariable() {
                               SourceTextModule::kRegularExportsOffset);
     // The actual array index is (cell_index - 1).
     cell_index -= 1;
+
     __ LoadFixedArrayElement(scratch, scratch, cell_index);
-    SaveAccumulatorScope save_accumulator(&basm_);
-    __ StoreTaggedFieldWithWriteBarrier(scratch, Cell::kValueOffset,
-                                        kInterpreterAccumulatorRegister);
+    __ StoreTaggedFieldWithWriteBarrier(scratch, Cell::kValueOffset, value);
   } else {
     // Not supported (probably never).
     CallRuntime(Runtime::kAbort,
