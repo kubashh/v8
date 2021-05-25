@@ -16,6 +16,23 @@
       "message": "ptal, the previous CL got reverted due to slowness in TSAN + stress concurrent allocation. The workaround in PS2 is to run TSAN without variants",
       "revId": "857dc1a189a4536b07ff7667d5e8976596d2eb93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95e0af6e_77e54223",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-05-25T13:47:27Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "857dc1a189a4536b07ff7667d5e8976596d2eb93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
