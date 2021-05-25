@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82fd8eea_ae463320",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-25T14:28:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abd823aa_bddbd556",
+      "range": {
+        "startLine": 1846,
+        "startChar": 6,
+        "endLine": 1847,
+        "endChar": 41
+      },
+      "revId": "b8077de801e18edbe4142609cf1e0401494b7354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "871fb244_7d90ca78",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-05-25T14:06:34Z",
       "side": 1,
       "message": "nit: let\u0027s drop this, comment literally repeats the function name :)",
+      "range": {
+        "startLine": 1888,
+        "startChar": 0,
+        "endLine": 1888,
+        "endChar": 20
+      },
+      "revId": "b8077de801e18edbe4142609cf1e0401494b7354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c51ce36a_b4ba5ffb",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1888,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-25T14:28:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "871fb244_7d90ca78",
       "range": {
         "startLine": 1888,
         "startChar": 0,
