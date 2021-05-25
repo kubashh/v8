@@ -7,7 +7,7 @@
 // These tests do not work well if this script is run more than once (e.g.
 // --stress-opt); after a few runs the whole function is immediately compiled
 // and assertions would fail. We prevent re-runs.
-// Flags: --nostress-opt --no-always-opt
+// Flags: --nostress-opt --no-always-opt --no-stress-background-compile
 
 // Some of the tests rely on optimizing/deoptimizing at predictable moments, so
 // this is not suitable for deoptimization fuzzing.
@@ -88,7 +88,7 @@
   %OptimizeFunctionOnNextCall(foo);
   assertTrue(sum_js3_got_interpreted);
 
-  // This this it should stay optimized, but with the call not inlined.
+  // This should stay optimized, but with the call not inlined.
   assertEquals(42.17, foo(16.11, 26.06));
   assertTrue(sum_js3_got_interpreted);
   assertOptimized(foo);

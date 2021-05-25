@@ -7,7 +7,7 @@
 // These tests do not work well if this script is run more than once (e.g.
 // --stress-opt); after a few runs the whole function is immediately compiled
 // and assertions would fail. We prevent re-runs.
-// Flags: --nostress-opt --no-always-opt
+// Flags: --nostress-opt --no-always-opt --no-stress-background-compile
 
 // Tests for optimization of CallWithSpread and CallWithArrayLike.
 // This test is in a separate file because it invalidates protectors.

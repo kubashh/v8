@@ -7,7 +7,7 @@
 // These tests do not work well if this script is run more than once (e.g.
 // --stress-opt); after a few runs the whole function is immediately compiled
 // and assertions would fail. We prevent re-runs.
-// Flags: --nostress-opt --no-always-opt
+// Flags: --nostress-opt --no-always-opt --no-stress-background-compile
 
 // The test relies on optimizing/deoptimizing at predictable moments, so
 // this is not suitable for deoptimization fuzzing.
