@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "21a0b08479ca3c6d58b512dff7b4b1a9a6fc4ca6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e65feefe_873a5e0c",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-25T12:59:21Z",
+      "side": 1,
+      "message": "`object` and `value` could be aliasing here, right? If it is important that they are different registers, WDYT about defining AreAliased for 4 inputs? If it is not important, please add a comment stating why it is fine that object and value can alias.\n\nSimilar below for other archs.",
+      "range": {
+        "startLine": 320,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 51
+      },
+      "revId": "21a0b08479ca3c6d58b512dff7b4b1a9a6fc4ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
