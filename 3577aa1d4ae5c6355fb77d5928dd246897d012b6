@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85d5196d_7058bfbe",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-25T15:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d112844_6d28525f",
+      "range": {
+        "startLine": 1809,
+        "startChar": 2,
+        "endLine": 1809,
+        "endChar": 64
+      },
+      "revId": "3577aa1d4ae5c6355fb77d5928dd246897d012b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "232fb607_a4f0b7c8",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-05-25T15:22:04Z",
       "side": 1,
       "message": "When does this happen and should we throw an error?",
+      "range": {
+        "startLine": 1865,
+        "startChar": 2,
+        "endLine": 1865,
+        "endChar": 25
+      },
+      "revId": "3577aa1d4ae5c6355fb77d5928dd246897d012b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3660ff15_08702613",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-05-25T15:34:03Z",
+      "side": 1,
+      "message": "`RealmIndexOrThrow()` already throws here.",
+      "parentUuid": "232fb607_a4f0b7c8",
       "range": {
         "startLine": 1865,
         "startChar": 2,
