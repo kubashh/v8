@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f194127_7fa855e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-25T15:22:04Z",
+      "side": 1,
+      "message": "lgtm with comments, and follow-ups as discussed",
+      "revId": "3577aa1d4ae5c6355fb77d5928dd246897d012b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d112844_6d28525f",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-25T15:22:04Z",
+      "side": 1,
+      "message": "Here you could add a TODO(v8:11525): Add an API taking Local\u003cString\u003es. or sth like that.",
+      "range": {
+        "startLine": 1809,
+        "startChar": 2,
+        "endLine": 1809,
+        "endChar": 64
+      },
+      "revId": "3577aa1d4ae5c6355fb77d5928dd246897d012b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "232fb607_a4f0b7c8",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-05-25T15:22:04Z",
+      "side": 1,
+      "message": "When does this happen and should we throw an error?",
+      "range": {
+        "startLine": 1865,
+        "startChar": 2,
+        "endLine": 1865,
+        "endChar": 25
+      },
+      "revId": "3577aa1d4ae5c6355fb77d5928dd246897d012b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
