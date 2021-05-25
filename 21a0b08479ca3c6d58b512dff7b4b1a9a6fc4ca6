@@ -111,6 +111,30 @@
       },
       "revId": "21a0b08479ca3c6d58b512dff7b4b1a9a6fc4ca6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bda93661_c2614570",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-25T14:38:04Z",
+      "side": 1,
+      "message": "I\u0027d be up for making this more explicit.\nCurrently I\u0027m documenting existing behavior so I can land the follow-up CL easier: https://crrev.com/c/2910313",
+      "parentUuid": "bcaa029f_15917291",
+      "range": {
+        "startLine": 320,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 51
+      },
+      "revId": "21a0b08479ca3c6d58b512dff7b4b1a9a6fc4ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
