@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34f9473a_a2c6b401",
+        "filename": "builders/auto.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-26T09:21:54Z",
+      "side": 1,
+      "message": "That\u0027s not how the dependency is called. It\u0027s:\nthird_party/google_benchmark/src",
+      "range": {
+        "startLine": 68,
+        "startChar": 22,
+        "endLine": 68,
+        "endChar": 32
+      },
+      "revId": "6801ce15187cc2912d2cc0ef575e47de2b803b0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf293584_db21dfcb",
+        "filename": "builders/auto.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-26T09:21:54Z",
+      "side": 1,
+      "message": "Maybe don\u0027t make it in the exact same time of the other roller. Maybe 5?",
+      "range": {
+        "startLine": 132,
+        "startChar": 16,
+        "endLine": 132,
+        "endChar": 25
+      },
+      "revId": "6801ce15187cc2912d2cc0ef575e47de2b803b0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f22c9739_4b937545",
+        "filename": "builders/auto.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-26T09:21:54Z",
+      "side": 1,
+      "message": "The owners of wasm-spec tests don\u0027t make sense now. How about:\n\"v8-waterfall-sheriff@grotations.appspotmail.com\"\nand maybe someone from gc team like mlippauts?",
+      "range": {
+        "startLine": 143,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 40
+      },
+      "revId": "6801ce15187cc2912d2cc0ef575e47de2b803b0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
