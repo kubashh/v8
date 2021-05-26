@@ -22,6 +22,30 @@
       },
       "revId": "c21d0148d6737f76d07cbbf08280f3c695f301a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "203362c6_f6e9796b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-26T08:47:13Z",
+      "side": 1,
+      "message": "Argh commit message typos are worst typos, baked in as a mark of shame for all eternity.",
+      "parentUuid": "333872b7_834eb660",
+      "range": {
+        "startLine": 7,
+        "startChar": 44,
+        "endLine": 7,
+        "endChar": 57
+      },
+      "revId": "c21d0148d6737f76d07cbbf08280f3c695f301a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
