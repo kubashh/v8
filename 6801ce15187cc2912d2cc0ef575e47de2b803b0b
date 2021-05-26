@@ -68,6 +68,30 @@
       },
       "revId": "6801ce15187cc2912d2cc0ef575e47de2b803b0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b81cf567_fc0e2af1",
+        "filename": "builders/auto.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-26T09:22:48Z",
+      "side": 1,
+      "message": "mlippautz@chromium.org I meant.",
+      "parentUuid": "f22c9739_4b937545",
+      "range": {
+        "startLine": 143,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 40
+      },
+      "revId": "6801ce15187cc2912d2cc0ef575e47de2b803b0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
