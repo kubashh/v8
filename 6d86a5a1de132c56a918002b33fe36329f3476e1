@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74dfca23_4de8c70c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-05-26T06:32:28Z",
+      "side": 1,
+      "message": "As requested, this is the second part of the CL. PTAL.",
+      "revId": "6d86a5a1de132c56a918002b33fe36329f3476e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
