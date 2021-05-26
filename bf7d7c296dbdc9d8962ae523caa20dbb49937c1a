@@ -16,6 +16,57 @@
       "message": "Georg PTAL",
       "revId": "bf7d7c296dbdc9d8962ae523caa20dbb49937c1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "493d8109_a91d18fe",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3180,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-26T05:51:32Z",
+      "side": 1,
+      "message": "drive-by: wrapping this in a helper would be nice since it\u0027s used in multiple spots.",
+      "revId": "bf7d7c296dbdc9d8962ae523caa20dbb49937c1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dff47ea_d9325349",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3183,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-26T05:51:32Z",
+      "side": 1,
+      "message": "Also here, I\u0027d suggest a more generic comment like \"for unsupported string kind\".",
+      "revId": "bf7d7c296dbdc9d8962ae523caa20dbb49937c1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7413e1a_04b010c7",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-26T05:51:32Z",
+      "side": 1,
+      "message": "Please update the comment (probably make it more generic).",
+      "revId": "bf7d7c296dbdc9d8962ae523caa20dbb49937c1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
