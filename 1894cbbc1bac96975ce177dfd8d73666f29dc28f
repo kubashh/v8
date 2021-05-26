@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25b1ba2c_f57425e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2021-05-26T17:44:07Z",
+      "side": 1,
+      "message": "- V8 MSVC bot\u0027s are not red because they only do release builds.\n- DCHECK() is itself implemented with macros. #if inside a macro seems a bit too much for MSVC?",
+      "revId": "1894cbbc1bac96975ce177dfd8d73666f29dc28f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
