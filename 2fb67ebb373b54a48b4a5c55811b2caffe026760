@@ -16,6 +16,29 @@
       "message": "ahaas@ PTAL rename in src/wasm/*\nleszks@ PTAL src/baseline/*",
       "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd93027_19a80f89",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-05-26T11:14:36Z",
+      "side": 1,
+      "message": "since this is clobbered anyway, should we just not pass it (and force using WriteBarrierDescriptor::SlotAddressRegister)?",
+      "range": {
+        "startLine": 326,
+        "startChar": 54,
+        "endLine": 326,
+        "endChar": 75
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
