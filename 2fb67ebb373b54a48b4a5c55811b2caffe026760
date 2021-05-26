@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f38595a8_0ee5c8a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-26T16:24:40Z",
+      "side": 1,
+      "message": "I\u0027m doing exactly what the DynamicCheckMapsTrampoline does :).\nThe problem is that RecordWrite is written in CSA, so I do have to specify it somehow and tell TurboFan to do this.\n\nRegister shuffling is mostly needed to avoid additional moves in Sparkplug, and there is a set of registers that will work well (not overlapping with kContextRegister and kInterpreterAccumulatorRegister).\n\nThis is now explicitly ensured with all the DCHECK(!AreAliased(...)) in place.",
+      "parentUuid": "1d6b4c36_a5a81407",
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69d9893d_6d07458d",
         "filename": "src/codegen/arm/interface-descriptors-arm-inl.h",
         "patchSetId": 18
@@ -65,6 +83,30 @@
       "writtenOn": "2021-05-26T16:12:06Z",
       "side": 1,
       "message": "Why is this and arm64 re-shuffling needed?",
+      "range": {
+        "startLine": 24,
+        "startChar": 39,
+        "endLine": 24,
+        "endChar": 41
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f37f44f7_2026055c",
+        "filename": "src/codegen/arm/interface-descriptors-arm-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-26T16:24:40Z",
+      "side": 1,
+      "message": "r0 \u003d\u003d kAccumulatorRegister which would require more code changes.",
+      "parentUuid": "69d9893d_6d07458d",
       "range": {
         "startLine": 24,
         "startChar": 39,
@@ -100,6 +142,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c6ff773_81957a61",
+        "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-26T16:24:40Z",
+      "side": 1,
+      "message": "This looks fairly random, but is rather deliberate:\n\n- We need arg_reg_1 - arg_reg_4 for the runtime call in the RecordWrite builtin, they are platform specific\n- kReturnRegister0 is used as well, since it\u0027s always accessed\n- We need kContextRegister since it\u0027s accessed as well by default in the builtin (this accidentally overlaps with arg_reg_2 on x64)\n- rbx on linux could be anything that doesn\u0027t mess too much with\n  existing code.",
+      "parentUuid": "20dcf974_b9847f1c",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 41
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "038dbf7d_26f7dbec",
         "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
         "patchSetId": 18
@@ -111,6 +177,30 @@
       "writtenOn": "2021-05-26T16:12:06Z",
       "side": 1,
       "message": "Why the change here? rcx is arg_reg_4 for non-windows.",
+      "range": {
+        "startLine": 45,
+        "startChar": 52,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50db9e34_0c684768",
+        "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-26T16:24:40Z",
+      "side": 1,
+      "message": "You\u0027re right, changing to arg_reg_4",
+      "parentUuid": "038dbf7d_26f7dbec",
       "range": {
         "startLine": 45,
         "startChar": 52,

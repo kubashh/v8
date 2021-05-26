@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dd10173_263fc678",
+        "filename": "src/codegen/interface-descriptors-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-26T16:24:40Z",
+      "side": 1,
+      "message": "This is not an actual argument to the builtin, but rather a helper register so we can avoid accidental clobbering.\n\nMaybe I should add a comment?",
+      "parentUuid": "98382f17_1bfb5d0e",
+      "range": {
+        "startLine": 202,
+        "startChar": 18,
+        "endLine": 202,
+        "endChar": 34
+      },
+      "revId": "300128b42f89afab4ff577db40446336718dd815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9bdb82e4_167f1b80",
