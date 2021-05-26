@@ -16,6 +16,23 @@
       "message": "PTAL - note there\u0027s two changes here:\n\n1. call Publish unconditionally (not just with concurrent inlining)\n2. call Publish before main-thread phases",
       "revId": "133b9454f99982d8da8a57cf46b8f3574571c843",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10b77200_8b299330",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-05-26T11:37:23Z",
+      "side": 1,
+      "message": "Nice, LGTM!",
+      "revId": "133b9454f99982d8da8a57cf46b8f3574571c843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
