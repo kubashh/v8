@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11340aa9_ef7047d2",
+        "filename": "builders/auto.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-05-26T09:27:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34f9473a_a2c6b401",
+      "range": {
+        "startLine": 68,
+        "startChar": 22,
+        "endLine": 68,
+        "endChar": 32
+      },
+      "revId": "6801ce15187cc2912d2cc0ef575e47de2b803b0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf293584_db21dfcb",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-05-26T09:21:54Z",
       "side": 1,
       "message": "Maybe don\u0027t make it in the exact same time of the other roller. Maybe 5?",
+      "range": {
+        "startLine": 132,
+        "startChar": 16,
+        "endLine": 132,
+        "endChar": 25
+      },
+      "revId": "6801ce15187cc2912d2cc0ef575e47de2b803b0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "287fd2e9_7121932d",
+        "filename": "builders/auto.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-05-26T09:27:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf293584_db21dfcb",
       "range": {
         "startLine": 132,
         "startChar": 16,
@@ -84,6 +132,30 @@
       "side": 1,
       "message": "mlippautz@chromium.org I meant.",
       "parentUuid": "f22c9739_4b937545",
+      "range": {
+        "startLine": 143,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 40
+      },
+      "revId": "6801ce15187cc2912d2cc0ef575e47de2b803b0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fb0ffff_3d61a458",
+        "filename": "builders/auto.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-05-26T09:27:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b81cf567_fc0e2af1",
       "range": {
         "startLine": 143,
         "startChar": 16,
