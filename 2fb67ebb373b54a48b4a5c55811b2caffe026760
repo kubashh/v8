@@ -39,6 +39,30 @@
       },
       "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "946dd75b_dc96af6b",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-26T11:17:53Z",
+      "side": 1,
+      "message": "I\u0027m still torn between making this explicit (passing all used registers) and doing the minimal registers approach (but then we need a temp register scope line on arm64 to make it clean).",
+      "parentUuid": "6bd93027_19a80f89",
+      "range": {
+        "startLine": 326,
+        "startChar": 54,
+        "endLine": 326,
+        "endChar": 75
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
