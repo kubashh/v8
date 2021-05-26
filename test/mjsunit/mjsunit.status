@@ -233,6 +233,11 @@
   'regress/regress-752764': [SLOW],
 }],  # mode == debug
 
+['mode != debug', {
+  # Test uses a flag only available in debug mode.
+  'regress/wasm/regress-11809': [SKIP],
+}],  # mode != debug
+
 ['novfp3', {
   'asm/embenchen/box2d': [SKIP],
   'asm/embenchen/zlib': [SKIP],

@@ -2593,6 +2593,10 @@ class LiftoffCompiler {
     // further down).
     Register index_ptrsize =
         kNeedI64RegPair && index.is_gp_pair() ? index.low_gp() : index.gp();
+    // Clear the upper bits on 64-bit systems.
+    if (!env_->module->is_memory64) {
+      __ emit_u32_to_intptr(index_ptrsize, index_ptrsize);
+    }
 
     if (!force_check && !statically_oob &&
         (!FLAG_wasm_bounds_checks || env_->use_trap_handler)) {
@@ -2617,11 +2621,8 @@ class LiftoffCompiler {
       return no_reg;
     }
 
-    // Convert the index to ptrsize, bounds-checking the high word on 32-bit
-    // systems for memory64.
-    if (!env_->module->is_memory64) {
-      __ emit_u32_to_intptr(index_ptrsize, index_ptrsize);
-    } else if (kSystemPointerSize == kInt32Size) {
+    // Bounds-check the high word on 32-bit systems for memory64.
+    if (env_->module->is_memory64 && kSystemPointerSize == kInt32Size) {
       DCHECK_GE(kMaxUInt32, env_->max_memory_size);
       // Unary "unequal" means "not equals zero".
       __ emit_cond_jump(kUnequal, trap_label, kI32, index.high_gp());
