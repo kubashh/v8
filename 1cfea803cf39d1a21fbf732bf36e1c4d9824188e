@@ -33,6 +33,24 @@
       "message": "At this point the call feedback in foo has become megamorphic. I think that\u0027s not what your test had in mind, and that\u0027s why you get strange behavior in combination with other flags. Right now I\u0027m puzzled as to why it became megamorphic. Could you please look into that?",
       "revId": "1cfea803cf39d1a21fbf732bf36e1c4d9824188e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cac9829_7c2f4916",
+        "filename": "test/mjsunit/compiler/call-with-arraylike-or-spread.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-05-26T19:32:10Z",
+      "side": 1,
+      "message": "It is in fact megamorphic.\n\nWith:\n  function foo(x, y) {\n    return sum_js3.apply(null, [x,0,y]);\n  }\nThe Feedback Vector for function foo() has a monomorphic slot for the call to sum_js3():\n - slot #5 Call MONOMORPHIC {\n     [5]: [weak] 0x01dc08114d1d \u003cJSFunction sum_js3 (sfi \u003d 000001DC08296C59)\u003e\n     [6]: 6\n  }\n\nWith a hole:\n  function foo(x, y) {\n    return sum_js3.apply(null, [x, ,y]);\n  }\nThe Feedback Vector for function foo() becomes megamorphic:\n - slot #5 Call GENERIC {\n     [5]: 0x01dc08005285 \u003cSymbol: (megamorphic_symbol)\u003e\n     [6]: 13\n  }\n\nThe transition to megamorphic happens in Builtins_CallProperty2Handler. Now I need to understand why.",
+      "parentUuid": "1c498c3b_438218f4",
+      "revId": "1cfea803cf39d1a21fbf732bf36e1c4d9824188e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
