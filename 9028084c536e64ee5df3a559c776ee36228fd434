@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32e616a5_ed2d0301",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-26T14:47:35Z",
+      "side": 1,
+      "message": "I think we should clarify first what the convention is for 32-bit values held in 64-bit registers. For example an kExprI64UConvertI32 type conversion on x64 relies on the value being zero extended. On arm64, we do an explicit zero extension in that conversion. This seems inconsistent.\nIt also looks like memory accesses on x64 assume a zero-extended offset register.\n\nCan you make the AssertZeroExtended on x64 (or the memory access) fail if using an i32 parameter passed from TurboFan?\n\nIf so, we have two options:\n1) Do *not* rely on zero-extension (for memory accesses, as fixed by this CL, but also for other instructions, and on all platforms).\n2) Ensure zero-extension everywhere.\n\nI think the best solution is the one that produces less code.\n\n(2) would probably mean that we need to add zero-extension for all i32 parameters in the function prologue, which does not sound right.\n(1) requires several fixes on different platforms for different instructions.\n\nIt\u0027s a bit sad that the problem only happens when calling from TurboFan to Liftoff. Would it maybe be an option to use 32-bit loads for 32-bit values in TurboFan?",
+      "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
