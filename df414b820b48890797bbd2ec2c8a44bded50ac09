@@ -33,6 +33,24 @@
       "message": "q: whenever I come across `this-\u003e` I wonder why we use it. Why not just `IsInternalizedString()` instead?",
       "revId": "df414b820b48890797bbd2ec2c8a44bded50ac09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7582c87d_0898b0f3",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3180,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-26T10:13:43Z",
+      "side": 1,
+      "message": "It is useful in some cases. This is not one of those though so I removed `this-\u003e`.",
+      "parentUuid": "2217512d_ad8c9241",
+      "revId": "df414b820b48890797bbd2ec2c8a44bded50ac09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
