@@ -1394,11 +1394,14 @@ TNode<HeapObject> CodeStubAssembler::Allocate(TNode<IntPtrT> size_in_bytes,
       new_space
           ? ExternalReference::new_space_allocation_top_address(isolate())
           : ExternalReference::old_space_allocation_top_address(isolate()));
-  DCHECK_EQ(kSystemPointerSize,
-            ExternalReference::new_space_allocation_limit_address(isolate())
-                    .address() -
-                ExternalReference::new_space_allocation_top_address(isolate())
-                    .address());
+  DCHECK_IMPLIES(
+      ExternalReference::new_space_allocation_limit_address(isolate())
+          .address(),
+      kSystemPointerSize ==
+          ExternalReference::new_space_allocation_limit_address(isolate())
+                  .address() -
+              ExternalReference::new_space_allocation_top_address(isolate())
+                  .address());
   DCHECK_EQ(kSystemPointerSize,
             ExternalReference::old_space_allocation_limit_address(isolate())
                     .address() -
