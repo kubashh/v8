@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f5158a9_70207500",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-26T09:28:41Z",
+      "side": 1,
+      "message": "ty (leaving the review to georg)",
+      "revId": "df414b820b48890797bbd2ec2c8a44bded50ac09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2217512d_ad8c9241",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3180,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-26T09:28:41Z",
+      "side": 1,
+      "message": "q: whenever I come across `this-\u003e` I wonder why we use it. Why not just `IsInternalizedString()` instead?",
+      "revId": "df414b820b48890797bbd2ec2c8a44bded50ac09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
