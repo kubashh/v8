@@ -259,6 +259,7 @@ void TurboAssembler::CallRecordWriteStub(
     Register object, Register address,
     RememberedSetAction remembered_set_action, SaveFPRegsMode fp_mode,
     StubCallMode mode) {
+  DCHECK(!AreAliased(object, address));
   WriteBarrierDescriptor descriptor;
   RegList registers = descriptor.allocatable_registers();
   SaveRegisters(registers);
@@ -5449,11 +5450,12 @@ void MacroAssembler::LeaveExitFrame(bool save_doubles, Register argument_count,
      ExternalReference::Create(IsolateAddressId::kContextAddress, isolate()));
   Ld(cp, MemOperand(t8));
 
-#ifdef DEBUG
-  li(t8,
-     ExternalReference::Create(IsolateAddressId::kContextAddress, isolate()));
-  Sd(a3, MemOperand(t8));
-#endif
+  if (FLAG_debug_code) {
+    UseScratchRegisterScope temp(this);
+    Register scratch = temp.Acquire();
+    li(scratch, Operand(Context::kInvalidContext));
+    Sd(scratch, MemOperand(t8));
+  }
 
   // Pop the arguments, restore registers, and return.
   mov(sp, fp);  // Respect ABI stack constraint.

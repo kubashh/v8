@@ -3012,9 +3012,18 @@ void WasmGraphBuilder::LoadIndirectFunctionTable(uint32_t table_index,
                                                  Node** ift_sig_ids,
                                                  Node** ift_targets,
                                                  Node** ift_instances) {
+  bool needs_dynamic_size = true;
+  const wasm::WasmTable& table = env_->module->tables[table_index];
+  if (table.has_maximum_size && table.maximum_size == table.initial_size) {
+    *ift_size = Int32Constant(table.initial_size);
+    needs_dynamic_size = false;
+  }
+
   if (table_index == 0) {
-    *ift_size = LOAD_MUTABLE_INSTANCE_FIELD(IndirectFunctionTableSize,
-                                            MachineType::Uint32());
+    if (needs_dynamic_size) {
+      *ift_size = LOAD_MUTABLE_INSTANCE_FIELD(IndirectFunctionTableSize,
+                                              MachineType::Uint32());
+    }
     *ift_sig_ids = LOAD_MUTABLE_INSTANCE_FIELD(IndirectFunctionTableSigIds,
                                                MachineType::Pointer());
     *ift_targets = LOAD_MUTABLE_INSTANCE_FIELD(IndirectFunctionTableTargets,
@@ -3028,9 +3037,11 @@ void WasmGraphBuilder::LoadIndirectFunctionTable(uint32_t table_index,
                                                  MachineType::TaggedPointer());
   Node* ift_table = gasm_->LoadFixedArrayElementAny(ift_tables, table_index);
 
-  *ift_size = gasm_->LoadFromObject(
-      MachineType::Int32(), ift_table,
-      wasm::ObjectAccess::ToTagged(WasmIndirectFunctionTable::kSizeOffset));
+  if (needs_dynamic_size) {
+    *ift_size = gasm_->LoadFromObject(
+        MachineType::Int32(), ift_table,
+        wasm::ObjectAccess::ToTagged(WasmIndirectFunctionTable::kSizeOffset));
+  }
 
   *ift_sig_ids = gasm_->LoadFromObject(
       MachineType::Pointer(), ift_table,
@@ -5530,16 +5541,11 @@ Node* WasmGraphBuilder::StructNewWithRtt(uint32_t struct_index,
   for (uint32_t i = 0; i < type->field_count(); i++) {
     gasm_->StoreStructField(s, type, i, fields[i]);
   }
-  if (type->field_count() == 0) {
-    static_assert(Heap::kMinObjectSizeInTaggedWords == 2 &&
-                      WasmStruct::kHeaderSize == kTaggedSize,
-                  "empty structs need exactly one padding field");
-    wasm::ValueType fake_type = wasm::kWasmAnyRef;
-    Node* padding_offset = gasm_->IntPtrConstant(
-        wasm::ObjectAccess::ToTagged(WasmStruct::kHeaderSize));
-    gasm_->StoreToObject(ObjectAccessForGCStores(fake_type), s, padding_offset,
-                         RefNull());
-  }
+  // If this assert fails then initialization of padding field might be
+  // necessary.
+  static_assert(Heap::kMinObjectSizeInTaggedWords == 2 &&
+                    WasmStruct::kHeaderSize == 2 * kTaggedSize,
+                "empty struct might require initialization of padding field");
   return s;
 }
 

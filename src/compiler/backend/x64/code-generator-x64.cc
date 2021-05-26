@@ -273,6 +273,8 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
         stub_mode_(stub_mode),
 #endif  // V8_ENABLE_WEBASSEMBLY
         zone_(gen->zone()) {
+    DCHECK(!AreAliased(object, scratch0, scratch1));
+    DCHECK(!AreAliased(value, scratch0, scratch1));
   }
 
   void Generate() final {
@@ -319,6 +321,52 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
 #endif  // V8_ENABLE_WEBASSEMBLY
   Zone* zone_;
 };
+
+#ifdef V8_IS_TSAN
+class OutOfLineTSANRelaxedStore final : public OutOfLineCode {
+ public:
+  OutOfLineTSANRelaxedStore(CodeGenerator* gen, Operand operand, Register value,
+                            Register scratch0, StubCallMode stub_mode)
+      : OutOfLineCode(gen),
+        operand_(operand),
+        value_(value),
+        scratch0_(scratch0),
+#if V8_ENABLE_WEBASSEMBLY
+        stub_mode_(stub_mode),
+#endif  // V8_ENABLE_WEBASSEMBLY
+        zone_(gen->zone()) {
+  }
+
+  void Generate() final {
+    const SaveFPRegsMode save_fp_mode = frame()->DidAllocateDoubleRegisters()
+                                            ? SaveFPRegsMode::kSave
+                                            : SaveFPRegsMode::kIgnore;
+    __ leaq(scratch0_, operand_);
+
+#if V8_ENABLE_WEBASSEMBLY
+    if (stub_mode_ == StubCallMode::kCallWasmRuntimeStub) {
+      // A direct call to a wasm runtime stub defined in this module.
+      // Just encode the stub index. This will be patched when the code
+      // is added to the native module and copied into wasm code space.
+      __ CallTSANRelaxedStoreStub(scratch0_, value_, save_fp_mode,
+                                  wasm::WasmCode::kTSANRelaxedStore);
+      return;
+    }
+#endif  // V8_ENABLE_WEBASSEMBLY
+
+    __ CallTSANRelaxedStoreStub(scratch0_, value_, save_fp_mode);
+  }
+
+ private:
+  Operand const operand_;
+  Register const value_;
+  Register const scratch0_;
+#if V8_ENABLE_WEBASSEMBLY
+  StubCallMode const stub_mode_;
+#endif  // V8_ENABLE_WEBASSEMBLY
+  Zone* zone_;
+};
+#endif  // V8_IS_TSAN
 
 #if V8_ENABLE_WEBASSEMBLY
 class WasmOutOfLineTrap : public OutOfLineCode {
@@ -1185,6 +1233,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       Operand operand = i.MemoryOperand(&index);
       Register value = i.InputRegister(index);
       Register scratch0 = i.TempRegister(0);
+
+#ifdef V8_IS_TSAN
+      auto tsan_ool = zone()->New<OutOfLineTSANRelaxedStore>(
+          this, operand, value, scratch0, DetermineStubCallMode());
+      __ jmp(tsan_ool->entry());
+      __ bind(tsan_ool->exit());
+#endif  // V8_IS_TSAN
+
       Register scratch1 = i.TempRegister(1);
       auto ool = zone()->New<OutOfLineRecordWrite>(this, object, operand, value,
                                                    scratch0, scratch1, mode,

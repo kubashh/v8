@@ -286,9 +286,8 @@ DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
 #endif
 
 // Features that are complete (but still behind --harmony/es-staging flag).
-#define HARMONY_STAGED_BASE(V)                                              \
-  V(harmony_class_static_blocks, "harmony static initializer blocks")       \
-  V(harmony_error_cause, "harmony error cause property")
+#define HARMONY_STAGED_BASE(V) \
+  V(harmony_class_static_blocks, "harmony static initializer blocks")
 
 #ifdef V8_INTL_SUPPORT
 #define HARMONY_STAGED(V)                                 \
@@ -300,13 +299,14 @@ DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
 #endif
 
 // Features that are shipping (turned on by default, but internal flag remains).
-#define HARMONY_SHIPPING_BASE(V)                                  \
-  V(harmony_sharedarraybuffer, "harmony sharedarraybuffer")       \
-  V(harmony_atomics, "harmony atomics")                           \
-  V(harmony_regexp_match_indices, "harmony regexp match indices") \
-  V(harmony_private_brand_checks, "harmony private brand checks") \
-  V(harmony_top_level_await, "harmony top level await")           \
-  V(harmony_relative_indexing_methods, "harmony relative indexing methods")
+#define HARMONY_SHIPPING_BASE(V)                                            \
+  V(harmony_sharedarraybuffer, "harmony sharedarraybuffer")                 \
+  V(harmony_atomics, "harmony atomics")                                     \
+  V(harmony_regexp_match_indices, "harmony regexp match indices")           \
+  V(harmony_private_brand_checks, "harmony private brand checks")           \
+  V(harmony_top_level_await, "harmony top level await")                     \
+  V(harmony_relative_indexing_methods, "harmony relative indexing methods") \
+  V(harmony_error_cause, "harmony error cause property")
 
 #ifdef V8_INTL_SUPPORT
 #define HARMONY_SHIPPING(V)             \
@@ -678,7 +678,7 @@ DEFINE_WEAK_VALUE_IMPLICATION(stress_concurrent_inlining, interrupt_budget,
 DEFINE_BOOL(
     turbo_concurrent_get_property_access_info, false,
     "concurrently call GetPropertyAccessInfo (only with --concurrent-inlining)")
-DEFINE_BOOL(turbo_concurrent_inlining_check_ispendingallocation, false,
+DEFINE_BOOL(turbo_concurrent_inlining_check_ispendingallocation, true,
             "when --concurrent-inlining is enabled, check IsPendingAllocation "
             "in Ref construction")
 DEFINE_INT(max_serializer_nesting, 25,
@@ -837,6 +837,9 @@ DEFINE_BOOL(turbo_dynamic_map_checks, true,
 DEFINE_BOOL(turbo_compress_translation_arrays, false,
             "compress translation arrays (experimental)")
 DEFINE_BOOL(turbo_inline_js_wasm_calls, false, "inline JS->Wasm calls")
+
+DEFINE_BOOL(turbo_optimize_apply, false, "optimize Function.prototype.apply")
+
 DEFINE_BOOL(turbo_collect_feedback_in_generic_lowering, true,
             "enable experimental feedback collection in generic lowering.")
 DEFINE_BOOL(isolate_script_cache_ageing, true,
@@ -888,7 +891,7 @@ DEFINE_BOOL(wasm_async_compilation, true,
 DEFINE_NEG_IMPLICATION(single_threaded, wasm_async_compilation)
 DEFINE_BOOL(wasm_test_streaming, false,
             "use streaming compilation instead of async compilation for tests")
-DEFINE_UINT(wasm_max_mem_pages, v8::internal::wasm::kSpecMaxMemoryPages,
+DEFINE_UINT(wasm_max_mem_pages, v8::internal::wasm::kV8MaxWasmMemoryPages,
             "maximum number of 64KiB memory pages per wasm memory")
 DEFINE_UINT(wasm_max_table_size, v8::internal::wasm::kV8MaxWasmTableSize,
             "maximum table size of a wasm instance")

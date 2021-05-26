@@ -457,8 +457,8 @@ assert(
     "Can't share a pointer compression cage if pointers aren't compressed")
 
 assert(!v8_enable_pointer_compression_shared_cage || v8_current_cpu == "x64" ||
-           v8_current_cpu == "arm64",
-       "Sharing a pointer compression cage is only supported on x64 and arm64")
+           v8_current_cpu == "arm64" || v8_current_cpu == "riscv64",
+       "Sharing a pointer compression cage is only supported on x64,arm64 and riscv64")
 
 assert(!v8_enable_unconditional_write_barriers || !v8_disable_write_barriers,
        "Write barriers can't be both enabled and disabled")
@@ -609,6 +609,7 @@ external_v8_defines = [
   "V8_NO_ARGUMENTS_ADAPTOR",
   "V8_USE_PERFETTO",
   "V8_MAP_PACKING",
+  "V8_IS_TSAN",
 ]
 
 enabled_external_v8_defines = []
@@ -644,6 +645,9 @@ if (v8_use_perfetto) {
 }
 if (v8_enable_map_packing) {
   enabled_external_v8_defines += [ "V8_MAP_PACKING" ]
+}
+if (is_tsan) {
+  enabled_external_v8_defines += [ "V8_IS_TSAN" ]
 }
 
 disabled_external_v8_defines = external_v8_defines - enabled_external_v8_defines

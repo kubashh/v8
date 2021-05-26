@@ -111,7 +111,7 @@ enum class RefSerializationKind {
   V(CallHandlerInfo, RefSerializationKind::kNeverSerialized)              \
   V(Cell, RefSerializationKind::kNeverSerialized)                         \
   V(Code, RefSerializationKind::kNeverSerialized)                         \
-  V(Context, RefSerializationKind::kSerialized)                           \
+  V(Context, RefSerializationKind::kNeverSerialized)                      \
   V(DescriptorArray, RefSerializationKind::kNeverSerialized)              \
   V(FeedbackCell, RefSerializationKind::kNeverSerialized)                 \
   V(FeedbackVector, RefSerializationKind::kNeverSerialized)               \
@@ -160,12 +160,11 @@ struct ref_traits<Object> {
 
 class V8_EXPORT_PRIVATE ObjectRef {
  public:
-  ObjectRef(JSHeapBroker* broker, Handle<Object> object,
-            bool check_type = true);
   ObjectRef(JSHeapBroker* broker, ObjectData* data, bool check_type = true)
       : data_(data), broker_(broker) {
     CHECK_NOT_NULL(data_);
   }
+
   Handle<Object> object() const;
 
   bool equals(const ObjectRef& other) const;
@@ -870,6 +869,7 @@ class ScopeInfoRef : public HeapObjectRef {
 
 #define BROKER_SFI_FIELDS(V)                       \
   V(int, internal_formal_parameter_count)          \
+  V(bool, has_simple_parameters)                   \
   V(bool, has_duplicate_parameters)                \
   V(int, function_map_index)                       \
   V(FunctionKind, kind)                            \

@@ -158,6 +158,8 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
 #endif  // V8_ENABLE_WEBASSEMBLY
         must_save_lr_(!gen->frame_access_state()->has_frame()),
         zone_(gen->zone()) {
+    DCHECK(!AreAliased(object, index, scratch0, scratch1));
+    DCHECK(!AreAliased(value, index, scratch0, scratch1));
   }
 
   void Generate() final {
@@ -778,7 +780,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       bool isWasmCapiFunction =
           linkage()->GetIncomingDescriptor()->IsWasmCapiFunction();
       // from start_call to return address.
-      int offset = __ root_array_available() ? 68 : 80;
+      int offset = __ root_array_available() ? 64 : 88;
 #endif  // V8_ENABLE_WEBASSEMBLY
 #if V8_HOST_ARCH_MIPS
       if (FLAG_debug_code) {
@@ -927,33 +929,12 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           frame_access_state()->GetFrameOffset(i.InputInt32(0));
       Register base_reg = offset.from_stack_pointer() ? sp : fp;
       __ Addu(i.OutputRegister(), base_reg, Operand(offset.offset()));
-      int alignment = i.InputInt32(1);
-      DCHECK(alignment == 0 || alignment == 4 || alignment == 8 ||
-             alignment == 16);
-      if (FLAG_debug_code && alignment > 0) {
+      if (FLAG_debug_code > 0) {
         // Verify that the output_register is properly aligned
         __ And(kScratchReg, i.OutputRegister(),
                Operand(kSystemPointerSize - 1));
         __ Assert(eq, AbortReason::kAllocationIsNotDoubleAligned, kScratchReg,
                   Operand(zero_reg));
-      }
-
-      if (alignment == 2 * kSystemPointerSize) {
-        Label done;
-        __ Addu(kScratchReg, base_reg, Operand(offset.offset()));
-        __ And(kScratchReg, kScratchReg, Operand(alignment - 1));
-        __ BranchShort(&done, eq, kScratchReg, Operand(zero_reg));
-        __ Addu(i.OutputRegister(), i.OutputRegister(), kSystemPointerSize);
-        __ bind(&done);
-      } else if (alignment > 2 * kSystemPointerSize) {
-        Label done;
-        __ Addu(kScratchReg, base_reg, Operand(offset.offset()));
-        __ And(kScratchReg, kScratchReg, Operand(alignment - 1));
-        __ BranchShort(&done, eq, kScratchReg, Operand(zero_reg));
-        __ li(kScratchReg2, alignment);
-        __ Subu(kScratchReg2, kScratchReg2, Operand(kScratchReg));
-        __ Addu(i.OutputRegister(), i.OutputRegister(), kScratchReg2);
-        __ bind(&done);
       }
       break;
     }
