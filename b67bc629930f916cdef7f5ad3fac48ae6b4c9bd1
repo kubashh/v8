@@ -68,6 +68,24 @@
       "parentUuid": "1781a89b_d655914c",
       "revId": "b67bc629930f916cdef7f5ad3fac48ae6b4c9bd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3081d06_6507a6ed",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-26T08:50:48Z",
+      "side": 1,
+      "message": "Clarifying, I meant to do something like\n\n #ifdef DEBUG\n  if (ExternalReference::new_space_allocation_top_address(isolate())\n              .address() !\u003d kNullAddress) {\n   int foo \u003d ExternalReference::new_space_allocation_limit_address(isolate())\n                  .address() -\n              ExternalReference::new_space_allocation_top_address(isolate())\n                  .address());\n   CHECK_EQ(kSystemPointerSize, foo);\n }\n\ni.e. pulling all the verbose logic out of the CHECK macro.",
+      "parentUuid": "6ec3e3f7_3c93386e",
+      "revId": "b67bc629930f916cdef7f5ad3fac48ae6b4c9bd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
