@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e433e053_2cadbc1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-26T06:36:00Z",
+      "side": 1,
+      "message": "lgtm from my side with a nit",
+      "revId": "106e3a20240f91839f0c58972c169f1ec0b7cefd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccd8ba84_caee7f77",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-26T06:36:00Z",
+      "side": 1,
+      "message": "nit: V8_DISABLE_WRITE_BARRIERS_BOOL here and in the other file.",
+      "revId": "106e3a20240f91839f0c58972c169f1ec0b7cefd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
