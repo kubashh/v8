@@ -318,6 +318,7 @@ class RuntimeCallTimer final {
   ADD_THREAD_SPECIFIC_COUNTER(V, Compile, RewriteReturnResult)              \
   ADD_THREAD_SPECIFIC_COUNTER(V, Compile, ScopeAnalysis)                    \
   ADD_THREAD_SPECIFIC_COUNTER(V, Compile, Script)                           \
+  ADD_THREAD_SPECIFIC_COUNTER(V, Compile, TraceScheduleAndVerify)           \
                                                                             \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, AllocateFPRegisters)             \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, AllocateGeneralRegisters)        \
@@ -374,6 +375,7 @@ class RuntimeCallTimer final {
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, WasmBaseOptimization)            \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, WasmInlining)                    \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, WasmLoopUnrolling)               \
+  ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, WasmOptimization)                \
                                                                             \
   ADD_THREAD_SPECIFIC_COUNTER(V, Parse, ArrowFunctionLiteral)               \
   ADD_THREAD_SPECIFIC_COUNTER(V, Parse, FunctionLiteral)                    \
