@@ -37,6 +37,92 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1d6b4c36_a5a81407",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-26T16:12:06Z",
+      "side": 1,
+      "message": "I like the idea of embedding the saving of the registers to the builtin itself, however I feel like this CL is a bit hacky/hardcoded. We are now relying on a particular set of registers for the builtin (which are not the usual arg_reg_x). This CL is also impacting some architectures like Arm for which we shouldn\u0027t be seeing impact as far as I can see, which leads me to believe that this has more impact than the localized RecordWrite builtin.\n\nWhat are the savings in code size and compilation speed? If Sparkplug is the only one who benefits, is there a way to localize the change over there?\n\nCould we instead do something similar to Builtins::Generate_DynamicCheckMapsTrampoline that saves the register in the builtin? https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/x64/builtins-x64.cc;l\u003d4509;drc\u003dbaa4ba3f7d20fc9ec925a83d126e8efce9e57d85",
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69d9893d_6d07458d",
+        "filename": "src/codegen/arm/interface-descriptors-arm-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-26T16:12:06Z",
+      "side": 1,
+      "message": "Why is this and arm64 re-shuffling needed?",
+      "range": {
+        "startLine": 24,
+        "startChar": 39,
+        "endLine": 24,
+        "endChar": 41
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20dcf974_b9847f1c",
+        "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-26T16:12:06Z",
+      "side": 1,
+      "message": "How were these registers chosen? Some of them are the same for windows and non-windows, but some are not. Also, `rax` (kReturnRegister0) is used in both cases, but in a different position.\nSince we are not using them in the regular way of \"arg_reg_1, arg_reg_2, ...\" WDYT about using the register itself? Unless there\u0027s a reason we would like to update them automatically if arg_reg_1 changes or similar.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 41
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "038dbf7d_26f7dbec",
+        "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-26T16:12:06Z",
+      "side": 1,
+      "message": "Why the change here? rcx is arg_reg_4 for non-windows.",
+      "range": {
+        "startLine": 45,
+        "startChar": 52,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6bd93027_19a80f89",
         "filename": "src/codegen/x64/macro-assembler-x64.cc",
         "patchSetId": 18
