@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "102ade9e_38bc1055",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-05-26T07:17:34Z",
+      "side": 1,
+      "message": "PTAL at this CL.\n\nI am unsure about what\u0027s the best way to fix this. I didn\u0027t want to compile out new_space_allocation_top/limit entirely since I also recently disabled the new space for the shared isolate and not for the whole build.",
+      "revId": "b67bc629930f916cdef7f5ad3fac48ae6b4c9bd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
