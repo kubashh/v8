@@ -1213,6 +1213,11 @@ PipelineCompilationJob::Status PipelineCompilationJob::PrepareJobImpl(
 
   if (compilation_info()->is_osr()) data_.InitializeOsrHelper();
 
+  // Publish once here to satisfy the IsPendingAllocation predicate in the
+  // main-thread phases. This can be removed once main-thread phases are
+  // removed.
+  isolate->heap()->PublishPendingAllocations();
+
   pipeline_.Serialize();
 
   if (!data_.broker()->is_concurrent_inlining()) {
@@ -1222,9 +1227,7 @@ PipelineCompilationJob::Status PipelineCompilationJob::PrepareJobImpl(
     }
   }
 
-  if (compilation_info()->concurrent_inlining()) {
-    isolate->heap()->PublishPendingAllocations();
-  }
+  isolate->heap()->PublishPendingAllocations();
 
   return SUCCEEDED;
 }
