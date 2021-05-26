@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3cfad00_3a18c847",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-26T16:28:59Z",
+      "side": 1,
+      "message": "Just do give you an idea: the call-sites for RecordWrite are very large (my previous change where I reduced the call-sites to two arguments in registers instead of 4, reduced builtin size by \u003e 2KiB);\n\nFor sparkplug this CL reduces code-size by 4%, and I\u0027m pretty sure turbofan will benefit as well from smaller code.",
+      "parentUuid": "f38595a8_0ee5c8a8",
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69d9893d_6d07458d",
         "filename": "src/codegen/arm/interface-descriptors-arm-inl.h",
         "patchSetId": 18
