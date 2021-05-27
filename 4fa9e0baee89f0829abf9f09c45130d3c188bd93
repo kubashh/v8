@@ -16,6 +16,23 @@
       "message": "Done. I will land it next Monday",
       "revId": "4fa9e0baee89f0829abf9f09c45130d3c188bd93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3e02d5c_6094ef21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116609
+      },
+      "writtenOn": "2021-05-27T18:10:22Z",
+      "side": 1,
+      "message": "Just FYI that while your approach is similar to what others are doing here (e.g. Skia), there will be chunks of time where the new branch is basically N/A (whenever stable \u003d\u003d extended), and at some point (e.g. if other long-lived branches launch) it feels like migrating away from \"beta\" and \"stable\" and towards milestone and branch-based names might be more convenient.  This is the direction the security team is starting to move, and Chrome as a whole will need to move eventually IMO.  Just wanted to provide a pointer to the future so it\u0027s not a surprise later.",
+      "revId": "4fa9e0baee89f0829abf9f09c45130d3c188bd93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
