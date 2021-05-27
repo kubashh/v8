@@ -51,6 +51,24 @@
       "parentUuid": "1c498c3b_438218f4",
       "revId": "1cfea803cf39d1a21fbf732bf36e1c4d9824188e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29bd0ede_9473d67f",
+        "filename": "test/mjsunit/compiler/call-with-arraylike-or-spread.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-05-27T02:16:34Z",
+      "side": 1,
+      "message": "This seems to be caused by the fact that for HOLEY_DOUBLE_ELEMENTS we add a CheckFloat64Hole that causes a deopt if there is a hole. So what happens is that:\n\n1. We begin compiling method foo.\n\n2. There is a deopt-eager, reason: hole for foo.\n\n3. Later, the interpreter calls: Builtins_CallProperty2Handler -\u003e CollectCallFeedback.\nCollectCallFeedback transitions to megamorphic because feedbackCell is not equal to targetFeedbackCell:\n\n    feedback is initialized,\n    target is JSFunction \"apply\"\n    feedbackValue is JSFunction \"sum_js3\"\n\n    targetFeedbackCell \u003d target.feedback_cell is:\n    DebugPrint: 000001DC08296E45: [FeedbackCell] in OldSpace\n    - map: 0x01dc08002bd5 \u003cMap[12]\u003e\n    - one closure\n    - value: 0x01dc08296f71 \u003cFeedbackVector[2]\u003e\n\n    feedbackCell: \u003d Cast\u003cJSFunction\u003e(feedbackValue).feedback_cell is:\n    DebugPrint: 000001DC0820244D: [FeedbackCell] in OldSpace\n    - map: 0x01dc08002ae5 \u003cMap[12]\u003e\n    - many closures\n    - value: 0x01dc080023b5 \u003cundefined\u003e\n\nIs the mismatch here due to the fact that we transform a call to \u0027apply\u0027 into a call to \u0027sum_js3\u0027?\n\n\nInstead, modifying the code to call\n    sum_js3.apply(null, [x,0,y]);\nwithout holes, CollectCallFeedback immediately goes to TryInitializeAsMonomorphic because \"feedback\" is uninitialized.",
+      "parentUuid": "0cac9829_7c2f4916",
+      "revId": "1cfea803cf39d1a21fbf732bf36e1c4d9824188e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
