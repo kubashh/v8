@@ -182,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "891ea43a_8a4fd707",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T13:29:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fe0626e_a0e512d4",
+      "range": {
+        "startLine": 457,
+        "startChar": 0,
+        "endLine": 457,
+        "endChar": 1
+      },
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62c2117f_e8c93496",
@@ -195,6 +219,30 @@
       "writtenOn": "2021-05-27T12:58:26Z",
       "side": 1,
       "message": "Nit: We seem to be checking r10 below in each case before using it, so the DCHECK in line 4674 seems to be redundant. If the DCHECK remains, please move the rcx comment to line 4712 and keep this comment only for r10.",
+      "range": {
+        "startLine": 4673,
+        "startChar": 19,
+        "endLine": 4673,
+        "endChar": 26
+      },
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a094a3ff_dd4a8de0",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4673,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T13:29:50Z",
+      "side": 1,
+      "message": "I removed this here.",
+      "parentUuid": "62c2117f_e8c93496",
       "range": {
         "startLine": 4673,
         "startChar": 19,
