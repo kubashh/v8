@@ -256,6 +256,24 @@
       "parentUuid": "f737668c_c7d9cafc",
       "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4ec4c19_48abe69e",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T13:17:34Z",
+      "side": 1,
+      "message": "Ideally I would like to get rid of CallRecordWriteStubSaveRegisters alltogether, but that would required more changes again.\n\nThis is the accidental overlap of having to save registers for the builtins and for the call-sites.",
+      "parentUuid": "3a5e1ffd_d0e48a8e",
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
