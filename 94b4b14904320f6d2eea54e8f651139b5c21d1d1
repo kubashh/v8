@@ -33,6 +33,109 @@
       "message": "liftoff LGTM",
       "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51e95c7c_3376598e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T12:58:26Z",
+      "side": 1,
+      "message": "I\u0027m understanding this CL more than the other one. Let me see if I got this right: This CL decouples `CallRecordWriteStub` into `CallRecordWriteStubSaveRegisters` and `CallRecordWriteStub`. Nothing (yet) calls directly `CallRecordWriteStub` and instead they call `CallRecordWriteStubSaveRegisters` which preserves the functionality as it was before this CL. `CallRecordWriteStub` assumes that the registers are saved and restored outside of its scope.",
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73f5a001_67f7c702",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T12:58:26Z",
+      "side": 1,
+      "message": "This is related to the linkage.cc comment. If this was `false` what would change?",
+      "range": {
+        "startLine": 1020,
+        "startChar": 47,
+        "endLine": 1020,
+        "endChar": 51
+      },
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fe0626e_a0e512d4",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T12:58:26Z",
+      "side": 1,
+      "message": "nit: maybe add a comment at the beginning of this method stating that we are purposefully not saving and restoring registers. If the caller wants to preserve them it save and restore them itself, or can call `CallRecordWriteStubSaveRegisters`.",
+      "range": {
+        "startLine": 457,
+        "startChar": 0,
+        "endLine": 457,
+        "endChar": 1
+      },
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62c2117f_e8c93496",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4673,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T12:58:26Z",
+      "side": 1,
+      "message": "Nit: We seem to be checking r10 below in each case before using it, so the DCHECK in line 4674 seems to be redundant. If the DCHECK remains, please move the rcx comment to line 4712 and keep this comment only for r10.",
+      "range": {
+        "startLine": 4673,
+        "startChar": 19,
+        "endLine": 4673,
+        "endChar": 26
+      },
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e134d8e_85bddee4",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T12:58:26Z",
+      "side": 1,
+      "message": "The only thing I am missing is what the changes to linkage.cc affect. If the changes to this file weren\u0027t in this CL, what would change?",
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
