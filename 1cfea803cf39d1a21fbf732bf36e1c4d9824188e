@@ -69,6 +69,24 @@
       "parentUuid": "0cac9829_7c2f4916",
       "revId": "1cfea803cf39d1a21fbf732bf36e1c4d9824188e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f13bf2b_115e49dd",
+        "filename": "test/mjsunit/compiler/call-with-arraylike-or-spread.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-05-27T02:29:00Z",
+      "side": 1,
+      "message": "Should we avoid this optimization for HOLEY_DOUBLE_ELEMENTS?",
+      "parentUuid": "29bd0ede_9473d67f",
+      "revId": "1cfea803cf39d1a21fbf732bf36e1c4d9824188e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
