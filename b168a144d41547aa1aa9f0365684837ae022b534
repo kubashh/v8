@@ -33,6 +33,40 @@
       "message": "Forgot to add you! 😊",
       "revId": "b168a144d41547aa1aa9f0365684837ae022b534",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52112603_1927e0af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-27T23:56:00Z",
+      "side": 1,
+      "message": "Nice! Thanks for implementing so speedily.",
+      "revId": "b168a144d41547aa1aa9f0365684837ae022b534",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3de5cd46_5c12affa",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-05-27T23:56:00Z",
+      "side": 1,
+      "message": "Could you also copy the spec step here to make it clearer why this ToObject optimization is needed? Can say that ToProperty(key) and the rest of the steps are done in ObjectPrototypeHasOwnProperty?",
+      "revId": "b168a144d41547aa1aa9f0365684837ae022b534",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
