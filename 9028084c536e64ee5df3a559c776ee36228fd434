@@ -69,6 +69,24 @@
       "parentUuid": "ade73b30_d8b23863",
       "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "add8e61c_6025977d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-05-27T13:04:23Z",
+      "side": 1,
+      "message": "Right, we would emit a useless mov in x64... It looks like this is already the case in TurboFan then, since we have the same logic there:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/wasm-compiler.cc;drc\u003ddb245ed83a1f673bb1d879bb9a127dc87392b2e9;l\u003d3766\n\nWe can go back to the UXTW load, but only if this is actually a 32 bit offset, otherwise we hit the initial issue again where a 64 bit index is truncated. LiftoffAssembler doesn\u0027t have that information yet but it should be easy enough to get it from LiftoffCompiler.",
+      "parentUuid": "53758eb0_eba2482f",
+      "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
