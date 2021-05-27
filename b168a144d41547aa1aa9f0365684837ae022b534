@@ -16,6 +16,23 @@
       "message": "ptal Shu!\nTo be able to use the optimisations in HasOwnPrototype and since the only difference between HasOwn and HasOwnPrototype seems to be ToObject needs to be evaluated first. I just check if null or undefined and call HasOwnPrototype.",
       "revId": "b168a144d41547aa1aa9f0365684837ae022b534",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "822c568a_73f791ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-05-27T15:10:32Z",
+      "side": 1,
+      "message": "Forgot to add you! 😊",
+      "revId": "b168a144d41547aa1aa9f0365684837ae022b534",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
