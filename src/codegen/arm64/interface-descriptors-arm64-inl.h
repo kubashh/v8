@@ -22,7 +22,7 @@ constexpr auto CallInterfaceDescriptor::DefaultRegisterArray() {
 
 // static
 constexpr auto WriteBarrierDescriptor::registers() {
-  return RegisterArray(x1, x2, x3, x4, x0, kReturnRegister0);
+  return RegisterArray(x0, x1, x2, x3, x4, kReturnRegister0);
 }
 
 // static
