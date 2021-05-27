@@ -293,7 +293,8 @@ DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
 #define HARMONY_STAGED(V)                                 \
   HARMONY_STAGED_BASE(V)                                  \
   V(harmony_intl_best_fit_matcher, "Intl BestFitMatcher") \
-  V(harmony_intl_locale_info, "Intl locale info")
+  V(harmony_intl_locale_info, "Intl locale info")         \
+  V(harmony_has_own, "Object.hasOwn")
 #else
 #define HARMONY_STAGED(V) HARMONY_STAGED_BASE(V)
 #endif

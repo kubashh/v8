@@ -543,6 +543,26 @@ TF_BUILTIN(ObjectKeys, ObjectBuiltinsAssembler) {
   }
 }
 
+TF_BUILTIN(ObjectHasOwn, ObjectBuiltinsAssembler) {
+  auto target = Parameter<Object>(Descriptor::kJSTarget);
+  auto new_target = Parameter<Object>(Descriptor::kJSNewTarget);
+  auto object = Parameter<Object>(Descriptor::kObject);
+  auto key = Parameter<Object>(Descriptor::kKey);
+  auto context = Parameter<Context>(Descriptor::kContext);
+
+  // ToObject can only fail when object is undefined or null.
+  Label undefined_or_null(this), not_undefined_nor_null(this);
+  Branch(IsNullOrUndefined(object), &undefined_or_null,
+         &not_undefined_nor_null);
+
+  BIND(&undefined_or_null);
+  ThrowTypeError(context, MessageTemplate::kUndefinedOrNullToObject);
+
+  BIND(&not_undefined_nor_null);
+  Return(CallBuiltin(Builtins::kObjectPrototypeHasOwnProperty, context, target,
+                     new_target, IntPtrConstant(2), object, key));
+}
+
 // ES #sec-object.getOwnPropertyNames
 TF_BUILTIN(ObjectGetOwnPropertyNames, ObjectBuiltinsAssembler) {
   auto object = Parameter<Object>(Descriptor::kObject);
