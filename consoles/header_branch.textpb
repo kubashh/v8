@@ -1,4 +1,16 @@
 links {
+  name: "Previous coverage"
+  links {
+    text: "previous"
+    url: "/p/v8/g/br.previous"
+    alt: "Previous Main"
+  }
+  links {
+    text: "previous.ports"
+    url: "/p/v8/g/br.previous.ports"
+    alt: "Previous Ports"
+  }
+}links {
   name: "Stable coverage"
   links {
     text: "stable"
@@ -34,6 +46,8 @@ links {
 }
 
 console_groups {
+  console_ids: "v8/br.previous"
+  console_ids: "v8/br.previous.ports"
   console_ids: "v8/br.stable"
   console_ids: "v8/br.stable.ports"
   console_ids: "v8/br.beta"
