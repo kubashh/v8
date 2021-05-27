@@ -3081,6 +3081,9 @@ void JSObject::MigrateToMap(Isolate* isolate, Handle<JSObject> object,
   Handle<Map> old_map(object->map(isolate), isolate);
   NotifyMapChange(old_map, new_map, isolate);
 
+  base::SharedMutexGuard<base::kExclusive> mutex_guard(
+      isolate->js_obj_migration_access());
+
   if (old_map->is_dictionary_map()) {
     // For slow-to-fast migrations JSObject::MigrateSlowToFast()
     // must be used instead.
