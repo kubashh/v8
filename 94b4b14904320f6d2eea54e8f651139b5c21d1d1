@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40af62f8_c6f8c828",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T13:12:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "192fca7a_4699b139",
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73f5a001_67f7c702",
@@ -107,6 +125,30 @@
       "side": 1,
       "message": "We would not do the register pushes inside the builtin (aka the old behavior).",
       "parentUuid": "73f5a001_67f7c702",
+      "range": {
+        "startLine": 1020,
+        "startChar": 47,
+        "endLine": 1020,
+        "endChar": 51
+      },
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7937c8cc_c5222eb8",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T13:12:40Z",
+      "side": 1,
+      "message": "Resolving this and continuing in the linkage.cc comment to have only one thread open.",
+      "parentUuid": "ae89ae25_e45f6474",
       "range": {
         "startLine": 1020,
         "startChar": 47,
@@ -194,6 +236,24 @@
       "side": 1,
       "message": "That\u0027s the core piece of the CL, it actively tells TF to do the register restoring inside the builtin. (is that what you\u0027ve asked?)",
       "parentUuid": "5e134d8e_85bddee4",
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a5e1ffd_d0e48a8e",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T13:12:40Z",
+      "side": 1,
+      "message": "Yes. Since we are still saving and restoring registers in `CallRecordWriteStubSaveRegisters` I was wondering why it was needed.",
+      "parentUuid": "f737668c_c7d9cafc",
       "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
