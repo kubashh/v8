@@ -488,7 +488,7 @@ void TurboAssembler::CallTSANRelaxedStoreStub(Register address, Register value,
   TSANRelaxedStoreDescriptor descriptor;
   RegList registers = descriptor.allocatable_registers();
 
-  SaveRegisters(registers);
+  MaybeSaveRegisters(registers);
 
   Register address_parameter(
       descriptor.GetRegisterParameter(TSANRelaxedStoreDescriptor::kAddress));
@@ -511,7 +511,7 @@ void TurboAssembler::CallTSANRelaxedStoreStub(Register address, Register value,
     Call(code_target, RelocInfo::CODE_TARGET);
   }
 
-  RestoreRegisters(registers);
+  MaybeRestoreRegisters(registers);
 }
 #endif  // V8_IS_TSAN
 
