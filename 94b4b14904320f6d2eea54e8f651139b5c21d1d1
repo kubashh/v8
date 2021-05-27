@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50949719_39747557",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T10:40:27Z",
+      "side": 1,
+      "message": "PTAL\nahaas@ PTAL again liftoff changes (this is a new preparatory CL for https://crrev.com/c/2910313)",
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
