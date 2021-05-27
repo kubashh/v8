@@ -340,6 +340,24 @@
       "parentUuid": "e4ec4c19_48abe69e",
       "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dbdd40b_a354c166",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T14:03:12Z",
+      "side": 1,
+      "message": "Correct.\n- We\u0027re likely regressing a little bit (since we might end up pushing at most 2 registers twice).\n- We\u0027re definitely improving code size since we now maximally push two registers instead of all 5\n\n\u003d\u003e We will get rid of most registers saving and restoring in follow-up CLs",
+      "parentUuid": "97d8f7c2_6c184ba3",
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
