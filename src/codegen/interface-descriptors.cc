@@ -125,5 +125,37 @@ bool CallInterfaceDescriptor::IsValidFloatParameterRegister(Register reg) {
 #endif
 }
 
+#if DEBUG
+template <typename DerivedDescriptor>
+void StaticCallInterfaceDescriptor<DerivedDescriptor>::Verify(
+    CallInterfaceDescriptorData* data) {}
+
+// static
+void WriteBarrierDescriptor::Verify(CallInterfaceDescriptorData* data) {
+  DCHECK(!AreAliased(ObjectRegister(), SlotAddressRegister(), ValueRegister()));
+  // The default parameters should not clobber vital registers in order to
+  // reduce code size:
+  DCHECK(!AreAliased(ObjectRegister(), kContextRegister,
+                     kInterpreterAccumulatorRegister));
+  DCHECK(!AreAliased(SlotAddressRegister(), kContextRegister,
+                     kInterpreterAccumulatorRegister));
+  DCHECK(!AreAliased(ValueRegister(), kContextRegister,
+                     kInterpreterAccumulatorRegister));
+  // Coincidental: to make calling from various builtins easier.
+  DCHECK_EQ(ObjectRegister(), kJSFunctionRegister);
+  // We need a certain set of registers by default:
+  RegList allocatable_regs = data->allocatable_registers();
+  DCHECK(allocatable_regs | kContextRegister.bit());
+  DCHECK(allocatable_regs | kReturnRegister0.bit());
+#if V8_TARGET_ARCH_X64
+  // Verify that we have all registers for a runtime call with 4 arguments.
+  DCHECK(allocatable_regs | arg_reg_1.bit());
+  DCHECK(allocatable_regs | arg_reg_2.bit());
+  DCHECK(allocatable_regs | arg_reg_3.bit());
+  DCHECK(allocatable_regs | arg_reg_4.bit());
+#endif
+}
+#endif  // DEBUG
+
 }  // namespace internal
 }  // namespace v8
