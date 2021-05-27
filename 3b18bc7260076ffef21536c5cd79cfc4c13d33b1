@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dbcb39d_50f482bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T15:14:41Z",
+      "side": 1,
+      "message": "Georg PTAL",
+      "revId": "3b18bc7260076ffef21536c5cd79cfc4c13d33b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d97f46dc_e3666c30",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T15:14:41Z",
+      "side": 1,
+      "message": "We only need the second register iff `g.CanBeImmediate(value)`. Is it worth it to complicate a little bit this part of the code to save that temp register?",
+      "range": {
+        "startLine": 525,
+        "startChar": 52,
+        "endLine": 525,
+        "endChar": 68
+      },
+      "revId": "3b18bc7260076ffef21536c5cd79cfc4c13d33b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28e24b31_e9014322",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T15:14:41Z",
+      "side": 1,
+      "message": "Code in the #else was preserved. Only moved around.",
+      "revId": "3b18bc7260076ffef21536c5cd79cfc4c13d33b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
