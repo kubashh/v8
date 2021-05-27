@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39f1733f_87564d54",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-27T13:37:28Z",
+      "side": 1,
+      "message": "Please enrich the CL description with more details...",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "3448ab47fe8b09f84ea305303e777b4a90a25235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48671e7a_7a25ba46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-27T13:37:28Z",
+      "side": 1,
+      "message": "I\u0027m not entirely sure about the name of the consoles. Maybe check with Alex if \"previous\" is a good name. I currently don\u0027t find what the name was.",
+      "revId": "3448ab47fe8b09f84ea305303e777b4a90a25235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be8c3e0c_4940e5f7",
+        "filename": "definitions.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-05-27T13:37:28Z",
+      "side": 1,
+      "message": "Maybe sort these names by age?\nci\nbeta\nstable\nprevious\n\nnit: update the comment line or remove all those comments",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 29
+      },
+      "revId": "3448ab47fe8b09f84ea305303e777b4a90a25235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
