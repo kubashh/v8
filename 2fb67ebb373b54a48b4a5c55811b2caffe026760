@@ -135,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f974db6f_3381462a",
+        "filename": "src/codegen/arm/interface-descriptors-arm-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T11:45:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f37f44f7_2026055c",
+      "range": {
+        "startLine": 24,
+        "startChar": 39,
+        "endLine": 24,
+        "endChar": 41
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20dcf974_b9847f1c",
@@ -172,6 +196,30 @@
       "side": 1,
       "message": "This looks fairly random, but is rather deliberate:\n\n- We need arg_reg_1 - arg_reg_4 for the runtime call in the RecordWrite builtin, they are platform specific\n- kReturnRegister0 is used as well, since it\u0027s always accessed\n- We need kContextRegister since it\u0027s accessed as well by default in the builtin (this accidentally overlaps with arg_reg_2 on x64)\n- rbx on linux could be anything that doesn\u0027t mess too much with\n  existing code.",
       "parentUuid": "20dcf974_b9847f1c",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 41
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a30e12c7_e1955206",
+        "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T11:45:25Z",
+      "side": 1,
+      "message": "Added WriteBarrierDescriptor::Verify to make this explicit across platforms.",
+      "parentUuid": "0c6ff773_81957a61",
       "range": {
         "startLine": 24,
         "startChar": 0,
@@ -229,6 +277,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f99cee43_558e59fe",
+        "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T11:45:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50db9e34_0c684768",
+      "range": {
+        "startLine": 45,
+        "startChar": 52,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bd93027_19a80f89",
@@ -266,6 +338,30 @@
       "side": 1,
       "message": "I\u0027m still torn between making this explicit (passing all used registers) and doing the minimal registers approach (but then we need a temp register scope line on arm64 to make it clean).",
       "parentUuid": "6bd93027_19a80f89",
+      "range": {
+        "startLine": 326,
+        "startChar": 54,
+        "endLine": 326,
+        "endChar": 75
+      },
+      "revId": "2fb67ebb373b54a48b4a5c55811b2caffe026760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eae01adf_2584c5b3",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T11:45:25Z",
+      "side": 1,
+      "message": "sticking with the explicit arguments for now, once all platforms are migrated I can clean up the code.",
+      "parentUuid": "946dd75b_dc96af6b",
       "range": {
         "startLine": 326,
         "startChar": 54,
