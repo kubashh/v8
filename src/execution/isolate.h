@@ -670,6 +670,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   base::SharedMutex* map_updater_access() { return &map_updater_access_; }
 
+  base::SharedMutex* js_obj_migration_access() {
+    return &js_obj_migration_access_;
+  }
+
   // The isolate's string table.
   StringTable* string_table() const { return string_table_.get(); }
 
@@ -1928,6 +1932,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   base::SharedMutex full_transition_array_access_;
   base::SharedMutex shared_function_info_access_;
   base::SharedMutex map_updater_access_;
+  base::SharedMutex js_obj_migration_access_;
   Logger* logger_ = nullptr;
   StubCache* load_stub_cache_ = nullptr;
   StubCache* store_stub_cache_ = nullptr;
