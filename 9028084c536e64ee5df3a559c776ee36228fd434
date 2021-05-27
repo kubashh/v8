@@ -33,6 +33,24 @@
       "message": "I think we should clarify first what the convention is for 32-bit values held in 64-bit registers. For example an kExprI64UConvertI32 type conversion on x64 relies on the value being zero extended. On arm64, we do an explicit zero extension in that conversion. This seems inconsistent.\nIt also looks like memory accesses on x64 assume a zero-extended offset register.\n\nCan you make the AssertZeroExtended on x64 (or the memory access) fail if using an i32 parameter passed from TurboFan?\n\nIf so, we have two options:\n1) Do *not* rely on zero-extension (for memory accesses, as fixed by this CL, but also for other instructions, and on all platforms).\n2) Ensure zero-extension everywhere.\n\nI think the best solution is the one that produces less code.\n\n(2) would probably mean that we need to add zero-extension for all i32 parameters in the function prologue, which does not sound right.\n(1) requires several fixes on different platforms for different instructions.\n\nIt\u0027s a bit sad that the problem only happens when calling from TurboFan to Liftoff. Would it maybe be an option to use 32-bit loads for 32-bit values in TurboFan?",
       "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ade73b30_d8b23863",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-05-27T11:25:22Z",
+      "side": 1,
+      "message": "In general we seem to be consistent about *not* expecting zero-extension on arm64. The i64 to i32 zero-extension was only introduced recently to solve the load offset issue, but since we do it before the load now we can remove it.\n\nI could not make the repro fail on x64. x64 is not consistent with arm64 there and pushes the full register for 32 bit stack arguments, so the upper bits stay cleared.\n\nI propose that we do the following:\n- I will remove the i64 to i32 zero-extension in arm64 in this CL to resolve the inconsistency\n- We land it to fix the issue\n- As a follow-up, we revisit the assumptions on both platforms to see if there is any potential code size or performance benefits, or at least align them.\n\nWDYT?",
+      "parentUuid": "32e616a5_ed2d0301",
+      "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
