@@ -5,13 +5,16 @@
 versions = {
     "beta": "9.2",
     "stable": "9.1",
+    "previous" : "9.0",
 }
 
 branch_names = [
     "ci",  # master
     "ci.br.stable",  # stable
     "ci.br.beta",  # beta
+    "ci.br.previous",  # beta
 ]
 
 beta_re = versions["beta"].replace(".", "\\.")
 stable_re = versions["stable"].replace(".", "\\.")
+previous_re = versions["previous"].replace(".", "\\.")
