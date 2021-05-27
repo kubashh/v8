@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aeafe18_df34a6f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-05-27T17:08:36Z",
+      "side": 1,
+      "message": "FYI this is the fix https://chromium-review.googlesource.com/c/v8/v8/+/2922602. I was going to send it for review and then I saw this revert.\nCamillo, feel free to include it as part of your reland since it will now fail as a separate CL.",
+      "revId": "d23d68fe37e84c63910a9d02af7e68f76c5e4a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
