@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "11b04b19_70d83618",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-05-27T17:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39f1733f_87564d54",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "3448ab47fe8b09f84ea305303e777b4a90a25235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "48671e7a_7a25ba46",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -37,6 +61,24 @@
       "writtenOn": "2021-05-27T13:37:28Z",
       "side": 1,
       "message": "I\u0027m not entirely sure about the name of the consoles. Maybe check with Alex if \"previous\" is a good name. I currently don\u0027t find what the name was.",
+      "revId": "3448ab47fe8b09f84ea305303e777b4a90a25235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b0a2e1c_f377b681",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-05-27T17:47:40Z",
+      "side": 1,
+      "message": "I understood from Alex that they use the term \"extended\". Updated accordingly",
+      "parentUuid": "48671e7a_7a25ba46",
       "revId": "3448ab47fe8b09f84ea305303e777b4a90a25235",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +96,30 @@
       "writtenOn": "2021-05-27T13:37:28Z",
       "side": 1,
       "message": "Maybe sort these names by age?\nci\nbeta\nstable\nprevious\n\nnit: update the comment line or remove all those comments",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 29
+      },
+      "revId": "3448ab47fe8b09f84ea305303e777b4a90a25235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbf40fb9_92b2c413",
+        "filename": "definitions.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-05-27T17:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be8c3e0c_4940e5f7",
       "range": {
         "startLine": 15,
         "startChar": 4,
