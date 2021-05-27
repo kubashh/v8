@@ -432,11 +432,16 @@ class JSObjectData : public JSReceiverData {
   void SerializeAsBoilerplate(JSHeapBroker* broker);
   ObjectData* GetInobjectField(int property_index) const;
 
+  // TODO(solanes): How should the lock interact with SerializeElements? We do
+  // serialize the elements in SerializeAsBoilerplate, but this is a different
+  // serialization.
   // Shallow serialization of {elements}.
   void SerializeElements(JSHeapBroker* broker);
   bool serialized_elements() const { return serialized_elements_; }
   ObjectData* elements() const;
 
+  // TODO(solanes): This doesn't matter with --concurrent-inlining (see
+  // https://chromium-review.googlesource.com/c/v8/v8/+/2876852)
   void SerializeObjectCreateMap(JSHeapBroker* broker);
 
   // Can be nullptr.
@@ -2279,6 +2284,8 @@ ObjectData* JSObjectData::elements() const {
 }
 
 void JSObjectData::SerializeAsBoilerplate(JSHeapBroker* broker) {
+  base::SharedMutexGuard<base::kShared> mutex_guard(
+      broker->isolate()->js_obj_migration_access());
   SerializeRecursiveAsBoilerplate(broker, kMaxFastLiteralDepth);
 }
 
