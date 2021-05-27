@@ -33,6 +33,40 @@
       "message": "Nice, LGTM!",
       "revId": "133b9454f99982d8da8a57cf46b8f3574571c843",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40cd40ef_a931ce5a",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-05-27T06:41:20Z",
+      "side": 1,
+      "message": "In the main thread phase we don\u0027t check the predicate, see the definition of ObjectMayBeUninitialized.",
+      "revId": "133b9454f99982d8da8a57cf46b8f3574571c843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "615ac76a_e8d55500",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-05-27T06:41:20Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be needed:\n- Either we are in the main thread phase, or\n- we are in the background phase looking at serialized data only (or read-only objects).",
+      "revId": "133b9454f99982d8da8a57cf46b8f3574571c843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
