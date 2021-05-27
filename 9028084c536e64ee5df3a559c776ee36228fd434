@@ -51,6 +51,24 @@
       "parentUuid": "32e616a5_ed2d0301",
       "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53758eb0_eba2482f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-05-27T11:41:49Z",
+      "side": 1,
+      "message": "If arm64 and x64 have different assumptions about zero extension, then we should try to fix this in arm64-specific code. The current CL introduces an additional mov for every memory access on x64, for no reason (as it seems).\nWouldn\u0027t it be better then to just go back to the UXTW for memory accesses on arm64?\n\nAnd then as a follow-up we should definitely revisit the zero-extension assumptions across platforms and try to align them.",
+      "parentUuid": "ade73b30_d8b23863",
+      "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
