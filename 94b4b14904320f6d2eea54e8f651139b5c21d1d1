@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "192fca7a_4699b139",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T13:08:03Z",
+      "side": 1,
+      "message": "Exactly. While not strictly necessary yet, this decouples the two versions for future work.",
+      "parentUuid": "51e95c7c_3376598e",
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73f5a001_67f7c702",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 7
@@ -65,6 +83,30 @@
       "writtenOn": "2021-05-27T12:58:26Z",
       "side": 1,
       "message": "This is related to the linkage.cc comment. If this was `false` what would change?",
+      "range": {
+        "startLine": 1020,
+        "startChar": 47,
+        "endLine": 1020,
+        "endChar": 51
+      },
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae89ae25_e45f6474",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T13:08:03Z",
+      "side": 1,
+      "message": "We would not do the register pushes inside the builtin (aka the old behavior).",
+      "parentUuid": "73f5a001_67f7c702",
       "range": {
         "startLine": 1020,
         "startChar": 47,
@@ -134,6 +176,24 @@
       "writtenOn": "2021-05-27T12:58:26Z",
       "side": 1,
       "message": "The only thing I am missing is what the changes to linkage.cc affect. If the changes to this file weren\u0027t in this CL, what would change?",
+      "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f737668c_c7d9cafc",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-05-27T13:08:03Z",
+      "side": 1,
+      "message": "That\u0027s the core piece of the CL, it actively tells TF to do the register restoring inside the builtin. (is that what you\u0027ve asked?)",
+      "parentUuid": "5e134d8e_85bddee4",
       "revId": "94b4b14904320f6d2eea54e8f651139b5c21d1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
