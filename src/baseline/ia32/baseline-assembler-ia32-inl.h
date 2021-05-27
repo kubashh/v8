@@ -316,7 +316,8 @@ void BaselineAssembler::StoreTaggedFieldWithWriteBarrier(Register target,
                                                          int offset,
 
                                                          Register value) {
-  Register scratch = WriteBarrierDescriptor::SlotAddressRegister();
+  BaselineAssembler::ScratchRegisterScope scratch_scope(this);
+  Register scratch = scratch_scope.AcquireScratch();
   DCHECK(!AreAliased(scratch, target, value));
   __ mov(FieldOperand(target, offset), value);
   __ RecordWriteField(target, offset, value, scratch, SaveFPRegsMode::kIgnore);

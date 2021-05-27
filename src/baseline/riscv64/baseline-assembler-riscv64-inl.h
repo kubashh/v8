@@ -461,7 +461,8 @@ void BaselineAssembler::StoreTaggedFieldWithWriteBarrier(Register target,
                                                          Register value) {
   // FIXME(riscv64): riscv64 don't implement pointer compressed
   __ Sd(value, FieldMemOperand(target, offset));
-  Register tmp = WriteBarrierDescriptor::SlotAddressRegister();
+  ScratchRegisterScope temps(this);
+  Register tmp = temps.AcquireScratch();
   __ RecordWriteField(target, offset, value, tmp, kRAHasNotBeenSaved,
                       SaveFPRegsMode::kIgnore);
 }

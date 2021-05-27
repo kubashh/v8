@@ -20,13 +20,8 @@ constexpr auto CallInterfaceDescriptor::DefaultRegisterArray() {
 
 // static
 constexpr auto WriteBarrierDescriptor::registers() {
-#if V8_TARGET_OS_WIN
-  return RegisterArray(rdi, arg_reg_3, arg_reg_1, kReturnRegister0, arg_reg_4,
-                       arg_reg_2, kContextRegister);
-#else
-  return RegisterArray(arg_reg_1, rbx, arg_reg_3, arg_reg_4, kReturnRegister0,
-                       kContextRegister);
-#endif  // V8_TARGET_OS_WIN
+  return RegisterArray(arg_reg_1, arg_reg_2, arg_reg_3, arg_reg_4,
+                       kReturnRegister0);
 }
 
 #ifdef V8_IS_TSAN
@@ -42,8 +37,9 @@ constexpr auto DynamicCheckMapsDescriptor::registers() {
   return RegisterArray(kReturnRegister0, arg_reg_1, arg_reg_2, arg_reg_3,
                        kRuntimeCallFunctionRegister, kContextRegister);
 #else
-  return RegisterArray(kReturnRegister0, arg_reg_1, rcx, arg_reg_3,
-                       kRuntimeCallFunctionRegister, kContextRegister);
+  STATIC_ASSERT(kContextRegister == arg_reg_2);
+  return RegisterArray(kReturnRegister0, arg_reg_1, arg_reg_2, arg_reg_3,
+                       kRuntimeCallFunctionRegister);
 #endif  // V8_TARGET_OS_WIN
 }
 
