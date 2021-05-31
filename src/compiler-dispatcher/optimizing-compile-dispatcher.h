@@ -52,6 +52,8 @@ class V8_EXPORT_PRIVATE OptimizingCompileDispatcher {
 
   static bool Enabled() { return FLAG_concurrent_recompilation; }
 
+  bool HasJobs();
+
  private:
   class CompileTask;
 

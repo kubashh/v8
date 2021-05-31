@@ -219,6 +219,18 @@ void OptimizingCompileDispatcher::InstallOptimizedFunctions() {
   }
 }
 
+bool OptimizingCompileDispatcher::HasJobs() {
+  {
+    base::MutexGuard access_ref_count(&ref_count_mutex_);
+    if (ref_count_ != 0) return true;
+  }
+  {
+    base::MutexGuard access_output_queue(&output_queue_mutex_);
+    if (!output_queue_.empty()) return true;
+  }
+  return false;
+}
+
 void OptimizingCompileDispatcher::QueueForOptimization(
     OptimizedCompilationJob* job) {
   DCHECK(IsQueueAvailable());
