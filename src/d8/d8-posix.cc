@@ -734,6 +734,10 @@ void Shell::AddOSMethods(Isolate* isolate, Local<ObjectTemplate> os_templ) {
   if (options.enable_os_system) {
     os_templ->Set(isolate, "system", FunctionTemplate::New(isolate, System));
   }
+  os_templ->Set(
+      isolate, "d8Path",
+      v8::String::NewFromUtf8(isolate, options.d8_path).ToLocalChecked(),
+      PropertyAttribute::ReadOnly);
   os_templ->Set(isolate, "chdir",
                 FunctionTemplate::New(isolate, ChangeDirectory));
   os_templ->Set(isolate, "setenv",

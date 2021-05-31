@@ -4097,6 +4097,7 @@ void Worker::PostMessageOut(const v8::FunctionCallbackInfo<v8::Value>& args) {
 bool Shell::SetOptions(int argc, char* argv[]) {
   bool logfile_per_isolate = false;
   bool no_always_opt = false;
+  options.d8_path = argv[0];
   for (int i = 0; i < argc; i++) {
     if (strcmp(argv[i], "--") == 0) {
       argv[i] = nullptr;
