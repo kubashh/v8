@@ -41,7 +41,11 @@ export class CppProcessor extends LogReader {
   processLogFileInTest(fileName) {
     // Hack file name to avoid dealing with platform specifics.
     this.lastLogFileName_ = 'v8.log';
+<<<<<<< HEAD
+    const contents = d8.read(fileName);
+=======
     const contents = this.readFile(fileName);
+>>>>>>> 3dbbb2e73ab89b034e522d86a75ddeaa05e1bce1
     this.processLogChunk(contents);
   }
 
