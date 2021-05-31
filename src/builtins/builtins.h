@@ -114,10 +114,10 @@ class Builtins {
   }
 
 #ifdef V8_IS_TSAN
-  static Name GetTSANRelaxedStoreStub(SaveFPRegsMode fp_mode) {
+  static Builtin GetTSANRelaxedStoreStub(SaveFPRegsMode fp_mode) {
     return fp_mode == SaveFPRegsMode::kIgnore
-               ? Builtins::kTSANRelaxedStoreIgnoreFP
-               : Builtins::kTSANRelaxedStoreSaveFP;
+               ? Builtin::kTSANRelaxedStoreIgnoreFP
+               : Builtin::kTSANRelaxedStoreSaveFP;
   }
 #endif  // V8_IS_TSAN
 

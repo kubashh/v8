@@ -22,6 +22,16 @@ export class BaseArgumentsProcessor {
 
   result() { return this.result_ }
 
+  static process(args) {
+    const processor = new this(args);
+    if (processor.parse()) {
+      return processor.result();
+    } else {
+      processor.printUsageAndExit();
+      return false;
+    }
+  }
+
   printUsageAndExit() {
     console.log('Cmdline args: [options] [log-file-name]\n' +
           'Default log file name is "' +
@@ -72,7 +82,20 @@ export class BaseArgumentsProcessor {
   }
 }
 
+export function parseSourceMap(sourceMap) {
+  // Pull dev tools source maps  into our name space.
+  SourceMap = WebInspector.SourceMap;
+  // Overwrite the load function to load scripts synchronously.
+  SourceMap.load = function(sourceMapURL) {
+    const content = readFile(sourceMapURL);
+    const sourceMapObject = (JSON.parse(content));
+    return new SourceMap(sourceMapURL, sourceMapObject);
+  };
+  return SourceMap.load(params.sourceMap);
+}
+
 export function parseBool(str) {
   if (str == "true" || str == "1") return true;
   return false;
 }
+
