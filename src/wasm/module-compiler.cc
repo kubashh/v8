@@ -1436,6 +1436,12 @@ void InitializeCompilationUnits(Isolate* isolate, NativeModule* native_module) {
 
   uint32_t start = module->num_imported_functions;
   uint32_t end = start + module->num_declared_functions;
+  // Open a single scope for modification in {UseLazyStub} here, instead of
+  // flipping page permissions for each {func_index} anew.
+  NativeModuleModificationScope native_module_modification_scope(native_module);
+  // FIXME: Can the {CompileStrategy} (lazy or not) change while iterating
+  // over the function indices? I.e., could we pull the `if (strategy == ...)`
+  // outside of the loop?
   for (uint32_t func_index = start; func_index < end; func_index++) {
     if (prefer_liftoff) {
       builder.AddRecompilationUnit(func_index, ExecutionTier::kLiftoff);
