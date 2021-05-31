@@ -50,6 +50,23 @@
       "message": "lgtm",
       "revId": "e56448f568e5408c6c6ae4dbfb27345e6e026735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa826054_e201f1be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-05-31T08:14:37Z",
+      "side": 1,
+      "message": "Thanks Jakob!",
+      "revId": "e56448f568e5408c6c6ae4dbfb27345e6e026735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
