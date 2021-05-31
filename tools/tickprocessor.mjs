@@ -26,7 +26,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import { LogReader, parseString, parseVarArgs } from "./logreader.mjs";
-import { BaseArgumentsProcessor, parseBool } from "./arguments.mjs";
+import { BaseArgumentsProcessor, parseBool, parseSourceMap} from "./arguments.mjs";
 import { Profile, JsonProfile } from "./profile.mjs";
 import { ViewBuilder } from "./profile_view.mjs";
 
@@ -835,6 +835,7 @@ export class WindowsCppEntriesProvider extends CppEntriesProvider {
 export class ArgumentsProcessor extends BaseArgumentsProcessor {
   getArgsDispatch() {
     let dispatch = {
+      __proto__:null,
       '-j': ['stateFilter', TickProcessor.VmStates.JS,
         'Show only ticks from JS VM state'],
       '-g': ['stateFilter', TickProcessor.VmStates.GC,
@@ -883,7 +884,7 @@ export class ArgumentsProcessor extends BaseArgumentsProcessor {
         'Specify the range limit as [start],[end]'],
       '--distortion': ['distortion', 0,
         'Specify the logging overhead in picoseconds'],
-      '--source-map': ['sourceMap', null,
+      '--source-map': ['sourceMap', parseSourceMap,
         'Specify the source map that should be used for output'],
       '--timed-range': ['timedRange', true,
         'Ignore ticks before first and after last Date.now() call'],
@@ -918,6 +919,7 @@ export class ArgumentsProcessor extends BaseArgumentsProcessor {
       separateStubs: true,
       separateBaselineHandlers: false,
       preprocessJson: null,
+      sourceMap: null,
       targetRootFS: '',
       nm: 'nm',
       objdump: 'objdump',

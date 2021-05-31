@@ -3,17 +3,7 @@
 // found in the LICENSE file.
 
 import { Processor } from "./system-analyzer/processor.mjs";
-import { WebInspector } from "./sourcemap.mjs";
-import { BaseArgumentsProcessor } from "./arguments.mjs";
-
-function processArguments(args) {
-  const processor = new ArgumentsProcessor(args);
-  if (processor.parse()) {
-    return processor.result();
-  } else {
-    processor.printUsageAndExit();
-  }
-}
+import { BaseArgumentsProcessor} from "./arguments.mjs";
 
 /**
  * A thin wrapper around shell's 'read' function showing a file name on error.
@@ -27,25 +17,11 @@ export function readFile(fileName) {
   }
 }
 
-function initSourceMapSupport() {
-  // Pull dev tools source maps into our name space.
-  SourceMap = WebInspector.SourceMap;
-
-  // Overwrite the load function to load scripts synchronously.
-  SourceMap.load = function(sourceMapURL) {
-    const content = readFile(sourceMapURL);
-    const sourceMapObject = (JSON.parse(content));
-    return new SourceMap(sourceMapURL, sourceMapObject);
-  };
-}
-
 class ArgumentsProcessor extends BaseArgumentsProcessor {
   getArgsDispatch() {
     return {
       '--range': ['range', 'auto,auto',
           'Specify the range limit as [start],[end]'],
-      '--source-map': ['sourceMap', null,
-          'Specify the source map that should be used for output']
     };
   }
   getDefaultResults() {
@@ -56,12 +32,7 @@ class ArgumentsProcessor extends BaseArgumentsProcessor {
   }
 }
 
-const params = processArguments(arguments);
-let sourceMap = null;
-if (params.sourceMap) {
-  initSourceMapSupport();
-  sourceMap = SourceMap.load(params.sourceMap);
-}
+const params = ArgumentsProcessor.process(arguments);
 const processor = new Processor();
 processor.processLogFile(params.logFileName);
 
