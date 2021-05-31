@@ -28,7 +28,7 @@
 import { WebInspector} from "./sourcemap.mjs";
 import {
     ArgumentsProcessor, TickProcessor, UnixCppEntriesProvider,
-    WindowsCppEntriesProvider, MacCppEntriesProvider, readFile,
+    WindowsCppEntriesProvider, MacCppEntriesProvider,
   } from "./tickprocessor.mjs";
 
 // Tick Processor's code flow.
@@ -48,8 +48,8 @@ function initSourceMapSupport() {
 
   // Overwrite the load function to load scripts synchronously.
   SourceMap.load = function(sourceMapURL) {
-    const content = readFile(sourceMapURL);
-    const sourceMapObject = (JSON.parse(content));
+    const content = d8.read(sourceMapURL);
+    const sourceMapObject = JSON.parse(content);
     return new SourceMap(sourceMapURL, sourceMapObject);
   };
 }

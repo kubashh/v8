@@ -15,26 +15,14 @@ function processArguments(args) {
   }
 }
 
-/**
- * A thin wrapper around shell's 'read' function showing a file name on error.
- */
-export function readFile(fileName) {
-  try {
-    return read(fileName);
-  } catch (e) {
-    console.log(fileName + ': ' + (e.message || e));
-    throw e;
-  }
-}
-
 function initSourceMapSupport() {
   // Pull dev tools source maps into our name space.
   SourceMap = WebInspector.SourceMap;
 
   // Overwrite the load function to load scripts synchronously.
   SourceMap.load = function(sourceMapURL) {
-    const content = readFile(sourceMapURL);
-    const sourceMapObject = (JSON.parse(content));
+    const content = d8.read(sourceMapURL);
+    const sourceMapObject = JSON.parse(content);
     return new SourceMap(sourceMapURL, sourceMapObject);
   };
 }

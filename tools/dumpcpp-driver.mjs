@@ -25,7 +25,7 @@ function initSourceMapSupport() {
 
   // Overwrite the load function to load scripts synchronously.
   SourceMap.load = function(sourceMapURL) {
-    const content = readFile(sourceMapURL);
+    const content = d8.read(sourceMapURL);
     const sourceMapObject = (JSON.parse(content));
     return new SourceMap(sourceMapURL, sourceMapObject);
   };

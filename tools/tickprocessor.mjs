@@ -59,19 +59,6 @@ class V8Profile extends Profile {
 }
 
 
-/**
- * A thin wrapper around shell's 'read' function showing a file name on error.
- */
-export function readFile(fileName) {
-  try {
-    return read(fileName);
-  } catch (e) {
-    printErr(`file="${fileName}": ${e.message || e}`);
-    throw e;
-  }
-}
-
-
 export class TickProcessor extends LogReader {
   constructor(
     cppEntriesProvider,
@@ -282,7 +269,7 @@ export class TickProcessor extends LogReader {
   processLogFileInTest(fileName) {
     // Hack file name to avoid dealing with platform specifics.
     this.lastLogFileName_ = 'v8.log';
-    const contents = readFile(fileName);
+    const contents = d8.read(fileName);
     this.processLogChunk(contents);
   }
 
