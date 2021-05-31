@@ -33,6 +33,23 @@
       "message": "Jakob, ptal as onwer of src/compiler, src/debug and src/init",
       "revId": "e56448f568e5408c6c6ae4dbfb27345e6e026735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "550e676e_09c4d288",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-05-31T08:10:24Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "e56448f568e5408c6c6ae4dbfb27345e6e026735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
