@@ -950,10 +950,10 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Module> referrer,
                                           ModuleType module_type) {
   DCHECK(IsAbsolutePath(file_name));
   Isolate* isolate = context->GetIsolate();
-  Local<String> source_text = ReadFile(isolate, file_name.c_str());
+  Local<String> source_text = ReadFile(isolate, file_name.c_str(), false);
   if (source_text.IsEmpty() && options.fuzzy_module_file_extensions) {
     std::string fallback_file_name = file_name + ".js";
-    source_text = ReadFile(isolate, fallback_file_name.c_str());
+    source_text = ReadFile(isolate, fallback_file_name.c_str(), false);
     if (source_text.IsEmpty()) {
       fallback_file_name = file_name + ".mjs";
       source_text = ReadFile(isolate, fallback_file_name.c_str());
@@ -2137,7 +2137,7 @@ void Shell::Write(const v8::FunctionCallbackInfo<v8::Value>& args) {
 void Shell::Read(const v8::FunctionCallbackInfo<v8::Value>& args) {
   String::Utf8Value file(args.GetIsolate(), args[0]);
   if (*file == nullptr) {
-    args.GetIsolate()->ThrowError("Error loading file");
+    args.GetIsolate()->ThrowError("Error converting filename to string");
     return;
   }
   if (args.Length() == 2) {
@@ -2148,10 +2148,7 @@ void Shell::Read(const v8::FunctionCallbackInfo<v8::Value>& args) {
     }
   }
   Local<String> source = ReadFile(args.GetIsolate(), *file);
-  if (source.IsEmpty()) {
-    args.GetIsolate()->ThrowError("Error loading file");
-    return;
-  }
+  if (source.IsEmpty()) return;
   args.GetReturnValue().Set(source);
 }
 
@@ -2193,25 +2190,29 @@ Local<String> Shell::ReadFromStdin(Isolate* isolate) {
 }
 
 void Shell::Load(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  Isolate* isolate = args.GetIsolate();
   for (int i = 0; i < args.Length(); i++) {
-    HandleScope handle_scope(args.GetIsolate());
-    String::Utf8Value file(args.GetIsolate(), args[i]);
+    HandleScope handle_scope(isolate);
+    String::Utf8Value file(isolate, args[i]);
     if (*file == nullptr) {
-      args.GetIsolate()->ThrowError("Error loading file");
+      std::ostringstream oss;
+      oss << "Cannot convert file[" << i << "] name to string.";
+      isolate->ThrowError(
+          String::NewFromUtf8(isolate, oss.str().c_str()).ToLocalChecked());
       return;
     }
-    Local<String> source = ReadFile(args.GetIsolate(), *file);
-    if (source.IsEmpty()) {
-      args.GetIsolate()->ThrowError("Error loading file");
-      return;
-    }
+    Local<String> source = ReadFile(isolate, *file);
+    if (source.IsEmpty()) return;
     if (!ExecuteString(
             args.GetIsolate(), source,
-            String::NewFromUtf8(args.GetIsolate(), *file).ToLocalChecked(),
+            String::NewFromUtf8(isolate, *file).ToLocalChecked(),
             kNoPrintResult,
             options.quiet_load ? kNoReportExceptions : kReportExceptions,
             kNoProcessMessageQueue)) {
-      args.GetIsolate()->ThrowError("Error executing file");
+      std::ostringstream oss;
+      oss << "Error executing file: \"" << *file << '"';
+      isolate->ThrowError(
+          String::NewFromUtf8(isolate, oss.str().c_str()).ToLocalChecked());
       return;
     }
   }
@@ -2355,10 +2356,7 @@ void Shell::WorkerNew(const v8::FunctionCallbackInfo<v8::Value>& args) {
     if (load_from_file) {
       String::Utf8Value filename(isolate, args[0]);
       source = ReadFile(isolate, *filename);
-      if (source.IsEmpty()) {
-        args.GetIsolate()->ThrowError("Error loading worker script");
-        return;
-      }
+      if (source.IsEmpty()) return;
     } else {
       source = args[0].As<String>();
     }
@@ -2909,13 +2907,15 @@ Local<FunctionTemplate> Shell::CreateSnapshotTemplate(Isolate* isolate) {
 }
 Local<ObjectTemplate> Shell::CreateD8Template(Isolate* isolate) {
   Local<ObjectTemplate> d8_template = ObjectTemplate::New(isolate);
+  d8_template->Set(isolate, "read", FunctionTemplate::New(isolate, Read));
   {
     Local<ObjectTemplate> log_template = ObjectTemplate::New(isolate);
     log_template->Set(isolate, "getAndStop",
                       FunctionTemplate::New(isolate, LogGetAndStop));
 
     d8_template->Set(isolate, "log", log_template);
-
+  }
+  {
     Local<ObjectTemplate> dom_template = ObjectTemplate::New(isolate);
     dom_template->Set(isolate, "Div", Shell::CreateNodeTemplates(isolate));
     d8_template->Set(isolate, "dom", dom_template);
@@ -3068,6 +3068,11 @@ void Shell::Initialize(Isolate* isolate, D8Console* console,
   debug::SetConsoleDelegate(isolate, console);
 }
 
+Local<String> Shell::WasmLoadSourceMapCallback(Isolate* isolate,
+                                               const char* path) {
+  return Shell::ReadFile(isolate, path, false);
+}
+
 Local<Context> Shell::CreateEvaluationContext(Isolate* isolate) {
   // This needs to be a critical section since this is not thread-safe
   base::MutexGuard lock_guard(context_mutex_.Pointer());
@@ -3077,7 +3082,7 @@ Local<Context> Shell::CreateEvaluationContext(Isolate* isolate) {
   Local<Context> context = Context::New(isolate, nullptr, global_template);
   DCHECK(!context.IsEmpty());
   if (i::FLAG_perf_prof_annotate_wasm || i::FLAG_vtune_prof_annotate_wasm) {
-    isolate->SetWasmLoadSourceMapCallback(ReadFile);
+    isolate->SetWasmLoadSourceMapCallback(Shell::WasmLoadSourceMapCallback);
   }
   InitializeModuleEmbedderData(context);
   if (options.include_arguments) {
@@ -3427,11 +3432,20 @@ void Shell::ReadBuffer(const v8::FunctionCallbackInfo<v8::Value>& args) {
 }
 
 // Reads a file into a v8 string.
-Local<String> Shell::ReadFile(Isolate* isolate, const char* name) {
+Local<String> Shell::ReadFile(Isolate* isolate, const char* name,
+                              bool shouldThrow) {
   std::unique_ptr<base::OS::MemoryMappedFile> file(
       base::OS::MemoryMappedFile::open(
           name, base::OS::MemoryMappedFile::FileMode::kReadOnly));
-  if (!file) return Local<String>();
+  if (!file) {
+    if (shouldThrow) {
+      std::ostringstream oss;
+      oss << "Error loading file: \"" << name << '"';
+      isolate->ThrowError(
+          v8::String::NewFromUtf8(isolate, oss.str().c_str()).ToLocalChecked());
+    }
+    return Local<String>();
+  }
 
   int size = static_cast<int>(file->size());
   char* chars = static_cast<char*>(file->memory());
@@ -3729,7 +3743,7 @@ bool SourceGroup::Execute(Isolate* isolate) {
     HandleScope handle_scope(isolate);
     Local<String> file_name =
         String::NewFromUtf8(isolate, arg).ToLocalChecked();
-    Local<String> source = ReadFile(isolate, arg);
+    Local<String> source = Shell::ReadFile(isolate, arg);
     if (source.IsEmpty()) {
       printf("Error reading '%s'\n", arg);
       base::OS::ExitProcess(1);
@@ -3744,10 +3758,6 @@ bool SourceGroup::Execute(Isolate* isolate) {
     }
   }
   return success;
-}
-
-Local<String> SourceGroup::ReadFile(Isolate* isolate, const char* name) {
-  return Shell::ReadFile(isolate, name);
 }
 
 SourceGroup::IsolateThread::IsolateThread(SourceGroup* group)
