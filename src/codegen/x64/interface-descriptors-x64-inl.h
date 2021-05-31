@@ -20,8 +20,14 @@ constexpr auto CallInterfaceDescriptor::DefaultRegisterArray() {
 
 // static
 constexpr auto WriteBarrierDescriptor::registers() {
-  return RegisterArray(arg_reg_1, arg_reg_2, arg_reg_3, arg_reg_4,
-                       kReturnRegister0);
+#if V8_TARGET_OS_WIN
+  return RegisterArray(kJSFunctionRegister, arg_reg_3, arg_reg_1,
+                       kReturnRegister0, arg_reg_4, arg_reg_2,
+                       kContextRegister);
+#else
+  return RegisterArray(kJSFunctionRegister, rbx, arg_reg_3, arg_reg_4,
+                       kReturnRegister0, kContextRegister);
+#endif  // V8_TARGET_OS_WIN
 }
 
 #ifdef V8_IS_TSAN
