@@ -219,6 +219,12 @@ void OptimizingCompileDispatcher::InstallOptimizedFunctions() {
   }
 }
 
+bool OptimizingCompileDispatcher::HasJobs() {
+  // Note: This relies on {output_queue_} being mutated by a background thread
+  // only when ref_count is not zero.
+  return !(ref_count_ == 0 && output_queue_.empty());
+}
+
 void OptimizingCompileDispatcher::QueueForOptimization(
     OptimizedCompilationJob* job) {
   DCHECK(IsQueueAvailable());
