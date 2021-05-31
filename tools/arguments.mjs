@@ -22,6 +22,16 @@ export class BaseArgumentsProcessor {
 
   result() { return this.result_ }
 
+  static process(args) {
+    const processor = new this(args);
+    if (processor.parse()) {
+      return processor.result();
+    } else {
+      processor.printUsageAndExit();
+      return false;
+    }
+  }
+
   printUsageAndExit() {
     console.log('Cmdline args: [options] [log-file-name]\n' +
           'Default log file name is "' +
@@ -76,3 +86,4 @@ export function parseBool(str) {
   if (str == "true" || str == "1") return true;
   return false;
 }
+
