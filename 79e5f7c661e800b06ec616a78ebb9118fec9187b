@@ -33,6 +33,46 @@
       "message": "Thanks, LGTM!",
       "revId": "79e5f7c661e800b06ec616a78ebb9118fec9187b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdb70d1e_18f21afa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-31T15:51:18Z",
+      "side": 1,
+      "message": "lgtm, thanks",
+      "revId": "79e5f7c661e800b06ec616a78ebb9118fec9187b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b48c5d8_5889b96c",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3164,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-31T15:51:18Z",
+      "side": 1,
+      "message": "Dominik: For outside-heap users we could over a DisallowLeftTrimmingScope. That way we wouldn\u0027t need to have dependencies from within the GC. wdyt?",
+      "range": {
+        "startLine": 3164,
+        "startChar": 50,
+        "endLine": 3164,
+        "endChar": 57
+      },
+      "revId": "79e5f7c661e800b06ec616a78ebb9118fec9187b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
