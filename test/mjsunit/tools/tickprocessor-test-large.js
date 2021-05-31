@@ -53,6 +53,6 @@ function ics() {
   }
 }
 
-for (let i = 0; i < 100_000; i++) {
+for (let i = 0; i < 100_00; i++) {
   ics();
 }
