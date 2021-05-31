@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6e720a6_4a706943",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-05-31T15:37:12Z",
+      "side": 1,
+      "message": "Nit: Would it be good to give a small explanation in the CL message as well?",
+      "revId": "79e5f7c661e800b06ec616a78ebb9118fec9187b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9365b4ee_609195f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-05-31T15:37:12Z",
+      "side": 1,
+      "message": "Thanks, LGTM!",
+      "revId": "79e5f7c661e800b06ec616a78ebb9118fec9187b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
