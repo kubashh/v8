@@ -44,7 +44,7 @@
 
 import {
   TickProcessor, ArgumentsProcessor, UnixCppEntriesProvider,
-  MacCppEntriesProvider, WindowsCppEntriesProvider, readFile
+  MacCppEntriesProvider, WindowsCppEntriesProvider 
 } from "../../../tools/tickprocessor.mjs";
 
 
@@ -383,17 +383,17 @@ class PrintMonitor {
       this.expectedOut = this.loadExpectedOutput(outputOrFileName)
       this.outputFile = outputOrFileName;
     }
-    var expectedOut = this.expectedOut;
-    var outputPos = 0;
-    var diffs = this.diffs = [];
-    var realOut = this.realOut = [];
-    var unexpectedOut = this.unexpectedOut = null;
+    let expectedOut = this.expectedOut;
+    let outputPos = 0;
+    let diffs = this.diffs = [];
+    let realOut = this.realOut = [];
+    let unexpectedOut = this.unexpectedOut = null;
 
     this.oldPrint = print;
     print = function(str) {
-      var strSplit = str.split('\n');
-      for (var i = 0; i < strSplit.length; ++i) {
-        var s = strSplit[i];
+      const strSplit = str.split('\n');
+      for (let i = 0; i < strSplit.length; ++i) {
+        const s = strSplit[i];
         realOut.push(s);
         if (outputPos < expectedOut.length) {
           if (expectedOut[outputPos] != s) {
@@ -415,20 +415,19 @@ class PrintMonitor {
 
  finish() {
     print = this.oldPrint;
-    if (this.diffs.length > 0 || this.unexpectedOut != null) {
-      console.log("===== actual output: =====");
-      console.log(this.realOut.join('\n'));
-      console.log("===== expected output: =====");
-      if (this.outputFile) {
-        console.log("===== File: " + this.outputFile + " =====");
-      }
-      console.log(this.expectedOut.join('\n'));
-      if (this.diffs.length > 0) {
-        this.diffs.forEach(line => console.log(line))
-        assertEquals([], this.diffs);
-      }
-      assertNull(this.unexpectedOut);
+    if (this.diffs.length == 0 && this.unexpectedOut == null) return;
+    console.log("===== actual output: =====");
+    console.log(this.realOut.join('\n'));
+    console.log("===== expected output: =====");
+    if (this.outputFile) {
+      console.log("===== File: " + this.outputFile + " =====");
     }
+    console.log(this.expectedOut.join('\n'));
+    if (this.diffs.length > 0) {
+      this.diffs.forEach(line => console.log(line))
+      assertEquals([], this.diffs);
+    }
+    assertNull(this.unexpectedOut);
   }
 }
 
@@ -467,7 +466,7 @@ function driveTickProcessorTest(
   pm.finish();
 };
 
-
+/*
 (function testProcessing() {
   var testData = {
     'Default': [
@@ -504,3 +503,24 @@ function driveTickProcessorTest(
     driveTickProcessorTest(...testData[testName]);
   }
 })();
+*/
+
+(function testLive() {
+  if (! os?.system) return;
+  testIt('tickprocessor-test-large.js',  [])
+})();
+
+function testIt(sourceFile, tickprocessorArgs) {
+  const argString = tickprocessorArgs.join('')
+  const tmpLogFile = `/var/tmp/${Date.now()}.v8.log`
+  // /foo/bar/tickprocesser.mjs => /foo/bar/
+  const dir = import.meta.url.split("/").slice(0, -1).join('/') + '/';
+  sourceFile = dir +  sourceFile;
+  const result = os.system(
+    os.d8Path, ['--prof', `--logfile=${tmpLogFile}`, sourceFile]);
+
+  const printMonitor = new PrintMonitor(dir + refOutput);
+  tickProcessor.processLogFileInTest(dir + logInput);
+  tickProcessor.printStatistics();
+  printMonitor.finish();
+}
