@@ -97,6 +97,30 @@
       },
       "revId": "79e5f7c661e800b06ec616a78ebb9118fec9187b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f415fc2b_d546c71b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3164,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-05-31T19:01:42Z",
+      "side": 1,
+      "message": "Yes, that\u0027s what I was thinking off.",
+      "parentUuid": "89bd38f2_7e2f98dd",
+      "range": {
+        "startLine": 3164,
+        "startChar": 50,
+        "endLine": 3164,
+        "endChar": 57
+      },
+      "revId": "79e5f7c661e800b06ec616a78ebb9118fec9187b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
