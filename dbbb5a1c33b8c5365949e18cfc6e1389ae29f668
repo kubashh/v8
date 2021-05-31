@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f23f7453_be831e89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-05-31T12:25:20Z",
+      "side": 1,
+      "message": "Hi Dominik, here is the comment update we discussed, ptal,\n--Michael\n",
+      "revId": "dbbb5a1c33b8c5365949e18cfc6e1389ae29f668",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
