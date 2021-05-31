@@ -40,6 +40,54 @@ void WebSnapshotSerializerDeserializer::Throw(const char* message) {
   }
 }
 
+WebSnapshotSerializerDeserializer::FunctionFlags
+WebSnapshotSerializerDeserializer::FunctionKindToFunctionFlags(
+    FunctionKind kind) {
+  // TODO(v8:11525): Support more function kinds.
+  switch (kind) {
+    case FunctionKind::kNormalFunction:
+    case FunctionKind::kArrowFunction:
+    case FunctionKind::kGeneratorFunction:
+    case FunctionKind::kAsyncFunction:
+    case FunctionKind::kAsyncArrowFunction:
+    case FunctionKind::kAsyncGeneratorFunction:
+      break;
+    default:
+      Throw("Web Snapshot: Unsupported function kind");
+  }
+  return WebSnapshotSerializerDeserializer::FunctionFlags(
+      IsArrowFunction(kind) * FunctionFlags::ARROW +
+      IsAsyncFunction(kind) * FunctionFlags::ASYNC +
+      IsGeneratorFunction(kind) * FunctionFlags::GENERATOR);
+}
+
+FunctionKind WebSnapshotSerializerDeserializer::FunctionFlagsToFunctionKind(
+    uint32_t flags) {
+  static const FunctionKind kFunctionKinds[][2][2] = {
+      {
+          // is_arrow = false
+          {// is_generator = false
+           FunctionKind::kNormalFunction, FunctionKind::kAsyncFunction},
+          {// is_generator = true
+           FunctionKind::kGeneratorFunction,
+           FunctionKind::kAsyncGeneratorFunction},
+      },
+      {
+          // is_arrow = true
+          {// is_generator = false
+           FunctionKind::kArrowFunction, FunctionKind::kAsyncArrowFunction},
+          {// is_generator = true
+           FunctionKind::kInvalid, FunctionKind::kInvalid},
+      }};
+  FunctionKind kind = kFunctionKinds[(flags & FunctionFlags::ARROW)]
+                                    [(flags & FunctionFlags::GENERATOR) != 0]
+                                    [(flags & FunctionFlags::ASYNC) != 0];
+  if (kind == FunctionKind::kInvalid) {
+    Throw("Web Snapshots: Invalid function flags\n");
+  }
+  return kind;
+}
+
 WebSnapshotSerializer::WebSnapshotSerializer(v8::Isolate* isolate)
     : WebSnapshotSerializerDeserializer(
           reinterpret_cast<v8::internal::Isolate*>(isolate)),
@@ -245,6 +293,7 @@ void WebSnapshotSerializer::SerializeMap(Handle<Map> map, uint32_t& id) {
 // - String id (source snippet)
 // - Start position in the source snippet
 // - Length in the source snippet
+// - Flags (see FunctionFlags)
 // TODO(v8:11525): Investigate whether the length is really needed.
 void WebSnapshotSerializer::SerializeFunction(Handle<JSFunction> function,
                                               uint32_t& id) {
@@ -280,6 +329,9 @@ void WebSnapshotSerializer::SerializeFunction(Handle<JSFunction> function,
   function_serializer_.WriteUint32(start);
   int end = function->shared().EndPosition();
   function_serializer_.WriteUint32(end - start);
+
+  function_serializer_.WriteUint32(
+      FunctionKindToFunctionFlags(function->shared().kind()));
   // TODO(v8:11525): Serialize .prototype.
   // TODO(v8:11525): Support properties in functions.
 }
@@ -748,13 +800,14 @@ void WebSnapshotDeserializer::DeserializeFunctions() {
 
     uint32_t start_position;
     uint32_t length;
+    uint32_t flags;
     if (!deserializer_->ReadUint32(&start_position) ||
-        !deserializer_->ReadUint32(&length)) {
+        !deserializer_->ReadUint32(&length) ||
+        !deserializer_->ReadUint32(&flags)) {
       Throw("Web snapshot: Malformed function");
       return;
     }
 
-    // TODO(v8:11525): Support other function kinds.
     // TODO(v8:11525): Support (exported) top level functions.
 
     // TODO(v8:11525): Deduplicate the SFIs for inner functions the user creates
@@ -763,7 +816,7 @@ void WebSnapshotDeserializer::DeserializeFunctions() {
     Handle<SharedFunctionInfo> shared =
         isolate_->factory()->NewSharedFunctionInfo(
             isolate_->factory()->empty_string(), MaybeHandle<Code>(),
-            Builtins::kCompileLazy, FunctionKind::kNormalFunction);
+            Builtins::kCompileLazy, FunctionFlagsToFunctionKind(flags));
     shared->set_script(*script);
     // Index 0 is reserved for top-level shared function info (which web
     // snapshot scripts don't have).

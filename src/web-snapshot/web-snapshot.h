@@ -54,6 +54,15 @@ class WebSnapshotSerializerDeserializer {
     REGEXP
   };
 
+  enum FunctionFlags : uint8_t {
+    ARROW = 1 << 0,
+    ASYNC = 1 << 1,
+    GENERATOR = 1 << 2
+  };
+
+  FunctionFlags FunctionKindToFunctionFlags(FunctionKind kind);
+  FunctionKind FunctionFlagsToFunctionKind(uint32_t flags);
+
   // The maximum count of items for each value type (strings, objects etc.)
   static constexpr uint32_t kMaxItemCount =
       static_cast<uint32_t>(FixedArray::kMaxLength - 1);
