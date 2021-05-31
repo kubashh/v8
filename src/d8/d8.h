@@ -115,7 +115,6 @@ class SourceGroup {
   base::Thread* thread_;
 
   void ExitShell(int exit_code);
-  Local<String> ReadFile(Isolate* isolate, const char* name);
 
   const char** argv_;
   int begin_offset_;
@@ -437,7 +436,10 @@ class Shell : public i::AllStatic {
   static void ReportException(Isolate* isolate, Local<Message> message,
                               Local<Value> exception);
   static void ReportException(Isolate* isolate, TryCatch* try_catch);
-  static Local<String> ReadFile(Isolate* isolate, const char* name);
+  static Local<String> ReadFile(Isolate* isolate, const char* name,
+                                bool shouldThrow = true);
+  static Local<String> WasmLoadSourceMapCallback(Isolate* isolate,
+                                                 const char* name);
   static Local<Context> CreateEvaluationContext(Isolate* isolate);
   static int RunMain(Isolate* isolate, bool last_run);
   static int Main(int argc, char* argv[]);
