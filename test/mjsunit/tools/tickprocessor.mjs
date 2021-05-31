@@ -44,9 +44,17 @@
 
 import {
   TickProcessor, ArgumentsProcessor, UnixCppEntriesProvider,
-  MacCppEntriesProvider, WindowsCppEntriesProvider, readFile
+  MacCppEntriesProvider, WindowsCppEntriesProvider 
 } from "../../../tools/tickprocessor.mjs";
 
+export function readFile(fileName) {
+  try {
+    return read(fileName);
+  } catch (e) {
+    console.log(fileName + ': ' + (e.message || e));
+    throw e;
+  }
+}
 
 (function testArgumentsProcessor() {
   var p_default = new ArgumentsProcessor([]);
