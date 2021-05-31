@@ -47,16 +47,6 @@ import {
   MacCppEntriesProvider, WindowsCppEntriesProvider 
 } from "../../../tools/tickprocessor.mjs";
 
-// TODO(cbruni): Remove after refactoring
-export function readFile(fileName) {
-  try {
-    return read(fileName);
-  } catch (e) {
-    console.log(fileName + ': ' + (e.message || e));
-    throw e;
-  }
-}
-
 (function testArgumentsProcessor() {
   var p_default = new ArgumentsProcessor([]);
   assertTrue(p_default.parse());
@@ -372,7 +362,7 @@ export function readFile(fileName) {
 class CppEntriesProviderMock {
   constructor(filename) {
     this.isLoaded = false;
-    this.symbols = JSON.parse(readFile(filename));
+    this.symbols = JSON.parse(d8.read(filename));
   }
   parseVmSymbols(name, startAddr, endAddr, slideAddr, symbolAdder) {
     if (this.isLoaded) return;
@@ -418,7 +408,7 @@ class PrintMonitor {
   }
 
   loadExpectedOutput(fileName) {
-    var output = readFile(fileName);
+    let output = d8.read(fileName);
     return output.split('\n');
   }
 
