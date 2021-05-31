@@ -52,6 +52,9 @@ class V8_EXPORT_PRIVATE OptimizingCompileDispatcher {
 
   static bool Enabled() { return FLAG_concurrent_recompilation; }
 
+  // This method must be called on the main thread.
+  bool HasJobs();
+
  private:
   class CompileTask;
 
