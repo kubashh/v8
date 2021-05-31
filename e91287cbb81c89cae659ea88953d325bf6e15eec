@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "413d961d_a442f7fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-05-31T16:47:35Z",
+      "side": 1,
+      "message": "PTAL 😊\n\nWith this change, enabling --wasm-write-protect-code-memory has only about 3% overhead on asm.js lazy compilation of the Unity benchmark, i.e., comparison of no write protection vs. write protection with this change:\nt:V8.WasmCompileModuleMicroSeconds.asm     9.10k ±30%  12.16k ±19%  +33.65%\nt:V8.WasmCompileFunctionMicroSeconds.asm   5.92M ± 2%   6.10M ± 3%   +3.11%\n(The percentage for module compilation time is high, but in absolute terms, it\u0027s only 3ms, so not really relevant.)\n\nIn contrast, without this change, enabling --wasm-write-protect-code-memory has a much higher cost, namely:\nt:V8.WasmCompileModuleMicroSeconds.asm     11.0k ±15%  1289.8k ± 2%  +11641.13%\nt:V8.WasmCompileFunctionMicroSeconds.asm   5.99M ± 2%    6.04M ± 4%  (not yet statistically significant, needs more runs)",
+      "revId": "e91287cbb81c89cae659ea88953d325bf6e15eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68e6ce62_8fb87bf1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-05-31T16:47:35Z",
+      "side": 1,
+      "message": "Clemens, do you know an answer to this question, i.e., whether I could move {strategy} and the check on it out of the loop?",
+      "revId": "e91287cbb81c89cae659ea88953d325bf6e15eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
