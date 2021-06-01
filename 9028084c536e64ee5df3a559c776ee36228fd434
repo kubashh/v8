@@ -87,6 +87,24 @@
       "parentUuid": "53758eb0_eba2482f",
       "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4e9ebe6_3e339daf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-01T08:54:02Z",
+      "side": 1,
+      "message": "Please take another look, I made the changes we discussed: using UXTW for zero-extension on arm64 when the offset is 32 bits, and using the full register otherwise.",
+      "parentUuid": "add8e61c_6025977d",
+      "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
