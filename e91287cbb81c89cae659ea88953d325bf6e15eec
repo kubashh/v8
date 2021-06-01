@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "836b882f_4ad4384f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T10:36:02Z",
+      "side": 1,
+      "message": "Recording offline discussion: The WasmCompileFunctionMicroSeconds.asm counter does not include the constructor and destructor of NativeModuleModificationScope (in CompileLazy). We should (temporarily) add another counter that includes all time spent in CompileLazy, and check by how much that regresses.",
+      "parentUuid": "413d961d_a442f7fa",
+      "revId": "e91287cbb81c89cae659ea88953d325bf6e15eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68e6ce62_8fb87bf1",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-05-31T16:47:35Z",
       "side": 1,
       "message": "Clemens, do you know an answer to this question, i.e., whether I could move {strategy} and the check on it out of the loop?",
+      "revId": "e91287cbb81c89cae659ea88953d325bf6e15eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f742dcf5_2f9f3ef5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T10:36:02Z",
+      "side": 1,
+      "message": "As discussed offline, the strategy can be set per functions via the \"compilation hints\" proposal. In most cases, it will be the same per module though (lazy compilation for asm.js, non-lazy for wasm). We could put the scope in a base::Optional and only initialize it when we see the first lazy function.",
+      "parentUuid": "68e6ce62_8fb87bf1",
       "revId": "e91287cbb81c89cae659ea88953d325bf6e15eec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
