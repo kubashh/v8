@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74bc799e_e1f764ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-01T11:48:33Z",
+      "side": 1,
+      "message": "LGTM thanks.",
+      "revId": "704a9b6c2da5f8864f7936883778948d2c94f56b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dba51cc4_9ece9f03",
@@ -102,6 +119,54 @@
       "side": 1,
       "message": "The point is that the finalization phase may dereference handles to backing stores e.g. when processing compilation dependencies.",
       "parentUuid": "9e8705a2_d65b012f",
+      "range": {
+        "startLine": 221,
+        "startChar": 30,
+        "endLine": 221,
+        "endChar": 51
+      },
+      "revId": "704a9b6c2da5f8864f7936883778948d2c94f56b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eb5619a_305b4ab0",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-01T11:48:33Z",
+      "side": 1,
+      "message": "Ack sorry missed that change.",
+      "parentUuid": "3f452958_43c6ad28",
+      "range": {
+        "startLine": 221,
+        "startChar": 11,
+        "endLine": 221,
+        "endChar": 21
+      },
+      "revId": "704a9b6c2da5f8864f7936883778948d2c94f56b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cebb8702_de62b6e2",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-01T11:48:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a28caba4_7cb16b9a",
       "range": {
         "startLine": 221,
         "startChar": 30,
