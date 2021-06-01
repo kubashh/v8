@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb54cdd4_b81c6228",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T11:55:39Z",
+      "side": 1,
+      "message": "If the assumption is not used in the code (i.e. if the implication is not a precondition of this method), then I think we should remove it.",
+      "parentUuid": "5c0d99eb_02b9aee2",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9c32fd7_9dafe2c2",
@@ -137,6 +155,24 @@
       "side": 1,
       "message": "Why do you think this DCHECK_IMPLIES makes sense here and not on arm64? We also don\u0027t rely on it here AFAICT.\nAgreed about is_load_mem, the assert should hold in any case. Removed.",
       "parentUuid": "fe69065c_b5fb38b2",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba5bc47e_3129b52d",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T11:55:39Z",
+      "side": 1,
+      "message": "It only makes sense if we somehow rely in this implication, i.e. if the code would break (or needs to be revisited) if it is ever violated. Since this is not the case here, I think we don\u0027t need it.",
+      "parentUuid": "245ba9f0_83cbd69b",
       "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
