@@ -16,6 +16,52 @@
       "message": "ptal",
       "revId": "8a131d423d7325642563eed645cbc82c18efaf50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8313e2dc_75a0a3f1",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T09:16:47Z",
+      "side": 1,
+      "message": "how about using base::BitField for these things?",
+      "range": {
+        "startLine": 82,
+        "startChar": 37,
+        "endLine": 84,
+        "endChar": 71
+      },
+      "revId": "8a131d423d7325642563eed645cbc82c18efaf50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fa05b18_ebc741dc",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T09:16:47Z",
+      "side": 1,
+      "message": "FunctionKind is a uint8_t, maybe let\u0027s stick directly to ReadByte?",
+      "range": {
+        "startLine": 806,
+        "startChar": 24,
+        "endLine": 806,
+        "endChar": 34
+      },
+      "revId": "8a131d423d7325642563eed645cbc82c18efaf50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
