@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ea7656aa_e2f6834d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T08:20:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11e1502e_e4ed3f83",
+      "range": {
+        "startLine": 10,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "1111645bee4d76d80f4ef1c1a2a54b2afc193bf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b38c8a73_2ea57d23",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e60c56a_d8494550",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T08:20:51Z",
+      "side": 1,
+      "message": "yess, let\u0027s do that.",
+      "parentUuid": "29c825ff_f5c3bee6",
+      "range": {
+        "startLine": 2138,
+        "startChar": 20,
+        "endLine": 2138,
+        "endChar": 24
+      },
+      "revId": "1111645bee4d76d80f4ef1c1a2a54b2afc193bf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c998596_6e5d05e3",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-06-01T06:50:13Z",
       "side": 1,
       "message": "Loosely related nit: the name \"Load\" is very generic, would ExecuteFiles be more descriptive?",
+      "range": {
+        "startLine": 2192,
+        "startChar": 12,
+        "endLine": 2192,
+        "endChar": 16
+      },
+      "revId": "1111645bee4d76d80f4ef1c1a2a54b2afc193bf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41324ef8_50b46ad3",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2192,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T08:20:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c998596_6e5d05e3",
       "range": {
         "startLine": 2192,
         "startChar": 12,
@@ -127,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f1e50ec_86b2fcfe",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T08:20:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b480d37_6584e241",
+      "range": {
+        "startLine": 2196,
+        "startChar": 22,
+        "endLine": 2196,
+        "endChar": 26
+      },
+      "revId": "1111645bee4d76d80f4ef1c1a2a54b2afc193bf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b66aa65f_83e4c4fe",
@@ -140,6 +236,30 @@
       "writtenOn": "2021-06-01T06:50:13Z",
       "side": 1,
       "message": "Nit: \"readFile\" would be clearer IMO",
+      "range": {
+        "startLine": 2910,
+        "startChar": 29,
+        "endLine": 2910,
+        "endChar": 33
+      },
+      "revId": "1111645bee4d76d80f4ef1c1a2a54b2afc193bf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6696b468_4dd8c0a1",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2910,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T08:20:51Z",
+      "side": 1,
+      "message": "Extended the API to me cleaner:\n\n d8.file.load()\n d8.file.execute()",
+      "parentUuid": "b66aa65f_83e4c4fe",
       "range": {
         "startLine": 2910,
         "startChar": 29,
