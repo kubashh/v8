@@ -59,8 +59,199 @@ class V8Profile extends Profile {
   }
 }
 
+class CppEntriesProvider {
+  inRange(funcInfo, start, end) {
+    return funcInfo.start >= start && funcInfo.end <= end;
+  }
+
+  parseVmSymbols(libName, libStart, libEnd, libASLRSlide, processorFunc) {
+    this.loadSymbols(libName);
+
+    let lastUnknownSize;
+    let lastAdded;
+
+    let addEntry = (funcInfo) => {
+      // Several functions can be mapped onto the same address. To avoid
+      // creating zero-sized entries, skip such duplicates.
+      // Also double-check that function belongs to the library address space.
+
+      if (lastUnknownSize &&
+        lastUnknownSize.start < funcInfo.start) {
+        // Try to update lastUnknownSize based on new entries start position.
+        lastUnknownSize.end = funcInfo.start;
+        if ((!lastAdded ||
+            !this.inRange(lastUnknownSize, lastAdded.start, lastAdded.end)) &&
+            this.inRange(lastUnknownSize, libStart, libEnd)) {
+          processorFunc(
+              lastUnknownSize.name, lastUnknownSize.start, lastUnknownSize.end);
+          lastAdded = lastUnknownSize;
+        }
+      }
+      lastUnknownSize = undefined;
+
+      if (funcInfo.end) {
+        // Skip duplicates that have the same start address as the last added.
+        if ((!lastAdded || lastAdded.start != funcInfo.start) &&
+          this.inRange(funcInfo, libStart, libEnd)) {
+          processorFunc(funcInfo.name, funcInfo.start, funcInfo.end);
+          lastAdded = funcInfo;
+        }
+      } else {
+        // If a funcInfo doesn't have an end, try to match it up with then next
+        // entry.
+        lastUnknownSize = funcInfo;
+      }
+    }
+
+    while (true) {
+      const funcInfo = this.parseNextLine();
+      if (funcInfo === null) continue;
+      if (funcInfo === false) break;
+      if (funcInfo.start < libStart - libASLRSlide &&
+        funcInfo.start < libEnd - libStart) {
+        funcInfo.start += libStart;
+      } else {
+        funcInfo.start += libASLRSlide;
+      }
+      if (funcInfo.size) {
+        funcInfo.end = funcInfo.start + funcInfo.size;
+      }
+      addEntry(funcInfo);
+    }
+    addEntry({ name: '', start: libEnd });
+  }
+
+  loadSymbols(libName) {}
+
+  parseNextLine() { return false }
+}
+
+
+export class UnixCppEntriesProvider extends CppEntriesProvider {
+  constructor(nmExec, objdumpExec, targetRootFS, apkEmbeddedLibrary) {
+    super();
+    this.symbols = [];
+    // File offset of a symbol minus the virtual address of a symbol found in
+    // the symbol table.
+    this.fileOffsetMinusVma = 0;
+    this.parsePos = 0;
+    this.nmExec = nmExec;
+    this.objdumpExec = objdumpExec;
+    this.targetRootFS = targetRootFS;
+    this.apkEmbeddedLibrary = apkEmbeddedLibrary;
+    this.FUNC_RE = /^([0-9a-fA-F]{8,16}) ([0-9a-fA-F]{8,16} )?[tTwW] (.*)$/;
+  }
+
+
+  loadSymbols(libName) {
+    this.parsePos = 0;
+    if (this.apkEmbeddedLibrary && libName.endsWith('.apk')) {
+      libName = this.apkEmbeddedLibrary;
+    }
+    if (this.targetRootFS) {
+      libName = libName.substring(libName.lastIndexOf('/') + 1);
+      libName = this.targetRootFS + libName;
+    }
+    try {
+      this.symbols = [
+        os.system(this.nmExec, ['-C', '-n', '-S', libName], -1, -1),
+        os.system(this.nmExec, ['-C', '-n', '-S', '-D', libName], -1, -1)
+      ];
+
+      const objdumpOutput = os.system(this.objdumpExec, ['-h', libName], -1, -1);
+      for (const line of objdumpOutput.split('\n')) {
+        const [, sectionName, , vma, , fileOffset] = line.trim().split(/\s+/);
+        if (sectionName === ".text") {
+          this.fileOffsetMinusVma = parseInt(fileOffset, 16) - parseInt(vma, 16);
+        }
+      }
+    } catch (e) {
+      // If the library cannot be found on this system let's not panic.
+      this.symbols = ['', ''];
+    }
+  }
+
+  parseNextLine() {
+    if (this.symbols.length == 0) {
+      return false;
+    }
+    const lineEndPos = this.symbols[0].indexOf('\n', this.parsePos);
+    if (lineEndPos == -1) {
+      this.symbols.shift();
+      this.parsePos = 0;
+      return this.parseNextLine();
+    }
+
+    const line = this.symbols[0].substring(this.parsePos, lineEndPos);
+    this.parsePos = lineEndPos + 1;
+    const fields = line.match(this.FUNC_RE);
+    let funcInfo = null;
+    if (fields) {
+      funcInfo = { name: fields[3], start: parseInt(fields[1], 16) + this.fileOffsetMinusVma };
+      if (fields[2]) {
+        funcInfo.size = parseInt(fields[2], 16);
+      }
+    }
+    return funcInfo;
+  }
+}
+
+export class MacCppEntriesProvider extends UnixCppEntriesProvider {
+  constructor(nmExec, objdumpExec, targetRootFS, apkEmbeddedLibrary) {
+    super(nmExec, objdumpExec, targetRootFS, apkEmbeddedLibrary);
+    // Note an empty group. It is required, as UnixCppEntriesProvider expects 3 groups.
+    this.FUNC_RE = /^([0-9a-fA-F]{8,16})() (.*)$/;
+  }
+
+  loadSymbols(libName) {
+    this.parsePos = 0;
+    libName = this.targetRootFS + libName;
+
+    // It seems that in OS X `nm` thinks that `-f` is a format option, not a
+    // "flat" display option flag.
+    try {
+      this.symbols = [os.system(this.nmExec, ['-n', libName], -1, -1), ''];
+    } catch (e) {
+      // If the library cannot be found on this system let's not panic.
+      this.symbols = '';
+    }
+  }
+}
+
 
 export class TickProcessor extends LogReader {
+  static EntriesProvider = {
+    'linux': UnixCppEntriesProvider,
+    'windows': WindowsCppEntriesProvider,
+    'mac': MacCppEntriesProvider
+  };
+
+  static fromParams(params, entriesProvider) {
+    if (entriesProvider == undefined) {
+      entriesProvider = new this.EntriesProvider[params.platform](
+          params.nm, params.objdump, params.targetRootFS,
+          params.apkEmbeddedLibrary);
+    }
+    return new TickProcessor(
+      entriesProvider,
+      params.separateIc,
+      params.separateBytecodes,
+      params.separateBuiltins,
+      params.separateStubs,
+      params.separateBaselineHandlers,
+      params.callGraphSize,
+      params.ignoreUnknown,
+      params.stateFilter,
+      params.distortion,
+      params.range,
+      params.sourceMap,
+      params.timedRange,
+      params.pairwiseTimedRange,
+      params.onlySummary,
+      params.runtimeTimerFilter,
+      params.preprocessJson);
+  }
+
   constructor(
     cppEntriesProvider,
     separateIc,
@@ -281,7 +472,7 @@ export class TickProcessor extends LogReader {
   processLogFileInTest(fileName) {
     // Hack file name to avoid dealing with platform specifics.
     this.lastLogFileName_ = 'v8.log';
-    const contents = this.readFile(fileName);
+    const contents = d8.file.read(fileName);
     this.processLogChunk(contents);
   }
 
@@ -561,272 +752,6 @@ export class TickProcessor extends LogReader {
     const sourceColumn = entry[4] + 1;
 
     return `${sourceFile}:${sourceLine}:${sourceColumn} -> ${funcName}`;
-  }
-
-  printEntries(
-        profile, totalTicks, nonLibTicks, filterP, callback, printAllTicks) {
-    this.processProfile(profile, filterP, (rec) => {
-      if (rec.selfTime == 0) return;
-      callback(rec);
-      const funcName = this.formatFunctionName(rec.internalFuncName);
-      if (printAllTicks) {
-        this.printLine(funcName, rec.selfTime, totalTicks, nonLibTicks);
-      }
-    });
-  }
-
-  printHeavyProfile(profile, opt_indent) {
-    const indent = opt_indent || 0;
-    const indentStr = ''.padStart(indent);
-    this.processProfile(profile, () => true, (rec) => {
-      // Cut off too infrequent callers.
-      if (rec.parentTotalPercent < TickProcessor.CALL_PROFILE_CUTOFF_PCT) return;
-      const funcName = this.formatFunctionName(rec.internalFuncName);
-      print(`${`  ${rec.totalTime.toString().padStart(5)}  ` +
-        rec.parentTotalPercent.toFixed(1).toString().padStart(5)}%  ${indentStr}${funcName}`);
-      // Limit backtrace depth.
-      if (indent < 2 * this.callGraphSize_) {
-        this.printHeavyProfile(rec.children, indent + 2);
-      }
-      // Delimit top-level functions.
-      if (indent == 0) print('');
-    });
-  }
-}
-
-
-class CppEntriesProvider {
-  inRange(funcInfo, start, end) {
-    return funcInfo.start >= start && funcInfo.end <= end;
-  }
-
-  parseVmSymbols(libName, libStart, libEnd, libASLRSlide, processorFunc) {
-    this.loadSymbols(libName);
-
-    let lastUnknownSize;
-    let lastAdded;
-
-    let addEntry = (funcInfo) => {
-      // Several functions can be mapped onto the same address. To avoid
-      // creating zero-sized entries, skip such duplicates.
-      // Also double-check that function belongs to the library address space.
-
-      if (lastUnknownSize &&
-        lastUnknownSize.start < funcInfo.start) {
-        // Try to update lastUnknownSize based on new entries start position.
-        lastUnknownSize.end = funcInfo.start;
-        if ((!lastAdded ||
-            !this.inRange(lastUnknownSize, lastAdded.start, lastAdded.end)) &&
-            this.inRange(lastUnknownSize, libStart, libEnd)) {
-          processorFunc(
-              lastUnknownSize.name, lastUnknownSize.start, lastUnknownSize.end);
-          lastAdded = lastUnknownSize;
-        }
-      }
-      lastUnknownSize = undefined;
-
-      if (funcInfo.end) {
-        // Skip duplicates that have the same start address as the last added.
-        if ((!lastAdded || lastAdded.start != funcInfo.start) &&
-          this.inRange(funcInfo, libStart, libEnd)) {
-          processorFunc(funcInfo.name, funcInfo.start, funcInfo.end);
-          lastAdded = funcInfo;
-        }
-      } else {
-        // If a funcInfo doesn't have an end, try to match it up with then next
-        // entry.
-        lastUnknownSize = funcInfo;
-      }
-    }
-
-    while (true) {
-      const funcInfo = this.parseNextLine();
-      if (funcInfo === null) continue;
-      if (funcInfo === false) break;
-      if (funcInfo.start < libStart - libASLRSlide &&
-        funcInfo.start < libEnd - libStart) {
-        funcInfo.start += libStart;
-      } else {
-        funcInfo.start += libASLRSlide;
-      }
-      if (funcInfo.size) {
-        funcInfo.end = funcInfo.start + funcInfo.size;
-      }
-      addEntry(funcInfo);
-    }
-    addEntry({ name: '', start: libEnd });
-  }
-
-  loadSymbols(libName) {}
-
-  parseNextLine() { return false }
-}
-
-
-export class UnixCppEntriesProvider extends CppEntriesProvider {
-  constructor(nmExec, objdumpExec, targetRootFS, apkEmbeddedLibrary) {
-    super();
-    this.symbols = [];
-    // File offset of a symbol minus the virtual address of a symbol found in
-    // the symbol table.
-    this.fileOffsetMinusVma = 0;
-    this.parsePos = 0;
-    this.nmExec = nmExec;
-    this.objdumpExec = objdumpExec;
-    this.targetRootFS = targetRootFS;
-    this.apkEmbeddedLibrary = apkEmbeddedLibrary;
-    this.FUNC_RE = /^([0-9a-fA-F]{8,16}) ([0-9a-fA-F]{8,16} )?[tTwW] (.*)$/;
-  }
-
-
-  loadSymbols(libName) {
-    this.parsePos = 0;
-    if (this.apkEmbeddedLibrary && libName.endsWith('.apk')) {
-      libName = this.apkEmbeddedLibrary;
-    }
-    if (this.targetRootFS) {
-      libName = libName.substring(libName.lastIndexOf('/') + 1);
-      libName = this.targetRootFS + libName;
-    }
-    try {
-      this.symbols = [
-        os.system(this.nmExec, ['-C', '-n', '-S', libName], -1, -1),
-        os.system(this.nmExec, ['-C', '-n', '-S', '-D', libName], -1, -1)
-      ];
-
-      const objdumpOutput = os.system(this.objdumpExec, ['-h', libName], -1, -1);
-      for (const line of objdumpOutput.split('\n')) {
-        const [, sectionName, , vma, , fileOffset] = line.trim().split(/\s+/);
-        if (sectionName === ".text") {
-          this.fileOffsetMinusVma = parseInt(fileOffset, 16) - parseInt(vma, 16);
-        }
-      }
-    } catch (e) {
-      // If the library cannot be found on this system let's not panic.
-      this.symbols = ['', ''];
-    }
-  }
-
-  parseNextLine() {
-    if (this.symbols.length == 0) {
-      return false;
-    }
-    const lineEndPos = this.symbols[0].indexOf('\n', this.parsePos);
-    if (lineEndPos == -1) {
-      this.symbols.shift();
-      this.parsePos = 0;
-      return this.parseNextLine();
-    }
-
-    const line = this.symbols[0].substring(this.parsePos, lineEndPos);
-    this.parsePos = lineEndPos + 1;
-    const fields = line.match(this.FUNC_RE);
-    let funcInfo = null;
-    if (fields) {
-      funcInfo = { name: fields[3], start: parseInt(fields[1], 16) + this.fileOffsetMinusVma };
-      if (fields[2]) {
-        funcInfo.size = parseInt(fields[2], 16);
-      }
-    }
-    return funcInfo;
-  }
-}
-
-export class MacCppEntriesProvider extends UnixCppEntriesProvider {
-  constructor(nmExec, objdumpExec, targetRootFS, apkEmbeddedLibrary) {
-    super(nmExec, objdumpExec, targetRootFS, apkEmbeddedLibrary);
-    // Note an empty group. It is required, as UnixCppEntriesProvider expects 3 groups.
-    this.FUNC_RE = /^([0-9a-fA-F]{8,16})() (.*)$/;
-  }
-
-  loadSymbols(libName) {
-    this.parsePos = 0;
-    libName = this.targetRootFS + libName;
-
-    // It seems that in OS X `nm` thinks that `-f` is a format option, not a
-    // "flat" display option flag.
-    try {
-      this.symbols = [os.system(this.nmExec, ['-n', libName], -1, -1), ''];
-    } catch (e) {
-      // If the library cannot be found on this system let's not panic.
-      this.symbols = '';
-    }
-  }
-}
-
-
-export class WindowsCppEntriesProvider extends CppEntriesProvider {
-  constructor(_ignored_nmExec, _ignored_objdumpExec, targetRootFS,
-    _ignored_apkEmbeddedLibrary) {
-    super();
-    this.targetRootFS = targetRootFS;
-    this.symbols = '';
-    this.parsePos = 0;
-  }
-
-  static FILENAME_RE = /^(.*)\.([^.]+)$/;
-  static FUNC_RE =
-    /^\s+0001:[0-9a-fA-F]{8}\s+([_\?@$0-9a-zA-Z]+)\s+([0-9a-fA-F]{8}).*$/;
-  static IMAGE_BASE_RE =
-    /^\s+0000:00000000\s+___ImageBase\s+([0-9a-fA-F]{8}).*$/;
-  // This is almost a constant on Windows.
-  static EXE_IMAGE_BASE = 0x00400000;
-
-  loadSymbols(libName) {
-    libName = this.targetRootFS + libName;
-    const fileNameFields = libName.match(WindowsCppEntriesProvider.FILENAME_RE);
-    if (!fileNameFields) return;
-    const mapFileName = `${fileNameFields[1]}.map`;
-    this.moduleType_ = fileNameFields[2].toLowerCase();
-    try {
-      this.symbols = read(mapFileName);
-    } catch (e) {
-      // If .map file cannot be found let's not panic.
-      this.symbols = '';
-    }
-  }
-
-  parseNextLine() {
-    const lineEndPos = this.symbols.indexOf('\r\n', this.parsePos);
-    if (lineEndPos == -1) {
-      return false;
-    }
-
-    const line = this.symbols.substring(this.parsePos, lineEndPos);
-    this.parsePos = lineEndPos + 2;
-
-    // Image base entry is above all other symbols, so we can just
-    // terminate parsing.
-    const imageBaseFields = line.match(WindowsCppEntriesProvider.IMAGE_BASE_RE);
-    if (imageBaseFields) {
-      const imageBase = parseInt(imageBaseFields[1], 16);
-      if ((this.moduleType_ == 'exe') !=
-        (imageBase == WindowsCppEntriesProvider.EXE_IMAGE_BASE)) {
-        return false;
-      }
-    }
-
-    const fields = line.match(WindowsCppEntriesProvider.FUNC_RE);
-    return fields ?
-      { name: this.unmangleName(fields[1]), start: parseInt(fields[2], 16) } :
-      null;
-  }
-
-  /**
-   * Performs very simple unmangling of C++ names.
-   *
-   * Does not handle arguments and template arguments. The mangled names have
-   * the form:
-   *
-   *   ?LookupInDescriptor@JSObject@internal@v8@@...arguments info...
-   */
-  unmangleName(name) {
-    // Empty or non-mangled name.
-    if (name.length < 1 || name.charAt(0) != '?') return name;
-    const nameEndPos = name.indexOf('@@');
-    const components = name.substring(1, nameEndPos).split('@');
-    components.reverse();
-    return components.join('::');
   }
 }
 
