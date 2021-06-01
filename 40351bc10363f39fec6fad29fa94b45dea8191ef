@@ -16,6 +16,46 @@
       "message": "Added benchmark results for new counter; made NativeModuleModificationScope initialization lazy on first call to {UseLazyStub}.",
       "revId": "40351bc10363f39fec6fad29fa94b45dea8191ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dab713e_0bfa598d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T17:17:00Z",
+      "side": 1,
+      "message": "This else is not needed, since there are no other compilation strategies. In fact, we want this code to fail if someone adds another one without updating this code. So there are two options:\n1) Just make this an \"else\" branch, and add a DCHECK_EQ (like before), or\n2) use a switch statement (without a default case, and with a shared kLazy and kLazyBaselineEagerTopTier block, which then contains another condition for the AddTopTierUnit call).",
+      "revId": "40351bc10363f39fec6fad29fa94b45dea8191ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87af50c2_28aad6fc",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T17:17:00Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 978,
+        "startChar": 60,
+        "endLine": 978,
+        "endChar": 69
+      },
+      "revId": "40351bc10363f39fec6fad29fa94b45dea8191ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
