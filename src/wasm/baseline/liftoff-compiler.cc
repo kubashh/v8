@@ -2799,7 +2799,9 @@ class LiftoffCompiler {
       Register mem = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
       LOAD_INSTANCE_FIELD(mem, MemoryStart, kSystemPointerSize, pinned);
       LiftoffRegister value = pinned.set(__ GetUnusedRegister(rc, pinned));
-      __ Load(value, mem, no_reg, offset, type, pinned, nullptr, true);
+      bool i64_offset = index_val.type == kWasmI64;
+      __ Load(value, mem, no_reg, offset, type, pinned, nullptr, true,
+              i64_offset);
       __ PushRegister(kind, value);
     } else {
       LiftoffRegister full_index = __ PopToRegister();
