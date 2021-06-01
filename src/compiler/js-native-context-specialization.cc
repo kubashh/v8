@@ -1953,25 +1953,31 @@ Reduction JSNativeContextSpecialization::ReduceElementLoadFromHeapConstant(
 
     if (receiver_ref.IsJSObject()) {
       element = receiver_ref.AsJSObject().GetOwnConstantElement(index);
-      if (!element.has_value() && receiver_ref.IsJSArray()) {
-        // We didn't find a constant element, but if the receiver is a cow-array
-        // we can exploit the fact that any future write to the element will
-        // replace the whole elements storage.
+      if (receiver_ref.IsJSArray()) {
         JSArrayRef array_ref = receiver_ref.AsJSArray();
-        base::Optional<FixedArrayBaseRef> array_elements = array_ref.elements();
-        if (array_elements.has_value()) {
-          element = array_ref.GetOwnCowElement(*array_elements, index);
-          if (element.has_value()) {
-            Node* elements = effect = graph()->NewNode(
-                simplified()->LoadField(AccessBuilder::ForJSObjectElements()),
-                receiver, effect, control);
-            Node* check =
-                graph()->NewNode(simplified()->ReferenceEqual(), elements,
-                                 jsgraph()->Constant(*array_elements));
-            effect = graph()->NewNode(
-                simplified()->CheckIf(
-                    DeoptimizeReason::kCowArrayElementsChanged),
-                check, effect, control);
+        if (element.has_value()) {
+          dependencies()->DependOnArrayIndexIsInBounds(array_ref, index);
+        } else {
+          // We didn't find a constant element, but if the receiver is a
+          // cow-array we can exploit the fact that any future write to the
+          // element will replace the whole elements storage.
+          JSArrayRef array_ref = receiver_ref.AsJSArray();
+          base::Optional<FixedArrayBaseRef> array_elements =
+              array_ref.elements();
+          if (array_elements.has_value()) {
+            element = array_ref.GetOwnCowElement(*array_elements, index);
+            if (element.has_value()) {
+              Node* elements = effect = graph()->NewNode(
+                  simplified()->LoadField(AccessBuilder::ForJSObjectElements()),
+                  receiver, effect, control);
+              Node* check =
+                  graph()->NewNode(simplified()->ReferenceEqual(), elements,
+                                   jsgraph()->Constant(*array_elements));
+              effect = graph()->NewNode(
+                  simplified()->CheckIf(
+                      DeoptimizeReason::kCowArrayElementsChanged),
+                  check, effect, control);
+            }
           }
         }
       }

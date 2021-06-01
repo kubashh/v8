@@ -3891,6 +3891,17 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
 
     DCHECK_LE(index, JSObject::kMaxElementIndex);
 
+    // See also ElementsAccessorBase::GetMaxIndex.
+    if (IsJSArray()) {
+      // For JSArrays we additionally need to check against JSArray::length.
+      // Note length_unsafe is unsafe, but if necessary we verify through
+      // compilation dependencies when back on the main thread.
+      Smi length_unsafe = Smi::cast(*AsJSArray().length_unsafe().object());
+      if (static_cast<int>(index) >= Smi::ToInt(length_unsafe)) {
+        return {};
+      }
+    }
+
     Object maybe_element;
     auto result = ConcurrentLookupIterator::TryGetOwnConstantElement(
         &maybe_element, broker()->isolate(), broker()->local_isolate(),

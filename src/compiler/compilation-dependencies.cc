@@ -8,6 +8,7 @@
 #include "src/execution/protectors.h"
 #include "src/handles/handles-inl.h"
 #include "src/objects/allocation-site-inl.h"
+#include "src/objects/js-array-inl.h"
 #include "src/objects/js-function-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/zone/zone-handle-set.h"
@@ -461,6 +462,26 @@ class ElementsKindDependency final : public CompilationDependency {
   ElementsKind kind_;
 };
 
+class ArrayIndexIsInBoundsDependency final : public CompilationDependency {
+ public:
+  ArrayIndexIsInBoundsDependency(const JSArrayRef& holder, uint32_t index)
+      : holder_(holder), index_(index) {}
+
+  bool IsValid() const override {
+    Object length = holder_.object()->length();
+    if (!length.IsSmi()) return false;
+    return static_cast<int>(index_) < Smi::ToInt(length);
+  }
+
+  void Install(const MaybeObjectHandle& code) const override {
+    // This dependency has no effect after code finalization.
+  }
+
+ private:
+  JSArrayRef holder_;
+  const uint32_t index_;
+};
+
 class InitialMapInstanceSizePredictionDependency final
     : public CompilationDependency {
  public:
@@ -624,6 +645,13 @@ void CompilationDependencies::DependOnElementsKind(
                           : site.GetElementsKind();
   if (AllocationSite::ShouldTrack(kind)) {
     RecordDependency(zone_->New<ElementsKindDependency>(site, kind));
+  }
+}
+
+void CompilationDependencies::DependOnArrayIndexIsInBounds(
+    const JSArrayRef& holder, uint32_t index) {
+  if (broker_->is_concurrent_inlining()) {
+    RecordDependency(zone_->New<ArrayIndexIsInBoundsDependency>(holder, index));
   }
 }
 
