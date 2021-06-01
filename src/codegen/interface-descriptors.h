@@ -473,9 +473,17 @@ class StaticCallInterfaceDescriptor : public CallInterfaceDescriptor {
   static constexpr inline Register GetRegisterParameter(int i) {
     return DerivedDescriptor::registers()[i];
   }
-
   explicit StaticCallInterfaceDescriptor(CallDescriptors::Key key)
       : CallInterfaceDescriptor(key) {}
+
+#if DEBUG
+  // Overwritten in DerivedDescriptor.
+  static void Verify(CallInterfaceDescriptorData* data);
+  // Verify that the CallInterfaceDescriptorData contains the default
+  // argument registers for {argc} arguments.
+  static inline void VerifyArgumentRegisters(CallInterfaceDescriptorData* data,
+                                             int argc);
+#endif
 
  private:
   // {CallDescriptors} is allowed to call the private {Initialize} method.
@@ -1025,6 +1033,9 @@ class WriteBarrierDescriptor final
   static constexpr inline Register ValueRegister();
   static constexpr inline RegList ComputeSavedRegisters(Register object,
                                                         Register slot_address);
+#if DEBUG
+  static void Verify(CallInterfaceDescriptorData* data);
+#endif
 };
 
 #ifdef V8_IS_TSAN
