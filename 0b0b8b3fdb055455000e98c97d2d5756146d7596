@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e002ba94_adf7c3b3",
+        "filename": "test/mjsunit/tools/tickprocessor-test-large.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T11:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cecd4646_3f954db0",
+      "range": {
+        "startLine": 56,
+        "startChar": 23,
+        "endLine": 56,
+        "endChar": 24
+      },
+      "revId": "0b0b8b3fdb055455000e98c97d2d5756146d7596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "553991e4_77b60411",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ac65dd6_18d433c4",
+        "filename": "test/mjsunit/tools/tickprocessor.mjs",
+        "patchSetId": 10
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T11:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "553991e4_77b60411",
+      "range": {
+        "startLine": 469,
+        "startChar": 9,
+        "endLine": 469,
+        "endChar": 25
+      },
+      "revId": "0b0b8b3fdb055455000e98c97d2d5756146d7596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3468ee47_20575011",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-06-01T09:14:01Z",
       "side": 1,
       "message": "nit: -n",
+      "range": {
+        "startLine": 100,
+        "startChar": 73,
+        "endLine": 100,
+        "endChar": 74
+      },
+      "revId": "0b0b8b3fdb055455000e98c97d2d5756146d7596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77a3e63b_51bbaa9e",
+        "filename": "tools/tickprocessor.mjs",
+        "patchSetId": 10
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-01T11:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3468ee47_20575011",
       "range": {
         "startLine": 100,
         "startChar": 73,
