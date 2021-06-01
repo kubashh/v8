@@ -16,6 +16,52 @@
       "message": "Ross PTAL",
       "revId": "704a9b6c2da5f8864f7936883778948d2c94f56b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dba51cc4_9ece9f03",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-01T10:43:48Z",
+      "side": 1,
+      "message": "Should we make ref_count_ a std::atomic to be more confident about accessing it on multiple threads without locking?",
+      "range": {
+        "startLine": 221,
+        "startChar": 11,
+        "endLine": 221,
+        "endChar": 21
+      },
+      "revId": "704a9b6c2da5f8864f7936883778948d2c94f56b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e8705a2_d65b012f",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-01T10:43:48Z",
+      "side": 1,
+      "message": "Do we need to care about the output_queue here? If the job is only in the output queue then do we need to prevent left-trimming since the compilation job will only be accessed on the main thread after that point?",
+      "range": {
+        "startLine": 221,
+        "startChar": 30,
+        "endLine": 221,
+        "endChar": 51
+      },
+      "revId": "704a9b6c2da5f8864f7936883778948d2c94f56b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
