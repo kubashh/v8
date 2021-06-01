@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d7bb26a_a42f4a90",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T10:50:07Z",
+      "side": 1,
+      "message": "nit: I think a ternary expression would read nicer:\nreturn i64_offset ? ... : ...",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55e03920_32295298",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T10:50:07Z",
+      "side": 1,
+      "message": "Does this protect us against anything? Or is it just checking something that \"happens to be the case\"? We should either document why we need this implication, or just drop it.",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c32fd7_9dafe2c2",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T10:50:07Z",
+      "side": 1,
+      "message": "Does anyone ever set i64_offset to true?",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe69065c_b5fb38b2",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-01T10:50:07Z",
+      "side": 1,
+      "message": "Why do we only check if \"is_load_mem\" is true? Here it looks like there should be a \"DCHECK_IMPLIES(!is_load_mem, !i64_offset)\" (or \"DCHECK_IMPLIES(i64_offset, is_load_mem)\"), and \"is_load_mem\" should not be part of the condition.",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
