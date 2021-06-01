@@ -16,6 +16,40 @@
       "message": "PTAL.",
       "revId": "1a0c7ac4349180ba4473c71ad5c17845f0431cef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc3f232a_6eceea05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-01T10:00:05Z",
+      "side": 1,
+      "message": "The implementation of CheckCompatibleStackSlotTypes is also outdated. We now have two different rtt kinds and they should be compatible.",
+      "revId": "1a0c7ac4349180ba4473c71ad5c17845f0431cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fed0758f_25e11e39",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-01T10:00:05Z",
+      "side": 1,
+      "message": "This function already calls DCHECK, so this will generate nested DCHECKs (don\u0027t know if that matters).",
+      "revId": "1a0c7ac4349180ba4473c71ad5c17845f0431cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
