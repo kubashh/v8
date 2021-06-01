@@ -461,6 +461,26 @@ class ElementsKindDependency final : public CompilationDependency {
   ElementsKind kind_;
 };
 
+class OwnConstantElementDependency final : public CompilationDependency {
+ public:
+  OwnConstantElementDependency(const JSObjectRef& holder, uint32_t index,
+                               const ObjectRef& element)
+      : holder_(holder), index_(index), element_(element) {}
+
+  bool IsValid() const override {
+    return holder_.GetOwnConstantElement(index_)->equals(element_);
+  }
+
+  void Install(const MaybeObjectHandle& code) const override {
+    // This dependency has no effect after code finalization.
+  }
+
+ private:
+  JSObjectRef holder_;
+  const uint32_t index_;
+  ObjectRef element_;
+};
+
 class InitialMapInstanceSizePredictionDependency final
     : public CompilationDependency {
  public:
@@ -624,6 +644,14 @@ void CompilationDependencies::DependOnElementsKind(
                           : site.GetElementsKind();
   if (AllocationSite::ShouldTrack(kind)) {
     RecordDependency(zone_->New<ElementsKindDependency>(site, kind));
+  }
+}
+
+void CompilationDependencies::DependOnOwnConstantElement(
+    const JSObjectRef& holder, uint32_t index, const ObjectRef& element) {
+  if (broker_->is_concurrent_inlining()) {
+    RecordDependency(
+        zone_->New<OwnConstantElementDependency>(holder, index, element));
   }
 }
 

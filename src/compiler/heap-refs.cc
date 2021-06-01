@@ -11,6 +11,7 @@
 #include "src/api/api-inl.h"
 #include "src/ast/modules.h"
 #include "src/codegen/code-factory.h"
+#include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/graph-reducer.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/execution/protectors-inl.h"
@@ -2824,8 +2825,10 @@ ObjectData* JSHeapBroker::TryGetOrCreateData(Handle<Object> object,
     return *storage;
   }
 
+  // Retired: for compilation dependency validation.
   CHECK(mode() == JSHeapBroker::kSerializing ||
-        mode() == JSHeapBroker::kSerialized);
+        mode() == JSHeapBroker::kSerialized ||
+        mode() == JSHeapBroker::kRetired);
 
   ObjectData* object_data;
   if (object->IsSmi()) {
@@ -3891,6 +3894,17 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
 
     DCHECK_LE(index, JSObject::kMaxElementIndex);
 
+    // See also ElementsAccessorBase::GetMaxIndex.
+    if (IsJSArray()) {
+      // For JSArrays we additionally need to check against JSArray::length.
+      // Note length_unsafe is unsafe, but if necessary we verify through
+      // compilation dependencies when back on the main thread.
+      Smi length_unsafe = Smi::cast(*AsJSArray().length_unsafe().object());
+      if (static_cast<int>(index) >= Smi::ToInt(length_unsafe)) {
+        return {};
+      }
+    }
+
     Object maybe_element;
     auto result = ConcurrentLookupIterator::TryGetOwnConstantElement(
         &maybe_element, broker()->isolate(), broker()->local_isolate(),
@@ -3912,6 +3926,16 @@ base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
     if (element == nullptr) return base::nullopt;
     return ObjectRef(broker(), element);
   }
+}
+
+base::Optional<ObjectRef> JSObjectRef::GetOwnConstantElement(
+    uint32_t index, CompilationDependencies* dependencies) const {
+  DCHECK_NOT_NULL(dependencies);
+  base::Optional<ObjectRef> result = GetOwnConstantElement(index);
+  if (result.has_value()) {
+    dependencies->DependOnOwnConstantElement(*this, index, *result);
+  }
+  return result;
 }
 
 base::Optional<ObjectRef> JSObjectRef::GetOwnFastDataProperty(
@@ -4242,13 +4266,12 @@ ObjectData* ObjectRef::data() const {
       CHECK_NE(data_->kind(), kUnserializedHeapObject);
       return data_;
     case JSHeapBroker::kSerialized:
+    case JSHeapBroker::kRetired:
 #ifdef DEBUG
       data_->used_status = ObjectData::Usage::kDataUsed;
 #endif  // DEBUG
       CHECK_NE(data_->kind(), kUnserializedHeapObject);
       return data_;
-    case JSHeapBroker::kRetired:
-      UNREACHABLE();
   }
 }
 

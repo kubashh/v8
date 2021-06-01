@@ -320,6 +320,10 @@ class JSObjectRef : public JSReceiverRef {
   base::Optional<ObjectRef> GetOwnConstantElement(
       uint32_t index, SerializationPolicy policy =
                           SerializationPolicy::kAssumeSerialized) const;
+  // Use this overload if called from the background thread and thus
+  // dependencies should be created.
+  base::Optional<ObjectRef> GetOwnConstantElement(
+      uint32_t index, CompilationDependencies* dependencies) const;
 
   // Return the value of the property identified by the field {index}
   // if {index} is known to be an own data property of the object.

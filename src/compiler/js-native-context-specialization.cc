@@ -1952,7 +1952,8 @@ Reduction JSNativeContextSpecialization::ReduceElementLoadFromHeapConstant(
     base::Optional<ObjectRef> element;
 
     if (receiver_ref.IsJSObject()) {
-      element = receiver_ref.AsJSObject().GetOwnConstantElement(index);
+      element = receiver_ref.AsJSObject().GetOwnConstantElement(index,
+                                                                dependencies());
       if (!element.has_value() && receiver_ref.IsJSArray()) {
         // We didn't find a constant element, but if the receiver is a cow-array
         // we can exploit the fact that any future write to the element will
