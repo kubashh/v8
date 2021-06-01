@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "448f42ab_7971f6c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-06-01T17:11:26Z",
+      "side": 1,
+      "message": "I added a counter around {CompileLazy} as proposed, ran the Unity benchmark again, and got the following results (no write protection vs. write protection with this CL, and delta):\nt:V8.WasmCompileLazyFunctionMicroSeconds   5.93M ± 2%   6.78M ± 2%   +14.37%\nt:V8.WasmCompileModuleMicroSeconds.asm     9.14k ±36%  11.16k ±15%   +22.11%\ntime elapsed seconds                         191 ± 7%     197 ± 7%    +3.22%\nmprotect syscall count                     3.74k ± 2%  20.33k ± 1%  +442.84%\ntime sys seconds                            0.77 ±25%    1.35 ±12%   +76.89%\n\nIn other words: the new counter captures the function compilation slowdown better, but at 14%, it is not very high. Overall runtime regressed by a couple seconds/percent, which is good. Number of mprotect syscalls and sys time increased quite a lot, but by the expected amount (around 8.29k functions are compiled, x2 mprotect syscalls per function, yields roughly the 20k syscalls we see with write protection).",
+      "parentUuid": "836b882f_4ad4384f",
+      "revId": "e91287cbb81c89cae659ea88953d325bf6e15eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68e6ce62_8fb87bf1",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 1
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "As discussed offline, the strategy can be set per functions via the \"compilation hints\" proposal. In most cases, it will be the same per module though (lazy compilation for asm.js, non-lazy for wasm). We could put the scope in a base::Optional and only initialize it when we see the first lazy function.",
       "parentUuid": "68e6ce62_8fb87bf1",
+      "revId": "e91287cbb81c89cae659ea88953d325bf6e15eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c004f9d_0933b2be",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-06-01T17:11:26Z",
+      "side": 1,
+      "message": "Done, and I also disabled copy ctor and copy-assignment operator for {NativeModuleModificationScopes}, due to being error prone (over which I stumbled myself in this implementation).",
+      "parentUuid": "f742dcf5_2f9f3ef5",
       "revId": "e91287cbb81c89cae659ea88953d325bf6e15eec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

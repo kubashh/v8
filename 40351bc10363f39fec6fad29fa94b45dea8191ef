@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a61f62e6_7f767a70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-06-01T17:11:26Z",
+      "side": 1,
+      "message": "Added benchmark results for new counter; made NativeModuleModificationScope initialization lazy on first call to {UseLazyStub}.",
+      "revId": "40351bc10363f39fec6fad29fa94b45dea8191ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
