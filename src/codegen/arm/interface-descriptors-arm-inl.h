@@ -19,10 +19,22 @@ constexpr auto CallInterfaceDescriptor::DefaultRegisterArray() {
   return registers;
 }
 
+#if DEBUG
+template <typename DerivedDescriptor>
+void StaticCallInterfaceDescriptor<DerivedDescriptor>::VerifyArgumentRegisters(
+    CallInterfaceDescriptorData* data, int argc) {
+  RegList allocatable_regs = data->allocatable_registers();
+  if (argc >= 1) DCHECK(allocatable_regs | r0.bit());
+  if (argc >= 2) DCHECK(allocatable_regs | r1.bit());
+  if (argc >= 3) DCHECK(allocatable_regs | r2.bit());
+  if (argc >= 4) DCHECK(allocatable_regs | r3.bit());
+  if (argc > 4) UNREACHABLE();
+}
+#endif  // DEBUG
+
 // static
 constexpr auto WriteBarrierDescriptor::registers() {
-  STATIC_ASSERT(kReturnRegister0 == r0);
-  return RegisterArray(r0, r1, r2, r3, r4);
+  return RegisterArray(r1, r2, r3, r4, r0);
 }
 
 // static

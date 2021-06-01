@@ -18,10 +18,17 @@ constexpr auto CallInterfaceDescriptor::DefaultRegisterArray() {
   return registers;
 }
 
+#if DEBUG
+template <typename DerivedDescriptor>
+void StaticCallInterfaceDescriptor<DerivedDescriptor>::VerifyArgumentRegisters(
+    CallInterfaceDescriptorData* data, int argc) {
+  // Not implemented yet.
+}
+#endif  // DEBUG
+
 // static
 constexpr auto WriteBarrierDescriptor::registers() {
-  STATIC_ASSERT(esi == kContextRegister);
-  return RegisterArray(ecx, edx, esi, edi, kReturnRegister0);
+  return RegisterArray(edi, edx, ecx, esi, kReturnRegister0);
 }
 
 // static
@@ -74,7 +81,7 @@ constexpr Register GrowArrayElementsDescriptor::ObjectRegister() { return eax; }
 // static
 constexpr Register GrowArrayElementsDescriptor::KeyRegister() { return ecx; }
 
-// static
+// s
 constexpr Register BaselineLeaveFrameDescriptor::ParamsSizeRegister() {
   return esi;
 }
