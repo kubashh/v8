@@ -123,6 +123,24 @@
       "parentUuid": "d4e9ebe6_3e339daf",
       "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c89aaf4_52db50e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-01T11:46:57Z",
+      "side": 1,
+      "message": "Comments addressed, PTAL.",
+      "parentUuid": "5cccb662_5bfb9956",
+      "revId": "9028084c536e64ee5df3a559c776ee36228fd434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

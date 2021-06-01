@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a71b0ad5_e73ab893",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-01T11:46:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d7bb26a_a42f4a90",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55e03920_32295298",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-06-01T10:50:07Z",
       "side": 1,
       "message": "Does this protect us against anything? Or is it just checking something that \"happens to be the case\"? We should either document why we need this implication, or just drop it.",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c0d99eb_02b9aee2",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-01T11:46:57Z",
+      "side": 1,
+      "message": "This is just to check that the assumption holds, we don\u0027t rely on it. I can remove it.",
+      "parentUuid": "55e03920_32295298",
       "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a23ad378_da988ff8",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-01T11:46:57Z",
+      "side": 1,
+      "message": "It should be set by LiftoffCompiler when we do a memory load of course... I made the change but somehow did not include it in the patch set. Thanks for catching!",
+      "parentUuid": "c9c32fd7_9dafe2c2",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe69065c_b5fb38b2",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-06-01T10:50:07Z",
       "side": 1,
       "message": "Why do we only check if \"is_load_mem\" is true? Here it looks like there should be a \"DCHECK_IMPLIES(!is_load_mem, !i64_offset)\" (or \"DCHECK_IMPLIES(i64_offset, is_load_mem)\"), and \"is_load_mem\" should not be part of the condition.",
+      "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "245ba9f0_83cbd69b",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-01T11:46:57Z",
+      "side": 1,
+      "message": "Why do you think this DCHECK_IMPLIES makes sense here and not on arm64? We also don\u0027t rely on it here AFAICT.\nAgreed about is_load_mem, the assert should hold in any case. Removed.",
+      "parentUuid": "fe69065c_b5fb38b2",
       "revId": "278ecd9c60a400d599312e30b67e6e38ffba7aac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
