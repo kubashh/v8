@@ -62,6 +62,54 @@
       },
       "revId": "704a9b6c2da5f8864f7936883778948d2c94f56b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f452958_43c6ad28",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-01T11:11:04Z",
+      "side": 1,
+      "message": "That\u0027s already part of this CL (otherwise there\u0027d be a data race).",
+      "parentUuid": "dba51cc4_9ece9f03",
+      "range": {
+        "startLine": 221,
+        "startChar": 11,
+        "endLine": 221,
+        "endChar": 21
+      },
+      "revId": "704a9b6c2da5f8864f7936883778948d2c94f56b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a28caba4_7cb16b9a",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-01T11:11:04Z",
+      "side": 1,
+      "message": "The point is that the finalization phase may dereference handles to backing stores e.g. when processing compilation dependencies.",
+      "parentUuid": "9e8705a2_d65b012f",
+      "range": {
+        "startLine": 221,
+        "startChar": 30,
+        "endLine": 221,
+        "endChar": 51
+      },
+      "revId": "704a9b6c2da5f8864f7936883778948d2c94f56b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
