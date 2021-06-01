@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f114816f_2c02f21f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-01T11:26:13Z",
+      "side": 1,
+      "message": "Hi Georg, changed again: the helper function approach didn\u0027t work well since we create multiple refs (e.g. by calling `JSObjectRef::elements()`). Instead I introduce this simple new dep type. It\u0027s intended to be replaced in follow-up work once we add the OwnConstantElement dep. But for backmerge purposes, this is simpler. ptal",
+      "revId": "52377166377ca43a1f692b3aff864e9f54a26646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
