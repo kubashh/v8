@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "96dc99dd_ec34af19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 30
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-02T14:53:56Z",
+      "side": 1,
+      "message": "I have to do all in one go most because of sparkplug.\nWill remove the x64 tag",
+      "parentUuid": "1dc6a322_e7563465",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 16
+      },
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78b3a44a_8f2d8ced",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 30
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2336d34a_5e8c1e83",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-02T14:53:56Z",
+      "side": 1,
+      "message": "I guess we could encode the cell_index as Uint, but I wanted to preserve as much of the existing behavior as possible.",
+      "parentUuid": "e444f47c_9a9be8f7",
+      "range": {
+        "startLine": 853,
+        "startChar": 0,
+        "endLine": 859,
+        "endChar": 3
+      },
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "619982a4_05dcc3a3",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-06-02T13:53:40Z",
       "side": 1,
       "message": "Why not just use cell_index \u003d -1 then?",
+      "range": {
+        "startLine": 874,
+        "startChar": 2,
+        "endLine": 874,
+        "endChar": 18
+      },
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39fe82c9_1fbdc9fa",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-02T14:53:56Z",
+      "side": 1,
+      "message": "Int(0) actually loads the encoded value from the 0th bytecode paramter, so it\u0027s not 0 by default.",
+      "parentUuid": "619982a4_05dcc3a3",
       "range": {
         "startLine": 874,
         "startChar": 2,
@@ -163,6 +235,54 @@
       "writtenOn": "2021-06-02T13:53:40Z",
       "side": 1,
       "message": "WDYT about calling this `arg_reg_1` and the `kContextRegister` `arg_reg_2`?",
+      "range": {
+        "startLine": 41,
+        "startChar": 23,
+        "endLine": 41,
+        "endChar": 42
+      },
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1f1cb65_713d9256",
+        "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-02T14:53:56Z",
+      "side": 1,
+      "message": "We \"need\" rbx here since it will interfere with the registers used in TailCallOptimizedCodeSlot.\n\nThis currently adds one register more, but this only increases the push/pop sequence in the builtin itself.\n\nI\u0027ve locally tried to add more pushes and pops and I couldn\u0027t measure a difference. So I think performance-wise we\u0027re mostly save.",
+      "parentUuid": "0143b09f_042fed81",
+      "range": {
+        "startLine": 41,
+        "startChar": 44,
+        "endLine": 41,
+        "endChar": 47
+      },
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c0c5afd_8bcee4a9",
+        "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-02T14:53:56Z",
+      "side": 1,
+      "message": "I will just use the direct register names, that should be much easier to understand now that we have the separate clear validation steps.",
+      "parentUuid": "8abfec94_66f77267",
       "range": {
         "startLine": 41,
         "startChar": 23,
