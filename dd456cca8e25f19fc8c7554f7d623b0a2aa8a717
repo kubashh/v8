@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8cab096_c150847f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-02T10:02:30Z",
+      "side": 1,
+      "message": "Mentioned offline: part of the motivation for the virtual methods was a consistent interface for platform masm ports. Could we preserve that guarantee somehow? Instead of manual devirtualization, could we make sure the compiler optimization works? Shouldn\u0027t be hard since each platform knows statically which assembler subclass it\u0027ll have.",
+      "revId": "dd456cca8e25f19fc8c7554f7d623b0a2aa8a717",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
