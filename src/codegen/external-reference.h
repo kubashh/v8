@@ -83,6 +83,10 @@ class StatsCounter;
     "RegExpMacroAssembler*::CheckStackGuardState()")                           \
   V(re_grow_stack, "NativeRegExpMacroAssembler::GrowStack()")                  \
   V(re_word_character_map, "NativeRegExpMacroAssembler::word_character_map")   \
+  V(array_buffer_cage_base_address,                                            \
+    "Isolate::array_buffer_cage_base_address()")                               \
+  V(array_buffer_cage_shift_address,                                           \
+    "Isolate::array_buffer_cage_shift_address()")                              \
   EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V)
 
 #ifdef V8_HEAP_SANDBOX

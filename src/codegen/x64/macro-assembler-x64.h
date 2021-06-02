@@ -592,6 +592,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public SharedTurboAssembler {
   // ---------------------------------------------------------------------------
   // V8 Heap sandbox support
 
+  void UncagePointer(Register destination, Operand field_operand);
+
   enum class IsolateRootLocation { kInScratchRegister, kInRootRegister };
   // Loads a field containing off-heap pointer and does necessary decoding
   // if V8 heap sandbox is enabled.

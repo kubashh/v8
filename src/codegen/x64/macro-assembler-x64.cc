@@ -371,6 +371,19 @@ void TurboAssembler::SaveRegisters(RegList registers) {
   }
 }
 
+void TurboAssembler::UncagePointer(Register destination,
+                                   Operand field_operand) {
+  RecordComment("[ UncagePointer");
+  movq(destination, field_operand);
+#ifdef DEBUG
+  movq(kScratchRegister, Immediate64(kArrayBufferCageSalt));
+  xorq(destination, kScratchRegister);
+#endif
+  shrq(destination, Immediate(kArrayBufferCageShift));
+  addq(destination, kPtrComprCageBaseRegister);
+  RecordComment("]");
+}
+
 void TurboAssembler::LoadExternalPointerField(
     Register destination, Operand field_operand, ExternalPointerTag tag,
     Register scratch, IsolateRootLocation isolateRootLocation) {

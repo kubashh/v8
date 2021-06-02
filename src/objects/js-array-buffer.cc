@@ -46,7 +46,6 @@ void JSArrayBuffer::Setup(SharedFlag shared, ResizableFlag resizable,
     SetEmbedderField(i, Smi::zero());
   }
   set_extension(nullptr);
-  AllocateExternalPointerEntries(GetIsolate());
   if (!backing_store) {
     set_backing_store(GetIsolate(), nullptr);
     set_byte_length(0);
@@ -172,7 +171,7 @@ Handle<JSArrayBuffer> JSTypedArray::GetBuffer() {
   DCHECK(!array_buffer->is_resizable());
 
   // The existing array buffer should be empty.
-  DCHECK_NULL(array_buffer->backing_store());
+  DCHECK(!array_buffer->has_backing_store());
 
   // Allocate a new backing store and attach it to the existing array buffer.
   size_t byte_length = self->byte_length();

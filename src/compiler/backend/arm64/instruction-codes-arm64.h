@@ -171,6 +171,7 @@ namespace compiler {
   V(Arm64LdrDecompressTaggedSigned)         \
   V(Arm64LdrDecompressTaggedPointer)        \
   V(Arm64LdrDecompressAnyTagged)            \
+  V(Arm64LdrUncagePointer)                  \
   V(Arm64Str)                               \
   V(Arm64StrCompressTagged)                 \
   V(Arm64DmbIsh)                            \

@@ -55,8 +55,10 @@ class V8_BASE_EXPORT BoundedPageAllocator : public v8::PageAllocator {
     return page_allocator_->GetRandomMmapAddr();
   }
 
+  void* GetCageBase() override { return page_allocator_->GetCageBase(); }
+
   void* AllocatePages(void* hint, size_t size, size_t alignment,
-                      Permission access) override;
+                      Permission access, Usage usage) override;
 
   bool ReserveForSharedMemoryMapping(void* address, size_t size) override;
 

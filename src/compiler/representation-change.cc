@@ -237,6 +237,7 @@ Node* RepresentationChanger::GetRepresentationFor(
       return node;
     case MachineRepresentation::kCompressed:
     case MachineRepresentation::kCompressedPointer:
+    case MachineRepresentation::kCagedPointer:
     case MachineRepresentation::kMapWord:
       UNREACHABLE();
   }
@@ -1233,6 +1234,9 @@ Node* RepresentationChanger::GetWord64RepresentationFor(
       return TypeError(node, output_rep, output_type,
                        MachineRepresentation::kWord64);
     }
+  } else if (output_rep == MachineRepresentation::kCagedPointer) {
+    // TODO(saelo) is this correct?
+    return node;
   } else {
     return TypeError(node, output_rep, output_type,
                      MachineRepresentation::kWord64);

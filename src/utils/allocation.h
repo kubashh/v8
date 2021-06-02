@@ -126,10 +126,10 @@ V8_EXPORT_PRIVATE void* GetRandomMmapAddr();
 // AllocatePageSize(). Returns the address of the allocated memory, with the
 // specified size and alignment, or nullptr on failure.
 V8_EXPORT_PRIVATE
-V8_WARN_UNUSED_RESULT void* AllocatePages(v8::PageAllocator* page_allocator,
-                                          void* address, size_t size,
-                                          size_t alignment,
-                                          PageAllocator::Permission access);
+V8_WARN_UNUSED_RESULT void* AllocatePages(
+    v8::PageAllocator* page_allocator, void* address, size_t size,
+    size_t alignment, PageAllocator::Permission access,
+    PageAllocator::Usage usage = PageAllocator::kDefault);
 
 // Frees memory allocated by a call to AllocatePages. |address| and |size| must
 // be multiples of AllocatePageSize(). Returns true on success, otherwise false.

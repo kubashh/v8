@@ -388,6 +388,11 @@ class PageAllocator {
   virtual void* GetRandomMmapAddr() = 0;
 
   /**
+   * Returns the V8 cage base
+   */
+  virtual void* GetCageBase() = 0;
+
+  /**
    * Memory permissions.
    */
   enum Permission {
@@ -404,11 +409,14 @@ class PageAllocator {
     kNoAccessWillJitLater
   };
 
+  enum Usage { kDefault, kWasmMemory };
+
   /**
    * Allocates memory in range with the given alignment and permission.
    */
   virtual void* AllocatePages(void* address, size_t length, size_t alignment,
-                              Permission permissions) = 0;
+                              Permission permissions,
+                              Usage usage = kDefault) = 0;
 
   /**
    * Frees memory in a range that was allocated by a call to AllocatePages.

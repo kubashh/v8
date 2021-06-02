@@ -820,10 +820,15 @@ void InstructionSelector::VisitLoad(Node* node) {
       opcode = kArm64LdrDecompressAnyTagged;
       immediate_mode = kLoadStoreImm32;
       break;
+    case MachineRepresentation::kCagedPointer:
+      opcode = kArm64LdrUncagePointer;
+      immediate_mode = kLoadStoreImm64;
+      break;
 #else
     case MachineRepresentation::kTaggedSigned:   // Fall through.
     case MachineRepresentation::kTaggedPointer:  // Fall through.
     case MachineRepresentation::kTagged:         // Fall through.
+    case MachineRepresentation::kCagedPointer:   // Fall through.
 #endif
     case MachineRepresentation::kWord64:
       opcode = kArm64Ldr;
@@ -945,6 +950,7 @@ void InstructionSelector::VisitStore(Node* node) {
         break;
       case MachineRepresentation::kMapWord:  // Fall through.
       case MachineRepresentation::kNone:
+      case MachineRepresentation::kCagedPointer:
         UNREACHABLE();
     }
 

@@ -287,10 +287,14 @@ ArchOpcode GetLoadOpcode(LoadRepresentation load_rep) {
     case MachineRepresentation::kTagged:
       opcode = kX64MovqDecompressAnyTagged;
       break;
+    case MachineRepresentation::kCagedPointer:
+      opcode = kX64MovqUncagePointer;
+      break;
 #else
     case MachineRepresentation::kTaggedSigned:   // Fall through.
     case MachineRepresentation::kTaggedPointer:  // Fall through.
     case MachineRepresentation::kTagged:         // Fall through.
+    case MachineRepresentation::kCagedPointer:   // Fall through.
 #endif
     case MachineRepresentation::kWord64:
       opcode = kX64Movq;
@@ -335,6 +339,7 @@ ArchOpcode GetStoreOpcode(StoreRepresentation store_rep) {
       return kX64Movdqu;
     case MachineRepresentation::kNone:
     case MachineRepresentation::kMapWord:
+    case MachineRepresentation::kCagedPointer:
       UNREACHABLE();
   }
   UNREACHABLE();

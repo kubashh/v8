@@ -400,9 +400,9 @@ std::unique_ptr<BackingStore> BackingStore::TryAllocateAndPartiallyCommitMemory(
   //--------------------------------------------------------------------------
   void* allocation_base = nullptr;
   auto allocate_pages = [&] {
-    allocation_base =
-        AllocatePages(GetPlatformPageAllocator(), nullptr, reservation_size,
-                      page_size, PageAllocator::kNoAccess);
+    allocation_base = AllocatePages(
+        GetPlatformPageAllocator(), nullptr, reservation_size, page_size,
+        PageAllocator::kNoAccess, PageAllocator::kWasmMemory);
     return allocation_base != nullptr;
   };
   if (!gc_retry(allocate_pages)) {

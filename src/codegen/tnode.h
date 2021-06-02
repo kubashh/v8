@@ -35,6 +35,10 @@ struct RawPtrT : WordT {
   static constexpr MachineType kMachineType = MachineType::Pointer();
 };
 
+struct CagedPtrT : WordT {
+  static constexpr MachineType kMachineType = MachineType::CagedPointer();
+};
+
 template <class To>
 struct RawPtr : RawPtrT {};
 

@@ -369,6 +369,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64LdrDecompressTaggedSigned:
     case kArm64LdrDecompressTaggedPointer:
     case kArm64LdrDecompressAnyTagged:
+    case kArm64LdrUncagePointer:
     case kArm64Peek:
     case kArm64LoadSplat:
     case kArm64LoadLane:

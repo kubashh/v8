@@ -86,6 +86,10 @@ V8_INLINE bool GetIsolateFromHeapObject(HeapObject object, Isolate** isolate) {
 #endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE, V8_ENABLE_THIRD_PARTY_HEAP
 }
 
+V8_INLINE static Isolate* GetIsolateForArrayBufferCage(HeapObject object) {
+  return GetIsolateFromWritableObject(object);
+}
+
 // Use this function instead of Internals::GetIsolateForHeapSandbox for internal
 // code, as this function is fully inlinable.
 V8_INLINE static Isolate* GetIsolateForHeapSandbox(HeapObject object) {

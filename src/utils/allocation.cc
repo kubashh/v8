@@ -167,7 +167,8 @@ void* GetRandomMmapAddr() {
 }
 
 void* AllocatePages(v8::PageAllocator* page_allocator, void* hint, size_t size,
-                    size_t alignment, PageAllocator::Permission access) {
+                    size_t alignment, PageAllocator::Permission access,
+                    PageAllocator::Usage usage) {
   DCHECK_NOT_NULL(page_allocator);
   DCHECK_EQ(hint, AlignedAddress(hint, alignment));
   DCHECK(IsAligned(size, page_allocator->AllocatePageSize()));
@@ -176,7 +177,8 @@ void* AllocatePages(v8::PageAllocator* page_allocator, void* hint, size_t size,
   }
   void* result = nullptr;
   for (int i = 0; i < kAllocationTries; ++i) {
-    result = page_allocator->AllocatePages(hint, size, alignment, access);
+    result =
+        page_allocator->AllocatePages(hint, size, alignment, access, usage);
     if (result != nullptr) break;
     size_t request_size = size + alignment - page_allocator->AllocatePageSize();
     if (!OnCriticalMemoryPressure(request_size)) break;
@@ -334,7 +336,18 @@ bool VirtualMemoryCage::InitReservation(const ReservationParams& params) {
                            RoundUp(params.base_alignment, allocate_page_size)) -
                  RoundUp(params.base_bias_size, allocate_page_size);
 
-  if (params.base_alignment == ReservationParams::kAnyBaseAlignment) {
+  Address embedder_provided_base =
+      reinterpret_cast<Address>(params.page_allocator->GetCageBase());
+  if (embedder_provided_base &&
+      params.reservation_size >= 0x100000000UL) {  // TODO(saelo)
+    CHECK(IsAligned(embedder_provided_base, params.base_alignment));
+    CHECK_EQ(params.reservation_size, 4UL * 1024 * 1024 * 1024);
+
+    reservation_ = VirtualMemory(params.page_allocator, embedder_provided_base,
+                                 params.reservation_size);
+    base_ = reservation_.address() + params.base_bias_size;
+    CHECK_EQ(reservation_.size(), params.reservation_size);
+  } else if (params.base_alignment == ReservationParams::kAnyBaseAlignment) {
     // When the base doesn't need to be aligned, the virtual memory reservation
     // fails only due to OOM.
     VirtualMemory reservation(params.page_allocator, params.reservation_size,

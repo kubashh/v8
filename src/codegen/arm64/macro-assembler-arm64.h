@@ -1381,6 +1381,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void DecompressAnyTagged(const Register& destination,
                            const MemOperand& field_operand);
 
+  void UncagePointer(const Register& destination,
+                     const MemOperand& field_operand);
+
   // Restore FP and LR from the values stored in the current frame. This will
   // authenticate the LR when pointer authentication is enabled.
   void RestoreFPAndLR();

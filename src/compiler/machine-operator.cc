@@ -615,6 +615,7 @@ std::ostream& operator<<(std::ostream& os, TruncateKind kind) {
   V(MapInHeader)             \
   V(AnyTagged)               \
   V(CompressedPointer)       \
+  V(CagedPointer)            \
   V(AnyCompressed)
 
 #define MACHINE_REPRESENTATION_LIST(V) \
@@ -630,6 +631,7 @@ std::ostream& operator<<(std::ostream& os, TruncateKind kind) {
   V(kTaggedPointer)                    \
   V(kTagged)                           \
   V(kCompressedPointer)                \
+  V(kCagedPointer)                     \
   V(kCompressed)
 
 #define LOAD_TRANSFORM_LIST(V) \

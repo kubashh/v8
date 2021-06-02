@@ -1197,6 +1197,10 @@ extern macro IsPrototypeTypedArrayPrototype(implicit context: Context)(Map):
     bool;
 
 extern operator '.data_ptr' macro LoadJSTypedArrayDataPtr(JSTypedArray): RawPtr;
+extern operator '.data_ptr_or_nullptr' macro LoadJSTypedArrayDataPtrOrNullptr(
+    JSTypedArray): RawPtr;
+extern operator '.backing_store_ptr_or_nullptr' macro
+LoadJSArrayBufferBackingStorePtrOrNullptr(JSArrayBuffer): RawPtr;
 
 extern operator '.elements_kind' macro LoadMapElementsKind(Map): ElementsKind;
 extern operator '.elements_kind' macro LoadElementsKind(JSTypedArray):

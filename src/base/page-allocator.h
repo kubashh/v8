@@ -30,8 +30,11 @@ class V8_BASE_EXPORT PageAllocator
 
   void* GetRandomMmapAddr() override;
 
+  void* GetCageBase() override;
+
   void* AllocatePages(void* hint, size_t size, size_t alignment,
-                      PageAllocator::Permission access) override;
+                      PageAllocator::Permission access,
+                      PageAllocator::Usage usage) override;
 
   bool CanAllocateSharedPages() override;
 

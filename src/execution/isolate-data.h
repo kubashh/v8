@@ -30,7 +30,9 @@ class Isolate;
 class IsolateData final {
  public:
   IsolateData(Isolate* isolate, Address cage_base)
-      : cage_base_(cage_base), stack_guard_(isolate) {}
+      : cage_base_(cage_base),
+        stack_guard_(isolate),
+        array_buffer_cage_base_(cage_base) {}
 
   IsolateData(const IsolateData&) = delete;
   IsolateData& operator=(const IsolateData&) = delete;
@@ -82,6 +84,18 @@ class IsolateData final {
     return kExternalPointerTableOffset - kIsolateRootBias;
   }
 #endif
+
+  static constexpr int array_buffer_cage_base_offset() {
+    return kArrayBufferCageBaseOffset - kIsolateRootBias;
+  }
+
+  static constexpr int array_buffer_cage_size_offset() {
+    return kArrayBufferCageSizeOffset - kIsolateRootBias;
+  }
+
+  static constexpr int array_buffer_cage_shift_offset() {
+    return kArrayBufferCageShiftOffset - kIsolateRootBias;
+  }
 
   static constexpr int fast_c_call_caller_fp_offset() {
     return kFastCCallCallerFPOffset - kIsolateRootBias;
@@ -168,6 +182,9 @@ class IsolateData final {
   V(kBuiltinEntryTableOffset, Builtins::builtin_count* kSystemPointerSize)    \
   V(kBuiltinsTableOffset, Builtins::builtin_count* kSystemPointerSize)        \
   FIELDS_HEAP_SANDBOX(V)                                                      \
+  V(kArrayBufferCageBaseOffset, kSystemPointerSize)                           \
+  V(kArrayBufferCageSizeOffset, kSizetSize)                                   \
+  V(kArrayBufferCageShiftOffset, kSizetSize)                                  \
   V(kStackIsIterableOffset, kUInt8Size)                                       \
   /* This padding aligns IsolateData size by 8 bytes. */                      \
   V(kPaddingOffset,                                                           \
@@ -228,6 +245,11 @@ class IsolateData final {
   ExternalPointerTable external_pointer_table_;
 #endif
 
+  Address array_buffer_cage_base_;
+  // These would be set in the constructor
+  size_t array_buffer_cage_size_ = kArrayBufferCageSize;
+  size_t array_buffer_cage_shift_ = kArrayBufferCageShift;
+
   // Whether the SafeStackFrameIterator can successfully iterate the current
   // stack. Only valid values are 0 or 1.
   uint8_t stack_is_iterable_ = 1;
@@ -278,6 +300,12 @@ void IsolateData::AssertPredictableLayout() {
   STATIC_ASSERT(offsetof(IsolateData, external_pointer_table_) ==
                 kExternalPointerTableOffset);
 #endif
+  STATIC_ASSERT(offsetof(IsolateData, array_buffer_cage_base_) ==
+                kArrayBufferCageBaseOffset);
+  STATIC_ASSERT(offsetof(IsolateData, array_buffer_cage_size_) ==
+                kArrayBufferCageSizeOffset);
+  STATIC_ASSERT(offsetof(IsolateData, array_buffer_cage_shift_) ==
+                kArrayBufferCageShiftOffset);
   STATIC_ASSERT(offsetof(IsolateData, stack_is_iterable_) ==
                 kStackIsIterableOffset);
   STATIC_ASSERT(sizeof(IsolateData) == IsolateData::kSize);

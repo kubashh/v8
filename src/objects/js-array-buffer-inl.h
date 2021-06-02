@@ -30,10 +30,6 @@ ACCESSORS(JSTypedArray, base_pointer, Object, kBasePointerOffset)
 RELEASE_ACQUIRE_ACCESSORS(JSTypedArray, base_pointer, Object,
                           kBasePointerOffset)
 
-void JSArrayBuffer::AllocateExternalPointerEntries(Isolate* isolate) {
-  InitExternalPointerField(kBackingStoreOffset, isolate);
-}
-
 size_t JSArrayBuffer::byte_length() const {
   return ReadField<size_t>(kByteLengthOffset);
 }
@@ -43,16 +39,42 @@ void JSArrayBuffer::set_byte_length(size_t value) {
 }
 
 DEF_GETTER(JSArrayBuffer, backing_store, void*) {
-  Isolate* isolate = GetIsolateForHeapSandbox(*this);
-  Address value = ReadExternalPointerField(kBackingStoreOffset, isolate,
-                                           kArrayBufferBackingStoreTag);
-  return reinterpret_cast<void*>(value);
+  Address addr = ReadField<Address>(kBackingStoreOffset);
+#ifdef DEBUG
+  addr ^= kArrayBufferCageSalt;
+#endif
+  DCHECK(addr);
+  Isolate* isolate = GetIsolateForArrayBufferCage(*this);
+  Address offset = addr >> isolate->array_buffer_cage_shift();
+  return reinterpret_cast<void*>(cage_base.address() + offset);
+}
+
+DEF_GETTER(JSArrayBuffer, backing_store_or_nullptr, void*) {
+  if (!has_backing_store()) {
+    return nullptr;
+  }
+  return backing_store();
 }
 
 void JSArrayBuffer::set_backing_store(Isolate* isolate, void* value) {
-  WriteExternalPointerField(kBackingStoreOffset, isolate,
-                            reinterpret_cast<Address>(value),
-                            kArrayBufferBackingStoreTag);
+  Address ptr = reinterpret_cast<Address>(value);
+  if (ptr) {
+    DCHECK_GE(ptr, isolate->array_buffer_cage_base());
+    DCHECK_LT(ptr, isolate->array_buffer_cage_base() + kArrayBufferCageSize);
+  }
+  ptr <<= isolate->array_buffer_cage_shift();
+#ifdef DEBUG
+  ptr ^= kArrayBufferCageSalt;
+#endif
+  WriteField<Address>(kBackingStoreOffset, ptr);
+}
+
+bool JSArrayBuffer::has_backing_store() const {
+  Address addr = ReadField<Address>(kBackingStoreOffset);
+#ifdef DEBUG
+  addr ^= kArrayBufferCageSalt;
+#endif
+  return addr != kNullAddress;
 }
 
 uint32_t JSArrayBuffer::GetBackingStoreRefForDeserialization() const {
@@ -128,14 +150,14 @@ uint32_t* JSArrayBuffer::extension_hi() const {
 #endif
 
 size_t JSArrayBuffer::allocation_length() const {
-  if (backing_store() == nullptr) {
+  if (!has_backing_store()) {
     return 0;
   }
   return byte_length();
 }
 
 void* JSArrayBuffer::allocation_base() const {
-  if (backing_store() == nullptr) {
+  if (!has_backing_store()) {
     return nullptr;
   }
   return backing_store();
@@ -221,10 +243,6 @@ size_t JSTypedArray::GetLength() const {
   return array_length;
 }
 
-void JSTypedArray::AllocateExternalPointerEntries(Isolate* isolate) {
-  InitExternalPointerField(kExternalPointerOffset, isolate);
-}
-
 size_t JSTypedArray::length() const {
   DCHECK(!is_length_tracking());
   DCHECK(!is_backed_by_rab());
@@ -240,18 +258,38 @@ void JSTypedArray::set_length(size_t value) {
 }
 
 DEF_GETTER(JSTypedArray, external_pointer, Address) {
-  Isolate* isolate = GetIsolateForHeapSandbox(*this);
-  return ReadExternalPointerField(kExternalPointerOffset, isolate,
-                                  kTypedArrayExternalPointerTag);
+  Address addr = ReadField<Address>(kExternalPointerOffset);
+#ifdef DEBUG
+  addr ^= kArrayBufferCageSalt;
+#endif
+  DCHECK(addr);
+  Isolate* isolate = GetIsolateForArrayBufferCage(*this);
+  Address offset = addr >> isolate->array_buffer_cage_shift();
+  // Uncage the backing store pointer
+  return cage_base.address() + offset;
 }
 
-DEF_GETTER(JSTypedArray, external_pointer_raw, ExternalPointer_t) {
-  return ReadField<ExternalPointer_t>(kExternalPointerOffset);
+DEF_GETTER(JSTypedArray, external_pointer_raw, Address) {
+  Address value = ReadField<Address>(kExternalPointerOffset);
+#ifdef DEBUG
+  value ^= kArrayBufferCageSalt;
+#endif
+  DCHECK(value);
+  Isolate* isolate = GetIsolateForArrayBufferCage(*this);
+  value >>= isolate->array_buffer_cage_shift();
+  return value;
 }
 
 void JSTypedArray::set_external_pointer(Isolate* isolate, Address value) {
-  WriteExternalPointerField(kExternalPointerOffset, isolate, value,
-                            kTypedArrayExternalPointerTag);
+  if (value) {
+    DCHECK_GE(value, isolate->array_buffer_cage_base());
+    DCHECK_LT(value, isolate->array_buffer_cage_base() + kArrayBufferCageSize);
+  }
+  value <<= isolate->array_buffer_cage_shift();
+#ifdef DEBUG
+  value ^= kArrayBufferCageSalt;
+#endif
+  WriteField<Address>(kExternalPointerOffset, value);
 }
 
 Address JSTypedArray::ExternalPointerCompensationForOnHeapArray(
@@ -362,19 +400,28 @@ MaybeHandle<JSTypedArray> JSTypedArray::Validate(Isolate* isolate,
 }
 
 DEF_GETTER(JSDataView, data_pointer, void*) {
-  Isolate* isolate = GetIsolateForHeapSandbox(*this);
-  return reinterpret_cast<void*>(ReadExternalPointerField(
-      kDataPointerOffset, isolate, kDataViewDataPointerTag));
-}
-
-void JSDataView::AllocateExternalPointerEntries(Isolate* isolate) {
-  InitExternalPointerField(kDataPointerOffset, isolate);
+  Address addr = ReadField<Address>(kDataPointerOffset);
+#ifdef DEBUG
+  addr ^= kArrayBufferCageSalt;
+#endif
+  DCHECK(addr);
+  Isolate* isolate = GetIsolateForArrayBufferCage(*this);
+  Address offset = addr >> isolate->array_buffer_cage_shift();
+  // Uncage the backing store pointer
+  return reinterpret_cast<void*>(cage_base.address() + offset);
 }
 
 void JSDataView::set_data_pointer(Isolate* isolate, void* value) {
-  WriteExternalPointerField(kDataPointerOffset, isolate,
-                            reinterpret_cast<Address>(value),
-                            kDataViewDataPointerTag);
+  Address ptr = reinterpret_cast<Address>(value);
+  if (ptr) {
+    DCHECK_GE(ptr, isolate->array_buffer_cage_base());
+    DCHECK_LT(ptr, isolate->array_buffer_cage_base() + kArrayBufferCageSize);
+  }
+  ptr <<= isolate->array_buffer_cage_shift();
+#ifdef DEBUG
+  ptr ^= kArrayBufferCageSalt;
+#endif
+  WriteField<Address>(kDataPointerOffset, ptr);
 }
 
 }  // namespace internal

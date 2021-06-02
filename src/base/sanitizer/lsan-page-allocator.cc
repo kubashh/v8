@@ -23,8 +23,10 @@ LsanPageAllocator::LsanPageAllocator(v8::PageAllocator* page_allocator)
 
 void* LsanPageAllocator::AllocatePages(void* hint, size_t size,
                                        size_t alignment,
-                                       PageAllocator::Permission access) {
-  void* result = page_allocator_->AllocatePages(hint, size, alignment, access);
+                                       PageAllocator::Permission access,
+                                       PageAllocator::Usage usage) {
+  void* result =
+      page_allocator_->AllocatePages(hint, size, alignment, access, usage);
 #if defined(LEAK_SANITIZER)
   if (result != nullptr) {
     __lsan_register_root_region(result, size);

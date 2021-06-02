@@ -123,8 +123,8 @@ uint8_t* CodeRange::RemapEmbeddedBuiltins(Isolate* isolate,
 
   embedded_blob_code_copy =
       reinterpret_cast<uint8_t*>(page_allocator()->AllocatePages(
-          hint, allocate_code_size, kAllocatePageSize,
-          PageAllocator::kNoAccess));
+          hint, allocate_code_size, kAllocatePageSize, PageAllocator::kNoAccess,
+          PageAllocator::kDefault));
 
   if (!embedded_blob_code_copy) {
     V8::FatalProcessOutOfMemory(

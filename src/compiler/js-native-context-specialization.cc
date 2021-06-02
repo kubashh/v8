@@ -2586,6 +2586,7 @@ JSNativeContextSpecialization::BuildPropertyStore(
       case MachineRepresentation::kNone:
       case MachineRepresentation::kBit:
       case MachineRepresentation::kCompressedPointer:
+      case MachineRepresentation::kCagedPointer:
       case MachineRepresentation::kCompressed:
       case MachineRepresentation::kWord8:
       case MachineRepresentation::kWord16:

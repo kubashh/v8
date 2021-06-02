@@ -392,6 +392,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
 
     case kX64MovqDecompressTaggedSigned:
     case kX64MovqDecompressTaggedPointer:
+    case kX64MovqUncagePointer:
     case kX64MovqDecompressAnyTagged:
     case kX64MovqCompressTagged:
     case kX64Movq:

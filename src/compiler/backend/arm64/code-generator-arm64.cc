@@ -1851,6 +1851,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ DecompressAnyTagged(i.OutputRegister(), i.MemoryOperand());
       EmitWordLoadPoisoningIfNeeded(this, opcode, instr, i);
       break;
+    case kArm64LdrUncagePointer:
+      __ UncagePointer(i.OutputRegister(), i.MemoryOperand());
+      EmitWordLoadPoisoningIfNeeded(this, opcode, instr, i);
+      break;
     case kArm64Str:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Str(i.InputOrZeroRegister64(0), i.MemoryOperand(1));

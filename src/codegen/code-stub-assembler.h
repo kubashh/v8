@@ -979,6 +979,36 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void GotoIfForceSlowPath(Label* if_true);
 
   //
+  // Caged pointer related functionality.
+  //
+
+  // Load a caged pointer value from an object.
+  TNode<RawPtrT> LoadCagedPointerFromObject(TNode<HeapObject> object,
+                                            int offset) {
+    return LoadCagedPointerFromObject(object, IntPtrConstant(offset));
+  }
+
+  TNode<RawPtrT> LoadCagedPointerFromObject(TNode<HeapObject> object,
+                                            TNode<IntPtrT> offset);
+  TNode<RawPtrT> LoadCagedPointerFromObjectWithNullptrCheck(
+      TNode<HeapObject> object, int offset) {
+    return LoadCagedPointerFromObjectWithNullptrCheck(object,
+                                                      IntPtrConstant(offset));
+  }
+
+  TNode<RawPtrT> LoadCagedPointerFromObjectWithNullptrCheck(
+      TNode<HeapObject> object, TNode<IntPtrT> offset);
+
+  // Stored a caged pointer value to an object.
+  void StoreCagedPointerToObject(TNode<HeapObject> object, int offset,
+                                 TNode<RawPtrT> pointer) {
+    StoreCagedPointerToObject(object, IntPtrConstant(offset), pointer);
+  }
+
+  void StoreCagedPointerToObject(TNode<HeapObject> object,
+                                 TNode<IntPtrT> offset, TNode<RawPtrT> pointer);
+
+  //
   // ExternalPointerT-related functionality.
   //
 
@@ -1056,15 +1086,20 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<RawPtrT> LoadJSTypedArrayExternalPointerPtr(
       TNode<JSTypedArray> holder) {
-    return LoadExternalPointerFromObject(holder,
-                                         JSTypedArray::kExternalPointerOffset,
-                                         kTypedArrayExternalPointerTag);
+    return LoadCagedPointerFromObject(holder,
+                                      JSTypedArray::kExternalPointerOffset);
+  }
+
+  TNode<RawPtrT> LoadJSTypedArrayExternalPointerPtrOrNullptr(
+      TNode<JSTypedArray> holder) {
+    return LoadCagedPointerFromObjectWithNullptrCheck(
+        holder, JSTypedArray::kExternalPointerOffset);
   }
 
   void StoreJSTypedArrayExternalPointerPtr(TNode<JSTypedArray> holder,
                                            TNode<RawPtrT> value) {
-    StoreExternalPointerToObject(holder, JSTypedArray::kExternalPointerOffset,
-                                 value, kTypedArrayExternalPointerTag);
+    StoreCagedPointerToObject(holder, JSTypedArray::kExternalPointerOffset,
+                              value);
   }
 
   // Load value from current parent frame by given offset in bytes.
@@ -3485,6 +3520,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // JSArrayBuffer helpers
   TNode<RawPtrT> LoadJSArrayBufferBackingStorePtr(
       TNode<JSArrayBuffer> array_buffer);
+  TNode<RawPtrT> LoadJSArrayBufferBackingStorePtrOrNullptr(
+      TNode<JSArrayBuffer> array_buffer);
   void ThrowIfArrayBufferIsDetached(TNode<Context> context,
                                     TNode<JSArrayBuffer> array_buffer,
                                     const char* method_name);
@@ -3515,6 +3552,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<IntPtrT> RabGsabElementsKindToElementByteSize(
       TNode<Int32T> elementsKind);
   TNode<RawPtrT> LoadJSTypedArrayDataPtr(TNode<JSTypedArray> typed_array);
+  TNode<RawPtrT> LoadJSTypedArrayDataPtrOrNullptr(
+      TNode<JSTypedArray> typed_array);
   TNode<JSArrayBuffer> GetTypedArrayBuffer(TNode<Context> context,
                                            TNode<JSTypedArray> array);
 

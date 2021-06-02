@@ -2871,6 +2871,18 @@ void TurboAssembler::DecompressAnyTagged(const Register& destination,
   RecordComment("]");
 }
 
+void TurboAssembler::UncagePointer(const Register& destination,
+                                   const MemOperand& field_operand) {
+  RecordComment("[ UncagePointer");
+  Ldr(destination, field_operand);
+#ifdef DEBUG
+  // TODO(saelo) XOR with kArrayBufferCageSalt
+#endif
+  Add(destination, kPtrComprCageBaseRegister,
+      Operand(destination, LSR, kArrayBufferCageShift));
+  RecordComment("]");
+}
+
 void TurboAssembler::CheckPageFlag(const Register& object, int mask,
                                    Condition cc, Label* condition_met) {
   UseScratchRegisterScope temps(this);

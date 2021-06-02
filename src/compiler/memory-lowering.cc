@@ -428,6 +428,7 @@ Reduction MemoryLowering::ReduceLoadField(Node* node) {
   } else {
     DCHECK(!access.type.Is(Type::SandboxedExternalPointer()));
   }
+
   return Changed(node);
 }
 
@@ -475,6 +476,7 @@ Reduction MemoryLowering::ReduceStoreField(Node* node,
   DCHECK_IMPLIES(V8_HEAP_SANDBOX_BOOL,
                  !access.type.Is(Type::ExternalPointer()) &&
                      !access.type.Is(Type::SandboxedExternalPointer()));
+  DCHECK(!access.type.Is(Type::CagedExternalPointer()));
   MachineType machine_type = access.machine_type;
   Node* object = node->InputAt(0);
   Node* value = node->InputAt(1);

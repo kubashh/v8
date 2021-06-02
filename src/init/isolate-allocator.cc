@@ -4,6 +4,8 @@
 
 #include "src/init/isolate-allocator.h"
 
+#include <unistd.h>
+
 #include "src/base/bounded-page-allocator.h"
 #include "src/common/ptr-compr.h"
 #include "src/execution/isolate.h"

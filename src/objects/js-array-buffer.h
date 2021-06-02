@@ -32,17 +32,16 @@ class JSArrayBuffer
   static constexpr size_t kMaxByteLength = kMaxSafeInteger;
 #endif
 
-  // When soft sandbox is enabled, creates entries in external pointer table for
-  // all JSArrayBuffer's fields that require soft sandbox protection (backing
-  // store pointer, backing store length, etc.).
-  // When sandbox is not enabled, it's a no-op.
-  inline void AllocateExternalPointerEntries(Isolate* isolate);
-
   // [byte_length]: length in bytes
   DECL_PRIMITIVE_ACCESSORS(byte_length, size_t)
 
   // [backing_store]: backing memory for this array
+  // Only use the backing_store() getter if the backing store pointer cannot be
+  // nullptr (i.e. if has_backing_store() returns true). Otherwise use
+  // backing_store_or_nullptr().
   DECL_GETTER(backing_store, void*)
+  DECL_GETTER(backing_store_or_nullptr, void*)
+  inline bool has_backing_store() const;
   inline void set_backing_store(Isolate* isolate, void* value);
 
   // [extension]: extension object used for GC
@@ -283,12 +282,6 @@ class JSTypedArray
 
   V8_EXPORT_PRIVATE Handle<JSArrayBuffer> GetBuffer();
 
-  // When soft sandbox is enabled, creates entries in external pointer table for
-  // all JSTypedArray's fields that require soft sandbox protection (external
-  // pointer, offset, length, etc.).
-  // When sandbox is not enabled, it's a no-op.
-  inline void AllocateExternalPointerEntries(Isolate* isolate);
-
   // The `DataPtr` is `base_ptr + external_pointer`, and `base_ptr` is nullptr
   // for off-heap typed arrays.
   static constexpr bool kOffHeapDataPtrEqualsExternalPointer = true;
@@ -389,12 +382,6 @@ class JSDataView
   // [data_pointer]: pointer to the actual data.
   DECL_GETTER(data_pointer, void*)
   inline void set_data_pointer(Isolate* isolate, void* value);
-
-  // When soft sandbox is enabled, creates entries in external pointer table for
-  // all JSDataView's fields that require soft sandbox protection (data pointer,
-  // offset, length, etc.).
-  // When sandbox is not enabled, it's a no-op.
-  inline void AllocateExternalPointerEntries(Isolate* isolate);
 
   // Dispatched behavior.
   DECL_PRINTER(JSDataView)

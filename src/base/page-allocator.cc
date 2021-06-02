@@ -43,8 +43,11 @@ void* PageAllocator::GetRandomMmapAddr() {
   return base::OS::GetRandomMmapAddr();
 }
 
+void* PageAllocator::GetCageBase() { return nullptr; }
+
 void* PageAllocator::AllocatePages(void* hint, size_t size, size_t alignment,
-                                   PageAllocator::Permission access) {
+                                   PageAllocator::Permission access,
+                                   PageAllocator::Usage usage) {
 #if !(V8_OS_MACOSX && V8_HOST_ARCH_ARM64 && defined(MAP_JIT))
   // kNoAccessWillJitLater is only used on Apple Silicon. Map it to regular
   // kNoAccess on other platforms, so code doesn't have to handle both enum
@@ -53,6 +56,7 @@ void* PageAllocator::AllocatePages(void* hint, size_t size, size_t alignment,
     access = PageAllocator::kNoAccess;
   }
 #endif
+  CHECK(usage != kWasmMemory);
   return base::OS::Allocate(hint, size, alignment,
                             static_cast<base::OS::MemoryPermission>(access));
 }

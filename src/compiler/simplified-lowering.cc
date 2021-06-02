@@ -159,6 +159,7 @@ UseInfo TruncatingUseInfoFromRepresentation(MachineRepresentation rep) {
     case MachineRepresentation::kBit:
       return UseInfo::Bool();
     case MachineRepresentation::kCompressedPointer:
+    case MachineRepresentation::kCagedPointer:
     case MachineRepresentation::kCompressed:
     case MachineRepresentation::kSimd128:
     case MachineRepresentation::kNone:
@@ -1053,7 +1054,8 @@ class RepresentationSelector {
     } else if (type.Is(Type::BigInt()) && use.IsUsedAsWord64()) {
       return MachineRepresentation::kWord64;
     } else if (type.Is(Type::ExternalPointer()) ||
-               type.Is(Type::SandboxedExternalPointer())) {
+               type.Is(Type::SandboxedExternalPointer()) ||
+               type.Is(Type::CagedExternalPointer())) {
       return MachineType::PointerRepresentation();
     }
     return MachineRepresentation::kTagged;

@@ -1504,6 +1504,70 @@ void CodeStubAssembler::BranchIfToBooleanIsTrue(TNode<Object> value,
   }
 }
 
+TNode<RawPtrT> CodeStubAssembler::LoadCagedPointerFromObject(
+    TNode<HeapObject> object, TNode<IntPtrT> field_offset) {
+  // TODO(saelo) the cage base doesn't need to be loaded as it is always in a
+  // register...
+  TNode<ExternalReference> array_buffer_cage_base_address = ExternalConstant(
+      ExternalReference::array_buffer_cage_base_address(isolate()));
+  TNode<IntPtrT> base = Load<IntPtrT>(array_buffer_cage_base_address);
+  TNode<ExternalReference> array_buffer_cage_shift_address = ExternalConstant(
+      ExternalReference::array_buffer_cage_shift_address(isolate()));
+  TNode<IntPtrT> shift = Load<IntPtrT>(array_buffer_cage_shift_address);
+
+  TNode<IntPtrT> pointer = LoadObjectField<IntPtrT>(object, field_offset);
+#ifdef DEBUG
+  pointer = UncheckedCast<IntPtrT>(
+      WordXor(pointer, IntPtrConstant(kArrayBufferCageSalt)));
+#endif
+  CSA_ASSERT(this, WordNotEqual(pointer, IntPtrConstant(kNullAddress)));
+  TNode<IntPtrT> offset = Signed(WordShr(pointer, shift));
+  return ReinterpretCast<RawPtrT>(IntPtrAdd(base, offset));
+}
+
+TNode<RawPtrT> CodeStubAssembler::LoadCagedPointerFromObjectWithNullptrCheck(
+    TNode<HeapObject> object, TNode<IntPtrT> field_offset) {
+  // TODO(saelo) this can be improved.
+  TVariable<IntPtrT> pointer(LoadObjectField<IntPtrT>(object, field_offset),
+                             this);
+#ifdef DEBUG
+  pointer = UncheckedCast<IntPtrT>(
+      WordXor(pointer.value(), IntPtrConstant(kArrayBufferCageSalt)));
+#endif
+  Label done(this);
+  GotoIf(IntPtrEqual(pointer.value(), IntPtrConstant(0)), &done);
+  pointer =
+      UncheckedCast<IntPtrT>(LoadCagedPointerFromObject(object, field_offset));
+  Goto(&done);
+  BIND(&done);
+  return ReinterpretCast<RawPtrT>(pointer.value());
+}
+
+void CodeStubAssembler::StoreCagedPointerToObject(TNode<HeapObject> object,
+                                                  TNode<IntPtrT> offset,
+                                                  TNode<RawPtrT> pointer) {
+  TNode<IntPtrT> value = ReinterpretCast<IntPtrT>(pointer);
+#ifdef DEBUG
+  Label done(this);
+  GotoIf(IntPtrEqual(value, IntPtrConstant(0)), &done);
+  TNode<ExternalReference> array_buffer_cage_base_address = ExternalConstant(
+      ExternalReference::array_buffer_cage_base_address(isolate()));
+  TNode<IntPtrT> base = Load<IntPtrT>(array_buffer_cage_base_address);
+  CSA_ASSERT(this, IntPtrGreaterThanOrEqual(value, base));
+  CSA_ASSERT(this,
+             IntPtrLessThan(
+                 value, IntPtrAdd(base, IntPtrConstant(kArrayBufferCageSize))));
+  Goto(&done);
+  BIND(&done);
+#endif
+  value = Signed(WordShl(value, IntPtrConstant(kArrayBufferCageShift)));
+#ifdef DEBUG
+  value = UncheckedCast<IntPtrT>(
+      WordXor(value, IntPtrConstant(kArrayBufferCageSalt)));
+#endif
+  StoreObjectFieldNoWriteBarrier<IntPtrT>(object, offset, value);
+}
+
 TNode<ExternalPointerT> CodeStubAssembler::ChangeUint32ToExternalPointer(
     TNode<Uint32T> value) {
   STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
@@ -2278,6 +2342,30 @@ TNode<RawPtrT> CodeStubAssembler::LoadJSTypedArrayDataPtr(
   // Data pointer = external_pointer + static_cast<Tagged_t>(base_pointer).
   TNode<RawPtrT> external_pointer =
       LoadJSTypedArrayExternalPointerPtr(typed_array);
+
+  TNode<IntPtrT> base_pointer;
+  if (COMPRESS_POINTERS_BOOL) {
+    TNode<Int32T> compressed_base =
+        LoadObjectField<Int32T>(typed_array, JSTypedArray::kBasePointerOffset);
+    // Zero-extend TaggedT to WordT according to current compression scheme
+    // so that the addition with |external_pointer| (which already contains
+    // compensated offset value) below will decompress the tagged value.
+    // See JSTypedArray::ExternalPointerCompensationForOnHeapArray() for
+    // details.
+    base_pointer = Signed(ChangeUint32ToWord(compressed_base));
+  } else {
+    base_pointer =
+        LoadObjectField<IntPtrT>(typed_array, JSTypedArray::kBasePointerOffset);
+  }
+  return RawPtrAdd(external_pointer, base_pointer);
+}
+
+TNode<RawPtrT> CodeStubAssembler::LoadJSTypedArrayDataPtrOrNullptr(
+    TNode<JSTypedArray> typed_array) {
+  // TODO(saelo) avoid code duplication with previous method
+  // Data pointer = external_pointer + static_cast<Tagged_t>(base_pointer).
+  TNode<RawPtrT> external_pointer =
+      LoadJSTypedArrayExternalPointerPtrOrNullptr(typed_array);
 
   TNode<IntPtrT> base_pointer;
   if (COMPRESS_POINTERS_BOOL) {
@@ -13633,9 +13721,14 @@ void CodeStubAssembler::ThrowIfArrayBufferViewBufferIsDetached(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSArrayBufferBackingStorePtr(
     TNode<JSArrayBuffer> array_buffer) {
-  return LoadExternalPointerFromObject(array_buffer,
-                                       JSArrayBuffer::kBackingStoreOffset,
-                                       kArrayBufferBackingStoreTag);
+  return LoadCagedPointerFromObject(array_buffer,
+                                    JSArrayBuffer::kBackingStoreOffset);
+}
+
+TNode<RawPtrT> CodeStubAssembler::LoadJSArrayBufferBackingStorePtrOrNullptr(
+    TNode<JSArrayBuffer> array_buffer) {
+  return LoadCagedPointerFromObjectWithNullptrCheck(
+      array_buffer, JSArrayBuffer::kBackingStoreOffset);
 }
 
 TNode<JSArrayBuffer> CodeStubAssembler::LoadJSArrayBufferViewBuffer(
@@ -13811,7 +13904,9 @@ TNode<JSArrayBuffer> CodeStubAssembler::GetTypedArrayBuffer(
 
   TNode<JSArrayBuffer> buffer = LoadJSArrayBufferViewBuffer(array);
   GotoIf(IsDetachedBuffer(buffer), &call_runtime);
-  TNode<RawPtrT> backing_store = LoadJSArrayBufferBackingStorePtr(buffer);
+  // TODO(saelo) can maybe be optimized
+  TNode<RawPtrT> backing_store =
+      LoadJSArrayBufferBackingStorePtrOrNullptr(buffer);
   GotoIf(WordEqual(backing_store, IntPtrConstant(0)), &call_runtime);
   var_result = buffer;
   Goto(&done);

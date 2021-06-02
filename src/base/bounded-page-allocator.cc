@@ -27,9 +27,11 @@ size_t BoundedPageAllocator::size() const { return region_allocator_.size(); }
 
 void* BoundedPageAllocator::AllocatePages(void* hint, size_t size,
                                           size_t alignment,
-                                          PageAllocator::Permission access) {
+                                          PageAllocator::Permission access,
+                                          PageAllocator::Usage usage) {
   MutexGuard guard(&mutex_);
   CHECK(IsAligned(alignment, region_allocator_.page_size()));
+  CHECK(usage != kWasmMemory);
 
   // Region allocator does not support alignments bigger than it's own
   // allocation alignment.
