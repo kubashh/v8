@@ -18,10 +18,26 @@ constexpr auto CallInterfaceDescriptor::DefaultRegisterArray() {
   return registers;
 }
 
+#if DEBUG
+template <typename DerivedDescriptor>
+void StaticCallInterfaceDescriptor<DerivedDescriptor>::VerifyArgumentRegisters(
+    CallInterfaceDescriptorData* data, int argc) {
+  RegList allocatable_regs = data->allocatable_registers();
+  if (argc >= 1) DCHECK(allocatable_regs | arg_reg_1.bit());
+  if (argc >= 2) DCHECK(allocatable_regs | arg_reg_2.bit());
+  if (argc >= 3) DCHECK(allocatable_regs | arg_reg_3.bit());
+  if (argc >= 4) DCHECK(allocatable_regs | arg_reg_4.bit());
+  if (argc > 4) UNREACHABLE();
+}
+#endif  // DEBUG
+
 // static
 constexpr auto WriteBarrierDescriptor::registers() {
-  return RegisterArray(arg_reg_1, arg_reg_2, arg_reg_3, arg_reg_4,
-                       kReturnRegister0);
+#if V8_TARGET_OS_WIN
+  return RegisterArray(rdi, r8, rcx, rax, r9, rdx, rsi);
+#else
+  return RegisterArray(rdi, rbx, rdx, rcx, rax, rsi);
+#endif  // V8_TARGET_OS_WIN
 }
 
 #ifdef V8_IS_TSAN

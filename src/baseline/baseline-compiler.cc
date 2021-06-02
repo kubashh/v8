@@ -705,26 +705,26 @@ void BaselineCompiler::VisitLdaImmutableCurrentContextSlot() {
 }
 
 void BaselineCompiler::VisitStaContextSlot() {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
-  Register context = scratch_scope.AcquireScratch();
+  Register value = WriteBarrierDescriptor::ValueRegister();
+  Register context = WriteBarrierDescriptor::ObjectRegister();
+  DCHECK(!AreAliased(value, context, kInterpreterAccumulatorRegister));
+  __ Move(value, kInterpreterAccumulatorRegister);
   LoadRegister(context, 0);
   int depth = Uint(2);
   for (; depth > 0; --depth) {
     __ LoadTaggedPointerField(context, context, Context::kPreviousOffset);
   }
-  Register value = scratch_scope.AcquireScratch();
-  __ Move(value, kInterpreterAccumulatorRegister);
   __ StoreTaggedFieldWithWriteBarrier(
       context, Context::OffsetOfElementAt(iterator().GetIndexOperand(1)),
       value);
 }
 
 void BaselineCompiler::VisitStaCurrentContextSlot() {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
-  Register context = scratch_scope.AcquireScratch();
-  __ LoadContext(context);
-  Register value = scratch_scope.AcquireScratch();
+  Register value = WriteBarrierDescriptor::ValueRegister();
+  Register context = WriteBarrierDescriptor::ObjectRegister();
+  DCHECK(!AreAliased(value, context, kInterpreterAccumulatorRegister));
   __ Move(value, kInterpreterAccumulatorRegister);
+  __ LoadContext(context);
   __ StoreTaggedFieldWithWriteBarrier(
       context, Context::OffsetOfElementAt(Index(0)), value);
 }
@@ -849,31 +849,31 @@ void BaselineCompiler::VisitLdaModuleVariable() {
 }
 
 void BaselineCompiler::VisitStaModuleVariable() {
-  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
-  Register scratch = scratch_scope.AcquireScratch();
-  __ LoadContext(scratch);
-  int depth = Uint(1);
-  for (; depth > 0; --depth) {
-    __ LoadTaggedPointerField(scratch, scratch, Context::kPreviousOffset);
-  }
-  __ LoadTaggedPointerField(scratch, scratch, Context::kExtensionOffset);
   int cell_index = Int(0);
-  if (cell_index > 0) {
-    __ LoadTaggedPointerField(scratch, scratch,
-                              SourceTextModule::kRegularExportsOffset);
-    // The actual array index is (cell_index - 1).
-    cell_index -= 1;
-    __ LoadFixedArrayElement(scratch, scratch, cell_index);
-    SaveAccumulatorScope save_accumulator(&basm_);
-    __ StoreTaggedFieldWithWriteBarrier(scratch, Cell::kValueOffset,
-                                        kInterpreterAccumulatorRegister);
-  } else {
+  if (V8_UNLIKELY(cell_index < 0)) {
     // Not supported (probably never).
     CallRuntime(Runtime::kAbort,
                 Smi::FromInt(static_cast<int>(
                     AbortReason::kUnsupportedModuleOperation)));
     __ Trap();
   }
+  Register value = WriteBarrierDescriptor::ValueRegister();
+  Register scratch = WriteBarrierDescriptor::ObjectRegister();
+  DCHECK(!AreAliased(value, scratch, kInterpreterAccumulatorRegister));
+  __ Move(value, kInterpreterAccumulatorRegister);
+  __ LoadContext(scratch);
+  int depth = Uint(1);
+  for (; depth > 0; --depth) {
+    __ LoadTaggedPointerField(scratch, scratch, Context::kPreviousOffset);
+  }
+  __ LoadTaggedPointerField(scratch, scratch, Context::kExtensionOffset);
+  __ LoadTaggedPointerField(scratch, scratch,
+                            SourceTextModule::kRegularExportsOffset);
+
+  // The actual array index is (cell_index - 1).
+  cell_index -= 1;
+  __ LoadFixedArrayElement(scratch, scratch, cell_index);
+  __ StoreTaggedFieldWithWriteBarrier(scratch, Cell::kValueOffset, value);
 }
 
 void BaselineCompiler::VisitStaNamedProperty() {
