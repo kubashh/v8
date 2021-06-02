@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a26bbf2_b23662a2",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-06-02T07:25:40Z",
+      "side": 1,
+      "message": "Thanks for the comment, that makes sense. I did option 1).",
+      "parentUuid": "3dab713e_0bfa598d",
+      "revId": "40351bc10363f39fec6fad29fa94b45dea8191ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87af50c2_28aad6fc",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-06-01T17:17:00Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 978,
+        "startChar": 60,
+        "endLine": 978,
+        "endChar": 69
+      },
+      "revId": "40351bc10363f39fec6fad29fa94b45dea8191ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa8752c_d553187a",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-06-02T07:25:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87af50c2_28aad6fc",
       "range": {
         "startLine": 978,
         "startChar": 60,
