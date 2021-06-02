@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a5e9bc8_cc44d1d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-02T10:49:35Z",
+      "side": 1,
+      "message": "Thanks for the review. Answered your comment. (Still need CR+1.)",
+      "revId": "1a0c7ac4349180ba4473c71ad5c17845f0431cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fed0758f_25e11e39",
@@ -48,6 +65,24 @@
       "writtenOn": "2021-06-01T10:00:05Z",
       "side": 1,
       "message": "This function already calls DCHECK, so this will generate nested DCHECKs (don\u0027t know if that matters).",
+      "revId": "1a0c7ac4349180ba4473c71ad5c17845f0431cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8bc6bb1_95c72d66",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-02T10:49:35Z",
+      "side": 1,
+      "message": "That\u0027s not a problem. In fact, CheckCompatibleStackSlotTypes (which is only defined in Debug builds) intentionally returns a dummy value so that it can be called from a DCHECK, as opposed to needing to be wrapped in #if DEBUG / #endif.",
+      "parentUuid": "fed0758f_25e11e39",
       "revId": "1a0c7ac4349180ba4473c71ad5c17845f0431cef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
