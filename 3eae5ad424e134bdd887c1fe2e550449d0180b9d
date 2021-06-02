@@ -16,6 +16,23 @@
       "message": "Thanks",
       "revId": "3eae5ad424e134bdd887c1fe2e550449d0180b9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a716cfd3_437ca33f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-02T07:36:23Z",
+      "side": 1,
+      "message": "One minor change still upcoming.",
+      "revId": "3eae5ad424e134bdd887c1fe2e550449d0180b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
