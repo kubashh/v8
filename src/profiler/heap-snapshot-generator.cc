@@ -421,8 +421,8 @@ void HeapObjectsMap::UpdateHeapObjectsMap() {
     PrintF("Begin HeapObjectsMap::UpdateHeapObjectsMap. map has %d entries.\n",
            entries_map_.occupancy());
   }
-  heap_->PreciseCollectAllGarbage(Heap::kNoGCFlags,
-                                  GarbageCollectionReason::kHeapProfiler);
+  // heap_->PreciseCollectAllGarbage(Heap::kNoGCFlags,
+  //                                 GarbageCollectionReason::kHeapProfiler);
   CombinedHeapObjectIterator iterator(heap_);
   for (HeapObject obj = iterator.Next(); !obj.is_null();
        obj = iterator.Next()) {
@@ -2201,7 +2201,7 @@ bool HeapSnapshotGenerator::GenerateSnapshot() {
   base::Optional<HandleScope> handle_scope(base::in_place, isolate);
   v8_heap_explorer_.CollectGlobalObjectsTags();
 
-  heap_->CollectAllAvailableGarbage(GarbageCollectionReason::kHeapProfiler);
+  // heap_->CollectAllAvailableGarbage(GarbageCollectionReason::kHeapProfiler);
 
   NullContextForSnapshotScope null_context_scope(isolate);
   SafepointScope scope(heap_);
