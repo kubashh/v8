@@ -343,7 +343,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public SharedTurboAssembler {
 
   Operand EntryFromBuiltinIndexAsOperand(Builtins::Name builtin_index);
   Operand EntryFromBuiltinIndexAsOperand(Register builtin_index);
-  void CallBuiltinByIndex(Register builtin_index) override;
+  void CallBuiltinByIndex(Register builtin_index);
   void CallBuiltin(Builtins::Name builtin) {
     // TODO(11527): drop the int overload in favour of the Builtins::Name one.
     return CallBuiltin(static_cast<int>(builtin));
@@ -355,16 +355,16 @@ class V8_EXPORT_PRIVATE TurboAssembler : public SharedTurboAssembler {
   }
   void TailCallBuiltin(int builtin_index);
 
-  void LoadCodeObjectEntry(Register destination, Register code_object) override;
-  void CallCodeObject(Register code_object) override;
+  void LoadCodeObjectEntry(Register destination, Register code_object);
+  void CallCodeObject(Register code_object);
   void JumpCodeObject(Register code_object,
-                      JumpMode jump_mode = JumpMode::kJump) override;
+                      JumpMode jump_mode = JumpMode::kJump);
 
   void RetpolineCall(Register reg);
   void RetpolineCall(Address destination, RelocInfo::Mode rmode);
 
   void Jump(Address destination, RelocInfo::Mode rmode);
-  void Jump(const ExternalReference& reference) override;
+  void Jump(const ExternalReference& reference);
   void Jump(Operand op);
   void Jump(Handle<Code> code_object, RelocInfo::Mode rmode,
             Condition cc = always);
@@ -375,8 +375,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public SharedTurboAssembler {
                              DeoptimizeKind kind, Label* ret,
                              Label* jump_deoptimization_entry_label);
 
-  void Trap() override;
-  void DebugBreak() override;
+  void Trap();
+  void DebugBreak();
 
   // Will move src1 to dst if dst != src1.
   void Pmaddwd(XMMRegister dst, XMMRegister src1, Operand src2);
