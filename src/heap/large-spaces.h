@@ -123,6 +123,10 @@ class V8_EXPORT_PRIVATE LargeObjectSpace : public Space {
     pending_object_.store(0, std::memory_order_release);
   }
 
+  base::SharedMutex* pending_allocation_mutex() {
+    return &pending_allocation_mutex_;
+  }
+
  protected:
   LargeObjectSpace(Heap* heap, AllocationSpace id);
 
@@ -137,6 +141,7 @@ class V8_EXPORT_PRIVATE LargeObjectSpace : public Space {
   std::atomic<size_t> objects_size_;  // size of objects
   base::Mutex allocation_mutex_;
   std::atomic<Address> pending_object_;
+  base::SharedMutex pending_allocation_mutex_;
 
  private:
   friend class LargeObjectSpaceObjectIterator;

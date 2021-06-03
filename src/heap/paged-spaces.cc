@@ -277,8 +277,7 @@ void PagedSpace::SetTopAndLimit(Address top, Address limit) {
   allocation_info_.Reset(top, limit);
 
   base::Optional<base::SharedMutexGuard<base::kExclusive>> optional_guard;
-  if (!is_local_space())
-    optional_guard.emplace(&heap_->pending_allocation_mutex_);
+  if (!is_local_space()) optional_guard.emplace(&pending_allocation_mutex_);
   original_limit_ = limit;
   original_top_ = top;
 }
