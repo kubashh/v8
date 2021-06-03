@@ -33,6 +33,23 @@
       "message": "lgtm",
       "revId": "423672b82dfd303c8d7b393dbba919cc9fc225fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4139dd1d_c0f7fe41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-06-03T14:49:05Z",
+      "side": 1,
+      "message": "Looks like there were bad tests checking for the \u0027rs2\u0027. Please review the errors in test-disasm-riscv64.c and add them to this commit. Thanks.",
+      "revId": "423672b82dfd303c8d7b393dbba919cc9fc225fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
