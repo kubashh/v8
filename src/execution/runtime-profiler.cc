@@ -266,6 +266,8 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction function,
          function.feedback_vector()
              .global_ticks_at_last_runtime_profiler_interrupt());
     ticks_for_optimization =
+        kProfilerTicksBeforeOptimization + (bytecode.length() / 10);
+    ticks_for_optimization =
         ticks_for_optimization +
         std::min(global_ticks_diff / kMidTierGlobalTicksScaleFactor,
                  kMaxAdditionalMidTierGlobalTicks);
