@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53ec2208_afb43fe7",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-04T07:02:45Z",
+      "side": 1,
+      "message": "This should now be realm_scope-\u003econtext()",
+      "range": {
+        "startLine": 1861,
+        "startChar": 33,
+        "endLine": 1861,
+        "endChar": 61
+      },
+      "revId": "03ace58ed2007709f06b710cc5d9299540276788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d59f327e_ecaa9005",
+        "filename": "src/d8/d8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-04T07:02:45Z",
+      "side": 1,
+      "message": "A short comment above might be useful here. There\u0027s a RealmScope above, so a natural question when seeing this is \"What\u0027s the difference between RealmScope and ExplicitRealmScope\".",
+      "range": {
+        "startLine": 257,
+        "startChar": 2,
+        "endLine": 257,
+        "endChar": 7
+      },
+      "revId": "03ace58ed2007709f06b710cc5d9299540276788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bc8423a_0e61ee3f",
+        "filename": "src/d8/d8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-04T07:02:45Z",
+      "side": 1,
+      "message": "Nit: I\u0027d call this context() instead, as it\u0027s not similar to Isolate::GetCurrentContext(), but a simple getter.",
+      "range": {
+        "startLine": 262,
+        "startChar": 19,
+        "endLine": 262,
+        "endChar": 36
+      },
+      "revId": "03ace58ed2007709f06b710cc5d9299540276788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15d0cc0f_6ead671b",
+        "filename": "test/mjsunit/d8/d8-realm-explicit-scope.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-04T07:02:45Z",
+      "side": 1,
+      "message": "Since we don\u0027t intend this test to be food for fuzzing, you can do this in a more straightforward way:\n\nRealm.eval(\"stuff\");\n\n+ Remove callString",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 44
+      },
+      "revId": "03ace58ed2007709f06b710cc5d9299540276788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
