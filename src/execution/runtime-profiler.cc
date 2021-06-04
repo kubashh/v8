@@ -27,7 +27,7 @@ static const int kProfilerTicksBeforeOptimization = 3;
 // The number of ticks required for optimizing a function increases with
 // the size of the bytecode. This is in addition to the
 // kProfilerTicksBeforeOptimization required for any function.
-static const int kBytecodeSizeAllowancePerTick = 1100;
+static const int kBytecodeSizeAllowancePerTick = 110;
 
 // Maximum size in bytes of generate code for a function to allow OSR.
 static const int kOSRBytecodeSizeAllowanceBase = 119;
@@ -265,6 +265,10 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction function,
         (current_global_ticks_ -
          function.feedback_vector()
              .global_ticks_at_last_runtime_profiler_interrupt());
+    ticks_for_optimization =
+        kProfilerTicksBeforeOptimization + (bytecode.length() / 10);
+    ticks_for_optimization =
+        kProfilerTicksBeforeOptimization + (bytecode.length() / 10);
     ticks_for_optimization =
         ticks_for_optimization +
         std::min(global_ticks_diff / kMidTierGlobalTicksScaleFactor,
