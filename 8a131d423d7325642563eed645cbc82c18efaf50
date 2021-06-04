@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "286c1647_bf6bc0bc",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-04T08:15:13Z",
+      "side": 1,
+      "message": "Done; but the combination of this + your other suggestion to use BitField makes the code harder to follow... We only use BitField to hide the encoding part but then we don\u0027t use the BitField decoding functionality but hard-code it here.",
+      "parentUuid": "4b0b07b5_5b314f19",
+      "range": {
+        "startLine": 66,
+        "startChar": 28,
+        "endLine": 66,
+        "endChar": 50
+      },
+      "revId": "8a131d423d7325642563eed645cbc82c18efaf50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8313e2dc_75a0a3f1",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0d826c8_f5945c68",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-04T08:15:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8313e2dc_75a0a3f1",
+      "range": {
+        "startLine": 82,
+        "startChar": 37,
+        "endLine": 84,
+        "endChar": 71
+      },
+      "revId": "8a131d423d7325642563eed645cbc82c18efaf50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fa05b18_ebc741dc",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-06-01T09:16:47Z",
       "side": 1,
       "message": "FunctionKind is a uint8_t, maybe let\u0027s stick directly to ReadByte?",
+      "range": {
+        "startLine": 806,
+        "startChar": 24,
+        "endLine": 806,
+        "endChar": 34
+      },
+      "revId": "8a131d423d7325642563eed645cbc82c18efaf50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00de107b_1d9d5fb1",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-04T08:15:13Z",
+      "side": 1,
+      "message": "Offline discussion:\n- A trivial reprensentation of the flags won\u0027t fit to 8 bits (even though FunctionKind does, since some combinations are not possible).\n- If we keep common function kinds low, the resulting encoding will produce only 1 byte in the var length encoding.\n\n-\u003e Not doing that for now",
+      "parentUuid": "7fa05b18_ebc741dc",
       "range": {
         "startLine": 806,
         "startChar": 24,
