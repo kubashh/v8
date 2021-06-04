@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c67e4d3e_955b4217",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-04T07:52:54Z",
+      "side": 1,
+      "message": "still lgtm",
+      "revId": "3f53f6fec929fb404bd421568fc85c865abe1801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3c3d23b_8fe56cfb",
+        "filename": "src/d8/d8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-04T07:52:54Z",
+      "side": 1,
+      "message": "Mega-nit: \"creates a new Realm\"",
+      "range": {
+        "startLine": 257,
+        "startChar": 35,
+        "endLine": 257,
+        "endChar": 58
+      },
+      "revId": "3f53f6fec929fb404bd421568fc85c865abe1801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
