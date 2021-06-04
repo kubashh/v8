@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf3e4535_aebac5bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 30
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-04T08:36:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "96dc99dd_ec34af19",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 16
+      },
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78b3a44a_8f2d8ced",
@@ -149,6 +173,30 @@
       "side": 1,
       "message": "Int(0) actually loads the encoded value from the 0th bytecode paramter, so it\u0027s not 0 by default.",
       "parentUuid": "619982a4_05dcc3a3",
+      "range": {
+        "startLine": 874,
+        "startChar": 2,
+        "endLine": 874,
+        "endChar": 18
+      },
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8207f180_16d746db",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-04T08:36:36Z",
+      "side": 1,
+      "message": "Ah, ack. I thought Int(0) was `0`.",
+      "parentUuid": "39fe82c9_1fbdc9fa",
       "range": {
         "startLine": 874,
         "startChar": 2,
@@ -288,6 +336,30 @@
         "startChar": 23,
         "endLine": 41,
         "endChar": 42
+      },
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "761e899d_03ca58f4",
+        "filename": "src/codegen/x64/interface-descriptors-x64-inl.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-04T08:36:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b1f1cb65_713d9256",
+      "range": {
+        "startLine": 41,
+        "startChar": 44,
+        "endLine": 41,
+        "endChar": 47
       },
       "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a5630d4_5e1800b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-04T08:36:36Z",
+      "side": 1,
+      "message": "I have a couple more comments. Please resolve some of the open ones from previous patchsets too.",
+      "revId": "67e54f61e553172c9c98acbe1ef5fceb402ea0dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8751b7e3_1b9ea16b",
+        "filename": "src/codegen/arm64/interface-descriptors-arm64-inl.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-04T08:36:36Z",
+      "side": 1,
+      "message": "Can we split these registers shufflings into a separate CL? That way we can see if the shuffling is actually something important or not.",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 43
+      },
+      "revId": "67e54f61e553172c9c98acbe1ef5fceb402ea0dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaf765eb_fcec1116",
+        "filename": "src/codegen/interface-descriptors.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-04T08:36:36Z",
+      "side": 1,
+      "message": "Is there a way of not having a magic number `4` here? Is the `allocatable_regs` size equal to 4?",
+      "range": {
+        "startLine": 149,
+        "startChar": 32,
+        "endLine": 149,
+        "endChar": 33
+      },
+      "revId": "67e54f61e553172c9c98acbe1ef5fceb402ea0dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
