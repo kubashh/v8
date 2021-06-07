@@ -230,6 +230,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6159b1a_e620daab",
+        "filename": "src/codegen/ia32/interface-descriptors-ia32-inl.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-07T11:58:24Z",
+      "side": 1,
+      "message": "fixed.",
+      "parentUuid": "703f9b6d_5744dd26",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 25
+      },
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04636d61_09678c26",
@@ -243,6 +267,24 @@
       "writtenOn": "2021-06-02T13:53:40Z",
       "side": 1,
       "message": "tatic",
+      "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "201ebe2d_fb6a86e0",
+        "filename": "src/codegen/ia32/interface-descriptors-ia32-inl.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-07T11:58:24Z",
+      "side": 1,
+      "message": "ups.",
+      "parentUuid": "04636d61_09678c26",
       "revId": "5f30c60be96c68faaaf8a9e104b320dad0cf8f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
