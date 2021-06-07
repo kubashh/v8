@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ce1d7d4c_fa8ae567",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 37
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-07T15:20:07Z",
+      "side": 1,
+      "message": "english hard :P \u003d\u003e \"now\"",
+      "parentUuid": "0f25a514_42d0970c",
+      "range": {
+        "startLine": 11,
+        "startChar": 40,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "24cf8f946bd909881952b2e7f66a64bf5be991cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "503cf213_b9130d27",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 37
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a3cb35f5_afdb6cb7",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-07T15:20:07Z",
+      "side": 1,
+      "message": "I\u0027m gonna leave this for now, it\u0027s easier to refactor and I will remove it soon anyway.",
+      "parentUuid": "7b554ab8_68efc4c9",
+      "range": {
+        "startLine": 735,
+        "startChar": 0,
+        "endLine": 735,
+        "endChar": 50
+      },
+      "revId": "24cf8f946bd909881952b2e7f66a64bf5be991cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3633a416_d09ab5d5",
         "filename": "src/baseline/baseline-compiler.cc",
         "patchSetId": 37
@@ -77,6 +125,30 @@
       "writtenOn": "2021-06-07T14:26:43Z",
       "side": 1,
       "message": "Same here",
+      "range": {
+        "startLine": 749,
+        "startChar": 0,
+        "endLine": 750,
+        "endChar": 26
+      },
+      "revId": "24cf8f946bd909881952b2e7f66a64bf5be991cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17a6aa1c_a0005343",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-07T15:20:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3633a416_d09ab5d5",
       "range": {
         "startLine": 749,
         "startChar": 0,
@@ -123,6 +195,30 @@
       "writtenOn": "2021-06-07T14:26:43Z",
       "side": 1,
       "message": "nit: WDYT about moving this DCHECK inside `ReplaceClosureCodeWithOptimizedCode`? Over there it is more clear that we require it because we call RecordWrite",
+      "range": {
+        "startLine": 941,
+        "startChar": 2,
+        "endLine": 941,
+        "endChar": 69
+      },
+      "revId": "24cf8f946bd909881952b2e7f66a64bf5be991cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad55a7f9_f83a074c",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-07T15:20:07Z",
+      "side": 1,
+      "message": "I can also just drop it at this point, since it\u0027s DCHECK\u0027ed in CallRecordWriteStub anyway.",
+      "parentUuid": "9ac24d23_07215b55",
       "range": {
         "startLine": 941,
         "startChar": 2,
