@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0384d09c_502a6469",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-07T15:06:20Z",
+      "side": 1,
+      "message": "Andreas, PTAL (main reviewer for the overall predictable effort)\nCamillo as a second d8 owner for the DEPS change.",
+      "revId": "4501594098454d685c60e919675be0d593a43e10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
