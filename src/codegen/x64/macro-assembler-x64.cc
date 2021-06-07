@@ -422,7 +422,6 @@ void TurboAssembler::CallEphemeronKeyBarrier(Register object,
   Register object_parameter = WriteBarrierDescriptor::ObjectRegister();
   Register slot_address_parameter =
       WriteBarrierDescriptor::SlotAddressRegister();
-  MovePair(slot_address_parameter, slot_address, object_parameter, object);
 
   Call(isolate()->builtins()->builtin_handle(
            Builtins::GetEphemeronKeyBarrierStub(fp_mode)),
@@ -452,8 +451,6 @@ void TurboAssembler::CallRecordWriteStub(
     Register object, Register slot_address,
     RememberedSetAction remembered_set_action, SaveFPRegsMode fp_mode,
     StubCallMode mode) {
-  // Use CallRecordWriteStubSaveRegisters if the object and slot registers
-  // need to be caller saved.
   DCHECK_EQ(WriteBarrierDescriptor::ObjectRegister(), object);
   DCHECK_EQ(WriteBarrierDescriptor::SlotAddressRegister(), slot_address);
 #if V8_ENABLE_WEBASSEMBLY
@@ -553,8 +550,7 @@ void MacroAssembler::RecordWrite(Register object, Register slot_address,
                 MemoryChunk::kPointersFromHereAreInterestingMask, zero, &done,
                 Label::kNear);
 
-  CallRecordWriteStubSaveRegisters(object, slot_address, remembered_set_action,
-                                   fp_mode);
+  CallRecordWriteStub(object, slot_address, remembered_set_action, fp_mode);
 
   bind(&done);
 
