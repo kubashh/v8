@@ -16,6 +16,23 @@
       "message": "The actual cause of the test failures with --stress-background-compile was found and documented by Georg in https://bugs.chromium.org/p/v8/issues/detail?id\u003d11821.\n\nThe problem is that in code like:\n   function foo(x, y, z) {\n     const numbers \u003d [z, y, x];\n     ...\n   }\n\nthe new array is created as PACKED_SMI_ELEMENTS and then when assigning strings the elements kind changes to PACKED_ELEMENTS. If a GC happens before this change then the array\u0027s memento is removed, and during the compilation this causes adding a deopt check with the wrong map. \nThis could happen in these tests with some stress flags, making them brittle because several tests don\u0027t expect the test function to get deoptimized.\n\nThis patchset modifies the tests to avoid the elements kind change and seems to fix all the tests.",
       "revId": "d24ae6f53961135571e113747e41e31e834eb5b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c839f13_a7fb66f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-07T05:33:06Z",
+      "side": 1,
+      "message": "lgtm, thanks",
+      "revId": "d24ae6f53961135571e113747e41e31e834eb5b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
