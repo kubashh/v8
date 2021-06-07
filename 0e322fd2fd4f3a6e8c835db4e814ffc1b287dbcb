@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "0e322fd2fd4f3a6e8c835db4e814ffc1b287dbcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3e83196_5c99f3b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2021-06-07T12:43:48Z",
+      "side": 1,
+      "message": "Thank you! I assume that the handling of `undefined` will happen in the switch statements, e.g. NaN for f32 and f64, but TypeError for i32 and i64. It would be good to add a test for that though.",
+      "revId": "0e322fd2fd4f3a6e8c835db4e814ffc1b287dbcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
