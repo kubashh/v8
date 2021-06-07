@@ -1786,10 +1786,14 @@ class RepresentationSelector {
     }
   }
 
-  UseInfo UseInfoForFastApiCallArgument(CTypeInfo::Type type,
+  UseInfo UseInfoForFastApiCallArgument(CTypeInfo type,
                                         FeedbackSource const& feedback) {
-    switch (type) {
+    switch (type.GetType()) {
       case CTypeInfo::Type::kVoid:
+        if (type.GetSequenceType() == CTypeInfo::SequenceType::kIsSequence) {
+          // TODO(mslekova): Should we go the slow path instead?
+          return UseInfo::CheckedHeapObjectAsTaggedPointer(feedback);
+        }
         UNREACHABLE();
       case CTypeInfo::Type::kBool:
         return UseInfo::Bool();
@@ -1831,7 +1835,7 @@ class RepresentationSelector {
     // Propagate representation information from TypeInfo.
     for (int i = 0; i < c_arg_count; i++) {
       arg_use_info[i] = UseInfoForFastApiCallArgument(
-          c_signature->ArgumentInfo(i).GetType(), op_params.feedback());
+          c_signature->ArgumentInfo(i), op_params.feedback());
       ProcessInput<T>(node, i + FastApiCallNode::kFastTargetInputCount,
                       arg_use_info[i]);
     }

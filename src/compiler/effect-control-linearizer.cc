@@ -196,7 +196,7 @@ class EffectControlLinearizer {
   void LowerTransitionElementsKind(Node* node);
   Node* LowerLoadFieldByIndex(Node* node);
   Node* LowerLoadMessage(Node* node);
-  Node* AdaptFastCallArgument(Node* node, CTypeInfo::Type arg_type);
+  Node* AdaptFastCallArgument(Node* node, CTypeInfo arg_type);
   Node* LowerFastApiCall(Node* node);
   Node* LowerLoadTypedElement(Node* node);
   Node* LowerLoadDataViewElement(Node* node);
@@ -4986,8 +4986,8 @@ MachineType MachineTypeFor(CTypeInfo::Type type) {
 }  // namespace
 
 Node* EffectControlLinearizer::AdaptFastCallArgument(Node* node,
-                                                     CTypeInfo::Type arg_type) {
-  switch (arg_type) {
+                                                     CTypeInfo arg_type) {
+  switch (arg_type.GetType()) {
     case CTypeInfo::Type::kV8Value: {
       int kAlign = alignof(uintptr_t);
       int kSize = sizeof(uintptr_t);
@@ -5001,6 +5001,22 @@ Node* EffectControlLinearizer::AdaptFastCallArgument(Node* node,
     }
     case CTypeInfo::Type::kFloat32: {
       return __ TruncateFloat64ToFloat32(node);
+    }
+    case CTypeInfo::Type::kVoid: {
+      CHECK(arg_type.GetSequenceType() != CTypeInfo::SequenceType::kScalar);
+      if (arg_type.GetSequenceType() == CTypeInfo::SequenceType::kIsSequence) {
+        int kAlign = alignof(uintptr_t);
+        int kSize = sizeof(uintptr_t);
+        Node* stack_slot = __ StackSlot(kSize, kAlign);
+
+        __ Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                                     kNoWriteBarrier),
+                 stack_slot, 0, node);
+
+        return stack_slot;
+      } else {
+        UNREACHABLE();  // TODO(mslekova): Implement typed arrays.
+      }
     }
     default: {
       return node;
@@ -5069,11 +5085,25 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
   Node** const inputs = graph()->zone()->NewArray<Node*>(
       c_arg_count + n.FastCallExtraInputCount());
   inputs[0] = n.target();
+
+  // Hint to fast path.
+  auto if_success = __ MakeLabel();
+  auto if_error = __ MakeDeferredLabel();
+
   for (int i = FastApiCallNode::kFastTargetInputCount;
        i < c_arg_count + FastApiCallNode::kFastTargetInputCount; ++i) {
-    inputs[i] =
-        AdaptFastCallArgument(NodeProperties::GetValueInput(node, i),
-                              c_signature->ArgumentInfo(i - 1).GetType());
+    Node* value = NodeProperties::GetValueInput(node, i);
+    CTypeInfo type = c_signature->ArgumentInfo(i - 1);
+    inputs[i] = AdaptFastCallArgument(value, type);
+    if (type.GetSequenceType() == CTypeInfo::SequenceType::kIsSequence) {
+      // Instance check against a JSArray.
+      Node* value_map = __ LoadField(AccessBuilder::ForMap(), value);
+      Node* value_instance_type =
+          __ LoadField(AccessBuilder::ForMapInstanceType(), value_map);
+      Node* value_is_not_js_array =
+          __ Word32Equal(value_instance_type, __ Int32Constant(JS_ARRAY_TYPE));
+      __ GotoIfNot(value_is_not_js_array, &if_error);
+    }
   }
   if (c_signature->HasOptions()) {
     inputs[c_arg_count + 1] = stack_slot;
@@ -5132,9 +5162,6 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
               static_cast<int>(offsetof(v8::FastApiCallbackOptions, fallback)));
 
   Node* is_zero = __ Word32Equal(load, __ Int32Constant(0));
-  // Hint to true.
-  auto if_success = __ MakeLabel();
-  auto if_error = __ MakeDeferredLabel();
   auto merge = __ MakeLabel(MachineRepresentation::kTagged);
   __ Branch(is_zero, &if_success, &if_error);
 

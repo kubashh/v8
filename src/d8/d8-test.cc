@@ -91,6 +91,44 @@ class FastCApiObject {
     args.GetReturnValue().Set(Number::New(isolate, sum));
   }
 
+  static double AddAllSequenceFastCallback(Local<Object> receiver,
+                                           bool should_fallback,
+                                           Local<Array> seq_arg,
+                                           FastApiCallbackOptions& options) {
+    FastCApiObject* self = UnwrapObject(receiver);
+    CHECK_SELF_OR_FALLBACK(0);
+    self->fast_call_count_++;
+
+    if (should_fallback) {
+      options.fallback = 1;
+      return 0;
+    }
+
+    CHECK_GT(seq_arg->Length(), 0);
+    return 42;  // TODO(mslekova): Call CopyAndConvert.
+  }
+  static void AddAllSequenceSlowCallback(
+      const FunctionCallbackInfo<Value>& args) {
+    Isolate* isolate = args.GetIsolate();
+
+    FastCApiObject* self = UnwrapObject(args.This());
+    CHECK_SELF_OR_THROW();
+    self->slow_call_count_++;
+
+    HandleScope handle_scope(isolate);
+
+    USE(isolate);
+    CHECK_EQ(args.Length(), 2);
+    if (!args[1]->IsArray()) {
+      args.GetIsolate()->ThrowError(
+          "This method expects an array as a second argument.");
+      return;
+    }
+
+    // TODO(mslekova): Call CopyAndConvert.
+    args.GetReturnValue().Set(Number::New(isolate, 42));
+  }
+
   static int Add32BitIntFastCallback(v8::Local<v8::Object> receiver,
                                      bool should_fallback, int32_t arg_i32,
                                      uint32_t arg_u32,
@@ -337,6 +375,15 @@ Local<FunctionTemplate> Shell::CreateTestFastCApiTemplate(Isolate* isolate) {
                               Local<Value>(), signature, 1,
                               ConstructorBehavior::kThrow,
                               SideEffectType::kHasSideEffect, &add_all_c_func));
+
+    CFunction add_all_seq_c_func =
+        CFunction::Make(FastCApiObject::AddAllSequenceFastCallback);
+    api_obj_ctor->PrototypeTemplate()->Set(
+        isolate, "add_all_sequence",
+        FunctionTemplate::New(
+            isolate, FastCApiObject::AddAllSequenceSlowCallback, Local<Value>(),
+            signature, 1, ConstructorBehavior::kThrow,
+            SideEffectType::kHasSideEffect, &add_all_seq_c_func));
 
     CFunction add_all_32bit_int_6args_c_func =
         CFunction::Make(FastCApiObject::AddAll32BitIntFastCallback_6Args);
