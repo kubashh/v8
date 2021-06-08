@@ -768,7 +768,7 @@ Handle<String> WasmSimd128ToString(Isolate* isolate, wasm::Simd128 s128) {
 Handle<String> GetRefTypeName(Isolate* isolate, wasm::ValueType type,
                               wasm::NativeModule* module) {
   const char* nullable = type.kind() == wasm::kOptRef ? " null" : "";
-  EmbeddedVector<char, 64> type_name;
+  EmbeddedVector<char, 128> type_name;
   size_t len;
   if (type.heap_type().is_generic()) {
     const char* generic_name = "";
@@ -806,8 +806,9 @@ Handle<String> GetRefTypeName(Isolate* isolate, wasm::ValueType type,
     } else {
       len = SNPrintF(type_name, "(ref%s $", nullable);
       Vector<char> suffix = type_name.SubVector(len, type_name.size());
-      StrNCpy(suffix, name_vec.data(), name_vec.size());
-      len += std::min(suffix.size(), name_vec.size());
+      size_t to_copy = std::min(suffix.size(), name_vec.size());
+      StrNCpy(suffix, name_vec.data(), to_copy);
+      len += to_copy;
       if (len < type_name.size()) {
         type_name[len] = ')';
         len++;
