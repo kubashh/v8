@@ -49,8 +49,8 @@ class Simd128 {
 #undef DEFINE_SIMD_TYPE_SPECIFIC_METHODS
 
   explicit Simd128(byte* bytes) {
-    base::Memcpy(static_cast<void*>(val_), reinterpret_cast<void*>(bytes),
-                 kSimd128Size);
+    memcpy(static_cast<void*>(val_), reinterpret_cast<void*>(bytes),
+           kSimd128Size);
   }
 
   const uint8_t* bytes() { return val_; }
@@ -135,8 +135,8 @@ class WasmValue {
 
   void CopyTo(byte* to) {
     DCHECK(type_.is_numeric());
-    base::Memcpy(static_cast<void*>(to), static_cast<void*>(bit_pattern_),
-                 type_.element_size_bytes());
+    memcpy(static_cast<void*>(to), static_cast<void*>(bit_pattern_),
+           type_.element_size_bytes());
   }
 
   void CopyToWithSystemEndianness(byte* to) {
@@ -144,26 +144,26 @@ class WasmValue {
     switch (type_.kind()) {
       case kI32: {
         int32_t value = to_i32();
-        base::Memcpy(static_cast<void*>(to), &value, sizeof(value));
+        memcpy(static_cast<void*>(to), &value, sizeof(value));
         break;
       }
       case kI64: {
         int64_t value = to_i64();
-        base::Memcpy(static_cast<void*>(to), &value, sizeof(value));
+        memcpy(static_cast<void*>(to), &value, sizeof(value));
         break;
       }
       case kF32: {
         float value = to_f32();
-        base::Memcpy(static_cast<void*>(to), &value, sizeof(value));
+        memcpy(static_cast<void*>(to), &value, sizeof(value));
         break;
       }
       case kF64: {
         double value = to_f64();
-        base::Memcpy(static_cast<void*>(to), &value, sizeof(value));
+        memcpy(static_cast<void*>(to), &value, sizeof(value));
         break;
       }
       case kS128:
-        base::Memcpy(static_cast<void*>(to), to_s128().bytes(), kSimd128Size);
+        memcpy(static_cast<void*>(to), to_s128().bytes(), kSimd128Size);
         break;
       case kRtt:
       case kRttWithDepth:

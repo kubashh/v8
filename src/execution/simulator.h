@@ -117,7 +117,8 @@ class GeneratedCode {
 #ifdef USE_SIMULATOR
   // Defined in simulator-base.h.
   Return Call(Args... args) {
-#if defined(V8_TARGET_OS_WIN) && !defined(V8_OS_WIN)
+#if defined(V8_TARGET_OS_WIN) && !defined(V8_OS_WIN) && \
+    !defined(V8_OS_STARBOARD)
     FATAL("Generated code execution not possible during cross-compilation.");
 #endif  // defined(V8_TARGET_OS_WIN) && !defined(V8_OS_WIN)
     return Simulator::current(isolate_)->template Call<Return>(
@@ -127,7 +128,8 @@ class GeneratedCode {
 
   DISABLE_CFI_ICALL Return Call(Args... args) {
     // When running without a simulator we call the entry directly.
-#if defined(V8_TARGET_OS_WIN) && !defined(V8_OS_WIN)
+#if defined(V8_TARGET_OS_WIN) && !defined(V8_OS_WIN) && \
+    !defined(V8_OS_STARBOARD)
     FATAL("Generated code execution not possible during cross-compilation.");
 #endif  // defined(V8_TARGET_OS_WIN) && !defined(V8_OS_WIN)
 #if ABI_USES_FUNCTION_DESCRIPTORS
