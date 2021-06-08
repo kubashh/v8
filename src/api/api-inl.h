@@ -239,6 +239,60 @@ inline bool IsExecutionTerminatingCheck(i::Isolate* isolate) {
   return false;
 }
 
+template <typename T>
+bool CopySmiElementsToTypedBuffer(T* dst, uint32_t length,
+                                  internal::FixedArrayBase elements) {
+  internal::FixedArray smi_elements = internal::FixedArray::cast(elements);
+  for (uint32_t i = 0; i < length; ++i) {
+    double value = smi_elements.get(static_cast<int>(i)).Number();
+    dst[i] = internal::ConvertDouble<T>(value);
+  }
+  return true;
+}
+
+template <typename T>
+bool CopyDoubleElementsToTypedBuffer(T* dst, uint32_t length,
+                                     internal::FixedArrayBase elements) {
+  CHECK(elements.IsFixedDoubleArray());
+  internal::FixedDoubleArray double_elements =
+      internal::FixedDoubleArray::cast(elements);
+  for (uint32_t i = 0; i < length; ++i) {
+    double value = double_elements.get_scalar(static_cast<int>(i));
+    dst[i] = internal::ConvertDouble<T>(value);
+  }
+  return true;
+}
+
+template <typename T>
+bool v8::Array::CopyAndConvertArrayToCppBuffer(
+    T* dst, uint32_t max_length,
+    const FastArgConversion* conversion_map /* Unused for now */) {
+  uint32_t length = Length();
+  if (length > max_length) {
+    return false;
+  }
+
+  internal::DisallowGarbageCollection no_gc;
+  internal::JSArray obj = *reinterpret_cast<internal::JSArray*>(this);
+
+  if (obj.HasHoleyElements()) {
+    return false;
+  }
+
+  if (obj.HasObjectElements()) {
+    return false;
+  }
+
+  internal::FixedArrayBase elements = obj.elements();
+  if (obj.HasSmiElements()) {
+    return CopySmiElementsToTypedBuffer(dst, length, elements);
+  } else if (obj.HasDoubleElements()) {
+    return CopyDoubleElementsToTypedBuffer(dst, length, elements);
+  }
+
+  UNREACHABLE();
+}
+
 namespace internal {
 
 Handle<Context> HandleScopeImplementer::LastEnteredContext() {
