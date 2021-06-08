@@ -4040,6 +4040,19 @@ Handle<ArrayList> ArrayList::Add(Isolate* isolate, Handle<ArrayList> array,
   return array;
 }
 
+Handle<ArrayList> ArrayList::Add(Isolate* isolate, Handle<ArrayList> array,
+                                 Handle<Object> obj1, Smi obj2, Smi obj3) {
+  int length = array->Length();
+  array = EnsureSpace(isolate, array, length + 3);
+  // Check that GC didn't remove elements from the array.
+  DCHECK_EQ(array->Length(), length);
+  array->Set(length, *obj1);
+  array->Set(length + 1, obj2);
+  array->Set(length + 2, obj3);
+  array->SetLength(length + 3);
+  return array;
+}
+
 // static
 Handle<ArrayList> ArrayList::New(Isolate* isolate, int size) {
   Handle<FixedArray> fixed_array =
