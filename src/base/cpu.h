@@ -163,6 +163,9 @@ class V8_BASE_EXPORT CPU final {
   bool has_non_stop_time_stamp_counter_;
   bool is_running_in_vm_;
   bool has_msa_;
+#if defined(STARBOARD)
+  bool StarboardDetectCPU();
+#endif
 };
 
 }  // namespace base

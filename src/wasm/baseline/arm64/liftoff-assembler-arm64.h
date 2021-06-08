@@ -333,7 +333,7 @@ void LiftoffAssembler::PatchPrepareStackFrame(int offset) {
 #endif
   PatchingAssembler patching_assembler(AssemblerOptions{},
                                        buffer_start_ + offset, 1);
-#if V8_OS_WIN
+#if V8_TARGET_OS_WIN
   if (frame_size > kStackPageSize) {
     // Generate OOL code (at the end of the function, where the current
     // assembler is pointing) to do the explicit stack limit check (see
@@ -2842,7 +2842,7 @@ void LiftoffAssembler::emit_f64x2_le(LiftoffRegister dst, LiftoffRegister lhs,
 void LiftoffAssembler::emit_s128_const(LiftoffRegister dst,
                                        const uint8_t imms[16]) {
   uint64_t vals[2];
-  base::Memcpy(vals, imms, sizeof(vals));
+  memcpy(vals, imms, sizeof(vals));
   Movi(dst.fp().V16B(), vals[1], vals[0]);
 }
 

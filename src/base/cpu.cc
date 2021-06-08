@@ -316,7 +316,7 @@ class CPUInfo final {
     size_t len = q - p;
     char* result = new char[len + 1];
     if (result != nullptr) {
-      base::Memcpy(result, p, len);
+      memcpy(result, p, len);
       result[len] = '\0';
     }
     return result;
@@ -359,7 +359,6 @@ static bool HasListItem(const char* list, const char* item) {
 #if defined(STARBOARD)
 
 bool CPU::StarboardDetectCPU() {
-#if (SB_API_VERSION >= 11)
   SbCPUFeatures features;
   if (!SbCPUFeaturesGet(&features)) {
     return false;
@@ -398,9 +397,6 @@ bool CPU::StarboardDetectCPU() {
   }
 
   return true;
-#else  // SB_API_VERSION >= 11
-  return false;
-#endif
 }
 
 #endif
@@ -448,7 +444,7 @@ CPU::CPU()
       has_non_stop_time_stamp_counter_(false),
       is_running_in_vm_(false),
       has_msa_(false) {
-  base::Memcpy(vendor_, "Unknown", 8);
+  memcpy(vendor_, "Unknown", 8);
 
 #if defined(STARBOARD)
   if (StarboardDetectCPU()) {
@@ -469,7 +465,7 @@ CPU::CPU()
   __cpuid(cpu_info, 0);
   unsigned num_ids = cpu_info[0];
   std::swap(cpu_info[2], cpu_info[3]);
-  base::Memcpy(vendor_, cpu_info + 1, 12);
+  memcpy(vendor_, cpu_info + 1, 12);
   vendor_[12] = '\0';
 
   // Interpret CPU feature information.
