@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a4aa454_f04e5db5",
+        "filename": "src/bigint/digit-arithmetic.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-09T15:01:28Z",
+      "side": 1,
+      "message": "This is an exact copy from bigint.cc (where we can\u0027t delete it yet because it has one remaining caller).",
+      "range": {
+        "startLine": 116,
+        "startChar": 22,
+        "endLine": 116,
+        "endChar": 31
+      },
+      "revId": "0f3f76cab0cd21535a12160ce00b793ef7663220",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc42d3a3_c4dab74b",
+        "filename": "src/bigint/div-schoolbook.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-09T15:01:28Z",
+      "side": 1,
+      "message": "This is \"AbsoluteDivSmall\" from bigint.cc (where we can\u0027t delete it yet because it has one remaining caller), ported from Handle\u003cBigInt\u003e to Digits.",
+      "range": {
+        "startLine": 29,
+        "startChar": 20,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "0f3f76cab0cd21535a12160ce00b793ef7663220",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa5b722_db83f3fd",
+        "filename": "src/bigint/div-schoolbook.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-09T15:01:28Z",
+      "side": 1,
+      "message": "This is \"AbsoluteDivLarge\" from bigint.cc, ported from Handle\u003cBigInt\u003e to Digits, otherwise unchanged.",
+      "range": {
+        "startLine": 94,
+        "startChar": 20,
+        "endLine": 94,
+        "endChar": 36
+      },
+      "revId": "0f3f76cab0cd21535a12160ce00b793ef7663220",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
