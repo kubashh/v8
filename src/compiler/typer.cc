@@ -1516,7 +1516,7 @@ Type Typer::Visitor::JSCallTyper(Type fun, Typer* t) {
   if (!function.shared().HasBuiltinId()) {
     return Type::NonInternal();
   }
-  switch (function.shared().builtin_id()) {
+  switch (function.shared().builtin()) {
     case Builtin::kMathRandom:
       return Type::PlainNumber();
     case Builtin::kMathFloor:
