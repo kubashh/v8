@@ -34,6 +34,24 @@
       "parentUuid": "124a1d96_42f2164b",
       "revId": "8b0cbd232b0ec64b6460c6dfc28e1d0efb7060de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c85901f5_66ce33f4",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-09T14:27:06Z",
+      "side": 0,
+      "message": "Oh, that\u0027s unexpected! In that case, we should add a comment saying why we can *not* return in the memory start case. In which cases could the memory start be part of the possible uses? I checked all callers, but still don\u0027t see it.\n\nFor the cached instance, I would prefer to keep the return, as it skips unneeded code. Feel free to add a comment.",
+      "parentUuid": "8f0ebc1c_a5cbd352",
+      "revId": "8b0cbd232b0ec64b6460c6dfc28e1d0efb7060de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
