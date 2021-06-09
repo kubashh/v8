@@ -4,7 +4,7 @@
 
 load("//definitions.star", "versions")
 
-def branch_descriptor(pooler_name, refs, version_tag = None, display = None):
+def branch_descriptor(pooler_name, refs, version_tag = None, display = None, priority = None):
     version = None
     if version_tag:
         version = versions[version_tag].replace(".", "\\.")
@@ -13,6 +13,7 @@ def branch_descriptor(pooler_name, refs, version_tag = None, display = None):
         pooler_name = pooler_name,
         display = display,
         refs = [ref % version for ref in refs if version],
+        priority = priority,
     )
 
 branch_descriptors = {
@@ -22,18 +23,21 @@ branch_descriptors = {
         ["refs/branch-heads/%s"],
         "beta",
         "Beta",
+        30,
     ),
     "ci.br.stable": branch_descriptor(
         "v8-trigger-br-stable",
         ["refs/branch-heads/%s"],
         "stable",
         "Stable",
+        40,
     ),
     "ci.br.extended": branch_descriptor(
         "v8-trigger-br-extended",
         ["refs/branch-heads/%s"],
         "extended",
         "Extended",
+        50,
     ),
 }
 
@@ -238,6 +242,7 @@ def multibranch_builder(**kwargs):
                 notifies.append("v8 tree closer")
                 args["notifies"] = notifies
         else:
+            args["priority"] = branch.priority
             args["notifies"] = ["beta/stable notifier"]
             if _builder_is_not_supported(bucket_name, first_branch_version):
                 continue
