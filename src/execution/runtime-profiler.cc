@@ -269,6 +269,10 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction function,
         ticks_for_optimization +
         std::min(global_ticks_diff / kMidTierGlobalTicksScaleFactor,
                  kMaxAdditionalMidTierGlobalTicks);
+    if (function.feedback_vector().PercentageInitialized() < 0.9) {
+      ticks_for_optimization += (1 - function.feedback_vector().PercentageInitialized()) * 50.0;
+    }
+    //ticks_for_optimization += (100 - function.feedback_vector().PercentageInitialized()) / 10;
   }
   if (ticks >= ticks_for_optimization) {
     return OptimizationReason::kHotAndStable;
