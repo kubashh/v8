@@ -16,6 +16,268 @@
       "message": "Hi folks, PTAL at this CL that adds support for JSArray arguments to the fast API.\n@Georg - PTAL at src/compiler and overall.\n@Camillo - PTAL at include/* and src/api/*.\n\nI\u0027ll try to care of the MSVC x86 compile failure, but I\u0027m not sure what\u0027s happening there - the code should be looking for ConvertDouble\u003cint32_t\u003e(double) and not ConvertDouble\u003cint\u003e(double) from what I can tell. If any of you can give an idea, it would be appreciated, thanks!",
       "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5f2613_0f9b3e2b",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "This is an internal implementation technicality that we should not mention in the API documentation.",
+      "range": {
+        "startLine": 4426,
+        "startChar": 34,
+        "endLine": 4426,
+        "endChar": 47
+      },
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f530e2e7_1be78d90",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "elements or values",
+      "range": {
+        "startLine": 4427,
+        "startChar": 49,
+        "endLine": 4427,
+        "endChar": 58
+      },
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5d44cb8_1084aa70",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "Similarly \"double elements\" is internal or unclear.\nIn general we should word this conservatively by highlighting that the operation may fail and probably giving necessary but not sufficient conditions under which it succeeds.",
+      "range": {
+        "startLine": 4427,
+        "startChar": 8,
+        "endLine": 4427,
+        "endChar": 28
+      },
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a80d0d8_a83cf7d5",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "How about making this function take a CTypeInfo as argument instead of conversion_map?",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7da220_f8ea0f23",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5006,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "This is redundant (see UNREACHABLE below).",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dcae4f4_21c3bee3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5007,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "I think it would be more natural to start this function by switching on the sequence type. In the IsSequence case you can then assert that GetType() is kVoid.",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ce6c64a_bffd8c45",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5110,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "Please move this into AdaptFastCallArgument.",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2e74a07_c01ce8fb",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "This isn\u0027t needed.",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84847273_dd4ae568",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "isolate",
+      "range": {
+        "startLine": 143,
+        "startChar": 6,
+        "endLine": 143,
+        "endChar": 23
+      },
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f719e38a_73c74221",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "You can\u0027t expect that due to to fuzzing.",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04647c79_dc3ff796",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "This is just a shortcut, right? Removing it would not change the result?\n\nCan it be extended to int64_t?",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f1a154f_82ccf829",
+        "filename": "test/mjsunit/compiler/fast-api-sequences.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "Does this belong here?",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1795d38_bf3f7dd8",
+        "filename": "test/mjsunit/compiler/fast-api-sequences.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "Please wrap long lines.",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb79278b_f6fd29a1",
+        "filename": "test/mjsunit/compiler/fast-api-sequences.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:34:17Z",
+      "side": 1,
+      "message": "How about making the array an argument to your test function so that you can write something easier to grasp:\n\nassertEquals(3, add_all_sequence_smi([-42, 45]));",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
