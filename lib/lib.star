@@ -2,7 +2,40 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-load("//definitions.star", "branch_names", "versions")
+load("//definitions.star", "versions")
+
+def branch_descriptor(pooler_name, refs, version_tag = None, display = None):
+    version = None
+    if version_tag:
+        version = versions[version_tag].replace(".", "\\.")
+    return struct(
+        version = version or None,
+        pooler_name = pooler_name,
+        display = display,
+        refs = [ref % version for ref in refs if version],
+    )
+
+branch_descriptors = {
+    "ci": branch_descriptor("v8-trigger", ["refs/heads/master"]),  # master
+    "ci.br.beta": branch_descriptor(
+        "v8-trigger-br-beta",
+        ["refs/branch-heads/%s"],
+        "beta",
+        "Beta",
+    ),
+    "ci.br.stable": branch_descriptor(
+        "v8-trigger-br-stable",
+        ["refs/branch-heads/%s"],
+        "stable",
+        "Stable",
+    ),
+    "ci.br.extended": branch_descriptor(
+        "v8-trigger-br-extended",
+        ["refs/branch-heads/%s"],
+        "extended",
+        "Extended",
+    ),
+}
 
 waterfall_acls = [
     acl.entry(
@@ -68,13 +101,6 @@ defaults_dict = {
     "ci.br.beta": defaults_ci_br,
     "ci.br.stable": defaults_ci_br,
     "ci.br.extended": defaults_ci_br,
-}
-
-trigger_dict = {
-    "ci": "v8-trigger",
-    "ci.br.beta": "v8-trigger-br-beta",
-    "ci.br.stable": "v8-trigger-br-stable",
-    "ci.br.extended": "v8-trigger-br-extended",
 }
 
 GOMA = struct(
@@ -197,12 +223,12 @@ branch_console_dict = {
 def multibranch_builder(**kwargs):
     added_builders = []
     close_tree = kwargs.pop("close_tree", True)
-    for bucket_name in branch_names:
+    for bucket_name, branch in branch_descriptors.items():
         args = dict(kwargs)
         triggered_by_gitiles = args.pop("triggered_by_gitiles", True)
         first_branch_version = args.pop("first_branch_version", None)
         if triggered_by_gitiles:
-            args["triggered_by"] = [trigger_dict[bucket_name]]
+            args["triggered_by"] = [branch.pooler_name]
             args["use_goma"] = args.get("use_goma", GOMA.DEFAULT)
         else:
             args["dimensions"] = {"host_class": "multibot"}
