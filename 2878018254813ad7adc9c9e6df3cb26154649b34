@@ -231,6 +231,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73c778d6_bdb4fff0",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-09T09:56:03Z",
+      "side": 1,
+      "message": "You are masking with a 64-bit value, so the result can cast to the minimal int64_t value -2^63. (In fact the masking is pointless because the mask has every bit set.)",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7f1a154f_82ccf829",
         "filename": "test/mjsunit/compiler/fast-api-sequences.js",
         "patchSetId": 9
