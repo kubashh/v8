@@ -16,6 +16,24 @@
       "message": "Why did you remove this return? If the register is holding the cached instance, it cannot be used for anything else, or am I missing something?\nIf I am not mistaken, this would be a nice little optimization (early exit) also for the cached memory start.",
       "revId": "8b0cbd232b0ec64b6460c6dfc28e1d0efb7060de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f0ebc1c_a5cbd352",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-09T14:18:10Z",
+      "side": 0,
+      "message": "I removed the return because for the memory start this return would be incorrect, and handling the instance and the memory start inconsistently seemed like a bad idea. We could add a comment at the return of the instance to explain why this early return is okay, but I\u0027m not sure it\u0027s worth it.\n\nFor the memory start the return is incorrect because it can be one of the {possible_uses}.",
+      "parentUuid": "124a1d96_42f2164b",
+      "revId": "8b0cbd232b0ec64b6460c6dfc28e1d0efb7060de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
