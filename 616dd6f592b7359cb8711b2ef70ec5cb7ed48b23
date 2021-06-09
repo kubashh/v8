@@ -39,6 +39,30 @@
       },
       "revId": "616dd6f592b7359cb8711b2ef70ec5cb7ed48b23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43b513f2_76c7144f",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-06-09T12:47:48Z",
+      "side": 1,
+      "message": "Only RO_SPACE is missing here (we could use this instead). We also don\u0027t use those special values like FIRST_SPACE, not sure if that\u0027s a problem. Would the compiler give us a warning in case we add a new space and don\u0027t handle it here (without the default)?",
+      "parentUuid": "1fa94308_c9edc36f",
+      "range": {
+        "startLine": 626,
+        "startChar": 4,
+        "endLine": 626,
+        "endChar": 11
+      },
+      "revId": "616dd6f592b7359cb8711b2ef70ec5cb7ed48b23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
