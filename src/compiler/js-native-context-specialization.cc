@@ -465,6 +465,9 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
         !constant->AsHeapObject().map().is_callable())
       return NoChange();
 
+    dependencies()->DependOnPropertyValueSame(
+        holder_ref, access_info.field_index(), *constant);
+
     if (found_on_proto) {
       dependencies()->DependOnStablePrototypeChains(
           access_info.lookup_start_object_maps(), kStartAtPrototype,

@@ -228,6 +228,36 @@ class ConstantInDictionaryPrototypeChainDependency final
   PropertyKind kind_;
 };
 
+class PropertyValueSameDependency final : public CompilationDependency {
+ public:
+  PropertyValueSameDependency(JSHeapBroker* broker, const JSObjectRef& o,
+                              FieldIndex index, const ObjectRef& current_value)
+      : broker_(broker), object_(o), index_(index), value_(current_value) {}
+
+  bool IsValid() const override {
+    // read property at offset_ in object_
+    Object property_value = object_.object()->RawFastPropertyAt(index_);
+    Object saved_value = *value_.object();
+    if (property_value != saved_value) {
+      TRACE_BROKER_MISSING(broker_, "Constant property value changed in "
+                                        << object_.object() << " at FieldIndex "
+                                        << index_.property_index());
+      return false;
+    }
+    return true;
+  }
+
+  void Install(const MaybeObjectHandle& code) const override {
+    SLOW_DCHECK(IsValid());
+  }
+
+ private:
+  JSHeapBroker* const broker_;
+  JSObjectRef object_;
+  FieldIndex index_;
+  ObjectRef value_;
+};
+
 class TransitionDependency final : public CompilationDependency {
  public:
   explicit TransitionDependency(const MapRef& map) : map_(map) {
@@ -665,6 +695,16 @@ void CompilationDependencies::DependOnOwnConstantElement(
   DCHECK(holder.should_access_heap() || broker_->is_concurrent_inlining());
   RecordDependency(
       zone_->New<OwnConstantElementDependency>(holder, index, element));
+}
+
+void CompilationDependencies::DependOnPropertyValueSame(
+    const JSObjectRef& o, FieldIndex index, const ObjectRef& current_value) {
+  // We only need to record a dependency if we are running on the background
+  // thread.
+  if (!broker_->IsMainThread()) {
+    RecordDependency(zone_->New<PropertyValueSameDependency>(broker_, o, index,
+                                                             current_value));
+  }
 }
 
 bool CompilationDependencies::Commit(Handle<Code> code) {

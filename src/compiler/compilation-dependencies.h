@@ -100,6 +100,9 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   void DependOnOwnConstantElement(const JSObjectRef& holder, uint32_t index,
                                   const ObjectRef& element);
 
+  void DependOnPropertyValueSame(const JSObjectRef& o, FieldIndex index,
+                                 const ObjectRef& current_value);
+
   // For each given map, depend on the stability of (the maps of) all prototypes
   // up to (and including) the {last_prototype}.
   template <class MapContainer>

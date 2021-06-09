@@ -80,13 +80,13 @@ enum class RefSerializationKind {
 // DO NOT VIOLATE THIS PROPERTY!
 #define HEAP_BROKER_OBJECT_LIST(V)                                        \
   /* Subtypes of JSObject */                                              \
-  V(JSArray, RefSerializationKind::kSerialized)                           \
+  V(JSArray, RefSerializationKind::kBackgroundSerialized)                 \
   V(JSBoundFunction, RefSerializationKind::kSerialized)                   \
   V(JSDataView, RefSerializationKind::kSerialized)                        \
   V(JSFunction, RefSerializationKind::kSerialized)                        \
   V(JSGlobalObject, RefSerializationKind::kSerialized)                    \
-  V(JSGlobalProxy, RefSerializationKind::kSerialized)                     \
-  V(JSTypedArray, RefSerializationKind::kSerialized)                      \
+  V(JSGlobalProxy, RefSerializationKind::kBackgroundSerialized)           \
+  V(JSTypedArray, RefSerializationKind::kBackgroundSerialized)            \
   /* Subtypes of Context */                                               \
   V(NativeContext, RefSerializationKind::kNeverSerialized)                \
   /* Subtypes of FixedArray */                                            \
@@ -102,7 +102,7 @@ enum class RefSerializationKind {
   V(String, RefSerializationKind::kNeverSerialized)                       \
   V(Symbol, RefSerializationKind::kNeverSerialized)                       \
   /* Subtypes of JSReceiver */                                            \
-  V(JSObject, RefSerializationKind::kSerialized)                          \
+  V(JSObject, RefSerializationKind::kBackgroundSerialized)                \
   /* Subtypes of HeapObject */                                            \
   V(AccessorInfo, RefSerializationKind::kNeverSerialized)                 \
   V(AllocationSite, RefSerializationKind::kSerialized)                    \
@@ -168,7 +168,6 @@ class V8_EXPORT_PRIVATE ObjectRef {
   Handle<Object> object() const;
 
   bool equals(const ObjectRef& other) const;
-  bool ShouldHaveBeenSerialized() const;
 
   bool IsSmi() const;
   int AsSmi() const;
@@ -279,6 +278,10 @@ class HeapObjectRef : public ObjectRef {
 
   MapRef map() const;
 
+  // Only for use in special situations where we need to read the object's
+  // current map (instead of returning the cached map). Use with care.
+  base::Optional<MapRef> map_direct_read() const;
+
   // See the comment on the HeapObjectType class.
   HeapObjectType GetHeapObjectType() const;
 };
@@ -315,7 +318,11 @@ class JSObjectRef : public JSReceiverRef {
 
   Handle<JSObject> object() const;
 
-  ObjectRef RawFastPropertyAt(FieldIndex index) const;
+  // Usable only for in-object properties. Only use this if the underlying
+  // value can be an uninitialized-sentinel, or if HeapNumber construction must
+  // be avoided for some reason. Otherwise, use the higher-level
+  // GetOwnFastDataProperty.
+  base::Optional<ObjectRef> RawFastPropertyAt(FieldIndex index) const;
 
   // Return the element at key {index} if {index} is known to be an own data
   // property of the object that is non-writable and non-configurable.
@@ -439,6 +446,7 @@ class HeapNumberRef : public HeapObjectRef {
   Handle<HeapNumber> object() const;
 
   double value() const;
+  uint64_t value_as_bits() const;
 };
 
 class ContextRef : public HeapObjectRef {
@@ -970,7 +978,6 @@ class JSTypedArrayRef : public JSObjectRef {
 
   void Serialize();
   bool serialized() const;
-  bool ShouldHaveBeenSerialized() const;
 
   HeapObjectRef buffer() const;
 };
