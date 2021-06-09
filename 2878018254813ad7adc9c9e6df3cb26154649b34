@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb158608_012f3da4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-09T08:20:27Z",
+      "side": 1,
+      "message": "Hi folks, PTAL at this CL that adds support for JSArray arguments to the fast API.\n@Georg - PTAL at src/compiler and overall.\n@Camillo - PTAL at include/* and src/api/*.\n\nI\u0027ll try to care of the MSVC x86 compile failure, but I\u0027m not sure what\u0027s happening there - the code should be looking for ConvertDouble\u003cint32_t\u003e(double) and not ConvertDouble\u003cint\u003e(double) from what I can tell. If any of you can give an idea, it would be appreciated, thanks!",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
