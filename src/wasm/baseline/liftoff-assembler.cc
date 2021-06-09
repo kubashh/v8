@@ -15,6 +15,7 @@
 #include "src/utils/ostreams.h"
 #include "src/wasm/baseline/liftoff-register.h"
 #include "src/wasm/function-body-decoder-impl.h"
+#include "src/wasm/object-access.h"
 #include "src/wasm/wasm-linkage.h"
 #include "src/wasm/wasm-opcodes.h"
 
@@ -446,6 +447,10 @@ void LiftoffAssembler::CacheState::InitMerge(const CacheState& source,
     SetInstanceCacheRegister(source.cached_instance);
   }
 
+  if (source.cached_mem_start != no_reg) {
+    SetMemStartCacheRegister(source.cached_mem_start);
+  }
+
   uint32_t stack_base = stack_depth + num_locals;
   uint32_t target_height = stack_base + arity;
   uint32_t discarded = source.stack_height() - target_height;
@@ -709,9 +714,12 @@ void LiftoffAssembler::MergeFullStackWith(CacheState& target,
   }
 
   // Full stack merging is only done for forward jumps, so we can just clear the
-  // instance cache register at the target in case of mismatch.
+  // cache registers at the target in case of mismatch.
   if (source.cached_instance != target.cached_instance) {
     target.ClearCachedInstanceRegister();
+  }
+  if (source.cached_mem_start != target.cached_mem_start) {
+    target.ClearCachedMemStartRegister();
   }
 }
 
@@ -754,6 +762,30 @@ void LiftoffAssembler::MergeStackWith(CacheState& target, uint32_t arity,
       }
     }
   }
+  if (cache_state_.cached_mem_start != target.cached_mem_start &&
+      target.cached_mem_start != no_reg) {
+    if (jump_direction == kForwardJump) {
+      // On forward jumps, just reset the cached instance in the target state.
+      target.ClearCachedMemStartRegister();
+    } else {
+      // On backward jumps, we already generated code assuming that the
+      // memory start is available in that register. Thus move it there.
+      if (cache_state_.cached_mem_start == no_reg) {
+        Register instance = target.cached_instance;
+        if (instance == no_reg) {
+          instance = target.cached_mem_start;
+          LoadInstanceFromFrame(instance);
+          LoadFromInstance(
+              target.cached_mem_start, instance,
+              ObjectAccess::ToTagged(WasmInstanceObject::kMemoryStartOffset),
+              sizeof(size_t));
+        }
+      } else {
+        Move(target.cached_mem_start, cache_state_.cached_mem_start,
+             kPointerKind);
+      }
+    }
+  }
 }
 
 void LiftoffAssembler::Spill(VarState* slot) {
@@ -784,7 +816,7 @@ void LiftoffAssembler::SpillAllRegisters() {
     Spill(slot.offset(), slot.reg(), slot.kind());
     slot.MakeStack();
   }
-  cache_state_.ClearCachedInstanceRegister();
+  cache_state_.ClearAllCacheRegisters();
   cache_state_.reset_used_registers();
 }
 
@@ -793,7 +825,8 @@ void LiftoffAssembler::ClearRegister(
     LiftoffRegList pinned) {
   if (reg == cache_state()->cached_instance) {
     cache_state()->ClearCachedInstanceRegister();
-    return;
+  } else if (reg == cache_state()->cached_mem_start) {
+    cache_state()->ClearCachedMemStartRegister();
   }
   if (cache_state()->is_used(LiftoffRegister(reg))) {
     SpillRegister(LiftoffRegister(reg));
@@ -891,7 +924,7 @@ void LiftoffAssembler::PrepareCall(const ValueKindSig* sig,
   constexpr size_t kInputShift = 1;
 
   // Spill all cache slots which are not being used as parameters.
-  cache_state_.ClearCachedInstanceRegister();
+  cache_state_.ClearAllCacheRegisters();
   for (VarState* it = cache_state_.stack_state.end() - 1 - num_params;
        it >= cache_state_.stack_state.begin() &&
        !cache_state_.used_registers.is_empty();
@@ -1130,6 +1163,14 @@ bool LiftoffAssembler::ValidateCacheState() const {
     int liftoff_code =
         LiftoffRegister{cache_state_.cached_instance}.liftoff_code();
     used_regs.set(cache_state_.cached_instance);
+    DCHECK_EQ(0, register_use_count[liftoff_code]);
+    register_use_count[liftoff_code] = 1;
+  }
+  if (cache_state_.cached_mem_start != no_reg) {
+    DCHECK(!used_regs.has(cache_state_.cached_mem_start));
+    int liftoff_code =
+        LiftoffRegister{cache_state_.cached_mem_start}.liftoff_code();
+    used_regs.set(cache_state_.cached_mem_start);
     DCHECK_EQ(0, register_use_count[liftoff_code]);
     register_use_count[liftoff_code] = 1;
   }
