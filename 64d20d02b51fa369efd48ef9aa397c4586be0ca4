@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ded0e101_3ed81a73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-09T17:34:43Z",
+      "side": 1,
+      "message": "Thanks for the review! I\u0027ve reworked the handling of long strings to never truncate as you suggested.\n\nFor (malicious?) modules that exceed the max string length, we\u0027ll run into a CHECK failure in the factory. That scenario is probably unlikely enough that crashing hard is an acceptable user experience? I can do a follow-up if you disagree.",
+      "revId": "64d20d02b51fa369efd48ef9aa397c4586be0ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
