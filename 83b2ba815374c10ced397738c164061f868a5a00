@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a4fde37_ebc78fe8",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4051,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-09T15:38:11Z",
+      "side": 1,
+      "message": "As per offline discussion:  ArrayList::Set(int index, Smi obj) should be added to avoid the write barrier",
+      "range": {
+        "startLine": 4051,
+        "startChar": 2,
+        "endLine": 4051,
+        "endChar": 31
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9dc492ac_c5a412e6",
         "filename": "src/objects/objects.cc",
         "patchSetId": 1
