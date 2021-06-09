@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "124a1d96_42f2164b",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-09T11:16:36Z",
+      "side": 0,
+      "message": "Why did you remove this return? If the register is holding the cached instance, it cannot be used for anything else, or am I missing something?\nIf I am not mistaken, this would be a nice little optimization (early exit) also for the cached memory start.",
+      "revId": "8b0cbd232b0ec64b6460c6dfc28e1d0efb7060de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
