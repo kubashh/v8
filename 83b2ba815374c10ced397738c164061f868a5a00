@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a0b2798_77acfebd",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4049,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-09T15:37:57Z",
+      "side": 1,
+      "message": "Add Set which takes a Smi to avoid the write barrier",
+      "range": {
+        "startLine": 4049,
+        "startChar": 10,
+        "endLine": 4049,
+        "endChar": 11
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9dc492ac_c5a412e6",
         "filename": "src/objects/objects.cc",
         "patchSetId": 1
