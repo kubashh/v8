@@ -606,9 +606,12 @@ Handle<Code> Deoptimizer::compiled_code() const {
 }
 
 bool Deoptimizer::should_reuse_code() const {
-  int count = compiled_code_.deoptimization_count();
-  return deopt_kind_ == DeoptimizeKind::kSoft &&
-         count < FLAG_reuse_opt_code_count;
+  if (deopt_kind_ == DeoptimizeKind::kSoft) {
+    PrintF("Soft Deopt: Size %d, frac %g\n", function_.shared().GetBytecodeArray(isolate_).BytecodeArraySize(), function_.feedback_vector().PercentageInitialized());
+  }
+  // int count = compiled_code_.deoptimization_count();
+  return false; //deopt_kind_ == DeoptimizeKind::kSoft &&
+         //count < FLAG_reuse_opt_code_count;
 }
 
 Deoptimizer::~Deoptimizer() {
