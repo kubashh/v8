@@ -319,6 +319,10 @@ struct FastApiArrayBuffer {
   size_t byte_length;
 };
 
+struct FastArgConversion {
+  // TODO(mslekova): Implement conversion policies.
+};
+
 class V8_EXPORT CFunctionInfo {
  public:
   // Construct a struct to hold a CFunction's type information.
