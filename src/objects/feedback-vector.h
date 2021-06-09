@@ -269,6 +269,9 @@ class FeedbackVector
   // Gives access to raw memory which stores the array's data.
   inline MaybeObjectSlot slots_start();
 
+  // TODO
+  double PercentageInitialized();
+
   // Returns slot kind for given slot.
   V8_EXPORT_PRIVATE FeedbackSlotKind GetKind(FeedbackSlot slot) const;
 

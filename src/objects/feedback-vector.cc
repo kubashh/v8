@@ -484,6 +484,21 @@ void FeedbackVector::EvictOptimizedCodeMarkedForDeoptimization(
   }
 }
 
+double FeedbackVector::PercentageInitialized() {
+  int count = 0;
+  int initialized = 0;
+  FeedbackMetadataIterator iter(metadata());
+  while (iter.HasNext()) {
+    FeedbackSlot slot = iter.Next();
+    FeedbackNexus nexus(*this, slot);
+    count++;
+    if (!nexus.IsUninitialized()) {
+      initialized++;
+    }
+  }
+  return static_cast<double>(initialized) / count;
+}
+
 bool FeedbackVector::ClearSlots(Isolate* isolate) {
   if (!shared_function_info().HasFeedbackMetadata()) return false;
   MaybeObject uninitialized_sentinel = MaybeObject::FromObject(
