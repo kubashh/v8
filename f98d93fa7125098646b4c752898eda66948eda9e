@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1b57bd8_cabeacc7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-06-09T05:10:56Z",
+      "side": 1,
+      "message": "I guess you can put Fixed: here.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 3
+      },
+      "revId": "f98d93fa7125098646b4c752898eda66948eda9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "dc073b50_02891eb2",
@@ -14,6 +37,23 @@
       "writtenOn": "2021-06-08T18:22:19Z",
       "side": 1,
       "message": "PTAL.",
+      "revId": "f98d93fa7125098646b4c752898eda66948eda9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f667721f_440dac03",
+        "filename": "src/debug/debug-wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-06-09T05:10:56Z",
+      "side": 1,
+      "message": "Instead of truncating here, how about putting the type name into a malloc()\u0027ed region?",
       "revId": "f98d93fa7125098646b4c752898eda66948eda9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
