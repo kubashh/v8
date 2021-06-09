@@ -142,7 +142,7 @@ int Code::OffHeapInstructionSize() const {
     return raw_instruction_size();
   }
   EmbeddedData d = EmbeddedData::FromBlob();
-  return d.InstructionSizeOfBuiltin(builtin_index());
+  return d.InstructionSizeOfBuiltin(builtin());
 }
 
 namespace {
@@ -181,7 +181,7 @@ Address Code::OffHeapInstructionStart() const {
 
   // TODO(11527): pass Isolate as an argument for getting the EmbeddedData.
   EmbeddedData d = EmbeddedDataWithMaybeRemappedEmbeddedBuiltins(*this);
-  return d.InstructionStartOfBuiltin(builtin_index());
+  return d.InstructionStartOfBuiltin(builtin());
 }
 
 Address Code::OffHeapInstructionEnd() const {
@@ -192,21 +192,21 @@ Address Code::OffHeapInstructionEnd() const {
 
   // TODO(11527): pass Isolate as an argument for getting the EmbeddedData.
   EmbeddedData d = EmbeddedDataWithMaybeRemappedEmbeddedBuiltins(*this);
-  return d.InstructionStartOfBuiltin(builtin_index()) +
-         d.InstructionSizeOfBuiltin(builtin_index());
+  return d.InstructionStartOfBuiltin(builtin()) +
+         d.InstructionSizeOfBuiltin(builtin());
 }
 
 Address Code::OffHeapInstructionStart(Isolate* isolate, Address pc) const {
   DCHECK(is_off_heap_trampoline());
   EmbeddedData d = EmbeddedData::GetEmbeddedDataForPC(isolate, pc);
-  return d.InstructionStartOfBuiltin(builtin_index());
+  return d.InstructionStartOfBuiltin(builtin());
 }
 
 Address Code::OffHeapInstructionEnd(Isolate* isolate, Address pc) const {
   DCHECK(is_off_heap_trampoline());
   EmbeddedData d = EmbeddedData::GetEmbeddedDataForPC(isolate, pc);
-  return d.InstructionStartOfBuiltin(builtin_index()) +
-         d.InstructionSizeOfBuiltin(builtin_index());
+  return d.InstructionStartOfBuiltin(builtin()) +
+         d.InstructionSizeOfBuiltin(builtin());
 }
 
 int Code::OffHeapMetadataSize() const {
@@ -215,7 +215,7 @@ int Code::OffHeapMetadataSize() const {
     return raw_instruction_size();
   }
   EmbeddedData d = EmbeddedData::FromBlob();
-  return d.MetadataSizeOfBuiltin(builtin_index());
+  return d.MetadataSizeOfBuiltin(builtin());
 }
 
 Address Code::OffHeapMetadataStart() const {
@@ -224,7 +224,7 @@ Address Code::OffHeapMetadataStart() const {
     return raw_instruction_size();
   }
   EmbeddedData d = EmbeddedData::FromBlob();
-  return d.MetadataStartOfBuiltin(builtin_index());
+  return d.MetadataStartOfBuiltin(builtin());
 }
 
 Address Code::OffHeapMetadataEnd() const {
@@ -233,8 +233,8 @@ Address Code::OffHeapMetadataEnd() const {
     return raw_instruction_size();
   }
   EmbeddedData d = EmbeddedData::FromBlob();
-  return d.MetadataStartOfBuiltin(builtin_index()) +
-         d.MetadataSizeOfBuiltin(builtin_index());
+  return d.MetadataStartOfBuiltin(builtin()) +
+         d.MetadataSizeOfBuiltin(builtin());
 }
 
 // TODO(cbruni): Move to BytecodeArray

@@ -33,7 +33,7 @@ Handle<WasmInstanceObject> CompileModule(Zone* zone, Isolate* isolate,
 
 bool IsGeneric(Code wrapper) {
   return wrapper.is_builtin() &&
-         wrapper.builtin_index() == Builtin::kGenericJSToWasmWrapper;
+         wrapper.builtin() == Builtin::kGenericJSToWasmWrapper;
 }
 
 bool IsSpecific(Code wrapper) {

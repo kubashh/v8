@@ -270,7 +270,7 @@ DEF_GETTER(JSFunction, prototype, Object) {
 }
 
 bool JSFunction::is_compiled() const {
-  return code(kAcquireLoad).builtin_index() != Builtin::kCompileLazy &&
+  return code(kAcquireLoad).builtin() != Builtin::kCompileLazy &&
          shared().is_compiled();
 }
 
@@ -287,7 +287,7 @@ bool JSFunction::NeedsResetDueToFlushedBytecode() {
 
   SharedFunctionInfo shared = SharedFunctionInfo::cast(maybe_shared);
   Code code = Code::cast(maybe_code);
-  return !shared.is_compiled() && code.builtin_index() != Builtin::kCompileLazy;
+  return !shared.is_compiled() && code.builtin() != Builtin::kCompileLazy;
 }
 
 void JSFunction::ResetIfBytecodeFlushed(
@@ -297,7 +297,7 @@ void JSFunction::ResetIfBytecodeFlushed(
   if (FLAG_flush_bytecode && NeedsResetDueToFlushedBytecode()) {
     // Bytecode was flushed and function is now uncompiled, reset JSFunction
     // by setting code to CompileLazy and clearing the feedback vector.
-    set_code(GetIsolate()->builtins()->builtin(i::Builtin::kCompileLazy));
+    set_code(GetIsolate()->builtins()->code(i::Builtin::kCompileLazy));
     raw_feedback_cell().reset_feedback_vector(gc_notify_updated_slot);
   }
 }
