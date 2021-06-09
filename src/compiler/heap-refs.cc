@@ -1962,7 +1962,7 @@ class SharedFunctionInfoData : public HeapObjectData {
   SharedFunctionInfoData(JSHeapBroker* broker, ObjectData** storage,
                          Handle<SharedFunctionInfo> object);
 
-  int builtin_id() const { return builtin_id_; }
+  Builtin builtin() const { return builtin_; }
   int context_header_size() const { return context_header_size_; }
   ObjectData* GetBytecodeArray() const { return GetBytecodeArray_; }
   SharedFunctionInfo::Inlineability GetInlineability() const {
@@ -1990,7 +1990,7 @@ class SharedFunctionInfoData : public HeapObjectData {
 #undef DECL_ACCESSOR
 
  private:
-  int const builtin_id_;
+  Builtin const builtin_;
   int const context_header_size_;
   ObjectData* const GetBytecodeArray_;
 #define DECL_MEMBER(type, name) type const name##_;
@@ -2006,8 +2006,8 @@ SharedFunctionInfoData::SharedFunctionInfoData(
     JSHeapBroker* broker, ObjectData** storage,
     Handle<SharedFunctionInfo> object)
     : HeapObjectData(broker, storage, object),
-      builtin_id_(object->HasBuiltinId() ? object->builtin_id()
-                                         : Builtin::kNoBuiltinId),
+      builtin_(object->HasBuiltinId() ? object->builtin()
+                                      : Builtin::kNoBuiltinId),
       context_header_size_(object->scope_info().ContextHeaderLength()),
       GetBytecodeArray_(object->HasBytecodeArray()
                             ? broker->GetOrCreateData(
@@ -2021,7 +2021,7 @@ SharedFunctionInfoData::SharedFunctionInfoData(
       function_template_info_(nullptr),
       template_objects_(broker->zone()),
       scope_info_(nullptr) {
-  DCHECK_EQ(HasBuiltinId_, builtin_id_ != Builtin::kNoBuiltinId);
+  DCHECK_EQ(HasBuiltinId_, builtin_ != Builtin::kNoBuiltinId);
   DCHECK_EQ(HasBytecodeArray_, GetBytecodeArray_ != nullptr);
 }
 
@@ -3497,7 +3497,7 @@ BIMODAL_ACCESSOR_C(ScopeInfo, bool, HasContextExtensionSlot)
 BIMODAL_ACCESSOR_C(ScopeInfo, bool, HasOuterScopeInfo)
 BIMODAL_ACCESSOR(ScopeInfo, ScopeInfo, OuterScopeInfo)
 
-BIMODAL_ACCESSOR_C(SharedFunctionInfo, int, builtin_id)
+BIMODAL_ACCESSOR_C(SharedFunctionInfo, Builtin, builtin)
 BytecodeArrayRef SharedFunctionInfoRef::GetBytecodeArray() const {
   if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
     BytecodeArray bytecode_array;

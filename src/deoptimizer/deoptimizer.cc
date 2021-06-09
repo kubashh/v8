@@ -1059,7 +1059,7 @@ void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
       !goto_catch_handler;
   const bool is_baseline = shared.HasBaselineData();
   Code dispatch_builtin =
-      builtins->builtin(DispatchBuiltinFor(is_baseline, advance_bc));
+      builtins->code(DispatchBuiltinFor(is_baseline, advance_bc));
 
   if (verbose_tracing_enabled()) {
     PrintF(trace_scope()->file(), "  translating %s frame ",
@@ -1300,7 +1300,7 @@ void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
     Register context_reg = JavaScriptFrame::context_register();
     output_frame->SetRegister(context_reg.code(), context_value);
     // Set the continuation for the topmost frame.
-    Code continuation = builtins->builtin(Builtin::kNotifyDeoptimized);
+    Code continuation = builtins->code(Builtin::kNotifyDeoptimized);
     output_frame->SetContinuation(
         static_cast<intptr_t>(continuation.InstructionStart()));
   }
@@ -1380,7 +1380,7 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   CHECK(!is_topmost || deopt_kind_ == DeoptimizeKind::kLazy);
 
   Builtins* builtins = isolate_->builtins();
-  Code construct_stub = builtins->builtin(Builtin::kJSConstructStubGeneric);
+  Code construct_stub = builtins->code(Builtin::kJSConstructStubGeneric);
   BytecodeOffset bytecode_offset = translated_frame->bytecode_offset();
 
   const int parameters_count = translated_frame->height();
@@ -1536,7 +1536,7 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   if (is_topmost) {
     Builtins* builtins = isolate_->builtins();
     DCHECK_EQ(DeoptimizeKind::kLazy, deopt_kind_);
-    Code continuation = builtins->builtin(Builtin::kNotifyDeoptimized);
+    Code continuation = builtins->code(Builtin::kNotifyDeoptimized);
     output_frame->SetContinuation(
         static_cast<intptr_t>(continuation.InstructionStart()));
   }
@@ -1703,10 +1703,9 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   TranslatedFrame::iterator value_iterator = translated_frame->begin();
 
   const BytecodeOffset bytecode_offset = translated_frame->bytecode_offset();
-  Builtin builtin_name =
-      Builtins::GetBuiltinFromBytecodeOffset(bytecode_offset);
+  Builtin builtin = Builtins::GetBuiltinFromBytecodeOffset(bytecode_offset);
   CallInterfaceDescriptor continuation_descriptor =
-      Builtins::CallInterfaceDescriptorFor(builtin_name);
+      Builtins::CallInterfaceDescriptorFor(builtin);
 
   const RegisterConfiguration* config = RegisterConfiguration::Default();
 
@@ -1748,7 +1747,7 @@ void Deoptimizer::DoComputeBuiltinContinuation(
            "  translating BuiltinContinuation to %s,"
            " => register_param_count=%d,"
            " stack_param_count=%d, frame_size=%d\n",
-           Builtins::name(builtin_name), register_parameter_count,
+           Builtins::name(builtin), register_parameter_count,
            frame_info.stack_parameter_count(), output_frame_size);
   }
 
@@ -1777,9 +1776,9 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   }
 
   if (mode == BuiltinContinuationMode::STUB) {
-    DCHECK_EQ(Builtins::CallInterfaceDescriptorFor(builtin_name)
-                  .GetStackArgumentOrder(),
-              StackArgumentOrder::kDefault);
+    DCHECK_EQ(
+        Builtins::CallInterfaceDescriptorFor(builtin).GetStackArgumentOrder(),
+        StackArgumentOrder::kDefault);
     for (uint32_t i = 0; i < frame_info.translated_stack_parameter_count();
          ++i, ++value_iterator) {
       frame_writer.PushTranslatedValue(value_iterator, "stack parameter");
@@ -1894,7 +1893,8 @@ void Deoptimizer::DoComputeBuiltinContinuation(
                                    "builtin JavaScript context\n");
 
   // The builtin to continue to.
-  frame_writer.PushRawObject(Smi::FromInt(builtin_name), "builtin index\n");
+  frame_writer.PushRawObject(Smi::FromInt(static_cast<int>(builtin)),
+                             "builtin index\n");
 
   const int allocatable_register_count =
       config->num_allocatable_general_registers();
@@ -1961,7 +1961,7 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   // ContinueToCodeStubBuiltinWithResult because we don't want to overwrite the
   // return value that we have already set.
   Code continue_to_builtin =
-      isolate()->builtins()->builtin(TrampolineForBuiltinContinuation(
+      isolate()->builtins()->code(TrampolineForBuiltinContinuation(
           mode, frame_info.frame_has_result_stack_slot() &&
                     !is_js_to_wasm_builtin_continuation));
   if (is_topmost) {
@@ -1976,8 +1976,7 @@ void Deoptimizer::DoComputeBuiltinContinuation(
         static_cast<intptr_t>(continue_to_builtin.InstructionStart()));
   }
 
-  Code continuation =
-      isolate()->builtins()->builtin(Builtin::kNotifyDeoptimized);
+  Code continuation = isolate()->builtins()->code(Builtin::kNotifyDeoptimized);
   output_frame->SetContinuation(
       static_cast<intptr_t>(continuation.InstructionStart()));
 }

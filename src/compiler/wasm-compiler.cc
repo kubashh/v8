@@ -219,9 +219,9 @@ class WasmGraphAssembler : public GraphAssembler {
 #endif
   }
 
-  Node* GetBuiltinPointerTarget(Builtin builtin_id) {
+  Node* GetBuiltinPointerTarget(Builtin builtin) {
     static_assert(std::is_same<Smi, BuiltinPtr>(), "BuiltinPtr must be Smi");
-    return NumberConstant(builtin_id);
+    return NumberConstant(static_cast<int>(builtin));
   }
 
   // Sets {true_node} and {false_node} to their corresponding Branch outputs.
@@ -6080,11 +6080,11 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
   }
 
   Node* GetTargetForBuiltinCall(wasm::WasmCode::RuntimeStubId wasm_stub,
-                                Builtin builtin_id) {
+                                Builtin builtin) {
     return (stub_mode_ == StubCallMode::kCallWasmRuntimeStub)
                ? mcgraph()->RelocatableIntPtrConstant(wasm_stub,
                                                       RelocInfo::WASM_STUB_CALL)
-               : gasm_->GetBuiltinPointerTarget(builtin_id);
+               : gasm_->GetBuiltinPointerTarget(builtin);
   }
 
   Node* UndefinedValue() { return LOAD_ROOT(UndefinedValue, undefined_value); }
@@ -7374,7 +7374,7 @@ std::pair<WasmImportCallKind, Handle<JSReceiver>> ResolveWasmImportCall(
     break;
 
     if (FLAG_wasm_math_intrinsics && shared->HasBuiltinId()) {
-      switch (shared->builtin_id()) {
+      switch (shared->builtin()) {
         COMPARE_SIG_FOR_BUILTIN_F64(Acos);
         COMPARE_SIG_FOR_BUILTIN_F64(Asin);
         COMPARE_SIG_FOR_BUILTIN_F64(Atan);
