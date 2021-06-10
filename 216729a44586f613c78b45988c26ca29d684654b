@@ -191,6 +191,24 @@
       "parentUuid": "b0868f7a_cfdc0c08",
       "revId": "216729a44586f613c78b45988c26ca29d684654b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cce627d_234c42b7",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-10T16:32:21Z",
+      "side": 1,
+      "message": "You could have defined global operator+(Builtin,int) and operator+(int,Builtin).",
+      "parentUuid": "5621b246_7b3d8117",
+      "revId": "216729a44586f613c78b45988c26ca29d684654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
