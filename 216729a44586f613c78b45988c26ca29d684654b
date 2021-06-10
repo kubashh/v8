@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c310c47_6a423ba9",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T09:38:33Z",
+      "side": 1,
+      "message": "Yeah I agree, they\u0027re not really an upgrade, mostly cargo culting on top of the RootIndex approach.\n\nI started to prefer \u003c\u003d since you can refer to the last enum (and not the non-existent last+1). If I read correctly, using invalid values for enum casts is UB.",
+      "parentUuid": "eb3a6eda_909e5f9f",
+      "revId": "216729a44586f613c78b45988c26ca29d684654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49006c3b_6c27d363",
         "filename": "src/builtins/builtins.h",
         "patchSetId": 5
@@ -99,6 +117,24 @@
       "writtenOn": "2021-06-10T05:35:58Z",
       "side": 1,
       "message": "qq would defining operator+ instead fix both ++ and the \u0027+\u0027 case in L83?",
+      "revId": "216729a44586f613c78b45988c26ca29d684654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0868f7a_cfdc0c08",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T09:38:33Z",
+      "side": 1,
+      "message": "ah right, let me try this.",
+      "parentUuid": "49006c3b_6c27d363",
       "revId": "216729a44586f613c78b45988c26ca29d684654b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
