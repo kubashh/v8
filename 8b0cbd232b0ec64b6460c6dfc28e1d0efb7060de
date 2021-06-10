@@ -52,6 +52,24 @@
       "parentUuid": "8f0ebc1c_a5cbd352",
       "revId": "8b0cbd232b0ec64b6460c6dfc28e1d0efb7060de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e637769b_2c95a381",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-10T17:19:19Z",
+      "side": 0,
+      "message": "Done. I added the early return, and a DCHECK for the instance case to make sure the early return is okay.",
+      "parentUuid": "c85901f5_66ce33f4",
+      "revId": "8b0cbd232b0ec64b6460c6dfc28e1d0efb7060de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
