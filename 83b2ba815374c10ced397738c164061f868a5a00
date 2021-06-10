@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5b85af0_fd6309b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "thanks, ptal again",
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a0b2798_77acfebd",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-06-09T15:37:57Z",
       "side": 1,
       "message": "Add Set which takes a Smi to avoid the write barrier",
+      "range": {
+        "startLine": 4049,
+        "startChar": 10,
+        "endLine": 4049,
+        "endChar": 11
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "930033f2_ffd8000f",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4049,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a0b2798_77acfebd",
       "range": {
         "startLine": 4049,
         "startChar": 10,
@@ -64,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e40e5f2c_93dda93d",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4051,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a4fde37_ebc78fe8",
+      "range": {
+        "startLine": 4051,
+        "startChar": 2,
+        "endLine": 4051,
+        "endChar": 31
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9dc492ac_c5a412e6",
@@ -77,6 +142,30 @@
       "writtenOn": "2021-06-09T14:42:29Z",
       "side": 1,
       "message": "I find these methods a bit odd here (though happy to keep on cargo culting :D).\n\nnit: use raw handle after EnsureSpace to be fast.",
+      "range": {
+        "startLine": 4043,
+        "startChar": 0,
+        "endLine": 4054,
+        "endChar": 1
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ab70ece_63c631fa",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4054,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dc492ac_c5a412e6",
       "range": {
         "startLine": 4043,
         "startChar": 0,
@@ -110,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e978326_34f727ec",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Passing the obj + index to ReadValue instead",
+      "parentUuid": "4d0768d8_a3fc6891",
+      "range": {
+        "startLine": 882,
+        "startChar": 0,
+        "endLine": 885,
+        "endChar": 8
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7321f36d_af4d7cf0",
@@ -123,6 +236,30 @@
       "writtenOn": "2021-06-09T14:42:29Z",
       "side": 1,
       "message": "nit: value \u003d isolate-\u003efactory()-\u003eundefined_value()",
+      "range": {
+        "startLine": 1007,
+        "startChar": 16,
+        "endLine": 1007,
+        "endChar": 75
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d44c026_54461b57",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7321f36d_af4d7cf0",
       "range": {
         "startLine": 1007,
         "startChar": 16,
@@ -156,6 +293,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bba2c21_e09d3401",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f6fbcb0_b83c7b9b",
+      "range": {
+        "startLine": 1052,
+        "startChar": 0,
+        "endLine": 1054,
+        "endChar": 3
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c36c565f_b2c0a6e9",
@@ -169,6 +330,30 @@
       "writtenOn": "2021-06-09T14:42:29Z",
       "side": 1,
       "message": "This should probably be AllowGarbageCollection no? (I\u0027m never 100% which one is to be used)",
+      "range": {
+        "startLine": 1061,
+        "startChar": 2,
+        "endLine": 1061,
+        "endChar": 24
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3726da1_9528bfba",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Done (but Disallow instead of Allow)",
+      "parentUuid": "c36c565f_b2c0a6e9",
       "range": {
         "startLine": 1061,
         "startChar": 2,
@@ -202,6 +387,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3558a6ae_5de485c8",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4fd8b9d_a2e3cf65",
+      "range": {
+        "startLine": 1062,
+        "startChar": 1,
+        "endLine": 1064,
+        "endChar": 3
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a20b6fa8_56c0aaea",
@@ -225,6 +434,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bb9e874_bdbd758b",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Added a clarifying comment above",
+      "parentUuid": "a20b6fa8_56c0aaea",
+      "range": {
+        "startLine": 1065,
+        "startChar": 63,
+        "endLine": 1065,
+        "endChar": 64
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e81fcd1a_7ffbbf58",
@@ -238,6 +471,30 @@
       "writtenOn": "2021-06-09T14:42:29Z",
       "side": 1,
       "message": "nit: we\u0027re not allocating here, use a raw reference to speed up this loop",
+      "range": {
+        "startLine": 1066,
+        "startChar": 23,
+        "endLine": 1066,
+        "endChar": 43
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed5f43bb_13421308",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e81fcd1a_7ffbbf58",
       "range": {
         "startLine": 1066,
         "startChar": 23,
@@ -273,6 +530,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c67a521b_34916e53",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e18fa3e4_971df2e9",
+      "range": {
+        "startLine": 1069,
+        "startChar": 0,
+        "endLine": 1069,
+        "endChar": 55
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f31e1145_8c636440",
         "filename": "src/web-snapshot/web-snapshot.cc",
         "patchSetId": 1
@@ -284,6 +565,30 @@
       "writtenOn": "2021-06-09T14:42:29Z",
       "side": 1,
       "message": "So no in-object properties yet, right?",
+      "range": {
+        "startLine": 1079,
+        "startChar": 0,
+        "endLine": 1079,
+        "endChar": 20
+      },
+      "revId": "83b2ba815374c10ced397738c164061f868a5a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cda40ff6_3d2493a1",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-06-10T06:50:39Z",
+      "side": 1,
+      "message": "Yep, adding a TODO above",
+      "parentUuid": "f31e1145_8c636440",
       "range": {
         "startLine": 1079,
         "startChar": 0,
