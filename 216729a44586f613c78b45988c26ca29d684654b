@@ -50,6 +50,57 @@
       "message": "src/wasm/* LGTM",
       "revId": "216729a44586f613c78b45988c26ca29d684654b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "833f040d_628adf61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-10T05:35:58Z",
+      "side": 1,
+      "message": "Looked mostly at builtins.h",
+      "revId": "216729a44586f613c78b45988c26ca29d684654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb3a6eda_909e5f9f",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-10T05:35:58Z",
+      "side": 1,
+      "message": "Why change all these to the more uncommon \u003c\u003d loop style? Also, weren\u0027t range-based for loops also discussed at some point? (IMO these new loops are not an improvement over the int-based originals.)",
+      "revId": "216729a44586f613c78b45988c26ca29d684654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49006c3b_6c27d363",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-10T05:35:58Z",
+      "side": 1,
+      "message": "qq would defining operator+ instead fix both ++ and the \u0027+\u0027 case in L83?",
+      "revId": "216729a44586f613c78b45988c26ca29d684654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
