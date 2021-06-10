@@ -15,6 +15,7 @@
 #include "src/compiler/code-assembler.h"
 #include "src/objects/arguments.h"
 #include "src/objects/bigint.h"
+#include "src/objects/cell.h"
 #include "src/objects/feedback-vector.h"
 #include "src/objects/js-function.h"
 #include "src/objects/objects.h"

@@ -5200,9 +5200,11 @@ void ImplementationVisitor::GenerateExportedMacrosAssembler(
     cc_contents << "#include \"src/objects/js-regexp-string-iterator.h\"\n";
     cc_contents << "#include \"src/objects/ordered-hash-table.h\"\n";
     cc_contents << "#include \"src/objects/property-descriptor-object.h\"\n";
+    cc_contents << "#include \"src/objects/stack-frame-info.h\"\n";
     cc_contents << "#include \"src/objects/swiss-name-dictionary.h\"\n";
     cc_contents << "#include \"src/objects/synthetic-module.h\"\n";
     cc_contents << "#include \"src/objects/template-objects.h\"\n";
+    cc_contents << "#include \"src/objects/torque-defined-classes.h\"\n";
     {
       IfDefScope intl_scope(cc_contents, "V8_INTL_SUPPORT");
       cc_contents << "#include \"src/objects/js-break-iterator.h\"\n";
