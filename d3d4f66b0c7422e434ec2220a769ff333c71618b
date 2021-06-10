@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "015dccf6_adb63577",
+        "filename": "gitiles.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T11:48:23Z",
+      "side": 1,
+      "message": "nit: poller\nalso below in several places.",
+      "range": {
+        "startLine": 14,
+        "startChar": 11,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52adad24_aee292cf",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T11:48:23Z",
+      "side": 1,
+      "message": "Maybe I\u0027m missing something here. Why does this work for version\u003d\u003dNone? Does this pass presubmit? I would have thought the list to get empty in this case.",
+      "range": {
+        "startLine": 15,
+        "startChar": 16,
+        "endLine": 15,
+        "endChar": 56
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25c8b025_b0cf7be2",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T11:48:23Z",
+      "side": 1,
+      "message": "Design suggestion: You only use .items() on this dictionary, which suggests that you actually want a list instead. Maybe add the bucket keys into the struct above and refer to it from the items when iterating through a list instead?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 18
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b573cb45_a1c9367d",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T11:48:23Z",
+      "side": 1,
+      "message": "nit: rename to main in separate CL. Different project though...",
+      "range": {
+        "startLine": 19,
+        "startChar": 69,
+        "endLine": 19,
+        "endChar": 75
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
