@@ -122,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fc5c5c7_17943957",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T15:15:38Z",
+      "side": 1,
+      "message": "ok, let me do that for Builtin and RootIndex, so we will have the same pattern there.",
+      "parentUuid": "b7815d5e_cf61b31b",
+      "revId": "216729a44586f613c78b45988c26ca29d684654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49006c3b_6c27d363",
@@ -153,6 +171,24 @@
       "side": 1,
       "message": "ah right, let me try this.",
       "parentUuid": "49006c3b_6c27d363",
+      "revId": "216729a44586f613c78b45988c26ca29d684654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5621b246_7b3d8117",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T15:15:38Z",
+      "side": 1,
+      "message": "ah no, l83 is Builtin + int, that still won\u0027t work cleanly.\n\nI will try to clean this up a bit further and remove some more int uses.",
+      "parentUuid": "b0868f7a_cfdc0c08",
       "revId": "216729a44586f613c78b45988c26ca29d684654b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

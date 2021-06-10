@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fee083d_62966b69",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T15:15:38Z",
+      "side": 1,
+      "message": "ah neat, marked it down for follow-up work.",
+      "parentUuid": "59956098_e0ceb6f4",
+      "range": {
+        "startLine": 278,
+        "startChar": 6,
+        "endLine": 278,
+        "endChar": 27
+      },
+      "revId": "bec6f4a40681086a8700ad5160c0e655db449c6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eebd97cf_3327e25b",
@@ -92,6 +116,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9bfb242_f09a9477",
+        "filename": "src/heap/factory-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T15:15:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eebd97cf_3327e25b",
+      "revId": "bec6f4a40681086a8700ad5160c0e655db449c6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc404338_4274f1e7",
@@ -105,6 +147,24 @@
       "writtenOn": "2021-06-10T10:48:38Z",
       "side": 1,
       "message": ": int32_t;",
+      "revId": "bec6f4a40681086a8700ad5160c0e655db449c6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02cd778b_458d1c29",
+        "filename": "src/init/setup-isolate.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T15:15:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc404338_4274f1e7",
       "revId": "bec6f4a40681086a8700ad5160c0e655db449c6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -132,6 +192,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c362a60b_cf413bd0",
+        "filename": "src/objects/code.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T15:15:38Z",
+      "side": 1,
+      "message": "SGTM, I had doubts about this one as well.\nreverting to builtin_id",
+      "parentUuid": "1452e503_fe56d241",
+      "range": {
+        "startLine": 303,
+        "startChar": 17,
+        "endLine": 303,
+        "endChar": 24
+      },
+      "revId": "bec6f4a40681086a8700ad5160c0e655db449c6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81c4f9b5_9afa1d83",
@@ -145,6 +229,30 @@
       "writtenOn": "2021-06-10T10:48:38Z",
       "side": 1,
       "message": "Bikeshedding: I think it\u0027s less confusing to call these accessors builtin_id().",
+      "range": {
+        "startLine": 338,
+        "startChar": 17,
+        "endLine": 338,
+        "endChar": 24
+      },
+      "revId": "bec6f4a40681086a8700ad5160c0e655db449c6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02cf7b27_d6a7fe6a",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T15:15:38Z",
+      "side": 1,
+      "message": "ACK, reverting to builtin_id;",
+      "parentUuid": "81c4f9b5_9afa1d83",
       "range": {
         "startLine": 338,
         "startChar": 17,
