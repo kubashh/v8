@@ -49,6 +49,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a25fc91a_28ce2df9",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T12:27:09Z",
+      "side": 1,
+      "message": "redundant code? I assume version is either None already or something that evaluates to non-false.",
+      "range": {
+        "startLine": 12,
+        "startChar": 25,
+        "endLine": 12,
+        "endChar": 33
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "52adad24_aee292cf",
         "filename": "lib/lib.star",
         "patchSetId": 3
