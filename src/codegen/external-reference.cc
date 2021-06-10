@@ -1167,6 +1167,24 @@ FUNCTION_REFERENCE(atomic_pair_compare_exchange_function,
 // Note that {value} is an int64_t irrespective of the store size. This is on
 // purpose to keep the function signatures the same accross stores. The
 // static_cast inside the method will ignore the bits which will not be stored.
+static void tsan_relaxed_store_8_bits(Address addr, int64_t value) {
+#if V8_TARGET_ARCH_X64
+  base::Relaxed_Store(reinterpret_cast<base::Atomic8*>(addr),
+                      static_cast<base::Atomic8>(value));
+#else
+  UNREACHABLE();
+#endif  // V8_TARGET_ARCH_X64
+}
+
+static void tsan_relaxed_store_16_bits(Address addr, int64_t value) {
+#if V8_TARGET_ARCH_X64
+  base::Relaxed_Store(reinterpret_cast<base::Atomic16*>(addr),
+                      static_cast<base::Atomic16>(value));
+#else
+  UNREACHABLE();
+#endif  // V8_TARGET_ARCH_X64
+}
+
 static void tsan_relaxed_store_32_bits(Address addr, int64_t value) {
 #if V8_TARGET_ARCH_X64
     base::Relaxed_Store(reinterpret_cast<base::Atomic32*>(addr),
@@ -1187,6 +1205,10 @@ static void tsan_relaxed_store_64_bits(Address addr, int64_t value) {
 
 #endif  // V8_IS_TSAN
 
+IF_TSAN(FUNCTION_REFERENCE, tsan_relaxed_store_function_8_bits,
+        tsan_relaxed_store_8_bits)
+IF_TSAN(FUNCTION_REFERENCE, tsan_relaxed_store_function_16_bits,
+        tsan_relaxed_store_16_bits)
 IF_TSAN(FUNCTION_REFERENCE, tsan_relaxed_store_function_32_bits,
         tsan_relaxed_store_32_bits)
 IF_TSAN(FUNCTION_REFERENCE, tsan_relaxed_store_function_64_bits,

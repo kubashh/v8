@@ -2136,9 +2136,15 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       size_t index = 0;
       Operand operand = i.MemoryOperand(&index);
       if (HasImmediateInput(instr, index)) {
-        __ movb(operand, Immediate(i.InputInt8(index)));
+        Immediate value = Immediate(i.InputInt8(index));
+        __ movb(operand, value);
+        EmitTSANStoreOOLIfNeeded(zone(), this, tasm(), operand, value, i,
+                                 DetermineStubCallMode(), kInt8Size);
       } else {
+        Register value = i.InputRegister(index);
         __ movb(operand, i.InputRegister(index));
+        EmitTSANStoreOOLIfNeeded(zone(), this, tasm(), operand, value, i,
+                                 DetermineStubCallMode(), kInt8Size);
       }
       EmitWordLoadPoisoningIfNeeded(this, opcode, instr, i);
       break;
@@ -2170,9 +2176,15 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       size_t index = 0;
       Operand operand = i.MemoryOperand(&index);
       if (HasImmediateInput(instr, index)) {
-        __ movw(operand, Immediate(i.InputInt16(index)));
+        Immediate value = Immediate(i.InputInt16(index));
+        __ movw(operand, value);
+        EmitTSANStoreOOLIfNeeded(zone(), this, tasm(), operand, value, i,
+                                 DetermineStubCallMode(), kInt16Size);
       } else {
+        Register value = i.InputRegister(index);
         __ movw(operand, i.InputRegister(index));
+        EmitTSANStoreOOLIfNeeded(zone(), this, tasm(), operand, value, i,
+                                 DetermineStubCallMode(), kInt16Size);
       }
       EmitWordLoadPoisoningIfNeeded(this, opcode, instr, i);
       break;
