@@ -136,6 +136,19 @@ class Builtins {
                  : Builtin::kTSANRelaxedStore64SaveFP;
     }
   }
+
+  static Builtin GetTSANRelaxedLoadStub(SaveFPRegsMode fp_mode, int size) {
+    if (size == kInt32Size) {
+      return fp_mode == SaveFPRegsMode::kIgnore
+                 ? Builtin::kTSANRelaxedLoad32IgnoreFP
+                 : Builtin::kTSANRelaxedLoad32SaveFP;
+    } else {
+      CHECK_EQ(size, kInt64Size);
+      return fp_mode == SaveFPRegsMode::kIgnore
+                 ? Builtin::kTSANRelaxedLoad64IgnoreFP
+                 : Builtin::kTSANRelaxedLoad64SaveFP;
+    }
+  }
 #endif  // V8_IS_TSAN
 
   // Convenience wrappers.
