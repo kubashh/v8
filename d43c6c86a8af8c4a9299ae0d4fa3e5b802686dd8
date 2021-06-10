@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "034a7134_587137b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Thanks for the comments! The test that Camillo requested are coming soon (tomorrow).\n\n@Georg PTAL again, thanks!",
+      "revId": "d43c6c86a8af8c4a9299ae0d4fa3e5b802686dd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

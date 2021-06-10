@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19cacac1_93efede9",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e5f2613_0f9b3e2b",
+      "range": {
+        "startLine": 4426,
+        "startChar": 34,
+        "endLine": 4426,
+        "endChar": 47
+      },
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f530e2e7_1be78d90",
@@ -87,6 +111,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41404860_55698fd5",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f530e2e7_1be78d90",
+      "range": {
+        "startLine": 4427,
+        "startChar": 49,
+        "endLine": 4427,
+        "endChar": 58
+      },
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "358d6a97_b92f3d5a",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Reworded, PTAL again.",
+      "parentUuid": "e5d44cb8_1084aa70",
+      "range": {
+        "startLine": 4427,
+        "startChar": 8,
+        "endLine": 4427,
+        "endChar": 28
+      },
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a80d0d8_a83cf7d5",
@@ -100,6 +172,24 @@
       "writtenOn": "2021-06-09T09:34:17Z",
       "side": 1,
       "message": "How about making this function take a CTypeInfo as argument instead of conversion_map?",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99a292e4_076afe8e",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "The conversion map is intended to specify the mapping for all types used by this embedded, e.g. something like { float: restricted, double: restricted, int64: BigInt }. So FastArgConversion is not intended to describe a single argument (such as CTypeInfo), but rather all possible arguments for all CFunctions created by this embedder.",
+      "parentUuid": "0a80d0d8_a83cf7d5",
       "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -121,6 +211,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f577ee7_30281c3c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5006,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce7da220_f8ea0f23",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5dcae4f4_21c3bee3",
@@ -134,6 +242,24 @@
       "writtenOn": "2021-06-09T09:34:17Z",
       "side": 1,
       "message": "I think it would be more natural to start this function by switching on the sequence type. In the IsSequence case you can then assert that GetType() is kVoid.",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "389424a2_c22966c3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5007,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5dcae4f4_21c3bee3",
       "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +281,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6fe820d_40f70c7c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5110,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ce6c64a_bffd8c45",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2e74a07_c01ce8fb",
@@ -168,6 +312,24 @@
       "writtenOn": "2021-06-09T09:34:17Z",
       "side": 1,
       "message": "This isn\u0027t needed.",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "098f2748_98c52bdd",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2e74a07_c01ce8fb",
       "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -195,6 +357,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40b100ff_952c2eb1",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84847273_dd4ae568",
+      "range": {
+        "startLine": 143,
+        "startChar": 6,
+        "endLine": 143,
+        "endChar": 23
+      },
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f719e38a_73c74221",
@@ -208,6 +394,24 @@
       "writtenOn": "2021-06-09T09:34:17Z",
       "side": 1,
       "message": "You can\u0027t expect that due to to fuzzing.",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99b3f761_a3483233",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f719e38a_73c74221",
       "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -231,6 +435,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ad49ccb_3671f4ac",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "But it will make the function slower if I remove it, no? I think it makes sense for int64_t, if this is what you meant. Let\u0027s discuss it tomorrow!",
+      "parentUuid": "04647c79_dc3ff796",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73c778d6_bdb4fff0",
         "filename": "src/numbers/conversions-inl.h",
         "patchSetId": 9
@@ -242,6 +464,24 @@
       "writtenOn": "2021-06-09T09:56:03Z",
       "side": 1,
       "message": "You are masking with a 64-bit value, so the result can cast to the minimal int64_t value -2^63. (In fact the masking is pointless because the mask has every bit set.)",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f30559e9_24e85b8d",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Good point, I removed the masking. PTAL again.",
+      "parentUuid": "73c778d6_bdb4fff0",
       "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -286,6 +526,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3742a68d_62a93747",
+        "filename": "test/mjsunit/compiler/fast-api-sequences.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Not really, thanks!",
+      "parentUuid": "7f1a154f_82ccf829",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1795d38_bf3f7dd8",
@@ -303,6 +561,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51479655_8b24222f",
+        "filename": "test/mjsunit/compiler/fast-api-sequences.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1795d38_bf3f7dd8",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb79278b_f6fd29a1",
@@ -316,6 +592,24 @@
       "writtenOn": "2021-06-09T09:34:17Z",
       "side": 1,
       "message": "How about making the array an argument to your test function so that you can write something easier to grasp:\n\nassertEquals(3, add_all_sequence_smi([-42, 45]));",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd7b9894_0f51997d",
+        "filename": "test/mjsunit/compiler/fast-api-sequences.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-10T09:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb79278b_f6fd29a1",
       "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
