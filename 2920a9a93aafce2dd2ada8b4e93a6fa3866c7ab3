@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb1d9cb3_646d157a",
+        "filename": "src/objects/fixed-array-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T09:24:57Z",
+      "side": 1,
+      "message": "nit: I guess this is not really needed :P",
+      "range": {
+        "startLine": 538,
+        "startChar": 0,
+        "endLine": 538,
+        "endChar": 32
+      },
+      "revId": "2920a9a93aafce2dd2ada8b4e93a6fa3866c7ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de9310d_bb6da9f9",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4042,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-10T09:24:57Z",
+      "side": 1,
+      "message": "grazie!",
+      "range": {
+        "startLine": 4038,
+        "startChar": 0,
+        "endLine": 4042,
+        "endChar": 36
+      },
+      "revId": "2920a9a93aafce2dd2ada8b4e93a6fa3866c7ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
