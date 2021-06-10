@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92c9a8cb_789d0766",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T11:50:16Z",
+      "side": 1,
+      "message": "Since this is no refactoring, but changes the logic, please provide more details about what we change and why.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6e639f9_c291887d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T11:50:16Z",
+      "side": 1,
+      "message": "Al, could you also look at this CL?",
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
