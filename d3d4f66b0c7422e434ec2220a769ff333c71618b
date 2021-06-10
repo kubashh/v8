@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db8ef3b5_d08506aa",
+        "filename": "milo.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T15:10:32Z",
+      "side": 0,
+      "message": "This piece confuses me. Was that dead code?",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 34
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

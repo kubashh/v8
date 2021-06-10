@@ -56,6 +56,98 @@
       "message": "LGTM from my side",
       "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b95f55df_a1732686",
+        "filename": "lib/lib.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T15:10:32Z",
+      "side": 1,
+      "message": "Maybe we can make it explicit? Not that it ever changes and breaks our assumptions compared to other branches?",
+      "range": {
+        "startLine": 20,
+        "startChar": 99,
+        "endLine": 20,
+        "endChar": 101
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10687b01_97b3eed9",
+        "filename": "lib/lib.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T15:10:32Z",
+      "side": 1,
+      "message": "Alternatively, maybe just use the same lower priority for all branches for a start. There\u0027s no user-given reason why one branch should be tested faster than any other. Only the main branch needs to be fast due to ongoing development.\n\nAlso: If we have different prios, we might need different expiration timeouts and different alert profiles for each of the branches? Maybe it\u0027d be easier there if all were equal.",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 10
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14073b63_9cd9c1ce",
+        "filename": "lib/lib.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T15:10:32Z",
+      "side": 1,
+      "message": "As above, maybe pass in both cases and make main explicit.",
+      "range": {
+        "startLine": 245,
+        "startChar": 12,
+        "endLine": 245,
+        "endChar": 46
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4db200b7_b23908a6",
+        "filename": "milo.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-10T15:10:32Z",
+      "side": 1,
+      "message": "Optional follow up: I wonder how difficult it would be to also merge this one with the function below? It\u0027d be nice if e.g. branch.refs is universally correct for all branches, including main.\n\nThe remaining difference would be the title construction, which might not be too complex. Even there, a title_prefix or something could be explicitly part of the descriptor?",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 23
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
