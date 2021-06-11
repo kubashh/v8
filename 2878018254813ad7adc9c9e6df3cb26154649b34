@@ -214,6 +214,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "79567a3c_ab9c0587",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-11T07:46:52Z",
+      "side": 1,
+      "message": "Okay, that\u0027s also a viable option. I\u0027ll change the argument then, thanks!\nThis is not reflected though in the design doc (https://docs.google.com/document/d/1SAHn7d8M7CoazTd1laVF8gduFC_ikZWiYuytrR9c4Oc/edit#heading\u003dh.jw4qzchtw6tu, option d), so we should update that, I assume.",
+      "parentUuid": "53b61771_ff73b461",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ce7da220_f8ea0f23",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 9
@@ -489,6 +507,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a52e531_37b4a28c",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-11T07:46:52Z",
+      "side": 1,
+      "message": "Okay, I see. As far as I understand, it\u0027s a shortcut indeed, a fast path for certain cases. I\u0027d suggest that it stays here.",
+      "parentUuid": "14b27c27_1cdd8c23",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73c778d6_bdb4fff0",
         "filename": "src/numbers/conversions-inl.h",
         "patchSetId": 9
@@ -536,6 +572,24 @@
       "side": 1,
       "message": "That doesn\u0027t avoid the case where you multiply -1 with -2^63 and thus get undefined behavior.",
       "parentUuid": "f30559e9_24e85b8d",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37181fab_ba472de2",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-11T07:46:52Z",
+      "side": 1,
+      "message": "Okay, maybe I didn\u0027t get the purpose of the original code then. What kind of mask can we apply for the 64-bit case?",
+      "parentUuid": "695a50bd_767da417",
       "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
