@@ -83,6 +83,12 @@
 #include <windows.h>  // NOLINT
 #endif                // !defined(_WIN32) && !defined(_WIN64)
 
+#ifdef V8_OS_MACOSX
+// For sysctlbyname()
+#include <sys/sysctl.h>
+#include <sys/types.h>
+#endif  // V8_OS_MACOSX
+
 #ifndef DCHECK
 #define DCHECK(condition) assert(condition)
 #endif
@@ -370,6 +376,18 @@ base::Thread::Options GetThreadOptions(const char* name) {
   // OS-specific padding for thread startup code.  2Mbytes seems to be enough.
   return base::Thread::Options(name, 2 * kMB);
 }
+
+#ifdef V8_OS_MACOSX
+// https://developer.apple.com/documentation/apple_silicon/about_the_rosetta_translation_environment
+bool ProcessIsTranslated() {
+  int ret = 0;
+  size_t size = sizeof(ret);
+  if (sysctlbyname("sysctl.proc_translated", &ret, &size, nullptr, 0) == -1) {
+    return false;
+  }
+  return ret;
+}
+#endif  // V8_OS_MACOSX
 
 }  // namespace
 
@@ -4366,6 +4384,9 @@ bool Shell::SetOptions(int argc, char* argv[]) {
 #endif
       argv[i] = nullptr;
 #endif
+    } else if (strcmp(argv[i], "--reject-rosetta") == 0) {
+      options.reject_rosetta = true;
+      argv[i] = nullptr;
     }
   }
 
@@ -4937,6 +4958,14 @@ void Shell::WaitForRunningWorkers() {
 int Shell::Main(int argc, char* argv[]) {
   v8::base::EnsureConsoleOutput();
   if (!SetOptions(argc, argv)) return 1;
+
+#ifdef V8_OS_MACOSX
+  // Temporary code to help diagnose https://crbug.com/1210489
+  if (options.reject_rosetta && ProcessIsTranslated()) {
+    fprintf(stderr, "Running under rosetta not supported\n");
+    return 1;
+  }
+#endif  // V8_OS_MACOSX
 
   v8::V8::InitializeICUDefaultLocation(argv[0], options.icu_data_file);
 

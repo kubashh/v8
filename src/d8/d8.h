@@ -430,6 +430,7 @@ class ShellOptions {
       "experimental-d8-web-snapshot-api", false};
   DisallowReassignment<bool> compile_only = {"compile-only", false};
   DisallowReassignment<int> repeat_compile = {"repeat-compile", 1};
+  DisallowReassignment<bool> reject_rosetta = {"reject-rosetta", false};
 };
 
 class Shell : public i::AllStatic {
