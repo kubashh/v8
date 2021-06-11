@@ -33,6 +33,23 @@
       "message": "Hmm, feel free to land, though a preliminary semi-manual test doesn\u0027t flush out this new error:\nhttps://chromium-swarm.appspot.com/task?id\u003d54133bd459e7f310\n\nThis was spawend on a DTK manually with a build based on this CL from the opt-in trybot below.",
       "revId": "f345f49c69bf31005ef62b89c79c65f161cec6e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecf852fb_94739976",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-11T12:51:12Z",
+      "side": 1,
+      "message": "Update: per crbug.com/1210489#c23, I think we can probably abandon this CL. (Feel free to land it though if you prefer.)",
+      "revId": "f345f49c69bf31005ef62b89c79c65f161cec6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
