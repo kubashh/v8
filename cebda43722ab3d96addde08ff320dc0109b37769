@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d28aa3b8_9d0e4b6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-06-11T17:08:40Z",
+      "side": 1,
+      "message": "lgtm\n\nI\u0027m curious: what determines that Collations should may_remove \u003d\u003d true, but Collations and TimeZones should have may_remove \u003d\u003d false?",
+      "revId": "cebda43722ab3d96addde08ff320dc0109b37769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
