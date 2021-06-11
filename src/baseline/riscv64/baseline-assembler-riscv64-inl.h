@@ -12,7 +12,6 @@ namespace v8 {
 namespace internal {
 namespace baseline {
 
-constexpr Register kTestReg = t0;
 class BaselineAssembler::ScratchRegisterScope {
  public:
   explicit ScratchRegisterScope(BaselineAssembler* assembler)
@@ -141,7 +140,7 @@ void BaselineAssembler::TestAndBranch(Register value, int mask, Condition cc,
   ScratchRegisterScope temps(this);
   Register tmp = temps.AcquireScratch();
   __ And(tmp, value, Operand(mask));
-  __ Branch(target, AsMasmCondition(cc), tmp, Operand(mask));
+  __ Branch(target, AsMasmCondition(cc), tmp, Operand(zero_reg));
 }
 
 void BaselineAssembler::JumpIf(Condition cc, Register lhs, const Operand& rhs,
