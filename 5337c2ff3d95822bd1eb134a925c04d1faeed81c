@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cad7f751_a0067a80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-11T12:21:26Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "5337c2ff3d95822bd1eb134a925c04d1faeed81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a3c60a6_10554aa6",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-11T12:21:26Z",
+      "side": 1,
+      "message": "In this case we could do a full stack merge instead. I don\u0027t think it is worth adding a check for this case though, since this rule is more for consistency purposes but not actually needed by producers. The producers could just emit a regular block instead.",
+      "range": {
+        "startLine": 1274,
+        "startChar": 49,
+        "endLine": 1275,
+        "endChar": 30
+      },
+      "revId": "5337c2ff3d95822bd1eb134a925c04d1faeed81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
