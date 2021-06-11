@@ -1497,8 +1497,10 @@
       'priority': 35,
     },
     'tests': [
-      {'name': 'd8testing', 'shards': 2},
-      {'name': 'd8testing', 'variant': 'extra', 'shards': 2},
+      # --reject-rosetta is a temporary flag to help diagnose
+      # https://crbug.com/1210489
+      {'name': 'd8testing', 'test_args': ['--reject-rosetta'], 'shards': 2},
+      {'name': 'd8testing', 'test_args': ['--reject-rosetta'], 'variant': 'extra', 'shards': 2},
     ],
   },
   'V8 Mac - arm64 - sim - debug': {
