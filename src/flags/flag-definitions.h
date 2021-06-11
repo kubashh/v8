@@ -278,9 +278,10 @@ DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
     "harmony ResizableArrayBuffer / GrowableSharedArrayBuffer")
 
 #ifdef V8_INTL_SUPPORT
-#define HARMONY_INPROGRESS(V) \
-  HARMONY_INPROGRESS_BASE(V)  \
-  V(harmony_intl_displaynames_v2, "Intl.DisplayNames v2")
+#define HARMONY_INPROGRESS(V)                             \
+  HARMONY_INPROGRESS_BASE(V)                              \
+  V(harmony_intl_displaynames_v2, "Intl.DisplayNames v2") \
+  V(harmony_intl_enumeration, "Intl Enumberation API")
 #else
 #define HARMONY_INPROGRESS(V) HARMONY_INPROGRESS_BASE(V)
 #endif
