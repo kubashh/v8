@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6d2135b_23426203",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-11T11:13:17Z",
+      "side": 1,
+      "message": "LGTM % presubmit.",
+      "revId": "9b21960a8c3299641eab497e7d2e94d56844fc1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33d9ab6f_956f8adf",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-11T11:13:17Z",
+      "side": 1,
+      "message": "nit: 80col (please run `git cl format`)\n\nMaybe this particular line would be more readable if written as:\n\n  if (mapped \u003d\u003d substitutions.end() || *(mapped-\u003esecond.c_str()) !\u003d \u0027\\0\u0027)) {\n    count++;\n  }",
+      "range": {
+        "startLine": 477,
+        "startChar": 80,
+        "endLine": 477,
+        "endChar": 96
+      },
+      "revId": "9b21960a8c3299641eab497e7d2e94d56844fc1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
