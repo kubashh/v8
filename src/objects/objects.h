@@ -338,6 +338,9 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
 
   static Handle<Object> WrapForRead(Isolate* isolate, Handle<Object> object,
                                     Representation representation);
+  static Handle<Object> WrapForRead(LocalIsolate* isolate,
+                                    Handle<Object> object,
+                                    Representation representation);
 
   // Returns true if the object is of the correct type to be used as a
   // implementation of a JSObject's elements.

@@ -228,6 +228,57 @@ class ConstantInDictionaryPrototypeChainDependency final
   PropertyKind kind_;
 };
 
+class PropertyValueSameDependency final : public CompilationDependency {
+ public:
+  PropertyValueSameDependency(JSHeapBroker* broker, const JSObjectRef& o,
+                              Representation representation, FieldIndex index,
+                              const ObjectRef& current_value)
+      : broker_(broker),
+        object_(o),
+        original_map_(o.map()),
+        representation_(representation),
+        index_(index),
+        value_(current_value) {}
+
+  bool IsValid() const override {
+    // Ensure it's still valid to read at this location.
+    // read property at offset_ in object_
+    if (object_.object()->map() != *original_map_.object()) {
+      TRACE_BROKER_MISSING(broker_,
+                           "Map change detected in " << object_.object());
+      return false;
+    }
+    Handle<Object> property_value =
+        JSObject::FastPropertyAt(object_.object(), representation_, index_);
+    Object saved_value = *value_.object();
+    if (representation_.IsDouble() &&
+        (!property_value->IsHeapNumber() || !value_.object()->IsHeapNumber() ||
+         Handle<HeapNumber>::cast(property_value)->value_as_bits() !=
+             Handle<HeapNumber>::cast(value_.object())->value_as_bits())) {
+      TRACE_BROKER_MISSING(broker_, "Constant Double property value changed in "
+                                        << object_.object() << " at FieldIndex "
+                                        << index_.property_index());
+      return false;
+    } else if (*property_value != saved_value) {
+      TRACE_BROKER_MISSING(broker_, "Constant property value changed in "
+                                        << object_.object() << " at FieldIndex "
+                                        << index_.property_index());
+      return false;
+    }
+    return true;
+  }
+
+  void Install(const MaybeObjectHandle& code) const override {}
+
+ private:
+  JSHeapBroker* const broker_;
+  JSObjectRef object_;
+  MapRef original_map_;
+  Representation representation_;
+  FieldIndex index_;
+  ObjectRef value_;
+};
+
 class TransitionDependency final : public CompilationDependency {
  public:
   explicit TransitionDependency(const MapRef& map) : map_(map) {
@@ -665,6 +716,17 @@ void CompilationDependencies::DependOnOwnConstantElement(
   DCHECK(holder.should_access_heap() || broker_->is_concurrent_inlining());
   RecordDependency(
       zone_->New<OwnConstantElementDependency>(holder, index, element));
+}
+
+void CompilationDependencies::DependOnPropertyValueSame(
+    const JSObjectRef& o, Representation representation, FieldIndex index,
+    const ObjectRef& current_value) {
+  // We only need to record a dependency if we are running on the background
+  // thread.
+  if (!broker_->IsMainThread()) {
+    RecordDependency(zone_->New<PropertyValueSameDependency>(
+        broker_, o, representation, index, current_value));
+  }
 }
 
 bool CompilationDependencies::Commit(Handle<Code> code) {

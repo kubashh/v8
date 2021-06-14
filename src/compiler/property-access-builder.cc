@@ -213,6 +213,10 @@ Node* PropertyAccessBuilder::TryFoldLoadConstantDataField(
   if (!value.has_value()) {
     return nullptr;
   }
+  dependencies()->DependOnPropertyValueSame(holder_ref,
+                                            access_info.field_representation(),
+                                            access_info.field_index(), *value);
+
   return jsgraph()->Constant(*value);
 }
 

@@ -348,6 +348,29 @@ Object JSObject::RawFastPropertyAt(FieldIndex index, RelaxedLoadTag tag) const {
   return TaggedField<Object>::Relaxed_Load(cage_base, *this, index.offset());
 }
 
+base::Optional<Object> JSObject::ThreadSafeRawFastPropertyAt(
+    FieldIndex index, PropertyArrayVerifier verifier) const {
+  PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
+  // The acquire load is helpful here should the caller wish to do a
+  // subsequent load of the map to verify the object shape is unchanged.
+  if (index.is_inobject()) {
+    return TaggedField<Object>::Acquire_Load(cage_base, *this, index.offset());
+  } else {
+    Object properties_or_hash = TaggedField<Object>::Acquire_Load(
+        cage_base, *this, kPropertiesOrHashOffset);
+    if (!properties_or_hash.IsSmi() &&
+        properties_or_hash != GetReadOnlyRoots(cage_base).empty_fixed_array() &&
+        verifier(properties_or_hash)) {
+      PropertyArray properties = PropertyArray::cast(properties_or_hash);
+      const int array_index = index.outobject_array_index();
+      if (array_index < properties.length()) {
+        return properties.get(array_index);
+      }
+    }
+  }
+  return {};
+}
+
 void JSObject::RawFastInobjectPropertyAtPut(FieldIndex index, Object value,
                                             WriteBarrierMode mode) {
   DCHECK(index.is_inobject());
