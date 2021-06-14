@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1adf3b6a_1f77276d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T07:42:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cdd7535_d1ce7a37",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "015dccf6_adb63577",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-06-10T11:48:23Z",
       "side": 1,
       "message": "nit: poller\nalso below in several places.",
+      "range": {
+        "startLine": 14,
+        "startChar": 11,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25efb936_5591cf74",
+        "filename": "gitiles.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T07:42:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "015dccf6_adb63577",
       "range": {
         "startLine": 14,
         "startChar": 11,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7712c612_03350b53",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T07:42:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a25fc91a_28ce2df9",
+      "range": {
+        "startLine": 12,
+        "startChar": 25,
+        "endLine": 12,
+        "endChar": 33
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52adad24_aee292cf",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-06-10T11:48:23Z",
       "side": 1,
       "message": "Maybe I\u0027m missing something here. Why does this work for version\u003d\u003dNone? Does this pass presubmit? I would have thought the list to get empty in this case.",
+      "range": {
+        "startLine": 15,
+        "startChar": 16,
+        "endLine": 15,
+        "endChar": 56
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2c35d54_f0d2a0d3",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T07:42:54Z",
+      "side": 1,
+      "message": "Ups! Thanks for catching it 😊",
+      "parentUuid": "52adad24_aee292cf",
       "range": {
         "startLine": 15,
         "startChar": 16,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39aad1b9_e5f6de81",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T07:42:54Z",
+      "side": 1,
+      "message": "Sounds right. Thanks!",
+      "parentUuid": "25c8b025_b0cf7be2",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 18
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b573cb45_a1c9367d",
@@ -129,6 +249,30 @@
       "writtenOn": "2021-06-10T11:48:23Z",
       "side": 1,
       "message": "nit: rename to main in separate CL. Different project though...",
+      "range": {
+        "startLine": 19,
+        "startChar": 69,
+        "endLine": 19,
+        "endChar": 75
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c345e98e_21f28ef9",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T07:42:54Z",
+      "side": 1,
+      "message": "We will have to come back for this one, yes.",
+      "parentUuid": "b573cb45_a1c9367d",
       "range": {
         "startLine": 19,
         "startChar": 69,
