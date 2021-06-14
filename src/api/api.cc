@@ -10230,6 +10230,60 @@ void InvokeFinalizationRegistryCleanupFromTask(
   }
 }
 
+#ifdef V8_OS_WIN
+template <>
+int ConvertDouble(double d) {
+  return internal::DoubleToInt32(d);
+}
+#else   // V8_OS_WIN
+template <>
+int32_t ConvertDouble(double d) {
+  return internal::DoubleToInt32(d);
+}
+#endif  // V8_OS_WIN
+
+template <>
+uint32_t ConvertDouble(double d) {
+  return internal::DoubleToUint32(d);
+}
+
+template <>
+float ConvertDouble(double d) {
+  return internal::DoubleToFloat32(d);
+}
+
+template <>
+double ConvertDouble(double d) {
+  return d;
+}
+
+template <>
+int64_t ConvertDouble(double d) {
+  return internal::DoubleToInt64(d);
+}
+
+template <>
+uint64_t ConvertDouble(double d) {
+  return internal::DoubleToUint64(d);
+}
+
+template <>
+bool ConvertDouble(double d) {
+  // Implements https://tc39.es/ecma262/#sec-toboolean.
+  if (std::isnan(d)) {
+    return false;
+  }
+  if (d == 0) {
+    return false;
+  }
+  return true;
+}
+
+template <typename T>
+T ConvertDouble(double d) {
+  UNREACHABLE();
+}
+
 // Undefine macros for jumbo build.
 #undef SET_FIELD_WRAPPED
 #undef NEW_STRING
