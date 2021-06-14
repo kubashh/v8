@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b21e09e_93aa1e9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-14T08:39:28Z",
+      "side": 1,
+      "message": "ptal (this is on top of a few other CLs)",
+      "revId": "dc731b53e52bc0db874a5c7a577c02aa6d09a365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4729372a_ed0895d0",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-14T08:39:28Z",
+      "side": 1,
+      "message": "Only this is new, the rest is pure refactoring.",
+      "range": {
+        "startLine": 1182,
+        "startChar": 0,
+        "endLine": 1184,
+        "endChar": 60
+      },
+      "revId": "dc731b53e52bc0db874a5c7a577c02aa6d09a365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
