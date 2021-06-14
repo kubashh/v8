@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e16183b_449e80a9",
+        "filename": "tools/system-analyzer/log/tick.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-14T12:44:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1852e288_6eed75b7",
+      "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bba14ce_63280dfa",
@@ -65,6 +83,24 @@
       "writtenOn": "2021-06-14T09:58:03Z",
       "side": 1,
       "message": "nit: missing semicolon",
+      "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6d32748_70985da9",
+        "filename": "tools/system-analyzer/log/tick.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-14T12:44:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bba14ce_63280dfa",
       "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84a0942a_e89bad2d",
+        "filename": "tools/system-analyzer/view/timeline/timeline-track-base.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-14T12:44:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a482861_620126b3",
+      "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db709906_5c5bd606",
@@ -99,6 +153,24 @@
       "writtenOn": "2021-06-14T09:58:03Z",
       "side": 1,
       "message": "nit: missing semicolon",
+      "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7c58388_8f8b1a00",
+        "filename": "tools/system-analyzer/view/timeline/timeline-track-base.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-14T12:44:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db709906_5c5bd606",
       "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03f12465_2e3ab306",
+        "filename": "tools/system-analyzer/view/timeline/timeline-track-tick.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-14T12:44:39Z",
+      "side": 1,
+      "message": "Let\u0027s see what the auto-formatter says about this :P",
+      "parentUuid": "94fe5e90_c3ab37dd",
+      "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59927796_ff7fb7a8",
@@ -137,6 +227,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb69cdcc_23de274a",
+        "filename": "tools/system-analyzer/view/timeline/timeline-track-tick.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-14T12:44:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59927796_ff7fb7a8",
+      "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a3740c6_5710a917",
@@ -150,6 +258,24 @@
       "writtenOn": "2021-06-14T09:58:03Z",
       "side": 1,
       "message": "nit: Maybe factor out some of the code that is shared between _getFlameForEvent and _getEntryForEvent into a helper.",
+      "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6619399_ede51962",
+        "filename": "tools/system-analyzer/view/timeline/timeline-track-tick.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-14T12:44:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3740c6_5710a917",
       "revId": "8c7eec4d809d06a45e5974303053285c1674de0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
