@@ -110,6 +110,33 @@ int32_t DoubleToInt32(double x) {
   return static_cast<int32_t>(d.Sign() * static_cast<int64_t>(bits));
 }
 
+inline int64_t DoubleToInt64(double x) {
+  if ((std::isfinite(x)) && (x <= std::numeric_limits<int64_t>::max()) &&
+      (x >= std::numeric_limits<int64_t>::min())) {
+    int64_t i = static_cast<int64_t>(x);
+    if (FastI642D(i) == x) return i;
+  }
+  Double d(x);
+  int exponent = d.Exponent();
+  uint64_t bits;
+  if (exponent < 0) {
+    if (exponent <= -Double::kSignificandSize) return 0;
+    bits = d.Significand() >> -exponent;
+  } else {
+    if (exponent > 63) return 0;
+    bits = (d.Significand() << exponent);
+    int64_t bits_int64 = static_cast<int64_t>(bits);
+    if (bits_int64 == std::numeric_limits<int64_t>::min()) {
+      return d.Sign() == 1 ? bits_int64 : -bits_int64;
+    }
+  }
+  return static_cast<int64_t>(d.Sign() * static_cast<int64_t>(bits));
+}
+
+inline uint64_t DoubleToUint64(double x) {
+  return static_cast<uint64_t>(DoubleToInt64(x));
+}
+
 bool DoubleToSmiInteger(double value, int* smi_int_value) {
   if (!IsSmiDouble(value)) return false;
   *smi_int_value = FastD2I(value);
