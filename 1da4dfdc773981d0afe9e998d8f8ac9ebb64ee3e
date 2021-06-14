@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bf257ef_290663b7",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-14T15:06:27Z",
+      "side": 1,
+      "message": "Can you take a careful look at the calls to {UpdateNativeModuleCache} and {InitializeAfterDeserialization} here? I guess it is okay to avoid calling {InitializeAfterDeserialization} if there is an error, is it not? If deserialization fails here, does it even make sense to create a compilation state here?\n\nThe other question is, should {UpdateNativeModuleCache} even be called if the {missing_functions} vector is not empty? I guess if compilation continues later, {UpdateNativeModuleCache} would be called anyways by the normal compilation pipeline.",
+      "revId": "1da4dfdc773981d0afe9e998d8f8ac9ebb64ee3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
