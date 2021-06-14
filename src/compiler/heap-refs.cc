@@ -4610,9 +4610,20 @@ base::Optional<bool> JSGlobalObjectRef::IsDetached() const {
 
 base::Optional<PropertyCellRef> JSGlobalObjectRef::GetPropertyCell(
     NameRef const& name, SerializationPolicy policy) const {
-  if (data_->should_access_heap()) {
-    return GetPropertyCellFromHeap(broker(), name.object());
+  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
+    base::Optional<PropertyCell> maybe_cell =
+        ConcurrentLookupIterator::TryGetPropertyCell(
+            broker()->isolate(), broker()->local_isolate_or_isolate(),
+            *object(), name.object(), [=](Object o) {
+              return o.IsHeapObject() ? broker()->ObjectMayBeUninitialized(
+                                            HeapObject::cast(o))
+                                      : false;
+            });
+
+    if (!maybe_cell.has_value()) return {};
+    return TryMakeRef(broker(), *maybe_cell);
   }
+
   ObjectData* property_cell_data = data()->AsJSGlobalObject()->GetPropertyCell(
       broker(), name.data(), policy);
   return TryMakeRef<PropertyCell>(broker(), property_cell_data);

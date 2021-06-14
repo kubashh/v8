@@ -40,6 +40,23 @@ void AccessorPair::set(AccessorComponent component, Object value) {
   }
 }
 
+Object AccessorPair::getter() const {
+  return TorqueGeneratedAccessorPair<AccessorPair, Struct>::getter();
+}
+
+Object AccessorPair::getter(PtrComprCageBase cage_base) const {
+  return TorqueGeneratedAccessorPair<AccessorPair, Struct>::getter(cage_base);
+}
+
+Object AccessorPair::getter(RelaxedLoadTag tag) const {
+  PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
+  return AccessorPair::getter(cage_base, tag);
+}
+
+Object AccessorPair::getter(PtrComprCageBase cage_base, RelaxedLoadTag) const {
+  return TaggedField<Object, kGetterOffset>::Relaxed_Load(cage_base, *this);
+}
+
 void AccessorPair::SetComponents(Object getter, Object setter) {
   if (!getter.IsNull()) set_getter(getter);
   if (!setter.IsNull()) set_setter(setter);

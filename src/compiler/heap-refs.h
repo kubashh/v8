@@ -1013,14 +1013,6 @@ class JSGlobalObjectRef : public JSObjectRef {
   Handle<JSGlobalObject> object() const;
 
   base::Optional<bool> IsDetached() const;
-
-  // If {serialize} is false:
-  //   If the property is known to exist as a property cell (on the global
-  //   object), return that property cell. Otherwise (not known to exist as a
-  //   property cell or known not to exist as a property cell) return nothing.
-  // If {serialize} is true:
-  //   Like above but potentially access the heap and serialize the necessary
-  //   information.
   base::Optional<PropertyCellRef> GetPropertyCell(
       NameRef const& name, SerializationPolicy policy =
                                SerializationPolicy::kAssumeSerialized) const;
