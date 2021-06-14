@@ -242,6 +242,17 @@ Handle<Object> Object::WrapForRead(Isolate* isolate, Handle<Object> object,
       HeapNumber::cast(*object).value_as_bits());
 }
 
+Handle<Object> Object::WrapForRead(LocalIsolate* isolate, Handle<Object> object,
+                                   Representation representation) {
+  DCHECK(!object->IsUninitialized(isolate));
+  if (!representation.IsDouble()) {
+    DCHECK(object->FitsRepresentation(representation));
+    return object;
+  }
+  return isolate->factory()->NewHeapNumberFromBits<AllocationType::kOld>(
+      HeapNumber::cast(*object).value_as_bits());
+}
+
 MaybeHandle<JSReceiver> Object::ToObjectImpl(Isolate* isolate,
                                              Handle<Object> object,
                                              const char* method_name) {
