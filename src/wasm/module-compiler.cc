@@ -553,7 +553,8 @@ class CompilationStateImpl {
 
   // Initialize the compilation progress after deserialization. This is needed
   // for recompilation (e.g. for tier down) to work later.
-  void InitializeCompilationProgressAfterDeserialization();
+  void InitializeCompilationProgressAfterDeserialization(
+      const std::vector<int>& missing_functions);
 
   // Initialize recompilation of the whole module: Setup compilation progress
   // for recompilation and add the respective compilation units. The callback is
@@ -813,6 +814,11 @@ void CompilationState::AddCallback(CompilationState::callback_t callback) {
   return Impl(this)->AddCallback(std::move(callback));
 }
 
+void CompilationState::WaitForBaselineFinished() {
+  Impl(this)->WaitForCompilationEvent(
+      CompilationEvent::kFinishedBaselineCompilation);
+}
+
 void CompilationState::WaitForTopTierFinished() {
   Impl(this)->WaitForCompilationEvent(
       CompilationEvent::kFinishedTopTierCompilation);
@@ -820,8 +826,10 @@ void CompilationState::WaitForTopTierFinished() {
 
 void CompilationState::SetHighPriority() { Impl(this)->SetHighPriority(); }
 
-void CompilationState::InitializeAfterDeserialization() {
-  Impl(this)->InitializeCompilationProgressAfterDeserialization();
+void CompilationState::InitializeAfterDeserialization(
+    const std::vector<int>& missing_functions) {
+  Impl(this)->InitializeCompilationProgressAfterDeserialization(
+      missing_functions);
 }
 
 bool CompilationState::failed() const { return Impl(this)->failed(); }
@@ -994,11 +1002,10 @@ class CompilationUnitBuilder {
     tiering_units_.emplace_back(func_index, tiers.top_tier, kNoDebugging);
   }
 
-  void AddRecompilationUnit(int func_index, ExecutionTier tier) {
+  void AddRecompilationUnit(int func_index, ExecutionTier tier,
+                            ForDebugging for_debugging) {
     // For recompilation, just treat all units like baseline units.
-    baseline_units_.emplace_back(
-        func_index, tier,
-        tier == ExecutionTier::kLiftoff ? kForDebugging : kNoDebugging);
+    baseline_units_.emplace_back(func_index, tier, for_debugging);
   }
 
   bool Commit() {
@@ -1431,7 +1438,8 @@ void InitializeCompilationUnits(Isolate* isolate, NativeModule* native_module) {
       lazy_native_module_modification_scope;
   for (uint32_t func_index = start; func_index < end; func_index++) {
     if (prefer_liftoff) {
-      builder.AddRecompilationUnit(func_index, ExecutionTier::kLiftoff);
+      builder.AddRecompilationUnit(func_index, ExecutionTier::kLiftoff,
+                                   kForDebugging);
       continue;
     }
     CompileStrategy strategy = GetCompileStrategy(
@@ -2897,19 +2905,41 @@ void CompilationStateImpl::InitializeCompilationProgress(
   TriggerCallbacks();
 }
 
-void CompilationStateImpl::InitializeCompilationProgressAfterDeserialization() {
+void CompilationStateImpl::InitializeCompilationProgressAfterDeserialization(
+    const std::vector<int>& missing_functions) {
   auto* module = native_module_->module();
-  base::MutexGuard guard(&callbacks_mutex_);
-  DCHECK(compilation_progress_.empty());
   constexpr uint8_t kProgressAfterDeserialization =
       RequiredBaselineTierField::encode(ExecutionTier::kTurbofan) |
       RequiredTopTierField::encode(ExecutionTier::kTurbofan) |
       ReachedTierField::encode(ExecutionTier::kTurbofan);
-  finished_events_.Add(CompilationEvent::kFinishedExportWrappers);
-  finished_events_.Add(CompilationEvent::kFinishedBaselineCompilation);
-  finished_events_.Add(CompilationEvent::kFinishedTopTierCompilation);
-  compilation_progress_.assign(module->num_declared_functions,
-                               kProgressAfterDeserialization);
+  if (missing_functions.empty()) {
+    base::MutexGuard guard(&callbacks_mutex_);
+    DCHECK(compilation_progress_.empty());
+    finished_events_.Add(CompilationEvent::kFinishedExportWrappers);
+    finished_events_.Add(CompilationEvent::kFinishedBaselineCompilation);
+    finished_events_.Add(CompilationEvent::kFinishedTopTierCompilation);
+    compilation_progress_.assign(module->num_declared_functions,
+                                 kProgressAfterDeserialization);
+  } else {
+    CompilationUnitBuilder builder(native_module_);
+    {
+      base::MutexGuard guard(&callbacks_mutex_);
+      compilation_progress_.assign(module->num_declared_functions,
+                                   kProgressAfterDeserialization);
+      for (int func_index : missing_functions) {
+        builder.AddRecompilationUnit(func_index, ExecutionTier::kLiftoff,
+                                     kNoDebugging);
+        compilation_progress_[func_index] =
+            RequiredTopTierField::encode(ExecutionTier::kLiftoff) |
+            RequiredBaselineTierField::encode(ExecutionTier::kLiftoff) |
+            ReachedTierField::encode(ExecutionTier::kNone);
+      }
+      outstanding_baseline_units_ = static_cast<int>(missing_functions.size());
+      outstanding_top_tier_functions_ =
+          static_cast<int>(missing_functions.size());
+    }
+    builder.Commit();
+  }
 }
 
 void CompilationStateImpl::InitializeRecompilation(
@@ -2976,7 +3006,9 @@ void CompilationStateImpl::InitializeRecompilation(
       int slot_index = function_index - imported;
       auto& progress = compilation_progress_[slot_index];
       progress = MissingRecompilationField::update(progress, true);
-      builder->AddRecompilationUnit(function_index, new_tier);
+      builder->AddRecompilationUnit(
+          function_index, new_tier,
+          new_tier == ExecutionTier::kLiftoff ? kForDebugging : kNoDebugging);
     }
   }
 
