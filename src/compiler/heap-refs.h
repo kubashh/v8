@@ -82,7 +82,7 @@ enum class RefSerializationKind {
   /* Subtypes of JSObject */                                              \
   V(JSArray, RefSerializationKind::kBackgroundSerialized)                 \
   V(JSBoundFunction, RefSerializationKind::kSerialized)                   \
-  V(JSDataView, RefSerializationKind::kSerialized)                        \
+  V(JSDataView, RefSerializationKind::kBackgroundSerialized)              \
   V(JSFunction, RefSerializationKind::kSerialized)                        \
   V(JSGlobalObject, RefSerializationKind::kBackgroundSerialized)          \
   V(JSGlobalProxy, RefSerializationKind::kBackgroundSerialized)           \

@@ -736,12 +736,18 @@ class ArrayBoilerplateDescriptionData : public HeapObjectData {
 class JSDataViewData : public JSObjectData {
  public:
   JSDataViewData(JSHeapBroker* broker, ObjectData** storage,
-                 Handle<JSDataView> object);
+                 Handle<JSDataView> object,
+                 ObjectDataKind kind = kSerializedHeapObject)
+      : JSObjectData(broker, storage, object, kind) {
+    if (!broker->is_concurrent_inlining()) {
+      byte_length_ = object->byte_length();
+    }
+  }
 
   size_t byte_length() const { return byte_length_; }
 
  private:
-  size_t const byte_length_;
+  size_t byte_length_ = 0;  // Only valid if not concurrent inlining.
 };
 
 class JSBoundFunctionData : public JSObjectData {
@@ -1806,11 +1812,6 @@ class ScriptContextTableData : public FixedArrayData {
                          Handle<ScriptContextTable> object, ObjectDataKind kind)
       : FixedArrayData(broker, storage, object, kind) {}
 };
-
-JSDataViewData::JSDataViewData(JSHeapBroker* broker, ObjectData** storage,
-                               Handle<JSDataView> object)
-    : JSObjectData(broker, storage, object),
-      byte_length_(object->byte_length()) {}
 
 JSBoundFunctionData::JSBoundFunctionData(JSHeapBroker* broker,
                                          ObjectData** storage,
@@ -3341,7 +3342,8 @@ BIMODAL_ACCESSOR_WITH_FLAG(JSBoundFunction, JSReceiver, bound_target_function)
 BIMODAL_ACCESSOR_WITH_FLAG(JSBoundFunction, Object, bound_this)
 BIMODAL_ACCESSOR_WITH_FLAG(JSBoundFunction, FixedArray, bound_arguments)
 
-BIMODAL_ACCESSOR_C(JSDataView, size_t, byte_length)
+// Immutable after initialization.
+BIMODAL_ACCESSOR_WITH_FLAG_C(JSDataView, size_t, byte_length)
 
 BIMODAL_ACCESSOR_C(JSFunction, bool, has_feedback_vector)
 BIMODAL_ACCESSOR_C(JSFunction, bool, has_initial_map)
