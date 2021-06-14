@@ -4,7 +4,7 @@
 
 load("//definitions.star", "versions")
 
-def branch_descriptor(name, poller_name, refs, version_tag = None, display = None):
+def branch_descriptor(name, poller_name, refs, version_tag = None, display = None, priority = None):
     version = None
     if version_tag:
         version = versions[version_tag].replace(".", "\\.")
@@ -15,16 +15,23 @@ def branch_descriptor(name, poller_name, refs, version_tag = None, display = Non
         poller_name = poller_name,
         display = display,
         refs = refs,
+        priority = priority,
     )
 
 branch_descriptors = [
-    branch_descriptor("ci", "v8-trigger", ["refs/heads/master"]),  # master
+    branch_descriptor(
+        "ci",
+        "v8-trigger",
+        ["refs/heads/master"],
+        priority = 30,  # default
+    ),  # master
     branch_descriptor(
         "ci.br.beta",
         "v8-trigger-br-beta",
         ["refs/branch-heads/%s"],
         "beta",
         "Beta",
+        50,
     ),
     branch_descriptor(
         "ci.br.stable",
@@ -32,6 +39,7 @@ branch_descriptors = [
         ["refs/branch-heads/%s"],
         "stable",
         "Stable",
+        50,
     ),
     branch_descriptor(
         "ci.br.extended",
@@ -39,6 +47,7 @@ branch_descriptors = [
         ["refs/branch-heads/%s"],
         "extended",
         "Extended",
+        50,
     ),
 ]
 
@@ -243,6 +252,7 @@ def multibranch_builder(**kwargs):
                 notifies.append("v8 tree closer")
                 args["notifies"] = notifies
         else:
+            args["priority"] = branch.priority
             args["notifies"] = ["beta/stable notifier"]
             if _builder_is_not_supported(branch.name, first_branch_version):
                 continue
