@@ -1459,5 +1459,48 @@ ConcurrentLookupIterator::TryGetOwnConstantElement(
   UNREACHABLE();
 }
 
+// static
+base::Optional<PropertyCell> ConcurrentLookupIterator::TryGetPropertyCell(
+    Isolate* isolate, LocalIsolate* local_isolate, JSGlobalObject holder,
+    Handle<Name> name,
+    std::function<bool(Object)> object_may_be_uninitialized) {
+  DisallowGarbageCollection no_gc;
+
+  // This method reimplements the following sequence in a concurrent setting:
+  //
+  // LookupIterator it(holder, isolate, name, LookupIterator::OWN);
+  // it.TryLookupCachedProperty();
+  // if (it.state() == LookupIterator::DATA) it.GetPropertyCell();
+  //
+  // Unlike on the main thread, we cannot trust values accessed from the
+  // global dictionary due to relaxed semantics.
+
+  GlobalDictionary dict = holder.global_dictionary(kAcquireLoad);
+
+  base::Optional<PropertyCell> cell =
+      dict.TryFindPropertyCellForConcurrentLookupIterator(
+          isolate, name, kRelaxedLoad, object_may_be_uninitialized);
+  if (!cell.has_value()) return {};
+
+  if (cell->property_details().kind() == kAccessor) {
+    Object maybe_accessor_pair = cell->value(kAcquireLoad);
+    if (!maybe_accessor_pair.IsAccessorPair()) return {};
+
+    base::Optional<Name> maybe_cached_property_name =
+        FunctionTemplateInfo::TryGetCachedPropertyName(
+            isolate, AccessorPair::cast(maybe_accessor_pair)
+                         .getter(isolate, kRelaxedLoad));
+    if (!maybe_cached_property_name.has_value()) return {};
+
+    cell = dict.TryFindPropertyCellForConcurrentLookupIterator(
+        isolate, handle(*maybe_cached_property_name, local_isolate),
+        kRelaxedLoad, object_may_be_uninitialized);
+    if (!cell.has_value()) return {};
+    if (cell->property_details().kind() != kData) return {};
+  }
+
+  return cell;
+}
+
 }  // namespace internal
 }  // namespace v8
