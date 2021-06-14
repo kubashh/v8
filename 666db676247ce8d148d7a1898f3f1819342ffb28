@@ -33,6 +33,24 @@
       "message": "LGTM.\n\nMight be good to see whether https://crrev.com/c/2959613 is effective before landing this though, in case there\u0027s a chance of making the problem worse.",
       "revId": "666db676247ce8d148d7a1898f3f1819342ffb28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7883b6c0_675346e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-14T12:49:44Z",
+      "side": 1,
+      "message": "As discussed offline, we do not finch --future currently. It\u0027s only used for testing (on more bots, and in ClusterFuzz), so this CL increases the chance to catch bugs, but should not influence any users (except those that manually enabled the \"Future V8 VM features\" feature).\n\nThus landing now.",
+      "parentUuid": "eedb59e2_5320936e",
+      "revId": "666db676247ce8d148d7a1898f3f1819342ffb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
