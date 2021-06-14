@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ff6d32b9_ceaafbbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T08:25:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92c9a8cb_789d0766",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a6e639f9_c291887d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c1af062_6205865b",
+        "filename": "lib/lib.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T08:25:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b95f55df_a1732686",
+      "range": {
+        "startLine": 20,
+        "startChar": 99,
+        "endLine": 20,
+        "endChar": 101
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10687b01_97b3eed9",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-06-10T15:10:32Z",
       "side": 1,
       "message": "Alternatively, maybe just use the same lower priority for all branches for a start. There\u0027s no user-given reason why one branch should be tested faster than any other. Only the main branch needs to be fast due to ongoing development.\n\nAlso: If we have different prios, we might need different expiration timeouts and different alert profiles for each of the branches? Maybe it\u0027d be easier there if all were equal.",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 10
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9370db5_7689e478",
+        "filename": "lib/lib.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T08:25:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10687b01_97b3eed9",
       "range": {
         "startLine": 26,
         "startChar": 8,
@@ -127,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4e9fad0_826ed5c1",
+        "filename": "lib/lib.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T08:25:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14073b63_9cd9c1ce",
+      "range": {
+        "startLine": 245,
+        "startChar": 12,
+        "endLine": 245,
+        "endChar": 46
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4db200b7_b23908a6",
@@ -140,6 +236,30 @@
       "writtenOn": "2021-06-10T15:10:32Z",
       "side": 1,
       "message": "Optional follow up: I wonder how difficult it would be to also merge this one with the function below? It\u0027d be nice if e.g. branch.refs is universally correct for all branches, including main.\n\nThe remaining difference would be the title construction, which might not be too complex. Even there, a title_prefix or something could be explicitly part of the descriptor?",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 23
+      },
+      "revId": "3ff3e48119e7398a2e1b049bf0be829cca57169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "185a5911_62285302",
+        "filename": "milo.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T08:25:50Z",
+      "side": 1,
+      "message": "I think I can do that. Will add a CL to this chain.",
+      "parentUuid": "4db200b7_b23908a6",
       "range": {
         "startLine": 18,
         "startChar": 4,

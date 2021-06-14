@@ -22,6 +22,30 @@
       },
       "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11758474_a7313e0f",
+        "filename": "milo.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T08:25:50Z",
+      "side": 0,
+      "message": "the function got moved and refactored; you can find it a bit above",
+      "parentUuid": "db8ef3b5_d08506aa",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 34
+      },
+      "revId": "d3d4f66b0c7422e434ec2220a769ff333c71618b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
