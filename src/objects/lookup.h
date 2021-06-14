@@ -329,6 +329,16 @@ class ConcurrentLookupIterator final : public AllStatic {
       Object* result_out, Isolate* isolate, LocalIsolate* local_isolate,
       JSObject holder, FixedArrayBase elements, ElementsKind elements_kind,
       size_t index);
+
+  // This method reimplements the following sequence in a concurrent setting:
+  //
+  // LookupIterator it(holder, isolate, name, LookupIterator::OWN);
+  // it.TryLookupCachedProperty();
+  // if (it.state() == LookupIterator::DATA) it.GetPropertyCell();
+  V8_EXPORT_PRIVATE static base::Optional<PropertyCell> TryGetPropertyCell(
+      Isolate* isolate, LocalIsolate* local_isolate, JSGlobalObject holder,
+      Handle<Name> name,
+      std::function<bool(Object)> object_may_be_uninitialized);
 };
 
 }  // namespace internal
