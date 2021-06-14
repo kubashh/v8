@@ -16,6 +16,29 @@
       "message": "Thanks guys, PTAL again.",
       "revId": "67e458668676e091d3557373cce376d3e40b7908",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b32a027_b6b6cfe2",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T09:44:37Z",
+      "side": 1,
+      "message": "This is still signed overflow and thus undefined behavior, isn\u0027t it? You probably want return bits_int64 in either case.",
+      "range": {
+        "startLine": 130,
+        "startChar": 41,
+        "endLine": 130,
+        "endChar": 53
+      },
+      "revId": "67e458668676e091d3557373cce376d3e40b7908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
