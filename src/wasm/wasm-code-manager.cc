@@ -2288,8 +2288,6 @@ WasmCode* WasmCodeManager::LookupCode(Address pc) const {
   return candidate ? candidate->Lookup(pc) : nullptr;
 }
 
-// TODO(v8:7424): Code protection scopes are not yet supported with shared code
-// enabled and need to be revisited.
 NativeModuleModificationScope::NativeModuleModificationScope(
     NativeModule* native_module)
     : native_module_(native_module) {
