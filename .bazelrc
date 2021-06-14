@@ -1,0 +1,2 @@
+# V8 bazel port only supports clang
+build --repo_env=CC=clang
