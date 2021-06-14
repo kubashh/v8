@@ -33,6 +33,23 @@
       "message": "nicohartmann: Ping",
       "revId": "bf7155d5342714ca26bcad681cac7fbcd1e34085",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "120cceb8_7a7a1882",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-06-14T13:21:59Z",
+      "side": 1,
+      "message": "LGTM\n\nSorry for the delay, have been on vacation last week.",
+      "revId": "bf7155d5342714ca26bcad681cac7fbcd1e34085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
