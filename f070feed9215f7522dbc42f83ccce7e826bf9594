@@ -22,6 +22,30 @@
       },
       "revId": "f070feed9215f7522dbc42f83ccce7e826bf9594",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38bf78b1_126d3860",
+        "filename": "lib/lib.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-06-14T11:23:07Z",
+      "side": 1,
+      "message": "I\u0027ll fix this in the last refactoring CL",
+      "parentUuid": "676543a4_03e32850",
+      "range": {
+        "startLine": 237,
+        "startChar": 18,
+        "endLine": 237,
+        "endChar": 22
+      },
+      "revId": "f070feed9215f7522dbc42f83ccce7e826bf9594",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
