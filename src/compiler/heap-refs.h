@@ -1012,7 +1012,7 @@ class JSGlobalObjectRef : public JSObjectRef {
 
   Handle<JSGlobalObject> object() const;
 
-  bool IsDetached() const;
+  base::Optional<bool> IsDetached() const;
 
   // If {serialize} is false:
   //   If the property is known to exist as a property cell (on the global

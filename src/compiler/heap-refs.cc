@@ -3358,8 +3358,6 @@ BIMODAL_ACCESSOR(JSFunction, SharedFunctionInfo, shared)
 BIMODAL_ACCESSOR(JSFunction, FeedbackCell, raw_feedback_cell)
 BIMODAL_ACCESSOR(JSFunction, FeedbackVector, feedback_vector)
 
-BIMODAL_ACCESSOR_C(JSGlobalObject, bool, IsDetached)
-
 BIMODAL_ACCESSOR_WITH_FLAG_B(Map, bit_field2, elements_kind,
                              Map::Bits2::ElementsKindBits)
 BIMODAL_ACCESSOR_WITH_FLAG_B(Map, bit_field3, is_dictionary_map,
@@ -4594,6 +4592,20 @@ void FunctionTemplateInfoRef::SerializeCallCode() {
   }
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
   data()->AsFunctionTemplateInfo()->SerializeCallCode(broker());
+}
+
+base::Optional<bool> JSGlobalObjectRef::IsDetached() const {
+  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
+    // Immutable after initialization.
+    JSGlobalProxyRef global_proxy =
+        MakeRefAssumeMemoryFence(broker(), object()->global_proxy());
+    // See JSGlobalProxy::IsDetachedFrom.
+    base::Optional<HeapObjectRef> global_proxy_proto =
+        global_proxy.map().prototype();
+    if (!global_proxy_proto.has_value()) return {};
+    return !global_proxy_proto->equals(*this);
+  }
+  return data()->AsJSGlobalObject()->IsDetached();
 }
 
 base::Optional<PropertyCellRef> JSGlobalObjectRef::GetPropertyCell(
