@@ -2288,6 +2288,7 @@ WasmCode* WasmCodeManager::LookupCode(Address pc) const {
   return candidate ? candidate->Lookup(pc) : nullptr;
 }
 
+#if !(defined(V8_OS_MACOSX) && defined(V8_HOST_ARCH_ARM64))
 NativeModuleModificationScope::NativeModuleModificationScope(
     NativeModule* native_module)
     : native_module_(native_module) {
@@ -2318,6 +2319,7 @@ NativeModuleModificationScope::~NativeModuleModificationScope() {
     CHECK(success);
   }
 }
+#endif  // !(defined(V8_OS_MACOSX) && defined(V8_HOST_ARCH_ARM64))
 
 namespace {
 thread_local WasmCodeRefScope* current_code_refs_scope = nullptr;
