@@ -98,6 +98,12 @@
   'octane/typescript': [SKIP],
 }],  # 'predictable'
 
+['tsan', {
+  # Too slow.
+  'audio-beat-detection': [SLOW],
+  'audio-fft': [SLOW],
+}],  # 'tsan'
+
 ################################################################################
 ['variant == stress_snapshot', {
   '*': [SKIP],  # only relevant for mjsunit tests.
