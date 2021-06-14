@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "193dcf2b_cda175b7",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T13:57:51Z",
+      "side": 1,
+      "message": "This can\u0027t be represented as double, so when it is promoted to double for the comparison you get a larger numeric value (9223372036854775808). As a result of that the cast in line 116 is undefined behaviour.\n\nI\u0027d say let\u0027s keep the original shortcut for now.",
+      "range": {
+        "startLine": 114,
+        "startChar": 34,
+        "endLine": 114,
+        "endChar": 69
+      },
+      "revId": "228f11e97b56420d83536fd824cc3d40311328dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
