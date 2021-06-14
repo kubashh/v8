@@ -156,6 +156,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d411a62_dacea16f",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 5021,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:50:53Z",
+      "side": 1,
+      "message": "Move this check up.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dc31db6f_39be5a8d",
         "filename": "src/compiler/simplified-lowering.cc",
         "patchSetId": 17
@@ -184,6 +201,40 @@
       "writtenOn": "2021-06-14T14:39:58Z",
       "side": 1,
       "message": "You can use FastI2D again.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dc81b2a_2cade927",
+        "filename": "src/numbers/conversions.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:50:53Z",
+      "side": 1,
+      "message": "Let\u0027s remove this again.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd18cdf7_9d9eb4a1",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:50:53Z",
+      "side": 1,
+      "message": "Please also test with finite values outside of int range.",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
