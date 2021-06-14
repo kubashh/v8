@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "666db676247ce8d148d7a1898f3f1819342ffb28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eedb59e2_5320936e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-14T11:58:05Z",
+      "side": 1,
+      "message": "LGTM.\n\nMight be good to see whether https://crrev.com/c/2959613 is effective before landing this though, in case there\u0027s a chance of making the problem worse.",
+      "revId": "666db676247ce8d148d7a1898f3f1819342ffb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
