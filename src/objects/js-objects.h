@@ -655,6 +655,16 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
   // in-object properties.
   inline Object RawFastPropertyAt(FieldIndex index, RelaxedLoadTag) const;
 
+  // Specialized versions of the above for use by TurboFan. Only supports
+  // in-object properties.
+  inline Object RawFastPropertyAt(FieldIndex index, RelaxedLoadTag) const;
+
+  // Trying to combine everything here.
+  using PropertyArrayVerifier = std::function<bool(Object)>;
+  inline base::Optional<Object> ThreadSafeRawFastPropertyAt(
+      FieldIndex index,
+      PropertyArrayVerifier verifier = PropertyArrayVerifier()) const;
+
   inline void FastPropertyAtPut(FieldIndex index, Object value,
                                 WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
   inline void RawFastInobjectPropertyAtPut(

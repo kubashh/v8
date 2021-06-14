@@ -7950,6 +7950,11 @@ Reduction JSCallReducer::ReduceRegExpPrototypeTest(Node* node) {
     dependencies()->DependOnStablePrototypeChains(
         ai_exec.lookup_start_object_maps(), kStartAtPrototype,
         MakeRef(broker(), holder));
+
+    // Add dependency on the validity of the read of the constant property.
+    dependencies()->DependOnPropertyValueSame(holder_ref,
+                                              ai_exec.field_representation(),
+                                              ai_exec.field_index(), *constant);
   } else {
     // TODO(v8:11457) Support dictionary mode protoypes here.
     return inference.NoChange();
