@@ -16,6 +16,176 @@
       "message": "Thanks, PTAL again.",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d3fdc86_0c569c62",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "Please remove.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76168744_068a8e17",
+        "filename": "include/v8.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "Please remove.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05d0684c_25779519",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "Please take FixedArray as argument.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e41552a4_3fa24241",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "Please take FixedDoubleArray as argument.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ff8410e_ed875cc4",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "The return value seems unnecessary.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0b1f7ff_4c593fe1",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "else {\n return false;\n}\n\nAnd then remove lines 277 to 283 and the UNREACHABLE.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef9f275d_c096a0df",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 10278,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "return d !\u003d 0 \u0026\u0026 !std::isnan(d);",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c01af45_09c22926",
+        "filename": "src/api/api.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "Why is this here but all the others in the cc file?",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc31db6f_39be5a8d",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1795,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "Also here: please first switch on sequence type.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff0be3d0_27debcf9",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "You can use FastI2D again.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

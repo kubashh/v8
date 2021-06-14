@@ -320,6 +320,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12e2af8e_1b76db12",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5007,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-14T14:39:58Z",
+      "side": 1,
+      "message": "I meant moving it to the start of the function (basically first switch on sequence type, then on type where needed).",
+      "parentUuid": "389424a2_c22966c3",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ce6c64a_bffd8c45",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 9
