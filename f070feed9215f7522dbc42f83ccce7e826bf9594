@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "676543a4_03e32850",
+        "filename": "lib/lib.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-06-14T11:21:17Z",
+      "side": 1,
+      "message": "nit: Maybe keep the name bucket_name as it otherwise sounds like a branch name. Or branch.bucket if short is needed?",
+      "range": {
+        "startLine": 237,
+        "startChar": 18,
+        "endLine": 237,
+        "endChar": 22
+      },
+      "revId": "f070feed9215f7522dbc42f83ccce7e826bf9594",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
