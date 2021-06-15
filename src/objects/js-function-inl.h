@@ -141,16 +141,13 @@ AbstractCode JSFunction::abstract_code(IsolateT* isolate) {
 
 int JSFunction::length() { return shared().length(); }
 
-Code JSFunction::code() const {
-  return Code::cast(RELAXED_READ_FIELD(*this, kCodeOffset));
+DEF_GETTER(JSFunction, code, Code) {
+  return TaggedField<Code, kCodeOffset>::Relaxed_Load(cage_base, *this);
 }
 
-void JSFunction::set_code(Code value) {
-  DCHECK(!ObjectInYoungGeneration(value));
+void JSFunction::set_code(Code value, WriteBarrierMode mode) {
   RELAXED_WRITE_FIELD(*this, kCodeOffset, value);
-#ifndef V8_DISABLE_WRITE_BARRIERS
-  WriteBarrier::Marking(*this, RawField(kCodeOffset), value);
-#endif
+  CONDITIONAL_WRITE_BARRIER(*this, kCodeOffset, value, mode);
 }
 
 RELEASE_ACQUIRE_ACCESSORS(JSFunction, code, Code, kCodeOffset)
