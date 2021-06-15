@@ -98,6 +98,15 @@
   'octane/typescript': [SKIP],
 }],  # 'predictable'
 
+['tsan', {
+  # Too slow.
+  'kraken/audio-beat-detection': [SLOW],
+  'kraken/audio-dft': [SLOW],
+  'kraken/audio-fft': [SLOW],
+  'kraken/audio-oscillator': [SLOW],
+  'octane/regexp': [SLOW],
+}],  # 'tsan'
+
 ################################################################################
 ['variant == stress_snapshot', {
   '*': [SKIP],  # only relevant for mjsunit tests.
