@@ -156,6 +156,7 @@
  *   - float64_t
  * Currently supported argument types:
  *  - pointer to an embedder type
+ *  - JavaScript array of primitive types
  *  - bool
  *  - int32_t
  *  - uint32_t
@@ -176,7 +177,7 @@
  * passes NaN values as-is, i.e. doesn't normalize them.
  *
  * To be supported types:
- *  - arrays of C types
+ *  - TypedArrays and ArrayBuffers
  *  - arrays of embedder types
  *
  *

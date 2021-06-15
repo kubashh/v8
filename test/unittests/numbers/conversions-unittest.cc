@@ -72,6 +72,66 @@ TEST_F(ConversionsTest, DoubleToCString) {
   }
 }
 
+struct DoubleInt32Pair {
+  double number;
+  int integer;
+};
+
+static DoubleInt32Pair double_int32_pairs[] = {
+    {0.0, 0},
+    {-0.0, 0},
+    {std::numeric_limits<double>::quiet_NaN(), 0},
+    {std::numeric_limits<double>::infinity(), 0},
+    {-std::numeric_limits<double>::infinity(), 0},
+    {3.14, 3},
+    {static_cast<double>(kMinInt), kMinInt},
+    {static_cast<double>(kMaxInt), kMaxInt},
+    {kMaxSafeInteger, -1},
+    {-kMaxSafeInteger, 1},
+};
+
+TEST_F(ConversionsTest, DoubleToInt32) {
+  for (size_t i = 0; i < arraysize(double_int32_pairs); i++) {
+    ASSERT_EQ(DoubleToInt32(double_int32_pairs[i].number),
+              double_int32_pairs[i].integer);
+  }
+}
+
+struct DoubleInt64Pair {
+  double number;
+  int64_t integer;
+};
+
+static constexpr uint64_t kUint64AllBitsSet =
+    static_cast<uint64_t>(int64_t{-1});
+// Min/max integer values representable by 52 bits of mantissa and 1 sign bit.
+static constexpr int64_t kMinSafeInteger =
+    static_cast<int64_t>(kUint64AllBitsSet << 53);
+
+static DoubleInt64Pair double_int64_pairs[] = {
+    {0.0, 0},
+    {-0.0, 0},
+    {std::numeric_limits<double>::quiet_NaN(), 0},
+    {std::numeric_limits<double>::infinity(), 0},
+    {-std::numeric_limits<double>::infinity(), 0},
+    {3.14, 3},
+    {static_cast<double>(kMinSafeInteger), kMinSafeInteger},
+    {kMaxSafeInteger, static_cast<int64_t>(kMaxSafeIntegerUint64)},
+    {static_cast<double>(std::numeric_limits<int64_t>::min()),
+     std::numeric_limits<int64_t>::min()},
+    // Max int64_t is not representable as a double, the closest is -2^63.
+    {static_cast<double>(std::numeric_limits<int64_t>::max()),
+     std::numeric_limits<int64_t>::min()},
+    // So we test for a smaller number, representable as a double.
+    {static_cast<double>((1ull << 63) - 1024), (1ull << 63) - 1024}};
+
+TEST_F(ConversionsTest, DoubleToInt64) {
+  for (size_t i = 0; i < arraysize(double_int64_pairs); i++) {
+    ASSERT_EQ(DoubleToInt64(double_int64_pairs[i].number),
+              double_int64_pairs[i].integer);
+  }
+}
+
 }  // namespace interpreter
 }  // namespace internal
 }  // namespace v8
