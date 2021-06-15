@@ -1657,6 +1657,105 @@ MaybeHandle<JSArray> Intl::GetCanonicalLocales(Isolate* isolate,
   return CreateArrayFromList(isolate, maybe_ll.FromJust(), attr);
 }
 
+namespace {
+
+MaybeHandle<JSArray> AvailableCollations(Isolate* isolate) {
+  UErrorCode status = U_ZERO_ERROR;
+  std::unique_ptr<icu::StringEnumeration> enumeration(
+      icu::Collator::getKeywordValues("collation", status));
+  if (U_FAILURE(status)) {
+    THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
+                    JSArray);
+  }
+  const std::map<std::string, std::string> substitutions(
+      {{"standard", ""}, {"search", ""}});
+  return Intl::ToJSArray(isolate, enumeration.get(), substitutions, true);
+}
+
+MaybeHandle<JSArray> AvailableCurrencies(Isolate* isolate) {
+  Factory* factory = isolate->factory();
+  Handle<JSArray> array = factory->NewJSArray(0);
+  return array;
+}
+
+MaybeHandle<JSArray> AvailableNumberingSystems(Isolate* isolate) {
+  UErrorCode status = U_ZERO_ERROR;
+  std::unique_ptr<icu::StringEnumeration> enumeration(
+      icu::NumberingSystem::getAvailableNames(status));
+  if (U_FAILURE(status)) {
+    THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
+                    JSArray);
+  }
+  const std::map<std::string, std::string> substitutions({});
+  // Need to filter out isAlgorithmic
+  return Intl::ToJSArray(isolate, enumeration.get(), substitutions, false);
+}
+
+MaybeHandle<JSArray> AvailableTimeZones(Isolate* isolate) {
+  Factory* factory = isolate->factory();
+  Handle<JSArray> array = factory->NewJSArray(0);
+  return array;
+}
+
+MaybeHandle<JSArray> AvailableUnits(Isolate* isolate) {
+  Factory* factory = isolate->factory();
+  Handle<JSArray> array = factory->NewJSArray(0);
+  return array;
+}
+
+}  // namespace
+
+// ecma-402 #sec-intl.supportedvaluesof
+MaybeHandle<JSArray> Intl::SupportedValuesOf(Isolate* isolate,
+                                             Handle<Object> key_obj) {
+  // 1. 1. Let key be ? ToString(key).
+  Handle<String> key_str;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, key_str,
+                             Object::ToString(isolate, key_obj), JSArray);
+  std::unique_ptr<char[]> key_cstr = key_str->ToCString();
+
+  // 2. If key is "calendar", then
+  if (strcmp("calendar", key_cstr.get()) == 0) {
+    // a. Let list be ! AvailableCalendars( ).
+    return Intl::AvailableCalendars(isolate);
+  }
+  // 3. Else if key is "collation", then
+  if (strcmp("collation", key_cstr.get()) == 0) {
+    // a. Let list be ! AvailableCollations( ).
+    return AvailableCollations(isolate);
+  }
+  // 4. Else if key is "currency", then
+  if (strcmp("currency", key_cstr.get()) == 0) {
+    // a. Let list be ! AvailableCurrencies( ).
+    return AvailableCurrencies(isolate);
+  }
+  // 5. Else if key is "numberingSystem", then
+  if (strcmp("numberingSystem", key_cstr.get()) == 0) {
+    // a. Let list be ! AvailableNumberingSystems( ).
+    return AvailableNumberingSystems(isolate);
+  }
+  // 6. Else if key is "timeZone", then
+  if (strcmp("timeZone", key_cstr.get()) == 0) {
+    // a. Let list be ! AvailableTimeZones( ).
+    return AvailableTimeZones(isolate);
+  }
+  // 7. Else if key is "unit", then
+  if (strcmp("unit", key_cstr.get()) == 0) {
+    // a. Let list be ! AvailableUnits( ).
+    return AvailableUnits(isolate);
+  }
+  // 8. Else,
+  // a. Throw a RangeError exception.
+  // 9. Return ! CreateArrayFromList( list ).
+
+  THROW_NEW_ERROR(
+      isolate,
+      NewRangeError(MessageTemplate::kInvalid,
+                    isolate->factory()->NewStringFromStaticChars("key"),
+                    key_str),
+      JSArray);
+}
+
 // ECMA 402 Intl.*.supportedLocalesOf
 MaybeHandle<JSObject> Intl::SupportedLocalesOf(
     Isolate* isolate, const char* method,
@@ -2238,6 +2337,53 @@ MaybeHandle<JSReceiver> Intl::CoerceOptionsToObject(Isolate* isolate,
                              Object::ToObject(isolate, options, service),
                              JSReceiver);
   return Handle<JSReceiver>::cast(options);
+}
+
+MaybeHandle<JSArray> Intl::ToJSArray(
+    Isolate* isolate, icu::StringEnumeration* enumeration,
+    const std::map<std::string, std::string>& substitutions, bool may_remove) {
+  UErrorCode status = U_ZERO_ERROR;
+  Factory* factory = isolate->factory();
+
+  int32_t count = 0;
+  if (may_remove) {
+    // If we may remove items, then we need to go one pass first to count how
+    // many items we will insert before we allocate the fixed array.
+    for (const char* item = enumeration->next(nullptr, status);
+         U_SUCCESS(status) && item != nullptr;
+         item = enumeration->next(nullptr, status)) {
+      auto mapped = substitutions.find(item);
+      if ((mapped == substitutions.end()) ||
+          (*(mapped->second.c_str()) != '\0')) {
+        count++;
+      }
+    }
+    enumeration->reset(status);
+  } else {
+    count = enumeration->count(status);
+  }
+  Handle<FixedArray> fixed_array = factory->NewFixedArray(count);
+
+  int32_t index = 0;
+  for (const char* item = enumeration->next(nullptr, status);
+       U_SUCCESS(status) && item != nullptr;
+       item = enumeration->next(nullptr, status)) {
+    auto mapped = substitutions.find(item);
+    if (mapped != substitutions.end()) {
+      item = mapped->second.c_str();
+      if (*item == '\0') {
+        continue;
+      }
+    }
+    Handle<String> str = factory->NewStringFromAsciiChecked(item);
+    fixed_array->set(index++, *str);
+  }
+  CHECK(index == count);
+  if (U_FAILURE(status)) {
+    THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
+                    JSArray);
+  }
+  return factory->NewJSArrayWithElements(fixed_array);
 }
 
 }  // namespace internal

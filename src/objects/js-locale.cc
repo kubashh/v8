@@ -460,58 +460,12 @@ MaybeHandle<JSLocale> JSLocale::Minimize(Isolate* isolate,
   return Construct(isolate, result);
 }
 
-MaybeHandle<JSArray> ToJSArray(
-    Isolate* isolate, icu::StringEnumeration* enumeration,
-    const std::map<std::string, std::string>& substitutions, bool may_remove) {
-  UErrorCode status = U_ZERO_ERROR;
-  Factory* factory = isolate->factory();
-
-  int32_t count = 0;
-  if (may_remove) {
-    // If we may remove items, then we need to go one pass first to count how
-    // many items we will insert before we allocate the fixed array.
-    for (const char* item = enumeration->next(nullptr, status);
-         U_SUCCESS(status) && item != nullptr;
-         item = enumeration->next(nullptr, status)) {
-      auto mapped = substitutions.find(item);
-      if ((mapped == substitutions.end()) ||
-          (*(mapped->second.c_str()) != '\0')) {
-        count++;
-      }
-    }
-    enumeration->reset(status);
-  } else {
-    count = enumeration->count(status);
-  }
-  Handle<FixedArray> fixed_array = factory->NewFixedArray(count);
-
-  int32_t index = 0;
-  for (const char* item = enumeration->next(nullptr, status);
-       U_SUCCESS(status) && item != nullptr;
-       item = enumeration->next(nullptr, status)) {
-    auto mapped = substitutions.find(item);
-    if (mapped != substitutions.end()) {
-      item = mapped->second.c_str();
-      if (*item == '\0') {
-        continue;
-      }
-    }
-    Handle<String> str = factory->NewStringFromAsciiChecked(item);
-    fixed_array->set(index++, *str);
-  }
-  CHECK(index == count);
-  if (U_FAILURE(status)) {
-    THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
-                    JSArray);
-  }
-  return factory->NewJSArrayWithElements(fixed_array);
-}
-
 template <typename T>
 MaybeHandle<JSArray> GetKeywordValuesFromLocale(
     Isolate* isolate, const char* key, const char* unicode_key,
     const icu::Locale& locale,
-    const std::map<std::string, std::string>& substitutions, bool may_remove) {
+    const std::map<std::string, std::string>& substitutions, bool commonly_used,
+    bool may_remove) {
   Factory* factory = isolate->factory();
   UErrorCode status = U_ZERO_ERROR;
   std::string ext =
@@ -524,21 +478,37 @@ MaybeHandle<JSArray> GetKeywordValuesFromLocale(
   }
   status = U_ZERO_ERROR;
   std::unique_ptr<icu::StringEnumeration> enumeration(
-      T::getKeywordValuesForLocale(key, locale, true, status));
+      T::getKeywordValuesForLocale(key, locale, commonly_used, status));
   if (U_FAILURE(status)) {
     THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
                     JSArray);
   }
-  return ToJSArray(isolate, enumeration.get(), substitutions, may_remove);
+  return Intl::ToJSArray(isolate, enumeration.get(), substitutions, may_remove);
 }
+
+namespace {
+
+MaybeHandle<JSArray> CalendarsForLocale(Isolate* isolate,
+                                        const icu::Locale& icu_locale,
+                                        bool commonly_used) {
+  const std::map<std::string, std::string> substitutions(
+      {{"gregorian", "gregory"}, {"ethiopic-amete-alem", "ethioaa"}});
+  return GetKeywordValuesFromLocale<icu::Calendar>(isolate, "calendar", "ca",
+                                                   icu_locale, substitutions,
+                                                   commonly_used, false);
+}
+
+}  // namespace
 
 MaybeHandle<JSArray> JSLocale::Calendars(Isolate* isolate,
                                          Handle<JSLocale> locale) {
   icu::Locale icu_locale(*(locale->icu_locale().raw()));
-  const std::map<std::string, std::string> substitutions(
-      {{"gregorian", "gregory"}, {"ethiopic-amete-alem", "ethioaa"}});
-  return GetKeywordValuesFromLocale<icu::Calendar>(
-      isolate, "calendar", "ca", icu_locale, substitutions, false);
+  return CalendarsForLocale(isolate, icu_locale, true);
+}
+
+MaybeHandle<JSArray> Intl::AvailableCalendars(Isolate* isolate) {
+  icu::Locale icu_locale("und");
+  return CalendarsForLocale(isolate, icu_locale, false);
 }
 
 MaybeHandle<JSArray> JSLocale::Collations(Isolate* isolate,
@@ -547,7 +517,7 @@ MaybeHandle<JSArray> JSLocale::Collations(Isolate* isolate,
   const std::map<std::string, std::string> substitutions(
       {{"standard", ""}, {"search", ""}});
   return GetKeywordValuesFromLocale<icu::Collator>(
-      isolate, "collations", "co", icu_locale, substitutions, true);
+      isolate, "collations", "co", icu_locale, substitutions, true, true);
 }
 
 MaybeHandle<JSArray> JSLocale::HourCycles(Isolate* isolate,
@@ -677,7 +647,7 @@ MaybeHandle<Object> JSLocale::TimeZones(Isolate* isolate,
                     JSArray);
   }
   const std::map<std::string, std::string> substitutions({});
-  return ToJSArray(isolate, enumeration.get(), substitutions, false);
+  return Intl::ToJSArray(isolate, enumeration.get(), substitutions, false);
 }
 
 MaybeHandle<JSObject> JSLocale::TextInfo(Isolate* isolate,
