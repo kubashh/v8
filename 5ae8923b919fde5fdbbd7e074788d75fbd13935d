@@ -16,6 +16,23 @@
       "message": "Mythri, this pushes back TP\u0027s optimization tiering and removes some of the extra TP heuristics that don\u0027t seem to work quite as well with this later tiering (we can always add some of them back if they later seem to make more sense. PTAL thanks.",
       "revId": "5ae8923b919fde5fdbbd7e074788d75fbd13935d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa102ca1_2926ef1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-06-15T16:34:01Z",
+      "side": 1,
+      "message": "Thanks! lgtm.",
+      "revId": "5ae8923b919fde5fdbbd7e074788d75fbd13935d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
