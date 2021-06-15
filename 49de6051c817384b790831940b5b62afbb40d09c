@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aae5425_3927caac",
+        "filename": "include/v8.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 4425,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-15T16:55:03Z",
+      "side": 1,
+      "message": "to",
+      "range": {
+        "startLine": 4425,
+        "startChar": 50,
+        "endLine": 4425,
+        "endChar": 52
+      },
+      "revId": "49de6051c817384b790831940b5b62afbb40d09c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d57d2f28_9b98aaa7",
+        "filename": "include/v8.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 4429,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-15T16:55:03Z",
+      "side": 1,
+      "message": "Please update.",
+      "range": {
+        "startLine": 4426,
+        "startChar": 25,
+        "endLine": 4429,
+        "endChar": 19
+      },
+      "revId": "49de6051c817384b790831940b5b62afbb40d09c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eec648f2_58d16532",
+        "filename": "include/v8.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 4432,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-15T16:55:03Z",
+      "side": 1,
+      "message": "It\u0027s not clear what this means.",
+      "range": {
+        "startLine": 4432,
+        "startChar": 63,
+        "endLine": 4432,
+        "endChar": 77
+      },
+      "revId": "49de6051c817384b790831940b5b62afbb40d09c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d55c6de9_93038244",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-15T16:55:03Z",
+      "side": 1,
+      "message": "Can you assert that the underlying C++ type of type_info is exactly T?",
+      "revId": "49de6051c817384b790831940b5b62afbb40d09c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95679593_20a445cf",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 5017,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-15T16:55:03Z",
+      "side": 1,
+      "message": "value_is_smi, to match value_is_js_array below",
+      "range": {
+        "startLine": 5017,
+        "startChar": 12,
+        "endLine": 5017,
+        "endChar": 17
+      },
+      "revId": "49de6051c817384b790831940b5b62afbb40d09c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
