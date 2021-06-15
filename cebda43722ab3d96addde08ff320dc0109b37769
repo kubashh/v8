@@ -16,6 +16,24 @@
       "message": "lgtm\n\nI\u0027m curious: what determines that Collations should may_remove \u003d\u003d true, but Collations and TimeZones should have may_remove \u003d\u003d false?",
       "revId": "cebda43722ab3d96addde08ff320dc0109b37769",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5e631b6_d3417178",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-06-15T18:28:55Z",
+      "side": 1,
+      "message": "collation is filtering out \"standard\" and \"search\" in the substitutions map so it will remove some item returned by ICU therefore change the number of items should be allocate in the FixedArray. calendar will only change the string but won\u0027t change the number of items. TimeZone won\u0027t filter out any neither. So for the case of collation we need to recalculate the size needed for FixedArray but the other two cases we don\u0027t .",
+      "parentUuid": "d28aa3b8_9d0e4b6e",
+      "revId": "cebda43722ab3d96addde08ff320dc0109b37769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
