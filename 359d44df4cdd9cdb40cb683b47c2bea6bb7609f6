@@ -46,6 +46,30 @@
       },
       "revId": "359d44df4cdd9cdb40cb683b47c2bea6bb7609f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce128250_ea2b1d3e",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-15T17:07:22Z",
+      "side": 0,
+      "message": "yeah sorry the wording in the commit message isn\u0027t very good, I mean avoid skipping call optimizations (not avoid deopt/bailouts due to call optimizations)",
+      "parentUuid": "547fbe44_35ff6ac2",
+      "range": {
+        "startLine": 1127,
+        "startChar": 4,
+        "endLine": 1127,
+        "endChar": 17
+      },
+      "revId": "359d44df4cdd9cdb40cb683b47c2bea6bb7609f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
