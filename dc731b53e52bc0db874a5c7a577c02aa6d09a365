@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e5e38d9_4222f109",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4601,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-15T08:25:33Z",
+      "side": 1,
+      "message": "Creating a Ref here isn\u0027t necessary, I think. Even below it isn\u0027t.\nI\u0027d just do\n\nreturn *object() !\u003d object()-\u003eglobal_proxy().map().prototype()\n\nThen the type can stay bool.",
+      "revId": "dc731b53e52bc0db874a5c7a577c02aa6d09a365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4729372a_ed0895d0",
