@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d468b3_26e6e5b5",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T14:33:15Z",
+      "side": 1,
+      "message": "Good point, thanks! Added such a test.",
+      "parentUuid": "53b9b379_d605997a",
+      "range": {
+        "startLine": 112,
+        "startChar": 43,
+        "endLine": 112,
+        "endChar": 64
+      },
+      "revId": "f4d019c9ea24bee53bc78791b2d12184d835c8b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73a32171_8033ab21",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-06-15T13:54:32Z",
       "side": 1,
       "message": "this seems a bit odd, I\u0027d expect no overflows when converting, no?",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 40
+      },
+      "revId": "f4d019c9ea24bee53bc78791b2d12184d835c8b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "457fecb9_e61a9c00",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T14:33:15Z",
+      "side": 1,
+      "message": "Indeed, max int64 is not representable as a double, the closest is max int64 + 1 (2^63), which overflows to min int64. I wonder if I should implement a workaround for this in the conversion, e.g. after computing `bits_int64` do something like:\n\n    if (bits_int64 \u003c bits) {   // We have an overflow.\n      return std::numeric_limits\u003cint64_t\u003e::max();\n    }",
+      "parentUuid": "73a32171_8033ab21",
       "range": {
         "startLine": 116,
         "startChar": 4,
