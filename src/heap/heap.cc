@@ -2160,9 +2160,6 @@ size_t Heap::PerformGarbageCollection(
 
   SafepointScope safepoint_scope(this);
 
-  // Shared isolates cannot have any clients when running GC at the moment.
-  DCHECK_IMPLIES(IsShared(), !isolate()->HasClientIsolates());
-
   collection_barrier_->StopTimeToCollectionTimer();
 
 #ifdef VERIFY_HEAP
@@ -2248,6 +2245,41 @@ size_t Heap::PerformGarbageCollection(
   tracer()->StopInSafepoint();
 
   return freed_global_handles;
+}
+
+void Heap::CollectSharedGarbage(GarbageCollectionReason gc_reason) {
+  DCHECK(!IsShared());
+  DCHECK_NOT_NULL(isolate()->shared_isolate());
+
+  const char* collector_reason = nullptr;
+  GarbageCollector collector = MARK_COMPACTOR;
+  tracer()->Start(collector, gc_reason, collector_reason);
+
+  isolate()->shared_isolate()->heap()->PerformSharedGarbageCollection(
+      gc_reason);
+
+  tracer()->Stop(collector);
+}
+
+void Heap::PerformSharedGarbageCollection(GarbageCollectionReason gc_reason) {
+  DCHECK(IsShared());
+  base::MutexGuard guard(isolate()->client_isolate_mutex());
+
+  isolate()->IterateClientIsolates([](Isolate* client) {
+    DCHECK_NOT_NULL(client->shared_isolate());
+    Heap* client_heap = client->heap();
+
+    client_heap->safepoint()->EnterSafepointScope();
+
+    client_heap->shared_old_allocator_->FreeLinearAllocationArea();
+    client_heap->shared_map_allocator_->FreeLinearAllocationArea();
+  });
+
+  PerformGarbageCollection(MARK_COMPACTOR);
+
+  isolate()->IterateClientIsolates([](Isolate* client) {
+    client->heap()->safepoint()->LeaveSafepointScope();
+  });
 }
 
 void Heap::CompleteSweepingYoung(GarbageCollector collector) {
@@ -4278,10 +4310,7 @@ void Heap::Verify() {
   SafepointScope safepoint_scope(this);
   HandleScope scope(isolate());
 
-  MakeLocalHeapLabsIterable();
-
-  // We have to wait here for the sweeper threads to have an iterable heap.
-  mark_compact_collector()->EnsureSweepingCompleted();
+  MakeHeapIterable();
 
   array_buffer_sweeper()->EnsureFinished();
 
@@ -5305,8 +5334,12 @@ HeapObject Heap::AllocateRawWithLightRetrySlowPath(
   }
   // Two GCs before panicking. In newspace will almost always succeed.
   for (int i = 0; i < 2; i++) {
-    CollectGarbage(alloc.RetrySpace(),
-                   GarbageCollectionReason::kAllocationFailure);
+    if (IsSharedAllocationType(allocation)) {
+      CollectSharedGarbage(GarbageCollectionReason::kAllocationFailure);
+    } else {
+      CollectGarbage(alloc.RetrySpace(),
+                     GarbageCollectionReason::kAllocationFailure);
+    }
     alloc = AllocateRaw(size, allocation, origin, alignment);
     if (alloc.To(&result)) {
       DCHECK(result != ReadOnlyRoots(this).exception());
@@ -5325,7 +5358,12 @@ HeapObject Heap::AllocateRawWithRetryOrFailSlowPath(
   if (!result.is_null()) return result;
 
   isolate()->counters()->gc_last_resort_from_handles()->Increment();
-  CollectAllAvailableGarbage(GarbageCollectionReason::kLastResort);
+  if (IsSharedAllocationType(allocation)) {
+    CollectSharedGarbage(GarbageCollectionReason::kLastResort);
+  } else {
+    CollectAllAvailableGarbage(GarbageCollectionReason::kLastResort);
+  }
+
   {
     AlwaysAllocateScope scope(this);
     alloc = AllocateRaw(size, allocation, origin, alignment);
