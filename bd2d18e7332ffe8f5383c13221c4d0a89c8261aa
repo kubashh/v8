@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feed6fe4_a6986269",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-15T08:16:01Z",
+      "side": 1,
+      "message": "just accidentally stumbled upon this, not 100% sure this helps on x64, but I think we\u0027ll reduce object size on ia32.",
+      "revId": "bd2d18e7332ffe8f5383c13221c4d0a89c8261aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
