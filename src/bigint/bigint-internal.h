@@ -13,6 +13,7 @@ namespace v8 {
 namespace bigint {
 
 constexpr int kKaratsubaThreshold = 34;
+constexpr int kBurnikelThreshold = 57;
 
 class ProcessorImpl : public Processor {
  public:
@@ -33,6 +34,7 @@ class ProcessorImpl : public Processor {
   void Divide(RWDigits Q, Digits A, Digits B);
   void DivideSingle(RWDigits Q, digit_t* remainder, Digits A, digit_t b);
   void DivideSchoolbook(RWDigits Q, RWDigits R, Digits A, Digits B);
+  void DivideBurnikelZiegler(RWDigits Q, RWDigits R, Digits A, Digits B);
 
   void Modulo(RWDigits R, Digits A, Digits B);
 
