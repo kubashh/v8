@@ -16,6 +16,92 @@
       "message": "Thanks for volunteering; please take a look!\nNo urgency, take your time.",
       "revId": "6541ae710233d332f05dc49500deda2a093e8e55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "742d83a2_7f5072c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T14:13:53Z",
+      "side": 1,
+      "message": "LGTM % nits, thanks! Very interesting read.",
+      "revId": "6541ae710233d332f05dc49500deda2a093e8e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bd78001_e2a6c324",
+        "filename": "src/bigint/div-helpers.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T14:13:53Z",
+      "side": 1,
+      "message": "This is somewhat confusing in the loop, could we do it outside and just do `Z[i] \u003d 0` in the body?",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 14
+      },
+      "revId": "6541ae710233d332f05dc49500deda2a093e8e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bc5dc9c_237d209b",
+        "filename": "src/bigint/div-helpers.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T14:13:53Z",
+      "side": 1,
+      "message": "nit: this is the same body of code as in LeftShift, let\u0027s extract it in a common place.",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 52,
+        "endChar": 3
+      },
+      "revId": "6541ae710233d332f05dc49500deda2a093e8e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e748404a_b28369b6",
+        "filename": "src/bigint/div-helpers.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T14:13:53Z",
+      "side": 1,
+      "message": "nit: please add a `DCHECK_GE(X.len(), 1)`",
+      "range": {
+        "startLine": 54,
+        "startChar": 13,
+        "endLine": 54,
+        "endChar": 20
+      },
+      "revId": "6541ae710233d332f05dc49500deda2a093e8e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
