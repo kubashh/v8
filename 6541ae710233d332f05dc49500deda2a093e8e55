@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb15d599_e9ef97c3",
+        "filename": "src/bigint/div-helpers.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-15T15:50:16Z",
+      "side": 1,
+      "message": "Done.\n(To me it seemed like an obvious implementation when looking at this loop as a simplified version of the loop above; but it can certainly be formulated differently if you find that more readable.)",
+      "parentUuid": "0bd78001_e2a6c324",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 14
+      },
+      "revId": "6541ae710233d332f05dc49500deda2a093e8e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bc5dc9c_237d209b",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0d43e3c_415e4579",
+        "filename": "src/bigint/div-helpers.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-15T15:50:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bc5dc9c_237d209b",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 52,
+        "endChar": 3
+      },
+      "revId": "6541ae710233d332f05dc49500deda2a093e8e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e748404a_b28369b6",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-06-15T14:13:53Z",
       "side": 1,
       "message": "nit: please add a `DCHECK_GE(X.len(), 1)`",
+      "range": {
+        "startLine": 54,
+        "startChar": 13,
+        "endLine": 54,
+        "endChar": 20
+      },
+      "revId": "6541ae710233d332f05dc49500deda2a093e8e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a15da31_a874798d",
+        "filename": "src/bigint/div-helpers.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-15T15:50:16Z",
+      "side": 1,
+      "message": "Whoa, thanks for catching this bug!\n(Missing DCHECKs are not the problem, as Digits::operator[] contains bounds checks. But we actually have to handle the case of X.len() \u003d\u003d 0 here properly! Regression test added.)",
+      "parentUuid": "e748404a_b28369b6",
       "range": {
         "startLine": 54,
         "startChar": 13,
