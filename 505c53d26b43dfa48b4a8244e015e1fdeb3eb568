@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82204dc5_fa32645b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-06-15T10:33:30Z",
+      "side": 1,
+      "message": "Thanks for your continuous efforts!",
+      "revId": "505c53d26b43dfa48b4a8244e015e1fdeb3eb568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b5588b9_862bde9d",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-06-15T10:33:30Z",
+      "side": 1,
+      "message": "Should be apiList.show() I suppose",
+      "revId": "505c53d26b43dfa48b4a8244e015e1fdeb3eb568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ef7d21d_dadf12ba",
+        "filename": "tools/system-analyzer/log/map.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-06-15T10:33:30Z",
+      "side": 1,
+      "message": "nit: missing semicolon",
+      "revId": "505c53d26b43dfa48b4a8244e015e1fdeb3eb568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78dbe625_9fd37271",
+        "filename": "tools/system-analyzer/view/property-link-table-template.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-06-15T10:33:30Z",
+      "side": 1,
+      "message": "Not sure if this is gerrit bogus or there is some special character that was pasted  in throughout this file at the beginning of some lines.\nMaybe it is gerrit indicating that there are tabs, whereas otherwise we use spaces?",
+      "revId": "505c53d26b43dfa48b4a8244e015e1fdeb3eb568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57214afa_b5253892",
+        "filename": "tools/system-analyzer/view/property-link-table.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-06-15T10:33:30Z",
+      "side": 1,
+      "message": "nit: add newline",
+      "revId": "505c53d26b43dfa48b4a8244e015e1fdeb3eb568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b22fbe12_9cc63971",
+        "filename": "tools/system-analyzer/view/property-link-table.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-06-15T10:33:30Z",
+      "side": 1,
+      "message": "this looks a bit awkward at a first glance.\nIt looks like this is the only place were a value is returned in this function, until you check that _addTitle also returns undefined.\nMaybe change this to `this._addTitle(value); return;`?",
+      "revId": "505c53d26b43dfa48b4a8244e015e1fdeb3eb568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf4fd7d5_37aa1eff",
+        "filename": "tools/system-analyzer/view/property-link-table.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-06-15T10:33:30Z",
+      "side": 1,
+      "message": "nit: Since \"button\" refers to different instances, maybe give them unique names?",
+      "revId": "505c53d26b43dfa48b4a8244e015e1fdeb3eb568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
