@@ -18,8 +18,8 @@ class Heap;
 class LocalHeap;
 class RootVisitor;
 
-// Used to bring all background threads with heap access to a safepoint such
-// that e.g. a garbage collection can be performed.
+// Used to bring all threads with heap access to a safepoint such that e.g. a
+// garbage collection can be performed.
 class GlobalSafepoint {
  public:
   explicit GlobalSafepoint(Heap* heap);
@@ -51,6 +51,9 @@ class GlobalSafepoint {
 
   bool IsActive() { return active_safepoint_scopes_ > 0; }
 
+  void EnterSafepointScope();
+  void LeaveSafepointScope();
+
  private:
   class Barrier {
     base::Mutex mutex_;
@@ -73,9 +76,6 @@ class GlobalSafepoint {
     void WaitInUnpark();
     void NotifyPark();
   };
-
-  void EnterSafepointScope();
-  void LeaveSafepointScope();
 
   template <typename Callback>
   void AddLocalHeap(LocalHeap* local_heap, Callback callback) {
