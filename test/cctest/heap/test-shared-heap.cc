@@ -6,6 +6,7 @@
 #include "src/common/globals.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/heap.h"
+#include "src/objects/fixed-array-inl.h"
 #include "src/objects/heap-object.h"
 #include "test/cctest/cctest.h"
 
@@ -140,7 +141,8 @@ UNINITIALIZED_TEST(ConcurrentAllocationInSharedMapSpace) {
   Isolate::Delete(shared_isolate);
 }
 
-UNINITIALIZED_TEST(SharedCollection) {
+UNINITIALIZED_TEST(SharedCollectionWithoutClients) {
+  FLAG_max_old_space_size = 8;
   std::unique_ptr<v8::ArrayBuffer::Allocator> allocator(
       v8::ArrayBuffer::Allocator::NewDefaultAllocator());
 
@@ -152,6 +154,50 @@ UNINITIALIZED_TEST(SharedCollection) {
   DCHECK_NULL(shared_isolate->heap()->new_lo_space());
 
   CcTest::CollectGarbage(OLD_SPACE, shared_isolate);
+  Isolate::Delete(shared_isolate);
+}
+
+void AllocateInSharedSpace(Isolate* shared_isolate) {
+  v8::Isolate::CreateParams create_params;
+  std::unique_ptr<v8::ArrayBuffer::Allocator> allocator(
+      v8::ArrayBuffer::Allocator::NewDefaultAllocator());
+  create_params.array_buffer_allocator = allocator.get();
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
+  i_isolate->AttachToSharedIsolate(shared_isolate);
+
+  {
+    HandleScope scope(i_isolate);
+    Handle<FixedArray> first =
+        i_isolate->factory()->NewFixedArray(100, AllocationType::kSharedOld);
+
+    for (int i = 0; i < kNumIterations * 1000; i++) {
+      HandleScope scope(i_isolate);
+      i_isolate->factory()->NewFixedArray(100, AllocationType::kSharedOld);
+    }
+
+    Handle<FixedArray> last =
+        i_isolate->factory()->NewFixedArray(100, AllocationType::kSharedOld);
+
+    CHECK_EQ(first->length(), 100);
+    CHECK_EQ(last->length(), 100);
+  }
+
+  isolate->Dispose();
+  PrintF("Drop client isolate\n");
+}
+
+UNINITIALIZED_TEST(SharedCollection) {
+  FLAG_max_old_space_size = 8;
+  std::unique_ptr<v8::ArrayBuffer::Allocator> allocator(
+      v8::ArrayBuffer::Allocator::NewDefaultAllocator());
+
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = allocator.get();
+  Isolate* shared_isolate = Isolate::NewShared(create_params);
+
+  AllocateInSharedSpace(shared_isolate);
+
   Isolate::Delete(shared_isolate);
 }
 
