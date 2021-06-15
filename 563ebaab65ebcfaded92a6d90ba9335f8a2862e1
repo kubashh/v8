@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c62626b_98421b98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Thanks, PTAL again!\n\nBtw, does anyone have an idea why MSVC is complaining? (the red bot) I\u0027m out of ideas already.",
+      "revId": "563ebaab65ebcfaded92a6d90ba9335f8a2862e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

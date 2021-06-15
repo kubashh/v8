@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "378c8837_fee09638",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d3fdc86_0c569c62",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76168744_068a8e17",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-06-14T14:39:58Z",
       "side": 1,
       "message": "Please remove.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77bafae0_636ecef4",
+        "filename": "include/v8.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76168744_068a8e17",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "373a084f_9f2c8b4b",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05d0684c_25779519",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e41552a4_3fa24241",
@@ -82,6 +136,24 @@
       "writtenOn": "2021-06-14T14:39:58Z",
       "side": 1,
       "message": "Please take FixedDoubleArray as argument.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71267614_5f0416de",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e41552a4_3fa24241",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a543bc4_951376b5",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ff8410e_ed875cc4",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0b1f7ff_4c593fe1",
@@ -120,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10829af0_61b27a3d",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0b1f7ff_4c593fe1",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef9f275d_c096a0df",
@@ -133,6 +241,24 @@
       "writtenOn": "2021-06-14T14:39:58Z",
       "side": 1,
       "message": "return d !\u003d 0 \u0026\u0026 !std::isnan(d);",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e326524_0a34b46c",
+        "filename": "src/api/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 10278,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef9f275d_c096a0df",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -156,6 +282,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7c77182_b1d51293",
+        "filename": "src/api/api.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Because they use the DoubleToInt32 (and similar) conversion functions from conversions-inl.h, which brings in too many dependencies for api.h.",
+      "parentUuid": "2c01af45_09c22926",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2d411a62_dacea16f",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 17
@@ -167,6 +311,24 @@
       "writtenOn": "2021-06-14T14:50:53Z",
       "side": 1,
       "message": "Move this check up.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd966292_8bb92b7b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 5021,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d411a62_dacea16f",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -184,6 +346,24 @@
       "writtenOn": "2021-06-14T14:39:58Z",
       "side": 1,
       "message": "Also here: please first switch on sequence type.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4112b36_f38472b1",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1795,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc31db6f_39be5a8d",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -211,6 +391,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "698e2316_942333cd",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61cb9f86_a076c117",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 31
+      },
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff0be3d0_27debcf9",
@@ -224,6 +428,24 @@
       "writtenOn": "2021-06-14T14:39:58Z",
       "side": 1,
       "message": "You can use FastI2D again.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd07697c_4a28c8ed",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff0be3d0_27debcf9",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -245,6 +467,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "853ff9f2_ccbfe1d3",
+        "filename": "src/numbers/conversions.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dc81b2a_2cade927",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd18cdf7_9d9eb4a1",
@@ -258,6 +498,24 @@
       "writtenOn": "2021-06-14T14:50:53Z",
       "side": 1,
       "message": "Please also test with finite values outside of int range.",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e57d8038_c05b3b14",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-15T12:43:50Z",
+      "side": 1,
+      "message": "Added two cases, but I\u0027m not sure we get the expected results, so PTAL again.",
+      "parentUuid": "fd18cdf7_9d9eb4a1",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
