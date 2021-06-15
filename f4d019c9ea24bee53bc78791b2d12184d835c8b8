@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b9b379_d605997a",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-15T13:54:32Z",
+      "side": 1,
+      "message": "There is also https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_SAFE_INTEGER which would be quite interesting.\n\nSee also: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/diagnostics/objects-printer.cc;l\u003d2487;bpv\u003d1;bpt\u003d1?q\u003dkMinSafeInteger",
+      "range": {
+        "startLine": 112,
+        "startChar": 43,
+        "endLine": 112,
+        "endChar": 64
+      },
+      "revId": "f4d019c9ea24bee53bc78791b2d12184d835c8b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73a32171_8033ab21",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-15T13:54:32Z",
+      "side": 1,
+      "message": "this seems a bit odd, I\u0027d expect no overflows when converting, no?",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 40
+      },
+      "revId": "f4d019c9ea24bee53bc78791b2d12184d835c8b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
