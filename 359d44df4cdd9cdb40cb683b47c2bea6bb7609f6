@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c530166_52dc07cf",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-15T16:37:58Z",
+      "side": 0,
+      "message": "Wouldn\u0027t this change make us bailout more since we would be bailing out more cases?",
+      "range": {
+        "startLine": 1127,
+        "startChar": 4,
+        "endLine": 1127,
+        "endChar": 17
+      },
+      "revId": "359d44df4cdd9cdb40cb683b47c2bea6bb7609f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
