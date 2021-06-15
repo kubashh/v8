@@ -140,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05152c3_94588442",
+        "filename": "tools/system-analyzer/view/property-link-table.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-15T11:19:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57214afa_b5253892",
+      "revId": "505c53d26b43dfa48b4a8244e015e1fdeb3eb568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b22fbe12_9cc63971",
