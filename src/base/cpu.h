@@ -120,6 +120,9 @@ class V8_BASE_EXPORT CPU final {
   bool has_msa() const { return has_msa_; }
 
  private:
+#if defined(STARBOARD)
+  bool StarboardDetectCPU();
+#endif
   char vendor_[13];
   int stepping_;
   int model_;

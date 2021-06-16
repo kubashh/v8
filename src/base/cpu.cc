@@ -359,7 +359,6 @@ static bool HasListItem(const char* list, const char* item) {
 #if defined(STARBOARD)
 
 bool CPU::StarboardDetectCPU() {
-#if (SB_API_VERSION >= 11)
   SbCPUFeatures features;
   if (!SbCPUFeaturesGet(&features)) {
     return false;
@@ -398,9 +397,6 @@ bool CPU::StarboardDetectCPU() {
   }
 
   return true;
-#else  // SB_API_VERSION >= 11
-  return false;
-#endif
 }
 
 #endif
