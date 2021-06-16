@@ -536,6 +536,24 @@
       "parentUuid": "e57d8038_c05b3b14",
       "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6d2a3c8_445d8be7",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-16T14:24:15Z",
+      "side": 1,
+      "message": "Well, my understanding is that kMaxSafeInteger, when attempted to get converted to an int32_t, results in an overflow. So kMaxSafeInteger % (2 ^ 32) \u003d\u003d -1. The other result is analogous, just the signed is flipped. As a demo:\nhttps://godbolt.org/z/hGc67f3j9 outputs:\n\n    Modulo: 4294967295\n    Equals to -1: true",
+      "parentUuid": "cc52c0ee_ce26c54a",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

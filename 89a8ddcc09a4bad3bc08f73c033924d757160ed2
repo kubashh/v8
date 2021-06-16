@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d82d9f_09eb5f61",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-16T14:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7880e25_e436e6a7",
+      "revId": "89a8ddcc09a4bad3bc08f73c033924d757160ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9b3503c_fb1b6d7f",
@@ -71,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ed123ea_90ba0c9b",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-16T14:24:15Z",
+      "side": 1,
+      "message": "Asked for clarification offline. Fix will follow up.",
+      "parentUuid": "b9b3503c_fb1b6d7f",
+      "revId": "89a8ddcc09a4bad3bc08f73c033924d757160ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0eebc8dc_f67d1c08",
         "filename": "test/unittests/numbers/conversions-unittest.cc",
         "patchSetId": 22
@@ -82,6 +118,24 @@
       "writtenOn": "2021-06-16T13:49:57Z",
       "side": 1,
       "message": "You can simply use -static_cast\u003cint64_t\u003e(kMaxSafeIntegerUint64).",
+      "revId": "89a8ddcc09a4bad3bc08f73c033924d757160ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89a0e656_18858e6f",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-16T14:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0eebc8dc_f67d1c08",
       "revId": "89a8ddcc09a4bad3bc08f73c033924d757160ed2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
