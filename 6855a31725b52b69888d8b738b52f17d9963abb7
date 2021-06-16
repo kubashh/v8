@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdfd9aea_ce1cd3db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283828
+      },
+      "writtenOn": "2021-06-16T12:19:23Z",
+      "side": 1,
+      "message": "Hi Camillo, Andreas, could you take a look at this please?\n\nThanks,\nAdam",
+      "revId": "6855a31725b52b69888d8b738b52f17d9963abb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
