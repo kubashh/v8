@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55febd87_20acd404",
+        "filename": "src/codegen/turbo-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-16T12:55:08Z",
+      "side": 1,
+      "message": "For sanity DCHECK_EQ(\u003caddress\u003e, EmbeddedData::FromBlob(isolate).InstructionStartOf(..))",
+      "revId": "b7b60d39ac5f827c3f3cbd4d694228738878c22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
