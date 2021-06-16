@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3605026_8bbd3fa3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-16T13:24:38Z",
+      "side": 1,
+      "message": "nit: I only accept `-` as item delimiter.",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 3
+      },
+      "revId": "95e07658ce5881a0cb9db6a25e0f140df1cae350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3f292d3_6ab9456c",
+        "filename": "tools/system-analyzer/view/map-panel/map-details.mjs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-16T13:24:38Z",
+      "side": 1,
+      "message": "I guess we could add this by default to the template.",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 11
+      },
+      "revId": "95e07658ce5881a0cb9db6a25e0f140df1cae350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
