@@ -50,6 +50,7 @@ class CFunction;
 class CallHandlerHelper;
 class Context;
 class CppHeap;
+class CTypeInfo;
 class Data;
 class Date;
 class EscapableHandleScope;
@@ -4419,6 +4420,22 @@ class V8_EXPORT Array : public Object {
   static Local<Array> New(Isolate* isolate, Local<Value>* elements,
                           size_t length);
   V8_INLINE static Array* Cast(Value* obj);
+
+  /**
+   * Copies the contents of this JavaScript array to a C++ buffer with
+   * a given max_length. Conversions of the elements are done according
+   * to the ES specification by default. Optionally a CTypeInfo might
+   * be specified, instructing different rules for conversions (e.g. restricted
+   * float/double).
+   * If the array length is larger than max_length or the array is of
+   * unsupported type, the operation will fail, returning false. Generally, an
+   * array which contains objects, undefined, null or anything not convertible
+   * to the requested destination type, is considered unsupported. The operation
+   * returns true on success. `type_info` will be used for conversions.
+   */
+  template <typename T, uint8_t type_info>
+  bool CopyAndConvertArrayToCppBuffer(T* dst, uint32_t max_length);
+
  private:
   Array();
   static void CheckCast(Value* obj);
