@@ -5,6 +5,7 @@
 #ifndef V8_API_API_INL_H_
 #define V8_API_API_INL_H_
 
+#include "include/v8-fast-api-calls.h"
 #include "src/api/api.h"
 #include "src/execution/interrupts-scope.h"
 #include "src/execution/microtask-queue.h"
@@ -237,6 +238,52 @@ inline bool IsExecutionTerminatingCheck(i::Isolate* isolate) {
            i::ReadOnlyRoots(isolate).termination_exception();
   }
   return false;
+}
+
+template <typename T>
+void CopySmiElementsToTypedBuffer(T* dst, uint32_t length,
+                                  i::FixedArray elements) {
+  for (uint32_t i = 0; i < length; ++i) {
+    double value = elements.get(static_cast<int>(i)).Number();
+    dst[i] = i::ConvertDouble<T>(value);
+  }
+}
+
+template <typename T>
+void CopyDoubleElementsToTypedBuffer(T* dst, uint32_t length,
+                                     i::FixedDoubleArray elements) {
+  for (uint32_t i = 0; i < length; ++i) {
+    double value = elements.get_scalar(static_cast<int>(i));
+    dst[i] = i::ConvertDouble<T>(value);
+  }
+}
+
+template <typename T>
+bool v8::Array::CopyAndConvertArrayToCppBuffer(
+    T* dst, uint32_t max_length,
+    const CTypeInfo* type_info /* Unused for now */) {
+  if (type_info) {
+    CHECK_EQ(i::TypeInfoHelper<T>::Type(), type_info->GetType());
+  }
+  uint32_t length = Length();
+  if (length > max_length) {
+    return false;
+  }
+
+  i::DisallowGarbageCollection no_gc;
+  i::JSArray obj = *reinterpret_cast<i::JSArray*>(this);
+
+  i::FixedArrayBase elements = obj.elements();
+  if (obj.HasSmiElements()) {
+    CopySmiElementsToTypedBuffer(dst, length, i::FixedArray::cast(elements));
+    return true;
+  } else if (obj.HasDoubleElements()) {
+    CopyDoubleElementsToTypedBuffer(dst, length,
+                                    i::FixedDoubleArray::cast(elements));
+    return true;
+  } else {
+    return false;
+  }
 }
 
 namespace internal {
