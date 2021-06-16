@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0963053b_05b61761",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-16T11:12:38Z",
+      "side": 1,
+      "message": "LGTM with comments.",
+      "revId": "501cc4772c138c9df1cee5372b3f6fde05408514",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8984908f_c3455b9d",
+        "filename": "src/base/cpu.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-16T11:12:38Z",
+      "side": 1,
+      "message": "and here.",
+      "revId": "501cc4772c138c9df1cee5372b3f6fde05408514",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e6ced31_743cdb6d",
+        "filename": "src/base/cpu.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-16T11:12:38Z",
+      "side": 1,
+      "message": "Please also use V8_OS_STARBOARD here then.",
+      "revId": "501cc4772c138c9df1cee5372b3f6fde05408514",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
