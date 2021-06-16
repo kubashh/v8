@@ -1787,14 +1787,11 @@ void TurboAssembler::CallBuiltin(Builtin builtin) {
   ASM_CODE_COMMENT_STRING(this, CommentForOffHeapTrampoline("call", builtin));
   DCHECK(Builtins::IsBuiltinId(builtin));
   CHECK_NE(builtin, Builtin::kNoBuiltinId);
+  Address entry =
+      isolate()->builtin_entry_table()[static_cast<int32_t>(builtin)];
   if (options().short_builtin_calls) {
-    EmbeddedData d = EmbeddedData::FromBlob(isolate());
-    Address entry = d.InstructionStartOfBuiltin(builtin);
     call(entry, RelocInfo::RUNTIME_ENTRY);
-
   } else {
-    EmbeddedData d = EmbeddedData::FromBlob();
-    Address entry = d.InstructionStartOfBuiltin(builtin);
     Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
     call(kScratchRegister);
   }
