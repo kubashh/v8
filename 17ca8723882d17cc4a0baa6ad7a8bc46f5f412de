@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d4a3bf6_1d5c1699",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-06-16T08:56:29Z",
+      "side": 1,
+      "message": "PTAL\n\nAt least it makes sense now that I didn\u0027t see the impact on the bots 😊",
+      "revId": "17ca8723882d17cc4a0baa6ad7a8bc46f5f412de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
