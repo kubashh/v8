@@ -16,6 +16,74 @@
       "message": "Thanks, PTAL again.",
       "revId": "89a8ddcc09a4bad3bc08f73c033924d757160ed2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fbb9b4e_5a72756d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-16T13:49:57Z",
+      "side": 1,
+      "message": "compiler lgtm",
+      "revId": "89a8ddcc09a4bad3bc08f73c033924d757160ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7880e25_e436e6a7",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-16T13:49:57Z",
+      "side": 1,
+      "message": "I wouldn\u0027t even make it optional.",
+      "revId": "89a8ddcc09a4bad3bc08f73c033924d757160ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9b3503c_fb1b6d7f",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-16T13:49:57Z",
+      "side": 1,
+      "message": "Hmm this is not quite the same as what I asked. This seems to assume that for each supported C type there is a unique CTypeInfo::Type. That won\u0027t be true once you support different conversions for, say, integers, right?",
+      "revId": "89a8ddcc09a4bad3bc08f73c033924d757160ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eebc8dc_f67d1c08",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-16T13:49:57Z",
+      "side": 1,
+      "message": "You can simply use -static_cast\u003cint64_t\u003e(kMaxSafeIntegerUint64).",
+      "revId": "89a8ddcc09a4bad3bc08f73c033924d757160ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

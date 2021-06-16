@@ -723,6 +723,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "80888731_3cb35c9f",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-16T13:49:57Z",
+      "side": 1,
+      "message": "No, the suggestion is to remove the (FastI2D(i) \u003d\u003d x) condition, i.e. to handle even non-integral values in the shortcut.",
+      "parentUuid": "152d0a62_ce7a7702",
+      "revId": "2878018254813ad7adc9c9e6df3cb26154649b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73c778d6_bdb4fff0",
         "filename": "src/numbers/conversions-inl.h",
         "patchSetId": 9
