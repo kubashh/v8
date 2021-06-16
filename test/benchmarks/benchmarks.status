@@ -33,7 +33,7 @@
   'octane/pdfjs': [PASS, ['mode == debug', SKIP]],
 
   # Slow tests.
-  'kraken/imaging-gaussian-blur': [PASS, SLOW],
+  'kraken/imaging-gaussian-blur': [PASS, SLOW, ['tsan', SKIP]],
   'octane/typescript': [PASS, SLOW],
   'octane/box2d': [PASS, SLOW],
 
@@ -97,6 +97,19 @@
   # https://crbug.com/v8/8537
   'octane/typescript': [SKIP],
 }],  # 'predictable'
+
+['tsan', {
+  # Slow tests.
+  'kraken/audio-beat-detection': [SLOW],
+  'kraken/audio-dft': [SLOW],
+  'kraken/audio-fft': [SLOW],
+  'kraken/audio-oscillator': [SLOW],
+  'octane/pdfjs': [SLOW],
+  'octane/regexp': [SLOW],
+
+  # Too slow.
+  'octane/mandreel': [SKIP],
+}],  # 'tsan'
 
 ################################################################################
 ['variant == stress_snapshot', {
