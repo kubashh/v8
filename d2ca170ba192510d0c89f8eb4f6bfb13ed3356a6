@@ -33,6 +33,24 @@
       "message": "nit: spurious new line",
       "revId": "d2ca170ba192510d0c89f8eb4f6bfb13ed3356a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4894f82c_a52cd26d",
+        "filename": "src/base/platform/wrappers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2021-06-16T07:25:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "128c01df_27829241",
+      "revId": "d2ca170ba192510d0c89f8eb4f6bfb13ed3356a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
