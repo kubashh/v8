@@ -9,6 +9,7 @@
 #include "src/codegen/external-reference-encoder.h"
 #include "src/execution/isolate-data.h"
 #include "src/execution/isolate-inl.h"
+#include "src/snapshot/embedded/embedded-data.h"
 
 namespace v8 {
 namespace internal {
@@ -22,6 +23,16 @@ TurboAssemblerBase::TurboAssemblerBase(Isolate* isolate,
     code_object_ = Handle<HeapObject>::New(
         ReadOnlyRoots(isolate).self_reference_marker(), isolate);
   }
+}
+
+Address TurboAssemblerBase::BuiltinEntry(Builtin builtin) {
+  DCHECK(Builtins::IsBuiltinId(builtin));
+  CHECK_NE(builtin, Builtin::kNoBuiltinId);
+  if (isolate_ != nullptr) {
+    return isolate_->builtin_entry_table()[static_cast<int32_t>(builtin)];
+  }
+  EmbeddedData d = EmbeddedData::FromBlob();
+  return d.InstructionStartOfBuiltin(builtin);
 }
 
 void TurboAssemblerBase::IndirectLoadConstant(Register destination,

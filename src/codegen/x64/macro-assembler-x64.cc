@@ -27,7 +27,6 @@
 #include "src/logging/counters.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/smi.h"
-#include "src/snapshot/embedded/embedded-data.h"
 #include "src/snapshot/snapshot.h"
 
 // Satisfy cpplint check, but don't include platform-specific header. It is
@@ -1788,14 +1787,9 @@ void TurboAssembler::CallBuiltin(Builtin builtin) {
   DCHECK(Builtins::IsBuiltinId(builtin));
   CHECK_NE(builtin, Builtin::kNoBuiltinId);
   if (options().short_builtin_calls) {
-    EmbeddedData d = EmbeddedData::FromBlob(isolate());
-    Address entry = d.InstructionStartOfBuiltin(builtin);
-    call(entry, RelocInfo::RUNTIME_ENTRY);
-
+    call(BuiltinEntry(builtin), RelocInfo::RUNTIME_ENTRY);
   } else {
-    EmbeddedData d = EmbeddedData::FromBlob();
-    Address entry = d.InstructionStartOfBuiltin(builtin);
-    Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
+    Move(kScratchRegister, BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET);
     call(kScratchRegister);
   }
 }
@@ -1806,14 +1800,10 @@ void TurboAssembler::TailCallBuiltin(Builtin builtin) {
   DCHECK(Builtins::IsBuiltinId(builtin));
   CHECK_NE(builtin, Builtin::kNoBuiltinId);
   if (options().short_builtin_calls) {
-    EmbeddedData d = EmbeddedData::FromBlob(isolate());
-    Address entry = d.InstructionStartOfBuiltin(builtin);
-    jmp(entry, RelocInfo::RUNTIME_ENTRY);
+    jmp(BuiltinEntry(builtin), RelocInfo::RUNTIME_ENTRY);
 
   } else {
-    EmbeddedData d = EmbeddedData::FromBlob();
-    Address entry = d.InstructionStartOfBuiltin(builtin);
-    Jump(entry, RelocInfo::OFF_HEAP_TARGET);
+    Jump(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET);
   }
 }
 
