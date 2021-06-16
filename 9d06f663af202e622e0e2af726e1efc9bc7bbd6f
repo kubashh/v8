@@ -33,6 +33,23 @@
       "message": "Thanks Ross! lgtm.",
       "revId": "9d06f663af202e622e0e2af726e1efc9bc7bbd6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0420fb5_dfe6c2ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-16T08:42:03Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "9d06f663af202e622e0e2af726e1efc9bc7bbd6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
