@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80e9bb95_7712b320",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-16T13:22:28Z",
+      "side": 1,
+      "message": "cleaner?",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 55
+      },
+      "revId": "082fd4ba53ac50e1eb62d3658f923b477f4ea5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9462cfb1_e9c219d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-16T13:22:28Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "082fd4ba53ac50e1eb62d3658f923b477f4ea5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a312900_ac883e67",
+        "filename": "src/codegen/turbo-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-16T13:22:28Z",
+      "side": 1,
+      "message": "While you are here - having just the first one as a CHECK should be enough.",
+      "revId": "082fd4ba53ac50e1eb62d3658f923b477f4ea5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
