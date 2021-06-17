@@ -408,8 +408,9 @@ Handle<Object> Context::Lookup(Handle<Context> context, Handle<String> name,
 void NativeContext::AddOptimizedCode(Code code) {
   DCHECK(CodeKindCanDeoptimize(code.kind()));
   DCHECK(code.next_code_link().IsUndefined());
-  code.set_next_code_link(get(OPTIMIZED_CODE_LIST));
-  set(OPTIMIZED_CODE_LIST, code, UPDATE_WEAK_WRITE_BARRIER, kReleaseStore);
+  code.set_next_code_link(OptimizedCodeListHead());
+  set(OPTIMIZED_CODE_LIST, ToCodeT(code), UPDATE_WEAK_WRITE_BARRIER,
+      kReleaseStore);
 }
 
 void NativeContext::SetOptimizedCodeListHead(Object head) {
