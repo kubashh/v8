@@ -2427,6 +2427,7 @@ class Heap {
 
   HeapObject pending_layout_change_object_;
 
+  base::Mutex unprotected_memory_chunks_mutex_;
   std::unordered_set<MemoryChunk*> unprotected_memory_chunks_;
   bool unprotected_memory_chunks_registry_enabled_ = false;
 
@@ -2734,7 +2735,17 @@ class HeapObjectAllocationTracker {
 };
 
 template <typename T>
-inline T ForwardingAddress(T heap_obj);
+T ForwardingAddress(T heap_obj) {
+  MapWord map_word = heap_obj.map_word(kRelaxedLoad);
+
+  if (map_word.IsForwardingAddress()) {
+    return T::cast(map_word.ToForwardingAddress());
+  } else if (Heap::InFromPage(heap_obj)) {
+    return T();
+  } else {
+    return heap_obj;
+  }
+}
 
 // Address block allocator compatible with standard containers which registers
 // its allocated range as strong roots.

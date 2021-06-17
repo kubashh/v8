@@ -100,13 +100,12 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   void DependOnOwnConstantElement(const JSObjectRef& holder, uint32_t index,
                                   const ObjectRef& element);
 
-  // Record the assumption that the {value} read from {holder} on the background
-  // thread is the correct value for a given property.
+  // {representation} and {index} are associated with {map}.
   void DependOnOwnConstantDataProperty(const JSObjectRef& holder,
                                        const MapRef& map,
                                        Representation representation,
                                        FieldIndex index,
-                                       const ObjectRef& value);
+                                       const ObjectRef& current_value);
 
   // For each given map, depend on the stability of (the maps of) all prototypes
   // up to (and including) the {last_prototype}.
@@ -118,6 +117,8 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
 
   // Like DependOnElementsKind but also applies to all nested allocation sites.
   void DependOnElementsKinds(const AllocationSiteRef& site);
+
+  void DependOnConsistentJSFunctionView(const JSFunctionRef& function);
 
   // Predict the final instance size for {function}'s initial map and record
   // the assumption that this prediction is correct. In addition, register

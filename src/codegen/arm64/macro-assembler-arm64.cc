@@ -22,6 +22,7 @@
 #include "src/init/bootstrapper.h"
 #include "src/logging/counters.h"
 #include "src/runtime/runtime.h"
+#include "src/snapshot/embedded/embedded-data.h"
 #include "src/snapshot/snapshot.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -1944,12 +1945,16 @@ void TurboAssembler::CallBuiltin(Builtin builtin) {
   RecordCommentForOffHeapTrampoline(builtin);
   CHECK_NE(builtin, Builtin::kNoBuiltinId);
   if (options().short_builtin_calls) {
-    Call(BuiltinEntry(builtin), RelocInfo::RUNTIME_ENTRY);
+    EmbeddedData d = EmbeddedData::FromBlob(isolate());
+    Address entry = d.InstructionStartOfBuiltin(builtin);
+    Call(entry, RelocInfo::RUNTIME_ENTRY);
 
   } else {
+    EmbeddedData d = EmbeddedData::FromBlob();
+    Address entry = d.InstructionStartOfBuiltin(builtin);
     UseScratchRegisterScope temps(this);
     Register scratch = temps.AcquireX();
-    Ldr(scratch, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+    Ldr(scratch, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
     Call(scratch);
   }
   RecordComment("]");
@@ -1960,9 +1965,13 @@ void TurboAssembler::TailCallBuiltin(Builtin builtin) {
   RecordCommentForOffHeapTrampoline(builtin);
   CHECK_NE(builtin, Builtin::kNoBuiltinId);
   if (options().short_builtin_calls) {
-    Jump(BuiltinEntry(builtin), RelocInfo::RUNTIME_ENTRY);
+    EmbeddedData d = EmbeddedData::FromBlob(isolate());
+    Address entry = d.InstructionStartOfBuiltin(builtin);
+    Jump(entry, RelocInfo::RUNTIME_ENTRY);
 
   } else {
+    EmbeddedData d = EmbeddedData::FromBlob();
+    Address entry = d.InstructionStartOfBuiltin(builtin);
     // The control flow integrity (CFI) feature allows us to "sign" code entry
     // points as a target for calls, jumps or both. Arm64 has special
     // instructions for this purpose, so-called "landing pads" (see
@@ -1974,7 +1983,7 @@ void TurboAssembler::TailCallBuiltin(Builtin builtin) {
     // (i.e. `bti j`) landing pads for the tail-called code.
     Register temp = x17;
 
-    Ldr(temp, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+    Ldr(temp, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
     Jump(temp);
   }
   RecordComment("]");

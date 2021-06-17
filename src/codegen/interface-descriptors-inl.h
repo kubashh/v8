@@ -181,13 +181,6 @@ StaticCallInterfaceDescriptor<DerivedDescriptor>::GetStackParameterCount() {
 }
 
 // static
-template <typename DerivedDescriptor>
-constexpr Register
-StaticCallInterfaceDescriptor<DerivedDescriptor>::GetRegisterParameter(int i) {
-  return DerivedDescriptor::registers()[i];
-}
-
-// static
 constexpr Register FastNewObjectDescriptor::TargetRegister() {
   return kJSFunctionRegister;
 }

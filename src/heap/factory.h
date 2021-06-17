@@ -901,13 +901,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     // Indicates the CodeDataContainer should be allocated in read-only space.
     // As an optimization, if the kind-specific flags match that of a canonical
     // container, it will be used instead.
-    CodeBuilder& set_read_only_data_container(bool read_only) {
-      CHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !read_only);
-      read_only_data_container_ = read_only;
-      return *this;
-    }
-
-    CodeBuilder& set_kind_specific_flags(int32_t flags) {
+    CodeBuilder& set_read_only_data_container(int32_t flags) {
+      read_only_data_container_ = true;
       kind_specific_flags_ = flags;
       return *this;
     }

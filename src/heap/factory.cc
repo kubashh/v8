@@ -96,10 +96,10 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
       (kind_specific_flags_ == 0 ||
        kind_specific_flags_ == promise_rejection_flag)) {
     const ReadOnlyRoots roots(isolate_);
-    const auto canonical_code_data_container = Handle<CodeDataContainer>::cast(
+    const auto canonical_code_data_container =
         kind_specific_flags_ == 0
             ? roots.trampoline_trivial_code_data_container_handle()
-            : roots.trampoline_promise_rejection_code_data_container_handle());
+            : roots.trampoline_promise_rejection_code_data_container_handle();
     DCHECK_EQ(canonical_code_data_container->kind_specific_flags(),
               kind_specific_flags_);
     data_container = canonical_code_data_container;
@@ -136,9 +136,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
     CodePageCollectionMemoryModificationScope code_allocation(heap);
     HeapObject result;
     AllocationType allocation_type =
-        V8_EXTERNAL_CODE_SPACE_BOOL || is_executable_
-            ? AllocationType::kCode
-            : AllocationType::kReadOnly;
+        is_executable_ ? AllocationType::kCode : AllocationType::kReadOnly;
     if (retry_allocation_or_fail) {
       result = heap->AllocateRawWith<Heap::kRetryOrFail>(
           object_size, allocation_type, AllocationOrigin::kRuntime);
@@ -220,9 +218,6 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
 
     raw_code.clear_padding();
 
-    if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-      data_container->SetCodeAndEntryPoint(isolate_, raw_code);
-    }
 #ifdef VERIFY_HEAP
     if (FLAG_verify_heap) raw_code.ObjectVerify(isolate_);
 #endif
@@ -1470,7 +1465,7 @@ Handle<WasmArray> Factory::NewWasmArray(
       AllocateRaw(WasmArray::SizeFor(*map, length), AllocationType::kYoung);
   raw.set_map_after_allocation(*map);
   WasmArray result = WasmArray::cast(raw);
-  result.set_raw_properties_or_hash(*empty_fixed_array(), kRelaxedStore);
+  result.set_raw_properties_or_hash(*empty_fixed_array());
   result.set_length(length);
   for (uint32_t i = 0; i < length; i++) {
     Address address = result.ElementAddress(i);
@@ -1492,7 +1487,7 @@ Handle<WasmStruct> Factory::NewWasmStruct(const wasm::StructType* type,
   HeapObject raw = AllocateRaw(WasmStruct::Size(type), AllocationType::kYoung);
   raw.set_map_after_allocation(*map);
   WasmStruct result = WasmStruct::cast(raw);
-  result.set_raw_properties_or_hash(*empty_fixed_array(), kRelaxedStore);
+  result.set_raw_properties_or_hash(*empty_fixed_array());
   for (uint32_t i = 0; i < type->field_count(); i++) {
     Address address = result.RawFieldAddress(type->field_offset(i));
     if (type->field(i).is_numeric()) {
@@ -1768,7 +1763,7 @@ Handle<JSObject> Factory::CopyJSObjectWithAllocationSite(
       // TODO(gsathya): Do not copy hash code.
       Handle<PropertyArray> prop = CopyArrayWithMap(
           handle(properties, isolate()), handle(properties.map(), isolate()));
-      clone->set_raw_properties_or_hash(*prop, kRelaxedStore);
+      clone->set_raw_properties_or_hash(*prop);
     }
   } else {
     Handle<Object> copied_properties;
@@ -1779,7 +1774,7 @@ Handle<JSObject> Factory::CopyJSObjectWithAllocationSite(
       copied_properties =
           CopyFixedArray(handle(source->property_dictionary(), isolate()));
     }
-    clone->set_raw_properties_or_hash(*copied_properties, kRelaxedStore);
+    clone->set_raw_properties_or_hash(*copied_properties);
   }
   return clone;
 }
@@ -2083,11 +2078,6 @@ Handle<CodeDataContainer> Factory::NewCodeDataContainer(
   DisallowGarbageCollection no_gc;
   data_container.set_next_code_link(*undefined_value(), SKIP_WRITE_BARRIER);
   data_container.set_kind_specific_flags(flags);
-  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    data_container.AllocateExternalPointerEntries(isolate());
-    data_container.set_raw_code(Smi::zero(), SKIP_WRITE_BARRIER);
-    data_container.set_code_entry_point(isolate(), kNullAddress);
-  }
   data_container.clear_padding();
   return handle(data_container, isolate());
 }
@@ -2147,12 +2137,6 @@ Handle<Code> Factory::NewOffHeapTrampolineFor(Handle<Code> code,
     }
 #endif
     raw_result.set_relocation_info(canonical_reloc_info);
-    if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-      // Updating flags (in particular is_off_heap_trampoline one) might change
-      // the value of the instruction start, so update it here.
-      raw_result.code_data_container(kAcquireLoad)
-          .UpdateCodeEntryPoint(isolate(), raw_result);
-    }
   }
 
   return result;
@@ -2188,9 +2172,6 @@ Handle<Code> Factory::CopyCode(Handle<Code> code) {
 #ifndef V8_DISABLE_WRITE_BARRIERS
     WriteBarrierForCode(*new_code);
 #endif
-  }
-  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    data_container->SetCodeAndEntryPoint(isolate(), *new_code);
   }
 
 #ifdef VERIFY_HEAP
@@ -2307,7 +2288,7 @@ Handle<JSGlobalObject> Factory::NewJSGlobalObject(
 void Factory::InitializeJSObjectFromMap(JSObject obj, Object properties,
                                         Map map) {
   DisallowGarbageCollection no_gc;
-  obj.set_raw_properties_or_hash(properties, kRelaxedStore);
+  obj.set_raw_properties_or_hash(properties);
   obj.initialize_elements();
   // TODO(1240798): Initialize the object's body using valid initial values
   // according to the object's initial map.  For example, if the map's
@@ -2376,7 +2357,7 @@ Handle<JSObject> Factory::NewSlowJSObjectFromMap(
   }
   Handle<JSObject> js_object =
       NewJSObjectFromMap(map, allocation, allocation_site);
-  js_object->set_raw_properties_or_hash(*object_properties, kRelaxedStore);
+  js_object->set_raw_properties_or_hash(*object_properties);
   return js_object;
 }
 

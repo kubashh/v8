@@ -396,8 +396,7 @@ Handle<Code> Builtins::GenerateOffHeapTrampolineFor(
                                              : TrampolineType::kAbort);
 
   return Factory::CodeBuilder(isolate, desc, CodeKind::BUILTIN)
-      .set_kind_specific_flags(kind_specfic_flags)
-      .set_read_only_data_container(!V8_EXTERNAL_CODE_SPACE_BOOL)
+      .set_read_only_data_container(kind_specfic_flags)
       .set_self_reference(generator.CodeObject())
       .set_is_executable(generate_jump_to_instruction_stream)
       .Build();

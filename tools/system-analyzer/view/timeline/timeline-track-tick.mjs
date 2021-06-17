@@ -267,8 +267,7 @@ class Annotations {
       this._markFlames(start - range, start - offset);
       this._markFlames(start + offset, start + range);
       offset = range;
-      if ((navigator?.scheduling?.isInputPending({includeContinuous: true}) ??
-           false) ||
+      if (navigator.scheduling.isInputPending({includeContinuous: true}) ||
           performance.now() >= deadline) {
         // Yield if we have to handle an input event, or we're out of time.
         await delay(50);

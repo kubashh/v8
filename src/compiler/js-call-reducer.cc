@@ -2725,7 +2725,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeCall(Node* node) {
   HeapObjectMatcher m(target);
   if (m.HasResolvedValue() && m.Ref(broker()).IsJSFunction()) {
     JSFunctionRef function = m.Ref(broker()).AsJSFunction();
-    if (!function.serialized()) return NoChange();
+    if (!function.SerializeXYZ()) return NoChange();
     context = jsgraph()->Constant(function.context());
   } else {
     context = effect = graph()->NewNode(
@@ -4262,7 +4262,7 @@ Reduction JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpread(
 }
 
 bool JSCallReducer::IsBuiltinOrApiFunction(JSFunctionRef function) const {
-  if (!function.serialized()) return false;
+  if (!function.SerializeXYZ()) return false;
   // TODO(neis): Add a way to check if function template info isn't serialized
   // and add a warning in such cases. Currently we can't tell if function
   // template info doesn't exist or wasn't serialized.
@@ -4286,7 +4286,7 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
     ObjectRef target_ref = m.Ref(broker());
     if (target_ref.IsJSFunction()) {
       JSFunctionRef function = target_ref.AsJSFunction();
-      if (!function.serialized()) return NoChange();
+      if (!function.SerializeXYZ()) return NoChange();
 
       // Don't inline cross native context.
       if (!function.native_context().equals(native_context())) {
@@ -4426,6 +4426,13 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
   if (feedback_target.has_value() && feedback_target->map().is_callable()) {
     Node* target_function = jsgraph()->Constant(*feedback_target);
 
+    if (broker()->is_turboprop()) {
+      if (!feedback_target->IsJSFunction()) return NoChange();
+      if (!IsBuiltinOrApiFunction(feedback_target->AsJSFunction())) {
+        return NoChange();
+      }
+    }
+
     // Check that the {target} is still the {target_function}.
     Node* check = graph()->NewNode(simplified()->ReferenceEqual(), target,
                                    target_function);
@@ -4449,6 +4456,11 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
       if (!feedback_vector.serialized()) {
         TRACE_BROKER_MISSING(
             broker(), "feedback vector, not serialized: " << feedback_vector);
+        return NoChange();
+      }
+
+      if (broker()->is_turboprop() &&
+          !feedback_vector.shared_function_info().HasBuiltinId()) {
         return NoChange();
       }
 
@@ -4938,7 +4950,7 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
 
     if (target_ref.IsJSFunction()) {
       JSFunctionRef function = target_ref.AsJSFunction();
-      if (!function.serialized()) return NoChange();
+      if (!function.SerializeXYZ()) return NoChange();
 
       // Do not reduce constructors with break points.
       // If this state changes during background compilation, the compilation
@@ -5300,6 +5312,10 @@ Reduction JSCallReducer::ReduceForInsufficientFeedback(
   DCHECK(node->opcode() == IrOpcode::kJSCall ||
          node->opcode() == IrOpcode::kJSConstruct);
   if (!(flags() & kBailoutOnUninitialized)) return NoChange();
+  // TODO(mythria): May be add additional flags to specify if we need to deopt
+  // on calls / construct rather than checking for TurboProp here. We may need
+  // it for NativeContextIndependent code too.
+  if (broker()->is_turboprop()) return NoChange();
 
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);

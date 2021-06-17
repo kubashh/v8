@@ -206,9 +206,7 @@ void Snapshot::ClearReconstructableDataForSerialization(
   if (clear_recompilable_data) {
     HandleScope scope(isolate);
     std::vector<i::Handle<i::SharedFunctionInfo>> sfis_to_clear;
-    {
-      // Heap allocation is disallowed within this scope.
-      DisallowGarbageCollection disallow_gc;
+    {  // Heap allocation is disallowed within this scope.
       i::HeapObjectIterator it(isolate->heap());
       for (i::HeapObject o = it.Next(); !o.is_null(); o = it.Next()) {
         if (o.IsSharedFunctionInfo()) {
@@ -231,9 +229,7 @@ void Snapshot::ClearReconstructableDataForSerialization(
 
     // Must happen after heap iteration since SFI::DiscardCompiled may allocate.
     for (i::Handle<i::SharedFunctionInfo> shared : sfis_to_clear) {
-      if (shared->CanDiscardCompiled()) {
-        i::SharedFunctionInfo::DiscardCompiled(isolate, shared);
-      }
+      i::SharedFunctionInfo::DiscardCompiled(isolate, shared);
     }
   }
 

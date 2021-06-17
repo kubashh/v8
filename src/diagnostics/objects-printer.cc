@@ -79,11 +79,9 @@ void PrintDictionaryContents(std::ostream& os, T dict) {
     return;
   }
 
-#ifdef V8_ENABLE_SWISS_NAME_DICTIONARY
   Isolate* isolate = GetIsolateFromWritableObject(dict);
   // IterateEntries for SwissNameDictionary needs to create a handle.
   HandleScope scope(isolate);
-#endif
   for (InternalIndex i : dict.IterateEntries()) {
     Object k;
     if (!dict.ToKey(roots, i, &k)) continue;
@@ -571,7 +569,7 @@ static void JSObjectPrintHeader(std::ostream& os, JSObject obj,
 static void JSObjectPrintBody(std::ostream& os, JSObject obj,
                               bool print_elements = true) {
   os << "\n - properties: ";
-  Object properties_or_hash = obj.raw_properties_or_hash(kRelaxedLoad);
+  Object properties_or_hash = obj.raw_properties_or_hash();
   if (!properties_or_hash.IsSmi()) {
     os << Brief(properties_or_hash);
   }
@@ -1641,11 +1639,6 @@ void PropertyCell::PropertyCellPrint(std::ostream& os) {
 
 void Code::CodePrint(std::ostream& os) {
   PrintHeader(os, "Code");
-  os << "\n - code_data_container: "
-     << Brief(code_data_container(kAcquireLoad));
-  if (is_builtin()) {
-    os << "\n - builtin_id: " << Builtins::name(builtin_id());
-  }
   os << "\n";
 #ifdef ENABLE_DISASSEMBLER
   Disassemble(nullptr, os, GetIsolate());
@@ -1655,11 +1648,6 @@ void Code::CodePrint(std::ostream& os) {
 void CodeDataContainer::CodeDataContainerPrint(std::ostream& os) {
   PrintHeader(os, "CodeDataContainer");
   os << "\n - kind_specific_flags: " << kind_specific_flags();
-  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    os << "\n - code: " << Brief(code());
-    os << "\n - code_entry_point: "
-       << reinterpret_cast<void*>(code_entry_point());
-  }
   os << "\n";
 }
 
