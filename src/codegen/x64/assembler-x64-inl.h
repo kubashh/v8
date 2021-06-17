@@ -5,11 +5,11 @@
 #ifndef V8_CODEGEN_X64_ASSEMBLER_X64_INL_H_
 #define V8_CODEGEN_X64_ASSEMBLER_X64_INL_H_
 
-#include "src/codegen/x64/assembler-x64.h"
-
 #include "src/base/cpu.h"
 #include "src/base/memory.h"
+#include "src/codegen/x64/assembler-x64.h"
 #include "src/debug/debug.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/objects-inl.h"
 
 namespace v8 {
@@ -309,15 +309,19 @@ int RelocInfo::target_address_size() {
 }
 
 HeapObject RelocInfo::target_object() {
+  return HeapObject::cast(target_object_as_object());
+}
+
+Object RelocInfo::target_object_as_object() {
   DCHECK(IsCodeTarget(rmode_) || IsEmbeddedObjectMode(rmode_));
   if (IsCompressedEmbeddedObject(rmode_)) {
     CHECK(!host_.is_null());
     Object o = static_cast<Object>(DecompressTaggedPointer(
         host_.ptr(), ReadUnalignedValue<Tagged_t>(pc_)));
-    return HeapObject::cast(o);
+    return o;
   }
   DCHECK(IsFullEmbeddedObject(rmode_) || IsDataEmbeddedObject(rmode_));
-  return HeapObject::cast(Object(ReadUnalignedValue<Address>(pc_)));
+  return Object(ReadUnalignedValue<Address>(pc_));
 }
 
 HeapObject RelocInfo::target_object_no_host(Isolate* isolate) {

@@ -37,11 +37,11 @@
 #ifndef V8_CODEGEN_IA32_ASSEMBLER_IA32_INL_H_
 #define V8_CODEGEN_IA32_ASSEMBLER_IA32_INL_H_
 
-#include "src/codegen/ia32/assembler-ia32.h"
-
 #include "src/base/memory.h"
 #include "src/codegen/assembler.h"
+#include "src/codegen/ia32/assembler-ia32.h"
 #include "src/debug/debug.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/objects-inl.h"
 
 namespace v8 {
@@ -81,9 +81,13 @@ Address RelocInfo::constant_pool_entry_address() { UNREACHABLE(); }
 int RelocInfo::target_address_size() { return Assembler::kSpecialTargetSize; }
 
 HeapObject RelocInfo::target_object() {
+  return HeapObject::cast(target_object_as_object());
+}
+
+Object RelocInfo::target_object_as_object() {
   DCHECK(IsCodeTarget(rmode_) || IsFullEmbeddedObject(rmode_) ||
          IsDataEmbeddedObject(rmode_));
-  return HeapObject::cast(Object(ReadUnalignedValue<Address>(pc_)));
+  return Object(ReadUnalignedValue<Address>(pc_));
 }
 
 HeapObject RelocInfo::target_object_no_host(Isolate* isolate) {
