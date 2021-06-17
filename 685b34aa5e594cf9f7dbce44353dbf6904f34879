@@ -16,6 +16,40 @@
       "message": "Apparently we use this class a lot!\n\nAn alternative that would be less massive and could be incrementally migrated would be to leave in utils/vector.h and add\n\ntemplate \u003ctypename T\u003e\nusing Vector \u003d base::Vector\u003cT\u003e;\ntemplate \u003ctypename T\u003e\nusing OwnedVector \u003d base::OwnedVector\u003cT\u003e;\netc...",
       "revId": "685b34aa5e594cf9f7dbce44353dbf6904f34879",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54cc7634_a847591c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-17T15:43:42Z",
+      "side": 1,
+      "message": "LGTM, but I did not look at every single change. Was this created via a script? Can you mention in the CL description how this change was prepared?",
+      "revId": "685b34aa5e594cf9f7dbce44353dbf6904f34879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25b7e5f1_8607c39b",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-17T15:43:42Z",
+      "side": 1,
+      "message": "This is a merge error, the DCHECK was removed in a recent CL.",
+      "revId": "685b34aa5e594cf9f7dbce44353dbf6904f34879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
