@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd4e55b7_4206de7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-17T15:59:24Z",
+      "side": 1,
+      "message": "That\u0027s not too bad, I would have used a similar process :)",
+      "parentUuid": "995620ce_cc39e13a",
+      "revId": "685b34aa5e594cf9f7dbce44353dbf6904f34879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25b7e5f1_8607c39b",
