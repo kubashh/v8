@@ -8,6 +8,7 @@
 #include <unordered_map>
 
 #include "include/v8config.h"
+#include "src/base/logging.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate.h"
 #include "src/heap/gc-tracer.h"
@@ -210,6 +211,14 @@ class ConcurrentMarkingVisitor final
    private:
     SlotSnapshot* slot_snapshot_;
   };
+
+  int VisitUpdatableCode(Map map, Code object) {
+    if (!ShouldVisit(object)) return 0;
+    int size = Code::BodyDescriptor::SizeOf(map, object);
+    this->VisitMapPointer(object);
+    Code::BodyDescriptor::IterateBody(map, object, size, this);
+    return size;
+  }
 
   template <typename T>
   int VisitJSObjectSubclassFast(Map map, T object) {
