@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5e7f3ab_00a170c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-06-17T15:05:35Z",
+      "side": 1,
+      "message": "Apparently we use this class a lot!\n\nAn alternative that would be less massive and could be incrementally migrated would be to leave in utils/vector.h and add\n\ntemplate \u003ctypename T\u003e\nusing Vector \u003d base::Vector\u003cT\u003e;\ntemplate \u003ctypename T\u003e\nusing OwnedVector \u003d base::OwnedVector\u003cT\u003e;\netc...",
+      "revId": "685b34aa5e594cf9f7dbce44353dbf6904f34879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
