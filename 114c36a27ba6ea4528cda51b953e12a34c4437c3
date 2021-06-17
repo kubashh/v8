@@ -16,6 +16,126 @@
       "message": "Thanks, guys! PTAL at this \"small\" template magic addition.",
       "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39779bd1_9233f670",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-17T06:40:57Z",
+      "side": 1,
+      "message": "Hmm this looks like overkill. We just need to define a struct templatized by primitive CTypeInfo::Type that carries its underlying C++ type.",
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49a5c62d_5bd01ac5",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-17T06:40:57Z",
+      "side": 1,
+      "message": "The name isn\u0027t very good. What\u0027s the idea here?\n\nDon\u0027t you want to split the primitive from the non-primitive types? In that case I\u0027d define PRIMITVE_FOO and FOO (or ALL_FOO).",
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9d295ca_4d06d808",
+        "filename": "include/v8.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-17T06:40:57Z",
+      "side": 1,
+      "message": "Please update.",
+      "range": {
+        "startLine": 4427,
+        "startChar": 41,
+        "endLine": 4427,
+        "endChar": 51
+      },
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfc5fa0f_c9162c8d",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-17T06:40:57Z",
+      "side": 1,
+      "message": "I find this name confusing, as this is not a CTypeInfo.",
+      "range": {
+        "startLine": 261,
+        "startChar": 30,
+        "endLine": 261,
+        "endChar": 39
+      },
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ec07a24_2f8cfd3c",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-17T06:40:57Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be CTypeInfo::Type instead of uint8_t?\n\nActually, if you plan to go with the current setup where clamped and restricted etc. are not part of the CTypeInfo::Type but are encoded in separate flags then just the CTypeInfo::Type is not enough.",
+      "range": {
+        "startLine": 261,
+        "startChar": 22,
+        "endLine": 261,
+        "endChar": 29
+      },
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e38375d6_32b7a4c1",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-17T06:40:57Z",
+      "side": 1,
+      "message": "We should be able to end up with a static_assert instead.",
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
