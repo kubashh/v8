@@ -352,6 +352,12 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
 
   RootIndexMap const& root_index_map() { return root_index_map_; }
 
+  // If this returns false, the object is guaranteed to be fully initialized and
+  // thus safe to read from a memory safety perspective. The converse does not
+  // necessarily hold.
+  bool ObjectMayBeUninitialized(Handle<Object> object) const;
+  bool ObjectMayBeUninitialized(HeapObject object) const;
+
   // Locks {mutex} through the duration of this scope iff it is the first
   // occurrence. This is done to have a recursive shared lock on {mutex}.
   class V8_NODISCARD RecursiveSharedMutexGuardIfNeeded {
@@ -396,13 +402,6 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
               broker->isolate()->boilerplate_migration_access(),
               &broker->boilerplate_migration_mutex_depth_) {}
   };
-
-  // If this returns false, the object is guaranteed to be fully initialized and
-  // thus safe to read from a memory safety perspective. The converse does not
-  // necessarily hold.
-  bool ObjectMayBeUninitialized(Handle<Object> object) const;
-  bool ObjectMayBeUninitialized(Object object) const;
-  bool ObjectMayBeUninitialized(HeapObject object) const;
 
  private:
   friend class HeapObjectRef;

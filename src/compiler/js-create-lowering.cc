@@ -121,6 +121,7 @@ Reduction JSCreateLowering::ReduceJSCreate(Node* node) {
 
   JSFunctionRef original_constructor =
       HeapObjectMatcher(new_target).Ref(broker()).AsJSFunction();
+  if (!original_constructor.SerializeXYZ()) return NoChange();
   SlackTrackingPrediction slack_tracking_prediction =
       dependencies()->DependOnInitialMapInstanceSizePrediction(
           original_constructor);
@@ -389,6 +390,7 @@ Reduction JSCreateLowering::ReduceJSCreateGeneratorObject(Node* node) {
     DCHECK(closure_type.AsHeapConstant()->Ref().IsJSFunction());
     JSFunctionRef js_function =
         closure_type.AsHeapConstant()->Ref().AsJSFunction();
+    if (!js_function.SerializeXYZ()) return NoChange();
     if (!js_function.has_initial_map()) return NoChange();
 
     SlackTrackingPrediction slack_tracking_prediction =
@@ -634,6 +636,7 @@ Reduction JSCreateLowering::ReduceJSCreateArray(Node* node) {
   Node* new_target = NodeProperties::GetValueInput(node, 1);
   JSFunctionRef original_constructor =
       HeapObjectMatcher(new_target).Ref(broker()).AsJSFunction();
+  if (!original_constructor.SerializeXYZ()) return NoChange();
   SlackTrackingPrediction slack_tracking_prediction =
       dependencies()->DependOnInitialMapInstanceSizePrediction(
           original_constructor);
@@ -1692,11 +1695,11 @@ base::Optional<Node*> JSCreateLowering::TryAllocateFastLiteral(
                           LoadSensitivity::kUnsafe,
                           const_field_info};
 
-    // Note: the use of RawInobjectPropertyAt (vs. the higher-level
+    // Note: the use of RawFastPropertyAt (vs. the higher-level
     // GetOwnFastDataProperty) here is necessary, since the underlying value
     // may be `uninitialized`, which the latter explicitly does not support.
     base::Optional<ObjectRef> maybe_boilerplate_value =
-        boilerplate.RawInobjectPropertyAt(index);
+        boilerplate.RawFastPropertyAt(index);
     if (!maybe_boilerplate_value.has_value()) return {};
 
     // Note: We don't need to take a compilation dependency verifying the value

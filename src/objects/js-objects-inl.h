@@ -145,8 +145,6 @@ bool JSObject::PrototypeHasNoElements(Isolate* isolate, JSObject object) {
 }
 
 ACCESSORS(JSReceiver, raw_properties_or_hash, Object, kPropertiesOrHashOffset)
-RELAXED_ACCESSORS(JSReceiver, raw_properties_or_hash, Object,
-                  kPropertiesOrHashOffset)
 
 void JSObject::EnsureCanContainHeapObjectElements(Handle<JSObject> object) {
   JSObject::ValidateElements(*object);
@@ -374,10 +372,10 @@ base::Optional<Object> JSObject::RawInobjectPropertyAt(Map original_map,
   // Only if the maps match can the property be inspected. It may have a "wrong"
   // value, but it will be within the bounds of the objects instance size as
   // given by the map and it will be a valid Smi or object pointer.
-  Object maybe_tagged_object =
+  Object dangerous_object =
       TaggedField<Object>::Acquire_Load(cage_base, *this, index.offset());
   if (original_map != map(kAcquireLoad)) return {};
-  return maybe_tagged_object;
+  return dangerous_object;
 }
 
 void JSObject::RawFastInobjectPropertyAtPut(FieldIndex index, Object value,

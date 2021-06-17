@@ -322,12 +322,12 @@ class JSObjectRef : public JSReceiverRef {
   // value can be an uninitialized-sentinel, or if HeapNumber construction must
   // be avoided for some reason. Otherwise, use the higher-level
   // GetOwnFastDataProperty.
-  base::Optional<ObjectRef> RawInobjectPropertyAt(FieldIndex index) const;
+  base::Optional<ObjectRef> RawFastPropertyAt(FieldIndex index) const;
 
   // Return the element at key {index} if {index} is known to be an own data
   // property of the object that is non-writable and non-configurable. If
-  // {dependencies} is non-null, a dependency will be taken to protect
-  // against inconsistency due to weak memory concurrency.
+  // {dependencies} is non-null, a dependency will be taken to check that
+  // the property is still constant at code finalization time.
   base::Optional<ObjectRef> GetOwnConstantElement(
       const FixedArrayBaseRef& elements_ref, uint32_t index,
       CompilationDependencies* dependencies,
@@ -343,8 +343,8 @@ class JSObjectRef : public JSReceiverRef {
   // Return the value of the property identified by the field {index}
   // if {index} is known to be an own data property of the object.
   // If {dependencies} is non-null, and a property was successfully read,
-  // then the function will take a dependency to check the value of the
-  // property at code finalization time.
+  // then the function will take a dependency
+  // to check the value of the property at code finalization time.
   base::Optional<ObjectRef> GetOwnFastDataProperty(
       Representation field_representation, FieldIndex index,
       CompilationDependencies* dependencies,
@@ -402,8 +402,8 @@ class V8_EXPORT_PRIVATE JSFunctionRef : public JSObjectRef {
   bool has_prototype() const;
   bool PrototypeRequiresRuntimeLookup() const;
 
-  void Serialize();
-  bool serialized() const;
+  bool SerializeXYZ() const;
+  bool IsConsistentWithHeapState() const;
 
   // The following are available only after calling Serialize().
   ObjectRef prototype() const;
@@ -412,9 +412,6 @@ class V8_EXPORT_PRIVATE JSFunctionRef : public JSObjectRef {
   NativeContextRef native_context() const;
   SharedFunctionInfoRef shared() const;
   int InitialMapInstanceSizeWithMinSlack() const;
-
-  void SerializeCodeAndFeedback();
-  bool serialized_code_and_feedback() const;
 
   // The following are available only after calling SerializeCodeAndFeedback().
   // TODO(mvstanton): Once we allow inlining of functions we didn't see

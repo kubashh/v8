@@ -21,6 +21,7 @@
 #include "src/init/bootstrapper.h"
 #include "src/logging/counters.h"
 #include "src/runtime/runtime.h"
+#include "src/snapshot/embedded/embedded-data.h"
 #include "src/snapshot/snapshot.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -193,9 +194,11 @@ void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
     // Inline the trampoline.
     Label skip;
     RecordCommentForOffHeapTrampoline(builtin_index);
+    EmbeddedData d = EmbeddedData::FromBlob();
+    Address entry = d.InstructionStartOfBuiltin(builtin_index);
     // Use ip directly instead of using UseScratchRegisterScope, as we do
     // not preserve scratch registers across calls.
-    mov(ip, Operand(BuiltinEntry(builtin_index), RelocInfo::OFF_HEAP_TARGET));
+    mov(ip, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
     if (cond != al) b(NegateCondition(cond), &skip, cr);
     Jump(ip);
     bind(&skip);
@@ -278,9 +281,11 @@ void TurboAssembler::Call(Handle<Code> code, RelocInfo::Mode rmode,
   } else if (options().inline_offheap_trampolines && target_is_builtin) {
     // Inline the trampoline.
     RecordCommentForOffHeapTrampoline(builtin_index);
+    EmbeddedData d = EmbeddedData::FromBlob();
+    Address entry = d.InstructionStartOfBuiltin(builtin_index);
     // Use ip directly instead of using UseScratchRegisterScope, as we do
     // not preserve scratch registers across calls.
-    mov(ip, Operand(BuiltinEntry(builtin_index), RelocInfo::OFF_HEAP_TARGET));
+    mov(ip, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
     Label skip;
     if (cond != al) b(NegateCondition(cond), &skip);
     Call(ip);
@@ -468,66 +473,6 @@ void TurboAssembler::MultiPopV128(RegList dregs, Register location) {
     }
   }
   addi(location, location, Operand(stack_offset));
-}
-
-void TurboAssembler::MultiPushF64AndV128(RegList dregs, RegList simd_regs,
-                                         Register location) {
-  bool generating_bultins =
-      isolate() && isolate()->IsGeneratingEmbeddedBuiltins();
-  MultiPushDoubles(dregs);
-  if (generating_bultins) {
-    // V8 uses the same set of fp param registers as Simd param registers.
-    // As these registers are two different sets on ppc we must make
-    // sure to also save them when Simd is enabled.
-    // Check the comments under crrev.com/c/2645694 for more details.
-    Label push_empty_simd, simd_pushed;
-    Move(ip, ExternalReference::supports_wasm_simd_128_address());
-    LoadU8(ip, MemOperand(ip), r0);
-    cmpi(ip, Operand::Zero());  // If > 0 then simd is available.
-    ble(&push_empty_simd);
-    MultiPushV128(simd_regs);
-    b(&simd_pushed);
-    bind(&push_empty_simd);
-    // We still need to allocate empty space on the stack even if we
-    // are not pushing Simd registers (see kFixedFrameSizeFromFp).
-    addi(sp, sp,
-         Operand(-static_cast<int8_t>(NumRegs(simd_regs)) * kSimd128Size));
-    bind(&simd_pushed);
-  } else {
-    if (CpuFeatures::SupportsWasmSimd128()) {
-      MultiPushV128(simd_regs);
-    } else {
-      addi(sp, sp,
-           Operand(-static_cast<int8_t>(NumRegs(simd_regs)) * kSimd128Size));
-    }
-  }
-}
-
-void TurboAssembler::MultiPopF64AndV128(RegList dregs, RegList simd_regs,
-                                        Register location) {
-  bool generating_bultins =
-      isolate() && isolate()->IsGeneratingEmbeddedBuiltins();
-  if (generating_bultins) {
-    Label pop_empty_simd, simd_popped;
-    Move(ip, ExternalReference::supports_wasm_simd_128_address());
-    LoadU8(ip, MemOperand(ip), r0);
-    cmpi(ip, Operand::Zero());  // If > 0 then simd is available.
-    ble(&pop_empty_simd);
-    MultiPopV128(simd_regs);
-    b(&simd_popped);
-    bind(&pop_empty_simd);
-    addi(sp, sp,
-         Operand(static_cast<int8_t>(NumRegs(simd_regs)) * kSimd128Size));
-    bind(&simd_popped);
-  } else {
-    if (CpuFeatures::SupportsWasmSimd128()) {
-      MultiPopV128(simd_regs);
-    } else {
-      addi(sp, sp,
-           Operand(static_cast<int8_t>(NumRegs(simd_regs)) * kSimd128Size));
-    }
-  }
-  MultiPopDoubles(dregs);
 }
 
 void TurboAssembler::LoadRoot(Register destination, RootIndex index,
@@ -758,9 +703,11 @@ void TurboAssembler::CallRecordWriteStub(
         Builtins::GetRecordWriteStub(remembered_set_action, fp_mode);
     if (options().inline_offheap_trampolines) {
       RecordCommentForOffHeapTrampoline(builtin_index);
+      EmbeddedData d = EmbeddedData::FromBlob();
+      Address entry = d.InstructionStartOfBuiltin(builtin_index);
       // Use ip directly instead of using UseScratchRegisterScope, as we do
       // not preserve scratch registers across calls.
-      mov(ip, Operand(BuiltinEntry(builtin_index), RelocInfo::OFF_HEAP_TARGET));
+      mov(ip, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
       Call(ip);
     } else {
       Handle<Code> code_target =

@@ -214,6 +214,7 @@ Node* PropertyAccessBuilder::TryFoldLoadConstantDataField(
   if (!value.has_value()) {
     return nullptr;
   }
+
   return jsgraph()->Constant(*value);
 }
 

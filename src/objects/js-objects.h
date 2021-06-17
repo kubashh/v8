@@ -75,7 +75,6 @@ class JSReceiver : public HeapObject {
   // This is used only in the deoptimizer and heap. Please use the
   // above typed getters and setters to access the properties.
   DECL_ACCESSORS(raw_properties_or_hash, Object)
-  DECL_RELAXED_ACCESSORS(raw_properties_or_hash, Object)
 
   inline void initialize_properties(Isolate* isolate);
 

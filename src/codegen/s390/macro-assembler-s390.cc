@@ -22,6 +22,7 @@
 #include "src/logging/counters.h"
 #include "src/objects/smi.h"
 #include "src/runtime/runtime.h"
+#include "src/snapshot/embedded/embedded-data.h"
 #include "src/snapshot/snapshot.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -407,7 +408,10 @@ void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
   if (options().inline_offheap_trampolines && target_is_builtin) {
     // Inline the trampoline.
     RecordCommentForOffHeapTrampoline(builtin_index);
-    mov(ip, Operand(BuiltinEntry(builtin_index), RelocInfo::OFF_HEAP_TARGET));
+    CHECK_NE(builtin_index, Builtin::kNoBuiltinId);
+    EmbeddedData d = EmbeddedData::FromBlob();
+    Address entry = d.InstructionStartOfBuiltin(builtin_index);
+    mov(ip, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
     b(cond, ip);
     return;
   }
@@ -465,7 +469,10 @@ void TurboAssembler::Call(Handle<Code> code, RelocInfo::Mode rmode,
   if (target_is_builtin && options().inline_offheap_trampolines) {
     // Inline the trampoline.
     RecordCommentForOffHeapTrampoline(builtin_index);
-    mov(ip, Operand(BuiltinEntry(builtin_index), RelocInfo::OFF_HEAP_TARGET));
+    CHECK_NE(builtin_index, Builtin::kNoBuiltinId);
+    EmbeddedData d = EmbeddedData::FromBlob();
+    Address entry = d.InstructionStartOfBuiltin(builtin_index);
+    mov(ip, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
     Call(ip);
     return;
   }
@@ -701,60 +708,6 @@ void TurboAssembler::MultiPopV128(RegList dregs, Register location) {
   AddS64(location, location, Operand(stack_offset));
 }
 
-void TurboAssembler::MultiPushF64OrV128(RegList dregs, Register location) {
-  bool generating_bultins =
-      isolate() && isolate()->IsGeneratingEmbeddedBuiltins();
-  if (generating_bultins) {
-    Label push_doubles, simd_pushed;
-    Move(r1, ExternalReference::supports_wasm_simd_128_address());
-    LoadU8(r1, MemOperand(r1));
-    LoadAndTestP(r1, r1);  // If > 0 then simd is available.
-    ble(&push_doubles, Label::kNear);
-    // Save vector registers, don't save double registers anymore.
-    MultiPushV128(dregs);
-    b(&simd_pushed);
-    bind(&push_doubles);
-    // Simd not supported, only save double registers.
-    MultiPushDoubles(dregs);
-    // We still need to allocate empty space on the stack as if
-    // Simd rgeisters were saved (see kFixedFrameSizeFromFp).
-    lay(sp, MemOperand(sp, -(NumRegs(dregs) * kDoubleSize)));
-    bind(&simd_pushed);
-  } else {
-    if (CpuFeatures::SupportsWasmSimd128()) {
-      MultiPushV128(dregs);
-    } else {
-      MultiPushDoubles(dregs);
-      lay(sp, MemOperand(sp, -(NumRegs(dregs) * kDoubleSize)));
-    }
-  }
-}
-
-void TurboAssembler::MultiPopF64OrV128(RegList dregs, Register location) {
-  bool generating_bultins =
-      isolate() && isolate()->IsGeneratingEmbeddedBuiltins();
-  if (generating_bultins) {
-    Label pop_doubles, simd_popped;
-    LoadAndTestP(r1, r1);  // If > 0 then simd is available.
-    ble(&pop_doubles, Label::kNear);
-    // Pop vector registers, don't pop double registers anymore.
-    MultiPopV128(dregs);
-    b(&simd_popped);
-    bind(&pop_doubles);
-    // Simd not supported, only pop double registers.
-    lay(sp, MemOperand(sp, NumRegs(dregs) * kDoubleSize));
-    MultiPopDoubles(dregs);
-    bind(&simd_popped);
-  } else {
-    if (CpuFeatures::SupportsWasmSimd128()) {
-      MultiPopV128(dregs);
-    } else {
-      lay(sp, MemOperand(sp, NumRegs(dregs) * kDoubleSize));
-      MultiPopDoubles(dregs);
-    }
-  }
-}
-
 void TurboAssembler::LoadRoot(Register destination, RootIndex index,
                               Condition) {
   LoadU64(destination,
@@ -982,7 +935,10 @@ void TurboAssembler::CallRecordWriteStub(
         Builtins::GetRecordWriteStub(remembered_set_action, fp_mode);
     if (options().inline_offheap_trampolines) {
       RecordCommentForOffHeapTrampoline(builtin_index);
-      mov(ip, Operand(BuiltinEntry(builtin_index), RelocInfo::OFF_HEAP_TARGET));
+      CHECK_NE(builtin_index, Builtin::kNoBuiltinId);
+      EmbeddedData d = EmbeddedData::FromBlob();
+      Address entry = d.InstructionStartOfBuiltin(builtin_index);
+      mov(ip, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
       Call(ip);
     } else {
       Handle<Code> code_target =

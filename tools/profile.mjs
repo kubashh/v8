@@ -57,7 +57,7 @@ export class SourcePosition {
       title: this.toString(),
       __this__: this,
       script: this.script,
-      entries: this.entries,
+      entries: this.entries.length,
     }
   }
 }
@@ -128,7 +128,7 @@ export class Script {
       id: this.id,
       url: this.url,
       source: this.source,
-      sourcePositions: this.sourcePositions
+      sourcePositions: this.sourcePositions.length
     }
   }
 
@@ -203,7 +203,7 @@ export class Profile {
 
   /**
    * Returns whether a function with the specified name must be skipped.
-   * Should be overridden by subclasses.
+   * Should be overriden by subclasses.
    *
    * @param {string} name Function name.
    */
@@ -838,10 +838,6 @@ class FunctionEntry extends CodeEntry {
   getSourceCode() {
     // All code entries should map to the same source positions.
     return this._codeEntries.values().next().value.getSourceCode();
-  }
-
-  get codeEntries() {
-    return this._codeEntries;
   }
 
   /**

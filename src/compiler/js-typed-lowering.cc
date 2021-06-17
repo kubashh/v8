@@ -1622,10 +1622,7 @@ Reduction JSTypedLowering::ReduceJSConstruct(Node* node) {
     // Only optimize [[Construct]] here if {function} is a Constructor.
     if (!function.map().is_constructor()) return NoChange();
 
-    if (!function.serialized()) {
-      TRACE_BROKER_MISSING(broker(), "data for function " << function);
-      return NoChange();
-    }
+    if (!function.SerializeXYZ()) return NoChange();
 
     // Patch {node} to an indirect call via the {function}s construct stub.
     bool use_builtin_construct_stub = function.shared().construct_as_builtin();
@@ -1704,11 +1701,7 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
   if (target_type.IsHeapConstant() &&
       target_type.AsHeapConstant()->Ref().IsJSFunction()) {
     function = target_type.AsHeapConstant()->Ref().AsJSFunction();
-
-    if (!function->serialized()) {
-      TRACE_BROKER_MISSING(broker(), "data for function " << *function);
-      return NoChange();
-    }
+    if (!function->SerializeXYZ()) return NoChange();
     shared = function->shared();
   } else if (target->opcode() == IrOpcode::kJSCreateClosure) {
     CreateClosureParameters const& ccp =

@@ -56,9 +56,7 @@ bool CanConsiderForInlining(JSHeapBroker* broker,
     return false;
   }
 
-  if (!function.serialized() || !function.serialized_code_and_feedback()) {
-    TRACE_BROKER_MISSING(
-        broker, "data for " << function << " (cannot consider for inlining)");
+  if (!function.SerializeXYZ()) {
     TRACE("Cannot consider " << function << " for inlining (missing data)");
     return false;
   }

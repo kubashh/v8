@@ -371,6 +371,9 @@ Reduction JSNativeContextSpecialization::ReduceJSGetSuperConstructor(
   // {function}s map is stable, i.e. we can use a code dependency
   // to guard against [[Prototype]] changes of {function}.
   if (function_map.is_stable()) {
+    if (broker()->is_concurrent_inlining()) {
+      dependencies()->DependOnConsistentJSFunctionView(function);
+    }
     dependencies()->DependOnStableMap(function_map);
     Node* value = jsgraph()->Constant(*function_prototype);
     ReplaceWithValue(node, value);
@@ -648,13 +651,17 @@ Reduction JSNativeContextSpecialization::ReduceJSOrdinaryHasInstance(
     // Optimize if we currently know the "prototype" property.
 
     JSFunctionRef function = m.Ref(broker()).AsJSFunction();
-    if (!function.serialized()) return NoChange();
+    if (!function.SerializeXYZ()) return NoChange();
 
     // TODO(neis): Remove the has_prototype_slot condition once the broker is
     // always enabled.
     if (!function.map().has_prototype_slot() || !function.has_prototype() ||
         function.PrototypeRequiresRuntimeLookup()) {
       return NoChange();
+    }
+
+    if (broker()->is_concurrent_inlining()) {
+      dependencies()->DependOnConsistentJSFunctionView(function);
     }
 
     ObjectRef prototype = dependencies()->DependOnPrototypeProperty(function);
@@ -1468,12 +1475,15 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadNamed(Node* node) {
         name.equals(MakeRef(broker(), factory()->prototype_string()))) {
       // Optimize "prototype" property of functions.
       JSFunctionRef function = object.AsJSFunction();
-      if (!function.serialized()) return NoChange();
+      if (!function.SerializeXYZ()) return NoChange();
       // TODO(neis): Remove the has_prototype_slot condition once the broker is
       // always enabled.
       if (!function.map().has_prototype_slot() || !function.has_prototype() ||
           function.PrototypeRequiresRuntimeLookup()) {
         return NoChange();
+      }
+      if (broker()->is_concurrent_inlining()) {
+        dependencies()->DependOnConsistentJSFunctionView(function);
       }
       ObjectRef prototype = dependencies()->DependOnPrototypeProperty(function);
       Node* value = jsgraph()->Constant(prototype);

@@ -7,9 +7,8 @@ import {LogEntry} from './log.mjs';
 // ===========================================================================
 // Map Log Events
 
-export const kChunkHeight = 200;
-export const kChunkWidth = 10;
-export const kChunkVisualWidth = 6;
+const kChunkHeight = 200;
+const kChunkWidth = 10;
 
 function define(prototype, name, fn) {
   Object.defineProperty(prototype, name, {value: fn, enumerable: false});
@@ -34,7 +33,7 @@ define(Array.prototype, 'last', function() {
 // ===========================================================================
 // Map Log Events
 
-export class MapLogEntry extends LogEntry {
+class MapLogEntry extends LogEntry {
   constructor(id, time) {
     if (!time) throw new Error('Invalid time');
     // Use MapLogEntry.type getter instead of property, since we only know the
@@ -55,10 +54,6 @@ export class MapLogEntry extends LogEntry {
 
   get functionName() {
     return this.entry?.functionName;
-  }
-
-  get code() {
-    return this.entry?.logEntry;
   }
 
   toString() {
@@ -126,7 +121,7 @@ export class MapLogEntry extends LogEntry {
   position(chunks) {
     const index = this.chunkIndex(chunks);
     if (index === -1) return [0, 0];
-    const xFrom = (index * kChunkWidth + kChunkVisualWidth / 2) | 0;
+    const xFrom = (index + 0.5) * kChunkWidth | 0;
     const yFrom = kChunkHeight - chunks[index].yOffset(this) | 0;
     return [xFrom, yFrom];
   }
@@ -194,8 +189,8 @@ export class MapLogEntry extends LogEntry {
 
   static get propertyNames() {
     return [
-      'type', 'reason', 'property', 'parent', 'functionName', 'sourcePosition',
-      'script', 'code', 'id', 'description'
+      'type', 'reason', 'property', 'functionName', 'sourcePosition', 'script',
+      'id', 'parent', 'description'
     ];
   }
 }
@@ -203,7 +198,7 @@ export class MapLogEntry extends LogEntry {
 MapLogEntry.cache = new Map();
 
 // ===========================================================================
-export class Edge {
+class Edge {
   constructor(type, name, reason, time, from, to) {
     this.type = type;
     this.name = name;
@@ -327,3 +322,5 @@ export class Edge {
         (this.name ? this.name : '')
   }
 }
+
+export {MapLogEntry, Edge, kChunkWidth, kChunkHeight};

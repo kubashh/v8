@@ -234,35 +234,36 @@ class OwnConstantDataPropertyDependency final : public CompilationDependency {
                                     const JSObjectRef& holder,
                                     const MapRef& map,
                                     Representation representation,
-                                    FieldIndex index, const ObjectRef& value)
+                                    FieldIndex index,
+                                    const ObjectRef& current_value)
       : broker_(broker),
         holder_(holder),
-        map_(map),
+        original_map_(map),
         representation_(representation),
         index_(index),
-        value_(value) {}
+        value_(current_value) {}
 
   bool IsValid() const override {
-    if (holder_.object()->map() != *map_.object()) {
+    if (holder_.object()->map() != *original_map_.object()) {
       TRACE_BROKER_MISSING(broker_,
                            "Map change detected in " << holder_.object());
       return false;
     }
     DisallowGarbageCollection no_heap_allocation;
-    Object current_value = holder_.object()->RawFastPropertyAt(index_);
-    Object used_value = *value_.object();
+    Object property_value = holder_.object()->RawFastPropertyAt(index_);
+    Object saved_value = *value_.object();
     if (representation_.IsDouble()) {
-      // Compare doubles by bit pattern.
-      if (!current_value.IsHeapNumber() || !used_value.IsHeapNumber() ||
-          HeapNumber::cast(current_value).value_as_bits() !=
-              HeapNumber::cast(used_value).value_as_bits()) {
+      // Compare doubles by value.
+      if (!property_value.IsHeapNumber() || !value_.object()->IsHeapNumber() ||
+          HeapNumber::cast(property_value).value_as_bits() !=
+              HeapNumber::cast(saved_value).value_as_bits()) {
         TRACE_BROKER_MISSING(broker_,
                              "Constant Double property value changed in "
                                  << holder_.object() << " at FieldIndex "
                                  << index_.property_index());
         return false;
       }
-    } else if (current_value != used_value) {
+    } else if (property_value != saved_value) {
       TRACE_BROKER_MISSING(broker_, "Constant property value changed in "
                                         << holder_.object() << " at FieldIndex "
                                         << index_.property_index());
@@ -276,10 +277,27 @@ class OwnConstantDataPropertyDependency final : public CompilationDependency {
  private:
   JSHeapBroker* const broker_;
   JSObjectRef const holder_;
-  MapRef const map_;
+  MapRef const original_map_;
   Representation const representation_;
   FieldIndex const index_;
   ObjectRef const value_;
+};
+
+class ConsistentJSFunctionViewDependency final : public CompilationDependency {
+ public:
+  explicit ConsistentJSFunctionViewDependency(const JSFunctionRef& function)
+      : function_(function) {
+    DCHECK(function.SerializeXYZ());
+  }
+
+  bool IsValid() const override {
+    return function_.IsConsistentWithHeapState();
+  }
+
+  void Install(Handle<Code> code) const override {}
+
+ private:
+  const JSFunctionRef function_;
 };
 
 class TransitionDependency final : public CompilationDependency {
@@ -723,9 +741,9 @@ void CompilationDependencies::DependOnOwnConstantElement(
 
 void CompilationDependencies::DependOnOwnConstantDataProperty(
     const JSObjectRef& holder, const MapRef& map, Representation representation,
-    FieldIndex index, const ObjectRef& value) {
+    FieldIndex index, const ObjectRef& current_value) {
   RecordDependency(zone_->New<OwnConstantDataPropertyDependency>(
-      broker_, holder, map, representation, index, value));
+      broker_, holder, map, representation, index, current_value));
 }
 
 bool CompilationDependencies::Commit(Handle<Code> code) {
@@ -826,6 +844,12 @@ void CompilationDependencies::DependOnElementsKinds(
     current = current.nested_site().AsAllocationSite();
   }
   CHECK_EQ(current.nested_site().AsSmi(), 0);
+}
+
+void CompilationDependencies::DependOnConsistentJSFunctionView(
+    const JSFunctionRef& function) {
+  DCHECK(broker_->is_concurrent_inlining());
+  RecordDependency(zone_->New<ConsistentJSFunctionViewDependency>(function));
 }
 
 SlackTrackingPrediction::SlackTrackingPrediction(MapRef initial_map,
