@@ -6,8 +6,11 @@
 
 #include <stack>
 #include <unordered_map>
+#include <utility>
 
 #include "include/v8config.h"
+#include "src/base/logging.h"
+#include "src/codegen/reloc-info.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate.h"
 #include "src/heap/gc-tracer.h"
@@ -28,6 +31,7 @@
 #include "src/objects/data-handler-inl.h"
 #include "src/objects/embedder-data-array-inl.h"
 #include "src/objects/hash-table-inl.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/slots-inl.h"
 #include "src/objects/transitions-inl.h"
@@ -58,6 +62,11 @@ class ConcurrentMarkingState final
   MemoryChunkDataMap* memory_chunk_data_;
 };
 
+struct TypedSlot {
+  RelocInfo* rinfo;
+  Object value;
+};
+
 // Helper class for storing in-object slot addresses and values.
 class SlotSnapshot {
  public:
@@ -67,15 +76,23 @@ class SlotSnapshot {
   int number_of_slots() const { return number_of_slots_; }
   ObjectSlot slot(int i) const { return snapshot_[i].first; }
   Object value(int i) const { return snapshot_[i].second; }
-  void clear() { number_of_slots_ = 0; }
+  void clear() {
+    number_of_slots_ = 0;
+    typed_slots_.clear();
+  }
   void add(ObjectSlot slot, Object value) {
     snapshot_[number_of_slots_++] = {slot, value};
   }
+  void add(RelocInfo* reloc_info, Object value) {
+    typed_slots_.push_back({reloc_info, value});
+  }
+  const std::vector<TypedSlot>& typed_slots() const { return typed_slots_; }
 
  private:
   static const int kMaxSnapshotSize = JSObject::kMaxInstanceSize / kTaggedSize;
   int number_of_slots_;
   std::pair<ObjectSlot, Object> snapshot_[kMaxSnapshotSize];
+  std::vector<TypedSlot> typed_slots_;
 };
 
 class ConcurrentMarkingVisitor final
@@ -191,15 +208,15 @@ class ConcurrentMarkingVisitor final
     }
 
     void VisitCodeTarget(Code host, RelocInfo* rinfo) final {
-      // This should never happen, because snapshotting is performed only on
-      // JSObjects (and derived classes).
-      UNREACHABLE();
+      // Use target_object_as_object() instead of target_object() since we might
+      // not read a valid HeapObject here.
+      slot_snapshot_->add(rinfo, rinfo->target_object_as_object());
     }
 
     void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) final {
-      // This should never happen, because snapshotting is performed only on
-      // JSObjects (and derived classes).
-      UNREACHABLE();
+      // Use target_object_as_object() instead of target_object() since we might
+      // not read a valid HeapObject here.
+      slot_snapshot_->add(rinfo, rinfo->target_object_as_object());
     }
 
     void VisitCustomWeakPointers(HeapObject host, ObjectSlot start,
@@ -210,6 +227,14 @@ class ConcurrentMarkingVisitor final
    private:
     SlotSnapshot* slot_snapshot_;
   };
+
+  int VisitUpdatableCode(Map map, Code object) {
+    if (!ShouldVisit(object)) return 0;
+    int size = Code::BodyDescriptor::SizeOf(map, object);
+    this->VisitMapPointer(object);
+    Code::BodyDescriptor::IterateBody(map, object, size, this);
+    return size;
+  }
 
   template <typename T>
   int VisitJSObjectSubclassFast(Map map, T object) {
@@ -255,6 +280,16 @@ class ConcurrentMarkingVisitor final
       HeapObject heap_object = HeapObject::cast(object);
       MarkObject(host, heap_object);
       RecordSlot(host, slot, heap_object);
+    }
+
+    for (const TypedSlot& slot : snapshot.typed_slots()) {
+      RelocInfo* rinfo = slot.rinfo;
+      Object object = slot.value;
+      DCHECK(!HasWeakHeapObjectTag(object));
+      if (!object.IsHeapObject()) continue;
+      HeapObject heap_object = HeapObject::cast(object);
+      MarkObject(host, heap_object);
+      RecordRelocSlot(Code::cast(host), rinfo, heap_object);
     }
   }
 

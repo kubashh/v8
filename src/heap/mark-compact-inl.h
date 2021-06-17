@@ -90,6 +90,15 @@ void MarkCompactCollector::AddTransitionArray(TransitionArray array) {
 }
 
 template <typename MarkingState>
+int MainMarkingVisitor<MarkingState>::VisitUpdatableCode(Map map, Code object) {
+  if (!this->ShouldVisit(object)) return 0;
+  int size = Code::BodyDescriptor::SizeOf(map, object);
+  this->VisitMapPointer(object);
+  Code::BodyDescriptor::IterateBody(map, object, size, this);
+  return size;
+}
+
+template <typename MarkingState>
 template <typename T, typename TBodyDescriptor>
 int MainMarkingVisitor<MarkingState>::VisitJSObjectSubclass(Map map, T object) {
   if (!this->ShouldVisit(object)) return 0;
