@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd9db883_14fc28c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-17T16:04:06Z",
+      "side": 1,
+      "message": "Michi, PTAL @ all\nJakob, PTAL @ deoptimizer",
+      "revId": "a128c6a9e91af3c1a2a781e29f6d7b7cd5e498c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b94a534a_7768baab",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-17T16:04:06Z",
+      "side": 1,
+      "message": "Contexts are no longer FixedArray-based although they share the same layout.",
+      "revId": "a128c6a9e91af3c1a2a781e29f6d7b7cd5e498c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
