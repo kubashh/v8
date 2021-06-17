@@ -84,7 +84,7 @@ enum class RefSerializationKind {
   V(JSBoundFunction, RefSerializationKind::kSerialized)                   \
   V(JSDataView, RefSerializationKind::kSerialized)                        \
   V(JSFunction, RefSerializationKind::kSerialized)                        \
-  V(JSGlobalObject, RefSerializationKind::kSerialized)                    \
+  V(JSGlobalObject, RefSerializationKind::kBackgroundSerialized)          \
   V(JSGlobalProxy, RefSerializationKind::kBackgroundSerialized)           \
   V(JSTypedArray, RefSerializationKind::kBackgroundSerialized)            \
   /* Subtypes of Context */                                               \
@@ -1019,14 +1019,6 @@ class JSGlobalObjectRef : public JSObjectRef {
   Handle<JSGlobalObject> object() const;
 
   bool IsDetached() const;
-
-  // If {serialize} is false:
-  //   If the property is known to exist as a property cell (on the global
-  //   object), return that property cell. Otherwise (not known to exist as a
-  //   property cell or known not to exist as a property cell) return nothing.
-  // If {serialize} is true:
-  //   Like above but potentially access the heap and serialize the necessary
-  //   information.
   base::Optional<PropertyCellRef> GetPropertyCell(
       NameRef const& name, SerializationPolicy policy =
                                SerializationPolicy::kAssumeSerialized) const;
