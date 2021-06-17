@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_MARKING_VISITOR_INL_H_
 #define V8_HEAP_MARKING_VISITOR_INL_H_
 
+#include "src/base/logging.h"
 #include "src/heap/marking-visitor.h"
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/objects-visiting.h"
@@ -464,6 +465,16 @@ int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitTransitionArray(
   int size = TransitionArray::BodyDescriptor::SizeOf(map, array);
   TransitionArray::BodyDescriptor::IterateBody(map, array, size, this);
   weak_objects_->transition_arrays.Push(task_id_, array);
+  return size;
+}
+
+template <typename ConcreteVisitor, typename MarkingState>
+int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitCode(Map map,
+                                                                 Code object) {
+  if (!concrete_visitor()->ShouldVisit(object)) return 0;
+  int size = Code::BodyDescriptor::SizeOf(map, object);
+  concrete_visitor()->VisitMapPointer(object);
+  Code::BodyDescriptor::IterateBody(map, object, size, this);
   return size;
 }
 
