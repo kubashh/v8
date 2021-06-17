@@ -50,6 +50,24 @@
       "message": "As this is not really a \"bug\", should we just move it to the \"Slow tests\" group above?",
       "revId": "596d674b7621611b8089e22d262800bb1daf1b6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4064534_dc6788ad",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-17T14:42:38Z",
+      "side": 1,
+      "message": "Good point, done.",
+      "parentUuid": "159a0608_1d4b3abd",
+      "revId": "596d674b7621611b8089e22d262800bb1daf1b6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
