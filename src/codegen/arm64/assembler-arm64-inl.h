@@ -11,6 +11,7 @@
 #include "src/codegen/arm64/assembler-arm64.h"
 #include "src/codegen/assembler.h"
 #include "src/debug/debug.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/smi.h"
 
@@ -656,17 +657,20 @@ Address RelocInfo::constant_pool_entry_address() {
 }
 
 HeapObject RelocInfo::target_object() {
+  return HeapObject::cast(target_object_as_object());
+}
+
+Object RelocInfo::target_object_as_object() {
   DCHECK(IsCodeTarget(rmode_) || IsEmbeddedObjectMode(rmode_));
   if (IsDataEmbeddedObject(rmode_)) {
-    return HeapObject::cast(Object(ReadUnalignedValue<Address>(pc_)));
+    return Object(ReadUnalignedValue<Address>(pc_));
   } else if (IsCompressedEmbeddedObject(rmode_)) {
     CHECK(!host_.is_null());
-    return HeapObject::cast(Object(DecompressTaggedAny(
+    return Object(DecompressTaggedAny(
         host_.address(),
-        Assembler::target_compressed_address_at(pc_, constant_pool_))));
+        Assembler::target_compressed_address_at(pc_, constant_pool_)));
   } else {
-    return HeapObject::cast(
-        Object(Assembler::target_address_at(pc_, constant_pool_)));
+    return Object(Assembler::target_address_at(pc_, constant_pool_));
   }
 }
 
