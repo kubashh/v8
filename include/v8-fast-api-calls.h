@@ -156,6 +156,7 @@
  *   - float64_t
  * Currently supported argument types:
  *  - pointer to an embedder type
+ *  - JavaScript array of primitive types
  *  - bool
  *  - int32_t
  *  - uint32_t
@@ -176,7 +177,7 @@
  * passes NaN values as-is, i.e. doesn't normalize them.
  *
  * To be supported types:
- *  - arrays of C types
+ *  - TypedArrays and ArrayBuffers
  *  - arrays of embedder types
  *
  *
@@ -539,6 +540,26 @@ struct TypeInfoHelper {
     }                                                                         \
   };
 
+template <typename T, CTypeInfo::Type type>
+class CTypeMatcher {
+ public:
+  template <typename U>
+  static constexpr bool CTypeMatchesInfo() {
+    static_assert(sizeof(T) != sizeof(T), "This type is not supported");
+    return false;
+  }
+};
+
+#define SPECIALIZE_C_TYPE_MATCHES_INFO(T, Enum)  \
+  template <>                                    \
+  class CTypeMatcher<T, CTypeInfo::Type::Enum> { \
+   public:                                       \
+    template <typename U>                        \
+    static constexpr bool CTypeMatchesInfo() {   \
+      return std::is_same<U, T>::value;          \
+    }                                            \
+  };
+
 #define BASIC_C_TYPES(V)            \
   V(void, kVoid)                    \
   V(bool, kBool)                    \
@@ -548,15 +569,19 @@ struct TypeInfoHelper {
   V(uint64_t, kUint64)              \
   V(float, kFloat32)                \
   V(double, kFloat64)               \
-  V(ApiObject, kApiObject)          \
   V(v8::Local<v8::Value>, kV8Value) \
   V(v8::Local<v8::Object>, kV8Value)
+
+#define ALL_BASIC_C_TYPES(V) \
+  BASIC_C_TYPES(V)           \
+  V(ApiObject, kApiObject)
 
 // ApiObject was a temporary solution to wrap the pointer to the v8::Value.
 // Please use v8::Local<v8::Value> in new code for the arguments and
 // v8::Local<v8::Object> for the receiver, as ApiObject will be deprecated.
 
-BASIC_C_TYPES(SPECIALIZE_GET_TYPE_INFO_HELPER_FOR)
+ALL_BASIC_C_TYPES(SPECIALIZE_GET_TYPE_INFO_HELPER_FOR)
+BASIC_C_TYPES(SPECIALIZE_C_TYPE_MATCHES_INFO)
 
 #undef BASIC_C_TYPES
 
