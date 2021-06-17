@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "891d7790_ec07bad7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-17T15:05:37Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "14513a070bfd416266a7f87c4b4358e8b0fd5331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b4dd8b1_a8d65448",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-17T15:05:37Z",
+      "side": 1,
+      "message": "It\u0027s rather related to one of the earlier CLs but still.",
+      "revId": "14513a070bfd416266a7f87c4b4358e8b0fd5331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
