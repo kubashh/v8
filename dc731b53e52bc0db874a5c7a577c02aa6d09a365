@@ -37,6 +37,41 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "cee3d40b_c5fd0f17",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4601,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-17T05:06:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e5e38d9_4222f109",
+      "revId": "dc731b53e52bc0db874a5c7a577c02aa6d09a365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ee89a41_d36a2f89",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-17T05:06:30Z",
+      "side": 1,
+      "message": "Looking at this again, I wonder how/if we protect from concurrent changes that\u0027d change the IsDetached result (i.e. what if IsDetached returns false here, but that changes later while we\u0027re still compiling).",
+      "revId": "dc731b53e52bc0db874a5c7a577c02aa6d09a365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4729372a_ed0895d0",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 1
