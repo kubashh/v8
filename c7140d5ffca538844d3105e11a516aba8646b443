@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a79d450_0ef17cc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-06-17T11:32:31Z",
+      "side": 1,
+      "message": "+Clemens as requested\n+Simon for inspector",
+      "revId": "c7140d5ffca538844d3105e11a516aba8646b443",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
