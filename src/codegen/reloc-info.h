@@ -243,6 +243,7 @@ class RelocInfo {
   // can only be called if IsCodeTarget(rmode_) || IsRuntimeEntry(rmode_)
   V8_INLINE Address target_address();
   V8_INLINE HeapObject target_object();
+  V8_INLINE Object target_object_as_object();
 
   // In GC operations, we don't have a host_ pointer. Retrieving a target
   // for COMPRESSED_EMBEDDED_OBJECT mode requires an isolate.
