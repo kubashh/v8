@@ -94,6 +94,7 @@ class MarkingStateBase {
 // - ConcreteVisitor::SynchronizePageAccess method,
 // - ConcreteVisitor::VisitJSObjectSubclass method,
 // - ConcreteVisitor::VisitLeftTrimmableArray method.
+// - ConcreteVisitor::VisitUpdatableCode method.
 // These methods capture the difference between the concurrent and main thread
 // marking visitors. For example, the concurrent visitor has to use the
 // snapshotting protocol to visit JSObject and left-trimmable FixedArrays.
@@ -118,6 +119,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
         is_shared_heap_(heap->IsShared()) {}
 
   V8_INLINE int VisitBytecodeArray(Map map, BytecodeArray object);
+  V8_INLINE int VisitCode(Map map, Code object);
   V8_INLINE int VisitDescriptorArray(Map map, DescriptorArray object);
   V8_INLINE int VisitEphemeronHashTable(Map map, EphemeronHashTable object);
   V8_INLINE int VisitFixedArray(Map map, FixedArray object);
