@@ -91,10 +91,11 @@ class PrototypePropertyDependency final : public CompilationDependency {
 class StableMapDependency final : public CompilationDependency {
  public:
   explicit StableMapDependency(const MapRef& map) : map_(map) {
-    DCHECK(map_.is_stable());
   }
 
-  bool IsValid() const override { return map_.object()->is_stable(); }
+  bool IsValid() const override {
+    return !map_.is_dictionary_map() && map_.object()->is_stable();
+  }
 
   void Install(Handle<Code> code) const override {
     SLOW_DCHECK(IsValid());
@@ -601,12 +602,9 @@ ObjectRef CompilationDependencies::DependOnPrototypeProperty(
 }
 
 void CompilationDependencies::DependOnStableMap(const MapRef& map) {
-  DCHECK(!map.is_dictionary_map());
   DCHECK(!map.IsNeverSerializedHeapObject());
   if (map.CanTransition()) {
     RecordDependency(zone_->New<StableMapDependency>(map));
-  } else {
-    DCHECK(map.is_stable());
   }
 }
 
