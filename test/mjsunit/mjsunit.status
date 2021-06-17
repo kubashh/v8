@@ -642,6 +642,9 @@
 
   # BUG(v8:11752): Flakes on TSAN.
   'd8/d8-worker-shutdown-spawn': [SKIP],
+
+  # BUG(v8:11780): Flakily times out on TSAN.
+  'wasm/memory_1gb_oob': [PASS, SLOW],
 }],  # 'tsan == True'
 
 ##############################################################################
