@@ -38,9 +38,9 @@
 #define V8_CODEGEN_ARM_ASSEMBLER_ARM_INL_H_
 
 #include "src/codegen/arm/assembler-arm.h"
-
 #include "src/codegen/assembler.h"
 #include "src/debug/debug.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/smi.h"
 
@@ -92,13 +92,16 @@ Address RelocInfo::constant_pool_entry_address() {
 int RelocInfo::target_address_size() { return kPointerSize; }
 
 HeapObject RelocInfo::target_object() {
+  return HeapObject::cast(target_object_as_object());
+}
+
+Object RelocInfo::target_object_as_object() {
   DCHECK(IsCodeTarget(rmode_) || IsFullEmbeddedObject(rmode_) ||
          IsDataEmbeddedObject(rmode_));
   if (IsDataEmbeddedObject(rmode_)) {
-    return HeapObject::cast(Object(ReadUnalignedValue<Address>(pc_)));
+    return Object(ReadUnalignedValue<Address>(pc_));
   }
-  return HeapObject::cast(
-      Object(Assembler::target_address_at(pc_, constant_pool_)));
+  return Object(Assembler::target_address_at(pc_, constant_pool_));
 }
 
 HeapObject RelocInfo::target_object_no_host(Isolate* isolate) {

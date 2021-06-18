@@ -397,6 +397,8 @@ class MainMarkingVisitor final
  private:
   // Functions required by MarkingVisitorBase.
 
+  int VisitUpdatableCode(Map map, Code object);
+
   template <typename T, typename TBodyDescriptor = typename T::BodyDescriptor>
   int VisitJSObjectSubclass(Map map, T object);
 
