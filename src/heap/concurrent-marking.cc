@@ -6,8 +6,11 @@
 
 #include <stack>
 #include <unordered_map>
+#include <utility>
 
 #include "include/v8config.h"
+#include "src/base/logging.h"
+#include "src/codegen/reloc-info.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate.h"
 #include "src/heap/gc-tracer.h"
@@ -28,6 +31,7 @@
 #include "src/objects/data-handler-inl.h"
 #include "src/objects/embedder-data-array-inl.h"
 #include "src/objects/hash-table-inl.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/slots-inl.h"
 #include "src/objects/transitions-inl.h"
@@ -58,6 +62,12 @@ class ConcurrentMarkingState final
   MemoryChunkDataMap* memory_chunk_data_;
 };
 
+struct RelocSlot {
+  Address pc;
+  RelocInfo::Mode rmode;
+  Object value;
+};
+
 // Helper class for storing in-object slot addresses and values.
 class SlotSnapshot {
  public:
@@ -67,15 +77,23 @@ class SlotSnapshot {
   int number_of_slots() const { return number_of_slots_; }
   ObjectSlot slot(int i) const { return snapshot_[i].first; }
   Object value(int i) const { return snapshot_[i].second; }
-  void clear() { number_of_slots_ = 0; }
+  void clear() {
+    number_of_slots_ = 0;
+    reloc_slots_.clear();
+  }
   void add(ObjectSlot slot, Object value) {
     snapshot_[number_of_slots_++] = {slot, value};
   }
+  void add(RelocInfo* reloc_info, Object value) {
+    reloc_slots_.push_back({reloc_info->pc(), reloc_info->rmode(), value});
+  }
+  const std::vector<RelocSlot>& reloc_slots() const { return reloc_slots_; }
 
  private:
   static const int kMaxSnapshotSize = JSObject::kMaxInstanceSize / kTaggedSize;
   int number_of_slots_;
   std::pair<ObjectSlot, Object> snapshot_[kMaxSnapshotSize];
+  std::vector<RelocSlot> reloc_slots_;
 };
 
 class ConcurrentMarkingVisitor final
@@ -191,15 +209,14 @@ class ConcurrentMarkingVisitor final
     }
 
     void VisitCodeTarget(Code host, RelocInfo* rinfo) final {
-      // This should never happen, because snapshotting is performed only on
-      // JSObjects (and derived classes).
-      UNREACHABLE();
+      Code target = Code::GetCodeFromTargetAddress(rinfo->target_address());
+      slot_snapshot_->add(rinfo, target);
     }
 
     void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) final {
-      // This should never happen, because snapshotting is performed only on
-      // JSObjects (and derived classes).
-      UNREACHABLE();
+      // Use target_object_as_object() instead of target_object() since we might
+      // not read a valid HeapObject here.
+      slot_snapshot_->add(rinfo, rinfo->target_object_as_object());
     }
 
     void VisitCustomWeakPointers(HeapObject host, ObjectSlot start,
@@ -210,6 +227,10 @@ class ConcurrentMarkingVisitor final
    private:
     SlotSnapshot* slot_snapshot_;
   };
+
+  int VisitUpdatableCode(Map map, Code object) {
+    return VisitFullyWithSnapshot(map, object);
+  }
 
   template <typename T>
   int VisitJSObjectSubclassFast(Map map, T object) {
@@ -256,6 +277,34 @@ class ConcurrentMarkingVisitor final
       MarkObject(host, heap_object);
       RecordSlot(host, slot, heap_object);
     }
+
+    for (const RelocSlot& entry : snapshot.reloc_slots()) {
+      VisitRelocSlotInSnapshot(Code::cast(host), entry);
+    }
+  }
+
+  void VisitRelocSlotInSnapshot(Code host, const RelocSlot& entry) {
+    Object object = entry.value;
+    DCHECK(!HasWeakHeapObjectTag(object));
+    if (!object.IsHeapObject()) return;
+    HeapObject target = HeapObject::cast(object);
+    RelocInfo rinfo(entry.pc, entry.rmode, 0, Code());
+
+    if (RelocInfo::IsEmbeddedObjectMode(rinfo.rmode())) {
+      if (!concrete_visitor()->marking_state()->IsBlackOrGrey(target)) {
+        if (host.IsWeakObject(target)) {
+          weak_objects_->weak_objects_in_code.Push(
+              task_id_, std::make_pair(target, host));
+        } else {
+          MarkObject(host, target);
+        }
+      }
+    } else {
+      DCHECK(RelocInfo::IsCodeTargetMode(rinfo.rmode()));
+      MarkObject(host, target);
+    }
+
+    concrete_visitor()->RecordRelocSlot(host, &rinfo, target);
   }
 
   template <typename T>

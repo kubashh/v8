@@ -166,6 +166,15 @@ HeapObject RelocInfo::target_object() {
       Object(Assembler::target_address_at(pc_, constant_pool_)));
 }
 
+Object RelocInfo::target_object_as_object() {
+  DCHECK(IsCodeTarget(rmode_) || IsFullEmbeddedObject(rmode_) ||
+         IsDataEmbeddedObject(rmode_));
+  if (IsDataEmbeddedObject(rmode_)) {
+    return Object(ReadUnalignedValue<Address>(pc_));
+  }
+  return Object(Assembler::target_address_at(pc_, constant_pool_));
+}
+
 HeapObject RelocInfo::target_object_no_host(Isolate* isolate) {
   return target_object();
 }
