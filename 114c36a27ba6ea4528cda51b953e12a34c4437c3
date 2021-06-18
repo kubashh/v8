@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "938330e5_b85aed3d",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-18T07:54:49Z",
+      "side": 1,
+      "message": "What I\u0027m imagining is having something like\nstatic_assert(std::is_same\u003cT, CTypeInfoTraits\u003ctype_info\u003e::ctype\u003e::value);\nat the top of CopyAndConvertArrayToCppBuffer.\n\nThen the task is to define CTypeInfoTraits\u003ctype_info\u003e such that its ctype component is the underlying C type.",
+      "parentUuid": "4f76869c_3ee627c0",
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49a5c62d_5bd01ac5",
         "filename": "include/v8-fast-api-calls.h",
         "patchSetId": 24

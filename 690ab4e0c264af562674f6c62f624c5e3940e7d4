@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8858a6c2_fa803367",
+        "filename": "include/v8.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-18T07:54:49Z",
+      "side": 1,
+      "message": "This doesn\u0027t make much sense when the conversion semantics is given by the CTypeInfo.",
+      "range": {
+        "startLine": 4426,
+        "startChar": 25,
+        "endLine": 4427,
+        "endChar": 40
+      },
+      "revId": "690ab4e0c264af562674f6c62f624c5e3940e7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
