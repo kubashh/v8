@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d939fc73_d6b32c42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-18T14:58:55Z",
+      "side": 1,
+      "message": "PTAL. This CL increases V8 binary size by 60K. Ideas on how to mitigate this are welcome!",
+      "revId": "df6297defc5b35dc3c9b17ea3660b3aa11f79c68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93e02f79_5833e5c5",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-18T14:58:55Z",
+      "side": 1,
+      "message": "Any idea on how to fix this?",
+      "range": {
+        "startLine": 1810,
+        "startChar": 22,
+        "endLine": 1813,
+        "endChar": 40
+      },
+      "revId": "df6297defc5b35dc3c9b17ea3660b3aa11f79c68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
