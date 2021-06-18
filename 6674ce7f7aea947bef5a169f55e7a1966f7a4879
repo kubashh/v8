@@ -56,6 +56,30 @@
       },
       "revId": "6674ce7f7aea947bef5a169f55e7a1966f7a4879",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "582e2eb2_32b1f9bd",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-18T14:43:30Z",
+      "side": 1,
+      "message": "module_ is defined in WasmDecoder.",
+      "parentUuid": "d02fee2d_7e7f1e57",
+      "range": {
+        "startLine": 688,
+        "startChar": 53,
+        "endLine": 688,
+        "endChar": 64
+      },
+      "revId": "6674ce7f7aea947bef5a169f55e7a1966f7a4879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
