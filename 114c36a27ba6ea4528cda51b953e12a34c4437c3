@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8185635a_157e7b16",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-18T13:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "938330e5_b85aed3d",
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49a5c62d_5bd01ac5",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "I needed to split ApiObject out, because it\u0027s deprecated and can\u0027t be instantiated (which SPECIALIZE_C_TYPE_MATCHES_INFO attempts to do).",
       "parentUuid": "49a5c62d_5bd01ac5",
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3055694d_2f633eac",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-18T13:45:12Z",
+      "side": 1,
+      "message": "Renamed, PTAL again.",
+      "parentUuid": "ce5381dc_420a5304",
       "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -237,6 +273,54 @@
       "side": 1,
       "message": "Semantically it is a type info, it\u0027s just the underlying representation of the enum. Or maybe I could name it just `type`?",
       "parentUuid": "bfc5fa0f_c9162c8d",
+      "range": {
+        "startLine": 261,
+        "startChar": 30,
+        "endLine": 261,
+        "endChar": 39
+      },
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f8706ff_cbc7c7ff",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-18T13:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89fab818_061b0622",
+      "range": {
+        "startLine": 261,
+        "startChar": 22,
+        "endLine": 261,
+        "endChar": 29
+      },
+      "revId": "114c36a27ba6ea4528cda51b953e12a34c4437c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d2d37a5_91ccaa80",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-18T13:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "534012d2_a401ac11",
       "range": {
         "startLine": 261,
         "startChar": 30,
