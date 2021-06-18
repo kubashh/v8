@@ -16,6 +16,46 @@
       "message": "PTAL.",
       "revId": "6674ce7f7aea947bef5a169f55e7a1966f7a4879",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd57a823_c050ea63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-18T14:11:10Z",
+      "side": 1,
+      "message": "LGTM with a question.",
+      "revId": "6674ce7f7aea947bef5a169f55e7a1966f7a4879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d02fee2d_7e7f1e57",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-18T14:11:10Z",
+      "side": 1,
+      "message": "Why not simply read `decoder-\u003emodule_-\u003eis_memory64` in here? Then you wouldn\u0027t need the new helper function.",
+      "range": {
+        "startLine": 688,
+        "startChar": 53,
+        "endLine": 688,
+        "endChar": 64
+      },
+      "revId": "6674ce7f7aea947bef5a169f55e7a1966f7a4879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
