@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d2b3b12_04d482fd",
+        "filename": "src/wasm/compilation-environment.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d62eaca_c3cbcb2f",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9abe967_86e2924e",
@@ -65,6 +83,42 @@
       "writtenOn": "2021-06-16T14:39:21Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1b83cb5_9665753d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9abe967_86e2924e",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a7476ef_3261ffc3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9abe967_86e2924e",
       "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c6c8bd8_2865aeb8",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1442,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3244efb8_126885d5",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1a2af37_d9efeaa4",
@@ -99,6 +171,24 @@
       "writtenOn": "2021-06-16T14:39:21Z",
       "side": 1,
       "message": "Can we share more code between the two arms here? {CompilationUnitBuilder::Commit} is cheap if there is nothing to commit, so we could just always have this. I.e.\n\nCompilationUnitBuilder ...\n{\n  base::MutexGuard ...\n  DCHECK ...\n  compilation_progress.assign ...\n  if (missing_functions.empty()) {\n    ...\n    // Maybe even return here?\n  } else {\n    ...\n  }\n}\nbuilder.Commit();",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ab99cc2_737e7e82",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "I guess it\u0027s a tradeoff here between readability, which would benefit from having two independent code blocks, and maintainability, which would benefit from code sharing.\n\nPersonally I would prefer readability, but I don\u0027t care too much about it, so I added the code sharing you suggested.",
+      "parentUuid": "c1a2af37_d9efeaa4",
       "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5a3f3fc_9fb04842",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2933,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "But wouldn\u0027t that be weird? The reason why I do this change is to allow serialization of a wasm module that did not get tiered up completely. So if we did not want to tier up the function before serialization, why would we want to tier up the function after deserialization?\n\nI guess there is the scenario if a user leaves a page before tier-up is completed, then we could cache the current state and continue tier-up after deserialization. However, I\u0027m not sure that we should optimize for such a scenario.",
+      "parentUuid": "a3288d39_045ef463",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b665b3c4_f746fb1a",
@@ -133,6 +241,24 @@
       "writtenOn": "2021-06-16T14:39:21Z",
       "side": 1,
       "message": "Please compute this once, right after {new_tier} above (to be consistent with {new_tier}).",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cc0502e_f70f8fbd",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3011,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b665b3c4_f746fb1a",
       "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -154,6 +280,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea59d8f9_629cb8c9",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc9542fa_d0387831",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b528d29_fabb85eb",
@@ -171,6 +315,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3881b6c4_996d3e96",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b528d29_fabb85eb",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1126ad7e_4aea073b",
@@ -184,6 +346,24 @@
       "writtenOn": "2021-06-16T14:39:21Z",
       "side": 1,
       "message": "Should we make this part of {InitializeAfterDeserialization}? Or is there any path where it\u0027s allowed to initialize without waiting for baseline finished afterwards?",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b6a42d5_c35138cf",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-18T09:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1126ad7e_4aea073b",
       "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
