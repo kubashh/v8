@@ -39,6 +39,30 @@
       },
       "revId": "df6297defc5b35dc3c9b17ea3660b3aa11f79c68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e2b72cf_a870f9c4",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-18T15:50:00Z",
+      "side": 1,
+      "message": "I think the correct value to pass is end_, since the external decoder has its limits reset every section. Testing now.",
+      "parentUuid": "93e02f79_5833e5c5",
+      "range": {
+        "startLine": 1810,
+        "startChar": 22,
+        "endLine": 1813,
+        "endChar": 40
+      },
+      "revId": "df6297defc5b35dc3c9b17ea3660b3aa11f79c68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
