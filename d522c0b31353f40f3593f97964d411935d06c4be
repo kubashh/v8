@@ -230,6 +230,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bed51d83_93868766",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2933,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-18T10:36:37Z",
+      "side": 1,
+      "message": "I would have tried to keep the two issues (serialization and tier-up) as separate as possible, i.e. not changing our tier-up strategy based on the serialized state. For now, our tier-up strategy is \"always tier up to TF\", and I think we could (and should) keep it like that for now, even if we deserialize a partial module (wherever that might come from). This will change later, of course.\n\nI.e. the overall strategy would be:\n1. Deserialize everything we have.\n2. Depending on flags etc decide which functions need (re-)compilation.\n\nAnd this CL would be about the first point only.",
+      "parentUuid": "e5a3f3fc_9fb04842",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b665b3c4_f746fb1a",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 3

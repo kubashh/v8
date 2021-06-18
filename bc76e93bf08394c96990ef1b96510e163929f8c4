@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "551435f8_fbfd7482",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-18T10:36:37Z",
+      "side": 1,
+      "message": "LGTM with one comment which I would prefer to see addressed in this CL. We could also do it later, but that would mean adding \"incomplete\" code now which would need to be changed later anyway. If this CL is blocking further work, feel free to land now and maybe add a TODO to look at this again later.",
+      "revId": "bc76e93bf08394c96990ef1b96510e163929f8c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77cab796_5eedbffb",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-18T10:36:37Z",
+      "side": 1,
+      "message": "You can use {VectorOf(missing_functions)} instead.",
+      "revId": "bc76e93bf08394c96990ef1b96510e163929f8c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
