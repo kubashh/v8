@@ -655,6 +655,7 @@ RUNTIME_FUNCTION(Runtime_WasmArrayCopy) {
   CONVERT_ARG_HANDLE_CHECKED(WasmArray, src_array, 2);
   CONVERT_UINT32_ARG_CHECKED(src_index, 3);
   CONVERT_UINT32_ARG_CHECKED(length, 4);
+  DCHECK(false);
   bool overlapping_ranges =
       dst_array->ptr() == src_array->ptr() &&
       (dst_index + length > src_index || src_index + length > dst_index);
