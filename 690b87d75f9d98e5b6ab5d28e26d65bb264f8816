@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba874d5a_b7ed6b4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-18T17:32:27Z",
+      "side": 1,
+      "message": "LGTM w/ nit. Thanks!",
+      "revId": "690b87d75f9d98e5b6ab5d28e26d65bb264f8816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e9f01d1_29c238ff",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-18T17:32:27Z",
+      "side": 1,
+      "message": "nit: double space (all cases)",
+      "range": {
+        "startLine": 1207,
+        "startChar": 44,
+        "endLine": 1207,
+        "endChar": 46
+      },
+      "revId": "690b87d75f9d98e5b6ab5d28e26d65bb264f8816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
