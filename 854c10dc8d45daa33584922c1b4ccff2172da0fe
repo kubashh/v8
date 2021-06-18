@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d096e7a6_68eb98ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-18T20:04:06Z",
+      "side": 1,
+      "message": "Looking good!\n\nTo fix the leak, I think you\u0027ll have to make `WasmInitExpr` derive from `ZoneObject`, and then its `operands_` member can become a `ZoneVector`. The `args`/`exprs` vectors in the various InitExprInterface functions should probably also become ZoneVectors then, and if you do that please initialize them to an appropriate length (because std::vector\u0027s default dynamic growth behavior is wasteful in a Zone); and then it makes sense to switch their consuming functions to rvalue references to further cut down on Zone memory usage.\n\nFor the binary size regression: That\u0027s probably because a `WasmFullDecoder\u003cvalidate, InitExprInterface, kInitExpression\u003e` instance is much bigger than `consume_init_expr` used to be, because it knows all opcodes individually as opposed to handling most of them with a `default:` case. I think that\u0027s where our earlier idea of splitting the `Decoder` comes in: a base class that only has the DECODE_CONST members, and a derived class that adds the others. Is that feasible?",
+      "revId": "854c10dc8d45daa33584922c1b4ccff2172da0fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bb03a39_9ac4e128",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-18T20:04:06Z",
+      "side": 1,
+      "message": "nit: ctors with two args don\u0027t need `explicit`",
+      "range": {
+        "startLine": 1708,
+        "startChar": 4,
+        "endLine": 1708,
+        "endChar": 12
+      },
+      "revId": "854c10dc8d45daa33584922c1b4ccff2172da0fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b39c81dd_bf8e1f01",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-18T20:04:06Z",
+      "side": 1,
+      "message": "Since WasmInitExpr::StructNewWithRtt takes a `std::vector` (and not a `std::vector\u0026\u0026`), I don\u0027t think this `std::move` has any effect.\n\nAgain below.",
+      "range": {
+        "startLine": 1764,
+        "startChar": 52,
+        "endLine": 1764,
+        "endChar": 61
+      },
+      "revId": "854c10dc8d45daa33584922c1b4ccff2172da0fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d399c4f_19c0d41e",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-18T20:04:06Z",
+      "side": 1,
+      "message": "This doesn\u0027t do anything either.",
+      "range": {
+        "startLine": 1827,
+        "startChar": 11,
+        "endLine": 1827,
+        "endChar": 20
+      },
+      "revId": "854c10dc8d45daa33584922c1b4ccff2172da0fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
