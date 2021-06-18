@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba37a7a4_915f24bf",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-06-18T07:55:33Z",
+      "side": 1,
+      "message": "nit: final",
+      "range": {
+        "startLine": 65,
+        "startChar": 16,
+        "endLine": 65,
+        "endChar": 17
+      },
+      "revId": "66d67c003db4ee7c035abf9f9f6418ffaf85c426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4ae6c0b_c187d84e",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-06-18T07:55:33Z",
+      "side": 1,
+      "message": "nit: final",
+      "range": {
+        "startLine": 72,
+        "startChar": 18,
+        "endLine": 72,
+        "endChar": 19
+      },
+      "revId": "66d67c003db4ee7c035abf9f9f6418ffaf85c426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89e45f3a_ba169b8e",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-06-18T07:55:33Z",
+      "side": 1,
+      "message": "nit: constexpr",
+      "range": {
+        "startLine": 93,
+        "startChar": 9,
+        "endLine": 93,
+        "endChar": 14
+      },
+      "revId": "66d67c003db4ee7c035abf9f9f6418ffaf85c426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e68e09a_26edf678",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-06-18T07:55:33Z",
+      "side": 1,
+      "message": "nit: \u003d0 here and make ctor \u003ddefault",
+      "range": {
+        "startLine": 94,
+        "startChar": 22,
+        "endLine": 94,
+        "endChar": 23
+      },
+      "revId": "66d67c003db4ee7c035abf9f9f6418ffaf85c426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0085db33_30503a70",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-06-18T07:55:33Z",
+      "side": 1,
+      "message": "This actually needs to be a relaxed read here. I am not sure this is the case right now.",
+      "range": {
+        "startLine": 219,
+        "startChar": 29,
+        "endLine": 219,
+        "endChar": 52
+      },
+      "revId": "66d67c003db4ee7c035abf9f9f6418ffaf85c426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe38fb08_2d06ebb1",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-06-18T07:55:33Z",
+      "side": 1,
+      "message": "nit: GetCodeFromTargetAddressUnsafe()",
+      "range": {
+        "startLine": 694,
+        "startChar": 11,
+        "endLine": 694,
+        "endChar": 35
+      },
+      "revId": "66d67c003db4ee7c035abf9f9f6418ffaf85c426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
