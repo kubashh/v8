@@ -516,9 +516,9 @@ TEST_F(WasmModuleVerifyTest, GlobalInitializer) {
               1,               // mutable
               kExprEnd)        // --
   };
-  EXPECT_FAILURE_WITH_MSG(no_initializer,
-                          "Found 'end' in initializer expression, but no "
-                          "expressions were found on the stack");
+  EXPECT_FAILURE_WITH_MSG(
+      no_initializer,
+      "expected 1 elements on the stack for init. expression, found 0");
 
   static const byte too_many_initializers_no_end[] = {
       SECTION(Global,           // --
@@ -539,9 +539,9 @@ TEST_F(WasmModuleVerifyTest, GlobalInitializer) {
               WASM_I32V_1(42),  // one value is good
               WASM_I32V_1(43),  // another value is too much
               kExprEnd)};
-  EXPECT_FAILURE_WITH_MSG(too_many_initializers,
-                          "Found 'end' in initializer expression, but more than"
-                          " one expressions were found on the stack");
+  EXPECT_FAILURE_WITH_MSG(
+      too_many_initializers,
+      "expected 1 elements on the stack for init. expression, found 2");
 
   static const byte missing_end_opcode[] = {
       SECTION(Global,           // --
@@ -824,9 +824,9 @@ TEST_F(WasmModuleVerifyTest, RttCanonGlobalTypeError) {
       SECTION(Global, ENTRY_COUNT(1), WASM_RTT_WITH_DEPTH(1, 0), 1,
               WASM_RTT_CANON(0), kExprEnd)};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
-  EXPECT_NOT_OK(result,
-                "type error in init expression, expected (rtt 1 0), got "
-                "(rtt 0 0)");
+  EXPECT_NOT_OK(
+      result,
+      "type error in init. expression[0] (expected (rtt 1 0), got (rtt 0 0))");
 }
 
 TEST_F(WasmModuleVerifyTest, GlobalRttSubOfCanon) {
@@ -994,7 +994,9 @@ TEST_F(WasmModuleVerifyTest, GlobalRttSubOfGlobalTypeError) {
       SECTION(Global, ENTRY_COUNT(1), WASM_RTT_WITH_DEPTH(1, 0), 1,
               WASM_RTT_SUB(0, WASM_GLOBAL_GET(0)), kExprEnd)};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
-  EXPECT_NOT_OK(result, "rtt.sub requires a supertype rtt on stack");
+  EXPECT_NOT_OK(result,
+                "rtt.sub[0] expected rtt for a supertype of type 0, found "
+                "global.get of type i32");
 }
 
 TEST_F(WasmModuleVerifyTest, GlobalRttFreshSubOfGlobalTypeError) {
@@ -1016,7 +1018,9 @@ TEST_F(WasmModuleVerifyTest, GlobalRttFreshSubOfGlobalTypeError) {
       SECTION(Global, ENTRY_COUNT(1), WASM_RTT_WITH_DEPTH(1, 0), 1,
               WASM_RTT_FRESH_SUB(0, WASM_GLOBAL_GET(0)), kExprEnd)};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
-  EXPECT_NOT_OK(result, "rtt.fresh_sub requires a supertype rtt on stack");
+  EXPECT_NOT_OK(result,
+                "rtt.fresh_sub[0] expected rtt for a supertype of type 0, "
+                "found global.get of type i32");
 }
 
 #if !V8_OS_FUCHSIA
@@ -1031,7 +1035,9 @@ TEST_F(WasmModuleVerifyTest, GlobalRttSubIllegalParent) {
       SECTION(Global, ENTRY_COUNT(1), WASM_RTT_WITH_DEPTH(1, 1), 1,
               WASM_RTT_SUB(1, WASM_RTT_CANON(0)), kExprEnd)};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
-  EXPECT_NOT_OK(result, "rtt.sub requires a supertype rtt on stack");
+  EXPECT_NOT_OK(result,
+                "rtt.sub[0] expected rtt for a supertype of type 1, found "
+                "rtt.canon of type (rtt 0 0)");
 }
 
 TEST_F(WasmModuleVerifyTest, GlobalRttFreshSubIllegalParent) {
@@ -1047,7 +1053,9 @@ TEST_F(WasmModuleVerifyTest, GlobalRttFreshSubIllegalParent) {
       SECTION(Global, ENTRY_COUNT(1), WASM_RTT_WITH_DEPTH(1, 1), 1,
               WASM_RTT_FRESH_SUB(1, WASM_RTT_CANON(0)), kExprEnd)};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
-  EXPECT_NOT_OK(result, "rtt.fresh_sub requires a supertype rtt on stack");
+  EXPECT_NOT_OK(result,
+                "rtt.fresh_sub[0] expected rtt for a supertype of type 1, "
+                "found rtt.canon of type (rtt 0 0)");
 }
 #endif  // !V8_OS_FUCHSIA
 
@@ -1061,9 +1069,9 @@ TEST_F(WasmModuleVerifyTest, RttSubGlobalTypeError) {
       SECTION(Global, ENTRY_COUNT(1), WASM_RTT_WITH_DEPTH(0, 0), 1,
               WASM_RTT_SUB(0, WASM_RTT_CANON(0)), kExprEnd)};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
-  EXPECT_NOT_OK(result,
-                "type error in init expression, expected (rtt 0 0), got "
-                "(rtt 1 0)");
+  EXPECT_NOT_OK(
+      result,
+      "type error in init. expression[0] (expected (rtt 0 0), got (rtt 1 0))");
 }
 
 TEST_F(WasmModuleVerifyTest, RttFreshSubGlobalTypeError) {
@@ -1078,9 +1086,9 @@ TEST_F(WasmModuleVerifyTest, RttFreshSubGlobalTypeError) {
       SECTION(Global, ENTRY_COUNT(1), WASM_RTT_WITH_DEPTH(0, 0), 1,
               WASM_RTT_FRESH_SUB(0, WASM_RTT_CANON(0)), kExprEnd)};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
-  EXPECT_NOT_OK(result,
-                "type error in init expression, expected (rtt 0 0), got "
-                "(rtt 1 0)");
+  EXPECT_NOT_OK(
+      result,
+      "type error in init. expression[0] (expected (rtt 0 0), got (rtt 1 0))");
 }
 
 TEST_F(WasmModuleVerifyTest, StructNewInitExpr) {
@@ -1103,7 +1111,7 @@ TEST_F(WasmModuleVerifyTest, StructNewInitExpr) {
       SECTION(Global, ENTRY_COUNT(3),                        // --
               kI32Code, 0,                                   // type, mutability
               WASM_INIT_EXPR_I32V_1(10),                     // --
-              kRttCode, 0, 0,                                // type, mutability
+              kRttWithDepthCode, 1, 0, 0,                    // type, mutability
               WASM_RTT_SUB(0, WASM_RTT_CANON(0)), kExprEnd,  // --
               kRefCode, 0, 0,                                // type, mutability
               WASM_INIT_EXPR_STRUCT_NEW(0, WASM_GLOBAL_GET(0),
@@ -1119,7 +1127,7 @@ TEST_F(WasmModuleVerifyTest, StructNewInitExpr) {
               WASM_INIT_EXPR_STRUCT_NEW(0, WASM_I32V(42), WASM_RTT_CANON(0)))};
   EXPECT_FAILURE_WITH_MSG(
       type_error,
-      "type error in init expression, expected (ref 1), got (ref 0)");
+      "type error in init. expression[0] (expected (ref 1), got (ref 0))");
 
   static const byte subexpr_type_error[] = {
       SECTION(Type, ENTRY_COUNT(2),  // --
@@ -1128,9 +1136,9 @@ TEST_F(WasmModuleVerifyTest, StructNewInitExpr) {
       SECTION(Global, ENTRY_COUNT(1),  // --
               kRefCode, 0, 0,          // type, mutability
               WASM_INIT_EXPR_STRUCT_NEW(0, WASM_I32V(42), WASM_RTT_CANON(1)))};
-  EXPECT_FAILURE_WITH_MSG(
-      subexpr_type_error,
-      "struct.new[1]: expected (rtt 0), found (rtt 0 1) instead");
+  EXPECT_FAILURE_WITH_MSG(subexpr_type_error,
+                          "struct.new_with_rtt[1] expected rtt with depth for "
+                          "type 0, found rtt.canon of type (rtt 0 1)");
 }
 
 TEST_F(WasmModuleVerifyTest, ArrayInitInitExpr) {
@@ -1157,7 +1165,7 @@ TEST_F(WasmModuleVerifyTest, ArrayInitInitExpr) {
           WASM_INIT_EXPR_ARRAY_INIT(0, 1, WASM_I32V(42), WASM_RTT_CANON(0)))};
   EXPECT_FAILURE_WITH_MSG(
       type_error,
-      "type error in init expression, expected (ref 1), got (ref 0)");
+      "type error in init. expression[0] (expected (ref 1), got (ref 0))");
 
   static const byte subexpr_type_error[] = {
       SECTION(Type, ENTRY_COUNT(1), WASM_ARRAY_DEF(kI64Code, true)),
@@ -1165,8 +1173,9 @@ TEST_F(WasmModuleVerifyTest, ArrayInitInitExpr) {
               kRefCode, 0, 0,          // type, mutability
               WASM_INIT_EXPR_ARRAY_INIT(0, 2, WASM_I64V(42), WASM_I32V(142),
                                         WASM_RTT_CANON(0)))};
-  EXPECT_FAILURE_WITH_MSG(subexpr_type_error,
-                          "array.init[1]: expected i64, found i32 instead");
+  EXPECT_FAILURE_WITH_MSG(
+      subexpr_type_error,
+      "array.init[1] expected type i64, found i32.const of type i32");
 
   static const byte length_error[] = {
       SECTION(Type, ENTRY_COUNT(1), WASM_ARRAY_DEF(kI16Code, true)),
@@ -1176,7 +1185,7 @@ TEST_F(WasmModuleVerifyTest, ArrayInitInitExpr) {
                                         WASM_I32V(30), WASM_RTT_CANON(0)))};
   EXPECT_FAILURE_WITH_MSG(
       length_error,
-      "not enough arguments on the stack for array.init: expected 11, found 4");
+      "not enough arguments on the stack for array.init, expected 7 more");
 }
 
 TEST_F(WasmModuleVerifyTest, EmptyStruct) {
@@ -2362,8 +2371,7 @@ TEST_F(WasmModuleVerifyTest, NonNullableTableNoInitializer) {
               kRefCode, 0,     // table 1: type
               5, 6)};          // table 1: limits
 
-  EXPECT_FAILURE_WITH_MSG(data,
-                          "invalid opcode 0x6b in initializer expression");
+  EXPECT_FAILURE(data);
 }
 
 TEST_F(WasmModuleVerifyTest, TieringCompilationHints) {
