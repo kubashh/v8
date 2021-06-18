@@ -157,13 +157,16 @@ void Assembler::deserialization_set_target_internal_reference_at(
 }
 
 HeapObject RelocInfo::target_object() {
+  return HeapObject::cast(target_object_as_object());
+}
+
+Object RelocInfo::target_object_as_object() {
   DCHECK(IsCodeTarget(rmode_) || IsFullEmbeddedObject(rmode_) ||
          IsDataEmbeddedObject(rmode_));
   if (IsDataEmbeddedObject(rmode_)) {
-    return HeapObject::cast(Object(ReadUnalignedValue<Address>(pc_)));
+    return Object(ReadUnalignedValue<Address>(pc_));
   }
-  return HeapObject::cast(
-      Object(Assembler::target_address_at(pc_, constant_pool_)));
+  return Object(Assembler::target_address_at(pc_, constant_pool_));
 }
 
 HeapObject RelocInfo::target_object_no_host(Isolate* isolate) {

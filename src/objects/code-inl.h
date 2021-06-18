@@ -692,6 +692,13 @@ int Code::unwinding_info_size() const {
 bool Code::has_unwinding_info() const { return unwinding_info_size() > 0; }
 
 Code Code::GetCodeFromTargetAddress(Address address) {
+  HeapObject object = HeapObject::cast(GetObjectFromTargetAddress(address));
+  // Unchecked cast because we can't rely on the map currently
+  // not being a forwarding pointer.
+  return Code::unchecked_cast(object);
+}
+
+Object Code::GetObjectFromTargetAddress(Address address) {
   {
     // TODO(jgruber,v8:6666): Support embedded builtins here. We'd need to pass
     // in the current isolate.
@@ -701,10 +708,7 @@ Code Code::GetCodeFromTargetAddress(Address address) {
     CHECK(address < start || address >= end);
   }
 
-  HeapObject code = HeapObject::FromAddress(address - Code::kHeaderSize);
-  // Unchecked cast because we can't rely on the map currently
-  // not being a forwarding pointer.
-  return Code::unchecked_cast(code);
+  return Object(address - Code::kHeaderSize + kHeapObjectTag);
 }
 
 Code Code::GetObjectFromEntryAddress(Address location_of_address) {

@@ -403,6 +403,9 @@ class Code : public HeapObject {
   // Convert a target address into a code object.
   static inline Code GetCodeFromTargetAddress(Address address);
 
+  // Convert a target address into an object.
+  static inline Object GetObjectFromTargetAddress(Address address);
+
   // Convert an entry address into an object.
   static inline Code GetObjectFromEntryAddress(Address location_of_address);
 
