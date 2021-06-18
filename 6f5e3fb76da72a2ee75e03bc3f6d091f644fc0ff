@@ -16,6 +16,75 @@
       "message": "PTAL",
       "revId": "6f5e3fb76da72a2ee75e03bc3f6d091f644fc0ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8472ceb7_89afe50b",
+        "filename": "src/codegen/mips/assembler-mips-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-06-18T07:32:46Z",
+      "side": 1,
+      "message": "Why can\u0027t this one not use target_object_as_object?",
+      "range": {
+        "startLine": 159,
+        "startChar": 22,
+        "endLine": 159,
+        "endChar": 35
+      },
+      "revId": "6f5e3fb76da72a2ee75e03bc3f6d091f644fc0ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d254060_cb0d9eb5",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-06-18T07:32:46Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this somehow use the snapshot?",
+      "range": {
+        "startLine": 232,
+        "startChar": 6,
+        "endLine": 232,
+        "endChar": 24
+      },
+      "revId": "6f5e3fb76da72a2ee75e03bc3f6d091f644fc0ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfad8109_2c2f6791",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-06-18T07:32:46Z",
+      "side": 1,
+      "message": "Not sure we should but we could distinguish SP from TF code via a visitor id and only handle SP code this way.",
+      "range": {
+        "startLine": 472,
+        "startChar": 55,
+        "endLine": 472,
+        "endChar": 64
+      },
+      "revId": "6f5e3fb76da72a2ee75e03bc3f6d091f644fc0ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
