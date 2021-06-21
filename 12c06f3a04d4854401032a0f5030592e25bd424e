@@ -115,6 +115,52 @@
       "parentUuid": "7d06f964_96f73e92",
       "revId": "12c06f3a04d4854401032a0f5030592e25bd424e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3efc16c6_80b9798c",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-21T13:34:47Z",
+      "side": 1,
+      "message": "Also for a future performance CL: I think we should avoid the int-\u003edouble-\u003eint dance at all cost if we want to make this fast.",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 40
+      },
+      "revId": "12c06f3a04d4854401032a0f5030592e25bd424e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f648d719_4481f93b",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-21T13:34:47Z",
+      "side": 1,
+      "message": "Definitely stuff for a future CL: but I guess we could just use memcpy for the cases where no conversion is necessary.",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 3
+      },
+      "revId": "12c06f3a04d4854401032a0f5030592e25bd424e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
