@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4bd7a75_d45cad39",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-21T13:45:11Z",
+      "side": 1,
+      "message": "Let\u0027s add a DCHECK into the getter.",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7709a6c4_c3432755",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2208,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-21T13:45:11Z",
+      "side": 1,
+      "message": "This is also used only when not concurrent inlining, right?\nLet\u0027s add a comment and/or DCHECK as well.",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf065f8_deab325f",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-21T13:45:11Z",
+      "side": 1,
+      "message": "I think we want to assert or check here for:\n- !is_element\n- !name-\u003eIsPrivate\n- check_interceptor \u003d\u003e !HasInterceptor || SkipInterceptor\n- !is_js_array_element\n\nAnd we might want to repeat them before the second lookup below.",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cc258f5_f7bffa67",
+        "filename": "src/objects/lookup.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-21T13:45:11Z",
+      "side": 1,
+      "message": "Let\u0027s use handles for both or none.",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63ff72c4_c0d4143e",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5856,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-21T13:45:11Z",
+      "side": 1,
+      "message": "Let\u0027s do that directly (see also Santiago\u0027s last CL).",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d492482_80b9558e",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5876,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-21T13:45:11Z",
+      "side": 1,
+      "message": "Can this be a CHECK?",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
