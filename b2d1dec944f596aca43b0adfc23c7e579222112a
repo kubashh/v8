@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c8b55ea_6d2aeb4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-21T14:18:44Z",
+      "side": 1,
+      "message": "Dominik ptal heap, Marja ptal at init.",
+      "revId": "b2d1dec944f596aca43b0adfc23c7e579222112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
