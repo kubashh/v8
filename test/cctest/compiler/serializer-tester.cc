@@ -304,34 +304,6 @@ TEST(MergeJumpTargetEnvironment) {
       "f(); return f;");  // Two calls to f to make g() megamorhpic.
 }
 
-TEST(BoundFunctionTarget) {
-  CheckForSerializedInlinee(
-      "function apply(foo, arg) { return foo(arg); };"
-      "%EnsureFeedbackVectorForFunction(apply);"
-      "function test() {"
-      "  const lambda = (a) => a;"
-      "  %EnsureFeedbackVectorForFunction(lambda);"
-      "  let bound = apply.bind(null, lambda).bind(null, 42);"
-      "  %TurbofanStaticAssert(bound() == 42); return apply;"
-      "};"
-      "%EnsureFeedbackVectorForFunction(test);"
-      "test(); return test;");
-}
-
-TEST(BoundFunctionArguments) {
-  CheckForSerializedInlinee(
-      "function apply(foo, arg) { return foo(arg); };"
-      "%EnsureFeedbackVectorForFunction(apply);"
-      "function test() {"
-      "  const lambda = (a) => a;"
-      "  %EnsureFeedbackVectorForFunction(lambda);"
-      "  let bound = apply.bind(null, lambda).bind(null, 42);"
-      "  %TurbofanStaticAssert(bound() == 42); return lambda;"
-      "};"
-      "%EnsureFeedbackVectorForFunction(test);"
-      "test(); return test;");
-}
-
 TEST(ArrowFunctionInlined) {
   // The loop is to ensure there is a feedback vector for the arrow function
   // {b}.
