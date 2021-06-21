@@ -400,7 +400,7 @@ void Generate_JSEntryVariant(MacroAssembler* masm, StackFrame::Type type,
     // If the c_entry_fp is not already zero and we don't clear it, the
     // SafeStackFrameIterator will assume we are executing C++ and miss the JS
     // frames on top.
-    __ Move(c_entry_fp_operand, 0);
+    __ movq(c_entry_fp_operand, Immediate(0));
   }
 
   // Store the context address in the previously-reserved slot.
@@ -1181,8 +1181,8 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
           Immediate(0));
 
   // Load initial bytecode offset.
-  __ Move(kInterpreterBytecodeOffsetRegister,
-          BytecodeArray::kHeaderSize - kHeapObjectTag);
+  __ movq(kInterpreterBytecodeOffsetRegister,
+          Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag));
 
   // Push bytecode array and Smi tagged bytecode offset.
   __ Push(kInterpreterBytecodeArrayRegister);
@@ -1289,8 +1289,8 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // previous value.
   __ movq(kInterpreterBytecodeArrayRegister,
           Operand(rbp, InterpreterFrameConstants::kBytecodeArrayFromFp));
-  __ Move(kInterpreterBytecodeOffsetRegister,
-          BytecodeArray::kHeaderSize - kHeapObjectTag);
+  __ movq(kInterpreterBytecodeOffsetRegister,
+          Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag));
   __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
 
   __ SmiTag(rcx, kInterpreterBytecodeArrayRegister);
@@ -1612,8 +1612,8 @@ void Builtins::Generate_InterpreterEnterAtNextBytecode(MacroAssembler* masm) {
   // check, it will have a bailout ID of kFunctionEntryBytecodeOffset, which is
   // not a valid bytecode offset. Detect this case and advance to the first
   // actual bytecode.
-  __ Move(kInterpreterBytecodeOffsetRegister,
-          BytecodeArray::kHeaderSize - kHeapObjectTag);
+  __ movq(kInterpreterBytecodeOffsetRegister,
+          Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag));
   __ jmp(&enter_bytecode);
 
   // We should never take the if_return path.
@@ -2810,7 +2810,7 @@ void PrepareForBuiltinCall(MacroAssembler* masm, MemOperand GCScanSlotPlace,
                            Register wasm_instance, Register function_data) {
   // Pushes and puts the values in order onto the stack before builtin calls for
   // the GenericJSToWasmWrapper.
-  __ Move(GCScanSlotPlace, GCScanSlotCount);
+  __ movq(GCScanSlotPlace, Immediate(GCScanSlotCount));
   __ pushq(current_param);
   __ pushq(param_limit);
   __ pushq(current_int_param_slot);
@@ -3049,8 +3049,8 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   Register current_param = rbx;
   Register param_limit = rdx;
   constexpr int kReceiverOnStackSize = kSystemPointerSize;
-  __ Move(current_param,
-          kFPOnStackSize + kPCOnStackSize + kReceiverOnStackSize);
+  __ movq(current_param,
+          Immediate(kFPOnStackSize + kPCOnStackSize + kReceiverOnStackSize));
   __ movq(param_limit, param_count);
   __ shlq(param_limit, Immediate(kSystemPointerSizeLog2));
   __ addq(param_limit,
@@ -3273,7 +3273,8 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
 
   // We set the indicating value for the GC to the proper one for Wasm call.
   constexpr int kWasmCallGCScanSlotCount = 0;
-  __ Move(MemOperand(rbp, kGCScanSlotCountOffset), kWasmCallGCScanSlotCount);
+  __ movq(MemOperand(rbp, kGCScanSlotCountOffset),
+          Immediate(kWasmCallGCScanSlotCount));
 
   // -------------------------------------------
   // Call the Wasm function.
@@ -3515,7 +3516,7 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   __ bind(&compile_wrapper);
   // Enable GC.
   MemOperand GCScanSlotPlace = MemOperand(rbp, kGCScanSlotCountOffset);
-  __ Move(GCScanSlotPlace, 4);
+  __ movq(GCScanSlotPlace, Immediate(4));
   // Save registers to the stack.
   __ pushq(wasm_instance);
   __ pushq(function_data);
@@ -3537,7 +3538,7 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
 void Builtins::Generate_WasmOnStackReplace(MacroAssembler* masm) {
   MemOperand OSRTargetSlot(rbp, -wasm::kOSRTargetOffset);
   __ movq(kScratchRegister, OSRTargetSlot);
-  __ Move(OSRTargetSlot, 0);
+  __ movq(OSRTargetSlot, Immediate(0));
   __ jmp(kScratchRegister);
 }
 
@@ -3678,8 +3679,8 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
       ExternalReference::Create(Runtime::kUnwindAndFindExceptionHandler);
   {
     FrameScope scope(masm, StackFrame::MANUAL);
-    __ Move(arg_reg_1, 0);  // argc.
-    __ Move(arg_reg_2, 0);  // argv.
+    __ movq(arg_reg_1, Immediate(0));  // argc.
+    __ movq(arg_reg_2, Immediate(0));  // argv.
     __ Move(arg_reg_3, ExternalReference::isolate_address(masm->isolate()));
     __ PrepareCallCFunction(3);
     __ CallCFunction(find_handler, 3);
@@ -4187,7 +4188,7 @@ void Generate_DeoptimizationEntry(MacroAssembler* masm,
   // this on linux), since it is another parameter passing register on windows.
   Register arg5 = r15;
 
-  __ Move(arg_reg_3, Deoptimizer::kFixedExitSizeMarker);
+  __ movq(arg_reg_3, Immediate(Deoptimizer::kFixedExitSizeMarker));
   // Get the address of the location in the code object
   // and compute the fp-to-sp delta in register arg5.
   __ movq(arg_reg_4, Operand(rsp, kCurrentOffsetToReturnAddress));
@@ -4198,7 +4199,7 @@ void Generate_DeoptimizationEntry(MacroAssembler* masm,
 
   // Allocate a new deoptimizer object.
   __ PrepareCallCFunction(6);
-  __ Move(rax, 0);
+  __ movq(rax, Immediate(0));
   Label context_check;
   __ movq(rdi, Operand(rbp, CommonFrameConstants::kContextOrFrameTypeOffset));
   __ JumpIfSmi(rdi, &context_check);
@@ -4470,7 +4471,7 @@ void Generate_BaselineEntry(MacroAssembler* masm, bool next_bytecode,
     __ bind(&function_entry_bytecode);
     // If the bytecode offset is kFunctionEntryOffset, get the start address of
     // the first bytecode.
-    __ Move(kInterpreterBytecodeOffsetRegister, 0);
+    __ movq(kInterpreterBytecodeOffsetRegister, Immediate(0));
     if (next_bytecode) {
       __ LoadAddress(get_baseline_pc,
                      ExternalReference::baseline_pc_for_bytecode_offset());
