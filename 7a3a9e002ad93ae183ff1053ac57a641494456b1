@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcfdd08c_6189a412",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-06-21T12:02:06Z",
+      "side": 1,
+      "message": "Thanks for reviewing the comment in depth! I copied some of it from the previous code and hadn\u0027t adapted it properly...",
+      "parentUuid": "d3c477eb_e28ed591",
+      "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f1819d9_fb3a5689",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-06-21T10:46:48Z",
       "side": 1,
       "message": "This is not quite true. Should we change to something like \"After the last (nested) scope is destructed, the code space is not writable any more.\"?",
+      "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fd65d04_497dc38d",
+        "filename": "src/wasm/code-space-access.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-06-21T12:02:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6f1819d9_fb3a5689",
       "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -77,6 +113,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "521cc13f_05c49096",
+        "filename": "src/wasm/code-space-access.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-06-21T12:02:06Z",
+      "side": 1,
+      "message": "Yes, I think we should drop it. This was a comment on the original {NativeModuleModificationScope} class, and I am not sure what kind of misunderstanding/misuse it should have guarded against: maybe it wanted to highlight that \"non standard\" protection flags are \"lost\", because the destructor does not restore the original permissions, but rather switches to fixed R-X? This is still the case, but I think also not a very important point/likely misuse scenario.",
+      "parentUuid": "cb181be2_0cf29d0d",
+      "range": {
+        "startLine": 36,
+        "startChar": 31,
+        "endLine": 36,
+        "endChar": 59
+      },
+      "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08f74e35_020ba733",
         "filename": "src/wasm/code-space-access.h",
         "patchSetId": 3
@@ -88,6 +148,24 @@
       "writtenOn": "2021-06-21T10:46:48Z",
       "side": 1,
       "message": "This is only for the mprotect-based approach (the others switch all code pages anyway).",
+      "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61fa59c3_1e5d89f6",
+        "filename": "src/wasm/code-space-access.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1509339
+      },
+      "writtenOn": "2021-06-21T12:02:06Z",
+      "side": 1,
+      "message": "True, I made it more clear this related to mprotect (PKU with multiple keys could in principle also not switch the whole space but rather (at most 15) subsets.)",
+      "parentUuid": "08f74e35_020ba733",
       "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
