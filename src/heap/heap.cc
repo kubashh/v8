@@ -3164,6 +3164,9 @@ void Heap::CreateFillerObjectAtBackground(
 
 HeapObject Heap::CreateFillerObjectAt(Address addr, int size,
                                       ClearRecordedSlots clear_slots_mode) {
+  SLOW_DCHECK(!lo_space_->ContainsSlow(addr) &&
+              !new_lo_space_->ContainsSlow(addr) &&
+              !code_lo_space_->ContainsSlow(addr));
   if (size == 0) return HeapObject();
   HeapObject filler = CreateFillerObjectAtImpl(
       ReadOnlyRoots(this), addr, size,
