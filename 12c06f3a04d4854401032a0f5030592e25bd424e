@@ -142,6 +142,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b09e012d_c1b6e04b",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-21T13:48:10Z",
+      "side": 1,
+      "message": "Good point. Will this mean extending the interface of FixedArray with e.g. get\u003cint32_t\u003e(index)?",
+      "parentUuid": "3efc16c6_80b9798c",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 40
+      },
+      "revId": "12c06f3a04d4854401032a0f5030592e25bd424e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f648d719_4481f93b",
         "filename": "src/api/api-inl.h",
         "patchSetId": 28
@@ -153,6 +177,30 @@
       "writtenOn": "2021-06-21T13:34:47Z",
       "side": 1,
       "message": "Definitely stuff for a future CL: but I guess we could just use memcpy for the cases where no conversion is necessary.",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 3
+      },
+      "revId": "12c06f3a04d4854401032a0f5030592e25bd424e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8df4345a_26765e94",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-21T13:48:10Z",
+      "side": 1,
+      "message": "Good idea, thanks! I\u0027ll leave a TODO.",
+      "parentUuid": "f648d719_4481f93b",
       "range": {
         "startLine": 256,
         "startChar": 0,
