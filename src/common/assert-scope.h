@@ -38,6 +38,7 @@ enum PerIsolateAssertType {
   DEOPTIMIZATION_ASSERT,
   COMPILATION_ASSERT,
   NO_EXCEPTION_ASSERT,
+  kPerIsolateAssertTypesCount
 };
 
 template <PerThreadAssertType kType, bool kAllow>
@@ -74,7 +75,7 @@ class V8_NODISCARD PerIsolateAssertScope {
 
  private:
   Isolate* isolate_;
-  uint32_t old_data_;
+  bool old_data_;
 };
 
 template <typename... Scopes>
