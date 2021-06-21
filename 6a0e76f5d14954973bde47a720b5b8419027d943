@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e252ad0d_8f391f0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-06-21T13:07:57Z",
+      "side": 1,
+      "message": "Hey Kim,\n\nThis was causing the weird wrap-around (combined with the hinting).\nPlease take a look.\n\nthanks,\nBenedikt",
+      "revId": "6a0e76f5d14954973bde47a720b5b8419027d943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
