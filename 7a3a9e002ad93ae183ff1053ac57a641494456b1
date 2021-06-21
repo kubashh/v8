@@ -16,6 +16,80 @@
       "message": "Could you take a look?",
       "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3c477eb_e28ed591",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-21T10:46:48Z",
+      "side": 1,
+      "message": "Nice, LGTM with a few comments about the comment.",
+      "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f1819d9_fb3a5689",
+        "filename": "src/wasm/code-space-access.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-21T10:46:48Z",
+      "side": 1,
+      "message": "This is not quite true. Should we change to something like \"After the last (nested) scope is destructed, the code space is not writable any more.\"?",
+      "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb181be2_0cf29d0d",
+        "filename": "src/wasm/code-space-access.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-21T10:46:48Z",
+      "side": 1,
+      "message": "This also does not sound right. The first part (\"inside the scope\") is correct, but at scope termination it depends on other surrounding scopes being open or not.\nShould we just drop this whole sentence?",
+      "range": {
+        "startLine": 36,
+        "startChar": 31,
+        "endLine": 36,
+        "endChar": 59
+      },
+      "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08f74e35_020ba733",
+        "filename": "src/wasm/code-space-access.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-21T10:46:48Z",
+      "side": 1,
+      "message": "This is only for the mprotect-based approach (the others switch all code pages anyway).",
+      "revId": "7a3a9e002ad93ae183ff1053ac57a641494456b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
