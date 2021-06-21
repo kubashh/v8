@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85b749b2_ed976c75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-21T15:03:54Z",
+      "side": 1,
+      "message": "Hi Toon, could you PTAL at this relatively small CL which we talked about? Thanks!",
+      "revId": "6b8dce3ba94dce61930edfac59e12238771b2547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
