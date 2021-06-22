@@ -16,6 +16,23 @@
       "message": "lgtm, thanks for fixing such an old bug!\n\nI was going to say double check the issue # since I\u0027m not sure that issue covers this, but I guess that issue was intended as an umbrella one for all .name issues, and in any case it\u0027s referenced in test262.status.",
       "revId": "961378b8cd5329da47fa83f8d147778c5cac2073",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7444564c_965b31ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-06-22T21:38:12Z",
+      "side": 1,
+      "message": "SM follows the spec, JSC currently doesn\u0027t and agree with V8\u0027s current (non-compliant) behavior. This muddies the compat story a bit, but I think `(ident) \u003d expr` forms have got to be pretty rare.",
+      "revId": "961378b8cd5329da47fa83f8d147778c5cac2073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
