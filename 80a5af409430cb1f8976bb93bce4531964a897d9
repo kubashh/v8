@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "827da935_f9401d5c",
+        "filename": "test/cctest/cctest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-22T08:51:02Z",
+      "side": 1,
+      "message": "The new code checks that no other flag is set. The inlining flag itself may or may not be set.",
+      "parentUuid": "b2158679_78e2658b",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 55
+      },
+      "revId": "80a5af409430cb1f8976bb93bce4531964a897d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3bbfe9a7_cb827778",
         "filename": "test/cctest/compiler/serializer-tester.cc",
         "patchSetId": 6
@@ -54,6 +78,24 @@
       "writtenOn": "2021-06-22T08:47:18Z",
       "side": 1,
       "message": "nit: in this one and in line 321 is hard to see that the first line is the global source, and the other one is the local one. Adding a local variable might help in differentiating the global one.",
+      "revId": "80a5af409430cb1f8976bb93bce4531964a897d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82216c11_5261142a",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-22T08:51:02Z",
+      "side": 1,
+      "message": "A local variable for what?",
+      "parentUuid": "3bbfe9a7_cb827778",
       "revId": "80a5af409430cb1f8976bb93bce4531964a897d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
