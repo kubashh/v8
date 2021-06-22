@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5bd6eb0_c180165a",
+        "filename": "src/bigint/div-burnikel.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-22T17:10:01Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "5a875305_2fe7163c",
+      "range": {
+        "startLine": 33,
+        "startChar": 24,
+        "endLine": 33,
+        "endChar": 28
+      },
+      "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b10e29e4_bf410a3d",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-06-22T15:11:12Z",
       "side": 1,
       "message": "Looks like this contradicts with the condition it\u0027s nested in: `cmp \u003c 0`. Should it be a completely separate if condition or maybe the above should read \u003c\u003d ?",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 16
+      },
+      "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9434ed09_b161e06d",
+        "filename": "src/bigint/div-burnikel.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-22T17:10:01Z",
+      "side": 1,
+      "message": "Ah yes, that\u0027s a typo, should be \u0027\u003c\u003d\u0027 coming into the block. Fixed.\n\n(We could make it separate `cmp \u003c 0` and `cmp \u003d\u003d 0` blocks as well, doesn\u0027t make a big difference here.)",
+      "parentUuid": "b10e29e4_bf410a3d",
       "range": {
         "startLine": 73,
         "startChar": 8,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59c734a6_b5a0a05d",
+        "filename": "src/bigint/vector-arithmetic.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-22T17:10:01Z",
+      "side": 1,
+      "message": "In short: yes and yes.\n\n1) See bigint.h:51: `// Digits are stored in little-endian order.`\nSo X[0] is the least significant digit of X. (This is the same in the existing v8::internal::BigInt class, where `digit(0)` is the least significant digit.)\n\n2) For addition and subtraction, schoolbook is the way to go. We have several helpers here with slightly different parameters for different caller needs (see lines 17, 23, 29, 50); we could consider merging a few of them, but let\u0027s get all the code in place before worrying about such cleanups.",
+      "parentUuid": "dd36053b_48140cdc",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 8
+      },
+      "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54a7aeb1_2b69765d",
@@ -117,6 +189,30 @@
       "writtenOn": "2021-06-22T15:11:12Z",
       "side": 1,
       "message": "Shouldn\u0027t that be 0 and the first call to digit_sub the following (everything in the loop is fine):\n\n    digit_sub(X[i], y, \u0026borrow);",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 20
+      },
+      "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "467eba6b_0eb6ac49",
+        "filename": "src/bigint/vector-arithmetic.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-22T17:10:01Z",
+      "side": 1,
+      "message": "If I\u0027m not missing anything, that\u0027d be exactly equivalent, and the way it\u0027s written is more concise because it only needs a single `digit_sub` call spelled out. Consider:\n\n  digit_t borrow;\n  X[0] \u003d digit_sub(X[0], y, \u0026borrow);\n  int i \u003d 1;\n  while (borrow !\u003d 0) {\n    X[i] \u003d digit_sub(X[i], borrow, \u0026borrow);\n    i++;\n  }\n\nPersonally, I also think that it makes sense intuitively: subtracting a single `digit_t` from a Digits array (starting at X[0], propagating borrows as far as needed) is exactly the same operation as propagating a borrow from a hypothetical X[-1] position.\n\n`digit_sub` is careful to read the in-parameter before writing to the out-parameter, precisely so it can be used in loops as `digit_sub(..., borrow, \u0026borrow)`.\n\nSee also line 30, which is exactly the same pattern. In fact, the entire pair of functions has the same structure, just s/add/sub/, s/carry/borrow/.",
+      "parentUuid": "54a7aeb1_2b69765d",
       "range": {
         "startLine": 40,
         "startChar": 19,
