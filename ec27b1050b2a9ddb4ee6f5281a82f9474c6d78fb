@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f48d68b_a51222bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-22T06:59:21Z",
+      "side": 1,
+      "message": "It\u0027s more than that. Some methods are changed to direct reads.",
+      "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edaa4c56_403aaca1",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-22T06:59:21Z",
+      "side": 1,
+      "message": "For clarity I\u0027d like to add a DCHECK that this condition is equivalent to kind \u003d\u003d kSerializedHeapObject here.",
+      "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32f94ba6_ea180ae8",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-22T06:59:21Z",
+      "side": 1,
+      "message": "Add DCHECK to getter.",
+      "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74f4648e_3f14d729",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-22T06:59:21Z",
+      "side": 1,
+      "message": "Let\u0027s add a comment that this is for foreground serialization only.",
+      "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d2e4c32_99b8e204",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4593,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-22T06:59:21Z",
+      "side": 1,
+      "message": "Let\u0027s move this up to the other function.",
+      "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
