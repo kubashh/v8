@@ -16,6 +16,115 @@
       "message": "Friendly ping. No rush.",
       "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3c3084b_1ec58664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T15:11:12Z",
+      "side": 1,
+      "message": "Mostly LGTM, but still please check questions 2 and 4 (the rest is nits).",
+      "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a875305_2fe7163c",
+        "filename": "src/bigint/div-burnikel.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T15:11:12Z",
+      "side": 1,
+      "message": "nit: could you add a comment what are the meanings of the return values?",
+      "range": {
+        "startLine": 33,
+        "startChar": 24,
+        "endLine": 33,
+        "endChar": 28
+      },
+      "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b10e29e4_bf410a3d",
+        "filename": "src/bigint/div-burnikel.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T15:11:12Z",
+      "side": 1,
+      "message": "Looks like this contradicts with the condition it\u0027s nested in: `cmp \u003c 0`. Should it be a completely separate if condition or maybe the above should read \u003c\u003d ?",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 16
+      },
+      "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd36053b_48140cdc",
+        "filename": "src/bigint/vector-arithmetic.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T15:11:12Z",
+      "side": 1,
+      "message": "2 questions just for my own understanding:\n1) X is represented in reverse order, e.g. the number 1234 is represented in the memory of X as [4,3,2,1], right?\n2) This implements schoolbook addition with carry (such as the next one implements schoolbook subtraction with borrow)?",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 8
+      },
+      "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54a7aeb1_2b69765d",
+        "filename": "src/bigint/vector-arithmetic.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T15:11:12Z",
+      "side": 1,
+      "message": "Shouldn\u0027t that be 0 and the first call to digit_sub the following (everything in the loop is fine):\n\n    digit_sub(X[i], y, \u0026borrow);",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 20
+      },
+      "revId": "0e8f99687e6b6429d217bfffa5f80dc58fe309d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
