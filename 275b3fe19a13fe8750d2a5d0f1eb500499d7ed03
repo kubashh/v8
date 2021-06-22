@@ -16,6 +16,75 @@
       "message": "Thanks for the comments, Camillo! PTAL and let me know if you prefer to have a live chat in the afternoon.",
       "revId": "275b3fe19a13fe8750d2a5d0f1eb500499d7ed03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e002190_95f7c27e",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T11:58:02Z",
+      "side": 1,
+      "message": "this probably needs a uint cast for msvc",
+      "range": {
+        "startLine": 127,
+        "startChar": 15,
+        "endLine": 127,
+        "endChar": 43
+      },
+      "revId": "275b3fe19a13fe8750d2a5d0f1eb500499d7ed03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cff9bd08_85657584",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T11:58:02Z",
+      "side": 1,
+      "message": "Sorry for the back and forth.\nI just saw that there must be https://tc39.es/ecma262/#sec-tobigint64 as well. WDYT?",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 55
+      },
+      "revId": "275b3fe19a13fe8750d2a5d0f1eb500499d7ed03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5f6f9a1_41ba06ac",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T11:58:02Z",
+      "side": 1,
+      "message": "nit: leftover code.",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 78
+      },
+      "revId": "275b3fe19a13fe8750d2a5d0f1eb500499d7ed03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
