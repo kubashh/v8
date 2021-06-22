@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7e0df8c_2b4e61a4",
+        "filename": "test/cctest/cctest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-22T08:55:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "827da935_f9401d5c",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 55
+      },
+      "revId": "80a5af409430cb1f8976bb93bce4531964a897d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bbfe9a7_cb827778",
@@ -96,6 +120,23 @@
       "side": 1,
       "message": "A local variable for what?",
       "parentUuid": "3bbfe9a7_cb827778",
+      "revId": "80a5af409430cb1f8976bb93bce4531964a897d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07feb934_5f418bfa",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-22T08:55:07Z",
+      "side": 1,
+      "message": "e.g.\nconst char* global \u003d \"function apply1(foo, arg) { return foo(arg); };\";\nCheckForSerializedInlinee(global, \"...\");",
       "revId": "80a5af409430cb1f8976bb93bce4531964a897d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
