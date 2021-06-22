@@ -91,8 +91,8 @@ inline double DoubleToInteger(double x) {
 // Implements most of https://tc39.github.io/ecma262/#sec-toint32.
 int32_t DoubleToInt32(double x) {
   if ((std::isfinite(x)) && (x <= INT_MAX) && (x >= INT_MIN)) {
-    int32_t i = static_cast<int32_t>(x);
-    if (FastI2D(i) == x) return i;
+    // All doubles within these limits are trivially convertable to an int.
+    return static_cast<int32_t>(x);
   }
   Double d(x);
   int exponent = d.Exponent();
@@ -108,6 +108,35 @@ int32_t DoubleToInt32(double x) {
     bits = (d.Significand() << exponent) & 0xFFFFFFFFul;
   }
   return static_cast<int32_t>(d.Sign() * static_cast<int64_t>(bits));
+}
+
+inline int64_t DoubleToInt64(double x) {
+  if ((std::isfinite(x)) && (x <= kMaxSafeInteger) && (x >= kMinSafeInteger)) {
+    // All doubles within these limits are trivially convertable to an int.
+    return static_cast<int64_t>(x);
+  }
+  Double d(x);
+  int exponent = d.Exponent();
+  uint64_t bits;
+  if (exponent < 0) {
+    if (exponent <= -Double::kSignificandSize) return 0;
+    bits = d.Significand() >> -exponent;
+  } else {
+    if (exponent > 63) return 0;
+    bits = (d.Significand() << exponent);
+    if (bits > std::numeric_limits<int64_t>::max()) {
+      // Following the 32-bit specification, we want to do the following:
+      // 5. If int32bit ≥ 2^63, return 𝔽(int32bit - 2^64);
+      // We can't fit 2^64 within uint64_t, so instead we subtract 2^63 twice.
+      bits -= (1ull << 63);
+      return static_cast<int64_t>(bits) - (1ull << 63);
+    }
+  }
+  return static_cast<int64_t>(d.Sign() * static_cast<int64_t>(bits));
+}
+
+inline uint64_t DoubleToUint64(double x) {
+  return static_cast<uint64_t>(DoubleToInt64(x));
 }
 
 bool DoubleToSmiInteger(double value, int* smi_int_value) {
