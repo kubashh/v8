@@ -166,6 +166,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d8f90e6_ba670325",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T07:33:44Z",
+      "side": 1,
+      "message": "I\u0027d be fine with doing this locally here, since you cannot generally guarantee the FixedArray has only Smis.\n\nWhile here you did the precheck with HasSmiElements(), so exploiting this makes probably mostly sense locally.",
+      "parentUuid": "b09e012d_c1b6e04b",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 40
+      },
+      "revId": "12c06f3a04d4854401032a0f5030592e25bd424e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f648d719_4481f93b",
         "filename": "src/api/api-inl.h",
         "patchSetId": 28

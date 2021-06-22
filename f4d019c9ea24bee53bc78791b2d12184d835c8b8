@@ -93,6 +93,30 @@
       },
       "revId": "f4d019c9ea24bee53bc78791b2d12184d835c8b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6da97c79_8a497c66",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T07:33:44Z",
+      "side": 1,
+      "message": "I guess we should keep the behavior the same as ToInt32 in the spec https://tc39.es/ecma262/#sec-toint32 (see comment above)",
+      "parentUuid": "457fecb9_e61a9c00",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 40
+      },
+      "revId": "f4d019c9ea24bee53bc78791b2d12184d835c8b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

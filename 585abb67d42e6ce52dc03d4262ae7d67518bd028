@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5811ca34_4e3c83c4",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T07:33:44Z",
+      "side": 1,
+      "message": "Let\u0027s define a proper constant for this: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_SAFE_INTEGER",
+      "range": {
+        "startLine": 114,
+        "startChar": 55,
+        "endLine": 114,
+        "endChar": 76
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc5e514a_2bcb16f4",
+        "filename": "test/mjsunit/compiler/fast-api-sequences.js",
+        "patchSetId": 30
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T07:33:44Z",
+      "side": 1,
+      "message": "just curious: Where does the term \"sequence\" come from (here and in other files)? I find it a bit confusing, since we\u0027re interacting with JS, and there we only have Array, which would be the name I\u0027d expect here. Or are there plans for other sequence-like types?",
+      "range": {
+        "startLine": 29,
+        "startChar": 17,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6825e35a_1871bb3d",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T07:33:44Z",
+      "side": 1,
+      "message": "For answering the question below with the overflow, can you add the conversion test for kMaxSafeInteger+1 and -kMinSafeInteger-1 as well?\n\nWe then should do the same for int64 and get the same results for the non-safe ranged integers.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 26
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62f385f7_63aaba5d",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T07:33:44Z",
+      "side": 1,
+      "message": "Here as well, let\u0027s use kMinSafeInteger (I don\u0027t feel comfortable with just taking the negative value of kMaxSafeInteger in various places)",
+      "range": {
+        "startLine": 92,
+        "startChar": 6,
+        "endLine": 92,
+        "endChar": 21
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1fa2c3d_d03f261d",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-22T07:33:44Z",
+      "side": 1,
+      "message": "Move this to where kMaxSafeInteger is defined.",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 0
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
