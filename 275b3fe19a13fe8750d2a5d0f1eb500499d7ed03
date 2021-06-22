@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13497130_d37fdc35",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T12:14:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e002190_95f7c27e",
+      "range": {
+        "startLine": 127,
+        "startChar": 15,
+        "endLine": 127,
+        "endChar": 43
+      },
+      "revId": "275b3fe19a13fe8750d2a5d0f1eb500499d7ed03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cff9bd08_85657584",
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ede28e6_32083d63",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T12:14:13Z",
+      "side": 1,
+      "message": "I think that\u0027s mostly what is implemented right now, modulo the checks for +/-0 and +/-Inf. Or do you think the implementation diverges much from the ToBigInt64 spec?",
+      "parentUuid": "cff9bd08_85657584",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 55
+      },
+      "revId": "275b3fe19a13fe8750d2a5d0f1eb500499d7ed03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5f6f9a1_41ba06ac",
         "filename": "test/unittests/numbers/conversions-unittest.cc",
         "patchSetId": 31
@@ -77,6 +125,30 @@
       "writtenOn": "2021-06-22T11:58:02Z",
       "side": 1,
       "message": "nit: leftover code.",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 78
+      },
+      "revId": "275b3fe19a13fe8750d2a5d0f1eb500499d7ed03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b6de7a3_f3210c70",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T12:14:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5f6f9a1_41ba06ac",
       "range": {
         "startLine": 109,
         "startChar": 0,
