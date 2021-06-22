@@ -139,6 +139,24 @@
       "message": "e.g.\nconst char* global \u003d \"function apply1(foo, arg) { return foo(arg); };\";\nCheckForSerializedInlinee(global, \"...\");",
       "revId": "80a5af409430cb1f8976bb93bce4531964a897d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8acd4c4b_9bb28db8",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-22T08:57:36Z",
+      "side": 1,
+      "message": "Ah I thought you meant variable in JS. Good idea, will do.",
+      "parentUuid": "07feb934_5f418bfa",
+      "revId": "80a5af409430cb1f8976bb93bce4531964a897d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
