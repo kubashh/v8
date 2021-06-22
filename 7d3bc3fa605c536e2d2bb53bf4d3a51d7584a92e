@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7143789_6ead2652",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1114919
+      },
+      "writtenOn": "2021-06-22T08:52:43Z",
+      "side": 1,
+      "message": "infrastructure FYI: this was the first commit landed by LUCI CV in V8 😊",
+      "revId": "7d3bc3fa605c536e2d2bb53bf4d3a51d7584a92e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
