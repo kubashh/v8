@@ -648,6 +648,10 @@ DEFINE_UINT_READONLY(max_minimorphic_map_checks, 4,
 DEFINE_INT(interrupt_budget_scale_factor_for_top_tier, 5,
            "scale factor for profiler ticks when tiering up from midtier")
 
+DEFINE_INT(turboprop_inline_scaling_factor, 2,
+           "scale factor for reduction in bytecode that can be inline for "
+           "TurboProp compared to TurboFan")
+
 // Flags for Sparkplug
 #undef FLAG
 #if ENABLE_SPARKPLUG
@@ -857,7 +861,7 @@ DEFINE_BOOL(
 DEFINE_BOOL(turbo_fast_api_calls, false, "enable fast API calls from TurboFan")
 DEFINE_INT(reuse_opt_code_count, 0,
            "don't discard optimized code for the specified number of deopts.")
-DEFINE_BOOL(turbo_dynamic_map_checks, true,
+DEFINE_BOOL(turbo_dynamic_map_checks, false,
             "use dynamic map checks when generating code for property accesses "
             "if all handlers in an IC are the same for turboprop")
 DEFINE_BOOL(turbo_compress_translation_arrays, false,
