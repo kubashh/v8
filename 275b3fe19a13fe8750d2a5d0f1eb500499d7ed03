@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57dbf1a2_5ea9eef2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T09:48:50Z",
+      "side": 1,
+      "message": "Thanks for the comments, Camillo! PTAL and let me know if you prefer to have a live chat in the afternoon.",
+      "revId": "275b3fe19a13fe8750d2a5d0f1eb500499d7ed03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

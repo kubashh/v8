@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5da72fe4_fbe8d1f7",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T09:48:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5811ca34_4e3c83c4",
+      "range": {
+        "startLine": 114,
+        "startChar": 55,
+        "endLine": 114,
+        "endChar": 76
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc5e514a_2bcb16f4",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-06-22T07:33:44Z",
       "side": 1,
       "message": "just curious: Where does the term \"sequence\" come from (here and in other files)? I find it a bit confusing, since we\u0027re interacting with JS, and there we only have Array, which would be the name I\u0027d expect here. Or are there plans for other sequence-like types?",
+      "range": {
+        "startLine": 29,
+        "startChar": 17,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f516b1_869d6773",
+        "filename": "test/mjsunit/compiler/fast-api-sequences.js",
+        "patchSetId": 30
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T09:48:50Z",
+      "side": 1,
+      "message": "The name comes from WebIDL sequences (which are equivalent to JS arrays or anything array-like, as far as I understood). Also all design docs mention sequences and only in the implementation details - arrays.",
+      "parentUuid": "dc5e514a_2bcb16f4",
       "range": {
         "startLine": 29,
         "startChar": 17,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f89aaa8f_fccafe24",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T09:48:50Z",
+      "side": 1,
+      "message": "I added the tests for the 64-bit case, with different expectations. PTAL again.",
+      "parentUuid": "6825e35a_1871bb3d",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 26
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62f385f7_63aaba5d",
         "filename": "test/unittests/numbers/conversions-unittest.cc",
         "patchSetId": 30
@@ -83,6 +155,30 @@
       "writtenOn": "2021-06-22T07:33:44Z",
       "side": 1,
       "message": "Here as well, let\u0027s use kMinSafeInteger (I don\u0027t feel comfortable with just taking the negative value of kMaxSafeInteger in various places)",
+      "range": {
+        "startLine": 92,
+        "startChar": 6,
+        "endLine": 92,
+        "endChar": 21
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b590255_9a1fbbac",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T09:48:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62f385f7_63aaba5d",
       "range": {
         "startLine": 92,
         "startChar": 6,
@@ -106,6 +202,30 @@
       "writtenOn": "2021-06-22T07:33:44Z",
       "side": 1,
       "message": "Move this to where kMaxSafeInteger is defined.",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 0
+      },
+      "revId": "585abb67d42e6ce52dc03d4262ae7d67518bd028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00d40e40_3acbfa7c",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T09:48:50Z",
+      "side": 1,
+      "message": "I left the static_cast\u0027ed version here, but the kMinSafeIngeter is in globals.h.",
+      "parentUuid": "c1fa2c3d_d03f261d",
       "range": {
         "startLine": 108,
         "startChar": 0,

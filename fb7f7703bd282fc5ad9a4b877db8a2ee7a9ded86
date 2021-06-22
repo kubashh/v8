@@ -298,6 +298,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b83bb87_4f697957",
+        "filename": "src/api/api.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-22T09:48:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7c77182_b1d51293",
+      "revId": "fb7f7703bd282fc5ad9a4b877db8a2ee7a9ded86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d411a62_dacea16f",
