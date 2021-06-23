@@ -226,6 +226,15 @@ class V8_EXPORT_PRIVATE AssemblerBase : public Malloced {
                 std::unique_ptr<AssemblerBuffer>);
   virtual ~AssemblerBase();
 
+  std::unique_ptr<AssemblerBuffer> ReleaseBuffer() {
+    std::unique_ptr<AssemblerBuffer> buffer = std::move(buffer_);
+    DCHECK_NULL(buffer_);
+    // Reset fields to prevent accidental further modifications of the buffer.
+    buffer_start_ = nullptr;
+    pc_ = nullptr;
+    return buffer;
+  }
+
   const AssemblerOptions& options() const { return options_; }
 
   bool predictable_code_size() const { return predictable_code_size_; }
