@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1be3071f_bf9ba1ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-23T12:55:06Z",
+      "side": 1,
+      "message": "I plan to finish the x86 impl first and port it to arm separately. I\u0027m not sure yet how to do it, I was planning to look at what clang emits for std::isnan().",
+      "parentUuid": "589a0b52_c7874634",
+      "revId": "fc61b9d0de324f72f90f25dd1badc7da846a65cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e82a34f_b3d78d49",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b147b322_2a1b7446",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-23T12:55:06Z",
+      "side": 1,
+      "message": "{emit_select} also wouldn\u0027t necessarily set dst. I agree that \"set_if_nan\" is more explicit than \"isnan\", though. How about \"emit_set_if_nan\" then?",
+      "parentUuid": "4e82a34f_b3d78d49",
+      "revId": "fc61b9d0de324f72f90f25dd1badc7da846a65cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "911f8608_ded9597d",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 4
@@ -48,6 +84,24 @@
       "writtenOn": "2021-06-23T10:48:08Z",
       "side": 1,
       "message": "Can this ever be false? If not, we should remove it.",
+      "revId": "fc61b9d0de324f72f90f25dd1badc7da846a65cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f518d939_26d4c04b",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6093,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-23T12:55:06Z",
+      "side": 1,
+      "message": "Ack, will remove it after we resolve the other comment.",
+      "parentUuid": "911f8608_ded9597d",
       "revId": "fc61b9d0de324f72f90f25dd1badc7da846a65cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
