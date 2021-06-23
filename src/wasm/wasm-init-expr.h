@@ -12,6 +12,8 @@
 #include <memory>
 
 #include "src/wasm/value-type.h"
+#include "src/zone/zone-containers.h"
+#include "src/zone/zone.h"
 
 namespace v8 {
 namespace internal {
@@ -21,7 +23,7 @@ struct WasmModule;
 class WasmFeatures;
 
 // Representation of an initializer expression.
-class WasmInitExpr {
+class WasmInitExpr : public ZoneObject {
  public:
   enum Operator {
     kNone,
@@ -51,6 +53,9 @@ class WasmInitExpr {
   };
 
   WasmInitExpr() : kind_(kNone) { immediate_.i32_const = 0; }
+  explicit WasmInitExpr(Zone* zone) : kind_(kNone), operands_(zone) {
+    immediate_.i32_const = 0;
+  }
   explicit WasmInitExpr(int32_t v) : kind_(kI32Const) {
     immediate_.i32_const = v;
   }
@@ -91,21 +96,13 @@ class WasmInitExpr {
   }
 
   static WasmInitExpr StructNewWithRtt(uint32_t index,
-                                       std::vector<WasmInitExpr> elements) {
-    WasmInitExpr expr;
-    expr.kind_ = kStructNewWithRtt;
-    expr.immediate_.index = index;
-    expr.operands_ = std::move(elements);
-    return expr;
+                                       ZoneVector<WasmInitExpr>&& elements) {
+    return WasmInitExpr(kStructNewWithRtt, index, std::move(elements));
   }
 
   static WasmInitExpr ArrayInit(uint32_t index,
-                                std::vector<WasmInitExpr> elements) {
-    WasmInitExpr expr;
-    expr.kind_ = kArrayInit;
-    expr.immediate_.index = index;
-    expr.operands_ = std::move(elements);
-    return expr;
+                                ZoneVector<WasmInitExpr>&& elements) {
+    return WasmInitExpr(kArrayInit, index, std::move(elements));
   }
 
   static WasmInitExpr RttCanon(uint32_t index) {
@@ -115,25 +112,19 @@ class WasmInitExpr {
     return expr;
   }
 
-  static WasmInitExpr RttSub(uint32_t index, WasmInitExpr supertype) {
-    WasmInitExpr expr;
-    expr.kind_ = kRttSub;
-    expr.immediate_.index = index;
-    expr.operands_.push_back(std::move(supertype));
-    return expr;
+  static WasmInitExpr RttSub(uint32_t index, WasmInitExpr&& supertype,
+                             Zone* zone) {
+    return WasmInitExpr(kRttSub, index, std::move(supertype), zone);
   }
 
-  static WasmInitExpr RttFreshSub(uint32_t index, WasmInitExpr supertype) {
-    WasmInitExpr expr;
-    expr.kind_ = kRttFreshSub;
-    expr.immediate_.index = index;
-    expr.operands_.push_back(std::move(supertype));
-    return expr;
+  static WasmInitExpr RttFreshSub(uint32_t index, WasmInitExpr&& supertype,
+                                  Zone* zone) {
+    return WasmInitExpr(kRttFreshSub, index, std::move(supertype), zone);
   }
 
   Immediate immediate() const { return immediate_; }
   Operator kind() const { return kind_; }
-  const std::vector<WasmInitExpr>& operands() const { return operands_; }
+  const ZoneVector<WasmInitExpr>& operands() const { return operands_; }
 
   bool operator==(const WasmInitExpr& other) const {
     if (kind() != other.kind()) return false;
@@ -185,9 +176,29 @@ class WasmInitExpr {
                  const WasmFeatures& enabled_features) const;
 
  private:
+  // Constructor for rtt.sub and rtt.fresh_sub.
+  WasmInitExpr(Operator kind, uint32_t index, WasmInitExpr&& supertype,
+               Zone* zone)
+      : kind_(kind), operands_(zone) {
+    DCHECK(kind == kRttSub || kind == kRttFreshSub);
+    immediate_.index = index;
+    operands_.resize(1);
+    operands_[0] = std::move(supertype);
+  }
+
+  // Constructor for array.init and struct.new_with_rtt.
+  WasmInitExpr(Operator kind, uint32_t index,
+               ZoneVector<WasmInitExpr>&& elements)
+      : kind_(kind), operands_(elements.get_allocator().zone()) {
+    DCHECK(kind == kArrayInit || kind == kStructNewWithRtt);
+    DCHECK_NOT_NULL(operands_.get_allocator().zone());
+    operands_ = std::move(elements);
+    immediate_.index = index;
+  }
+
   Immediate immediate_;
   Operator kind_;
-  std::vector<WasmInitExpr> operands_;
+  ZoneVector<WasmInitExpr> operands_{nullptr};
 };
 
 }  // namespace wasm

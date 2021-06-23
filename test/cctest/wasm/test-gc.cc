@@ -1194,7 +1194,8 @@ WASM_COMPILED_EXEC_TEST(RttFreshSub) {
 
   const byte kRtt = tester.AddGlobal(
       ValueType::Rtt(kType, 1), false,
-      WasmInitExpr::RttFreshSub(type_repr, WasmInitExpr::RttCanon(type_repr)));
+      WasmInitExpr::RttFreshSub(type_repr, WasmInitExpr::RttCanon(type_repr),
+                                tester.zone()));
 
   // A struct allocated with a fresh RTT does not match other fresh RTTs
   // created for the same type.
@@ -1761,7 +1762,7 @@ WASM_COMPILED_EXEC_TEST(CastsBenchmark) {
   const byte RttSub = tester.AddGlobal(
       ValueType::Rtt(SubType, 1), false,
       WasmInitExpr::RttSub(static_cast<HeapType::Representation>(SubType),
-                           WasmInitExpr::GlobalGet(RttSuper)));
+                           WasmInitExpr::GlobalGet(RttSuper), tester.zone()));
   const byte RttList = tester.AddGlobal(
       ValueType::Rtt(ListType, 0), false,
       WasmInitExpr::RttCanon(static_cast<HeapType::Representation>(ListType)));
