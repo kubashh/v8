@@ -138,6 +138,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6504d22f_9364687a",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-23T12:38:26Z",
+      "side": 1,
+      "message": "After chatting with Georg, it looks we should follow the WebIDL spec instead (https://heycam.github.io/webidl/#abstract-opdef-integerpart). It just happens that in the 32-bit case it coincides with ToInt32 from the ES spec. So I\u0027ll revert this change, as this case is already covered by `if (exponent \u003e 63)`.",
+      "parentUuid": "7ede28e6_32083d63",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 55
+      },
+      "revId": "275b3fe19a13fe8750d2a5d0f1eb500499d7ed03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5f6f9a1_41ba06ac",
         "filename": "test/unittests/numbers/conversions-unittest.cc",
         "patchSetId": 31
