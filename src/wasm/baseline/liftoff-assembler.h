@@ -1455,6 +1455,9 @@ class LiftoffAssembler : public TurboAssembler {
   // Instrumentation for shadow-stack-compatible OSR on x64.
   inline void MaybeOSR();
 
+  // Set dst to 1 if src is a NaN, 0 otherwise.
+  inline void emit_isnan(Register dst, DoubleRegister src, ValueKind kind);
+
   ////////////////////////////////////
   // End of platform-specific part. //
   ////////////////////////////////////
