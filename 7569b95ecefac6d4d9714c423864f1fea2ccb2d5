@@ -16,6 +16,23 @@
       "message": "Santiago, PTAL thanks.",
       "revId": "7569b95ecefac6d4d9714c423864f1fea2ccb2d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a01fd52_d6fff079",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-23T09:06:13Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "7569b95ecefac6d4d9714c423864f1fea2ccb2d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
