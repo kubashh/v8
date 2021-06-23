@@ -249,7 +249,7 @@ void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
 
   for (WasmGlobal& glob : module->globals) {
     os << "builder.addGlobal(" << ValueTypeToConstantName(glob.type) << ", "
-       << glob.mutability << ", " << glob.init << ");\n";
+       << glob.mutability << ", " << /*glob.init <<*/ ");\n";
   }
 
   // TODO(7748): Support array/struct types.
@@ -287,7 +287,8 @@ void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
                   : "Declarative";
     os << "builder.add" << status_str << "ElementSegment(";
     if (elem_segment.status == WasmElemSegment::kStatusActive) {
-      os << elem_segment.table_index << ", " << elem_segment.offset << ", ";
+      os << elem_segment.table_index
+         << ", " /*<< elem_segment.offset */ << ", ";
     }
     os << "[";
     for (uint32_t i = 0; i < elem_segment.entries.size(); i++) {
