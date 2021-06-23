@@ -5064,6 +5064,12 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
                                kNoWriteBarrier),
            target_address, 0, n.target());
 
+  // Disable JS execution
+  Node* javascript_execution_assert = __ ExternalConstant(
+      ExternalReference::javascript_execution_assert(isolate()));
+  __ Store(StoreRepresentation(MachineRepresentation::kWord8, kNoWriteBarrier),
+           javascript_execution_assert, 0, __ Int32Constant(0));
+
   Node** const inputs = graph()->zone()->NewArray<Node*>(
       c_arg_count + n.FastCallExtraInputCount());
   inputs[0] = n.target();
@@ -5084,6 +5090,10 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
 
   Node* c_call_result = __ Call(
       call_descriptor, c_arg_count + n.FastCallExtraInputCount(), inputs);
+
+  // Reenable JS execution
+  __ Store(StoreRepresentation(MachineRepresentation::kWord8, kNoWriteBarrier),
+           javascript_execution_assert, 0, __ Int32Constant(1));
 
   __ Store(StoreRepresentation(MachineType::PointerRepresentation(),
                                kNoWriteBarrier),

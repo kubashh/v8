@@ -420,6 +420,7 @@ V8_EXPORT_PRIVATE void FreeCurrentEmbeddedBlob();
   V(int, bad_char_shift_table, kUC16AlphabetSize)                              \
   V(int, good_suffix_shift_table, (kBMMaxShift + 1))                           \
   V(int, suffix_table, (kBMMaxShift + 1))                                      \
+  V(bool, assert_scope_data, kPerIsolateAssertTypesCount)                      \
   ISOLATE_INIT_DEBUG_ARRAY_LIST(V)
 
 using DebugObjectCache = std::vector<Handle<HeapObject>>;
@@ -453,7 +454,6 @@ using DebugObjectCache = std::vector<Handle<HeapObject>>;
   V(MicrotaskQueue*, default_microtask_queue, nullptr)                        \
   V(CompilationStatistics*, turbo_statistics, nullptr)                        \
   V(CodeTracer*, code_tracer, nullptr)                                        \
-  V(uint32_t, per_isolate_assert_data, 0xFFFFFFFFu)                           \
   V(PromiseRejectCallback, promise_reject_callback, nullptr)                  \
   V(const v8::StartupData*, snapshot_blob, nullptr)                           \
   V(int, code_and_metadata_size, 0)                                           \
@@ -1509,6 +1509,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   Address async_event_delegate_address() {
     return reinterpret_cast<Address>(&async_event_delegate_);
+  }
+
+  bool* javascript_execution_assert_address() {
+    return assert_scope_data_ + JAVASCRIPT_EXECUTION_ASSERT;
   }
 
   Address handle_scope_implementer_address() {
