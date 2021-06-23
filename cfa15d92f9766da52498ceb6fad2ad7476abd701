@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41ba11a8_f2f2f486",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-23T13:10:01Z",
+      "side": 1,
+      "message": "Thanks everyone for the comments! As discussed, I gave a clearer name to the WebIDL specific conversion function and added a link to the spec. I\u0027ll land this CL and please let me know if you\u0027d suggest any further changes (beyond what\u0027s already mentioned in the TODOs).",
+      "revId": "cfa15d92f9766da52498ceb6fad2ad7476abd701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
