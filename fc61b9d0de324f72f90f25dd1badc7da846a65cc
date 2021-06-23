@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e0e770d_7d08f9ca",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-23T13:25:53Z",
+      "side": 1,
+      "message": "{emit_select} ensures that dst holds either {true_value} or {false_value} afterwards, which is consistent with other emit functions.\n\"emit_set_if_nan\" also works for me.",
+      "parentUuid": "b147b322_2a1b7446",
+      "revId": "fc61b9d0de324f72f90f25dd1badc7da846a65cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "911f8608_ded9597d",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 4
