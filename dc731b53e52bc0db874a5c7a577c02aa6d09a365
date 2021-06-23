@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "58a5db92_35db6dfc",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-23T08:15:12Z",
+      "side": 1,
+      "message": "Here\u0027s how this works (I will add a comment to the code):\n\n- We must not use the property cell (or its value) when IsDetached becomes true.\n- When IsDetached changes from false to true, the map of the global proxy changes (see Bootstrapper::DetachGlobal).\n- When we take this path in TF, ReduceGlobalAccess will emit a deopting-check that the incoming object\u0027s map is the global proxy\u0027s (compile-time) map. Hence we will deopt when IsDetached changes after compilation.\n- Regarding concurrency, no additional changes are needed as long as the global-proxy\u0027s (compile-time) map is cached.",
+      "parentUuid": "2ee89a41_d36a2f89",
+      "revId": "dc731b53e52bc0db874a5c7a577c02aa6d09a365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4729372a_ed0895d0",
