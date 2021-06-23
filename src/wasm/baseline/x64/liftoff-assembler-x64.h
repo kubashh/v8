@@ -4371,6 +4371,24 @@ void LiftoffAssembler::emit_isnan(Register dst, DoubleRegister src,
   bind(&ret);
 }
 
+void LiftoffAssembler::emit_s128_hasnan(Register dst, DoubleRegister src,
+                                        DoubleRegister tmp,
+                                        ValueKind lane_kind) {
+  if (lane_kind == kF32) {
+    movaps(tmp, src);
+    cmpunordps(tmp, tmp);
+  } else {
+    DCHECK_EQ(lane_kind, kF64);
+    movapd(tmp, src);
+    cmpunordpd(tmp, tmp);
+  }
+  ptest(tmp, tmp);
+  Label ret;
+  j(zero, &ret);
+  movl(Operand(dst, 0), Immediate(1));
+  bind(&ret);
+}
+
 void LiftoffStackSlots::Construct(int param_slots) {
   DCHECK_LT(0, slots_.size());
   SortInPushOrder();

@@ -4238,6 +4238,12 @@ void LiftoffAssembler::emit_isnan(Register dst, DoubleRegister src,
   UNIMPLEMENTED();
 }
 
+void LiftoffAssembler::emit_s128_hasnan(Register dst, DoubleRegister src,
+                                        DoubleRegister tmp,
+                                        ValueKind lane_kind) {
+  UNIMPLEMENTED();
+}
+
 void LiftoffStackSlots::Construct(int param_slots) {
   DCHECK_LT(0, slots_.size());
   SortInPushOrder();

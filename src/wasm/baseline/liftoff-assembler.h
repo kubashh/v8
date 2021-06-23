@@ -1458,6 +1458,10 @@ class LiftoffAssembler : public TurboAssembler {
   // Set the i32 at address dst to 1 if src is a NaN.
   inline void emit_isnan(Register dst, DoubleRegister src, ValueKind kind);
 
+  // Set the i32 at address dst to 1 if src contains a NaN.
+  inline void emit_s128_hasnan(Register dst, DoubleRegister src,
+                               DoubleRegister tmp, ValueKind lane_kind);
+
   ////////////////////////////////////
   // End of platform-specific part. //
   ////////////////////////////////////
