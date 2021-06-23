@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4edf5b82_c7f3c9f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-06-23T15:37:23Z",
+      "side": 1,
+      "message": "the change itself looks good, but this code seems unnecessarily complex.",
+      "revId": "60ce1c01b2117f36b3a81eac5fffc23b3c2cf73f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6caf8558_e28b26ba",
+        "filename": "src/common/assert-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-06-23T15:37:23Z",
+      "side": 1,
+      "message": "Is there value to having this enum? All these templates just seem like unnecessary complexity that don\u0027t provide much value... Simply having straightforward C++ scopes with a bool on the isolate seems simpler.",
+      "revId": "60ce1c01b2117f36b3a81eac5fffc23b3c2cf73f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
