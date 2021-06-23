@@ -3035,6 +3035,7 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator,
   memset(name##_, 0, sizeof(type) * length);
   ISOLATE_INIT_ARRAY_LIST(ISOLATE_INIT_ARRAY_EXECUTE)
 #undef ISOLATE_INIT_ARRAY_EXECUTE
+  memset(assert_scope_data_, 1, sizeof(bool) * kPerIsolateAssertTypesCount);
 
   InitializeLoggingAndCounters();
   debug_ = new Debug(this);
