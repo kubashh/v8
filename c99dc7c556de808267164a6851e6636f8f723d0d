@@ -73,6 +73,30 @@
       },
       "revId": "c99dc7c556de808267164a6851e6636f8f723d0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "465f0ef8_812da4f3",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6208,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-23T14:22:00Z",
+      "side": 1,
+      "message": "Hm, I thought this code was already there, but now I added a \"std::max(kMinimalBufferSize, size)\" in the DefaultAssemblerBuffer constructor to ensure that we allocate at least kMinimalBufferSize.",
+      "parentUuid": "9de52107_a485f085",
+      "range": {
+        "startLine": 6206,
+        "startChar": 60,
+        "endLine": 6208,
+        "endChar": 29
+      },
+      "revId": "c99dc7c556de808267164a6851e6636f8f723d0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
