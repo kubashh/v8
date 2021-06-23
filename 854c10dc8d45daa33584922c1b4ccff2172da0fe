@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1db3b631_c3fd68bf",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-23T09:00:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bb03a39_9ac4e128",
+      "range": {
+        "startLine": 1708,
+        "startChar": 4,
+        "endLine": 1708,
+        "endChar": 12
+      },
+      "revId": "854c10dc8d45daa33584922c1b4ccff2172da0fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b39c81dd_bf8e1f01",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d395f24c_73f632b6",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-23T09:00:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b39c81dd_bf8e1f01",
+      "range": {
+        "startLine": 1764,
+        "startChar": 52,
+        "endLine": 1764,
+        "endChar": 61
+      },
+      "revId": "854c10dc8d45daa33584922c1b4ccff2172da0fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d399c4f_19c0d41e",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-06-18T20:04:06Z",
       "side": 1,
       "message": "This doesn\u0027t do anything either.",
+      "range": {
+        "startLine": 1827,
+        "startChar": 11,
+        "endLine": 1827,
+        "endChar": 20
+      },
+      "revId": "854c10dc8d45daa33584922c1b4ccff2172da0fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "963d1d9c_c8a7d097",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-23T09:00:14Z",
+      "side": 1,
+      "message": "It is needed to invoke the move constructor over the deleted copy constructor.",
+      "parentUuid": "8d399c4f_19c0d41e",
       "range": {
         "startLine": 1827,
         "startChar": 11,
