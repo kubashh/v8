@@ -33,6 +33,46 @@
       "message": "LGTM for src/compiler and src/codegen, thanks!",
       "revId": "c99dc7c556de808267164a6851e6636f8f723d0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf711142_a0034987",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-23T13:56:41Z",
+      "side": 1,
+      "message": "LGTM with a comment.",
+      "revId": "c99dc7c556de808267164a6851e6636f8f723d0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9de52107_a485f085",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6208,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-23T13:56:41Z",
+      "side": 1,
+      "message": "My reading of the code is that we\u0027ll do an implicit cast to `size_t` (with no rounding up to any minimal buffer size -- this CL deletes that code), so an overflown negative int would cause a very large allocation.\n\nIt\u0027s not a problem because `kV8MaxWasmFunctionSize \u003d 7654321` along with the max code size multiplier (7, on arm/arm64) prevents overflow from ever happening, but I think the comment should be accurate, if it exists at all :-)",
+      "range": {
+        "startLine": 6206,
+        "startChar": 60,
+        "endLine": 6208,
+        "endChar": 29
+      },
+      "revId": "c99dc7c556de808267164a6851e6636f8f723d0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
