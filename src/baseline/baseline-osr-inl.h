@@ -6,7 +6,7 @@
 #define V8_BASELINE_BASELINE_OSR_INL_H_
 
 #include "src/baseline/baseline-batch-compiler.h"
-#include "src/execution/frames.h"
+#include "src/execution/frames-inl.h"
 #include "src/execution/isolate-inl.h"
 
 namespace v8 {
@@ -16,7 +16,6 @@ enum CompilationMode { kCompileImmediate, kCompileBatch };
 
 inline void OSRInterpreterFrameToBaseline(Isolate* isolate,
                                           Handle<JSFunction> function,
-                                          UnoptimizedFrame* frame,
                                           CompilationMode compilation_mode) {
   IsCompiledScope is_compiled_scope(
       function->shared().is_compiled_scope(isolate));
@@ -33,15 +32,18 @@ inline void OSRInterpreterFrameToBaseline(Isolate* isolate,
   }
   if (is_compiled) {
     if (V8_LIKELY(FLAG_use_osr)) {
-      DCHECK_NOT_NULL(frame);
       if (FLAG_trace_osr) {
+        JavaScriptFrameIterator it(isolate);
+        DCHECK(it.frame()->is_unoptimized());
+        UnoptimizedFrame* frame = UnoptimizedFrame::cast(it.frame());
         CodeTracer::Scope scope(isolate->GetCodeTracer());
         PrintF(scope.file(),
                "[OSR - Entry at OSR bytecode offset %d into baseline code]\n",
                frame->GetBytecodeOffset());
       }
-      frame->GetBytecodeArray().set_osr_loop_nesting_level(
-          AbstractCode::kMaxLoopNestingMarker);
+      function->shared(isolate)
+          .GetBytecodeArray(isolate)
+          .set_osr_loop_nesting_level(AbstractCode::kMaxLoopNestingMarker);
     }
   }
 }
