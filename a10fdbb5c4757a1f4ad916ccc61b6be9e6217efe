@@ -151,6 +151,30 @@
       },
       "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54935e3b_828126a3",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-06-24T11:04:54Z",
+      "side": 1,
+      "message": "you\u0027re right, so it does; I missed that, my mistake.\n\nIn which case, I think it\u0027d be clearer to make these `interpreter::JumpTableTargetOffset` (to make it clear that it\u0027s not e.g. a std::pair)",
+      "parentUuid": "9a2fd1ee_ebb31cfb",
+      "range": {
+        "startLine": 2007,
+        "startChar": 21,
+        "endLine": 2007,
+        "endChar": 28
+      },
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
