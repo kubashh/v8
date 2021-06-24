@@ -40,7 +40,7 @@ bool BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
   Handle<SharedFunctionInfo> shared(function->shared(), isolate_);
   // Early return if the function is compiled with baseline already or it is not
   // suitable for baseline compilation.
-  if (shared->HasBaselineData()) return true;
+  if (shared->HasBaselineData()) return false;
   if (!CanCompileWithBaseline(isolate_, shared)) return false;
 
   // Immediately compile the function if batch compilation is disabled.
@@ -49,6 +49,18 @@ bool BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
         function->shared().is_compiled_scope(isolate_));
     return Compiler::CompileBaseline(
         isolate_, function, Compiler::CLEAR_EXCEPTION, &is_compiled_scope);
+  }
+
+  // Do nothing if the function is already enqueued.
+  if (IsEnqueuedAlready(shared)) {
+    if (FLAG_trace_baseline_batch_compilation) {
+      CodeTracer::Scope trace_scope(isolate_->GetCodeTracer());
+      PrintF(trace_scope.file(),
+             "[Baseline batch compilation] Skipping function ");
+      function->PrintName(trace_scope.file());
+      PrintF(trace_scope.file(), " (already enqueued)\n");
+    }
+    return false;
   }
 
   int estimated_size;
@@ -81,6 +93,19 @@ bool BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
   }
   EnsureQueueCapacity();
   compilation_queue_->Set(last_index_++, HeapObjectReference::Weak(*shared));
+  return false;
+}
+
+bool BaselineBatchCompiler::IsEnqueuedAlready(Handle<SharedFunctionInfo> sfi) {
+  for (int i = 0; i < last_index_; i++) {
+    MaybeObject maybe_sfi = compilation_queue_->Get(i);
+    HeapObject heapobj;
+    if (maybe_sfi.GetHeapObjectIfWeak(&heapobj)) {
+      Handle<SharedFunctionInfo> shared =
+          handle(SharedFunctionInfo::cast(heapobj), isolate_);
+      if (shared.is_identical_to(sfi)) return true;
+    }
+  }
   return false;
 }
 
