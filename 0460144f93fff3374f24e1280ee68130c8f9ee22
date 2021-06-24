@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "679396c6_6dfd1f60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-06-24T17:47:44Z",
+      "side": 1,
+      "message": "It took awhile, but I managed to compile in my mac! 😊",
+      "revId": "0460144f93fff3374f24e1280ee68130c8f9ee22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
