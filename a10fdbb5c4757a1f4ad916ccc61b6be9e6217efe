@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d175f376_31e1135c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-24T10:42:59Z",
+      "side": 1,
+      "message": "The one that Leszek also mentioned. We can continue in that thread to keep only one open.",
+      "parentUuid": "b0a8e2f9_78ee7973",
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c782cde7_0ffed4d2",
