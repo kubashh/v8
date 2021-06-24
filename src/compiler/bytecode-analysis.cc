@@ -230,7 +230,7 @@ void UpdateOutLiveness(Bytecode bytecode, BytecodeLivenessState* out_liveness,
     int target_offset = iterator.GetJumpTargetOffset();
     out_liveness->Union(*liveness_map.GetInLiveness(target_offset));
   } else if (Bytecodes::IsSwitch(bytecode)) {
-    for (const auto& entry : iterator.GetJumpTableTargetOffsets()) {
+    for (auto entry : iterator.GetJumpTableTargetOffsets()) {
       out_liveness->Union(*liveness_map.GetInLiveness(entry.target_offset));
     }
   }
@@ -530,7 +530,7 @@ void BytecodeAnalysis::Analyze() {
         liveness_map().GetLiveness(current_offset);
 
     bool any_changed = false;
-    for (const auto& entry : iterator.GetJumpTableTargetOffsets()) {
+    for (auto entry : iterator.GetJumpTableTargetOffsets()) {
       if (switch_liveness.out->UnionIsChanged(
               *liveness_map().GetInLiveness(entry.target_offset))) {
         any_changed = true;
@@ -713,8 +713,7 @@ bool BytecodeAnalysis::ResumeJumpTargetsAreValid() {
 
   // First collect all required suspend ids.
   std::map<int, int> unresolved_suspend_ids;
-  for (const interpreter::JumpTableTargetOffset& offset :
-       iterator.GetJumpTableTargetOffsets()) {
+  for (auto offset : iterator.GetJumpTableTargetOffsets()) {
     int suspend_id = offset.case_value;
     int resume_offset = offset.target_offset;
 
