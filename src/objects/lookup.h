@@ -13,6 +13,10 @@
 #include "src/objects/map.h"
 #include "src/objects/objects.h"
 
+#if V8_ENABLE_WEBASSEMBLY
+#include "src/wasm/value-type.h"
+#endif  // V8_ENABLE_WEBASSEMBLY
+
 namespace v8 {
 namespace internal {
 
@@ -172,6 +176,10 @@ class V8_EXPORT_PRIVATE LookupIterator final {
   Representation representation() const {
     return property_details().representation();
   }
+#if V8_ENABLE_WEBASSEMBLY
+  inline wasm::ValueType wasm_value_type() const;
+#endif  // V8_ENABLE_WEBASSEMBLY
+
   PropertyLocation location() const { return property_details().location(); }
   PropertyConstness constness() const { return property_details().constness(); }
   FieldIndex GetFieldIndex() const;
@@ -184,6 +192,7 @@ class V8_EXPORT_PRIVATE LookupIterator final {
   Handle<Object> GetDataValue(AllocationPolicy allocation_policy =
                                   AllocationPolicy::kAllocationAllowed) const;
   void WriteDataValue(Handle<Object> value, bool initializing_store);
+  void WriteDataValueToWasmObject(Handle<Object> value);
   inline void UpdateProtector();
   static inline void UpdateProtector(Isolate* isolate, Handle<Object> receiver,
                                      Handle<Name> name);
@@ -284,6 +293,9 @@ class V8_EXPORT_PRIVATE LookupIterator final {
   bool has_property_ = false;
   InterceptorState interceptor_state_ = InterceptorState::kUninitialized;
   PropertyDetails property_details_ = PropertyDetails::Empty();
+#if V8_ENABLE_WEBASSEMBLY
+  wasm::ValueType wasm_value_type_ = wasm::kWasmVoid;
+#endif  // V8_ENABLE_WEBASSEMBLY
   Isolate* const isolate_;
   Handle<Name> name_;
   Handle<Object> transition_;

@@ -17,11 +17,8 @@
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/map-updater.h"
 #include "src/objects/ordered-hash-table.h"
+#include "src/objects/property-details.h"
 #include "src/objects/struct-inl.h"
-
-#if V8_ENABLE_WEBASSEMBLY
-#include "src/wasm/wasm-objects-inl.h"
-#endif  // V8_ENABLE_WEBASSEMBLY
 
 namespace v8 {
 namespace internal {
@@ -128,6 +125,9 @@ template <bool is_element>
 void LookupIterator::RestartInternal(InterceptorState interceptor_state) {
   interceptor_state_ = interceptor_state;
   property_details_ = PropertyDetails::Empty();
+#if V8_ENABLE_WEBASSEMBLY
+  wasm_value_type_ = wasm::kWasmVoid;
+#endif
   number_ = InternalIndex::NotFound();
   Start<is_element>();
 }
@@ -330,8 +330,12 @@ void LookupIterator::InternalUpdateProtector(Isolate* isolate,
 void LookupIterator::PrepareForDataProperty(Handle<Object> value) {
   DCHECK(state_ == DATA || state_ == ACCESSOR);
   DCHECK(HolderIsReceiverOrHiddenPrototype());
+#if V8_ENABLE_WEBASSEMBLY
+  DCHECK(!receiver_->IsWasmObject(isolate_));
+#endif  // V8_ENABLE_WEBASSEMBLY
 
   Handle<JSReceiver> holder = GetHolder<JSReceiver>();
+
   // We are not interested in tracking constness of a JSProxy's direct
   // properties.
   DCHECK_IMPLIES(holder->IsJSProxy(isolate_), name()->IsPrivate(isolate_));
@@ -457,6 +461,9 @@ void LookupIterator::ReconfigureDataProperty(Handle<Object> value,
   DCHECK(HolderIsReceiverOrHiddenPrototype());
 
   Handle<JSReceiver> holder = GetHolder<JSReceiver>();
+#if V8_ENABLE_WEBASSEMBLY
+  if (V8_UNLIKELY(holder->IsWasmObject())) UNREACHABLE();
+#endif  // V8_ENABLE_WEBASSEMBLY
 
   // Property details can never change for private properties.
   if (holder->IsJSProxy(isolate_)) {
@@ -1043,14 +1050,20 @@ void LookupIterator::WriteDataValue(Handle<Object> value,
                                     bool initializing_store) {
   DCHECK_EQ(DATA, state_);
   Handle<JSReceiver> holder = GetHolder<JSReceiver>();
+#if V8_ENABLE_WEBASSEMBLY
+  // WriteDataValueToWasmObject() must be used instead.
+  DCHECK(!holder_->IsWasmObject(isolate_));
+#endif  // V8_ENABLE_WEBASSEMBLY
+
   if (IsElement(*holder)) {
     Handle<JSObject> object = Handle<JSObject>::cast(holder);
     ElementsAccessor* accessor = object->GetElementsAccessor(isolate_);
     accessor->Set(object, number_, *value);
   } else if (holder->HasFastProperties(isolate_)) {
+    DCHECK(holder->IsJSObject(isolate_));
     if (property_details_.location() == kField) {
-      // Check that in case of VariableMode::kConst field the existing value is
-      // equal to |value|.
+      // Check that in case of VariableMode::kConst field the existing value
+      // is equal to |value|.
       DCHECK_IMPLIES(!initializing_store && property_details_.constness() ==
                                                 PropertyConstness::kConst,
                      IsConstFieldValueEqualTo(*value));
@@ -1088,6 +1101,28 @@ void LookupIterator::WriteDataValue(Handle<Object> value,
       dictionary.ValueAtPut(dictionary_entry(), *value);
     }
   }
+}
+
+void LookupIterator::WriteDataValueToWasmObject(Handle<Object> value) {
+#if V8_ENABLE_WEBASSEMBLY
+  DCHECK_EQ(DATA, state_);
+  DCHECK(holder_->IsWasmObject(isolate_));
+  Handle<JSReceiver> holder = GetHolder<JSReceiver>();
+
+  if (IsElement(*holder)) {
+    // TODO(ishell): consider supporting indexed access to WasmStruct fields.
+    // TODO(v8:11804): implement stores to WasmArrays.
+    UNIMPLEMENTED();
+  } else {
+    // Wasm arrays don't have writable properties.
+    DCHECK(holder->IsWasmStruct());
+    Handle<WasmStruct> holder = GetHolder<WasmStruct>();
+    WasmStruct::SetField(isolate_, holder, property_details_.field_index(),
+                         value);
+  }
+#else
+  UNREACHABLE();
+#endif  // V8_ENABLE_WEBASSEMBLY
 }
 
 template <bool is_element>
@@ -1214,14 +1249,17 @@ LookupIterator::State LookupIterator::LookupInRegularHolder(
 
   if (is_element && IsElement(holder)) {
 #if V8_ENABLE_WEBASSEMBLY
-    if (V8_UNLIKELY(holder.IsWasmObject())) {
+    if (V8_UNLIKELY(holder.IsWasmObject(isolate_))) {
       // TODO(ishell): consider supporting indexed access to WasmStruct fields.
       if (holder.IsWasmArray()) {
         WasmArray wasm_array = WasmArray::cast(holder);
         number_ = index_ < wasm_array.length() ? InternalIndex(index_)
                                                : InternalIndex::NotFound();
-        property_details_ =
-            PropertyDetails(kData, SEALED, PropertyCellType::kNoCell);
+        wasm::ArrayType* wasm_array_type = wasm_array.type();
+        property_details_ = PropertyDetails(
+            kData, wasm_array_type->mutability() ? SEALED : FROZEN,
+            PropertyCellType::kNoCell);
+        wasm_value_type_ = wasm_array_type->element_type();
 
       } else {
         DCHECK(holder.IsWasmStruct());
@@ -1251,6 +1289,20 @@ LookupIterator::State LookupIterator::LookupInRegularHolder(
     number_ = descriptors.SearchWithCache(isolate_, *name_, map);
     if (number_.is_not_found()) return NotFound(holder);
     property_details_ = descriptors.GetDetails(number_);
+#if V8_ENABLE_WEBASSEMBLY
+    if (V8_UNLIKELY(holder.IsWasmObject(isolate_))) {
+      if (holder.IsWasmStruct()) {
+        WasmStruct wasm_struct = WasmStruct::cast(holder);
+        wasm::StructType* wasm_array_type = wasm_struct.type();
+        wasm_value_type_ =
+            wasm_array_type->field(property_details_.field_index());
+      } else {
+        DCHECK(holder.IsWasmArray(isolate_));
+        DCHECK_EQ(*name_, ReadOnlyRoots(isolate_).length_string());
+        wasm_value_type_ = wasm::kWasmVoid;
+      }
+    }
+#endif  // V8_ENABLE_WEBASSEMBLY
   } else {
     DCHECK_IMPLIES(holder.IsJSProxy(isolate_), name()->IsPrivate(isolate_));
     if (V8_ENABLE_SWISS_NAME_DICTIONARY_BOOL) {

@@ -19,6 +19,10 @@
 #include "src/objects/name-inl.h"
 #include "src/objects/objects-inl.h"
 
+#if V8_ENABLE_WEBASSEMBLY
+#include "src/wasm/wasm-objects-inl.h"
+#endif  // V8_ENABLE_WEBASSEMBLY
+
 namespace v8 {
 namespace internal {
 
@@ -253,6 +257,14 @@ InternalIndex LookupIterator::dictionary_entry() const {
   DCHECK(!holder_->HasFastProperties(isolate_));
   return number_;
 }
+
+#if V8_ENABLE_WEBASSEMBLY
+wasm::ValueType LookupIterator::wasm_value_type() const {
+  DCHECK(has_property_);
+  DCHECK(holder_->IsWasmObject(isolate_));
+  return wasm_value_type_;
+}
+#endif  // V8_ENABLE_WEBASSEMBLY
 
 // static
 LookupIterator::Configuration LookupIterator::ComputeConfiguration(
