@@ -19,6 +19,10 @@
 #include "src/objects/name-inl.h"
 #include "src/objects/objects-inl.h"
 
+#if V8_ENABLE_WEBASSEMBLY
+#include "src/wasm/wasm-objects-inl.h"
+#endif  // V8_ENABLE_WEBASSEMBLY
+
 namespace v8 {
 namespace internal {
 
