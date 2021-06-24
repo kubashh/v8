@@ -103,6 +103,9 @@ void V8::InitializeOncePerProcessImpl() {
     // Profiling flags depend on logging.
     FLAG_log |= FLAG_perf_prof || FLAG_perf_basic_prof || FLAG_ll_prof ||
                 FLAG_prof || FLAG_prof_cpp;
+    // Logging bytecode dispatches requires the logger, but should not be
+    // enabled by FLAG_log_all because it requires a matching build flag.
+    FLAG_log |= FLAG_log_ignition_dispatches;
   }
 
   FlagList::EnforceFlagImplications();

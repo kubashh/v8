@@ -3974,6 +3974,9 @@ void Isolate::DumpAndResetStats() {
     BasicBlockProfiler::Get()->Print(out, this);
     BasicBlockProfiler::Get()->ResetCounts(this);
   }
+  if (FLAG_log_ignition_dispatches) {
+    interpreter_->LogAndResetDispatchCounters();
+  }
 }
 
 void Isolate::AbortConcurrentOptimization(BlockingBehavior behavior) {

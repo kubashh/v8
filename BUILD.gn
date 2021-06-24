@@ -157,9 +157,10 @@ declare_args() {
   # Enables counting frequencies of bytecode dispatches. After building in this
   # configuration, subsequent runs of d8 can output frequencies for each pair
   # of (current, next) bytecode instructions executed if you specify
-  # --trace-ignition-dispatches-output-file, or can generate a JS object with
-  # those frequencies if you run with --expose-ignition-statistics and call the
-  # extension function getIgnitionDispatchCounters().
+  # --trace-ignition-dispatches-output-file or --log-ignition-dispatches, or can
+  # generate a JS object with those frequencies if you run with
+  # --expose-ignition-statistics and call the extension function
+  # getIgnitionDispatchCounters().
   v8_enable_ignition_dispatch_counting = false
 
   # Runs mksnapshot with --turbo-profiling. After building in this

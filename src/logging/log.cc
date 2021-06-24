@@ -1181,6 +1181,14 @@ void Logger::ApiEntryCall(const char* name) {
   msg.WriteToLogFile();
 }
 
+void Logger::DispatchCounterEvent(const char* from, const char* to,
+                                  uintptr_t count) {
+  if (!FLAG_log_ignition_dispatches) return;
+  MSG_BUILDER();
+  msg << "dispatch" << kNext << from << kNext << to << kNext << count;
+  msg.WriteToLogFile();
+}
+
 void Logger::NewEvent(const char* name, void* object, size_t size) {
   if (!FLAG_log) return;
   MSG_BUILDER();

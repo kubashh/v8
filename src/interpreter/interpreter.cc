@@ -75,11 +75,16 @@ Interpreter::Interpreter(Isolate* isolate)
 }
 
 void Interpreter::InitDispatchCounters() {
-  static const int kBytecodeCount = static_cast<int>(Bytecode::kLast) + 1;
   bytecode_dispatch_counters_table_.reset(
-      new uintptr_t[kBytecodeCount * kBytecodeCount]);
+      new uintptr_t[Bytecodes::kBytecodeCount * Bytecodes::kBytecodeCount]);
+  ZeroDispatchCounters();
+}
+
+void Interpreter::ZeroDispatchCounters() {
+  DCHECK_NOT_NULL(bytecode_dispatch_counters_table_);
   memset(bytecode_dispatch_counters_table_.get(), 0,
-         sizeof(uintptr_t) * kBytecodeCount * kBytecodeCount);
+         sizeof(uintptr_t) * Bytecodes::kBytecodeCount *
+             Bytecodes::kBytecodeCount);
 }
 
 namespace {
@@ -377,6 +382,22 @@ const char* Interpreter::LookupNameOfBytecodeHandler(const Code code) {
     return Builtins::name(code.builtin_id());
   }
   return nullptr;
+}
+
+void Interpreter::LogAndResetDispatchCounters() {
+  for (int from_index = 0; from_index < kNumberOfBytecodes; ++from_index) {
+    Bytecode from_bytecode = Bytecodes::FromByte(from_index);
+    for (int to_index = 0; to_index < kNumberOfBytecodes; ++to_index) {
+      Bytecode to_bytecode = Bytecodes::FromByte(to_index);
+      uintptr_t counter = GetDispatchCounter(from_bytecode, to_bytecode);
+      if (counter > 0) {
+        isolate_->logger()->DispatchCounterEvent(
+            Bytecodes::ToString(from_bytecode),
+            Bytecodes::ToString(to_bytecode), counter);
+      }
+    }
+  }
+  ZeroDispatchCounters();
 }
 
 uintptr_t Interpreter::GetDispatchCounter(Bytecode from, Bytecode to) const {

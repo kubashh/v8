@@ -93,12 +93,15 @@ class Interpreter {
         &interpreter_entry_trampoline_instruction_start_);
   }
 
+  void LogAndResetDispatchCounters();
+
  private:
   friend class SetupInterpreter;
   friend class v8::internal::SetupIsolateDelegate;
   friend class v8::internal::IgnitionStatisticsTester;
 
   V8_EXPORT_PRIVATE void InitDispatchCounters();
+  void ZeroDispatchCounters();
   V8_EXPORT_PRIVATE uintptr_t GetDispatchCounter(Bytecode from,
                                                  Bytecode to) const;
 

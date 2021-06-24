@@ -180,6 +180,9 @@ class Logger : public CodeEventListener {
   void ApiObjectAccess(const char* tag, JSReceiver obj);
   void ApiEntryCall(const char* name);
 
+  // ---- Events logged by --log-ignition-dispatches. ====
+  void DispatchCounterEvent(const char* from, const char* to, uintptr_t count);
+
   // ==== Events logged by --log-code. ====
   V8_EXPORT_PRIVATE void AddCodeEventListener(CodeEventListener* listener);
   V8_EXPORT_PRIVATE void RemoveCodeEventListener(CodeEventListener* listener);

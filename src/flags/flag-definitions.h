@@ -627,6 +627,9 @@ DEFINE_STRING(
     trace_ignition_dispatches_output_file, nullptr,
     "write the bytecode handler dispatch table to the specified file (d8 only) "
     "(requires building with v8_enable_ignition_dispatch_counting)")
+DEFINE_BOOL(log_ignition_dispatches, false,
+            "write the bytecode handler dispatch counters to the V8 log file "
+            "(requires building with v8_enable_ignition_dispatch_counting)")
 
 DEFINE_BOOL(trace_track_allocation_sites, false,
             "trace the tracking of allocation sites")
