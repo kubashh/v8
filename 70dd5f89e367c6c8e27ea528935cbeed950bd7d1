@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cf3d02a_75f77e36",
+        "filename": "src/compiler/dead-code-elimination.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-24T12:59:06Z",
+      "side": 0,
+      "message": "Now unused.",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 37
+      },
+      "revId": "70dd5f89e367c6c8e27ea528935cbeed950bd7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65763836_cd23cb41",
+        "filename": "src/compiler/type-narrowing-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-24T12:59:06Z",
+      "side": 0,
+      "message": "Now unused.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 36
+      },
+      "revId": "70dd5f89e367c6c8e27ea528935cbeed950bd7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
