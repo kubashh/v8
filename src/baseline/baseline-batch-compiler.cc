@@ -131,8 +131,13 @@ bool BaselineBatchCompiler::MaybeCompileFunction(MaybeObject maybe_sfi) {
   if (!shared->is_compiled()) return false;
 
   IsCompiledScope is_compiled_scope(shared->is_compiled_scope(isolate_));
-  return Compiler::CompileSharedWithBaseline(
-      isolate_, shared, Compiler::CLEAR_EXCEPTION, &is_compiled_scope);
+  if (Compiler::CompileSharedWithBaseline(
+          isolate_, shared, Compiler::CLEAR_EXCEPTION, &is_compiled_scope)) {
+    // Arm back edges for OSR.
+    shared->GetBytecodeArray(isolate_).set_osr_loop_nesting_level(
+        AbstractCode::kMaxLoopNestingMarker);
+  }
+  return false;
 }
 
 void BaselineBatchCompiler::ClearBatch() {
