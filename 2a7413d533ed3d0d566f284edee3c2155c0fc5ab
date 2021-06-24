@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcb719a4_0a7ff08b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2021-06-24T04:29:54Z",
+      "side": 1,
+      "message": "MSVC has a very strange way of telling us the noexcept keyword is missing. See red bots on https://pdfium-review.googlesource.com/c/pdfium/+/82370/2",
+      "revId": "2a7413d533ed3d0d566f284edee3c2155c0fc5ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
