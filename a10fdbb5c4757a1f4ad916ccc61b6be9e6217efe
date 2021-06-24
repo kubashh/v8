@@ -16,6 +16,23 @@
       "message": "solanes: src/compiler\nleszeks: rest",
       "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b295ba95_6f7676bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-24T08:49:53Z",
+      "side": 1,
+      "message": "If it\u0027s used everywhere as const auto\u0026, couldn\u0027t we change the method rather than its uses?",
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
