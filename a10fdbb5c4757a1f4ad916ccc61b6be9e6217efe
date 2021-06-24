@@ -33,6 +33,46 @@
       "message": "If it\u0027s used everywhere as const auto\u0026, couldn\u0027t we change the method rather than its uses?",
       "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efe937b5_8d566a55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-06-24T09:52:06Z",
+      "side": 1,
+      "message": "This seems pretty relevant to the discussion we had about auto\u0026\u0026 on cxx slack...",
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c782cde7_0ffed4d2",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-06-24T09:52:06Z",
+      "side": 1,
+      "message": "I think it would make more sense to fix operator* here to return a const\u0026 (the returned object is two ints, so it\u0027s up in the air whether it\u0027s better to return them by value or by ref. I assume the compiler will optimize both down to the same thing).",
+      "range": {
+        "startLine": 2007,
+        "startChar": 21,
+        "endLine": 2007,
+        "endChar": 28
+      },
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
