@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30d96186_b1a009a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-24T10:07:51Z",
+      "side": 1,
+      "message": "This is the new version. PTAL and sorry for the large CL!",
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
