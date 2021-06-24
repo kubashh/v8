@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c384a151_58a8b06d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-06-24T09:24:42Z",
+      "side": 1,
+      "message": "PTAL. Adding Michael instead of Dominik, since he\u0027s OOO.",
+      "revId": "e9ca41cea79910ab1aeebe22fb93fd19c08ee95a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
