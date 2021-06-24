@@ -16,6 +16,23 @@
       "message": "Hi Toon, this is the simplification we talked about. PTAL again.",
       "revId": "1dfd4b6267e6a60023f718ec21ca8932fa269a3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df6fdc56_127494a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-06-24T13:25:55Z",
+      "side": 1,
+      "message": "Lgtm, but it would be nice to share the macros between enable/disable and simply pass true or false into the macro call for the definitions (the declarations are already 100% copies it seems)",
+      "revId": "1dfd4b6267e6a60023f718ec21ca8932fa269a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
