@@ -52,6 +52,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0a8e2f9_78ee7973",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-06-24T10:40:58Z",
+      "side": 1,
+      "message": "Which method are you referring to here?",
+      "parentUuid": "b295ba95_6f7676bd",
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c082e8e9_3b834932",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-06-24T10:40:58Z",
+      "side": 1,
+      "message": "Note that if you try to switch (at least some of) these to auto\u0026\u0026, clang will still warn you that the variable \"is always a copy because the range never returns a reference\" or some such.  Or at least, that\u0027s what happened when I tried using auto\u0026\u0026 on one of these over in perfetto...",
+      "parentUuid": "efe937b5_8d566a55",
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c782cde7_0ffed4d2",
@@ -65,6 +101,30 @@
       "writtenOn": "2021-06-24T09:52:06Z",
       "side": 1,
       "message": "I think it would make more sense to fix operator* here to return a const\u0026 (the returned object is two ints, so it\u0027s up in the air whether it\u0027s better to return them by value or by ref. I assume the compiler will optimize both down to the same thing).",
+      "range": {
+        "startLine": 2007,
+        "startChar": 21,
+        "endLine": 2007,
+        "endChar": 28
+      },
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a2fd1ee_ebb31cfb",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-06-24T10:40:58Z",
+      "side": 1,
+      "message": "How will that work, though?\n\nThe relevant code is https://source.chromium.org/chromium/chromium/src/+/main:v8/src/interpreter/bytecode-array-iterator.cc;l\u003d332;drc\u003d570d2d089d1d822d8b29111ea92d7e2e12cce67b , and it dynamically computes the values to return.  If we try to return by reference we\u0027ll be returning a dangling reference, no?",
+      "parentUuid": "c782cde7_0ffed4d2",
       "range": {
         "startLine": 2007,
         "startChar": 21,
