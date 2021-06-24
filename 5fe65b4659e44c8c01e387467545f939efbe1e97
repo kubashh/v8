@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f551cb40_16c5216d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-24T13:53:32Z",
+      "side": 1,
+      "message": "Thanks, Toon! I simplified the macros with boolean param and I\u0027m submitting this.",
+      "revId": "5fe65b4659e44c8c01e387467545f939efbe1e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
