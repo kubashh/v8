@@ -45,6 +45,30 @@
       },
       "revId": "33f1c55dda4bb43ebe4eef60e59b8430da817ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "088a9bbe_6dcdda94",
+        "filename": "BUILD.bazel",
+        "patchSetId": 6
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-06-24T14:06:54Z",
+      "side": 1,
+      "message": "Yes, I know! This is kind of a hack!\nWe could also remove these lines and setup a script to add them when we import to g3. Wdyt?",
+      "parentUuid": "37e85500_8f3a0689",
+      "range": {
+        "startLine": 2429,
+        "startChar": 12,
+        "endLine": 2430,
+        "endChar": 39
+      },
+      "revId": "33f1c55dda4bb43ebe4eef60e59b8430da817ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
