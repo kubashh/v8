@@ -16,6 +16,52 @@
       "message": "PTAL, as discussed. I am open to renaming the flag in a follow-up CL.",
       "revId": "79190841aaa5d68b38197052d5c4ec6c072628c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "292922b6_254d187c",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-24T12:28:05Z",
+      "side": 1,
+      "message": "Do you know what\u0027s the purpose of {use_trap_handler_} here? As far as I can tell, it is used to initialize the {CompilationEnv}, and for a CHECK in WasmMemory. Could we not use {trap_handler::IsTrapHandlerEnabled} there directly, and remove {use_trap_handler_} here?",
+      "range": {
+        "startLine": 848,
+        "startChar": 6,
+        "endLine": 848,
+        "endChar": 23
+      },
+      "revId": "79190841aaa5d68b38197052d5c4ec6c072628c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3370308d_fb3069ec",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-24T12:28:05Z",
+      "side": 1,
+      "message": "I think that the current name of the flag is misleading, and if it is renamed to what the flag is actually doing (i.e. enforcing bounds checks), then this seems like the wrong place for it to me.",
+      "range": {
+        "startLine": 848,
+        "startChar": 24,
+        "endLine": 848,
+        "endChar": 47
+      },
+      "revId": "79190841aaa5d68b38197052d5c4ec6c072628c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
