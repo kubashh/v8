@@ -33,6 +33,24 @@
       "message": "lgtm.\n\nShould we go as far as to only do this for Error objects? (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/objects.cc;l\u003d425?q\u003diserrorobject\u0026sq\u003d\u0026ss\u003dchromium)\n\nI think all the use cases we want to use this for would have an Error object. No strong opinions though.",
       "revId": "af4e73ee50570540ff4bbbf7e1e0f17c289e6c97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b217a4_c8998276",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2021-06-24T07:03:43Z",
+      "side": 1,
+      "message": "It sounds reasonable, but let\u0027s not at this point. Thanks for the quick review!",
+      "parentUuid": "63b7adbd_2b9ed20a",
+      "revId": "af4e73ee50570540ff4bbbf7e1e0f17c289e6c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
