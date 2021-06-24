@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bcdd267_3b1ffd9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-06-24T14:04:31Z",
+      "side": 1,
+      "message": "nit: extra \"t\"",
+      "range": {
+        "startLine": 11,
+        "startChar": 2,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "33f1c55dda4bb43ebe4eef60e59b8430da817ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37e85500_8f3a0689",
+        "filename": "BUILD.bazel",
+        "patchSetId": 6
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-06-24T14:04:31Z",
+      "side": 1,
+      "message": "This won\u0027t work though unless we generate these files before hand?",
+      "range": {
+        "startLine": 2429,
+        "startChar": 12,
+        "endLine": 2430,
+        "endChar": 39
+      },
+      "revId": "33f1c55dda4bb43ebe4eef60e59b8430da817ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
