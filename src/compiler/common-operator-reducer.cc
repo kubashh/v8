@@ -56,8 +56,6 @@ CommonOperatorReducer::CommonOperatorReducer(Editor* editor, Graph* graph,
 }
 
 Reduction CommonOperatorReducer::Reduce(Node* node) {
-  DisallowHeapAccessIf no_heap_access(broker() == nullptr ||
-                                      !broker()->is_concurrent_inlining());
   switch (node->opcode()) {
     case IrOpcode::kBranch:
       return ReduceBranch(node);

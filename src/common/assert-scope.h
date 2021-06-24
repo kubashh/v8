@@ -227,16 +227,6 @@ using AllowHeapAccess =
     CombinationAssertScope<AllowCodeDependencyChange, AllowHandleDereference,
                            AllowHandleAllocation, AllowHeapAllocation>;
 
-class DisallowHeapAccessIf {
- public:
-  explicit DisallowHeapAccessIf(bool condition) {
-    if (condition) maybe_disallow_.emplace();
-  }
-
- private:
-  base::Optional<DisallowHeapAccess> maybe_disallow_;
-};
-
 // Like MutexGuard but also asserts that no garbage collection happens while
 // we're holding the mutex.
 class V8_NODISCARD NoGarbageCollectionMutexGuard {
