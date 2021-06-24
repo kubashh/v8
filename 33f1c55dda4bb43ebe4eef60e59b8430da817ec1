@@ -117,6 +117,30 @@
       },
       "revId": "33f1c55dda4bb43ebe4eef60e59b8430da817ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32cc013d_6921b6ee",
+        "filename": "BUILD.bazel",
+        "patchSetId": 6
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-06-24T14:14:49Z",
+      "side": 1,
+      "message": "If landing this now like this is convenient, I\u0027m happy to LGTM. Just add a TODO here.",
+      "parentUuid": "40664c7a_f29c690c",
+      "range": {
+        "startLine": 2429,
+        "startChar": 12,
+        "endLine": 2430,
+        "endChar": 39
+      },
+      "revId": "33f1c55dda4bb43ebe4eef60e59b8430da817ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
