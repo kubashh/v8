@@ -124,6 +124,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c4ff0df_2a8e084f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-06-24T11:08:05Z",
+      "side": 1,
+      "message": "lgtm from my end after replacing with explicit interpreter::JumpTableTargetOffset",
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c782cde7_0ffed4d2",
@@ -209,6 +226,30 @@
       "side": 1,
       "message": "OK.  You want that done every place this CL touches a use of that type?",
       "parentUuid": "54935e3b_828126a3",
+      "range": {
+        "startLine": 2007,
+        "startChar": 21,
+        "endLine": 2007,
+        "endChar": 28
+      },
+      "revId": "a10fdbb5c4757a1f4ad916ccc61b6be9e6217efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95c66793_e48a7619",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-06-24T11:08:05Z",
+      "side": 1,
+      "message": "Yes please -- and I should have also said initially, thanks for the fix!",
+      "parentUuid": "9b544eab_77b656a4",
       "range": {
         "startLine": 2007,
         "startChar": 21,
