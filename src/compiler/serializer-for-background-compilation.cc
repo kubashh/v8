@@ -2798,7 +2798,7 @@ void SerializerForBackgroundCompilation::VisitSwitchOnSmiNoFeedback(
     interpreter::BytecodeArrayIterator* iterator) {
   interpreter::JumpTableTargetOffsets targets =
       iterator->GetJumpTableTargetOffsets();
-  for (const auto& target : targets) {
+  for (interpreter::JumpTableTargetOffset target : targets) {
     ContributeToJumpTargetEnvironment(target.target_offset);
   }
 }
