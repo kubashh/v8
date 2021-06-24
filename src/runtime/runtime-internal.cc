@@ -348,15 +348,7 @@ RUNTIME_FUNCTION(Runtime_BytecodeBudgetInterruptFromBytecode) {
   if (FLAG_sparkplug && !function->ActiveTierIsBaseline()) {
     CompilationMode compilation_mode =
         FLAG_baseline_batch_compilation ? kCompileBatch : kCompileImmediate;
-    if (V8_LIKELY(FLAG_use_osr)) {
-      JavaScriptFrameIterator it(isolate);
-      DCHECK(it.frame()->is_unoptimized());
-      UnoptimizedFrame* frame = UnoptimizedFrame::cast(it.frame());
-      OSRInterpreterFrameToBaseline(isolate, function, frame, compilation_mode);
-    } else {
-      OSRInterpreterFrameToBaseline(isolate, function, nullptr,
-                                    compilation_mode);
-    }
+    OSRInterpreterFrameToBaseline(isolate, function, compilation_mode);
   }
   if (should_mark_for_optimization) {
     SealHandleScope shs(isolate);
