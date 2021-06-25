@@ -80,13 +80,13 @@ enum class RefSerializationKind {
 // DO NOT VIOLATE THIS PROPERTY!
 #define HEAP_BROKER_OBJECT_LIST(V)                                        \
   /* Subtypes of JSObject */                                              \
-  V(JSArray, RefSerializationKind::kSerialized)                           \
-  V(JSBoundFunction, RefSerializationKind::kSerialized)                   \
-  V(JSDataView, RefSerializationKind::kSerialized)                        \
+  V(JSArray, RefSerializationKind::kBackgroundSerialized)                 \
+  V(JSBoundFunction, RefSerializationKind::kBackgroundSerialized)         \
+  V(JSDataView, RefSerializationKind::kBackgroundSerialized)              \
   V(JSFunction, RefSerializationKind::kSerialized)                        \
-  V(JSGlobalObject, RefSerializationKind::kSerialized)                    \
-  V(JSGlobalProxy, RefSerializationKind::kSerialized)                     \
-  V(JSTypedArray, RefSerializationKind::kSerialized)                      \
+  V(JSGlobalObject, RefSerializationKind::kBackgroundSerialized)          \
+  V(JSGlobalProxy, RefSerializationKind::kBackgroundSerialized)           \
+  V(JSTypedArray, RefSerializationKind::kBackgroundSerialized)            \
   /* Subtypes of Context */                                               \
   V(NativeContext, RefSerializationKind::kNeverSerialized)                \
   /* Subtypes of FixedArray */                                            \
@@ -102,7 +102,7 @@ enum class RefSerializationKind {
   V(String, RefSerializationKind::kNeverSerialized)                       \
   V(Symbol, RefSerializationKind::kNeverSerialized)                       \
   /* Subtypes of JSReceiver */                                            \
-  V(JSObject, RefSerializationKind::kSerialized)                          \
+  V(JSObject, RefSerializationKind::kBackgroundSerialized)                \
   /* Subtypes of HeapObject */                                            \
   V(AccessorInfo, RefSerializationKind::kNeverSerialized)                 \
   V(AllocationSite, RefSerializationKind::kSerialized)                    \
@@ -386,7 +386,6 @@ class JSBoundFunctionRef : public JSObjectRef {
   bool Serialize();
   bool serialized() const;
 
-  // The following are available only after calling Serialize().
   JSReceiverRef bound_target_function() const;
   ObjectRef bound_this() const;
   FixedArrayRef bound_arguments() const;
@@ -1019,14 +1018,6 @@ class JSGlobalObjectRef : public JSObjectRef {
   Handle<JSGlobalObject> object() const;
 
   bool IsDetached() const;
-
-  // If {serialize} is false:
-  //   If the property is known to exist as a property cell (on the global
-  //   object), return that property cell. Otherwise (not known to exist as a
-  //   property cell or known not to exist as a property cell) return nothing.
-  // If {serialize} is true:
-  //   Like above but potentially access the heap and serialize the necessary
-  //   information.
   base::Optional<PropertyCellRef> GetPropertyCell(
       NameRef const& name, SerializationPolicy policy =
                                SerializationPolicy::kAssumeSerialized) const;
