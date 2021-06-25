@@ -40,7 +40,7 @@ bool BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
   Handle<SharedFunctionInfo> shared(function->shared(), isolate_);
   // Early return if the function is compiled with baseline already or it is not
   // suitable for baseline compilation.
-  if (shared->HasBaselineData()) return true;
+  if (shared->HasBaselineData()) return false;
   if (!CanCompileWithBaseline(isolate_, *shared)) return false;
 
   // Immediately compile the function if batch compilation is disabled.

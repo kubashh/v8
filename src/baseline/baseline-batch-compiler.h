@@ -19,8 +19,7 @@ class BaselineBatchCompiler {
   explicit BaselineBatchCompiler(Isolate* isolate);
   ~BaselineBatchCompiler();
   // Enqueues SharedFunctionInfo of |function| for compilation.
-  // Returns true if the function is compiled (either it was compiled already,
-  // or the current batch including the function was just compiled).
+  // Returns true if the function was compiled.
   bool EnqueueFunction(Handle<JSFunction> function);
 
   void set_enabled(bool enabled) { enabled_ = enabled; }
@@ -35,7 +34,7 @@ class BaselineBatchCompiler {
   // compiled.
   bool ShouldCompileBatch() const;
 
-  // Compiles the current batch and returns the number of functions compiled.
+  // Compiles the current batch (+ the passed function).
   void CompileBatch(Handle<JSFunction> function);
 
   // Resets the current batch.
