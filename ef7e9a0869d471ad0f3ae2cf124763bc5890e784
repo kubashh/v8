@@ -16,6 +16,159 @@
       "message": "PTAL",
       "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ee9deb1_0e0a8da9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-25T13:44:55Z",
+      "side": 1,
+      "message": "LGTM with a few comments, and a wild idea (not necessarily to be addressed in this CL).",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfab32b0_31280c02",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4840,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-25T13:44:55Z",
+      "side": 1,
+      "message": "If you add a \"Label::kNear\" parameter, this will generate slighly smaller code.",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7c31eae_63c71d0c",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-25T13:44:55Z",
+      "side": 1,
+      "message": "Why do we still need to keep {src} alive here?",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00f69136_08e43c02",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-25T13:44:55Z",
+      "side": 1,
+      "message": "Same here: It should be fine to overwrite lhs and rhs.",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b30b23c_aa8cb0db",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3320,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-25T13:44:55Z",
+      "side": 1,
+      "message": "For consistency, you should also pull out the {pinned} set, and remove the src registers.",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08685134_236b52a8",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3369,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-25T13:44:55Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d13e8646_3054723d",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6140,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-25T13:44:55Z",
+      "side": 1,
+      "message": "Can\u0027t we hard-code {rc} as {reg_class_for(kS128)} (and drop the parameter)?",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f3610ce_09f0139e",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4387,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-25T13:44:55Z",
+      "side": 1,
+      "message": "A wild idea: What if we just replace all this code (test, j, movl) by an \"or([dst], tmp_reg)\"? I guess it would not be slower, since [dst] would be in the store buffer most of the time, and we save a conditional jump. Plus we generate smaller code.\nThe only downside is that we don\u0027t get the constant 1 in the dst register, but any non-zero value.\nWDYT?",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b89c1e4_53a6b779",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4389,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-25T13:44:55Z",
+      "side": 1,
+      "message": "Same as for ia32: {Label::kNear} produces smaller code.",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
