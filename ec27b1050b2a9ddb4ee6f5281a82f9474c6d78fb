@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60a379ad_1202ed39",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-25T14:19:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edaa4c56_403aaca1",
+      "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32f94ba6_ea180ae8",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-06-22T06:59:21Z",
       "side": 1,
       "message": "Add DCHECK to getter.",
+      "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5efe6306_61a211a0",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-25T14:19:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32f94ba6_ea180ae8",
       "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88828092_a0237c08",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-25T14:19:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74f4648e_3f14d729",
+      "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d2e4c32_99b8e204",
@@ -82,6 +136,24 @@
       "writtenOn": "2021-06-22T06:59:21Z",
       "side": 1,
       "message": "Let\u0027s move this up to the other function.",
+      "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e4277e_1e2e75c2",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4593,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-25T14:19:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d2e4c32_99b8e204",
       "revId": "ec27b1050b2a9ddb4ee6f5281a82f9474c6d78fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
