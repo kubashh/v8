@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28e1cdbd_fd84564b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-06-25T13:48:41Z",
+      "side": 1,
+      "message": "ptal! I got the wrong branch in the previous cl.",
+      "revId": "484182f93a0d8c0a801821d16ecf8abd63e82b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
