@@ -16,6 +16,23 @@
       "message": "Georg PTAL",
       "revId": "78898ca74601bf062f3aa93be45fa936a4f6532b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6643d4b_009528e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-25T07:01:52Z",
+      "side": 1,
+      "message": "Nice, thanks!",
+      "revId": "78898ca74601bf062f3aa93be45fa936a4f6532b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
