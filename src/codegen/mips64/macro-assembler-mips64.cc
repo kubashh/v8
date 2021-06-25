@@ -162,7 +162,6 @@ int MacroAssembler::SafepointRegisterStackIndex(int reg_code) {
   return kSafepointRegisterStackIndexMap[reg_code];
 }
 
-// Clobbers object, dst, value, and ra, if (ra_status == kRAHasBeenSaved)
 // The register 'object' contains a heap object pointer.  The heap object
 // tag is shifted away.
 void MacroAssembler::RecordWriteField(Register object, int offset,
@@ -199,13 +198,6 @@ void MacroAssembler::RecordWriteField(Register object, int offset,
               SmiCheck::kOmit);
 
   bind(&done);
-
-  // Clobber clobbered input registers when running with the debug-code flag
-  // turned on to provoke errors.
-  if (FLAG_debug_code) {
-    li(value, Operand(bit_cast<int64_t>(kZapValue + 4)));
-    li(dst, Operand(bit_cast<int64_t>(kZapValue + 8)));
-  }
 }
 
 void TurboAssembler::MaybeSaveRegisters(RegList registers) {
@@ -307,7 +299,6 @@ void TurboAssembler::CallRecordWriteStub(
   }
 }
 
-// Clobbers object, address, value, and ra, if (ra_status == kRAHasBeenSaved)
 // The register 'object' contains a heap object pointer.  The heap object
 // tag is shifted away.
 void MacroAssembler::RecordWrite(Register object, Register address,
@@ -321,6 +312,7 @@ void MacroAssembler::RecordWrite(Register object, Register address,
   if (FLAG_debug_code) {
     UseScratchRegisterScope temps(this);
     Register scratch = temps.Acquire();
+    DCHECK(!AreAliased(object, value, scratch));
     Ld(scratch, MemOperand(address));
     Assert(eq, AbortReason::kWrongAddressOrValuePassedToRecordWrite, scratch,
            Operand(value));
@@ -352,20 +344,21 @@ void MacroAssembler::RecordWrite(Register object, Register address,
   if (ra_status == kRAHasNotBeenSaved) {
     push(ra);
   }
-  CallRecordWriteStubSaveRegisters(object, address, remembered_set_action,
-                                   fp_mode);
+
+  Register slot_address = WriteBarrierDescriptor::SlotAddressRegister();
+  DCHECK(!AreAliased(object, slot_address, address, value));
+  mov(slot_address, address);
+  CallRecordWriteStub(object, slot_address, remembered_set_action, fp_mode);
+
   if (ra_status == kRAHasNotBeenSaved) {
     pop(ra);
   }
 
-  bind(&done);
-
-  // Clobber clobbered registers when running with the debug-code flag
-  // turned on to provoke errors.
   if (FLAG_debug_code) {
-    li(address, Operand(bit_cast<int64_t>(kZapValue + 12)));
-    li(value, Operand(bit_cast<int64_t>(kZapValue + 16)));
+    li(slot_address, Operand(bit_cast<int64_t>(kZapValue + 4)));
   }
+
+  bind(&done);
 }
 
 // ---------------------------------------------------------------------------
@@ -6099,9 +6092,7 @@ void TurboAssembler::LoadCodeObjectEntry(Register destination,
     DCHECK(root_array_available());
     Label if_code_is_off_heap, out;
 
-    UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
-
+    Register scratch = kScratchReg;
     DCHECK(!AreAliased(destination, scratch));
     DCHECK(!AreAliased(code_object, scratch));
 
