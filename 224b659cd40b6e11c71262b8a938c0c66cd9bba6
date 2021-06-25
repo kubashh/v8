@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b796f12c_7cd4e9d4",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2366,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 0,
+      "message": "What happened to this message?",
+      "range": {
+        "startLine": 2366,
+        "startChar": 26,
+        "endLine": 2366,
+        "endChar": 73
+      },
+      "revId": "224b659cd40b6e11c71262b8a938c0c66cd9bba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

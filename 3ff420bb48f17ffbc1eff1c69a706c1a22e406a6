@@ -16,6 +16,253 @@
       "message": "This is the new version. PTAL and sorry for the large CL!",
       "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5583d32b_1cc7b552",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "LGTM with a bunch of minor comments.\n\nHow is binary size looking with this approach now?",
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cabf77c_e5a0dda3",
+        "filename": "BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 4124,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "Please update BUILD.bazel too. (We have to maintain two build systems now.)",
+      "range": {
+        "startLine": 4124,
+        "startChar": 6,
+        "endLine": 4124,
+        "endChar": 40
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "046922e0_78728ed1",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 3439,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "Why do you use the _CONST version here, and then manually call NonConstError in line 3147? Couldn\u0027t the same effect be achieved by using the non-_CONST macro here?\n(Same for StoreMem right below.)",
+      "range": {
+        "startLine": 3439,
+        "startChar": 33,
+        "endLine": 3439,
+        "endChar": 51
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5677cc8b_177db76b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 4245,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "0",
+      "range": {
+        "startLine": 4245,
+        "startChar": 17,
+        "endLine": 4245,
+        "endChar": 19
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14ddbc38_9a029486",
+        "filename": "src/wasm/init-expr-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "nit: I don\u0027t feel strongly about it, but consider avoiding indentation here and below by using an early bailout:\n\n  if (isolate \u003d\u003d nullptr) return;\n  result-\u003eruntime_value \u003d ...;",
+      "range": {
+        "startLine": 43,
+        "startChar": 15,
+        "endLine": 43,
+        "endChar": 28
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8862c824_9f26a4ec",
+        "filename": "src/wasm/init-expr-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "simpler: `ReadOnlyRoots(isolate_).null_value_handle()`\n\n(or `isolate_-\u003efactory()-\u003enull_value()`)",
+      "range": {
+        "startLine": 52,
+        "startChar": 18,
+        "endLine": 52,
+        "endChar": 71
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac5c87ce_68819257",
+        "filename": "src/wasm/init-expr-interface.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "nit: ctors with multiple parameters don\u0027t need `explicit`.",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 47,
+        "endChar": 10
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a90f2f9_f92f2968",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "I imagine that most initializers will be tiny, so instantiating an allocator and a zone for each of them might add quite some overhead (in relative terms). How about adding something like the following?\n\n  // TODO(manoskouk): Investigate whether it\u0027d be more efficient to reuse\n  // the decoder\u0027s main Zone.",
+      "range": {
+        "startLine": 1692,
+        "startChar": 4,
+        "endLine": 1692,
+        "endChar": 13
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44a5eb54_3528328d",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "nit: outdated comment (it belonged to the DCHECK you\u0027ve deleted). The new code does still rely on this restriction though; how about preserving comment and check by adding `DCHECK(WasmExportedFunction::IsWasmExportedFunction(value.to_ref())` before line 1790?",
+      "range": {
+        "startLine": 1787,
+        "startChar": 6,
+        "endLine": 1787,
+        "endChar": 68
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "196e5ca7_43b1df57",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "I think we can see base/macros.h from here, so you could use:\n\n  os \u003c\u003c \"F32Const(\" \u003c\u003c bit_cast\u003cfloat\u003e(as_int);",
+      "range": {
+        "startLine": 224,
+        "startChar": 27,
+        "endLine": 224,
+        "endChar": 33
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fc5d13e_132cca49",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-25T09:17:18Z",
+      "side": 1,
+      "message": "Any particular reason for this change?",
+      "range": {
+        "startLine": 1081,
+        "startChar": 14,
+        "endLine": 1081,
+        "endChar": 31
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
