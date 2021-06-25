@@ -80,13 +80,13 @@ enum class RefSerializationKind {
 // DO NOT VIOLATE THIS PROPERTY!
 #define HEAP_BROKER_OBJECT_LIST(V)                                        \
   /* Subtypes of JSObject */                                              \
-  V(JSArray, RefSerializationKind::kSerialized)                           \
+  V(JSArray, RefSerializationKind::kBackgroundSerialized)                 \
   V(JSBoundFunction, RefSerializationKind::kSerialized)                   \
   V(JSDataView, RefSerializationKind::kSerialized)                        \
   V(JSFunction, RefSerializationKind::kSerialized)                        \
   V(JSGlobalObject, RefSerializationKind::kSerialized)                    \
-  V(JSGlobalProxy, RefSerializationKind::kSerialized)                     \
-  V(JSTypedArray, RefSerializationKind::kSerialized)                      \
+  V(JSGlobalProxy, RefSerializationKind::kBackgroundSerialized)           \
+  V(JSTypedArray, RefSerializationKind::kBackgroundSerialized)            \
   /* Subtypes of Context */                                               \
   V(NativeContext, RefSerializationKind::kNeverSerialized)                \
   /* Subtypes of FixedArray */                                            \
@@ -102,7 +102,7 @@ enum class RefSerializationKind {
   V(String, RefSerializationKind::kNeverSerialized)                       \
   V(Symbol, RefSerializationKind::kNeverSerialized)                       \
   /* Subtypes of JSReceiver */                                            \
-  V(JSObject, RefSerializationKind::kSerialized)                          \
+  V(JSObject, RefSerializationKind::kBackgroundSerialized)                \
   /* Subtypes of HeapObject */                                            \
   V(AccessorInfo, RefSerializationKind::kNeverSerialized)                 \
   V(AllocationSite, RefSerializationKind::kSerialized)                    \
@@ -557,6 +557,7 @@ class NativeContextRef : public ContextRef {
   MapRef GetFunctionMapFromIndex(int index) const;
   MapRef GetInitialJSArrayMap(ElementsKind kind) const;
   base::Optional<JSFunctionRef> GetConstructorFunction(const MapRef& map) const;
+  bool GlobalIsDetached() const;
 };
 
 class NameRef : public HeapObjectRef {
@@ -1018,7 +1019,7 @@ class JSGlobalObjectRef : public JSObjectRef {
 
   Handle<JSGlobalObject> object() const;
 
-  bool IsDetached() const;
+  bool IsDetachedFrom(JSGlobalProxyRef const& proxy) const;
 
   // If {serialize} is false:
   //   If the property is known to exist as a property cell (on the global
