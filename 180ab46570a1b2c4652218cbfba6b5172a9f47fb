@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c931009_27d5dbad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-06-25T07:46:25Z",
+      "side": 1,
+      "message": "PTAL\n\nNote to avoid confusion: This CL is not addressing the regressions we talked about yesterday",
+      "revId": "180ab46570a1b2c4652218cbfba6b5172a9f47fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
