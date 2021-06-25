@@ -3377,8 +3377,6 @@ BIMODAL_ACCESSOR(JSFunction, SharedFunctionInfo, shared)
 BIMODAL_ACCESSOR(JSFunction, FeedbackCell, raw_feedback_cell)
 BIMODAL_ACCESSOR(JSFunction, FeedbackVector, feedback_vector)
 
-BIMODAL_ACCESSOR_C(JSGlobalObject, bool, IsDetached)
-
 BIMODAL_ACCESSOR_WITH_FLAG_B(Map, bit_field2, elements_kind,
                              Map::Bits2::ElementsKindBits)
 BIMODAL_ACCESSOR_WITH_FLAG_B(Map, bit_field3, is_dictionary_map,
@@ -3612,8 +3610,7 @@ DescriptorArrayRef MapRef::instance_descriptors() const {
 
 base::Optional<HeapObjectRef> MapRef::prototype() const {
   if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
-    return MakeRefAssumeMemoryFence(broker(),
-                                    HeapObject::cast(object()->prototype()));
+    return TryMakeRef(broker(), HeapObject::cast(object()->prototype()));
   }
   ObjectData* prototype_data = data()->AsMap()->prototype();
   if (prototype_data == nullptr) {
@@ -4325,12 +4322,13 @@ ObjectData* ObjectRef::data() const {
       CHECK_NE(data_->kind(), kUnserializedHeapObject);
       return data_;
     case JSHeapBroker::kSerialized:
-    case JSHeapBroker::kRetired:
 #ifdef DEBUG
       data_->used_status = ObjectData::Usage::kDataUsed;
 #endif  // DEBUG
       CHECK_NE(data_->kind(), kUnserializedHeapObject);
       return data_;
+    case JSHeapBroker::kRetired:
+      UNREACHABLE();
   }
 }
 
@@ -4618,6 +4616,12 @@ void FunctionTemplateInfoRef::SerializeCallCode() {
   }
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
   data()->AsFunctionTemplateInfo()->SerializeCallCode(broker());
+}
+
+bool NativeContextRef::GlobalIsDetached() const {
+  base::Optional<ObjectRef> proxy_proto =
+      global_proxy_object().map().prototype();
+  return !proxy_proto.has_value() || !proxy_proto->equals(global_object());
 }
 
 base::Optional<PropertyCellRef> JSGlobalObjectRef::GetPropertyCell(
