@@ -131,7 +131,9 @@ namespace internal {
   ASM(JSEntry, Dummy)                                                          \
   ASM(JSConstructEntry, Dummy)                                                 \
   ASM(JSRunMicrotasksEntry, RunMicrotasksEntry)                                \
+  /* Call a JSValue. */                                                        \
   ASM(JSEntryTrampoline, JSTrampoline)                                         \
+  /* Construct a JSValue. */                                                   \
   ASM(JSConstructEntryTrampoline, JSTrampoline)                                \
   ASM(ResumeGeneratorTrampoline, ResumeGenerator)                              \
                                                                                \
@@ -149,6 +151,8 @@ namespace internal {
   TFS(OrderedHashTableHealIndex, kTable, kIndex)                               \
                                                                                \
   /* Interpreter */                                                            \
+  /* We have a callable JSFunction in the form of bytecode, dispatch to */     \
+  /* interpreter*/                                                             \
   ASM(InterpreterEntryTrampoline, JSTrampoline)                                \
   ASM(InterpreterPushArgsThenCall, InterpreterPushArgsThenCall)                \
   ASM(InterpreterPushUndefinedAndArgsThenCall, InterpreterPushArgsThenCall)    \
