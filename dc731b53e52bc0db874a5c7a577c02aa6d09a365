@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "827794a1_c55d7b6e",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-25T11:18:58Z",
+      "side": 1,
+      "message": "\u003e Regarding concurrency, no additional changes are needed as long as the global-proxy\u0027s (compile-time) map is cached.\n\nSince the direct path of IsDetached didn\u0027t use the cached map, I\u0027ve rewritten the code a little bit. Newest patchset contain that change as well as the comments.",
+      "parentUuid": "58a5db92_35db6dfc",
+      "revId": "dc731b53e52bc0db874a5c7a577c02aa6d09a365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4729372a_ed0895d0",
