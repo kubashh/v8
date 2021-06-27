@@ -782,17 +782,6 @@ FieldAccess ForPropertyCellValue(MachineRepresentation representation,
 
 }  // namespace
 
-Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
-    Node* node, Node* lookup_start_object, Node* receiver, Node* value,
-    NameRef const& name, AccessMode access_mode, Node* key, Node* effect) {
-  base::Optional<PropertyCellRef> cell =
-      native_context().global_object().GetPropertyCell(name);
-  return cell.has_value()
-             ? ReduceGlobalAccess(node, lookup_start_object, receiver, value,
-                                  name, access_mode, key, *cell, effect)
-             : NoChange();
-}
-
 // TODO(neis): Try to merge this with ReduceNamedAccess by introducing a new
 // PropertyAccessInfo kind for global accesses and using the existing mechanism
 // for building loads/stores.
@@ -1184,11 +1173,17 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
   if (lookup_start_object_maps.size() == 1) {
     MapRef lookup_start_object_map =
         MakeRef(broker(), lookup_start_object_maps[0]);
+    NativeContextRef target_native_context = broker()->target_native_context();
     if (lookup_start_object_map.equals(
-            broker()->target_native_context().global_proxy_object().map()) &&
-        !broker()->target_native_context().global_object().IsDetached()) {
-      return ReduceGlobalAccess(node, lookup_start_object, receiver, value,
-                                feedback.name(), access_mode, key, effect);
+            target_native_context.global_proxy_object().map())) {
+      if (!target_native_context.global_object().IsDetached()) {
+        base::Optional<PropertyCellRef> cell =
+            native_context().global_object().GetPropertyCell(feedback.name());
+        if (!cell.has_value()) return NoChange();
+        return ReduceGlobalAccess(node, lookup_start_object, receiver, value,
+                                  feedback.name(), access_mode, key, *cell,
+                                  effect);
+      }
     }
   }
 

@@ -80,13 +80,13 @@ enum class RefSerializationKind {
 // DO NOT VIOLATE THIS PROPERTY!
 #define HEAP_BROKER_OBJECT_LIST(V)                                        \
   /* Subtypes of JSObject */                                              \
-  V(JSArray, RefSerializationKind::kSerialized)                           \
+  V(JSArray, RefSerializationKind::kBackgroundSerialized)                 \
   V(JSBoundFunction, RefSerializationKind::kSerialized)                   \
   V(JSDataView, RefSerializationKind::kSerialized)                        \
   V(JSFunction, RefSerializationKind::kSerialized)                        \
-  V(JSGlobalObject, RefSerializationKind::kSerialized)                    \
-  V(JSGlobalProxy, RefSerializationKind::kSerialized)                     \
-  V(JSTypedArray, RefSerializationKind::kSerialized)                      \
+  V(JSGlobalObject, RefSerializationKind::kBackgroundSerialized)          \
+  V(JSGlobalProxy, RefSerializationKind::kBackgroundSerialized)           \
+  V(JSTypedArray, RefSerializationKind::kBackgroundSerialized)            \
   /* Subtypes of Context */                                               \
   V(NativeContext, RefSerializationKind::kNeverSerialized)                \
   /* Subtypes of FixedArray */                                            \
@@ -102,7 +102,7 @@ enum class RefSerializationKind {
   V(String, RefSerializationKind::kNeverSerialized)                       \
   V(Symbol, RefSerializationKind::kNeverSerialized)                       \
   /* Subtypes of JSReceiver */                                            \
-  V(JSObject, RefSerializationKind::kSerialized)                          \
+  V(JSObject, RefSerializationKind::kBackgroundSerialized)                \
   /* Subtypes of HeapObject */                                            \
   V(AccessorInfo, RefSerializationKind::kNeverSerialized)                 \
   V(AllocationSite, RefSerializationKind::kSerialized)                    \
@@ -1020,13 +1020,7 @@ class JSGlobalObjectRef : public JSObjectRef {
 
   bool IsDetached() const;
 
-  // If {serialize} is false:
-  //   If the property is known to exist as a property cell (on the global
-  //   object), return that property cell. Otherwise (not known to exist as a
-  //   property cell or known not to exist as a property cell) return nothing.
-  // If {serialize} is true:
-  //   Like above but potentially access the heap and serialize the necessary
-  //   information.
+  // Can be called even when there is no property cell for the given name.
   base::Optional<PropertyCellRef> GetPropertyCell(
       NameRef const& name, SerializationPolicy policy =
                                SerializationPolicy::kAssumeSerialized) const;

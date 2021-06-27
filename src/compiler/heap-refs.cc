@@ -429,7 +429,8 @@ class JSReceiverData : public HeapObjectData {
 class JSObjectData : public JSReceiverData {
  public:
   JSObjectData(JSHeapBroker* broker, ObjectData** storage,
-               Handle<JSObject> object);
+               Handle<JSObject> object,
+               ObjectDataKind kind = kSerializedHeapObject);
 
   // Recursive serialization of all reachable JSObjects.
   void SerializeAsBoilerplate(JSHeapBroker* broker);
@@ -683,12 +684,8 @@ ObjectData* JSObjectData::GetOwnDictionaryProperty(JSHeapBroker* broker,
 class JSTypedArrayData : public JSObjectData {
  public:
   JSTypedArrayData(JSHeapBroker* broker, ObjectData** storage,
-                   Handle<JSTypedArray> object)
-      : JSObjectData(broker, storage, object) {}
-
-  // TODO(v8:7790): Once JSObject is no longer serialized, also make
-  // JSTypedArrayRef never-serialized.
-  STATIC_ASSERT(IsSerializedRef<JSObject>());
+                   Handle<JSTypedArray> object, ObjectDataKind kind)
+      : JSObjectData(broker, storage, object, kind) {}
 
   void Serialize(JSHeapBroker* broker);
   bool serialized() const { return serialized_; }
@@ -1373,12 +1370,8 @@ void AllocationSiteData::SerializeBoilerplate(JSHeapBroker* broker) {
 HeapObjectData::HeapObjectData(JSHeapBroker* broker, ObjectData** storage,
                                Handle<HeapObject> object, ObjectDataKind kind)
     : ObjectData(broker, storage, object, kind),
-      // We have to use a raw cast below instead of AsMap() because of
-      // recursion. AsMap() would call IsMap(), which accesses the
-      // instance_type_ member. In the case of constructing the MapData for the
-      // meta map (whose map is itself), this member has not yet been
-      // initialized.
-      map_(broker->GetOrCreateData(object->map(kAcquireLoad))) {
+      map_(broker->GetOrCreateData(object->map(kAcquireLoad),
+                                   kAssumeMemoryFence)) {
   CHECK_IMPLIES(kind == kSerializedHeapObject,
                 broker->mode() == JSHeapBroker::kSerializing);
   CHECK_IMPLIES(broker->mode() == JSHeapBroker::kSerialized,
@@ -1869,9 +1862,8 @@ bool JSBoundFunctionData::Serialize(JSHeapBroker* broker) {
 }
 
 JSObjectData::JSObjectData(JSHeapBroker* broker, ObjectData** storage,
-                           Handle<JSObject> object)
-    : JSReceiverData(broker, storage, object,
-                     ObjectDataKind::kSerializedHeapObject),
+                           Handle<JSObject> object, ObjectDataKind kind)
+    : JSReceiverData(broker, storage, object, kind),
       inobject_fields_(broker->zone()),
       own_constant_elements_(broker->zone()),
       own_properties_(broker->zone()) {}
@@ -1913,7 +1905,10 @@ class BytecodeArrayData : public FixedArrayBaseData {
 class JSArrayData : public JSObjectData {
  public:
   JSArrayData(JSHeapBroker* broker, ObjectData** storage,
-              Handle<JSArray> object);
+              Handle<JSArray> object,
+              ObjectDataKind kind = kSerializedHeapObject)
+      : JSObjectData(broker, storage, object, kind),
+        own_elements_(broker->zone()) {}
 
   void Serialize(JSHeapBroker* broker);
   ObjectData* length() const {
@@ -1935,10 +1930,6 @@ class JSArrayData : public JSObjectData {
   // In case (2), the second pair component is nullptr.
   ZoneVector<std::pair<uint32_t, ObjectData*>> own_elements_;
 };
-
-JSArrayData::JSArrayData(JSHeapBroker* broker, ObjectData** storage,
-                         Handle<JSArray> object)
-    : JSObjectData(broker, storage, object), own_elements_(broker->zone()) {}
 
 void JSArrayData::Serialize(JSHeapBroker* broker) {
   CHECK(!broker->is_concurrent_inlining());
@@ -2192,15 +2183,28 @@ class CellData : public HeapObjectData {
 class JSGlobalObjectData : public JSObjectData {
  public:
   JSGlobalObjectData(JSHeapBroker* broker, ObjectData** storage,
-                     Handle<JSGlobalObject> object);
-  bool IsDetached() const { return is_detached_; }
+                     Handle<JSGlobalObject> object,
+                     ObjectDataKind kind = kSerializedHeapObject)
+      : JSObjectData(broker, storage, object, kind),
+        properties_(broker->zone()) {
+    if (!broker->is_concurrent_inlining()) {
+      is_detached_ = object->IsDetached();
+    }
+  }
+
+  bool IsDetached() const {
+    DCHECK_EQ(kind(), kSerializedHeapObject);
+    return is_detached_;
+  }
 
   ObjectData* GetPropertyCell(
       JSHeapBroker* broker, ObjectData* name,
       SerializationPolicy policy = SerializationPolicy::kAssumeSerialized);
 
  private:
-  bool const is_detached_;
+  // Only valid if not concurrent inlining.
+
+  bool is_detached_ = false;
 
   // Properties that either
   // (1) are known to exist as property cells on the global object, or
@@ -2209,38 +2213,24 @@ class JSGlobalObjectData : public JSObjectData {
   ZoneVector<std::pair<ObjectData*, ObjectData*>> properties_;
 };
 
-JSGlobalObjectData::JSGlobalObjectData(JSHeapBroker* broker,
-                                       ObjectData** storage,
-                                       Handle<JSGlobalObject> object)
-    : JSObjectData(broker, storage, object),
-      is_detached_(object->IsDetached()),
-      properties_(broker->zone()) {}
-
 class JSGlobalProxyData : public JSObjectData {
  public:
   JSGlobalProxyData(JSHeapBroker* broker, ObjectData** storage,
-                    Handle<JSGlobalProxy> object);
+                    Handle<JSGlobalProxy> object,
+                    ObjectDataKind kind = kSerializedHeapObject)
+      : JSObjectData(broker, storage, object, kind) {}
 };
-
-JSGlobalProxyData::JSGlobalProxyData(JSHeapBroker* broker, ObjectData** storage,
-                                     Handle<JSGlobalProxy> object)
-    : JSObjectData(broker, storage, object) {}
 
 namespace {
 
 base::Optional<PropertyCellRef> GetPropertyCellFromHeap(JSHeapBroker* broker,
                                                         Handle<Name> name) {
-  LookupIterator it(
-      broker->isolate(),
-      handle(broker->target_native_context().object()->global_object(),
-             broker->isolate()),
-      name, LookupIterator::OWN);
-  it.TryLookupCachedProperty();
-  if (it.state() == LookupIterator::DATA &&
-      it.GetHolder<JSObject>()->IsJSGlobalObject()) {
-    return TryMakeRef(broker, it.GetPropertyCell());
-  }
-  return base::nullopt;
+  base::Optional<PropertyCell> maybe_cell =
+      ConcurrentLookupIterator::TryGetPropertyCell(
+          broker->isolate(), broker->local_isolate_or_isolate(),
+          broker->target_native_context().global_object().object(), name);
+  if (!maybe_cell.has_value()) return {};
+  return TryMakeRef(broker, *maybe_cell);
 }
 
 }  // namespace
@@ -2248,6 +2238,8 @@ base::Optional<PropertyCellRef> GetPropertyCellFromHeap(JSHeapBroker* broker,
 ObjectData* JSGlobalObjectData::GetPropertyCell(JSHeapBroker* broker,
                                                 ObjectData* name,
                                                 SerializationPolicy policy) {
+  DCHECK_EQ(kind(), kSerializedHeapObject);
+
   CHECK_NOT_NULL(name);
   for (auto const& p : properties_) {
     if (p.first == name) return p.second;
@@ -3383,8 +3375,6 @@ BIMODAL_ACCESSOR(JSFunction, Object, prototype)
 BIMODAL_ACCESSOR(JSFunction, SharedFunctionInfo, shared)
 BIMODAL_ACCESSOR(JSFunction, FeedbackCell, raw_feedback_cell)
 BIMODAL_ACCESSOR(JSFunction, FeedbackVector, feedback_vector)
-
-BIMODAL_ACCESSOR_C(JSGlobalObject, bool, IsDetached)
 
 BIMODAL_ACCESSOR_WITH_FLAG_B(Map, bit_field2, elements_kind,
                              Map::Bits2::ElementsKindBits)
@@ -4581,14 +4571,7 @@ void SourceTextModuleRef::Serialize() {
 
 void JSTypedArrayRef::Serialize() {
   if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
-    // Even if the typed array object itself is no longer serialized (besides
-    // the JSObject parts), the `buffer` field still is and thus we need to
-    // make sure to visit it.
-    // TODO(jgruber,v8:7790): Remove once JSObject is no longer serialized.
-    static_assert(
-        std::is_base_of<JSObject, decltype(object()->buffer())>::value, "");
-    STATIC_ASSERT(IsSerializedRef<JSObject>());
-    MakeRef<JSObject>(broker(), object()->buffer());
+    // Nothing to do.
   } else {
     CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
     data()->AsJSTypedArray()->Serialize(broker());
@@ -4634,11 +4617,20 @@ void FunctionTemplateInfoRef::SerializeCallCode() {
   data()->AsFunctionTemplateInfo()->SerializeCallCode(broker());
 }
 
+bool JSGlobalObjectRef::IsDetached() const {
+  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
+    // The global proxy must have existed before this compile job was spawned.
+    return *object() != object()->global_proxy().map().prototype();
+  }
+  return data()->AsJSGlobalObject()->IsDetached();
+}
+
 base::Optional<PropertyCellRef> JSGlobalObjectRef::GetPropertyCell(
     NameRef const& name, SerializationPolicy policy) const {
-  if (data_->should_access_heap()) {
+  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
     return GetPropertyCellFromHeap(broker(), name.object());
   }
+
   ObjectData* property_cell_data = data()->AsJSGlobalObject()->GetPropertyCell(
       broker(), name.data(), policy);
   return TryMakeRef<PropertyCell>(broker(), property_cell_data);
