@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7f36b40_c3eed3da",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-27T10:33:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4bd7a75_d45cad39",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7709a6c4_c3432755",
@@ -31,6 +49,41 @@
       "writtenOn": "2021-06-21T13:45:11Z",
       "side": 1,
       "message": "This is also used only when not concurrent inlining, right?\nLet\u0027s add a comment and/or DCHECK as well.",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35eea9a4_ff378024",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2208,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-27T10:33:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7709a6c4_c3432755",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "708e574e_b641f01f",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4639,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-27T10:33:26Z",
+      "side": 1,
+      "message": "I\u0027ve moved this code into GetPropertyCellFromHeap, replacing the old implementation there.",
       "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +105,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8b9fd1a_fce65634",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-27T10:33:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edf065f8_deab325f",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1a2de68_d172ebc2",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-27T10:33:26Z",
+      "side": 1,
+      "message": "Done (only two checks were needed).",
+      "parentUuid": "edf065f8_deab325f",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cc258f5_f7bffa67",
@@ -65,6 +154,24 @@
       "writtenOn": "2021-06-21T13:45:11Z",
       "side": 1,
       "message": "Let\u0027s use handles for both or none.",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60f373c6_0e603edd",
+        "filename": "src/objects/lookup.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-27T10:33:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cc258f5_f7bffa67",
       "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +193,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be91a022_2f69cd32",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5856,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-27T10:33:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63ff72c4_c0d4143e",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "687a9fbd_868fdf1f",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5872,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-27T10:33:26Z",
+      "side": 1,
+      "message": "I\u0027ve made this a direct call to heap (see above).\n\nHowever, I have since realized that we are missing the broker warnings when we bailout due to failing predicate. I think they are really important for debugging. This doesn\u0027t have to block the CL though, let\u0027s discuss it next week.",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d492482_80b9558e",
@@ -99,6 +241,24 @@
       "writtenOn": "2021-06-21T13:45:11Z",
       "side": 1,
       "message": "Can this be a CHECK?",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c6c47b4_06e549cb",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5876,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-06-27T10:33:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d492482_80b9558e",
       "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
