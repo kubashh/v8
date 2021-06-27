@@ -1213,6 +1213,9 @@ PipelineCompilationJob::Status PipelineCompilationJob::PrepareJobImpl(
 
   if (compilation_info()->is_osr()) data_.InitializeOsrHelper();
 
+  // Serializ() and CreateGraph() may already use IsPendingAllocation.
+  isolate->heap()->PublishPendingAllocations();
+
   pipeline_.Serialize();
 
   if (!data_.broker()->is_concurrent_inlining()) {
@@ -1223,6 +1226,7 @@ PipelineCompilationJob::Status PipelineCompilationJob::PrepareJobImpl(
   }
 
   if (compilation_info()->concurrent_inlining()) {
+    // Serialization may have allocated.
     isolate->heap()->PublishPendingAllocations();
   }
 
