@@ -63,12 +63,12 @@ if (fast_c_api.supports_fp_params) {
 }
 
 function add_all_sequence_mismatch(arg) {
-  return fast_c_api.add_all_sequence(false /*should_fallback*/,
-    arg);
+  return fast_c_api.add_all_sequence(false /*should_fallback*/, arg);
 }
 
 %PrepareFunctionForOptimization(add_all_sequence_mismatch);
-assertThrows(() => add_all_sequence_mismatch());
+add_all_sequence_mismatch();
+//assertThrows(() => add_all_sequence_mismatch());
 %OptimizeFunctionOnNextCall(add_all_sequence_mismatch);
 
 // Test that passing non-array arguments falls down the slow path.
@@ -95,3 +95,100 @@ assertThrows(() => add_all_sequence_mismatch(Symbol()));
 assertOptimized(add_all_sequence_mismatch);
 assertEquals(0, fast_c_api.fast_call_count());
 assertEquals(1, fast_c_api.slow_call_count());
+
+
+//----------- Test function overloads with same arity. -----------
+//Only overloads between JSArray and TypedArray are supported
+
+// Test with TypedArray.
+(function () {
+  function overloaded_test(should_fallback = false) {
+    let typed_array = new Uint32Array([1, 2, 3]);
+    return fast_c_api.add_all_overload(false /* should_fallback */, typed_array);
+  }
+
+  %PrepareFunctionForOptimization(overloaded_test);
+  let result = overloaded_test();
+  assertEquals(0, result);
+
+  fast_c_api.reset_counts();
+  %OptimizeFunctionOnNextCall(overloaded_test);
+  result = overloaded_test();
+  assertEquals(0, result);
+  assertOptimized(overloaded_test);
+  assertEquals(1, fast_c_api.fast_call_count());
+})();
+
+// Mismatched TypedArray.
+(function () {
+  function overloaded_test(should_fallback = false) {
+    let typed_array = new Float32Array([1.1, 2.2, 3.3]);
+    return fast_c_api.add_all_overload(false /* should_fallback */, typed_array);
+  }
+
+  %PrepareFunctionForOptimization(overloaded_test);
+  let result = overloaded_test();
+  assertEquals(0, result);
+
+  fast_c_api.reset_counts();
+  %OptimizeFunctionOnNextCall(overloaded_test);
+  result = overloaded_test();
+  assertEquals(0, result);
+  assertOptimized(overloaded_test);
+  assertEquals(0, fast_c_api.fast_call_count());
+})();
+
+// Test with JSArray.
+(function () {
+  function overloaded_test(should_fallback = false) {
+    let js_array = [1.1, 2.2, 3.3];
+    return fast_c_api.add_all_overload(false /* should_fallback */, js_array);
+  }
+
+  %PrepareFunctionForOptimization(overloaded_test);
+  let result = overloaded_test();
+  assertEquals(6.6, result);
+
+  fast_c_api.reset_counts();
+  %OptimizeFunctionOnNextCall(overloaded_test);
+  result = overloaded_test();
+  assertEquals(6.6, result);
+  assertOptimized(overloaded_test);
+  assertEquals(1, fast_c_api.fast_call_count());
+})();
+
+// Test function overloads with undefined.
+(function () {
+  function overloaded_test(should_fallback = false) {
+    return fast_c_api.add_all_overload(false /* should_fallback */, undefined);
+  }
+
+  %PrepareFunctionForOptimization(overloaded_test);
+  result = overloaded_test();
+  assertEquals(0, result);
+
+  fast_c_api.reset_counts();
+  %OptimizeFunctionOnNextCall(overloaded_test);
+  result = overloaded_test();
+  assertEquals(0, result);
+  assertOptimized(overloaded_test);
+  assertEquals(0, fast_c_api.fast_call_count());
+})();
+
+// Test function overloads with invalid overloads.
+(function () {
+  function overloaded_test(should_fallback = false) {
+    return fast_c_api.add_all_invalid_overload(false /* should_fallback */, [1, 2, 3]);
+  }
+
+  %PrepareFunctionForOptimization(overloaded_test);
+  result = overloaded_test();
+  assertEquals(6, result);
+
+  fast_c_api.reset_counts();
+  %OptimizeFunctionOnNextCall(overloaded_test);
+  result = overloaded_test();
+  assertEquals(6, result);
+  assertOptimized(overloaded_test);
+  assertEquals(0, fast_c_api.fast_call_count());
+})();
