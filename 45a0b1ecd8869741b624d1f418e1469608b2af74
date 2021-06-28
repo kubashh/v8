@@ -16,6 +16,23 @@
       "message": "Hi Nico, I made an adjustment to the CL. I had the special exception for --stress-concurrent-inlining in the wrong place, which led to test failures. Could you thumbs up if it looks good to you?",
       "revId": "45a0b1ecd8869741b624d1f418e1469608b2af74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d7a0ba5_9ee86510",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-06-28T14:06:47Z",
+      "side": 1,
+      "message": "looks good to me",
+      "revId": "45a0b1ecd8869741b624d1f418e1469608b2af74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
