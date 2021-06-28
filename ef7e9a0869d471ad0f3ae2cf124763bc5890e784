@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "434c37ab_77607121",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4840,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-28T15:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfab32b0_31280c02",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7c31eae_63c71d0c",
@@ -65,6 +83,24 @@
       "writtenOn": "2021-06-25T13:44:55Z",
       "side": 1,
       "message": "Why do we still need to keep {src} alive here?",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e7db0a9_e7a200cd",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-28T15:27:51Z",
+      "side": 1,
+      "message": "I think I thought the op should preserve the source, but this is obviously not the case, fixed.",
+      "parentUuid": "c7c31eae_63c71d0c",
       "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a70bc6fe_146287dc",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-28T15:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00f69136_08e43c02",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b30b23c_aa8cb0db",
@@ -99,6 +153,24 @@
       "writtenOn": "2021-06-25T13:44:55Z",
       "side": 1,
       "message": "For consistency, you should also pull out the {pinned} set, and remove the src registers.",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e0d871a_317b92af",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3320,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-28T15:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b30b23c_aa8cb0db",
       "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "217e6f20_3b9015e0",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3369,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-28T15:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08685134_236b52a8",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d13e8646_3054723d",
@@ -133,6 +223,24 @@
       "writtenOn": "2021-06-25T13:44:55Z",
       "side": 1,
       "message": "Can\u0027t we hard-code {rc} as {reg_class_for(kS128)} (and drop the parameter)?",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "852cc605_7f43882e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6140,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-28T15:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d13e8646_3054723d",
       "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -156,6 +264,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2339bc9f_94b1ac4f",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4387,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-28T15:27:51Z",
+      "side": 1,
+      "message": "I actually thought about something like this, but I favored this version with the assumption that the branch would be taken most of the time, so we would have good branch prediction and no memory access.\nBut I also really like the or version for its simplicity, I don\u0027t know much about the store buffer, so if you think it can\u0027t be slower I\u0027m ok with it.",
+      "parentUuid": "0f3610ce_09f0139e",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b89c1e4_53a6b779",
         "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
         "patchSetId": 5
@@ -167,6 +293,24 @@
       "writtenOn": "2021-06-25T13:44:55Z",
       "side": 1,
       "message": "Same as for ia32: {Label::kNear} produces smaller code.",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b71a1ff_0101a52f",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4389,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-06-28T15:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b89c1e4_53a6b779",
       "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
