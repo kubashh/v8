@@ -284,6 +284,23 @@ bool JSFunction::is_compiled() const {
          shared().is_compiled();
 }
 
+bool JSFunction::ShouldFlushBaselineCode(BytecodeFlushMode mode) {
+  if (mode == BytecodeFlushMode::kDoNotFlushBytecode) return false;
+  // Do a raw read for shared and code fields here since this function may be
+  // called on a concurrent thread and the JSFunction might not be fully
+  // initialized yet.
+  Object maybe_shared = ACQUIRE_READ_FIELD(*this, kSharedFunctionInfoOffset);
+  if (!maybe_shared.IsSharedFunctionInfo()) return false;
+
+  Object maybe_code = RELAXED_READ_FIELD(*this, kCodeOffset);
+  if (!maybe_code.IsCodeT()) return false;
+  Code code = FromCodeT(CodeT::cast(maybe_code));
+  if (code.kind() != CodeKind::BASELINE) return false;
+
+  SharedFunctionInfo shared = SharedFunctionInfo::cast(maybe_shared);
+  return shared.ShouldFlushBytecode(mode);
+}
+
 bool JSFunction::NeedsResetDueToFlushedBytecode() {
   // Do a raw read for shared and code fields here since this function may be
   // called on a concurrent thread and the JSFunction might not be fully
@@ -309,6 +326,13 @@ void JSFunction::ResetIfBytecodeFlushed(
     set_code(*BUILTIN_CODE(GetIsolate(), CompileLazy));
     raw_feedback_cell().reset_feedback_vector(gc_notify_updated_slot);
   }
+}
+
+void JSFunction::ResetBaselineIfBytecodeFlushed() {
+  if (!FLAG_flush_bytecode) return;
+  // TODO(mythria): Consider setting this to IET if bytecode array is still
+  // alive to avoid calling to CompileLazy that restores the bytecode array.
+  set_code(*BUILTIN_CODE(GetIsolate(), CompileLazy));
 }
 
 }  // namespace internal

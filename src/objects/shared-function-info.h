@@ -523,6 +523,14 @@ class SharedFunctionInfo
   V8_EXPORT_PRIVATE static void DiscardCompiled(
       Isolate* isolate, Handle<SharedFunctionInfo> shared_info);
 
+  // Flush baseline code from this function. This is called during GC so and
+  // |gc_notify_updated_slot| is used to record any slot updates/
+  void DiscardBaselineData(
+      Isolate* isolate,
+      std::function<void(HeapObject object, ObjectSlot slot, HeapObject target)>
+          gc_notify_updated_slot =
+              [](HeapObject object, ObjectSlot slot, HeapObject target) {});
+
   // Discard the compiled metadata. If called during GC then
   // |gc_notify_updated_slot| should be used to record any slot updates.
   void DiscardCompiledMetadata(

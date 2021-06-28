@@ -215,6 +215,9 @@ class JSFunction : public JSFunctionOrBoundFunction {
                                         HeapObject target)>>
           gc_notify_updated_slot = base::nullopt);
 
+  inline bool ShouldFlushBaselineCode(BytecodeFlushMode mode);
+  inline void ResetBaselineIfBytecodeFlushed();
+
   DECL_GETTER(has_prototype_slot, bool)
 
   // The initial map for an object created by this constructor.
@@ -310,6 +313,8 @@ class JSFunction : public JSFunctionOrBoundFunction {
   static constexpr int kCodeOffset = FieldOffsets::kCodeOffset;
   static constexpr int kPrototypeOrInitialMapOffset =
       FieldOffsets::kPrototypeOrInitialMapOffset;
+
+  class BodyDescriptor;
 
  private:
   DECL_ACCESSORS(raw_code, CodeT)

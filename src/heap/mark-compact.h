@@ -666,7 +666,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   void ClearPotentialSimpleMapTransition(Map map, Map dead_target);
 
   // Flushes a weakly held bytecode array from a shared function info.
-  void FlushBytecodeFromSFI(SharedFunctionInfo shared_info);
+  void FlushCodeFromSFI(SharedFunctionInfo shared_info, bool is_bytecode_alive,
+                        bool is_baseline_code_alive);
 
   // Clears bytecode arrays that have not been executed for multiple
   // collections.

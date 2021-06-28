@@ -132,12 +132,19 @@ int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitBytecodeArray(
 
 template <typename ConcreteVisitor, typename MarkingState>
 int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitJSFunction(
-    Map map, JSFunction object) {
-  int size = concrete_visitor()->VisitJSObjectSubclass(map, object);
+    Map map, JSFunction js_function) {
+  int size = concrete_visitor()->VisitJSObjectSubclass(map, js_function);
+  if (js_function.ShouldFlushBaselineCode(bytecode_flush_mode_)) {
+    weak_objects_->flushed_js_functions.Push(task_id_, js_function);
+  } else {
+    VisitPointer(js_function, js_function.RawField(JSFunction::kCodeOffset));
+  }
+  // TODO(mythria): I don't think this is needed anymore. Double check and
+  // remove this.
   // Check if the JSFunction needs reset due to bytecode being flushed.
   if (bytecode_flush_mode_ != BytecodeFlushMode::kDoNotFlushBytecode &&
-      object.NeedsResetDueToFlushedBytecode()) {
-    weak_objects_->flushed_js_functions.Push(task_id_, object);
+      js_function.NeedsResetDueToFlushedBytecode()) {
+    weak_objects_->flushed_js_functions.Push(task_id_, js_function);
   }
   return size;
 }

@@ -293,6 +293,26 @@ bool SharedFunctionInfo::HasSourceCode() const {
          String::cast(Script::cast(script()).source()).length() > 0;
 }
 
+void SharedFunctionInfo::DiscardBaselineData(
+    Isolate* isolate,
+    std::function<void(HeapObject object, ObjectSlot slot, HeapObject target)>
+        gc_notify_updated_slot) {
+  DisallowGarbageCollection no_gc;
+  if (!HasBaselineData()) return;
+
+  if (FLAG_trace_flush_bytecode) {
+    CodeTracer::Scope scope(GetIsolate()->GetCodeTracer());
+    PrintF(scope.file(), "[discarding baseline code for ");
+    ShortPrint(scope.file());
+    PrintF(scope.file(), "]\n");
+  }
+
+  HeapObject bytecode_array = baseline_data().data();
+  set_function_data(bytecode_array, kReleaseStore);
+  gc_notify_updated_slot(
+      *this, RawField(SharedFunctionInfo::kFunctionDataOffset), bytecode_array);
+}
+
 void SharedFunctionInfo::DiscardCompiledMetadata(
     Isolate* isolate,
     std::function<void(HeapObject object, ObjectSlot slot, HeapObject target)>

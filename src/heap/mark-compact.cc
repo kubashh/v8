@@ -2196,19 +2196,33 @@ void MarkCompactCollector::ClearPotentialSimpleMapTransition(Map map,
   }
 }
 
-void MarkCompactCollector::FlushBytecodeFromSFI(
-    SharedFunctionInfo shared_info) {
+void MarkCompactCollector::FlushCodeFromSFI(SharedFunctionInfo shared_info,
+                                            bool is_bytecode_live,
+                                            bool is_baseline_code_live) {
   DCHECK(shared_info.HasBytecodeArray());
+
+  // Nothing to flush
+  if (is_baseline_code_live && is_bytecode_live) return;
+
+  auto gc_notify_updated_slot = [](HeapObject object, ObjectSlot slot,
+                                   HeapObject target) {
+    RecordSlot(object, slot, target);
+  };
+
+  DCHECK_IMPLIES(is_baseline_code_live, is_bytecode_live);
+  // If baseline code is dead but bytecode is still live update the field by
+  // discarding baseline data but retain the bytecode array
+  if (is_bytecode_live && !is_baseline_code_live) {
+    shared_info.DiscardBaselineData(isolate(), gc_notify_updated_slot);
+    return;
+  }
 
   // Retain objects required for uncompiled data.
   String inferred_name = shared_info.inferred_name();
   int start_position = shared_info.StartPosition();
   int end_position = shared_info.EndPosition();
 
-  shared_info.DiscardCompiledMetadata(
-      isolate(), [](HeapObject object, ObjectSlot slot, HeapObject target) {
-        RecordSlot(object, slot, target);
-      });
+  shared_info.DiscardCompiledMetadata(isolate(), gc_notify_updated_slot);
 
   // The size of the bytecode array should always be larger than an
   // UncompiledData object.
@@ -2269,15 +2283,18 @@ void MarkCompactCollector::ClearOldBytecodeCandidates() {
   SharedFunctionInfo flushing_candidate;
   while (weak_objects_.bytecode_flushing_candidates.Pop(kMainThreadTask,
                                                         &flushing_candidate)) {
+    bool is_baseline_code_dead = non_atomic_marking_state()->IsBlackOrGrey(
+        flushing_candidate.GetBytecodeArray(isolate()));
+    bool is_bytecode_dead = non_atomic_marking_state()->IsBlackOrGrey(
+        flushing_candidate.GetBytecodeArray(isolate()));
+
     // If the BytecodeArray is dead, flush it, which will replace the field with
     // an uncompiled data object.
-    if (!non_atomic_marking_state()->IsBlackOrGrey(
-            flushing_candidate.GetBytecodeArray(isolate()))) {
-      FlushBytecodeFromSFI(flushing_candidate);
-    }
+    FlushCodeFromSFI(flushing_candidate, is_baseline_code_dead,
+                     is_bytecode_dead);
 
     // Now record the slot, which has either been updated to an uncompiled data,
-    // or is the BytecodeArray which is still alive.
+    // Baseline code or BytecodeArray which is still alive.
     ObjectSlot slot =
         flushing_candidate.RawField(SharedFunctionInfo::kFunctionDataOffset);
     RecordSlot(flushing_candidate, slot, HeapObject::cast(*slot));
@@ -2289,6 +2306,7 @@ void MarkCompactCollector::ClearFlushedJsFunctions() {
   JSFunction flushed_js_function;
   while (weak_objects_.flushed_js_functions.Pop(kMainThreadTask,
                                                 &flushed_js_function)) {
+    flushed_js_function.ResetBaselineIfBytecodeFlushed();
     auto gc_notify_updated_slot = [](HeapObject object, ObjectSlot slot,
                                      Object target) {
       RecordSlot(object, slot, HeapObject::cast(target));
