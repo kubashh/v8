@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c49ecb3_50d17823",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-06-28T13:20:48Z",
+      "side": 1,
+      "message": "Hi Nico, I made an adjustment to the CL. I had the special exception for --stress-concurrent-inlining in the wrong place, which led to test failures. Could you thumbs up if it looks good to you?",
+      "revId": "45a0b1ecd8869741b624d1f418e1469608b2af74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
