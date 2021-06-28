@@ -50,9 +50,23 @@ struct GarbageCollectionFullMainThreadIncrementalMark {
   int64_t cpp_wall_clock_duration_in_us = -1;
 };
 
+struct GarbageCollectionFullMainThreadBatchedIncrementalMark {
+  static constexpr int kMaxBatchedEvents = 16;
+  GarbageCollectionFullMainThreadIncrementalMark
+      batched_events[kMaxBatchedEvents];
+  int num_batched_events = 0;
+};
+
 struct GarbageCollectionFullMainThreadIncrementalSweep {
   int64_t wall_clock_duration_in_us = -1;
   int64_t cpp_wall_clock_duration_in_us = -1;
+};
+
+struct GarbageCollectionFullMainThreadBatchedIncrementalSweep {
+  static constexpr int kMaxBatchedEvents = 16;
+  GarbageCollectionFullMainThreadIncrementalSweep
+      batched_events[kMaxBatchedEvents];
+  int num_batched_events = 0;
 };
 
 struct GarbageCollectionYoungCycle {
@@ -101,14 +115,16 @@ struct WasmModulesPerIsolate {
   size_t count = 0;
 };
 
-#define V8_MAIN_THREAD_METRICS_EVENTS(V)             \
-  V(GarbageCollectionFullCycle)                      \
-  V(GarbageCollectionFullMainThreadIncrementalMark)  \
-  V(GarbageCollectionFullMainThreadIncrementalSweep) \
-  V(GarbageCollectionYoungCycle)                     \
-  V(WasmModuleDecoded)                               \
-  V(WasmModuleCompiled)                              \
-  V(WasmModuleInstantiated)                          \
+#define V8_MAIN_THREAD_METRICS_EVENTS(V)                    \
+  V(GarbageCollectionFullCycle)                             \
+  V(GarbageCollectionFullMainThreadIncrementalMark)         \
+  V(GarbageCollectionFullMainThreadBatchedIncrementalMark)  \
+  V(GarbageCollectionFullMainThreadIncrementalSweep)        \
+  V(GarbageCollectionFullMainThreadBatchedIncrementalSweep) \
+  V(GarbageCollectionYoungCycle)                            \
+  V(WasmModuleDecoded)                                      \
+  V(WasmModuleCompiled)                                     \
+  V(WasmModuleInstantiated)                                 \
   V(WasmModuleTieredUp)
 
 #define V8_THREAD_SAFE_METRICS_EVENTS(V) V(WasmModulesPerIsolate)

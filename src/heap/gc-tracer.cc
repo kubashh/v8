@@ -1363,6 +1363,20 @@ void CopySizeMetrics(
   return isolate->GetOrRegisterRecorderContextId(isolate->native_context());
 }
 
+void FlushBatchedIncrementalEvents(
+    v8::metrics::GarbageCollectionFullMainThreadBatchedIncrementalMark&
+        batched_events,
+    Isolate* isolate) {
+  DCHECK_NOT_NULL(isolate->metrics_recorder());
+  DCHECK_LT(0, batched_events.num_batched_events);
+  isolate->metrics_recorder()->AddMainThreadEvent(batched_events,
+                                                  GetContextId(isolate));
+  memset(
+      &batched_events, 0,
+      sizeof(
+          v8::metrics::GarbageCollectionFullMainThreadBatchedIncrementalMark));
+}
+
 }  // namespace
 
 void GCTracer::ReportFullCycleToRecorder() {
@@ -1370,11 +1384,16 @@ void GCTracer::ReportFullCycleToRecorder() {
       heap_->isolate()->metrics_recorder();
   DCHECK_NOT_NULL(recorder);
   if (!recorder->HasEmbedderRecorder()) return;
-  ::v8::metrics::GarbageCollectionFullCycle event;
+  if (incremental_mark_batched_events_.num_batched_events > 0) {
+    FlushBatchedIncrementalEvents(incremental_mark_batched_events_,
+                                  heap_->isolate());
+  }
+  v8::metrics::GarbageCollectionFullCycle event;
   if (heap_->cpp_heap()) {
+    auto* cpp_heap = v8::internal::CppHeap::From(heap_->cpp_heap());
+    cpp_heap->FlushBatchedIncrementalEvents();
     const base::Optional<cppgc::internal::MetricRecorder::FullCycle>
-        optional_cppgc_event = v8::internal::CppHeap::From(heap_->cpp_heap())
-                                   ->ExtractLastCppgcFullGcEvent();
+        optional_cppgc_event = cpp_heap->ExtractLastCppgcFullGcEvent();
     DCHECK(optional_cppgc_event.has_value());
     const cppgc::internal::MetricRecorder::FullCycle& cppgc_event =
         optional_cppgc_event.value();
@@ -1406,7 +1425,9 @@ void GCTracer::ReportIncrementalMarkingStepToRecorder() {
       heap_->isolate()->metrics_recorder();
   DCHECK_NOT_NULL(recorder);
   if (!recorder->HasEmbedderRecorder()) return;
-  ::v8::metrics::GarbageCollectionFullMainThreadIncrementalMark event;
+  v8::metrics::GarbageCollectionFullMainThreadIncrementalMark& event =
+      incremental_mark_batched_events_.batched_events
+          [incremental_mark_batched_events_.num_batched_events++];
   if (heap_->cpp_heap()) {
     const base::Optional<
         cppgc::internal::MetricRecorder::MainThreadIncrementalMark>
@@ -1418,7 +1439,12 @@ void GCTracer::ReportIncrementalMarkingStepToRecorder() {
     }
   }
   // TODO(chromium:1154636): Populate event.wall_clock_duration_in_us.
-  recorder->AddMainThreadEvent(event, GetContextId(heap_->isolate()));
+  if (incremental_mark_batched_events_.num_batched_events ==
+      v8::metrics::GarbageCollectionFullMainThreadBatchedIncrementalMark::
+          kMaxBatchedEvents) {
+    FlushBatchedIncrementalEvents(incremental_mark_batched_events_,
+                                  heap_->isolate());
+  }
 }
 
 }  // namespace internal
