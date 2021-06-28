@@ -1152,6 +1152,16 @@ void Heap::CreateInitialObjects() {
         CreateSharedFunctionInfo(isolate_, Builtins::kProxyRevoke, 0);
     set_proxy_revoke_shared_fun(*info);
   }
+
+  {
+    Handle<HeapObject> obj = factory->undefined_value();
+    Handle<Cell> my_cell;
+    for (int i = 0; i < 1000000; ++i) {
+      my_cell = factory->NewCell(obj);
+      obj = my_cell;
+    }
+    set_my_cell(*my_cell);
+  }
 }
 
 void Heap::CreateInternalAccessorInfoObjects() {

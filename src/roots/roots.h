@@ -306,7 +306,8 @@ class Symbol;
   V(Object, pending_optimize_for_test_bytecode,                            \
     PendingOptimizeForTestBytecode)                                        \
   V(ArrayList, basic_block_profiling_data, BasicBlockProfilingData)        \
-  V(WeakArrayList, shared_wasm_memories, SharedWasmMemories)
+  V(WeakArrayList, shared_wasm_memories, SharedWasmMemories)               \
+  V(Cell, my_cell, MyCell)
 
 // Entries in this list are limited to Smis and are not visited during GC.
 #define SMI_ROOT_LIST(V)                                                       \
