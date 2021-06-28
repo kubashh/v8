@@ -133,6 +133,30 @@
       },
       "revId": "ff97995a88e5ebc82f6294026c893ef0ef7f4599",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb0c05e1_09515fcb",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-06-28T15:41:51Z",
+      "side": 1,
+      "message": "I keep swapping \"left\" and \"right\". :D Thanks for the explanation!",
+      "parentUuid": "9c845d27_8ef8a1d0",
+      "range": {
+        "startLine": 1018,
+        "startChar": 14,
+        "endLine": 1018,
+        "endChar": 21
+      },
+      "revId": "ff97995a88e5ebc82f6294026c893ef0ef7f4599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
