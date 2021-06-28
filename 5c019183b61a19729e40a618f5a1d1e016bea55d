@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "586c790a_d7531ca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-28T09:57:22Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "5c019183b61a19729e40a618f5a1d1e016bea55d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03035564_e16e8e6f",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-28T09:57:22Z",
+      "side": 1,
+      "message": "First issue.",
+      "revId": "5c019183b61a19729e40a618f5a1d1e016bea55d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7d5019b_15dafec9",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-28T09:57:22Z",
+      "side": 1,
+      "message": "Second issue.",
+      "revId": "5c019183b61a19729e40a618f5a1d1e016bea55d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
