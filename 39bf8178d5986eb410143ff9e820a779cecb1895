@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c09b9421_aed39627",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-06-28T16:44:36Z",
+      "side": 1,
+      "message": "ptal. This should help with some of the regression we saw (which frankly are a bit noisy anyway).\n\nI wanted to run this on pinpoint but that\u0027s not possible because it requires CL in 2 different repos.\nIf we don\u0027t want to wait for everything to roll and see the effect on chrome perf, we can split this CL into 2 parts. The 1st will introduce the batched events and will land first. Then we land the blink-side CL. Finally we switch v8 to report batches. Running the 3rd CL in pinpoint after the other 2 have landed will be possible.\nwdyt?",
+      "revId": "39bf8178d5986eb410143ff9e820a779cecb1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52f5003b_948f44db",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-06-28T16:44:36Z",
+      "side": 1,
+      "message": "I debated for a long time between using an array or std::vector here.\nI actually like std::vector better as it means we don\u0027t need to commit to a kMaxBatchedEvents value and we don\u0027t need to explicitly include |num_batched_events|.\nWent with the array approach in the end because I think the code is somewhat simpler and probably a bit faster.",
+      "range": {
+        "startLine": 53,
+        "startChar": 7,
+        "endLine": 53,
+        "endChar": 60
+      },
+      "revId": "39bf8178d5986eb410143ff9e820a779cecb1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
