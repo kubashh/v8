@@ -3850,6 +3850,10 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
     PrintF("[Initializing isolate from scratch took %0.3f ms]\n", ms);
   }
 
+#ifdef V8_ENABLE_THIRD_PARTY_HEAP
+  heap()->tp_heap_->FinishInitialization();
+#endif
+
   return true;
 }
 
