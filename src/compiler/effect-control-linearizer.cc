@@ -5039,8 +5039,11 @@ Node* EffectControlLinearizer::AdaptFastCallArgument(
 
       return stack_slot;
     }
+    case CTypeInfo::SequenceType::kIsTypedArray:
+      // TODO(mslekova): Implement typed arrays.
+      return node;
     default: {
-      UNREACHABLE();  // TODO(mslekova): Implement typed arrays.
+      UNREACHABLE();
     }
   }
 }
