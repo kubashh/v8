@@ -34,6 +34,24 @@
       "parentUuid": "1162c8a9_4daf9600",
       "revId": "473aaf795ecb56021755b84b09e976bb9316ce98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c71d879f_a657bf32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-06-29T01:09:39Z",
+      "side": 1,
+      "message": "Yeah, that sounds fine. Verbosity is better than confusion.",
+      "parentUuid": "f6a7949f_17b01ba8",
+      "revId": "473aaf795ecb56021755b84b09e976bb9316ce98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
