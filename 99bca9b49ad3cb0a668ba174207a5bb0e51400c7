@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa2d3240_1c22b201",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-06-29T13:53:48Z",
+      "side": 1,
+      "message": "There is a typo, \"enbale\" -\u003e \"enable\". Also, it is good practice to keep the length of the subject line below 50 characters, and don\u0027t end it with a period. I like these guidelines - https://chris.beams.io/posts/git-commit/.",
+      "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0435c824_7c53ab53",
+        "filename": "src/wasm/baseline/riscv64/liftoff-assembler-riscv64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-06-29T13:53:48Z",
+      "side": 1,
+      "message": "There is actually an instruction to do this, fsgnj.s. fsgnj_s is already defined in the assembler, so you should just be able to use it here.",
+      "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28dc3eae_aef3f537",
+        "filename": "src/wasm/baseline/riscv64/liftoff-assembler-riscv64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-06-29T13:53:48Z",
+      "side": 1,
+      "message": "Like earlier comment, we can use fsgnj.d for doubles.",
+      "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "490c5caf_a994463b",
+        "filename": "src/wasm/baseline/riscv64/liftoff-assembler-riscv64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-06-29T13:53:48Z",
+      "side": 1,
+      "message": "Is the default rounding mode (nearest), the correct one? It looks like ARM64 rounds towards zero, but I\u0027m not sure where to find what this opcode expects.",
+      "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
