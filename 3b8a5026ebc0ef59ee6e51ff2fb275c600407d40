@@ -88,6 +88,24 @@
       "parentUuid": "c36de6d2_e14c039c",
       "revId": "3b8a5026ebc0ef59ee6e51ff2fb275c600407d40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1421aee_ece5a32e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-29T11:02:45Z",
+      "side": 1,
+      "message": "(Alternatively we could rename all checked-in .log files to something else.)",
+      "parentUuid": "2dc43b24_faf52767",
+      "revId": "3b8a5026ebc0ef59ee6e51ff2fb275c600407d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
