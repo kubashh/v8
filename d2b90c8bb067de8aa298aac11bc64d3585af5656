@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "604e7863_f4de10e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-29T12:31:49Z",
+      "side": 1,
+      "message": "Mythri PTAL.\nThe sheriff marked it as slow for a couple of variants but this is probably only affecting TSAN due to the recent changes.",
+      "revId": "d2b90c8bb067de8aa298aac11bc64d3585af5656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
