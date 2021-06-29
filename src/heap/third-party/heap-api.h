@@ -38,6 +38,8 @@ class Heap {
 
   static bool IsValidHeapObject(HeapObject object);
 
+  static bool IsImmovable(HeapObject object);
+
   void ResetIterator();
   HeapObject NextObject();
 
