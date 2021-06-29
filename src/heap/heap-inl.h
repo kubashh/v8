@@ -615,6 +615,8 @@ void Heap::UpdateAllocationSite(Map map, HeapObject object,
 bool Heap::IsPendingAllocation(HeapObject object) {
   DCHECK(deserialization_complete());
 
+  if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return false;
+
   BasicMemoryChunk* chunk = BasicMemoryChunk::FromHeapObject(object);
   if (chunk->InReadOnlySpace()) return false;
 
