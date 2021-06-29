@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6253bc86_3c499ba1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-29T09:30:27Z",
+      "side": 1,
+      "message": "If this is only about copying the V8 repo, and not about actually checking .log files in, then imho this .gitignore entry is the wrong approach. It leads to issues whenever .log files are created in test/mjsunit/tools because `git add` will notice them as untracked files and add them to the repo. I\u0027d suggest we revert this and repo copies are solved in another way, e.g. by using rsync.",
+      "revId": "3b8a5026ebc0ef59ee6e51ff2fb275c600407d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
