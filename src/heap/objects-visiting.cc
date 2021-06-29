@@ -16,7 +16,8 @@ namespace internal {
 // effect if we are already in the middle of compacting mark-sweep cycle and we
 // have to record slots manually.
 static bool MustRecordSlots(Heap* heap) {
-  return heap->gc_state() == Heap::MARK_COMPACT &&
+  return !V8_ENABLE_THIRD_PARTY_HEAP_BOOL &&
+         heap->gc_state() == Heap::MARK_COMPACT &&
          heap->mark_compact_collector()->is_compacting();
 }
 
@@ -38,7 +39,8 @@ Object VisitWeakList(Heap* heap, Object list, WeakObjectRetainer* retainer) {
     Object retained = retainer->RetainAs(list);
 
     // Move to the next element before the WeakNext is cleared.
-    list = WeakListVisitor<T>::WeakNext(candidate);
+    list = WeakListVisitor<T>::WeakNext(retained != Object() ? T::cast(retained)
+                                                             : candidate);
 
     if (retained != Object()) {
       if (head == undefined) {
@@ -129,12 +131,14 @@ struct WeakListVisitor<Context> {
   static void VisitLiveObject(Heap* heap, Context context,
                               WeakObjectRetainer* retainer) {
     if (heap->gc_state() == Heap::MARK_COMPACT) {
-      // Record the slots of the weak entries in the native context.
-      for (int idx = Context::FIRST_WEAK_SLOT;
-           idx < Context::NATIVE_CONTEXT_SLOTS; ++idx) {
-        ObjectSlot slot = context.RawField(Context::OffsetOfElementAt(idx));
-        MarkCompactCollector::RecordSlot(context, slot,
-                                         HeapObject::cast(*slot));
+      if (!V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
+        // Record the slots of the weak entries in the native context.
+        for (int idx = Context::FIRST_WEAK_SLOT;
+             idx < Context::NATIVE_CONTEXT_SLOTS; ++idx) {
+          ObjectSlot slot = context.RawField(Context::OffsetOfElementAt(idx));
+          MarkCompactCollector::RecordSlot(context, slot,
+                                           HeapObject::cast(*slot));
+        }
       }
       // Code objects are always allocated in Code space, we do not have to
       // visit them during scavenges.
