@@ -845,7 +845,6 @@
   'd8/d8-performance-now': [PASS, ['mode == debug', SKIP]],
 
   # https://github.com/v8-riscv/v8/issues/418
-  'regress/regress-1138075': [SKIP],
   'regress/regress-1138611': [SKIP],
 
   # Some atomic functions are not yet implemented
