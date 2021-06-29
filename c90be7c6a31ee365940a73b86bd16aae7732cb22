@@ -22,6 +22,30 @@
       },
       "revId": "c90be7c6a31ee365940a73b86bd16aae7732cb22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e82e23fe_68d475d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-29T11:42:22Z",
+      "side": 1,
+      "message": "Ah sorry, we don\u0027t have to revert (need to delete this line).\nWe do have .log files checked in, so we have to explicitly allowlist them.",
+      "parentUuid": "d04438ee_21fa8da8",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 49
+      },
+      "revId": "c90be7c6a31ee365940a73b86bd16aae7732cb22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
