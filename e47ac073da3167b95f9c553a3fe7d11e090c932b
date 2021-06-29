@@ -16,6 +16,40 @@
       "message": "PTAL, I think this should be ok, since this only mksnapshot.\n\nThe alternative is using the #ifdef V8_CODE_COMMENTS approach for kBufferSize.",
       "revId": "e47ac073da3167b95f9c553a3fe7d11e090c932b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76cdd2c8_044b32ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-29T12:58:35Z",
+      "side": 1,
+      "message": "lgtm with comment",
+      "revId": "e47ac073da3167b95f9c553a3fe7d11e090c932b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d6c669c_8e07c314",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-29T12:58:35Z",
+      "side": 1,
+      "message": "nit: please extract these 3 uses into a single constant\n\n namespace {\n constexpr int kAssemblerBufferSize \u003d 128 * KB;\n }",
+      "revId": "e47ac073da3167b95f9c553a3fe7d11e090c932b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
