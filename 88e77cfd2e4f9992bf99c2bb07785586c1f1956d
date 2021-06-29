@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6af33c83_236c5594",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-06-29T17:49:48Z",
+      "side": 1,
+      "message": "Sorry this has so many files, hopefully it\u0027s fairly mechanical...",
+      "revId": "88e77cfd2e4f9992bf99c2bb07785586c1f1956d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
