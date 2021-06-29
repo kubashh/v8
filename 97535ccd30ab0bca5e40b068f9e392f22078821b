@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "819cf8e8_1e4acc9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-06-29T15:29:07Z",
+      "side": 1,
+      "message": "Thanks so much!  Can you CQ+2 this for me?",
+      "revId": "97535ccd30ab0bca5e40b068f9e392f22078821b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
