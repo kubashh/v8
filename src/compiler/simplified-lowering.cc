@@ -1816,6 +1816,9 @@ class RepresentationSelector {
         CHECK_EQ(type.GetType(), CTypeInfo::Type::kVoid);
         return UseInfo::AnyTagged();
       }
+      case CTypeInfo::SequenceType::kIsTypedArray: {
+        return UseInfo::AnyTagged();
+      }
       default: {
         UNREACHABLE();  // TODO(mslekova): Implement typed arrays.
       }
