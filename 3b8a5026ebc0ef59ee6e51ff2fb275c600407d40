@@ -52,6 +52,24 @@
       "parentUuid": "d9bc49ce_a68d4d61",
       "revId": "3b8a5026ebc0ef59ee6e51ff2fb275c600407d40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb43753b_3266028c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158669
+      },
+      "writtenOn": "2021-06-29T10:26:11Z",
+      "side": 1,
+      "message": "I suppose we could use \"git add --force\" after copying the V8 repo. Is that what was done in the V8 repo to add the .log files such as \"test/mjsunit/tools/tickprocessor-test.log\" ?",
+      "parentUuid": "c36de6d2_e14c039c",
+      "revId": "3b8a5026ebc0ef59ee6e51ff2fb275c600407d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
