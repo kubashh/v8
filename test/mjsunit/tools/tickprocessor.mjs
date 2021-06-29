@@ -470,27 +470,27 @@ function testTickProcessor(logInput, refOutput, args=[]) {
   // /foo/bar/tickprocesser.mjs => /foo/bar/
   const dir = import.meta.url.split("/").slice(0, -1).join('/') + '/';
   const params = ArgumentsProcessor.process(args);
-  testExpectations(dir + logInput, dir + refOutput, params);
+  testExpectations(dir, logInput, refOutput, params);
   // TODO(cbruni): enable again after it works on bots
-  // testEndToEnd(dir + 'tickprocessor-test-large.js', dir + refOutput,  params);
+  // testEndToEnd(dir, 'tickprocessor-test-large.js', refOutput,  params);
 }
 
-function testExpectations(logInput, refOutput, params) {
-  const symbolsFile = logInput + '.symbols.json';
+function testExpectations(dir, logInput, refOutput, params) {
+  const symbolsFile = dir + logInput + '.symbols.json';
   const cppEntries = new CppEntriesProviderMock(symbolsFile);
   const tickProcessor = TickProcessor.fromParams(params, cppEntries);
-  const printMonitor = new PrintMonitor(refOutput);
-  tickProcessor.processLogFileInTest(logInput);
+  const printMonitor = new PrintMonitor(dir + refOutput);
+  tickProcessor.processLogFileInTest(dir + logInput);
   tickProcessor.printStatistics();
   printMonitor.finish();
 };
 
-function testEndToEnd(sourceFile, ignoredRefOutput, params) {
+function testEndToEnd(dir, sourceFile, ignoredRefOutput, params) {
   // This test only works on linux.
   if (!os?.system) return;
   if (os.name !== 'linux' && os.name !== 'macos') return;
   params.platform = os.name;
-  const tmpLogFile= `/var/tmp/${Date.now()}.v8.log`
+  const tmpLogFile= `${dir}tmp/${Date.now()}.v8.log`
   const result = os.system(
     os.d8Path, ['--prof', `--logfile=${tmpLogFile}`, sourceFile]);
 
