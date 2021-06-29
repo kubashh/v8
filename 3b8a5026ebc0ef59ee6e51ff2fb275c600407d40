@@ -70,6 +70,24 @@
       "parentUuid": "c36de6d2_e14c039c",
       "revId": "3b8a5026ebc0ef59ee6e51ff2fb275c600407d40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dc43b24_faf52767",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-29T10:28:46Z",
+      "side": 1,
+      "message": "I wonder if something like \n\n # cd empty-repo\n git bundle unbundle ...\n cp empty-repo real-repo\n # cd real-repo\n git add --force .\n \n would work without .gitignore hacks. The bundle would contain only whatever is checked into the V8 repo. `git add -f` would add everything while ignoring .gitignore.",
+      "parentUuid": "c36de6d2_e14c039c",
+      "revId": "3b8a5026ebc0ef59ee6e51ff2fb275c600407d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
