@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "849add41_320e2c4f",
+        "filename": ".gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-29T11:43:48Z",
+      "side": 1,
+      "message": "We globally skip *.log, but we should include /test/mjsunit/tools/*.log (which is what this line is doing).\nAny tests that leave .log files behind should be fixed IMO.",
+      "parentUuid": "ab97f0ea_153c8ea0",
+      "revId": "dc1d4288f0fc7907065f0e2167da5e6592d502ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3f72a4d2_c329e4e2",
