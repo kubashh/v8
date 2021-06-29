@@ -1250,7 +1250,17 @@ void LiftoffAssembler::emit_f32_max(DoubleRegister dst, DoubleRegister lhs,
 
 void LiftoffAssembler::emit_f32_copysign(DoubleRegister dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
-  bailout(kComplexOperation, "f32_copysign");
+  static constexpr int kF32SignBit = 1 << 31;
+  UseScratchRegisterScope temps(this);
+  Register scratch = temps.Acquire();
+  li(scratch, ~kF32SignBit);
+  fmv_x_w(kScratchReg, lhs);
+  and_(kScratchReg, kScratchReg, scratch);
+  fmv_x_w(kScratchReg2, rhs);
+  li(scratch, kF32SignBit);
+  and_(kScratchReg2, kScratchReg, scratch);
+  or_(kScratchReg, kScratchReg, kScratchReg2);
+  fmv_w_x(dst, kScratchReg);
 }
 
 void LiftoffAssembler::emit_f64_min(DoubleRegister dst, DoubleRegister lhs,
@@ -1265,7 +1275,17 @@ void LiftoffAssembler::emit_f64_max(DoubleRegister dst, DoubleRegister lhs,
 
 void LiftoffAssembler::emit_f64_copysign(DoubleRegister dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
-  bailout(kComplexOperation, "f64_copysign");
+  static constexpr int64_t kF64SignBit = (int64_t)1 << 63;
+  UseScratchRegisterScope temps(this);
+  Register scratch = temps.Acquire();
+  li(scratch, ~kF64SignBit);
+  fmv_x_d(kScratchReg, lhs);
+  and_(kScratchReg, kScratchReg, scratch);
+  fmv_x_d(kScratchReg2, rhs);
+  li(scratch, kF64SignBit);
+  and_(kScratchReg2, kScratchReg, scratch);
+  or_(kScratchReg, kScratchReg, kScratchReg2);
+  fmv_d_x(dst, kScratchReg);
 }
 
 #define FP_BINOP(name, instruction)                                          \
@@ -1362,7 +1382,9 @@ bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
       }
 
       // Checking if trap.
-      TurboAssembler::Branch(trap, eq, kScratchReg, Operand(zero_reg));
+      if (trap) {
+        TurboAssembler::Branch(trap, eq, kScratchReg, Operand(zero_reg));
+      }
 
       return true;
     }
@@ -1402,28 +1424,28 @@ bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
       fmv_d_x(dst.fp(), src.gp());
       return true;
     case kExprI32SConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI32SConvertSatF32");
+      fcvt_w_s(dst.gp(), src.fp());
       return true;
     case kExprI32UConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI32UConvertSatF32");
+      fcvt_wu_s(dst.gp(), src.fp());
       return true;
     case kExprI32SConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI32SConvertSatF64");
+      fcvt_w_d(dst.gp(), src.fp());
       return true;
     case kExprI32UConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI32UConvertSatF64");
+      fcvt_wu_d(dst.gp(), src.fp());
       return true;
     case kExprI64SConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI64SConvertSatF32");
+      fcvt_l_s(dst.gp(), src.fp());
       return true;
     case kExprI64UConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI64UConvertSatF32");
+      fcvt_lu_s(dst.gp(), src.fp());
       return true;
     case kExprI64SConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI64SConvertSatF64");
+      fcvt_l_d(dst.gp(), src.fp());
       return true;
     case kExprI64UConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI64UConvertSatF64");
+      fcvt_lu_d(dst.gp(), src.fp());
       return true;
     default:
       return false;
