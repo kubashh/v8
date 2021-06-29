@@ -280,6 +280,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aee04c0a_cd031acf",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4387,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-29T15:17:04Z",
+      "side": 1,
+      "message": "It\u0027s really hard to say if a good-to-predict branch is faster or slower than an unconditional memory access. We would have to measure, but then we also just have one data point from one machine.\nI think we should just do whatever is simpler to do, since this is only used for debugging/fuzzing anyway.",
+      "parentUuid": "2339bc9f_94b1ac4f",
+      "revId": "ef7e9a0869d471ad0f3ae2cf124763bc5890e784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b89c1e4_53a6b779",
