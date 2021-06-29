@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8f200fb_50a4887d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-29T12:55:40Z",
+      "side": 1,
+      "message": "PTAL, I think this should be ok, since this only mksnapshot.\n\nThe alternative is using the #ifdef V8_CODE_COMMENTS approach for kBufferSize.",
+      "revId": "e47ac073da3167b95f9c553a3fe7d11e090c932b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
