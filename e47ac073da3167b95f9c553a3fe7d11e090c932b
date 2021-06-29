@@ -50,6 +50,24 @@
       "message": "nit: please extract these 3 uses into a single constant\n\n namespace {\n constexpr int kAssemblerBufferSize \u003d 128 * KB;\n }",
       "revId": "e47ac073da3167b95f9c553a3fe7d11e090c932b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d7ecaa3_c512b5c2",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-29T14:55:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d6c669c_8e07c314",
+      "revId": "e47ac073da3167b95f9c553a3fe7d11e090c932b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
