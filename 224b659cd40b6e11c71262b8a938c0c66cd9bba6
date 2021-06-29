@@ -22,6 +22,30 @@
       },
       "revId": "224b659cd40b6e11c71262b8a938c0c66cd9bba6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7335102d_6d75497c",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2366,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 0,
+      "message": "It is now \"opcode i32.sub is not allowed in init. expressions\". I think it is more confusing than it is helpful.",
+      "parentUuid": "b796f12c_7cd4e9d4",
+      "range": {
+        "startLine": 2366,
+        "startChar": 26,
+        "endLine": 2366,
+        "endChar": 73
+      },
+      "revId": "224b659cd40b6e11c71262b8a938c0c66cd9bba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

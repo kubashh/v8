@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d5f45b3_fbeba0e0",
+        "filename": "BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 4124,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cabf77c_e5a0dda3",
+      "range": {
+        "startLine": 4124,
+        "startChar": 6,
+        "endLine": 4124,
+        "endChar": 40
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "046922e0_78728ed1",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-06-25T09:17:18Z",
       "side": 1,
       "message": "Why do you use the _CONST version here, and then manually call NonConstError in line 3147? Couldn\u0027t the same effect be achieved by using the non-_CONST macro here?\n(Same for StoreMem right below.)",
+      "range": {
+        "startLine": 3439,
+        "startChar": 33,
+        "endLine": 3439,
+        "endChar": 51
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ebc8a79_3ae93ee9",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 3439,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "046922e0_78728ed1",
       "range": {
         "startLine": 3439,
         "startChar": 33,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2c9aae1_b8cfc7b8",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 4245,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5677cc8b_177db76b",
+      "range": {
+        "startLine": 4245,
+        "startChar": 17,
+        "endLine": 4245,
+        "endChar": 19
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14ddbc38_9a029486",
@@ -117,6 +189,30 @@
       "writtenOn": "2021-06-25T09:17:18Z",
       "side": 1,
       "message": "nit: I don\u0027t feel strongly about it, but consider avoiding indentation here and below by using an early bailout:\n\n  if (isolate \u003d\u003d nullptr) return;\n  result-\u003eruntime_value \u003d ...;",
+      "range": {
+        "startLine": 43,
+        "startChar": 15,
+        "endLine": 43,
+        "endChar": 28
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a604a3_dd7ef11c",
+        "filename": "src/wasm/init-expr-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14ddbc38_9a029486",
       "range": {
         "startLine": 43,
         "startChar": 15,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "091e3945_518479b9",
+        "filename": "src/wasm/init-expr-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8862c824_9f26a4ec",
+      "range": {
+        "startLine": 52,
+        "startChar": 18,
+        "endLine": 52,
+        "endChar": 71
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac5c87ce_68819257",
@@ -163,6 +283,30 @@
       "writtenOn": "2021-06-25T09:17:18Z",
       "side": 1,
       "message": "nit: ctors with multiple parameters don\u0027t need `explicit`.",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 47,
+        "endChar": 10
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92534980_9f7b525a",
+        "filename": "src/wasm/init-expr-interface.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac5c87ce_68819257",
       "range": {
         "startLine": 47,
         "startChar": 2,
@@ -196,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de53452e_aa1da538",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "ModuleDecoderImpl does not have access to a Zone AFAIK. I added init_expr_zone_.",
+      "parentUuid": "3a90f2f9_f92f2968",
+      "range": {
+        "startLine": 1692,
+        "startChar": 4,
+        "endLine": 1692,
+        "endChar": 13
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44a5eb54_3528328d",
@@ -209,6 +377,30 @@
       "writtenOn": "2021-06-25T09:17:18Z",
       "side": 1,
       "message": "nit: outdated comment (it belonged to the DCHECK you\u0027ve deleted). The new code does still rely on this restriction though; how about preserving comment and check by adding `DCHECK(WasmExportedFunction::IsWasmExportedFunction(value.to_ref())` before line 1790?",
+      "range": {
+        "startLine": 1787,
+        "startChar": 6,
+        "endLine": 1787,
+        "endChar": 68
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ded40d0_c6977eb0",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44a5eb54_3528328d",
       "range": {
         "startLine": 1787,
         "startChar": 6,
@@ -242,6 +434,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf947fec_cfc79590",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "196e5ca7_43b1df57",
+      "range": {
+        "startLine": 224,
+        "startChar": 27,
+        "endLine": 224,
+        "endChar": 33
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fc5d13e_132cca49",
@@ -255,6 +471,30 @@
       "writtenOn": "2021-06-25T09:17:18Z",
       "side": 1,
       "message": "Any particular reason for this change?",
+      "range": {
+        "startLine": 1081,
+        "startChar": 14,
+        "endLine": 1081,
+        "endChar": 31
+      },
+      "revId": "3ff420bb48f17ffbc1eff1c69a706c1a22e406a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26a3f524_f2341f08",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "As per spec, rtts without depth are not allowed for struct/array.new. We used to erroneously allow it in initializer expressions, so this test passed beforew.",
+      "parentUuid": "2fc5d13e_132cca49",
       "range": {
         "startLine": 1081,
         "startChar": 14,

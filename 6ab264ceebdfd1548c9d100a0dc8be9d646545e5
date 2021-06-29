@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "930fc137_f2b39de8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-06-29T15:05:11Z",
+      "side": 1,
+      "message": "Thanks for the detailed review. Please feel free to take another look before I submit.\nRegarding binary code size, we ended up with a 39KB increase, which I think is acceptable given the memory consumption decrease and the code maintainability improvement.",
+      "revId": "6ab264ceebdfd1548c9d100a0dc8be9d646545e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
