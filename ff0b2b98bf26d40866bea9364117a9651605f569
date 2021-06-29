@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36a2efaa_666acb4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-29T12:59:34Z",
+      "side": 1,
+      "message": "lgtm with the changes discussed offline (removing the /tmp dir)",
+      "revId": "ff0b2b98bf26d40866bea9364117a9651605f569",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
