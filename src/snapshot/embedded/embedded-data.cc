@@ -189,11 +189,6 @@ bool BuiltinAliasesOffHeapTrampolineRegister(Isolate* isolate, Code code) {
       return false;
   }
 
-  if (CallInterfaceDescriptor::ContextRegister() ==
-      kOffHeapTrampolineRegister) {
-    return true;
-  }
-
   Callable callable = Builtins::CallableFor(isolate, code.builtin_id());
   CallInterfaceDescriptor descriptor = callable.descriptor();
 
