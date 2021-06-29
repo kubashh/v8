@@ -34,6 +34,24 @@
       "parentUuid": "6253bc86_3c499ba1",
       "revId": "3b8a5026ebc0ef59ee6e51ff2fb275c600407d40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c36de6d2_e14c039c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158669
+      },
+      "writtenOn": "2021-06-29T10:16:49Z",
+      "side": 1,
+      "message": "This is about checking the files in. The problem is that Node.js has a copy of V8 in git (deps/v8) and when we updated to V8 9.2 (basically with \"cp -r\" and \"git add\"), some files were missing because ignored by V8\u0027s .gitignore.",
+      "parentUuid": "d9bc49ce_a68d4d61",
+      "revId": "3b8a5026ebc0ef59ee6e51ff2fb275c600407d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
