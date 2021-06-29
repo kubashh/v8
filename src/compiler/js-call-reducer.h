@@ -221,6 +221,11 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
   // The pendant to ReplaceWithValue when using GraphAssembler-based reductions.
   Reduction ReplaceWithSubgraph(JSCallReducerAssembler* gasm, Node* subgraph);
 
+  void TransformApiCallToSlowCall(
+      Node* node, const FunctionTemplateInfoRef& function_template_info,
+      Node* receiver, Node* holder, const SharedFunctionInfoRef shared,
+      Node* effect);
+
   // Helper to verify promise receiver maps are as expected.
   // On bailout from a reduction, be sure to return inference.NoChange().
   bool DoPromiseChecks(MapInference* inference);
@@ -233,6 +238,7 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
                            Node* control, Node** if_true, Node** if_false);
   Node* LoadReceiverElementsKind(Node* receiver, Effect* effect,
                                  Control control);
+  friend class FastApiCallReducerAssembler;
 
   bool IsBuiltinOrApiFunction(JSFunctionRef target_ref) const;
 
