@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab97f0ea_153c8ea0",
+        "filename": ".gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-29T10:32:49Z",
+      "side": 1,
+      "message": "I still wonder whether we can\u0027t simply revert crrev.com/c/2972915. There\u0027s ongoing discussion on that CL. With that, tests could keep generating .log files which would then be ignored through .gitignore. Or am I missing something?",
+      "revId": "dc1d4288f0fc7907065f0e2167da5e6592d502ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3f72a4d2_c329e4e2",
