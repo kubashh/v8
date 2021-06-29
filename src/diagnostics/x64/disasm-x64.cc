@@ -500,7 +500,8 @@ int DisassemblerX64::PrintRightOperandHelper(
       if ((rm & 7) == 5) {
         AppendToBuffer("[rip+0x%x]", Imm32(modrmp + 1));
         return 5;
-      } else if ((rm & 7) == 4) {
+      }
+      if ((rm & 7) == 4) {
         // Codes for SIB byte.
         byte sib = *(modrmp + 1);
         int scale, index, base;
@@ -510,28 +511,27 @@ int DisassemblerX64::PrintRightOperandHelper(
           // rsp and r12 base.
           AppendToBuffer("[%s]", NameOfCPURegister(base));
           return 2;
-        } else if (base == 5) {
+        }
+        if (base == 5) {
           // base == rbp means no base register (when mod == 0).
           int32_t disp = Imm32(modrmp + 2);
           AppendToBuffer("[%s*%d%s0x%x]", NameOfCPURegister(index), 1 << scale,
                          disp < 0 ? "-" : "+", disp < 0 ? -disp : disp);
           return 6;
-        } else if (index != 4 && base != 5) {
+        }
+        if (index != 4 && base != 5) {
           // [base+index*scale]
           AppendToBuffer("[%s+%s*%d]", NameOfCPURegister(base),
                          NameOfCPURegister(index), 1 << scale);
           return 2;
-        } else {
-          UnimplementedInstruction();
-          return 1;
         }
-      } else {
-        AppendToBuffer("[%s]", NameOfCPURegister(rm));
+        UnimplementedInstruction();
         return 1;
       }
-      break;
+      AppendToBuffer("[%s]", NameOfCPURegister(rm));
+      return 1;
     case 1:  // fall through
-    case 2:
+    case 2: {
       if ((rm & 7) == 4) {
         byte sib = *(modrmp + 1);
         int scale, index, base;
@@ -546,18 +546,17 @@ int DisassemblerX64::PrintRightOperandHelper(
                          disp < 0 ? "-" : "+", disp < 0 ? -disp : disp);
         }
         return mod == 2 ? 6 : 3;
-      } else {
-        // No sib.
-        int disp = (mod == 2) ? Imm32(modrmp + 1) : Imm8(modrmp + 1);
-        AppendToBuffer("[%s%s0x%x]", NameOfCPURegister(rm),
-                       disp < 0 ? "-" : "+", disp < 0 ? -disp : disp);
-        if (rm == i::kRootRegister.code()) {
-          // For root-relative accesses, try to append a description.
-          TryAppendRootRelativeName(disp);
-        }
-        return (mod == 2) ? 5 : 2;
       }
-      break;
+      // No sib.
+      int disp = (mod == 2) ? Imm32(modrmp + 1) : Imm8(modrmp + 1);
+      AppendToBuffer("[%s%s0x%x]", NameOfCPURegister(rm), disp < 0 ? "-" : "+",
+                     disp < 0 ? -disp : disp);
+      if (rm == i::kRootRegister.code()) {
+        // For root-relative accesses, try to append a description.
+        TryAppendRootRelativeName(disp);
+      }
+      return (mod == 2) ? 5 : 2;
+    }
     case 3:
       AppendToBuffer("%s", (this->*register_name)(rm));
       return 1;

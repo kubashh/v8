@@ -568,7 +568,8 @@ Handle<String> Isolate::StackTraceString() {
     incomplete_message_ = nullptr;
     stack_trace_nesting_level_ = 0;
     return stack_trace;
-  } else if (stack_trace_nesting_level_ == 1) {
+  }
+  if (stack_trace_nesting_level_ == 1) {
     stack_trace_nesting_level_++;
     base::OS::PrintError(
         "\n\nAttempt to print stack while printing stack (double fault)\n");
@@ -576,11 +577,8 @@ Handle<String> Isolate::StackTraceString() {
         "If you are lucky you may find a partial stack dump on stdout.\n\n");
     incomplete_message_->OutputToStdOut();
     return factory()->empty_string();
-  } else {
-    base::OS::Abort();
-    // Unreachable
-    return factory()->empty_string();
   }
+  base::OS::Abort();
 }
 
 void Isolate::PushStackTraceAndDie(void* ptr1, void* ptr2, void* ptr3,
@@ -1944,7 +1942,7 @@ Object Isolate::UnwindAndFindHandler() {
         Code code = js_frame->LookupCode();
         return FoundHandler(Context(), code.InstructionStart(), 0,
                             code.constant_pool(), return_sp, frame->fp());
-      } break;
+      }
 
       default:
         // All other types can not handle exception.
@@ -2050,7 +2048,7 @@ Isolate::CatchType Isolate::PredictExceptionCatcher() {
         Isolate::CatchType prediction = ToCatchType(PredictException(js_frame));
         if (prediction == NOT_CAUGHT) break;
         return prediction;
-      } break;
+      }
 
       case StackFrame::STUB: {
         Handle<Code> code(frame->LookupCode(), this);
@@ -3689,7 +3687,6 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
 
   if (!setup_delegate_->SetupHeap(&heap_)) {
     V8::FatalProcessOutOfMemory(this, "heap object creation");
-    return false;
   }
 
   if (create_heap_objects) {

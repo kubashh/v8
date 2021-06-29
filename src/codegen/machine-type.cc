@@ -86,14 +86,14 @@ std::ostream& operator<<(std::ostream& os, MachineSemantic type) {
 std::ostream& operator<<(std::ostream& os, MachineType type) {
   if (type == MachineType::None()) {
     return os;
-  } else if (type.representation() == MachineRepresentation::kNone) {
-    return os << type.semantic();
-  } else if (type.semantic() == MachineSemantic::kNone) {
-    return os << type.representation();
-  } else {
-    return os << type.representation() << "|" << type.semantic();
   }
-  return os;
+  if (type.representation() == MachineRepresentation::kNone) {
+    return os << type.semantic();
+  }
+  if (type.semantic() == MachineSemantic::kNone) {
+    return os << type.representation();
+  }
+  return os << type.representation() << "|" << type.semantic();
 }
 
 }  // namespace internal
