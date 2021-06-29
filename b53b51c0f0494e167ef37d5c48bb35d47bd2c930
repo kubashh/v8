@@ -16,6 +16,24 @@
       "message": "Just notice there is also a macro named \"LoadTaggedSignedField\" in the \"codegen/riscv64/macro-assembler-riscv64.cc\". So why not call that instead of \"LoadTaggedPointerField\" here? The top 32bits will be different, am I right?",
       "revId": "b53b51c0f0494e167ef37d5c48bb35d47bd2c930",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1999cf0b_4b6dfa12",
+        "filename": "src/baseline/riscv64/baseline-assembler-riscv64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1477547
+      },
+      "writtenOn": "2021-06-29T06:08:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b83be35d_9eb360ee",
+      "revId": "b53b51c0f0494e167ef37d5c48bb35d47bd2c930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
