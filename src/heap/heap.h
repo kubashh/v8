@@ -1650,6 +1650,8 @@ class Heap {
 
   void UpdateEpochFull();
 
+  void ProcessAllWeakReferences(WeakObjectRetainer* retainer);
+
  private:
   using ExternalStringTableUpdaterCallback = String (*)(Heap* heap,
                                                         FullObjectSlot pointer);
@@ -1945,7 +1947,6 @@ class Heap {
   void UpdateReferencesInExternalStringTable(
       ExternalStringTableUpdaterCallback updater_func);
 
-  void ProcessAllWeakReferences(WeakObjectRetainer* retainer);
   void ProcessYoungWeakReferences(WeakObjectRetainer* retainer);
   void ProcessNativeContexts(WeakObjectRetainer* retainer);
   void ProcessAllocationSites(WeakObjectRetainer* retainer);
@@ -2496,6 +2497,7 @@ class Heap {
   friend class Space;
   friend class Sweeper;
   friend class heap::TestMemoryAllocatorScope;
+  friend class third_party_heap::Heap;
 
   // The allocator interface.
   friend class Factory;
