@@ -33,6 +33,24 @@
       "message": "I\u0027m a bit confused by this change. Is V8_UNLIKELY considered always false in the presence of -Wunreachable-code-aggressive? We use V8_UNLIKELY in quite a few places to guide compilation; it would be unfortunate to lose this.\n\nIt seems like there\u0027s a  __builtin_expect_with_probability as well; could we use that instead?",
       "revId": "3570eabaf258c58c92cfbfbc0fb3a6b93c6e86ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c182dab5_4a274abf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-06-30T11:24:20Z",
+      "side": 1,
+      "message": "I don\u0027t _think_ it is -- if it is, that seems like a compiler bug, but I was only warned on these locations, which are all of the form V8_UNLIKELY(FLAG_xxx).  I wonder if these flags\u0027 values are known at compile time?  If so, then certainly removing the V8_UNLIKELYs should be harmless to optimization (the code will be dead anyway), although I don\u0027t know why it will silence the warning in that case... if they _are_ known at compile time, we could always do\n\n#if FLAG_xxx\n  ...\n#endif\n\ninstead...",
+      "parentUuid": "3ad5f7ed_38db1a68",
+      "revId": "3570eabaf258c58c92cfbfbc0fb3a6b93c6e86ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
