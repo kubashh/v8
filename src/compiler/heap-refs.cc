@@ -2887,7 +2887,9 @@ base::Optional<MapRef> MapRef::AsElementsKind(ElementsKind kind) const {
 }
 
 void MapRef::SerializeForElementStore() {
-  if (data()->should_access_heap()) return;
+  if (data()->should_access_heap() || broker()->is_concurrent_inlining()) {
+    return;
+  }
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
   data()->AsMap()->SerializeForElementStore(broker());
 }
@@ -4415,7 +4417,9 @@ void MapRef::SerializeBackPointer() {
 }
 
 bool MapRef::TrySerializePrototype() {
-  if (data_->should_access_heap()) return true;
+  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
+    return true;
+  }
   CHECK_IMPLIES(!FLAG_turbo_concurrent_get_property_access_info,
                 broker()->mode() == JSHeapBroker::kSerializing);
   return data()->AsMap()->TrySerializePrototype(broker());
