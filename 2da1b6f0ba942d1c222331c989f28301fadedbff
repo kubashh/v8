@@ -39,6 +39,30 @@
       },
       "revId": "2da1b6f0ba942d1c222331c989f28301fadedbff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13e93af1_c2d441e5",
+        "filename": "test/common/flag-utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-06-30T14:19:54Z",
+      "side": 1,
+      "message": "Ack, actually I think \"FLAG_VALUE_SCOPE\" sounds even better. Fixed.",
+      "parentUuid": "a4693816_f64179c6",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "2da1b6f0ba942d1c222331c989f28301fadedbff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
