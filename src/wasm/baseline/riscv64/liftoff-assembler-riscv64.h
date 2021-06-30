@@ -1250,7 +1250,7 @@ void LiftoffAssembler::emit_f32_max(DoubleRegister dst, DoubleRegister lhs,
 
 void LiftoffAssembler::emit_f32_copysign(DoubleRegister dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
-  bailout(kComplexOperation, "f32_copysign");
+  fsgnj_s(dst, lhs, rhs);
 }
 
 void LiftoffAssembler::emit_f64_min(DoubleRegister dst, DoubleRegister lhs,
@@ -1265,7 +1265,7 @@ void LiftoffAssembler::emit_f64_max(DoubleRegister dst, DoubleRegister lhs,
 
 void LiftoffAssembler::emit_f64_copysign(DoubleRegister dst, DoubleRegister lhs,
                                          DoubleRegister rhs) {
-  bailout(kComplexOperation, "f64_copysign");
+  fsgnj_d(dst, lhs, rhs);
 }
 
 #define FP_BINOP(name, instruction)                                          \
@@ -1362,7 +1362,9 @@ bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
       }
 
       // Checking if trap.
-      TurboAssembler::Branch(trap, eq, kScratchReg, Operand(zero_reg));
+      if (trap) {
+        TurboAssembler::Branch(trap, eq, kScratchReg, Operand(zero_reg));
+      }
 
       return true;
     }
@@ -1396,34 +1398,34 @@ bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
       TurboAssembler::Cvt_d_uw(dst.fp(), src.gp());
       return true;
     case kExprF64ConvertF32:
-      fcvt_d_s(dst.fp(), src.fp());
+      fcvt_d_s(dst.fp(), src.fp(), RTZ);
       return true;
     case kExprF64ReinterpretI64:
-      fmv_d_x(dst.fp(), src.gp());
+      fmv_d_x(dst.fp(), src.gp(), RTZ);
       return true;
     case kExprI32SConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI32SConvertSatF32");
+      fcvt_w_s(dst.gp(), src.fp(), RTZ);
       return true;
     case kExprI32UConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI32UConvertSatF32");
+      fcvt_wu_s(dst.gp(), src.fp(), RTZ);
       return true;
     case kExprI32SConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI32SConvertSatF64");
+      fcvt_w_d(dst.gp(), src.fp(), RTZ);
       return true;
     case kExprI32UConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI32UConvertSatF64");
+      fcvt_wu_d(dst.gp(), src.fp(), RTZ);
       return true;
     case kExprI64SConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI64SConvertSatF32");
+      fcvt_l_s(dst.gp(), src.fp(), RTZ);
       return true;
     case kExprI64UConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI64UConvertSatF32");
+      fcvt_lu_s(dst.gp(), src.fp(), RTZ);
       return true;
     case kExprI64SConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI64SConvertSatF64");
+      fcvt_l_d(dst.gp(), src.fp(), RTZ);
       return true;
     case kExprI64UConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI64UConvertSatF64");
+      fcvt_lu_d(dst.gp(), src.fp(), RTZ);
       return true;
     default:
       return false;
