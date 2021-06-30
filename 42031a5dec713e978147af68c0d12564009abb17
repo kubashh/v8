@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44cac3f8_3ffeda68",
+        "filename": "test/mjsunit/tools/tickprocessor.mjs",
+        "patchSetId": 5
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-30T06:13:17Z",
+      "side": 1,
+      "message": "The changes in this file are pure refactorings, right?",
+      "revId": "42031a5dec713e978147af68c0d12564009abb17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
