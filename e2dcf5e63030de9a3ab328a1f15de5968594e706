@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96ce74b4_d7940b36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-06-30T13:54:57Z",
+      "side": 1,
+      "message": "Hi Santiago,\nI\u0027m marking the double value_as_bits() as relaxed.\nShould I add the kRelaxedTag to the method for this case (so it\u0027s obvious for callers)?\n",
+      "revId": "e2dcf5e63030de9a3ab328a1f15de5968594e706",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
