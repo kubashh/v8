@@ -28620,7 +28620,7 @@ TEST(FastApiCalls) {
 
   // Corner cases - bool
   CallAndCheck<bool>(false, Behavior::kNoException,
-                     ApiCheckerResult::kFastCalled, v8::Undefined(isolate));
+                     ApiCheckerResult::kSlowCalled, v8::Undefined(isolate));
   CallAndCheck<bool>(false, Behavior::kNoException,
                      ApiCheckerResult::kFastCalled, v8::Null(isolate));
   CallAndCheck<bool>(false, Behavior::kNoException,
@@ -28737,7 +28737,7 @@ TEST(FastApiCalls) {
 #ifndef V8_LITE_MODE
 namespace {
 void FastCallback1TypedArray(v8::Local<v8::Object> receiver, int arg0,
-                             v8::FastApiTypedArray<double> arg1) {
+                             const v8::FastApiTypedArray<double>& arg1) {
   // TODO(mslekova): Use the TypedArray parameter
 }
 
