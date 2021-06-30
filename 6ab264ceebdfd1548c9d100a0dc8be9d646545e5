@@ -16,6 +16,23 @@
       "message": "Thanks for the detailed review. Please feel free to take another look before I submit.\nRegarding binary code size, we ended up with a 39KB increase, which I think is acceptable given the memory consumption decrease and the code maintainability improvement.",
       "revId": "6ab264ceebdfd1548c9d100a0dc8be9d646545e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4929a953_9ae8589b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-30T13:38:53Z",
+      "side": 1,
+      "message": "Still LGTM",
+      "revId": "6ab264ceebdfd1548c9d100a0dc8be9d646545e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
