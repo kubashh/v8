@@ -92,6 +92,22 @@ class JSCallReducerAssembler : public JSGraphAssembler {
 
   Node* node_ptr() const { return node_; }
 
+  TNode<Boolean> HasInstanceType(TNode<HeapObject> heap_object,
+                                 InstanceType type) {
+    // Load the {value} map and instance type.
+    Node* map =
+        graph()->NewNode(simplified()->LoadField(AccessBuilder::ForMap()),
+                         heap_object, effect(), control());
+    InitializeEffectControl(map, control());
+    Node* instance_type = graph()->NewNode(
+        simplified()->LoadField(AccessBuilder::ForMapInstanceType()), map,
+        effect(), control());
+    InitializeEffectControl(instance_type, control());
+    Node* check = graph()->NewNode(simplified()->NumberEqual(), instance_type,
+                                   jsgraph()->Constant(type));
+    return TNode<Boolean>::UncheckedCast(check);
+  }
+
  protected:
   using NodeGenerator0 = std::function<TNode<Object>()>;
   using VoidGenerator0 = std::function<void()>;
@@ -884,6 +900,50 @@ class PromiseBuiltinReducerAssembler : public JSCallReducerAssembler {
   JSHeapBroker* const broker_;
 };
 
+namespace {
+
+struct FastCallOverloadsResolutionResult {
+  static const int kTypesLength = 2;
+
+  static FastCallOverloadsResolutionResult Invalid(Zone* zone) {
+    return FastCallOverloadsResolutionResult(-1, -1, -1,
+                                             CTypeInfo::Type::kVoid);
+  }
+
+  FastCallOverloadsResolutionResult(int distinguishable_arg_index_,
+                                    int index_of_func_with_js_array_arg,
+                                    int index_of_func_with_typed_array_arg,
+                                    CTypeInfo::Type element_type_)
+      : distinguishable_arg_index(distinguishable_arg_index_),
+        types{CTypeInfo::SequenceType::kScalar,
+              CTypeInfo::SequenceType::kScalar},
+        element_type(element_type_) {
+    // Only overload resolution of JSArray vs TypedArray supported.
+    DCHECK(distinguishable_arg_index_ < 0 ||
+           (index_of_func_with_js_array_arg >= 0 &&
+            index_of_func_with_js_array_arg <= 1 &&
+            index_of_func_with_typed_array_arg >= 0 &&
+            index_of_func_with_typed_array_arg <= 1 &&
+            index_of_func_with_js_array_arg !=
+                index_of_func_with_typed_array_arg &&
+            element_type_ != CTypeInfo::Type::kVoid));
+    if (distinguishable_arg_index_ >= 0) {
+      types[index_of_func_with_js_array_arg] =
+          CTypeInfo::SequenceType::kIsSequence;
+      types[index_of_func_with_typed_array_arg] =
+          CTypeInfo::SequenceType::kIsTypedArray;
+    }
+  }
+
+  bool is_valid() const { return distinguishable_arg_index >= 0; }
+
+  int distinguishable_arg_index;
+  CTypeInfo::SequenceType types[kTypesLength];
+  CTypeInfo::Type element_type;
+};
+
+}  // namespace
+
 class FastApiCallReducerAssembler : public JSCallReducerAssembler {
  public:
   FastApiCallReducerAssembler(
@@ -906,12 +966,147 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
     InitializeEffectControl(effect, NodeProperties::GetControlInput(node));
   }
 
-  TNode<Object> ReduceFastApiCall() {
-    JSCallNode n(node_ptr());
+  ElementsKind GetTypedArrayElementsKind(CTypeInfo::Type type) {
+    switch (type) {
+      case CTypeInfo::Type::kInt32:
+        return INT32_ELEMENTS;
+      case CTypeInfo::Type::kUint32:
+        return UINT32_ELEMENTS;
+      case CTypeInfo::Type::kInt64:
+        return BIGINT64_ELEMENTS;
+      case CTypeInfo::Type::kUint64:
+        return BIGUINT64_ELEMENTS;
+      case CTypeInfo::Type::kFloat32:
+        return FLOAT32_ELEMENTS;
+      case CTypeInfo::Type::kFloat64:
+        return FLOAT64_ELEMENTS;
+      case CTypeInfo::Type::kVoid:
+      case CTypeInfo::Type::kBool:
+      case CTypeInfo::Type::kV8Value:
+      case CTypeInfo::Type::kApiObject:
+        UNREACHABLE();
+        break;
+    }
+  }
 
-    // Multiple function overloads not supported yet, always call the first
-    // overload with the same arity.
-    const size_t c_overloads_index = 0;
+  Node* GenerateGraph(const ZoneVector<Node*>& inputs, int arg_index,
+                      Node* slow_call) {
+    auto if_fast_call_label = MakeLabel();
+    auto if_slow_call_label = MakeDeferredLabel();
+    auto result_label = MakeLabel(MachineRepresentation::kTagged);
+
+    // Check that any argument is not undefined.
+    for (size_t i = 0; i < inputs.size(); i++) {
+      Node* check_undefined = ReferenceEqual(
+          TNode<Object>::UncheckedCast(inputs[i]),
+          TNode<Object>::UncheckedCast(jsgraph()->UndefinedConstant()));
+      GotoIf(check_undefined, &if_slow_call_label);
+    }
+    Goto(&if_fast_call_label);
+
+    Bind(&if_fast_call_label);
+    {
+      Node* fast_call = ReduceFastApiCall(arg_index);
+      Goto(&result_label, fast_call);
+    }
+
+    Bind(&if_slow_call_label);
+    {
+      NodeProperties::ReplaceControlInput(slow_call, control());
+      UpdateEffectControlWith(slow_call);
+      Goto(&result_label, slow_call);
+    }
+
+    Bind(&result_label);
+    return result_label.PhiAt(0);
+  }
+
+  Node* GenerateOverloadResolutionGraph(
+      JSCallReducer* jscall_reducer,
+      const FastCallOverloadsResolutionResult& overloads_resolution,
+      const ZoneVector<Node*>& inputs, int distinguishable_arg_index,
+      Node* slow_call) {
+    auto if_heap_object_label = MakeLabel();
+    auto if_slow_call_label = MakeDeferredLabel();
+    auto result_label = MakeLabel(MachineRepresentation::kTagged);
+
+    // Check whether the argument is a HeapObject.
+    Node* arg = inputs[distinguishable_arg_index];
+    Node* check_is_smi = graph()->NewNode(simplified()->ObjectIsSmi(), arg);
+    GotoIf(check_is_smi, &if_slow_call_label);
+
+    // Check that any argument is not undefined.
+    for (size_t i = 0; i < inputs.size(); i++) {
+      Node* check_undefined = ReferenceEqual(
+          TNode<Object>::UncheckedCast(inputs[i]),
+          TNode<Object>::UncheckedCast(jsgraph()->UndefinedConstant()));
+      GotoIf(check_undefined, &if_slow_call_label);
+    }
+    Goto(&if_heap_object_label);
+
+    // Handles the case where the argument is a JSArray or a typed array.
+    Bind(&if_heap_object_label);
+    {
+      TNode<HeapObject> heap_obj = TNode<HeapObject>::UncheckedCast(arg);
+
+      DCHECK(overloads_resolution.is_valid());
+      for (size_t i = 0; i < FastCallOverloadsResolutionResult::kTypesLength;
+           i++) {
+        auto next = MakeLabel();
+
+        if (overloads_resolution.types[i] ==
+            CTypeInfo::SequenceType::kIsSequence) {
+          auto if_sequence_label = MakeLabel();
+
+          // Checks whether the argument is a JSArray.
+          GotoIf(HasInstanceType(heap_obj, JS_ARRAY_TYPE), &if_sequence_label);
+          Goto(&next);
+
+          Bind(&if_sequence_label);
+          Goto(&result_label, ReduceFastApiCall(i));
+        } else if (overloads_resolution.types[i] ==
+                   CTypeInfo::SequenceType::kIsTypedArray) {
+          // Checks whether the argument is a typed array with a type that
+          // matches the type declared in the c-function.
+          ElementsKind typed_array_elements_kind =
+              GetTypedArrayElementsKind(overloads_resolution.element_type);
+
+          Effect current_effect(effect());
+          Node* elements_kind = jscall_reducer->LoadReceiverElementsKind(
+              heap_obj, &current_effect, control());
+          InitializeEffectControl(current_effect, control());
+
+          Node* is_same_kind = graph()->NewNode(
+              simplified()->NumberEqual(), elements_kind,
+              jsgraph()->Constant(
+                  GetPackedElementsKind(typed_array_elements_kind)));
+          auto is_matching_typed_array = MakeLabel();
+          GotoIf(is_same_kind, &is_matching_typed_array);
+          Goto(&next);
+
+          Bind(&is_matching_typed_array);
+          Goto(&result_label, ReduceFastApiCall(i));
+        }
+
+        Bind(&next);
+      }
+      Goto(&if_slow_call_label);
+    }
+
+    Bind(&if_slow_call_label);
+    {
+      NodeProperties::ReplaceControlInput(slow_call, control());
+      UpdateEffectControlWith(slow_call);
+      Goto(&result_label, slow_call);
+    }
+
+    Bind(&result_label);
+    return result_label.PhiAt(0);
+  }
+
+ private:
+  TNode<Object> ReduceFastApiCall(size_t c_overloads_index) {
+    JSCallNode n(node_ptr());
 
     // C arguments include the receiver at index 0. Thus C index 1 corresponds
     // to the JS argument 0, etc.
@@ -922,11 +1117,8 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
     int cursor = 0;
     base::SmallVector<Node*, kInlineSize> inputs(c_argument_count + arity_ +
                                                  kExtraInputsCount);
-    // Multiple function overloads not supported yet, always call the first
-    // overload.
     inputs[cursor++] = ExternalConstant(ExternalReference::Create(
         c_candidate_functions_[c_overloads_index].first));
-
     inputs[cursor++] = n.receiver();
 
     // TODO(turbofan): Consider refactoring CFunctionInfo to distinguish
@@ -984,7 +1176,6 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
                        c_overloads_index);
   }
 
- private:
   static constexpr int kTarget = 1;
   static constexpr int kEffectAndControl = 2;
   static constexpr int kContextAndFrameState = 2;
@@ -1002,6 +1193,22 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
                              c_candidate_functions_[c_overloads_index].second,
                              feedback(), descriptor),
                          static_cast<int>(inputs_size), inputs));
+  }
+
+  TNode<Boolean> HasInstanceType(TNode<HeapObject> heap_object,
+                                 InstanceType type) {
+    // Load the {value} map and instance type.
+    Node* map =
+        graph()->NewNode(simplified()->LoadField(AccessBuilder::ForMap()),
+                         heap_object, effect(), control());
+    InitializeEffectControl(map, control());
+    Node* instance_type = graph()->NewNode(
+        simplified()->LoadField(AccessBuilder::ForMapInstanceType()), map,
+        effect(), control());
+    InitializeEffectControl(instance_type, control());
+    Node* check = graph()->NewNode(simplified()->NumberEqual(), instance_type,
+                                   jsgraph()->Constant(type));
+    return TNode<Boolean>::UncheckedCast(check);
   }
 
   const ZoneVector<std::pair<Address, const CFunctionInfo*>>
@@ -3547,6 +3754,60 @@ bool Has64BitIntegerParamsInSignature(const CFunctionInfo* c_signature) {
 }  // namespace
 #endif
 
+namespace {
+
+FastCallOverloadsResolutionResult ResolveFastCallOverloads(
+    Zone* zone,
+    const ZoneVector<std::pair<Address, const CFunctionInfo*>>& candidates,
+    unsigned int arg_count) {
+  DCHECK_GT(arg_count, 0);
+
+  static constexpr int kReceiver = 1;
+
+  // Only the case of the overload resolution of two functions, one with a
+  // JSArray param and the other with a typed array param is currently
+  // supported.
+  DCHECK_EQ(candidates.size(), 2);
+  if (candidates.size() != 2) {
+    return FastCallOverloadsResolutionResult::Invalid(zone);
+  }
+
+  for (unsigned int arg_index = 0; arg_index < arg_count; arg_index++) {
+    int index_of_func_with_js_array_arg = -1;
+    int index_of_func_with_typed_array_arg = -1;
+    CTypeInfo::Type element_type = CTypeInfo::Type::kVoid;
+
+    for (size_t i = 0; i < candidates.size(); i++) {
+      const CTypeInfo& type_info =
+          candidates[i].second->ArgumentInfo(arg_index + kReceiver);
+      CTypeInfo::SequenceType sequence_type = type_info.GetSequenceType();
+
+      if (sequence_type == CTypeInfo::SequenceType::kIsSequence) {
+        DCHECK_LT(index_of_func_with_js_array_arg, 0);
+        index_of_func_with_js_array_arg = static_cast<int>(i);
+      } else if (sequence_type == CTypeInfo::SequenceType::kIsTypedArray) {
+        DCHECK_LT(index_of_func_with_typed_array_arg, 0);
+        index_of_func_with_typed_array_arg = static_cast<int>(i);
+        element_type = type_info.GetType();
+      } else {
+        DCHECK(index_of_func_with_js_array_arg < 0 &&
+               index_of_func_with_typed_array_arg < 0);
+      }
+    }
+
+    if (index_of_func_with_js_array_arg >= 0 &&
+        index_of_func_with_typed_array_arg >= 0) {
+      return {static_cast<int>(arg_index), index_of_func_with_js_array_arg,
+              index_of_func_with_typed_array_arg, element_type};
+    }
+  }
+
+  // No overload found with a JSArray and a typed array as i-th argument.
+  return FastCallOverloadsResolutionResult::Invalid(zone);
+}
+
+}  // namespace
+
 // Given a FunctionTemplateInfo, checks whether the fast API call can be
 // optimized, applying the initial step of the overload resolution algorithm:
 // Given an overload set function_template_info.c_signatures, and a list of
@@ -3621,10 +3882,8 @@ Reduction JSCallReducer::ReduceCallApiFunction(
                        ? global_proxy
                        : n.receiver();
   Node* holder;
-  Node* context = n.context();
   Effect effect = n.effect();
   Control control = n.control();
-  FrameState frame_state = n.frame_state();
 
   if (!shared.function_template_info().has_value()) {
     TRACE_BROKER_MISSING(
@@ -3778,17 +4037,69 @@ Reduction JSCallReducer::ReduceCallApiFunction(
     return NoChange();
   }
 
+  // Handles overloaded functions.
+
+  ZoneVector<Node*> inputs(graph()->zone());
+  inputs.resize(argc);
+  for (int i = 0; i != argc; i++) {
+    inputs[i] = n.Argument(i);
+  }
+
   ZoneVector<std::pair<Address, const CFunctionInfo*>> c_candidate_functions =
       CanOptimizeFastCall(graph()->zone(), function_template_info, argc);
-  if (!c_candidate_functions.empty()) {
+
+  if (c_candidate_functions.size() == 0) {
+    TransformApiCallToSlowCall(node, function_template_info, receiver, holder,
+                               shared, effect);
+    return Changed(node);
+  } else if (c_candidate_functions.size() == 1) {
     FastApiCallReducerAssembler a(this, node, function_template_info,
                                   c_candidate_functions, receiver, holder,
                                   shared, target, argc, effect);
-    Node* fast_call_subgraph = a.ReduceFastApiCall();
-    ReplaceWithSubgraph(&a, fast_call_subgraph);
 
-    return Replace(fast_call_subgraph);
+    // Clone {node} because it will be replaced with the subgraph.
+    Node* slow_call = graph()->CloneNode(node);
+    TransformApiCallToSlowCall(slow_call, function_template_info, receiver,
+                               holder, shared, effect);
+
+    Node* fast_call_subgraph = a.GenerateGraph(inputs, 0, slow_call);
+    DCHECK_NOT_NULL(fast_call_subgraph);
+    return ReplaceWithSubgraph(&a, fast_call_subgraph);
+  } else {
+    // Manage function overloads with the same arity.
+    FastApiCallReducerAssembler a(this, node, function_template_info,
+                                  c_candidate_functions, receiver, holder,
+                                  shared, target, argc, effect);
+    FastCallOverloadsResolutionResult result =
+        ResolveFastCallOverloads(graph()->zone(), c_candidate_functions, argc);
+    if (!result.is_valid()) {
+      // Invalid overloads: make slow call.
+      TransformApiCallToSlowCall(node, function_template_info, receiver, holder,
+                                 shared, effect);
+      return Changed(node);
+    }
+
+    // Clone {node} because it will be replaced with the subgraph.
+    Node* slow_call = graph()->CloneNode(node);
+    TransformApiCallToSlowCall(slow_call, function_template_info, receiver,
+                               holder, shared, effect);
+    Node* fast_call_subgraph = a.GenerateOverloadResolutionGraph(
+        this, result, inputs, result.distinguishable_arg_index, slow_call);
+    DCHECK_NOT_NULL(fast_call_subgraph);
+    return ReplaceWithSubgraph(&a, fast_call_subgraph);
   }
+}
+
+void JSCallReducer::TransformApiCallToSlowCall(
+    Node* node, const FunctionTemplateInfoRef& function_template_info,
+    Node* receiver, Node* holder, const SharedFunctionInfoRef shared,
+    Node* effect) {
+  JSCallNode n(node);
+  CallParameters const& p = n.Parameters();
+  int const argc = p.arity_without_implicit_args();
+  Node* target = n.target();
+  Node* context = n.context();
+  FrameState frame_state = n.frame_state();
 
   CallHandlerInfoRef call_handler_info = *function_template_info.call_code();
   Callable call_api_callback = CodeFactory::CallApiCallback(isolate());
@@ -3816,7 +4127,6 @@ Reduction JSCallReducer::ReduceCallApiFunction(
   node->ReplaceInput(6 + argc + 1, continuation_frame_state);
   node->ReplaceInput(6 + argc + 2, effect);
   NodeProperties::ChangeOp(node, common()->Call(call_descriptor));
-  return Changed(node);
 }
 
 namespace {
