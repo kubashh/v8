@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ac5313d1_0cb555ff",
+        "filename": ".gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-06-30T06:47:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "849add41_320e2c4f",
+      "revId": "dc1d4288f0fc7907065f0e2167da5e6592d502ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3f72a4d2_c329e4e2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
