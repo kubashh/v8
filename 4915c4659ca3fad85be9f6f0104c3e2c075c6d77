@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "221dc1b5_11d11e15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-30T12:25:33Z",
+      "side": 1,
+      "message": "Please wait a sec with the revert. I think Camillo had plans to use the current .gitignore line, let\u0027s wait for him to chime in.",
+      "revId": "4915c4659ca3fad85be9f6f0104c3e2c075c6d77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
