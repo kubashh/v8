@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c408dee_f63c5ccd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-30T10:39:46Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "98172b292adf8f5f83f4fc63d224ad92c8b66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "179f53b2_bc657173",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-30T10:39:46Z",
+      "side": 1,
+      "message": "Given these are CHECKs, how about getting the map only once?",
+      "revId": "98172b292adf8f5f83f4fc63d224ad92c8b66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2710640a_1cf56136",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 5892,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-30T10:39:46Z",
+      "side": 1,
+      "message": "(cage_base)",
+      "range": {
+        "startLine": 5892,
+        "startChar": 32,
+        "endLine": 5892,
+        "endChar": 34
+      },
+      "revId": "98172b292adf8f5f83f4fc63d224ad92c8b66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e3443a8_575ecc58",
+        "filename": "src/objects/struct-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-30T10:39:46Z",
+      "side": 1,
+      "message": "DEF_GETTER(AccessorPair, getter, Object) {",
+      "revId": "98172b292adf8f5f83f4fc63d224ad92c8b66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b052ef90_70d742a7",
+        "filename": "src/objects/struct-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-30T10:39:46Z",
+      "side": 1,
+      "message": "TorqueGeneratedClass",
+      "range": {
+        "startLine": 48,
+        "startChar": 9,
+        "endLine": 48,
+        "endChar": 58
+      },
+      "revId": "98172b292adf8f5f83f4fc63d224ad92c8b66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5368f94_d6b785b7",
+        "filename": "src/objects/struct-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-06-30T10:39:46Z",
+      "side": 1,
+      "message": "DEF_RELAXED_GETTER(AccessorPair, getter, Object) {",
+      "revId": "98172b292adf8f5f83f4fc63d224ad92c8b66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
