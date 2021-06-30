@@ -20,6 +20,7 @@ namespace compiler {
 
 // Forward declarations.
 class CommonOperatorBuilder;
+class CompilationDependencies;
 class JSGraph;
 class JSOperatorBuilder;
 class SimplifiedOperatorBuilder;
@@ -32,7 +33,7 @@ class V8_EXPORT_PRIVATE JSTypedLowering final
     : public NON_EXPORTED_BASE(AdvancedReducer) {
  public:
   JSTypedLowering(Editor* editor, JSGraph* jsgraph, JSHeapBroker* broker,
-                  Zone* zone);
+                  CompilationDependencies* dependencies, Zone* zone);
   ~JSTypedLowering() final = default;
 
   const char* reducer_name() const override { return "JSTypedLowering"; }
@@ -93,6 +94,7 @@ class V8_EXPORT_PRIVATE JSTypedLowering final
   Graph* graph() const;
   JSGraph* jsgraph() const { return jsgraph_; }
   JSHeapBroker* broker() const { return broker_; }
+  CompilationDependencies* dependencies() const { return dependencies_; }
   Isolate* isolate() const;
   JSOperatorBuilder* javascript() const;
   CommonOperatorBuilder* common() const;
@@ -100,6 +102,7 @@ class V8_EXPORT_PRIVATE JSTypedLowering final
 
   JSGraph* jsgraph_;
   JSHeapBroker* broker_;
+  CompilationDependencies* dependencies_;
   Type empty_string_type_;
   Type pointer_comparable_type_;
   TypeCache const* type_cache_;

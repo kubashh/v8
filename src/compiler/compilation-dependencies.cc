@@ -342,6 +342,23 @@ class OwnConstantDictionaryPropertyDependency final
   ObjectRef const value_;
 };
 
+class ConsistentJSFunctionViewDependency final : public CompilationDependency {
+ public:
+  explicit ConsistentJSFunctionViewDependency(const JSFunctionRef& function)
+      : function_(function) {
+    DCHECK(function.SerializeXYZ());
+  }
+
+  bool IsValid() const override {
+    return function_.IsConsistentWithHeapState();
+  }
+
+  void Install(Handle<Code> code) const override {}
+
+ private:
+  const JSFunctionRef function_;
+};
+
 class TransitionDependency final : public CompilationDependency {
  public:
   explicit TransitionDependency(const MapRef& map) : map_(map) {
@@ -398,8 +415,7 @@ class FieldRepresentationDependency final : public CompilationDependency {
                                 Representation representation)
       : owner_(owner),
         descriptor_(descriptor),
-        representation_(representation) {
-  }
+        representation_(representation) {}
 
   bool IsValid() const override {
     DisallowGarbageCollection no_heap_allocation;
@@ -899,6 +915,12 @@ void CompilationDependencies::DependOnElementsKinds(
     current = current.nested_site().AsAllocationSite();
   }
   CHECK_EQ(current.nested_site().AsSmi(), 0);
+}
+
+void CompilationDependencies::DependOnConsistentJSFunctionView(
+    const JSFunctionRef& function) {
+  DCHECK(broker_->is_concurrent_inlining());
+  RecordDependency(zone_->New<ConsistentJSFunctionViewDependency>(function));
 }
 
 SlackTrackingPrediction::SlackTrackingPrediction(MapRef initial_map,

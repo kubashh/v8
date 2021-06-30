@@ -404,8 +404,8 @@ class V8_EXPORT_PRIVATE JSFunctionRef : public JSObjectRef {
   bool has_prototype() const;
   bool PrototypeRequiresRuntimeLookup() const;
 
-  void Serialize();
-  bool serialized() const;
+  bool SerializeXYZ() const;
+  bool IsConsistentWithHeapState() const;
 
   // The following are available only after calling Serialize().
   ObjectRef prototype() const;
@@ -414,9 +414,6 @@ class V8_EXPORT_PRIVATE JSFunctionRef : public JSObjectRef {
   NativeContextRef native_context() const;
   SharedFunctionInfoRef shared() const;
   int InitialMapInstanceSizeWithMinSlack() const;
-
-  void SerializeCodeAndFeedback();
-  bool serialized_code_and_feedback() const;
 
   // The following are available only after calling SerializeCodeAndFeedback().
   // TODO(mvstanton): Once we allow inlining of functions we didn't see

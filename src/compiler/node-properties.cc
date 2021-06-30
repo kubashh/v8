@@ -333,10 +333,7 @@ base::Optional<MapRef> NodeProperties::GetJSCreateMap(JSHeapBroker* broker,
     ObjectRef target = mtarget.Ref(broker);
     JSFunctionRef newtarget = mnewtarget.Ref(broker).AsJSFunction();
     if (newtarget.map().has_prototype_slot() && newtarget.has_initial_map()) {
-      if (!newtarget.serialized()) {
-        TRACE_BROKER_MISSING(broker, "initial map on " << newtarget);
-        return base::nullopt;
-      }
+      if (!newtarget.SerializeXYZ()) return {};
       MapRef initial_map = newtarget.initial_map();
       if (initial_map.GetConstructor().equals(target)) {
         DCHECK(target.AsJSFunction().map().is_constructor());
