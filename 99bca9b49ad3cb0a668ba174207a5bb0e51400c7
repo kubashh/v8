@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "341096c0_18fcabf7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-06-30T01:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa2d3240_1c22b201",
+      "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0435c824_7c53ab53",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-06-29T13:53:48Z",
       "side": 1,
       "message": "There is actually an instruction to do this, fsgnj.s. fsgnj_s is already defined in the assembler, so you should just be able to use it here.",
+      "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ea31307_98df5e91",
+        "filename": "src/wasm/baseline/riscv64/liftoff-assembler-riscv64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-06-30T01:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0435c824_7c53ab53",
       "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0059cfa5_e135833c",
+        "filename": "src/wasm/baseline/riscv64/liftoff-assembler-riscv64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-06-30T01:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28dc3eae_aef3f537",
+      "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "490c5caf_a994463b",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-06-29T13:53:48Z",
       "side": 1,
       "message": "Is the default rounding mode (nearest), the correct one? It looks like ARM64 rounds towards zero, but I\u0027m not sure where to find what this opcode expects.",
+      "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab3dd6af_5e6d2431",
+        "filename": "src/wasm/baseline/riscv64/liftoff-assembler-riscv64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-06-30T01:00:35Z",
+      "side": 1,
+      "message": "I don\u0027t find the rule in wasm-spec. \n\nSo i fix it and keep the agreement with ARM64.",
+      "parentUuid": "490c5caf_a994463b",
       "revId": "99bca9b49ad3cb0a668ba174207a5bb0e51400c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
