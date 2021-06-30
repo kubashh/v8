@@ -16,6 +16,47 @@
       "message": "Hi Santiago,\nI\u0027m marking the double value_as_bits() as relaxed.\nShould I add the kRelaxedTag to the method for this case (so it\u0027s obvious for callers)?\n",
       "revId": "e2dcf5e63030de9a3ab328a1f15de5968594e706",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da2bc2ec_990b6bf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-30T14:10:49Z",
+      "side": 1,
+      "message": "Adding a tag would be nice, thanks!",
+      "parentUuid": "96ce74b4_d7940b36",
+      "revId": "e2dcf5e63030de9a3ab328a1f15de5968594e706",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f1ffa91_b6ff4ba5",
+        "filename": "src/objects/heap-number-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-30T14:10:49Z",
+      "side": 1,
+      "message": "Are we okay with reading a potentially old value? Or do we have a release/acquire for synchronization?",
+      "range": {
+        "startLine": 23,
+        "startChar": 21,
+        "endLine": 23,
+        "endChar": 34
+      },
+      "revId": "e2dcf5e63030de9a3ab328a1f15de5968594e706",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
