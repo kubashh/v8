@@ -16,6 +16,103 @@
       "message": "Sorry this has so many files, hopefully it\u0027s fairly mechanical...",
       "revId": "88e77cfd2e4f9992bf99c2bb07785586c1f1956d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b4b3e9b_7be52a91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-30T11:28:33Z",
+      "side": 1,
+      "message": "LGTM with a couple of requests to return code to the if/if else/else style where possible. Thanks for the cleanup!",
+      "revId": "88e77cfd2e4f9992bf99c2bb07785586c1f1956d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "552311e8_a91d5c41",
+        "filename": "src/codegen/machine-type.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-30T11:28:33Z",
+      "side": 1,
+      "message": "Can we turn these back to \u0027else if\u0027 for clarity (I\u0027m assuming the main fix here is removing the \"return os;\" at the end).",
+      "range": {
+        "startLine": 89,
+        "startChar": 3,
+        "endLine": 90,
+        "endChar": 2
+      },
+      "revId": "88e77cfd2e4f9992bf99c2bb07785586c1f1956d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f57d54d_7d9f0e3a",
+        "filename": "src/diagnostics/x64/disasm-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-30T11:28:33Z",
+      "side": 1,
+      "message": "please return these to \"else if\" too",
+      "revId": "88e77cfd2e4f9992bf99c2bb07785586c1f1956d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36657a46_ced3bb93",
+        "filename": "src/diagnostics/x64/disasm-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-30T11:28:33Z",
+      "side": 1,
+      "message": "can you keep the \"else\" cases here and just remove the break?",
+      "revId": "88e77cfd2e4f9992bf99c2bb07785586c1f1956d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5b839b5_b7d39ca1",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-06-30T11:28:33Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 572,
+        "startChar": 0,
+        "endLine": 572,
+        "endChar": 4
+      },
+      "revId": "88e77cfd2e4f9992bf99c2bb07785586c1f1956d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
