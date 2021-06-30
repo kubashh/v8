@@ -16,6 +16,46 @@
       "message": "@Jakob: PTAL.",
       "revId": "04f89e6c4cdbe3b8c2b3a441ec6a1d8bf2297d83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc6fa676_309f2ff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-30T19:57:45Z",
+      "side": 1,
+      "message": "LGTM with a comment.\n\nDeepti: FYI.",
+      "revId": "04f89e6c4cdbe3b8c2b3a441ec6a1d8bf2297d83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "917e0362_a8e4ea4b",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-06-30T19:57:45Z",
+      "side": 1,
+      "message": "You don\u0027t need this check, it\u0027s implied by `CheckHardwareSupportsSimd`.",
+      "range": {
+        "startLine": 289,
+        "startChar": 34,
+        "endLine": 289,
+        "endChar": 67
+      },
+      "revId": "04f89e6c4cdbe3b8c2b3a441ec6a1d8bf2297d83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
