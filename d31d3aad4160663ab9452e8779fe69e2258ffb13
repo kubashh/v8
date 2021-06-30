@@ -16,6 +16,24 @@
       "message": "Note that we have this as well. The info gome/no goma seems redundant on build side and here on v8 side, but I think both matter and need to match. Maybe you need this since goma is off? Does Re-client need any specific gn args?",
       "revId": "d31d3aad4160663ab9452e8779fe69e2258ffb13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1992fe50_17ea974a",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1107806
+      },
+      "writtenOn": "2021-06-30T10:13:54Z",
+      "side": 1,
+      "message": "Good catch!\nRe-client has it own flag and we need to explicitly enables that to use reclient.\nLet me add the logic.",
+      "parentUuid": "151912e7_006b2a5e",
+      "revId": "d31d3aad4160663ab9452e8779fe69e2258ffb13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
