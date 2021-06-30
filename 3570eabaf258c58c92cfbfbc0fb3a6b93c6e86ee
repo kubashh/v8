@@ -16,6 +16,23 @@
       "message": "Adding folks as reviewers who are more qualified to take a look at this change.",
       "revId": "3570eabaf258c58c92cfbfbc0fb3a6b93c6e86ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ad5f7ed_38db1a68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-06-30T08:14:29Z",
+      "side": 1,
+      "message": "I\u0027m a bit confused by this change. Is V8_UNLIKELY considered always false in the presence of -Wunreachable-code-aggressive? We use V8_UNLIKELY in quite a few places to guide compilation; it would be unfortunate to lose this.\n\nIt seems like there\u0027s a  __builtin_expect_with_probability as well; could we use that instead?",
+      "revId": "3570eabaf258c58c92cfbfbc0fb3a6b93c6e86ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
