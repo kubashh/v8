@@ -84,7 +84,7 @@ enum class RefSerializationKind {
   V(JSBoundFunction, RefSerializationKind::kSerialized)                   \
   V(JSDataView, RefSerializationKind::kSerialized)                        \
   V(JSFunction, RefSerializationKind::kSerialized)                        \
-  V(JSGlobalObject, RefSerializationKind::kSerialized)                    \
+  V(JSGlobalObject, RefSerializationKind::kBackgroundSerialized)          \
   V(JSGlobalProxy, RefSerializationKind::kBackgroundSerialized)           \
   V(JSTypedArray, RefSerializationKind::kBackgroundSerialized)            \
   /* Subtypes of Context */                                               \
@@ -559,6 +559,7 @@ class NativeContextRef : public ContextRef {
   MapRef GetFunctionMapFromIndex(int index) const;
   MapRef GetInitialJSArrayMap(ElementsKind kind) const;
   base::Optional<JSFunctionRef> GetConstructorFunction(const MapRef& map) const;
+  bool GlobalIsDetached() const;
 };
 
 class NameRef : public HeapObjectRef {
@@ -1020,15 +1021,9 @@ class JSGlobalObjectRef : public JSObjectRef {
 
   Handle<JSGlobalObject> object() const;
 
-  bool IsDetached() const;
+  bool IsDetachedFrom(JSGlobalProxyRef const& proxy) const;
 
-  // If {serialize} is false:
-  //   If the property is known to exist as a property cell (on the global
-  //   object), return that property cell. Otherwise (not known to exist as a
-  //   property cell or known not to exist as a property cell) return nothing.
-  // If {serialize} is true:
-  //   Like above but potentially access the heap and serialize the necessary
-  //   information.
+  // Can be called even when there is no property cell for the given name.
   base::Optional<PropertyCellRef> GetPropertyCell(
       NameRef const& name, SerializationPolicy policy =
                                SerializationPolicy::kAssumeSerialized) const;
