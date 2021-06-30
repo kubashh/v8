@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3163d626_b0fefc10",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4639,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-30T08:13:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "708e574e_b641f01f",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edf065f8_deab325f",
@@ -224,6 +242,24 @@
       "writtenOn": "2021-06-27T10:33:26Z",
       "side": 1,
       "message": "I\u0027ve made this a direct call to heap (see above).\n\nHowever, I have since realized that we are missing the broker warnings when we bailout due to failing predicate. I think they are really important for debugging. This doesn\u0027t have to block the CL though, let\u0027s discuss it next week.",
+      "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b47fb0e4_3fec2ac8",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5872,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-06-30T08:13:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "687a9fbd_868fdf1f",
       "revId": "c8a818e80946b818994c0647348ac48a07c84e4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
