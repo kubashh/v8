@@ -1114,6 +1114,12 @@ bool CompileLazy(Isolate* isolate, Handle<WasmModuleObject> module_object,
   auto enabled_features = native_module->enabled_features();
   Counters* counters = isolate->counters();
 
+  // Put the timer scope around everything, including the {CodeSpaceWriteScope}
+  // and its destruction, to measure complete overhead (apart from the runtime
+  // function itself, which has constant overhead).
+  TimedHistogramScope lazy_compile_time_scope(
+      counters->wasm_lazy_compile_time());
+
   DCHECK(!native_module->lazy_compile_frozen());
   CodeSpaceWriteScope code_space_write_scope(native_module);
 
