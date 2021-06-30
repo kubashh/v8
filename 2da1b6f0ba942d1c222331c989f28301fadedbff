@@ -16,6 +16,29 @@
       "message": "Minor cleanup, PTAL.",
       "revId": "2da1b6f0ba942d1c222331c989f28301fadedbff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4693816_f64179c6",
+        "filename": "test/common/flag-utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-06-30T14:01:34Z",
+      "side": 1,
+      "message": "nit: two more letters, and you could have a {FLAG_SCOPE_VALUE} ;-)",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "2da1b6f0ba942d1c222331c989f28301fadedbff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
