@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c96e7d_d8c73580",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-06-30T08:31:20Z",
+      "side": 1,
+      "message": "Not sure if you are waiting for my +1 but LGTM",
+      "revId": "a1074a564f036cf55adfe9682c1e7cab6866b771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
