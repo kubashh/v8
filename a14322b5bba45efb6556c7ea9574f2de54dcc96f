@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1e9db1a_688413fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-01T11:22:42Z",
+      "side": 1,
+      "message": "You can convert that issue from type Bug-Security to just Bug.",
+      "revId": "a14322b5bba45efb6556c7ea9574f2de54dcc96f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "59311190_d6659d84",
@@ -14,6 +31,29 @@
       "writtenOn": "2021-07-01T10:46:34Z",
       "side": 1,
       "message": "Georg, PTAL. \n\nThanks!",
+      "revId": "a14322b5bba45efb6556c7ea9574f2de54dcc96f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79790718_5c47f835",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-01T11:22:42Z",
+      "side": 1,
+      "message": "superfluous word",
+      "range": {
+        "startLine": 260,
+        "startChar": 17,
+        "endLine": 260,
+        "endChar": 20
+      },
       "revId": "a14322b5bba45efb6556c7ea9574f2de54dcc96f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
