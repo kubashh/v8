@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d5f2d66_52ab79a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-01T07:49:36Z",
+      "side": 1,
+      "message": "LGTM with a comment.",
+      "revId": "d7ef85065832bbead16af975f6f00b930fea7cc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c87ef21_97968915",
+        "filename": "tools/lldb_commands.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-01T07:49:36Z",
+      "side": 1,
+      "message": "Do you plan to use this environment variable in a follow-up CL? Should we postpone adding this until it is used?",
+      "revId": "d7ef85065832bbead16af975f6f00b930fea7cc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
