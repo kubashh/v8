@@ -16,6 +16,24 @@
       "message": "Could we replace this by a \n\n STATIC_ASSERT(CallInterfaceDescriptor::ContextRegister() !\u003d\n      kOffHeapTrampolineRegister);\n      \ninstead for safety?",
       "revId": "db1baab973b9b3e18600bd8fe50fa252fcf1b285",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f20e4cd2_fa40970c",
+        "filename": "src/snapshot/embedded/embedded-data.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-01T11:11:26Z",
+      "side": 0,
+      "message": "Friendly reminder - simply removing this is not future-proof without the static assert.",
+      "parentUuid": "23e496fa_8fb89b50",
+      "revId": "db1baab973b9b3e18600bd8fe50fa252fcf1b285",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
