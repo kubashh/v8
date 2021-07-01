@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d48c7da_2eac679c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-01T16:02:44Z",
+      "side": 1,
+      "message": "Hi Santiago, here is an update.\nI need to add the test as well, however, it\u0027s really huge (CF failed to make a minimized version) and I guess I should try to do that manually.",
+      "revId": "be5ce49248a665011c3901cbecb005bddc349d76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e859ce5d_26d8724a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-01T16:02:44Z",
+      "side": 1,
+      "message": "Right on, did this.",
+      "parentUuid": "da2bc2ec_990b6bf2",
+      "revId": "e2dcf5e63030de9a3ab328a1f15de5968594e706",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f1ffa91_b6ff4ba5",
@@ -49,6 +67,30 @@
       "writtenOn": "2021-06-30T14:10:49Z",
       "side": 1,
       "message": "Are we okay with reading a potentially old value? Or do we have a release/acquire for synchronization?",
+      "range": {
+        "startLine": 23,
+        "startChar": 21,
+        "endLine": 23,
+        "endChar": 34
+      },
+      "revId": "e2dcf5e63030de9a3ab328a1f15de5968594e706",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1da24f90_7a4c7eec",
+        "filename": "src/objects/heap-number-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-01T16:02:44Z",
+      "side": 1,
+      "message": "In the compiler we are okay with it. Of course, we can\u0027t guarantee it in general right (just think of 32bit platforms reading 2 words). We protect with a DependOnOwnConstantDataProperty(), so the initial value is not trusted.",
+      "parentUuid": "3f1ffa91_b6ff4ba5",
       "range": {
         "startLine": 23,
         "startChar": 21,
