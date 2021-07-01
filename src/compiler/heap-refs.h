@@ -908,7 +908,6 @@ class V8_EXPORT_PRIVATE SharedFunctionInfoRef : public HeapObjectRef {
     return GetInlineability() == SharedFunctionInfo::kIsInlineable;
   }
 
-  void SerializeFunctionTemplateInfo();
   base::Optional<FunctionTemplateInfoRef> function_template_info() const;
 
   void SerializeScopeInfoChain();

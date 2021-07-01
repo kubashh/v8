@@ -2245,8 +2245,7 @@ void SerializerForBackgroundCompilation::ProcessApiCall(
   if (!target_template_info.has_call_code()) return;
   target_template_info.SerializeCallCode();
 
-  SharedFunctionInfoRef target_ref = MakeRef(broker(), target);
-  target_ref.SerializeFunctionTemplateInfo();
+  MakeRef(broker(), target);
 
   if (target_template_info.accept_any_receiver() &&
       target_template_info.is_signature_undefined()) {
