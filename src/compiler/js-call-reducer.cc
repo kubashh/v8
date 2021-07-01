@@ -2730,7 +2730,10 @@ Reduction JSCallReducer::ReduceFunctionPrototypeCall(Node* node) {
   HeapObjectMatcher m(target);
   if (m.HasResolvedValue() && m.Ref(broker()).IsJSFunction()) {
     JSFunctionRef function = m.Ref(broker()).AsJSFunction();
-    if (!function.serialized()) return NoChange();
+    if (!function.SerializeXYZ()) return NoChange();
+    if (broker()->is_concurrent_inlining()) {
+      dependencies()->DependOnConsistentJSFunctionView(function);
+    }
     context = jsgraph()->Constant(function.context());
   } else {
     context = effect = graph()->NewNode(
@@ -4274,7 +4277,7 @@ Reduction JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpread(
 }
 
 bool JSCallReducer::IsBuiltinOrApiFunction(JSFunctionRef function) const {
-  if (!function.serialized()) return false;
+  if (!function.SerializeXYZ()) return false;
   // TODO(neis): Add a way to check if function template info isn't serialized
   // and add a warning in such cases. Currently we can't tell if function
   // template info doesn't exist or wasn't serialized.
@@ -4298,11 +4301,15 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
     ObjectRef target_ref = m.Ref(broker());
     if (target_ref.IsJSFunction()) {
       JSFunctionRef function = target_ref.AsJSFunction();
-      if (!function.serialized()) return NoChange();
+      if (!function.SerializeXYZ()) return NoChange();
 
       // Don't inline cross native context.
       if (!function.native_context().equals(native_context())) {
         return NoChange();
+      }
+
+      if (broker()->is_concurrent_inlining()) {
+        dependencies()->DependOnConsistentJSFunctionView(function);
       }
 
       return ReduceJSCall(node, function.shared());
@@ -4950,7 +4957,7 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
 
     if (target_ref.IsJSFunction()) {
       JSFunctionRef function = target_ref.AsJSFunction();
-      if (!function.serialized()) return NoChange();
+      if (!function.SerializeXYZ()) return NoChange();
 
       // Do not reduce constructors with break points.
       // If this state changes during background compilation, the compilation
@@ -4961,6 +4968,10 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
       // Don't inline cross native context.
       if (!function.native_context().equals(native_context())) {
         return NoChange();
+      }
+
+      if (broker()->is_concurrent_inlining()) {
+        dependencies()->DependOnConsistentJSFunctionView(function);
       }
 
       // Check for known builtin functions.
@@ -6934,6 +6945,7 @@ Reduction JSCallReducer::ReducePromisePrototypeThen(Node* node) {
   // doesn't escape to user JavaScript. So bake this information
   // into the graph such that subsequent passes can use the
   // information for further optimizations.
+  if (!native_context().promise_function().SerializeXYZ()) return NoChange();
   MapRef promise_map = native_context().promise_function().initial_map();
   effect = graph()->NewNode(
       simplified()->MapGuard(ZoneHandleSet<Map>(promise_map.object())), promise,
@@ -7896,6 +7908,7 @@ Reduction JSCallReducer::ReduceRegExpPrototypeTest(Node* node) {
   // Only the initial JSRegExp map is valid here, since the following lastIndex
   // check as well as the lowered builtin call rely on a known location of the
   // lastIndex field.
+  if (!native_context().regexp_function().SerializeXYZ()) return NoChange();
   Handle<Map> regexp_initial_map =
       native_context().regexp_function().initial_map().object();
 
