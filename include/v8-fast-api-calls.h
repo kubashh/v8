@@ -578,7 +578,7 @@ PRIMITIVE_C_TYPES(DEFINE_TYPE_INFO_TRAITS)
 
 #define SPECIALIZE_GET_TYPE_INFO_HELPER_FOR_TA(T, Enum)                       \
   template <>                                                                 \
-  struct TypeInfoHelper<FastApiTypedArray<T>> {                               \
+  struct TypeInfoHelper<const FastApiTypedArray<T>&> {                        \
     static constexpr CTypeInfo::Flags Flags() {                               \
       return CTypeInfo::Flags::kNone;                                         \
     }                                                                         \
@@ -608,6 +608,16 @@ struct TypeInfoHelper<v8::Local<v8::Array>> {
   static constexpr CTypeInfo::Type Type() { return CTypeInfo::Type::kVoid; }
   static constexpr CTypeInfo::SequenceType SequenceType() {
     return CTypeInfo::SequenceType::kIsSequence;
+  }
+};
+
+template <>
+struct TypeInfoHelper<v8::Local<v8::Uint32Array>> {
+  static constexpr CTypeInfo::Flags Flags() { return CTypeInfo::Flags::kNone; }
+
+  static constexpr CTypeInfo::Type Type() { return CTypeInfo::Type::kUint32; }
+  static constexpr CTypeInfo::SequenceType SequenceType() {
+    return CTypeInfo::SequenceType::kIsTypedArray;
   }
 };
 

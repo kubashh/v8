@@ -4993,6 +4993,32 @@ MachineType MachineTypeFor(CTypeInfo::Type type) {
 }
 }  // namespace
 
+// TODO(mslekova): Deduplicate after Paolo's CL lands.
+namespace {
+ElementsKind GetTypedArrayElementsKind(CTypeInfo::Type type) {
+  switch (type) {
+    case CTypeInfo::Type::kInt32:
+      return INT32_ELEMENTS;
+    case CTypeInfo::Type::kUint32:
+      return UINT32_ELEMENTS;
+    case CTypeInfo::Type::kInt64:
+      return BIGINT64_ELEMENTS;
+    case CTypeInfo::Type::kUint64:
+      return BIGUINT64_ELEMENTS;
+    case CTypeInfo::Type::kFloat32:
+      return FLOAT32_ELEMENTS;
+    case CTypeInfo::Type::kFloat64:
+      return FLOAT64_ELEMENTS;
+    case CTypeInfo::Type::kVoid:
+    case CTypeInfo::Type::kBool:
+    case CTypeInfo::Type::kV8Value:
+    case CTypeInfo::Type::kApiObject:
+      UNREACHABLE();
+      break;
+  }
+}
+}  // namespace
+
 Node* EffectControlLinearizer::AdaptFastCallArgument(
     Node* node, CTypeInfo arg_type, GraphAssemblerLabel<0>* if_error) {
   switch (arg_type.GetSequenceType()) {
@@ -5042,8 +5068,61 @@ Node* EffectControlLinearizer::AdaptFastCallArgument(
 
       return stack_slot;
     }
+    case CTypeInfo::SequenceType::kIsTypedArray: {
+      // Check that the value is a HeapObject.
+      Node* value_is_smi = ObjectIsSmi(node);
+      __ GotoIf(value_is_smi, if_error);
+
+      ElementsKind expected_elements_kind =
+          GetTypedArrayElementsKind(arg_type.GetType());
+      Node* value_map = __ LoadField(AccessBuilder::ForMap(), node);
+      Node* value_instance_type =
+          __ LoadField(AccessBuilder::ForMapInstanceType(), value_map);
+      Node* value_is_typed_array = __ Word32Equal(
+          value_instance_type, __ Int32Constant(JS_TYPED_ARRAY_TYPE));
+      __ GotoIfNot(value_is_typed_array, if_error);
+
+      Node* bit_field2 =
+          __ LoadField(AccessBuilder::ForMapBitField2(), value_map);
+      Node* mask = __ Int32Constant(Map::Bits2::ElementsKindBits::kMask);
+      Node* andit = __ Word32And(bit_field2, mask);
+      Node* shift = __ Int32Constant(Map::Bits2::ElementsKindBits::kShift);
+      Node* kind = __ Word32Shr(andit, shift);
+
+      Node* value_is_expected_elements_kind =
+          __ Word32Equal(kind, __ Int32Constant(expected_elements_kind));
+      __ GotoIfNot(value_is_expected_elements_kind, if_error);
+
+      // TODO(mslekova): Check for IsDetached, IsExternalized or IsShared.
+
+      // Unpack the store and length, and store them to a struct
+      // FastApiTypedArray.
+      int kAlign = alignof(FastApiTypedArray<int32_t>);
+      int kSize = sizeof(FastApiTypedArray<int32_t>);
+      CHECK_EQ(kSize, sizeof(uintptr_t) + sizeof(size_t));
+
+      Node* stack_slot = __ StackSlot(kSize, kAlign);
+
+      Node* elements =
+          __ LoadField(AccessBuilder::ForJSTypedArrayBasePointer(), node);
+      // TODO(mslekova): Explain this magic.
+      Node* raw_elements_start = __ IntAdd(
+          elements, __ Int32Constant(JSTypedArray::kHeaderSize -
+                                     JSTypedArray::kBasePointerOffset - 1));
+      Node* length_in_bytes =
+          __ LoadField(AccessBuilder::ForJSTypedArrayLength(), node);
+
+      __ Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                                   kNoWriteBarrier),
+               stack_slot, 0, raw_elements_start);
+      __ Store(
+          StoreRepresentation(MachineRepresentation::kWord32, kNoWriteBarrier),
+          stack_slot, sizeof(uintptr_t), length_in_bytes);
+
+      return stack_slot;
+    }
     default: {
-      UNREACHABLE();  // TODO(mslekova): Implement typed arrays.
+      UNREACHABLE();
     }
   }
 }
