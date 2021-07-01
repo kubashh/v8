@@ -33,6 +33,24 @@
       "message": "Do you plan to use this environment variable in a follow-up CL? Should we postpone adding this until it is used?",
       "revId": "d7ef85065832bbead16af975f6f00b930fea7cc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "724f8280_6bd1c844",
+        "filename": "tools/lldb_commands.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-07-01T16:22:53Z",
+      "side": 1,
+      "message": "I copied this from Chromium, it looks like they have some debugging detection here https://source.chromium.org/chromium/chromium/src/+/main:base/debug/debugger_posix.cc;l\u003d136?q\u003dCHROMIUM_LLDBINIT_SOURCED\u0026ss\u003dchromium to warn that you have not sourced lldbinit in chromium. I\u0027ll remove this line for now.",
+      "parentUuid": "7c87ef21_97968915",
+      "revId": "d7ef85065832bbead16af975f6f00b930fea7cc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
