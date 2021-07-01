@@ -16,6 +16,23 @@
       "message": "Hi Santiago, here is an update.\nI need to add the test as well, however, it\u0027s really huge (CF failed to make a minimized version) and I guess I should try to do that manually.",
       "revId": "be5ce49248a665011c3901cbecb005bddc349d76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0227bba5_b55cba0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-07-01T16:54:07Z",
+      "side": 1,
+      "message": "LGTM, thanks!\nRegarding the test, I wonder if by reducing it a bit manually and re-running the minimizer on that slightly reduced file might help",
+      "revId": "be5ce49248a665011c3901cbecb005bddc349d76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
