@@ -56,6 +56,53 @@
       },
       "revId": "39bf8178d5986eb410143ff9e820a779cecb1895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bf65a3b_71d45b5e",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-02T08:58:05Z",
+      "side": 1,
+      "message": "I would suggest using std::vector to be more flexible with batch sizes and avoid exposing a maximum cosntant.\n\nWe can move `kMaxBatchedEvents` to the .cc file as implementation detail.\n\nWhy is the code simpler with the array?",
+      "parentUuid": "52f5003b_948f44db",
+      "range": {
+        "startLine": 53,
+        "startChar": 7,
+        "endLine": 53,
+        "endChar": 60
+      },
+      "revId": "39bf8178d5986eb410143ff9e820a779cecb1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7299346_b4412357",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-02T08:58:05Z",
+      "side": 1,
+      "message": "With vector, we should probably have std::move() here.",
+      "range": {
+        "startLine": 254,
+        "startChar": 35,
+        "endLine": 254,
+        "endChar": 67
+      },
+      "revId": "39bf8178d5986eb410143ff9e820a779cecb1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
