@@ -663,7 +663,7 @@ DEFINE_BOOL(always_sparkplug, false, "directly tier up to Sparkplug code")
 DEFINE_BOOL(sparkplug_on_heap, false, "compile Sparkplug code directly on heap")
 #if ENABLE_SPARKPLUG
 DEFINE_IMPLICATION(always_sparkplug, sparkplug)
-DEFINE_BOOL(baseline_batch_compilation, true, "batch compile Sparkplug code")
+DEFINE_BOOL(baseline_batch_compilation, false, "batch compile Sparkplug code")
 #else
 DEFINE_BOOL(baseline_batch_compilation, false, "batch compile Sparkplug code")
 #endif

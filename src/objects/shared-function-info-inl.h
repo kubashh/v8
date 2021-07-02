@@ -587,6 +587,10 @@ bool SharedFunctionInfo::ShouldFlushBytecode(BytecodeFlushMode mode) {
   // check if it is old. Note, this is done this way since this function can be
   // called by the concurrent marker.
   Object data = function_data(kAcquireLoad);
+  if (data.IsBaselineData()) {
+    data =
+        ACQUIRE_READ_FIELD(BaselineData::cast(data), BaselineData::kDataOffset);
+  }
   if (!data.IsBytecodeArray()) return false;
 
   if (mode == BytecodeFlushMode::kStressFlushBytecode) return true;
