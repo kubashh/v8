@@ -215,6 +215,14 @@ class JSFunction : public JSFunctionOrBoundFunction {
                                         HeapObject target)>>
           gc_notify_updated_slot = base::nullopt);
 
+  // Returns if the closure's code field has to be updated because it has
+  // stale baseline code.
+  inline bool NeedsResetDueToFlushedBaselineCode();
+
+  // Returns if baseline code is a candidate for flushing. This method is called
+  // from concurrent marking so we should be careful when accessing data fields.
+  inline bool ShouldFlushBaselineCode(BytecodeFlushMode mode);
+
   DECL_GETTER(has_prototype_slot, bool)
 
   // The initial map for an object created by this constructor.
@@ -310,6 +318,8 @@ class JSFunction : public JSFunctionOrBoundFunction {
   static constexpr int kCodeOffset = FieldOffsets::kCodeOffset;
   static constexpr int kPrototypeOrInitialMapOffset =
       FieldOffsets::kPrototypeOrInitialMapOffset;
+
+  class BodyDescriptor;
 
  private:
   DECL_ACCESSORS(raw_code, CodeT)
