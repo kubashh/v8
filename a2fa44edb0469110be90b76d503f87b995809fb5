@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "82c1dc14_b8ae1524",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-07-05T09:27:40Z",
+      "side": 1,
+      "message": "Nit: could you add a description to the CL that describes what the problem was, and how you fixed it? This can give a good guideline in how to review the CL, and what to expect.",
+      "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e58f4cea_ffef86a4",
@@ -14,6 +31,23 @@
       "writtenOn": "2021-07-05T09:01:43Z",
       "side": 1,
       "message": "Great, I added a test.\n\nAndreas, could you look at src/asmjs/asm-js.cc?\nLeszek, could you look at factory-base-inl.h?\nJakob, could you look at src/json/json-parser.cc?\n\nThanks much,\n--Michael",
+      "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24e59b20_fb8ac107",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-07-05T09:27:40Z",
+      "side": 1,
+      "message": "lgtm asmjs",
       "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -36,6 +70,29 @@
         "startChar": 15,
         "endLine": 79,
         "endChar": 24
+      },
+      "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c4afc71_f7d3436c",
+        "filename": "src/objects/heap-number-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-07-05T09:27:40Z",
+      "side": 1,
+      "message": "Nit: Could you add a comment on why you add this parameter? I can already see the next cleanup CL removing this parameter.",
+      "range": {
+        "startLine": 23,
+        "startChar": 35,
+        "endLine": 23,
+        "endChar": 49
       },
       "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
