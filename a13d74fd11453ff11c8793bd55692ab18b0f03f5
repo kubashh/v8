@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dedfa3c5_3dc950ae",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3443,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-07-05T15:58:03Z",
+      "side": 0,
+      "message": "Gerrit UI bugged. I kept the `if (data_-\u003eshould_access_heap())` side with no modifications.",
+      "revId": "a13d74fd11453ff11c8793bd55692ab18b0f03f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

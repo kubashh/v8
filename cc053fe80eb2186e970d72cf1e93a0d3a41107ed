@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4cd08e9_08d32deb",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4255,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-07-05T15:58:03Z",
+      "side": 1,
+      "message": "It\u0027s a bit odd how we serialize a CallHandlerInfo\u0027s data() in a FunctionTemplateInfoRef method. I had a change to clean it up but I am not sure if it\u0027s worth it since we should remove this ::Serialize method anyway.\n\nThe change was to do:\nbase::Optional\u003cCallHandlerInfoRef\u003e maybe_call_handler \u003d call_code();\nif (maybe_call_handler) maybe_call_handler-\u003eSerialize();\n\nand CallHandlerInfoRef::Serialize would just do `data();` and return.",
+      "range": {
+        "startLine": 4255,
+        "startChar": 30,
+        "endLine": 4255,
+        "endChar": 47
+      },
+      "revId": "cc053fe80eb2186e970d72cf1e93a0d3a41107ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
