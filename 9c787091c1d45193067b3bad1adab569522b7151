@@ -16,6 +16,24 @@
       "message": "Would \"if (trap !\u003d NULL)\" be better? Not quite sure why only RISCV64 needs this null label pointer check. It seems MIPS64 and ARM64 both need not. Is there any difference in the Branch macro handling? Need we fix the Branch handling?",
       "revId": "9c787091c1d45193067b3bad1adab569522b7151",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27b3072e_1f76b0aa",
+        "filename": "src/wasm/baseline/riscv64/liftoff-assembler-riscv64.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-07-05T02:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86a4e031_cdaff1ec",
+      "revId": "9c787091c1d45193067b3bad1adab569522b7151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
