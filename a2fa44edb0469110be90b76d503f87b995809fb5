@@ -106,6 +106,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d6de359e_20245a1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-05T14:14:52Z",
+      "side": 1,
+      "message": "Okay, I\u0027ll work on getting the test very targeted.",
+      "parentUuid": "06c26668_aad5294f",
+      "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5347473b_c5a90e85",
         "filename": "src/heap/factory-base-inl.h",
         "patchSetId": 4
@@ -165,6 +183,30 @@
       "side": 1,
       "message": "My thinking is that the main thread can also (afaik) call set_value, which sets the same value as that read by value_as_bits, so the two aren\u0027t entirely independent. Given how difficult this repro seems to have been to trigger, I worry that we\u0027ll have even more difficulty/less luck triggering a race between main-thread write in set_value and concurrent read in value_as_bits.\n\nMakes sense to keep the value read non-atomic though.",
       "parentUuid": "0fa9fa61_3798b887",
+      "range": {
+        "startLine": 79,
+        "startChar": 15,
+        "endLine": 79,
+        "endChar": 24
+      },
+      "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "790039f4_1eb4b975",
+        "filename": "src/heap/factory-base-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-05T14:14:52Z",
+      "side": 1,
+      "message": "Yes, good point. Done.",
+      "parentUuid": "ee81d7b4_e3388d62",
       "range": {
         "startLine": 79,
         "startChar": 15,
