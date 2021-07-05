@@ -384,6 +384,7 @@ class RuntimeCallTimer final {
 #define FOR_EACH_MANUAL_COUNTER(V)             \
   V(AccessorGetterCallback)                    \
   V(AccessorSetterCallback)                    \
+  V(Debugger)                                  \
   V(ArrayLengthGetter)                         \
   V(ArrayLengthSetter)                         \
   V(BoundFunctionLengthGetter)                 \
