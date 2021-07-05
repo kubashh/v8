@@ -52,8 +52,11 @@ class WebSnapshotSerializerDeserializer {
     ARRAY_ID,
     OBJECT_ID,
     FUNCTION_ID,
+    CLASS_ID,
     REGEXP
   };
+
+  enum ContextType : uint8_t { FUNCTION, BLOCK };
 
   uint32_t FunctionKindToFunctionFlags(FunctionKind kind);
   FunctionKind FunctionFlagsToFunctionKind(uint32_t flags);
@@ -82,8 +85,12 @@ class WebSnapshotSerializerDeserializer {
   // Keep most common function kinds in the 7 least significant bits to make the
   // flags fit in 1 byte.
   using ArrowFunctionBitField = base::BitField<bool, 0, 1>;
-  using AsyncFunctionBitField = ArrowFunctionBitField::Next<bool, 1>;
-  using GeneratorFunctionBitField = AsyncFunctionBitField::Next<bool, 1>;
+  using StaticBitField = ArrowFunctionBitField::Next<bool, 1>;
+  using GeneratorFunctionBitField = StaticBitField::Next<bool, 1>;
+  using AsyncFunctionBitField = GeneratorFunctionBitField::Next<bool, 1>;
+  using ConstructorBitField = AsyncFunctionBitField::Next<bool, 1>;
+  using DefaultBitField = ConstructorBitField::Next<bool, 1>;
+  using DerivedBitField = DefaultBitField::Next<bool, 1>;
 };
 
 class V8_EXPORT WebSnapshotSerializer
@@ -111,6 +118,10 @@ class V8_EXPORT WebSnapshotSerializer
     return static_cast<uint32_t>(function_ids_.size());
   }
 
+  uint32_t class_count() const {
+    return static_cast<uint32_t>(class_ids_.size());
+  }
+
   uint32_t array_count() const {
     return static_cast<uint32_t>(array_ids_.size());
   }
@@ -133,6 +144,7 @@ class V8_EXPORT WebSnapshotSerializer
   void SerializeString(Handle<String> string, uint32_t& id);
   void SerializeMap(Handle<Map> map, uint32_t& id);
   void SerializeFunction(Handle<JSFunction> function, uint32_t& id);
+  void SerializeClass(Handle<JSFunction> function, uint32_t& id);
   void SerializeContext(Handle<Context> context, uint32_t& id);
   void SerializeArray(Handle<JSArray> array, uint32_t& id);
   void SerializePendingArray(Handle<JSArray> array);
@@ -145,6 +157,7 @@ class V8_EXPORT WebSnapshotSerializer
   ValueSerializer map_serializer_;
   ValueSerializer context_serializer_;
   ValueSerializer function_serializer_;
+  ValueSerializer class_serializer_;
   ValueSerializer array_serializer_;
   ValueSerializer object_serializer_;
   ValueSerializer export_serializer_;
@@ -153,6 +166,7 @@ class V8_EXPORT WebSnapshotSerializer
   ObjectCacheIndexMap map_ids_;
   ObjectCacheIndexMap context_ids_;
   ObjectCacheIndexMap function_ids_;
+  ObjectCacheIndexMap class_ids_;
   ObjectCacheIndexMap array_ids_;
   ObjectCacheIndexMap object_ids_;
   uint32_t export_count_ = 0;
@@ -173,6 +187,7 @@ class V8_EXPORT WebSnapshotDeserializer
   uint32_t map_count() const { return map_count_; }
   uint32_t context_count() const { return context_count_; }
   uint32_t function_count() const { return function_count_; }
+  uint32_t class_count() const { return class_count_; }
   uint32_t array_count() const { return array_count_; }
   uint32_t object_count() const { return object_count_; }
 
@@ -184,8 +199,11 @@ class V8_EXPORT WebSnapshotDeserializer
   Handle<String> ReadString(bool internalize = false);
   void DeserializeMaps();
   void DeserializeContexts();
-  Handle<ScopeInfo> CreateScopeInfo(uint32_t variable_count, bool has_parent);
+  Handle<ScopeInfo> CreateScopeInfo(uint32_t variable_count, bool has_parent,
+                                    ContextType context_type);
+  void DeserializeFunctionData(uint32_t count, uint32_t current_count);
   void DeserializeFunctions();
+  void DeserializeClasses();
   void DeserializeArrays();
   void DeserializeObjects();
   void DeserializeExports();
@@ -205,6 +223,7 @@ class V8_EXPORT WebSnapshotDeserializer
   Handle<FixedArray> maps_;
   Handle<FixedArray> contexts_;
   Handle<FixedArray> functions_;
+  Handle<FixedArray> classes_;
   Handle<FixedArray> arrays_;
   Handle<FixedArray> objects_;
   Handle<ArrayList> deferred_references_;
@@ -214,6 +233,8 @@ class V8_EXPORT WebSnapshotDeserializer
   uint32_t context_count_ = 0;
   uint32_t function_count_ = 0;
   uint32_t current_function_count_ = 0;
+  uint32_t class_count_ = 0;
+  uint32_t current_class_count_ = 0;
   uint32_t array_count_ = 0;
   uint32_t current_array_count_ = 0;
   uint32_t object_count_ = 0;

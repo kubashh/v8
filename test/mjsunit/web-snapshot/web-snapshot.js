@@ -292,3 +292,24 @@ function takeAndUseWebSnapshot(createObjects, exports) {
   const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
   assertEquals(11525, foo.func()[0]);
 })();
+
+(function TestEmptyClass() {
+  function createObjects() {
+    globalThis.Foo = class Foo { };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  let x = new Foo();
+})();
+
+(function TestClassWithConstructor() {
+  function createObjects() {
+    globalThis.Foo = class {
+      constructor(x) {
+        this.n = 42 + x;
+      }
+    };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  let x = new Foo(2);
+  assertEquals(44, x.n);
+})();
