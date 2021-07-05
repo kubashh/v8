@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1c078b16_316bbe40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-05T14:45:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82c1dc14_b8ae1524",
+      "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e58f4cea_ffef86a4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -248,6 +266,30 @@
       "writtenOn": "2021-07-05T09:27:40Z",
       "side": 1,
       "message": "Nit: Could you add a comment on why you add this parameter? I can already see the next cleanup CL removing this parameter.",
+      "range": {
+        "startLine": 23,
+        "startChar": 35,
+        "endLine": 23,
+        "endChar": 49
+      },
+      "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b001c587_85f98714",
+        "filename": "src/objects/heap-number-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-05T14:45:52Z",
+      "side": 1,
+      "message": "Right on, I did so in the header file as well as in the heap-number.tq file (per Leszek\u0027s comments).",
+      "parentUuid": "1c4afc71_f7d3436c",
       "range": {
         "startLine": 23,
         "startChar": 35,
