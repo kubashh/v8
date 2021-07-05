@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1851d327_ff69d53d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-05T14:35:18Z",
+      "side": 1,
+      "message": "Hi Jakob, now I\u0027ve got a targeted test.",
+      "revId": "e268508dfdab2d14110cfdd1d116e49a21abfe84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
