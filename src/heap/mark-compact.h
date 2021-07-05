@@ -668,9 +668,14 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   // Flushes a weakly held bytecode array from a shared function info.
   void FlushBytecodeFromSFI(SharedFunctionInfo shared_info);
 
+  // Marks the BaselineData as live and records the slots of baseline data
+  // fields. This assumes that the objects in the data fields are alive.
+  void MarkBaselineDataAsLive(BaselineData baseline_data);
+
   // Clears bytecode arrays that have not been executed for multiple
   // collections.
   void ClearOldBytecodeCandidates();
+  void ClearOldBaselineCandidates();
 
   // Resets any JSFunctions which have had their bytecode flushed.
   void ClearFlushedJsFunctions();
