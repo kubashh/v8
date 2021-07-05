@@ -2108,6 +2108,7 @@ void MarkCompactCollector::ClearNonLiveReferences() {
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_CLEAR_FLUSHABLE_BYTECODE);
     ClearOldBytecodeCandidates();
+    ClearOldBaselineCandidates();
   }
 
   {
@@ -2146,6 +2147,7 @@ void MarkCompactCollector::ClearNonLiveReferences() {
   DCHECK(weak_objects_.js_weak_refs.IsEmpty());
   DCHECK(weak_objects_.weak_cells.IsEmpty());
   DCHECK(weak_objects_.bytecode_flushing_candidates.IsEmpty());
+  DCHECK(weak_objects_.baseline_flushing_candidates.IsEmpty());
   DCHECK(weak_objects_.flushed_js_functions.IsEmpty());
 }
 
@@ -2263,21 +2265,59 @@ void MarkCompactCollector::FlushBytecodeFromSFI(
   DCHECK(!shared_info.is_compiled());
 }
 
+void MarkCompactCollector::MarkBaselineDataAsLive(BaselineData baseline_data) {
+  if (non_atomic_marking_state()->IsBlackOrGrey(baseline_data)) return;
+
+  // Mark baseline data as live
+  non_atomic_marking_state()->WhiteToBlack(baseline_data);
+
+  // Record object slots
+  DCHECK(
+      non_atomic_marking_state()->IsBlackOrGrey(baseline_data.baseline_code()));
+  ObjectSlot code = baseline_data.RawField(BaselineData::kBaselineCodeOffset);
+  RecordSlot(baseline_data, code, HeapObject::cast(*code));
+
+  DCHECK(non_atomic_marking_state()->IsBlackOrGrey(baseline_data.data()));
+  ObjectSlot data = baseline_data.RawField(BaselineData::kDataOffset);
+  RecordSlot(baseline_data, data, HeapObject::cast(*data));
+}
+
 void MarkCompactCollector::ClearOldBytecodeCandidates() {
   DCHECK(FLAG_flush_bytecode ||
          weak_objects_.bytecode_flushing_candidates.IsEmpty());
   SharedFunctionInfo flushing_candidate;
   while (weak_objects_.bytecode_flushing_candidates.Pop(kMainThreadTask,
                                                         &flushing_candidate)) {
-    // If the BytecodeArray is dead, flush it, which will replace the field with
-    // an uncompiled data object.
-    if (!non_atomic_marking_state()->IsBlackOrGrey(
-            flushing_candidate.GetBytecodeArray(isolate()))) {
+    bool is_bytecode_live = non_atomic_marking_state()->IsBlackOrGrey(
+        flushing_candidate.GetBytecodeArray(isolate()));
+    if (flushing_candidate.HasBaselineData()) {
+      BaselineData baseline_data = flushing_candidate.baseline_data();
+      if (non_atomic_marking_state()->IsBlackOrGrey(
+              baseline_data.baseline_code())) {
+        // Currently baseline code holds bytecode array strongly. So it is
+        // always ensured that bytecode is live if baseline code is live. Hence
+        // baseline code can safely load bytecode array without any additional
+        // checks. In future if this changes we need to update these checks to
+        // flush code if bytecode is not live and also update baseline code to
+        // bailout if there is no bytecode.
+        DCHECK(is_bytecode_live);
+        MarkBaselineDataAsLive(baseline_data);
+      } else if (is_bytecode_live) {
+        // If baseline code is flushed but we have a valid bytecode array reset
+        // the function_data field to BytecodeArray.
+        flushing_candidate.set_function_data(baseline_data.data(),
+                                             kReleaseStore);
+      }
+    }
+
+    if (!is_bytecode_live) {
+      // If the BytecodeArray is dead, flush it, which will replace the field
+      // with an uncompiled data object.
       FlushBytecodeFromSFI(flushing_candidate);
     }
 
     // Now record the slot, which has either been updated to an uncompiled data,
-    // or is the BytecodeArray which is still alive.
+    // Baseline code or BytecodeArray which is still alive.
     ObjectSlot slot =
         flushing_candidate.RawField(SharedFunctionInfo::kFunctionDataOffset);
     RecordSlot(flushing_candidate, slot, HeapObject::cast(*slot));
@@ -2293,7 +2333,26 @@ void MarkCompactCollector::ClearFlushedJsFunctions() {
                                      Object target) {
       RecordSlot(object, slot, HeapObject::cast(target));
     };
-    flushed_js_function.ResetIfBytecodeFlushed(gc_notify_updated_slot);
+    flushed_js_function.ResetIfCodeFlushed(gc_notify_updated_slot);
+  }
+}
+
+void MarkCompactCollector::ClearOldBaselineCandidates() {
+  DCHECK(FLAG_flush_bytecode ||
+         weak_objects_.baseline_flushing_candidates.IsEmpty());
+  JSFunction flushed_js_function;
+  while (weak_objects_.baseline_flushing_candidates.Pop(kMainThreadTask,
+                                                        &flushed_js_function)) {
+    auto gc_notify_updated_slot = [](HeapObject object, ObjectSlot slot,
+                                     Object target) {
+      RecordSlot(object, slot, HeapObject::cast(target));
+    };
+    flushed_js_function.ResetIfCodeFlushed(gc_notify_updated_slot);
+
+    // Record the code slot that has been updated either to CompileLazy,
+    // InterpreterEntryTrampoline or baseline code.
+    ObjectSlot slot = flushed_js_function.RawField(JSFunction::kCodeOffset);
+    RecordSlot(flushed_js_function, slot, HeapObject::cast(*slot));
   }
 }
 
@@ -2610,6 +2669,7 @@ void MarkCompactCollector::AbortWeakObjects() {
   weak_objects_.js_weak_refs.Clear();
   weak_objects_.weak_cells.Clear();
   weak_objects_.bytecode_flushing_candidates.Clear();
+  weak_objects_.baseline_flushing_candidates.Clear();
   weak_objects_.flushed_js_functions.Clear();
 }
 
