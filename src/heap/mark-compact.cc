@@ -122,6 +122,11 @@ class MarkingVerifier : public ObjectVisitor, public RootVisitor {
 
 void MarkingVerifier::VerifyRoots() {
   heap_->IterateRoots(this, base::EnumSet<SkipRoot>{SkipRoot::kWeak});
+
+  heap_->isolate()->IterateClientIsolates([this](Isolate* client) {
+    client->heap()->IterateRoots(this,
+                                 base::EnumSet<SkipRoot>{SkipRoot::kWeak});
+  });
 }
 
 void MarkingVerifier::VerifyMarkingOnPage(const Page* page, Address start,
@@ -245,9 +250,10 @@ class FullMarkingVerifier : public MarkingVerifier {
 
  private:
   V8_INLINE void VerifyHeapObjectImpl(HeapObject heap_object) {
-    if (!heap_->IsShared() &&
+    if (heap_->IsShared() !=
         BasicMemoryChunk::FromHeapObject(heap_object)->InSharedHeap())
       return;
+
     CHECK(marking_state_->IsBlackOrGrey(heap_object));
   }
 
@@ -306,6 +312,11 @@ class EvacuationVerifier : public ObjectVisitor, public RootVisitor {
 
 void EvacuationVerifier::VerifyRoots() {
   heap_->IterateRoots(this, base::EnumSet<SkipRoot>{SkipRoot::kWeak});
+
+  heap_->isolate()->IterateClientIsolates([this](Isolate* client) {
+    client->heap()->IterateRoots(this,
+                                 base::EnumSet<SkipRoot>{SkipRoot::kWeak});
+  });
 }
 
 void EvacuationVerifier::VerifyEvacuationOnPage(Address start, Address end) {
@@ -356,6 +367,10 @@ class FullEvacuationVerifier : public EvacuationVerifier {
 
  protected:
   V8_INLINE void VerifyHeapObjectImpl(HeapObject heap_object) {
+    if (heap_->IsShared() !=
+        BasicMemoryChunk::FromHeapObject(heap_object)->InSharedHeap())
+      return;
+
     CHECK_IMPLIES(Heap::InYoungGeneration(heap_object),
                   Heap::InToPage(heap_object));
     CHECK(!MarkCompactCollector::IsOnEvacuationCandidate(heap_object));
@@ -1001,7 +1016,7 @@ class MarkCompactCollector::RootMarkingVisitor final : public RootVisitor {
     HeapObject heap_object = HeapObject::cast(object);
     BasicMemoryChunk* target_page =
         BasicMemoryChunk::FromHeapObject(heap_object);
-    if (!is_shared_heap_ && target_page->InSharedHeap()) return;
+    if (is_shared_heap_ != target_page->InSharedHeap()) return;
     collector_->MarkRootObject(root, heap_object);
   }
 
@@ -1631,8 +1646,18 @@ void MarkCompactCollector::MarkRoots(RootVisitor* root_visitor,
   // etc., and all objects reachable from them.
   heap()->IterateRoots(root_visitor, base::EnumSet<SkipRoot>{SkipRoot::kWeak});
 
+  isolate()->IterateClientIsolates([root_visitor](Isolate* client) {
+    client->heap()->IterateRoots(root_visitor,
+                                 base::EnumSet<SkipRoot>{SkipRoot::kWeak});
+  });
+
   // Custom marking for top optimized frame.
-  ProcessTopOptimizedFrame(custom_root_body_visitor);
+  ProcessTopOptimizedFrame(custom_root_body_visitor, isolate());
+
+  isolate()->IterateClientIsolates(
+      [this, custom_root_body_visitor](Isolate* client) {
+        ProcessTopOptimizedFrame(custom_root_body_visitor, client);
+      });
 }
 
 void MarkCompactCollector::VisitObject(HeapObject obj) {
@@ -1921,13 +1946,14 @@ void MarkCompactCollector::ProcessEphemeronMarking() {
   CHECK(heap()->local_embedder_heap_tracer()->IsRemoteTracingDone());
 }
 
-void MarkCompactCollector::ProcessTopOptimizedFrame(ObjectVisitor* visitor) {
-  for (StackFrameIterator it(isolate(), isolate()->thread_local_top());
-       !it.done(); it.Advance()) {
+void MarkCompactCollector::ProcessTopOptimizedFrame(ObjectVisitor* visitor,
+                                                    Isolate* isolate) {
+  for (StackFrameIterator it(isolate, isolate->thread_local_top()); !it.done();
+       it.Advance()) {
     if (it.frame()->is_unoptimized()) return;
     if (it.frame()->type() == StackFrame::OPTIMIZED) {
       Code code = it.frame()->LookupCode();
-      if (!code.CanDeoptAt(isolate(), it.frame()->pc())) {
+      if (!code.CanDeoptAt(isolate, it.frame()->pc())) {
         Code::BodyDescriptor::IterateBody(code.map(), code, visitor);
       }
       return;
@@ -3986,6 +4012,12 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
     // The external string table is updated at the end.
     heap_->IterateRoots(&updating_visitor, base::EnumSet<SkipRoot>{
                                                SkipRoot::kExternalStringTable});
+
+    isolate()->IterateClientIsolates([&updating_visitor](Isolate* client) {
+      client->heap()->IterateRoots(
+          &updating_visitor,
+          base::EnumSet<SkipRoot>{SkipRoot::kExternalStringTable});
+    });
   }
 
   {
