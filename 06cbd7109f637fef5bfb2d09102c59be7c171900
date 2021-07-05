@@ -16,6 +16,69 @@
       "message": "Ross, Toon PTAL.\nDominik, PTAL at src/heap. ",
       "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4edfc313_85c9369f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-07-05T14:45:47Z",
+      "side": 1,
+      "message": "Overall approach looks good to me, thanks. I\u0027ll let Dominik review the GC parts in detail.",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f87a70df_03d795cb",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-07-05T14:45:47Z",
+      "side": 1,
+      "message": "nit - should we rename this enum and the values?",
+      "range": {
+        "startLine": 288,
+        "startChar": 14,
+        "endLine": 288,
+        "endChar": 51
+      },
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bbb382b_8c324e08",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-07-05T14:45:47Z",
+      "side": 1,
+      "message": "nit - fullstop",
+      "range": {
+        "startLine": 311,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 45
+      },
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
