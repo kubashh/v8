@@ -69,6 +69,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8f449f6_df96e3cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-05T10:21:04Z",
+      "side": 1,
+      "message": "Also, +1 to reducing (or rewriting) the test, in particular because a test that intentionally sets up a particular situation (say, function X getting compiled while function Y is executing in the foreground) has a higher chance of continuing to create those conditions in the future, compared to a fuzzer-generated massive random test that just so happens to accidentally get the timing right. Since you now know what the bug is, I\u0027d hope that it\u0027s not overly difficult to write a reliable and targeted test that triggers it?",
+      "revId": "a2fa44edb0469110be90b76d503f87b995809fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5347473b_c5a90e85",
