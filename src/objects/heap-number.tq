@@ -4,7 +4,7 @@
 
 @generateCppClass
 extern class HeapNumber extends PrimitiveHeapObject {
-  value: float64;
+  @cppRelaxedStore value: float64;
 }
 
 // The HeapNumber value NaN
