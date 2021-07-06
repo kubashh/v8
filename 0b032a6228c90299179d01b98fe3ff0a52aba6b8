@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f306904a_40af8bfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-07-06T08:54:06Z",
+      "side": 1,
+      "message": "Nico PTAL\nUnrelated bug I found when doing the other fixes. I guess not many people click on the 0: Start node in the Schedule phase and this went under the radar",
+      "revId": "0b032a6228c90299179d01b98fe3ff0a52aba6b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
