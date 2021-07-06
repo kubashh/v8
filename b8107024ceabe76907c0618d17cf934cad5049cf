@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db8d1fa5_31d4d586",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1424220
+      },
+      "writtenOn": "2021-07-06T02:49:43Z",
+      "side": 1,
+      "message": "Hi Dominik, forgot to mention that I\u0027ve updated the CL title and description. Could you please review it again? Thanks!",
+      "revId": "b8107024ceabe76907c0618d17cf934cad5049cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
