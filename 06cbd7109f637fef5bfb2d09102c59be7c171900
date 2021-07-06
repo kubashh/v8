@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06d0341f_a58c15c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-06T07:00:34Z",
+      "side": 1,
+      "message": "Very cool! LGTM with comments",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f87a70df_03d795cb",
@@ -60,6 +77,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cf13d8e6_e455d5e2",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-06T07:00:34Z",
+      "side": 1,
+      "message": "Hmm, AFAIU the JSFunction itself should always be fully initialized (please correct me if I am wrong). What might not be fully initialized here is the SFI (although we use acquire load to defend against that) and the Code object referenced from here.",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63b275fd_2ae71dec",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-06T07:00:34Z",
+      "side": 1,
+      "message": "We only do a relaxed load to get the Code object, so I think Code::kind() might be uninitialized (again, please correct me if I am wrong). I think this is fine though, since for false positives we recheck in the final atomic pause and for false negatives we would flush them in the next GC. Should we add a comment to explain this?",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a382cdfa_78f2e514",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-06T07:00:34Z",
+      "side": 1,
+      "message": "Nit: Maybe related to Ross\u0027 comment: Should the name of this flag change as well? We use this flag to also control baseline flushing here.",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1bbb382b_8c324e08",
         "filename": "src/objects/objects-body-descriptors-inl.h",
         "patchSetId": 9
@@ -77,6 +145,23 @@
         "endLine": 311,
         "endChar": 45
       },
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45d7cadf_581c087c",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-06T07:00:34Z",
+      "side": 1,
+      "message": "Nit: typo",
       "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
