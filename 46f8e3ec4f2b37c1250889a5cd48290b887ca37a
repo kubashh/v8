@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa77a0ab_fee90fde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-06T12:25:50Z",
+      "side": 1,
+      "message": "thx, submitting with comment fix...",
+      "revId": "46f8e3ec4f2b37c1250889a5cd48290b887ca37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8191a12d_028eca3d",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-07-06T10:59:54Z",
       "side": 1,
       "message": "nit: there\u0027s a double space here",
+      "range": {
+        "startLine": 594,
+        "startChar": 22,
+        "endLine": 594,
+        "endChar": 24
+      },
+      "revId": "46f8e3ec4f2b37c1250889a5cd48290b887ca37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e430656b_9f242ba0",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-06T12:25:50Z",
+      "side": 1,
+      "message": "good eye!",
+      "parentUuid": "8191a12d_028eca3d",
       "range": {
         "startLine": 594,
         "startChar": 22,
