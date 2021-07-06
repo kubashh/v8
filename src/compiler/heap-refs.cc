@@ -512,6 +512,7 @@ base::Optional<ObjectRef> GetOwnFastDataPropertyFromHeap(
     }
 
     // {constant} needs to pass the gc predicate before we can introspect on it.
+<<<<<<< HEAD   (bddb85 Version 9.3.345.5)
     if (broker->ObjectMayBeUninitialized(constant.value())) return {};
 
     // Ensure that {constant} matches the {representation} we expect for the
@@ -525,6 +526,18 @@ base::Optional<ObjectRef> GetOwnFastDataPropertyFromHeap(
                                        << holder << ". Expected "
                                        << representation << ", but object is a "
                                        << repString);
+=======
+    value = TryMakeRef(broker, constant.value());
+    if (!value.has_value()) {
+      return {};
+    }
+    // Since we don't have a guarantee that {value} is the correct value of the
+    // property, we use the expected {representation} to weed out the most
+    // egregious types of wrong values.
+    if (!value->object()->FitsRepresentation(representation)) {
+      TRACE_BROKER_MISSING(
+          broker, "Mismatch between representation and value in " << holder);
+>>>>>>> CHANGE (758816 [compiler] Representation mismatch detection missed a case)
       return {};
     }
   }
