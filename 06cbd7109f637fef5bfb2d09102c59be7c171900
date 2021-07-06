@@ -54,6 +54,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "184c0a50_6d2cfd3d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-07-06T12:38:25Z",
+      "side": 1,
+      "message": "This probably should be renamed to just \"OldCode\" or so, and perhaps \"ProcessOldCodeCandidates\" since it\u0027s possible we keep things alive?",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8edd5d6c_6cc7167c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-07-06T12:38:25Z",
+      "side": 1,
+      "message": "It seems odd to me that we\u0027d clear baseline code if the bytecode is still alive. In this case we should probably keep baseline code alive as well.",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f87a70df_03d795cb",
         "filename": "src/objects/js-function-inl.h",
         "patchSetId": 9
