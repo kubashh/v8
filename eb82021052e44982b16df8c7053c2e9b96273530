@@ -73,6 +73,30 @@
       },
       "revId": "eb82021052e44982b16df8c7053c2e9b96273530",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfef3d67_e589c76c",
+        "filename": "src/inspector/v8-inspector-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2021-07-06T09:35:36Z",
+      "side": 1,
+      "message": "Sorry for being unclear in the description. This is about a JS-level exception which is indicated by map-\u003eSet() returning an empty MaybeLocal. We\u0027re handling the case correctly (I think) by just keeping the old map, but we didn\u0027t clear the exception on the isolate.\n\nFor the other ToLocalChecked: That is only executed if !entry.IsEmpty(), so I don\u0027t see how it could fail? Do you mean because it may allocate a slot in the handle scope?\n\nSince we keep the old map, and v8::Object::New cannot fail (as it will panic if it can\u0027t allocate) I think the invariant that entry is either a valid object or undefined is preserved. Hence I don\u0027t see why this ToLocalChecked can fail?\n\nDoes this make sense?",
+      "parentUuid": "96d23b1b_66d96c33",
+      "range": {
+        "startLine": 533,
+        "startChar": 19,
+        "endLine": 533,
+        "endChar": 33
+      },
+      "revId": "eb82021052e44982b16df8c7053c2e9b96273530",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
