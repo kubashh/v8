@@ -114,6 +114,30 @@
       },
       "revId": "eb82021052e44982b16df8c7053c2e9b96273530",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccfaf86a_1ec8b182",
+        "filename": "src/inspector/v8-inspector-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2021-07-06T10:58:32Z",
+      "side": 1,
+      "message": "Ack (see response in the top-level comment).",
+      "parentUuid": "dfef3d67_e589c76c",
+      "range": {
+        "startLine": 533,
+        "startChar": 19,
+        "endLine": 533,
+        "endChar": 33
+      },
+      "revId": "eb82021052e44982b16df8c7053c2e9b96273530",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
