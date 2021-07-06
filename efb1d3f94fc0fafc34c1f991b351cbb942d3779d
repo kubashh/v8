@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9d3f408_a3014f69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-07-06T15:21:37Z",
+      "side": 1,
+      "message": "PTAL again. Hopefully no new tests will be imported to blink before we can land this CL 😊",
+      "revId": "efb1d3f94fc0fafc34c1f991b351cbb942d3779d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
