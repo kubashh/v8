@@ -5049,6 +5049,10 @@ v8_header_set("cppgc_headers") {
     "include/cppgc/process-heap-statistics.h",
     "include/cppgc/sentinel-pointer.h",
     "include/cppgc/source-location.h",
+
+    # TODO(v8:11952): Remove the testing header here once depending on both,
+    # //v8:v8 and //v8:v8_for_testing does not result in ODR violations.
+    "include/cppgc/testing.h",
     "include/cppgc/trace-trait.h",
     "include/cppgc/type-traits.h",
     "include/cppgc/visitor.h",
@@ -5145,6 +5149,10 @@ v8_source_set("cppgc_base") {
     "src/heap/cppgc/sweeper.cc",
     "src/heap/cppgc/sweeper.h",
     "src/heap/cppgc/task-handle.h",
+
+    # TODO(v8:11952): Remove the testing header here once depending on both,
+    # //v8:v8 and //v8:v8_for_testing does not result in ODR violations.
+    "src/heap/cppgc/testing.cc",
     "src/heap/cppgc/trace-event.h",
     "src/heap/cppgc/trace-trait.cc",
     "src/heap/cppgc/virtual-memory.cc",
