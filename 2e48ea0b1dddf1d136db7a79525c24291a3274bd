@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3573468_bd69f9e4",
+        "filename": "src/codegen/x64/assembler-x64-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T13:00:08Z",
+      "side": 1,
+      "message": "Currently these are coming from Move(Register, Handle\u003cHeapObject\u003e). So yes, it is currently only HeapObjects.\n\nAlso when we iterate the reloc info, we do not check if it is a Smi in RelocateFromDesc.\n\nI guess it is possible in the future for someone to call this function with a Handle\u003cSmi\u003e, although that wouldn\u0027t make much sense.",
+      "parentUuid": "e3e932f9_2c94ea43",
+      "range": {
+        "startLine": 65,
+        "startChar": 34,
+        "endLine": 65,
+        "endChar": 52
+      },
+      "revId": "2e48ea0b1dddf1d136db7a79525c24291a3274bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "faa37ead_767a43c5",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-07-07T12:31:40Z",
       "side": 1,
       "message": "Is there a way to DCHECK here that all the relevant RelocInfos are already relocated?",
+      "range": {
+        "startLine": 298,
+        "startChar": 56,
+        "endLine": 298,
+        "endChar": 57
+      },
+      "revId": "2e48ea0b1dddf1d136db7a79525c24291a3274bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3353d992_91082ee2",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T13:00:08Z",
+      "side": 1,
+      "message": "I am not sure if there is a safe way to check if a random address is a handle (or an object). I will think about it and do it in a follow up cl.",
+      "parentUuid": "faa37ead_767a43c5",
       "range": {
         "startLine": 298,
         "startChar": 56,

@@ -229,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5095c53b_d96ae48a",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T13:00:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73a4baa6_bd2e9198",
+      "range": {
+        "startLine": 581,
+        "startChar": 18,
+        "endLine": 581,
+        "endChar": 37
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0a2bd8e_fe4086ea",
