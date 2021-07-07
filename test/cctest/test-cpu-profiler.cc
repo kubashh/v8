@@ -4249,7 +4249,7 @@ TEST(BytecodeFlushEventsEagerLogging) {
 #if ENABLE_SPARKPLUG
   FLAG_always_sparkplug = false;
 #endif  // ENABLE_SPARKPLUG
-  i::FLAG_flush_bytecode = true;
+  i::FLAG_flush_code = true;
   i::FLAG_allow_natives_syntax = true;
 
   TestSetup test_setup;

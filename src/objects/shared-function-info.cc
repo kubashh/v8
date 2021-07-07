@@ -299,7 +299,7 @@ void SharedFunctionInfo::DiscardCompiledMetadata(
         gc_notify_updated_slot) {
   DisallowGarbageCollection no_gc;
   if (is_compiled()) {
-    if (FLAG_trace_flush_bytecode) {
+    if (FLAG_trace_flush_code) {
       CodeTracer::Scope scope(GetIsolate()->GetCodeTracer());
       PrintF(scope.file(), "[discarding compiled metadata for ");
       ShortPrint(scope.file());
