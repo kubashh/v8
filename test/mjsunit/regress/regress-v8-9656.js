@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --allow-natives-syntax --no-flush-bytecode
-// Flags: --no-stress-flush-bytecode
+// Flags: --allow-natives-syntax --no-flush-code
+// Flags: --no-stress-flush-code
 // Files: test/mjsunit/code-coverage-utils.js
 
 %DebugToggleBlockCoverage(true);

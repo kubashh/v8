@@ -1104,7 +1104,7 @@ TEST(TestBytecodeFlushing) {
 #if ENABLE_SPARKPLUG
   FLAG_always_sparkplug = false;
 #endif  // ENABLE_SPARKPLUG
-  i::FLAG_flush_bytecode = true;
+  i::FLAG_flush_code = true;
   i::FLAG_allow_natives_syntax = true;
 
   CcTest::InitializeVM();
@@ -1160,7 +1160,7 @@ TEST(TestBytecodeFlushing) {
 }
 
 HEAP_TEST(Regress10560) {
-  i::FLAG_flush_bytecode = true;
+  i::FLAG_flush_code = true;
   i::FLAG_allow_natives_syntax = true;
   // Disable flags that allocate a feedback vector eagerly.
   i::FLAG_opt = false;
@@ -1338,7 +1338,7 @@ TEST(TestOptimizeAfterBytecodeFlushingCandidate) {
 #endif  // ENABLE_SPARKPLUG
   i::FLAG_optimize_for_size = false;
   i::FLAG_incremental_marking = true;
-  i::FLAG_flush_bytecode = true;
+  i::FLAG_flush_code = true;
   i::FLAG_allow_natives_syntax = true;
   ManualGCScope manual_gc_scope;
 
