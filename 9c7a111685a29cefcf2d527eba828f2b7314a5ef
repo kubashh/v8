@@ -16,6 +16,121 @@
       "message": "ptal!",
       "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b44d8215_be52f9f4",
+        "filename": "src/codegen/x64/assembler-x64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-07T09:24:58Z",
+      "side": 1,
+      "message": "I assume the -4 comes from RelocInfo somewhere? Could it be a shared helper, or at least a constant?",
+      "range": {
+        "startLine": 48,
+        "startChar": 31,
+        "endLine": 48,
+        "endChar": 45
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e632659b_204e94f4",
+        "filename": "src/codegen/x64/assembler-x64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-07T09:24:58Z",
+      "side": 1,
+      "message": "maybe rather than storing on_heap_object_ptr_ on the Immediate64, you could use the value_ to recreate the Handle\u003cObject\u003e, and read the ptr off with that?",
+      "range": {
+        "startLine": 66,
+        "startChar": 36,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3187718c_eab7ba77",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-07T09:24:58Z",
+      "side": 1,
+      "message": "nit: no trailing underscore for local variables.",
+      "range": {
+        "startLine": 539,
+        "startChar": 7,
+        "endLine": 539,
+        "endChar": 26
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a018ee13_acb04aff",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-07T09:24:58Z",
+      "side": 1,
+      "message": "should this be `previously_on_heap_ \u0026\u0026 !buffer_-\u003eIsOnHeap()`? In case we ever do allow growing to happen still on-heap.",
+      "range": {
+        "startLine": 579,
+        "startChar": 6,
+        "endLine": 579,
+        "endChar": 25
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0a2bd8e_fe4086ea",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-07T09:24:58Z",
+      "side": 1,
+      "message": "not used?",
+      "range": {
+        "startLine": 602,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 65
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
