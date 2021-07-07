@@ -208,6 +208,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73a4baa6_bd2e9198",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-07T12:31:40Z",
+      "side": 1,
+      "message": "(forgot to send this comment from first review)\n\nthis took me a while to understand -- this isn\u0027t actually an on-heap RelocInfo, but rather raw object pointers that are in on-heap Code. I think this should be renamed, e.g. saved_handles_for_raw_object_ptr_ and saved_offsets_for_runtime_entries_ (or similar)",
+      "range": {
+        "startLine": 581,
+        "startChar": 18,
+        "endLine": 581,
+        "endChar": 37
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0a2bd8e_fe4086ea",
         "filename": "src/codegen/x64/assembler-x64.h",
         "patchSetId": 2

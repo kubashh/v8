@@ -16,6 +16,69 @@
       "message": "Thanks for the quick review! PTAL again!",
       "revId": "2e48ea0b1dddf1d136db7a79525c24291a3274bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd94eff1_354de4d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-07T12:31:40Z",
+      "side": 1,
+      "message": "lgtm % naming and maybe a DCHECK",
+      "revId": "2e48ea0b1dddf1d136db7a79525c24291a3274bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3e932f9_2c94ea43",
+        "filename": "src/codegen/x64/assembler-x64-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-07T12:31:40Z",
+      "side": 1,
+      "message": "is this guaranteed to not be a Handle\u003cSmi\u003e?",
+      "range": {
+        "startLine": 65,
+        "startChar": 34,
+        "endLine": 65,
+        "endChar": 52
+      },
+      "revId": "2e48ea0b1dddf1d136db7a79525c24291a3274bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faa37ead_767a43c5",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-07T12:31:40Z",
+      "side": 1,
+      "message": "Is there a way to DCHECK here that all the relevant RelocInfos are already relocated?",
+      "range": {
+        "startLine": 298,
+        "startChar": 56,
+        "endLine": 298,
+        "endChar": 57
+      },
+      "revId": "2e48ea0b1dddf1d136db7a79525c24291a3274bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
