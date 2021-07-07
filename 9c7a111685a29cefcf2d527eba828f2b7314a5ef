@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b775dc1_d3022a3e",
+        "filename": "src/codegen/x64/assembler-x64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T11:27:56Z",
+      "side": 1,
+      "message": "I created a helper relative_target_offset and used in set_target_address_at as well.",
+      "parentUuid": "b44d8215_be52f9f4",
+      "range": {
+        "startLine": 48,
+        "startChar": 31,
+        "endLine": 48,
+        "endChar": 45
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e632659b_204e94f4",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-07-07T09:24:58Z",
       "side": 1,
       "message": "maybe rather than storing on_heap_object_ptr_ on the Immediate64, you could use the value_ to recreate the Handle\u003cObject\u003e, and read the ptr off with that?",
+      "range": {
+        "startLine": 66,
+        "startChar": 36,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59b97962_d28bb555",
+        "filename": "src/codegen/x64/assembler-x64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T11:27:56Z",
+      "side": 1,
+      "message": "Nice idea! I haven\u0027t though about that!",
+      "parentUuid": "e632659b_204e94f4",
       "range": {
         "startLine": 66,
         "startChar": 36,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56224abc_18924e70",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T11:27:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3187718c_eab7ba77",
+      "range": {
+        "startLine": 539,
+        "startChar": 7,
+        "endLine": 539,
+        "endChar": 26
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a018ee13_acb04aff",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1881b39d_5295ee9d",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T11:27:56Z",
+      "side": 1,
+      "message": "Good idea!",
+      "parentUuid": "a018ee13_acb04aff",
+      "range": {
+        "startLine": 579,
+        "startChar": 6,
+        "endLine": 579,
+        "endChar": 25
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0a2bd8e_fe4086ea",
@@ -123,6 +219,30 @@
       "writtenOn": "2021-07-07T09:24:58Z",
       "side": 1,
       "message": "not used?",
+      "range": {
+        "startLine": 602,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 65
+      },
+      "revId": "9c7a111685a29cefcf2d527eba828f2b7314a5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31a6dd7a_a9bced07",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T11:27:56Z",
+      "side": 1,
+      "message": "Old idea! I forgot to remove. 😊",
+      "parentUuid": "a0a2bd8e_fe4086ea",
       "range": {
         "startLine": 602,
         "startChar": 0,
