@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c421d4f_a07917f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-07T09:40:14Z",
+      "side": 1,
+      "message": "Thanks for the review!",
+      "revId": "63b64e13a48a2350a8e96a4d2827a0d629fb0551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29ac7046_05d728d4",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-07-07T09:23:14Z",
       "side": 1,
       "message": "nit: +constexpr",
+      "range": {
+        "startLine": 844,
+        "startChar": 0,
+        "endLine": 844,
+        "endChar": 6
+      },
+      "revId": "63b64e13a48a2350a8e96a4d2827a0d629fb0551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ca1fe94_a5ed5397",
+        "filename": "src/common/globals.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-07T09:40:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29ac7046_05d728d4",
       "range": {
         "startLine": 844,
         "startChar": 0,
@@ -66,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51aef4ce_6c12b411",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2270,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-07T09:40:14Z",
+      "side": 1,
+      "message": "Presumably those would be the global handles for all those individual clients, right? In client GCs those references would always kept alive. But we might want to disable weak global handles to shared objects with callbacks, otherwise it might be hard to ensure that those callbacks are invoked on the right thread in a shared GC.",
+      "parentUuid": "d4a36793_476ed04d",
+      "range": {
+        "startLine": 2270,
+        "startChar": 11,
+        "endLine": 2270,
+        "endChar": 41
+      },
+      "revId": "63b64e13a48a2350a8e96a4d2827a0d629fb0551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "902ec133_2635c7f9",
         "filename": "src/heap/heap.cc",
         "patchSetId": 13
@@ -77,6 +142,30 @@
       "writtenOn": "2021-07-07T09:23:14Z",
       "side": 1,
       "message": "What kind of growing strategy do we use for the shared Isolate? \n\nI forgot: How do we disable incremental marking triggers?",
+      "range": {
+        "startLine": 5370,
+        "startChar": 6,
+        "endLine": 5370,
+        "endChar": 26
+      },
+      "revId": "63b64e13a48a2350a8e96a4d2827a0d629fb0551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "558ee61c_95358ebf",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 5370,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-07T09:40:14Z",
+      "side": 1,
+      "message": "Whatever is the default, so far I didn\u0027t touch the growing strategy at all.\n\nWe forbid incremental marking for shared isolates in IncrementalMarking::CanBeActivated.",
+      "parentUuid": "902ec133_2635c7f9",
       "range": {
         "startLine": 5370,
         "startChar": 6,
