@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24e4c79b_48fa89b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-07T09:23:14Z",
+      "side": 1,
+      "message": "Generally looks good, only have a few questions",
+      "revId": "63b64e13a48a2350a8e96a4d2827a0d629fb0551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29ac7046_05d728d4",
+        "filename": "src/common/globals.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-07T09:23:14Z",
+      "side": 1,
+      "message": "nit: +constexpr",
+      "range": {
+        "startLine": 844,
+        "startChar": 0,
+        "endLine": 844,
+        "endChar": 6
+      },
+      "revId": "63b64e13a48a2350a8e96a4d2827a0d629fb0551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4a36793_476ed04d",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2270,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-07T09:23:14Z",
+      "side": 1,
+      "message": "What about global handles in shared heaps?\n\nPresumably we can save ourselves the callbacks but I am not even sure about that one in the long run.",
+      "range": {
+        "startLine": 2270,
+        "startChar": 11,
+        "endLine": 2270,
+        "endChar": 41
+      },
+      "revId": "63b64e13a48a2350a8e96a4d2827a0d629fb0551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "902ec133_2635c7f9",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 5370,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-07T09:23:14Z",
+      "side": 1,
+      "message": "What kind of growing strategy do we use for the shared Isolate? \n\nI forgot: How do we disable incremental marking triggers?",
+      "range": {
+        "startLine": 5370,
+        "startChar": 6,
+        "endLine": 5370,
+        "endChar": 26
+      },
+      "revId": "63b64e13a48a2350a8e96a4d2827a0d629fb0551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
