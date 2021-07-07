@@ -144,9 +144,15 @@ class Immediate64 {
       : value_(value), rmode_(rmode) {}
   explicit constexpr Immediate64(Address value, RelocInfo::Mode rmode)
       : value_(static_cast<int64_t>(value)), rmode_(rmode) {}
+  explicit constexpr Immediate64(Address value, Address on_heap_object_ptr,
+                                 RelocInfo::Mode rmode)
+      : value_(static_cast<int64_t>(value)),
+        on_heap_object_ptr_(static_cast<int64_t>(on_heap_object_ptr)),
+        rmode_(rmode) {}
 
  private:
   const int64_t value_;
+  const int64_t on_heap_object_ptr_ = 0;
   const RelocInfo::Mode rmode_ = RelocInfo::NONE;
 
   friend class Assembler;
@@ -593,6 +599,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void movq_heap_number(Register dst, double value);
 
   void movq_string(Register dst, const StringConstantBase* str);
+
+  void movq_heap_object(Register dst, Handle<HeapObject> object);
 
   // Loads a 64-bit immediate into a register, potentially using the constant
   // pool.

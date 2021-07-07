@@ -409,6 +409,10 @@ class V8_EXPORT_PRIVATE AssemblerBase : public Malloced {
 
   CodeCommentsWriter code_comments_writer_;
 
+  // Relocation information when code allocated directly on heap
+  std::vector<std::pair<uint32_t, Address>> on_heap_reloc_info_;
+  std::vector<std::pair<uint32_t, uint32_t>> on_heap_reloc_info_compressed_;
+
  private:
   // Before we copy code into the code space, we sometimes cannot encode
   // call/jump code targets as we normally would, as the difference between the
