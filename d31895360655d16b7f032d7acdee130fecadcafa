@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e75ef398_b621295a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T09:22:16Z",
+      "side": 1,
+      "message": "En passant review... 😊",
+      "revId": "d31895360655d16b7f032d7acdee130fecadcafa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3d14c30_711a4c0f",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 3949,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-07T09:22:16Z",
+      "side": 1,
+      "message": "Please, add this to BUILD.bazel as well.",
+      "range": {
+        "startLine": 3949,
+        "startChar": 3,
+        "endLine": 3949,
+        "endChar": 33
+      },
+      "revId": "d31895360655d16b7f032d7acdee130fecadcafa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
