@@ -1632,7 +1632,7 @@ void TurboAssembler::Move(Register result, Handle<HeapObject> object,
     movl(result, Immediate(static_cast<int>(index), rmode));
   } else {
     DCHECK(RelocInfo::IsFullEmbeddedObject(rmode));
-    movq(result, Immediate64(object.address(), rmode));
+    movq(result, Immediate64(object.address(), object->ptr(), rmode));
   }
 }
 

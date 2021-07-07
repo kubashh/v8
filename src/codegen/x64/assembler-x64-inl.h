@@ -40,7 +40,15 @@ void Assembler::emit_runtime_entry(Address entry, RelocInfo::Mode rmode) {
   DCHECK(RelocInfo::IsRuntimeEntry(rmode));
   DCHECK_NE(options().code_range_start, 0);
   RecordRelocInfo(rmode);
-  emitl(static_cast<uint32_t>(entry - options().code_range_start));
+  uint32_t offset = static_cast<uint32_t>(entry - options().code_range_start);
+  if (IsOnHeap()) {
+    on_heap_reloc_info_compressed_.push_back(
+        std::make_pair(pc_offset(), offset));
+    Address pc = reinterpret_cast<Address>(pc_);
+    emitl(static_cast<int32_t>(entry - pc - 4));
+  } else {
+    emitl(offset);
+  }
 }
 
 void Assembler::emit(Immediate x) {
@@ -53,6 +61,11 @@ void Assembler::emit(Immediate x) {
 void Assembler::emit(Immediate64 x) {
   if (!RelocInfo::IsNone(x.rmode_)) {
     RecordRelocInfo(x.rmode_);
+    if (x.rmode_ == RelocInfo::FULL_EMBEDDED_OBJECT && IsOnHeap()) {
+      on_heap_reloc_info_.push_back(std::make_pair(pc_offset(), x.value_));
+      emitq(static_cast<uint64_t>(x.on_heap_object_ptr_));
+      return;
+    }
   }
   emitq(static_cast<uint64_t>(x.value_));
 }
