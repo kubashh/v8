@@ -153,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5af4bf29_43ad6136",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2270,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-07T11:28:37Z",
+      "side": 1,
+      "message": "For client GCs the RootMarkingVisitor should bail out before visiting/tracing shared objects.",
+      "parentUuid": "514913b6_947cf4b5",
+      "range": {
+        "startLine": 2270,
+        "startChar": 11,
+        "endLine": 2270,
+        "endChar": 41
+      },
+      "revId": "63b64e13a48a2350a8e96a4d2827a0d629fb0551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "902ec133_2635c7f9",
