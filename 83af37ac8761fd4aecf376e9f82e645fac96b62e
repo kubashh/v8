@@ -386,6 +386,30 @@
       },
       "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af7d2a18_41c8afb5",
+        "filename": "src/heap/cppgc/heap-statistics-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T18:25:50Z",
+      "side": 1,
+      "message": "Have to correct myself here: Our canonicalization would work if our `const char*` names were indeed unique. They can be duplicated in component builds due to the way the GCInfos indices work. We can get 2 different GCInfo objects with different NameTraits for the same types if they are in different shared libraries.\n\nWe have to add ids in Blink to accomodate this as we would otherwise have a name clash in the dumps.",
+      "parentUuid": "d2cb3e5c_7b3b0a06",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 41
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
