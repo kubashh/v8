@@ -5,6 +5,7 @@
 #include "src/heap/cppgc/heap-statistics-collector.h"
 
 #include <string>
+#include <unordered_map>
 
 #include "include/cppgc/heap-statistics.h"
 #include "include/cppgc/name-provider.h"
@@ -60,6 +61,7 @@ HeapStatistics::PageStatistics* InitializePage(
     page_stats->object_stats.type_name.resize(num_types);
     page_stats->object_stats.type_count.resize(num_types);
     page_stats->object_stats.type_bytes.resize(num_types);
+    page_stats->object_stats.type_ids.resize(num_types);
   }
 
   return page_stats;
@@ -87,7 +89,7 @@ void FinalizeSpace(HeapStatistics* stats,
   *space_stats = nullptr;
 }
 
-void RecordObjectType(std::vector<std::string>& type_names,
+void RecordObjectType(std::unordered_map<const char*, size_t>& type_map,
                       HeapStatistics::ObjectStatistics& object_stats,
                       HeapObjectHeader* header, size_t object_size) {
   if (!NameProvider::HideInternalNames()) {
@@ -98,9 +100,10 @@ void RecordObjectType(std::vector<std::string>& type_names,
     if (object_stats.type_name[gc_info_index].empty()) {
       object_stats.type_name[gc_info_index] = header->GetName().value;
     }
-    if (type_names[gc_info_index].empty()) {
-      type_names[gc_info_index] = header->GetName().value;
-    }
+    // Tries to insert a new entry into the typemap with a running counter. If
+    // the entry is already present, just returns the old one.
+    const auto it = type_map.insert({header->GetName().value, type_map.size()});
+    object_stats.type_ids[gc_info_index] = it.first->second;
   }
 }
 
@@ -112,12 +115,20 @@ HeapStatistics HeapStatisticsCollector::CollectStatistics(HeapBase* heap) {
   current_stats_ = &stats;
 
   if (!NameProvider::HideInternalNames()) {
-    const size_t num_types = GlobalGCInfoTable::Get().NumberOfGCInfos();
-    current_stats_->type_names.resize(num_types);
+    // Add a dummy type so that a type index of zero has a valid mapping but
+    // shows an invalid type.
+    type_map_.insert({"Invalid type", 0});
   }
 
   Traverse(heap->raw_heap());
   FinalizeSpace(current_stats_, &current_space_stats_, &current_page_stats_);
+
+  if (!NameProvider::HideInternalNames()) {
+    stats.type_names.resize(type_map_.size());
+    for (auto& it : type_map_) {
+      stats.type_names[it.second] = it.first;
+    }
+  }
 
   DCHECK_EQ(heap->stats_collector()->allocated_memory_size(),
             stats.physical_size_bytes);
@@ -180,11 +191,9 @@ bool HeapStatisticsCollector::VisitHeapObjectHeader(HeapObjectHeader& header) {
                 BasePage::FromPayload(const_cast<HeapObjectHeader*>(&header)))
                 ->PayloadSize()
           : header.AllocatedSize();
-  RecordObjectType(current_stats_->type_names,
-                   current_space_stats_->object_stats, &header,
+  RecordObjectType(type_map_, current_space_stats_->object_stats, &header,
                    allocated_object_size);
-  RecordObjectType(current_stats_->type_names,
-                   current_page_stats_->object_stats, &header,
+  RecordObjectType(type_map_, current_page_stats_->object_stats, &header,
                    allocated_object_size);
   current_page_stats_->used_size_bytes += allocated_object_size;
   return true;
