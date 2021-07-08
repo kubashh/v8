@@ -44,6 +44,21 @@ struct HeapStatistics final {
     std::vector<size_t> type_count;
     /** Overall size of allocated objects per each type. */
     std::vector<size_t> type_bytes;
+
+    /**
+     * Number of allocated bytes per type.
+     *
+     * The index matches `HeapStatistics::type_name`.
+     */
+    std::vector<size_t> allocated_bytes;
+    /**
+     * Number of allocated objects per type.
+     *
+     * The index matches `HeapStatistics::type_name`.
+     */
+    std::vector<size_t> object_counts;
+
+    size_t number_of_types() const { return allocated_bytes.size(); }
   };
 
   /**
@@ -133,8 +148,7 @@ struct HeapStatistics final {
   std::vector<SpaceStatistics> space_stats;
 
   /**
-   * Vector of `cppgc::GarbageCollected` types that are potentially used on the
-   * heap. Unused types in the vector are represented by empty strings.
+   * Vector of `cppgc::GarbageCollected` type names.
    */
   std::vector<std::string> type_names;
 };
