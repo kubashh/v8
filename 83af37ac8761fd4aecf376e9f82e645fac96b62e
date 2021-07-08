@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2d474ae4_55b472c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T18:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6225cbdf_2550aa33",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d4bc70dd_77c7a7a9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -152,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "507b2770_7b8599e3",
+        "filename": "include/cppgc/heap-statistics.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T18:07:12Z",
+      "side": 1,
+      "message": "Implemented this idea.",
+      "parentUuid": "a2daed34_539b27cf",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 4
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5344150_2af37d10",
@@ -165,6 +213,30 @@
       "writtenOn": "2021-07-08T17:26:04Z",
       "side": 1,
       "message": "Would it be useful to also have a mapping from type name to gc info index?\nThe only possible benefit I can currently think of is in analyzing problems caused by gc info folding, but I don\u0027t have anything concrete in mind.",
+      "range": {
+        "startLine": 153,
+        "startChar": 27,
+        "endLine": 153,
+        "endChar": 37
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "428c7667_5b7aaa23",
+        "filename": "include/cppgc/heap-statistics.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T18:07:12Z",
+      "side": 1,
+      "message": "I actually implemented now what I needed for diagnosing issues with the LayoutObject CLs.\n\nI would avoid exposing this detail for now as I would also not know how to expose it in a useful way on the UI.",
+      "parentUuid": "d5344150_2af37d10",
       "range": {
         "startLine": 153,
         "startChar": 27,
@@ -258,6 +330,54 @@
       "writtenOn": "2021-07-08T17:43:48Z",
       "side": 1,
       "message": "In crrev.com/c/3009259 you mention that different types might return the same name. If that\u0027s the case, then I think canonalizing based on name would also not suffice.\nI guess we need a combination of name and gc info as you use in the blink CL.",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 41
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3519c2a3_4742e249",
+        "filename": "src/heap/cppgc/heap-statistics-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T18:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c552747a_160723e6",
+      "range": {
+        "startLine": 36,
+        "startChar": 42,
+        "endLine": 36,
+        "endChar": 51
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2cb3e5c_7b3b0a06",
+        "filename": "src/heap/cppgc/heap-statistics-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T18:07:12Z",
+      "side": 1,
+      "message": "I am not sure we actually want to distinguish those. We currently canonicalize based on name as that\u0027s the only thing that in the end makes sense. If the user choses to return the same name for 2 different types then they are merged.\n\nI need to update the Blink CL as the issue should disappear with the approach we take here and we should not need the ids anymore.",
+      "parentUuid": "c05722b4_de614fc9",
       "range": {
         "startLine": 36,
         "startChar": 2,
