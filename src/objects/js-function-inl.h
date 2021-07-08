@@ -284,6 +284,24 @@ bool JSFunction::is_compiled() const {
          shared().is_compiled();
 }
 
+bool JSFunction::ShouldFlushBaselineCode(CodeFlushMode mode) {
+  if (mode == CodeFlushMode::kDoNotFlushCode) return false;
+  // Do a raw read for shared and code fields here since this function may be
+  // called on a concurrent thread. JSFunction itself should be fully
+  // initialized here but the SharedFunctionInfo, Code fields maynot be
+  // initialized. We read using acquire loads to defend against that.
+  Object maybe_shared = ACQUIRE_READ_FIELD(*this, kSharedFunctionInfoOffset);
+  if (!maybe_shared.IsSharedFunctionInfo()) return false;
+
+  Object maybe_code = ACQUIRE_READ_FIELD(*this, kCodeOffset);
+  if (!maybe_code.IsCodeT()) return false;
+  Code code = FromCodeT(CodeT::cast(maybe_code));
+  if (code.kind() != CodeKind::BASELINE) return false;
+
+  SharedFunctionInfo shared = SharedFunctionInfo::cast(maybe_shared);
+  return shared.ShouldFlushBytecode(mode);
+}
+
 bool JSFunction::NeedsResetDueToFlushedBytecode() {
   // Do a raw read for shared and code fields here since this function may be
   // called on a concurrent thread and the JSFunction might not be fully
@@ -299,15 +317,24 @@ bool JSFunction::NeedsResetDueToFlushedBytecode() {
   return !shared.is_compiled() && code.builtin_id() != Builtin::kCompileLazy;
 }
 
-void JSFunction::ResetIfBytecodeFlushed(
+bool JSFunction::NeedsResetDueToFlushedBaselineCode() {
+  return code().kind() == CodeKind::BASELINE && !shared().HasBaselineData();
+}
+
+void JSFunction::ResetIfCodeFlushed(
     base::Optional<std::function<void(HeapObject object, ObjectSlot slot,
                                       HeapObject target)>>
         gc_notify_updated_slot) {
-  if (FLAG_flush_bytecode && NeedsResetDueToFlushedBytecode()) {
+  if (!FLAG_flush_bytecode) return;
+
+  if (NeedsResetDueToFlushedBytecode()) {
     // Bytecode was flushed and function is now uncompiled, reset JSFunction
     // by setting code to CompileLazy and clearing the feedback vector.
     set_code(*BUILTIN_CODE(GetIsolate(), CompileLazy));
     raw_feedback_cell().reset_feedback_vector(gc_notify_updated_slot);
+  } else if (NeedsResetDueToFlushedBaselineCode()) {
+    // Flush baseline code from the closure if required
+    set_code(*BUILTIN_CODE(GetIsolate(), InterpreterEntryTrampoline));
   }
 }
 
