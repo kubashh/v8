@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6225cbdf_2550aa33",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-08T17:26:04Z",
+      "side": 1,
+      "message": "properly",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d4bc70dd_77c7a7a9",
@@ -18,6 +41,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66c674ce_6fe6d538",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-08T17:26:04Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b590abd_c0f4da6e",
@@ -31,6 +71,30 @@
       "writtenOn": "2021-07-08T10:37:09Z",
       "side": 1,
       "message": "The old fields can be removed in a follow up.",
+      "range": {
+        "startLine": 40,
+        "startChar": 11,
+        "endLine": 40,
+        "endChar": 20
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "893f5b1e_f32bdfde",
+        "filename": "include/cppgc/heap-statistics.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-08T17:26:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0b590abd_c0f4da6e",
       "range": {
         "startLine": 40,
         "startChar": 11,
@@ -66,6 +130,53 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2daed34_539b27cf",
+        "filename": "include/cppgc/heap-statistics.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-08T17:26:04Z",
+      "side": 1,
+      "message": "I like this idea. It would make it somewhat simpler to manage the vector indexes and such. But I\u0027m also ok with keeping the current impl.",
+      "parentUuid": "9b1b2bf4_c3f35a29",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 4
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5344150_2af37d10",
+        "filename": "include/cppgc/heap-statistics.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-08T17:26:04Z",
+      "side": 1,
+      "message": "Would it be useful to also have a mapping from type name to gc info index?\nThe only possible benefit I can currently think of is in analyzing problems caused by gc info folding, but I don\u0027t have anything concrete in mind.",
+      "range": {
+        "startLine": 153,
+        "startChar": 27,
+        "endLine": 153,
+        "endChar": 37
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "76b9fc7a_86eef170",
         "filename": "src/heap/cppgc/heap-statistics-collector.cc",
         "patchSetId": 6
@@ -82,6 +193,53 @@
         "startChar": 17,
         "endLine": 74,
         "endChar": 36
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "828847de_9cef5f3c",
+        "filename": "src/heap/cppgc/heap-statistics-collector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-08T17:26:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "76b9fc7a_86eef170",
+      "range": {
+        "startLine": 74,
+        "startChar": 17,
+        "endLine": 74,
+        "endChar": 36
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c552747a_160723e6",
+        "filename": "src/heap/cppgc/heap-statistics-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-08T17:26:04Z",
+      "side": 1,
+      "message": "nit: type_name_to_index_map_?",
+      "range": {
+        "startLine": 36,
+        "startChar": 42,
+        "endLine": 36,
+        "endChar": 51
       },
       "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
