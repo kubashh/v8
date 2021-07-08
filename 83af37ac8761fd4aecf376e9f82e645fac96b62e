@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4bc70dd_77c7a7a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T10:37:09Z",
+      "side": 1,
+      "message": "ptal, this is now working with my local Blink patch",
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b590abd_c0f4da6e",
+        "filename": "include/cppgc/heap-statistics.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T10:37:09Z",
+      "side": 1,
+      "message": "The old fields can be removed in a follow up.",
+      "range": {
+        "startLine": 40,
+        "startChar": 11,
+        "endLine": 40,
+        "endChar": 20
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b1b2bf4_c3f35a29",
+        "filename": "include/cppgc/heap-statistics.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T10:37:09Z",
+      "side": 1,
+      "message": "This could be remodeled\n  vector\u003cObjectStatsEntry\u003e where the indices match HeapStatistics:type_names.\n  \nAny preference?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 4
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76b9fc7a_86eef170",
+        "filename": "src/heap/cppgc/heap-statistics-collector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-08T10:37:09Z",
+      "side": 1,
+      "message": "This is a left-over from the previous CL. I plan on additing tests and better support once Blink is adjusted to the API.",
+      "range": {
+        "startLine": 74,
+        "startChar": 17,
+        "endLine": 74,
+        "endChar": 36
+      },
+      "revId": "83af37ac8761fd4aecf376e9f82e645fac96b62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
