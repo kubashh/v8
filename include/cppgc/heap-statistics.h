@@ -40,10 +40,14 @@ struct HeapStatistics final {
     size_t num_types = 0;
     /** Name of each type. */
     std::vector<std::string> type_name;
+    /** Index into `HeapStatistics::type_name` per each type. */
+    std::vector<size_t> type_ids;
     /** Number of allocated objects per each type. */
     std::vector<size_t> type_count;
     /** Overall size of allocated objects per each type. */
     std::vector<size_t> type_bytes;
+
+    size_t number_of_types() const { return type_ids.size(); }
   };
 
   /**
