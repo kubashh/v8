@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "871f7716_64bad2de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-07-08T14:49:49Z",
+      "side": 1,
+      "message": "This is fine on my side (apart from a last comment), but can the other reviewers please confirm that the changes from Patchset 15 to Patchset 19 are in order?",
+      "revId": "990809ebee0745fcdea5218fb7d481ff21cd3900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
