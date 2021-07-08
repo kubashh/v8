@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d3340c8_d202ba69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-07-08T16:56:52Z",
+      "side": 1,
+      "message": "Hi Dominik,\n\nThe newly added test in this CL causes a crash when `pointer_compression_shared_cage` is disabled.\nI have created this issue:\nhttps://bugs.chromium.org/p/v8/issues/detail?id\u003d11966",
+      "revId": "9663bb31d89c2c15bb067a926129bde4b6609736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
