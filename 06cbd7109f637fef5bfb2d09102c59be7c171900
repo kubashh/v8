@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a67e26ca_6bf259b4",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "184c0a50_6d2cfd3d",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8edd5d6c_6cc7167c",
@@ -82,6 +100,24 @@
       "writtenOn": "2021-07-06T12:38:25Z",
       "side": 1,
       "message": "It seems odd to me that we\u0027d clear baseline code if the bytecode is still alive. In this case we should probably keep baseline code alive as well.",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66dfdab9_baa2c8df",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "It\u0027s kind of difficult to mark the baseline code live during the atomic phase. Since we marked it as dead none of the pointers from code object would be visited, so we need to check if all of them are alive, if not we need to recurse down. I am not really worried about this happening too often. In my understanding, this can only happen if there is bytecode on the stack which is aged. This should be relatively rare. If we find this to be an issue we can then see how to keep baseline code in such cases.",
+      "parentUuid": "8edd5d6c_6cc7167c",
       "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +145,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99e6540b_77703bce",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f87a70df_03d795cb",
+      "range": {
+        "startLine": 288,
+        "startChar": 14,
+        "endLine": 288,
+        "endChar": 51
+      },
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf13d8e6_e455d5e2",
@@ -122,6 +182,24 @@
       "writtenOn": "2021-07-06T07:00:34Z",
       "side": 1,
       "message": "Hmm, AFAIU the JSFunction itself should always be fully initialized (please correct me if I am wrong). What might not be fully initialized here is the SFI (although we use acquire load to defend against that) and the Code object referenced from here.",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "312e933e_e8ae725a",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf13d8e6_e455d5e2",
       "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -145,6 +223,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92d3d359_7a85984f",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "I am sorry for going back and forth on this Dominik. I think it\u0027s safe to do a acquire load here. The accesses in assembly code we saw earlier are only setting an already initialized code object which was stored into the field using release store. For ex: when we create a TF code we store it on feedback vector using a release store. The assembly code is only reading the feedback vector field and storing it on JSFunction. This support was added for concurrent turbofan here: https://chromium-review.googlesource.com/c/v8/v8/+/2676633. The only place where we missed this was in runtime-wasm and I checked with Michael that it was an oversight and it should indeed be release store. I updated that along with this CL (Happy to do it as a separate CL if that\u0027s better). Since we already rely on these semantics in background compilation I think it\u0027s safe to use it here as well. Let me know if this sounds OK.",
+      "parentUuid": "63b275fd_2ae71dec",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a382cdfa_78f2e514",
         "filename": "src/objects/js-function-inl.h",
         "patchSetId": 9
@@ -156,6 +252,24 @@
       "writtenOn": "2021-07-06T07:00:34Z",
       "side": 1,
       "message": "Nit: Maybe related to Ross\u0027 comment: Should the name of this flag change as well? We use this flag to also control baseline flushing here.",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8be0ac09_c9ffce4d",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "Ya, you are right. I will rename this in a follow up CL. Renaming this flag triggers blink_web_tests and somehow they are timing out. The linux-rel bot uses use_clang_coverage \u003d true and the clang coverage for these files is causing some gc related tests to timeout. I checked locally and with or without this patch the tests take around the same time. If I change clang_coverage it massively slows them down. I will investigate this further and land it as a separate CL. Even otherwise I think it is better to land flag rename as a different CL since I saw some test262 seem to be using this flag too. So I will try to introduce a new flag change all of them to use new flag and then delete the old flag.",
+      "parentUuid": "a382cdfa_78f2e514",
       "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -183,6 +297,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9564597_5e4a40d3",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bbb382b_8c324e08",
+      "range": {
+        "startLine": 311,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 45
+      },
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45d7cadf_581c087c",
@@ -196,6 +334,24 @@
       "writtenOn": "2021-07-06T07:00:34Z",
       "side": 1,
       "message": "Nit: typo",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcd50994_c224a9bd",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45d7cadf_581c087c",
       "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e14089eb_d8fb384d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "Thanks all!\nAndreas, PTAL at one line change in runtime-wasm.cc\nDominik, just take another look at the change for using acquire load for code field in js-function-inl.h. Sorry for changing it so many times :) \n\nThanks,\nMythri.",
+      "revId": "d8c8067f32695f7005d6c98452b4fa3fe0b16f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ff568e7_f5608224",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-08T18:49:56Z",
+      "side": 1,
+      "message": "This was needed after we added acquire / release semantics for JSFunction::code here: https://chromium-review.googlesource.com/c/v8/v8/+/2676633. It was an oversight that this was left out.",
+      "revId": "d8c8067f32695f7005d6c98452b4fa3fe0b16f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
