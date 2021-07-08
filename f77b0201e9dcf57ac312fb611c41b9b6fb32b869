@@ -16,6 +16,24 @@
       "message": "LGTM, thanks!\n\nCan we add a regress test for the test failure?",
       "revId": "f77b0201e9dcf57ac312fb611c41b9b6fb32b869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5978e56_80db8029",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-08T09:39:08Z",
+      "side": 1,
+      "message": "Similar situation as for the other CL. We have a tests that fail, but not reliably. Creating a new test is not so simple. But the main issue is that it will have to rely on serializer heuristics that we are gradually removing anyways, so I\u0027m thinking it makes no sense to spend the time on creating such a test.",
+      "parentUuid": "bf327dd5_6c0a15d2",
+      "revId": "f77b0201e9dcf57ac312fb611c41b9b6fb32b869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
