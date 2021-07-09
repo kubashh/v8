@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10ac9d5d_11105416",
+        "filename": "test/intl/regress-1224869.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-07-09T21:47:17Z",
+      "side": 1,
+      "message": "Oh man, what is this payload?",
+      "revId": "02f5ad60fa0761202630a05130a26d73e81191f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
