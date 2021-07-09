@@ -430,6 +430,8 @@ void Assembler::Align(int m) {
 
 void Assembler::CodeTargetAlign() { Align(8); }
 
+void Assembler::LoopHeaderAlign() { CodeTargetAlign(); }
+
 Condition Assembler::GetCondition(Instr instr) {
   switch (instr & kCondMask) {
     case BT:

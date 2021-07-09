@@ -1538,6 +1538,7 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   inline bool IsLoopHeader() const { return loop_end_.IsValid(); }
   inline bool IsSwitchTarget() const { return switch_target_; }
   inline bool ShouldAlign() const { return alignment_; }
+  inline bool ShouldAlignLoop() const { return loop_alignment_; }
 
   using Predecessors = ZoneVector<RpoNumber>;
   Predecessors& predecessors() { return predecessors_; }
@@ -1561,6 +1562,7 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   void set_ao_number(RpoNumber ao_number) { ao_number_ = ao_number; }
 
   void set_alignment(bool val) { alignment_ = val; }
+  void set_loop_alignment(bool val) { loop_alignment_ = val; }
 
   void set_switch_target(bool val) { switch_target_ = val; }
 
@@ -1589,6 +1591,7 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   bool handler_;              // Block is a handler entry point.
   bool switch_target_ = false;
   bool alignment_ = false;  // insert alignment before this block
+  bool loop_alignment_ = false;  // insert alignment before this block
   bool needs_frame_ = false;
   bool must_construct_frame_ = false;
   bool must_deconstruct_frame_ = false;

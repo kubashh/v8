@@ -34,6 +34,8 @@ class BaselineAssembler {
   inline int pc_offset() const;
   inline void CodeEntry() const;
   inline void ExceptionHandler() const;
+  inline void CodeTargetAlign();
+  inline void LoopHeaderAlign();
   V8_INLINE void RecordComment(const char* string);
   inline void Trap();
   inline void DebugBreak();

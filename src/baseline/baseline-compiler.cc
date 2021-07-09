@@ -409,7 +409,8 @@ void BaselineCompiler::AddPosition() {
 void BaselineCompiler::PreVisitSingleBytecode() {
   switch (iterator().current_bytecode()) {
     case interpreter::Bytecode::kJumpLoop:
-      EnsureLabels(iterator().GetJumpTargetOffset());
+      // EnsureLabels(iterator().GetJumpTargetOffset());
+      EnsureLabels(iterator().GetJumpTargetOffset())->should_align = true;
       break;
 
     // TODO(leszeks): Update the max_call_args as part of the main bytecode
@@ -442,6 +443,9 @@ void BaselineCompiler::PreVisitSingleBytecode() {
 void BaselineCompiler::VisitSingleBytecode() {
   int offset = iterator().current_offset();
   if (labels_[offset]) {
+    if (labels_[offset]->should_align) {
+      __ LoopHeaderAlign();
+    }
     // Bind labels for this offset that have already been linked to a
     // jump (i.e. forward jumps, excluding jump tables).
     for (auto&& label : labels_[offset]->linked) {
