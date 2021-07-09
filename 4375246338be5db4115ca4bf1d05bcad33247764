@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f66138ba_11871661",
+        "filename": "lib/recipes.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-07-09T17:24:41Z",
+      "side": 0,
+      "message": "@Liviu, maybe you can add it back as a normal v8_builder and maybe without a console entry...",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 19
+      },
+      "revId": "4375246338be5db4115ca4bf1d05bcad33247764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
