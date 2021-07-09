@@ -2803,13 +2803,17 @@ JSNativeContextSpecialization::BuildElementAccess(
       // Only check that the {index} is in SignedSmall range. We do the actual
       // bounds check below and just skip the property access if it's out of
       // bounds for the {receiver}.
+#if 0
       index = effect = graph()->NewNode(
           simplified()->CheckSmi(FeedbackSource()), index, effect, control);
+#endif
+      index = effect = graph()->NewNode(
+          simplified()->CheckNumber(FeedbackSource()), index, effect, control);
 
       // Cast the {index} to Unsigned32 range, so that the bounds checks
       // below are performed on unsigned values, which means that all the
       // Negative32 values are treated as out-of-bounds.
-      index = graph()->NewNode(simplified()->NumberToUint32(), index);
+      //      index = graph()->NewNode(simplified()->NumberToUint32(), index);
       situation = kHandleOOB_SmiCheckDone;
     } else {
       // Check that the {index} is in the valid range for the {receiver}.
@@ -2827,14 +2831,27 @@ JSNativeContextSpecialization::BuildElementAccess(
       case AccessMode::kLoad: {
         // Check if we can return undefined for out-of-bounds loads.
         if (situation == kHandleOOB_SmiCheckDone) {
-          Node* check =
+          Node* check1 =
               graph()->NewNode(simplified()->NumberLessThan(), index, length);
-          Node* branch = graph()->NewNode(
+          //          Node* check =
+          //              graph()->NewNode(simplified()->NumberLessThan(),
+          //              index, length);
+
+          Node* branch1 = graph()->NewNode(
               common()->Branch(BranchHint::kTrue,
                                IsSafetyCheck::kCriticalSafetyCheck),
-              check, control);
+              check1, control);
 
-          Node* if_true = graph()->NewNode(common()->IfTrue(), branch);
+          Node* if_true1 = graph()->NewNode(common()->IfTrue(), branch1);
+
+          Node* check2 = graph()->NewNode(simplified()->NumberLessThanOrEqual(),
+                                          jsgraph()->ZeroConstant(), index);
+          Node* branch2 = graph()->NewNode(
+              common()->Branch(BranchHint::kTrue,
+                               IsSafetyCheck::kCriticalSafetyCheck),
+              check2, if_true1);
+
+          Node* if_true2 = graph()->NewNode(common()->IfTrue(), branch2);
           Node* etrue = effect;
           Node* vtrue;
           {
@@ -2846,16 +2863,17 @@ JSNativeContextSpecialization::BuildElementAccess(
                     FeedbackSource(),
                     CheckBoundsFlag::kConvertStringAndMinusZero |
                         CheckBoundsFlag::kAbortOnOutOfBounds),
-                index, length, etrue, if_true);
+                index, length, etrue, if_true2);
 
             // Perform the actual load
             vtrue = etrue = graph()->NewNode(
                 simplified()->LoadTypedElement(external_array_type),
                 buffer_or_receiver, base_pointer, external_pointer, index,
-                etrue, if_true);
+                etrue, if_true2);
           }
 
-          Node* if_false = graph()->NewNode(common()->IfFalse(), branch);
+          Node* if_false1 = graph()->NewNode(common()->IfFalse(), branch1);
+          Node* if_false2 = graph()->NewNode(common()->IfFalse(), branch2);
           Node* efalse = effect;
           Node* vfalse;
           {
@@ -2863,12 +2881,13 @@ JSNativeContextSpecialization::BuildElementAccess(
             vfalse = jsgraph()->UndefinedConstant();
           }
 
-          control = graph()->NewNode(common()->Merge(2), if_true, if_false);
-          effect =
-              graph()->NewNode(common()->EffectPhi(2), etrue, efalse, control);
+          control = graph()->NewNode(common()->Merge(3), if_true2, if_false1,
+                                     if_false2);
+          effect = graph()->NewNode(common()->EffectPhi(3), etrue, efalse,
+                                    efalse, control);
           value =
-              graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
-                               vtrue, vfalse, control);
+              graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 3),
+                               vtrue, vfalse, vfalse, control);
         } else {
           // Perform the actual load.
           DCHECK_EQ(kBoundsCheckDone, situation);
