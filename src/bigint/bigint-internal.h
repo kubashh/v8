@@ -21,6 +21,8 @@ constexpr int kBurnikelThreshold = 57;
 constexpr int kNewtonInversionThreshold = 50;
 // kBarrettThreshold is defined in bigint.h.
 
+constexpr int kToStringFastThreshold = 43;
+
 class ProcessorImpl : public Processor {
  public:
   explicit ProcessorImpl(Platform* platform);
@@ -62,6 +64,8 @@ class ProcessorImpl : public Processor {
   // {out_length} initially contains the allocated capacity of {out}, and
   // upon return will be set to the actual length of the result string.
   void ToString(char* out, int* out_length, Digits X, int radix, bool sign);
+  void ToStringImpl(char* out, int* out_length, Digits X, int radix, bool sign,
+                    bool use_fast_algorithm);
 
   bool should_terminate() { return status_ == Status::kInterrupted; }
 
@@ -87,6 +91,10 @@ class ProcessorImpl : public Processor {
   Status status_{Status::kOk};
   Platform* platform_;
 };
+
+int DivideBarrettScratchSpace(int n);
+int InvertScratchSpace(int n);
+int InvertNewtonScratchSpace(int n);
 
 #define CHECK(cond)                                   \
   if (!(cond)) {                                      \
