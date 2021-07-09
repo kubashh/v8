@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdafcf8e_fe26931e",
+        "filename": "builders/experiments.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-07-09T13:13:57Z",
+      "side": 1,
+      "message": "I think the builder can\u0027t live on the experimental console. It needs to live on the official console and be triggered by official versions. Otherwise it has no tag and does nothing, which is WAI:\nhttps://ci.chromium.org/p/v8/builders/ci/V8%20Official%20Linux64%20(reclient)/3\n\nI think it\u0027s fine to just move this to official console with the upload_archive\u003dfalse property.",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 1
+      },
+      "revId": "4375246338be5db4115ca4bf1d05bcad33247764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
