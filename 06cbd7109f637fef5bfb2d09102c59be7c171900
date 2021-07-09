@@ -124,6 +124,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3df0df11_eb3603ff",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-07-09T07:40:23Z",
+      "side": 1,
+      "message": "If the bytecode is alive, all pointers pointed to by baseline code will have to be alive too though. But I guess it\u0027s ok to drop it.",
+      "parentUuid": "66dfdab9_baa2c8df",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f87a70df_03d795cb",
         "filename": "src/objects/js-function-inl.h",
         "patchSetId": 9
