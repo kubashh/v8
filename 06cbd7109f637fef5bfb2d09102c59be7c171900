@@ -259,6 +259,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ff48ae9_c13dd0cf",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-09T09:02:55Z",
+      "side": 1,
+      "message": "Great, that\u0027s even better! Wdyt about those usages of kCodeOffset in assembly and CSA code, where we don\u0027t use store-release yet? (e.g. https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/arm/builtins-arm.cc;l\u003d799;drc\u003d0ec17e4452120719f6bf5f86f50c781123ee8f5d;bpv\u003d1;bpt\u003d1).",
+      "parentUuid": "92d3d359_7a85984f",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a382cdfa_78f2e514",
         "filename": "src/objects/js-function-inl.h",
         "patchSetId": 9
@@ -288,6 +306,24 @@
       "side": 1,
       "message": "Ya, you are right. I will rename this in a follow up CL. Renaming this flag triggers blink_web_tests and somehow they are timing out. The linux-rel bot uses use_clang_coverage \u003d true and the clang coverage for these files is causing some gc related tests to timeout. I checked locally and with or without this patch the tests take around the same time. If I change clang_coverage it massively slows them down. I will investigate this further and land it as a separate CL. Even otherwise I think it is better to land flag rename as a different CL since I saw some test262 seem to be using this flag too. So I will try to introduce a new flag change all of them to use new flag and then delete the old flag.",
       "parentUuid": "a382cdfa_78f2e514",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87b537df_faba706d",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-09T09:02:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8be0ac09_c9ffce4d",
       "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

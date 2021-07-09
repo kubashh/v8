@@ -20,6 +20,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa294cef_8b7de62e",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-09T09:02:55Z",
+      "side": 1,
+      "message": "nit: maynot",
+      "revId": "d8c8067f32695f7005d6c98452b4fa3fe0b16f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7ad19d4_aa498a9b",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-07-09T09:02:55Z",
+      "side": 1,
+      "message": "I understand it\u0027s not strictly necessary here, but should we use an acquire load here as well for simplicity? Or update the comment above as well and explain here why the relaxed load is enough?",
+      "revId": "d8c8067f32695f7005d6c98452b4fa3fe0b16f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ff568e7_f5608224",
         "filename": "src/runtime/runtime-wasm.cc",
         "patchSetId": 13
