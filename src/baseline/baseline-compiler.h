@@ -181,6 +181,7 @@ class BaselineCompiler {
   struct BaselineLabels {
     base::ThreadedList<ThreadedLabel> linked;
     Label unlinked;
+    bool should_align = false;
   };
 
   BaselineLabels* EnsureLabels(int i) {

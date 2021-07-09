@@ -802,11 +802,11 @@ void InstructionSequence::ComputeAssemblyOrder() {
           ao_blocks_->push_back(loop_end);
           // This block will be the new machine-level loop header, so align
           // this block instead of the loop header block.
-          loop_end->set_alignment(true);
+          loop_end->set_loop_alignment(true);
           header_align = false;
         }
       }
-      block->set_alignment(header_align);
+      block->set_loop_alignment(header_align);
     }
     if (block->loop_header().IsValid() && block->IsSwitchTarget()) {
       block->set_alignment(true);

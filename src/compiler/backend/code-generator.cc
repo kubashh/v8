@@ -320,8 +320,13 @@ void CodeGenerator::AssembleCode() {
   offsets_info_.blocks_start = tasm()->pc_offset();
   for (const InstructionBlock* block : instructions()->ao_blocks()) {
     // Align loop headers on vendor recommended boundaries.
-    if (block->ShouldAlign() && !tasm()->jump_optimization_info()) {
-      tasm()->CodeTargetAlign();
+    if ((block->ShouldAlign() || block->ShouldAlignLoop()) &&
+        !tasm()->jump_optimization_info()) {
+      if (block->ShouldAlignLoop()) {
+        tasm()->LoopHeaderAlign();
+      } else {
+        tasm()->CodeTargetAlign();
+      }
     }
     if (info->trace_turbo_json()) {
       block_starts_[block->rpo_number().ToInt()] = tasm()->pc_offset();
