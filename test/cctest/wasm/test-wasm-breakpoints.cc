@@ -151,7 +151,7 @@ Handle<BreakPoint> SetBreakpoint(WasmRunnerBase* runner, int function_index,
   Handle<BreakPoint> break_point =
       runner->main_isolate()->factory()->NewBreakPoint(
           break_index++, runner->main_isolate()->factory()->empty_string());
-  CHECK(WasmScript::SetBreakPoint(script, &code_offset, break_point));
+  CHECK(WasmScript::SetBreakPoint(script, &code_offset, break_point).IsJust());
   return break_point;
 }
 

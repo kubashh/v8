@@ -1,6 +1,9 @@
 Tests breakpoint at last line.
 {
     breakpointId : <breakpointId>
+    functionNames : [
+        [0] : 
+    ]
     locations : [
         [0] : {
             columnNumber : 0
@@ -11,6 +14,9 @@ Tests breakpoint at last line.
 }
 {
     breakpointId : <breakpointId>
+    functionNames : [
+        [0] : 
+    ]
     locations : [
         [0] : {
             columnNumber : 0

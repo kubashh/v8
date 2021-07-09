@@ -900,38 +900,44 @@ int FindNextBreakablePosition(wasm::NativeModule* native_module, int func_index,
 }  // namespace
 
 // static
-bool WasmScript::SetBreakPoint(Handle<Script> script, int* position,
-                               Handle<BreakPoint> break_point) {
-  // Special handling for on-entry breakpoints.
-  if (*position == kOnEntryBreakpointPosition) {
-    AddBreakpointToInfo(script, *position, break_point);
-    script->set_break_on_entry(true);
-
-    // Update the "break_on_entry" flag on all live instances.
-    i::WeakArrayList weak_instance_list = script->wasm_weak_instance_list();
-    for (int i = 0; i < weak_instance_list.length(); ++i) {
-      if (weak_instance_list.Get(i)->IsCleared()) continue;
-      i::WasmInstanceObject instance = i::WasmInstanceObject::cast(
-          weak_instance_list.Get(i)->GetHeapObject());
-      instance.set_break_on_entry(true);
-    }
-    return true;
-  }
+Maybe<uint32_t> WasmScript::SetBreakPoint(Handle<Script> script, int* position,
+                                          Handle<BreakPoint> break_point) {
+  DCHECK_NE(kOnEntryBreakpointPosition, *position);
 
   // Find the function for this breakpoint.
   const wasm::WasmModule* module = script->wasm_native_module()->module();
   int func_index = GetContainingWasmFunction(module, *position);
-  if (func_index < 0) return false;
+  if (func_index < 0) return Nothing<uint32_t>();
   const wasm::WasmFunction& func = module->functions[func_index];
   int offset_in_func = *position - func.code.offset();
 
   int breakable_offset = FindNextBreakablePosition(script->wasm_native_module(),
                                                    func_index, offset_in_func);
-  if (breakable_offset == 0) return false;
+  if (breakable_offset == 0) return Nothing<uint32_t>();
   *position = func.code.offset() + breakable_offset;
 
-  return WasmScript::SetBreakPointForFunction(script, func_index,
-                                              breakable_offset, break_point);
+  if (!WasmScript::SetBreakPointForFunction(script, func_index,
+                                            breakable_offset, break_point)) {
+    return Nothing<uint32_t>();
+  }
+  return Just<uint32_t>(func_index);
+}
+
+// static
+void WasmScript::SetBreakPointOnEntry(Handle<Script> script,
+                                      Handle<BreakPoint> break_point) {
+  // Special handling for on-entry breakpoints.
+  AddBreakpointToInfo(script, kOnEntryBreakpointPosition, break_point);
+  script->set_break_on_entry(true);
+
+  // Update the "break_on_entry" flag on all live instances.
+  i::WeakArrayList weak_instance_list = script->wasm_weak_instance_list();
+  for (int i = 0; i < weak_instance_list.length(); ++i) {
+    if (weak_instance_list.Get(i)->IsCleared()) continue;
+    i::WasmInstanceObject instance =
+        i::WasmInstanceObject::cast(weak_instance_list.Get(i)->GetHeapObject());
+    instance.set_break_on_entry(true);
+  }
 }
 
 // static

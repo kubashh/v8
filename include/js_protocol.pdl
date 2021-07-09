@@ -342,6 +342,8 @@ domain Debugger
       BreakpointId breakpointId
       # Location this breakpoint resolved into.
       Location actualLocation
+      # Name of function this breakpoint resolved in.
+      experimental optional string functionName
 
   # Sets instrumentation breakpoint.
   command setInstrumentationBreakpoint
@@ -379,6 +381,8 @@ domain Debugger
       BreakpointId breakpointId
       # List of the locations this breakpoint resolved into upon addition.
       array of Location locations
+      # Names of the function this breakpoint resolved into upon addition.
+      experimental optional array of string functionNames
 
   # Sets JavaScript breakpoint before each call to the given function.
   # If another function was created from the same source as a given one,
@@ -483,6 +487,8 @@ domain Debugger
       BreakpointId breakpointId
       # Actual breakpoint location.
       Location location
+      # Name of function at breakpoint location.
+      experimental optional string functionName
 
   # Fired when the virtual machine stopped on breakpoint or exception or any other stop criteria.
   event paused

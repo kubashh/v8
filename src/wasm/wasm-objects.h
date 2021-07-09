@@ -843,9 +843,16 @@ class WasmScript : public AllStatic {
   // The passed position might be modified to point to the next breakable
   // location inside the same function.
   // If it points outside a function, or behind the last breakable location,
-  // this function returns false and does not set any breakpoint.
-  V8_EXPORT_PRIVATE static bool SetBreakPoint(Handle<Script>, int* position,
-                                              Handle<BreakPoint> break_point);
+  // this function returns nothing and does not set any breakpoint, otherwise
+  // it returns the index of the function in which the breakpoint was set.
+  V8_EXPORT_PRIVATE static Maybe<uint32_t> SetBreakPoint(
+      Handle<Script>, int* position, Handle<BreakPoint> break_point);
+
+  // Set an "on entry" breakpoint (a.k.a. instrumentation breakpoint) inside
+  // the given module. This will affect all live and future instances of the
+  // module.
+  V8_EXPORT_PRIVATE static void SetBreakPointOnEntry(
+      Handle<Script>, Handle<BreakPoint> break_point);
 
   // Set a breakpoint on first breakable position of the given function index
   // inside the given module. This will affect all live and future instances of

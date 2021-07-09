@@ -38,11 +38,10 @@ Handle<String> GetNameOrDefault(Isolate* isolate,
 }
 
 MaybeHandle<String> GetNameFromImportsAndExportsOrNull(
-    Isolate* isolate, Handle<WasmInstanceObject> instance,
+    Isolate* isolate, wasm::NativeModule* native_module,
     wasm::ImportExportKindCode kind, uint32_t index) {
-  auto debug_info = instance->module_object().native_module()->GetDebugInfo();
-  wasm::ModuleWireBytes wire_bytes(
-      instance->module_object().native_module()->wire_bytes());
+  auto debug_info = native_module->GetDebugInfo();
+  wasm::ModuleWireBytes wire_bytes(native_module->wire_bytes());
 
   auto import_name_ref = debug_info->GetImportName(kind, index);
   if (!import_name_ref.first.is_empty()) {
@@ -324,7 +323,8 @@ struct FunctionsProxy : NamedDebugProxy<FunctionsProxy, kFunctionsProxy> {
   static Handle<String> GetName(Isolate* isolate,
                                 Handle<WasmInstanceObject> instance,
                                 uint32_t index) {
-    return GetWasmFunctionDebugName(isolate, instance, index);
+    return GetWasmFunctionDebugName(
+        isolate, instance->module_object().native_module(), index);
   }
 };
 
@@ -353,8 +353,8 @@ struct GlobalsProxy : NamedDebugProxy<GlobalsProxy, kGlobalsProxy> {
     return GetNameOrDefault(
         isolate,
         GetNameFromImportsAndExportsOrNull(
-            isolate, instance, wasm::ImportExportKindCode::kExternalGlobal,
-            index),
+            isolate, instance->module_object().native_module(),
+            wasm::ImportExportKindCode::kExternalGlobal, index),
         "$global", index);
   }
 };
@@ -379,8 +379,8 @@ struct MemoriesProxy : NamedDebugProxy<MemoriesProxy, kMemoriesProxy> {
     return GetNameOrDefault(
         isolate,
         GetNameFromImportsAndExportsOrNull(
-            isolate, instance, wasm::ImportExportKindCode::kExternalMemory,
-            index),
+            isolate, instance->module_object().native_module(),
+            wasm::ImportExportKindCode::kExternalMemory, index),
         "$memory", index);
   }
 };
@@ -405,8 +405,8 @@ struct TablesProxy : NamedDebugProxy<TablesProxy, kTablesProxy> {
     return GetNameOrDefault(
         isolate,
         GetNameFromImportsAndExportsOrNull(
-            isolate, instance, wasm::ImportExportKindCode::kExternalTable,
-            index),
+            isolate, instance->module_object().native_module(),
+            wasm::ImportExportKindCode::kExternalTable, index),
         "$table", index);
   }
 };
@@ -1060,18 +1060,23 @@ std::unique_ptr<debug::ScopeIterator> GetWasmScopeIterator(WasmFrame* frame) {
 }
 
 Handle<String> GetWasmFunctionDebugName(Isolate* isolate,
-                                        Handle<WasmInstanceObject> instance,
+                                        wasm::NativeModule* native_module,
                                         uint32_t func_index) {
-  Handle<WasmModuleObject> module_object(instance->module_object(), isolate);
-  MaybeHandle<String> maybe_name = WasmModuleObject::GetFunctionNameOrNull(
-      isolate, module_object, func_index);
-  if (module_object->is_asm_js()) {
+  wasm::ModuleWireBytes wire_bytes(native_module->wire_bytes());
+  auto name_ref =
+      native_module->module()->lazily_generated_names.LookupFunctionName(
+          wire_bytes, func_index);
+  MaybeHandle<String> maybe_name = name_ref.is_set()
+                                       ? isolate->factory()->NewStringFromUtf8(
+                                             wire_bytes.GetNameOrNull(name_ref))
+                                       : MaybeHandle<String>();
+  if (wasm::is_asmjs_module(native_module->module())) {
     // In case of asm.js, we use the names from the function declarations.
     return maybe_name.ToHandleChecked();
   }
   if (maybe_name.is_null()) {
     maybe_name = GetNameFromImportsAndExportsOrNull(
-        isolate, instance, wasm::ImportExportKindCode::kExternalFunction,
+        isolate, native_module, wasm::ImportExportKindCode::kExternalFunction,
         func_index);
   }
   return GetNameOrDefault(isolate, maybe_name, "$func", func_index);

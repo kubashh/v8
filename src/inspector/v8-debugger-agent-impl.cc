@@ -508,10 +508,12 @@ Response V8DebuggerAgentImpl::setBreakpointByUrl(
     Maybe<String16> optionalURLRegex, Maybe<String16> optionalScriptHash,
     Maybe<int> optionalColumnNumber, Maybe<String16> optionalCondition,
     String16* outBreakpointId,
-    std::unique_ptr<protocol::Array<protocol::Debugger::Location>>* locations) {
+    std::unique_ptr<protocol::Array<protocol::Debugger::Location>>* locations,
+    Maybe<protocol::Array<String16>>* outFunctionNames) {
   if (!enabled()) return Response::ServerError(kDebuggerNotEnabled);
 
   *locations = std::make_unique<Array<protocol::Debugger::Location>>();
+  auto functionNames = std::make_unique<protocol::Array<String16>>();
 
   int specified = (optionalURL.isJust() ? 1 : 0) +
                   (optionalURLRegex.isJust() ? 1 : 0) +
@@ -575,13 +577,18 @@ Response V8DebuggerAgentImpl::setBreakpointByUrl(
       adjustBreakpointLocation(*script.second, hint, &lineNumber,
                                &columnNumber);
     }
-    std::unique_ptr<protocol::Debugger::Location> location = setBreakpointImpl(
-        breakpointId, script.first, condition, lineNumber, columnNumber);
-    if (location && type != BreakpointType::kByUrlRegex) {
-      hint = breakpointHint(*script.second, location->getLineNumber(),
-                            location->getColumnNumber(columnNumber));
+    String16 functionName;
+    std::unique_ptr<protocol::Debugger::Location> location =
+        setBreakpointImpl(breakpointId, script.first, condition, lineNumber,
+                          columnNumber, &functionName);
+    if (location) {
+      if (type != BreakpointType::kByUrlRegex) {
+        hint = breakpointHint(*script.second, location->getLineNumber(),
+                              location->getColumnNumber(columnNumber));
+      }
+      (*locations)->emplace_back(std::move(location));
+      functionNames->emplace_back(std::move(functionName));
     }
-    if (location) (*locations)->emplace_back(std::move(location));
   }
   breakpoints->setString(breakpointId, condition);
   if (!hint.isEmpty()) {
@@ -590,13 +597,15 @@ Response V8DebuggerAgentImpl::setBreakpointByUrl(
     breakpointHints->setString(breakpointId, hint);
   }
   *outBreakpointId = breakpointId;
+  *outFunctionNames = std::move(functionNames);
   return Response::Success();
 }
 
 Response V8DebuggerAgentImpl::setBreakpoint(
     std::unique_ptr<protocol::Debugger::Location> location,
     Maybe<String16> optionalCondition, String16* outBreakpointId,
-    std::unique_ptr<protocol::Debugger::Location>* actualLocation) {
+    std::unique_ptr<protocol::Debugger::Location>* actualLocation,
+    Maybe<String16>* outFunctionName) {
   String16 breakpointId = generateBreakpointId(
       BreakpointType::kByScriptId, location->getScriptId(),
       location->getLineNumber(), location->getColumnNumber(0));
@@ -607,13 +616,15 @@ Response V8DebuggerAgentImpl::setBreakpoint(
     return Response::ServerError(
         "Breakpoint at specified location already exists.");
   }
-  *actualLocation = setBreakpointImpl(breakpointId, location->getScriptId(),
-                                      optionalCondition.fromMaybe(String16()),
-                                      location->getLineNumber(),
-                                      location->getColumnNumber(0));
+  String16 functionName;
+  *actualLocation = setBreakpointImpl(
+      breakpointId, location->getScriptId(),
+      optionalCondition.fromMaybe(String16()), location->getLineNumber(),
+      location->getColumnNumber(0), &functionName);
   if (!*actualLocation)
     return Response::ServerError("Could not resolve breakpoint");
   *outBreakpointId = breakpointId;
+  *outFunctionName = std::move(functionName);
   return Response::Success();
 }
 
@@ -919,7 +930,8 @@ std::unique_ptr<protocol::Debugger::Location>
 V8DebuggerAgentImpl::setBreakpointImpl(const String16& breakpointId,
                                        const String16& scriptId,
                                        const String16& condition,
-                                       int lineNumber, int columnNumber) {
+                                       int lineNumber, int columnNumber,
+                                       String16* outFunctionName) {
   v8::HandleScope handles(m_isolate);
   DCHECK(enabled());
 
@@ -945,7 +957,8 @@ V8DebuggerAgentImpl::setBreakpointImpl(const String16& breakpointId,
 
   {
     v8::Context::Scope contextScope(inspected->context());
-    if (!script->setBreakpoint(condition, &location, &debuggerBreakpointId)) {
+    if (!script->setBreakpoint(condition, &location, &debuggerBreakpointId,
+                               outFunctionName)) {
       return nullptr;
     }
   }
@@ -1693,11 +1706,14 @@ void V8DebuggerAgentImpl::didParseSource(
       if (hasHint) {
         adjustBreakpointLocation(*scriptRef, hint, &lineNumber, &columnNumber);
       }
-      std::unique_ptr<protocol::Debugger::Location> location =
+      String16 functionName;
+      auto location =
           setBreakpointImpl(breakpointId, scriptId, condition, lineNumber,
-                            columnNumber);
-      if (location)
-        m_frontend.breakpointResolved(breakpointId, std::move(location));
+                            columnNumber, &functionName);
+      if (location) {
+        m_frontend.breakpointResolved(breakpointId, std::move(location),
+                                      std::move(functionName));
+      }
     }
   }
   setScriptInstrumentationBreakpointIfNeeded(scriptRef);

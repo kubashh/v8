@@ -14,6 +14,7 @@ Setting breakpoint at offset 34, condition "false"
             scriptId : <scriptId>
         }
         breakpointId : <breakpointId>
+        functionName : $fib
     }
 }
 Setting breakpoint at offset 41, condition "true"
@@ -26,6 +27,7 @@ Setting breakpoint at offset 41, condition "true"
             scriptId : <scriptId>
         }
         breakpointId : <breakpointId>
+        functionName : $fib
     }
 }
 Setting breakpoint at offset 46, condition "$var0.value==3"
@@ -38,6 +40,7 @@ Setting breakpoint at offset 46, condition "$var0.value==3"
             scriptId : <scriptId>
         }
         breakpointId : <breakpointId>
+        functionName : $fib
     }
 }
 Calling fib(5)

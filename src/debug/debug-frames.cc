@@ -77,8 +77,7 @@ Handle<String> FrameInspector::GetFunctionName() {
 #if V8_ENABLE_WEBASSEMBLY
   if (IsWasm()) {
     auto wasm_frame = WasmFrame::cast(frame_);
-    auto wasm_instance = handle(wasm_frame->wasm_instance(), isolate_);
-    return GetWasmFunctionDebugName(isolate_, wasm_instance,
+    return GetWasmFunctionDebugName(isolate_, wasm_frame->native_module(),
                                     wasm_frame->function_index());
   }
 #endif  // V8_ENABLE_WEBASSEMBLY

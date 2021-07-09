@@ -52,10 +52,11 @@ Local<String> GetFunctionDebugName(Local<StackFrame> frame) {
   auto info = Utils::OpenHandle(*frame);
   if (info->IsWasm()) {
     auto isolate = info->GetIsolate();
-    auto instance = handle(info->GetWasmInstance(), isolate);
+    auto native_module =
+        info->GetWasmInstance().module_object().native_module();
     auto func_index = info->GetWasmFunctionIndex();
     return Utils::ToLocal(
-        i::GetWasmFunctionDebugName(isolate, instance, func_index));
+        i::GetWasmFunctionDebugName(isolate, native_module, func_index));
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
   return frame->GetFunctionName();
@@ -74,13 +75,16 @@ Local<String> GetFunctionDescription(Local<Function> function) {
       auto isolate = function->GetIsolate();
       auto func_index =
           function->shared().wasm_exported_function_data().function_index();
-      auto instance = i::handle(
-          function->shared().wasm_exported_function_data().instance(), isolate);
-      if (instance->module()->origin == i::wasm::kWasmOrigin) {
+      auto native_module = function->shared()
+                               .wasm_exported_function_data()
+                               .instance()
+                               .module_object()
+                               .native_module();
+      if (native_module->module()->origin == i::wasm::kWasmOrigin) {
         // For asm.js functions, we can still print the source
         // code (hopefully), so don't bother with them here.
         auto debug_name =
-            i::GetWasmFunctionDebugName(isolate, instance, func_index);
+            i::GetWasmFunctionDebugName(isolate, native_module, func_index);
         i::IncrementalStringBuilder builder(isolate);
         builder.AppendCString("function ");
         builder.AppendString(debug_name);
@@ -527,17 +531,36 @@ bool Script::SetScriptSource(Local<String> newSource, bool preview,
       script, Utils::OpenHandle(*newSource), preview, result);
 }
 
-bool Script::SetBreakpoint(Local<String> condition, Location* location,
-                           BreakpointId* id) const {
-  i::Handle<i::Script> script = Utils::OpenHandle(this);
-  i::Isolate* isolate = script->GetIsolate();
+MaybeLocal<String> Script::SetBreakpoint(Local<String> condition,
+                                         Location* location,
+                                         BreakpointId* id) const {
+  auto script = Utils::OpenHandle(this);
+  auto isolate = script->GetIsolate();
   int offset = GetSourceOffset(*location);
-  if (!isolate->debug()->SetBreakPointForScript(
-          script, Utils::OpenHandle(*condition), &offset, id)) {
-    return false;
+#if V8_ENABLE_WEBASSEMBLY
+  if (script->type() == i::Script::TYPE_WASM) {
+    uint32_t func_index;
+    if (!isolate->debug()
+             ->SetBreakpointForWasmScript(script, Utils::OpenHandle(*condition),
+                                          &offset, id)
+             .To(&func_index)) {
+      return {};
+    }
+    // For wasm, we use the byte offset as the column.
+    *location = Location(0, offset);
+    return Utils::ToLocal(i::GetWasmFunctionDebugName(
+        isolate, script->wasm_native_module(), func_index));
+  }
+#endif  // V8_ENABLE_WEBASSEMBLY
+  i::Handle<i::SharedFunctionInfo> shared;
+  if (!isolate->debug()
+           ->SetBreakpointForScript(script, Utils::OpenHandle(*condition),
+                                    &offset, id)
+           .ToHandle(&shared)) {
+    return {};
   }
   *location = GetSourceLocation(offset);
-  return true;
+  return Utils::ToLocal(i::SharedFunctionInfo::DebugName(shared));
 }
 
 bool Script::SetBreakpointOnScriptEntry(BreakpointId* id) const {
@@ -545,9 +568,8 @@ bool Script::SetBreakpointOnScriptEntry(BreakpointId* id) const {
   i::Isolate* isolate = script->GetIsolate();
 #if V8_ENABLE_WEBASSEMBLY
   if (script->type() == i::Script::TYPE_WASM) {
-    int position = i::WasmScript::kOnEntryBreakpointPosition;
-    return isolate->debug()->SetBreakPointForScript(
-        script, isolate->factory()->empty_string(), &position, id);
+    isolate->debug()->SetOnEntryBreakpointForWasmScript(script, id);
+    return true;
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
   i::SharedFunctionInfo::ScriptIterator it(isolate, *script);

@@ -246,12 +246,17 @@ class V8_EXPORT_PRIVATE Debug {
 
   void SetTerminateOnResume();
 
-  bool SetBreakPointForScript(Handle<Script> script, Handle<String> condition,
-                              int* source_position, int* id);
+  MaybeHandle<SharedFunctionInfo> SetBreakpointForScript(
+      Handle<Script> script, Handle<String> condition, int* source_position,
+      int* id);
   bool SetBreakpointForFunction(Handle<SharedFunctionInfo> shared,
                                 Handle<String> condition, int* id);
   void RemoveBreakpoint(int id);
 #if V8_ENABLE_WEBASSEMBLY
+  Maybe<uint32_t> SetBreakpointForWasmScript(Handle<Script> script,
+                                             Handle<String> condition,
+                                             int* bytecode_offset, int* id);
+  void SetOnEntryBreakpointForWasmScript(Handle<Script> script, int* id);
   void RemoveBreakpointForWasmScript(Handle<Script> script, int id);
 
   void RecordWasmScriptWithBreakpoints(Handle<Script> script);

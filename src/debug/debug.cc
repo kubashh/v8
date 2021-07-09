@@ -652,30 +652,24 @@ bool Debug::SetBreakpoint(Handle<SharedFunctionInfo> shared,
   return true;
 }
 
-bool Debug::SetBreakPointForScript(Handle<Script> script,
-                                   Handle<String> condition,
-                                   int* source_position, int* id) {
+MaybeHandle<SharedFunctionInfo> Debug::SetBreakpointForScript(
+    Handle<Script> script, Handle<String> condition, int* source_position,
+    int* id) {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
+  DCHECK_NE(Script::TYPE_WASM, script->type());
   *id = ++thread_local_.last_breakpoint_id_;
+  HandleScope scope(isolate_);
   Handle<BreakPoint> break_point =
       isolate_->factory()->NewBreakPoint(*id, condition);
-#if V8_ENABLE_WEBASSEMBLY
-  if (script->type() == Script::TYPE_WASM) {
-    RecordWasmScriptWithBreakpoints(script);
-    return WasmScript::SetBreakPoint(script, source_position, break_point);
-  }
-#endif  //  V8_ENABLE_WEBASSEMBLY
-
-  HandleScope scope(isolate_);
 
   // Obtain shared function info for the innermost function containing this
   // position.
   Handle<Object> result =
       FindInnermostContainingFunctionInfo(script, *source_position);
-  if (result->IsUndefined(isolate_)) return false;
+  if (result->IsUndefined(isolate_)) return {};
 
   auto shared = Handle<SharedFunctionInfo>::cast(result);
-  if (!EnsureBreakInfo(shared)) return false;
+  if (!EnsureBreakInfo(shared)) return {};
   PrepareFunctionForDebugExecution(shared);
 
   // Find the nested shared function info that is closest to the position within
@@ -684,8 +678,33 @@ bool Debug::SetBreakPointForScript(Handle<Script> script,
                                                      shared);
 
   // Set the breakpoint in the function.
-  return SetBreakpoint(shared, break_point, source_position);
+  if (!SetBreakpoint(shared, break_point, source_position)) return {};
+  return scope.CloseAndEscape(shared);
 }
+
+#if V8_ENABLE_WEBASSEMBLY
+Maybe<uint32_t> Debug::SetBreakpointForWasmScript(Handle<Script> script,
+                                                  Handle<String> condition,
+                                                  int* byte_offset, int* id) {
+  RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
+  DCHECK_EQ(Script::TYPE_WASM, script->type());
+  *id = ++thread_local_.last_breakpoint_id_;
+  Handle<BreakPoint> break_point =
+      isolate_->factory()->NewBreakPoint(*id, condition);
+  RecordWasmScriptWithBreakpoints(script);
+  return WasmScript::SetBreakPoint(script, byte_offset, break_point);
+}
+
+void Debug::SetOnEntryBreakpointForWasmScript(Handle<Script> script, int* id) {
+  RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
+  DCHECK_EQ(Script::TYPE_WASM, script->type());
+  *id = ++thread_local_.last_breakpoint_id_;
+  Handle<BreakPoint> break_point = isolate_->factory()->NewBreakPoint(
+      *id, isolate_->factory()->empty_string());
+  RecordWasmScriptWithBreakpoints(script);
+  WasmScript::SetBreakPointOnEntry(script, break_point);
+}
+#endif  //  V8_ENABLE_WEBASSEMBLY
 
 int Debug::FindBreakablePosition(Handle<DebugInfo> debug_info,
                                  int source_position) {

@@ -1,6 +1,9 @@
 Tests breakpoint when two scripts have the same url.
 {
     breakpointId : <breakpointId>
+    functionNames : [
+        [0] : boo
+    ]
     locations : [
         [0] : {
             columnNumber : 2

@@ -71,7 +71,7 @@ Handle<JSObject> GetWasmDebugProxy(WasmFrame* frame);
 std::unique_ptr<debug::ScopeIterator> GetWasmScopeIterator(WasmFrame* frame);
 
 Handle<String> GetWasmFunctionDebugName(Isolate* isolate,
-                                        Handle<WasmInstanceObject> instance,
+                                        wasm::NativeModule* native_module,
                                         uint32_t func_index);
 
 Handle<ArrayList> AddWasmInstanceObjectInternalProperties(

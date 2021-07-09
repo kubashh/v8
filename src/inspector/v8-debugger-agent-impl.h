@@ -54,12 +54,13 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
       Maybe<String16> optionalURLRegex, Maybe<String16> optionalScriptHash,
       Maybe<int> optionalColumnNumber, Maybe<String16> optionalCondition,
       String16*,
-      std::unique_ptr<protocol::Array<protocol::Debugger::Location>>* locations)
-      override;
+      std::unique_ptr<protocol::Array<protocol::Debugger::Location>>* locations,
+      Maybe<protocol::Array<String16>>* functionNames) override;
   Response setBreakpoint(
       std::unique_ptr<protocol::Debugger::Location>,
       Maybe<String16> optionalCondition, String16*,
-      std::unique_ptr<protocol::Debugger::Location>* actualLocation) override;
+      std::unique_ptr<protocol::Debugger::Location>* actualLocation,
+      Maybe<String16>* outFunctionName) override;
   Response setBreakpointOnFunctionCall(const String16& functionObjectId,
                                        Maybe<String16> optionalCondition,
                                        String16* outBreakpointId) override;
@@ -184,7 +185,8 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
 
   std::unique_ptr<protocol::Debugger::Location> setBreakpointImpl(
       const String16& breakpointId, const String16& scriptId,
-      const String16& condition, int lineNumber, int columnNumber);
+      const String16& condition, int lineNumber, int columnNumber,
+      String16* outFunctionName);
   void setBreakpointImpl(const String16& breakpointId,
                          v8::Local<v8::Function> function,
                          v8::Local<v8::String> condition);

@@ -9,6 +9,7 @@ Debugger.setBreakpoint result:
         scriptId : <scriptId>
     }
     breakpointId : <breakpointId>
+    functionName : foo
 }
 Debugger.paused call frames:
 foo (foo.js:2:2)

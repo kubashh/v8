@@ -249,10 +249,18 @@ class ActualScript : public V8DebuggerScript {
   }
 
   bool setBreakpoint(const String16& condition, v8::debug::Location* location,
-                     int* id) const override {
+                     int* id, String16* outFunctionName) const override {
     v8::HandleScope scope(m_isolate);
-    return script()->SetBreakpoint(toV8String(m_isolate, condition), location,
-                                   id);
+    v8::Local<v8::String> functionName;
+    if (!script()
+             ->SetBreakpoint(toV8String(m_isolate, condition), location, id)
+             .ToLocal(&functionName)) {
+      return false;
+    }
+    if (outFunctionName) {
+      *outFunctionName = toProtocolString(m_isolate, functionName);
+    }
+    return true;
   }
 
   bool setBreakpointOnRun(int* id) const override {

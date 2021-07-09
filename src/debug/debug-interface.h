@@ -172,8 +172,10 @@ class V8_EXPORT_PRIVATE Script {
   v8::debug::Location GetSourceLocation(int offset) const;
   bool SetScriptSource(v8::Local<v8::String> newSource, bool preview,
                        LiveEditResult* result) const;
-  bool SetBreakpoint(v8::Local<v8::String> condition, debug::Location* location,
-                     BreakpointId* id) const;
+  // Returns the name of the function in which the breakpoint was set.
+  MaybeLocal<String> SetBreakpoint(v8::Local<v8::String> condition,
+                                   debug::Location* location,
+                                   BreakpointId* id) const;
 #if V8_ENABLE_WEBASSEMBLY
   bool IsWasm() const;
   void RemoveWasmBreakpoint(BreakpointId id);

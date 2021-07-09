@@ -2905,7 +2905,7 @@ TEST(PauseInScript) {
   i::Handle<i::String> condition = isolate->factory()->empty_string();
   int position = 0;
   int id;
-  isolate->debug()->SetBreakPointForScript(i_script, condition, &position, &id);
+  isolate->debug()->SetBreakpointForScript(i_script, condition, &position, &id);
   break_point_hit_count = 0;
 
   v8::Local<v8::Value> r = script->Run(context).ToLocalChecked();
@@ -4768,7 +4768,8 @@ class SetBreakpointOnScriptCompiled : public v8::debug::DebugDelegate {
     if (!name->Equals(context, v8_str("test")).FromJust()) return;
     CHECK(!has_compile_error);
     v8::debug::Location loc(1, 2);
-    CHECK(script->SetBreakpoint(v8_str(""), &loc, &id_));
+    v8::Local<v8::String> functionName;
+    CHECK(script->SetBreakpoint(v8_str(""), &loc, &id_).ToLocal(&functionName));
     CHECK_EQ(loc.GetLineNumber(), 1);
     CHECK_EQ(loc.GetColumnNumber(), 10);
   }

@@ -13,6 +13,7 @@ Set breakpoint
         scriptId : <scriptId>
     }
     breakpointId : <breakpointId>
+    functionName : foo
 }
 Call function foo and dump stack
 foo (:3:0)
