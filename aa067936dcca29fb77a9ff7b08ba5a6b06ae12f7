@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d13d879e_3826a29d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-07-09T13:44:40Z",
+      "side": 1,
+      "message": "There is still a typo in the commit message, \"thad\" -\u003e \"that\". I also added one new comment, with a question about the conversions.",
+      "revId": "aa067936dcca29fb77a9ff7b08ba5a6b06ae12f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feeadf6c_9be2ab53",
+        "filename": "src/wasm/baseline/riscv64/liftoff-assembler-riscv64.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-07-09T13:44:40Z",
+      "side": 1,
+      "message": "Do the conversions to i64 not require the same handling of NaNs that the above i32 conversions have?",
+      "revId": "aa067936dcca29fb77a9ff7b08ba5a6b06ae12f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
