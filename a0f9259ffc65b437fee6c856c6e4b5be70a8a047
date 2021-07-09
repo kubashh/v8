@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cbcc429_7b384d2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-07-09T07:33:34Z",
+      "side": 1,
+      "message": "Hey Kim,\n\nSome minor cleanup, as I was quite confused about the same method being there twice.\nPlease take a look.\n\ncheers,\nBenedikt",
+      "revId": "a0f9259ffc65b437fee6c856c6e4b5be70a8a047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
