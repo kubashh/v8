@@ -35,6 +35,3 @@ console_view(
 
 list_view("infra", "Infra")
 list_view("tryserver", "Tryserver")
-
-luci.console_view_entry(builder = "ci/Auto-tag", category = "Tag", console_view = "br.stable")
-luci.console_view_entry(builder = "ci/Auto-tag", category = "Tag", console_view = "br.beta")
