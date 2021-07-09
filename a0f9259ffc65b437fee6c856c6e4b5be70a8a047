@@ -16,6 +16,23 @@
       "message": "Hey Kim,\n\nSome minor cleanup, as I was quite confused about the same method being there twice.\nPlease take a look.\n\ncheers,\nBenedikt",
       "revId": "a0f9259ffc65b437fee6c856c6e4b5be70a8a047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bafdeb23_e1d2831c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2021-07-09T08:42:33Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "a0f9259ffc65b437fee6c856c6e4b5be70a8a047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
