@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a46536ad_7a1ead45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1107806
+      },
+      "writtenOn": "2021-07-09T08:40:49Z",
+      "side": 1,
+      "message": "I added the upload_archive property to the recipe.  The archive won\u0027t be uploaded if the flag is False.",
+      "revId": "ee3987dc00b3b7e98fa78c740dc16a387ae22482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
