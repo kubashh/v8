@@ -147,7 +147,7 @@ class StatsCounter : public StatsCounterBase {
 
   // Is this counter enabled?
   // Returns false if table is full.
-  bool Enabled() { return GetPtr() != nullptr; }
+  bool Enabled() { return false; }
 
   // Get the internal pointer to the counter. This is used
   // by the code generator to emit code that manipulates a
@@ -187,7 +187,7 @@ class V8_EXPORT_PRIVATE StatsCounterThreadSafe : public StatsCounterBase {
   void Increment(int value);
   void Decrement();
   void Decrement(int value);
-  bool Enabled() { return ptr_ != nullptr; }
+  bool Enabled() { return false; }
   int* GetInternalPointer() {
     DCHECK_NOT_NULL(ptr_);
     return ptr_;
@@ -212,7 +212,7 @@ class Histogram {
   void AddSample(int sample);
 
   // Returns true if this histogram is enabled.
-  bool Enabled() { return histogram_ != nullptr; }
+  bool Enabled() { return false; }
 
   const char* name() { return name_; }
 
@@ -264,10 +264,18 @@ enum class HistogramTimerResolution { MILLISECOND, MICROSECOND };
 class TimedHistogram : public Histogram {
  public:
   // Start the timer. Log if isolate non-null.
-  V8_EXPORT_PRIVATE void Start(base::ElapsedTimer* timer, Isolate* isolate);
+  V8_EXPORT_PRIVATE void Start(base::ElapsedTimer* timer, Isolate* isolate) {
+    if (!Enabled()) return;
+    Start(timer, isolate);
+  }
+  V8_EXPORT_PRIVATE void StartI(base::ElapsedTimer* timer, Isolate* isolate);
 
   // Stop the timer and record the results. Log if isolate non-null.
-  V8_EXPORT_PRIVATE void Stop(base::ElapsedTimer* timer, Isolate* isolate);
+  V8_EXPORT_PRIVATE void Stop(base::ElapsedTimer* timer, Isolate* isolate) {
+    if (!Enabled()) return;
+    StopI(timer, isolate);
+  }
+  V8_EXPORT_PRIVATE void StopI(base::ElapsedTimer* timer, Isolate* isolate);
 
   // Records a TimeDelta::Max() result. Useful to record percentage of tasks
   // that never got to run in a given scenario. Log if isolate non-null.
@@ -295,10 +303,14 @@ class V8_NODISCARD TimedHistogramScope {
   explicit TimedHistogramScope(TimedHistogram* histogram,
                                Isolate* isolate = nullptr)
       : histogram_(histogram), isolate_(isolate) {
-    histogram_->Start(&timer_, isolate);
+    if (histogram_->Enabled()) histogram_->Start(&timer_, isolate);
   }
 
-  ~TimedHistogramScope() { histogram_->Stop(&timer_, isolate_); }
+  ~TimedHistogramScope() {
+    if (histogram_->Enabled()) {
+      histogram_->Stop(&timer_, isolate_);
+    }
+  }
 
  private:
   base::ElapsedTimer timer_;
@@ -354,10 +366,16 @@ class AsyncTimedHistogram {
   }
 
   // Records the time elapsed to |histogram_| and stops |timer_|.
-  void RecordDone() { histogram_->Stop(&timer_, nullptr); }
+  void RecordDone() {
+    if (!histogram_->Enabled()) return;
+    histogram_->Stop(&timer_, nullptr);
+  }
 
   // Records TimeDelta::Max() to |histogram_| and stops |timer_|.
-  void RecordAbandon() { histogram_->RecordAbandon(&timer_, nullptr); }
+  void RecordAbandon() {
+    if (!histogram_->Enabled()) return;
+    histogram_->RecordAbandon(&timer_, nullptr);
+  }
 
  private:
   base::ElapsedTimer timer_;
@@ -374,10 +392,11 @@ class AsyncTimedHistogram {
 // TimedHistogram, and we shouldn't rely on it.
 class V8_NODISCARD LazyTimedHistogramScope {
  public:
-  LazyTimedHistogramScope() : histogram_(nullptr) { timer_.Start(); }
+  LazyTimedHistogramScope() : histogram_(nullptr) {}
   ~LazyTimedHistogramScope() {
     // We should set the histogram before this scope exits.
     DCHECK_NOT_NULL(histogram_);
+    if (!histogram_->Enabled()) return;
     histogram_->Stop(&timer_, nullptr);
   }
 
@@ -403,7 +422,7 @@ class HistogramTimer : public TimedHistogram {
   inline void Stop();
 
   // Returns true if the timer is running.
-  bool Running() { return Enabled() && timer_.IsStarted(); }
+  bool Running() { return false; }
 
   // TODO(bmeurer): Remove this when HistogramTimerScope is fixed.
 #ifdef DEBUG
@@ -437,7 +456,7 @@ class V8_NODISCARD HistogramTimerScope {
   }
 #else
       : timer_(timer) {
-    timer_->Start();
+    if (timer_->Enabled()) timer_->Start();
   }
 #endif
   ~HistogramTimerScope() {
@@ -446,7 +465,7 @@ class V8_NODISCARD HistogramTimerScope {
       timer_->Stop();
     }
 #else
-    timer_->Stop();
+    if (timer_->Enabled()) timer_->Stop();
 #endif
   }
 
@@ -519,7 +538,9 @@ class V8_NODISCARD AggregatedHistogramTimerScope {
       : histogram_(histogram) {
     timer_.Start();
   }
-  ~AggregatedHistogramTimerScope() { histogram_->Add(timer_.Elapsed()); }
+  ~AggregatedHistogramTimerScope() {
+    if (histogram_->Enabled()) histogram_->Add(timer_.Elapsed());
+  }
 
  private:
   base::ElapsedTimer timer_;

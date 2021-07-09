@@ -86,12 +86,12 @@ void TimedHistogram::AddTimedSample(base::TimeDelta sample) {
   }
 }
 
-void TimedHistogram::Start(base::ElapsedTimer* timer, Isolate* isolate) {
+void TimedHistogram::StartI(base::ElapsedTimer* timer, Isolate* isolate) {
   if (Enabled()) timer->Start();
   if (isolate) Logger::CallEventLogger(isolate, name(), Logger::START, true);
 }
 
-void TimedHistogram::Stop(base::ElapsedTimer* timer, Isolate* isolate) {
+void TimedHistogram::StopI(base::ElapsedTimer* timer, Isolate* isolate) {
   if (Enabled()) {
     base::TimeDelta delta = timer->Elapsed();
     timer->Stop();
