@@ -34,6 +34,23 @@
       "parentUuid": "a46536ad_7a1ead45",
       "revId": "ee3987dc00b3b7e98fa78c740dc16a387ae22482",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77c413d5_11fab6be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-07-09T09:10:31Z",
+      "side": 1,
+      "message": "lgtm if the recipe CL lands first.",
+      "revId": "ee3987dc00b3b7e98fa78c740dc16a387ae22482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
