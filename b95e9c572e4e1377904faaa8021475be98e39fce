@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e434ada1_cced4fe3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-07-10T01:40:20Z",
+      "side": 1,
+      "message": "lgtm, thanks",
+      "revId": "b95e9c572e4e1377904faaa8021475be98e39fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7278eebe_9099cb95",
+        "filename": "src/heap/cppgc/heap-page.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-07-10T01:40:20Z",
+      "side": 1,
+      "message": "nit: const",
+      "range": {
+        "startLine": 131,
+        "startChar": 2,
+        "endLine": 131,
+        "endChar": 9
+      },
+      "revId": "b95e9c572e4e1377904faaa8021475be98e39fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77243f3a_46b56c93",
+        "filename": "src/heap/cppgc/memory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-07-10T01:40:20Z",
+      "side": 1,
+      "message": "just to make sure: Is it guaranteed that CheckMemoryIsInaccessible is not called from threaded context? Otherwise there can be a race.",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 43
+      },
+      "revId": "b95e9c572e4e1377904faaa8021475be98e39fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ee32436_54a4f52d",
+        "filename": "src/heap/cppgc/object-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-07-10T01:40:20Z",
+      "side": 1,
+      "message": "Thanks for the comment!",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 59,
+        "endChar": 25
+      },
+      "revId": "b95e9c572e4e1377904faaa8021475be98e39fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
