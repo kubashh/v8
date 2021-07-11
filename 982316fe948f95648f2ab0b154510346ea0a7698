@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb89f17_51a3237b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-11T16:00:06Z",
+      "side": 1,
+      "message": "Two small fixes, plus some improved comments.\n\nPlease give this somewhat higher priority than other BigInt-related reviews: this should make it into the upcoming 9.3 branch on Thursday (otherwise we\u0027ll have to turn off FFT multiplication on that branch, which is of course also a possibility).",
+      "revId": "982316fe948f95648f2ab0b154510346ea0a7698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9dc36a5_c82ef681",
+        "filename": "src/bigint/mul-fft.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-11T16:00:06Z",
+      "side": 1,
+      "message": "Bug fix 1: we must not ignore this source digit. In rare cases, there may be a `1` in there.",
+      "range": {
+        "startLine": 70,
+        "startChar": 26,
+        "endLine": 70,
+        "endChar": 36
+      },
+      "revId": "982316fe948f95648f2ab0b154510346ea0a7698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9499bbdd_fc3b0073",
+        "filename": "src/bigint/mul-fft.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-11T16:00:06Z",
+      "side": 1,
+      "message": "Bug fix 2: this part of the ongoing iteration over all `i` values loop must happen *before* the next for-loop in lines 216-219 (it\u0027s the same code as before, just moved around).",
+      "range": {
+        "startLine": 209,
+        "startChar": 4,
+        "endLine": 212,
+        "endChar": 5
+      },
+      "revId": "982316fe948f95648f2ab0b154510346ea0a7698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2537fbe8_96cafaf7",
+        "filename": "src/bigint/mul-fft.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-11T16:00:06Z",
+      "side": 1,
+      "message": "Another instance of bug fix 2, same situation: this must happen before lines 247-252.",
+      "range": {
+        "startLine": 240,
+        "startChar": 4,
+        "endLine": 244,
+        "endChar": 5
+      },
+      "revId": "982316fe948f95648f2ab0b154510346ea0a7698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
