@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db58694_25c4aab7",
+        "filename": "src/heap/cppgc/heap-page.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-07-12T07:11:05Z",
+      "side": 1,
+      "message": "We are zapping payload, but we don\u0027t modify |begin|? (I meant not ConstAddress but const Adress, but nvm)",
+      "parentUuid": "7cab1a48_a6d21589",
+      "range": {
+        "startLine": 131,
+        "startChar": 2,
+        "endLine": 131,
+        "endChar": 9
+      },
+      "revId": "b95e9c572e4e1377904faaa8021475be98e39fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77243f3a_46b56c93",
