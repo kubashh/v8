@@ -22,6 +22,30 @@
       },
       "revId": "4375246338be5db4115ca4bf1d05bcad33247764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7379746_2a712865",
+        "filename": "lib/recipes.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-07-12T14:21:42Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "f66138ba_11871661",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 19
+      },
+      "revId": "4375246338be5db4115ca4bf1d05bcad33247764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
