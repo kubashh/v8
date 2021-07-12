@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12a6f51c_e716da53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-12T13:00:17Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "f2e6745d75de27a16d458d9d6769db8a4f8c43d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18f1f791_670fb463",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-12T13:00:17Z",
+      "side": 1,
+      "message": "nit: Since Isolate is only used to get the metrics recorder, could make the metrics recorder a parameter instead and pass by ref?",
+      "range": {
+        "startLine": 1369,
+        "startChar": 18,
+        "endLine": 1369,
+        "endChar": 45
+      },
+      "revId": "f2e6745d75de27a16d458d9d6769db8a4f8c43d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f23452d0_57467b5e",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-12T13:00:17Z",
+      "side": 1,
+      "message": "Only saw this now: If we make CppHeap::MetricRecorderAdapter public, then we can avoid threading through ExtractLastCppgcFullGcEvent() and FlushBatchedIncrementalEvents() in CppHeap.",
+      "range": {
+        "startLine": 1391,
+        "startChar": 41,
+        "endLine": 1391,
+        "endChar": 68
+      },
+      "revId": "f2e6745d75de27a16d458d9d6769db8a4f8c43d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97cb7aee_6a5b1e43",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-12T13:00:17Z",
+      "side": 1,
+      "message": "Can we merge this constant with the CppHeap side and expose it publicly from there? We can use that dep from here.",
+      "range": {
+        "startLine": 1419,
+        "startChar": 23,
+        "endLine": 1419,
+        "endChar": 40
+      },
+      "revId": "f2e6745d75de27a16d458d9d6769db8a4f8c43d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
