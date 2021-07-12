@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83420d34_24f6311d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-12T07:48:44Z",
+      "side": 1,
+      "message": "rubberstamp for riscv64/ parts, minor comments on .status files.",
+      "revId": "9c2607871ddab3102c25686399b856808cbe183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd65f253_767886f9",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 23
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-12T07:48:44Z",
+      "side": 1,
+      "message": "nit: Here and below, full sentences with period at the end please:\n\n This test is unstable, sometimes fails when running w/ other tests.\n SIMD is not fully implemented yet.\n Some wasm functionality is not implemented yet.",
+      "revId": "9c2607871ddab3102c25686399b856808cbe183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9ab567b_a24bd25b",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 23
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-12T07:48:44Z",
+      "side": 1,
+      "message": "Please keep the trailing comma.",
+      "revId": "9c2607871ddab3102c25686399b856808cbe183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
