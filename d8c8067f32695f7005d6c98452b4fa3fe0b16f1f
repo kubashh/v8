@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52d28c53_f8b928c9",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-12T09:22:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa294cef_8b7de62e",
+      "revId": "d8c8067f32695f7005d6c98452b4fa3fe0b16f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7ad19d4_aa498a9b",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88cf71e2_9a8652b6",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-12T09:22:45Z",
+      "side": 1,
+      "message": "Done. As discussed offline I think Acquire_load is better for consistency here. I updated the comment and the code. Thanks!",
+      "parentUuid": "b7ad19d4_aa498a9b",
+      "revId": "d8c8067f32695f7005d6c98452b4fa3fe0b16f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ff568e7_f5608224",
@@ -65,6 +101,24 @@
       "writtenOn": "2021-07-08T18:49:56Z",
       "side": 1,
       "message": "This was needed after we added acquire / release semantics for JSFunction::code here: https://chromium-review.googlesource.com/c/v8/v8/+/2676633. It was an oversight that this was left out.",
+      "revId": "d8c8067f32695f7005d6c98452b4fa3fe0b16f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dce251c1_dc603b2d",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-12T09:22:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ff568e7_f5608224",
       "revId": "d8c8067f32695f7005d6c98452b4fa3fe0b16f1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

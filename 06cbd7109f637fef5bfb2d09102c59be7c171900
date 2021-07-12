@@ -140,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "306989c8_9f885d0c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-12T09:22:45Z",
+      "side": 1,
+      "message": "Oh ok. I wasn\u0027t sure about that. Thanks! I will create a follow up CL that keeps the baseline code once it checks all pointers are live or possibly by just adding DCHECKs there.",
+      "parentUuid": "3df0df11_eb3603ff",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f87a70df_03d795cb",
@@ -271,6 +289,24 @@
       "side": 1,
       "message": "Great, that\u0027s even better! Wdyt about those usages of kCodeOffset in assembly and CSA code, where we don\u0027t use store-release yet? (e.g. https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/arm/builtins-arm.cc;l\u003d799;drc\u003d0ec17e4452120719f6bf5f86f50c781123ee8f5d;bpv\u003d1;bpt\u003d1).",
       "parentUuid": "92d3d359_7a85984f",
+      "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af92c9e0_5f998aae",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-12T09:22:45Z",
+      "side": 1,
+      "message": "Just summarising the offline discussion: The CodeOffset in the assembly / CSA code is copying the pointer from the feedback vector / SFI. When the code object was stored into feedback vector / SFI we use release stores so it should be safe to drop release stores here. Though this works in most cases in practice, C++ standard specifies that the store / load should be on the same variable. So strictly speaking this isn\u0027t guaranteed but in practice it always is. So using an acquire load and assuming acquire release semantics here is OK.",
+      "parentUuid": "2ff48ae9_c13dd0cf",
       "revId": "06cbd7109f637fef5bfb2d09102c59be7c171900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
