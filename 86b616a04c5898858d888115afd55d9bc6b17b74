@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9705a572_5d262cfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-12T23:41:34Z",
+      "side": 1,
+      "message": "Added a new API HasCustomIterator(Local\u003cArray\u003e array) which is implemented using Object::IterationHasObservableEffects().\nThere is a Torque macro that seems to do what we want here: \n\nmacro IsFastJSArrayForReadWithNoCustomIteration(context: Context, o: Object): bool {...}\n\nand it is implemented by trying to cast the object to a FastJSArrayWithNoCustomIteration.\nThis cast checks that:\n1. the ArrayIteratorProtector is not invalid,\n2. the array can be cast to a FastJSArray, which in turns checks that:\n2a. the array has fast element kinds\n2b. the prototype is the initial array prototype\n2c. the NoElementsProtectorCell is valid\n\nFunction Object::IterationHasObservableEffects() seems to do exactly the same work that Torque macro does so it should work.",
+      "revId": "86b616a04c5898858d888115afd55d9bc6b17b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48bf1ff2_f6f19dbd",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29273,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-12T23:41:34Z",
+      "side": 1,
+      "message": "This doesn\u0027t link because cctest does not include objects/objects.cc in its sources. What to do?",
+      "range": {
+        "startLine": 29273,
+        "startChar": 5,
+        "endLine": 29273,
+        "endChar": 35
+      },
+      "revId": "86b616a04c5898858d888115afd55d9bc6b17b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
