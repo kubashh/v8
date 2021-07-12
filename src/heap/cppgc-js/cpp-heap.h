@@ -91,6 +91,8 @@ class V8_EXPORT_PRIVATE CppHeap final
     return std::move(last_cppgc_incremental_mark_event_);
   }
 
+  void FlushBatchedIncrementalEvents();
+
  private:
   class MetricRecorderAdapter;
 

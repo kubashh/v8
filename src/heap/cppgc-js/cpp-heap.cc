@@ -222,6 +222,10 @@ void UnifiedHeapMarker::AddObject(void* object) {
 
 class CppHeap::MetricRecorderAdapter final
     : public cppgc::internal::MetricRecorder {
+  // This constant should have the same value as kMaxBatchedEvents in
+  // GCTracer::ReportIncrementalMarkingStepToRecorder in gc-tracer.cc.
+  static constexpr int kMaxBatchedEvents = 16;
+
  public:
   explicit MetricRecorderAdapter(CppHeap& cpp_heap) : cpp_heap_(cpp_heap) {}
 
@@ -243,10 +247,14 @@ class CppHeap::MetricRecorderAdapter final
         GetIsolate()->metrics_recorder();
     DCHECK_NOT_NULL(recorder);
     if (!recorder->HasEmbedderRecorder()) return;
-    ::v8::metrics::GarbageCollectionFullMainThreadIncrementalMark event;
-    event.cpp_wall_clock_duration_in_us = cppgc_event.duration_us;
+    incremental_mark_batched_events_.events.emplace_back();
+    incremental_mark_batched_events_.events.back()
+        .cpp_wall_clock_duration_in_us = cppgc_event.duration_us;
     // TODO(chromium:1154636): Populate event.wall_clock_duration_in_us.
-    recorder->AddMainThreadEvent(event, GetContextId());
+    if (incremental_mark_batched_events_.events.size() == kMaxBatchedEvents) {
+      recorder->AddMainThreadEvent(std::move(incremental_mark_batched_events_),
+                                   GetContextId());
+    }
   }
 
   void AddMainThreadEvent(const MainThreadIncrementalSweep& cppgc_event) final {
@@ -256,10 +264,28 @@ class CppHeap::MetricRecorderAdapter final
         GetIsolate()->metrics_recorder();
     DCHECK_NOT_NULL(recorder);
     if (!recorder->HasEmbedderRecorder()) return;
-    ::v8::metrics::GarbageCollectionFullMainThreadIncrementalSweep event;
-    event.cpp_wall_clock_duration_in_us = cppgc_event.duration_us;
+    incremental_sweep_batched_events_.events.emplace_back();
+    incremental_sweep_batched_events_.events.back()
+        .cpp_wall_clock_duration_in_us = cppgc_event.duration_us;
     // TODO(chromium:1154636): Populate event.wall_clock_duration_in_us.
-    recorder->AddMainThreadEvent(event, GetContextId());
+    if (incremental_sweep_batched_events_.events.size() == kMaxBatchedEvents) {
+      recorder->AddMainThreadEvent(std::move(incremental_sweep_batched_events_),
+                                   GetContextId());
+    }
+  }
+
+  void FlushBatchedIncrementalEvents() {
+    const std::shared_ptr<metrics::Recorder>& recorder =
+        GetIsolate()->metrics_recorder();
+    DCHECK_NOT_NULL(recorder);
+    if (!incremental_mark_batched_events_.events.empty()) {
+      recorder->AddMainThreadEvent(std::move(incremental_mark_batched_events_),
+                                   GetContextId());
+    }
+    if (!incremental_sweep_batched_events_.events.empty()) {
+      recorder->AddMainThreadEvent(std::move(incremental_sweep_batched_events_),
+                                   GetContextId());
+    }
   }
 
  private:
@@ -278,6 +304,10 @@ class CppHeap::MetricRecorderAdapter final
   }
 
   CppHeap& cpp_heap_;
+  v8::metrics::GarbageCollectionFullMainThreadBatchedIncrementalMark
+      incremental_mark_batched_events_;
+  v8::metrics::GarbageCollectionFullMainThreadBatchedIncrementalSweep
+      incremental_sweep_batched_events_;
 };
 
 CppHeap::CppHeap(
@@ -634,6 +664,11 @@ void CppHeap::CollectCustomSpaceStatisticsAtLastGC(
   }
   ReportCustomSpaceStatistics(raw_heap(), std::move(custom_spaces),
                               std::move(receiver));
+}
+
+void CppHeap::FlushBatchedIncrementalEvents() {
+  static_cast<MetricRecorderAdapter*>(stats_collector_->GetMetricRecorder())
+      ->FlushBatchedIncrementalEvents();
 }
 
 }  // namespace internal
