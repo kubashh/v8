@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "833cc407_bb1a2ff9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1148154
+      },
+      "writtenOn": "2021-07-12T19:40:32Z",
+      "side": 1,
+      "message": "Hi Michael, I did some debugging with one of the failed test, and here is what I found.\n\nWith this CL:\nWhen WebMediaPlayerImplTest::~WebMediaPlayerImplTest() is called, the code path goes to IncrementalMarkingJob::Task::RunInternal().\n\nWithout this CL:\nThe code path goes to Sweeper::IncrementalSweeperTask::RunInternal().\n\nWhy does it crash? The IncrementalMarkingJob::Task::RunInternal() calls into Heap::FinalizeIncrementalMarkingIfComplete(), and eventually calls the ChromeClientImpl::RequestBeginMainFrameNotExpected(). Note that in a unit test, we don\u0027t really need to create a \"WebFrameWidgetImpl\" and that\u0027s why it crashed.\n\nDoes that help? Please let me know so that and I am happy to debug further.",
+      "revId": "6822edb7074b30f71d8f0753eb4bb6ff47f4dc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
