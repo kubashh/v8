@@ -16,6 +16,29 @@
       "message": "Hey Yang,\n\nStill working on the details how to thread this through in the front-end, but I\u0027d appreciate an initial check-in on the backend changes so far.\n\nthanks,\nBenedikt",
       "revId": "e68a1f99bac1963979a63f85c64e515c606fad08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f44fb148_6f5127bb",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-07-12T12:29:42Z",
+      "side": 1,
+      "message": "What would we display (in the frontend) for a breakpoint in the top-level function? The script name?",
+      "range": {
+        "startLine": 346,
+        "startChar": 35,
+        "endLine": 346,
+        "endChar": 47
+      },
+      "revId": "e68a1f99bac1963979a63f85c64e515c606fad08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
