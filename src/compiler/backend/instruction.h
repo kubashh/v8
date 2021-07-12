@@ -95,6 +95,7 @@ class V8_EXPORT_PRIVATE INSTRUCTION_OPERAND_ALIGN InstructionOperand {
   inline bool IsFloatRegister() const;
   inline bool IsDoubleRegister() const;
   inline bool IsSimd128Register() const;
+  inline bool IsSimd256Register() const;
   inline bool IsAnyStackSlot() const;
   inline bool IsStackSlot() const;
   inline bool IsFPStackSlot() const;
@@ -533,6 +534,11 @@ class LocationOperand : public InstructionOperand {
     return Simd128Register::from_code(register_code());
   }
 
+  Simd256Register GetSimd256Register() const {
+    DCHECK(IsSimd256Register());
+    return Simd256Register::from_code(register_code());
+  }
+
   LocationKind location_kind() const {
     return LocationKindField::decode(value_);
   }
@@ -548,6 +554,7 @@ class LocationOperand : public InstructionOperand {
       case MachineRepresentation::kFloat32:
       case MachineRepresentation::kFloat64:
       case MachineRepresentation::kSimd128:
+      case MachineRepresentation::kSimd256:
       case MachineRepresentation::kTaggedSigned:
       case MachineRepresentation::kTaggedPointer:
       case MachineRepresentation::kTagged:
@@ -645,6 +652,11 @@ bool InstructionOperand::IsDoubleRegister() const {
 }
 
 bool InstructionOperand::IsSimd128Register() const {
+  return IsAnyRegister() && LocationOperand::cast(this)->representation() ==
+                                MachineRepresentation::kSimd128;
+}
+
+bool InstructionOperand::IsSimd256Register() const {
   return IsAnyRegister() && LocationOperand::cast(this)->representation() ==
                                 MachineRepresentation::kSimd128;
 }

@@ -44,8 +44,9 @@ enum class MachineRepresentation : uint8_t {
   kFloat32,
   kFloat64,
   kSimd128,
+  kSimd256,
   kFirstFPRepresentation = kFloat32,
-  kLastRepresentation = kSimd128
+  kLastRepresentation = kSimd256
 };
 
 bool IsSubtype(MachineRepresentation rep1, MachineRepresentation rep2);
@@ -63,7 +64,7 @@ ASSERT_CONSECUTIVE(Float64, Simd128)
 #undef ASSERT_CONSECUTIVE
 
 static_assert(MachineRepresentation::kLastRepresentation ==
-                  MachineRepresentation::kSimd128,
+                  MachineRepresentation::kSimd256,
               "FP and SIMD representations must be last.");
 
 static_assert(static_cast<int>(MachineRepresentation::kLastRepresentation) <
