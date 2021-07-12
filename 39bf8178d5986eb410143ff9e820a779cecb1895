@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "888bcb56_b6117e37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-12T11:25:21Z",
+      "side": 1,
+      "message": "Done. Ptal.",
+      "parentUuid": "aa7fd718_abab01a2",
+      "revId": "39bf8178d5986eb410143ff9e820a779cecb1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52f5003b_948f44db",
@@ -123,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "afd20ea6_a4051bf6",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-12T11:25:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff2f5b24_4fc130c5",
+      "range": {
+        "startLine": 53,
+        "startChar": 7,
+        "endLine": 53,
+        "endChar": 60
+      },
+      "revId": "39bf8178d5986eb410143ff9e820a779cecb1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7299346_b4412357",
@@ -160,6 +202,30 @@
       "side": 1,
       "message": "Indeed. std::vector with std::move also eliminates the need for memset below.",
       "parentUuid": "f7299346_b4412357",
+      "range": {
+        "startLine": 254,
+        "startChar": 35,
+        "endLine": 254,
+        "endChar": 67
+      },
+      "revId": "39bf8178d5986eb410143ff9e820a779cecb1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a6a51a5_dd4f3974",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-12T11:25:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "839f2b52_823a1550",
       "range": {
         "startLine": 254,
         "startChar": 35,
