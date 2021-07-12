@@ -776,6 +776,10 @@ template <typename T, const CTypeInfo* type_info>
 bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
                                     uint32_t max_length);
 
+// Returns true if the result of iterating over the object might be not the same
+// as simply accessing the properties between 0 and length.
+bool HasCustomIterator(Local<Array> array);
+
 }  // namespace v8
 
 #endif  // INCLUDE_V8_FAST_API_CALLS_H_

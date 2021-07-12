@@ -29251,3 +29251,24 @@ TEST(TestSetSabConstructorEnabledCallback) {
   sab_constructor_enabled_value = true;
   CHECK(i_isolate->IsSharedArrayBufferConstructorEnabled(i_context));
 }
+
+THREADED_TEST(HasCustomIterator) {
+  LocalContext context;
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  CompileRun(
+      "function Foo() {"
+      "  var v = [1, 2, 3];"
+      "  v[Symbol.iterator] = function* () { yield 42; };"
+      "  return v;"
+      "}");
+  Local<Function> Foo = Local<Function>::Cast(
+      context->Global()->Get(context.local(), v8_str("Foo")).ToLocalChecked());
+
+  v8::Local<Value>* args0 = nullptr;
+  Local<v8::Array> vec = Local<v8::Array>::Cast(
+      Foo->Call(context.local(), Foo, 0, args0).ToLocalChecked());
+  CHECK_EQ(3u, vec->Length());
+  // CHECK(HasCustomIterator(vec));
+}

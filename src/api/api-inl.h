@@ -293,6 +293,12 @@ bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
   }
 }
 
+inline bool HasCustomIterator(Local<Array> array) {
+  i::DisallowGarbageCollection no_gc;
+  i::Handle<i::Object> object = Utils::OpenHandle(*array);
+  return object->IterationHasObservableEffects();
+}
+
 namespace internal {
 
 Handle<Context> HandleScopeImplementer::LastEnteredContext() {
