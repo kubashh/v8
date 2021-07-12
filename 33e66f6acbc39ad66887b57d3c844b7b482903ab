@@ -16,6 +16,23 @@
       "message": "ptal!",
       "revId": "33e66f6acbc39ad66887b57d3c844b7b482903ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad1a81e3_9a790944",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-07-12T08:11:00Z",
+      "side": 1,
+      "message": "Oops, sorry for breaking this bot. LGTM, thanks!",
+      "revId": "33e66f6acbc39ad66887b57d3c844b7b482903ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
