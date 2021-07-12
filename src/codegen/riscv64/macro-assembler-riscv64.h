@@ -582,6 +582,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // Change endianness
   void ByteSwap(Register dest, Register src, int operand_size);
 
+  void Clear_if_nan(Register rd, FPURegister fs);
   // Convert single to unsigned word.
   void Trunc_uw_s(Register rd, FPURegister fs, Register result = no_reg);
 
