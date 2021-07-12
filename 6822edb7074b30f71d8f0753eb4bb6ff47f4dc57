@@ -33,6 +33,24 @@
       "message": "Sorry for sending multiple messages, it seems that without this CL, the StartIncrementalMarkingIfAllocationLimitIsReached() function is never called. With this CL, that function is called with \"soft limit reached\". And that seems to be triggered by the code at heap.cc:5275",
       "revId": "6822edb7074b30f71d8f0753eb4bb6ff47f4dc57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92e37c58_fdf4ae27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-12T20:19:51Z",
+      "side": 1,
+      "message": "Hey, thanks for taking a look at this. (Bit late here but I wanted to give you a summary of what I think is happening.)\n\nThe CL changes GC timing in that it may trigger a GC where there previously was no GC. While GC should be supported at any time blink, this change causes hickups as we likely introduce a GC early on in unit tests where we never had one before. In theory, all of this should just work (tm).\n\nNow, as for what you saw:\n- *Mark*: That\u0027s the marking phase of the GC.\n- *Sweep*: That\u0027s the sweeping, or reclamation, phase of the GC that reclaims unreachable objects.\n\nWith the CL, we do one GC more and through reclaiming an object trigger various other actions in a destructor which eventually lead to `RequestBeginMainFrameNotExpected()`.\n\nWhat we would need to figure out is why reclaiming some object results in a call of `RequestBeginMainFrameNotExpected()`. This is why I added dcheng@ to the bug as well as he may have more background there.\n\nUnfortunately, this is pretty far from my main area, so any help here would be appreciated.",
+      "parentUuid": "833cc407_bb1a2ff9",
+      "revId": "6822edb7074b30f71d8f0753eb4bb6ff47f4dc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
