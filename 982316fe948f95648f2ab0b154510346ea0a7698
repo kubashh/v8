@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "505242e0_cbfb8796",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-07-12T10:17:21Z",
+      "side": 1,
+      "message": "LGTM, just a minor suggestion. Thanks!",
+      "revId": "982316fe948f95648f2ab0b154510346ea0a7698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d9dc36a5_c82ef681",
         "filename": "src/bigint/mul-fft.cc",
         "patchSetId": 1
@@ -36,6 +53,29 @@
         "startChar": 26,
         "endLine": 70,
         "endChar": 36
+      },
+      "revId": "982316fe948f95648f2ab0b154510346ea0a7698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "937a9a94_8b30e742",
+        "filename": "src/bigint/mul-fft.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-07-12T10:17:21Z",
+      "side": 1,
+      "message": "Minor suggestion - should we do a memset(0) here? Will it be faster?",
+      "range": {
+        "startLine": 211,
+        "startChar": 6,
+        "endLine": 211,
+        "endChar": 33
       },
       "revId": "982316fe948f95648f2ab0b154510346ea0a7698",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
