@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "687be2a0_1c6f8d7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-12T10:45:37Z",
+      "side": 1,
+      "message": "Thanks for the super quick review! Comment addressed; landing.",
+      "revId": "982316fe948f95648f2ab0b154510346ea0a7698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d9dc36a5_c82ef681",
         "filename": "src/bigint/mul-fft.cc",
         "patchSetId": 1
@@ -71,6 +88,30 @@
       "writtenOn": "2021-07-12T10:17:21Z",
       "side": 1,
       "message": "Minor suggestion - should we do a memset(0) here? Will it be faster?",
+      "range": {
+        "startLine": 211,
+        "startChar": 6,
+        "endLine": 211,
+        "endChar": 33
+      },
+      "revId": "982316fe948f95648f2ab0b154510346ea0a7698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e1221ec_6f441541",
+        "filename": "src/bigint/mul-fft.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-12T10:45:37Z",
+      "side": 1,
+      "message": "Shouldn\u0027t make a performance difference: Clang with -O3 compiles such loops to `memset(0)` calls anyway, and this notation is more readable insofar as it makes it more obvious that this is functionally the same as line 206, just without the need to read `input[i]` from memory.",
+      "parentUuid": "937a9a94_8b30e742",
       "range": {
         "startLine": 211,
         "startChar": 6,
