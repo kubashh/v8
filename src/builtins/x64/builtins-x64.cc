@@ -92,8 +92,6 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
   // -----------------------------------
 
   Label stack_overflow;
-  __ StackOverflowCheck(rax, rcx, &stack_overflow, Label::kFar);
-
   // Enter a construct frame.
   {
     FrameScope scope(masm, StackFrame::CONSTRUCT);
@@ -108,13 +106,12 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
     // correct position (including any undefined), instead of delaying this to
     // InvokeFunction.
 
-    // Set up pointer to first argument (skip receiver).
-    __ leaq(rbx, Operand(rbp, StandardFrameConstants::kCallerSPOffset +
-                                  kSystemPointerSize));
-    // Copy arguments to the expression stack.
-    __ PushArray(rbx, rax, rcx);
-    // The receiver for the builtin/api call.
-    __ PushRoot(RootIndex::kTheHoleValue);
+    UseScratchRegisterScope scratch(masm);
+    scratch.Include(rbx, rcx);
+    ArgumentsHelper args(masm, rax);
+    args.set_stack_overflow_label(&stack_overflow);
+    args.set_receiver(masm->RootOperand(RootIndex::kTheHoleValue));
+    args.PushArgumentsFromFrame(ArgumentsHelper::HandleReceiver::kOverride);
 
     // Call the function.
     // rax: number of arguments (untagged)
@@ -129,15 +126,16 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
   }
 
   // Remove caller arguments from the stack and return.
-  __ PopReturnAddressTo(rcx);
-  SmiIndex index = masm->SmiToIndex(rbx, rbx, kSystemPointerSizeLog2);
-  __ leaq(rsp, Operand(rsp, index.reg, index.scale, 1 * kSystemPointerSize));
-  __ PushReturnAddressFrom(rcx);
+  ArgumentsHelper args(masm, rbx, ArgumentsHelper::ArgumentCountType::kSmi);
+  args.PopArguments();
 
   __ ret(0);
 
   __ bind(&stack_overflow);
   {
+    // The stack overflow was detected inside the construct frame. Leave it
+    // before we call into runtime.
+    __ LeaveFrame(StackFrame::CONSTRUCT);
     FrameScope scope(masm, StackFrame::INTERNAL);
     __ CallRuntime(Runtime::kThrowStackOverflow);
     __ int3();  // This should be unreachable.
@@ -219,29 +217,24 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   // InvokingFunction.
   __ movq(r8, rax);
 
-  // Set up pointer to first argument (skip receiver).
-  __ leaq(rbx, Operand(rbp, StandardFrameConstants::kCallerSPOffset +
-                                kSystemPointerSize));
-
   // Restore constructor function and argument count.
   __ movq(rdi, Operand(rbp, ConstructFrameConstants::kConstructorOffset));
   __ SmiUntag(rax, Operand(rbp, ConstructFrameConstants::kLengthOffset));
 
-  // Check if we have enough stack space to push all arguments.
-  // Argument count in rax. Clobbers rcx.
   Label stack_overflow;
-  __ StackOverflowCheck(rax, rcx, &stack_overflow);
-
   // TODO(victorgomes): When the arguments adaptor is completely removed, we
   // should get the formal parameter count and copy the arguments in its
   // correct position (including any undefined), instead of delaying this to
   // InvokeFunction.
 
-  // Copy arguments to the expression stack.
-  __ PushArray(rbx, rax, rcx);
-
-  // Push implicit receiver.
-  __ Push(r8);
+  ArgumentsHelper args(masm, rax);
+  {
+    UseScratchRegisterScope scratch(masm);
+    scratch.Include(rbx, rcx);
+    args.set_stack_overflow_label(&stack_overflow);
+    args.set_receiver(r8);
+    args.PushArgumentsFromFrame(ArgumentsHelper::HandleReceiver::kOverride);
+  }
 
   // Call the function.
   __ InvokeFunction(rdi, rdx, rax, InvokeType::kCall);
@@ -281,10 +274,8 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   __ movq(rbx, Operand(rbp, ConstructFrameConstants::kLengthOffset));
   __ LeaveFrame(StackFrame::CONSTRUCT);
   // Remove caller arguments from the stack and return.
-  __ PopReturnAddressTo(rcx);
-  SmiIndex index = masm->SmiToIndex(rbx, rbx, kSystemPointerSizeLog2);
-  __ leaq(rsp, Operand(rsp, index.reg, index.scale, 1 * kSystemPointerSize));
-  __ PushReturnAddressFrom(rcx);
+  args.set_argc(rbx, ArgumentsHelper::ArgumentCountType::kSmi);
+  args.PopArguments();
   __ ret(0);
 
   // If the result is a smi, it is *not* an object in the ECMA sense.
@@ -531,6 +522,7 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
   // - Address** argv (pointer to array of tagged Object pointers)
   // (see Handle::Invoke in execution.cc).
 
+  Label stack_overflow;
   // Open a C++ scope for the FrameScope.
   {
     // Platform specific argument handling. After this, the stack contains
@@ -598,34 +590,16 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
     // rdx : new.target
     // r9  : receiver
 
-    // Check if we have enough stack space to push all arguments.
-    // Argument count in rax. Clobbers rcx.
-    Label enough_stack_space, stack_overflow;
-    __ StackOverflowCheck(rax, rcx, &stack_overflow, Label::kNear);
-    __ jmp(&enough_stack_space, Label::kNear);
-
-    __ bind(&stack_overflow);
-    __ CallRuntime(Runtime::kThrowStackOverflow);
-    // This should be unreachable.
-    __ int3();
-
-    __ bind(&enough_stack_space);
-
-    // Copy arguments to the stack in a loop.
+    // Copy arguments to the stack.
     // Register rbx points to array of pointers to handle locations.
     // Push the values of these handles.
-    Label loop, entry;
-    __ movq(rcx, rax);
-    __ jmp(&entry, Label::kNear);
-    __ bind(&loop);
-    __ movq(kScratchRegister, Operand(rbx, rcx, times_system_pointer_size, 0));
-    __ Push(Operand(kScratchRegister, 0));  // dereference handle
-    __ bind(&entry);
-    __ decq(rcx);
-    __ j(greater_equal, &loop, Label::kNear);
-
-    // Push the receiver.
-    __ Push(r9);
+    UseScratchRegisterScope scratch(masm);
+    scratch.Include(rcx);
+    ArgumentsHelper args(masm, rax);
+    args.set_stack_overflow_label(&stack_overflow, Label::kNear);
+    args.set_receiver(r9);
+    args.PushArgumentsFrom(rbx, ArgumentsHelper::ElementsType::kHandle,
+                           ArgumentsHelper::HandleReceiver::kOverride);
 
     // Invoke the builtin code.
     Handle<Code> builtin = is_construct
@@ -639,6 +613,11 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
   }
 
   __ ret(0);
+
+  __ bind(&stack_overflow);
+  __ CallRuntime(Runtime::kThrowStackOverflow);
+  // This should be unreachable.
+  __ int3();
 }
 
 void Builtins::Generate_JSEntryTrampoline(MacroAssembler* masm) {
@@ -694,8 +673,6 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
   // Check that rdx is still valid, RecordWrite might have clobbered it.
   __ AssertGeneratorObject(rdx);
 
-  Register decompr_scratch1 = COMPRESS_POINTERS_BOOL ? r8 : no_reg;
-
   // Load suspended function and context.
   __ LoadTaggedPointerField(
       rdi, FieldOperand(rdx, JSGeneratorObject::kFunctionOffset));
@@ -719,12 +696,6 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
   __ j(equal, &prepare_step_in_suspended_generator);
   __ bind(&stepping_prepared);
 
-  // Check the stack for overflow. We are not trying to catch interruptions
-  // (i.e. debug break and preemption) here, so check the "real stack limit".
-  Label stack_overflow;
-  __ cmpq(rsp, __ StackLimitAsOperand(StackLimitKind::kRealStackLimit));
-  __ j(below, &stack_overflow);
-
   // Pop return address.
   __ PopReturnAddressTo(rax);
 
@@ -744,21 +715,16 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
   __ LoadTaggedPointerField(
       rbx, FieldOperand(rdx, JSGeneratorObject::kParametersAndRegistersOffset));
 
+  Label stack_overflow;
   {
-    Label done_loop, loop;
-    __ bind(&loop);
-    __ decq(rcx);
-    __ j(less, &done_loop, Label::kNear);
-    __ PushTaggedAnyField(
-        FieldOperand(rbx, rcx, times_tagged_size, FixedArray::kHeaderSize),
-        decompr_scratch1);
-    __ jmp(&loop);
-    __ bind(&done_loop);
-
-    // Push the receiver.
-    __ PushTaggedPointerField(
-        FieldOperand(rdx, JSGeneratorObject::kReceiverOffset),
-        decompr_scratch1);
+    UseScratchRegisterScope scratch(masm);
+    scratch.Include(r8, r11);
+    ArgumentsHelper args(masm, rcx);
+    args.set_stack_overflow_label(&stack_overflow);
+    args.set_receiver(FieldOperand(rdx, JSGeneratorObject::kReceiverOffset),
+                      ArgumentsHelper::ElementsType::kTagged);
+    args.PushArgumentsFrom(rbx, ArgumentsHelper::ElementsType::kTagged,
+                           ArgumentsHelper::HandleReceiver::kOverride);
   }
 
   // Underlying function needs to have bytecode available.
@@ -864,9 +830,9 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch1,
   // Compute the size of the actual parameters + receiver (in bytes).
   __ movq(actual_params_size,
           Operand(rbp, StandardFrameConstants::kArgCOffset));
-  __ leaq(actual_params_size,
-          Operand(actual_params_size, times_system_pointer_size,
-                  kSystemPointerSize));
+  ArgumentsHelper args(masm, actual_params_size);
+  args.AddReceiverToArgc();
+  args.ConvertArgcToBytes();
 
   // If actual is bigger than formal, then we should use it to free up the stack
   // arguments.
@@ -880,10 +846,8 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch1,
   __ leave();
 
   // Drop receiver + arguments.
-  Register return_pc = scratch2;
-  __ PopReturnAddressTo(return_pc);
-  __ addq(rsp, params_size);
-  __ PushReturnAddressFrom(return_pc);
+  args.set_argc(params_size, ArgumentsHelper::ArgumentCountType::kBytes);
+  args.PopArguments();
 }
 
 // Tail-call |function_id| if |actual_marker| == |expected_marker|
@@ -1359,21 +1323,6 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ int3();  // Should not return.
 }
 
-static void GenerateInterpreterPushArgs(MacroAssembler* masm, Register num_args,
-                                        Register start_address,
-                                        Register scratch) {
-  ASM_CODE_COMMENT(masm);
-  // Find the argument with lowest address.
-  __ movq(scratch, num_args);
-  __ negq(scratch);
-  __ leaq(start_address,
-          Operand(start_address, scratch, times_system_pointer_size,
-                  kSystemPointerSize));
-  // Push the arguments.
-  __ PushArray(start_address, num_args, scratch,
-               TurboAssembler::PushArrayOrder::kReverse);
-}
-
 // static
 void Builtins::Generate_InterpreterPushArgsThenCallImpl(
     MacroAssembler* masm, ConvertReceiverMode receiver_mode,
@@ -1387,31 +1336,23 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
   //  -- rdi : the target to call (can be any Object).
   // -----------------------------------
   Label stack_overflow;
-
-  if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
-    // The spread argument should not be pushed.
-    __ decl(rax);
-  }
-
-  __ leal(rcx, Operand(rax, 1));  // Add one for receiver.
-
-  // Add a stack check before pushing arguments.
-  __ StackOverflowCheck(rcx, rdx, &stack_overflow);
-
-  // Pop return address to allow tail-call after pushing arguments.
-  __ PopReturnAddressTo(kScratchRegister);
-
-  if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
-    // Don't copy receiver.
-    __ decq(rcx);
-  }
-
-  // rbx and rdx will be modified.
-  GenerateInterpreterPushArgs(masm, rcx, rbx, rdx);
-
-  // Push "undefined" as the receiver arg if we need to.
-  if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
-    __ PushRoot(RootIndex::kUndefinedValue);
+  {
+    UseScratchRegisterScope scratch(masm);
+    scratch.Include(rcx, rdx);
+    ArgumentsHelper args(masm, rax);
+    auto push_argument_flags =
+        ArgumentsHelper::kReverse | ArgumentsHelper::kPreserveReturnAddress;
+    if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
+      push_argument_flags |= ArgumentsHelper::kRemoveSpread;
+    }
+    auto handle_receiver = ArgumentsHelper::HandleReceiver::kInclude;
+    if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
+      handle_receiver = ArgumentsHelper::HandleReceiver::kOverride;
+      args.set_receiver(masm->RootOperand(RootIndex::kUndefinedValue));
+    }
+    args.set_stack_overflow_label(&stack_overflow, Label::kNear);
+    args.PushArgumentsFrom(rbx, ArgumentsHelper::ElementsType::kValue,
+                           handle_receiver, push_argument_flags);
   }
 
   if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
@@ -1422,8 +1363,6 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
   }
 
   // Call the target.
-  __ PushReturnAddressFrom(kScratchRegister);  // Re-push return address.
-
   if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
     __ Jump(BUILTIN_CODE(masm->isolate(), CallWithSpread),
             RelocInfo::CODE_TARGET);
@@ -1455,31 +1394,28 @@ void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
   //           they are to be pushed onto the stack.
   // -----------------------------------
   Label stack_overflow;
-
-  // Add a stack check before pushing arguments.
-  __ StackOverflowCheck(rax, r8, &stack_overflow);
-
-  // Pop return address to allow tail-call after pushing arguments.
-  __ PopReturnAddressTo(kScratchRegister);
-
-  if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
-    // The spread argument should not be pushed.
-    __ decl(rax);
+  {
+    UseScratchRegisterScope scratch(masm);
+    scratch.Include(r8);
+    ArgumentsHelper args(masm, rax);
+    ArgumentsHelper::Flags push_argument_flags =
+        ArgumentsHelper::kReverse | ArgumentsHelper::kPreserveReturnAddress;
+    if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
+      push_argument_flags |= ArgumentsHelper::kRemoveSpread;
+    }
+    // Receiver will be constructed. Push 0 to reserve the slot.
+    ArgumentsHelper::HandleReceiver handle_receiver =
+        ArgumentsHelper::HandleReceiver::kOverride;
+    args.set_receiver(0);
+    args.set_stack_overflow_label(&stack_overflow);
+    args.PushArgumentsFrom(rcx, ArgumentsHelper::ElementsType::kValue,
+                           handle_receiver, push_argument_flags);
   }
-
-  // rcx and r8 will be modified.
-  GenerateInterpreterPushArgs(masm, rax, rcx, r8);
-
-  // Push slot for the receiver to be constructed.
-  __ Push(Immediate(0));
 
   if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
     // Pass the spread in the register rbx.
     __ movq(rbx, Operand(rcx, -kSystemPointerSize));
-    // Push return address in preparation for the tail-call.
-    __ PushReturnAddressFrom(kScratchRegister);
   } else {
-    __ PushReturnAddressFrom(kScratchRegister);
     __ AssertUndefinedOrAllocationSite(rbx);
   }
 
@@ -1885,25 +1821,20 @@ void Builtins::Generate_FunctionPrototypeApply(MacroAssembler* masm) {
   // present) instead.
   {
     Label no_arg_array, no_this_arg;
-    StackArgumentsAccessor args(rax);
+    ArgumentsHelper args(masm, rax);
     __ LoadRoot(rdx, RootIndex::kUndefinedValue);
     __ movq(rbx, rdx);
     __ movq(rdi, args[0]);
-    __ testq(rax, rax);
-    __ j(zero, &no_this_arg, Label::kNear);
+    args.JumpIfArgc(zero, 0, &no_this_arg, Label::kNear);
     {
       __ movq(rdx, args[1]);
-      __ cmpq(rax, Immediate(1));
-      __ j(equal, &no_arg_array, Label::kNear);
+      args.JumpIfArgc(equal, 1, &no_arg_array, Label::kNear);
       __ movq(rbx, args[2]);
       __ bind(&no_arg_array);
     }
     __ bind(&no_this_arg);
-    __ PopReturnAddressTo(rcx);
-    __ leaq(rsp,
-            Operand(rsp, rax, times_system_pointer_size, kSystemPointerSize));
-    __ Push(rdx);
-    __ PushReturnAddressFrom(rcx);
+    args.set_receiver(rdx);
+    args.PopArguments(ArgumentsHelper::HandleReceiver::kOverride);
   }
 
   // ----------- S t a t e -------------
@@ -1947,32 +1878,26 @@ void Builtins::Generate_FunctionPrototypeCall(MacroAssembler* masm) {
   // rsp[8 * (n + 1)] : Argument n
   // rax contains the number of arguments, n, not counting the receiver.
 
-  // 1. Get the callable to call (passed as receiver) from the stack.
-  {
-    StackArgumentsAccessor args(rax);
-    __ movq(rdi, args.GetReceiverOperand());
-  }
-
-  // 2. Save the return address and drop the callable.
+  ArgumentsHelper args(masm, rax);
+  // 1. Save the return address and get the callable.
   __ PopReturnAddressTo(rbx);
-  __ Pop(kScratchRegister);
+  __ Pop(rdi);
 
-  // 3. Make sure we have at least one argument.
+  // 2. Make sure we have at least one argument.
   {
     Label done;
-    __ testq(rax, rax);
-    __ j(not_zero, &done, Label::kNear);
+    args.JumpIfArgc(not_zero, 0, &done, Label::kNear);
     __ PushRoot(RootIndex::kUndefinedValue);
     __ incq(rax);
     __ bind(&done);
   }
 
-  // 4. Push back the return address one slot down on the stack (overwriting the
+  // 3. Push back the return address one slot down on the stack (overwriting the
   // original callable), making the original first argument the new receiver.
   __ PushReturnAddressFrom(rbx);
   __ decq(rax);  // One fewer argument (first argument is new receiver).
 
-  // 5. Call the callable.
+  // 4. Call the callable.
   // Since we did not create a frame for Function.prototype.call() yet,
   // we use a normal Call builtin here.
   __ Jump(masm->isolate()->builtins()->Call(), RelocInfo::CODE_TARGET);
@@ -1993,24 +1918,19 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
   // thisArgument (if present) instead.
   {
     Label done;
-    StackArgumentsAccessor args(rax);
+    ArgumentsHelper args(masm, rax);
     __ LoadRoot(rdi, RootIndex::kUndefinedValue);
     __ movq(rdx, rdi);
     __ movq(rbx, rdi);
-    __ cmpq(rax, Immediate(1));
-    __ j(below, &done, Label::kNear);
+    args.JumpIfArgc(below, 1, &done, Label::kNear);
     __ movq(rdi, args[1]);  // target
     __ j(equal, &done, Label::kNear);
     __ movq(rdx, args[2]);  // thisArgument
-    __ cmpq(rax, Immediate(3));
-    __ j(below, &done, Label::kNear);
+    args.JumpIfArgc(below, 3, &done, Label::kNear);
     __ movq(rbx, args[3]);  // argumentsList
     __ bind(&done);
-    __ PopReturnAddressTo(rcx);
-    __ leaq(rsp,
-            Operand(rsp, rax, times_system_pointer_size, kSystemPointerSize));
-    __ Push(rdx);
-    __ PushReturnAddressFrom(rcx);
+    args.set_receiver(rdx);
+    args.PopArguments(ArgumentsHelper::HandleReceiver::kOverride);
   }
 
   // ----------- S t a t e -------------
@@ -2045,25 +1965,20 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
   // (if present) instead.
   {
     Label done;
-    StackArgumentsAccessor args(rax);
+    ArgumentsHelper args(masm, rax);
     __ LoadRoot(rdi, RootIndex::kUndefinedValue);
     __ movq(rdx, rdi);
     __ movq(rbx, rdi);
-    __ cmpq(rax, Immediate(1));
-    __ j(below, &done, Label::kNear);
+    args.JumpIfArgc(below, 1, &done, Label::kNear);
     __ movq(rdi, args[1]);                     // target
     __ movq(rdx, rdi);                         // new.target defaults to target
     __ j(equal, &done, Label::kNear);
     __ movq(rbx, args[2]);  // argumentsList
-    __ cmpq(rax, Immediate(3));
-    __ j(below, &done, Label::kNear);
+    args.JumpIfArgc(below, 3, &done, Label::kNear);
     __ movq(rdx, args[3]);  // new.target
     __ bind(&done);
-    __ PopReturnAddressTo(rcx);
-    __ leaq(rsp,
-            Operand(rsp, rax, times_system_pointer_size, kSystemPointerSize));
-    __ PushRoot(RootIndex::kUndefinedValue);
-    __ PushReturnAddressFrom(rcx);
+    args.set_receiver(masm->RootOperand(RootIndex::kUndefinedValue));
+    args.PopArguments(ArgumentsHelper::HandleReceiver::kOverride);
   }
 
   // ----------- S t a t e -------------
@@ -2120,54 +2035,17 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
   }
 
   Label stack_overflow;
-  __ StackOverflowCheck(rcx, r8, &stack_overflow, Label::kNear);
-
-  // Push additional arguments onto the stack.
-  // Move the arguments already in the stack,
-  // including the receiver and the return address.
   {
-    Label copy, check;
-    Register src = r8, dest = rsp, num = r9, current = r12;
-    __ movq(src, rsp);
-    __ leaq(kScratchRegister, Operand(rcx, times_system_pointer_size, 0));
-    __ AllocateStackSpace(kScratchRegister);
-    __ leaq(num, Operand(rax, 2));  // Number of words to copy.
-                                    // +2 for receiver and return address.
-    __ Move(current, 0);
-    __ jmp(&check);
-    __ bind(&copy);
-    __ movq(kScratchRegister,
-            Operand(src, current, times_system_pointer_size, 0));
-    __ movq(Operand(dest, current, times_system_pointer_size, 0),
-            kScratchRegister);
-    __ incq(current);
-    __ bind(&check);
-    __ cmpq(current, num);
-    __ j(less, &copy);
-    __ leaq(r8, Operand(rsp, num, times_system_pointer_size, 0));
-  }
-
-  // Copy the additional arguments onto the stack.
-  {
-    Register value = r12;
-    Register src = rbx, dest = r8, num = rcx, current = r9;
-    __ Move(current, 0);
-    Label done, push, loop;
-    __ bind(&loop);
-    __ cmpl(current, num);
-    __ j(equal, &done, Label::kNear);
-    // Turn the hole into undefined as we go.
-    __ LoadAnyTaggedField(value, FieldOperand(src, current, times_tagged_size,
-                                              FixedArray::kHeaderSize));
-    __ CompareRoot(value, RootIndex::kTheHoleValue);
-    __ j(not_equal, &push, Label::kNear);
-    __ LoadRoot(value, RootIndex::kUndefinedValue);
-    __ bind(&push);
-    __ movq(Operand(dest, current, times_system_pointer_size, 0), value);
-    __ incl(current);
-    __ jmp(&loop);
-    __ bind(&done);
-    __ addq(rax, current);
+    UseScratchRegisterScope scratch(masm);
+    scratch.Include(Register::ListOf(r8, r9, r12));
+    // Push additional arguments onto the stack.
+    // Move the arguments already in the stack,
+    // including the receiver and the return address.
+    ArgumentsHelper args(masm, rax);
+    args.set_stack_overflow_label(&stack_overflow, Label::kNear);
+    args.ShiftStackArguments(rcx);
+    args.AddArgumentsFrom(rbx, rcx, ArgumentsHelper::ElementsType::kTagged,
+                          ArgumentsHelper::kChangeHoleToUndefined);
   }
 
   // Tail-call to the actual Call or Construct builtin.
@@ -2220,57 +2098,16 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
     //  -- rdi : the target to call (can be any Object)
     //  -- r8  : number of arguments to copy, i.e. arguments count - start index
     // -----------------------------------
-
-    // Check for stack overflow.
-    __ StackOverflowCheck(r8, r12, &stack_overflow, Label::kNear);
-
+    UseScratchRegisterScope scratch(masm);
+    scratch.Include(Register::ListOf(r9, r12, r15));
     // Forward the arguments from the caller frame.
     // Move the arguments already in the stack,
     // including the receiver and the return address.
-    {
-      Label copy, check;
-      Register src = r9, dest = rsp, num = r12, current = r15;
-      __ movq(src, rsp);
-      __ leaq(kScratchRegister, Operand(r8, times_system_pointer_size, 0));
-      __ AllocateStackSpace(kScratchRegister);
-      __ leaq(num, Operand(rax, 2));  // Number of words to copy.
-                                      // +2 for receiver and return address.
-      __ Move(current, 0);
-      __ jmp(&check);
-      __ bind(&copy);
-      __ movq(kScratchRegister,
-              Operand(src, current, times_system_pointer_size, 0));
-      __ movq(Operand(dest, current, times_system_pointer_size, 0),
-              kScratchRegister);
-      __ incq(current);
-      __ bind(&check);
-      __ cmpq(current, num);
-      __ j(less, &copy);
-      __ leaq(r9, Operand(rsp, num, times_system_pointer_size, 0));
-    }
-
-    __ addl(rax, r8);  // Update total number of arguments.
-
-    // Point to the first argument to copy (skipping receiver).
-    __ leaq(rcx, Operand(rcx, times_system_pointer_size,
-                         CommonFrameConstants::kFixedFrameSizeAboveFp +
-                             kSystemPointerSize));
-    __ addq(rcx, rbp);
-
+    ArgumentsHelper args(masm, rax);
+    args.set_stack_overflow_label(&stack_overflow, Label::kNear);
+    args.ShiftStackArguments(r8);
     // Copy the additional caller arguments onto the stack.
-    // TODO(victorgomes): Consider using forward order as potentially more cache
-    // friendly.
-    {
-      Register src = rcx, dest = r9, num = r8;
-      Label loop;
-      __ bind(&loop);
-      __ decq(num);
-      __ movq(kScratchRegister,
-              Operand(src, num, times_system_pointer_size, 0));
-      __ movq(Operand(dest, num, times_system_pointer_size, 0),
-              kScratchRegister);
-      __ j(not_zero, &loop);
-    }
+    args.AddArgumentsFromFrame(r8, rcx);
   }
   __ jmp(&stack_done, Label::kNear);
   __ bind(&stack_overflow);
@@ -2289,7 +2126,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
   //  -- rdi : the function to call (checked to be a JSFunction)
   // -----------------------------------
 
-  StackArgumentsAccessor args(rax);
+  ArgumentsHelper args(masm, rax);
   __ AssertFunction(rdi);
 
   // ES6 section 9.2.1 [[Call]] ( thisArgument, argumentsList)
@@ -2484,7 +2321,7 @@ void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
   __ AssertBoundFunction(rdi);
 
   // Patch the receiver to [[BoundThis]].
-  StackArgumentsAccessor args(rax);
+  ArgumentsHelper args(masm, rax);
   __ LoadAnyTaggedField(rbx,
                         FieldOperand(rdi, JSBoundFunction::kBoundThisOffset));
   __ movq(args.GetReceiverOperand(), rbx);
@@ -2505,7 +2342,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   //  -- rax : the number of arguments (not including the receiver)
   //  -- rdi : the target to call (can be any Object)
   // -----------------------------------
-  StackArgumentsAccessor args(rax);
+  ArgumentsHelper args(masm, rax);
 
   Label non_callable;
   __ JumpIfSmi(rdi, &non_callable);
@@ -2611,7 +2448,7 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
   //           the JSFunction on which new was invoked initially)
   //  -- rdi : the constructor to call (can be any Object)
   // -----------------------------------
-  StackArgumentsAccessor args(rax);
+  ArgumentsHelper args(masm, rax);
 
   // Check if target is a Smi.
   Label non_constructor;

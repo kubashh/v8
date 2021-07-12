@@ -38,12 +38,292 @@
 namespace v8 {
 namespace internal {
 
-Operand StackArgumentsAccessor::GetArgumentOperand(int index) const {
+#define __ masm_->  // Convinient for ArgumentsHelper implementation
+
+Operand ArgumentsHelper::GetArgumentOperand(int index) const {
   DCHECK_GE(index, 0);
   // arg[0] = rsp + kPCOnStackSize;
   // arg[i] = arg[0] + i * kSystemPointerSize;
   return Operand(rsp, kPCOnStackSize + index * kSystemPointerSize);
 }
+
+void ArgumentsHelper::set_argc(Register argc, ArgumentCountType type) {
+  argc_ = argc;
+  argc_type_ = type;
+}
+
+void ArgumentsHelper::JumpIfArgc(Condition cc, int value, Label* L,
+                                 Label::Distance distance) {
+  if (value == 0) {
+    __ testq(argc_, argc_);
+  } else {
+    __ cmpq(argc_, Immediate(value));
+  }
+  __ j(cc, L, distance);
+}
+
+void ArgumentsHelper::ShiftStackArguments(Register offset,
+                                          HandleReceiver handle_receiver,
+                                          Flags flags) {
+  UseScratchRegisterScope scratch(masm_);
+  // Check for a stack overflow.
+  {
+    DCHECK_NE(stack_overflow_label_, nullptr);
+    UseScratchRegisterScope scratch(masm_);
+    __ StackOverflowCheck(offset, scratch.Acquire(), stack_overflow_label_,
+                          stack_overflow_label_distance_);
+  }
+
+  // Save old stack pointer and allocate new space on the stack.
+  const Register old_rsp = scratch.Acquire();
+  __ movq(old_rsp, rsp);
+  {
+    UseScratchRegisterScope scratch(masm_);
+    const Register new_space = scratch.Acquire();
+    __ leaq(new_space, Operand(offset, times_system_pointer_size, 0));
+    __ AllocateStackSpace(new_space);
+  }
+
+  // Shift old arguments down the stack.
+  const Register current = scratch.Acquire();
+  const Register value = scratch.Acquire();
+  Register count = argc_;
+  int argc_addition = 0;
+  if (handle_receiver == HandleReceiver::kInclude) ++argc_addition;
+  if ((flags & kPreserveReturnAddress) != 0) ++argc_addition;
+  if (argc_addition != 0) {
+    count = scratch.Acquire();
+    __ leaq(count, Operand(argc_, argc_addition));
+  }
+  auto loop_body = [&](TurboAssembler* masm, Register current) {
+    masm->movq(value, Operand(old_rsp, current, times_system_pointer_size, 0));
+    masm->movq(Operand(rsp, current, times_system_pointer_size, 0), value);
+  };
+  __ LoopForward(count, current, loop_body);
+}
+
+void ArgumentsHelper::AddArgumentsFrom(Register src, Register count,
+                                       ElementsType elements_type,
+                                       Flags flags) {
+  UseScratchRegisterScope scratch(masm_);
+  const Register dest = scratch.Acquire();
+  const Register current = scratch.Acquire();
+  const Register value = scratch.Acquire();
+  // Get address of first free argument slot on the stack.
+  __ leaq(dest, StackPointerAboveArguments());
+
+  // Store arguments on the stack.
+  const bool change_hole_to_undefined = (flags & kChangeHoleToUndefined) != 0;
+  auto loop_body = [&](TurboAssembler* masm, Register current) {
+    LoadArgument(value, src, current, elements_type);
+    if (change_hole_to_undefined) {
+      Label push;
+      masm->CompareRoot(value, RootIndex::kTheHoleValue);
+      masm->j(not_equal, &push, Label::kNear);
+      masm->LoadRoot(value, RootIndex::kUndefinedValue);
+      masm->bind(&push);
+    }
+    masm->movq(Operand(dest, current, times_system_pointer_size, 0), value);
+  };
+  __ LoopBackward(count, current, loop_body);
+
+  // Add number of copied arguments to argc.
+  __ addq(argc_, count);
+}
+
+void ArgumentsHelper::AddArgumentsFromFrame(Register count,
+                                            Register start_index) {
+  UseScratchRegisterScope scratch(masm_);
+  const Register base = scratch.Acquire();
+  __ leaq(base, Operand(rbp, start_index, times_system_pointer_size,
+                        StandardFrameConstants::kCallerSPOffset +
+                            // When adding arguments from the frame, we always
+                            // skip the receiver.
+                            kSystemPointerSize));
+  AddArgumentsFrom(base, count, ElementsType::kValue);
+}
+
+void ArgumentsHelper::PushArgumentsFrom(Register src,
+                                        ElementsType elements_type,
+                                        HandleReceiver handle_receiver,
+                                        Flags flags) {
+  UseScratchRegisterScope scratch(masm_);
+  if ((flags & kRemoveSpread) != 0) {
+    // Modify argc directly, since we effectively reduce the number of
+    // arguments.
+    __ decl(argc_);
+  }
+  // Account for the receiver if we want to copy it and it is not included in
+  // the argument count already.
+  Register count = argc_;
+  if (handle_receiver == HandleReceiver::kInclude && !argc_includes_receiver_) {
+    count = scratch.Acquire();
+    __ leal(count, Operand(argc_, 1));
+  }
+
+  // Check for a stack overflow.
+  {
+    DCHECK_NE(stack_overflow_label_, nullptr);
+    UseScratchRegisterScope scratch(masm_);
+    __ StackOverflowCheck(count, scratch.Acquire(), stack_overflow_label_,
+                          stack_overflow_label_distance_);
+  }
+
+  const bool preserve_return_address = (flags & kPreserveReturnAddress) != 0;
+  Register return_address = no_reg;
+  if (preserve_return_address) {
+    return_address = scratch.Acquire();
+    __ PopReturnAddressTo(return_address);
+  }
+  bool reverse_arguments = (flags & kReverse) != 0;
+  // Reverse input arguments. The passed src points to the end of the arguments.
+  if (reverse_arguments) {
+    UseScratchRegisterScope scratch(masm_);
+    const Register neg_count = scratch.Acquire();
+    __ movq(neg_count, count);
+    __ negq(neg_count);
+    __ leaq(src, Operand(src, neg_count, times_system_pointer_size,
+                         kSystemPointerSize));
+  }
+
+  // Push arguments.
+  const Register counter = scratch.Acquire();
+  auto loop_body = [&](TurboAssembler* masm, Register current) {
+    const Operand argument = ArgumentOperand(src, current, elements_type);
+    if (elements_type == ElementsType::kTagged) {
+      const Register decompr_scratch =
+          COMPRESS_POINTERS_BOOL ? scratch.Acquire() : no_reg;
+      masm->PushTaggedAnyField(argument, decompr_scratch);
+    } else {
+      masm->Push(argument);
+    }
+  };
+  if (reverse_arguments) {
+    __ LoopForward(count, counter, loop_body);
+  } else {
+    __ LoopBackward(count, counter, loop_body);
+  }
+
+  // Push new receiver.
+  if (handle_receiver == HandleReceiver::kOverride) {
+    PushReceiver();
+  }
+
+  if (preserve_return_address) {
+    __ PushReturnAddressFrom(return_address);
+  }
+}
+
+void ArgumentsHelper::PushArgumentsFromFrame(HandleReceiver handle_receiver,
+                                             Flags flags) {
+  UseScratchRegisterScope scratch(masm_);
+  const Register base = scratch.Acquire();
+  const bool copy_receiver = handle_receiver == HandleReceiver::kInclude;
+  __ leaq(base, Operand(rbp, StandardFrameConstants::kCallerSPOffset +
+                                 (copy_receiver ? 0 : kSystemPointerSize)));
+  PushArgumentsFrom(base, ElementsType::kValue, handle_receiver, flags);
+}
+
+void ArgumentsHelper::PopArguments(HandleReceiver handle_receiver) {
+  UseScratchRegisterScope scratch(masm_);
+  Register return_address = scratch.Acquire();
+  __ PopReturnAddressTo(return_address);
+  const int add_receiver_bytes =
+      (handle_receiver != HandleReceiver::kIgnore && !argc_includes_receiver_)
+          ? kSystemPointerSize
+          : 0;
+
+  switch (argc_type_) {
+    case ArgumentCountType::kInteger:
+      __ leaq(rsp, Operand(rsp, argc_, times_system_pointer_size,
+                           add_receiver_bytes));
+      break;
+    case ArgumentCountType::kSmi: {
+      SmiIndex index = masm_->SmiToIndex(argc_, argc_, kSystemPointerSizeLog2);
+      __ leaq(rsp, Operand(rsp, index.reg, index.scale, add_receiver_bytes));
+      break;
+    }
+    case ArgumentCountType::kBytes:
+      if (argc_includes_receiver_) {
+        __ addq(rsp, argc_);
+      } else {
+        __ leaq(rsp, Operand(argc_, add_receiver_bytes));
+      }
+      break;
+  }
+  if (handle_receiver == HandleReceiver::kOverride) {
+    PushReceiver();
+  }
+  __ PushReturnAddressFrom(return_address);
+}
+
+void ArgumentsHelper::AddReceiverToArgc() {
+  if (!argc_includes_receiver_) {
+    __ incq(argc_);
+    argc_includes_receiver_ = true;
+  }
+}
+
+void ArgumentsHelper::ConvertArgcToBytes() {
+  if (argc_type_ != ArgumentCountType::kBytes) {
+    DCHECK_EQ(argc_type_, ArgumentCountType::kInteger);
+    __ shlq(argc_, Immediate(kSystemPointerSizeLog2));
+    argc_type_ = ArgumentCountType::kBytes;
+  }
+}
+
+void ArgumentsHelper::PushReceiver() {
+  switch (receiver_source_) {
+    case ReceiverSource::kOperand:
+      if (receiver_type_ == ElementsType::kTagged) {
+        UseScratchRegisterScope scratch(masm_);
+        Register decompr_scratch =
+            COMPRESS_POINTERS_BOOL ? scratch.Acquire() : no_reg;
+        __ PushTaggedAnyField(receiver_.operand, decompr_scratch);
+      } else {
+        __ Push(receiver_.operand);
+      }
+      break;
+    case ReceiverSource::kRegister:
+      DCHECK_NE(receiver_.reg, no_reg);
+      __ Push(receiver_.reg);
+      break;
+    case ReceiverSource::kImmediate:
+      __ PushImm32(receiver_.imm);
+      break;
+    case ReceiverSource::kNone:
+      UNREACHABLE();
+  }
+}
+
+Operand ArgumentsHelper::ArgumentOperand(Register base, Register offset,
+                                         ElementsType type) {
+  UseScratchRegisterScope scratch(masm_);
+  switch (type) {
+    case ElementsType::kValue:
+      return Operand(base, offset, times_system_pointer_size, 0);
+    case ElementsType::kHandle: {
+      Register location = scratch.Acquire();
+      __ movq(location, Operand(base, offset, times_system_pointer_size, 0));
+      return Operand(location, 0);
+    }
+    case ElementsType::kTagged:
+      return FieldOperand(base, offset, times_tagged_size,
+                          FixedArray::kHeaderSize);
+  }
+}
+
+void ArgumentsHelper::LoadArgument(Register dest, Register base,
+                                   Register offset, ElementsType type) {
+  Operand argument = ArgumentOperand(base, offset, type);
+  if (type == ElementsType::kTagged) {
+    __ LoadAnyTaggedField(dest, argument);
+  } else {
+    __ movq(dest, argument);
+  }
+}
+
+#undef __
 
 void MacroAssembler::Load(Register destination, ExternalReference source) {
   if (root_array_available_ && options().enable_root_array_delta_access) {
@@ -155,26 +435,28 @@ void MacroAssembler::PushAddress(ExternalReference source) {
   Push(kScratchRegister);
 }
 
+Operand TurboAssembler::RootOperand(RootIndex index) const {
+  return Operand(kRootRegister, RootRegisterOffsetForRootIndex(index));
+}
+
 void TurboAssembler::LoadRoot(Register destination, RootIndex index) {
   DCHECK(root_array_available_);
-  movq(destination,
-       Operand(kRootRegister, RootRegisterOffsetForRootIndex(index)));
+  movq(destination, RootOperand(index));
 }
 
 void MacroAssembler::PushRoot(RootIndex index) {
   DCHECK(root_array_available_);
-  Push(Operand(kRootRegister, RootRegisterOffsetForRootIndex(index)));
+  Push(RootOperand(index));
 }
 
 void TurboAssembler::CompareRoot(Register with, RootIndex index) {
   DCHECK(root_array_available_);
   if (base::IsInRange(index, RootIndex::kFirstStrongOrReadOnlyRoot,
                       RootIndex::kLastStrongOrReadOnlyRoot)) {
-    cmp_tagged(with,
-               Operand(kRootRegister, RootRegisterOffsetForRootIndex(index)));
+    cmp_tagged(with, RootOperand(index));
   } else {
     // Some smi roots contain system pointer size values like stack limits.
-    cmpq(with, Operand(kRootRegister, RootRegisterOffsetForRootIndex(index)));
+    cmpq(with, RootOperand(index));
   }
 }
 
@@ -823,6 +1105,33 @@ int TurboAssembler::PopCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1,
   }
 
   return bytes;
+}
+
+template <typename F>
+void TurboAssembler::LoopForward(Register count, Register scratch, F& body) {
+  Register current = scratch;
+  Label loop, entry;
+  Move(current, 0);
+  jmp(&entry);
+  bind(&loop);
+  body(this, current);
+  incq(current);
+  bind(&entry);
+  cmpq(current, count);
+  j(less, &loop, Label::kNear);
+}
+
+template <typename F>
+void TurboAssembler::LoopBackward(Register count, Register scratch, F& body) {
+  Register current = scratch;
+  Label loop, entry;
+  Move(current, count);
+  jmp(&entry);
+  bind(&loop);
+  body(this, current);
+  bind(&entry);
+  decq(current);
+  j(greater_equal, &loop, Label::kNear);
 }
 
 void TurboAssembler::Movq(XMMRegister dst, Register src) {
@@ -1596,24 +1905,13 @@ void TurboAssembler::PushArray(Register array, Register size, Register scratch,
                                PushArrayOrder order) {
   DCHECK(!AreAliased(array, size, scratch));
   Register counter = scratch;
-  Label loop, entry;
+  auto loop_body = [&](TurboAssembler* masm, Register current) {
+    Push(Operand(array, counter, times_system_pointer_size, 0));
+  };
   if (order == PushArrayOrder::kReverse) {
-    Move(counter, 0);
-    jmp(&entry);
-    bind(&loop);
-    Push(Operand(array, counter, times_system_pointer_size, 0));
-    incq(counter);
-    bind(&entry);
-    cmpq(counter, size);
-    j(less, &loop, Label::kNear);
+    LoopForward(size, counter, loop_body);
   } else {
-    movq(counter, size);
-    jmp(&entry);
-    bind(&loop);
-    Push(Operand(array, counter, times_system_pointer_size, 0));
-    bind(&entry);
-    decq(counter);
-    j(greater_equal, &loop, Label::kNear);
+    LoopBackward(size, counter, loop_body);
   }
 }
 
