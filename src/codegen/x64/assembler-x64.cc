@@ -339,7 +339,9 @@ bool Assembler::UseConstPoolFor(RelocInfo::Mode rmode) {
 
 Assembler::Assembler(const AssemblerOptions& options,
                      std::unique_ptr<AssemblerBuffer> buffer)
-    : AssemblerBase(options, std::move(buffer)), constpool_(this) {
+    : AssemblerBase(options, std::move(buffer)),
+      constpool_(this),
+      scratch_register_list_(kScratchRegister.bit()) {
   reloc_info_writer.Reposition(buffer_start_ + buffer_->size(), pc_);
   if (CpuFeatures::IsSupported(SSE4_2)) {
     EnableCpuFeature(SSE4_1);
@@ -4360,6 +4362,25 @@ bool RelocInfo::IsCodedSpecially() {
 }
 
 bool RelocInfo::IsInConstantPool() { return false; }
+
+UseScratchRegisterScope::UseScratchRegisterScope(Assembler* assembler)
+    : available_(assembler->GetScratchRegisterList()),
+      old_available_(*available_) {}
+
+UseScratchRegisterScope::~UseScratchRegisterScope() {
+  *available_ = old_available_;
+}
+
+Register UseScratchRegisterScope::Acquire() {
+  DCHECK_NOT_NULL(available_);
+  DCHECK_NE(*available_, 0);
+  int index = static_cast<int>(base::bits::CountTrailingZeros32(*available_));
+  *available_ &= ~(1UL << index);
+
+  return Register::from_code(index);
+}
+
+bool UseScratchRegisterScope::hasAvailable() const { return *available_ != 0; }
 
 }  // namespace internal
 }  // namespace v8
