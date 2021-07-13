@@ -180,7 +180,7 @@ class XMMRegister : public RegisterBase<XMMRegister, kDoubleAfterLast> {
   // in modR/M, SIB, and opcode bytes.
   int low_bits() const { return code() & 0x7; }
 
- private:
+ protected:
   friend class RegisterBase<XMMRegister, kDoubleAfterLast>;
   explicit constexpr XMMRegister(int code) : RegisterBase(code) {}
 };
@@ -189,11 +189,29 @@ ASSERT_TRIVIALLY_COPYABLE(XMMRegister);
 static_assert(sizeof(XMMRegister) == sizeof(int),
               "XMMRegister can efficiently be passed by value");
 
+class YMMRegister : public XMMRegister {
+ public:
+  static constexpr YMMRegister from_code(int code) {
+    DCHECK(base::IsInRange(code, 0, XMMRegister::kNumRegisters - 1));
+    return YMMRegister(code);
+  }
+
+ private:
+  friend class XMMRegister;
+  explicit constexpr YMMRegister(int code) : XMMRegister(code) {}
+};
+
+ASSERT_TRIVIALLY_COPYABLE(YMMRegister);
+static_assert(sizeof(YMMRegister) == sizeof(int),
+              "YMMRegister can efficiently be passed by value");
+
 using FloatRegister = XMMRegister;
 
 using DoubleRegister = XMMRegister;
 
 using Simd128Register = XMMRegister;
+
+using Simd256Register = YMMRegister;
 
 #define DECLARE_REGISTER(R) \
   constexpr DoubleRegister R = DoubleRegister::from_code(kDoubleCode_##R);
@@ -204,6 +222,9 @@ constexpr DoubleRegister no_dreg = DoubleRegister::no_reg();
 // Define {RegisterName} methods for the register types.
 DEFINE_REGISTER_NAMES(Register, GENERAL_REGISTERS)
 DEFINE_REGISTER_NAMES(XMMRegister, DOUBLE_REGISTERS)
+// TODO(abrown): we still need to provide some more YMMRegister helper code,
+// like:
+// DEFINE_REGISTER_NAMES(YMMRegister, DOUBLE_REGISTERS)
 
 // Give alias names to registers for calling conventions.
 constexpr Register kReturnRegister0 = rax;

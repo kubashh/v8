@@ -230,6 +230,9 @@ std::ostream& operator<<(std::ostream& os, const InstructionOperand& op) {
         case MachineRepresentation::kSimd128:
           os << "|s128";
           break;
+        case MachineRepresentation::kSimd256:
+          os << "|s256";
+          break;
         case MachineRepresentation::kTaggedSigned:
           os << "|ts";
           break;
@@ -915,6 +918,7 @@ static MachineRepresentation FilterRepresentation(MachineRepresentation rep) {
     case MachineRepresentation::kFloat32:
     case MachineRepresentation::kFloat64:
     case MachineRepresentation::kSimd128:
+    case MachineRepresentation::kSimd256:
     case MachineRepresentation::kCompressedPointer:
     case MachineRepresentation::kCompressed:
       return rep;

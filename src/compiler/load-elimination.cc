@@ -1073,6 +1073,7 @@ Reduction LoadElimination::ReduceLoadElement(Node* node) {
       break;
     case MachineRepresentation::kFloat64:
     case MachineRepresentation::kSimd128:
+    case MachineRepresentation::kSimd256:
     case MachineRepresentation::kTaggedSigned:
     case MachineRepresentation::kTaggedPointer:
     case MachineRepresentation::kTagged:
@@ -1129,6 +1130,7 @@ Reduction LoadElimination::ReduceStoreElement(Node* node) {
       break;
     case MachineRepresentation::kFloat64:
     case MachineRepresentation::kSimd128:
+    case MachineRepresentation::kSimd256:
     case MachineRepresentation::kTaggedSigned:
     case MachineRepresentation::kTaggedPointer:
     case MachineRepresentation::kTagged:
@@ -1414,6 +1416,7 @@ LoadElimination::IndexRange LoadElimination::FieldIndexOf(
     case MachineRepresentation::kNone:
     case MachineRepresentation::kBit:
     case MachineRepresentation::kSimd128:
+    case MachineRepresentation::kSimd256:
       UNREACHABLE();
     case MachineRepresentation::kWord8:
     case MachineRepresentation::kWord16:

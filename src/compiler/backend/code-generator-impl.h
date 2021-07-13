@@ -150,6 +150,10 @@ class InstructionOperandConverter {
     return LocationOperand::cast(op)->GetSimd128Register();
   }
 
+  Simd256Register ToSimd256Register(InstructionOperand* op) {
+    return LocationOperand::cast(op)->GetSimd256Register();
+  }
+
   Constant ToConstant(InstructionOperand* op) const {
     if (op->IsImmediate()) {
       return gen_->instructions()->GetImmediate(ImmediateOperand::cast(op));

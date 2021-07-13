@@ -625,6 +625,7 @@ std::ostream& operator<<(std::ostream& os, TruncateKind kind) {
   V(kFloat32)                          \
   V(kFloat64)                          \
   V(kSimd128)                          \
+  V(kSimd256)                          \
   V(kWord8)                            \
   V(kWord16)                           \
   V(kWord32)                           \

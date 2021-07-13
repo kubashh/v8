@@ -298,6 +298,8 @@ ArchOpcode GetLoadOpcode(LoadRepresentation load_rep) {
     case MachineRepresentation::kSimd128:
       opcode = kX64Movdqu;
       break;
+    case MachineRepresentation::kSimd256:
+      UNREACHABLE();                    // TODO(abrown)
     case MachineRepresentation::kNone:  // Fall through.
     case MachineRepresentation::kMapWord:
       UNREACHABLE();
@@ -333,6 +335,8 @@ ArchOpcode GetStoreOpcode(StoreRepresentation store_rep) {
       return kX64Movq;
     case MachineRepresentation::kSimd128:
       return kX64Movdqu;
+    case MachineRepresentation::kSimd256:
+      UNREACHABLE();                    // TODO(abrown)
     case MachineRepresentation::kNone:  // Fall through.
     case MachineRepresentation::kMapWord:
       UNREACHABLE();
