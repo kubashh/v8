@@ -29251,3 +29251,72 @@ TEST(TestSetSabConstructorEnabledCallback) {
   sab_constructor_enabled_value = true;
   CHECK(i_isolate->IsSharedArrayBufferConstructorEnabled(i_context));
 }
+
+UNINITIALIZED_TEST(ArrayHasCustomIterator) {
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  isolate->Enter();
+  {
+    LocalContext context(isolate);
+    v8::HandleScope scope(isolate);
+    v8::TryCatch try_catch(isolate);
+
+    CompileRun(
+        "var v = [1, 2, 3];"
+        "function Foo() {"
+        "  return v;"
+        "}");
+    Local<Function> Foo =
+        Local<Function>::Cast(context->Global()
+                                  ->Get(context.local(), v8_str("Foo"))
+                                  .ToLocalChecked());
+
+    v8::Local<Value>* args0 = nullptr;
+    Local<v8::Array> vec = Local<v8::Array>::Cast(
+        Foo->Call(context.local(), Foo, 0, args0).ToLocalChecked());
+    CHECK_EQ(3u, vec->Length());
+    CHECK(!vec->HasCustomIterator());
+
+    CompileRun("v[Symbol.iterator] = function* () { yield 42; };");
+    CHECK(vec->HasCustomIterator());
+  }
+  isolate->Exit();
+  isolate->Dispose();
+}
+
+UNINITIALIZED_TEST(ArrayHasGlobalCustomIterator) {
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  isolate->Enter();
+  {
+    LocalContext context(isolate);
+    v8::HandleScope scope(isolate);
+    v8::TryCatch try_catch(isolate);
+
+    CompileRun(
+        "var v = [1, 2, 3];"
+        "function Foo() {"
+        "  return v;"
+        "}");
+    Local<Function> Foo =
+        Local<Function>::Cast(context->Global()
+                                  ->Get(context.local(), v8_str("Foo"))
+                                  .ToLocalChecked());
+
+    v8::Local<Value>* args0 = nullptr;
+    Local<v8::Array> vec = Local<v8::Array>::Cast(
+        Foo->Call(context.local(), Foo, 0, args0).ToLocalChecked());
+    CHECK_EQ(3u, vec->Length());
+    CHECK(!vec->HasCustomIterator());
+
+    CompileRun(
+        "Array.prototype[Symbol.iterator] = function* () { yield 42; };");
+    CHECK(vec->HasCustomIterator());
+  }
+  isolate->Exit();
+  isolate->Dispose();
+}

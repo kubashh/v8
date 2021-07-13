@@ -7115,6 +7115,13 @@ uint32_t v8::Array::Length() const {
   }
 }
 
+bool v8::Array::HasCustomIterator() const {
+  i::DisallowGarbageCollection no_gc;
+
+  i::Handle<i::JSArray> obj = Utils::OpenHandle(this);
+  return obj->IterationHasObservableEffects();
+}
+
 Local<v8::Map> v8::Map::New(Isolate* isolate) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
   LOG_API(i_isolate, Map, New);
