@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa72312_e31d83d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-07-13T07:44:03Z",
+      "side": 1,
+      "message": "LGTM % comment and suggestion about the test, thanks!\n@Camillo could you PTAL at the API changes? Thanks!",
+      "revId": "86b616a04c5898858d888115afd55d9bc6b17b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c914ba9_d7e5fcd2",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-07-13T07:44:03Z",
+      "side": 1,
+      "message": "nit: I think this function was requested to be part of the general V8 API, not only to be used in fast calls. Should we move it to v8.h?",
+      "range": {
+        "startLine": 781,
+        "startChar": 5,
+        "endLine": 781,
+        "endChar": 22
+      },
+      "revId": "86b616a04c5898858d888115afd55d9bc6b17b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48bf1ff2_f6f19dbd",
@@ -31,6 +71,30 @@
       "writtenOn": "2021-07-12T23:41:34Z",
       "side": 1,
       "message": "This doesn\u0027t link because cctest does not include objects/objects.cc in its sources. What to do?",
+      "range": {
+        "startLine": 29273,
+        "startChar": 5,
+        "endLine": 29273,
+        "endChar": 35
+      },
+      "revId": "86b616a04c5898858d888115afd55d9bc6b17b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66873eb5_92dac8da",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29273,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-07-13T07:44:03Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is the issue, cctest should include everything. What *might* be the issue is that IterationHasObservableEffects was not used before in another compilation unit, so it\u0027s missing the `V8_EXPORT_PRIVATE` marker. Could you try adding that?",
+      "parentUuid": "48bf1ff2_f6f19dbd",
       "range": {
         "startLine": 29273,
         "startChar": 5,
