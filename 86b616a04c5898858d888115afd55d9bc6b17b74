@@ -82,6 +82,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c4f93f4_39f9463b",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-13T14:51:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc39fb51_fa0a6d33",
+      "range": {
+        "startLine": 781,
+        "startChar": 5,
+        "endLine": 781,
+        "endChar": 22
+      },
+      "revId": "86b616a04c5898858d888115afd55d9bc6b17b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f574fd51_31e67bd9",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-13T14:51:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc39fb51_fa0a6d33",
+      "range": {
+        "startLine": 781,
+        "startChar": 5,
+        "endLine": 781,
+        "endChar": 22
+      },
+      "revId": "86b616a04c5898858d888115afd55d9bc6b17b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48bf1ff2_f6f19dbd",
@@ -143,6 +191,54 @@
       "side": 1,
       "message": "I think this will work out of the box if you move HasCustomIterator to v8::Array::HasCustomIterator",
       "parentUuid": "66873eb5_92dac8da",
+      "range": {
+        "startLine": 29273,
+        "startChar": 5,
+        "endLine": 29273,
+        "endChar": 35
+      },
+      "revId": "86b616a04c5898858d888115afd55d9bc6b17b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb9138aa_d546dba7",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29273,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-13T14:51:47Z",
+      "side": 1,
+      "message": "Thanks! It was probably a missing V8_EXPORT_PRIVATE. But moving the function to v8::Array fixed the issue.",
+      "parentUuid": "ae176fc4_b601cc93",
+      "range": {
+        "startLine": 29273,
+        "startChar": 5,
+        "endLine": 29273,
+        "endChar": 35
+      },
+      "revId": "86b616a04c5898858d888115afd55d9bc6b17b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69030262_a9a0e0a6",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29273,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-13T14:51:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae176fc4_b601cc93",
       "range": {
         "startLine": 29273,
         "startChar": 5,
