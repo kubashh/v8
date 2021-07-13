@@ -39,6 +39,30 @@
       },
       "revId": "e68a1f99bac1963979a63f85c64e515c606fad08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35548e9d_d55d74d2",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-07-13T09:46:28Z",
+      "side": 1,
+      "message": "In the Call Stack sidepane we display (anonymous) for top-level function (or more generally in the absence of a name). I was thinking of doing the same for the Breakpoints sidepane. WDYT?",
+      "parentUuid": "f44fb148_6f5127bb",
+      "range": {
+        "startLine": 346,
+        "startChar": 35,
+        "endLine": 346,
+        "endChar": 47
+      },
+      "revId": "e68a1f99bac1963979a63f85c64e515c606fad08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
