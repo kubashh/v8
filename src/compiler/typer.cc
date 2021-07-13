@@ -1509,10 +1509,7 @@ Type Typer::Visitor::JSCallTyper(Type fun, Typer* t) {
     return Type::NonInternal();
   }
   JSFunctionRef function = fun.AsHeapConstant()->Ref().AsJSFunction();
-  if (!function.serialized()) {
-    TRACE_BROKER_MISSING(t->broker(), "data for function " << function);
-    return Type::NonInternal();
-  }
+  if (!function.Serialize()) return Type::NonInternal();
   if (!function.shared().HasBuiltinId()) {
     return Type::NonInternal();
   }

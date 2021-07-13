@@ -121,6 +121,10 @@ Reduction JSCreateLowering::ReduceJSCreate(Node* node) {
 
   JSFunctionRef original_constructor =
       HeapObjectMatcher(new_target).Ref(broker()).AsJSFunction();
+  if (!original_constructor.Serialize()) return NoChange();
+  if (broker()->is_concurrent_inlining()) {
+    dependencies()->DependOnConsistentJSFunctionView(original_constructor);
+  }
   SlackTrackingPrediction slack_tracking_prediction =
       dependencies()->DependOnInitialMapInstanceSizePrediction(
           original_constructor);
@@ -389,7 +393,11 @@ Reduction JSCreateLowering::ReduceJSCreateGeneratorObject(Node* node) {
     DCHECK(closure_type.AsHeapConstant()->Ref().IsJSFunction());
     JSFunctionRef js_function =
         closure_type.AsHeapConstant()->Ref().AsJSFunction();
+    if (!js_function.Serialize()) return NoChange();
     if (!js_function.has_initial_map()) return NoChange();
+    if (broker()->is_concurrent_inlining()) {
+      dependencies()->DependOnConsistentJSFunctionView(js_function);
+    }
 
     SlackTrackingPrediction slack_tracking_prediction =
         dependencies()->DependOnInitialMapInstanceSizePrediction(js_function);
@@ -634,6 +642,10 @@ Reduction JSCreateLowering::ReduceJSCreateArray(Node* node) {
   Node* new_target = NodeProperties::GetValueInput(node, 1);
   JSFunctionRef original_constructor =
       HeapObjectMatcher(new_target).Ref(broker()).AsJSFunction();
+  if (!original_constructor.Serialize()) return NoChange();
+  if (broker()->is_concurrent_inlining()) {
+    dependencies()->DependOnConsistentJSFunctionView(original_constructor);
+  }
   SlackTrackingPrediction slack_tracking_prediction =
       dependencies()->DependOnInitialMapInstanceSizePrediction(
           original_constructor);
@@ -1060,6 +1072,7 @@ Reduction JSCreateLowering::ReduceJSCreatePromise(Node* node) {
   DCHECK_EQ(IrOpcode::kJSCreatePromise, node->opcode());
   Node* effect = NodeProperties::GetEffectInput(node);
 
+  if (!native_context().promise_function().Serialize()) return NoChange();
   MapRef promise_map = native_context().promise_function().initial_map();
 
   AllocationBuilder a(jsgraph(), effect, graph()->start());
@@ -1140,6 +1153,7 @@ Reduction JSCreateLowering::ReduceJSCreateEmptyLiteralObject(Node* node) {
   Node* control = NodeProperties::GetControlInput(node);
 
   // Retrieve the initial map for the object.
+  if (!native_context().object_function().Serialize()) return NoChange();
   MapRef map = native_context().object_function().initial_map();
   DCHECK(!map.is_dictionary_map());
   DCHECK(!map.IsInobjectSlackTrackingInProgress());
@@ -1175,6 +1189,7 @@ Reduction JSCreateLowering::ReduceJSCreateLiteralRegExp(Node* node) {
   if (!feedback.IsInsufficient()) {
     RegExpBoilerplateDescriptionRef literal =
         feedback.AsRegExpLiteral().value();
+    if (!native_context().regexp_function().Serialize()) return NoChange();
     Node* value = effect = AllocateLiteralRegExp(effect, control, literal);
     ReplaceWithValue(node, value, effect, control);
     return Replace(value);
@@ -1315,6 +1330,7 @@ Reduction JSCreateLowering::ReduceJSCreateBlockContext(Node* node) {
 namespace {
 base::Optional<MapRef> GetObjectCreateMap(JSHeapBroker* broker,
                                           HeapObjectRef prototype) {
+  if (!broker->target_native_context().object_function().Serialize()) return {};
   MapRef standard_map =
       broker->target_native_context().object_function().initial_map();
   if (prototype.equals(standard_map.prototype().value())) {

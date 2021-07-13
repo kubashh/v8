@@ -56,9 +56,7 @@ bool CanConsiderForInlining(JSHeapBroker* broker,
     return false;
   }
 
-  if (!function.serialized() || !function.serialized_code_and_feedback()) {
-    TRACE_BROKER_MISSING(
-        broker, "data for " << function << " (cannot consider for inlining)");
+  if (!function.Serialize()) {
     TRACE("Cannot consider " << function << " for inlining (missing data)");
     return false;
   }
@@ -80,6 +78,7 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
   if (m.HasResolvedValue() && m.Ref(broker()).IsJSFunction()) {
     out.functions[0] = m.Ref(broker()).AsJSFunction();
     JSFunctionRef function = out.functions[0].value();
+    if (!function.Serialize()) return out;
     if (CanConsiderForInlining(broker(), function)) {
       out.bytecode[0] = function.shared().GetBytecodeArray();
       out.num_functions = 1;
@@ -101,6 +100,7 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
 
       out.functions[n] = m.Ref(broker()).AsJSFunction();
       JSFunctionRef function = out.functions[n].value();
+      if (!function.Serialize()) return out;
       if (CanConsiderForInlining(broker(), function)) {
         out.bytecode[n] = function.shared().GetBytecodeArray();
       }
@@ -207,6 +207,7 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
       unsigned inlined_bytecode_size = 0;
       if (candidate.functions[i].has_value()) {
         JSFunctionRef function = candidate.functions[i].value();
+        function.Serialize();
         inlined_bytecode_size = function.code().GetInlinedBytecodeSize();
         candidate.total_size += inlined_bytecode_size;
       }
@@ -802,6 +803,7 @@ void JSInliningHeuristic::PrintCandidates() {
         os << ", bytecode size: " << candidate.bytecode[i]->length();
         if (candidate.functions[i].has_value()) {
           JSFunctionRef function = candidate.functions[i].value();
+          function.Serialize();
           unsigned inlined_bytecode_size =
               function.code().GetInlinedBytecodeSize();
           if (inlined_bytecode_size > 0) {
