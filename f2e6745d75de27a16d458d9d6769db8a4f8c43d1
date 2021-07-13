@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "812d3947_a240920d",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-13T08:18:28Z",
+      "side": 1,
+      "message": "We also use it to get the context id in line 1372.",
+      "parentUuid": "18f1f791_670fb463",
+      "range": {
+        "startLine": 1369,
+        "startChar": 18,
+        "endLine": 1369,
+        "endChar": 45
+      },
+      "revId": "f2e6745d75de27a16d458d9d6769db8a4f8c43d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f23452d0_57467b5e",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ee57f37_30095350",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-13T08:18:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f23452d0_57467b5e",
+      "range": {
+        "startLine": 1391,
+        "startChar": 41,
+        "endLine": 1391,
+        "endChar": 68
+      },
+      "revId": "f2e6745d75de27a16d458d9d6769db8a4f8c43d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97cb7aee_6a5b1e43",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-07-12T13:00:17Z",
       "side": 1,
       "message": "Can we merge this constant with the CppHeap side and expose it publicly from there? We can use that dep from here.",
+      "range": {
+        "startLine": 1419,
+        "startChar": 23,
+        "endLine": 1419,
+        "endChar": 40
+      },
+      "revId": "f2e6745d75de27a16d458d9d6769db8a4f8c43d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8251f48_e159521d",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-07-13T08:18:28Z",
+      "side": 1,
+      "message": "Exposing MetricRecorderAdapter enables this as well.",
+      "parentUuid": "97cb7aee_6a5b1e43",
       "range": {
         "startLine": 1419,
         "startChar": 23,
