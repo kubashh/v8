@@ -29251,3 +29251,49 @@ TEST(TestSetSabConstructorEnabledCallback) {
   sab_constructor_enabled_value = true;
   CHECK(i_isolate->IsSharedArrayBufferConstructorEnabled(i_context));
 }
+
+THREADED_TEST(ArrayHasCustomIterator) {
+  LocalContext context;
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  CompileRun(
+      "var v = [1, 2, 3];"
+      "function Foo() {"
+      "  return v;"
+      "}");
+  Local<Function> Foo = Local<Function>::Cast(
+      context->Global()->Get(context.local(), v8_str("Foo")).ToLocalChecked());
+
+  v8::Local<Value>* args0 = nullptr;
+  Local<v8::Array> vec = Local<v8::Array>::Cast(
+      Foo->Call(context.local(), Foo, 0, args0).ToLocalChecked());
+  CHECK_EQ(3u, vec->Length());
+  CHECK(!vec->HasCustomIterator());
+
+  CompileRun("v[Symbol.iterator] = function* () { yield 42; };");
+  CHECK(vec->HasCustomIterator());
+}
+
+THREADED_TEST(ArrayHasGlobalCustomIterator) {
+  LocalContext context;
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  CompileRun(
+      "var v = [1, 2, 3];"
+      "function Foo() {"
+      "  return v;"
+      "}");
+  Local<Function> Foo = Local<Function>::Cast(
+      context->Global()->Get(context.local(), v8_str("Foo")).ToLocalChecked());
+
+  v8::Local<Value>* args0 = nullptr;
+  Local<v8::Array> vec = Local<v8::Array>::Cast(
+      Foo->Call(context.local(), Foo, 0, args0).ToLocalChecked());
+  CHECK_EQ(3u, vec->Length());
+  CHECK(!vec->HasCustomIterator());
+
+  CompileRun("Array.prototype[Symbol.iterator] = function* () { yield 42; };");
+  CHECK(vec->HasCustomIterator());
+}
