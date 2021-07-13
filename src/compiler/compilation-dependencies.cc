@@ -338,6 +338,25 @@ class OwnConstantDictionaryPropertyDependency final
   ObjectRef const value_;
 };
 
+class ConsistentJSFunctionViewDependency final : public CompilationDependency {
+ public:
+  explicit ConsistentJSFunctionViewDependency(const JSFunctionRef& function)
+      : function_(function) {
+    DCHECK(function.Serialize());
+  }
+
+  bool IsValid() const override {
+    bool result = function_.IsConsistentWithHeapState();
+    CHECK(result);
+    return result;
+  }
+
+  void Install(Handle<Code> code) const override {}
+
+ private:
+  const JSFunctionRef function_;
+};
+
 class TransitionDependency final : public CompilationDependency {
  public:
   explicit TransitionDependency(const MapRef& map) : map_(map) {
@@ -388,8 +407,7 @@ class FieldRepresentationDependency final : public CompilationDependency {
                                 Representation representation)
       : owner_(owner),
         descriptor_(descriptor),
-        representation_(representation) {
-  }
+        representation_(representation) {}
 
   bool IsValid() const override {
     DisallowGarbageCollection no_heap_allocation;
@@ -859,7 +877,10 @@ void CompilationDependencies::DependOnStablePrototypeChains(
       // Implemented according to ES6 section 7.3.2 GetV (V, P).
       base::Optional<JSFunctionRef> constructor =
           broker_->target_native_context().GetConstructorFunction(receiver_map);
-      if (constructor.has_value()) receiver_map = constructor->initial_map();
+      if (constructor.has_value()) {
+        constructor->Serialize();
+        receiver_map = constructor->initial_map();
+      }
     }
     DependOnStablePrototypeChain(this, receiver_map, last_prototype);
   }
@@ -880,6 +901,12 @@ void CompilationDependencies::DependOnElementsKinds(
     current = current.nested_site().AsAllocationSite();
   }
   CHECK_EQ(current.nested_site().AsSmi(), 0);
+}
+
+void CompilationDependencies::DependOnConsistentJSFunctionView(
+    const JSFunctionRef& function) {
+  DCHECK(broker_->is_concurrent_inlining());
+  RecordDependency(zone_->New<ConsistentJSFunctionViewDependency>(function));
 }
 
 SlackTrackingPrediction::SlackTrackingPrediction(MapRef initial_map,

@@ -6,6 +6,7 @@
 
 #include "src/codegen/code-factory.h"
 #include "src/compiler/access-builder.h"
+#include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/js-heap-copy-reducer.h"
 #include "src/compiler/js-operator.h"
@@ -39,7 +40,8 @@ Type const kJSTypes[] = {Type::Undefined(), Type::Null(),   Type::Boolean(),
 
 class JSTypedLoweringTest : public TypedGraphTest {
  public:
-  JSTypedLoweringTest() : TypedGraphTest(3), javascript_(zone()) {}
+  JSTypedLoweringTest()
+      : TypedGraphTest(3), javascript_(zone()), deps_(broker(), zone()) {}
   ~JSTypedLoweringTest() override = default;
 
  protected:
@@ -51,7 +53,7 @@ class JSTypedLoweringTest : public TypedGraphTest {
     JSGraph jsgraph(isolate(), graph(), common(), javascript(), &simplified,
                     &machine);
     GraphReducer graph_reducer(zone(), graph(), tick_counter(), broker());
-    JSTypedLowering reducer(&graph_reducer, &jsgraph, broker(), zone());
+    JSTypedLowering reducer(&graph_reducer, &jsgraph, broker(), &deps_, zone());
     return reducer.Reduce(node);
   }
 
@@ -59,6 +61,7 @@ class JSTypedLoweringTest : public TypedGraphTest {
 
  private:
   JSOperatorBuilder javascript_;
+  CompilationDependencies deps_;
 };
 
 
