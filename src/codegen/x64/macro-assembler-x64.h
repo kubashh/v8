@@ -37,12 +37,43 @@ struct SmiIndex {
 // platforms are updated.
 enum class StackLimitKind { kInterruptStackLimit, kRealStackLimit };
 
-// Convenient class to access arguments below the stack pointer.
-class StackArgumentsAccessor {
+// Helper class to access/manipulate arguments on the stack.
+class ArgumentsHelper {
  public:
-  // argc = the number of arguments not including the receiver.
-  explicit StackArgumentsAccessor(Register argc) : argc_(argc) {
-    DCHECK_NE(argc_, no_reg);
+  // Type of arguments on the stack.
+  enum class ElementsType { kValue, kHandle, kTagged };
+  // Type of the argument count stored in the helper.
+  enum class ArgumentCountType { kInteger, kSmi, kBytes };
+
+  enum class HandleReceiver {
+    kIgnore,   // No special handling for receiver.
+    kInclude,  // Include receiver when copying/dropping arguments.
+    kOverride  // Override receiver with value specified with set_receiver.
+  };
+
+  enum ArgumentFlags {
+    kNone = 0u,
+    kPreserveReturnAddress = 1u << 0,  // Preserve the current return address
+                                       // when manipulating arguments.
+    kReverse = 1u << 1,                // Arguments are in reversed order.
+    kRemoveSpread = 1u << 2,           // Remove spread argument.
+    kChangeHoleToUndefined = 1u << 3   // Change TheHole values of arguments to
+                                       // undefined when copying.
+  };
+
+  using Flags = base::Flags<ArgumentFlags>;
+
+  explicit ArgumentsHelper(
+      MacroAssembler* masm, Register argc,
+      ArgumentCountType argc_type = ArgumentCountType::kInteger)
+      : masm_(masm),
+        argc_(argc),
+        argc_type_(argc_type),
+        argc_includes_receiver_(false),
+        formal_parameter_count_(no_reg),
+        stack_overflow_label_(nullptr),
+        receiver_source_(ReceiverSource::kNone) {
+    DCHECK_NE(argc, no_reg);
   }
 
   // Argument 0 is the receiver (despite argc not including the receiver).
@@ -51,11 +82,106 @@ class StackArgumentsAccessor {
   Operand GetArgumentOperand(int index) const;
   Operand GetReceiverOperand() const { return GetArgumentOperand(0); }
 
- private:
-  const Register argc_;
+  // Override the current argument count register.
+  void set_argc(Register argc,
+                ArgumentCountType type = ArgumentCountType::kInteger) {
+    argc_ = argc;
+    argc_type_ = type;
+  }
 
-  DISALLOW_IMPLICIT_CONSTRUCTORS(StackArgumentsAccessor);
+  void set_formal_parameter_count(Register formal_parameter_count) {
+    formal_parameter_count_ = formal_parameter_count;
+  }
+
+  // Branch based on the value of the argument count.
+  void JumpIfArgc(Condition cc, int value, Label* L,
+                  Label::Distance distance = Label::kFar);
+
+  // Add arguments to the top of the stack. Space has to be reserved before
+  // calling this method.
+  void AddArgumentsFrom(Register src, Register count,
+                        ElementsType elements_type = ElementsType::kValue,
+                        Flags flags = kNone);
+  // Add arguments from the current frame to the top of the stack.
+  void AddArgumentsFromFrame(Register count, Register start_index,
+                             Flags flags = kNone);
+  // Push arguments.
+  void PushArgumentsFrom(
+      Register src, ElementsType elements_type,
+      HandleReceiver handle_receiver = HandleReceiver::kIgnore,
+      Flags flags = kNone);
+  // Push arguments from the current frame.
+  void PushArgumentsFromFrame(
+      HandleReceiver handle_receiver = HandleReceiver::kIgnore,
+      Flags flags = kNone);
+  // Pop all arguments from the stack.
+  void PopArguments(HandleReceiver handle_receiver = HandleReceiver::kInclude);
+  void PrepareInvoke(InvokeType type, Label* regular_invoke_label);
+  // Set the label to handle stack overflows.
+  void set_stack_overflow_label(Label* label,
+                                Label::Distance distance = Label::kFar) {
+    stack_overflow_label_ = label;
+    stack_overflow_label_distance_ = distance;
+  }
+  // Set new receiver operand.
+  void set_receiver(Operand receiver,
+                    ElementsType type = ElementsType::kValue) {
+    receiver_source_ = ReceiverSource::kOperand;
+    receiver_.operand = receiver;
+    receiver_type_ = type;
+  }
+  // Set new receiver register.
+  void set_receiver(Register receiver) {
+    receiver_source_ = ReceiverSource::kRegister;
+    receiver_.reg = receiver;
+  }
+  // Set new receiver int (e.g. 0 to just reserve space).
+  void set_receiver(int32_t receiver) {
+    receiver_source_ = ReceiverSource::kImmediate;
+    receiver_.imm = receiver;
+  }
+  // Makes sure the receiver is included in the actual argument count.
+  void AddReceiverToArgc();
+  // Convert actual argument count from int to bytes.
+  void ConvertArgcToBytes();
+
+ private:
+  // Shift |count| slots on the stack down by |offset|.
+  // New space on the stack is allocated.
+  void ShiftStackArguments(Register offset, Register count);
+  void ArgcIncludingReceiverAndReturnAddress(Register dest,
+                                             Flags flags = kNone);
+  // Copy Arguments from source to destination.
+  void CopyArguments(Register src, Register dest, Register count,
+                     ElementsType elements_type = ElementsType::kValue,
+                     Flags flags = kNone);
+  // Push new receiver set by |set_receiver|.
+  void PushReceiver();
+  Operand ArgumentOperand(Register base, Register offset, ElementsType type);
+  void LoadArgument(Register dest, Register base, Register offset,
+                    ElementsType type);
+  MacroAssembler* masm_;
+  Register argc_;
+  ArgumentCountType argc_type_;
+  bool argc_includes_receiver_;
+  Register formal_parameter_count_;
+  Label* stack_overflow_label_;
+  Label::Distance stack_overflow_label_distance_;
+  enum class ReceiverSource { kNone, kRegister, kOperand, kImmediate };
+  ReceiverSource receiver_source_;
+  union Receiver {
+    Operand operand;
+    Register reg;
+    int32_t imm;
+    Receiver() : reg(no_reg) {}
+  };
+  Receiver receiver_;
+  ElementsType receiver_type_;
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(ArgumentsHelper);
 };
+
+DEFINE_OPERATORS_FOR_FLAGS(ArgumentsHelper::Flags)
 
 class V8_EXPORT_PRIVATE TurboAssembler : public SharedTurboAssembler {
  public:
@@ -107,6 +233,11 @@ class V8_EXPORT_PRIVATE TurboAssembler : public SharedTurboAssembler {
 
 #undef AVX_OP
 
+  template <typename F>
+  void LoopForward(Register count, Register scratch, F& body);
+  template <typename F>
+  void LoopBackward(Register count, Register scratch, F& body);
+
   // Define movq here instead of using AVX_OP. movq is defined using templates
   // and there is a function template `void movq(P1)`, while technically
   // impossible, will be selected when deducing the arguments for AvxHelper.
@@ -123,6 +254,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public SharedTurboAssembler {
   void Ret(int bytes_dropped, Register scratch);
 
   // Operations on roots in the root-array.
+  Operand RootOperand(RootIndex index) const;
   void LoadRoot(Register destination, RootIndex index) final;
   void LoadRoot(Operand destination, RootIndex index) {
     LoadRoot(kScratchRegister, index);
