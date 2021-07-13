@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "184bb5ef_6e4d0e08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-07-13T07:39:32Z",
+      "side": 1,
+      "message": "LGTM, thanks!\nAdding Camillo as an API owner.",
+      "revId": "ae18b12231d4a0e1cf3dc874864ea977364d8ac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
