@@ -51,6 +51,24 @@
       "parentUuid": "833cc407_bb1a2ff9",
       "revId": "6822edb7074b30f71d8f0753eb4bb6ff47f4dc57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d67f5d4d_387fa5bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001168
+      },
+      "writtenOn": "2021-07-13T18:35:42Z",
+      "side": 1,
+      "message": "This isn\u0027t related to bug 838348. It\u0027s because third_party/blink/renderer/platform/media/web_media_player_impl_unittest.cc tries to set up its own test environment, but does so incorrectly. It creates a WebViewImpl and a WebLocalFrameImpl, but it does not attach a WebFrameWidgetImpl to the main frame (which is a local root). This causes the page scheduler call to break, because it expects (reasonably so) that a local main frame always has a frame widget.\n\nLet me try to send a CL.",
+      "parentUuid": "92e37c58_fdf4ae27",
+      "revId": "6822edb7074b30f71d8f0753eb4bb6ff47f4dc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
