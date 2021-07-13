@@ -458,6 +458,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   inline Handle<HeapObject> compressed_embedded_object_handle_at(Address pc);
   inline Address runtime_entry_at(Address pc);
 
+  RegList* GetScratchRegisterList() { return &scratch_register_list_; }
+
   // Number of bytes taken up by the branch target in the code.
   static constexpr int kSpecialTargetSize = 4;  // 32-bit displacement.
 
@@ -2369,6 +2371,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   friend class ConstPool;
 
+  RegList scratch_register_list_;
+
 #if defined(V8_OS_WIN_X64)
   std::unique_ptr<win64_unwindinfo::XdataEncoder> xdata_encoder_;
 #endif
@@ -2399,6 +2403,29 @@ class EnsureSpace {
 #ifdef DEBUG
   int space_before_;
 #endif
+};
+
+class V8_EXPORT_PRIVATE UseScratchRegisterScope {
+ public:
+  explicit UseScratchRegisterScope(Assembler* assembler);
+  ~UseScratchRegisterScope();
+
+  Register Acquire();
+  bool hasAvailable() const;
+  void Include(const RegList& list) { *available_ |= list; }
+  void Include(const Register& reg1, const Register& reg2 = no_reg) {
+    RegList list(reg1.bit() | reg2.bit());
+    Include(list);
+  }
+  void Exclude(const RegList& list) { *available_ &= ~list; }
+  void Exclude(const Register& reg1, const Register& reg2 = no_reg) {
+    RegList list(reg1.bit() | reg2.bit());
+    Exclude(list);
+  }
+
+ private:
+  RegList* available_;
+  RegList old_available_;
 };
 
 }  // namespace internal
