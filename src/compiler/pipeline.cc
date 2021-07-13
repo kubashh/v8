@@ -1350,14 +1350,17 @@ struct GraphBuilderPhase {
       flags |= BytecodeGraphBuilderFlag::kBailoutOnUninitialized;
     }
 
-    JSFunctionRef closure = MakeRef(data->broker(), data->info()->closure());
+    SharedFunctionInfoRef shared =
+        MakeRef(data->broker(), data->info()->shared_info());
+    FeedbackCellRef feedback_cell =
+        MakeRef(data->broker(),
+                data->info()->closure()->raw_feedback_cell(kAcquireLoad));
     CallFrequency frequency(1.0f);
     BuildGraphFromBytecode(
-        data->broker(), temp_zone, closure.shared(),
-        closure.raw_feedback_cell(), data->info()->osr_offset(),
-        data->jsgraph(), frequency, data->source_positions(),
-        SourcePosition::kNotInlined, data->info()->code_kind(), flags,
-        &data->info()->tick_counter(),
+        data->broker(), temp_zone, shared, feedback_cell,
+        data->info()->osr_offset(), data->jsgraph(), frequency,
+        data->source_positions(), SourcePosition::kNotInlined,
+        data->info()->code_kind(), flags, &data->info()->tick_counter(),
         ObserveNodeInfo{data->observe_node_manager(),
                         data->info()->node_observer()});
   }
@@ -1597,7 +1600,8 @@ struct TypedLoweringPhase {
                                      data->jsgraph(), data->broker(),
                                      temp_zone);
     JSTypedLowering typed_lowering(&graph_reducer, data->jsgraph(),
-                                   data->broker(), temp_zone);
+                                   data->broker(), data->dependencies(),
+                                   temp_zone);
     ConstantFoldingReducer constant_folding_reducer(
         &graph_reducer, data->jsgraph(), data->broker());
     TypedOptimization typed_optimization(&graph_reducer, data->dependencies(),

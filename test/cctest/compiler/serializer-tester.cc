@@ -53,6 +53,7 @@ TEST(SerializeEmptyFunction) {
   SerializerTester tester(
       "", "function f() {}; %EnsureFeedbackVectorForFunction(f); return f;");
   JSFunctionRef function = tester.function();
+  CHECK(function.Serialize());
   CHECK(tester.broker()->IsSerializedForCompilation(
       function.shared(), function.feedback_vector()));
 }
@@ -65,6 +66,7 @@ void CheckForSerializedInlinee(const char* global_source,
                                Handle<Object> argv[] = {}) {
   SerializerTester tester(global_source, local_source);
   JSFunctionRef f = tester.function();
+  CHECK(f.Serialize());
   CHECK(tester.broker()->IsSerializedForCompilation(f.shared(),
                                                     f.feedback_vector()));
 
