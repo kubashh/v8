@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d78257e_02057927",
+        "filename": "src/heap/free-list.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-14T14:32:19Z",
+      "side": 1,
+      "message": "We actually don\u0027t know at this level whether it\u0027s compaction space or main thread which is why I chose \"kMaybeOffMainThread\".\n\nAll other callsites are actually known.",
+      "range": {
+        "startLine": 62,
+        "startChar": 44,
+        "endLine": 62,
+        "endChar": 63
+      },
+      "revId": "f2beee14a925af7c23e0dbd6ce11c5c51570e8a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
