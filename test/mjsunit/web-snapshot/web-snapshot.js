@@ -2,7 +2,34 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --experimental-d8-web-snapshot-api
+// Flags: --experimental-d8-web-snapshot-api --allow-natives-syntax
+
+function assertEqualsAsync(expected, run, msg) {
+  var actual;
+  var hadValue = false;
+  var hadError = false;
+  var promise = run();
+
+  if (typeof promise !== "object" || typeof promise.then !== "function") {
+    throw new MjsUnitAssertionError(
+        "Expected " + run.toString() +
+        " to return a Promise, but it returned " + PrettyPrint(promise));
+  }
+
+  promise.then(function(value) { hadValue = true; actual = value; },
+               function(error) { hadError = true; actual = error; });
+
+  assertFalse(hadValue || hadError);
+
+  %PerformMicrotaskCheckpoint();
+
+  if (hadError) throw actual;
+
+  assertTrue(
+      hadValue, "Expected '" + run.toString() + "' to produce a value");
+
+  assertEquals(expected, actual, msg);
+};
 
 function use(exports) {
   const result = Object.create(null);
@@ -277,7 +304,6 @@ function takeAndUseWebSnapshot(createObjects, exports) {
   assertEquals(5, foo.array[0]());
 })();
 
-
 (function TestContextReferencingArray() {
   function createObjects() {
     function outer() {
@@ -291,4 +317,38 @@ function takeAndUseWebSnapshot(createObjects, exports) {
   }
   const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
   assertEquals(11525, foo.func()[0]);
+})();
+
+(function TestEmptyClass() {
+  function createObjects() {
+    globalThis.Foo = class Foo { };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  let x = new Foo();
+})();
+
+(function TestClassWithConstructor() {
+  function createObjects() {
+    globalThis.Foo = class {
+      constructor(x) {
+        this.n = 42 + x;
+      }
+    };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  let x = new Foo(2);
+  assertEquals(44, x.n);
+})();
+
+(function TestClassWithMethods() {
+  function createObjects() {
+    globalThis.Foo = class {
+      f() { return 7; };
+      async g() { return 6; };
+    };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  let x = new Foo();
+  assertEquals(7, x.f());
+  assertEqualsAsync(6, x.g);
 })();
