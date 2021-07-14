@@ -572,7 +572,7 @@ DEFINE_BOOL_READONLY(enable_sealed_frozen_elements_kind, true,
 DEFINE_BOOL(unbox_double_arrays, true, "automatically unbox arrays of doubles")
 DEFINE_BOOL_READONLY(string_slices, true, "use string slices")
 
-DEFINE_INT(interrupt_budget, 132 * KB,
+DEFINE_INT(interrupt_budget, 100 * KB,
            "interrupt budget which should be used for the profiler counter")
 
 // Flags for inline caching and feedback vectors.
@@ -648,7 +648,7 @@ DEFINE_INT(turboprop_inline_scaling_factor, 4,
            "TurboProp compared to TurboFan")
 // The scale factor determines the interrupt budget when tiering up from
 // Turboprop to TurboFan.
-DEFINE_INT(interrupt_budget_scale_factor_for_top_tier, 5,
+DEFINE_INT(interrupt_budget_scale_factor_for_top_tier, 20,
            "scale factor for profiler ticks when tiering up from midtier")
 
 // Flags for Sparkplug
