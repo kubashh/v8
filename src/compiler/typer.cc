@@ -1020,6 +1020,7 @@ Type Typer::Visitor::TypeTypeGuard(Node* node) {
 Type Typer::Visitor::TypeFoldConstant(Node* node) { return Operand(node, 0); }
 
 Type Typer::Visitor::TypeDead(Node* node) { return Type::None(); }
+Type Typer::Visitor::TypePlug(Node* node) { UNREACHABLE(); }
 
 Type Typer::Visitor::TypeDeadValue(Node* node) { return Type::None(); }
 

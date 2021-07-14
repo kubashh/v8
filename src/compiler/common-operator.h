@@ -469,6 +469,7 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
   CommonOperatorBuilder(const CommonOperatorBuilder&) = delete;
   CommonOperatorBuilder& operator=(const CommonOperatorBuilder&) = delete;
 
+  const Operator* Plug();
   const Operator* Dead();
   const Operator* DeadValue(MachineRepresentation rep);
   const Operator* Unreachable();
