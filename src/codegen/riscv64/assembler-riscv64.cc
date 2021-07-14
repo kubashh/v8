@@ -2584,16 +2584,13 @@ int Assembler::li_estimate(int64_t imm, bool is_get_temp_reg) {
         continue;
       }
       // The first 1 seen
-      int32_t part;
       if ((i + 11) < 32) {
         // Pick 11 bits
-        part = ((uint32_t)(low_32 << i) >> i) >> (32 - (i + 11));
         count++;
         count++;
         i += 10;
         mask >>= 11;
       } else {
-        part = (uint32_t)(low_32 << i) >> i;
         count++;
         count++;
         break;
