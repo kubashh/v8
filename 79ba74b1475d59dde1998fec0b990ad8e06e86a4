@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffe38894_cb8424f0",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Haha! And I thought you used it for a reason and re-used it again. Fixed both!",
+      "parentUuid": "4c842565_8a6a9cee",
+      "range": {
+        "startLine": 62,
+        "startChar": 7,
+        "endLine": 62,
+        "endChar": 12
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c035213_a6c52ab4",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-07-14T07:48:25Z",
       "side": 1,
       "message": "In this case we\u0027ve already thrown, no?\n\nAlso, can we avoid this check and keep on trucking? (With the \"keep on trucking error handling\" approach where we set the error but don\u0027t do repeated \"did it fail?\" checks in all places.) Or is it too inconvenient?",
+      "range": {
+        "startLine": 872,
+        "startChar": 6,
+        "endLine": 872,
+        "endChar": 57
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c80b8813_ca8fbfad",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c035213_a6c52ab4",
       "range": {
         "startLine": 872,
         "startChar": 6,
@@ -110,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7707222_80d8740d",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "That\u0027s just the default value, I am overwriting these as needed.",
+      "parentUuid": "9801169b_4ccd297c",
+      "range": {
+        "startLine": 946,
+        "startChar": 45,
+        "endLine": 946,
+        "endChar": 50
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90f27233_4b87f238",
@@ -123,6 +195,30 @@
       "writtenOn": "2021-07-14T07:48:25Z",
       "side": 1,
       "message": "Iirc you said this will be gone (just leaving this comment so that I won\u0027t forget)",
+      "range": {
+        "startLine": 954,
+        "startChar": 6,
+        "endLine": 954,
+        "endChar": 56
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "678404d0_225b70c6",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "I verified the flags and these are the correct ones for classes.",
+      "parentUuid": "90f27233_4b87f238",
       "range": {
         "startLine": 954,
         "startChar": 6,
@@ -156,6 +252,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7decca38_36b55a46",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "I guess not. I removed the comment.",
+      "parentUuid": "218eb652_bf1742b6",
+      "range": {
+        "startLine": 1000,
+        "startChar": 2,
+        "endLine": 1002,
+        "endChar": 47
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d2da7ec_335b949e",
@@ -169,6 +289,30 @@
       "writtenOn": "2021-07-14T07:48:25Z",
       "side": 1,
       "message": "Isn\u0027t this done?",
+      "range": {
+        "startLine": 1003,
+        "startChar": 2,
+        "endLine": 1003,
+        "endChar": 60
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6ebde1a_440c879d",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "I only checked this for classes, not methods.",
+      "parentUuid": "1d2da7ec_335b949e",
       "range": {
         "startLine": 1003,
         "startChar": 2,
@@ -225,6 +369,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cb29418_913588e7",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b369560_f7bd5f0c",
+      "range": {
+        "startLine": 1098,
+        "startChar": 35,
+        "endLine": 1098,
+        "endChar": 43
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07d9e300_3bee1ef0",
@@ -248,6 +416,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "800f95f9_9f8d37bf",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07d9e300_3bee1ef0",
+      "range": {
+        "startLine": 1138,
+        "startChar": 13,
+        "endLine": 1138,
+        "endChar": 18
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b21a071_3ec83cf8",
@@ -261,6 +453,30 @@
       "writtenOn": "2021-07-14T07:48:25Z",
       "side": 1,
       "message": "I guess just \"Malformed class\" here, since it\u0027s not the object prototype which is malformed, really, just the ID.",
+      "range": {
+        "startLine": 1140,
+        "startChar": 37,
+        "endLine": 1140,
+        "endChar": 53
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b0688b7_fd15771e",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b21a071_3ec83cf8",
       "range": {
         "startLine": 1140,
         "startChar": 37,
@@ -317,6 +533,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2227d3dd_36af67cc",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "I changed it to `function-\u003eset_prototype_or_initial_map()` and it\u0027s working fine. Thanks!",
+      "parentUuid": "7de726aa_55ac9725",
+      "range": {
+        "startLine": 1151,
+        "startChar": 16,
+        "endLine": 1151,
+        "endChar": 28
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ce2bd11_2f82cd27",
@@ -330,6 +570,30 @@
       "writtenOn": "2021-07-14T07:48:25Z",
       "side": 1,
       "message": "Mega-nit: I\u0027d put these below the next 2 functions (FunctionKindToFnctionFlags), they\u0027re clearer that way.",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 37
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc911f5d_c1577c03",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ce2bd11_2f82cd27",
       "range": {
         "startLine": 61,
         "startChar": 0,
@@ -363,6 +627,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9898f76f_0ef6cf27",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cad3173e_d5463bd1",
+      "range": {
+        "startLine": 209,
+        "startChar": 21,
+        "endLine": 209,
+        "endChar": 34
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4260d6b_41e681c7",
@@ -376,6 +664,30 @@
       "writtenOn": "2021-07-14T07:48:25Z",
       "side": 1,
       "message": "This is now not \"inner\" as in \"inner function\"",
+      "range": {
+        "startLine": 528,
+        "startChar": 13,
+        "endLine": 528,
+        "endChar": 18
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26e4f19d_ad398f98",
+        "filename": "test/cctest/test-web-snapshots.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4260d6b_41e681c7",
       "range": {
         "startLine": 528,
         "startChar": 13,
@@ -409,6 +721,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8218a176_2e0c996e",
+        "filename": "test/cctest/test-web-snapshots.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fc961f8_4c260cfe",
+      "range": {
+        "startLine": 582,
+        "startChar": 28,
+        "endLine": 582,
+        "endChar": 36
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74d9aba6_5cd7d5bb",
@@ -422,6 +758,30 @@
       "writtenOn": "2021-07-14T07:48:25Z",
       "side": 1,
       "message": "Hmm, I can see this is copy paste from other tests. IMO this should be part of mjsunit.js instead. Maybe as a follow up? (And this func should be modernized too, like using let instead of var.)",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50d255c4_8e4e509b",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-14T15:24:40Z",
+      "side": 1,
+      "message": "Yes, maybe we can do something about it. But it requires `--allow-natives-syntax`, so I\u0027m not sure it\u0027s a good idea to add it to `mjsunit.js`.",
+      "parentUuid": "74d9aba6_5cd7d5bb",
       "range": {
         "startLine": 7,
         "startChar": 9,
