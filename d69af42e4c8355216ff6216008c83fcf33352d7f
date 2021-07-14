@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a111169_3cd63b47",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-07-14T13:57:53Z",
+      "side": 1,
+      "message": "FastJSArrayForRead?",
+      "revId": "d69af42e4c8355216ff6216008c83fcf33352d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "852d1e55_d2d6894f",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-07-14T13:57:53Z",
+      "side": 1,
+      "message": "FastJSArrayForRead?",
+      "revId": "d69af42e4c8355216ff6216008c83fcf33352d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
