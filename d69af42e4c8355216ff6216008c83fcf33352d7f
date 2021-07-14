@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd6adc90_71a4e5f8",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-14T14:34:01Z",
+      "side": 1,
+      "message": "Doing this in a follow-up CL.\n\nIf I change this now, some code paths in HandleSimpleArgumentsSlice become stale, I prefer to delete them (or handle them differently) in a different CL.",
+      "parentUuid": "7a111169_3cd63b47",
+      "revId": "d69af42e4c8355216ff6216008c83fcf33352d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "852d1e55_d2d6894f",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-07-14T13:57:53Z",
       "side": 1,
       "message": "FastJSArrayForRead?",
+      "revId": "d69af42e4c8355216ff6216008c83fcf33352d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96f6a54a_546f47ac",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-14T14:34:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "852d1e55_d2d6894f",
       "revId": "d69af42e4c8355216ff6216008c83fcf33352d7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
