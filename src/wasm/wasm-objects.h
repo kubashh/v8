@@ -2,6 +2,7 @@
 // this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/base/macros.h"
 #if !V8_ENABLE_WEBASSEMBLY
 #error This header should only be included if WebAssembly is enabled.
 #endif  // !V8_ENABLE_WEBASSEMBLY
@@ -753,6 +754,12 @@ class WasmScript : public AllStatic {
   // this function returns false and does not set any breakpoint.
   V8_EXPORT_PRIVATE static bool SetBreakPoint(Handle<Script>, int* position,
                                               Handle<BreakPoint> break_point);
+
+  // Set an "on entry" breakpoint (a.k.a. instrumentation breakpoint) inside
+  // the given module. This will affect all live and future instances of the
+  // module.
+  V8_EXPORT_PRIVATE static void SetBreakPointOnEntry(
+      Handle<Script>, Handle<BreakPoint> break_point);
 
   // Set a breakpoint on first breakable position of the given function index
   // inside the given module. This will affect all live and future instances of
