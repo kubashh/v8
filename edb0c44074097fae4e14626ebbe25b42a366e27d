@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f45abb9c_e6b79050",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-07-14T12:08:28Z",
+      "side": 1,
+      "message": "Hey Clemens,\n\nHere\u0027s some trivial refactoring to make returning function information from SetBreakpoint() family of methods possible. Please take a look.\n\nthanks,\nBenedikt",
+      "revId": "edb0c44074097fae4e14626ebbe25b42a366e27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
