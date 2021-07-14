@@ -441,7 +441,7 @@ void PagedSpace::FreeLinearAllocationArea() {
   // because we are going to write a filler into that memory area below.
   if (identity() == CODE_SPACE) {
     heap()->UnprotectAndRegisterMemoryChunk(
-        MemoryChunk::FromAddress(current_top));
+        MemoryChunk::FromAddress(current_top), !is_compaction_space());
   }
 
   DCHECK_IMPLIES(current_limit - current_top >= 2 * kTaggedSize,
@@ -543,7 +543,7 @@ bool PagedSpace::TryAllocationFromFreeListMain(size_t size_in_bytes,
   DCHECK_LE(size_in_bytes, limit - start);
   if (limit != end) {
     if (identity() == CODE_SPACE) {
-      heap()->UnprotectAndRegisterMemoryChunk(page);
+      heap()->UnprotectAndRegisterMemoryChunk(page, !is_compaction_space());
     }
     Free(limit, end - limit, SpaceAccountingMode::kSpaceAccounted);
   }

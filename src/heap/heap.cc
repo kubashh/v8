@@ -2656,8 +2656,13 @@ void Heap::ComputeFastPromotionMode() {
   }
 }
 
-void Heap::UnprotectAndRegisterMemoryChunk(MemoryChunk* chunk) {
+void Heap::UnprotectAndRegisterMemoryChunk(MemoryChunk* chunk,
+                                           bool is_main_thread) {
   if (unprotected_memory_chunks_registry_enabled_) {
+    base::Optional<base::MutexGuard> guard;
+    if (!is_main_thread) {
+      guard.emplace(&unprotected_memory_chunks_mutex_);
+    }
     if (unprotected_memory_chunks_.insert(chunk).second) {
       chunk->SetReadAndWritable();
     }
