@@ -2739,7 +2739,9 @@ Reduction JSCallReducer::ReduceFunctionPrototypeCall(Node* node) {
   HeapObjectMatcher m(target);
   if (m.HasResolvedValue() && m.Ref(broker()).IsJSFunction()) {
     JSFunctionRef function = m.Ref(broker()).AsJSFunction();
-    if (!function.serialized()) return NoChange();
+    if (broker()->is_concurrent_inlining()) {
+      dependencies()->DependOnConsistentJSFunctionView(function);
+    }
     context = jsgraph()->Constant(function.context());
   } else {
     context = effect = graph()->NewNode(
@@ -4286,7 +4288,6 @@ Reduction JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpread(
 }
 
 bool JSCallReducer::IsBuiltinOrApiFunction(JSFunctionRef function) const {
-  if (!function.serialized()) return false;
   // TODO(neis): Add a way to check if function template info isn't serialized
   // and add a warning in such cases. Currently we can't tell if function
   // template info doesn't exist or wasn't serialized.
@@ -4310,11 +4311,14 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
     ObjectRef target_ref = m.Ref(broker());
     if (target_ref.IsJSFunction()) {
       JSFunctionRef function = target_ref.AsJSFunction();
-      if (!function.serialized()) return NoChange();
 
       // Don't inline cross native context.
       if (!function.native_context().equals(native_context())) {
         return NoChange();
+      }
+
+      if (broker()->is_concurrent_inlining()) {
+        dependencies()->DependOnConsistentJSFunctionView(function);
       }
 
       return ReduceJSCall(node, function.shared());
@@ -5012,7 +5016,6 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
 
     if (target_ref.IsJSFunction()) {
       JSFunctionRef function = target_ref.AsJSFunction();
-      if (!function.serialized()) return NoChange();
 
       // Do not reduce constructors with break points.
       // If this state changes during background compilation, the compilation
@@ -5023,6 +5026,10 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
       // Don't inline cross native context.
       if (!function.native_context().equals(native_context())) {
         return NoChange();
+      }
+
+      if (broker()->is_concurrent_inlining()) {
+        dependencies()->DependOnConsistentJSFunctionView(function);
       }
 
       // Check for known builtin functions.
