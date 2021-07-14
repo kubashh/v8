@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 @abstract
+@doNotGenerateCppClass
 extern class Module extends HeapObject {
   exports: ObjectHashTable;
   hash: Smi;
@@ -12,7 +13,4 @@ extern class Module extends HeapObject {
   top_level_capability: JSPromise|Undefined;
 }
 
-@generateCppClass
-extern class JSModuleNamespace extends JSSpecialObject {
-  module: Module;
-}
+extern class JSModuleNamespace extends JSSpecialObject { module: Module; }
