@@ -121,6 +121,9 @@ Reduction JSCreateLowering::ReduceJSCreate(Node* node) {
 
   JSFunctionRef original_constructor =
       HeapObjectMatcher(new_target).Ref(broker()).AsJSFunction();
+  if (broker()->is_concurrent_inlining()) {
+    dependencies()->DependOnConsistentJSFunctionView(original_constructor);
+  }
   SlackTrackingPrediction slack_tracking_prediction =
       dependencies()->DependOnInitialMapInstanceSizePrediction(
           original_constructor);
@@ -390,6 +393,9 @@ Reduction JSCreateLowering::ReduceJSCreateGeneratorObject(Node* node) {
     JSFunctionRef js_function =
         closure_type.AsHeapConstant()->Ref().AsJSFunction();
     if (!js_function.has_initial_map()) return NoChange();
+    if (broker()->is_concurrent_inlining()) {
+      dependencies()->DependOnConsistentJSFunctionView(js_function);
+    }
 
     SlackTrackingPrediction slack_tracking_prediction =
         dependencies()->DependOnInitialMapInstanceSizePrediction(js_function);
@@ -634,6 +640,9 @@ Reduction JSCreateLowering::ReduceJSCreateArray(Node* node) {
   Node* new_target = NodeProperties::GetValueInput(node, 1);
   JSFunctionRef original_constructor =
       HeapObjectMatcher(new_target).Ref(broker()).AsJSFunction();
+  if (broker()->is_concurrent_inlining()) {
+    dependencies()->DependOnConsistentJSFunctionView(original_constructor);
+  }
   SlackTrackingPrediction slack_tracking_prediction =
       dependencies()->DependOnInitialMapInstanceSizePrediction(
           original_constructor);

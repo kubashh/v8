@@ -54,16 +54,17 @@ class PrototypePropertyDependency final : public CompilationDependency {
   PrototypePropertyDependency(const JSFunctionRef& function,
                               const ObjectRef& prototype)
       : function_(function), prototype_(prototype) {
-    DCHECK(function_.has_prototype());
+    DCHECK(function_.has_instance_prototype());
     DCHECK(!function_.PrototypeRequiresRuntimeLookup());
-    DCHECK(function_.prototype().equals(prototype_));
+    DCHECK(function_.instance_prototype().equals(prototype_));
   }
 
   bool IsValid() const override {
     Handle<JSFunction> function = function_.object();
-    return function->has_prototype_slot() && function->has_prototype() &&
+    return function->has_prototype_slot() &&
+           function->has_instance_prototype() &&
            !function->PrototypeRequiresRuntimeLookup() &&
-           function->prototype() == *prototype_.object();
+           function->instance_prototype() == *prototype_.object();
   }
 
   void PrepareInstall() const override {
@@ -338,6 +339,23 @@ class OwnConstantDictionaryPropertyDependency final
   ObjectRef const value_;
 };
 
+class ConsistentJSFunctionViewDependency final : public CompilationDependency {
+ public:
+  explicit ConsistentJSFunctionViewDependency(const JSFunctionRef& function)
+      : function_(function) {}
+
+  bool IsValid() const override {
+    bool result = function_.IsConsistentWithHeapState();
+    CHECK(result);
+    return result;
+  }
+
+  void Install(Handle<Code> code) const override {}
+
+ private:
+  const JSFunctionRef function_;
+};
+
 class TransitionDependency final : public CompilationDependency {
  public:
   explicit TransitionDependency(const MapRef& map) : map_(map) {
@@ -388,8 +406,7 @@ class FieldRepresentationDependency final : public CompilationDependency {
                                 Representation representation)
       : owner_(owner),
         descriptor_(descriptor),
-        representation_(representation) {
-  }
+        representation_(representation) {}
 
   bool IsValid() const override {
     DisallowGarbageCollection no_heap_allocation;
@@ -647,7 +664,7 @@ MapRef CompilationDependencies::DependOnInitialMap(
 ObjectRef CompilationDependencies::DependOnPrototypeProperty(
     const JSFunctionRef& function) {
   DCHECK(!function.IsNeverSerializedHeapObject());
-  ObjectRef prototype = function.prototype();
+  ObjectRef prototype = function.instance_prototype();
   RecordDependency(
       zone_->New<PrototypePropertyDependency>(function, prototype));
   return prototype;
@@ -880,6 +897,12 @@ void CompilationDependencies::DependOnElementsKinds(
     current = current.nested_site().AsAllocationSite();
   }
   CHECK_EQ(current.nested_site().AsSmi(), 0);
+}
+
+void CompilationDependencies::DependOnConsistentJSFunctionView(
+    const JSFunctionRef& function) {
+  DCHECK(broker_->is_concurrent_inlining());
+  RecordDependency(zone_->New<ConsistentJSFunctionViewDependency>(function));
 }
 
 SlackTrackingPrediction::SlackTrackingPrediction(MapRef initial_map,

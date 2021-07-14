@@ -83,7 +83,7 @@ enum class RefSerializationKind {
   V(JSArray, RefSerializationKind::kBackgroundSerialized)                 \
   V(JSBoundFunction, RefSerializationKind::kBackgroundSerialized)         \
   V(JSDataView, RefSerializationKind::kBackgroundSerialized)              \
-  V(JSFunction, RefSerializationKind::kSerialized)                        \
+  V(JSFunction, RefSerializationKind::kBackgroundSerialized)              \
   V(JSGlobalObject, RefSerializationKind::kBackgroundSerialized)          \
   V(JSGlobalProxy, RefSerializationKind::kBackgroundSerialized)           \
   V(JSTypedArray, RefSerializationKind::kBackgroundSerialized)            \
@@ -404,26 +404,20 @@ class V8_EXPORT_PRIVATE JSFunctionRef : public JSObjectRef {
 
   Handle<JSFunction> object() const;
 
-  bool has_feedback_vector() const;
-  bool has_initial_map() const;
-  bool has_prototype() const;
-  bool PrototypeRequiresRuntimeLookup() const;
-
-  void Serialize();
-  bool serialized() const;
+  bool IsConsistentWithHeapState() const;
 
   // The following are available only after calling Serialize().
-  ObjectRef prototype() const;
+  bool has_feedback_vector() const;
+  bool has_initial_map() const;
+  bool PrototypeRequiresRuntimeLookup() const;
+  bool has_instance_prototype() const;
+  ObjectRef instance_prototype() const;
   MapRef initial_map() const;
   ContextRef context() const;
   NativeContextRef native_context() const;
   SharedFunctionInfoRef shared() const;
   int InitialMapInstanceSizeWithMinSlack() const;
 
-  void SerializeCodeAndFeedback();
-  bool serialized_code_and_feedback() const;
-
-  // The following are available only after calling SerializeCodeAndFeedback().
   // TODO(mvstanton): Once we allow inlining of functions we didn't see
   // during serialization, we do need to ensure that any feedback vector
   // we read here has been fully initialized (ie, store-ordered into the
