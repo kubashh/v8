@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3f5a2cc_1a388a07",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-07-14T11:09:14Z",
+      "side": 1,
+      "message": "Let\u0027s make this nice now. How about an enum class { CompactionSpace, RegularSpace} or enum class { SequentialExecution, ParallelExecution}?",
+      "range": {
+        "startLine": 2660,
+        "startChar": 43,
+        "endLine": 2660,
+        "endChar": 47
+      },
+      "revId": "dff87174986e4db9ac270784ced6e5d9a961ffab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
