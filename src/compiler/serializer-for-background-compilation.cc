@@ -1166,7 +1166,9 @@ Hints SerializerForBackgroundCompilation::Run() {
                                                        shared.object());
   }
 
-  feedback_vector_ref.Serialize();
+  if (!broker()->is_concurrent_inlining()) {
+    feedback_vector_ref.Serialize(NotConcurrentInliningTag{broker()});
+  }
   TraverseBytecode();
 
   if (return_value_hints().IsEmpty()) {
@@ -1344,7 +1346,9 @@ void SerializerForBackgroundCompilation::VisitGetSuperConstructor(
     if (!constant->IsJSFunction()) continue;
     MapRef map = MakeRef(broker(), handle(HeapObject::cast(*constant).map(),
                                           broker()->isolate()));
-    map.SerializePrototype();
+    if (!broker()->is_concurrent_inlining()) {
+      map.SerializePrototype(NotConcurrentInliningTag{broker()});
+    }
     ObjectRef proto = map.prototype().value();
     if (proto.IsHeapObject() && proto.AsHeapObject().map().is_constructor()) {
       result_hints.AddConstant(proto.object(), zone(), broker());
@@ -2060,7 +2064,11 @@ void SerializerForBackgroundCompilation::ProcessCalleeForCallOrConstruct(
   if (callee->IsJSBoundFunction()) {
     JSBoundFunctionRef bound_function =
         MakeRef(broker(), Handle<JSBoundFunction>::cast(callee));
-    if (!bound_function.Serialize()) return;
+    if (!broker()->is_concurrent_inlining()) {
+      if (!bound_function.Serialize(NotConcurrentInliningTag{broker()})) {
+        return;
+      }
+    }
     callee = UnrollBoundFunction(bound_function, broker(), arguments,
                                  &expanded_arguments, zone())
                  .object();
@@ -2105,7 +2113,9 @@ void SerializerForBackgroundCompilation::ProcessCallOrConstruct(
           // Call; target is feedback cell or callee.
           if (target->IsFeedbackCell() && target->AsFeedbackCell().value()) {
             FeedbackVectorRef vector = *target->AsFeedbackCell().value();
-            vector.Serialize();
+            if (!broker()->is_concurrent_inlining()) {
+              vector.Serialize(NotConcurrentInliningTag{broker()});
+            }
             VirtualClosure virtual_closure(
                 vector.shared_function_info().object(), vector.object(),
                 Hints());
@@ -2218,7 +2228,9 @@ void SerializerForBackgroundCompilation::ProcessApiCall(
       MakeRef(broker(),
               FunctionTemplateInfo::cast(target->function_data(kAcquireLoad)));
   if (!target_template_info.has_call_code()) return;
-  target_template_info.SerializeCallCode();
+  if (!broker()->is_concurrent_inlining()) {
+    target_template_info.SerializeCallCode(NotConcurrentInliningTag{broker()});
+  }
 
   if (target_template_info.accept_any_receiver() &&
       target_template_info.is_signature_undefined()) {
@@ -2264,7 +2276,12 @@ void SerializerForBackgroundCompilation::ProcessHintsForObjectCreate(
     Hints const& prototype) {
   for (Handle<Object> constant_handle : prototype.constants()) {
     ObjectRef constant = MakeRef(broker(), constant_handle);
-    if (constant.IsJSObject()) constant.AsJSObject().SerializeObjectCreateMap();
+    if (!broker()->is_concurrent_inlining()) {
+      if (constant.IsJSObject()) {
+        constant.AsJSObject().SerializeObjectCreateMap(
+            NotConcurrentInliningTag{broker()});
+      }
+    }
   }
 }
 
@@ -2521,14 +2538,16 @@ void SerializerForBackgroundCompilation::ProcessBuiltinCall(
             VirtualBoundFunction(bound_target, new_arguments), zone(),
             broker());
 
-        broker()
-            ->target_native_context()
-            .bound_function_with_constructor_map()
-            .SerializePrototype();
-        broker()
-            ->target_native_context()
-            .bound_function_without_constructor_map()
-            .SerializePrototype();
+        if (!broker()->is_concurrent_inlining()) {
+          broker()
+              ->target_native_context()
+              .bound_function_with_constructor_map()
+              .SerializePrototype(NotConcurrentInliningTag{broker()});
+          broker()
+              ->target_native_context()
+              .bound_function_without_constructor_map()
+              .SerializePrototype(NotConcurrentInliningTag{broker()});
+        }
       }
       break;
     case Builtin::kObjectGetPrototypeOf:
@@ -2583,7 +2602,9 @@ void SerializerForBackgroundCompilation::ProcessHintsForHasInPrototypeChain(
   auto processMap = [&](Handle<Map> map_handle) {
     MapRef map = MakeRef(broker(), map_handle);
     while (map.IsJSObjectMap()) {
-      map.SerializePrototype();
+      if (!broker()->is_concurrent_inlining()) {
+        map.SerializePrototype(NotConcurrentInliningTag{broker()});
+      }
       map = map.prototype().value().map();
     }
   };
@@ -2625,11 +2646,17 @@ void SerializerForBackgroundCompilation::ProcessMapHintsForPromises(
     if (!constant->IsJSPromise()) continue;
     Handle<Map> map(Handle<HeapObject>::cast(constant)->map(),
                     broker()->isolate());
-    MakeRef(broker(), map).SerializePrototype();
+    if (!broker()->is_concurrent_inlining()) {
+      MakeRef(broker(), map)
+          .SerializePrototype(NotConcurrentInliningTag{broker()});
+    }
   }
   for (auto map : receiver_hints.maps()) {
     if (!map->IsJSPromiseMap()) continue;
-    MakeRef(broker(), map).SerializePrototype();
+    if (!broker()->is_concurrent_inlining()) {
+      MakeRef(broker(), map)
+          .SerializePrototype(NotConcurrentInliningTag{broker()});
+    }
   }
 }
 
@@ -2676,18 +2703,24 @@ void SerializerForBackgroundCompilation::ProcessHintsForRegExpTest(
 }
 
 namespace {
-void ProcessMapForFunctionBind(MapRef map) {
-  map.SerializePrototype();
-  int min_nof_descriptors = std::max({JSFunction::kLengthDescriptorIndex,
-                                      JSFunction::kNameDescriptorIndex}) +
-                            1;
-  if (map.NumberOfOwnDescriptors() >= min_nof_descriptors) {
-    map.SerializeOwnDescriptor(
-        InternalIndex(JSFunctionOrBoundFunction::kLengthDescriptorIndex));
-    map.SerializeOwnDescriptor(
-        InternalIndex(JSFunctionOrBoundFunction::kNameDescriptorIndex));
+
+void ProcessMapForFunctionBind(JSHeapBroker* broker, MapRef map) {
+  if (!broker->is_concurrent_inlining()) {
+    NotConcurrentInliningTag tag{broker};
+    map.SerializePrototype(tag);
+    int min_nof_descriptors = std::max({JSFunction::kLengthDescriptorIndex,
+                                        JSFunction::kNameDescriptorIndex}) +
+                              1;
+    if (map.NumberOfOwnDescriptors() >= min_nof_descriptors) {
+      map.SerializeOwnDescriptor(
+          InternalIndex(JSFunctionOrBoundFunction::kLengthDescriptorIndex),
+          tag);
+      map.SerializeOwnDescriptor(
+          InternalIndex(JSFunctionOrBoundFunction::kNameDescriptorIndex), tag);
+    }
   }
 }
+
 }  // namespace
 
 void SerializerForBackgroundCompilation::ProcessHintsForFunctionBind(
@@ -2696,18 +2729,18 @@ void SerializerForBackgroundCompilation::ProcessHintsForFunctionBind(
     if (constant->IsJSFunction()) {
       JSFunctionRef function =
           MakeRef(broker(), Handle<JSFunction>::cast(constant));
-      ProcessMapForFunctionBind(function.map());
+      ProcessMapForFunctionBind(broker(), function.map());
     } else if (constant->IsJSBoundFunction()) {
       JSBoundFunctionRef function =
           MakeRef(broker(), Handle<JSBoundFunction>::cast(constant));
-      function.Serialize();
-      ProcessMapForFunctionBind(function.map());
+      function.Serialize(NotConcurrentInliningTag{broker()});
+      ProcessMapForFunctionBind(broker(), function.map());
     }
   }
 
   for (auto map : receiver_hints.maps()) {
     if (!map->IsJSFunctionMap() && !map->IsJSBoundFunctionMap()) continue;
-    ProcessMapForFunctionBind(MakeRef(broker(), map));
+    ProcessMapForFunctionBind(broker(), MakeRef(broker(), map));
   }
 }
 
@@ -2717,11 +2750,16 @@ void SerializerForBackgroundCompilation::ProcessHintsForObjectGetPrototype(
     if (!constant->IsHeapObject()) continue;
     HeapObjectRef object =
         MakeRef(broker(), Handle<HeapObject>::cast(constant));
-    object.map().SerializePrototype();
+    if (!broker()->is_concurrent_inlining()) {
+      object.map().SerializePrototype(NotConcurrentInliningTag{broker()});
+    }
   }
 
   for (auto map : object_hints.maps()) {
-    MakeRef(broker(), map).SerializePrototype();
+    if (!broker()->is_concurrent_inlining()) {
+      MakeRef(broker(), map)
+          .SerializePrototype(NotConcurrentInliningTag{broker()});
+    }
   }
 }
 
@@ -2962,7 +3000,10 @@ void SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
   CHECK(!lookup_start_object_map.is_deprecated());
 
   // For JSNativeContextSpecialization::InferRootMap
-  lookup_start_object_map.SerializeRootMap();
+  if (!broker()->is_concurrent_inlining()) {
+    lookup_start_object_map.SerializeRootMap(
+        NotConcurrentInliningTag{broker()});
+  }
 
   // For JSNativeContextSpecialization::ReduceNamedAccess.
   JSGlobalProxyRef global_proxy =
@@ -3013,7 +3054,9 @@ void SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
           FunctionTemplateInfoRef fti_ref =
               MakeRef(broker(), sfi->get_api_func_data());
           if (fti_ref.has_call_code()) {
-            fti_ref.SerializeCallCode();
+            if (!broker()->is_concurrent_inlining()) {
+              fti_ref.SerializeCallCode(NotConcurrentInliningTag{broker()});
+            }
             ProcessReceiverMapForApiCall(fti_ref, receiver_map->object());
           }
         }
@@ -3022,11 +3065,15 @@ void SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
       // For JSCallReducer::ReduceJSCall.
       JSBoundFunctionRef function = MakeRef(
           broker(), Handle<JSBoundFunction>::cast(access_info.constant()));
-      function.Serialize();
+      function.Serialize(NotConcurrentInliningTag{broker()});
     } else {
       FunctionTemplateInfoRef fti = MakeRef(
           broker(), FunctionTemplateInfo::cast(*access_info.constant()));
-      if (fti.has_call_code()) fti.SerializeCallCode();
+      if (!broker()->is_concurrent_inlining()) {
+        if (fti.has_call_code()) {
+          fti.SerializeCallCode(NotConcurrentInliningTag{broker()});
+        }
+      }
     }
   } else if (access_info.IsModuleExport()) {
     // For JSNativeContextSpecialization::BuildPropertyLoad
@@ -3267,10 +3314,14 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
       switch (access_mode) {
         case AccessMode::kHas:
         case AccessMode::kLoad:
-          map.SerializePrototype();
+          if (!broker()->is_concurrent_inlining()) {
+            map.SerializePrototype(NotConcurrentInliningTag{broker()});
+          }
           break;
         case AccessMode::kStore:
-          map.SerializeForElementStore();
+          if (!broker()->is_concurrent_inlining()) {
+            map.SerializeForElementStore(NotConcurrentInliningTag{broker()});
+          }
           break;
         case AccessMode::kStoreInLiteral:
           // This operation is fairly local and simple, nothing to serialize.
@@ -3284,12 +3335,18 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
 
     // For JSNativeContextSpecialization::InferRootMap
     if (receiver_ref.IsHeapObject()) {
-      receiver_ref.AsHeapObject().map().SerializeRootMap();
+      if (!broker()->is_concurrent_inlining()) {
+        receiver_ref.AsHeapObject().map().SerializeRootMap(
+            NotConcurrentInliningTag{broker()});
+      }
     }
 
     // For JSNativeContextSpecialization::ReduceElementAccess.
     if (receiver_ref.IsJSTypedArray()) {
-      receiver_ref.AsJSTypedArray().Serialize();
+      if (!broker()->is_concurrent_inlining()) {
+        receiver_ref.AsJSTypedArray().Serialize(
+            NotConcurrentInliningTag{broker()});
+      }
     }
 
     // For JSNativeContextSpecialization::ReduceElementLoadFromHeapConstant.
@@ -3301,7 +3358,10 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
           base::Optional<ObjectRef> element;
           if (receiver_ref.IsJSObject()) {
             JSObjectRef jsobject_ref = receiver_ref.AsJSObject();
-            jsobject_ref.SerializeElements();
+            if (!broker()->is_concurrent_inlining()) {
+              jsobject_ref.SerializeElements(
+                  NotConcurrentInliningTag{broker()});
+            }
             element = receiver_ref.AsJSObject().GetOwnConstantElement(
                 jsobject_ref.elements(kRelaxedLoad).value(), key_ref.AsSmi(),
                 nullptr, SerializationPolicy::kSerializeIfNeeded);
@@ -3326,7 +3386,9 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
   // For JSNativeContextSpecialization::InferRootMap
   for (Handle<Map> map : receiver.maps()) {
     MapRef map_ref = MakeRef(broker(), map);
-    map_ref.SerializeRootMap();
+    if (!broker()->is_concurrent_inlining()) {
+      map_ref.SerializeRootMap(NotConcurrentInliningTag{broker()});
+    }
   }
 }
 
@@ -3382,7 +3444,10 @@ void SerializerForBackgroundCompilation::VisitTestIn(
 void SerializerForBackgroundCompilation::ProcessConstantForOrdinaryHasInstance(
     HeapObjectRef const& constructor, bool* walk_prototypes) {
   if (constructor.IsJSBoundFunction()) {
-    constructor.AsJSBoundFunction().Serialize();
+    if (!broker()->is_concurrent_inlining()) {
+      constructor.AsJSBoundFunction().Serialize(
+          NotConcurrentInliningTag{broker()});
+    }
     ProcessConstantForInstanceOf(
         constructor.AsJSBoundFunction().bound_target_function().value(),
         walk_prototypes);
