@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67ab601d_f68858f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-14T08:08:57Z",
+      "side": 1,
+      "message": "Thanks a lot, please cc me on the CL so I can rebase this here aftwards.",
+      "parentUuid": "d67f5d4d_387fa5bc",
+      "revId": "6822edb7074b30f71d8f0753eb4bb6ff47f4dc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4f05beb_7693a351",
@@ -84,6 +102,30 @@
       "writtenOn": "2021-07-13T19:23:30Z",
       "side": 1,
       "message": "dcheng@ found that there is something wrong with the setup of the web_media_player_impl_unittest.cc, and he will have a CL to correct that.\n\nAlso, I found that if you change this to kFallbackForEmbedderLimit, other test failures seem to be addressed. I also double checked, with kFallbackForEmbedderLimit it does solve the memory leak for my test case as well!",
+      "range": {
+        "startLine": 5279,
+        "startChar": 13,
+        "endLine": 5279,
+        "endChar": 49
+      },
+      "revId": "6822edb7074b30f71d8f0753eb4bb6ff47f4dc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2822902_5486dde6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5279,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-14T08:08:57Z",
+      "side": 1,
+      "message": "Great to hear. It was intended to fix the memory leak issue.",
+      "parentUuid": "d4f05beb_7693a351",
       "range": {
         "startLine": 5279,
         "startChar": 13,
