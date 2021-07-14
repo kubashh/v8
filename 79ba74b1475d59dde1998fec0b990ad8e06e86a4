@@ -1,0 +1,435 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d89e8079_e79f9068",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "Generally looks good, I think this is a good first step towards supporting classes, and we can iterate on the missing parts (and add more tests) afterwards.",
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c842565_8a6a9cee",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "Oops, this should have been called \"flags\"",
+      "range": {
+        "startLine": 62,
+        "startChar": 7,
+        "endLine": 62,
+        "endChar": 12
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c035213_a6c52ab4",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "In this case we\u0027ve already thrown, no?\n\nAlso, can we avoid this check and keep on trucking? (With the \"keep on trucking error handling\" approach where we set the error but don\u0027t do repeated \"did it fail?\" checks in all places.) Or is it too inconvenient?",
+      "range": {
+        "startLine": 872,
+        "startChar": 6,
+        "endLine": 872,
+        "endChar": 57
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60786b5a_b0756c04",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "One way to keep on trucking would be to set the error and then default to one of the context types. Then we\u0027d have a valid object and wouldn\u0027t crash and wouldn\u0027t need to check the error. The contents of the object would be nonsense but that\u0027s fine. (The ultimate goal being that the happy path where the data is valid has as few error checks as possible and we never check the same error multiple times.)",
+      "range": {
+        "startLine": 920,
+        "startChar": 8,
+        "endLine": 920,
+        "endChar": 15
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9801169b_4ccd297c",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "Always making it false here doesn\u0027t sound correct",
+      "range": {
+        "startLine": 946,
+        "startChar": 45,
+        "endLine": 946,
+        "endChar": 50
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90f27233_4b87f238",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "Iirc you said this will be gone (just leaving this comment so that I won\u0027t forget)",
+      "range": {
+        "startLine": 954,
+        "startChar": 6,
+        "endLine": 954,
+        "endChar": 56
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "218eb652_bf1742b6",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "This comment might be leftover... afaics it\u0027s done? Am I wrong?",
+      "range": {
+        "startLine": 1000,
+        "startChar": 2,
+        "endLine": 1002,
+        "endChar": 47
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d2da7ec_335b949e",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "Isn\u0027t this done?",
+      "range": {
+        "startLine": 1003,
+        "startChar": 2,
+        "endLine": 1003,
+        "endChar": 60
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1273b202_d2873399",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "After reading the class count, can we call some EnsureSpace function? (If it\u0027s a one liner, it makes sense to do in this CL.)",
+      "range": {
+        "startLine": 1047,
+        "startChar": 2,
+        "endLine": 1047,
+        "endChar": 63
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b369560_f7bd5f0c",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "class (here and below)",
+      "range": {
+        "startLine": 1098,
+        "startChar": 35,
+        "endLine": 1098,
+        "endChar": 43
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07d9e300_3bee1ef0",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "This is now the function prototype, not the __proto__, so calling it \"proto\" is misleading. function_prototype maybe?",
+      "range": {
+        "startLine": 1138,
+        "startChar": 13,
+        "endLine": 1138,
+        "endChar": 18
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b21a071_3ec83cf8",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "I guess just \"Malformed class\" here, since it\u0027s not the object prototype which is malformed, really, just the ID.",
+      "range": {
+        "startLine": 1140,
+        "startChar": 37,
+        "endLine": 1140,
+        "endChar": 53
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90ab5c5e_5a7b7fec",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "You prob want to see whether the constructor is already set to be something else, and return an error if yes.\n\nNot sure if set_is_prototype_map will have the same problem... is it always ok to set something as a prototype map? I guess yes. But V8 has an invariant that prototypes and maps are 1-to-1, that is, two prototypes (in the __proto__ sense, not in the function prototype sense) share the same map. Can you add a TODO for maintaining that invariant?",
+      "range": {
+        "startLine": 1149,
+        "startChar": 4,
+        "endLine": 1149,
+        "endChar": 34
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7de726aa_55ac9725",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "This seems to be doing very complicated things. Which branch do we take in SetInstancePrototype (js-function.cc) when doing this? Would function-\u003eset_prototype_or_initial_map be enough here?",
+      "range": {
+        "startLine": 1151,
+        "startChar": 16,
+        "endLine": 1151,
+        "endChar": 28
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ce2bd11_2f82cd27",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "Mega-nit: I\u0027d put these below the next 2 functions (FunctionKindToFnctionFlags), they\u0027re clearer that way.",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 37
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cad3173e_d5463bd1",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "This is not really StoreFunction.. CreateJSFunction?",
+      "range": {
+        "startLine": 209,
+        "startChar": 21,
+        "endLine": 209,
+        "endChar": 34
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4260d6b_41e681c7",
+        "filename": "test/cctest/test-web-snapshots.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "This is now not \"inner\" as in \"inner function\"",
+      "range": {
+        "startLine": 528,
+        "startChar": 13,
+        "endLine": 528,
+        "endChar": 18
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fc961f8_4c260cfe",
+        "filename": "test/cctest/test-web-snapshots.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "Ditto, not an inner function (except in the \"classes are functions\" sense but it\u0027s more confusing than not)",
+      "range": {
+        "startLine": 582,
+        "startChar": 28,
+        "endLine": 582,
+        "endChar": 36
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74d9aba6_5cd7d5bb",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-14T07:48:25Z",
+      "side": 1,
+      "message": "Hmm, I can see this is copy paste from other tests. IMO this should be part of mjsunit.js instead. Maybe as a follow up? (And this func should be modernized too, like using let instead of var.)",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
