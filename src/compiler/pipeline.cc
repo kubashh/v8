@@ -1597,7 +1597,8 @@ struct TypedLoweringPhase {
                                      data->jsgraph(), data->broker(),
                                      temp_zone);
     JSTypedLowering typed_lowering(&graph_reducer, data->jsgraph(),
-                                   data->broker(), temp_zone);
+                                   data->broker(), data->dependencies(),
+                                   temp_zone);
     ConstantFoldingReducer constant_folding_reducer(
         &graph_reducer, data->jsgraph(), data->broker());
     TypedOptimization typed_optimization(&graph_reducer, data->dependencies(),

@@ -1069,9 +1069,7 @@ SerializerForBackgroundCompilation::SerializerForBackgroundCompilation(
           CompilationSubject(closure, broker_->isolate(), zone()))),
       arguments_(zone()) {
   closure_hints_.AddConstant(closure, zone(), broker_);
-  JSFunctionRef closure_ref = MakeRef(broker, closure);
-  closure_ref.Serialize();
-  closure_ref.SerializeCodeAndFeedback();
+  MakeRef(broker, closure);
 
   TRACE_BROKER(broker_, "Hints for <closure>: " << closure_hints_);
   TRACE_BROKER(broker_, "Initial environment:\n" << *environment_);
@@ -1098,9 +1096,7 @@ SerializerForBackgroundCompilation::SerializerForBackgroundCompilation(
   Handle<JSFunction> closure;
   if (function.closure().ToHandle(&closure)) {
     closure_hints_.AddConstant(closure, zone(), broker);
-    JSFunctionRef closure_ref = MakeRef(broker, closure);
-    closure_ref.Serialize();
-    closure_ref.SerializeCodeAndFeedback();
+    MakeRef(broker, closure);
   } else {
     closure_hints_.AddVirtualClosure(function.virtual_closure(), zone(),
                                      broker);
@@ -2087,7 +2083,6 @@ void SerializerForBackgroundCompilation::ProcessCalleeForCallOrConstruct(
   if (!callee->IsJSFunction()) return;
 
   JSFunctionRef function = MakeRef(broker(), Handle<JSFunction>::cast(callee));
-  function.Serialize();
   Callee new_callee(function.object());
   ProcessCalleeForCallOrConstruct(new_callee, new_target, *actual_arguments,
                                   speculation_mode, padding, result_hints);
@@ -2513,7 +2508,7 @@ void SerializerForBackgroundCompilation::ProcessBuiltinCall(
       if (arguments.size() >= 2) {
         for (auto constant : arguments[1].constants()) {
           if (constant->IsJSFunction()) {
-            MakeRef(broker(), Handle<JSFunction>::cast(constant)).Serialize();
+            MakeRef(broker(), Handle<JSFunction>::cast(constant));
           }
         }
       }
@@ -2715,7 +2710,6 @@ void SerializerForBackgroundCompilation::ProcessHintsForFunctionBind(
     if (constant->IsJSFunction()) {
       JSFunctionRef function =
           MakeRef(broker(), Handle<JSFunction>::cast(constant));
-      function.Serialize();
       ProcessMapForFunctionBind(function.map());
     } else if (constant->IsJSBoundFunction()) {
       JSBoundFunctionRef function =
@@ -3245,10 +3239,9 @@ void SerializerForBackgroundCompilation::ProcessNamedAccess(
         feedback.name().equals(MakeRef(
             broker(), broker()->isolate()->factory()->prototype_string()))) {
       JSFunctionRef function = object.AsJSFunction();
-      function.Serialize();
-      if (result_hints != nullptr && function.has_prototype()) {
-        result_hints->AddConstant(function.prototype().object(), zone(),
-                                  broker());
+      if (result_hints != nullptr && function.has_instance_prototype()) {
+        result_hints->AddConstant(function.instance_prototype().object(),
+                                  zone(), broker());
       }
     }
     // TODO(neis): Also record accumulator hint for string.length and maybe
@@ -3408,11 +3401,10 @@ void SerializerForBackgroundCompilation::ProcessConstantForOrdinaryHasInstance(
         constructor.AsJSBoundFunction().bound_target_function().value(),
         walk_prototypes);
   } else if (constructor.IsJSFunction()) {
-    constructor.AsJSFunction().Serialize();
     *walk_prototypes =
         *walk_prototypes ||
         (constructor.map().has_prototype_slot() &&
-         constructor.AsJSFunction().has_prototype() &&
+         constructor.AsJSFunction().has_instance_prototype() &&
          !constructor.AsJSFunction().PrototypeRequiresRuntimeLookup());
   }
 }
@@ -3442,7 +3434,6 @@ void SerializerForBackgroundCompilation::ProcessConstantForInstanceOf(
     CHECK(constant.has_value());
     if (constant->IsJSFunction()) {
       JSFunctionRef function = constant->AsJSFunction();
-      function.Serialize();
       if (function.shared().HasBuiltinId() &&
           function.shared().builtin_id() ==
               Builtin::kFunctionPrototypeHasInstance) {

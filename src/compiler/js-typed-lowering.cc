@@ -10,6 +10,7 @@
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/compiler/access-builder.h"
 #include "src/compiler/allocation-builder.h"
+#include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/graph-assembler.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/js-heap-broker.h"
@@ -448,10 +449,13 @@ class JSBinopReduction final {
 // - relax effects from generic but not-side-effecting operations
 
 JSTypedLowering::JSTypedLowering(Editor* editor, JSGraph* jsgraph,
-                                 JSHeapBroker* broker, Zone* zone)
+                                 JSHeapBroker* broker,
+                                 CompilationDependencies* dependencies,
+                                 Zone* zone)
     : AdvancedReducer(editor),
       jsgraph_(jsgraph),
       broker_(broker),
+      dependencies_(dependencies),
       empty_string_type_(
           Type::Constant(broker, factory()->empty_string(), graph()->zone())),
       pointer_comparable_type_(
@@ -1590,6 +1594,9 @@ Reduction JSTypedLowering::ReduceJSConstructForwardVarargs(Node* node) {
     // Only optimize [[Construct]] here if {function} is a Constructor.
     JSFunctionRef function = target_type.AsHeapConstant()->Ref().AsJSFunction();
     if (!function.map().is_constructor()) return NoChange();
+    if (broker()->is_concurrent_inlining()) {
+      dependencies()->DependOnConsistentJSFunctionView(function);
+    }
     // Patch {node} to an indirect call via ConstructFunctionForwardVarargs.
     Callable callable = CodeFactory::ConstructFunctionForwardVarargs(isolate());
     node->InsertInput(graph()->zone(), 0,
@@ -1622,9 +1629,8 @@ Reduction JSTypedLowering::ReduceJSConstruct(Node* node) {
     // Only optimize [[Construct]] here if {function} is a Constructor.
     if (!function.map().is_constructor()) return NoChange();
 
-    if (!function.serialized()) {
-      TRACE_BROKER_MISSING(broker(), "data for function " << function);
-      return NoChange();
+    if (broker()->is_concurrent_inlining()) {
+      dependencies()->DependOnConsistentJSFunctionView(function);
     }
 
     // Patch {node} to an indirect call via the {function}s construct stub.
@@ -1704,10 +1710,8 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
   if (target_type.IsHeapConstant() &&
       target_type.AsHeapConstant()->Ref().IsJSFunction()) {
     function = target_type.AsHeapConstant()->Ref().AsJSFunction();
-
-    if (!function->serialized()) {
-      TRACE_BROKER_MISSING(broker(), "data for function " << *function);
-      return NoChange();
+    if (broker()->is_concurrent_inlining()) {
+      dependencies()->DependOnConsistentJSFunctionView(*function);
     }
     shared = function->shared();
   } else if (target->opcode() == IrOpcode::kJSCreateClosure) {
