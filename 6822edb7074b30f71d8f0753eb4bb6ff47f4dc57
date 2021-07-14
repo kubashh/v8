@@ -134,6 +134,30 @@
       },
       "revId": "6822edb7074b30f71d8f0753eb4bb6ff47f4dc57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e229064c_d90a47cb",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5279,
+      "author": {
+        "id": 1001168
+      },
+      "writtenOn": "2021-07-14T10:00:39Z",
+      "side": 1,
+      "message": "I\u0027ve uploaded https://chromium-review.googlesource.com/c/chromium/src/+/3025796 and confirmed that it fixes the crash, but I need to figure out what to do with the DEPS issue. I\u0027ll tackle that more in the morning.",
+      "parentUuid": "f2822902_5486dde6",
+      "range": {
+        "startLine": 5279,
+        "startChar": 13,
+        "endLine": 5279,
+        "endChar": 49
+      },
+      "revId": "6822edb7074b30f71d8f0753eb4bb6ff47f4dc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
