@@ -57,6 +57,20 @@ inline bool IsAnyStore(AccessMode mode) {
 
 enum class SerializationPolicy { kAssumeSerialized, kSerializeIfNeeded };
 
+// Clarifies in function signatures that a method may only be called when
+// concurrent inlining is disabled.
+class NotConcurrentInliningTag final {
+ public:
+  explicit NotConcurrentInliningTag(JSHeapBroker* broker);
+};
+
+// Clarifies in function signatures that a method is thread-safe (for
+// background serialization).
+class ThreadSafeTag final {
+ public:
+  ThreadSafeTag() {}
+};
+
 enum class OddballType : uint8_t {
   kNone,     // Not an Oddball.
   kBoolean,  // True or False.
@@ -292,10 +306,9 @@ class PropertyCellRef : public HeapObjectRef {
 
   Handle<PropertyCell> object() const;
 
-  // Can be called from a background thread.
-  V8_WARN_UNUSED_RESULT bool Serialize() const;
-  void SerializeAsProtector() const {
-    bool serialized = Serialize();
+  V8_WARN_UNUSED_RESULT bool Serialize(ThreadSafeTag tag = {}) const;
+  void SerializeAsProtector(ThreadSafeTag tag = {}) const {
+    bool serialized = Serialize(tag);
     // A protector always holds a Smi value and its cell type never changes, so
     // Serialize can't fail.
     CHECK(serialized);
@@ -364,13 +377,13 @@ class JSObjectRef : public JSReceiverRef {
   // relaxed read. This is to ease the transition to unserialized (or
   // background-serialized) elements.
   base::Optional<FixedArrayBaseRef> elements(RelaxedLoadTag) const;
-  void SerializeElements();
+  void SerializeElements(NotConcurrentInliningTag tag);
   bool IsElementsTenured(const FixedArrayBaseRef& elements);
 
-  void SerializeObjectCreateMap();
+  void SerializeObjectCreateMap(NotConcurrentInliningTag tag);
   base::Optional<MapRef> GetObjectCreateMap() const;
 
-  void SerializeAsBoilerplateRecursive();
+  void SerializeAsBoilerplateRecursive(NotConcurrentInliningTag tag);
 };
 
 class JSDataViewRef : public JSObjectRef {
@@ -388,7 +401,7 @@ class JSBoundFunctionRef : public JSObjectRef {
 
   Handle<JSBoundFunction> object() const;
 
-  bool Serialize();
+  bool Serialize(NotConcurrentInliningTag tag);
 
   // TODO(neis): Make return types non-optional once JSFunction is no longer
   // fg-serialized.
@@ -405,7 +418,6 @@ class V8_EXPORT_PRIVATE JSFunctionRef : public JSObjectRef {
 
   bool IsConsistentWithHeapState() const;
 
-  // The following are available only after calling Serialize().
   bool has_feedback_vector() const;
   bool has_initial_map() const;
   bool PrototypeRequiresRuntimeLookup() const;
@@ -432,7 +444,7 @@ class RegExpBoilerplateDescriptionRef : public HeapObjectRef {
 
   Handle<RegExpBoilerplateDescription> object() const;
 
-  void Serialize();
+  void Serialize(NotConcurrentInliningTag tag);
 
   FixedArrayRef data() const;
   StringRef source() const;
@@ -522,7 +534,7 @@ class NativeContextRef : public ContextRef {
 
   Handle<NativeContext> object() const;
 
-  void Serialize();
+  void Serialize(NotConcurrentInliningTag tag);
 
 #define DECL_ACCESSOR(type, name) type##Ref name() const;
   BROKER_NATIVE_CONTEXT_FIELDS(DECL_ACCESSOR)
@@ -580,7 +592,7 @@ class FeedbackVectorRef : public HeapObjectRef {
   SharedFunctionInfoRef shared_function_info() const;
   double invocation_count() const;
 
-  void Serialize();
+  void Serialize(NotConcurrentInliningTag tag);
   bool serialized() const;
   FeedbackCellRef GetClosureFeedbackCell(int index) const;
 };
@@ -612,7 +624,7 @@ class AllocationSiteRef : public HeapObjectRef {
   AllocationType GetAllocationType() const;
   ObjectRef nested_site() const;
 
-  void SerializeRecursive();
+  void SerializeRecursive(NotConcurrentInliningTag tag);
 
   base::Optional<JSObjectRef> boilerplate() const;
   ElementsKind GetElementsKind() const;
@@ -673,23 +685,25 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
   INSTANCE_TYPE_CHECKERS(DEF_TESTER)
 #undef DEF_TESTER
 
-  void SerializeBackPointer();
+  void SerializeBackPointer(NotConcurrentInliningTag tag);
   HeapObjectRef GetBackPointer() const;
 
-  void SerializePrototype();
+  void SerializePrototype(NotConcurrentInliningTag tag);
   // TODO(neis): We should be able to remove TrySerializePrototype once
   // concurrent-inlining is always on. Then we can also change the return type
   // of prototype() back to HeapObjectRef.
-  bool TrySerializePrototype();
+  bool TrySerializePrototype(NotConcurrentInliningTag tag);
   base::Optional<HeapObjectRef> prototype() const;
 
-  void SerializeForElementStore();
+  void SerializeForElementStore(NotConcurrentInliningTag tag);
   bool HasOnlyStablePrototypesWithFastElements(
       ZoneVector<MapRef>* prototype_maps);
 
   // Concerning the underlying instance_descriptors:
-  bool TrySerializeOwnDescriptor(InternalIndex descriptor_index);
-  void SerializeOwnDescriptor(InternalIndex descriptor_index);
+  bool TrySerializeOwnDescriptor(InternalIndex descriptor_index,
+                                 NotConcurrentInliningTag tag);
+  void SerializeOwnDescriptor(InternalIndex descriptor_index,
+                              NotConcurrentInliningTag tag);
   bool serialized_own_descriptor(InternalIndex descriptor_index) const;
   MapRef FindFieldOwner(InternalIndex descriptor_index) const;
   PropertyDetails GetPropertyDetails(InternalIndex descriptor_index) const;
@@ -701,11 +715,9 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
 
   DescriptorArrayRef instance_descriptors() const;
 
-  void SerializeRootMap();
+  void SerializeRootMap(NotConcurrentInliningTag tag);
   base::Optional<MapRef> FindRootMap() const;
 
-  // Available after calling JSFunctionRef::Serialize on a function that has
-  // this map as initial map.
   ObjectRef GetConstructor() const;
 };
 
@@ -729,7 +741,7 @@ class FunctionTemplateInfoRef : public HeapObjectRef {
   // The following returns true if the CallHandlerInfo is present.
   bool has_call_code() const;
 
-  void SerializeCallCode();
+  void SerializeCallCode(NotConcurrentInliningTag tag);
   base::Optional<CallHandlerInfoRef> call_code() const;
   ZoneVector<Address> c_functions() const;
   ZoneVector<const CFunctionInfo*> c_signatures() const;
@@ -856,9 +868,7 @@ class ScopeInfoRef : public HeapObjectRef {
   bool HasOuterScopeInfo() const;
   bool HasContextExtensionSlot() const;
 
-  // Only serialized via SerializeScopeInfoChain.
   ScopeInfoRef OuterScopeInfo() const;
-  void SerializeScopeInfoChain();
 };
 
 #define BROKER_SFI_FIELDS(V)                       \
@@ -946,7 +956,7 @@ class JSTypedArrayRef : public JSObjectRef {
   size_t length() const;
   void* data_ptr() const;
 
-  void Serialize();
+  void Serialize(NotConcurrentInliningTag tag);
   bool serialized() const;
 
   HeapObjectRef buffer() const;
