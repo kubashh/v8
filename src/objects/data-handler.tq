@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 @abstract
+@doNotGenerateCppClass
 extern class DataHandler extends Struct {
   @if(V8_EXTERNAL_CODE_SPACE) smi_handler: Smi|CodeDataContainer;
   @ifnot(V8_EXTERNAL_CODE_SPACE) smi_handler: Smi|Code;
