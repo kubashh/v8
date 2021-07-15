@@ -558,6 +558,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62b85976_f5c1ab53",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-15T11:43:56Z",
+      "side": 1,
+      "message": "Added a check and a TODO.",
+      "parentUuid": "90ab5c5e_5a7b7fec",
+      "range": {
+        "startLine": 1149,
+        "startChar": 4,
+        "endLine": 1149,
+        "endChar": 34
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7de726aa_55ac9725",
