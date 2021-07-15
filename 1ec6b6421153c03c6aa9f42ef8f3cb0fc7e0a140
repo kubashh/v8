@@ -16,6 +16,562 @@
       "message": "Hey Jakob!\nI think this change is getting too big to include all architectures in a single CL.\nIf you prefer landing all architectures together I can create a dependency chain.\nAnyways getting early feedback before I port the changes to other architectures would be appreciated.",
       "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b31d25bd_93887f7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "High-level comment: I\u0027m not yet 100% convinced this is an improvement. \n\n- Lines added is 2x lines removed (for what is intended to be a simplifying refactor).\n- It feels like each non-trivial use case has its own dedicated method and/or flag in the helper. If so, perhaps there\u0027s not a huge benefit of the helper class?\n- It\u0027s quite a large amount of asm code that moves around. I hesitate to change so much without need since things can go wrong in asm so easily. I certainly can\u0027t guarantee a review would catch any/all bugs.\n- This is just a single architecture, I suppose arm/arm64/ia32 would still follow.\n\nIt\u0027s tricky to evaluate without seeing the actual benefit wrt easier argument logic refactoring (in one of your upcoming CLs). For now I can\u0027t help but wonder if there\u0027s a simpler way.",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc25c805_9c699ed7",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "The `ArgumentsHelper` name is a bit too generic imo.",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52c42c65_edab74d9",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Should this set HandleReceiver::kOverride automatically?",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4d747a7_9cd72569",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Suggestion: follow the same pattern as above and create a new instance here (perhaps even in its own block scope). Maybe we can remove set_argc then?",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5962f5f_4e235560",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "nit: let\u0027s keep this close to the first use",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d79fe1d4_ea820656",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Is r11 needed?",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87159f08_2456961b",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Suggestion: to clarify which method emit code and which don\u0027t, the emitting ones could be prefixed with EmitFoo",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6431556c_3168e1de",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Same here (new instance)",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d765dbed_393d9ab7",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "I suppose this means \u0027penultimate\u0027(?) Let\u0027s maybe replace it by \u0027last\u0027 ;)",
+      "range": {
+        "startLine": 1361,
+        "startChar": 33,
+        "endLine": 1361,
+        "endChar": 42
+      },
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f819174_e9cfdd0c",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "\u0027Spread\u0027 is a bit specific, what about kRemoveLastArgument?",
+      "range": {
+        "startLine": 1405,
+        "startChar": 46,
+        "endLine": 1405,
+        "endChar": 59
+      },
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d00d12d_1e4dd7cf",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "With the helper it\u0027s a bit unclear what rcx now contains.",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8786e402_8ab38b83",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1825,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "This instance doesn\u0027t seem necessary",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa9f8937_e4a74a6b",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "nit: Not sure this method is too helpful (especially with the `zero, 0` args). Perhaps we can keep this outside the helper.",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bde89fb_5445c3f7",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "New instance here pls",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09c26c70_b65a7a2c",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1882,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "This instance doesn\u0027t seem necessary",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffdeb509_8dfcafed",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1922,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8f4c773_7b15b635",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1969,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2c8197c_5cccdae9",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2104,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Please update the comment (combine with below).",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "942553ae_c0661136",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4366,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Could the ctor/dtor impls move into the .h file? Same for the other fns actually.",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "057201a3_1e26377a",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "nit: `scratch_register_list()`",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "701b4df4_9ba2c4c5",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2374,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "One-line comment please (\u0027The set of available scratch registers\u0027 or so)",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "193438c9_d23f4a3c",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2408,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "nit: final",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be287da7_a9717025",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2414,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "nit: has_available()",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ced9bcb9_43dc6523",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "nit: I\u0027d skip the comment and #undef __ at the bottom",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9611ba2_71bca099",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Naming: It\u0027s not entirely clear to me what this is doing. Is it both 1. copying frame args and 2. adding addtl args?",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d371b87d_80cae2d4",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "nit: Load..",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9390ac6_02c8045f",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "DCHECK_NOT_NULL same elsewhere",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77185c04_db0b179d",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Leftover",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2553d11_2f37d9d3",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "leftover",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8367ad9a_b91d3462",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "nit: other similar methods are called FooAsOperand",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26e56f1c_92cf650c",
+        "filename": "src/codegen/x64/macro-assembler-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "What\u0027s kValue? Maybe kRaw or something, and a short comment.",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84045c17_caf9281f",
+        "filename": "src/codegen/x64/macro-assembler-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T10:48:47Z",
+      "side": 1,
+      "message": "Let\u0027s skip the comment if it just repeats the method name. More helpful here would be e.g. that `src` is clobbered.",
+      "revId": "1ec6b6421153c03c6aa9f42ef8f3cb0fc7e0a140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
