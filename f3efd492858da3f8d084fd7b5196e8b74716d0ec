@@ -33,6 +33,24 @@
       "message": "Thanks! lgtm. ",
       "revId": "f3efd492858da3f8d084fd7b5196e8b74716d0ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1362f1b_edbbd3ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-07-15T09:48:37Z",
+      "side": 1,
+      "message": "I\u0027m going to hold off on this for now actually. The pinpoint jobs don\u0027t show too much green (apart from Pixel2 Speedometer, which is strange since Linux Speedometer regresses a bit). Maybe we could do something like have a countdown similar to the soft-deopt to ensure we don\u0027t get stuck using the bailout builtin.",
+      "parentUuid": "a1586021_311a06b3",
+      "revId": "f3efd492858da3f8d084fd7b5196e8b74716d0ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
