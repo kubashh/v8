@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1f1546a_f913b019",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:55:31Z",
+      "side": 1,
+      "message": "Right. I\u0027ll add a comment.",
+      "parentUuid": "6f7d2d7b_07814d20",
+      "revId": "b3386c38e5536ceeb31a7deaf45455ff3b9b9d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b38f39b2_c36d948c",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-07-15T07:50:24Z",
       "side": 1,
       "message": "So this implies that we expect Plug to be introduced only during and after SL phase?",
+      "range": {
+        "startLine": 1026,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 60
+      },
+      "revId": "b3386c38e5536ceeb31a7deaf45455ff3b9b9d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9bcb70d_983cbdf8",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:55:31Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "b38f39b2_c36d948c",
       "range": {
         "startLine": 1026,
         "startChar": 0,
