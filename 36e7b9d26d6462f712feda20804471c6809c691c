@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "424df91d_35f2d65f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "The obvious danger is that we\u0027re missing places where we need to record the dependency, and, in the future, someone adding new code that inspects a JSFunctionRef and then forgetting to record the dependency.\n\nWe should consider changing the relevant methods on JSFunctionRef/JSFunctionData to automatically record the dependency when any of them is called for the first time (and only then). The question is how many unnecessary dependencies that would create (some, but not all, of these could be avoided by having a dependency rollback mechanism for NoChange or similar.)",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fed293b6_d1f37aa2",
         "filename": "src/compiler/compilation-dependencies.cc",
         "patchSetId": 10
@@ -31,6 +48,160 @@
       "writtenOn": "2021-07-15T05:09:31Z",
       "side": 1,
       "message": "Likewise these sections are also temporary and still have to be discussed - what kind of concurrent modifications are benign / which aren\u0027t?",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4e9e3be_815d6bad",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "I would like to be conservative and require that everything matches, including function_data and fields that you annotated as derived.",
+      "parentUuid": "20156af7_ac830b31",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7584622_370a8111",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "I don\u0027t understand this.",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46800013_283fe382",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3953,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "Since JSFunction is now bg-serialized, this path will be taken only in the no-concurrent-inlining configuration while still on the main thread, right? So MakeRef, as in the macro used before, would be fine.",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "874883f8_e9c487ea",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3957,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "MakeRef?",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b36cdc40_f1ff4386",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4048,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "Why is this changing?",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b954dac_628a72f5",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "Please add some explanation (it\u0027s not the whole heap state, just the stuff corresponding to the methods below).",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f38afaf8_8d119d3e",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "Why is this needed here?",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23dca993_9202a96e",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1633,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "Why is this needed here?",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eacb4430_1e804a46",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T07:25:12Z",
+      "side": 1,
+      "message": "Why is this needed here?",
       "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
