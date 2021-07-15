@@ -991,21 +991,6 @@ void Deoptimizer::DoComputeOutputFrames() {
       stack_guard->real_jslimit() - kStackLimitSlackForDeoptimizationInBytes);
 }
 
-namespace {
-
-// Get the dispatch builtin for unoptimized frames.
-Builtin DispatchBuiltinFor(bool is_baseline, bool advance_bc) {
-  if (is_baseline) {
-    return advance_bc ? Builtin::kBaselineEnterAtNextBytecode
-                      : Builtin::kBaselineEnterAtBytecode;
-  } else {
-    return advance_bc ? Builtin::kInterpreterEnterAtNextBytecode
-                      : Builtin::kInterpreterEnterAtBytecode;
-  }
-}
-
-}  // namespace
-
 void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
                                             int frame_index,
                                             bool goto_catch_handler) {
@@ -1062,7 +1047,8 @@ void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
       !goto_catch_handler;
   const bool is_baseline = shared.HasBaselineData();
   Code dispatch_builtin =
-      builtins->code(DispatchBuiltinFor(is_baseline, advance_bc));
+      builtins->code(advance_bc ? Builtin::kDeoptimizeEnterAtNextBytecode
+                                : Builtin::kDeoptimizeEnterAtBytecode);
 
   if (verbose_tracing_enabled()) {
     PrintF(trace_scope()->file(), "  translating %s frame ",
