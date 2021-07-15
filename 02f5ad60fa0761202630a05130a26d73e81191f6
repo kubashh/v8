@@ -16,6 +16,24 @@
       "message": "Oh man, what is this payload?",
       "revId": "02f5ad60fa0761202630a05130a26d73e81191f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d676361e_34a6b97a",
+        "filename": "test/intl/regress-1224869.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-07-15T00:33:01Z",
+      "side": 1,
+      "message": "see the bug report",
+      "parentUuid": "10ac9d5d_11105416",
+      "revId": "02f5ad60fa0761202630a05130a26d73e81191f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
