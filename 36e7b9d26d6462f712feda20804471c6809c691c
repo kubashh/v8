@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fed293b6_d1f37aa2",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T05:09:31Z",
+      "side": 1,
+      "message": "Note: This is temporary, just to help us understand if and why validation may fail. To be reverted before landing.",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20156af7_ac830b31",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T05:09:31Z",
+      "side": 1,
+      "message": "Likewise these sections are also temporary and still have to be discussed - what kind of concurrent modifications are benign / which aren\u0027t?",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
