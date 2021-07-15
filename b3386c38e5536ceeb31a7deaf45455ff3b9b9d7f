@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f7d2d7b_07814d20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-07-15T07:50:24Z",
+      "side": 1,
+      "message": "Is there no handling of Plug in any other phase (especially getting rid of it), because all uses of Plug are already dead and removed in the normal way?",
+      "revId": "b3386c38e5536ceeb31a7deaf45455ff3b9b9d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b38f39b2_c36d948c",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-07-15T07:50:24Z",
+      "side": 1,
+      "message": "So this implies that we expect Plug to be introduced only during and after SL phase?",
+      "range": {
+        "startLine": 1026,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 60
+      },
+      "revId": "b3386c38e5536ceeb31a7deaf45455ff3b9b9d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
