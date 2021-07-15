@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a56c7bc_c8815510",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T14:29:51Z",
+      "side": 1,
+      "message": "PTAL. This is what I meant in https://chromium-review.googlesource.com/c/v8/v8/+/3024339/comments/13f72daf_4200d1c3",
+      "revId": "0e68275cb56ae88867b16b01cfeed0ec77f38045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
