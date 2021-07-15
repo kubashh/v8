@@ -1301,10 +1301,10 @@ class DiscardBaselineCodeVisitor : public ThreadVisitor {
         JavaScriptFrame* frame = it.frame();
         Address pc = frame->pc();
         Builtin builtin = InstructionStream::TryLookupCode(isolate, pc);
-        if (builtin == Builtin::kBaselineEnterAtBytecode ||
-            builtin == Builtin::kBaselineEnterAtNextBytecode) {
+        if (builtin == Builtin::kDeoptimizeStartAtBytecode ||
+            builtin == Builtin::kDeoptimizeStartAtNextBytecode) {
           Address* pc_addr = frame->pc_address();
-          Builtin advance = builtin == Builtin::kBaselineEnterAtBytecode
+          Builtin advance = builtin == Builtin::kDeoptimizeStartAtBytecode
                                 ? Builtin::kInterpreterEnterAtBytecode
                                 : Builtin::kInterpreterEnterAtNextBytecode;
           Address advance_pc =
