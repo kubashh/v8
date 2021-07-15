@@ -1,6 +1,57 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06d3965b_55252029",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T09:34:12Z",
+      "side": 1,
+      "message": "DBC",
+      "revId": "1f1cde2cd21ef753c780df3ae4574c4af08da4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7065d32_eb707b84",
+        "filename": "src/builtins/array-concat.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T09:34:12Z",
+      "side": 1,
+      "message": "This and the above seem like such special cases that I wonder if the fast paths are worth the extra cost (paid on each call).",
+      "revId": "1f1cde2cd21ef753c780df3ae4574c4af08da4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80b6985f_d0098728",
+        "filename": "src/builtins/array-concat.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T09:34:12Z",
+      "side": 1,
+      "message": "Somewhat misleading name, it could be an array (the cast may fail due to invalidated protectors).",
+      "revId": "1f1cde2cd21ef753c780df3ae4574c4af08da4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c84132bd_18bbd7c3",
