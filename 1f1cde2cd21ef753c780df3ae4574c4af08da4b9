@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0c5f735_2b525361",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-15T09:44:57Z",
+      "side": 1,
+      "message": "Thanks Jakob!",
+      "revId": "1f1cde2cd21ef753c780df3ae4574c4af08da4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7065d32_eb707b84",
@@ -35,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e885e4e5_0ecd733c",
+        "filename": "src/builtins/array-concat.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-15T09:44:57Z",
+      "side": 1,
+      "message": "I don\u0027t think the cost is big for the first case (a single comparison). And it seems to be a common approach to copy an array.\nThe second case can be amortised later, since the protectors are checked in the slow path. I will change it when porting the rest of ArrayConcat to Torque (which will avoid the C++ trampoline).",
+      "parentUuid": "b7065d32_eb707b84",
+      "revId": "1f1cde2cd21ef753c780df3ae4574c4af08da4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80b6985f_d0098728",
@@ -48,6 +83,24 @@
       "writtenOn": "2021-07-15T09:34:12Z",
       "side": 1,
       "message": "Somewhat misleading name, it could be an array (the cast may fail due to invalidated protectors).",
+      "revId": "1f1cde2cd21ef753c780df3ae4574c4af08da4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24e58d3a_7bc22481",
+        "filename": "src/builtins/array-concat.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-15T09:44:57Z",
+      "side": 1,
+      "message": "Fair enough. I will change it!",
+      "parentUuid": "80b6985f_d0098728",
       "revId": "1f1cde2cd21ef753c780df3ae4574c4af08da4b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
