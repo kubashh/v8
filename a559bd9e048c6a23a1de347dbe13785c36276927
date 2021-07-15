@@ -16,6 +16,40 @@
       "message": "Jakob PTAL thanks.\n\nI couldn\u0027t repo the clusterfuzz test file directly and I think it would change due to minor changes in the heap layout in anycase, so I\u0027ve not included a test here, but I tested manually by changing the codegen to force bad instructions as constants and this fix works.",
       "revId": "a559bd9e048c6a23a1de347dbe13785c36276927",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0934ff3_39790e59",
+        "filename": "src/codegen/reloc-info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T11:09:02Z",
+      "side": 1,
+      "message": "Could you please clarify as INTEGER_CONSTANT (same with method names and printed strings). Alternatively LITERAL or whatever.",
+      "revId": "a559bd9e048c6a23a1de347dbe13785c36276927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac6104e8_2bcee2d0",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T11:09:02Z",
+      "side": 1,
+      "message": "I wonder how often this is emitted - we shouldn\u0027t significantly grow RelocInfo in production. Perhaps let\u0027s emit this only if the disassembler is enabled.",
+      "revId": "a559bd9e048c6a23a1de347dbe13785c36276927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
