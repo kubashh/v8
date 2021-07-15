@@ -321,7 +321,11 @@ void CodeGenerator::AssembleCode() {
   for (const InstructionBlock* block : instructions()->ao_blocks()) {
     // Align loop headers on vendor recommended boundaries.
     if (block->ShouldAlign() && !tasm()->jump_optimization_info()) {
-      tasm()->CodeTargetAlign();
+      if (block->ShouldAlignLoopHeader()) {
+        tasm()->LoopHeaderAlign();
+      } else if (block->ShouldAlignCodeTarget()) {
+        tasm()->CodeTargetAlign();
+      }
     }
     if (info->trace_turbo_json()) {
       block_starts_[block->rpo_number().ToInt()] = tasm()->pc_offset();
