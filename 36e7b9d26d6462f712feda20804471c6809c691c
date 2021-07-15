@@ -18,6 +18,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf972a09_83dddf4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T11:59:25Z",
+      "side": 1,
+      "message": "+ishell for objects/",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee1be61e_eb536b3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T11:59:25Z",
+      "side": 1,
+      "message": "Good point, I agree - will add this in the next PS.",
+      "parentUuid": "424df91d_35f2d65f",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fed293b6_d1f37aa2",
@@ -87,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf29adb4_2d027040",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T11:59:25Z",
+      "side": 1,
+      "message": "It\u0027s a reminder to remove the code_ field when CodeRef becomes ne-serialized.",
+      "parentUuid": "f7584622_370a8111",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46800013_283fe382",
@@ -100,6 +153,24 @@
       "writtenOn": "2021-07-15T07:25:12Z",
       "side": 1,
       "message": "Since JSFunction is now bg-serialized, this path will be taken only in the no-concurrent-inlining configuration while still on the main thread, right? So MakeRef, as in the macro used before, would be fine.",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc926d0b_7311fa46",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3953,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T11:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46800013_283fe382",
       "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -121,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c60b97a7_2927a8a4",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3957,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T11:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "874883f8_e9c487ea",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b36cdc40_f1ff4386",
@@ -138,6 +227,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d865da18_e6338ee0",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4048,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T11:59:25Z",
+      "side": 1,
+      "message": "SerializeBackPointer and SerializePrototype are cyclical deps with the JSFunction change (they\u0027re called from JSFunctionData::Serialize). Specifically we have to ensure no serialization happens when concurrent-inlining.",
+      "parentUuid": "b36cdc40_f1ff4386",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b954dac_628a72f5",
@@ -151,6 +258,24 @@
       "writtenOn": "2021-07-15T07:25:12Z",
       "side": 1,
       "message": "Please add some explanation (it\u0027s not the whole heap state, just the stuff corresponding to the methods below).",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e93d2f01_e2d2783c",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-15T11:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b954dac_628a72f5",
       "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
