@@ -135,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fee47cb7_3e7044ba",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-15T11:21:52Z",
+      "side": 1,
+      "message": "As discussed offline, this part is okay after all.",
+      "parentUuid": "60786b5a_b0756c04",
+      "range": {
+        "startLine": 920,
+        "startChar": 8,
+        "endLine": 920,
+        "endChar": 15
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9801169b_4ccd297c",
@@ -336,6 +360,30 @@
       "writtenOn": "2021-07-14T07:48:25Z",
       "side": 1,
       "message": "After reading the class count, can we call some EnsureSpace function? (If it\u0027s a one liner, it makes sense to do in this CL.)",
+      "range": {
+        "startLine": 1047,
+        "startChar": 2,
+        "endLine": 1047,
+        "endChar": 63
+      },
+      "revId": "79ba74b1475d59dde1998fec0b990ad8e06e86a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c3e6520_56631cd8",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-15T11:21:52Z",
+      "side": 1,
+      "message": "Fixed this to grow the `WeakFixedArray` for SharedFunctionInfos.",
+      "parentUuid": "1273b202_d2873399",
       "range": {
         "startLine": 1047,
         "startChar": 2,
