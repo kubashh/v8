@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6f2f8b6_91d86a11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-15T12:34:11Z",
+      "side": 1,
+      "message": "almost there!",
+      "revId": "cb3bc6ef7f898815575fc791123ff8140f200307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90e48d80_c1456897",
+        "filename": "src/objects/fixed-array.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-15T12:34:11Z",
+      "side": 1,
+      "message": "There\u0027s already WeakArrayList::EnsureSpace; having a similar function here is confusing IMO.\n\nHow about adding EnsureSpace here too? (With the same semantics.)\n\nSorry I was unclear about details; if the new length fits in the allocated region, we prob *don\u0027t* want to overallocate. But if we end up allocating a new memory region, then we should overallocate that one. EnsureSpace already has those semantics so that should be good.",
+      "range": {
+        "startLine": 289,
+        "startChar": 32,
+        "endLine": 289,
+        "endChar": 38
+      },
+      "revId": "cb3bc6ef7f898815575fc791123ff8140f200307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3692d6ad_b501cfbb",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-15T12:34:11Z",
+      "side": 1,
+      "message": "Shouldn\u0027t you range check this?",
+      "range": {
+        "startLine": 1205,
+        "startChar": 42,
+        "endLine": 1205,
+        "endChar": 60
+      },
+      "revId": "cb3bc6ef7f898815575fc791123ff8140f200307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f01db52b_7e861cdb",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-15T12:34:11Z",
+      "side": 1,
+      "message": "Now that you\u0027re pulling this out of the function, a longer name might be better (shared_function_infos).",
+      "range": {
+        "startLine": 247,
+        "startChar": 25,
+        "endLine": 247,
+        "endChar": 31
+      },
+      "revId": "cb3bc6ef7f898815575fc791123ff8140f200307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
