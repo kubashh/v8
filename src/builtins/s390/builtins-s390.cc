@@ -3411,12 +3411,12 @@ void Builtins::Generate_DeoptimizationEntry_Lazy(MacroAssembler* masm) {
   Generate_DeoptimizationEntry(masm, DeoptimizeKind::kLazy);
 }
 
-void Builtins::Generate_BaselineEnterAtBytecode(MacroAssembler* masm) {
+void Builtins::Generate_DeoptimizeStartAtBytecode(MacroAssembler* masm) {
   // Implement on this platform, https://crrev.com/c/2695591.
   __ bkpt(0);
 }
 
-void Builtins::Generate_BaselineEnterAtNextBytecode(MacroAssembler* masm) {
+void Builtins::Generate_DeoptimizeStartAtNextBytecode(MacroAssembler* masm) {
   // Implement on this platform, https://crrev.com/c/2695591.
   __ bkpt(0);
 }
