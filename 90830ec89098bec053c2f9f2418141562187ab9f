@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8abe247f_bc0ead45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-15T10:18:33Z",
+      "side": 1,
+      "message": "It seems like Camillo is OOO. Can you please have a look, Yang?",
+      "revId": "90830ec89098bec053c2f9f2418141562187ab9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
