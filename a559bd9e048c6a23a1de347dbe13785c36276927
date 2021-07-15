@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5267961f_64cccbf6",
+        "filename": "src/codegen/reloc-info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-07-15T12:47:13Z",
+      "side": 1,
+      "message": "Renamed as literal_constant",
+      "parentUuid": "e0934ff3_39790e59",
+      "revId": "a559bd9e048c6a23a1de347dbe13785c36276927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac6104e8_2bcee2d0",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-07-15T11:09:02Z",
       "side": 1,
       "message": "I wonder how often this is emitted - we shouldn\u0027t significantly grow RelocInfo in production. Perhaps let\u0027s emit this only if the disassembler is enabled.",
+      "revId": "a559bd9e048c6a23a1de347dbe13785c36276927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b62c4ac4_07e8e109",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-07-15T12:47:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac6104e8_2bcee2d0",
       "revId": "a559bd9e048c6a23a1de347dbe13785c36276927",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
