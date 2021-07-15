@@ -3651,11 +3651,11 @@ void Generate_BaselineEntry(MacroAssembler* masm, bool next_bytecode,
 
 }  // namespace
 
-void Builtins::Generate_BaselineEnterAtBytecode(MacroAssembler* masm) {
+void Builtins::Generate_DeoptimizeStartAtBytecode(MacroAssembler* masm) {
   Generate_BaselineEntry(masm, false);
 }
 
-void Builtins::Generate_BaselineEnterAtNextBytecode(MacroAssembler* masm) {
+void Builtins::Generate_DeoptimizeStartAtNextBytecode(MacroAssembler* masm) {
   Generate_BaselineEntry(masm, true);
 }
 
