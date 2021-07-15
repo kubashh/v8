@@ -444,6 +444,23 @@ void WeakFixedArray::Set(int index, MaybeObject value, WriteBarrierMode mode) {
   set_objects(index, value, mode);
 }
 
+Handle<WeakFixedArray> WeakFixedArray::EnsureSpace(Isolate* isolate, int length,
+                                                   AllocationType allocation,
+                                                   WriteBarrierMode mode) {
+  Handle<WeakFixedArray> array = handle(*this, isolate);
+  int current_length = array->length();
+  int current_capacity = WeakArrayList::CapacityForLength(current_length);
+  int new_length = current_length + length;
+  if (new_length <= current_capacity) {
+    return array;
+  }
+  int new_capacity = WeakArrayList::CapacityForLength(new_length);
+  Handle<WeakFixedArray> new_array(isolate->factory()->NewWeakFixedArray(
+      new_capacity, AllocationType::kOld));
+  new_array->CopyElements(isolate, 0, *array, 0, current_length, mode);
+  return new_array;
+}
+
 MaybeObjectSlot WeakFixedArray::data_start() {
   return RawMaybeWeakField(kObjectsOffset);
 }
