@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c58712f_d2c9d3b7",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6198,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-15T09:21:54Z",
+      "side": 1,
+      "message": "No, it is intentional. :/\nThe convention is `Is + name + CellInvalid`, the name is  IsConcatSpreadableProtector!",
+      "parentUuid": "c84132bd_18bbd7c3",
+      "range": {
+        "startLine": 6198,
+        "startChar": 32,
+        "endLine": 6198,
+        "endChar": 36
+      },
+      "revId": "1f1cde2cd21ef753c780df3ae4574c4af08da4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "920a9251_a118139a",
         "filename": "src/codegen/code-stub-assembler.h",
         "patchSetId": 5
@@ -37,6 +61,30 @@
       "writtenOn": "2021-07-15T08:47:01Z",
       "side": 1,
       "message": "where is this protector invalidated?",
+      "range": {
+        "startLine": 71,
+        "startChar": 33,
+        "endLine": 71,
+        "endChar": 63
+      },
+      "revId": "1f1cde2cd21ef753c780df3ae4574c4af08da4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23f6aafd_e8307b48",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-07-15T09:21:54Z",
+      "side": 1,
+      "message": "The following code should not go to the fast path:\n```\nlet a \u003d []\na[Symbol.isConcatSpreadable] \u003d false;\nlet b \u003d a.concat();\n```",
+      "parentUuid": "920a9251_a118139a",
       "range": {
         "startLine": 71,
         "startChar": 33,
