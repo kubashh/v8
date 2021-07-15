@@ -285,6 +285,11 @@ class WeakFixedArray
       int index, MaybeObject value,
       WriteBarrierMode mode = WriteBarrierMode::UPDATE_WRITE_BARRIER);
 
+  // Return a grown copy of the array.
+  inline Handle<WeakFixedArray> GrowBy(
+      Isolate* isolate, int length,
+      WriteBarrierMode mode = WriteBarrierMode::UPDATE_WRITE_BARRIER);
+
   // Forward declare the non-atomic (set_)length defined in torque.
   using TorqueGeneratedWeakFixedArray::length;
   using TorqueGeneratedWeakFixedArray::set_length;
