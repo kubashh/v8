@@ -4351,6 +4351,7 @@ void Assembler::RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data,
            RelocInfo::IsDeoptPosition(rmode) ||
            RelocInfo::IsInternalReference(rmode) ||
            RelocInfo::IsDataEmbeddedObject(rmode) ||
+           RelocInfo::IsLiteralConstant(rmode) ||
            RelocInfo::IsConstPool(rmode) || RelocInfo::IsVeneerPool(rmode));
     // These modes do not need an entry in the constant pool.
   } else if (constant_pool_mode == NEEDS_POOL_ENTRY) {
