@@ -36,20 +36,18 @@ class PropertyAccessBuilder {
 
   // Builds the appropriate string check if the maps are only string
   // maps.
-  bool TryBuildStringCheck(JSHeapBroker* broker,
-                           ZoneVector<Handle<Map>> const& maps, Node** receiver,
-                           Node** effect, Node* control);
+  bool TryBuildStringCheck(JSHeapBroker* broker, ZoneVector<MapRef> const& maps,
+                           Node** receiver, Node** effect, Node* control);
   // Builds a number check if all maps are number maps.
-  bool TryBuildNumberCheck(JSHeapBroker* broker,
-                           ZoneVector<Handle<Map>> const& maps, Node** receiver,
-                           Node** effect, Node* control);
+  bool TryBuildNumberCheck(JSHeapBroker* broker, ZoneVector<MapRef> const& maps,
+                           Node** receiver, Node** effect, Node* control);
 
   // TODO(jgruber): Remove the untyped version once all uses are
   // updated.
   void BuildCheckMaps(Node* object, Node** effect, Node* control,
-                      ZoneVector<Handle<Map>> const& maps);
+                      ZoneVector<MapRef> const& maps);
   void BuildCheckMaps(Node* object, Effect* effect, Control control,
-                      ZoneVector<Handle<Map>> const& maps) {
+                      ZoneVector<MapRef> const& maps) {
     Node* e = *effect;
     Node* c = control;
     BuildCheckMaps(object, &e, c, maps);
@@ -106,8 +104,7 @@ class PropertyAccessBuilder {
   CompilationDependencies* dependencies_;
 };
 
-bool HasOnlyStringMaps(JSHeapBroker* broker,
-                       ZoneVector<Handle<Map>> const& maps);
+bool HasOnlyStringMaps(JSHeapBroker* broker, ZoneVector<MapRef> const& maps);
 
 }  // namespace compiler
 }  // namespace internal
