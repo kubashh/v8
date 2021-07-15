@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ef27518_ccdb100c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T12:32:32Z",
+      "side": 1,
+      "message": "As an alternative, we could use this opportunity to get rid of the term \"serialization\" in the future world: distinguish between Serialize* methods, corresponding to NotConcurrentInliningTag, that are removed when the serializer gets removed, and Cache* methods (or similar), corresponding to ThreadSafeTag, that will stay.",
+      "revId": "ce5fc0b6f1c8217c411230923179287b02725fdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16006abb_5667bf66",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-15T12:32:32Z",
+      "side": 1,
+      "message": "SerializerForBackgroundCompilation runs only when concurrent inlining is on, so these conditions will always be false.",
+      "revId": "ce5fc0b6f1c8217c411230923179287b02725fdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
