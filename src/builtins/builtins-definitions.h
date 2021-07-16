@@ -170,8 +170,8 @@ namespace internal {
   ASM(BaselineOutOfLinePrologue, BaselineOutOfLinePrologue)                    \
   ASM(BaselineOnStackReplacement, Void)                                        \
   ASM(BaselineLeaveFrame, BaselineLeaveFrame)                                  \
-  ASM(BaselineEnterAtBytecode, Void)                                           \
-  ASM(BaselineEnterAtNextBytecode, Void)                                       \
+  ASM(DeoptimizeEnterAtBytecode, Void)                                         \
+  ASM(DeoptimizeEnterAtNextBytecode, Void)                                     \
   ASM(InterpreterOnStackReplacement_ToBaseline, Void)                          \
                                                                                \
   /* Code life-cycle */                                                        \
