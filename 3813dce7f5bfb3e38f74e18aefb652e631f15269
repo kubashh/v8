@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6883bc13_3b2c999a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-07-16T11:57:43Z",
+      "side": 1,
+      "message": "Thanks Mythri! Still LGTM.\nSorry for not catching the errors in mips/riscv. I didn\u0027t take a close look at those as I have never touched (and have no knowledge of) those assemblies.",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "745be20a_655fdccb",
@@ -48,6 +65,24 @@
       "writtenOn": "2021-07-16T11:42:29Z",
       "side": 1,
       "message": "I introduced this back because I realized on some platforms (PPC / S390) we don\u0027t have an implementation for the builtin yet and my changes would mean it will break even without FLAG_sparkplug. I guess we are close to turning it on by default which will break PPC / S390 anyway. Though I thought maybe it is better to leave it as is in this CL. Happy to go back to earlier version if it\u0027s better that way or do it as a followup CL by informing PPC / S390 owners.",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa66064_f7cb9765",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-07-16T11:57:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "745be20a_655fdccb",
       "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
