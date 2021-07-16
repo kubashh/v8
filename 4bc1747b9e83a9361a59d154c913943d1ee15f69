@@ -16,6 +16,23 @@
       "message": "+Nico, since Michael, Jakob and Santiago are OOO today.",
       "revId": "4bc1747b9e83a9361a59d154c913943d1ee15f69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f31b77e_7374ba82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-07-16T13:12:16Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4bc1747b9e83a9361a59d154c913943d1ee15f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
