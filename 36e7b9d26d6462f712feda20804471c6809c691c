@@ -53,6 +53,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4285f4af_bb83452b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-07-16T11:00:38Z",
+      "side": 1,
+      "message": "src/objects lgtm with nits",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fed293b6_d1f37aa2",
@@ -327,6 +344,23 @@
       "writtenOn": "2021-07-15T07:25:12Z",
       "side": 1,
       "message": "Why is this needed here?",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b2a2a3c_754f4bd7",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-07-16T11:00:38Z",
+      "side": 1,
+      "message": "return shared(cage_base, kRelaxedLoad);",
       "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
