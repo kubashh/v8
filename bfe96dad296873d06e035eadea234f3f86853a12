@@ -39,6 +39,30 @@
       },
       "revId": "bfe96dad296873d06e035eadea234f3f86853a12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0c8bf6e_0d29d6b9",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-07-16T09:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb54a121_3740a2e6",
+      "range": {
+        "startLine": 460,
+        "startChar": 4,
+        "endLine": 460,
+        "endChar": 30
+      },
+      "revId": "bfe96dad296873d06e035eadea234f3f86853a12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
