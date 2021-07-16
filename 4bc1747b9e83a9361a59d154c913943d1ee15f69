@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c586b277_547bf644",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-16T07:11:11Z",
+      "side": 1,
+      "message": "+Nico, since Michael, Jakob and Santiago are OOO today.",
+      "revId": "4bc1747b9e83a9361a59d154c913943d1ee15f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
