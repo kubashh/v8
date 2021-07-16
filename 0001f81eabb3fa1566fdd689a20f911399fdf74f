@@ -16,6 +16,23 @@
       "message": "Mythri, PTAL thanks!",
       "revId": "0001f81eabb3fa1566fdd689a20f911399fdf74f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "940e7ba7_df60dd54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-16T13:26:07Z",
+      "side": 1,
+      "message": "Thanks! lgtm.",
+      "revId": "0001f81eabb3fa1566fdd689a20f911399fdf74f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
