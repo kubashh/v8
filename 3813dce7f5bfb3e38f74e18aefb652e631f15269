@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bed53a40_b8bf6b15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-16T11:42:29Z",
+      "side": 1,
+      "message": "Thanks a lot Patrick! I reverted my changes from deoptimizer. Could you please take another look at the comment in deoptimizer.cc. Rest of the CL remains the same. Thanks!",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "745be20a_655fdccb",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-16T11:42:29Z",
+      "side": 1,
+      "message": "I introduced this back because I realized on some platforms (PPC / S390) we don\u0027t have an implementation for the builtin yet and my changes would mean it will break even without FLAG_sparkplug. I guess we are close to turning it on by default which will break PPC / S390 anyway. Though I thought maybe it is better to leave it as is in this CL. Happy to go back to earlier version if it\u0027s better that way or do it as a followup CL by informing PPC / S390 owners.",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
