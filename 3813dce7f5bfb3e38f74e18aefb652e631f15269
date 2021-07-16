@@ -85,6 +85,24 @@
       "parentUuid": "745be20a_655fdccb",
       "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf33c324_f402e4cd",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-07-16T12:58:22Z",
+      "side": 1,
+      "message": "Thank you so much for the consideration! We haven\u0027t had cycles to implement sparkplug for s390/ppc yet but we will probably start to port it later this year.",
+      "parentUuid": "2fa66064_f7cb9765",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
