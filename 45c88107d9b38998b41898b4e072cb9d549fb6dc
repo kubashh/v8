@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9ec7068_6ef56617",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-16T08:01:23Z",
+      "side": 1,
+      "message": "I reverted this back to the original CL and will try to land this once V8 is rolling again into Chromium.",
+      "revId": "45c88107d9b38998b41898b4e072cb9d549fb6dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
