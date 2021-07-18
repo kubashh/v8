@@ -225,8 +225,9 @@
 #include <tuple>
 #include <type_traits>
 
-#include "v8.h"        // NOLINT(build/include_directory)
-#include "v8config.h"  // NOLINT(build/include_directory)
+#include "v8-internal.h"  // NOLINT(build/include_directory)
+#include "v8.h"           // NOLINT(build/include_directory)
+#include "v8config.h"     // NOLINT(build/include_directory)
 
 namespace v8 {
 
@@ -770,6 +771,9 @@ CFunction CFunction::ArgUnwrap<R (*)(Args...)>::Make(R (*func)(Args...)) {
 
 using CFunctionBuilder = internal::CFunctionBuilder;
 
+static constexpr CTypeInfo k_ti_int32 = CTypeInfo(CTypeInfo::Type::kInt32);
+static constexpr CTypeInfo k_ti_float64 = CTypeInfo(CTypeInfo::Type::kFloat64);
+
 /**
  * Copies the contents of this JavaScript array to a C++ buffer with
  * a given max_length. A CTypeInfo is passed as an argument,
@@ -783,8 +787,20 @@ using CFunctionBuilder = internal::CFunctionBuilder;
  * returns true on success. `type_info` will be used for conversions.
  */
 template <const CTypeInfo* type_info, typename T>
-bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
-                                    uint32_t max_length);
+bool V8_EXPORT CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
+                                              uint32_t max_length);
+
+template <>
+inline bool CopyAndConvertArrayToCppBuffer<&k_ti_int32, int32_t>(
+    Local<Array> src, int32_t* dst, uint32_t max_length) {
+  return CopyAndConvertArrayToCppBuffer_int32(src, dst, max_length);
+}
+
+template <>
+inline bool CopyAndConvertArrayToCppBuffer<&k_ti_float64, double>(
+    Local<Array> src, double* dst, uint32_t max_length) {
+  return CopyAndConvertArrayToCppBuffer_float64(src, dst, max_length);
+}
 
 }  // namespace v8
 

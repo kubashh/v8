@@ -264,18 +264,17 @@ void CopyDoubleElementsToTypedBuffer(T* dst, uint32_t length,
 }
 
 template <const CTypeInfo* type_info, typename T>
-bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
-                                    uint32_t max_length) {
+bool _CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
+                                     uint32_t max_length) {
   static_assert(
       std::is_same<
           T, typename i::CTypeInfoTraits<type_info->GetType()>::ctype>::value,
       "Type mismatch between the expected CTypeInfo::Type and the destination "
       "array");
+  DCHECK(!src->HasCustomIterator());
 
   uint32_t length = src->Length();
-  if (length > max_length) {
-    return false;
-  }
+  if (length > max_length) return false;
 
   i::DisallowGarbageCollection no_gc;
   i::JSArray obj = *reinterpret_cast<i::JSArray*>(*src);
@@ -291,6 +290,12 @@ bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
   } else {
     return false;
   }
+}
+
+template <const CTypeInfo* type_info, typename T>
+inline bool V8_EXPORT CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
+                                                     uint32_t max_length) {
+  return _CopyAndConvertArrayToCppBuffer<type_info, T>(src, dst, max_length);
 }
 
 namespace internal {

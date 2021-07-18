@@ -10322,6 +10322,19 @@ bool ConvertDouble(double d) {
 #undef CALLBACK_SETTER
 
 }  // namespace internal
+
+bool CopyAndConvertArrayToCppBuffer_int32(Local<Array> src, int32_t* dst,
+                                          uint32_t max_length) {
+  return _CopyAndConvertArrayToCppBuffer<&v8::k_ti_int32, int32_t>(src, dst,
+                                                                   max_length);
+}
+
+bool CopyAndConvertArrayToCppBuffer_float64(Local<Array> src, double* dst,
+                                            uint32_t max_length) {
+  return _CopyAndConvertArrayToCppBuffer<&v8::k_ti_float64, double>(src, dst,
+                                                                    max_length);
+}
+
 }  // namespace v8
 
 #undef TRACE_BS
