@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "994412a8_e294f5be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-18T20:23:17Z",
+      "side": 1,
+      "message": "These changes are useful to make the template function CopyAndConvertArrayToCppBuffer\u003cCTypeInfo*, T\u003e callable from Blink code.\n\nSee Chromium CL https://chromium-review.googlesource.com/c/chromium/src/+/3027405.",
+      "revId": "61646fb6904335ca1a9690552c78bf113c14baa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
