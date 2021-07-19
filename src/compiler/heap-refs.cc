@@ -87,6 +87,10 @@ bool IsReadOnlyHeapObjectForCompiler(HeapObject object) {
 
 }  // namespace
 
+NotConcurrentInliningTag::NotConcurrentInliningTag(JSHeapBroker* broker) {
+  CHECK(!broker->is_concurrent_inlining());
+}
+
 class ObjectData : public ZoneObject {
  public:
   ObjectData(JSHeapBroker* broker, ObjectData** storage, Handle<Object> object,
@@ -180,7 +184,7 @@ class PropertyCellData : public HeapObjectData {
                    Handle<PropertyCell> object,
                    ObjectDataKind kind = ObjectDataKind::kSerializedHeapObject);
 
-  bool Serialize(JSHeapBroker* broker);
+  bool Serialize(JSHeapBroker* broker, ThreadSafeTag tag);
 
   PropertyDetails property_details() const {
     CHECK(serialized());
@@ -260,7 +264,7 @@ PropertyCellData::PropertyCellData(JSHeapBroker* broker, ObjectData** storage,
                                    ObjectDataKind kind)
     : HeapObjectData(broker, storage, object, kind) {}
 
-bool PropertyCellData::Serialize(JSHeapBroker* broker) {
+bool PropertyCellData::Serialize(JSHeapBroker* broker, ThreadSafeTag tag) {
   if (serialized()) return true;
 
   TraceScope tracer(broker, this, "PropertyCellData::Serialize");
@@ -332,17 +336,18 @@ class JSObjectData : public JSReceiverData {
 
   // Recursive serialization of all reachable JSObjects.
   bool SerializeAsBoilerplateRecursive(JSHeapBroker* broker,
+                                       NotConcurrentInliningTag,
                                        int max_depth = kMaxFastLiteralDepth);
   ObjectData* GetInobjectField(int property_index) const;
 
   // Shallow serialization of {elements}.
-  void SerializeElements(JSHeapBroker* broker);
+  void SerializeElements(JSHeapBroker* broker, NotConcurrentInliningTag);
   bool serialized_elements() const { return serialized_elements_; }
   ObjectData* elements() const;
 
   ObjectData* raw_properties_or_hash() const { return raw_properties_or_hash_; }
 
-  void SerializeObjectCreateMap(JSHeapBroker* broker);
+  void SerializeObjectCreateMap(JSHeapBroker* broker, NotConcurrentInliningTag);
 
   // Can be nullptr.
   ObjectData* object_create_map(JSHeapBroker* broker) const {
@@ -402,7 +407,8 @@ class JSObjectData : public JSReceiverData {
   ZoneUnorderedMap<int, ObjectData*> own_properties_;
 };
 
-void JSObjectData::SerializeObjectCreateMap(JSHeapBroker* broker) {
+void JSObjectData::SerializeObjectCreateMap(JSHeapBroker* broker,
+                                            NotConcurrentInliningTag) {
   if (serialized_object_create_map_) return;
   serialized_object_create_map_ = true;
 
@@ -597,7 +603,7 @@ class JSTypedArrayData : public JSObjectData {
                    Handle<JSTypedArray> object, ObjectDataKind kind)
       : JSObjectData(broker, storage, object, kind) {}
 
-  void Serialize(JSHeapBroker* broker);
+  void Serialize(JSHeapBroker* broker, NotConcurrentInliningTag tag);
   bool serialized() const { return serialized_; }
 
   bool is_on_heap() const { return is_on_heap_; }
@@ -614,7 +620,8 @@ class JSTypedArrayData : public JSObjectData {
   ObjectData* buffer_ = nullptr;
 };
 
-void JSTypedArrayData::Serialize(JSHeapBroker* broker) {
+void JSTypedArrayData::Serialize(JSHeapBroker* broker,
+                                 NotConcurrentInliningTag) {
   if (serialized_) return;
   serialized_ = true;
 
@@ -673,8 +680,7 @@ class JSBoundFunctionData : public JSObjectData {
                       ObjectDataKind kind = kSerializedHeapObject)
       : JSObjectData(broker, storage, object, kind) {}
 
-  // For main-thread serialization only.
-  bool Serialize(JSHeapBroker* broker);
+  bool Serialize(JSHeapBroker* broker, NotConcurrentInliningTag tag);
 
   ObjectData* bound_target_function() const {
     DCHECK(!broker()->is_concurrent_inlining());
@@ -703,7 +709,7 @@ class JSFunctionData : public JSObjectData {
                  Handle<JSFunction> object,
                  ObjectDataKind kind = kSerializedHeapObject)
       : JSObjectData(broker, storage, object, kind) {
-    Serialize(broker);
+    Serialize(broker, ThreadSafeTag{});
   }
 
   bool IsConsistentWithHeapState(JSHeapBroker* broker) const;
@@ -762,7 +768,7 @@ class JSFunctionData : public JSObjectData {
   }
 
  private:
-  void Serialize(JSHeapBroker* broker);
+  void Serialize(JSHeapBroker* broker, ThreadSafeTag);
   bool serialized_ = false;
 
   bool recorded_dependency_ = false;
@@ -893,7 +899,7 @@ class AllocationSiteData : public HeapObjectData {
  public:
   AllocationSiteData(JSHeapBroker* broker, ObjectData** storage,
                      Handle<AllocationSite> object);
-  void Serialize(JSHeapBroker* broker);
+  void Serialize(JSHeapBroker* broker, NotConcurrentInliningTag tag);
 
   bool PointsToLiteral() const { return PointsToLiteral_; }
   AllocationType GetAllocationType() const { return GetAllocationType_; }
@@ -974,40 +980,45 @@ class MapData : public HeapObjectData {
   // Serialize a single (or all) own slot(s) of the descriptor array and recurse
   // on field owner(s).
   bool TrySerializeOwnDescriptor(JSHeapBroker* broker,
-                                 InternalIndex descriptor_index);
+                                 InternalIndex descriptor_index,
+                                 NotConcurrentInliningTag tag);
   void SerializeOwnDescriptor(JSHeapBroker* broker,
-                              InternalIndex descriptor_index) {
-    CHECK(TrySerializeOwnDescriptor(broker, descriptor_index));
+                              InternalIndex descriptor_index,
+                              NotConcurrentInliningTag tag) {
+    CHECK(TrySerializeOwnDescriptor(broker, descriptor_index, tag));
   }
-  void SerializeOwnDescriptors(JSHeapBroker* broker);
+  void SerializeOwnDescriptors(JSHeapBroker* broker,
+                               NotConcurrentInliningTag tag);
   ObjectData* GetStrongValue(InternalIndex descriptor_index) const;
   ObjectData* instance_descriptors() const { return instance_descriptors_; }
 
-  void SerializeRootMap(JSHeapBroker* broker);
+  void SerializeRootMap(JSHeapBroker* broker, NotConcurrentInliningTag tag);
   ObjectData* FindRootMap() const;
 
-  void SerializeConstructor(JSHeapBroker* broker);
+  void SerializeConstructor(JSHeapBroker* broker, NotConcurrentInliningTag tag);
   ObjectData* GetConstructor() const {
     CHECK(serialized_constructor_);
     return constructor_;
   }
 
-  void SerializeBackPointer(JSHeapBroker* broker);
+  void SerializeBackPointer(JSHeapBroker* broker, NotConcurrentInliningTag tag);
   ObjectData* GetBackPointer() const {
     CHECK(serialized_backpointer_);
     return backpointer_;
   }
 
-  bool TrySerializePrototype(JSHeapBroker* broker);
-  void SerializePrototype(JSHeapBroker* broker) {
-    CHECK(TrySerializePrototype(broker));
+  bool TrySerializePrototype(JSHeapBroker* broker,
+                             NotConcurrentInliningTag tag);
+  void SerializePrototype(JSHeapBroker* broker, NotConcurrentInliningTag tag) {
+    CHECK(TrySerializePrototype(broker, tag));
   }
   ObjectData* prototype() const {
     DCHECK_EQ(serialized_prototype_, prototype_ != nullptr);
     return prototype_;
   }
 
-  void SerializeForElementStore(JSHeapBroker* broker);
+  void SerializeForElementStore(JSHeapBroker* broker,
+                                NotConcurrentInliningTag tag);
 
   bool has_extra_serialized_data() const {
     return serialized_own_descriptors_ || serialized_constructor_ ||
@@ -1063,7 +1074,7 @@ class MapData : public HeapObjectData {
 };
 
 // IMPORTANT: Keep this sync'd with JSFunctionData::IsConsistentWithHeapState.
-void JSFunctionData::Serialize(JSHeapBroker* broker) {
+void JSFunctionData::Serialize(JSHeapBroker* broker, ThreadSafeTag) {
   CHECK(!serialized_);
   CHECK(!broker->ObjectMayBeUninitialized(HeapObject::cast(*object())));
 
@@ -1115,8 +1126,10 @@ void JSFunctionData::Serialize(JSHeapBroker* broker) {
         // TODO(neis): This is currently only needed for native_context's
         // object_function, as used by GetObjectCreateMap. If no further use
         // sites show up, we should move this into NativeContextData::Serialize.
-        initial_map_->SerializePrototype(broker);
-        initial_map_->SerializeConstructor(broker);
+        initial_map_->SerializePrototype(broker,
+                                         NotConcurrentInliningTag{broker});
+        initial_map_->SerializeConstructor(broker,
+                                           NotConcurrentInliningTag{broker});
       }
     }
 
@@ -1265,7 +1278,8 @@ AllocationSiteData::AllocationSiteData(JSHeapBroker* broker,
   }
 }
 
-void AllocationSiteData::Serialize(JSHeapBroker* broker) {
+void AllocationSiteData::Serialize(JSHeapBroker* broker,
+                                   NotConcurrentInliningTag) {
   if (serialized_) return;
   serialized_ = true;
 
@@ -1456,7 +1470,8 @@ class DescriptorArrayData : public HeapObjectData {
   }
 
   void SerializeDescriptor(JSHeapBroker* broker, Handle<Map> map,
-                           InternalIndex descriptor_index);
+                           InternalIndex descriptor_index,
+                           NotConcurrentInliningTag tag);
 
  private:
   ZoneMap<int, PropertyDescriptor> contents_;
@@ -1464,7 +1479,8 @@ class DescriptorArrayData : public HeapObjectData {
 
 void DescriptorArrayData::SerializeDescriptor(JSHeapBroker* broker,
                                               Handle<Map> map,
-                                              InternalIndex descriptor_index) {
+                                              InternalIndex descriptor_index,
+                                              NotConcurrentInliningTag tag) {
   CHECK_LT(descriptor_index.as_int(), map->NumberOfOwnDescriptors());
   if (contents_.find(descriptor_index.as_int()) != contents_.end()) return;
 
@@ -1491,7 +1507,8 @@ void DescriptorArrayData::SerializeDescriptor(JSHeapBroker* broker,
 
   if (d.details.location() == kField && !d.field_owner->should_access_heap()) {
     // Recurse on the owner map.
-    d.field_owner->AsMap()->SerializeOwnDescriptor(broker, descriptor_index);
+    d.field_owner->AsMap()->SerializeOwnDescriptor(broker, descriptor_index,
+                                                   tag);
   }
 
   TRACE(broker, "Copied descriptor " << descriptor_index.as_int() << " into "
@@ -1531,7 +1548,7 @@ class FeedbackVectorData : public HeapObjectData {
     return shared_function_info_;
   }
 
-  void Serialize(JSHeapBroker* broker);
+  void Serialize(JSHeapBroker* broker, NotConcurrentInliningTag tag);
   bool serialized() const { return serialized_; }
   ObjectData* GetClosureFeedbackCell(JSHeapBroker* broker, int index) const;
 
@@ -1567,7 +1584,8 @@ ObjectData* FeedbackVectorData::GetClosureFeedbackCell(JSHeapBroker* broker,
   return closure_feedback_cell_array_[index];
 }
 
-void FeedbackVectorData::Serialize(JSHeapBroker* broker) {
+void FeedbackVectorData::Serialize(JSHeapBroker* broker,
+                                   NotConcurrentInliningTag tag) {
   if (serialized_) return;
   serialized_ = true;
 
@@ -1629,7 +1647,8 @@ class ScriptContextTableData : public FixedArrayData {
       : FixedArrayData(broker, storage, object, kind) {}
 };
 
-bool JSBoundFunctionData::Serialize(JSHeapBroker* broker) {
+bool JSBoundFunctionData::Serialize(JSHeapBroker* broker,
+                                    NotConcurrentInliningTag tag) {
   DCHECK(!broker->is_concurrent_inlining());
 
   if (serialized_) return true;
@@ -1648,7 +1667,7 @@ bool JSBoundFunctionData::Serialize(JSHeapBroker* broker) {
   if (!bound_target_function_->should_access_heap()) {
     if (bound_target_function_->IsJSBoundFunction()) {
       serialized_nested =
-          bound_target_function_->AsJSBoundFunction()->Serialize(broker);
+          bound_target_function_->AsJSBoundFunction()->Serialize(broker, tag);
     }
   }
   if (!serialized_nested) {
@@ -1711,7 +1730,7 @@ class JSArrayData : public JSObjectData {
       : JSObjectData(broker, storage, object, kind),
         own_elements_(broker->zone()) {}
 
-  void Serialize(JSHeapBroker* broker);
+  void Serialize(JSHeapBroker* broker, NotConcurrentInliningTag tag);
   ObjectData* length() const {
     CHECK(serialized_);
     return length_;
@@ -1732,9 +1751,8 @@ class JSArrayData : public JSObjectData {
   ZoneVector<std::pair<uint32_t, ObjectData*>> own_elements_;
 };
 
-void JSArrayData::Serialize(JSHeapBroker* broker) {
-  CHECK(!broker->is_concurrent_inlining());
-
+void JSArrayData::Serialize(JSHeapBroker* broker,
+                            NotConcurrentInliningTag tag) {
   if (serialized_) return;
   serialized_ = true;
 
@@ -1884,7 +1902,7 @@ ObjectData* JSGlobalObjectData::GetPropertyCell(JSHeapBroker* broker,
   if (cell.has_value()) {
     result = cell->data();
     if (!result->should_access_heap()) {
-      result->AsPropertyCell()->Serialize(broker);
+      result->AsPropertyCell()->Serialize(broker, ThreadSafeTag{});
     }
   }
   properties_.push_back({name, result});
@@ -1961,7 +1979,8 @@ ObjectData* JSObjectData::elements() const {
   return elements_;
 }
 
-void JSObjectData::SerializeElements(JSHeapBroker* broker) {
+void JSObjectData::SerializeElements(JSHeapBroker* broker,
+                                     NotConcurrentInliningTag) {
   if (serialized_elements_) return;
   serialized_elements_ = true;
 
@@ -1974,9 +1993,8 @@ void JSObjectData::SerializeElements(JSHeapBroker* broker) {
   DCHECK(elements_->IsFixedArrayBase());
 }
 
-void MapData::SerializeConstructor(JSHeapBroker* broker) {
-  CHECK(!broker->is_concurrent_inlining());
-
+void MapData::SerializeConstructor(JSHeapBroker* broker,
+                                   NotConcurrentInliningTag tag) {
   if (serialized_constructor_) return;
   serialized_constructor_ = true;
 
@@ -1987,9 +2005,8 @@ void MapData::SerializeConstructor(JSHeapBroker* broker) {
   constructor_ = broker->GetOrCreateData(map->GetConstructor());
 }
 
-void MapData::SerializeBackPointer(JSHeapBroker* broker) {
-  CHECK(!broker->is_concurrent_inlining());
-
+void MapData::SerializeBackPointer(JSHeapBroker* broker,
+                                   NotConcurrentInliningTag tag) {
   if (serialized_backpointer_) return;
   serialized_backpointer_ = true;
 
@@ -2000,9 +2017,8 @@ void MapData::SerializeBackPointer(JSHeapBroker* broker) {
   backpointer_ = broker->GetOrCreateData(map->GetBackPointer());
 }
 
-bool MapData::TrySerializePrototype(JSHeapBroker* broker) {
-  CHECK(!broker->is_concurrent_inlining());
-
+bool MapData::TrySerializePrototype(JSHeapBroker* broker,
+                                    NotConcurrentInliningTag tag) {
   if (serialized_prototype_) return true;
 
   TraceScope tracer(broker, this, "MapData::SerializePrototype");
@@ -2014,7 +2030,8 @@ bool MapData::TrySerializePrototype(JSHeapBroker* broker) {
   return true;
 }
 
-void MapData::SerializeOwnDescriptors(JSHeapBroker* broker) {
+void MapData::SerializeOwnDescriptors(JSHeapBroker* broker,
+                                      NotConcurrentInliningTag tag) {
   if (serialized_own_descriptors_) return;
   serialized_own_descriptors_ = true;
 
@@ -2022,12 +2039,13 @@ void MapData::SerializeOwnDescriptors(JSHeapBroker* broker) {
   Handle<Map> map = Handle<Map>::cast(object());
 
   for (InternalIndex i : map->IterateOwnDescriptors()) {
-    SerializeOwnDescriptor(broker, i);
+    SerializeOwnDescriptor(broker, i, tag);
   }
 }
 
 bool MapData::TrySerializeOwnDescriptor(JSHeapBroker* broker,
-                                        InternalIndex descriptor_index) {
+                                        InternalIndex descriptor_index,
+                                        NotConcurrentInliningTag tag) {
   TraceScope tracer(broker, this, "MapData::SerializeOwnDescriptor");
   Handle<Map> map = Handle<Map>::cast(object());
   Isolate* isolate = broker->isolate();
@@ -2051,19 +2069,20 @@ bool MapData::TrySerializeOwnDescriptor(JSHeapBroker* broker,
       if (!owner.equals(map)) {
         ObjectData* data = broker->TryGetOrCreateData(owner);
         if (data == nullptr) return false;
-        data->AsMap()->SerializeOwnDescriptor(broker, descriptor_index);
+        data->AsMap()->SerializeOwnDescriptor(broker, descriptor_index, tag);
       }
     }
   } else {
     DescriptorArrayData* descriptors =
         instance_descriptors()->AsDescriptorArray();
-    descriptors->SerializeDescriptor(broker, map, descriptor_index);
+    descriptors->SerializeDescriptor(broker, map, descriptor_index, tag);
   }
 
   return true;
 }
 
-void MapData::SerializeRootMap(JSHeapBroker* broker) {
+void MapData::SerializeRootMap(JSHeapBroker* broker,
+                               NotConcurrentInliningTag tag) {
   if (serialized_root_map_) return;
   serialized_root_map_ = true;
 
@@ -2076,6 +2095,7 @@ void MapData::SerializeRootMap(JSHeapBroker* broker) {
 ObjectData* MapData::FindRootMap() const { return root_map_; }
 
 bool JSObjectData::SerializeAsBoilerplateRecursive(JSHeapBroker* broker,
+                                                   NotConcurrentInliningTag tag,
                                                    int max_depth) {
   if (serialized_as_boilerplate_) return true;
   // If serialization succeeds, we set this to true at the end.
@@ -2114,7 +2134,7 @@ bool JSObjectData::SerializeAsBoilerplateRecursive(JSHeapBroker* broker,
   }
 
   if (!map()->should_access_heap()) {
-    map()->AsMap()->SerializeOwnDescriptors(broker);
+    map()->AsMap()->SerializeOwnDescriptors(broker, tag);
   }
 
   // Check the in-object properties.
@@ -2136,7 +2156,7 @@ bool JSObjectData::SerializeAsBoilerplateRecursive(JSHeapBroker* broker,
     inobject_fields_.push_back(value_data);
     if (value_data->IsJSObject() && !value_data->should_access_heap()) {
       if (!value_data->AsJSObject()->SerializeAsBoilerplateRecursive(
-              broker, max_depth - 1))
+              broker, tag, max_depth - 1))
         return false;
     }
   }
@@ -2156,7 +2176,7 @@ bool JSObjectData::SerializeAsBoilerplateRecursive(JSHeapBroker* broker,
         ObjectData* value_data = broker->GetOrCreateData(value);
         if (!value_data->should_access_heap()) {
           if (!value_data->AsJSObject()->SerializeAsBoilerplateRecursive(
-                  broker, max_depth - 1)) {
+                  broker, tag, max_depth - 1)) {
             return false;
           }
         }
@@ -2169,7 +2189,7 @@ bool JSObjectData::SerializeAsBoilerplateRecursive(JSHeapBroker* broker,
   }
 
   if (IsJSArray() && !broker->is_concurrent_inlining()) {
-    AsJSArray()->Serialize(broker);
+    AsJSArray()->Serialize(broker, NotConcurrentInliningTag{broker});
   }
 
   serialized_as_boilerplate_ = true;
@@ -2310,30 +2330,49 @@ void JSHeapBroker::InitializeAndStartSerializing() {
 
   CollectArrayAndObjectPrototypes();
 
-  SetTargetNativeContextRef(target_native_context().object());
-  target_native_context().Serialize();
-
   Factory* const f = isolate()->factory();
+  SetTargetNativeContextRef(target_native_context().object());
   if (!is_concurrent_inlining()) {
+    target_native_context().Serialize(NotConcurrentInliningTag{this});
+
+    ThreadSafeTag tag;
     ObjectData* data;
     data = GetOrCreateData(f->array_buffer_detaching_protector());
-    if (!data->should_access_heap()) data->AsPropertyCell()->Serialize(this);
+    if (!data->should_access_heap()) {
+      data->AsPropertyCell()->Serialize(this, tag);
+    }
     data = GetOrCreateData(f->array_constructor_protector());
-    if (!data->should_access_heap()) data->AsPropertyCell()->Serialize(this);
+    if (!data->should_access_heap()) {
+      data->AsPropertyCell()->Serialize(this, tag);
+    }
     data = GetOrCreateData(f->array_iterator_protector());
-    if (!data->should_access_heap()) data->AsPropertyCell()->Serialize(this);
+    if (!data->should_access_heap()) {
+      data->AsPropertyCell()->Serialize(this, tag);
+    }
     data = GetOrCreateData(f->array_species_protector());
-    if (!data->should_access_heap()) data->AsPropertyCell()->Serialize(this);
+    if (!data->should_access_heap()) {
+      data->AsPropertyCell()->Serialize(this, tag);
+    }
     data = GetOrCreateData(f->no_elements_protector());
-    if (!data->should_access_heap()) data->AsPropertyCell()->Serialize(this);
+    if (!data->should_access_heap()) {
+      data->AsPropertyCell()->Serialize(this, tag);
+    }
     data = GetOrCreateData(f->promise_hook_protector());
-    if (!data->should_access_heap()) data->AsPropertyCell()->Serialize(this);
+    if (!data->should_access_heap()) {
+      data->AsPropertyCell()->Serialize(this, tag);
+    }
     data = GetOrCreateData(f->promise_species_protector());
-    if (!data->should_access_heap()) data->AsPropertyCell()->Serialize(this);
+    if (!data->should_access_heap()) {
+      data->AsPropertyCell()->Serialize(this, tag);
+    }
     data = GetOrCreateData(f->promise_then_protector());
-    if (!data->should_access_heap()) data->AsPropertyCell()->Serialize(this);
+    if (!data->should_access_heap()) {
+      data->AsPropertyCell()->Serialize(this, tag);
+    }
     data = GetOrCreateData(f->string_length_protector());
-    if (!data->should_access_heap()) data->AsPropertyCell()->Serialize(this);
+    if (!data->should_access_heap()) {
+      data->AsPropertyCell()->Serialize(this, tag);
+    }
   }
   GetOrCreateData(f->many_closures_cell());
   GetOrCreateData(CodeFactory::CEntry(isolate(), 1, SaveFPRegsMode::kIgnore,
@@ -2445,14 +2484,12 @@ void JSHeapBroker::ClearReconstructibleData() {
     ObjectData* value = p->value;
     p = refs_->Next(p);
     if (value->IsMap() &&
-        value->kind() == ObjectDataKind::kBackgroundSerializedHeapObject &&
-        value->AsMap()->has_extra_serialized_data()) {
-      continue;
+        value->kind() == ObjectDataKind::kBackgroundSerializedHeapObject) {
+      CHECK(!value->AsMap()->has_extra_serialized_data());
     }
     if (value->IsJSObject() &&
-        value->kind() == ObjectDataKind::kBackgroundSerializedHeapObject &&
-        value->AsJSObject()->has_extra_serialized_data()) {
-      continue;
+        value->kind() == ObjectDataKind::kBackgroundSerializedHeapObject) {
+      CHECK(!value->AsJSObject()->has_extra_serialized_data());
     }
     // Can be reconstructed from the background thread.
     CHECK_NOT_NULL(refs_->Remove(key));
@@ -2559,13 +2596,14 @@ base::Optional<MapRef> MapRef::AsElementsKind(ElementsKind kind) const {
   return native_context.GetInitialJSArrayMap(kind);
 }
 
-void MapRef::SerializeForElementStore() {
+void MapRef::SerializeForElementStore(NotConcurrentInliningTag tag) {
   if (data()->should_access_heap()) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  data()->AsMap()->SerializeForElementStore(broker());
+  data()->AsMap()->SerializeForElementStore(broker(), tag);
 }
 
-void MapData::SerializeForElementStore(JSHeapBroker* broker) {
+void MapData::SerializeForElementStore(JSHeapBroker* broker,
+                                       NotConcurrentInliningTag tag) {
   if (serialized_for_element_store_) return;
   serialized_for_element_store_ = true;
 
@@ -2575,7 +2613,7 @@ void MapData::SerializeForElementStore(JSHeapBroker* broker) {
   // method should go away anyway once the compiler is fully concurrent.
   MapRef map(broker, this);
   do {
-    map.SerializePrototype();
+    map.SerializePrototype(tag);
     map = map.prototype().value().map();
   } while (map.IsJSObjectMap() && map.is_stable() &&
            IsFastElementsKind(map.elements_kind()));
@@ -2659,7 +2697,7 @@ FeedbackCellRef FeedbackVectorRef::GetClosureFeedbackCell(int index) const {
 }
 
 base::Optional<ObjectRef> JSObjectRef::raw_properties_or_hash() const {
-  if (data_->should_access_heap()) {
+  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
     return TryMakeRef(broker(), object()->raw_properties_or_hash());
   }
   return ObjectRef(broker(), data()->AsJSObject()->raw_properties_or_hash());
@@ -2693,29 +2731,30 @@ base::Optional<ObjectRef> JSObjectRef::RawInobjectPropertyAt(
                    object_data->GetInobjectField(index.property_index()));
 }
 
-void JSObjectRef::SerializeAsBoilerplateRecursive() {
+void JSObjectRef::SerializeAsBoilerplateRecursive(
+    NotConcurrentInliningTag tag) {
   if (data_->should_access_heap()) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  data()->AsJSObject()->SerializeAsBoilerplateRecursive(broker());
+  data()->AsJSObject()->SerializeAsBoilerplateRecursive(broker(), tag);
 }
 
-void AllocationSiteRef::SerializeRecursive() {
+void AllocationSiteRef::SerializeRecursive(NotConcurrentInliningTag tag) {
   if (!data_->should_access_heap()) {
-    data()->AsAllocationSite()->Serialize(broker());
+    data()->AsAllocationSite()->Serialize(broker(), tag);
   }
 
   if (boilerplate().has_value()) {
-    boilerplate()->SerializeAsBoilerplateRecursive();
+    boilerplate()->SerializeAsBoilerplateRecursive(tag);
   }
   if (nested_site().IsAllocationSite()) {
-    nested_site().AsAllocationSite().SerializeRecursive();
+    nested_site().AsAllocationSite().SerializeRecursive(tag);
   }
 }
 
-void JSObjectRef::SerializeElements() {
+void JSObjectRef::SerializeElements(NotConcurrentInliningTag tag) {
   if (data_->should_access_heap()) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  data()->AsJSObject()->SerializeElements(broker());
+  data()->AsJSObject()->SerializeElements(broker(), tag);
 }
 
 bool JSObjectRef::IsElementsTenured(const FixedArrayBaseRef& elements) {
@@ -3104,7 +3143,7 @@ HolderLookupResult FunctionTemplateInfoRef::LookupHolderOfExpectedType(
 
   if (!receiver_map.IsJSGlobalProxyMap()) return not_found;
   if (policy == SerializationPolicy::kSerializeIfNeeded) {
-    receiver_map.SerializePrototype();
+    receiver_map.SerializePrototype(NotConcurrentInliningTag{broker()});
   }
   base::Optional<HeapObjectRef> prototype = receiver_map.prototype();
   if (!prototype.has_value()) return not_found;
@@ -3191,10 +3230,10 @@ base::Optional<HeapObjectRef> MapRef::prototype() const {
   return HeapObjectRef(broker(), prototype_data);
 }
 
-void MapRef::SerializeRootMap() {
-  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) return;
+void MapRef::SerializeRootMap(NotConcurrentInliningTag tag) {
+  if (data_->should_access_heap()) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  data()->AsMap()->SerializeRootMap(broker());
+  data()->AsMap()->SerializeRootMap(broker(), tag);
 }
 
 // TODO(solanes, v8:7790): Remove base::Optional from the return type when
@@ -3320,21 +3359,19 @@ ZoneVector<const CFunctionInfo*> FunctionTemplateInfoRef::c_signatures() const {
 
 bool StringRef::IsSeqString() const { return object()->IsSeqString(); }
 
-void NativeContextRef::Serialize() {
+void NativeContextRef::Serialize(NotConcurrentInliningTag tag) {
   // TODO(jgruber): Disable visitation if should_access_heap() once all
   // NativeContext element refs can be created on background threads. Until
   // then, we *must* iterate them and create refs at serialization-time (even
   // though NativeContextRef itself is never-serialized).
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-#define SERIALIZE_MEMBER(type, name)                                       \
-  {                                                                        \
-    ObjectData* member_data = broker()->GetOrCreateData(object()->name()); \
-    if (member_data->IsMap() &&                                            \
-        !InstanceTypeChecker::IsContext(                                   \
-            member_data->AsMap()->instance_type()) &&                      \
-        !broker()->is_concurrent_inlining()) {                             \
-      member_data->AsMap()->SerializeConstructor(broker());                \
-    }                                                                      \
+#define SERIALIZE_MEMBER(type, name)                                          \
+  {                                                                           \
+    ObjectData* member_data = broker()->GetOrCreateData(object()->name());    \
+    if (member_data->IsMap() && !InstanceTypeChecker::IsContext(              \
+                                    member_data->AsMap()->instance_type())) { \
+      member_data->AsMap()->SerializeConstructor(broker(), tag);              \
+    }                                                                         \
   }
   BROKER_NATIVE_CONTEXT_FIELDS(SERIALIZE_MEMBER)
 #undef SERIALIZE_MEMBER
@@ -3342,9 +3379,8 @@ void NativeContextRef::Serialize() {
   for (int i = Context::FIRST_FUNCTION_MAP_INDEX;
        i <= Context::LAST_FUNCTION_MAP_INDEX; i++) {
     MapData* member_data = broker()->GetOrCreateData(object()->get(i))->AsMap();
-    if (!InstanceTypeChecker::IsContext(member_data->instance_type()) &&
-        !broker()->is_concurrent_inlining()) {
-      member_data->SerializeConstructor(broker());
+    if (!InstanceTypeChecker::IsContext(member_data->instance_type())) {
+      member_data->SerializeConstructor(broker(), tag);
     }
   }
 }
@@ -3774,10 +3810,10 @@ base::Optional<SharedFunctionInfoRef> FeedbackCellRef::shared_function_info()
   return base::nullopt;
 }
 
-void FeedbackVectorRef::Serialize() {
+void FeedbackVectorRef::Serialize(NotConcurrentInliningTag tag) {
   if (data_->should_access_heap()) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  data()->AsFeedbackVector()->Serialize(broker());
+  data()->AsFeedbackVector()->Serialize(broker(), tag);
 }
 
 bool FeedbackVectorRef::serialized() const {
@@ -3799,7 +3835,7 @@ bool NameRef::IsUniqueName() const {
   return IsInternalizedString() || IsSymbol();
 }
 
-void RegExpBoilerplateDescriptionRef::Serialize() {
+void RegExpBoilerplateDescriptionRef::Serialize(NotConcurrentInliningTag) {
   // TODO(jgruber,v8:7790): Remove once member types are also never serialized.
   // Until then, we have to call these functions once on the main thread to
   // trigger serialization.
@@ -3861,12 +3897,12 @@ Reduction NoChangeBecauseOfMissingData(JSHeapBroker* broker,
   return AdvancedReducer::NoChange();
 }
 
-bool JSBoundFunctionRef::Serialize() {
-  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
+bool JSBoundFunctionRef::Serialize(NotConcurrentInliningTag tag) {
+  if (data_->should_access_heap()) {
     return true;
   }
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  return data()->AsJSBoundFunction()->Serialize(broker());
+  return data()->AsJSBoundFunction()->Serialize(broker(), tag);
 }
 
 void JSFunctionRef::RecordDependencyIfNeeded(
@@ -3928,13 +3964,13 @@ ScopeInfoRef SharedFunctionInfoRef::scope_info() const {
   return MakeRef(broker(), object()->scope_info());
 }
 
-void JSObjectRef::SerializeObjectCreateMap() {
-  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
+void JSObjectRef::SerializeObjectCreateMap(NotConcurrentInliningTag tag) {
+  if (data_->should_access_heap()) {
     return;
   }
   CHECK_IMPLIES(!FLAG_turbo_concurrent_get_property_access_info,
                 broker()->mode() == JSHeapBroker::kSerializing);
-  data()->AsJSObject()->SerializeObjectCreateMap(broker());
+  data()->AsJSObject()->SerializeObjectCreateMap(broker(), tag);
 }
 
 base::Optional<MapRef> JSObjectRef::GetObjectCreateMap() const {
@@ -3965,18 +4001,20 @@ base::Optional<MapRef> JSObjectRef::GetObjectCreateMap() const {
   return MapRef(broker(), map_data->AsMap());
 }
 
-bool MapRef::TrySerializeOwnDescriptor(InternalIndex descriptor_index) {
+bool MapRef::TrySerializeOwnDescriptor(InternalIndex descriptor_index,
+                                       NotConcurrentInliningTag tag) {
   CHECK_LT(descriptor_index.as_int(), NumberOfOwnDescriptors());
-  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
+  if (data_->should_access_heap()) {
     return true;
   }
-  CHECK_IMPLIES(!FLAG_turbo_concurrent_get_property_access_info,
-                broker()->mode() == JSHeapBroker::kSerializing);
-  return data()->AsMap()->TrySerializeOwnDescriptor(broker(), descriptor_index);
+  CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
+  return data()->AsMap()->TrySerializeOwnDescriptor(broker(), descriptor_index,
+                                                    tag);
 }
 
-void MapRef::SerializeOwnDescriptor(InternalIndex descriptor_index) {
-  CHECK(TrySerializeOwnDescriptor(descriptor_index));
+void MapRef::SerializeOwnDescriptor(InternalIndex descriptor_index,
+                                    NotConcurrentInliningTag tag) {
+  CHECK(TrySerializeOwnDescriptor(descriptor_index, tag));
 }
 
 bool MapRef::serialized_own_descriptor(InternalIndex descriptor_index) const {
@@ -3992,28 +4030,30 @@ bool MapRef::serialized_own_descriptor(InternalIndex descriptor_index) const {
   return desc_array_data->serialized_descriptor(descriptor_index);
 }
 
-void MapRef::SerializeBackPointer() {
-  if (data_->should_access_heap() || broker()->is_concurrent_inlining()) return;
+void MapRef::SerializeBackPointer(NotConcurrentInliningTag tag) {
+  if (data_->should_access_heap()) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  data()->AsMap()->SerializeBackPointer(broker());
+  data()->AsMap()->SerializeBackPointer(broker(), tag);
 }
 
-bool MapRef::TrySerializePrototype() {
+bool MapRef::TrySerializePrototype(NotConcurrentInliningTag tag) {
   if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
     return true;
   }
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  return data()->AsMap()->TrySerializePrototype(broker());
+  return data()->AsMap()->TrySerializePrototype(broker(), tag);
 }
 
-void MapRef::SerializePrototype() { CHECK(TrySerializePrototype()); }
+void MapRef::SerializePrototype(NotConcurrentInliningTag tag) {
+  CHECK(TrySerializePrototype(tag));
+}
 
-void JSTypedArrayRef::Serialize() {
+void JSTypedArrayRef::Serialize(NotConcurrentInliningTag tag) {
   if (data_->should_access_heap() || broker()->is_concurrent_inlining()) {
     // Nothing to do.
   } else {
     CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-    data()->AsJSTypedArray()->Serialize(broker());
+    data()->AsJSTypedArray()->Serialize(broker(), tag);
   }
 }
 
@@ -4025,14 +4065,14 @@ bool JSTypedArrayRef::serialized() const {
   return false;
 }
 
-bool PropertyCellRef::Serialize() const {
+bool PropertyCellRef::Serialize(ThreadSafeTag tag) const {
   if (data_->should_access_heap()) return true;
   CHECK(broker()->mode() == JSHeapBroker::kSerializing ||
         broker()->mode() == JSHeapBroker::kSerialized);
-  return data()->AsPropertyCell()->Serialize(broker());
+  return data()->AsPropertyCell()->Serialize(broker(), tag);
 }
 
-void FunctionTemplateInfoRef::SerializeCallCode() {
+void FunctionTemplateInfoRef::SerializeCallCode(NotConcurrentInliningTag tag) {
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
   // CallHandlerInfo::data may still hold a serialized heap object, so we
   // have to make the broker aware of it.

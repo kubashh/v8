@@ -763,7 +763,9 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForArrayOrObjectLiteral(
   }
 
   AllocationSiteRef site = MakeRef(this, AllocationSite::cast(object));
-  if (site.PointsToLiteral()) site.SerializeRecursive();
+  if (!is_concurrent_inlining() && site.PointsToLiteral()) {
+    site.SerializeRecursive(NotConcurrentInliningTag{this});
+  }
   return *zone()->New<LiteralFeedback>(site, nexus.kind());
 }
 
@@ -779,7 +781,9 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForRegExpLiteral(
 
   RegExpBoilerplateDescriptionRef boilerplate = MakeRef(
       this, handle(RegExpBoilerplateDescription::cast(object), isolate()));
-  boilerplate.Serialize();
+  if (!is_concurrent_inlining()) {
+    boilerplate.Serialize(NotConcurrentInliningTag{this});
+  }
   return *zone()->New<RegExpLiteralFeedback>(boilerplate, nexus.kind());
 }
 
@@ -983,7 +987,9 @@ ElementAccessFeedback const& JSHeapBroker::ProcessFeedbackMapsForElementAccess(
   possible_transition_targets.reserve(maps.size());
   for (Handle<Map> map : maps) {
     MapRef map_ref = MakeRef(this, map);
-    map_ref.SerializeRootMap();
+    if (!is_concurrent_inlining()) {
+      map_ref.SerializeRootMap(NotConcurrentInliningTag{this});
+    }
 
     if (CanInlineElementAccess(map_ref) &&
         IsFastElementsKind(map->elements_kind()) &&
