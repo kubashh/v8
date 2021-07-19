@@ -50,6 +50,24 @@
       "message": "Any chance it would be better here to continue the loop, accepting that one or more maps simply fall out?",
       "revId": "bf8fdf27b2425d1417daa8e0fcd67a44618a80bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b877f85_8ee29ac6",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T09:31:58Z",
+      "side": 1,
+      "message": "From what I can tell, partially copying over TransitionGroups is okay (it\u0027d be good to have confirmation from someone who knows more about this though).\n\nI\u0027ve changed the `return` to a `continue`.",
+      "parentUuid": "e95445c0_8179d356",
+      "revId": "bf8fdf27b2425d1417daa8e0fcd67a44618a80bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
