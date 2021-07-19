@@ -245,6 +245,24 @@
       "parentUuid": "20405721_0890ef70",
       "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8405a521_021259ed",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 17
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T13:44:33Z",
+      "side": 1,
+      "message": "As discussed offline: back when I was able to repro this I did not see any validation failures (they\u0027d would have shown up in heap broker tracing). I suspect it was just changed timing that caused these tests to fail. We should make them more robust by flushing the dispatcher queues before checking assertOptimized, that\u0027s tracked in the linked bug.",
+      "parentUuid": "b25f2227_6550c75f",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
