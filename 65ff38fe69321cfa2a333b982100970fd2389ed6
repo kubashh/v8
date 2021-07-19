@@ -33,6 +33,24 @@
       "message": "if (!tasm()-\u003ejump_optimization_info()) {\n      if (block-\u003eShouldAlignLoopHeader()) {\n        tasm()-\u003eLoopHeaderAlign();\n      } else if (block-\u003eShouldAlignCodeTarget()) {\n        tasm()-\u003eCodeTargetAlign();\n      }\n    }\n    \n and let\u0027s then remove the ShouldAlign() method.",
       "revId": "65ff38fe69321cfa2a333b982100970fd2389ed6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb778070_6de6a90e",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2021-07-19T07:51:11Z",
+      "side": 1,
+      "message": "Done. Thanks for the review!",
+      "parentUuid": "680d2d92_3b1b48e3",
+      "revId": "65ff38fe69321cfa2a333b982100970fd2389ed6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
