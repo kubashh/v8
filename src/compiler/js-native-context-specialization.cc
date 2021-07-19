@@ -410,17 +410,15 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
   MapRef receiver_map = receiver_ref.map();
 
   PropertyAccessInfo access_info = PropertyAccessInfo::Invalid(graph()->zone());
+  NameRef name = MakeRef(broker(), isolate()->factory()->has_instance_symbol());
   if (broker()->is_concurrent_inlining()) {
     access_info = broker()->GetPropertyAccessInfo(
-        receiver_map,
-        MakeRef(broker(), isolate()->factory()->has_instance_symbol()),
-        AccessMode::kLoad, dependencies());
+        receiver_map, name, AccessMode::kLoad, dependencies());
   } else {
     AccessInfoFactory access_info_factory(broker(), dependencies(),
                                           graph()->zone());
     access_info = access_info_factory.ComputePropertyAccessInfo(
-        receiver_map.object(), factory()->has_instance_symbol(),
-        AccessMode::kLoad);
+        receiver_map, name, AccessMode::kLoad);
   }
 
   // TODO(v8:11457) Support dictionary mode holders here.
@@ -724,17 +722,16 @@ Reduction JSNativeContextSpecialization::ReduceJSResolvePromise(Node* node) {
   ZoneVector<PropertyAccessInfo> access_infos(graph()->zone());
   AccessInfoFactory access_info_factory(broker(), dependencies(),
                                         graph()->zone());
-  if (!broker()->is_concurrent_inlining()) {
-    access_info_factory.ComputePropertyAccessInfos(
-        resolution_maps, factory()->then_string(), AccessMode::kLoad,
-        &access_infos);
-  } else {
-    // Obtain pre-computed access infos from the broker.
-    for (auto map : resolution_maps) {
-      MapRef map_ref = MakeRef(broker(), map);
+
+  for (auto map : resolution_maps) {
+    MapRef map_ref = MakeRef(broker(), map);
+    NameRef name = MakeRef(broker(), isolate()->factory()->then_string());
+    if (broker()->is_concurrent_inlining()) {
       access_infos.push_back(broker()->GetPropertyAccessInfo(
-          map_ref, MakeRef(broker(), isolate()->factory()->then_string()),
-          AccessMode::kLoad, dependencies()));
+          map_ref, name, AccessMode::kLoad, dependencies()));
+    } else {
+      access_infos.push_back(access_info_factory.ComputePropertyAccessInfo(
+          map_ref, name, AccessMode::kLoad));
     }
   }
   PropertyAccessInfo access_info =
