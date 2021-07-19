@@ -52,6 +52,57 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f7b67f8_57e78408",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T06:07:47Z",
+      "side": 1,
+      "message": "lgtm with comments, thanks!",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bac6c121_4f51a53f",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4414,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T06:07:47Z",
+      "side": 1,
+      "message": "note there\u0027s TailCallBuiltin",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d10d3266_eb5e994c",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4533,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T06:07:47Z",
+      "side": 1,
+      "message": "Suggestion: for clarity, wdyt about calling these builtins BaselineOrInterpreterEnterAtFoo? That\u0027d stick with the current naming scheme.",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "745be20a_655fdccb",
