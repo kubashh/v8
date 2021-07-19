@@ -48,23 +48,16 @@ bool CanConsiderForInlining(JSHeapBroker* broker,
   return true;
 }
 
-bool CanConsiderForInlining(JSHeapBroker* broker,
-                            JSFunctionRef const& function) {
-  if (!function.has_feedback_vector()) {
+bool CanConsiderForInlining(JSHeapBroker* broker, JSFunctionRef const& function,
+                            CompilationDependencies* dependencies) {
+  if (!function.has_feedback_vector(dependencies)) {
     TRACE("Cannot consider " << function
                              << " for inlining (no feedback vector)");
     return false;
   }
 
-  if (!function.serialized() || !function.serialized_code_and_feedback()) {
-    TRACE_BROKER_MISSING(
-        broker, "data for " << function << " (cannot consider for inlining)");
-    TRACE("Cannot consider " << function << " for inlining (missing data)");
-    return false;
-  }
-
-  return CanConsiderForInlining(broker, function.shared(),
-                                function.feedback_vector());
+  return CanConsiderForInlining(broker, function.shared(dependencies),
+                                function.feedback_vector(dependencies));
 }
 
 }  // namespace
@@ -80,8 +73,8 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
   if (m.HasResolvedValue() && m.Ref(broker()).IsJSFunction()) {
     out.functions[0] = m.Ref(broker()).AsJSFunction();
     JSFunctionRef function = out.functions[0].value();
-    if (CanConsiderForInlining(broker(), function)) {
-      out.bytecode[0] = function.shared().GetBytecodeArray();
+    if (CanConsiderForInlining(broker(), function, dependencies())) {
+      out.bytecode[0] = function.shared(dependencies()).GetBytecodeArray();
       out.num_functions = 1;
       return out;
     }
@@ -101,8 +94,8 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
 
       out.functions[n] = m.Ref(broker()).AsJSFunction();
       JSFunctionRef function = out.functions[n].value();
-      if (CanConsiderForInlining(broker(), function)) {
-        out.bytecode[n] = function.shared().GetBytecodeArray();
+      if (CanConsiderForInlining(broker(), function, dependencies())) {
+        out.bytecode[n] = function.shared(dependencies()).GetBytecodeArray();
       }
     }
     out.num_functions = value_input_count;
@@ -179,9 +172,10 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
       continue;
     }
 
-    SharedFunctionInfoRef shared = candidate.functions[i].has_value()
-                                       ? candidate.functions[i].value().shared()
-                                       : candidate.shared_info.value();
+    SharedFunctionInfoRef shared =
+        candidate.functions[i].has_value()
+            ? candidate.functions[i].value().shared(dependencies())
+            : candidate.shared_info.value();
     candidate.can_inline_function[i] = candidate.bytecode[i].has_value();
     CHECK_IMPLIES(candidate.can_inline_function[i], shared.IsInlineable());
     // Do not allow direct recursion i.e. f() -> f(). We still allow indirect
@@ -207,7 +201,8 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
       unsigned inlined_bytecode_size = 0;
       if (candidate.functions[i].has_value()) {
         JSFunctionRef function = candidate.functions[i].value();
-        inlined_bytecode_size = function.code().GetInlinedBytecodeSize();
+        inlined_bytecode_size =
+            function.code(dependencies()).GetInlinedBytecodeSize();
         candidate.total_size += inlined_bytecode_size;
       }
       candidate_is_small = candidate_is_small &&
@@ -794,16 +789,17 @@ void JSInliningHeuristic::PrintCandidates() {
        << candidate.node->id() << " with frequency " << candidate.frequency
        << ", " << candidate.num_functions << " target(s):" << std::endl;
     for (int i = 0; i < candidate.num_functions; ++i) {
-      SharedFunctionInfoRef shared = candidate.functions[i].has_value()
-                                         ? candidate.functions[i]->shared()
-                                         : candidate.shared_info.value();
+      SharedFunctionInfoRef shared =
+          candidate.functions[i].has_value()
+              ? candidate.functions[i]->shared(dependencies())
+              : candidate.shared_info.value();
       os << "  - target: " << shared;
       if (candidate.bytecode[i].has_value()) {
         os << ", bytecode size: " << candidate.bytecode[i]->length();
         if (candidate.functions[i].has_value()) {
           JSFunctionRef function = candidate.functions[i].value();
           unsigned inlined_bytecode_size =
-              function.code().GetInlinedBytecodeSize();
+              function.code(dependencies()).GetInlinedBytecodeSize();
           if (inlined_bytecode_size > 0) {
             os << ", existing opt code's inlined bytecode size: "
                << inlined_bytecode_size;

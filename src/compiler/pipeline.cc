@@ -1353,11 +1353,11 @@ struct GraphBuilderPhase {
     JSFunctionRef closure = MakeRef(data->broker(), data->info()->closure());
     CallFrequency frequency(1.0f);
     BuildGraphFromBytecode(
-        data->broker(), temp_zone, closure.shared(),
-        closure.raw_feedback_cell(), data->info()->osr_offset(),
-        data->jsgraph(), frequency, data->source_positions(),
-        SourcePosition::kNotInlined, data->info()->code_kind(), flags,
-        &data->info()->tick_counter(),
+        data->broker(), temp_zone, closure.shared(data->dependencies()),
+        closure.raw_feedback_cell(data->dependencies()),
+        data->info()->osr_offset(), data->jsgraph(), frequency,
+        data->source_positions(), SourcePosition::kNotInlined,
+        data->info()->code_kind(), flags, &data->info()->tick_counter(),
         ObserveNodeInfo{data->observe_node_manager(),
                         data->info()->node_observer()});
   }
@@ -1404,9 +1404,10 @@ struct InliningPhase {
     JSNativeContextSpecialization native_context_specialization(
         &graph_reducer, data->jsgraph(), data->broker(), flags,
         data->dependencies(), temp_zone, info->zone());
-    JSInliningHeuristic inlining(
-        &graph_reducer, temp_zone, data->info(), data->jsgraph(),
-        data->broker(), data->source_positions(), JSInliningHeuristic::kJSOnly);
+    JSInliningHeuristic inlining(&graph_reducer, temp_zone, data->info(),
+                                 data->jsgraph(), data->broker(),
+                                 data->dependencies(), data->source_positions(),
+                                 JSInliningHeuristic::kJSOnly);
 
     JSIntrinsicLowering intrinsic_lowering(&graph_reducer, data->jsgraph(),
                                            data->broker());
@@ -1448,7 +1449,7 @@ struct WasmInliningPhase {
                                          data->machine(), temp_zone);
     JSInliningHeuristic inlining(&graph_reducer, temp_zone, data->info(),
                                  data->jsgraph(), data->broker(),
-                                 data->source_positions(),
+                                 data->dependencies(), data->source_positions(),
                                  JSInliningHeuristic::kWasmOnly);
     AddReducer(data, &graph_reducer, &dead_code_elimination);
     AddReducer(data, &graph_reducer, &common_reducer);
@@ -1597,7 +1598,8 @@ struct TypedLoweringPhase {
                                      data->jsgraph(), data->broker(),
                                      temp_zone);
     JSTypedLowering typed_lowering(&graph_reducer, data->jsgraph(),
-                                   data->broker(), temp_zone);
+                                   data->broker(), data->dependencies(),
+                                   temp_zone);
     ConstantFoldingReducer constant_folding_reducer(
         &graph_reducer, data->jsgraph(), data->broker());
     TypedOptimization typed_optimization(&graph_reducer, data->dependencies(),

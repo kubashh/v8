@@ -72,6 +72,8 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
 
   bool has_wasm_calls() const { return has_wasm_calls_; }
 
+  CompilationDependencies* dependencies() const { return dependencies_; }
+
  private:
   Reduction ReduceBooleanConstructor(Node* node);
   Reduction ReduceCallApiFunction(Node* node,
@@ -256,7 +258,6 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
   JSOperatorBuilder* javascript() const;
   SimplifiedOperatorBuilder* simplified() const;
   Flags flags() const { return flags_; }
-  CompilationDependencies* dependencies() const { return dependencies_; }
 
   JSGraph* const jsgraph_;
   JSHeapBroker* const broker_;

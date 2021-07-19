@@ -10,6 +10,7 @@
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/compiler/access-builder.h"
 #include "src/compiler/allocation-builder.h"
+#include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/graph-assembler.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/js-heap-broker.h"
@@ -448,10 +449,13 @@ class JSBinopReduction final {
 // - relax effects from generic but not-side-effecting operations
 
 JSTypedLowering::JSTypedLowering(Editor* editor, JSGraph* jsgraph,
-                                 JSHeapBroker* broker, Zone* zone)
+                                 JSHeapBroker* broker,
+                                 CompilationDependencies* dependencies,
+                                 Zone* zone)
     : AdvancedReducer(editor),
       jsgraph_(jsgraph),
       broker_(broker),
+      dependencies_(dependencies),
       empty_string_type_(
           Type::Constant(broker, factory()->empty_string(), graph()->zone())),
       pointer_comparable_type_(
@@ -1622,13 +1626,9 @@ Reduction JSTypedLowering::ReduceJSConstruct(Node* node) {
     // Only optimize [[Construct]] here if {function} is a Constructor.
     if (!function.map().is_constructor()) return NoChange();
 
-    if (!function.serialized()) {
-      TRACE_BROKER_MISSING(broker(), "data for function " << function);
-      return NoChange();
-    }
-
     // Patch {node} to an indirect call via the {function}s construct stub.
-    bool use_builtin_construct_stub = function.shared().construct_as_builtin();
+    bool use_builtin_construct_stub =
+        function.shared(dependencies()).construct_as_builtin();
     CodeRef code = MakeRef(
         broker(), use_builtin_construct_stub
                       ? BUILTIN_CODE(isolate(), JSBuiltinsConstructStub)
@@ -1704,12 +1704,7 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
   if (target_type.IsHeapConstant() &&
       target_type.AsHeapConstant()->Ref().IsJSFunction()) {
     function = target_type.AsHeapConstant()->Ref().AsJSFunction();
-
-    if (!function->serialized()) {
-      TRACE_BROKER_MISSING(broker(), "data for function " << *function);
-      return NoChange();
-    }
-    shared = function->shared();
+    shared = function->shared(dependencies());
   } else if (target->opcode() == IrOpcode::kJSCreateClosure) {
     CreateClosureParameters const& ccp =
         JSCreateClosureNode{target}.Parameters();
@@ -1737,12 +1732,13 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
     // require data from a foreign native context.
     if (is_sloppy(shared->language_mode()) && !shared->native() &&
         !receiver_type.Is(Type::Receiver())) {
-      if (!function.has_value() || !function->native_context().equals(
-                                       broker()->target_native_context())) {
+      if (!function.has_value() ||
+          !function->native_context(dependencies())
+               .equals(broker()->target_native_context())) {
         return NoChange();
       }
-      Node* global_proxy =
-          jsgraph()->Constant(function->native_context().global_proxy_object());
+      Node* global_proxy = jsgraph()->Constant(
+          function->native_context(dependencies()).global_proxy_object());
       receiver = effect =
           graph()->NewNode(simplified()->ConvertReceiver(convert_mode),
                            receiver, global_proxy, effect, control);

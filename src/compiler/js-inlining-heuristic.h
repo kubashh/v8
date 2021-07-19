@@ -11,6 +11,8 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+class CompilationDependencies;
+
 class JSInliningHeuristic final : public AdvancedReducer {
  public:
   enum Mode { kJSOnly, kWasmOnly };
@@ -18,6 +20,7 @@ class JSInliningHeuristic final : public AdvancedReducer {
   JSInliningHeuristic(Editor* editor, Zone* local_zone,
                       OptimizedCompilationInfo* info, JSGraph* jsgraph,
                       JSHeapBroker* broker,
+                      CompilationDependencies* dependencies,
                       SourcePositionTable* source_positions, Mode mode)
       : AdvancedReducer(editor),
         inliner_(editor, local_zone, info, jsgraph, broker, source_positions),
@@ -26,6 +29,7 @@ class JSInliningHeuristic final : public AdvancedReducer {
         source_positions_(source_positions),
         jsgraph_(jsgraph),
         broker_(broker),
+        dependencies_(dependencies),
         mode_(mode),
         max_inlined_bytecode_size_(
             ScaleInliningSize(FLAG_max_inlined_bytecode_size, broker)),
@@ -100,6 +104,7 @@ class JSInliningHeuristic final : public AdvancedReducer {
   JSGraph* jsgraph() const { return jsgraph_; }
   // TODO(neis): Make heap broker a component of JSGraph?
   JSHeapBroker* broker() const { return broker_; }
+  CompilationDependencies* dependencies() const { return dependencies_; }
   Isolate* isolate() const { return jsgraph_->isolate(); }
   SimplifiedOperatorBuilder* simplified() const;
   Mode mode() const { return mode_; }
@@ -110,6 +115,7 @@ class JSInliningHeuristic final : public AdvancedReducer {
   SourcePositionTable* source_positions_;
   JSGraph* const jsgraph_;
   JSHeapBroker* const broker_;
+  CompilationDependencies* const dependencies_;
   int total_inlined_bytecode_size_ = 0;
   const Mode mode_;
   const int max_inlined_bytecode_size_;
