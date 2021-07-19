@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72723921_ac228a7f",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T08:46:06Z",
+      "side": 1,
+      "message": "Now that deps are created inside these functions, we could easily be a bit smarter and tell the dep which fields we care about. There\u0027s no need to abort compilation for unrelated field mismatches, e.g. if `function_data` changed but we never actually looked at `function_data` inside TF. Wdyt, worth it?",
+      "revId": "168f2ea097ea75836ed575fd5b8619eeb6425637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24385dcb_afad2ec0",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T08:46:06Z",
+      "side": 1,
+      "message": "I added deps to the broker in the latest PS since some `JSFunctionRef::foo(CompilationDependencies*)` callsites are tedious to update (e.g. InferMapsUnsafe in particular has 30+ callsites that\u0027d all need to be updated). We still pass deps to Ref methods explicity, to clarify where deps are created.",
+      "revId": "168f2ea097ea75836ed575fd5b8619eeb6425637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cad68c3_a5ce9f44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T08:46:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee1be61e_eb536b3e",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fed293b6_d1f37aa2",
@@ -83,6 +101,24 @@
       "writtenOn": "2021-07-15T05:09:31Z",
       "side": 1,
       "message": "Note: This is temporary, just to help us understand if and why validation may fail. To be reverted before landing.",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29c37595_00b71ac6",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T08:46:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fed293b6_d1f37aa2",
       "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -118,6 +154,24 @@
       "side": 1,
       "message": "I would like to be conservative and require that everything matches, including function_data and fields that you annotated as derived.",
       "parentUuid": "20156af7_ac830b31",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20df3178_ed099a9f",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T08:46:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4e9e3be_815d6bad",
       "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -314,6 +368,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f20df13_0b479859",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T08:46:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f38afaf8_8d119d3e",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23dca993_9202a96e",
@@ -327,6 +399,24 @@
       "writtenOn": "2021-07-15T07:25:12Z",
       "side": 1,
       "message": "Why is this needed here?",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f59eb3da_a49f4286",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1633,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T08:46:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23dca993_9202a96e",
       "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -348,6 +438,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01b638c9_8a9a48ad",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T08:46:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eacb4430_1e804a46",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b2a2a3c_754f4bd7",
@@ -361,6 +469,24 @@
       "writtenOn": "2021-07-16T11:00:38Z",
       "side": 1,
       "message": "return shared(cage_base, kRelaxedLoad);",
+      "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ad5a729_3f3529d3",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T08:46:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b2a2a3c_754f4bd7",
       "revId": "36e7b9d26d6462f712feda20804471c6809c691c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
