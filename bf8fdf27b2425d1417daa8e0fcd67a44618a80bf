@@ -68,6 +68,24 @@
       "parentUuid": "e95445c0_8179d356",
       "revId": "bf8fdf27b2425d1417daa8e0fcd67a44618a80bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8430deb_615f033f",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-19T12:09:28Z",
+      "side": 1,
+      "message": "Yeah, I\u0027m basing that idea on similar code that takes map feedback and does things like winnow it down for various reasons. Might be good to check with Georg for this one particular point.",
+      "parentUuid": "0b877f85_8ee29ac6",
+      "revId": "bf8fdf27b2425d1417daa8e0fcd67a44618a80bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
