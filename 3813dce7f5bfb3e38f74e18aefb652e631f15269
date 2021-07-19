@@ -190,6 +190,24 @@
       "parentUuid": "2fa66064_f7cb9765",
       "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de41999_2b5876f7",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-07-19T14:53:37Z",
+      "side": 1,
+      "message": "Hi Mythri,\n\nI wanted to ask about the state of Sparkplug.\n\nYou mentioned V8 is close to turning it on by default. Isn\u0027t it already on by default for supported architectures? Are the Macros guarding the unsupported platforms going to be removed?\n\nI was wondering if this is going to be a feature like liftoff which PPC/S390 can\nbailout on until we manage to port it over without causing failures?",
+      "parentUuid": "bf33c324_f402e4cd",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
