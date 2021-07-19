@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "676b7d1a_7c1aba71",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-19T13:45:01Z",
+      "side": 1,
+      "message": "Hmm this will probably have already happened when we see the function. If you make this a CHECK, does it ever fail? If context can really change on a function visible by the compiler, then I\u0027m wondering how context specialization can be correct.",
+      "parentUuid": "5e7d58cd_123f0b13",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "418900fd_f7bb9a50",
