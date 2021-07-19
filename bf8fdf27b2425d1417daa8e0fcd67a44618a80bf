@@ -16,6 +16,40 @@
       "message": "ptal",
       "revId": "bf8fdf27b2425d1417daa8e0fcd67a44618a80bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d033ae1f_583b0277",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-19T08:35:09Z",
+      "side": 1,
+      "message": "Looking good, one question.",
+      "revId": "bf8fdf27b2425d1417daa8e0fcd67a44618a80bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e95445c0_8179d356",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-07-19T08:35:09Z",
+      "side": 1,
+      "message": "Any chance it would be better here to continue the loop, accepting that one or more maps simply fall out?",
+      "revId": "bf8fdf27b2425d1417daa8e0fcd67a44618a80bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
