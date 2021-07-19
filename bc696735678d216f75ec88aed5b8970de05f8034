@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4e5bff1_22335f76",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-19T12:54:45Z",
+      "side": 1,
+      "message": "Aren\u0027t these three immutable? You can use DCHECKs instead.",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "418900fd_f7bb9a50",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3893,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-19T12:54:45Z",
+      "side": 1,
+      "message": "Why is it needed now?",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c19b377b_baf41fd6",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-19T12:54:45Z",
+      "side": 1,
+      "message": "Please update or remove.",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be95697c_48ea6a23",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-19T12:54:45Z",
+      "side": 1,
+      "message": "As a follow-up you can move CompilationDependencies into JSHeapBroker and remove it from PipelineData.",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34da4176_45722804",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-19T12:54:45Z",
+      "side": 1,
+      "message": "Maybe do FinalizeJob anyways and have SUCCEEDED + has_bytecode_array as one option, and ... something else ... as other option.",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3296d4c5_00b2067b",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 17
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-19T12:54:45Z",
+      "side": 1,
+      "message": "Why does never-optimize fail with this CL? This may suggest that the JSFunction consistency dependency approach is too strict.",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
