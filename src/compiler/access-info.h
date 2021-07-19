@@ -252,27 +252,21 @@ class AccessInfoFactory final {
                     Zone* zone);
 
   base::Optional<ElementAccessInfo> ComputeElementAccessInfo(
-      Handle<Map> map, AccessMode access_mode) const;
+      MapRef map, AccessMode access_mode) const;
   bool ComputeElementAccessInfos(
       ElementAccessFeedback const& feedback,
       ZoneVector<ElementAccessInfo>* access_infos) const;
 
-  PropertyAccessInfo ComputePropertyAccessInfo(Handle<Map> map,
-                                               Handle<Name> name,
+  PropertyAccessInfo ComputePropertyAccessInfo(MapRef map, NameRef name,
                                                AccessMode access_mode) const;
 
   PropertyAccessInfo ComputeDictionaryProtoAccessInfo(
-      Handle<Map> receiver_map, Handle<Name> name, Handle<JSObject> holder,
+      MapRef receiver_map, NameRef name, JSObjectRef holder,
       InternalIndex dict_index, AccessMode access_mode,
       PropertyDetails details) const;
 
   MinimorphicLoadPropertyAccessInfo ComputePropertyAccessInfo(
       MinimorphicLoadPropertyAccessFeedback const& feedback) const;
-
-  // Convenience wrapper around {ComputePropertyAccessInfo} for multiple maps.
-  void ComputePropertyAccessInfos(
-      MapHandles const& maps, Handle<Name> name, AccessMode access_mode,
-      ZoneVector<PropertyAccessInfo>* access_infos) const;
 
   // Merge as many of the given {infos} as possible and record any dependencies.
   // Return false iff any of them was invalid, in which case no dependencies are
@@ -291,18 +285,15 @@ class AccessInfoFactory final {
  private:
   base::Optional<ElementAccessInfo> ConsolidateElementLoad(
       ElementAccessFeedback const& feedback) const;
-  PropertyAccessInfo LookupSpecialFieldAccessor(Handle<Map> map,
-                                                Handle<Name> name) const;
-  PropertyAccessInfo LookupTransition(Handle<Map> map, Handle<Name> name,
-                                      MaybeHandle<JSObject> holder) const;
-  PropertyAccessInfo ComputeDataFieldAccessInfo(Handle<Map> receiver_map,
-                                                Handle<Map> map,
-                                                MaybeHandle<JSObject> holder,
-                                                InternalIndex descriptor,
-                                                AccessMode access_mode) const;
+  PropertyAccessInfo LookupSpecialFieldAccessor(MapRef map, NameRef name) const;
+  PropertyAccessInfo LookupTransition(MapRef map, NameRef name,
+                                      base::Optional<JSObjectRef> holder) const;
+  PropertyAccessInfo ComputeDataFieldAccessInfo(
+      MapRef receiver_map, MapRef map, base::Optional<JSObjectRef> holder,
+      InternalIndex descriptor, AccessMode access_mode) const;
   PropertyAccessInfo ComputeAccessorDescriptorAccessInfo(
-      Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
-      MaybeHandle<JSObject> holder, InternalIndex descriptor,
+      MapRef receiver_map, NameRef name, MapRef map,
+      base::Optional<JSObjectRef> holder, InternalIndex descriptor,
       AccessMode access_mode) const;
 
   PropertyAccessInfo Invalid() const {
@@ -313,8 +304,9 @@ class AccessInfoFactory final {
                                 AccessMode access_mode,
                                 ZoneVector<PropertyAccessInfo>* result) const;
 
-  bool TryLoadPropertyDetails(Handle<Map> map, MaybeHandle<JSObject> holder,
-                              Handle<Name> name, InternalIndex* index_out,
+  bool TryLoadPropertyDetails(MapRef map,
+                              base::Optional<JSObjectRef> maybe_holder,
+                              NameRef name, InternalIndex* index_out,
                               PropertyDetails* details_out) const;
 
   CompilationDependencies* dependencies() const { return dependencies_; }
