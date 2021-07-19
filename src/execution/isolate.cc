@@ -3400,6 +3400,7 @@ bool IsolateIsCompatibleWithEmbeddedBlob(Isolate* isolate) {
 
 void Isolate::InitializeDefaultEmbeddedBlob() {
   const uint8_t* code = DefaultEmbeddedBlobCode();
+  printf("Initialize Default embedded blobb %p \n", code);
   uint32_t code_size = DefaultEmbeddedBlobCodeSize();
   const uint8_t* data = DefaultEmbeddedBlobData();
   uint32_t data_size = DefaultEmbeddedBlobDataSize();
@@ -3441,6 +3442,7 @@ void Isolate::CreateAndSetEmbeddedBlob() {
 
   // If a sticky blob has been set, we reuse it.
   if (StickyEmbeddedBlobCode() != nullptr) {
+    printf("Sticky embedded blob \n");
     CHECK_EQ(embedded_blob_code(), StickyEmbeddedBlobCode());
     CHECK_EQ(embedded_blob_data(), StickyEmbeddedBlobData());
     CHECK_EQ(CurrentEmbeddedBlobCode(), StickyEmbeddedBlobCode());
@@ -3454,6 +3456,7 @@ void Isolate::CreateAndSetEmbeddedBlob() {
     InstructionStream::CreateOffHeapInstructionStream(this, &code, &code_size,
                                                       &data, &data_size);
 
+    printf("Set embedded blob \n");
     CHECK_EQ(0, current_embedded_blob_refs_);
     const uint8_t* const_code = const_cast<const uint8_t*>(code);
     const uint8_t* const_data = const_cast<const uint8_t*>(data);
