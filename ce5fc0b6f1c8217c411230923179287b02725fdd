@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da11c9ba_25e15c87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T09:13:58Z",
+      "side": 1,
+      "message": "Renamed the methods taking a ThreadSafeTag to `Cache`.",
+      "parentUuid": "1ef27518_ccdb100c",
+      "revId": "ce5fc0b6f1c8217c411230923179287b02725fdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16006abb_5667bf66",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-07-15T12:32:32Z",
       "side": 1,
       "message": "SerializerForBackgroundCompilation runs only when concurrent inlining is on, so these conditions will always be false.",
+      "revId": "ce5fc0b6f1c8217c411230923179287b02725fdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10882157_a36cf157",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T09:13:58Z",
+      "side": 1,
+      "message": "Nice, clearly I missed an opportunity to switch from machine-mode to human-thinking mode :) I removed all these calls.",
+      "parentUuid": "16006abb_5667bf66",
       "revId": "ce5fc0b6f1c8217c411230923179287b02725fdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
