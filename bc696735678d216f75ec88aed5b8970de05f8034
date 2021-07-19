@@ -227,6 +227,24 @@
       "parentUuid": "3296d4c5_00b2067b",
       "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b25f2227_6550c75f",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 17
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-19T13:18:15Z",
+      "side": 1,
+      "message": "Since it didn\u0027t fail before the CL, I suspect that it\u0027s failing now because of JSFunctionData inconsistency. In that case it would be good to know which part became inconsistent. Perhaps these inconsistencies arise more often than assumed.",
+      "parentUuid": "20405721_0890ef70",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
