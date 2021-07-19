@@ -244,6 +244,24 @@
       "parentUuid": "41bbef31_ac39674c",
       "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f3ea1c4_34992553",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-07-19T15:23:03Z",
+      "side": 1,
+      "message": "Thank you for confirming.",
+      "parentUuid": "9818c15e_2201b7be",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
