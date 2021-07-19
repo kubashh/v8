@@ -47,6 +47,8 @@ SerializerTester::SerializerTester(const char* global_source,
   function =
       broker_->FindCanonicalPersistentHandleForTesting<JSFunction>(*function);
   function_ = MakeRef(broker(), function);
+  dependencies_ =
+      main_zone()->New<CompilationDependencies>(broker(), main_zone());
 }
 
 TEST(SerializeEmptyFunction) {
@@ -54,7 +56,8 @@ TEST(SerializeEmptyFunction) {
       "", "function f() {}; %EnsureFeedbackVectorForFunction(f); return f;");
   JSFunctionRef function = tester.function();
   CHECK(tester.broker()->IsSerializedForCompilation(
-      function.shared(), function.feedback_vector()));
+      function.shared(tester.dependencies()),
+      function.feedback_vector(tester.dependencies())));
 }
 
 // This helper function allows for testing whether an inlinee candidate
@@ -65,8 +68,9 @@ void CheckForSerializedInlinee(const char* global_source,
                                Handle<Object> argv[] = {}) {
   SerializerTester tester(global_source, local_source);
   JSFunctionRef f = tester.function();
-  CHECK(tester.broker()->IsSerializedForCompilation(f.shared(),
-                                                    f.feedback_vector()));
+  CHECK(tester.broker()->IsSerializedForCompilation(
+      f.shared(tester.dependencies()),
+      f.feedback_vector(tester.dependencies())));
 
   MaybeHandle<Object> g_obj = Execution::Call(
       tester.isolate(), tester.function().object(),

@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/js-heap-broker.h"
 #include "test/cctest/cctest.h"
 
@@ -26,17 +27,18 @@ class ZoneStats;
 // 4. The optimized function is accessible through `function()`.
 class SerializerTester : public HandleAndZoneScope {
  public:
-  explicit SerializerTester(const char* global_source,
-                            const char* local_source);
+  SerializerTester(const char* global_source, const char* local_source);
 
   JSFunctionRef function() const { return function_.value(); }
   JSHeapBroker* broker() const { return broker_.get(); }
   Isolate* isolate() { return main_isolate(); }
+  CompilationDependencies* dependencies() const { return dependencies_; }
 
  private:
   CanonicalHandleScope canonical_;
   base::Optional<JSFunctionRef> function_;
   std::unique_ptr<JSHeapBroker> broker_;
+  CompilationDependencies* dependencies_;
 };
 }  // namespace compiler
 }  // namespace internal
