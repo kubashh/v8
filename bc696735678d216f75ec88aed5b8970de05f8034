@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "60f27b98_dd070af6",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T13:07:43Z",
+      "side": 1,
+      "message": "The context apparently not: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/execution.cc;l\u003d312;drc\u003d919fa26613ca2a464a90e4a64e305d8412252ff0\n\nNativeContext/SFI: Done.",
+      "parentUuid": "e4e5bff1_22335f76",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "418900fd_f7bb9a50",
         "filename": "src/compiler/heap-refs.cc",
         "patchSetId": 17
@@ -31,6 +49,24 @@
       "writtenOn": "2021-07-19T12:54:45Z",
       "side": 1,
       "message": "Why is it needed now?",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60c75b9c_521c1838",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3893,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T13:07:43Z",
+      "side": 1,
+      "message": "Using the JSFunctionRef during dep validation.",
+      "parentUuid": "418900fd_f7bb9a50",
       "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62bdda0b_043bce09",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T13:07:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c19b377b_baf41fd6",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be95697c_48ea6a23",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-07-19T12:54:45Z",
       "side": 1,
       "message": "As a follow-up you can move CompilationDependencies into JSHeapBroker and remove it from PipelineData.",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6588a5f9_e0616944",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T13:07:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "be95697c_48ea6a23",
       "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc3b8d73_21ddbf40",
+        "filename": "test/cctest/compiler/test-concurrent-shared-function-info.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T13:07:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34da4176_45722804",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3296d4c5_00b2067b",
@@ -99,6 +189,24 @@
       "writtenOn": "2021-07-19T12:54:45Z",
       "side": 1,
       "message": "Why does never-optimize fail with this CL? This may suggest that the JSFunction consistency dependency approach is too strict.",
+      "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20405721_0890ef70",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 17
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-19T13:07:43Z",
+      "side": 1,
+      "message": "I believe due to timing issues. The test checks assertOptimized without %OptimizeFunctionOnNextCall.",
+      "parentUuid": "3296d4c5_00b2067b",
       "revId": "bc696735678d216f75ec88aed5b8970de05f8034",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
