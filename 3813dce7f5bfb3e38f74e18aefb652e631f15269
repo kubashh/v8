@@ -208,6 +208,24 @@
       "parentUuid": "bf33c324_f402e4cd",
       "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41bbef31_ac39674c",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2021-07-19T15:00:06Z",
+      "side": 1,
+      "message": "I am not entirely sure. Maybe my statement about turning it on by default isn\u0027t fully correct. I was just thinking about arm / x64 / ia32 platforms when I said that. I think +leszeks@ would know.\n\nLeszek, do you know what\u0027s the plan for sparkplug on PPC / S390.",
+      "parentUuid": "1de41999_2b5876f7",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
