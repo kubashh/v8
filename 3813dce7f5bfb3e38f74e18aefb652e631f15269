@@ -226,6 +226,24 @@
       "parentUuid": "1de41999_2b5876f7",
       "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9818c15e_2201b7be",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-19T15:19:45Z",
+      "side": 1,
+      "message": "Basically indeed like Liftoff, bailing out until someone (external) ports it.",
+      "parentUuid": "41bbef31_ac39674c",
+      "revId": "3813dce7f5bfb3e38f74e18aefb652e631f15269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
