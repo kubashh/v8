@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b111d725_8cb14849",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-20T07:40:51Z",
+      "side": 1,
+      "message": "lgtm but I\u0027d drop the tag at least from the Cache* methods. The convention would be that any Cache* method can be called from the background.\n\nI\u0027d also prefer a simple DCHECK(!is_concurrent_inlining) in the Serialize* methods but since they will disappear soon, I\u0027m fine with the tag there.",
+      "revId": "6edabc3decd87fc94055cc1fb0a039b8a3f8c472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
