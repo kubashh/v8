@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae4dfc3a_95325e23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T11:43:52Z",
+      "side": 1,
+      "message": "While this is strictly speaking JS-exposed behavior, I think the secondary implications on how this is used in the other cl to decide at API whether or not to take a fast-path is a bit tricky.\n\nI prefer keeping this V8 internal and expose a more complex API that does this check internally.",
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
