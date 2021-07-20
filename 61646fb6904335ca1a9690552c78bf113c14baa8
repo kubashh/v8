@@ -16,6 +16,75 @@
       "message": "These changes are useful to make the template function CopyAndConvertArrayToCppBuffer\u003cCTypeInfo*, T\u003e callable from Blink code.\n\nSee Chromium CL https://chromium-review.googlesource.com/c/chromium/src/+/3027405.",
       "revId": "61646fb6904335ca1a9690552c78bf113c14baa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60820652_39f4cbc2",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T08:15:08Z",
+      "side": 1,
+      "message": "nit: we usually have kCamelCase constants in v8, see globals.h.",
+      "range": {
+        "startLine": 774,
+        "startChar": 27,
+        "endLine": 774,
+        "endChar": 37
+      },
+      "revId": "61646fb6904335ca1a9690552c78bf113c14baa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7545d14d_f993985f",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T08:15:08Z",
+      "side": 1,
+      "message": "nit: let\u0027s stick with CamelCase\n\nCopyAndConvertArrayToInt32CppBuffer or so",
+      "range": {
+        "startLine": 796,
+        "startChar": 39,
+        "endLine": 796,
+        "endChar": 45
+      },
+      "revId": "61646fb6904335ca1a9690552c78bf113c14baa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81ef5b20_0d8d476f",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T08:15:08Z",
+      "side": 1,
+      "message": "What\u0027s the purpose of the rename here?",
+      "range": {
+        "startLine": 267,
+        "startChar": 5,
+        "endLine": 267,
+        "endChar": 36
+      },
+      "revId": "61646fb6904335ca1a9690552c78bf113c14baa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
