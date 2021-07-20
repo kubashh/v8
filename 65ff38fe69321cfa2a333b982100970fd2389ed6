@@ -51,6 +51,24 @@
       "parentUuid": "680d2d92_3b1b48e3",
       "revId": "65ff38fe69321cfa2a333b982100970fd2389ed6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "096e3d00_53f39420",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2021-07-20T08:36:14Z",
+      "side": 1,
+      "message": "Let\u0027s land if for now to see the performance impact. Will revert this patch if there exist regressions.",
+      "parentUuid": "cb778070_6de6a90e",
+      "revId": "65ff38fe69321cfa2a333b982100970fd2389ed6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
