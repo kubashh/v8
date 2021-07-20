@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "77c1590e_b50d9869",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-20T15:08:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58c972c4_74c96d43",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ae4dfc3a_95325e23",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -82,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a2843c2_d686b330",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-20T15:08:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aaf12941_76be6e12",
+      "range": {
+        "startLine": 4437,
+        "startChar": 54,
+        "endLine": 4437,
+        "endChar": 60
+      },
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0fb72c8_c26036e2",
@@ -107,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd30e06b_fff2ad69",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 29256,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-20T15:08:05Z",
+      "side": 1,
+      "message": "The test fails when FLAG_force_slow_path is set, because of this code:\n\n  bool Object::IterationHasObservableEffects() {\n    // Check that this object is an array.\n    if (!IsJSArray()) return true;\n    JSArray array \u003d JSArray::cast(*this);\n    Isolate* isolate \u003d array.GetIsolate();\n\n  #ifdef V8_ENABLE_FORCE_SLOW_PATH\n    if (isolate-\u003eforce_slow_path()) return true;\n  #endif\n    [...]",
+      "parentUuid": "a0fb72c8_c26036e2",
+      "range": {
+        "startLine": 29256,
+        "startChar": 0,
+        "endLine": 29256,
+        "endChar": 49
+      },
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2bfa8239_06e49afb",
         "filename": "test/cctest/test-api.cc",
         "patchSetId": 5
@@ -118,6 +190,30 @@
       "writtenOn": "2021-07-20T11:52:51Z",
       "side": 1,
       "message": "this can be dropped when using TEST instead of UNINITIALIZED_TEST",
+      "range": {
+        "startLine": 29258,
+        "startChar": 0,
+        "endLine": 29262,
+        "endChar": 19
+      },
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2425e39_075272f1",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 29262,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-20T15:08:05Z",
+      "side": 1,
+      "message": "Here I want to make sure that a new isolate is created for this test because the test invalidates the ArrayIteratorProtector.",
+      "parentUuid": "2bfa8239_06e49afb",
       "range": {
         "startLine": 29258,
         "startChar": 0,
