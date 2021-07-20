@@ -41,6 +41,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a63a28b4_d79e0c3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-07-20T13:24:36Z",
+      "side": 1,
+      "message": "Again, as written in the other CL, I\u0027m also fine with this alternative.",
+      "parentUuid": "ae4dfc3a_95325e23",
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aaf12941_76be6e12",
