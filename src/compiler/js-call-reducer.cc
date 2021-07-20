@@ -7979,20 +7979,17 @@ Reduction JSCallReducer::ReduceRegExpPrototypeTest(Node* node) {
   ZoneVector<PropertyAccessInfo> access_infos(graph()->zone());
   AccessInfoFactory access_info_factory(broker(), dependencies(),
                                         graph()->zone());
-  if (broker()->is_concurrent_inlining()) {
-    // Obtain precomputed access infos from the broker.
-    for (auto map : regexp_maps) {
-      MapRef map_ref = MakeRef(broker(), map);
-      PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
-          map_ref, MakeRef(broker(), isolate()->factory()->exec_string()),
-          AccessMode::kLoad, dependencies());
-      access_infos.push_back(access_info);
+
+  for (auto map : regexp_maps) {
+    MapRef map_ref = MakeRef(broker(), map);
+    NameRef name = MakeRef(broker(), isolate()->factory()->exec_string());
+    if (broker()->is_concurrent_inlining()) {
+      access_infos.push_back(broker()->GetPropertyAccessInfo(
+          map_ref, name, AccessMode::kLoad, dependencies()));
+    } else {
+      access_infos.push_back(access_info_factory.ComputePropertyAccessInfo(
+          map_ref, name, AccessMode::kLoad));
     }
-  } else {
-    // Compute property access info for "exec" on {resolution}.
-    access_info_factory.ComputePropertyAccessInfos(
-        MapHandles(regexp_maps.begin(), regexp_maps.end()),
-        factory()->exec_string(), AccessMode::kLoad, &access_infos);
   }
 
   PropertyAccessInfo ai_exec =
