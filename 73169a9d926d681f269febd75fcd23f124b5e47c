@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "58c972c4_74c96d43",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T11:52:51Z",
+      "side": 1,
+      "message": "can you also add [api] ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ae4dfc3a_95325e23",
@@ -14,6 +37,75 @@
       "writtenOn": "2021-07-20T11:43:52Z",
       "side": 1,
       "message": "While this is strictly speaking JS-exposed behavior, I think the secondary implications on how this is used in the other cl to decide at API whether or not to take a fast-path is a bit tricky.\n\nI prefer keeping this V8 internal and expose a more complex API that does this check internally.",
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaf12941_76be6e12",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T11:52:51Z",
+      "side": 1,
+      "message": "nit: array",
+      "range": {
+        "startLine": 4437,
+        "startChar": 54,
+        "endLine": 4437,
+        "endChar": 60
+      },
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0fb72c8_c26036e2",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 29256,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T11:52:51Z",
+      "side": 1,
+      "message": "Was this added on purpose? (I would expect that this has no effect)",
+      "range": {
+        "startLine": 29256,
+        "startChar": 0,
+        "endLine": 29256,
+        "endChar": 49
+      },
+      "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bfa8239_06e49afb",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 29262,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T11:52:51Z",
+      "side": 1,
+      "message": "this can be dropped when using TEST instead of UNINITIALIZED_TEST",
+      "range": {
+        "startLine": 29258,
+        "startChar": 0,
+        "endLine": 29262,
+        "endChar": 19
+      },
       "revId": "73169a9d926d681f269febd75fcd23f124b5e47c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
