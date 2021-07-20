@@ -181,6 +181,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9d668ae_c360e099",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "nit: attributes and string_ids can be preallocated\n\n  string_ids.reserve(map-\u003eNumberOfOwnDescriptors());\n  if (has_attributes) { ... }",
+      "range": {
+        "startLine": 367,
+        "startChar": 24,
+        "endLine": 367,
+        "endChar": 34
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55e8e7a7_aa946d4a",
         "filename": "src/web-snapshot/web-snapshot.cc",
         "patchSetId": 16
@@ -197,6 +220,236 @@
         "startChar": 2,
         "endLine": 387,
         "endChar": 5
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c145fdc8_1a70a6b5",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "nit: maybe put this in a separate function for future cleanups (SerializeSource or so)",
+      "range": {
+        "startLine": 422,
+        "startChar": 0,
+        "endLine": 428,
+        "endChar": 42
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdea5fae_1e6f7a2f",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "Could you add a DCHECK at the end of UseWebSnapshot to make sure we don\u0027t have any pending deferred references?",
+      "range": {
+        "startLine": 765,
+        "startChar": 0,
+        "endLine": 765,
+        "endChar": 30
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66dc793b_24079388",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "nit: \"attributes\" is a bit an overloaded term, maybe change it to has_custom_property_attributes?",
+      "range": {
+        "startLine": 833,
+        "startChar": 9,
+        "endLine": 833,
+        "endChar": 23
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "532bf87a_b3f844ae",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "snapshot",
+      "range": {
+        "startLine": 873,
+        "startChar": 21,
+        "endLine": 873,
+        "endChar": 29
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de537fa0_58366996",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "maybe let\u0027s move the DeclarationScopeBit and HasSimpleParametersBit completely into the switch statement below.",
+      "range": {
+        "startLine": 1004,
+        "startChar": 0,
+        "endLine": 1004,
+        "endChar": 53
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c88dbf9_3c05420a",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "Would it make sense to rename ContextType::BLOCK \u003d\u003e  ContextType::CLASS",
+      "range": {
+        "startLine": 1027,
+        "startChar": 0,
+        "endLine": 1028,
+        "endChar": 42
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "218c39fd_61a79c77",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "I know this is just the error case, but CLASS_SCOPE seems weird to be used as default (but maybe this is the easiest way to do it?)",
+      "range": {
+        "startLine": 1032,
+        "startChar": 0,
+        "endLine": 1035,
+        "endChar": 54
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62d5551a_d0e46f96",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "I don\u0027t think old-space makes sense here, we\u0027re likely growing this multiple times and we don\u0027t need it anymore after deserialisation finished.",
+      "range": {
+        "startLine": 1163,
+        "startChar": 29,
+        "endLine": 1163,
+        "endChar": 51
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "234d8991_925ffdab",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "nit: The name MapType is a bit confusing, PropertyAttributesType or so? (not 100% sure what a good name is here).",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 61,
+        "endChar": 14
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74601bee_26823624",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-20T10:07:14Z",
+      "side": 1,
+      "message": "EnumberableBitField \u003d\u003e EnumerableBitField",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 27
       },
       "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
