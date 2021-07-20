@@ -4433,6 +4433,12 @@ class V8_EXPORT Array : public Object {
                           size_t length);
   V8_INLINE static Array* Cast(Value* obj);
 
+  /**
+   * Returns true if the result of iterating over the array might be not the
+   * same as simply accessing the properties between 0 and length.
+   */
+  bool HasCustomIterator() const;
+
  private:
   Array();
   static void CheckCast(Value* obj);
