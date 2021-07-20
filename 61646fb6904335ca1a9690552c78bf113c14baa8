@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae6097ec_1010187f",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-20T13:44:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60820652_39f4cbc2",
+      "range": {
+        "startLine": 774,
+        "startChar": 27,
+        "endLine": 774,
+        "endChar": 37
+      },
+      "revId": "61646fb6904335ca1a9690552c78bf113c14baa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7545d14d_f993985f",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d344918d_7147b8b1",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-20T13:44:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7545d14d_f993985f",
+      "range": {
+        "startLine": 796,
+        "startChar": 39,
+        "endLine": 796,
+        "endChar": 45
+      },
+      "revId": "61646fb6904335ca1a9690552c78bf113c14baa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81ef5b20_0d8d476f",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-07-20T08:15:08Z",
       "side": 1,
       "message": "What\u0027s the purpose of the rename here?",
+      "range": {
+        "startLine": 267,
+        "startChar": 5,
+        "endLine": 267,
+        "endChar": 36
+      },
+      "revId": "61646fb6904335ca1a9690552c78bf113c14baa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6a520ce_bf7e625d",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-20T13:44:16Z",
+      "side": 1,
+      "message": "It was a relic of a lot of refactoring, it is indeed not needed.",
+      "parentUuid": "81ef5b20_0d8d476f",
       "range": {
         "startLine": 267,
         "startChar": 5,
