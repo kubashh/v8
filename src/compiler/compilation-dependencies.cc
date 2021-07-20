@@ -728,7 +728,7 @@ void CompilationDependencies::DependOnGlobalProperty(
 }
 
 bool CompilationDependencies::DependOnProtector(const PropertyCellRef& cell) {
-  cell.SerializeAsProtector();
+  cell.CacheAsProtector();
   if (cell.value().AsSmi() != Protectors::kProtectorValid) return false;
   RecordDependency(zone_->New<ProtectorDependency>(cell));
   return true;
