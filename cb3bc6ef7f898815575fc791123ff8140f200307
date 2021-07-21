@@ -64,6 +64,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "706a5456_7e712808",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3692d6ad_b501cfbb",
+      "range": {
+        "startLine": 1205,
+        "startChar": 42,
+        "endLine": 1205,
+        "endChar": 60
+      },
+      "revId": "cb3bc6ef7f898815575fc791123ff8140f200307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f01db52b_7e861cdb",
@@ -77,6 +101,30 @@
       "writtenOn": "2021-07-15T12:34:11Z",
       "side": 1,
       "message": "Now that you\u0027re pulling this out of the function, a longer name might be better (shared_function_infos).",
+      "range": {
+        "startLine": 247,
+        "startChar": 25,
+        "endLine": 247,
+        "endChar": 31
+      },
+      "revId": "cb3bc6ef7f898815575fc791123ff8140f200307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48189ccf_2abd49f3",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f01db52b_7e861cdb",
       "range": {
         "startLine": 247,
         "startChar": 25,

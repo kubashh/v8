@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca057e4a_398f5bc9",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5890dc1_7ad98d1b",
+      "range": {
+        "startLine": 64,
+        "startChar": 68,
+        "endLine": 64,
+        "endChar": 69
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c3b015a_5da0e7fc",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-07-20T09:30:15Z",
       "side": 1,
       "message": "Let\u0027s use slightly more descriptive names here (so you\u0027ll get some code-search hits if you look for the prefix)\n\nConstructorBitField \u003d\u003e ClassConstructorBitField",
+      "range": {
+        "startLine": 66,
+        "startChar": 15,
+        "endLine": 66,
+        "endChar": 34
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4488d9d_d05eeafa",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c3b015a_5da0e7fc",
       "range": {
         "startLine": 66,
         "startChar": 15,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb34813d_786cb197",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8dad56ff_82b6eff5",
+      "range": {
+        "startLine": 67,
+        "startChar": 15,
+        "endLine": 67,
+        "endChar": 30
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "469e45dc_6d6c8c8c",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-07-20T09:30:15Z",
       "side": 1,
       "message": "DerivedBitField \u003d\u003e DerivedConstructorBitField",
+      "range": {
+        "startLine": 68,
+        "startChar": 15,
+        "endLine": 68,
+        "endChar": 30
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75dce2ed_9a154759",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "469e45dc_6d6c8c8c",
       "range": {
         "startLine": 68,
         "startChar": 15,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3381bf4_16c5eccd",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "I am using a helper here so that I can also verify that all irrelevant bits are 0.",
+      "parentUuid": "c6f347f3_1d1fbd2d",
+      "range": {
+        "startLine": 145,
+        "startChar": 8,
+        "endLine": 145,
+        "endChar": 42
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44dd32a7_2a018e68",
@@ -146,6 +266,30 @@
       "writtenOn": "2021-07-20T09:30:15Z",
       "side": 1,
       "message": "nit: | just to make it a bit more obvious we\u0027re doing bit manipulations",
+      "range": {
+        "startLine": 150,
+        "startChar": 62,
+        "endLine": 150,
+        "endChar": 63
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7ebfeaf_22b13d98",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44dd32a7_2a018e68",
       "range": {
         "startLine": 150,
         "startChar": 62,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5044b1e_3e7f8e1b",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "293d05c2_8829db69",
+      "range": {
+        "startLine": 355,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 5
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9d668ae_c360e099",
@@ -192,6 +360,30 @@
       "writtenOn": "2021-07-20T10:07:14Z",
       "side": 1,
       "message": "nit: attributes and string_ids can be preallocated\n\n  string_ids.reserve(map-\u003eNumberOfOwnDescriptors());\n  if (has_attributes) { ... }",
+      "range": {
+        "startLine": 367,
+        "startChar": 24,
+        "endLine": 367,
+        "endChar": 34
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1f3e749_3907c62c",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9d668ae_c360e099",
       "range": {
         "startLine": 367,
         "startChar": 24,
@@ -227,6 +419,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eeeadef4_bf5b4343",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "To do that you\u0027d need to change the logic of what is stored in the attributes (e.g. store attributes with the indices of the properties that have them). Is that what you mean?",
+      "parentUuid": "55e8e7a7_aa946d4a",
+      "range": {
+        "startLine": 385,
+        "startChar": 2,
+        "endLine": 387,
+        "endChar": 5
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c145fdc8_1a70a6b5",
         "filename": "src/web-snapshot/web-snapshot.cc",
         "patchSetId": 16
@@ -238,6 +454,30 @@
       "writtenOn": "2021-07-20T10:07:14Z",
       "side": 1,
       "message": "nit: maybe put this in a separate function for future cleanups (SerializeSource or so)",
+      "range": {
+        "startLine": 422,
+        "startChar": 0,
+        "endLine": 428,
+        "endChar": 42
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bafe217_7c07c5af",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c145fdc8_1a70a6b5",
       "range": {
         "startLine": 422,
         "startChar": 0,
@@ -273,6 +513,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "03a44067_f2a542ff",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "I think there\u0027s no easy way to do that the way we handle the deferred references now.",
+      "parentUuid": "fdea5fae_1e6f7a2f",
+      "range": {
+        "startLine": 765,
+        "startChar": 0,
+        "endLine": 765,
+        "endChar": 30
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "66dc793b_24079388",
         "filename": "src/web-snapshot/web-snapshot.cc",
         "patchSetId": 16
@@ -284,6 +548,30 @@
       "writtenOn": "2021-07-20T10:07:14Z",
       "side": 1,
       "message": "nit: \"attributes\" is a bit an overloaded term, maybe change it to has_custom_property_attributes?",
+      "range": {
+        "startLine": 833,
+        "startChar": 9,
+        "endLine": 833,
+        "endChar": 23
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "889d2d22_d0d44343",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66dc793b_24079388",
       "range": {
         "startLine": 833,
         "startChar": 9,
@@ -317,6 +605,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b32dd13_7d35604d",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "532bf87a_b3f844ae",
+      "range": {
+        "startLine": 873,
+        "startChar": 21,
+        "endLine": 873,
+        "endChar": 29
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de537fa0_58366996",
@@ -330,6 +642,30 @@
       "writtenOn": "2021-07-20T10:07:14Z",
       "side": 1,
       "message": "maybe let\u0027s move the DeclarationScopeBit and HasSimpleParametersBit completely into the switch statement below.",
+      "range": {
+        "startLine": 1004,
+        "startChar": 0,
+        "endLine": 1004,
+        "endChar": 53
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4ad83e2_f251fe9a",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Isn\u0027t it better to list everything above? So, if there\u0027s any refactoring, there\u0027s always some list of everything for reference.",
+      "parentUuid": "de537fa0_58366996",
       "range": {
         "startLine": 1004,
         "startChar": 0,
@@ -386,6 +722,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d3521ef_2bf10d02",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "We already discussed this offline with marja@. The goal here is to be able to produce a valid scope even if we throw.",
+      "parentUuid": "218c39fd_61a79c77",
+      "range": {
+        "startLine": 1032,
+        "startChar": 0,
+        "endLine": 1035,
+        "endChar": 54
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62d5551a_d0e46f96",
@@ -399,6 +759,30 @@
       "writtenOn": "2021-07-20T10:07:14Z",
       "side": 1,
       "message": "I don\u0027t think old-space makes sense here, we\u0027re likely growing this multiple times and we don\u0027t need it anymore after deserialisation finished.",
+      "range": {
+        "startLine": 1163,
+        "startChar": 29,
+        "endLine": 1163,
+        "endChar": 51
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93bd61c2_29fe4e19",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Should I set it to `kYoung` then?",
+      "parentUuid": "62d5551a_d0e46f96",
       "range": {
         "startLine": 1163,
         "startChar": 29,
@@ -434,6 +818,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a70bf77_688afe2f",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Renamed `MapType` to `PropertyAttributesType` and changed the values to `DEFAULT` and `CUSTOM`. Is that OK?",
+      "parentUuid": "234d8991_925ffdab",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 61,
+        "endChar": 14
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "74601bee_26823624",
         "filename": "src/web-snapshot/web-snapshot.h",
         "patchSetId": 16
@@ -445,6 +853,30 @@
       "writtenOn": "2021-07-20T10:07:14Z",
       "side": 1,
       "message": "EnumberableBitField \u003d\u003e EnumerableBitField",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 27
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26676f2a_5d9ab1b8",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74601bee_26823624",
       "range": {
         "startLine": 104,
         "startChar": 8,
@@ -478,6 +910,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19695a25_51b9a0f2",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 16
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c162210_81067c4f",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2232de97_b1f85a74",
@@ -501,6 +957,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc88f3b0_1c056ccc",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 16
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2232de97_b1f85a74",
+      "range": {
+        "startLine": 327,
+        "startChar": 2,
+        "endLine": 327,
+        "endChar": 5
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fcd5e59_4214097b",
@@ -514,6 +994,30 @@
       "writtenOn": "2021-07-20T09:30:15Z",
       "side": 1,
       "message": "Could you maybe add a separate test for serialising an async function on its own?",
+      "range": {
+        "startLine": 347,
+        "startChar": 0,
+        "endLine": 347,
+        "endChar": 30
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "debd37c8_61068c3d",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 16
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-21T14:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fcd5e59_4214097b",
       "range": {
         "startLine": 347,
         "startChar": 0,
