@@ -277,7 +277,6 @@ function takeAndUseWebSnapshot(createObjects, exports) {
   assertEquals(5, foo.array[0]());
 })();
 
-
 (function TestContextReferencingArray() {
   function createObjects() {
     function outer() {
@@ -291,4 +290,47 @@ function takeAndUseWebSnapshot(createObjects, exports) {
   }
   const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
   assertEquals(11525, foo.func()[0]);
+})();
+
+(function TestEmptyClass() {
+  function createObjects() {
+    globalThis.Foo = class Foo { };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  const x = new Foo();
+})();
+
+(function TestClassWithConstructor() {
+  function createObjects() {
+    globalThis.Foo = class {
+      constructor(x) {
+        this.n = 42 + x;
+      }
+    };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  const x = new Foo(2);
+  assertEquals(44, x.n);
+})();
+
+(function TestClassWithMethods() {
+  function createObjects() {
+    globalThis.Foo = class {
+      f() { return 7; };
+    };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  const x = new Foo();
+  assertEquals(7, x.f());
+})();
+
+(async function TestClassWithAsyncMethods() {
+  function createObjects() {
+    globalThis.Foo = class {
+      async g() { return 6; };
+    };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  const x = new Foo();
+  assertEquals(6, await x.g());
 })();
