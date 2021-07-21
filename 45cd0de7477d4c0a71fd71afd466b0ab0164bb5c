@@ -104,6 +104,24 @@
       "parentUuid": "ef3fccba_5eb7b1a9",
       "revId": "45cd0de7477d4c0a71fd71afd466b0ab0164bb5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c987be21_2d61b978",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-21T15:47:36Z",
+      "side": 1,
+      "message": "I figured out the LSAN isuse and it\u0027s already an issue on main without this CL.\n\nLSAN is not considering poisoned memory as root region, even when we are using __lsan_register_root_region().\n\nAll GCed memory is considered a root region for LSAN. The GC temporarily poisons memory during a GC to catch bugs.\n\nNow, this CL here makes GC in C++ workloads more likely, so there\u0027s a good chance that we run the GC when run the test and end up being in the GC when the test ends. If that happens, then all pointers contained in the heap that are in poisoned areas are considered leaked.\n\nSolutions:\n1) LSAN can consider poisoned memory as well (LSAN_OPTIONS\u003duse_poisoned\u003d1) when registered in a root region.\n2) We can finish the GC before running leak detection.\n\nInvestigating whether 2) is possible now, to avoid changing environment varialbes on the bots (which 1) requires).",
+      "parentUuid": "106c522a_e6be30f2",
+      "revId": "45cd0de7477d4c0a71fd71afd466b0ab0164bb5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
