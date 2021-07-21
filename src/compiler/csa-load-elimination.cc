@@ -74,48 +74,45 @@ bool Subsumes(MachineRepresentation from, MachineRepresentation to) {
   return false;
 }
 
-bool ObjectMayAlias(Node* a, Node* b) {
-  if (a != b) {
-    if (NodeProperties::IsFreshObject(b)) std::swap(a, b);
-    if (NodeProperties::IsFreshObject(a) &&
-        (NodeProperties::IsFreshObject(b) ||
-         b->opcode() == IrOpcode::kParameter ||
-         b->opcode() == IrOpcode::kLoadImmutable ||
-         IrOpcode::IsConstantOpcode(b->opcode()))) {
-      return false;
-    }
-  }
-  return true;
+bool IsConstantObject(Node* object) {
+  return object->opcode() == IrOpcode::kParameter ||
+         object->opcode() == IrOpcode::kLoadImmutable ||
+         NodeProperties::IsConstant(object);
 }
 
-bool OffsetMayAlias(Node* offset1, MachineRepresentation repr1, Node* offset2,
-                    MachineRepresentation repr2) {
-  IntPtrMatcher matcher1(offset1);
-  IntPtrMatcher matcher2(offset2);
-  // If either of the offsets is variable, accesses may alias
-  if (!matcher1.HasResolvedValue() || !matcher2.HasResolvedValue()) {
-    return true;
-  }
-  // Otherwise, we return whether accesses overlap
-  intptr_t start1 = matcher1.ResolvedValue();
-  intptr_t end1 = start1 + ElementSizeInBytes(repr1);
-  intptr_t start2 = matcher2.ResolvedValue();
-  intptr_t end2 = start2 + ElementSizeInBytes(repr2);
-  return !(end1 <= start2 || end2 <= start1);
+bool IsFreshObject(Node* object) {
+  return NodeProperties::IsFreshObject(object);
 }
 
 }  // namespace CsaLoadEliminationHelpers
 
 namespace Helpers = CsaLoadEliminationHelpers;
 
-void CsaLoadElimination::AbstractState::Merge(AbstractState const* that,
-                                              Zone* zone) {
+// static
+template <typename OuterKey>
+void CsaLoadElimination::AbstractState::IntersectWith(
+    OuterMap<OuterKey>& to, const OuterMap<OuterKey>& from) {
   FieldInfo empty_info;
-  for (std::pair<Field, FieldInfo> entry : field_infos_) {
-    if (that->field_infos_.Get(entry.first) != entry.second) {
-      field_infos_.Set(entry.first, empty_info);
+  for (const std::pair<OuterKey, InnerMap>& to_map : to) {
+    InnerMap to_map_copy(to_map.second);
+    OuterKey key = to_map.first;
+    for (std::pair<Node*, FieldInfo> info : to_map.second) {
+      if (from.Get(key).Get(info.first) != info.second) {
+        to_map_copy.Set(info.first, empty_info);
+      }
     }
+    to.Set(key, to_map_copy);
   }
+}
+
+void CsaLoadElimination::AbstractState::IntersectWith(AbstractState const* that,
+                                                      Zone* zone) {
+  IntersectWith(fresh_entries_, that->fresh_entries_);
+  IntersectWith(constant_entries_, that->constant_entries_);
+  IntersectWith(arbitrary_entries_, that->arbitrary_entries_);
+  IntersectWith(fresh_unknown_entries_, that->fresh_unknown_entries_);
+  IntersectWith(constant_unknown_entries_, that->constant_unknown_entries_);
+  IntersectWith(arbitrary_unknown_entries_, that->arbitrary_unknown_entries_);
 }
 
 CsaLoadElimination::AbstractState const*
@@ -123,49 +120,172 @@ CsaLoadElimination::AbstractState::KillField(Node* kill_object,
                                              Node* kill_offset,
                                              MachineRepresentation kill_repr,
                                              Zone* zone) const {
-  FieldInfo empty_info;
-  AbstractState* that = zone->New<AbstractState>(*this);
-  for (std::pair<Field, FieldInfo> entry : that->field_infos_) {
-    Field field = entry.first;
-    MachineRepresentation field_repr = entry.second.representation;
-    if (Helpers::OffsetMayAlias(kill_offset, kill_repr, field.second,
-                                field_repr) &&
-        Helpers::ObjectMayAlias(kill_object, field.first)) {
-      that->field_infos_.Set(field, empty_info);
+  AbstractState* result = zone->New<AbstractState>(*this);
+  UnknownOffsetInfos empty_unknown(zone, InnerMap(zone));
+  IntPtrMatcher m(kill_offset);
+  if (m.HasResolvedValue()) {
+    uint32_t num_offset = static_cast<uint32_t>(m.ResolvedValue());
+    if (Helpers::IsFreshObject(kill_object)) {
+      // May alias with:
+      // - The same object/offset
+      // - Arbitrary objects with the same offset
+      // - The same object, unkwown offset
+      // - Arbitrary objects with unkwown offset
+      result->KillFreshOffset(kill_object, num_offset, kill_repr);
+      KillOffset(result->arbitrary_entries_, num_offset, kill_repr, zone);
+      result->fresh_unknown_entries_.Set(kill_object, InnerMap(zone));
+      result->arbitrary_unknown_entries_ = empty_unknown;
+    } else if (Helpers::IsConstantObject(kill_object)) {
+      // May alias with:
+      // - Constant/arbitrary objects with the same offset
+      // - Constant/arbitrary objects with unkwown offset
+      KillOffset(result->constant_entries_, num_offset, kill_repr, zone);
+      KillOffset(result->arbitrary_entries_, num_offset, kill_repr, zone);
+      result->constant_unknown_entries_ = empty_unknown;
+      result->arbitrary_unknown_entries_ = empty_unknown;
+    } else {
+      // May alias with:
+      // - Any object with the same or unknown offset
+      KillOffset(result->fresh_entries_, num_offset, kill_repr, zone);
+      KillOffset(result->constant_entries_, num_offset, kill_repr, zone);
+      KillOffset(result->arbitrary_entries_, num_offset, kill_repr, zone);
+      result->fresh_unknown_entries_ = empty_unknown;
+      result->constant_unknown_entries_ = empty_unknown;
+      result->arbitrary_unknown_entries_ = empty_unknown;
+    }
+  } else {
+    ConstantOffsetInfos empty_constant(zone, InnerMap(zone));
+    if (Helpers::IsFreshObject(kill_object)) {
+      // May alias with:
+      // - The same object with any known/unknown offset
+      // - Arbitrary objects with any known/unknown offset
+      for (auto map : result->fresh_entries_) {
+        // TODO(manoskouk): Consider adding a map from fresh objects to offsets
+        // to implement this efficiently.
+        InnerMap map_copy(map.second);
+        map_copy.Set(kill_object, FieldInfo());
+        result->fresh_entries_.Set(map.first, map_copy);
+      }
+      result->fresh_unknown_entries_.Set(kill_object, InnerMap(zone));
+      result->arbitrary_entries_ = empty_constant;
+      result->arbitrary_unknown_entries_ = empty_unknown;
+    } else if (Helpers::IsConstantObject(kill_object)) {
+      // May alias with:
+      // - Constant/arbitrary objects with the any known/unknown offset
+      result->constant_entries_ = empty_constant;
+      result->constant_unknown_entries_ = empty_unknown;
+      result->arbitrary_entries_ = empty_constant;
+      result->arbitrary_unknown_entries_ = empty_unknown;
+    } else {
+      // May alias with anything. Clear the state.
+      return zone->New<AbstractState>(zone);
     }
   }
-  return that;
+
+  return result;
 }
 
 CsaLoadElimination::AbstractState const*
 CsaLoadElimination::AbstractState::AddField(Node* object, Node* offset,
-                                            CsaLoadElimination::FieldInfo info,
+                                            Node* value,
+                                            MachineRepresentation repr,
                                             Zone* zone) const {
-  AbstractState* that = zone->New<AbstractState>(*this);
-  that->field_infos_.Set({object, offset}, info);
-  return that;
+  AbstractState* new_state = zone->New<AbstractState>(*this);
+  IntPtrMatcher m(offset);
+  if (m.HasResolvedValue()) {
+    uint32_t offset_num = static_cast<uint32_t>(m.ResolvedValue());
+    ConstantOffsetInfos& infos = Helpers::IsFreshObject(object)
+                                     ? new_state->fresh_entries_
+                                     : Helpers::IsConstantObject(object)
+                                           ? new_state->constant_entries_
+                                           : new_state->arbitrary_entries_;
+    InnerMap map_copy(infos.Get(offset_num));
+    map_copy.Set(object, FieldInfo(value, repr));
+    infos.Set(offset_num, map_copy);
+  } else {
+    UnknownOffsetInfos& infos =
+        Helpers::IsFreshObject(object)
+            ? new_state->fresh_unknown_entries_
+            : Helpers::IsConstantObject(object)
+                  ? new_state->constant_unknown_entries_
+                  : new_state->arbitrary_unknown_entries_;
+    InnerMap map_copy(infos.Get(object));
+    map_copy.Set(offset, FieldInfo(value, repr));
+    infos.Set(object, map_copy);
+  }
+  return new_state;
 }
 
 CsaLoadElimination::FieldInfo CsaLoadElimination::AbstractState::Lookup(
     Node* object, Node* offset) const {
-  if (object->IsDead()) {
-    return {};
+  IntPtrMatcher m(offset);
+  if (m.HasResolvedValue()) {
+    uint32_t num_offset = static_cast<uint32_t>(m.ResolvedValue());
+    const ConstantOffsetInfos& infos = Helpers::IsFreshObject(object)
+                                           ? fresh_entries_
+                                           : Helpers::IsConstantObject(object)
+                                                 ? constant_entries_
+                                                 : arbitrary_entries_;
+    return infos.Get(num_offset).Get(object);
+  } else {
+    const UnknownOffsetInfos& infos = Helpers::IsFreshObject(object)
+                                          ? fresh_unknown_entries_
+                                          : Helpers::IsConstantObject(object)
+                                                ? constant_unknown_entries_
+                                                : arbitrary_unknown_entries_;
+    return infos.Get(object).Get(offset);
   }
-  return field_infos_.Get({object, offset});
 }
 
-void CsaLoadElimination::AbstractState::Print() const {
-  for (std::pair<Field, FieldInfo> entry : field_infos_) {
-    Field field = entry.first;
-    Node* object = field.first;
-    Node* offset = field.second;
-    FieldInfo info = entry.second;
-    PrintF("    #%d+#%d:%s -> #%d:%s [repr=%s]\n", object->id(), offset->id(),
-           object->op()->mnemonic(), info.value->id(),
-           info.value->op()->mnemonic(),
-           MachineReprToString(info.representation));
+constexpr uint32_t maximum_repr_size = 8;
+
+// static
+void CsaLoadElimination::AbstractState::KillOffset(ConstantOffsetInfos& infos,
+                                                   uint32_t offset,
+                                                   MachineRepresentation repr,
+                                                   Zone* zone) {
+  for (int i = 0; i < ElementSizeInBytes(repr); i++) {
+    infos.Set(offset + i, InnerMap(zone));
+  }
+  int initial_offset = offset >= maximum_repr_size - 1
+                           ? static_cast<int>(offset - (maximum_repr_size - 1))
+                           : 0;
+  for (int i = initial_offset; i < static_cast<int>(offset); i++) {
+    InnerMap map_copy(infos.Get(i));
+    for (const std::pair<Node*, FieldInfo>& info : infos.Get(i)) {
+      if (info.second.representation != MachineRepresentation::kNone &&
+          ElementSizeInBytes(info.second.representation) >
+              static_cast<int>(offset) - i) {
+        map_copy.Set(info.first, {});
+      }
+    }
+    infos.Set(i, map_copy);
   }
 }
+
+void CsaLoadElimination::AbstractState::KillFreshOffset(
+    Node* const object, uint32_t offset, MachineRepresentation repr) {
+  for (int i = 0; i < ElementSizeInBytes(repr); i++) {
+    InnerMap map_copy(fresh_entries_.Get(offset + i));
+    map_copy.Set(object, {});
+    fresh_entries_.Set(offset + i, map_copy);
+  }
+  int initial_offset = offset >= maximum_repr_size - 1
+                           ? static_cast<int>(offset - (maximum_repr_size - 1))
+                           : 0;
+  for (int i = initial_offset; i < static_cast<int>(offset); i++) {
+    const FieldInfo& info = fresh_entries_.Get(i).Get(object);
+    if (info.representation != MachineRepresentation::kNone &&
+        ElementSizeInBytes(info.representation) >
+            static_cast<int>(offset) - i) {
+      InnerMap map_copy(fresh_entries_.Get(i));
+      map_copy.Set(object, {});
+      fresh_entries_.Set(i, map_copy);
+    }
+  }
+}
+
+void CsaLoadElimination::AbstractState::Print() const {}
 
 Reduction CsaLoadElimination::ReduceLoadFromObject(Node* node,
                                                    ObjectAccess const& access) {
@@ -189,8 +309,7 @@ Reduction CsaLoadElimination::ReduceLoadFromObject(Node* node,
       return Replace(replacement);
     }
   }
-  FieldInfo info(node, representation);
-  state = state->AddField(object, offset, info, zone());
+  state = state->AddField(object, offset, node, representation, zone());
 
   return UpdateState(node, state);
 }
@@ -204,9 +323,9 @@ Reduction CsaLoadElimination::ReduceStoreToObject(Node* node,
   AbstractState const* state = node_states_.Get(effect);
   if (state == nullptr) return NoChange();
 
-  FieldInfo info(value, access.machine_type.representation());
-  state = state->KillField(object, offset, info.representation, zone());
-  state = state->AddField(object, offset, info, zone());
+  MachineRepresentation repr = access.machine_type.representation();
+  state = state->KillField(object, offset, repr, zone());
+  state = state->AddField(object, offset, value, repr, zone());
 
   return UpdateState(node, state);
 }
@@ -232,12 +351,14 @@ Reduction CsaLoadElimination::ReduceEffectPhi(Node* node) {
     if (node_states_.Get(effect) == nullptr) return NoChange();
   }
 
-  // Make a copy of the first input's state and merge with the state
+  // Make a copy of the first input's state and intersect it with the state
   // from other inputs.
+  // TODO(manoskouk): Consider computing phis for at least a subset of the
+  // state.
   AbstractState* state = zone()->New<AbstractState>(*state0);
   for (int i = 1; i < input_count; ++i) {
     Node* const input = NodeProperties::GetEffectInput(node, i);
-    state->Merge(node_states_.Get(input), zone());
+    state->IntersectWith(node_states_.Get(input), zone());
   }
   return UpdateState(node, state);
 }
@@ -298,11 +419,10 @@ Reduction CsaLoadElimination::PropagateInputState(Node* node) {
 CsaLoadElimination::AbstractState const* CsaLoadElimination::ComputeLoopState(
     Node* node, AbstractState const* state) const {
   DCHECK_EQ(node->opcode(), IrOpcode::kEffectPhi);
-  Node* const control = NodeProperties::GetControlInput(node);
   ZoneQueue<Node*> queue(zone());
   ZoneSet<Node*> visited(zone());
   visited.insert(node);
-  for (int i = 1; i < control->InputCount(); ++i) {
+  for (int i = 1; i < node->InputCount() - 1; ++i) {
     queue.push(node->InputAt(i));
   }
   while (!queue.empty()) {
