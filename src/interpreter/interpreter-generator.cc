@@ -2158,8 +2158,6 @@ IGNITION_HANDLER(JumpLoop, InterpreterAssembler) {
   TNode<Int8T> osr_level = LoadOsrNestingLevel();
   TNode<Context> context = GetContext();
 
-  PerformStackCheck(context);
-
   // Check if OSR points at the given {loop_depth} are armed by comparing it to
   // the current {osr_level} loaded from the header of the BytecodeArray.
   Label ok(this), osr_armed(this, Label::kDeferred);
