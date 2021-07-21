@@ -67,6 +67,23 @@
       "message": "src/wasm LGTM.",
       "revId": "eed426880e27aa1c8e31a5a42294bc955c2862b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a65ed7d_0b3c5a3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-07-21T15:14:21Z",
+      "side": 1,
+      "message": "Thanks for the quick reviews!",
+      "revId": "eed426880e27aa1c8e31a5a42294bc955c2862b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
