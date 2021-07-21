@@ -16,6 +16,23 @@
       "message": "Hi Nico, here\u0027s another boring cleanup change to peruse at your leisure.",
       "revId": "eed426880e27aa1c8e31a5a42294bc955c2862b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc9088b9_02b28c20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-07-21T08:40:53Z",
+      "side": 1,
+      "message": "LGTM\n\nYou removed around 150 lines of annotations, I think this is an awesome change! Thanks",
+      "revId": "eed426880e27aa1c8e31a5a42294bc955c2862b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
