@@ -443,6 +443,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2124fc66_aabd6e84",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T08:06:13Z",
+      "side": 1,
+      "message": "Just directly do:\n\n   if (first_custom_index \u003e 0 || \n         details.IsReadOnly() || !details.IsConfigurable() ||\n        details.IsDontEnum()) {\n     if (first_custom_index \u003d\u003d -1) first_custom_index \u003d i;\n     attributes.push_back(AttributesToFlags(details));\n   }\n \n   \nand then you can use first_custom_index to write out the default details if needed and you only need one loop.",
+      "parentUuid": "eeeadef4_bf5b4343",
+      "range": {
+        "startLine": 385,
+        "startChar": 2,
+        "endLine": 387,
+        "endChar": 5
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c145fdc8_1a70a6b5",
         "filename": "src/web-snapshot/web-snapshot.cc",
         "patchSetId": 16
@@ -525,6 +549,30 @@
       "side": 1,
       "message": "I think there\u0027s no easy way to do that the way we handle the deferred references now.",
       "parentUuid": "fdea5fae_1e6f7a2f",
+      "range": {
+        "startLine": 765,
+        "startChar": 0,
+        "endLine": 765,
+        "endChar": 30
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0b7d3b2_962969c6",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T08:06:13Z",
+      "side": 1,
+      "message": "I had in mind resetting deferred_references_ to an ArrayList of size 0 in ProcessDeferredReferences and then you can just DCHECK this.",
+      "parentUuid": "03a44067_f2a542ff",
       "range": {
         "startLine": 765,
         "startChar": 0,
@@ -746,6 +794,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "013af74d_4b0e78ec",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T08:06:13Z",
+      "side": 1,
+      "message": "ok :)",
+      "parentUuid": "7d3521ef_2bf10d02",
+      "range": {
+        "startLine": 1032,
+        "startChar": 0,
+        "endLine": 1035,
+        "endChar": 54
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62d5551a_d0e46f96",
@@ -783,6 +855,30 @@
       "side": 1,
       "message": "Should I set it to `kYoung` then?",
       "parentUuid": "62d5551a_d0e46f96",
+      "range": {
+        "startLine": 1163,
+        "startChar": 29,
+        "endLine": 1163,
+        "endChar": 51
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab0c27a8_623d1b17",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T08:06:13Z",
+      "side": 1,
+      "message": "Indirect \"yes\", you can just drop it, kYoung is the default argument.",
+      "parentUuid": "93bd61c2_29fe4e19",
       "range": {
         "startLine": 1163,
         "startChar": 29,
