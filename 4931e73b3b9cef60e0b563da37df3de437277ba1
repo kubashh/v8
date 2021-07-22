@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4e65cab_9cff574f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-07-22T20:07:42Z",
+      "side": 1,
+      "message": "As per this issue: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1231999#c7\nWe have modified the PPC path under the OWNERS file. Our code reviews\nhave not been going through for the past 2 days.",
+      "revId": "4931e73b3b9cef60e0b563da37df3de437277ba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
