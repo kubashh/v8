@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "202dc38a_5356b12a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-07-22T03:31:06Z",
+      "side": 1,
+      "message": "Hi \n\nThanks your cl\n\nYou also can add \"treat_warnings_as_errors \u003d false\" into arrgs.gn, to warp it.\nWe will to fix these warning\n\n",
+      "revId": "2ac65216e3a6927e0e389c10efc3aa9baeae3ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
