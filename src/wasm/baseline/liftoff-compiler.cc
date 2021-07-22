@@ -2816,30 +2816,6 @@ class LiftoffCompiler {
     __ DeallocateStackSlot(sizeof(MemoryTracingInfo));
   }
 
-  Register AddMemoryMasking(Register index, uintptr_t* offset,
-                            LiftoffRegList* pinned) {
-    if (!FLAG_untrusted_code_mitigations ||
-        env_->bounds_checks == kTrapHandler) {
-      return index;
-    }
-    CODE_COMMENT("mask memory index");
-    // Make sure that we can overwrite {index}.
-    if (__ cache_state()->is_used(LiftoffRegister(index))) {
-      Register old_index = index;
-      pinned->clear(LiftoffRegister{old_index});
-      index = pinned->set(__ GetUnusedRegister(kGpReg, *pinned)).gp();
-      if (index != old_index) {
-        __ Move(index, old_index, kPointerKind);
-      }
-    }
-    Register tmp = __ GetUnusedRegister(kGpReg, *pinned).gp();
-    LOAD_INSTANCE_FIELD(tmp, MemoryMask, kSystemPointerSize, *pinned);
-    if (*offset) __ emit_ptrsize_addi(index, index, *offset);
-    __ emit_ptrsize_and(index, index, tmp);
-    *offset = 0;
-    return index;
-  }
-
   bool IndexStaticallyInBounds(const LiftoffAssembler::VarState& index_slot,
                                int access_size, uintptr_t* offset) {
     if (!index_slot.is_const()) return false;
@@ -2900,7 +2876,6 @@ class LiftoffCompiler {
 
       CODE_COMMENT("load from memory");
       LiftoffRegList pinned = LiftoffRegList::ForRegs(index);
-      index = AddMemoryMasking(index, &offset, &pinned);
 
       // Load the memory start address only now to reduce register pressure
       // (important on ia32).
@@ -2945,7 +2920,6 @@ class LiftoffCompiler {
 
     uintptr_t offset = imm.offset;
     LiftoffRegList pinned = LiftoffRegList::ForRegs(index);
-    index = AddMemoryMasking(index, &offset, &pinned);
     CODE_COMMENT("load with transformation");
     Register addr = GetMemoryStart(pinned);
     LiftoffRegister value = __ GetUnusedRegister(reg_class_for(kS128), {});
@@ -2985,7 +2959,6 @@ class LiftoffCompiler {
 
     uintptr_t offset = imm.offset;
     pinned.set(index);
-    index = AddMemoryMasking(index, &offset, &pinned);
     CODE_COMMENT("load lane");
     Register addr = GetMemoryStart(pinned);
     LiftoffRegister result = __ GetUnusedRegister(reg_class_for(kS128), {});
@@ -3031,7 +3004,6 @@ class LiftoffCompiler {
       if (index == no_reg) return;
 
       pinned.set(index);
-      index = AddMemoryMasking(index, &offset, &pinned);
       CODE_COMMENT("store to memory");
       uint32_t protected_store_pc = 0;
       // Load the memory start address only now to reduce register pressure
@@ -3066,7 +3038,6 @@ class LiftoffCompiler {
 
     uintptr_t offset = imm.offset;
     pinned.set(index);
-    index = AddMemoryMasking(index, &offset, &pinned);
     CODE_COMMENT("store lane to memory");
     Register addr = pinned.set(GetMemoryStart(pinned));
     uint32_t protected_store_pc = 0;
@@ -4348,7 +4319,6 @@ class LiftoffCompiler {
     pinned.set(index);
     AlignmentCheckMem(decoder, type.size(), imm.offset, index, pinned);
     uintptr_t offset = imm.offset;
-    index = AddMemoryMasking(index, &offset, &pinned);
     CODE_COMMENT("atomic store to memory");
     Register addr = pinned.set(GetMemoryStart(pinned));
     LiftoffRegList outer_pinned;
@@ -4371,7 +4341,6 @@ class LiftoffCompiler {
     LiftoffRegList pinned = LiftoffRegList::ForRegs(index);
     AlignmentCheckMem(decoder, type.size(), imm.offset, index, pinned);
     uintptr_t offset = imm.offset;
-    index = AddMemoryMasking(index, &offset, &pinned);
     CODE_COMMENT("atomic load from memory");
     Register addr = pinned.set(GetMemoryStart(pinned));
     RegClass rc = reg_class_for(kind);
@@ -4419,7 +4388,6 @@ class LiftoffCompiler {
     AlignmentCheckMem(decoder, type.size(), imm.offset, index, pinned);
 
     uintptr_t offset = imm.offset;
-    index = AddMemoryMasking(index, &offset, &pinned);
     Register addr = pinned.set(GetMemoryStart(pinned));
 
     (asm_.*emit_fn)(addr, index, offset, value, result, type);
@@ -4442,7 +4410,6 @@ class LiftoffCompiler {
     AlignmentCheckMem(decoder, type.size(), imm.offset, index, pinned);
 
     uintptr_t offset = imm.offset;
-    index = AddMemoryMasking(index, &offset, &pinned);
     Register addr = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
     LOAD_INSTANCE_FIELD(addr, MemoryStart, kSystemPointerSize, pinned);
     __ emit_i32_add(addr, addr, index);
@@ -4475,7 +4442,6 @@ class LiftoffCompiler {
     AlignmentCheckMem(decoder, type.size(), imm.offset, index, pinned);
 
     uintptr_t offset = imm.offset;
-    index = AddMemoryMasking(index, &offset, &pinned);
     Register addr = pinned.set(GetMemoryStart(pinned));
     LiftoffRegister result =
         pinned.set(__ GetUnusedRegister(reg_class_for(result_kind), pinned));
@@ -4522,7 +4488,6 @@ class LiftoffCompiler {
                       pinned);
 
     uintptr_t offset = imm.offset;
-    index_reg = AddMemoryMasking(index_reg, &offset, &pinned);
     Register index_plus_offset =
         __ cache_state()->is_used(LiftoffRegister(index_reg))
             ? pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp()
@@ -4539,8 +4504,7 @@ class LiftoffCompiler {
         __ cache_state()->stack_state.end()[-2];
     LiftoffAssembler::VarState index = __ cache_state()->stack_state.end()[-3];
 
-    // We have to set the correct register for the index. It may have changed
-    // above in {AddMemoryMasking}.
+    // We have to set the correct register for the index.
     index.MakeRegister(LiftoffRegister(index_plus_offset));
 
     static constexpr WasmCode::RuntimeStubId kTargets[2][2]{
@@ -4570,7 +4534,6 @@ class LiftoffCompiler {
     AlignmentCheckMem(decoder, kInt32Size, imm.offset, index_reg, pinned);
 
     uintptr_t offset = imm.offset;
-    index_reg = AddMemoryMasking(index_reg, &offset, &pinned);
     Register index_plus_offset =
         __ cache_state()->is_used(LiftoffRegister(index_reg))
             ? pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp()
@@ -5785,28 +5748,6 @@ class LiftoffCompiler {
     }
     __ emit_cond_jump(kUnsignedGreaterEqual, invalid_func_label, kI32, index,
                       tmp_const);
-
-    // Mask the index to prevent SSCA.
-    if (FLAG_untrusted_code_mitigations) {
-      CODE_COMMENT("Mask indirect call index");
-      // mask = ((index - size) & ~index) >> 31
-      // Reuse allocated registers; note: size is still stored in {tmp_const}.
-      Register diff = table;
-      Register neg_index = tmp_const;
-      Register mask = scratch;
-      // 1) diff = index - size
-      __ emit_i32_sub(diff, index, tmp_const);
-      // 2) neg_index = ~index
-      __ LoadConstant(LiftoffRegister(neg_index), WasmValue(int32_t{-1}));
-      __ emit_i32_xor(neg_index, neg_index, index);
-      // 3) mask = diff & neg_index
-      __ emit_i32_and(mask, diff, neg_index);
-      // 4) mask = mask >> 31
-      __ emit_i32_sari(mask, mask, 31);
-
-      // Apply mask.
-      __ emit_i32_and(index, index, mask);
-    }
 
     CODE_COMMENT("Check indirect call signature");
     // Load the signature from {instance->ift_sig_ids[key]}
