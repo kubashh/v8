@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d63cb5e_239d1f79",
+        "filename": "src/objects/fixed-array-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T12:56:29Z",
+      "side": 1,
+      "message": "nit: currently unused",
+      "range": {
+        "startLine": 449,
+        "startChar": 62,
+        "endLine": 451,
+        "endChar": 71
+      },
+      "revId": "f17fa40ee1768d0ed12ae55d3ba8bf91568c0aee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f743559b_c727a177",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T12:56:29Z",
+      "side": 1,
+      "message": "I still don\u0027t understand fully what you\u0027re doing here.\nI think I\u0027m confused about the name IsFunction is always true, since these are flags for functions.",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 32
+      },
+      "revId": "f17fa40ee1768d0ed12ae55d3ba8bf91568c0aee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2050a75c_76e27a47",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T12:56:29Z",
+      "side": 1,
+      "message": "This is rather hard to understand, subtraction for bit manipulation is not ideal.\n\nCan you directly use ::kMask here (and above)?",
+      "range": {
+        "startLine": 155,
+        "startChar": 17,
+        "endLine": 156,
+        "endChar": 58
+      },
+      "revId": "f17fa40ee1768d0ed12ae55d3ba8bf91568c0aee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ead2b8fc_a37ec6f5",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T12:56:29Z",
+      "side": 1,
+      "message": "nit: drop ! and flip ternary parameters.",
+      "range": {
+        "startLine": 179,
+        "startChar": 1,
+        "endLine": 180,
+        "endChar": 62
+      },
+      "revId": "f17fa40ee1768d0ed12ae55d3ba8bf91568c0aee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
