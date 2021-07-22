@@ -487,7 +487,7 @@ class V8_BASE_EXPORT ThreadTicks final
   // Similar to Now() above except this returns thread-specific CPU time for an
   // arbitrary thread. All comments for Now() method above apply apply to this
   // method as well.
-  static ThreadTicks GetForThread(const HANDLE& thread_handle);
+  static ThreadTicks GetForThread(const void*& thread_handle);
 #endif
 
  private:

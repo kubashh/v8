@@ -33,9 +33,9 @@
 #define _WIN32_WINNT 0x0600
 #endif
 
-#include <windows.h>
+//#include <windows.h>
 
-#include <mmsystem.h>  // For timeGetTime().
+//#include <mmsystem.h>  // For timeGetTime().
 #include <signal.h>  // For raise().
 #include <time.h>  // For LocalOffset() implementation.
 #ifdef __MINGW32__
@@ -45,22 +45,64 @@
 #define _WIN32_WINNT 0x501
 #endif  // __MINGW32__
 #if !defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR)
-#include <dbghelp.h>         // For SymLoadModule64 and al.
+//#include <dbghelp.h>         // For SymLoadModule64 and al.
 #include <errno.h>           // For STRUNCATE
-#include <versionhelpers.h>  // For IsWindows8OrGreater().
+//#include <versionhelpers.h>  // For IsWindows8OrGreater().
 #endif  // !defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR)
 #include <limits.h>  // For INT_MAX and al.
-#include <tlhelp32.h>  // For Module32First and al.
+//#include <tlhelp32.h>  // For Module32First and al.
 
 // These additional WIN32 includes have to be right here as the #undef's below
 // makes it impossible to have them elsewhere.
-#include <winsock2.h>
-#include <ws2tcpip.h>
+//#include <winsock2.h>
+//#include <ws2tcpip.h>
 #ifndef __MINGW32__
-#include <wspiapi.h>
+//#include <wspiapi.h>
 #endif  // __MINGW32__
 #include <process.h>  // For _beginthreadex().
 #include <stdlib.h>
+
+typedef unsigned long DWORD;
+typedef int BOOL;
+typedef void* LPVOID;
+typedef void* PVOID;
+
+typedef struct _RTL_SRWLOCK RTL_SRWLOCK;
+typedef RTL_SRWLOCK SRWLOCK, *PSRWLOCK;
+
+typedef struct _RTL_CONDITION_VARIABLE RTL_CONDITION_VARIABLE;
+typedef RTL_CONDITION_VARIABLE CONDITION_VARIABLE;
+
+// Declare V8 versions of some Windows structures. These are needed for
+// when we need a concrete type but don't want to pull in Windows.h. We can't
+// declare the Windows types so we declare our types and cast to the Windows
+// types in a few places. The sizes must match the Windows types so we verify
+// that with static asserts in win_includes_unittest.cc.
+// ChromeToWindowsType functions are provided for pointer conversions.
+
+struct V8_SRWLOCK {
+  PVOID Ptr;
+};
+
+struct V8_CONDITION_VARIABLE {
+  PVOID Ptr;
+};
+
+inline SRWLOCK* V8ToWindowsType(V8_SRWLOCK* p) {
+  return reinterpret_cast<SRWLOCK*>(p);
+}
+
+inline const SRWLOCK* V8ToWindowsType(const V8_SRWLOCK* p) {
+  return reinterpret_cast<const SRWLOCK*>(p);
+}
+
+inline CONDITION_VARIABLE* V8ToWindowsType(V8_CONDITION_VARIABLE* p) {
+  return reinterpret_cast<CONDITION_VARIABLE*>(p);
+}
+
+inline const CONDITION_VARIABLE* V8ToWindowsType(const V8_CONDITION_VARIABLE* p) {
+  return reinterpret_cast<const CONDITION_VARIABLE*>(p);
+}
 
 #undef VOID
 #undef DELETE

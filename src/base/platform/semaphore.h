@@ -60,7 +60,7 @@ class V8_BASE_EXPORT Semaphore final {
 #elif V8_OS_POSIX
   using NativeHandle = sem_t;
 #elif V8_OS_WIN
-  using NativeHandle = HANDLE;
+  using NativeHandle = void*; //HANDLE;
 #elif V8_OS_STARBOARD
   using NativeHandle = starboard::Semaphore;
 #endif
