@@ -12,6 +12,7 @@
 #include "src/codegen/arm/assembler-arm.h"
 #include "src/codegen/bailout-reason.h"
 #include "src/common/globals.h"
+#include "src/deoptimizer/deoptimizer.h"
 #include "src/objects/tagged-index.h"
 
 namespace v8 {
