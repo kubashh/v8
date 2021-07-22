@@ -238,6 +238,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5799e4bb_fb0bcc9b",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-22T14:42:36Z",
+      "side": 1,
+      "message": "I changed these as explained offline.",
+      "parentUuid": "874d77d4_8aa0ca01",
+      "range": {
+        "startLine": 155,
+        "startChar": 17,
+        "endLine": 156,
+        "endChar": 58
+      },
+      "revId": "f17fa40ee1768d0ed12ae55d3ba8bf91568c0aee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ead2b8fc_a37ec6f5",
         "filename": "src/web-snapshot/web-snapshot.cc",
         "patchSetId": 22
