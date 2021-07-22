@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34a4476d_4319e3b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-22T20:31:36Z",
+      "side": 1,
+      "message": "This shows roughly what would be done to remove windows.h. I can\u0027t find a win32 ubsan bot and I suspect that Windows builds are filled with aliasing (VC++ has never penalized it) so I\u0027m inclined to say that the aliasing issues are not a blocker.\n\nIt may be that this just needs some cleanup and then giving CRITICAL_SECTION the V8_CRITICAL_SECTION treatment. Or, it may be that other issues will be found. We\u0027ll see.\n\nAnyway, let me know whether the concept seems sound. If so I\u0027ll clean this up and add V8_CRITICAL_SECTION to the mix.",
+      "revId": "23eb8ef71e9a8ed95dd259c72f2530933925cc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
