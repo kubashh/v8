@@ -1009,6 +1009,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "111dbb4f_75911524",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T13:25:31Z",
+      "side": 1,
+      "message": "Ah sorry, this is the method you added.",
+      "parentUuid": "b93a7ac9_c3744031",
+      "range": {
+        "startLine": 1163,
+        "startChar": 29,
+        "endLine": 1163,
+        "endChar": 51
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "234d8991_925ffdab",
