@@ -724,6 +724,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "470f165f_7a1d9e2d",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T08:10:29Z",
+      "side": 1,
+      "message": "I guess if you keep the default case below, the current code works best.",
+      "parentUuid": "e4ad83e2_f251fe9a",
+      "range": {
+        "startLine": 1004,
+        "startChar": 0,
+        "endLine": 1004,
+        "endChar": 53
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c88dbf9_3c05420a",
@@ -926,6 +950,30 @@
       "side": 1,
       "message": "Renamed `MapType` to `PropertyAttributesType` and changed the values to `DEFAULT` and `CUSTOM`. Is that OK?",
       "parentUuid": "234d8991_925ffdab",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 61,
+        "endChar": 14
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9acbe9b1_e03c24e7",
+        "filename": "src/web-snapshot/web-snapshot.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-22T08:10:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a70bf77_688afe2f",
       "range": {
         "startLine": 61,
         "startChar": 7,
