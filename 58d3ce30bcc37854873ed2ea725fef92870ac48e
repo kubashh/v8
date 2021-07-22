@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b523bb6f_77fcd2e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2021-07-22T15:47:34Z",
+      "side": 1,
+      "message": "@shu can you help me to submit this patch to the CQ if the patch is looking good to you? Thanks!",
+      "revId": "58d3ce30bcc37854873ed2ea725fef92870ac48e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
