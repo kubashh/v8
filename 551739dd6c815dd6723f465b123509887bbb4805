@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a783dfe3_dbde79a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-07-22T18:18:35Z",
+      "side": 1,
+      "message": "Hi Ross,\n\nAs per this issue: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1231999#c7\nWe have modified the S390 path under the OWNERS file. Our code reviews\nhave not been going through for the past 2 days.\n\nSeems like we need to do the same for PPC.",
+      "revId": "551739dd6c815dd6723f465b123509887bbb4805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
