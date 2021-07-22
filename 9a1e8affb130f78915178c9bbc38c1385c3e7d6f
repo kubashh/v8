@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "046ac311_a2fd315d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-22T09:55:22Z",
+      "side": 1,
+      "message": "@Maya,\n\nI have modified the code to check whether a JSArray has a custom iterator inside CopyAndConvertArrayToCppBufferImpl rather than adding a new public API Array::HasCustomIterator().\n\nNow CopyAndConvertArrayToCppBufferImpl() calls JSArray::IterationHasObservableEffects() and returns false if IterationHasObservableEffects() returns true. \n\nHowever this does not work, and I need help to find a fix.\nThe problem is inside IterationHasObservableEffects, in the call to isolate-\u003eis_initial_array_prototype(array_proto), which uses the Isolate NativeContext.\n\nThe call to Isolate::raw_native_context() fails because in Isolate:\n\n  Context context() const { return thread_local_top()-\u003econtext_; }\n\nreturns an invalid Context (ptr_ \u003d\u003d 1).\n\nHere we are in a FastCApi callback and I see that the thread_local_top context_address location gets overwritten during this call.\n\nSo, is the problem that we cannot use the Context because we are not in a JS stack frame? If that is the case, is it possible to check whether a JSArray has a custom iterator from CopyAndConvertArrayToCppBuffer?\n\n\n \tv8.dll!v8::internal::Object::IterationHasObservableEffects() Line 1772\tC++\n \td8.exe!v8::CopyAndConvertArrayToCppBufferImpl\u003c\u0026v8::(anonymous namespace)::FastCApiObject::type_info,double\u003e(v8::Local\u003cv8::Array\u003e src, double * dst, unsigned int max_length) Line 280\tC++\n \td8.exe!v8::CopyAndConvertArrayToCppBuffer\u003c\u0026v8::(anonymous namespace)::FastCApiObject::type_info,double\u003e(v8::Local\u003cv8::Array\u003e src, double * dst, unsigned int max_length) Line 302\tC++\n \td8.exe!v8::`anonymous namespace\u0027::FastCApiObject::AddAllSequenceFastCallback(v8::Local\u003cv8::Object\u003e receiver, bool should_fallback, v8::Local\u003cv8::Array\u003e seq_arg, v8::FastApiCallbackOptions \u0026 options) Line 122\tC++\n\n\n  bool Object::IterationHasObservableEffects() {\n    // Check that this object is an array.\n    if (!IsJSArray()) return true;\n    JSArray array \u003d JSArray::cast(*this);\n    Isolate* isolate \u003d array.GetIsolate();\n\n  #ifdef V8_ENABLE_FORCE_SLOW_PATH\n    if (isolate-\u003eforce_slow_path()) return true;\n  #endif\n\n    // Check that we have the original ArrayPrototype.\n    if (!array.map().prototype().IsJSObject()) return true;\n    JSObject array_proto \u003d JSObject::cast(array.map().prototype());\n    \n    if (!isolate-\u003eis_initial_array_prototype(array_proto)) return true;   \u003c\u003d\u003d\u003d crash here\n\n    // Check that the ArrayPrototype hasn\u0027t been modified in a way that would\n    // affect iteration.\n    if (!Protectors::IsArrayIteratorLookupChainIntact(isolate)) return true;\n\n    // For FastPacked kinds, iteration will have the same effect as simply\n    // accessing each property in order.\n    ElementsKind array_kind \u003d array.GetElementsKind();\n    if (IsFastPackedElementsKind(array_kind)) return false;\n\n    // For FastHoley kinds, an element access on a hole would cause a lookup on\n    // the prototype. This could have different results if the prototype has been\n    // changed.\n    if (IsHoleyElementsKind(array_kind) \u0026\u0026\n        Protectors::IsNoElementsIntact(isolate)) {\n      return false;\n    }\n    return true;\n  }\n",
+      "revId": "9a1e8affb130f78915178c9bbc38c1385c3e7d6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
