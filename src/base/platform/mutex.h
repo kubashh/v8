@@ -66,7 +66,7 @@ class V8_BASE_EXPORT Mutex final {
 #if V8_OS_POSIX
   using NativeHandle = pthread_mutex_t;
 #elif V8_OS_WIN
-  using NativeHandle = SRWLOCK;
+  using NativeHandle = V8_SRWLOCK;
 #elif V8_OS_STARBOARD
   using NativeHandle = SbMutex;
 #endif
@@ -171,6 +171,7 @@ class V8_BASE_EXPORT RecursiveMutex final {
 #if V8_OS_POSIX
   using NativeHandle = pthread_mutex_t;
 #elif V8_OS_WIN
+  // Needs V8_CRITICAL_SECTION defined.
   using NativeHandle = CRITICAL_SECTION;
 #elif V8_OS_STARBOARD
   using NativeHandle = starboard::RecursiveMutex;
@@ -268,7 +269,7 @@ class V8_BASE_EXPORT SharedMutex final {
 #if V8_OS_POSIX
   using NativeHandle = pthread_rwlock_t;
 #elif V8_OS_WIN
-  using NativeHandle = SRWLOCK;
+  using NativeHandle = V8_SRWLOCK;
 #elif V8_OS_STARBOARD
   using NativeHandle = starboard::RWLock;
 #endif
