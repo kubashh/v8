@@ -465,6 +465,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1744957_2e1d5129",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-22T12:46:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2124fc66_aabd6e84",
+      "range": {
+        "startLine": 385,
+        "startChar": 2,
+        "endLine": 387,
+        "endChar": 5
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c145fdc8_1a70a6b5",
@@ -573,6 +597,30 @@
       "side": 1,
       "message": "I had in mind resetting deferred_references_ to an ArrayList of size 0 in ProcessDeferredReferences and then you can just DCHECK this.",
       "parentUuid": "03a44067_f2a542ff",
+      "range": {
+        "startLine": 765,
+        "startChar": 0,
+        "endLine": 765,
+        "endChar": 30
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1acfd73_7b4c82f3",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-22T12:46:33Z",
+      "side": 1,
+      "message": "I set the length to 0, as discussed offline.",
+      "parentUuid": "e0b7d3b2_962969c6",
       "range": {
         "startLine": 765,
         "startChar": 0,
@@ -771,6 +819,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "049a5d2d_3b560395",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-22T12:46:33Z",
+      "side": 1,
+      "message": "As discussed offline, we\u0027ll leave this as is for now.",
+      "parentUuid": "2c88dbf9_3c05420a",
+      "range": {
+        "startLine": 1027,
+        "startChar": 0,
+        "endLine": 1028,
+        "endChar": 42
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "218c39fd_61a79c77",
@@ -903,6 +975,30 @@
       "side": 1,
       "message": "Indirect \"yes\", you can just drop it, kYoung is the default argument.",
       "parentUuid": "93bd61c2_29fe4e19",
+      "range": {
+        "startLine": 1163,
+        "startChar": 29,
+        "endLine": 1163,
+        "endChar": 51
+      },
+      "revId": "126eb140f811a5a07bdce2ab7f92b0ff26b85004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b93a7ac9_c3744031",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-22T12:46:33Z",
+      "side": 1,
+      "message": "There is no default argument here.",
+      "parentUuid": "ab0c27a8_623d1b17",
       "range": {
         "startLine": 1163,
         "startChar": 29,
