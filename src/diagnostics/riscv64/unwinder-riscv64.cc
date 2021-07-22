@@ -6,6 +6,8 @@
 
 namespace v8 {
 
+class RegisterState;
+
 void GetCalleeSavedRegistersFromEntryFrame(void* fp,
                                            RegisterState* register_state) {}
 
