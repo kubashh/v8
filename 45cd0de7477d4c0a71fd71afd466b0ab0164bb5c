@@ -139,6 +139,23 @@
       "message": "It looks like the asan bot is green now. Thank you for your effort of fixing all the test failures.",
       "revId": "45cd0de7477d4c0a71fd71afd466b0ab0164bb5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a689682c_2409b524",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-07-23T14:29:44Z",
+      "side": 1,
+      "message": "Hannes, ptal. The code is unchanged from the review and 2 independent issues in Blink have been fixed to make this CL possible.",
+      "revId": "45cd0de7477d4c0a71fd71afd466b0ab0164bb5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
