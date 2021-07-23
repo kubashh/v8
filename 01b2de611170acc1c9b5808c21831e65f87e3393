@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e11f6952_56af1264",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-23T06:35:17Z",
+      "side": 1,
+      "message": "lgtm with comments below",
+      "revId": "01b2de611170acc1c9b5808c21831e65f87e3393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79de4451_23105a30",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-23T06:35:17Z",
+      "side": 1,
+      "message": "Mega-nit: is it possible to write this without branches:\n\nReadOnlyBitField::decode(flags) * READ_ONLY + !ConfigurableBitField::decode(flags) * DONT_DELETE + !EnumerableBitField::decode(flags) * DONT_ENUM",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 61
+      },
+      "revId": "01b2de611170acc1c9b5808c21831e65f87e3393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41b87765_a1c28643",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-23T06:35:17Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be after everything else? IMO the interesting thing to assert here is that nothing we do after ProcessDeferredReferences creates more deferred references.",
+      "range": {
+        "startLine": 791,
+        "startChar": 2,
+        "endLine": 791,
+        "endChar": 46
+      },
+      "revId": "01b2de611170acc1c9b5808c21831e65f87e3393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2f646f9_48955a54",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-23T06:35:17Z",
+      "side": 1,
+      "message": "You\u0027re over-over-allocating here since shared_function_infos_ is already overallocated before. How about CapacityForLength(function_count_ + 1 + class_count_)?",
+      "range": {
+        "startLine": 1194,
+        "startChar": 39,
+        "endLine": 1194,
+        "endChar": 71
+      },
+      "revId": "01b2de611170acc1c9b5808c21831e65f87e3393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92365c9a_02c4fb65",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 24
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-23T06:35:17Z",
+      "side": 1,
+      "message": "These look like spurious changes, is some formatter doing this or what\u0027s going on here?",
+      "range": {
+        "startLine": 16,
+        "startChar": 33,
+        "endLine": 16,
+        "endChar": 34
+      },
+      "revId": "01b2de611170acc1c9b5808c21831e65f87e3393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
