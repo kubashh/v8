@@ -51,6 +51,15 @@ namespace base {
 
 #if V8_CC_MSVC && V8_HOST_ARCH_IA32
 
+#include <intrin.h>
+// Some versions of clang's intrin.h lack a declaration for __readfsdword so we
+// explicitly include one. The error message is:
+// note: include the header <intrin.h> or explicitly provide a declaration for
+// '__readfsdword'
+unsigned int __readfsdword(unsigned long);
+
+#include <emmintrin.h> // Just needed for src/heap/setup-heap-internal.cc and others.
+
 #define V8_FAST_TLS_SUPPORTED 1
 
 V8_INLINE intptr_t InternalGetExistingThreadLocal(intptr_t index);

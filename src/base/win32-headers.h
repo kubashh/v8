@@ -33,9 +33,9 @@
 #define _WIN32_WINNT 0x0600
 #endif
 
-#include <windows.h>
+//#include <windows.h>
 
-#include <mmsystem.h>  // For timeGetTime().
+//#include <mmsystem.h>  // For timeGetTime().
 #include <signal.h>  // For raise().
 #include <time.h>  // For LocalOffset() implementation.
 #ifdef __MINGW32__
@@ -45,23 +45,97 @@
 #define _WIN32_WINNT 0x501
 #endif  // __MINGW32__
 #if !defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR)
-#include <dbghelp.h>         // For SymLoadModule64 and al.
+//#include <dbghelp.h>         // For SymLoadModule64 and al.
 #include <errno.h>           // For STRUNCATE
-#include <versionhelpers.h>  // For IsWindows8OrGreater().
+//#include <versionhelpers.h>  // For IsWindows8OrGreater().
 #endif  // !defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR)
 #include <limits.h>  // For INT_MAX and al.
-#include <tlhelp32.h>  // For Module32First and al.
+//#include <tlhelp32.h>  // For Module32First and al.
 
 // These additional WIN32 includes have to be right here as the #undef's below
 // makes it impossible to have them elsewhere.
-#include <winsock2.h>
-#include <ws2tcpip.h>
+//#include <winsock2.h>
+//#include <ws2tcpip.h>
 #ifndef __MINGW32__
-#include <wspiapi.h>
+//#include <wspiapi.h>
 #endif  // __MINGW32__
 #include <process.h>  // For _beginthreadex().
 #include <stdlib.h>
 
+typedef int BOOL;
+typedef unsigned long DWORD;
+typedef long LONG;
+typedef void* LPVOID;
+typedef void* PVOID;
+typedef void* HANDLE;
+
+#define WINAPI __stdcall
+
+#if defined(_WIN64)
+typedef unsigned __int64 ULONG_PTR, *PULONG_PTR;
+#else
+typedef __w64 unsigned long ULONG_PTR, *PULONG_PTR;
+#endif
+
+typedef struct _RTL_SRWLOCK RTL_SRWLOCK;
+typedef RTL_SRWLOCK SRWLOCK, *PSRWLOCK;
+
+typedef struct _RTL_CONDITION_VARIABLE RTL_CONDITION_VARIABLE;
+typedef RTL_CONDITION_VARIABLE CONDITION_VARIABLE;
+
+typedef struct _RTL_CRITICAL_SECTION CRITICAL_SECTION;
+typedef struct _RTL_CRITICAL_SECTION_DEBUG* PRTL_CRITICAL_SECTION_DEBUG;
+
+// Declare V8 versions of some Windows structures. These are needed for
+// when we need a concrete type but don't want to pull in Windows.h. We can't
+// declare the Windows types so we declare our types and cast to the Windows
+// types in a few places. The sizes must match the Windows types so we verify
+// that with static asserts in platform-win32.cc.
+// ChromeToWindowsType functions are provided for pointer conversions.
+
+struct V8_SRWLOCK {
+  PVOID Ptr;
+};
+
+struct V8_CONDITION_VARIABLE {
+  PVOID Ptr;
+};
+
+struct V8_CRITICAL_SECTION {
+  PRTL_CRITICAL_SECTION_DEBUG DebugInfo;
+  LONG LockCount;
+  LONG RecursionCount;
+  HANDLE OwningThread;
+  HANDLE LockSemaphore;
+  ULONG_PTR SpinCount;
+};
+
+inline SRWLOCK* V8ToWindowsType(V8_SRWLOCK* p) {
+  return reinterpret_cast<SRWLOCK*>(p);
+}
+
+inline const SRWLOCK* V8ToWindowsType(const V8_SRWLOCK* p) {
+  return reinterpret_cast<const SRWLOCK*>(p);
+}
+
+inline CONDITION_VARIABLE* V8ToWindowsType(V8_CONDITION_VARIABLE* p) {
+  return reinterpret_cast<CONDITION_VARIABLE*>(p);
+}
+
+inline const CONDITION_VARIABLE* V8ToWindowsType(
+    const V8_CONDITION_VARIABLE* p) {
+  return reinterpret_cast<const CONDITION_VARIABLE*>(p);
+}
+
+inline CRITICAL_SECTION* V8ToWindowsType(V8_CRITICAL_SECTION* p) {
+  return reinterpret_cast<CRITICAL_SECTION*>(p);
+}
+
+inline const CRITICAL_SECTION* V8ToWindowsType(const V8_CRITICAL_SECTION* p) {
+  return reinterpret_cast<const CRITICAL_SECTION*>(p);
+}
+
+/*
 #undef VOID
 #undef DELETE
 #undef IN
@@ -80,5 +154,6 @@
 #undef RotateLeft32
 #undef RotateRight64
 #undef RotateLeft64
+*/
 
 #endif  // V8_BASE_WIN32_HEADERS_H_

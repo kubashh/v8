@@ -130,8 +130,10 @@
 #endif
 
 #if V8_OS_WIN
-#include <versionhelpers.h>
+// This has to be first but "git cl format" likes to move it.
 #include <windows.h>
+
+#include <versionhelpers.h>
 
 #include "include/v8-wasm-trap-handler-win.h"
 #include "src/trap-handler/handler-inside-win.h"
