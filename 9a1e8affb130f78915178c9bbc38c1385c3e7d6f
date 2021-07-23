@@ -51,6 +51,24 @@
       "message": "Thanks!",
       "revId": "9a1e8affb130f78915178c9bbc38c1385c3e7d6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d82cd3b7_74ceb67d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-23T14:41:22Z",
+      "side": 1,
+      "message": "I modified CopyAndConvertArrayToCppBuffer to use a different version of JSArray::IterationHasObservableEffects, implemented to retrieve the initial_array_prototype from array-\u003eCreationContext() and not from the Isolate.\n\nThis seems to fix the problem we are having with Context not being available to the Isolate in an API callback. But we really need to double check this solution.",
+      "parentUuid": "3d81af4f_250d0711",
+      "revId": "9a1e8affb130f78915178c9bbc38c1385c3e7d6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
