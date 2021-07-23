@@ -16,6 +16,40 @@
       "message": "As per this issue: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1231999#c7\nWe have modified the PPC path under the OWNERS file. Our code reviews\nhave not been going through for the past 2 days.",
       "revId": "4931e73b3b9cef60e0b563da37df3de437277ba1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaabbe3d_c3e734e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-07-23T07:13:12Z",
+      "side": 1,
+      "message": "lgtm on the owners change and stamp on the rest. Hannes for owners stamp as Ross is OOO.",
+      "revId": "4931e73b3b9cef60e0b563da37df3de437277ba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa640a84_08b36c01",
+        "filename": "OWNERS",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-07-23T07:13:12Z",
+      "side": 1,
+      "message": "Maybe we should just update this for all of those entries? They all stop working according to the bug.",
+      "revId": "4931e73b3b9cef60e0b563da37df3de437277ba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
