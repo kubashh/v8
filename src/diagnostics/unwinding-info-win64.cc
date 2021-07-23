@@ -17,6 +17,11 @@
 #error "Unsupported OS"
 #endif  // V8_OS_WIN_X64
 
+// This has to be first but "git cl format" likes to move it.
+#include <windows.h>
+
+#include <versionhelpers.h>  // For IsWindows8OrGreater().
+
 namespace v8 {
 namespace internal {
 namespace win64_unwindinfo {

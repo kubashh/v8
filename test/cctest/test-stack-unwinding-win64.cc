@@ -12,6 +12,10 @@
 #define CONTEXT_PC(context) (context.Pc)
 #endif
 
+#include <windows.h>
+
+#include <versionhelpers.h>  // For IsWindows8OrGreater().
+
 class UnwindingWin64Callbacks {
  public:
   UnwindingWin64Callbacks() = default;
