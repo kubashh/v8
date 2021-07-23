@@ -16,6 +16,24 @@
       "message": "This is coming together faster than I thought. I can do 64-bit builds of Chrome with this change. 32-bit builds and all of the test targets will take some more work but this seems like a good time to get a sanity check.\n\nOne trivial thing I\u0027m not sure how to fix is the include ordering - git cl format keeps moving windows.h down. In Chrome you just need a blank line between them, but that doesn\u0027t work in v8. Thoughts?\n\nIf we\u0027re going to move forward then this can be landed in pieces. It\u0027s all easy until windows.h gets removed. Let me know if you have thoughts on the ideal sizing. I\u0027m not opposed to doing it all in one if that seems better.\n",
       "revId": "7e9c0390d5a15ca1662f7220c589e050e88408c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eee7ce34_56579f69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-23T03:03:27Z",
+      "side": 1,
+      "message": "I fixed most of the problems. The one remaining failure with __readfsdword is odd because I _do_ #include intrin.h. I\u0027m guessing this is a __MINGW32__ issue or cppgc issue or some-such - debug builds work fine on my machine.",
+      "parentUuid": "10907d8a_dbcc0c70",
+      "revId": "7e9c0390d5a15ca1662f7220c589e050e88408c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
