@@ -122,6 +122,23 @@
       "parentUuid": "106c522a_e6be30f2",
       "revId": "45cd0de7477d4c0a71fd71afd466b0ab0164bb5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46bfdda0_4cdef3e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1148154
+      },
+      "writtenOn": "2021-07-23T14:18:58Z",
+      "side": 1,
+      "message": "It looks like the asan bot is green now. Thank you for your effort of fixing all the test failures.",
+      "revId": "45cd0de7477d4c0a71fd71afd466b0ab0164bb5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
