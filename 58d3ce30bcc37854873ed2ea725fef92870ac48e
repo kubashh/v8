@@ -16,6 +16,23 @@
       "message": "@shu can you help me to submit this patch to the CQ if the patch is looking good to you? Thanks!",
       "revId": "58d3ce30bcc37854873ed2ea725fef92870ac48e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d629ae6f_fdb4a64a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2021-07-23T00:59:52Z",
+      "side": 1,
+      "message": "Hi, Marja, can you take a look on this patch as you are one of the owners of src/init/bootstrapper.cc? Thanks!",
+      "revId": "58d3ce30bcc37854873ed2ea725fef92870ac48e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
