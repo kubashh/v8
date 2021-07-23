@@ -15,9 +15,15 @@
 #endif  // MINGW_HAS_SECURE_API
 #endif  // __MINGW32__
 
-#include <limits>
+// This has to be first but "git cl format" likes to move it.
+#include <windows.h>
 
-#include "src/base/win32-headers.h"
+#include <VersionHelpers.h>
+#include <dbghelp.h>   // For SymLoadModule64 and al.
+#include <mmsystem.h>  // For timeGetTime().
+#include <tlhelp32.h>  // For Module32First and al.
+
+#include <limits>
 
 #include "src/base/bits.h"
 #include "src/base/lazy-instance.h"
@@ -26,12 +32,18 @@
 #include "src/base/platform/time.h"
 #include "src/base/timezone-cache.h"
 #include "src/base/utils/random-number-generator.h"
-
-#include <VersionHelpers.h>
+#include "src/base/win32-headers.h"
 
 #if defined(_MSC_VER)
 #include <crtdbg.h>
 #endif               // defined(_MSC_VER)
+
+// Check that type sizes match.
+static_assert(sizeof(V8_CONDITION_VARIABLE) == sizeof(CONDITION_VARIABLE),
+              "Definition mismatch.");
+static_assert(sizeof(V8_SRWLOCK) == sizeof(SRWLOCK), "Definition mismatch.");
+static_assert(sizeof(V8_CRITICAL_SECTION) == sizeof(CRITICAL_SECTION),
+              "Definition mismatch.");
 
 // Extra functions for MinGW. Most of these are the _s functions which are in
 // the Microsoft Visual Studio C++ CRT.

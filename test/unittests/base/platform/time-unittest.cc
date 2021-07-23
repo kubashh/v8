@@ -13,6 +13,8 @@
 
 #if V8_OS_WIN
 #include "src/base/win32-headers.h"
+
+#include <Windows.h>
 #endif
 
 #include <vector>

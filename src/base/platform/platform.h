@@ -51,6 +51,8 @@ namespace base {
 
 #if V8_CC_MSVC && V8_HOST_ARCH_IA32
 
+#include <intrin.h>
+
 #define V8_FAST_TLS_SUPPORTED 1
 
 V8_INLINE intptr_t InternalGetExistingThreadLocal(intptr_t index);
