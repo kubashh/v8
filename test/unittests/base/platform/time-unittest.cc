@@ -12,6 +12,8 @@
 #endif
 
 #if V8_OS_WIN
+#include <Windows.h>
+
 #include "src/base/win32-headers.h"
 #endif
 
