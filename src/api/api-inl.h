@@ -9,6 +9,7 @@
 #include "src/api/api.h"
 #include "src/execution/interrupts-scope.h"
 #include "src/execution/microtask-queue.h"
+#include "src/execution/protectors.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/heap-inl.h"
 #include "src/objects/foreign-inl.h"
@@ -263,9 +264,42 @@ void CopyDoubleElementsToTypedBuffer(T* dst, uint32_t length,
   }
 }
 
+inline bool HasCustomIterator(Isolate* v8_isolate, i::JSArray array) {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  i::HandleScope handle_scope(isolate);
+
+  i::Handle<i::Context> context;
+  if (!array.GetCreationContext().ToHandle(&context)) return false;
+
+  // Check that we have the original ArrayPrototype.
+  auto initial_array_prototype =
+      context->native_context().initial_array_prototype();
+  if (!array.map().prototype().IsJSObject()) return true;
+  i::JSObject array_proto = i::JSObject::cast(array.map().prototype());
+  if (initial_array_prototype != array_proto) return true;
+
+  // Check that the ArrayPrototype hasn't been modified in a way that would
+  // affect iteration.
+  if (!i::Protectors::IsArrayIteratorLookupChainIntact(isolate)) return true;
+
+  // For FastPacked kinds, iteration will have the same effect as simply
+  // accessing each property in order.
+  i::ElementsKind array_kind = array.GetElementsKind();
+  if (IsFastPackedElementsKind(array_kind)) return false;
+
+  // For FastHoley kinds, an element access on a hole would cause a lookup on
+  // the prototype. This could have different results if the prototype has been
+  // changed.
+  if (IsHoleyElementsKind(array_kind) &&
+      i::Protectors::IsNoElementsIntact(isolate)) {
+    return false;
+  }
+  return true;
+}
+
 template <const CTypeInfo* type_info, typename T>
-bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
-                                    uint32_t max_length) {
+inline bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
+                                           uint32_t max_length) {
   static_assert(
       std::is_same<
           T, typename i::CTypeInfoTraits<type_info->GetType()>::ctype>::value,
@@ -273,12 +307,15 @@ bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
       "array");
 
   uint32_t length = src->Length();
-  if (length > max_length) {
-    return false;
-  }
+  if (length > max_length) return false;
 
   i::DisallowGarbageCollection no_gc;
+
   i::JSArray obj = *reinterpret_cast<i::JSArray*>(*src);
+  if (HasCustomIterator(src->GetIsolate(), obj)) {
+    // The array has a custom iterator.
+    return false;
+  }
 
   i::FixedArrayBase elements = obj.elements();
   switch (obj.GetElementsKind()) {
@@ -292,6 +329,13 @@ bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
     default:
       return false;
   }
+}
+
+template <const CTypeInfo* type_info, typename T>
+inline bool V8_EXPORT TryCopyAndConvertArrayToCppBuffer(Local<Array> src,
+                                                        T* dst,
+                                                        uint32_t max_length) {
+  return CopyAndConvertArrayToCppBuffer<type_info, T>(src, dst, max_length);
 }
 
 namespace internal {
