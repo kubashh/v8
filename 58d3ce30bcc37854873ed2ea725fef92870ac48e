@@ -33,6 +33,23 @@
       "message": "Hi, Marja, can you take a look on this patch as you are one of the owners of src/init/bootstrapper.cc? Thanks!",
       "revId": "58d3ce30bcc37854873ed2ea725fef92870ac48e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6fc2faa_71e88ca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-23T06:36:37Z",
+      "side": 1,
+      "message": "init/ rubberstamp lgtm",
+      "revId": "58d3ce30bcc37854873ed2ea725fef92870ac48e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
