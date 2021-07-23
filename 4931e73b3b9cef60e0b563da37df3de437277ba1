@@ -50,6 +50,24 @@
       "message": "Maybe we should just update this for all of those entries? They all stop working according to the bug.",
       "revId": "4931e73b3b9cef60e0b563da37df3de437277ba1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f9dd57d_17067a8d",
+        "filename": "OWNERS",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-07-23T13:11:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fa640a84_08b36c01",
+      "revId": "4931e73b3b9cef60e0b563da37df3de437277ba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
