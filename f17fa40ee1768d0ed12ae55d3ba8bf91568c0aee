@@ -95,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d7b752b_1d6cfa66",
+        "filename": "src/objects/fixed-array-inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-23T16:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ba57e0d_cf558f15",
+      "range": {
+        "startLine": 452,
+        "startChar": 16,
+        "endLine": 452,
+        "endChar": 67
+      },
+      "revId": "f17fa40ee1768d0ed12ae55d3ba8bf91568c0aee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "545a62da_6e7817c6",
@@ -189,6 +213,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2605547_25bde90c",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-23T16:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7af7f125_cf33cce8",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 32
+      },
+      "revId": "f17fa40ee1768d0ed12ae55d3ba8bf91568c0aee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2050a75c_76e27a47",
@@ -250,6 +298,30 @@
       "side": 1,
       "message": "I changed these as explained offline.",
       "parentUuid": "874d77d4_8aa0ca01",
+      "range": {
+        "startLine": 155,
+        "startChar": 17,
+        "endLine": 156,
+        "endChar": 58
+      },
+      "revId": "f17fa40ee1768d0ed12ae55d3ba8bf91568c0aee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfd73407_155e61fb",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-23T16:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5799e4bb_fb0bcc9b",
       "range": {
         "startLine": 155,
         "startChar": 17,

@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e20afbab_0db8310a",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-23T16:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79de4451_23105a30",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 61
+      },
+      "revId": "01b2de611170acc1c9b5808c21831e65f87e3393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41b87765_a1c28643",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-07-23T06:35:17Z",
       "side": 1,
       "message": "Shouldn\u0027t this be after everything else? IMO the interesting thing to assert here is that nothing we do after ProcessDeferredReferences creates more deferred references.",
+      "range": {
+        "startLine": 791,
+        "startChar": 2,
+        "endLine": 791,
+        "endChar": 46
+      },
+      "revId": "01b2de611170acc1c9b5808c21831e65f87e3393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ee760c_a6b1642d",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-23T16:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41b87765_a1c28643",
       "range": {
         "startLine": 791,
         "startChar": 2,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d3cc21_4e84cc6c",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-23T16:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2f646f9_48955a54",
+      "range": {
+        "startLine": 1194,
+        "startChar": 39,
+        "endLine": 1194,
+        "endChar": 71
+      },
+      "revId": "01b2de611170acc1c9b5808c21831e65f87e3393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92365c9a_02c4fb65",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-07-23T06:35:17Z",
       "side": 1,
       "message": "These look like spurious changes, is some formatter doing this or what\u0027s going on here?",
+      "range": {
+        "startLine": 16,
+        "startChar": 33,
+        "endLine": 16,
+        "endChar": 34
+      },
+      "revId": "01b2de611170acc1c9b5808c21831e65f87e3393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a24f282e_2784543c",
+        "filename": "test/mjsunit/web-snapshot/web-snapshot.js",
+        "patchSetId": 24
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1455481
+      },
+      "writtenOn": "2021-07-23T16:07:51Z",
+      "side": 1,
+      "message": "The formatter I use showed that the formatting was not great in this file, so I intentionally fixed it here, to not add a new CL.",
+      "parentUuid": "92365c9a_02c4fb65",
       "range": {
         "startLine": 16,
         "startChar": 33,
