@@ -301,9 +301,9 @@ RUNTIME_FUNCTION(Runtime_GetWasmExceptionId) {
   Handle<Object> tag =
       WasmExceptionPackage::GetExceptionTag(isolate, exception);
   CHECK(tag->IsWasmExceptionTag());
-  Handle<FixedArray> exceptions_table(instance->exceptions_table(), isolate);
-  for (int index = 0; index < exceptions_table->length(); ++index) {
-    if (exceptions_table->get(index) == *tag) return Smi::FromInt(index);
+  Handle<FixedArray> tags_table(instance->tags_table(), isolate);
+  for (int index = 0; index < tags_table->length(); ++index) {
+    if (tags_table->get(index) == *tag) return Smi::FromInt(index);
   }
   UNREACHABLE();
 }
