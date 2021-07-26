@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fe22356_87ecfbbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T06:01:58Z",
+      "side": 1,
+      "message": "Could you clarify the CL description? I don\u0027t see any new uses of (Try)CopyAndConvertArrayToCppBuffer.",
+      "revId": "3ded84ca7ce0cc81e5cd955452fb61368dabb703",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
