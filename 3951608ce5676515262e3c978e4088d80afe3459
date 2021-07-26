@@ -56,6 +56,48 @@
       "message": "Can we use \"alignof(void*)\" for the second template argument? It should be the same value, but it makes it more obvious that this is the alignment parameter.",
       "revId": "3951608ce5676515262e3c978e4088d80afe3459",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f2fe6f1_698e79e7",
+        "filename": "src/base/win32-headers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-26T16:23:41Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "a2e87ccd_d9384e86",
+      "revId": "3951608ce5676515262e3c978e4088d80afe3459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2119912d_46fb2918",
+        "filename": "src/base/win32-headers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-26T16:23:41Z",
+      "side": 1,
+      "message": "Hmmm. I think it\u0027s legal if we alias a void* to a void*, but aliasing a V8_SRWLOCK to an SWRLOCK is wrong, I think. It\u0027s all weird and confusing.\n\nIt\u0027s probably irrelevant in the Windows world because we will never compile with strict aliasing, so maybe it\u0027s a matter of what we prefer, aesthetically.\n\nThen again, I think maybe I\u0027m just misusing aligned_storage because I think I\u0027m supposed to construct and destruct the objects with the actual type. I\u0027m going to ask the compiler team.",
+      "parentUuid": "792d7721_557d1c83",
+      "range": {
+        "startLine": 89,
+        "startChar": 2,
+        "endLine": 89,
+        "endChar": 67
+      },
+      "revId": "3951608ce5676515262e3c978e4088d80afe3459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
