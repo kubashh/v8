@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15fd7d48_4253c079",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-26T07:04:50Z",
+      "side": 1,
+      "message": "lgtm with comments, thanks!",
+      "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c66935f_e97778c0",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-26T07:04:50Z",
+      "side": 1,
+      "message": "This comment belongs to the removed assert, please remove it too.",
+      "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c8a4153_f7d08a0d",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-26T07:04:50Z",
+      "side": 1,
+      "message": "Comments needs updating (\u0027arg 2\u0027 -\u003e \u0027arg 1\u0027)",
+      "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e70e18b_b15b133b",
+        "filename": "src/compiler/common-operator.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-26T07:04:50Z",
+      "side": 1,
+      "message": "nit: could remove the BranchOperatorInfo struct and replace it by BranchHint.",
+      "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16c5d0fe_650169ab",
+        "filename": "src/compiler/linkage.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-26T07:04:50Z",
+      "side": 1,
+      "message": "Please move this comment down below 1\u003c\u003c9 (InstructionCode has 10 bits).",
+      "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
