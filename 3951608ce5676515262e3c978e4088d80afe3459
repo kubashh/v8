@@ -16,6 +16,29 @@
       "message": "This is ready for review! PTAL.",
       "revId": "3951608ce5676515262e3c978e4088d80afe3459",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "792d7721_557d1c83",
+        "filename": "src/base/win32-headers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-26T08:42:00Z",
+      "side": 1,
+      "message": "re-reading the relevant parts of the spec here, I think actually \n\n  struct V8_SRWLOCK {\n    void*;\n  };\n\nwould be ok here (and similar below) after all, as long as it passes the size/align STATIC_ASSERT, because it\u0027s POD.\n\nWith newer C++ I guess this would also use std::launder, but whatever.",
+      "range": {
+        "startLine": 89,
+        "startChar": 2,
+        "endLine": 89,
+        "endChar": 67
+      },
+      "revId": "3951608ce5676515262e3c978e4088d80afe3459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
