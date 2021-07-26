@@ -39,6 +39,23 @@
       },
       "revId": "3951608ce5676515262e3c978e4088d80afe3459",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2e87ccd_d9384e86",
+        "filename": "src/base/win32-headers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-26T08:43:24Z",
+      "side": 1,
+      "message": "Can we use \"alignof(void*)\" for the second template argument? It should be the same value, but it makes it more obvious that this is the alignment parameter.",
+      "revId": "3951608ce5676515262e3c978e4088d80afe3459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
