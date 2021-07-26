@@ -33,6 +33,23 @@
       "message": "And can you mark this cl as active?",
       "revId": "2ac65216e3a6927e0e389c10efc3aa9baeae3ae2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "004c8e5e_a44d1a85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-07-26T13:38:11Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "2ac65216e3a6927e0e389c10efc3aa9baeae3ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
