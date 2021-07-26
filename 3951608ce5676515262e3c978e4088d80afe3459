@@ -98,6 +98,30 @@
       },
       "revId": "3951608ce5676515262e3c978e4088d80afe3459",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e32138f_3a082390",
+        "filename": "src/base/win32-headers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002927
+      },
+      "writtenOn": "2021-07-26T17:45:42Z",
+      "side": 1,
+      "message": "I think there\u0027s no way around the aliasing violation when defining our own V8_SRWLOCK and passing V8_SRWLOCK pointers to functions expecting SWRLOCK pointers. But it also shouldn\u0027t be a problem on Windows, since we can\u0027t build with strict aliasing enabled there anyway.\n\nI also don\u0027t see how std::aligned_storage would help. I would suggest defining the structs as similarly as possible to how Microsoft defines them, and using lots of static_asserts to verify that they have the same layout.",
+      "parentUuid": "2119912d_46fb2918",
+      "range": {
+        "startLine": 89,
+        "startChar": 2,
+        "endLine": 89,
+        "endChar": 67
+      },
+      "revId": "3951608ce5676515262e3c978e4088d80afe3459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
