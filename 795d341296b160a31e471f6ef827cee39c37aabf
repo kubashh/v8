@@ -1,0 +1,169 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffb49a26_b1c347ca",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T10:40:38Z",
+      "side": 1,
+      "message": "DCHECK_IMPLIES(\n    NodeProperties::IsFreshObject(object), !IsConstantObject(object));",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e761eb7_1050a01b",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T10:40:38Z",
+      "side": 1,
+      "message": "I\u0027d move this out of the loop, it\u0027s not constant-time.",
+      "range": {
+        "startLine": 100,
+        "startChar": 10,
+        "endLine": 100,
+        "endChar": 23
+      },
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34671860_b4630000",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T10:40:38Z",
+      "side": 1,
+      "message": "While you\u0027re here, please remove the \"kill_\" prefix from the arguments. I don\u0027t find it helpful at all.",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "164d78bf_2e0ffd72",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T10:40:38Z",
+      "side": 1,
+      "message": "Let\u0027s define a helper for this lookup ;)",
+      "range": {
+        "startLine": 197,
+        "startChar": 33,
+        "endLine": 201,
+        "endChar": 75
+      },
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61331306_2cc00eec",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T10:40:38Z",
+      "side": 1,
+      "message": "Let\u0027s create a helper function Update(object, offset, field_info) for these three lines, it\u0027s a frequent pattern.",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edb498ca_bd53090b",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T10:40:38Z",
+      "side": 1,
+      "message": "kMaximumReprSize\n\nAnd please add at least\n  DCHECK_LE(ElementSizeInBytes(repr), kMaximumReprSize)\nat a strategic place.",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "244d7cac_428b12f0",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T10:40:38Z",
+      "side": 1,
+      "message": "I find the remaining code in this function hard to read. Please at least add a comment here on what it\u0027s doing.",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0db83ce9_1cae740f",
+        "filename": "src/compiler/csa-load-elimination.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T10:40:38Z",
+      "side": 1,
+      "message": "Let\u0027s remove the zone argument from these three functions and always use zone().",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d841d40_457c11e5",
+        "filename": "src/compiler/csa-load-elimination.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-07-26T10:40:38Z",
+      "side": 1,
+      "message": "How about KillOffsetInFresh(Object)",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
