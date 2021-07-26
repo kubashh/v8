@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fe57487_d8551249",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-26T17:57:19Z",
+      "side": 1,
+      "message": "These should static_assert the alignment as well.",
+      "revId": "60ec2fe6559771b3f64c4139bfe5a126ab1216c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
