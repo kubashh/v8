@@ -16,6 +16,24 @@
       "message": "Could you clarify the CL description? I don\u0027t see any new uses of (Try)CopyAndConvertArrayToCppBuffer.",
       "revId": "3ded84ca7ce0cc81e5cd955452fb61368dabb703",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbe9eda4_728e3bce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-07-26T14:53:59Z",
+      "side": 1,
+      "message": "It is used by code in this Chromium CL: https://chromium-review.googlesource.com/c/chromium/src/+/3027405.",
+      "parentUuid": "2fe22356_87ecfbbe",
+      "revId": "3ded84ca7ce0cc81e5cd955452fb61368dabb703",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
