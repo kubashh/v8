@@ -1801,14 +1801,12 @@ Handle<Object> WasmExceptionPackage::GetExceptionTag(
 Handle<Object> WasmExceptionPackage::GetExceptionValues(
     Isolate* isolate, Handle<WasmExceptionPackage> exception_package) {
   Handle<Object> values;
-  if (JSReceiver::GetProperty(
-          isolate, exception_package,
-          isolate->factory()->wasm_exception_values_symbol())
-          .ToHandle(&values)) {
-    DCHECK(values->IsFixedArray());
-    return values;
-  }
-  return ReadOnlyRoots(isolate).undefined_value_handle();
+  CHECK(JSReceiver::GetProperty(
+            isolate, exception_package,
+            isolate->factory()->wasm_exception_values_symbol())
+            .ToHandle(&values));
+  DCHECK(values->IsUndefined() || values->IsFixedArray());
+  return values;
 }
 
 void EncodeI32ExceptionValue(Handle<FixedArray> encoded_values,
@@ -1823,6 +1821,21 @@ void EncodeI64ExceptionValue(Handle<FixedArray> encoded_values,
                           static_cast<uint32_t>(value >> 32));
   EncodeI32ExceptionValue(encoded_values, encoded_index,
                           static_cast<uint32_t>(value));
+}
+
+void DecodeI32ExceptionValue(Handle<FixedArray> encoded_values,
+                             uint32_t* encoded_index, uint32_t* value) {
+  uint32_t msb = Smi::cast(encoded_values->get((*encoded_index)++)).value();
+  uint32_t lsb = Smi::cast(encoded_values->get((*encoded_index)++)).value();
+  *value = (msb << 16) | (lsb & 0xffff);
+}
+
+void DecodeI64ExceptionValue(Handle<FixedArray> encoded_values,
+                             uint32_t* encoded_index, uint64_t* value) {
+  uint32_t lsb = 0, msb = 0;
+  DecodeI32ExceptionValue(encoded_values, encoded_index, &msb);
+  DecodeI32ExceptionValue(encoded_values, encoded_index, &lsb);
+  *value = (static_cast<uint64_t>(msb) << 32) | static_cast<uint64_t>(lsb);
 }
 
 #ifdef DEBUG
