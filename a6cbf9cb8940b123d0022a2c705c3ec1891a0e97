@@ -87,6 +87,30 @@
       },
       "revId": "a6cbf9cb8940b123d0022a2c705c3ec1891a0e97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74f9782d_def77448",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3163,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-27T13:34:34Z",
+      "side": 1,
+      "message": "In that case I would leave it as-is for now, to avoid unneeded abstraction. Once we need to check for more than one stack type, I am happy to introduce that method.",
+      "parentUuid": "2943c851_962b2b52",
+      "range": {
+        "startLine": 3163,
+        "startChar": 6,
+        "endLine": 3163,
+        "endChar": 30
+      },
+      "revId": "a6cbf9cb8940b123d0022a2c705c3ec1891a0e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
