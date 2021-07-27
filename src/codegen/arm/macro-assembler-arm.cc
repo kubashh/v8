@@ -1370,6 +1370,7 @@ void TurboAssembler::EnterFrame(StackFrame::Type type,
     mov(scratch, Operand(StackFrame::TypeToMarker(type)));
   }
   PushCommonFrame(scratch);
+  if (type == StackFrame::WASM) Push(kWasmInstanceRegister);
 }
 
 int TurboAssembler::LeaveFrame(StackFrame::Type type) {
