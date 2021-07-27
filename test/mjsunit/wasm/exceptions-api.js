@@ -168,3 +168,36 @@ function TestCatchJS(types_str, types, values) {
               [kWasmI32, kWasmI64, kWasmF32, kWasmF64, kWasmExternRef],
               [6, 7n, 8, 9, {value: 10}]);
 })();
+
+function TestGetArgHelper(types, values) {
+  let tag = new WebAssembly.Tag({parameters: types});
+  let exception = new WebAssembly.Exception(tag, values);
+  for (i = 0; i < types.length; ++i) {
+    assertEquals(exception.getArg(tag, i), values[i]);
+  }
+}
+
+(function TestGetArg() {
+  // Check errors.
+  let tag = new WebAssembly.Tag({parameters: ['i32']});
+  let exception = new WebAssembly.Exception(tag, [0]);
+  assertThrows(() => exception.getArg(0, 0), TypeError,
+      /Argument 0 must be a WebAssembly.Tag/);
+  assertThrows(() => exception.getArg({}, 0), TypeError,
+      /Argument 0 must be a WebAssembly.Tag/);
+  assertThrows(() => exception.getArg(tag, undefined), TypeError,
+      /Index must be convertible to a valid number/);
+  assertThrows(() => exception.getArg(tag, 1), RangeError,
+      /Index out of range/);
+  let error = new WebAssembly.RuntimeError();
+  assertThrows(() => error.getArg(tag, 1), TypeError,
+      /Expected a WebAssembly.Exception object/);
+
+  // Check decoding.
+  TestGetArgHelper(['i32'], [1]);
+  TestGetArgHelper(['i64'], [2n]);
+  TestGetArgHelper(['f32'], [3]);
+  TestGetArgHelper(['f64'], [4]);
+  TestGetArgHelper(['externref'], [{val: 5}]);
+  TestGetArgHelper(['i32', 'i64', 'f32', 'f64', 'externref'], [5, 6n, 7, 8, {val: 9}]);
+})();
