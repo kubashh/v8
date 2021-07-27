@@ -33,6 +33,24 @@
       "message": "You can use {VectorOf(missing_functions)} instead.",
       "revId": "bc76e93bf08394c96990ef1b96510e163929f8c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03bae9ba_31a88c54",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-07-27T12:51:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77cab796_5eedbffb",
+      "revId": "bc76e93bf08394c96990ef1b96510e163929f8c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

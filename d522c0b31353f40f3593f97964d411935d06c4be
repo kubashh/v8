@@ -246,6 +246,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "211572d9_045c95f0",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2933,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-07-27T12:51:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bed51d83_93868766",
+      "revId": "d522c0b31353f40f3593f97964d411935d06c4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b665b3c4_f746fb1a",
