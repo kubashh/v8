@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1fa49fa_fda5aada",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-27T16:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6ffce08_17e915f5",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "7f387dd4a76948f868367fdf05ac0a4e2f9f31bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e02bc30a_b5cd16f3",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-07-27T15:05:21Z",
       "side": 1,
       "message": "You mean `BigInt(n), start, end`. The tests pass anyway because you never pass in {start} or {end}, so swallowing them here isn\u0027t causing observable breakage.",
+      "range": {
+        "startLine": 16,
+        "startChar": 12,
+        "endLine": 16,
+        "endChar": 33
+      },
+      "revId": "7f387dd4a76948f868367fdf05ac0a4e2f9f31bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9a99e74_3838f125",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-07-27T16:26:05Z",
+      "side": 1,
+      "message": "Done; also added a test that would\u0027ve caught the failure",
+      "parentUuid": "e02bc30a_b5cd16f3",
       "range": {
         "startLine": 16,
         "startChar": 12,
