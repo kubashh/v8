@@ -16,6 +16,24 @@
       "message": "These should static_assert the alignment as well.",
       "revId": "60ec2fe6559771b3f64c4139bfe5a126ab1216c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71bdd02c_fb75035b",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-27T10:17:24Z",
+      "side": 1,
+      "message": "+1, maybe even static assert all the field offsets?",
+      "parentUuid": "7fe57487_d8551249",
+      "revId": "60ec2fe6559771b3f64c4139bfe5a126ab1216c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -16,6 +16,46 @@
       "message": "I took out aligned_storage. It wasn\u0027t adding anything. PTAL.",
       "revId": "eee44f0efcfa1e01316f8915f380b4abd1f5152c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9042aff_f536dadb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-27T10:17:24Z",
+      "side": 1,
+      "message": "lgtm once static asserts are fixed. Thanks for working on this!",
+      "revId": "eee44f0efcfa1e01316f8915f380b4abd1f5152c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37ad2dbb_ee47d413",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-07-27T10:17:24Z",
+      "side": 1,
+      "message": "nit: you can use our STATIC_ASSERT macro, which stringifies the condition and uses that string as the error message.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 13
+      },
+      "revId": "eee44f0efcfa1e01316f8915f380b4abd1f5152c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
