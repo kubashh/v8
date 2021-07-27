@@ -1060,12 +1060,13 @@ Handle<Code> ContinuationForConcurrentOptimization(
       // into the feedback vector.
       STATIC_ASSERT(
           FeedbackVector::kFeedbackVectorMaybeOptimizedCodeIsStoreRelease);
-      function->set_code(function->feedback_vector().optimized_code());
+      function->set_code(function->feedback_vector().optimized_code(),
+                         kReleaseStore);
     }
     return handle(function->code(), isolate);
   } else if (function->shared().HasBaselineData()) {
     Code baseline_code = function->shared().baseline_data().baseline_code();
-    function->set_code(baseline_code);
+    function->set_code(baseline_code, kReleaseStore);
     return handle(baseline_code, isolate);
   }
   DCHECK(function->ActiveTierIsIgnition());
@@ -1997,7 +1998,7 @@ bool Compiler::CompileBaseline(Isolate* isolate, Handle<JSFunction> function,
 
   Code baseline_code = shared->baseline_data().baseline_code(isolate);
   DCHECK_EQ(baseline_code.kind(), CodeKind::BASELINE);
-  function->set_code(baseline_code);
+  function->set_code(baseline_code, kReleaseStore);
 
   return true;
 }
@@ -3274,7 +3275,7 @@ void Compiler::PostInstantiation(Handle<JSFunction> function) {
         // stored with release semantics into the vector
         STATIC_ASSERT(
             FeedbackVector::kFeedbackVectorMaybeOptimizedCodeIsStoreRelease);
-        function->set_code(code);
+        function->set_code(code, kReleaseStore);
       }
     }
 

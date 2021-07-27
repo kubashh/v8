@@ -1339,7 +1339,7 @@ void Debug::DiscardBaselineCode(SharedFunctionInfo shared) {
     if (obj.IsJSFunction()) {
       JSFunction fun = JSFunction::cast(obj);
       if (fun.shared() == shared && fun.ActiveTierIsBaseline()) {
-        fun.set_code(*trampoline);
+        fun.set_code(*trampoline, kReleaseStore);
       }
     }
   }
@@ -1357,7 +1357,7 @@ void Debug::DiscardAllBaselineCode() {
     if (obj.IsJSFunction()) {
       JSFunction fun = JSFunction::cast(obj);
       if (fun.shared().HasBaselineData()) {
-        fun.set_code(*trampoline);
+        fun.set_code(*trampoline, kReleaseStore);
       }
     }
   }
@@ -1464,7 +1464,7 @@ void Debug::InstallDebugBreakTrampoline() {
         if (!fun.is_compiled()) {
           needs_compile.push_back(handle(fun, isolate_));
         } else {
-          fun.set_code(*trampoline);
+          fun.set_code(*trampoline, kReleaseStore);
         }
       }
     }
@@ -1477,7 +1477,7 @@ void Debug::InstallDebugBreakTrampoline() {
     Compiler::Compile(isolate_, fun, Compiler::CLEAR_EXCEPTION,
                       &is_compiled_scope);
     DCHECK(is_compiled_scope.is_compiled());
-    fun->set_code(*trampoline);
+    fun->set_code(*trampoline, kReleaseStore);
   }
 }
 
