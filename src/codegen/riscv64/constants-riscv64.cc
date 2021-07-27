@@ -48,7 +48,7 @@ int Registers::Number(const char* name) {
   // Look through the alias names.
   int i = 0;
   while (aliases_[i].reg != kInvalidRegister) {
-    if (strcmp(aliases_[i].name, name) == 0) {
+    if (aliases_[i].name && strcmp(aliases_[i].name, name) == 0) {
       return aliases_[i].reg;
     }
     i++;
@@ -95,7 +95,7 @@ int FPURegisters::Number(const char* name) {
   // Look through the alias names.
   int i = 0;
   while (aliases_[i].creg != kInvalidRegister) {
-    if (strcmp(aliases_[i].name, name) == 0) {
+    if (aliases_[i].name && strcmp(aliases_[i].name, name) == 0) {
       return aliases_[i].creg;
     }
     i++;
