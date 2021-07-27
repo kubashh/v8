@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00cde55e_651a195a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-07-27T13:22:33Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "47f68626fdf77ad87bbbc6af9cdc5312fa2e680d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d652fca2_0492cf66",
@@ -14,6 +31,24 @@
       "writtenOn": "2021-07-27T13:10:45Z",
       "side": 1,
       "message": "This is not what the auto-roller choked on I think. You can extend the commit you linked and look at the CL. There\u0027s also the DEPS file on Chromium side. I think you need to update those versions here to match now:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3032285/5/DEPS",
+      "revId": "47f68626fdf77ad87bbbc6af9cdc5312fa2e680d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49a00ede_a5deb334",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-07-27T13:22:33Z",
+      "side": 1,
+      "message": "Done, I could not find however the \u0027android_system_sdk\u0027 package, should I add it?",
+      "parentUuid": "d652fca2_0492cf66",
       "revId": "47f68626fdf77ad87bbbc6af9cdc5312fa2e680d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
