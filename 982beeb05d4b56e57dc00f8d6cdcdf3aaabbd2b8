@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d157d2_b7e8f5f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-07-27T06:51:05Z",
+      "side": 1,
+      "message": "Thanks. LGTM",
+      "revId": "982beeb05d4b56e57dc00f8d6cdcdf3aaabbd2b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69c4e3b0_bf5ad83c",
+        "filename": "src/deoptimizer/translated-state.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-07-27T06:51:05Z",
+      "side": 1,
+      "message": "// TODO(hpayer): Find a cleaner way to support a group of non-fully-initialized objects.",
+      "revId": "982beeb05d4b56e57dc00f8d6cdcdf3aaabbd2b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
