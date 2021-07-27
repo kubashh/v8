@@ -6,12 +6,18 @@ use_relative_paths = True
 
 gclient_gn_args_file = 'build/config/gclient_args.gni'
 gclient_gn_args = [
+  'build_with_chromium',
+
   # TODO(https://crbug.com/1137662, https://crbug.com/1080854)
   # Remove when migration is complete.
   'checkout_fuchsia_for_arm64_host',
 ]
 
 vars = {
+  # Separates the build scenarios V8-standalone (false) and V8 in Chromium
+  # (set to true in Chromium's DEPS).
+  'build_with_chromium': False,
+
   # Fetches only the SDK boot images which match at least one of the whitelist
   # entries in a comma-separated list.
   #
