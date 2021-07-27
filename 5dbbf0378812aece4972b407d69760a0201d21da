@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "141b43f9_d58d88e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-27T12:18:57Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4699e55_f114359e",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1808,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-27T12:18:57Z",
+      "side": 1,
+      "message": "Rationale for the change: GetProperty should either return a FixedArray if the property exists, or \"undefined\" otherwise. In either case the call to \"ToHandle()\" succeeds.\nIn fact the test below with a \"WebAssembly.RuntimeError\" fails on the DCHECK without this change.",
+      "range": {
+        "startLine": 1804,
+        "startChar": 0,
+        "endLine": 1808,
+        "endChar": 0
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
