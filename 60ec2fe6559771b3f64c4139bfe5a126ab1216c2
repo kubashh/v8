@@ -34,6 +34,24 @@
       "parentUuid": "7fe57487_d8551249",
       "revId": "60ec2fe6559771b3f64c4139bfe5a126ab1216c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "147a19f5_364655fe",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-27T18:09:09Z",
+      "side": 1,
+      "message": "Oops - I\u0027d forgotten to static_assert the alignments. Done. And I added static_asserts for the alignments of all of the CRITICAL_SECTION field offsets.",
+      "parentUuid": "71bdd02c_fb75035b",
+      "revId": "60ec2fe6559771b3f64c4139bfe5a126ab1216c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

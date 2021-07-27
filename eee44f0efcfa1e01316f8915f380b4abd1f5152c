@@ -56,6 +56,30 @@
       },
       "revId": "eee44f0efcfa1e01316f8915f380b4abd1f5152c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a6e0fe5_51d3c143",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-27T18:09:09Z",
+      "side": 1,
+      "message": "Nice. Done.",
+      "parentUuid": "37ad2dbb_ee47d413",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 13
+      },
+      "revId": "eee44f0efcfa1e01316f8915f380b4abd1f5152c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

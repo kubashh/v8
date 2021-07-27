@@ -170,6 +170,30 @@
       },
       "revId": "3951608ce5676515262e3c978e4088d80afe3459",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a2b6806_a9b8d605",
+        "filename": "src/base/win32-headers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-27T18:09:09Z",
+      "side": 1,
+      "message": "Yep, it may be conformant, and it\u0027s fine either way. It was good to think it through more.",
+      "parentUuid": "573d8339_1ec054a8",
+      "range": {
+        "startLine": 89,
+        "startChar": 2,
+        "endLine": 89,
+        "endChar": 67
+      },
+      "revId": "3951608ce5676515262e3c978e4088d80afe3459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
