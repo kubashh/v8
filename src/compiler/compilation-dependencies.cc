@@ -939,25 +939,29 @@ CompilationDependencies::TransitionDependencyOffTheRecord(
 
 CompilationDependency const*
 CompilationDependencies::FieldRepresentationDependencyOffTheRecord(
-    const MapRef& map, InternalIndex descriptor) const {
+    const MapRef& map, InternalIndex descriptor,
+    Representation expected_representation, bool* success) const {
   DCHECK(!map.IsNeverSerializedHeapObject());
   MapRef owner = map.FindFieldOwner(descriptor);
   DCHECK(!owner.IsNeverSerializedHeapObject());
   PropertyDetails details = owner.GetPropertyDetails(descriptor);
   CHECK(details.representation().Equals(
       map.GetPropertyDetails(descriptor).representation()));
+  *success = details.representation().Equals(expected_representation);
   return zone_->New<FieldRepresentationDependency>(owner, descriptor,
                                                    details.representation());
 }
 
 CompilationDependency const*
 CompilationDependencies::FieldTypeDependencyOffTheRecord(
-    const MapRef& map, InternalIndex descriptor) const {
+    const MapRef& map, InternalIndex descriptor, const ObjectRef& expected_type,
+    bool* success) const {
   DCHECK(!map.IsNeverSerializedHeapObject());
   MapRef owner = map.FindFieldOwner(descriptor);
   DCHECK(!owner.IsNeverSerializedHeapObject());
   ObjectRef type = owner.GetFieldType(descriptor);
   CHECK(type.equals(map.GetFieldType(descriptor)));
+  *success = type.equals(expected_type);
   return zone_->New<FieldTypeDependency>(owner, descriptor, type);
 }
 
