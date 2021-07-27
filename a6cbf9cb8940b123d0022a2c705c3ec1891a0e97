@@ -39,6 +39,30 @@
       },
       "revId": "a6cbf9cb8940b123d0022a2c705c3ec1891a0e97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b5bad07_f98de1c5",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3163,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-27T13:07:36Z",
+      "side": 1,
+      "message": "{StackFrame::IsJavaScript} checks for three types (INTERPRETED, BASELINE, OPTIMIZED), whereas we only need to check for a single type here.\n\nDo you want me to introduce a {StackFrame::IsWebAssembly} method? I don\u0027t think it\u0027s needed, but I am also not opposed.",
+      "parentUuid": "9edc0eb0_9bd7b129",
+      "range": {
+        "startLine": 3163,
+        "startChar": 6,
+        "endLine": 3163,
+        "endChar": 30
+      },
+      "revId": "a6cbf9cb8940b123d0022a2c705c3ec1891a0e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
