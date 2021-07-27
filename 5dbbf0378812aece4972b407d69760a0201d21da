@@ -20,6 +20,207 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b8d63370_31fe6137",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "LGTM with comments. Happy to take another look if you end up making significant changes.",
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4aeeb69_bccef3e7",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "General comment: I like spelling out types. It matters whether something is, say, a Handle vs a MaybeHandle, or a Handle\u003cObject\u003e vs Handle\u003cJSObject\u003e, or an unhandlified Object, or some off-heap C++ type, etc.",
+      "range": {
+        "startLine": 2037,
+        "startChar": 2,
+        "endLine": 2037,
+        "endChar": 6
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bc4f0f3_47ec5e69",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2040,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "nit: for consistency, this could be one-liner like line 2035.",
+      "range": {
+        "startLine": 2038,
+        "startChar": 2,
+        "endLine": 2040,
+        "endChar": 3
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff22b123_f5bdb32d",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "Unsafe cast! {index} is a user-controlled uint32 and as such could well be beyond int range. Fix: simply cast signature.length() (which is V8-controlled and guaranteed to be \u003e\u003d 0) to uint32 instead.",
+      "range": {
+        "startLine": 2055,
+        "startChar": 6,
+        "endLine": 2055,
+        "endChar": 29
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c170f100_40c43b10",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2059,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "The efficiency (or lack thereof) of the code below is making me think: if we expect this function to be relevant for performance, we should probably change the serializing step to do what we do here (i.e. box primitive values as HeapNumber/BigInt), and then the entire rest of this function could be folded to:\n\n  args.GetReturnValue().Set(Utils::ToLocal(\n      i::FixedArray::get(values, index, i_isolate)));\n\nBut that\u0027s for future CLs to explore.",
+      "range": {
+        "startLine": 2059,
+        "startChar": 2,
+        "endLine": 2059,
+        "endChar": 47
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec39eac_0d8be79c",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2061,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "Here it\u0027s okay, but let\u0027s add a comment:\n\n  // Since the bounds check above passed, the cast to int is safe.",
+      "range": {
+        "startLine": 2061,
+        "startChar": 22,
+        "endLine": 2061,
+        "endChar": 45
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a71f9e50_3d211168",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2078,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "nit: just `i`, for consistency. Again twice below.",
+      "range": {
+        "startLine": 2078,
+        "startChar": 15,
+        "endLine": 2078,
+        "endChar": 23
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "052cf35b_e2b8697b",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "Does the compiler insist on having this explicit upcast? I\u0027d think it should work implicitly, just `result \u003d v8::Integer::New(...);`",
+      "range": {
+        "startLine": 2106,
+        "startChar": 15,
+        "endLine": 2106,
+        "endChar": 33
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "376c332f_2b6d82eb",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2120,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "bit_cast",
+      "range": {
+        "startLine": 2120,
+        "startChar": 6,
+        "endLine": 2120,
+        "endChar": 45
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e4699e55_f114359e",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -36,6 +237,53 @@
         "startChar": 0,
         "endLine": 1808,
         "endChar": 0
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b72751a2_e4fbb61c",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1808,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "nit: use `Handle\u003cObject\u003e values \u003d ...ToHandleChecked()` instead of `Handle\u003cObject\u003e values; CHECK(...ToHandle(\u0026values))`.\n\nThe rationale checks out iff we can guarantee that we\u0027ll only encounter WasmExceptionPackage objects here. AFAICS (in wasm-js.cc) objects must pass an `IsWasmExceptionPackage()` check, so that should be the case; so it\u0027s surprising (and concerning) to hear that a Webassembly.RuntimeError can end up here... what about random other user-controlled objects? Specifically, a JS Proxy? (Since the wasm_exception_values_symbol shouldn\u0027t leak to user code, I don\u0027t see a way to construct a non-Proxy object that throws or returns an arbitrary value here.)",
+      "parentUuid": "e4699e55_f114359e",
+      "range": {
+        "startLine": 1804,
+        "startChar": 0,
+        "endLine": 1808,
+        "endChar": 0
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f2ed610_01ff5010",
+        "filename": "test/mjsunit/wasm/exceptions-api.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-07-27T15:59:21Z",
+      "side": 1,
+      "message": "an additional test using 0xFFFFFFFF here should trigger the cast bug above.",
+      "range": {
+        "startLine": 190,
+        "startChar": 43,
+        "endLine": 190,
+        "endChar": 44
       },
       "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
