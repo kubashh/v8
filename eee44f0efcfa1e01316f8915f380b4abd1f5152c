@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42f37a6f_8ae5889a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-27T00:24:38Z",
+      "side": 1,
+      "message": "I took out aligned_storage. It wasn\u0027t adding anything. PTAL.",
+      "revId": "eee44f0efcfa1e01316f8915f380b4abd1f5152c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
