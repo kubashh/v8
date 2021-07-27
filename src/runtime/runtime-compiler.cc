@@ -90,7 +90,7 @@ RUNTIME_FUNCTION(Runtime_InstallBaselineCode) {
   DCHECK(!function->has_feedback_vector());
   JSFunction::EnsureFeedbackVector(function, &is_compiled_scope);
   Code baseline_code = sfi->baseline_data().baseline_code();
-  function->set_code(baseline_code);
+  function->set_code(baseline_code, kReleaseStore);
   return baseline_code;
 }
 
@@ -172,7 +172,7 @@ RUNTIME_FUNCTION(Runtime_InstantiateAsmJs) {
   shared->set_is_asm_wasm_broken(true);
 #endif
   DCHECK_EQ(function->code(), *BUILTIN_CODE(isolate, InstantiateAsmJs));
-  function->set_code(*BUILTIN_CODE(isolate, CompileLazy));
+  function->set_code(*BUILTIN_CODE(isolate, CompileLazy), kReleaseStore);
   DCHECK(!isolate->has_pending_exception());
   return Smi::zero();
 }

@@ -647,7 +647,7 @@ DEFINE_INT(interrupt_budget_scale_factor_for_top_tier, 20,
 #else
 #define FLAG FLAG_READONLY
 #endif
-DEFINE_BOOL(sparkplug, false, "enable experimental Sparkplug baseline compiler")
+DEFINE_BOOL(sparkplug, true, "enable experimental Sparkplug baseline compiler")
 DEFINE_BOOL(always_sparkplug, false, "directly tier up to Sparkplug code")
 DEFINE_BOOL(sparkplug_on_heap, false, "compile Sparkplug code directly on heap")
 #if ENABLE_SPARKPLUG
