@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4200e583_d32974e2",
+        "filename": "include/v8-version.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-28T16:11:51Z",
+      "side": 1,
+      "message": "Oh wow. I\u0027m not sure how that happened and it definitely wasn\u0027t intentional. Ditto for the change to WATCHLIST. I fixed those and looked through the entire change again to make sure there is nothing unintentional.",
+      "parentUuid": "f348fb8e_ba2532ae",
+      "revId": "493255a70a1446eac02c59b95b65222995465449",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21f234ee_bbb410d8",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-07-28T11:28:04Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "493255a70a1446eac02c59b95b65222995465449",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1108a6c4_707acc0b",
+        "filename": "include/v8-version.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-07-28T16:11:51Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "21f234ee_bbb410d8",
       "revId": "493255a70a1446eac02c59b95b65222995465449",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
