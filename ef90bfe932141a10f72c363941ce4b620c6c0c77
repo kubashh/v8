@@ -33,6 +33,63 @@
       "message": "New changes are only in module-compiler.cc, other than the change from Vector to base::Vector.",
       "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8dbd4ea_b7236517",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-28T12:29:33Z",
+      "side": 1,
+      "message": "Thanks, this looks good overall now. Just two minor comments.",
+      "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a93142ca_afb9af4b",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2894,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-28T12:29:33Z",
+      "side": 1,
+      "message": "This should just use \"encode\" and not \"update\", and bitwise-or together the individual pieces (like we do in other places):\n\n  return ReachedTierField::encode(ExecutionTier::kNone) |\n    RequiredBaselineTierField::encode(required_baseline_tier) |\n    RequiredTopTierField::encode(required_top_tier);",
+      "range": {
+        "startLine": 2888,
+        "startChar": 0,
+        "endLine": 2894,
+        "endChar": 27
+      },
+      "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07f650c4_bb7bbcba",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-28T12:29:33Z",
+      "side": 1,
+      "message": "It feels like this does not really belong here. In both {InitializeCompilationProgressAfterDeserialization} and {SetupCompilationProgressForFunction} we already have some handling of lazy modules / functions, can we move the call to {UseLazyStub} there?",
+      "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
