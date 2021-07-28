@@ -16,6 +16,40 @@
       "message": "hpayer@, can you review the remaining files and general concept?",
       "revId": "493255a70a1446eac02c59b95b65222995465449",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f348fb8e_ba2532ae",
+        "filename": "include/v8-version.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-28T11:28:04Z",
+      "side": 1,
+      "message": "Is this an intentional change? We don\u0027t usually change those values manually.",
+      "revId": "493255a70a1446eac02c59b95b65222995465449",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21f234ee_bbb410d8",
+        "filename": "include/v8-version.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-28T11:28:04Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "493255a70a1446eac02c59b95b65222995465449",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
