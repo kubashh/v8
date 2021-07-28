@@ -448,22 +448,29 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
       return Invalid();
     }
   }
+
+  // Note: FindFieldOwner may be called multiple times throughout one
+  // compilation. This is safe since its result is fixed for a given map and
+  // descriptor.
+  MapRef field_owner_map = map.FindFieldOwner(descriptor);
+
+  Handle<FieldType> descriptors_field_type =
+      broker()->CanonicalPersistentHandle(
+          descriptors->GetFieldType(descriptor));
+
   if (details_representation.IsSmi()) {
     field_type = Type::SignedSmall();
     unrecorded_dependencies.push_back(
-        dependencies()->FieldRepresentationDependencyOffTheRecord(map,
-                                                                  descriptor));
+        dependencies()->FieldRepresentationDependencyOffTheRecord(
+            map, descriptor, details_representation));
   } else if (details_representation.IsDouble()) {
     field_type = type_cache_->kFloat64;
     unrecorded_dependencies.push_back(
-        dependencies()->FieldRepresentationDependencyOffTheRecord(map,
-                                                                  descriptor));
+        dependencies()->FieldRepresentationDependencyOffTheRecord(
+            map, descriptor, details_representation));
   } else if (details_representation.IsHeapObject()) {
     // Extract the field type from the property details (make sure its
     // representation is TaggedPointer to reflect the heap object case).
-    Handle<FieldType> descriptors_field_type =
-        broker()->CanonicalPersistentHandle(
-            descriptors->GetFieldType(descriptor));
     if (descriptors_field_type->IsNone()) {
       // Store is not safe if the field type was cleared.
       if (access_mode == AccessMode::kStore) {
@@ -474,8 +481,8 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
       // about the contents now.
     }
     unrecorded_dependencies.push_back(
-        dependencies()->FieldRepresentationDependencyOffTheRecord(map,
-                                                                  descriptor));
+        dependencies()->FieldRepresentationDependencyOffTheRecord(
+            map, descriptor, details_representation));
     if (descriptors_field_type->IsClass()) {
       // Remember the field map, and try to infer a useful type.
       base::Optional<MapRef> maybe_field_map =
@@ -490,7 +497,8 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
   // TODO(turbofan): We may want to do this only depending on the use
   // of the access info.
   unrecorded_dependencies.push_back(
-      dependencies()->FieldTypeDependencyOffTheRecord(map, descriptor));
+      dependencies()->FieldTypeDependencyOffTheRecord(
+          map, descriptor, MakeRef<Object>(broker(), descriptors_field_type)));
 
   PropertyConstness constness;
   if (details.IsReadOnly() && !details.IsConfigurable()) {
@@ -498,11 +506,6 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
   } else {
     constness = dependencies()->DependOnFieldConstness(map, descriptor);
   }
-
-  // Note: FindFieldOwner may be called multiple times throughout one
-  // compilation. This is safe since its result is fixed for a given map and
-  // descriptor.
-  MapRef field_owner_map = map.FindFieldOwner(descriptor);
 
   switch (constness) {
     case PropertyConstness::kMutable:
@@ -1142,7 +1145,7 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     }
     unrecorded_dependencies.push_back(
         dependencies()->FieldRepresentationDependencyOffTheRecord(
-            transition_map, number));
+            transition_map, number, details_representation));
   } else if (details_representation.IsDouble()) {
     field_type = type_cache_->kFloat64;
     if (!broker()->is_concurrent_inlining()) {
@@ -1153,7 +1156,7 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     }
     unrecorded_dependencies.push_back(
         dependencies()->FieldRepresentationDependencyOffTheRecord(
-            transition_map, number));
+            transition_map, number, details_representation));
   } else if (details_representation.IsHeapObject()) {
     // Extract the field type from the property details (make sure its
     // representation is TaggedPointer to reflect the heap object case).
@@ -1171,11 +1174,12 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     }
     unrecorded_dependencies.push_back(
         dependencies()->FieldRepresentationDependencyOffTheRecord(
-            transition_map, number));
+            transition_map, number, details_representation));
     if (descriptors_field_type->IsClass()) {
       unrecorded_dependencies.push_back(
-          dependencies()->FieldTypeDependencyOffTheRecord(transition_map,
-                                                          number));
+          dependencies()->FieldTypeDependencyOffTheRecord(
+              transition_map, number,
+              MakeRef<Object>(broker(), descriptors_field_type)));
       // Remember the field map, and try to infer a useful type.
       base::Optional<MapRef> maybe_field_map =
           TryMakeRef(broker(), descriptors_field_type->AsClass());
