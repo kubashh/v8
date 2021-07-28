@@ -16,6 +16,24 @@
       "message": "This only holds if {map} hasn\u0027t become deprecated by the time we call FindFieldOwner, which we can\u0027t guarantee with your other CL if I understand correctly. So we should remove this CHECK here and in the other function too. (You can do that in the other CL instead.)\n\nFeel free to also remove the IsNeverSerializedHeapObject DCHECKs, I\u0027m not sure they still make sense.",
       "revId": "0d40ca658aa93059b89c4b55c620cc1d7ffbbac1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "420b7601_780d30a9",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-07-28T07:43:23Z",
+      "side": 1,
+      "message": "Ack, I\u0027ll do that in the follow-up since everything is nicely green here.",
+      "parentUuid": "40b52185_8cf89c01",
+      "revId": "0d40ca658aa93059b89c4b55c620cc1d7ffbbac1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
