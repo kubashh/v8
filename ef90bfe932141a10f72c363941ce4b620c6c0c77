@@ -150,6 +150,24 @@
       "parentUuid": "c42d69a7_bebc23c7",
       "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e35fee5_5812def8",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-07-29T12:13:10Z",
+      "side": 1,
+      "message": "Thanks for checking it again. I thought this is done by {InitializeLazyCompilation}, but this function does not get called after deserialization. I fix the issue in https://chromium-review.googlesource.com/c/v8/v8/+/3060482",
+      "parentUuid": "b3d26276_03f7e309",
+      "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
