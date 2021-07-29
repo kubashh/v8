@@ -132,6 +132,24 @@
       "parentUuid": "07f650c4_bb7bbcba",
       "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3d26276_03f7e309",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-07-29T10:48:06Z",
+      "side": 1,
+      "message": "Huh, where did the {UseLazyStub} call go? I fail to find it in {InitializeCompilationProgressAfterDeserialization} or {SetupCompilationProgressForFunction} or another called method.",
+      "parentUuid": "c42d69a7_bebc23c7",
+      "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
