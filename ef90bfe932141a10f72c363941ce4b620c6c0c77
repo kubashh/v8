@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44227604_1502a4da",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2894,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-07-29T10:25:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a93142ca_afb9af4b",
+      "range": {
+        "startLine": 2888,
+        "startChar": 0,
+        "endLine": 2894,
+        "endChar": 27
+      },
+      "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07f650c4_bb7bbcba",
@@ -88,6 +112,24 @@
       "writtenOn": "2021-07-28T12:29:33Z",
       "side": 1,
       "message": "It feels like this does not really belong here. In both {InitializeCompilationProgressAfterDeserialization} and {SetupCompilationProgressForFunction} we already have some handling of lazy modules / functions, can we move the call to {UseLazyStub} there?",
+      "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c42d69a7_bebc23c7",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-07-29T10:25:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07f650c4_bb7bbcba",
       "revId": "ef90bfe932141a10f72c363941ce4b620c6c0c77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
