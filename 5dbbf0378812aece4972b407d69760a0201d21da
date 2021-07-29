@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0c0f670_1abdb16b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "Please do take another look, I had to make significant changes to fix the issue with WebAssembly.RuntimeError.",
+      "parentUuid": "b8d63370_31fe6137",
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4aeeb69_bccef3e7",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-07-27T15:59:21Z",
       "side": 1,
       "message": "General comment: I like spelling out types. It matters whether something is, say, a Handle vs a MaybeHandle, or a Handle\u003cObject\u003e vs Handle\u003cJSObject\u003e, or an unhandlified Object, or some off-heap C++ type, etc.",
+      "range": {
+        "startLine": 2037,
+        "startChar": 2,
+        "endLine": 2037,
+        "endChar": 6
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3941ba62_682acce5",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4aeeb69_bccef3e7",
       "range": {
         "startLine": 2037,
         "startChar": 2,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f141b4e_3645eb91",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2040,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bc4f0f3_47ec5e69",
+      "range": {
+        "startLine": 2038,
+        "startChar": 2,
+        "endLine": 2040,
+        "endChar": 3
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff22b123_f5bdb32d",
@@ -94,6 +160,30 @@
       "writtenOn": "2021-07-27T15:59:21Z",
       "side": 1,
       "message": "Unsafe cast! {index} is a user-controlled uint32 and as such could well be beyond int range. Fix: simply cast signature.length() (which is V8-controlled and guaranteed to be \u003e\u003d 0) to uint32 instead.",
+      "range": {
+        "startLine": 2055,
+        "startChar": 6,
+        "endLine": 2055,
+        "endChar": 29
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb316941_c369621d",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff22b123_f5bdb32d",
       "range": {
         "startLine": 2055,
         "startChar": 6,
@@ -150,6 +240,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8230108_ff9661e3",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2061,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cec39eac_0d8be79c",
+      "range": {
+        "startLine": 2061,
+        "startChar": 22,
+        "endLine": 2061,
+        "endChar": 45
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a71f9e50_3d211168",
@@ -163,6 +277,30 @@
       "writtenOn": "2021-07-27T15:59:21Z",
       "side": 1,
       "message": "nit: just `i`, for consistency. Again twice below.",
+      "range": {
+        "startLine": 2078,
+        "startChar": 15,
+        "endLine": 2078,
+        "endChar": 23
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed45b395_e4e4f1bc",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2078,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a71f9e50_3d211168",
       "range": {
         "startLine": 2078,
         "startChar": 15,
@@ -196,6 +334,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4627d9b_5cbc7d85",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "052cf35b_e2b8697b",
+      "range": {
+        "startLine": 2106,
+        "startChar": 15,
+        "endLine": 2106,
+        "endChar": 33
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "376c332f_2b6d82eb",
@@ -209,6 +371,30 @@
       "writtenOn": "2021-07-27T15:59:21Z",
       "side": 1,
       "message": "bit_cast",
+      "range": {
+        "startLine": 2120,
+        "startChar": 6,
+        "endLine": 2120,
+        "endChar": 45
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42635687_3fe5e3c0",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2120,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "376c332f_2b6d82eb",
       "range": {
         "startLine": 2120,
         "startChar": 6,
@@ -266,6 +452,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad504f9a_dcf6dda4",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1808,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "I agree and on second thought I think it\u0027s unexpected that WebAssembly.RuntimeError objects have the \"getArg\" property in the first place. I changed this now so that the property is only added on such objects when they are created by the WebAssembly.Exception constructor, or by the throw runtime function. I plan to do the same thing for the two other missing properties (\"is\" and the toStringTag symbol).\nI also reverted this change since I don\u0027t think this DCHECK can fail now.",
+      "parentUuid": "b72751a2_e4fbb61c",
+      "range": {
+        "startLine": 1804,
+        "startChar": 0,
+        "endLine": 1808,
+        "endChar": 0
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f2ed610_01ff5010",
@@ -279,6 +489,30 @@
       "writtenOn": "2021-07-27T15:59:21Z",
       "side": 1,
       "message": "an additional test using 0xFFFFFFFF here should trigger the cast bug above.",
+      "range": {
+        "startLine": 190,
+        "startChar": 43,
+        "endLine": 190,
+        "endChar": 44
+      },
+      "revId": "5dbbf0378812aece4972b407d69760a0201d21da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a8ceb2a_d5d1c749",
+        "filename": "test/mjsunit/wasm/exceptions-api.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-07-29T10:34:46Z",
+      "side": 1,
+      "message": "Good catch! I can confirm that this leads to issues. Fixed.",
+      "parentUuid": "4f2ed610_01ff5010",
       "range": {
         "startLine": 190,
         "startChar": 43,
