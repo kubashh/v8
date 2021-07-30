@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d7f852b_10913e70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2021-07-30T17:40:37Z",
+      "side": 1,
+      "message": "The situation where the lack of an explicit section is a known problem is when variables are defined before the assembly.  (So the problem won\u0027t necessarily arise everywhere.)\n\nExample:\n\n $ cat top_level_asm.cc\n int var;\n asm(\"syscall\");\n\n $ gcc -c top_level_asm.cc\n $ objdump -d top_level_asm.o\n \u003cno instructions listed because assembly is put into data section\u003e\n\nIf you swap the variable and the asm(), objdump shows the instruction.\n\nDumping the compiler\u0027s assembly output (with \"gcc -S top_level_asm.cc -o -\") shows why this happens.\n\nClang seems to avoid this problem by putting top-level assembly before everything else in the assembly output.\n\nI think it\u0027s OK to leave out pushsection/popsection for consistency if it\u0027s not used elsewhere.",
+      "range": {
+        "startLine": 11,
+        "startChar": 41,
+        "endLine": 15,
+        "endChar": 57
+      },
+      "revId": "c51241dec44273f9a1fe25336e5b771778eb5d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b82ad563_3115ca98",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2021-07-30T17:40:37Z",
+      "side": 1,
+      "message": "Not all of the v8_mac_arm64* bots test the new case.  The bots that test the new case are v8_mac_arm64_sim_dbg_ng and v8_mac_arm64_sim_rel_ng, but I don\u0027t see results for them on this CL.  Can you run them and check they pass, please?\n\nMy reason for asking about builder coverage was to try to encourage you and others to run these optional builders.  There\u0027s no point in putting this description in the commit message if the builders aren\u0027t actually run and the new case isn\u0027t tested!\n\nI think it\u0027s possible to automate running and checking this builder by putting \"Cq-Include-Trybots:\" in the commit message.  See https://chromium.googlesource.com/chromium/src/+/HEAD/docs/infra/cq.md.",
+      "revId": "c51241dec44273f9a1fe25336e5b771778eb5d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d60cc818_d6907990",
