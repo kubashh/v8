@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20d29ac0_d1d457e3",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-30T14:41:45Z",
+      "side": 1,
+      "message": "nit: let\u0027s also add  V8_WARN_UNUSED_RESULT here",
+      "range": {
+        "startLine": 303,
+        "startChar": 12,
+        "endLine": 303,
+        "endChar": 21
+      },
+      "revId": "cd812a8e77e1195b97c8d88e0b024045b6bb0a81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9473c64d_dc242eba",
+        "filename": "test/mjsunit/compiler/fast-api-sequences.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-30T14:41:45Z",
+      "side": 1,
+      "message": "As I mentioned before, I think we should fix this in the API.\nI still think that V8 should have no observable side-effects at the API-level if we use --force-slow-path.",
+      "range": {
+        "startLine": 16,
+        "startChar": 10,
+        "endLine": 16,
+        "endChar": 30
+      },
+      "revId": "cd812a8e77e1195b97c8d88e0b024045b6bb0a81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
