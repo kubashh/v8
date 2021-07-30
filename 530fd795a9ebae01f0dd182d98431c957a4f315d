@@ -16,6 +16,23 @@
       "message": "Hey, could you address the issues below in a separate CL?",
       "revId": "530fd795a9ebae01f0dd182d98431c957a4f315d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03afe435_a6fb9711",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-07-30T14:43:36Z",
+      "side": 1,
+      "message": "I just realized that IterationHasObservableEffects is not used in v8, this simplifies the follow-up fixes quite a bit.\n\nI will add it in a separate CL",
+      "revId": "530fd795a9ebae01f0dd182d98431c957a4f315d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
