@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d1e78c_39b09748",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-07-30T14:14:20Z",
+      "side": 1,
+      "message": "I\u0027m actually proud that I found it ;-)",
+      "revId": "c37d4bc3c475c0cd1c8a7ff7e10e78a7895885ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
