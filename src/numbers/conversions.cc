@@ -914,6 +914,16 @@ double StringToInt(Isolate* isolate, Handle<String> string, int radix) {
   return helper.GetResult();
 }
 
+// The inlined implementation for parsing small-ish BigInts relies on
+// __builtin_mul_overflow, which Clang and GCC offer, and on twodigit_t.
+#if (defined(__GNUC__) || defined(__clang__)) && HAVE_TWODIGIT_T
+#define SUPPORT_INLINE_IMPLEMENTATION 1
+constexpr bool kSupportInlineImplementation = true;
+#else
+#define SUPPORT_INLINE_IMPLEMENTATION 0
+constexpr bool kSupportInlineImplementation = false;
+#endif
+
 template <typename IsolateT>
 class StringToBigIntHelper : public StringToIntHelper<IsolateT> {
  public:
@@ -960,6 +970,15 @@ class StringToBigIntHelper : public StringToIntHelper<IsolateT> {
       case State::kZero:
         return BigInt::Zero(this->isolate(), allocation_type());
       case State::kDone:
+#if SUPPORT_INLINE_IMPLEMENTATION
+        if (digits_populated_ > 0) {
+          while (digits_populated_ > 0 && digits_[digits_populated_ - 1] == 0) {
+            digits_populated_--;
+          }
+          return BigInt::Allocate(this->isolate(), digits_populated_, digits_,
+                                  this->negative(), allocation_type());
+        }
+#endif
         return BigInt::Allocate(this->isolate(), accumulator_.get(),
                                 this->negative(), allocation_type());
       case State::kEmpty:
@@ -972,25 +991,83 @@ class StringToBigIntHelper : public StringToIntHelper<IsolateT> {
  private:
   template <class Char>
   void ParseInternal(Char start) {
-    accumulator_.reset(
-        new bigint::FromStringAccumulator(this->radix(), BigInt::kMaxLength));
-
     Char current = start + this->cursor();
     Char end = start + this->length();
 
-    do {
-      using Result = bigint::FromStringAccumulator::Result;
-      Result result = accumulator_->ConsumeChar(*current);
-      if (result != Result::kOk) {
-        if (result == Result::kMaxSizeExceeded) {
-          this->set_state(State::kError);
-        } else {
-          DCHECK(result == Result::kInvalidChar);
+    // Optional fast-path that keeps all data stack-allocated (causing a
+    // compile-time defined upper limit) and all code inlined.
+    if (kSupportInlineImplementation && end - current < kInlineThreshold) {
+      using digit_t = bigint::digit_t;
+      using twodigit_t = bigint::twodigit_t;
+      using FSA = bigint::FromStringAccumulator;
+
+      for (int i = 0; i < kDigits; i++) digits_[i] = 0;
+      digit_t radix = this->radix();
+
+      // This loop follows the structure of
+      // {NumberParseIntHelper::HandleGenericCase}, but the details are inlined
+      // from {bigint::FromStringAccumulator::ConsumeChar}.
+      bool done = false;
+      do {
+        digit_t multiplier = 1;
+        digit_t part = 0;
+        while (true) {
+          digit_t d;
+          uint32_t c = *current;
+          if (c > 127 || (d = FSA::kCharValue[c]) >= radix) {
+            done = true;
+            break;
+          }
+
+          digit_t new_multiplier;
+          if (__builtin_mul_overflow(multiplier, radix, &new_multiplier)) break;
+          multiplier = new_multiplier;
+          part = part * radix + d;
+
+          ++current;
+          if (current == end) {
+            done = true;
+            break;
+          }
         }
-        break;
-      }
-      ++current;
-    } while (current < end);
+        // Inlined version of {MultiplySingle} in src/bigint/mul-schoolbook.cc.
+        // Multiply {digits} with {multiplier} and add {part}.
+        digit_t carry = part;
+        digit_t high = 0;
+        for (int i = 0; i < digits_populated_; i++) {
+          // Compute this round's multiplication.
+          twodigit_t result = twodigit_t{digits_[i]} * multiplier;
+          digit_t new_high = result >> bigint::kDigitBits;
+          digit_t low = static_cast<digit_t>(result);
+          // Add last round's carryovers.
+          result = twodigit_t{low} + high + carry;
+          carry = result >> bigint::kDigitBits;
+          // Store result and prepare for next round.
+          digits_[i] = static_cast<digit_t>(result);
+          high = new_high;
+        }
+        DCHECK_LE(carry, std::numeric_limits<digit_t>::max() - high);
+        digits_[digits_populated_] = carry + high;
+        digits_populated_++;
+        // End of {MultiplySingle}.
+      } while (!done);
+    } else {
+      accumulator_.reset(
+          new bigint::FromStringAccumulator(this->radix(), BigInt::kMaxLength));
+      do {
+        using Result = bigint::FromStringAccumulator::Result;
+        Result result = accumulator_->ConsumeChar(*current);
+        if (result != Result::kOk) {
+          if (result == Result::kMaxSizeExceeded) {
+            this->set_state(State::kError);
+          } else {
+            DCHECK(result == Result::kInvalidChar);
+          }
+          break;
+        }
+        ++current;
+      } while (current < end);
+    }
 
     if (!this->allow_trailing_junk() && AdvanceToNonspace(&current, end)) {
       return this->set_state(State::kJunk);
@@ -1007,6 +1084,17 @@ class StringToBigIntHelper : public StringToIntHelper<IsolateT> {
 
   std::unique_ptr<bigint::FromStringAccumulator> accumulator_;
   Behavior behavior_;
+#if SUPPORT_INLINE_IMPLEMENTATION
+  // The threshold is chosen such that kDigits == 8 and there are very few
+  // wasted bits. Crossing the threshold causes a ~2x performance cliff, but 99
+  // characters should cover most cases.
+  static constexpr int kInlineThreshold = 99;
+  // Math.log2(36) == 5.169..., so we need at most 5.17 bits per char.
+  static constexpr int kDigits =
+      (kInlineThreshold * 517 - 1) / (bigint::kDigitBits * 100) + 1;
+  bigint::digit_t digits_[kDigits];
+  int digits_populated_ = 0;
+#endif
 };
 
 MaybeHandle<BigInt> StringToBigInt(Isolate* isolate, Handle<String> string) {
