@@ -313,6 +313,34 @@ class ProcessorImpl;
 #define HAVE_BUILTIN_MUL_OVERFLOW 0
 #endif
 
+#if !defined(DEBUG) && (defined(__GNUC__) || defined(__clang__))
+// Clang supports this since 3.9, GCC since 4.x.
+#define ALWAYS_INLINE inline __attribute__((always_inline))
+#elif !defined(DEBUG) && defined(_MSC_VER)
+#define ALWAYS_INLINE __forceinline
+#else
+#define ALWAYS_INLINE inline
+#endif
+
+static constexpr uint8_t kCharValue[] = {
+    255, 255, 255, 255, 255, 255, 255, 255,  // 0..7
+    255, 255, 255, 255, 255, 255, 255, 255,  // 8..15
+    255, 255, 255, 255, 255, 255, 255, 255,  // 16..23
+    255, 255, 255, 255, 255, 255, 255, 255,  // 24..31
+    255, 255, 255, 255, 255, 255, 255, 255,  // 32..39
+    255, 255, 255, 255, 255, 255, 255, 255,  // 40..47
+    0,   1,   2,   3,   4,   5,   6,   7,    // 48..55    '0' == 48
+    8,   9,   255, 255, 255, 255, 255, 255,  // 56..63    '9' == 57
+    255, 10,  11,  12,  13,  14,  15,  16,   // 64..71    'A' == 65
+    17,  18,  19,  20,  21,  22,  23,  24,   // 72..79
+    25,  26,  27,  28,  29,  30,  31,  32,   // 80..87
+    33,  34,  35,  255, 255, 255, 255, 255,  // 88..95    'Z' == 90
+    255, 10,  11,  12,  13,  14,  15,  16,   // 96..103   'a' == 97
+    17,  18,  19,  20,  21,  22,  23,  24,   // 104..111
+    25,  26,  27,  28,  29,  30,  31,  32,   // 112..119
+    33,  34,  35,  255, 255, 255, 255, 255,  // 120..127  'z' == 122
+};
+
 // A container object for all metadata required for parsing a BigInt from
 // a string.
 // Aggressively optimized not to waste instructions for small cases, while
@@ -345,13 +373,9 @@ class FromStringAccumulator {
   // Step 1: Call this method repeatedly to read all characters.
   // This method will return quickly; it does not perform heavy processing.
   enum class Result { kOk, kInvalidChar, kMaxSizeExceeded };
-  Result ConsumeChar(uint32_t c) {
+  ALWAYS_INLINE Result ConsumeChar(uint32_t c) {
     digit_t d;
-    if (c - '0' < limit_digit_) {
-      d = c - '0';
-    } else if ((c | 32u) - 'a' < limit_alpha_) {
-      d = (c | 32u) - 'a' + 10;
-    } else {
+    if (c > 127 || (d = kCharValue[c]) >= radix_) {
       return Result::kInvalidChar;
     }
 #if HAVE_BUILTIN_MUL_OVERFLOW
@@ -392,12 +416,16 @@ class FromStringAccumulator {
 
  private:
   friend class ProcessorImpl;
+  static constexpr int kMinVectorCapacity = 16;
+
   int parts_size() { return static_cast<int>(parts_->size()); }
 
   bool AddPart(digit_t multiplier, digit_t part) {
     if (!parts_) {
       parts_ = new std::vector<digit_t>;
+      parts_->reserve(kMinVectorCapacity);
       multipliers_ = new std::vector<digit_t>;
+      multipliers_->reserve(kMinVectorCapacity);
     } else if (parts_size() == max_digits_) {
       return false;
     }
@@ -426,5 +454,6 @@ class FromStringAccumulator {
 
 #undef BIGINT_H_DCHECK
 #undef HAVE_BUILTIN_MUL_OVERFLOW
+#undef ALWAYS_INLINE
 
 #endif  // V8_BIGINT_BIGINT_H_
