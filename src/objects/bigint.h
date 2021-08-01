@@ -260,6 +260,10 @@ class BigInt : public BigIntBase {
   static MaybeHandle<BigInt> Allocate(
       IsolateT* isolate, bigint::FromStringAccumulator* accumulator,
       bool negative, AllocationType allocation);
+  template <typename IsolateT>
+  static Handle<BigInt> Allocate(IsolateT* isolate, int num_digits,
+                                 uintptr_t* digit_storage, bool negative,
+                                 AllocationType allocation);
 
   // Special functions for ValueSerializer/ValueDeserializer:
   uint32_t GetBitfieldForSerialization() const;

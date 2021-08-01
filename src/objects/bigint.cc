@@ -1570,6 +1570,25 @@ template MaybeHandle<BigInt> BigInt::Allocate(LocalIsolate*,
                                               bigint::FromStringAccumulator*,
                                               bool, AllocationType);
 
+template <typename IsolateT>
+Handle<BigInt> BigInt::Allocate(IsolateT* isolate, int num_digits,
+                                uintptr_t* digit_storage, bool negative,
+                                AllocationType allocation) {
+  DCHECK_LE(num_digits, kMaxLength);
+  Handle<MutableBigInt> result =
+      MutableBigInt::New(isolate, num_digits, allocation).ToHandleChecked();
+  bigint::RWDigits digits = GetRWDigits(result);
+  for (int i = 0; i < num_digits; i++) {
+    digits[i] = digit_storage[i];
+  }
+  result->set_sign(negative);
+  return MutableBigInt::MakeImmutable(result);
+}
+template Handle<BigInt> BigInt::Allocate(Isolate*, int, uintptr_t*, bool,
+                                         AllocationType);
+template Handle<BigInt> BigInt::Allocate(LocalIsolate*, int, uintptr_t*, bool,
+                                         AllocationType);
+
 // The serialization format MUST NOT CHANGE without updating the format
 // version in value-serializer.cc!
 uint32_t BigInt::GetBitfieldForSerialization() const {
