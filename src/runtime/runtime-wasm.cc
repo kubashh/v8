@@ -169,7 +169,9 @@ RUNTIME_FUNCTION(Runtime_WasmThrow) {
   Handle<WasmExceptionTag> tag(tag_raw, isolate);
   Handle<FixedArray> values(values_raw, isolate);
 
-  Handle<Object> exception = isolate->factory()->NewWasmRuntimeError(
+  Handle<JSFunction> exception_cons(
+      isolate->native_context()->wasm_exception_constructor(), isolate);
+  Handle<JSObject> exception = isolate->factory()->NewWasmExceptionError(
       MessageTemplate::kWasmExceptionError);
   Object::SetProperty(
       isolate, exception, isolate->factory()->wasm_exception_tag_symbol(), tag,
@@ -179,7 +181,6 @@ RUNTIME_FUNCTION(Runtime_WasmThrow) {
       isolate, exception, isolate->factory()->wasm_exception_values_symbol(),
       values, StoreOrigin::kMaybeKeyed, Just(ShouldThrow::kThrowOnError))
       .Check();
-
   wasm::GetWasmEngine()->SampleThrowEvent(isolate);
   return isolate->Throw(*exception);
 }
