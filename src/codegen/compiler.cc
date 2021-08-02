@@ -1680,6 +1680,31 @@ Handle<Script> BackgroundCompileTask::GetScript(Isolate* isolate) {
   return handle(*script_, isolate);
 }
 
+BackgroundDeserializeTask::BackgroundDeserializeTask(
+    Isolate* isolate, BackgroundDeserializeData* data)
+    : isolate_for_local_isolate_(isolate),
+      cached_data_(data->cached_data->data, data->cached_data->length) {}
+
+void BackgroundDeserializeTask::Run() {
+  LocalIsolate isolate(isolate_for_local_isolate_, ThreadKind::kBackground);
+  UnparkedScope unparked_scope(&isolate);
+  LocalHandleScope handle_scope(&isolate);
+
+  Handle<SharedFunctionInfo> inner_result;
+  off_thread_data_ =
+      CodeSerializer::StartDeserializeOffThread(&isolate, &cached_data_);
+}
+
+MaybeHandle<SharedFunctionInfo> BackgroundDeserializeTask::Finish(
+    Isolate* isolate, Handle<String> source,
+    ScriptOriginOptions origin_options) {
+  return CodeSerializer::FinishOffThreadDeserialize(
+      isolate, std::move(off_thread_data_), &cached_data_, source,
+      origin_options);
+}
+
+BackgroundDeserializeData::~BackgroundDeserializeData() = default;
+
 // ----------------------------------------------------------------------------
 // Implementation of Compiler
 
@@ -3298,7 +3323,7 @@ void Compiler::PostInstantiation(Handle<JSFunction> function) {
 // Implementation of ScriptStreamingData
 
 ScriptStreamingData::ScriptStreamingData(
-    std::unique_ptr<ScriptCompiler::ExternalSourceStream> source_stream,
+    std::unique_ptr<ScriptCompiler::ExternalSourceStream>&& source_stream,
     ScriptCompiler::StreamedSource::Encoding encoding)
     : source_stream(std::move(source_stream)), encoding(encoding) {}
 

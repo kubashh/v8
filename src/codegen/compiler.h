@@ -19,6 +19,7 @@
 #include "src/objects/debug-objects.h"
 #include "src/parsing/parse-info.h"
 #include "src/parsing/pending-compilation-error-handler.h"
+#include "src/snapshot/code-serializer.h"
 #include "src/utils/allocation.h"
 #include "src/zone/zone.h"
 
@@ -560,7 +561,7 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
 // background parsing and compiling and finalizing it on the main thread.
 struct ScriptStreamingData {
   ScriptStreamingData(
-      std::unique_ptr<ScriptCompiler::ExternalSourceStream> source_stream,
+      std::unique_ptr<ScriptCompiler::ExternalSourceStream>&& source_stream,
       ScriptCompiler::StreamedSource::Encoding encoding);
   ScriptStreamingData(const ScriptStreamingData&) = delete;
   ScriptStreamingData& operator=(const ScriptStreamingData&) = delete;
@@ -574,6 +575,41 @@ struct ScriptStreamingData {
 
   // Task that performs background parsing and compilation.
   std::unique_ptr<BackgroundCompileTask> task;
+};
+
+struct BackgroundDeserializeData;
+
+class V8_EXPORT_PRIVATE BackgroundDeserializeTask {
+ public:
+  BackgroundDeserializeTask(Isolate* isolate, BackgroundDeserializeData* data);
+
+  void Run();
+
+  MaybeHandle<SharedFunctionInfo> Finish(Isolate* isolate,
+                                         Handle<String> source,
+                                         ScriptOriginOptions origin_options);
+
+ private:
+  Isolate* isolate_for_local_isolate_;
+  CodeSerializer::OffThreadDeserializeData off_thread_data_;
+  ScriptData cached_data_;
+};
+
+// Contains all data which needs to be transmitted between threads for
+// background parsing and compiling and finalizing it on the main thread.
+struct BackgroundDeserializeData {
+  explicit BackgroundDeserializeData(
+      std::unique_ptr<ScriptCompiler::CachedData>&& cached_data)
+      : cached_data(std::move(cached_data)) {}
+  BackgroundDeserializeData(const BackgroundDeserializeData&) = delete;
+  BackgroundDeserializeData& operator=(const BackgroundDeserializeData&) =
+      delete;
+  ~BackgroundDeserializeData();
+
+  void Release();
+
+  std::unique_ptr<ScriptCompiler::CachedData> cached_data;
+  std::unique_ptr<BackgroundDeserializeTask> task;
 };
 
 }  // namespace internal
