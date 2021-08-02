@@ -33,6 +33,23 @@
       "message": "Thanks for implementing these  fixes!\nLGTM, but I don\u0027t have the rights to give a +1.",
       "revId": "ce0812480933e9dafaeb6beb0f6d1b1a4bae36ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "924325fa_df8e486a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-08-02T09:15:21Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "ce0812480933e9dafaeb6beb0f6d1b1a4bae36ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
