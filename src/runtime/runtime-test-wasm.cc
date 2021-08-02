@@ -293,7 +293,7 @@ RUNTIME_FUNCTION(Runtime_GetWasmRecoveredTrapCount) {
   return *isolate->factory()->NewNumberFromSize(trap_count);
 }
 
-RUNTIME_FUNCTION(Runtime_GetWasmExceptionTagId) {
+RUNTIME_FUNCTION(Runtime_GetWasmExceptionId) {
   HandleScope scope(isolate);
   DCHECK_EQ(2, args.length());
   CONVERT_ARG_HANDLE_CHECKED(WasmExceptionPackage, exception, 0);

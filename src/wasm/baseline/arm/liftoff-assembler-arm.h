@@ -481,10 +481,10 @@ void LiftoffAssembler::AlignFrameSize() {}
 
 void LiftoffAssembler::PatchPrepareStackFrame(
     int offset, SafepointTableBuilder* safepoint_table_builder) {
-  // The frame_size includes the frame marker and the instance slot. Both are
-  // pushed as part of frame construction, so we don't need to allocate memory
-  // for them anymore.
-  int frame_size = GetTotalFrameSize() - 2 * kSystemPointerSize;
+  // The frame_size includes the frame marker. The frame marker has already been
+  // pushed on the stack though, so we don't need to allocate memory for it
+  // anymore.
+  int frame_size = GetTotalFrameSize() - kSystemPointerSize;
 
   PatchingAssembler patching_assembler(AssemblerOptions{},
                                        buffer_start_ + offset,
@@ -531,6 +531,9 @@ void LiftoffAssembler::PatchPrepareStackFrame(
     b(cs /* higher or same */, &continuation);
   }
 
+  // The instance has not been written to the frame yet (because no frame space
+  // has been allocated), but the runtime call expects it. Hence push it now.
+  Push(kWasmInstanceRegister);
   Call(wasm::WasmCode::kWasmStackOverflow, RelocInfo::WASM_STUB_CALL);
   // The call will not return; just define an empty safepoint.
   safepoint_table_builder->DefineSafepoint(this);
@@ -543,8 +546,8 @@ void LiftoffAssembler::PatchPrepareStackFrame(
   AllocateStackSpace(frame_size);
 
   // Jump back to the start of the function, from {pc_offset()} to
-  // right after the reserved space for the {__ sub(sp, sp, framesize)} (which
-  // is a branch now).
+  // right after the reserved space for the {sub_sp_32} (which is a branch
+  // now).
   int func_start_offset =
       offset + liftoff::kPatchInstructionsRequired * kInstrSize;
   b(func_start_offset - pc_offset() - Instruction::kPcLoadDelta);

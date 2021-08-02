@@ -1411,9 +1411,6 @@ void TurboAssembler::EnterFrame(StackFrame::Type type,
 
   mov(ip, Operand(StackFrame::TypeToMarker(type)));
   PushCommonFrame(ip);
-#if V8_ENABLE_WEBASSEMBLY
-  if (type == StackFrame::WASM) Push(kWasmInstanceRegister);
-#endif  // V8_ENABLE_WEBASSEMBLY
 }
 
 int TurboAssembler::LeaveFrame(StackFrame::Type type, int stack_adjustment) {
@@ -1576,6 +1573,55 @@ void TurboAssembler::MovFromFloatResult(const DoubleRegister dst) {
 
 void TurboAssembler::MovFromFloatParameter(const DoubleRegister dst) {
   Move(dst, d0);
+}
+
+void TurboAssembler::PrepareForTailCall(Register callee_args_count,
+                                        Register caller_args_count,
+                                        Register scratch0, Register scratch1) {
+  DCHECK(!AreAliased(callee_args_count, caller_args_count, scratch0, scratch1));
+
+  // Calculate the end of destination area where we will put the arguments
+  // after we drop current frame. We AddS64 kSystemPointerSize to count the
+  // receiver argument which is not included into formal parameters count.
+  Register dst_reg = scratch0;
+  ShiftLeftU64(dst_reg, caller_args_count, Operand(kSystemPointerSizeLog2));
+  AddS64(dst_reg, fp, dst_reg);
+  AddS64(dst_reg, dst_reg,
+         Operand(StandardFrameConstants::kCallerSPOffset + kSystemPointerSize));
+
+  Register src_reg = caller_args_count;
+  // Calculate the end of source area. +kSystemPointerSize is for the receiver.
+  ShiftLeftU64(src_reg, callee_args_count, Operand(kSystemPointerSizeLog2));
+  AddS64(src_reg, sp, src_reg);
+  AddS64(src_reg, src_reg, Operand(kSystemPointerSize));
+
+  if (FLAG_debug_code) {
+    CmpU64(src_reg, dst_reg);
+    Check(lt, AbortReason::kStackAccessBelowStackPointer);
+  }
+
+  // Restore caller's frame pointer and return address now as they will be
+  // overwritten by the copying loop.
+  RestoreFrameStateForTailCall();
+
+  // Now copy callee arguments to the caller frame going backwards to avoid
+  // callee arguments corruption (source and destination areas could overlap).
+
+  // Both src_reg and dst_reg are pointing to the word after the one to copy,
+  // so they must be pre-decremented in the loop.
+  Register tmp_reg = scratch1;
+  Label loop;
+  AddS64(tmp_reg, callee_args_count, Operand(1));  // +1 for receiver
+  mov(r1, tmp_reg);
+  bind(&loop);
+  LoadU64(tmp_reg, MemOperand(src_reg, -kSystemPointerSize));
+  StoreU64(tmp_reg, MemOperand(dst_reg, -kSystemPointerSize));
+  lay(src_reg, MemOperand(src_reg, -kSystemPointerSize));
+  lay(dst_reg, MemOperand(dst_reg, -kSystemPointerSize));
+  BranchOnCount(r1, &loop);
+
+  // Leave current frame.
+  mov(sp, dst_reg);
 }
 
 MemOperand MacroAssembler::StackLimitAsMemOperand(StackLimitKind kind) {
@@ -5164,52 +5210,22 @@ void TurboAssembler::I8x16ReplaceLane(Simd128Register dst, Simd128Register src1,
   vlvg(dst, src2, MemOperand(r0, 15 - imm_lane_idx), Condition(0));
 }
 
-#define SIMD_BINOP_LIST(V)    \
-  V(F64x2Add, vfa, 0, 0, 3)   \
-  V(F64x2Sub, vfs, 0, 0, 3)   \
-  V(F64x2Mul, vfm, 0, 0, 3)   \
-  V(F64x2Div, vfd, 0, 0, 3)   \
-  V(F64x2Min, vfmin, 1, 0, 3) \
-  V(F64x2Max, vfmax, 1, 0, 3) \
-  V(F32x4Add, vfa, 0, 0, 2)   \
-  V(F32x4Sub, vfs, 0, 0, 2)   \
-  V(F32x4Mul, vfm, 0, 0, 2)   \
-  V(F32x4Div, vfd, 0, 0, 2)   \
-  V(F32x4Min, vfmin, 1, 0, 2) \
-  V(F32x4Max, vfmax, 1, 0, 2) \
-  V(I64x2Add, va, 0, 0, 3)    \
-  V(I64x2Sub, vs, 0, 0, 3)    \
-  V(I32x4Add, va, 0, 0, 2)    \
-  V(I32x4Sub, vs, 0, 0, 2)    \
-  V(I32x4Mul, vml, 0, 0, 2)   \
-  V(I16x8Add, va, 0, 0, 1)    \
-  V(I16x8Sub, vs, 0, 0, 1)    \
-  V(I16x8Mul, vml, 0, 0, 1)   \
-  V(I8x16Add, va, 0, 0, 0)    \
-  V(I8x16Sub, vs, 0, 0, 0)
+#define SIMD_BINOP_LIST(V) \
+  V(F64x2Add, vfa, 3)      \
+  V(F32x4Add, vfa, 2)      \
+  V(I64x2Add, va, 3)       \
+  V(I32x4Add, va, 2)       \
+  V(I16x8Add, va, 1)       \
+  V(I8x16Add, va, 0)
 
-#define EMIT_SIMD_BINOP(name, op, c1, c2, c3)                          \
-  void TurboAssembler::name(Simd128Register dst, Simd128Register src1, \
-                            Simd128Register src2) {                    \
-    op(dst, src1, src2, Condition(c1), Condition(c2), Condition(c3));  \
+#define EMIT_SIMD_BINOP(name, op, condition)                               \
+  void TurboAssembler::name(Simd128Register dst, Simd128Register src1,     \
+                            Simd128Register src2) {                        \
+    op(dst, src1, src2, Condition(0), Condition(0), Condition(condition)); \
   }
 SIMD_BINOP_LIST(EMIT_SIMD_BINOP)
 #undef EMIT_SIMD_BINOP
 #undef SIMD_BINOP_LIST
-
-void TurboAssembler::I64x2Mul(Simd128Register dst, Simd128Register src1,
-                              Simd128Register src2) {
-  Register scratch_1 = r0;
-  Register scratch_2 = r1;
-  for (int i = 0; i < 2; i++) {
-    vlgv(scratch_1, src1, MemOperand(r0, i), Condition(3));
-    vlgv(scratch_2, src2, MemOperand(r0, i), Condition(3));
-    MulS64(scratch_1, scratch_2);
-    scratch_1 = r1;
-    scratch_2 = ip;
-  }
-  vlvgp(dst, r0, r1);
-}
 
 }  // namespace internal
 }  // namespace v8

@@ -2165,7 +2165,7 @@ class WasmInterpreterInternals {
         *len += 1;
         break;
       case kExprI32AtomicWait: {
-        if (!module()->has_shared_memory || !isolate_->allow_atomics_wait()) {
+        if (!module()->has_shared_memory) {
           DoTrap(kTrapUnreachable, pc);
           return false;
         }
@@ -2185,7 +2185,7 @@ class WasmInterpreterInternals {
         break;
       }
       case kExprI64AtomicWait: {
-        if (!module()->has_shared_memory || !isolate_->allow_atomics_wait()) {
+        if (!module()->has_shared_memory) {
           DoTrap(kTrapUnreachable, pc);
           return false;
         }
@@ -3184,21 +3184,6 @@ class WasmInterpreterInternals {
         handle(instance_object_->tags_table().get(index), isolate_);
     DCHECK(expected_tag->IsWasmExceptionTag());
     return expected_tag.is_identical_to(caught_tag);
-  }
-
-  void DecodeI32ExceptionValue(Handle<FixedArray> encoded_values,
-                               uint32_t* encoded_index, uint32_t* value) {
-    uint32_t msb = Smi::cast(encoded_values->get((*encoded_index)++)).value();
-    uint32_t lsb = Smi::cast(encoded_values->get((*encoded_index)++)).value();
-    *value = (msb << 16) | (lsb & 0xffff);
-  }
-
-  void DecodeI64ExceptionValue(Handle<FixedArray> encoded_values,
-                               uint32_t* encoded_index, uint64_t* value) {
-    uint32_t lsb = 0, msb = 0;
-    DecodeI32ExceptionValue(encoded_values, encoded_index, &msb);
-    DecodeI32ExceptionValue(encoded_values, encoded_index, &lsb);
-    *value = (static_cast<uint64_t>(msb) << 32) | static_cast<uint64_t>(lsb);
   }
 
   // Unpack the values encoded in the given exception. The exception values are

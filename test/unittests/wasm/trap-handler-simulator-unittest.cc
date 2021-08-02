@@ -23,17 +23,15 @@ constexpr uintptr_t kFakePc = 11;
 
 class SimulatorTrapHandlerTest : public TestWithIsolate {
  public:
-  void SetThreadInWasm() {
-    EXPECT_EQ(0, *thread_in_wasm);
-    *thread_in_wasm = 1;
+  static void SetThreadInWasm() {
+    EXPECT_EQ(0, g_thread_in_wasm_code);
+    g_thread_in_wasm_code = 1;
   }
 
-  void ResetThreadInWasm() {
-    EXPECT_EQ(1, *thread_in_wasm);
-    *thread_in_wasm = 0;
+  static void ResetThreadInWasm() {
+    EXPECT_EQ(1, g_thread_in_wasm_code);
+    g_thread_in_wasm_code = 0;
   }
-
-  int* thread_in_wasm = trap_handler::GetThreadInWasmThreadLocalAddress();
 };
 
 TEST_F(SimulatorTrapHandlerTest, ProbeMemorySuccess) {

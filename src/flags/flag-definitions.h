@@ -706,7 +706,7 @@ DEFINE_NEG_IMPLICATION(stress_concurrent_inlining, lazy_feedback_allocation)
 DEFINE_WEAK_VALUE_IMPLICATION(stress_concurrent_inlining, interrupt_budget,
                               15 * KB)
 DEFINE_BOOL(
-    turbo_concurrent_get_property_access_info, true,
+    turbo_concurrent_get_property_access_info, false,
     "concurrently call GetPropertyAccessInfo (only with --concurrent-inlining)")
 DEFINE_INT(max_serializer_nesting, 25,
            "maximum levels for nesting child serializers")
@@ -1673,6 +1673,7 @@ DEFINE_BOOL(serialization_statistics, false,
             "Collect statistics on serialized objects.")
 // Regexp
 DEFINE_BOOL(regexp_optimization, true, "generate optimized regexp code")
+DEFINE_BOOL(regexp_mode_modifiers, false, "enable inline flags in regexp.")
 DEFINE_BOOL(regexp_interpret_all, false, "interpret all regexp code")
 #ifdef V8_TARGET_BIG_ENDIAN
 #define REGEXP_PEEPHOLE_OPTIMIZATION_BOOL false

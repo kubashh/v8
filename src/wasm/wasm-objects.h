@@ -31,9 +31,9 @@ namespace wasm {
 class InterpretedFrame;
 class NativeModule;
 class WasmCode;
+struct WasmTag;
 struct WasmGlobal;
 struct WasmModule;
-struct WasmTag;
 class WasmValue;
 class WireBytesRef;
 }  // namespace wasm
@@ -596,6 +596,14 @@ void V8_EXPORT_PRIVATE EncodeI32ExceptionValue(
 void V8_EXPORT_PRIVATE EncodeI64ExceptionValue(
     Handle<FixedArray> encoded_values, uint32_t* encoded_index, uint64_t value);
 
+void V8_EXPORT_PRIVATE
+DecodeI32ExceptionValue(Handle<FixedArray> encoded_values,
+                        uint32_t* encoded_index, uint32_t* value);
+
+void V8_EXPORT_PRIVATE
+DecodeI64ExceptionValue(Handle<FixedArray> encoded_values,
+                        uint32_t* encoded_index, uint64_t* value);
+
 // A Wasm function that is wrapped and exported to JavaScript.
 // Representation of WebAssembly.Function JavaScript-level object.
 class WasmExportedFunction : public JSFunction {
@@ -822,7 +830,7 @@ class WasmScript : public AllStatic {
 
 // Tags provide an object identity for each exception defined in a wasm module
 // header. They are referenced by the following fields:
-//  - {WasmTagObject::tag}  : The tag of the {Tag} object.
+//  - {WasmTagObject::exception_tag}  : The tag of the {Tag} object.
 //  - {WasmInstanceObject::tags_table}: List of tags used by an instance.
 class WasmExceptionTag
     : public TorqueGeneratedWasmExceptionTag<WasmExceptionTag, Struct> {

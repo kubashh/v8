@@ -64,14 +64,17 @@ class CanBeHandledVisitor final : private RegExpVisitor {
   }
 
   void* VisitCharacterClass(RegExpCharacterClass* node, void*) override {
+    result_ = result_ && AreSuitableFlags(node->flags());
     return nullptr;
   }
 
   void* VisitAssertion(RegExpAssertion* node, void*) override {
+    result_ = result_ && AreSuitableFlags(node->flags());
     return nullptr;
   }
 
   void* VisitAtom(RegExpAtom* node, void*) override {
+    result_ = result_ && AreSuitableFlags(node->flags());
     return nullptr;
   }
 

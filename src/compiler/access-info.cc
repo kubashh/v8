@@ -448,22 +448,22 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
       return Invalid();
     }
   }
-
-  Handle<FieldType> descriptors_field_type =
-      broker()->CanonicalPersistentHandle(
-          descriptors->GetFieldType(descriptor));
-
   if (details_representation.IsSmi()) {
     field_type = Type::SignedSmall();
     unrecorded_dependencies.push_back(
-        dependencies()->FieldRepresentationDependencyOffTheRecord(
-            map, descriptor, details_representation));
+        dependencies()->FieldRepresentationDependencyOffTheRecord(map,
+                                                                  descriptor));
   } else if (details_representation.IsDouble()) {
     field_type = type_cache_->kFloat64;
     unrecorded_dependencies.push_back(
-        dependencies()->FieldRepresentationDependencyOffTheRecord(
-            map, descriptor, details_representation));
+        dependencies()->FieldRepresentationDependencyOffTheRecord(map,
+                                                                  descriptor));
   } else if (details_representation.IsHeapObject()) {
+    // Extract the field type from the property details (make sure its
+    // representation is TaggedPointer to reflect the heap object case).
+    Handle<FieldType> descriptors_field_type =
+        broker()->CanonicalPersistentHandle(
+            descriptors->GetFieldType(descriptor));
     if (descriptors_field_type->IsNone()) {
       // Store is not safe if the field type was cleared.
       if (access_mode == AccessMode::kStore) {
@@ -474,8 +474,8 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
       // about the contents now.
     }
     unrecorded_dependencies.push_back(
-        dependencies()->FieldRepresentationDependencyOffTheRecord(
-            map, descriptor, details_representation));
+        dependencies()->FieldRepresentationDependencyOffTheRecord(map,
+                                                                  descriptor));
     if (descriptors_field_type->IsClass()) {
       // Remember the field map, and try to infer a useful type.
       base::Optional<MapRef> maybe_field_map =
@@ -490,8 +490,7 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
   // TODO(turbofan): We may want to do this only depending on the use
   // of the access info.
   unrecorded_dependencies.push_back(
-      dependencies()->FieldTypeDependencyOffTheRecord(
-          map, descriptor, MakeRef<Object>(broker(), descriptors_field_type)));
+      dependencies()->FieldTypeDependencyOffTheRecord(map, descriptor));
 
   PropertyConstness constness;
   if (details.IsReadOnly() && !details.IsConfigurable()) {
@@ -936,6 +935,7 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
 
     holder = prototype->AsJSObject();
     map = map_prototype_map;
+    CHECK(!map.is_deprecated());
 
     if (!CanInlinePropertyAccess(map, access_mode)) {
       return Invalid();
@@ -943,12 +943,8 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
 
     // Successful lookup on prototype chain needs to guarantee that all the
     // prototypes up to the holder have stable maps, except for dictionary-mode
-    // prototypes. We currently do this by taking a
-    // DependOnStablePrototypeChains dependency in the caller.
-    //
-    // TODO(jgruber): This is brittle and easy to miss. Consider a refactor
-    // that moves the responsibility of taking the dependency into
-    // AccessInfoFactory.
+    // prototypes.
+    CHECK_IMPLIES(!map.is_dictionary_map(), map.is_stable());
   }
   UNREACHABLE();
 }
@@ -1146,7 +1142,7 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     }
     unrecorded_dependencies.push_back(
         dependencies()->FieldRepresentationDependencyOffTheRecord(
-            transition_map, number, details_representation));
+            transition_map, number));
   } else if (details_representation.IsDouble()) {
     field_type = type_cache_->kFloat64;
     if (!broker()->is_concurrent_inlining()) {
@@ -1157,7 +1153,7 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     }
     unrecorded_dependencies.push_back(
         dependencies()->FieldRepresentationDependencyOffTheRecord(
-            transition_map, number, details_representation));
+            transition_map, number));
   } else if (details_representation.IsHeapObject()) {
     // Extract the field type from the property details (make sure its
     // representation is TaggedPointer to reflect the heap object case).
@@ -1175,12 +1171,11 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     }
     unrecorded_dependencies.push_back(
         dependencies()->FieldRepresentationDependencyOffTheRecord(
-            transition_map, number, details_representation));
+            transition_map, number));
     if (descriptors_field_type->IsClass()) {
       unrecorded_dependencies.push_back(
-          dependencies()->FieldTypeDependencyOffTheRecord(
-              transition_map, number,
-              MakeRef<Object>(broker(), descriptors_field_type)));
+          dependencies()->FieldTypeDependencyOffTheRecord(transition_map,
+                                                          number));
       // Remember the field map, and try to infer a useful type.
       base::Optional<MapRef> maybe_field_map =
           TryMakeRef(broker(), descriptors_field_type->AsClass());

@@ -1385,6 +1385,54 @@ void TurboAssembler::MovFromFloatParameter(const DoubleRegister dst) {
   Move(dst, d1);
 }
 
+void TurboAssembler::PrepareForTailCall(Register callee_args_count,
+                                        Register caller_args_count,
+                                        Register scratch0, Register scratch1) {
+  DCHECK(!AreAliased(callee_args_count, caller_args_count, scratch0, scratch1));
+
+  // Calculate the end of destination area where we will put the arguments
+  // after we drop current frame. We add kSystemPointerSize to count the
+  // receiver argument which is not included into formal parameters count.
+  Register dst_reg = scratch0;
+  ShiftLeftU64(dst_reg, caller_args_count, Operand(kSystemPointerSizeLog2));
+  add(dst_reg, fp, dst_reg);
+  AddS64(dst_reg, dst_reg,
+         Operand(StandardFrameConstants::kCallerSPOffset + kSystemPointerSize),
+         scratch0);
+
+  Register src_reg = caller_args_count;
+  // Calculate the end of source area. +kSystemPointerSize is for the receiver.
+  ShiftLeftU64(src_reg, callee_args_count, Operand(kSystemPointerSizeLog2));
+  add(src_reg, sp, src_reg);
+  AddS64(src_reg, src_reg, Operand(kSystemPointerSize), scratch0);
+
+  if (FLAG_debug_code) {
+    CmpU64(src_reg, dst_reg);
+    Check(lt, AbortReason::kStackAccessBelowStackPointer);
+  }
+
+  // Restore caller's frame pointer and return address now as they will be
+  // overwritten by the copying loop.
+  RestoreFrameStateForTailCall();
+
+  // Now copy callee arguments to the caller frame going backwards to avoid
+  // callee arguments corruption (source and destination areas could overlap).
+
+  // Both src_reg and dst_reg are pointing to the word after the one to copy,
+  // so they must be pre-decremented in the loop.
+  Register tmp_reg = scratch1;
+  Label loop;
+  addi(tmp_reg, callee_args_count, Operand(1));  // +1 for receiver
+  mtctr(tmp_reg);
+  bind(&loop);
+  LoadU64WithUpdate(tmp_reg, MemOperand(src_reg, -kSystemPointerSize));
+  StoreU64WithUpdate(tmp_reg, MemOperand(dst_reg, -kSystemPointerSize));
+  bdnz(&loop);
+
+  // Leave current frame.
+  mr(sp, dst_reg);
+}
+
 void MacroAssembler::LoadStackLimit(Register destination, StackLimitKind kind) {
   DCHECK(root_array_available());
   Isolate* isolate = this->isolate();
@@ -2402,7 +2450,7 @@ void TurboAssembler::LoadDoubleLiteral(DoubleRegister result,
   litVal.dval = value.AsUint64();
 
 #if V8_TARGET_ARCH_PPC64
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     mov(scratch, Operand(litVal.ival));
     mtfprd(result, scratch);
     return;
@@ -2428,7 +2476,7 @@ void TurboAssembler::MovIntToDouble(DoubleRegister dst, Register src,
                                     Register scratch) {
 // sign-extend src to 64-bit
 #if V8_TARGET_ARCH_PPC64
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     mtfprwa(dst, src);
     return;
   }
@@ -2453,7 +2501,7 @@ void TurboAssembler::MovUnsignedIntToDouble(DoubleRegister dst, Register src,
                                             Register scratch) {
 // zero-extend src to 64-bit
 #if V8_TARGET_ARCH_PPC64
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     mtfprwz(dst, src);
     return;
   }
@@ -2480,7 +2528,7 @@ void TurboAssembler::MovInt64ToDouble(DoubleRegister dst,
 #endif
                                       Register src) {
 #if V8_TARGET_ARCH_PPC64
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     mtfprd(dst, src);
     return;
   }
@@ -2503,7 +2551,7 @@ void TurboAssembler::MovInt64ComponentsToDouble(DoubleRegister dst,
                                                 Register src_hi,
                                                 Register src_lo,
                                                 Register scratch) {
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     ShiftLeftU64(scratch, src_hi, Operand(32));
     rldimi(scratch, src_lo, 0, 32);
     mtfprd(dst, scratch);
@@ -2522,7 +2570,7 @@ void TurboAssembler::MovInt64ComponentsToDouble(DoubleRegister dst,
 void TurboAssembler::InsertDoubleLow(DoubleRegister dst, Register src,
                                      Register scratch) {
 #if V8_TARGET_ARCH_PPC64
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     mffprd(scratch, dst);
     rldimi(scratch, src, 0, 32);
     mtfprd(dst, scratch);
@@ -2541,7 +2589,7 @@ void TurboAssembler::InsertDoubleLow(DoubleRegister dst, Register src,
 void TurboAssembler::InsertDoubleHigh(DoubleRegister dst, Register src,
                                       Register scratch) {
 #if V8_TARGET_ARCH_PPC64
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     mffprd(scratch, dst);
     rldimi(scratch, src, 32, 0);
     mtfprd(dst, scratch);
@@ -2559,7 +2607,7 @@ void TurboAssembler::InsertDoubleHigh(DoubleRegister dst, Register src,
 
 void TurboAssembler::MovDoubleLowToInt(Register dst, DoubleRegister src) {
 #if V8_TARGET_ARCH_PPC64
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     mffprwz(dst, src);
     return;
   }
@@ -2574,7 +2622,7 @@ void TurboAssembler::MovDoubleLowToInt(Register dst, DoubleRegister src) {
 
 void TurboAssembler::MovDoubleHighToInt(Register dst, DoubleRegister src) {
 #if V8_TARGET_ARCH_PPC64
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     mffprd(dst, src);
     srdi(dst, dst, Operand(32));
     return;
@@ -2594,7 +2642,7 @@ void TurboAssembler::MovDoubleToInt64(
 #endif
     Register dst, DoubleRegister src) {
 #if V8_TARGET_ARCH_PPC64
-  if (CpuFeatures::IsSupported(PPC_8_PLUS)) {
+  if (CpuFeatures::IsSupported(FPR_GPR_MOV)) {
     mffprd(dst, src);
     return;
   }
@@ -3572,24 +3620,6 @@ void TurboAssembler::DebugBreak() { stop(); }
 void TurboAssembler::Popcnt32(Register dst, Register src) { popcntw(dst, src); }
 
 void TurboAssembler::Popcnt64(Register dst, Register src) { popcntd(dst, src); }
-
-void TurboAssembler::CountLeadingZerosU32(Register dst, Register src, RCBit r) {
-  cntlzw(dst, src, r);
-}
-
-void TurboAssembler::CountLeadingZerosU64(Register dst, Register src, RCBit r) {
-  cntlzd(dst, src, r);
-}
-
-void TurboAssembler::CountTrailingZerosU32(Register dst, Register src,
-                                           RCBit r) {
-  cnttzw(dst, src, r);
-}
-
-void TurboAssembler::CountTrailingZerosU64(Register dst, Register src,
-                                           RCBit r) {
-  cnttzd(dst, src, r);
-}
 
 }  // namespace internal
 }  // namespace v8

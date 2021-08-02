@@ -4212,9 +4212,8 @@ void Isolate::RemoveCallCompletedCallback(CallCompletedCallback callback) {
   call_completed_callbacks_.erase(pos);
 }
 
-void Isolate::FireCallCompletedCallbackInternal(
-    MicrotaskQueue* microtask_queue) {
-  DCHECK(thread_local_top()->CallDepthIsZero());
+void Isolate::FireCallCompletedCallback(MicrotaskQueue* microtask_queue) {
+  if (!thread_local_top()->CallDepthIsZero()) return;
 
   bool perform_checkpoint =
       microtask_queue &&

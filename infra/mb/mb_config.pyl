@@ -62,9 +62,7 @@
       'V8 Linux - verify csa': 'release_x86_verify_csa',
       # Linux64.
       'V8 Linux64 - builder': 'release_x64',
-      'V8 Linux64 - builder (goma cache silo)': 'release_x64',
       'V8 Linux64 - builder (reclient)': 'release_x64_reclient',
-      'V8 Linux64 - builder (reclient compare)': 'release_x64_reclient',
       'V8 Linux64 - debug builder': 'debug_x64',
       'V8 Linux64 - dict tracking - debug - builder': 'debug_x64_dict_tracking_trybot',
       'V8 Linux64 - external code space - debug - builder': 'debug_x64_external_code_space',
@@ -398,7 +396,7 @@
       # TODO(v8:v7703): Make pointer compression bots testing non pointer
       # compression mode while pointer compression is temporarily enabled
       # on arm64
-      'release_bot', 'simulate_arm64', 'dcheck_always_on',
+      'release_bot', 'simulate_arm64', 'v8_dcheck_always_on',
       'v8_enable_slow_dchecks', 'v8_disable_pointer_compression'],
     'release_simulate_arm64_msan': [
       'release_bot', 'simulate_arm64', 'msan'],
@@ -471,7 +469,7 @@
     'release_x64_asan_no_lsan_verify_heap': [
       'release_bot', 'x64', 'asan', 'v8_verify_heap'],
     'release_x64_asan_no_lsan_verify_heap_dchecks': [
-      'release_bot', 'x64', 'asan', 'dcheck_always_on',
+      'release_bot', 'x64', 'asan', 'v8_dcheck_always_on',
       'v8_enable_slow_dchecks', 'v8_verify_heap'],
     'release_x64_asan_symbolized_verify_heap': [
       'release_bot', 'x64', 'asan', 'lsan', 'symbolized',
@@ -481,7 +479,7 @@
     'release_x64_cfi_clusterfuzz': [
       'release_bot', 'x64', 'cfi_clusterfuzz'],
     'release_x64_fuzzilli': [
-      'release_bot', 'x64', 'dcheck_always_on', 'v8_enable_slow_dchecks',
+      'release_bot', 'x64', 'v8_dcheck_always_on', 'v8_enable_slow_dchecks',
       'v8_verify_heap', 'v8_verify_csa', 'fuzzilli'],
     'release_x64_msvc': [
       'release_bot_no_goma', 'x64', 'minimal_symbols', 'msvc'],
@@ -503,7 +501,7 @@
     'release_x64_minimal_symbols': [
       'release_bot', 'x64', 'minimal_symbols'],
     'release_x64_pointer_compression': [
-      'release_bot', 'x64', 'dcheck_always_on', 'v8_enable_slow_dchecks',
+      'release_bot', 'x64', 'v8_dcheck_always_on', 'v8_enable_slow_dchecks',
       'v8_disable_pointer_compression'],
     'release_x64_pointer_compression_without_dchecks': [
       'release_bot', 'x64', 'v8_disable_pointer_compression'],
@@ -528,7 +526,7 @@
     'release_x64_shared_verify_heap': [
       'release_bot', 'x64', 'shared', 'v8_verify_heap'],
     'release_x64_verify_csa': [
-      'release_bot', 'x64', 'dcheck_always_on',
+      'release_bot', 'x64', 'v8_dcheck_always_on',
       'v8_enable_slow_dchecks', 'v8_verify_csa'],
     'release_x64_webassembly_disabled': [
       'release_bot', 'x64', 'webassembly_disabled'],
@@ -612,7 +610,7 @@
     'release_x86_trybot': [
       'release_trybot', 'x86'],
     'release_x86_verify_csa': [
-      'release_bot', 'x86', 'dcheck_always_on',
+      'release_bot', 'x86', 'v8_dcheck_always_on',
       'v8_enable_slow_dchecks', 'v8_verify_csa'],
 
     # Official configs for x86.
@@ -666,8 +664,8 @@
       'gn_args': 'v8_code_coverage=true',
     },
 
-    'dcheck_always_on': {
-      'gn_args': 'dcheck_always_on=true',
+    'v8_dcheck_always_on': {
+      'gn_args': 'v8_dcheck_always_on=true dcheck_always_on=true',
     },
 
     'debug': {
@@ -801,7 +799,7 @@
     },
 
     'release_trybot': {
-      'mixins': ['release_bot', 'minimal_symbols', 'dcheck_always_on'],
+      'mixins': ['release_bot', 'minimal_symbols', 'v8_dcheck_always_on'],
     },
 
     'official': {

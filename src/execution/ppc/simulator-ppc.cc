@@ -2523,6 +2523,7 @@ void Simulator::ExecuteGeneric(Instruction* instr) {
       }
       break;
     }
+#if V8_TARGET_ARCH_PPC64
     case CNTLZDX: {
       int rs = instr->RSValue();
       int ra = instr->RAValue();
@@ -2548,42 +2549,7 @@ void Simulator::ExecuteGeneric(Instruction* instr) {
       }
       break;
     }
-    case CNTTZWX: {
-      int rs = instr->RSValue();
-      int ra = instr->RAValue();
-      uint32_t rs_val = static_cast<uint32_t>(get_register(rs));
-      uintptr_t count = __builtin_ctz(rs_val);
-      set_register(ra, count);
-      if (instr->Bit(0)) {  // RC Bit set
-        int bf = 0;
-        if (count > 0) {
-          bf |= 0x40000000;
-        }
-        if (count == 0) {
-          bf |= 0x20000000;
-        }
-        condition_reg_ = (condition_reg_ & ~0xF0000000) | bf;
-      }
-      break;
-    }
-    case CNTTZDX: {
-      int rs = instr->RSValue();
-      int ra = instr->RAValue();
-      uint64_t rs_val = get_register(rs);
-      uintptr_t count = __builtin_ctz(rs_val);
-      set_register(ra, count);
-      if (instr->Bit(0)) {  // RC Bit set
-        int bf = 0;
-        if (count > 0) {
-          bf |= 0x40000000;
-        }
-        if (count == 0) {
-          bf |= 0x20000000;
-        }
-        condition_reg_ = (condition_reg_ & ~0xF0000000) | bf;
-      }
-      break;
-    }
+#endif
     case ANDX: {
       int rs = instr->RSValue();
       int ra = instr->RAValue();
@@ -5044,32 +5010,6 @@ void Simulator::ExecuteGeneric(Instruction* instr) {
       }
       break;
     }
-#define EXTRACT_MASK(type)                                           \
-  int rt = instr->RTValue();                                         \
-  int vrb = instr->RBValue();                                        \
-  uint64_t result = 0;                                               \
-  FOR_EACH_LANE(i, type) {                                           \
-    if (i > 0) result <<= 1;                                         \
-    result |= std::signbit(get_simd_register_by_lane<type>(vrb, i)); \
-  }                                                                  \
-  set_register(rt, result);
-    case VEXTRACTDM: {
-      EXTRACT_MASK(int64_t)
-      break;
-    }
-    case VEXTRACTWM: {
-      EXTRACT_MASK(int32_t)
-      break;
-    }
-    case VEXTRACTHM: {
-      EXTRACT_MASK(int16_t)
-      break;
-    }
-    case VEXTRACTBM: {
-      EXTRACT_MASK(int8_t)
-      break;
-    }
-#undef EXTRACT_MASK
 #undef FOR_EACH_LANE
 #undef DECODE_VX_INSTRUCTION
 #undef GET_ADDRESS

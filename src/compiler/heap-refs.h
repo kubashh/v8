@@ -593,6 +593,8 @@ class FeedbackVectorRef : public HeapObjectRef {
   SharedFunctionInfoRef shared_function_info() const;
   double invocation_count() const;
 
+  void Serialize(NotConcurrentInliningTag tag);
+  bool serialized() const;
   FeedbackCellRef GetClosureFeedbackCell(int index) const;
 };
 

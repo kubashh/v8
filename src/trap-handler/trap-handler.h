@@ -153,7 +153,7 @@ inline void ClearThreadInWasm() {
 bool RegisterDefaultTrapHandler();
 TH_EXPORT_PRIVATE void RemoveTrapHandler();
 
-TH_EXPORT_PRIVATE size_t GetRecoveredTrapCount();
+size_t GetRecoveredTrapCount();
 
 }  // namespace trap_handler
 }  // namespace internal

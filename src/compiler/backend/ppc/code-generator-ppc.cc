@@ -1487,7 +1487,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       ASSEMBLE_FLOAT_BINOP_RC(fdiv, MiscField::decode(instr->opcode()));
       break;
     case kPPC_Mod32:
-      if (CpuFeatures::IsSupported(PPC_9_PLUS)) {
+      if (CpuFeatures::IsSupported(MODULO)) {
         __ modsw(i.OutputRegister(), i.InputRegister(0), i.InputRegister(1));
       } else {
         ASSEMBLE_MODULO(divw, mullw);
@@ -1495,7 +1495,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
 #if V8_TARGET_ARCH_PPC64
     case kPPC_Mod64:
-      if (CpuFeatures::IsSupported(PPC_9_PLUS)) {
+      if (CpuFeatures::IsSupported(MODULO)) {
         __ modsd(i.OutputRegister(), i.InputRegister(0), i.InputRegister(1));
       } else {
         ASSEMBLE_MODULO(divd, mulld);
@@ -1503,7 +1503,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
 #endif
     case kPPC_ModU32:
-      if (CpuFeatures::IsSupported(PPC_9_PLUS)) {
+      if (CpuFeatures::IsSupported(MODULO)) {
         __ moduw(i.OutputRegister(), i.InputRegister(0), i.InputRegister(1));
       } else {
         ASSEMBLE_MODULO(divwu, mullw);
@@ -1511,7 +1511,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
 #if V8_TARGET_ARCH_PPC64
     case kPPC_ModU64:
-      if (CpuFeatures::IsSupported(PPC_9_PLUS)) {
+      if (CpuFeatures::IsSupported(MODULO)) {
         __ modud(i.OutputRegister(), i.InputRegister(0), i.InputRegister(1));
       } else {
         ASSEMBLE_MODULO(divdu, mulld);
@@ -1868,7 +1868,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
             cr, static_cast<CRBit>(VXCVI % CRWIDTH));
         __ mcrfs(cr, VXCVI);  // extract FPSCR field containing VXCVI into cr7
         // Handle conversion failures (such as overflow).
-        if (CpuFeatures::IsSupported(PPC_7_PLUS)) {
+        if (CpuFeatures::IsSupported(ISELECT)) {
           if (check_conversion) {
             __ li(i.OutputRegister(1), Operand(1));
             __ isel(i.OutputRegister(1), r0, i.OutputRegister(1), crbit);
@@ -1905,7 +1905,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         int crbit = v8::internal::Assembler::encode_crbit(
             cr, static_cast<CRBit>(VXCVI % CRWIDTH));
         __ mcrfs(cr, VXCVI);  // extract FPSCR field containing VXCVI into cr7
-        if (CpuFeatures::IsSupported(PPC_7_PLUS)) {
+        if (CpuFeatures::IsSupported(ISELECT)) {
           __ li(i.OutputRegister(1), Operand(1));
           __ isel(i.OutputRegister(1), r0, i.OutputRegister(1), crbit);
         } else {
@@ -3251,59 +3251,43 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kPPC_I64x2BitMask: {
-      if (CpuFeatures::IsSupported(PPC_10_PLUS)) {
-        __ vextractdm(i.OutputRegister(), i.InputSimd128Register(0));
-      } else {
-        __ mov(kScratchReg,
-               Operand(0x8080808080800040));  // Select 0 for the high bits.
-        __ mtvsrd(kScratchSimd128Reg, kScratchReg);
-        __ vbpermq(kScratchSimd128Reg, i.InputSimd128Register(0),
-                   kScratchSimd128Reg);
-        __ vextractub(kScratchSimd128Reg, kScratchSimd128Reg, Operand(6));
-        __ mfvsrd(i.OutputRegister(), kScratchSimd128Reg);
-      }
+      __ mov(kScratchReg,
+             Operand(0x8080808080800040));  // Select 0 for the high bits.
+      __ mtvsrd(kScratchSimd128Reg, kScratchReg);
+      __ vbpermq(kScratchSimd128Reg, i.InputSimd128Register(0),
+                 kScratchSimd128Reg);
+      __ vextractub(kScratchSimd128Reg, kScratchSimd128Reg, Operand(6));
+      __ mfvsrd(i.OutputRegister(), kScratchSimd128Reg);
       break;
     }
     case kPPC_I32x4BitMask: {
-      if (CpuFeatures::IsSupported(PPC_10_PLUS)) {
-        __ vextractwm(i.OutputRegister(), i.InputSimd128Register(0));
-      } else {
-        __ mov(kScratchReg,
-               Operand(0x8080808000204060));  // Select 0 for the high bits.
-        __ mtvsrd(kScratchSimd128Reg, kScratchReg);
-        __ vbpermq(kScratchSimd128Reg, i.InputSimd128Register(0),
-                   kScratchSimd128Reg);
-        __ vextractub(kScratchSimd128Reg, kScratchSimd128Reg, Operand(6));
-        __ mfvsrd(i.OutputRegister(), kScratchSimd128Reg);
-      }
+      __ mov(kScratchReg,
+             Operand(0x8080808000204060));  // Select 0 for the high bits.
+      __ mtvsrd(kScratchSimd128Reg, kScratchReg);
+      __ vbpermq(kScratchSimd128Reg, i.InputSimd128Register(0),
+                 kScratchSimd128Reg);
+      __ vextractub(kScratchSimd128Reg, kScratchSimd128Reg, Operand(6));
+      __ mfvsrd(i.OutputRegister(), kScratchSimd128Reg);
       break;
     }
     case kPPC_I16x8BitMask: {
-      if (CpuFeatures::IsSupported(PPC_10_PLUS)) {
-        __ vextracthm(i.OutputRegister(), i.InputSimd128Register(0));
-      } else {
-        __ mov(kScratchReg, Operand(0x10203040506070));
-        __ mtvsrd(kScratchSimd128Reg, kScratchReg);
-        __ vbpermq(kScratchSimd128Reg, i.InputSimd128Register(0),
-                   kScratchSimd128Reg);
-        __ vextractub(kScratchSimd128Reg, kScratchSimd128Reg, Operand(6));
-        __ mfvsrd(i.OutputRegister(), kScratchSimd128Reg);
-      }
+      __ mov(kScratchReg, Operand(0x10203040506070));
+      __ mtvsrd(kScratchSimd128Reg, kScratchReg);
+      __ vbpermq(kScratchSimd128Reg, i.InputSimd128Register(0),
+                 kScratchSimd128Reg);
+      __ vextractub(kScratchSimd128Reg, kScratchSimd128Reg, Operand(6));
+      __ mfvsrd(i.OutputRegister(), kScratchSimd128Reg);
       break;
     }
     case kPPC_I8x16BitMask: {
-      if (CpuFeatures::IsSupported(PPC_10_PLUS)) {
-        __ vextractbm(i.OutputRegister(), i.InputSimd128Register(0));
-      } else {
-        Register temp = i.ToRegister(instr->TempAt(0));
-        __ mov(temp, Operand(0x8101820283038));
-        __ mov(ip, Operand(0x4048505860687078));
-        __ mtvsrdd(kScratchSimd128Reg, temp, ip);
-        __ vbpermq(kScratchSimd128Reg, i.InputSimd128Register(0),
-                   kScratchSimd128Reg);
-        __ vextractuh(kScratchSimd128Reg, kScratchSimd128Reg, Operand(6));
-        __ mfvsrd(i.OutputRegister(), kScratchSimd128Reg);
-      }
+      Register temp = i.ToRegister(instr->TempAt(0));
+      __ mov(temp, Operand(0x8101820283038));
+      __ mov(ip, Operand(0x4048505860687078));
+      __ mtvsrdd(kScratchSimd128Reg, temp, ip);
+      __ vbpermq(kScratchSimd128Reg, i.InputSimd128Register(0),
+                 kScratchSimd128Reg);
+      __ vextractuh(kScratchSimd128Reg, kScratchSimd128Reg, Operand(6));
+      __ mfvsrd(i.OutputRegister(), kScratchSimd128Reg);
       break;
     }
     case kPPC_I32x4DotI16x8S: {
@@ -3901,7 +3885,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
     // Unnecessary for eq/lt & ne/ge since only FU bit will be set.
   }
 
-  if (CpuFeatures::IsSupported(PPC_7_PLUS)) {
+  if (CpuFeatures::IsSupported(ISELECT)) {
     switch (cond) {
       case eq:
       case lt:

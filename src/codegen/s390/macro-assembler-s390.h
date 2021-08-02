@@ -812,6 +812,10 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 #endif
   }
 
+  void PrepareForTailCall(Register callee_args_count,
+                          Register caller_args_count, Register scratch0,
+                          Register scratch1);
+
   // ---------------------------------------------------------------------------
   // Runtime calls
 
@@ -1062,37 +1066,18 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
                         Register src2, uint8_t imm_lane_idx);
   void I8x16ReplaceLane(Simd128Register dst, Simd128Register src1,
                         Register src2, uint8_t imm_lane_idx);
-
-#define SIMD_BINOP_LIST(V) \
-  V(F64x2Add)              \
-  V(F64x2Sub)              \
-  V(F64x2Mul)              \
-  V(F64x2Div)              \
-  V(F64x2Min)              \
-  V(F64x2Max)              \
-  V(F32x4Add)              \
-  V(F32x4Sub)              \
-  V(F32x4Mul)              \
-  V(F32x4Div)              \
-  V(F32x4Min)              \
-  V(F32x4Max)              \
-  V(I64x2Add)              \
-  V(I64x2Sub)              \
-  V(I64x2Mul)              \
-  V(I32x4Add)              \
-  V(I32x4Sub)              \
-  V(I32x4Mul)              \
-  V(I16x8Add)              \
-  V(I16x8Sub)              \
-  V(I16x8Mul)              \
-  V(I8x16Add)              \
-  V(I8x16Sub)
-
-#define PROTOTYPE_SIMD_BINOP(name) \
-  void name(Simd128Register dst, Simd128Register src1, Simd128Register src2);
-  SIMD_BINOP_LIST(PROTOTYPE_SIMD_BINOP)
-#undef PROTOTYPE_SIMD_BINOP
-#undef SIMD_BINOP_LIST
+  void F64x2Add(Simd128Register dst, Simd128Register src1,
+                Simd128Register src2);
+  void F32x4Add(Simd128Register dst, Simd128Register src1,
+                Simd128Register src2);
+  void I64x2Add(Simd128Register dst, Simd128Register src1,
+                Simd128Register src2);
+  void I32x4Add(Simd128Register dst, Simd128Register src1,
+                Simd128Register src2);
+  void I16x8Add(Simd128Register dst, Simd128Register src1,
+                Simd128Register src2);
+  void I8x16Add(Simd128Register dst, Simd128Register src1,
+                Simd128Register src2);
 
   // ---------------------------------------------------------------------------
   // Pointer compression Support

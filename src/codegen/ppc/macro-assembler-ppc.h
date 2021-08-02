@@ -238,11 +238,6 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void ShiftRightS32(Register dst, Register src, Register value,
                      RCBit r = LeaveRC);
 
-  void CountLeadingZerosU32(Register dst, Register src, RCBit r = LeaveRC);
-  void CountLeadingZerosU64(Register dst, Register src, RCBit r = LeaveRC);
-  void CountTrailingZerosU32(Register dst, Register src, RCBit r = LeaveRC);
-  void CountTrailingZerosU64(Register dst, Register src, RCBit r = LeaveRC);
-
   void AddF64(DoubleRegister dst, DoubleRegister lhs, DoubleRegister rhs,
               RCBit r = LeaveRC);
   void SubF64(DoubleRegister dst, DoubleRegister lhs, DoubleRegister rhs,
@@ -423,6 +418,10 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void PrepareCallCFunction(int num_reg_arguments, int num_double_registers,
                             Register scratch);
   void PrepareCallCFunction(int num_reg_arguments, Register scratch);
+
+  void PrepareForTailCall(Register callee_args_count,
+                          Register caller_args_count, Register scratch0,
+                          Register scratch1);
 
   // There are two ways of passing double arguments on ARM, depending on
   // whether soft or hard floating point ABI is used. These functions

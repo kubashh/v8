@@ -29,12 +29,12 @@
 }],  # ALWAYS
 
 ##############################################################################
-['mode != debug or dcheck_always_on', {
+['mode != debug or v8_dcheck_always_on', {
   # Investigating flaky tests: https://crbug.com/v8/10876. Enable only on pure debug.
   'debugger/pause-on-oom': [SKIP],
   'debugger/pause-on-oom-wide': [SKIP],
   'debugger/pause-on-oom-extrawide': [SKIP],
-}],  # 'mode != debug or dcheck_always_on'
+}],  # 'mode != debug or v8_dcheck_always_on'
 
 ##############################################################################
 ['system == android', {
@@ -85,7 +85,6 @@
   # https://crbug.com/v8/7777
   'cpu-profiler/coverage': [SKIP],
   'cpu-profiler/coverage-block': [SKIP],
-  'regress/regress-crbug-1233401': [SKIP],
 }], # variant == jitless
 
 ##############################################################################

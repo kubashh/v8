@@ -200,17 +200,19 @@ ZoneList<CharacterRange>* ToCanonicalZoneList(
 }
 
 void AddBmpCharacters(RegExpCompiler* compiler, ChoiceNode* result,
-                      RegExpNode* on_success, UnicodeRangeSplitter* splitter) {
+                      RegExpNode* on_success, UnicodeRangeSplitter* splitter,
+                      JSRegExp::Flags flags) {
   ZoneList<CharacterRange>* bmp =
       ToCanonicalZoneList(splitter->bmp(), compiler->zone());
   if (bmp == nullptr) return;
   result->AddAlternative(GuardedAlternative(TextNode::CreateForCharacterRanges(
-      compiler->zone(), bmp, compiler->read_backward(), on_success)));
+      compiler->zone(), bmp, compiler->read_backward(), on_success, flags)));
 }
 
 void AddNonBmpSurrogatePairs(RegExpCompiler* compiler, ChoiceNode* result,
                              RegExpNode* on_success,
-                             UnicodeRangeSplitter* splitter) {
+                             UnicodeRangeSplitter* splitter,
+                             JSRegExp::Flags flags) {
   ZoneList<CharacterRange>* non_bmp =
       ToCanonicalZoneList(splitter->non_bmp(), compiler->zone());
   if (non_bmp == nullptr) return;
@@ -235,7 +237,7 @@ void AddNonBmpSurrogatePairs(RegExpCompiler* compiler, ChoiceNode* result,
           GuardedAlternative(TextNode::CreateForSurrogatePair(
               zone, CharacterRange::Singleton(from_l),
               CharacterRange::Range(from_t, to_t), compiler->read_backward(),
-              on_success)));
+              on_success, flags)));
     } else {
       if (from_t != kTrailSurrogateStart) {
         // Add [from_l][from_t-\udfff]
@@ -243,7 +245,7 @@ void AddNonBmpSurrogatePairs(RegExpCompiler* compiler, ChoiceNode* result,
             GuardedAlternative(TextNode::CreateForSurrogatePair(
                 zone, CharacterRange::Singleton(from_l),
                 CharacterRange::Range(from_t, kTrailSurrogateEnd),
-                compiler->read_backward(), on_success)));
+                compiler->read_backward(), on_success, flags)));
         from_l++;
       }
       if (to_t != kTrailSurrogateEnd) {
@@ -252,7 +254,7 @@ void AddNonBmpSurrogatePairs(RegExpCompiler* compiler, ChoiceNode* result,
             GuardedAlternative(TextNode::CreateForSurrogatePair(
                 zone, CharacterRange::Singleton(to_l),
                 CharacterRange::Range(kTrailSurrogateStart, to_t),
-                compiler->read_backward(), on_success)));
+                compiler->read_backward(), on_success, flags)));
         to_l--;
       }
       if (from_l <= to_l) {
@@ -261,7 +263,7 @@ void AddNonBmpSurrogatePairs(RegExpCompiler* compiler, ChoiceNode* result,
             GuardedAlternative(TextNode::CreateForSurrogatePair(
                 zone, CharacterRange::Range(from_l, to_l),
                 CharacterRange::Range(kTrailSurrogateStart, kTrailSurrogateEnd),
-                compiler->read_backward(), on_success)));
+                compiler->read_backward(), on_success, flags)));
       }
     }
   }
@@ -269,38 +271,39 @@ void AddNonBmpSurrogatePairs(RegExpCompiler* compiler, ChoiceNode* result,
 
 RegExpNode* NegativeLookaroundAgainstReadDirectionAndMatch(
     RegExpCompiler* compiler, ZoneList<CharacterRange>* lookbehind,
-    ZoneList<CharacterRange>* match, RegExpNode* on_success,
-    bool read_backward) {
+    ZoneList<CharacterRange>* match, RegExpNode* on_success, bool read_backward,
+    JSRegExp::Flags flags) {
   Zone* zone = compiler->zone();
   RegExpNode* match_node = TextNode::CreateForCharacterRanges(
-      zone, match, read_backward, on_success);
+      zone, match, read_backward, on_success, flags);
   int stack_register = compiler->UnicodeLookaroundStackRegister();
   int position_register = compiler->UnicodeLookaroundPositionRegister();
   RegExpLookaround::Builder lookaround(false, match_node, stack_register,
                                        position_register);
   RegExpNode* negative_match = TextNode::CreateForCharacterRanges(
-      zone, lookbehind, !read_backward, lookaround.on_match_success());
+      zone, lookbehind, !read_backward, lookaround.on_match_success(), flags);
   return lookaround.ForMatch(negative_match);
 }
 
 RegExpNode* MatchAndNegativeLookaroundInReadDirection(
     RegExpCompiler* compiler, ZoneList<CharacterRange>* match,
     ZoneList<CharacterRange>* lookahead, RegExpNode* on_success,
-    bool read_backward) {
+    bool read_backward, JSRegExp::Flags flags) {
   Zone* zone = compiler->zone();
   int stack_register = compiler->UnicodeLookaroundStackRegister();
   int position_register = compiler->UnicodeLookaroundPositionRegister();
   RegExpLookaround::Builder lookaround(false, on_success, stack_register,
                                        position_register);
   RegExpNode* negative_match = TextNode::CreateForCharacterRanges(
-      zone, lookahead, read_backward, lookaround.on_match_success());
+      zone, lookahead, read_backward, lookaround.on_match_success(), flags);
   return TextNode::CreateForCharacterRanges(
-      zone, match, read_backward, lookaround.ForMatch(negative_match));
+      zone, match, read_backward, lookaround.ForMatch(negative_match), flags);
 }
 
 void AddLoneLeadSurrogates(RegExpCompiler* compiler, ChoiceNode* result,
                            RegExpNode* on_success,
-                           UnicodeRangeSplitter* splitter) {
+                           UnicodeRangeSplitter* splitter,
+                           JSRegExp::Flags flags) {
   ZoneList<CharacterRange>* lead_surrogates =
       ToCanonicalZoneList(splitter->lead_surrogates(), compiler->zone());
   if (lead_surrogates == nullptr) return;
@@ -314,19 +317,20 @@ void AddLoneLeadSurrogates(RegExpCompiler* compiler, ChoiceNode* result,
     // Reading backward. Assert that reading forward, there is no trail
     // surrogate, and then backward match the lead surrogate.
     match = NegativeLookaroundAgainstReadDirectionAndMatch(
-        compiler, trail_surrogates, lead_surrogates, on_success, true);
+        compiler, trail_surrogates, lead_surrogates, on_success, true, flags);
   } else {
     // Reading forward. Forward match the lead surrogate and assert that
     // no trail surrogate follows.
     match = MatchAndNegativeLookaroundInReadDirection(
-        compiler, lead_surrogates, trail_surrogates, on_success, false);
+        compiler, lead_surrogates, trail_surrogates, on_success, false, flags);
   }
   result->AddAlternative(GuardedAlternative(match));
 }
 
 void AddLoneTrailSurrogates(RegExpCompiler* compiler, ChoiceNode* result,
                             RegExpNode* on_success,
-                            UnicodeRangeSplitter* splitter) {
+                            UnicodeRangeSplitter* splitter,
+                            JSRegExp::Flags flags) {
   ZoneList<CharacterRange>* trail_surrogates =
       ToCanonicalZoneList(splitter->trail_surrogates(), compiler->zone());
   if (trail_surrogates == nullptr) return;
@@ -340,12 +344,12 @@ void AddLoneTrailSurrogates(RegExpCompiler* compiler, ChoiceNode* result,
     // Reading backward. Backward match the trail surrogate and assert that no
     // lead surrogate precedes it.
     match = MatchAndNegativeLookaroundInReadDirection(
-        compiler, trail_surrogates, lead_surrogates, on_success, true);
+        compiler, trail_surrogates, lead_surrogates, on_success, true, flags);
   } else {
     // Reading forward. Assert that reading backward, there is no lead
     // surrogate, and then forward match the trail surrogate.
     match = NegativeLookaroundAgainstReadDirectionAndMatch(
-        compiler, lead_surrogates, trail_surrogates, on_success, false);
+        compiler, lead_surrogates, trail_surrogates, on_success, false, flags);
   }
   result->AddAlternative(GuardedAlternative(match));
 }
@@ -361,7 +365,9 @@ RegExpNode* UnanchoredAdvance(RegExpCompiler* compiler,
   // the associated trail surrogate.
   ZoneList<CharacterRange>* range = CharacterRange::List(
       zone, CharacterRange::Range(0, String::kMaxUtf16CodeUnit));
-  return TextNode::CreateForCharacterRanges(zone, range, false, on_success);
+  JSRegExp::Flags default_flags = JSRegExp::Flags();
+  return TextNode::CreateForCharacterRanges(zone, range, false, on_success,
+                                            default_flags);
 }
 
 void AddUnicodeCaseEquivalents(ZoneList<CharacterRange>* ranges, Zone* zone) {
@@ -404,10 +410,10 @@ RegExpNode* RegExpCharacterClass::ToNode(RegExpCompiler* compiler,
   set_.Canonicalize();
   Zone* zone = compiler->zone();
   ZoneList<CharacterRange>* ranges = this->ranges(zone);
-  if (NeedsUnicodeCaseEquivalents(compiler->flags())) {
+  if (NeedsUnicodeCaseEquivalents(flags_)) {
     AddUnicodeCaseEquivalents(ranges, zone);
   }
-  if (IsUnicode(compiler->flags()) && !compiler->one_byte() &&
+  if (IsUnicode(flags_) && !compiler->one_byte() &&
       !contains_split_surrogate()) {
     if (is_negated()) {
       ZoneList<CharacterRange>* negated =
@@ -416,8 +422,9 @@ RegExpNode* RegExpCharacterClass::ToNode(RegExpCompiler* compiler,
       ranges = negated;
     }
     if (ranges->length() == 0) {
+      JSRegExp::Flags default_flags;
       RegExpCharacterClass* fail =
-          zone->New<RegExpCharacterClass>(zone, ranges);
+          zone->New<RegExpCharacterClass>(zone, ranges, default_flags);
       return zone->New<TextNode>(fail, compiler->read_backward(), on_success);
     }
     if (standard_type() == '*') {
@@ -425,10 +432,10 @@ RegExpNode* RegExpCharacterClass::ToNode(RegExpCompiler* compiler,
     } else {
       ChoiceNode* result = zone->New<ChoiceNode>(2, zone);
       UnicodeRangeSplitter splitter(ranges);
-      AddBmpCharacters(compiler, result, on_success, &splitter);
-      AddNonBmpSurrogatePairs(compiler, result, on_success, &splitter);
-      AddLoneLeadSurrogates(compiler, result, on_success, &splitter);
-      AddLoneTrailSurrogates(compiler, result, on_success, &splitter);
+      AddBmpCharacters(compiler, result, on_success, &splitter, flags_);
+      AddNonBmpSurrogatePairs(compiler, result, on_success, &splitter, flags_);
+      AddLoneLeadSurrogates(compiler, result, on_success, &splitter, flags_);
+      AddLoneTrailSurrogates(compiler, result, on_success, &splitter, flags_);
       static constexpr int kMaxRangesToInline = 32;  // Arbitrary.
       if (ranges->length() > kMaxRangesToInline) result->SetDoNotInline();
       return result;
@@ -503,10 +510,12 @@ bool RegExpDisjunction::SortConsecutiveAtoms(RegExpCompiler* compiler) {
     // i is length or it is the index of an atom.
     if (i == length) break;
     int first_atom = i;
+    JSRegExp::Flags flags = alternatives->at(i)->AsAtom()->flags();
     i++;
     while (i < length) {
       RegExpTree* alternative = alternatives->at(i);
       if (!alternative->IsAtom()) break;
+      if (alternative->AsAtom()->flags() != flags) break;
       i++;
     }
     // Sort atoms to get ones with common prefixes together.
@@ -518,7 +527,7 @@ bool RegExpDisjunction::SortConsecutiveAtoms(RegExpCompiler* compiler) {
     DCHECK_LT(first_atom, alternatives->length());
     DCHECK_LE(i, alternatives->length());
     DCHECK_LE(first_atom, i);
-    if (IgnoreCase(compiler->flags())) {
+    if (IgnoreCase(flags)) {
 #ifdef V8_INTL_SUPPORT
       alternatives->StableSort(CompareFirstCharCaseInsensitve, first_atom,
                                i - first_atom);
@@ -555,6 +564,7 @@ void RegExpDisjunction::RationalizeConsecutiveAtoms(RegExpCompiler* compiler) {
       continue;
     }
     RegExpAtom* const atom = alternative->AsAtom();
+    JSRegExp::Flags flags = atom->flags();
 #ifdef V8_INTL_SUPPORT
     icu::UnicodeString common_prefix(atom->data().at(0));
 #else
@@ -567,17 +577,18 @@ void RegExpDisjunction::RationalizeConsecutiveAtoms(RegExpCompiler* compiler) {
       alternative = alternatives->at(i);
       if (!alternative->IsAtom()) break;
       RegExpAtom* const atom = alternative->AsAtom();
+      if (atom->flags() != flags) break;
 #ifdef V8_INTL_SUPPORT
       icu::UnicodeString new_prefix(atom->data().at(0));
       if (new_prefix != common_prefix) {
-        if (!IgnoreCase(compiler->flags())) break;
+        if (!IgnoreCase(flags)) break;
         if (common_prefix.caseCompare(new_prefix, U_FOLD_CASE_DEFAULT) != 0)
           break;
       }
 #else
       unibrow::uchar new_prefix = atom->data().at(0);
       if (new_prefix != common_prefix) {
-        if (!IgnoreCase(compiler->flags())) break;
+        if (!IgnoreCase(flags)) break;
         unibrow::Mapping<unibrow::Ecma262Canonicalize>* canonicalize =
             compiler->isolate()->regexp_macro_assembler_canonicalize();
         new_prefix = Canonical(canonicalize, new_prefix);
@@ -606,8 +617,8 @@ void RegExpDisjunction::RationalizeConsecutiveAtoms(RegExpCompiler* compiler) {
           }
         }
       }
-      RegExpAtom* prefix =
-          zone->New<RegExpAtom>(atom->data().SubVector(0, prefix_length));
+      RegExpAtom* prefix = zone->New<RegExpAtom>(
+          atom->data().SubVector(0, prefix_length), flags);
       ZoneList<RegExpTree*>* pair = zone->New<ZoneList<RegExpTree*>>(2, zone);
       pair->Add(prefix, zone);
       ZoneList<RegExpTree*>* suffixes =
@@ -620,7 +631,8 @@ void RegExpDisjunction::RationalizeConsecutiveAtoms(RegExpCompiler* compiler) {
           suffixes->Add(zone->New<RegExpEmpty>(), zone);
         } else {
           RegExpTree* suffix = zone->New<RegExpAtom>(
-              old_atom->data().SubVector(prefix_length, old_atom->length()));
+              old_atom->data().SubVector(prefix_length, old_atom->length()),
+              flags);
           suffixes->Add(suffix, zone);
         }
       }
@@ -658,7 +670,7 @@ void RegExpDisjunction::FixSingleCharacterDisjunctions(
       i++;
       continue;
     }
-    const JSRegExp::Flags flags = compiler->flags();
+    JSRegExp::Flags flags = atom->flags();
     DCHECK_IMPLIES(IsUnicode(flags),
                    !unibrow::Utf16::IsLeadSurrogate(atom->data().at(0)));
     bool contains_trail_surrogate =
@@ -672,6 +684,7 @@ void RegExpDisjunction::FixSingleCharacterDisjunctions(
       if (!alternative->IsAtom()) break;
       RegExpAtom* const atom = alternative->AsAtom();
       if (atom->length() != 1) break;
+      if (atom->flags() != flags) break;
       DCHECK_IMPLIES(IsUnicode(flags),
                      !unibrow::Utf16::IsLeadSurrogate(atom->data().at(0)));
       contains_trail_surrogate |=
@@ -692,8 +705,8 @@ void RegExpDisjunction::FixSingleCharacterDisjunctions(
       if (IsUnicode(flags) && contains_trail_surrogate) {
         character_class_flags = RegExpCharacterClass::CONTAINS_SPLIT_SURROGATE;
       }
-      alternatives->at(write_posn++) =
-          zone->New<RegExpCharacterClass>(zone, ranges, character_class_flags);
+      alternatives->at(write_posn++) = zone->New<RegExpCharacterClass>(
+          zone, ranges, flags, character_class_flags);
     } else {
       // Just copy any trivial alternatives.
       for (int j = first_in_run; j < i; j++) {
@@ -741,7 +754,7 @@ RegExpNode* BoundaryAssertionAsLookaround(RegExpCompiler* compiler,
                                           RegExpNode* on_success,
                                           RegExpAssertion::AssertionType type,
                                           JSRegExp::Flags flags) {
-  CHECK(NeedsUnicodeCaseEquivalents(flags));
+  DCHECK(NeedsUnicodeCaseEquivalents(flags));
   Zone* zone = compiler->zone();
   ZoneList<CharacterRange>* word_range =
       zone->New<ZoneList<CharacterRange>>(2, zone);
@@ -759,13 +772,13 @@ RegExpNode* BoundaryAssertionAsLookaround(RegExpCompiler* compiler,
     RegExpLookaround::Builder lookbehind(lookbehind_for_word, on_success,
                                          stack_register, position_register);
     RegExpNode* backward = TextNode::CreateForCharacterRanges(
-        zone, word_range, true, lookbehind.on_match_success());
+        zone, word_range, true, lookbehind.on_match_success(), flags);
     // Look to the right.
     RegExpLookaround::Builder lookahead(lookahead_for_word,
                                         lookbehind.ForMatch(backward),
                                         stack_register, position_register);
     RegExpNode* forward = TextNode::CreateForCharacterRanges(
-        zone, word_range, false, lookahead.on_match_success());
+        zone, word_range, false, lookahead.on_match_success(), flags);
     result->AddAlternative(GuardedAlternative(lookahead.ForMatch(forward)));
   }
   return result;
@@ -783,14 +796,14 @@ RegExpNode* RegExpAssertion::ToNode(RegExpCompiler* compiler,
     case START_OF_INPUT:
       return AssertionNode::AtStart(on_success);
     case BOUNDARY:
-      return NeedsUnicodeCaseEquivalents(compiler->flags())
+      return NeedsUnicodeCaseEquivalents(flags_)
                  ? BoundaryAssertionAsLookaround(compiler, on_success, BOUNDARY,
-                                                 compiler->flags())
+                                                 flags_)
                  : AssertionNode::AtBoundary(on_success);
     case NON_BOUNDARY:
-      return NeedsUnicodeCaseEquivalents(compiler->flags())
-                 ? BoundaryAssertionAsLookaround(
-                       compiler, on_success, NON_BOUNDARY, compiler->flags())
+      return NeedsUnicodeCaseEquivalents(flags_)
+                 ? BoundaryAssertionAsLookaround(compiler, on_success,
+                                                 NON_BOUNDARY, flags_)
                  : AssertionNode::AtNonBoundary(on_success);
     case END_OF_INPUT:
       return AssertionNode::AtEnd(on_success);
@@ -806,7 +819,9 @@ RegExpNode* RegExpAssertion::ToNode(RegExpCompiler* compiler,
       ZoneList<CharacterRange>* newline_ranges =
           zone->New<ZoneList<CharacterRange>>(3, zone);
       CharacterRange::AddClassEscape('n', newline_ranges, false, zone);
-      RegExpCharacterClass* newline_atom = zone->New<RegExpCharacterClass>('n');
+      JSRegExp::Flags default_flags = JSRegExp::Flags();
+      RegExpCharacterClass* newline_atom =
+          zone->New<RegExpCharacterClass>('n', default_flags);
       TextNode* newline_matcher =
           zone->New<TextNode>(newline_atom, false,
                               ActionNode::PositiveSubmatchSuccess(
@@ -960,11 +975,16 @@ class AssertionSequenceRewriter final {
     uint32_t seen_assertions = 0;
     STATIC_ASSERT(RegExpAssertion::LAST_TYPE < kUInt32Size * kBitsPerByte);
 
+    // Flags must match for folding.
+    JSRegExp::Flags flags = terms_->at(from)->AsAssertion()->flags();
+    bool saw_mismatched_flags = false;
+
     for (int i = from; i < to; i++) {
       RegExpAssertion* t = terms_->at(i)->AsAssertion();
+      if (t->flags() != flags) saw_mismatched_flags = true;
       const uint32_t bit = 1 << t->assertion_type();
 
-      if (seen_assertions & bit) {
+      if ((seen_assertions & bit) && !saw_mismatched_flags) {
         // Fold duplicates.
         terms_->Set(i, zone_->New<RegExpEmpty>());
       }
@@ -986,7 +1006,8 @@ class AssertionSequenceRewriter final {
     // negated '*' (everything) range serves the purpose.
     ZoneList<CharacterRange>* ranges =
         zone_->New<ZoneList<CharacterRange>>(0, zone_);
-    RegExpCharacterClass* cc = zone_->New<RegExpCharacterClass>(zone_, ranges);
+    RegExpCharacterClass* cc =
+        zone_->New<RegExpCharacterClass>(zone_, ranges, JSRegExp::Flags());
     terms_->Set(from, cc);
 
     // Zero out the rest.

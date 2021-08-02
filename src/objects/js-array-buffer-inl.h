@@ -200,20 +200,17 @@ bool JSTypedArray::IsVariableLength() const {
   return is_length_tracking() || is_backed_by_rab();
 }
 
-size_t JSTypedArray::GetLengthOrOutOfBounds(bool& out_of_bounds) const {
-  DCHECK(!out_of_bounds);
+size_t JSTypedArray::GetLength() const {
   if (WasDetached()) return 0;
   if (is_length_tracking()) {
     if (is_backed_by_rab()) {
       if (byte_offset() >= buffer().byte_length()) {
-        out_of_bounds = true;
         return 0;
       }
       return (buffer().byte_length() - byte_offset()) / element_size();
     }
     if (byte_offset() >=
         buffer().GetBackingStore()->byte_length(std::memory_order_seq_cst)) {
-      out_of_bounds = true;
       return 0;
     }
     return (buffer().GetBackingStore()->byte_length(std::memory_order_seq_cst) -
@@ -226,16 +223,10 @@ size_t JSTypedArray::GetLengthOrOutOfBounds(bool& out_of_bounds) const {
     // JSTypedArray.
     if (byte_offset() + array_length * element_size() >
         buffer().byte_length()) {
-      out_of_bounds = true;
       return 0;
     }
   }
   return array_length;
-}
-
-size_t JSTypedArray::GetLength() const {
-  bool out_of_bounds = false;
-  return GetLengthOrOutOfBounds(out_of_bounds);
 }
 
 void JSTypedArray::AllocateExternalPointerEntries(Isolate* isolate) {
@@ -371,17 +362,6 @@ MaybeHandle<JSTypedArray> JSTypedArray::Validate(Isolate* isolate,
     Handle<String> operation =
         isolate->factory()->NewStringFromAsciiChecked(method_name);
     THROW_NEW_ERROR(isolate, NewTypeError(message, operation), JSTypedArray);
-  }
-
-  if (V8_UNLIKELY(array->IsVariableLength())) {
-    bool out_of_bounds = false;
-    array->GetLengthOrOutOfBounds(out_of_bounds);
-    if (out_of_bounds) {
-      const MessageTemplate message = MessageTemplate::kDetachedOperation;
-      Handle<String> operation =
-          isolate->factory()->NewStringFromAsciiChecked(method_name);
-      THROW_NEW_ERROR(isolate, NewTypeError(message, operation), JSTypedArray);
-    }
   }
 
   // spec describes to return `buffer`, but it may disrupt current

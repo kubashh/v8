@@ -191,9 +191,8 @@ int TransitionArray::SearchName(Name name, int* out_insertion_index) {
 }
 
 TransitionsAccessor::TransitionsAccessor(Isolate* isolate, Map map,
-                                         DisallowGarbageCollection* no_gc,
-                                         bool concurrent_access)
-    : isolate_(isolate), map_(map), concurrent_access_(concurrent_access) {
+                                         DisallowGarbageCollection* no_gc)
+    : isolate_(isolate), map_(map), concurrent_access_(false) {
   Initialize();
   USE(no_gc);
 }

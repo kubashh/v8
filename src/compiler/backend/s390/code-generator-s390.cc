@@ -2484,28 +2484,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       // Simd Support.
 #define SIMD_BINOP_LIST(V) \
   V(F64x2Add)              \
-  V(F64x2Sub)              \
-  V(F64x2Mul)              \
-  V(F64x2Div)              \
-  V(F64x2Min)              \
-  V(F64x2Max)              \
   V(F32x4Add)              \
-  V(F32x4Sub)              \
-  V(F32x4Mul)              \
-  V(F32x4Div)              \
-  V(F32x4Min)              \
-  V(F32x4Max)              \
   V(I64x2Add)              \
-  V(I64x2Sub)              \
-  V(I64x2Mul)              \
   V(I32x4Add)              \
-  V(I32x4Sub)              \
-  V(I32x4Mul)              \
   V(I16x8Add)              \
-  V(I16x8Sub)              \
-  V(I16x8Mul)              \
-  V(I8x16Add)              \
-  V(I8x16Sub)
+  V(I8x16Add)
 
 #define EMIT_SIMD_BINOP(name)                                     \
   case kS390_##name: {                                            \
@@ -2571,6 +2554,36 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
 #undef EMIT_SIMD_REPLACE_LANE
 #undef SIMD_REPLACE_LANE_LIST
       // vector binops
+    case kS390_F64x2Sub: {
+      __ vfs(i.OutputSimd128Register(), i.InputSimd128Register(0),
+             i.InputSimd128Register(1), Condition(0), Condition(0),
+             Condition(3));
+      break;
+    }
+    case kS390_F64x2Mul: {
+      __ vfm(i.OutputSimd128Register(), i.InputSimd128Register(0),
+             i.InputSimd128Register(1), Condition(0), Condition(0),
+             Condition(3));
+      break;
+    }
+    case kS390_F64x2Div: {
+      __ vfd(i.OutputSimd128Register(), i.InputSimd128Register(0),
+             i.InputSimd128Register(1), Condition(0), Condition(0),
+             Condition(3));
+      break;
+    }
+    case kS390_F64x2Min: {
+      __ vfmin(i.OutputSimd128Register(), i.InputSimd128Register(0),
+               i.InputSimd128Register(1), Condition(1), Condition(0),
+               Condition(3));
+      break;
+    }
+    case kS390_F64x2Max: {
+      __ vfmax(i.OutputSimd128Register(), i.InputSimd128Register(0),
+               i.InputSimd128Register(1), Condition(1), Condition(0),
+               Condition(3));
+      break;
+    }
     case kS390_F64x2Qfma: {
       Simd128Register src0 = i.InputSimd128Register(0);
       Simd128Register src1 = i.InputSimd128Register(1);
@@ -2587,6 +2600,36 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ vfnms(dst, src1, src2, src0, Condition(3), Condition(0));
       break;
     }
+    case kS390_F32x4Sub: {
+      __ vfs(i.OutputSimd128Register(), i.InputSimd128Register(0),
+             i.InputSimd128Register(1), Condition(0), Condition(0),
+             Condition(2));
+      break;
+    }
+    case kS390_F32x4Mul: {
+      __ vfm(i.OutputSimd128Register(), i.InputSimd128Register(0),
+             i.InputSimd128Register(1), Condition(0), Condition(0),
+             Condition(2));
+      break;
+    }
+    case kS390_F32x4Div: {
+      __ vfd(i.OutputSimd128Register(), i.InputSimd128Register(0),
+             i.InputSimd128Register(1), Condition(0), Condition(0),
+             Condition(2));
+      break;
+    }
+    case kS390_F32x4Min: {
+      __ vfmin(i.OutputSimd128Register(), i.InputSimd128Register(0),
+               i.InputSimd128Register(1), Condition(1), Condition(0),
+               Condition(2));
+      break;
+    }
+    case kS390_F32x4Max: {
+      __ vfmax(i.OutputSimd128Register(), i.InputSimd128Register(0),
+               i.InputSimd128Register(1), Condition(1), Condition(0),
+               Condition(2));
+      break;
+    }
     case kS390_F32x4Qfma: {
       Simd128Register src0 = i.InputSimd128Register(0);
       Simd128Register src1 = i.InputSimd128Register(1);
@@ -2601,6 +2644,57 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       Simd128Register src2 = i.InputSimd128Register(2);
       Simd128Register dst = i.OutputSimd128Register();
       __ vfnms(dst, src1, src2, src0, Condition(2), Condition(0));
+      break;
+    }
+    case kS390_I64x2Sub: {
+      __ vs(i.OutputSimd128Register(), i.InputSimd128Register(0),
+            i.InputSimd128Register(1), Condition(0), Condition(0),
+            Condition(3));
+      break;
+    }
+    case kS390_I64x2Mul: {
+      Simd128Register src0 = i.InputSimd128Register(0);
+      Simd128Register src1 = i.InputSimd128Register(1);
+      Register scratch_0 = r0;
+      Register scratch_1 = r1;
+      for (int i = 0; i < 2; i++) {
+        __ vlgv(scratch_0, src0, MemOperand(r0, i), Condition(3));
+        __ vlgv(scratch_1, src1, MemOperand(r0, i), Condition(3));
+        __ MulS64(scratch_0, scratch_1);
+        scratch_0 = r1;
+        scratch_1 = ip;
+      }
+      __ vlvgp(i.OutputSimd128Register(), r0, r1);
+      break;
+    }
+    case kS390_I32x4Sub: {
+      __ vs(i.OutputSimd128Register(), i.InputSimd128Register(0),
+            i.InputSimd128Register(1), Condition(0), Condition(0),
+            Condition(2));
+      break;
+    }
+    case kS390_I32x4Mul: {
+      __ vml(i.OutputSimd128Register(), i.InputSimd128Register(0),
+             i.InputSimd128Register(1), Condition(0), Condition(0),
+             Condition(2));
+      break;
+    }
+    case kS390_I16x8Sub: {
+      __ vs(i.OutputSimd128Register(), i.InputSimd128Register(0),
+            i.InputSimd128Register(1), Condition(0), Condition(0),
+            Condition(1));
+      break;
+    }
+    case kS390_I16x8Mul: {
+      __ vml(i.OutputSimd128Register(), i.InputSimd128Register(0),
+             i.InputSimd128Register(1), Condition(0), Condition(0),
+             Condition(1));
+      break;
+    }
+    case kS390_I8x16Sub: {
+      __ vs(i.OutputSimd128Register(), i.InputSimd128Register(0),
+            i.InputSimd128Register(1), Condition(0), Condition(0),
+            Condition(0));
       break;
     }
     case kS390_I16x8RoundingAverageU: {
