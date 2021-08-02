@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08683eee_7c4cc6f4",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-08-02T11:47:09Z",
+      "side": 1,
+      "message": "Thanks! Landing this for now, and I\u0027ll upload the more correct version as a follow-up.",
+      "parentUuid": "3948fef9_ed602904",
+      "range": {
+        "startLine": 182,
+        "startChar": 2,
+        "endLine": 182,
+        "endChar": 24
+      },
+      "revId": "cb1d0cf19d9124e2dfc792ba67e41381a336e261",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea4a88a4_b98d66d8",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-08-02T11:36:12Z",
       "side": 1,
       "message": "nit: `bit_cast\u003cfloat\u003e`in the next line instead of this",
+      "range": {
+        "startLine": 2125,
+        "startChar": 6,
+        "endLine": 2126,
+        "endChar": 45
+      },
+      "revId": "cb1d0cf19d9124e2dfc792ba67e41381a336e261",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "099af849_a3adce35",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-08-02T11:47:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea4a88a4_b98d66d8",
       "range": {
         "startLine": 2125,
         "startChar": 6,
