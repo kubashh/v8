@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e712112_bf6048a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-02T10:40:39Z",
+      "side": 1,
+      "message": "nit: empty line after title",
+      "revId": "6c788b4b121498737e3f08362a2697bbf45c174e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a005c67b_f1ce810b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-02T10:40:39Z",
+      "side": 1,
+      "message": "Mostly nits with just 1 \"real\" comment.",
+      "revId": "6c788b4b121498737e3f08362a2697bbf45c174e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1897035_f35cccc3",
+        "filename": "include/v8config.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-02T10:40:39Z",
+      "side": 1,
+      "message": "nittiest nit: these unchanged lines have the wrong indentation",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 19
+      },
+      "revId": "6c788b4b121498737e3f08362a2697bbf45c174e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bf2d324_1b569474",
+        "filename": "include/v8config.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-02T10:40:39Z",
+      "side": 1,
+      "message": "#else\n\nInteresting that this is compiling.",
+      "revId": "6c788b4b121498737e3f08362a2697bbf45c174e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
