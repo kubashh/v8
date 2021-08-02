@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "922b92dd_532e4146",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-02T11:36:12Z",
+      "side": 1,
+      "message": "Still LGTM; though as discussed we should consider the \"method-on-object\" implementation to be an intermediate step towards the spec\u0027ed behavior :-)",
+      "revId": "cb1d0cf19d9124e2dfc792ba67e41381a336e261",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3948fef9_ed602904",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-02T11:36:12Z",
+      "side": 1,
+      "message": "As discussed: it\u0027s weird to install methods on objects themselves, so we should introduce a separate prototype object for exception packages, and install the required methods/properties there.\nConsidering that this CL in its current form is a step in the right direction though, I\u0027m fine with landing it as-is, and doing the prototype change in a followup. Of course you can also iterate more on this CL if you prefer.",
+      "range": {
+        "startLine": 182,
+        "startChar": 2,
+        "endLine": 182,
+        "endChar": 24
+      },
+      "revId": "cb1d0cf19d9124e2dfc792ba67e41381a336e261",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea4a88a4_b98d66d8",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-02T11:36:12Z",
+      "side": 1,
+      "message": "nit: `bit_cast\u003cfloat\u003e`in the next line instead of this",
+      "range": {
+        "startLine": 2125,
+        "startChar": 6,
+        "endLine": 2126,
+        "endChar": 45
+      },
+      "revId": "cb1d0cf19d9124e2dfc792ba67e41381a336e261",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
