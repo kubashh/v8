@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "485364bf_b1715547",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-08-02T21:39:53Z",
+      "side": 1,
+      "message": "This is part of the fix. We also need https://chromium-review.googlesource.com/c/chromium/deps/icu/+/3064786 to include the resources and change DEPS to use the committed hash.",
+      "revId": "2407373965273acc62722493f7acfe7892ff23da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
