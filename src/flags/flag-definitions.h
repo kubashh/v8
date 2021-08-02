@@ -698,7 +698,7 @@ DEFINE_INT(concurrent_recompilation_delay, 0,
            "artificial compilation delay in ms")
 DEFINE_BOOL(block_concurrent_recompilation, false,
             "block queued jobs until released")
-DEFINE_BOOL(concurrent_inlining, false,
+DEFINE_BOOL(concurrent_inlining, true,
             "run optimizing compiler's inlining phase on a separate thread")
 DEFINE_BOOL(stress_concurrent_inlining, false,
             "makes concurrent inlining more likely to trigger in tests")
@@ -706,9 +706,6 @@ DEFINE_IMPLICATION(stress_concurrent_inlining, concurrent_inlining)
 DEFINE_NEG_IMPLICATION(stress_concurrent_inlining, lazy_feedback_allocation)
 DEFINE_WEAK_VALUE_IMPLICATION(stress_concurrent_inlining, interrupt_budget,
                               15 * KB)
-DEFINE_BOOL(
-    turbo_concurrent_get_property_access_info, true,
-    "concurrently call GetPropertyAccessInfo (only with --concurrent-inlining)")
 DEFINE_INT(max_serializer_nesting, 25,
            "maximum levels for nesting child serializers")
 DEFINE_WEAK_IMPLICATION(future, concurrent_inlining)

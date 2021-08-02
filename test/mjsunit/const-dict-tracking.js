@@ -3,9 +3,8 @@
 // found in the LICENSE file.
 //
 // Flags: --allow-natives-syntax --opt --no-always-opt
-// Flags: --no-stress-flush-bytecode
-// Flags: --block-concurrent-recompilation
-// Flags: --no-turbo-concurrent-get-property-access-info
+// Flags: --no-stress-flush-bytecode --block-concurrent-recompilation
+// Flags: --no-concurrent-inlining
 //
 // Tests tracking of constness of properties stored in dictionary
 // mode prototypes.

@@ -1091,8 +1091,8 @@ Reduction JSNativeContextSpecialization::ReduceMinimorphicPropertyAccess(
   }
 
   ZoneHandleSet<Map> maps;
-  for (Handle<Map> map : feedback.maps()) {
-    maps.insert(map, graph()->zone());
+  for (const MapRef& map : feedback.maps()) {
+    maps.insert(map.object(), graph()->zone());
   }
 
   effect = graph()->NewNode(
@@ -1148,7 +1148,9 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
   // Either infer maps from the graph or use the feedback.
   ZoneVector<Handle<Map>> lookup_start_object_maps(zone());
   if (!InferMaps(lookup_start_object, effect, &lookup_start_object_maps)) {
-    lookup_start_object_maps = feedback.maps();
+    for (const MapRef& map : feedback.maps()) {
+      lookup_start_object_maps.push_back(map.object());
+    }
   }
   RemoveImpossibleMaps(lookup_start_object, &lookup_start_object_maps);
 
@@ -1636,6 +1638,7 @@ Reduction JSNativeContextSpecialization::ReduceElementAccessOnString(
 }
 
 namespace {
+
 base::Optional<JSTypedArrayRef> GetTypedArrayConstant(JSHeapBroker* broker,
                                                       Node* receiver) {
   HeapObjectMatcher m(receiver);
@@ -1646,6 +1649,7 @@ base::Optional<JSTypedArrayRef> GetTypedArrayConstant(JSHeapBroker* broker,
   if (typed_array.is_on_heap()) return base::nullopt;
   return typed_array;
 }
+
 }  // namespace
 
 void JSNativeContextSpecialization::RemoveImpossibleMaps(
@@ -1661,6 +1665,20 @@ void JSNativeContextSpecialization::RemoveImpossibleMaps(
                                  !map_ref.FindRootMap()->equals(*root_map));
                        }),
         maps->end());
+  }
+}
+
+void JSNativeContextSpecialization::RemoveImpossibleMaps(
+    Node* object, ZoneVector<MapRef>* maps) const {
+  base::Optional<MapRef> root_map = InferRootMap(object);
+  if (root_map.has_value() && !root_map->is_abandoned_prototype_map()) {
+    maps->erase(std::remove_if(maps->begin(), maps->end(),
+                               [root_map](const MapRef& map) {
+                                 return map.is_abandoned_prototype_map() ||
+                                        (map.FindRootMap().has_value() &&
+                                         !map.FindRootMap()->equals(*root_map));
+                               }),
+                maps->end());
   }
 }
 
