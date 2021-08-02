@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f20d1d34_8e2a20b9",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-02T22:00:23Z",
+      "side": 1,
+      "message": "Since this is supposed to be a temporary fix until a better one is found, could you add a FIXME(bugno) here?",
+      "revId": "000114b433e6ade0ab31336ff0e3c79c07180ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
