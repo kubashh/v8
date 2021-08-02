@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "ce0812480933e9dafaeb6beb0f6d1b1a4bae36ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4d5714b_adbf50ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2021-08-02T09:13:12Z",
+      "side": 1,
+      "message": "Thanks for implementing these  fixes!\nLGTM, but I don\u0027t have the rights to give a +1.",
+      "revId": "ce0812480933e9dafaeb6beb0f6d1b1a4bae36ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
