@@ -574,7 +574,13 @@ std::set<std::string> Intl::BuildLocaleSet(
   for (const std::string& locale : icu_available_locales) {
     if (path != nullptr || validate_key != nullptr) {
       if (!ValidateResource(icu::Locale(locale.c_str()), path, validate_key)) {
-        continue;
+        if (locale != "nb") {
+          continue;
+        }
+        // Try no for nb
+        if (!ValidateResource(icu::Locale("no"), path, validate_key)) {
+          continue;
+        }
       }
     }
     locales.insert(locale);
