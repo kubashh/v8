@@ -19,6 +19,7 @@
 #include "src/objects/debug-objects.h"
 #include "src/parsing/parse-info.h"
 #include "src/parsing/pending-compilation-error-handler.h"
+#include "src/snapshot/code-serializer.h"
 #include "src/utils/allocation.h"
 #include "src/zone/zone.h"
 
@@ -574,6 +575,25 @@ struct ScriptStreamingData {
 
   // Task that performs background parsing and compilation.
   std::unique_ptr<BackgroundCompileTask> task;
+};
+
+struct BackgroundDeserializeData;
+
+class V8_EXPORT_PRIVATE BackgroundDeserializeTask {
+ public:
+  BackgroundDeserializeTask(Isolate* isolate,
+                            std::unique_ptr<ScriptCompiler::CachedData>&& data);
+
+  void Run();
+
+  MaybeHandle<SharedFunctionInfo> Finish(Isolate* isolate,
+                                         Handle<String> source,
+                                         ScriptOriginOptions origin_options);
+
+ private:
+  Isolate* isolate_for_local_isolate_;
+  ScriptData cached_data_;
+  CodeSerializer::OffThreadDeserializeData off_thread_data_;
 };
 
 }  // namespace internal
