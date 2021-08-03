@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "296460d3_d02fbe8c",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-08-03T11:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc4aedb7_004e40f2",
+      "range": {
+        "startLine": 172,
+        "startChar": 2,
+        "endLine": 172,
+        "endChar": 35
+      },
+      "revId": "3d2ec5ac8cf804d58111f95f729bc2ecc40551f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e58dcaa_762621db",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-08-03T11:35:08Z",
       "side": 1,
       "message": "Unused variable.\n\nWould it make sense to unify this with the code in runtime-wasm.cc? If you introduced an overload that takes the {values} array, i.e. WasmExceptionPackage::New(Isolate* isolate, Handle\u003cWasmExceptionTag\u003e tag, Handle\u003cFixedArray\u003e values), then both places could use that.",
+      "range": {
+        "startLine": 1772,
+        "startChar": 2,
+        "endLine": 1772,
+        "endChar": 35
+      },
+      "revId": "3d2ec5ac8cf804d58111f95f729bc2ecc40551f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a32a8e5e_9cc50733",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-08-03T11:59:25Z",
+      "side": 1,
+      "message": "Nice suggestion, done.",
+      "parentUuid": "4e58dcaa_762621db",
       "range": {
         "startLine": 1772,
         "startChar": 2,
