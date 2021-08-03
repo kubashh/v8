@@ -62,7 +62,6 @@ class ImplementationUtilities;
 class Int32;
 class Integer;
 class Isolate;
-class Isolate;
 class MicrotaskQueue;
 class Name;
 class Number;
