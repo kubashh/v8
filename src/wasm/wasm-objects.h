@@ -576,10 +576,6 @@ class V8_EXPORT_PRIVATE WasmExceptionPackage : public JSObject {
       Isolate* isolate, Handle<WasmExceptionTag> exception_tag,
       int encoded_size);
 
-  static Handle<WasmExceptionPackage> New(
-      Isolate* isolate, Handle<WasmExceptionTag> exception_tag,
-      Handle<FixedArray> values);
-
   // The below getters return {undefined} in case the given exception package
   // does not carry the requested values (i.e. is of a different type).
   static Handle<Object> GetExceptionTag(

@@ -1769,13 +1769,8 @@ bool WasmCapiFunction::MatchesSignature(const wasm::FunctionSig* sig) const {
 // static
 Handle<WasmExceptionPackage> WasmExceptionPackage::New(
     Isolate* isolate, Handle<WasmExceptionTag> exception_tag, int size) {
-  Handle<FixedArray> values = isolate->factory()->NewFixedArray(size);
-  return New(isolate, exception_tag, values);
-}
-
-Handle<WasmExceptionPackage> WasmExceptionPackage::New(
-    Isolate* isolate, Handle<WasmExceptionTag> exception_tag,
-    Handle<FixedArray> values) {
+  Handle<JSFunction> exception_cons(
+      isolate->native_context()->wasm_exception_constructor(), isolate);
   Handle<JSObject> exception = isolate->factory()->NewWasmExceptionError(
       MessageTemplate::kWasmExceptionError);
   CHECK(!Object::SetProperty(isolate, exception,
@@ -1783,6 +1778,7 @@ Handle<WasmExceptionPackage> WasmExceptionPackage::New(
                              exception_tag, StoreOrigin::kMaybeKeyed,
                              Just(ShouldThrow::kThrowOnError))
              .is_null());
+  Handle<FixedArray> values = isolate->factory()->NewFixedArray(size);
   CHECK(!Object::SetProperty(isolate, exception,
                              isolate->factory()->wasm_exception_values_symbol(),
                              values, StoreOrigin::kMaybeKeyed,
