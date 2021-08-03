@@ -6,6 +6,7 @@
 #define V8_SNAPSHOT_CODE_SERIALIZER_H_
 
 #include "src/base/macros.h"
+#include "src/handles/persistent-handles.h"
 #include "src/snapshot/serializer.h"
 #include "src/snapshot/snapshot-data.h"
 
@@ -27,6 +28,8 @@ class V8_EXPORT_PRIVATE ScriptData {
 
   void Reject() { rejected_ = true; }
 
+  bool HasDataOwnership() const { return owns_data_; }
+
   void AcquireDataOwnership() {
     DCHECK(!owns_data_);
     owns_data_ = true;
@@ -46,6 +49,14 @@ class V8_EXPORT_PRIVATE ScriptData {
 
 class CodeSerializer : public Serializer {
  public:
+  struct OffThreadDeserializeData {
+   private:
+    friend class CodeSerializer;
+    MaybeHandle<SharedFunctionInfo> maybe_result;
+    std::vector<Handle<Script>> scripts;
+    std::unique_ptr<PersistentHandles> persistent_handles;
+  };
+
   CodeSerializer(const CodeSerializer&) = delete;
   CodeSerializer& operator=(const CodeSerializer&) = delete;
   V8_EXPORT_PRIVATE static ScriptCompiler::CachedData* Serialize(
@@ -56,6 +67,14 @@ class CodeSerializer : public Serializer {
   V8_WARN_UNUSED_RESULT static MaybeHandle<SharedFunctionInfo> Deserialize(
       Isolate* isolate, ScriptData* cached_data, Handle<String> source,
       ScriptOriginOptions origin_options);
+
+  V8_WARN_UNUSED_RESULT static OffThreadDeserializeData
+  StartDeserializeOffThread(LocalIsolate* isolate, ScriptData* cached_data);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<SharedFunctionInfo>
+  FinishOffThreadDeserialize(Isolate* isolate, OffThreadDeserializeData&& data,
+                             ScriptData* cached_data, Handle<String> source,
+                             ScriptOriginOptions origin_options);
 
   uint32_t source_hash() const { return source_hash_; }
 
@@ -109,6 +128,8 @@ class SerializedCodeData : public SerializedData {
   static SerializedCodeData FromCachedData(ScriptData* cached_data,
                                            uint32_t expected_source_hash,
                                            SanityCheckResult* rejection_result);
+  static SerializedCodeData FromCachedDataWithoutSource(
+      ScriptData* cached_data, SanityCheckResult* rejection_result);
 
   // Used when producing.
   SerializedCodeData(const std::vector<byte>* payload,
@@ -132,6 +153,7 @@ class SerializedCodeData : public SerializedData {
   }
 
   SanityCheckResult SanityCheck(uint32_t expected_source_hash) const;
+  SanityCheckResult SanityCheckWithoutSource() const;
 };
 
 }  // namespace internal
