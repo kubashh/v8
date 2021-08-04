@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72fbac0b_db9f8d32",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2095,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T09:35:55Z",
+      "side": 1,
+      "message": "I would have loved to have this return a unique_ptr, but it\u0027s inconsistent with StartStreaming above, and I can\u0027t change that because APIs.",
+      "parentUuid": "c10f94e9_81147b56",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0baf6db9_6c741c11",
         "filename": "src/api/api.cc",
         "patchSetId": 3
@@ -82,6 +100,24 @@
       "writtenOn": "2021-08-04T09:13:21Z",
       "side": 1,
       "message": "nit: why not in the header? also, empty line between these methods.",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa54dbed_e89d5455",
+        "filename": "src/api/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2611,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T09:35:55Z",
+      "side": 1,
+      "message": "Not in the header because it needs the definition of BackgroundDeserializeTask for the unique_ptr destructor.",
+      "parentUuid": "0baf6db9_6c741c11",
       "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -128,6 +164,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "16586b64_0cbc7069",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T09:35:55Z",
+      "side": 1,
+      "message": "I agree -- I did it this way because of consistency with GetSharedFunctionInfoForScript; I\u0027m thinking of just renaming ScriptData to CachedData and having both v8::CachedData and v8::internal::CachedData. Thoughts? Maybe AlignedCachedData?",
+      "parentUuid": "d77d6bc2_bd94914a",
+      "range": {
+        "startLine": 595,
+        "startChar": 13,
+        "endLine": 595,
+        "endChar": 25
+      },
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c19e118a_e19a161a",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 3
@@ -139,6 +199,24 @@
       "writtenOn": "2021-08-04T09:13:21Z",
       "side": 1,
       "message": "This will remain true when landed?",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b91c249_3fe1f3bb",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T09:35:55Z",
+      "side": 1,
+      "message": "I was planning to leave it on yeah, since this doesn\u0027t actually _trigger_ concurrent cache deserialization, just _enables_ it.",
+      "parentUuid": "c19e118a_e19a161a",
       "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -179,6 +257,24 @@
       "writtenOn": "2021-08-04T09:13:21Z",
       "side": 1,
       "message": "leftover?",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b91e3e36_7288ec85",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T09:35:55Z",
+      "side": 1,
+      "message": "semi-leftover, I\u0027m not sure whether we should increment counters off-thread, or do this in the Finish method.",
+      "parentUuid": "a660e69d_e48fba44",
       "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
