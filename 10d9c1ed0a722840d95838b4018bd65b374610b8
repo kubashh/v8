@@ -16,6 +16,23 @@
       "message": "PTAL. If this looks good to you, Andreas, I would propose to land this right away to fix the broken FYI bot, and address potential comments/concerns by Mark later.",
       "revId": "10d9c1ed0a722840d95838b4018bd65b374610b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22332750_701fce8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-08-04T14:01:35Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Code-Review+1\n\u003e \n\u003e By voting Code-Review+1 the following files are now code-owner approved by \u003cGERRIT_ACCOUNT_1141154\u003e:\n\u003e * src/trap-handler/handler-inside-posix.cc\n\u003e * src/trap-handler/handler-outside-simulator.cc\n\u003e \n\nLanding as proposed then, to make our bot happy.\nMark, please check this CL, and if you have an idea how to make this more robust I am very open to further improvements in a follow-up.",
+      "revId": "10d9c1ed0a722840d95838b4018bd65b374610b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
