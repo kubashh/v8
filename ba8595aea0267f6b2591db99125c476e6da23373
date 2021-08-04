@@ -224,6 +224,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1405ffde_152ff424",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-08-04T09:45:23Z",
+      "side": 1,
+      "message": "v8::CachedData and i::CachedData SGTM",
+      "parentUuid": "16586b64_0cbc7069",
+      "range": {
+        "startLine": 595,
+        "startChar": 13,
+        "endLine": 595,
+        "endChar": 25
+      },
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c19e118a_e19a161a",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 3
