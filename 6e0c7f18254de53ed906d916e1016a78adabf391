@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "423ff175_c3eb0a9b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-08-04T20:36:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "037b3ad1_880799de",
+      "revId": "6e0c7f18254de53ed906d916e1016a78adabf391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa37dcf5_eeb73bc9",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ec1dd97_0f42a7e2",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-08-04T20:36:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aa37dcf5_eeb73bc9",
+      "range": {
+        "startLine": 862,
+        "startChar": 29,
+        "endLine": 862,
+        "endChar": 39
+      },
+      "revId": "6e0c7f18254de53ed906d916e1016a78adabf391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d127061f_258a91e0",
@@ -71,6 +113,24 @@
       "writtenOn": "2021-08-04T16:06:22Z",
       "side": 1,
       "message": "Phew, this gets really hard to follow. Can we maybe refactor to have less repetition in the conditions?\n\nMaybe this works:\nif (initial \u003e kGBPages) {\n  heuristic_maximum \u003d initial;\n} else if (has_maximum) {\n  heuristic_maximum \u003d min(maximum, kGBPages);\n} else if (shared) {\n  heuristic_maximum \u003d kGBPages;\n} else {\n  heuristic_maximum \u003d initial;\n}\n\nOr something similar.",
+      "revId": "6e0c7f18254de53ed906d916e1016a78adabf391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b83cbfd_157ac61f",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-08-04T20:36:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d127061f_258a91e0",
       "revId": "6e0c7f18254de53ed906d916e1016a78adabf391",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
