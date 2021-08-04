@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "096c17f2_0f887e5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-08-04T15:16:36Z",
+      "side": 1,
+      "message": "PTAL. I don\u0027t know of any bug caused by this, but in any case this seems cleaner.",
+      "revId": "f2cf286dfa65f893bbdc2414f107099eff551263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
