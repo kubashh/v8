@@ -16,6 +16,23 @@
       "message": "I\u0027ve implemented what we discussed last time. PTAL! 😊",
       "revId": "25e1a166ebadd49f7bafc129e23746139793418e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0147da7_09c21849",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T13:38:31Z",
+      "side": 1,
+      "message": "This looks great! Very clean fix.",
+      "revId": "25e1a166ebadd49f7bafc129e23746139793418e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
