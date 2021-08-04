@@ -5,6 +5,7 @@
 #include "src/wasm/wasm-code-manager.h"
 
 #include <iomanip>
+#include <iostream>
 
 #include "src/base/build_config.h"
 #include "src/base/iterator.h"
@@ -2122,13 +2123,39 @@ std::vector<std::unique_ptr<WasmCode>> NativeModule::AddCompiledCode(
     size_t code_size = RoundUp<kCodeAlignment>(result.code_desc.instr_size);
     base::Vector<byte> this_code_space = code_space.SubVector(0, code_size);
     code_space += code_size;
-    generated_code.emplace_back(AddCodeWithCodeSpace(
+    {
+      v8::base::LockGuard<v8::base::Mutex> lock(&mutex_);
+      std::cerr << "#### start "
+                << " module=" << this
+                << " index=" << (++total_index_)
+                << ", total_code_space=" << total_code_space
+                << ", code_space.size=" << code_space.size()
+                << ", this_code_space.size=" << this_code_space.size()
+                << ", this_code_space.begin="
+                << reinterpret_cast<void*>(this_code_space.begin())
+                << ", code_desc.buffer="
+                << reinterpret_cast<void*>(result.code_desc.buffer)
+                << ", code_desc,size="
+                << result.code_desc.instr_size
+                << ", code_desc.buffer==esult.instr_buffer->start?="
+                << (result.code_desc.buffer == result.instr_buffer->start())
+                << std::endl;
+    }
+    auto code = AddCodeWithCodeSpace(
         result.func_index, result.code_desc, result.frame_slot_count,
         result.tagged_parameter_slots,
         result.protected_instructions_data.as_vector(),
         result.source_positions.as_vector(), GetCodeKind(result),
         result.result_tier, result.for_debugging, this_code_space,
-        jump_tables));
+        jump_tables);
+    {
+      v8::base::LockGuard<v8::base::Mutex> lock(&mutex_);
+      std::cerr << "#### end "
+                << " module=" << this
+                << " index=" << total_index_
+                << std::endl;
+    }
+    generated_code.emplace_back(std::move(code));
   }
   DCHECK_EQ(0, code_space.size());
 

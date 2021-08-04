@@ -32,6 +32,9 @@
 #include "src/wasm/wasm-module-sourcemap.h"
 #include "src/wasm/wasm-tier.h"
 
+// ####
+#include "src/base/platform/mutex.h"
+
 namespace v8 {
 namespace internal {
 
@@ -923,6 +926,10 @@ class V8_EXPORT_PRIVATE NativeModule final {
 
   // End of fields protected by {allocation_mutex_}.
   //////////////////////////////////////////////////////////////////////////////
+
+  // ####
+  v8::base::Mutex mutex_;
+  int total_index_ = 0;
 
   const BoundsCheckStrategy bounds_checks_;
   bool lazy_compile_frozen_ = false;

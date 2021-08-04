@@ -4,6 +4,8 @@
 
 #include "src/wasm/code-space-access.h"
 
+#include <iostream>
+
 #include "src/wasm/wasm-code-manager.h"
 #include "src/wasm/wasm-engine.h"
 
@@ -51,9 +53,20 @@ void CodeSpaceWriteScope::SetWritable() const {
   DCHECK_NOT_NULL(native_module_);
   auto* code_manager = GetWasmCodeManager();
   if (code_manager->HasMemoryProtectionKeySupport()) {
+    std::cerr << "#### "
+              << "CodeSpaceWriteScope::SetWritable"
+              << ", HasMemoryProtectionKeySupport"
+              << ", FLAG_wasm_memory_protection_keys="
+              << FLAG_wasm_memory_protection_keys
+              << std::endl;
     DCHECK(FLAG_wasm_memory_protection_keys);
     code_manager->SetThreadWritable(true);
   } else if (FLAG_wasm_write_protect_code_memory) {
+    std::cerr << "#### "
+              << "CodeSpaceWriteScope::SetWritable"
+              << ", FLAG_wasm_write_protect_code_memory="
+              << FLAG_wasm_write_protect_code_memory
+              << std::endl;
     CHECK(native_module_->SetWritable(true));
   }
 }
