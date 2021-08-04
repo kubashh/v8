@@ -850,20 +850,25 @@ MaybeHandle<WasmMemoryObject> WasmMemoryObject::New(Isolate* isolate,
   }
 
 #ifdef V8_TARGET_ARCH_32_BIT
-  if (shared == SharedFlag::kNotShared) {
-    // On 32-bit platforms we need a heuristic here to balance overall memory
-    // and address space consumption. If a maximum memory size is defined, then
-    // we reserve that maximum size up to 1GB. If no maximum memory size is
-    // defined, we just allocate the initial size and grow with a realloc.
-    constexpr int kGBPages = 1024 * 1024 * 1024 / wasm::kWasmPageSize;
-    if (initial > kGBPages || !has_maximum) {
-      // We allocate at least the initial size. If no maximum is specified we
-      // also start with the initial size.
-      heuristic_maximum = initial;
-    } else {
-      // We reserve the maximum size, but at most 1GB.
-      heuristic_maximum = std::min(maximum, kGBPages);
-    }
+  // On 32-bit platforms we need a heuristic here to balance overall memory
+  // and address space consumption. If a maximum memory size is defined, then
+  // we reserve that maximum size up to 1GB. If no maximum memory size is
+  // defined, then we allocate 1GB for shared memory, and we allocate the
+  // initial size and grow with a realloc for not-shared memory.
+  constexpr int kGBPages = 1024 * 1024 * 1024 / wasm::kWasmPageSize;
+  if (shared == SharedFlag::kShared && !has_maximum) {
+    // For implicit maximum size of shared memory is 1GB. Only if the initial
+    // memory is set higher we allocate more memory. We handle shared memory
+    // here differently than not-shared memory because we cannot grow shared
+    // memory with realloc.
+    heuristic_maximum = std::max(initial, kGBPages);
+  } else if (initial > kGBPages || !has_maximum) {
+    // We allocate at least the initial size. If no maximum is specified we
+    // also start with the initial size.
+    heuristic_maximum = initial;
+  } else {
+    // We reserve the maximum size, but at most 1GB.
+    heuristic_maximum = std::min(maximum, kGBPages);
   }
 #endif
 
