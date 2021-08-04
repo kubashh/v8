@@ -359,6 +359,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe6cf172_03301ced",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-08-04T09:47:57Z",
+      "side": 1,
+      "message": "AddHistogramSample calls a user-defined method, I doubt this is thread safe \u003d\u003e adding samples on the main-thread seems like the better choice\n(https://source.chromium.org/chromium/chromium/src/+/main:v8/src/logging/counters.h;drc\u003dd0b89fe9c3d6ecc1ec4ffaf0baeb6b36c34ba7fd;l\u003d79)",
+      "parentUuid": "b91e3e36_7288ec85",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0f081abd_6d22dfc4",
         "filename": "src/snapshot/code-serializer.cc",
         "patchSetId": 3
