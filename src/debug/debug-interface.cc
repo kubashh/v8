@@ -758,7 +758,7 @@ MaybeLocal<UnboundScript> CompileInspectorScript(Isolate* v8_isolate,
   i::Handle<i::SharedFunctionInfo> result;
   {
     ScriptOriginOptions origin_options;
-    i::ScriptData* script_data = nullptr;
+    i::AlignedCachedData* script_data = nullptr;
     i::MaybeHandle<i::SharedFunctionInfo> maybe_function_info =
         i::Compiler::GetSharedFunctionInfoForScript(
             isolate, str, i::Compiler::ScriptDetails(), origin_options, nullptr,

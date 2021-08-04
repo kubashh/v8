@@ -2393,15 +2393,31 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
                      CompileUnbound, MaybeLocal<UnboundScript>(),
                      InternalEscapableScope);
 
-  i::ScriptData* script_data = nullptr;
+  i::Handle<i::String> str = Utils::OpenHandle(*(source->source_string));
+
+  std::unique_ptr<i::AlignedCachedData> cached_data;
   if (options == kConsumeCodeCache) {
-    DCHECK(source->cached_data);
-    // ScriptData takes care of pointer-aligning the data.
-    script_data = new i::ScriptData(source->cached_data->data,
-                                    source->cached_data->length);
+    if (source->consume_cache_task) {
+      // If there's a cache consume task, finish it
+      i::MaybeHandle<i::SharedFunctionInfo> maybe_function_info =
+          source->consume_cache_task->impl_->Finish(isolate, str,
+                                                    source->resource_options);
+      i::Handle<i::SharedFunctionInfo> result;
+      if (maybe_function_info.ToHandle(&result)) {
+        RETURN_ESCAPED(ToApiHandle<UnboundScript>(result));
+      }
+      // If the above failed, then we must have rejected the cache. Continue
+      // with normal compilation, disabling the code cache consumption.
+      source->cached_data->rejected = true;
+      options = kNoCompileOptions;
+    } else {
+      DCHECK(source->cached_data);
+      // AlignedCachedData takes care of pointer-aligning the data.
+      cached_data.reset(new i::AlignedCachedData(source->cached_data->data,
+                                                 source->cached_data->length));
+    }
   }
 
-  i::Handle<i::String> str = Utils::OpenHandle(*(source->source_string));
   i::Handle<i::SharedFunctionInfo> result;
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.CompileScript");
   i::Compiler::ScriptDetails script_details = GetScriptDetails(
@@ -2411,11 +2427,10 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
   i::MaybeHandle<i::SharedFunctionInfo> maybe_function_info =
       i::Compiler::GetSharedFunctionInfoForScript(
           isolate, str, script_details, source->resource_options, nullptr,
-          script_data, options, no_cache_reason, i::NOT_NATIVES_CODE);
+          cached_data.get(), options, no_cache_reason, i::NOT_NATIVES_CODE);
   if (options == kConsumeCodeCache) {
-    source->cached_data->rejected = script_data->rejected();
+    source->cached_data->rejected = cached_data->rejected();
   }
-  delete script_data;
   has_pending_exception = !maybe_function_info.ToHandle(&result);
   RETURN_ON_FAILED_EXECUTION(UnboundScript);
   RETURN_ESCAPED(ToApiHandle<UnboundScript>(result));
@@ -2537,12 +2552,12 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
         source->resource_column_offset, source->source_map_url,
         source->host_defined_options);
 
-    i::ScriptData* script_data = nullptr;
+    i::AlignedCachedData* script_data = nullptr;
     if (options == kConsumeCodeCache) {
       DCHECK(source->cached_data);
       // ScriptData takes care of pointer-aligning the data.
-      script_data = new i::ScriptData(source->cached_data->data,
-                                      source->cached_data->length);
+      script_data = new i::AlignedCachedData(source->cached_data->data,
+                                             source->cached_data->length);
     }
 
     i::Handle<i::JSFunction> scoped_result;
@@ -2592,6 +2607,24 @@ ScriptCompiler::ScriptStreamingTask* ScriptCompiler::StartStreaming(
       std::make_unique<i::BackgroundCompileTask>(data, isolate, type);
   data->task = std::move(task);
   return new ScriptCompiler::ScriptStreamingTask(data);
+}
+
+ScriptCompiler::ConsumeCodeCacheTask::ConsumeCodeCacheTask(
+    std::unique_ptr<i::BackgroundDeserializeTask> impl)
+    : impl_(std::move(impl)) {}
+
+ScriptCompiler::ConsumeCodeCacheTask::~ConsumeCodeCacheTask() = default;
+
+void ScriptCompiler::ConsumeCodeCacheTask::Run() { impl_->Run(); }
+
+ScriptCompiler::ConsumeCodeCacheTask* ScriptCompiler::StartConsumingCodeCache(
+    Isolate* v8_isolate, std::unique_ptr<CachedData> cached_data) {
+  if (!i::FLAG_concurrent_cache_deserialization) return nullptr;
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  ASSERT_NO_SCRIPT_NO_EXCEPTION(isolate);
+  return new ScriptCompiler::ConsumeCodeCacheTask(
+      std::make_unique<i::BackgroundDeserializeTask>(isolate,
+                                                     std::move(cached_data)));
 }
 
 namespace {

@@ -1571,7 +1571,8 @@ int CountBuiltins() {
 
 static Handle<SharedFunctionInfo> CompileScript(
     Isolate* isolate, Handle<String> source, Handle<String> name,
-    ScriptData* cached_data, v8::ScriptCompiler::CompileOptions options) {
+    AlignedCachedData* cached_data,
+    v8::ScriptCompiler::CompileOptions options) {
   return Compiler::GetSharedFunctionInfoForScript(
              isolate, source, Compiler::ScriptDetails(name),
              v8::ScriptOriginOptions(), nullptr, cached_data, options,
@@ -1581,7 +1582,8 @@ static Handle<SharedFunctionInfo> CompileScript(
 
 static Handle<SharedFunctionInfo> CompileScriptAndProduceCache(
     Isolate* isolate, Handle<String> source, Handle<String> name,
-    ScriptData** script_data, v8::ScriptCompiler::CompileOptions options) {
+    AlignedCachedData** script_data,
+    v8::ScriptCompiler::CompileOptions options) {
   Handle<SharedFunctionInfo> sfi =
       Compiler::GetSharedFunctionInfoForScript(
           isolate, source, Compiler::ScriptDetails(name),
@@ -1592,7 +1594,7 @@ static Handle<SharedFunctionInfo> CompileScriptAndProduceCache(
       ScriptCompiler::CreateCodeCache(ToApiHandle<UnboundScript>(sfi)));
   uint8_t* buffer = NewArray<uint8_t>(cached_data->length);
   MemCopy(buffer, cached_data->data, cached_data->length);
-  *script_data = new i::ScriptData(buffer, cached_data->length);
+  *script_data = new i::AlignedCachedData(buffer, cached_data->length);
   (*script_data)->AcquireDataOwnership();
   return sfi;
 }
@@ -1619,7 +1621,7 @@ TEST(CodeSerializerWithProfiler) {
   CHECK(!orig_source.is_identical_to(copy_source));
   CHECK(orig_source->Equals(*copy_source));
 
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   Handle<SharedFunctionInfo> orig = CompileScriptAndProduceCache(
       isolate, orig_source, Handle<String>(), &cache,
@@ -1661,7 +1663,7 @@ void TestCodeSerializerOnePlusOneImpl(bool verify_builtins_count = true) {
   CHECK(!orig_source.is_identical_to(copy_source));
   CHECK(orig_source->Equals(*copy_source));
 
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   Handle<SharedFunctionInfo> orig = CompileScriptAndProduceCache(
       isolate, orig_source, Handle<String>(), &cache,
@@ -1722,7 +1724,7 @@ TEST(CodeSerializerPromotedToCompilationCache) {
   Handle<String> src = isolate->factory()
                            ->NewStringFromUtf8(base::CStrVector(source))
                            .ToHandleChecked();
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   CompileScriptAndProduceCache(isolate, src, src, &cache,
                                v8::ScriptCompiler::kNoCompileOptions);
@@ -1761,7 +1763,7 @@ TEST(CodeSerializerInternalizedString) {
 
   Handle<JSObject> global(isolate->context().global_object(), isolate);
 
-  i::ScriptData* script_data = nullptr;
+  i::AlignedCachedData* script_data = nullptr;
   Handle<SharedFunctionInfo> orig = CompileScriptAndProduceCache(
       isolate, orig_source, Handle<String>(), &script_data,
       v8::ScriptCompiler::kNoCompileOptions);
@@ -1820,7 +1822,7 @@ TEST(CodeSerializerLargeCodeObject) {
       isolate->factory()->NewStringFromUtf8(source).ToHandleChecked();
 
   Handle<JSObject> global(isolate->context().global_object(), isolate);
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   Handle<SharedFunctionInfo> orig = CompileScriptAndProduceCache(
       isolate, source_str, Handle<String>(), &cache,
@@ -1887,7 +1889,7 @@ TEST(CodeSerializerLargeCodeObjectWithIncrementalMarking) {
   }
 
   Handle<JSObject> global(isolate->context().global_object(), isolate);
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   Handle<SharedFunctionInfo> orig = CompileScriptAndProduceCache(
       isolate, source_str, Handle<String>(), &cache,
@@ -1952,7 +1954,7 @@ TEST(CodeSerializerLargeStrings) {
           .ToHandleChecked();
 
   Handle<JSObject> global(isolate->context().global_object(), isolate);
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   Handle<SharedFunctionInfo> orig = CompileScriptAndProduceCache(
       isolate, source_str, Handle<String>(), &cache,
@@ -2026,7 +2028,7 @@ TEST(CodeSerializerThreeBigStrings) {
           .ToHandleChecked();
 
   Handle<JSObject> global(isolate->context().global_object(), isolate);
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   Handle<SharedFunctionInfo> orig = CompileScriptAndProduceCache(
       isolate, source_str, Handle<String>(), &cache,
@@ -2145,7 +2147,7 @@ TEST(CodeSerializerExternalString) {
           .ToHandleChecked();
 
   Handle<JSObject> global(isolate->context().global_object(), isolate);
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   Handle<SharedFunctionInfo> orig = CompileScriptAndProduceCache(
       isolate, source_string, Handle<String>(), &cache,
@@ -2209,7 +2211,7 @@ TEST(CodeSerializerLargeExternalString) {
           .ToHandleChecked();
 
   Handle<JSObject> global(isolate->context().global_object(), isolate);
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   Handle<SharedFunctionInfo> orig = CompileScriptAndProduceCache(
       isolate, source_str, Handle<String>(), &cache,
@@ -2263,7 +2265,7 @@ TEST(CodeSerializerExternalScriptName) {
   CHECK(!name->IsInternalizedString());
 
   Handle<JSObject> global(isolate->context().global_object(), isolate);
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   Handle<SharedFunctionInfo> orig =
       CompileScriptAndProduceCache(isolate, source_string, name, &cache,
@@ -2631,7 +2633,7 @@ TEST(Regress503552) {
   HandleScope scope(isolate);
   Handle<String> source = isolate->factory()->NewStringFromAsciiChecked(
       "function f() {} function g() {}");
-  ScriptData* script_data = nullptr;
+  AlignedCachedData* script_data = nullptr;
   Handle<SharedFunctionInfo> shared = CompileScriptAndProduceCache(
       isolate, source, Handle<String>(), &script_data,
       v8::ScriptCompiler::kNoCompileOptions);
@@ -4020,7 +4022,7 @@ TEST(WeakArraySerializationInCodeCache) {
   Handle<String> src = isolate->factory()
                            ->NewStringFromUtf8(base::CStrVector(source))
                            .ToHandleChecked();
-  ScriptData* cache = nullptr;
+  AlignedCachedData* cache = nullptr;
 
   CompileScriptAndProduceCache(isolate, src, src, &cache,
                                v8::ScriptCompiler::kNoCompileOptions);
