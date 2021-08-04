@@ -50,6 +50,24 @@
       "message": "Might as well add a few more cases here with different types (BigUint64Array, Uint16Array, etc)?",
       "revId": "b188c6c98374d5be6076fef3469c9d24a05d45c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc520703_c511b8d6",
+        "filename": "test/mjsunit/typedarray-constructor-mixed-bigint.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-04T21:21:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bf8214c_bbf81a1e",
+      "revId": "b188c6c98374d5be6076fef3469c9d24a05d45c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
