@@ -145,6 +145,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a09ab736_aa90be39",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-08-04T09:29:06Z",
+      "side": 1,
+      "message": "nit: cached_data_vs. ScriptData",
+      "range": {
+        "startLine": 300,
+        "startChar": 14,
+        "endLine": 300,
+        "endChar": 26
+      },
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a660e69d_e48fba44",
         "filename": "src/snapshot/code-serializer.cc",
         "patchSetId": 3
