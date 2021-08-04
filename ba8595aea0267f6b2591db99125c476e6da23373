@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4d0aba3_3e4b66f8",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1818,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T15:37:57Z",
+      "side": 1,
+      "message": "I like it.",
+      "parentUuid": "688e07d6_f856ab45",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4dd87d9_62daeca9",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-08-04T09:13:21Z",
       "side": 1,
       "message": "And not of CodeCacheConsumeTask?",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b822296_eaa40310",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T15:37:57Z",
+      "side": 1,
+      "message": "Oops, old comment.",
+      "parentUuid": "c4dd87d9_62daeca9",
       "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -175,6 +211,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0208c6a0_64e36886",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T15:37:57Z",
+      "side": 1,
+      "message": "You\u0027re right, no good reason.",
+      "parentUuid": "bf1508ea_80aa451f",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d77d6bc2_bd94914a",
@@ -236,6 +290,30 @@
       "side": 1,
       "message": "v8::CachedData and i::CachedData SGTM",
       "parentUuid": "16586b64_0cbc7069",
+      "range": {
+        "startLine": 595,
+        "startChar": 13,
+        "endLine": 595,
+        "endChar": 25
+      },
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cca4b68e_47aab129",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T15:37:57Z",
+      "side": 1,
+      "message": "I went with AlignedCachedData since that\u0027s the reason we can\u0027t just use v8::CachedData directly",
+      "parentUuid": "1405ffde_152ff424",
       "range": {
         "startLine": 595,
         "startChar": 13,
@@ -375,6 +453,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "734a639a_99eeee70",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T15:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe6cf172_03301ced",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f081abd_6d22dfc4",
@@ -398,6 +494,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f133335_0125fee9",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T15:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f081abd_6d22dfc4",
+      "range": {
+        "startLine": 495,
+        "startChar": 12,
+        "endLine": 495,
+        "endChar": 47
+      },
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "956f7e7d_31108d3e",
@@ -411,6 +531,24 @@
       "writtenOn": "2021-08-04T09:13:21Z",
       "side": 1,
       "message": "nit: fwd-declare if possible",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba4cca5d_739c4567",
+        "filename": "src/snapshot/code-serializer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-04T15:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "956f7e7d_31108d3e",
       "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
