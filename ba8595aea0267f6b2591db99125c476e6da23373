@@ -16,6 +16,142 @@
       "message": "Jakob, Camillo, PTAL both at everything.\n\nI haven\u0027t quite figured out how logging/debug printing works in the off-thread task, but the rest is good for review I think.\n\nExample usage in https://chromium-review.googlesource.com/c/chromium/src/+/3067343",
       "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "688e07d6_f856ab45",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1818,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-04T09:13:21Z",
+      "side": 1,
+      "message": "Suggestion: ConsumeCodeCacheTask? Likewise all other related names, up to you.",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4dd87d9_62daeca9",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-04T09:13:21Z",
+      "side": 1,
+      "message": "And not of CodeCacheConsumeTask?",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c10f94e9_81147b56",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2095,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-04T09:13:21Z",
+      "side": 1,
+      "message": "A comment as above seems useful. (BTW why don\u0027t these methods return unique_ptrs to clarify ownership?)",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0baf6db9_6c741c11",
+        "filename": "src/api/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2611,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-04T09:13:21Z",
+      "side": 1,
+      "message": "nit: why not in the header? also, empty line between these methods.",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf1508ea_80aa451f",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-04T09:13:21Z",
+      "side": 1,
+      "message": "Why \u0026\u0026 here and not in the other spots where unique_ptrs are passed as args? Because the ptr isn\u0027t assigned in the impl?",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c19e118a_e19a161a",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-04T09:13:21Z",
+      "side": 1,
+      "message": "This will remain true when landed?",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a660e69d_e48fba44",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-04T09:13:21Z",
+      "side": 1,
+      "message": "leftover?",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "956f7e7d_31108d3e",
+        "filename": "src/snapshot/code-serializer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-04T09:13:21Z",
+      "side": 1,
+      "message": "nit: fwd-declare if possible",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
