@@ -105,6 +105,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d77d6bc2_bd94914a",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-08-04T09:25:57Z",
+      "side": 1,
+      "message": "nit: cached_data_ vs. ScriptCompiler::CachedData is a bit confusing.",
+      "range": {
+        "startLine": 595,
+        "startChar": 13,
+        "endLine": 595,
+        "endChar": 25
+      },
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c19e118a_e19a161a",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 3
@@ -133,6 +156,29 @@
       "writtenOn": "2021-08-04T09:13:21Z",
       "side": 1,
       "message": "leftover?",
+      "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f081abd_6d22dfc4",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-08-04T09:25:57Z",
+      "side": 1,
+      "message": "nit: ReadOnlyRoots(isolate).empty_string()",
+      "range": {
+        "startLine": 495,
+        "startChar": 12,
+        "endLine": 495,
+        "endChar": 47
+      },
       "revId": "ba8595aea0267f6b2591db99125c476e6da23373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
