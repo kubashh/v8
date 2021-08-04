@@ -293,6 +293,12 @@ Object OptimizeFunctionOnNextCall(RuntimeArguments& args, Isolate* isolate,
         isolate->concurrent_recompilation_enabled()) {
       concurrency_mode = ConcurrencyMode::kConcurrent;
     }
+    if (Handle<String>::cast(type)->IsOneByteEqualTo(
+            base::StaticCharVector("concurrent-skip-finalization")) &&
+        isolate->concurrent_recompilation_enabled() && !FLAG_fuzzing) {
+      concurrency_mode = ConcurrencyMode::kConcurrent;
+      isolate->optimizing_compile_dispatcher()->set_skip_finalization(true);
+    }
   }
   if (FLAG_trace_opt) {
     PrintF("[manually marking ");
@@ -675,6 +681,23 @@ RUNTIME_FUNCTION(Runtime_UnblockConcurrentRecompilation) {
   CHECK(FLAG_block_concurrent_recompilation);
   CHECK(isolate->concurrent_recompilation_enabled());
   isolate->optimizing_compile_dispatcher()->Unblock();
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_WaitForBackgroundOptimization) {
+  DCHECK_EQ(0, args.length());
+  DCHECK(!FLAG_block_concurrent_recompilation);
+  CHECK(isolate->concurrent_recompilation_enabled());
+  isolate->optimizing_compile_dispatcher()->AwaitCompileTasks();
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_FinalizeOptimization) {
+  DCHECK_EQ(0, args.length());
+  DCHECK(!FLAG_block_concurrent_recompilation);
+  CHECK(isolate->concurrent_recompilation_enabled());
+  isolate->optimizing_compile_dispatcher()->InstallOptimizedFunctions();
+  isolate->optimizing_compile_dispatcher()->set_skip_finalization(false);
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
