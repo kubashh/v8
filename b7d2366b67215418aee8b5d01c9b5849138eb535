@@ -16,6 +16,23 @@
       "message": "PTAL\nThanks!",
       "revId": "b7d2366b67215418aee8b5d01c9b5849138eb535",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d0df3c4_d55275e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-08-05T12:56:08Z",
+      "side": 1,
+      "message": "Please also make it owner of the DEPS file. Note that in order for this to have the needed effect on auto-tag, it needs to be merged back to the last beta/stable versions.\n\nThis probably requires OWNERS approval of ENG OWNERS.",
+      "revId": "b7d2366b67215418aee8b5d01c9b5849138eb535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
