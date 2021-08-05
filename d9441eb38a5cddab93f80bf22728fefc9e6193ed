@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72431c22_4e82233d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-08-05T20:00:36Z",
+      "side": 1,
+      "message": "I missed a couple of windows.h includes. This fixes Windows ARM64 builds. PTAL.",
+      "revId": "d9441eb38a5cddab93f80bf22728fefc9e6193ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
