@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ab36675_10af0e89",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4354,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2021-08-05T03:28:18Z",
+      "side": 1,
+      "message": "Hi Victor,\nWill the assembler buffer grows cause full-embedded-object to invalid ?\nIs the value or address of object changed ?\nThanks.",
+      "revId": "fb4f89aede6f7acc219e964ac294a291d2280d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
