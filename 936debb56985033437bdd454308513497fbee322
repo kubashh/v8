@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2fe6f74_c88b2594",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2021-08-05T20:03:01Z",
+      "side": 1,
+      "message": "Hmm, curious!  I can\u0027t see an ELF toolchain doing that, but I suppose a Mac/Mach-O toolchain could.\n\nDo you have any information that could confirm that hypothesis?  e.g.\n\n* disassembly of binaries showing that the ProbeMemory function gets split up\n* standalone test cases showing that symbols declared with \".globl\"  get treated as starting new sections\n* any references to this in docs or other code?\n\nUnfortunately I don\u0027t have a Mac to test this out on.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 15
+      },
+      "revId": "936debb56985033437bdd454308513497fbee322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
