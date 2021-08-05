@@ -39,6 +39,30 @@
       },
       "revId": "d1b35d51afa6ae7459743c781c2c904fa2f3f21a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a407e8cf_e33b8881",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-08-05T15:10:50Z",
+      "side": 1,
+      "message": "One at a time. If discarding breaks somewhere I\u0027d rather know that\u0027s it\u0027s because of discarding and not because of lazy commits.",
+      "parentUuid": "60210d3d_0e45978f",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 15
+      },
+      "revId": "d1b35d51afa6ae7459743c781c2c904fa2f3f21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
