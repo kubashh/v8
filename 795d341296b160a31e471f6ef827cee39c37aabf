@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08e0347a_8340e1e7",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-05T14:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb49a26_b1c347ca",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e761eb7_1050a01b",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96186664_4b344a21",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-05T14:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e761eb7_1050a01b",
+      "range": {
+        "startLine": 100,
+        "startChar": 10,
+        "endLine": 100,
+        "endChar": 23
+      },
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34671860_b4630000",
@@ -54,6 +96,24 @@
       "writtenOn": "2021-07-26T10:40:38Z",
       "side": 1,
       "message": "While you\u0027re here, please remove the \"kill_\" prefix from the arguments. I don\u0027t find it helpful at all.",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afc9971d_135c7db6",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-05T14:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34671860_b4630000",
       "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -83,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "890768b6_d5a12086",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-05T14:47:38Z",
+      "side": 1,
+      "message": "The problem is that this lookup is only needed two times, once const-qualified and once not. So we would have to define two separate helpers anyway.",
+      "parentUuid": "164d78bf_2e0ffd72",
+      "range": {
+        "startLine": 197,
+        "startChar": 33,
+        "endLine": 201,
+        "endChar": 75
+      },
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "61331306_2cc00eec",
         "filename": "src/compiler/csa-load-elimination.cc",
         "patchSetId": 3
@@ -94,6 +178,24 @@
       "writtenOn": "2021-07-26T10:40:38Z",
       "side": 1,
       "message": "Let\u0027s create a helper function Update(object, offset, field_info) for these three lines, it\u0027s a frequent pattern.",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27c730d4_ee9bea21",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-05T14:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61331306_2cc00eec",
       "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -115,6 +217,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54f90a0a_77af2e16",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-05T14:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edb498ca_bd53090b",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "244d7cac_428b12f0",
@@ -128,6 +248,24 @@
       "writtenOn": "2021-07-26T10:40:38Z",
       "side": 1,
       "message": "I find the remaining code in this function hard to read. Please at least add a comment here on what it\u0027s doing.",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6558d3cd_99195125",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-05T14:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "244d7cac_428b12f0",
       "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -149,6 +287,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c574d06a_ed8cbe62",
+        "filename": "src/compiler/csa-load-elimination.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-05T14:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0db83ce9_1cae740f",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d841d40_457c11e5",
@@ -162,6 +318,24 @@
       "writtenOn": "2021-07-26T10:40:38Z",
       "side": 1,
       "message": "How about KillOffsetInFresh(Object)",
+      "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27c88906_3cdf99ef",
+        "filename": "src/compiler/csa-load-elimination.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-05T14:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d841d40_457c11e5",
       "revId": "795d341296b160a31e471f6ef827cee39c37aabf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
