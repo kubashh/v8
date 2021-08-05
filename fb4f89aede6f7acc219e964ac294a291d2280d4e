@@ -16,6 +16,24 @@
       "message": "Hi Victor,\nWill the assembler buffer grows cause full-embedded-object to invalid ?\nIs the value or address of object changed ?\nThanks.",
       "revId": "fb4f89aede6f7acc219e964ac294a291d2280d4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a11b5d01_c0522a10",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4354,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-08-05T06:45:14Z",
+      "side": 1,
+      "message": "Hi Liu!\nSometimes. If we grow the assembler buffer on the GC heap, we need to allocate a new Code object, which might trigger a GC, which might move the objects. Note that we always need to fix relative branches, since they depend on the location of the assembler buffer.\nBut you\u0027re right that if we don\u0027t have a GC, we don\u0027t need to move full-embedded-objects. I will add a new patch that checks if a GC happened and skip the fix.\nThanks!",
+      "parentUuid": "9ab36675_10af0e89",
+      "revId": "fb4f89aede6f7acc219e964ac294a291d2280d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
