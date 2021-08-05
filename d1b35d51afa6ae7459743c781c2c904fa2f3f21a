@@ -63,6 +63,30 @@
       },
       "revId": "d1b35d51afa6ae7459743c781c2c904fa2f3f21a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe5e3473_32fd0c3c",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2021-08-05T16:10:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a407e8cf_e33b8881",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 15
+      },
+      "revId": "d1b35d51afa6ae7459743c781c2c904fa2f3f21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
