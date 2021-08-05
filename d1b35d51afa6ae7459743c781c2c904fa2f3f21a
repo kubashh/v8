@@ -16,6 +16,29 @@
       "message": "ptal. I ran a few Fuchsia bots and at least on the v8 side this seems to be working fine.",
       "revId": "d1b35d51afa6ae7459743c781c2c904fa2f3f21a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60210d3d_0e45978f",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2021-08-05T15:00:35Z",
+      "side": 1,
+      "message": "This should be returning |true|, as well. 😊",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 15
+      },
+      "revId": "d1b35d51afa6ae7459743c781c2c904fa2f3f21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
