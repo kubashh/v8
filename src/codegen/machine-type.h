@@ -358,6 +358,16 @@ V8_EXPORT_PRIVATE inline constexpr int ElementSizeLog2Of(
   }
 }
 
+V8_EXPORT_PRIVATE constexpr int kMaximumReprSizeLog2 = 4;
+V8_EXPORT_PRIVATE constexpr int kMaximumReprSizeInBytes = 1 << kTaggedSizeLog2;
+
+STATIC_ASSERT(kMaximumReprSizeLog2 >=
+              ElementSizeLog2Of(MachineRepresentation::kTagged));
+STATIC_ASSERT(kMaximumReprSizeLog2 >=
+              ElementSizeLog2Of(MachineRepresentation::kSimd128));
+STATIC_ASSERT(kMaximumReprSizeLog2 >=
+              ElementSizeLog2Of(MachineRepresentation::kWord64));
+
 V8_EXPORT_PRIVATE inline constexpr int ElementSizeInBytes(
     MachineRepresentation rep) {
   return 1 << ElementSizeLog2Of(rep);
