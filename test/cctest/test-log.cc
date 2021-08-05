@@ -659,7 +659,7 @@ UNINITIALIZED_TEST(LogInterpretedFramesNativeStackWithSerialization) {
 #endif  // V8_TARGET_ARCH_ARM
 
 UNINITIALIZED_TEST(ExternalCodeEventListener) {
-  i::FLAG_log = false;
+  // i::FLAG_log = false;
   i::FLAG_prof = false;
 
   v8::Isolate::CreateParams create_params;
