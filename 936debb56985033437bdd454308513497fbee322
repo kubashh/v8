@@ -70,6 +70,30 @@
       },
       "revId": "936debb56985033437bdd454308513497fbee322",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21e2484e_35a9e830",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2021-08-06T21:32:24Z",
+      "side": 1,
+      "message": "Yeah, I think it would be good to have a comment that mentions \".subsections_via_symbols\" and \".alt_entry\".",
+      "parentUuid": "aeb12903_0e2c64d9",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 15
+      },
+      "revId": "936debb56985033437bdd454308513497fbee322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
