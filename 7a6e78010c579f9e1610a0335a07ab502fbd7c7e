@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d9ed90e_48632f8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-06T12:40:30Z",
+      "side": 1,
+      "message": "LGTM, because the bug I\u0027ve noticed has existed before this CL. Please fix crbug.com/v8/12059 as a follow-up.",
+      "revId": "7a6e78010c579f9e1610a0335a07ab502fbd7c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb34ed9e_d0da7828",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-06T12:40:30Z",
+      "side": 1,
+      "message": "These (existing) recursive calls aren\u0027t safe, because they can overflow the stack and crash. I\u0027ve verified that this can actually happen and filed crbug.com/v8/12059.",
+      "range": {
+        "startLine": 192,
+        "startChar": 19,
+        "endLine": 192,
+        "endChar": 35
+      },
+      "revId": "7a6e78010c579f9e1610a0335a07ab502fbd7c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
