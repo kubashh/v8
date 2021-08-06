@@ -43,6 +43,7 @@ class V8_EXPORT_PRIVATE OptimizingCompileDispatcher {
   // Takes ownership of |job|.
   void QueueForOptimization(OptimizedCompilationJob* job);
   void Unblock();
+  void AwaitCompileTasks();
   void InstallOptimizedFunctions();
 
   inline bool IsQueueAvailable() {
@@ -54,6 +55,15 @@ class V8_EXPORT_PRIVATE OptimizingCompileDispatcher {
 
   // This method must be called on the main thread.
   bool HasJobs();
+
+  // Whether to skip finalization and thus installation of optimized code.
+  // Defaults to false. Only set to true for testing (see uses of
+  // %FinalizeOptimization).
+  bool skip_finalization() { return skip_finalization_; }
+  void set_skip_finalization(bool skip) {
+    DCHECK_IMPLIES(skip, FLAG_testing_d8_test_runner);
+    skip_finalization_ = skip;
+  }
 
  private:
   class CompileTask;
@@ -101,6 +111,8 @@ class V8_EXPORT_PRIVATE OptimizingCompileDispatcher {
   // Since flags might get modified while the background thread is running, it
   // is not safe to access them directly.
   int recompilation_delay_;
+
+  bool skip_finalization_ = false;
 };
 }  // namespace internal
 }  // namespace v8
