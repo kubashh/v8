@@ -46,6 +46,30 @@
       },
       "revId": "936debb56985033437bdd454308513497fbee322",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeb12903_0e2c64d9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-08-06T14:09:09Z",
+      "side": 1,
+      "message": "Ah, good to know what is causing this. I only observed that the disassembly of \"ProbeMemory\" was missing the \"ret\", and was instead followed by instructions that were disassembled as nops. Eventually is must have returned, but \"rax\" contained some garbage then which made the simulator continue at that address and fail.\n\nI think the current solution is good enough (a \"ret\" is a single byte anyway). Should we add a comment why it\u0027s needed?",
+      "parentUuid": "5df03e90_58f63a4b",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 15
+      },
+      "revId": "936debb56985033437bdd454308513497fbee322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
