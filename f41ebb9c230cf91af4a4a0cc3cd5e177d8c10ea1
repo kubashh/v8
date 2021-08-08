@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5384840a_9b204ebb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-08T13:17:46Z",
+      "side": 1,
+      "message": "lgtm with minor comments. Didn\u0027t look at the wasm tests.",
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41f20a01_145a81a9",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-08T13:17:46Z",
+      "side": 1,
+      "message": "Did you forget \"{offset} + \" here?",
+      "range": {
+        "startLine": 243,
+        "startChar": 41,
+        "endLine": 243,
+        "endChar": 68
+      },
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4efbd4ad_6c98f14a",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-08T13:17:46Z",
+      "side": 1,
+      "message": "Isn\u0027t that essentially also what we are doing above?",
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3ee8a01_36f025ea",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-08T13:17:46Z",
+      "side": 1,
+      "message": "Why did you remove the const\u0026 here?",
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bdd60d4_6a557d9d",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-08T13:17:46Z",
+      "side": 1,
+      "message": "When do we have kNone here? Only in dead code?",
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5766db01_76844e42",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-08T13:17:46Z",
+      "side": 1,
+      "message": "Please remove or, preferrably, implement this.",
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
