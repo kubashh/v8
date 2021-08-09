@@ -16,6 +16,23 @@
       "message": "Ross for compiler/debug, Jakob for logging/, ptal, thanks!",
       "revId": "3c1c44aedc3b61d66e1c4c7c1232125e97344123",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27702ad2_8f27a99f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-08-09T09:32:02Z",
+      "side": 1,
+      "message": "LGTM thanks.",
+      "revId": "3c1c44aedc3b61d66e1c4c7c1232125e97344123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
