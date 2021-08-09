@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0180fc7_a638bb34",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-09T16:52:44Z",
+      "side": 1,
+      "message": "I think best would be\nZoneVector\u003cuint32_t\u003e field_index(builder-\u003ezone());",
+      "parentUuid": "31499406_f06c0977",
+      "range": {
+        "startLine": 801,
+        "startChar": 4,
+        "endLine": 801,
+        "endChar": 24
+      },
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3df4b249_2bd47148",
         "filename": "test/fuzzer/wasm-compile.cc",
         "patchSetId": 1
