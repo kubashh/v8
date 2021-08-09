@@ -851,6 +851,7 @@ Maybe<bool> Object::Equals(Isolate* isolate, Handle<Object> x,
 }
 
 bool Object::StrictEquals(Object that) {
+  if (*this == that) return true;
   if (this->IsNumber()) {
     if (!that.IsNumber()) return false;
     return StrictNumberEquals(*this, that);
@@ -861,7 +862,7 @@ bool Object::StrictEquals(Object that) {
     if (!that.IsBigInt()) return false;
     return BigInt::EqualToBigInt(BigInt::cast(*this), BigInt::cast(that));
   }
-  return *this == that;
+  return false;
 }
 
 // static
