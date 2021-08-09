@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a294d25e_65395b03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-09T09:51:32Z",
+      "side": 1,
+      "message": "lgtm from my side, but +1 to Leszek\u0027s comments",
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9be40e8f_e96771e8",
@@ -20,6 +37,23 @@
         "endLine": 169,
         "endChar": 16
       },
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c851fdc_6ae93443",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-09T09:51:32Z",
+      "side": 1,
+      "message": "const",
       "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
