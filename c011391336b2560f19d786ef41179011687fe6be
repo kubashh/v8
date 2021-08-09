@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6834ef70_6e07fca3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-09T16:02:32Z",
+      "side": 1,
+      "message": "Thanks! Looks good, except one comment.",
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3df4b249_2bd47148",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-09T16:02:32Z",
+      "side": 1,
+      "message": "This might be slow. If you know how many struct, array, and function types there are, you should be able to only traverse the struct types (and skip the check in the next line).",
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
