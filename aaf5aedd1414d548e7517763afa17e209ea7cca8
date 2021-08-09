@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14370e41_2a5ba823",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "This is ready for review.",
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04c49f88_62ac3264",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "This is the second optimization mentioned in the CL description: operating on a stack-allocated array is much faster than using the std::vector right below, but of course stack space is severely capacity-limited, so we use this for the first couple of parts before switching to the vector.",
+      "range": {
+        "startLine": 364,
+        "startChar": 2,
+        "endLine": 364,
+        "endChar": 36
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74837e68_d7d25c85",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "This was a pointer before, so we could allocate the vector on demand, but it turns out that wasn\u0027t a very useful idea: allocating an empty std::vector is very fast (just two zero-initialized fields), and the pointer indirection added avoidable overhead for later accesses. So it\u0027s a plain std::vector now.",
+      "range": {
+        "startLine": 365,
+        "startChar": 2,
+        "endLine": 365,
+        "endChar": 22
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9027091c_1c1f6ebd",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "This used to be a std::vector, but it only ever held two distinct values: {max_multiplier_} for the multiplier of all maxed-out parts, {last_multiplier_} for the potentially-non-maxed-out last part. So I\u0027m simply storing them as two scalars now.",
+      "range": {
+        "startLine": 366,
+        "startChar": 2,
+        "endLine": 367,
+        "endChar": 27
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29e9c4d9_a07262c2",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "This is the first optimization mentioned in the CL description: moving this loop from conversions.cc to here. That way, {multiplier} and {part} in the next two lines can be function-local variables, which generates faster machine code than class fields on FromStringAccumulator.",
+      "range": {
+        "startLine": 417,
+        "startChar": 2,
+        "endLine": 417,
+        "endChar": 6
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29070541_e0f060d1",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "This is the fourth optimization mentioned in the CL description: the fastest sequence I could find to replace old code lines 350-354. It\u0027s a little faster than hitting old line 351, and a lot faster than having to check the `else if` condition and hitting old line 353, so parsing hex strings is getting a particular boost from this.",
+      "range": {
+        "startLine": 423,
+        "startChar": 9,
+        "endLine": 423,
+        "endChar": 58
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "025e024d_3da669be",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "I\u0027ve inverted the logic here: `if (overflow) break` instead of `if (!overflow) /* keep going */ else AddPart()`. I think this new version looks weirder, it\u0027s taken from our decade-old conversions.cc code, and turns out to be significantly faster.",
+      "range": {
+        "startLine": 430,
+        "startChar": 70,
+        "endLine": 430,
+        "endChar": 75
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d28c5572_6a7030a4",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "This is the third optimization mentioned in the CL description. It essentially replicates what we did before https://chromium-review.googlesource.com/c/v8/v8/+/3046185, but operating on {stack_parts_} instead of a heap-allocated BigInt. {stack_parts_} is guaranteed to have sufficient capacity, per computation of {inline_everything_} in line 414.",
+      "range": {
+        "startLine": 452,
+        "startChar": 2,
+        "endLine": 452,
+        "endChar": 27
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30731484_cc7ab36b",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "This will become particularly relevant for the next CL, https://chromium-review.googlesource.com/c/v8/v8/+/3049079.",
+      "range": {
+        "startLine": 482,
+        "startChar": 52,
+        "endLine": 482,
+        "endChar": 79
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "052deef4_b3f040b7",
+        "filename": "src/bigint/fromstring.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 1,
+      "message": "No algorithmic changes here, we just have to be careful now:\n- whether to read parts from {stack_parts_} or {heap_parts_}, and\n- whether to use {max_multiplier_} or {last_multiplier_} for part i, instead of {multipliers_[i]}.",
+      "range": {
+        "startLine": 13,
+        "startChar": 20,
+        "endLine": 13,
+        "endChar": 37
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

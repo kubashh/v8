@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eda21ed6_daca3d34",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-09T10:37:40Z",
+      "side": 0,
+      "message": "I don\u0027t want to require the {radix} in the constructor, so that clients (such as conversions.cc line 997 (new)) can stack-allocate a {FromStringAccumulator} before having decided what the radix will be. So this has moved to the {Parse} method now.",
+      "range": {
+        "startLine": 330,
+        "startChar": 24,
+        "endLine": 330,
+        "endChar": 33
+      },
+      "revId": "d3d10bc2e48bf0784d5997c2a8e17bca9237639e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
