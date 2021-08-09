@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31499406_f06c0977",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-08-09T16:49:55Z",
+      "side": 1,
+      "message": "One additional nit:\n  auto field_index \u003d ...",
+      "range": {
+        "startLine": 801,
+        "startChar": 4,
+        "endLine": 801,
+        "endChar": 24
+      },
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3df4b249_2bd47148",
         "filename": "test/fuzzer/wasm-compile.cc",
         "patchSetId": 1
