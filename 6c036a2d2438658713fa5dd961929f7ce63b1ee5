@@ -16,6 +16,29 @@
       "message": "ptal. Fix is in https://chromium-review.googlesource.com/c/v8/v8/+/3081521/1..2",
       "revId": "6c036a2d2438658713fa5dd961929f7ce63b1ee5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acece05e_5ce47c9a",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2021-08-09T11:47:14Z",
+      "side": 1,
+      "message": "Why not just:\n\n  return statuc \u003d\u003d ZX_OK\n  \nas we do in the functions above?",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 14
+      },
+      "revId": "6c036a2d2438658713fa5dd961929f7ce63b1ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
