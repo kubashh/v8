@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0c84cc2_eeb45019",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-08-09T16:28:15Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3df4b249_2bd47148",
@@ -31,6 +48,41 @@
       "writtenOn": "2021-08-09T16:02:32Z",
       "side": 1,
       "message": "This might be slow. If you know how many struct, array, and function types there are, you should be able to only traverse the struct types (and skip the check in the next line).",
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57d71187_87db1f84",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-08-09T16:28:15Z",
+      "side": 1,
+      "message": "In general these vectors will be the same every time, including field indices, so we could go further and pre-compute them before we start generating the code.\nBut I am fine with landing this as a first step. For now we only generate a very small number of functions, structs and array types so I don\u0027t expect that this noticeably slows down the fuzzer.",
+      "parentUuid": "3df4b249_2bd47148",
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9456657d_759b0e23",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-08-09T16:28:15Z",
+      "side": 1,
+      "message": "nit: field_index.empty().",
       "revId": "c011391336b2560f19d786ef41179011687fe6be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
