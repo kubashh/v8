@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69ce6c78_a872a1fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-08-09T11:15:24Z",
+      "side": 1,
+      "message": "ptal. Fix is in https://chromium-review.googlesource.com/c/v8/v8/+/3081521/1..2",
+      "revId": "6c036a2d2438658713fa5dd961929f7ce63b1ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
