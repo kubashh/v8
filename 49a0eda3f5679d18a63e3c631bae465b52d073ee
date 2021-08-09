@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9be40e8f_e96771e8",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-09T07:49:28Z",
+      "side": 1,
+      "message": "Should we make sure that these two lock guards don\u0027t overlap, to avoid risk of deadlock?",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 16
+      },
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92d87b4a_4d1bd9b5",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-09T07:49:28Z",
+      "side": 1,
+      "message": "Is it ok to have this be a dispatcher-wide flag, rather than per-job? Do we risk having races between setting \"no finalization\" while another concurrent compile job is running?",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 3
+      },
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e21c2b69_72489f1f",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-09T07:49:28Z",
+      "side": 1,
+      "message": "Since the skip finalization is a global flag, and %FinalizeOptimization does so for all jobs, maybe \"skip finalization\" should be a separate runtime method? e.g.\n\n%DisableOptimizationFinalization()\n%OptimizeFunctionOnNextCall(f)\n...\n%FinalizeOptimization()",
+      "range": {
+        "startLine": 297,
+        "startChar": 36,
+        "endLine": 297,
+        "endChar": 64
+      },
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
