@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b91850_213980cd",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-08-09T15:35:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c66935f_e97778c0",
+      "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c8a4153_f7d08a0d",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-07-26T07:04:50Z",
       "side": 1,
       "message": "Comments needs updating (\u0027arg 2\u0027 -\u003e \u0027arg 1\u0027)",
+      "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6d206c6_d877f0ca",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-08-09T15:35:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c8a4153_f7d08a0d",
       "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "214c99ad_8b8192fd",
+        "filename": "src/compiler/common-operator.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-08-09T15:35:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e70e18b_b15b133b",
+      "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16c5d0fe_650169ab",
@@ -82,6 +136,24 @@
       "writtenOn": "2021-07-26T07:04:50Z",
       "side": 1,
       "message": "Please move this comment down below 1\u003c\u003c9 (InstructionCode has 10 bits).",
+      "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7938d0e_de590dfb",
+        "filename": "src/compiler/linkage.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2021-08-09T15:35:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16c5d0fe_650169ab",
       "revId": "5808bec856465da90aaa18e225f910c3b1ce3732",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
