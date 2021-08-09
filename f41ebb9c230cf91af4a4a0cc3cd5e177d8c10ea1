@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5890c03_5472ad28",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-09T11:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41f20a01_145a81a9",
+      "range": {
+        "startLine": 243,
+        "startChar": 41,
+        "endLine": 243,
+        "endChar": 68
+      },
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4efbd4ad_6c98f14a",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-08-08T13:17:46Z",
       "side": 1,
       "message": "Isn\u0027t that essentially also what we are doing above?",
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20a2410b_fdd3305e",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-09T11:50:24Z",
+      "side": 1,
+      "message": "I specified I mean \"earlier offsets\".",
+      "parentUuid": "4efbd4ad_6c98f14a",
       "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53d690f3_b25b17d0",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-09T11:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3ee8a01_36f025ea",
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bdd60d4_6a557d9d",
@@ -92,6 +152,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f85788b_7d138c34",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-09T11:50:24Z",
+      "side": 1,
+      "message": "I am not sure, but I get a DCHECK failure when I do not include this check.",
+      "parentUuid": "7bdd60d4_6a557d9d",
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5766db01_76844e42",
@@ -105,6 +183,24 @@
       "writtenOn": "2021-08-08T13:17:46Z",
       "side": 1,
       "message": "Please remove or, preferrably, implement this.",
+      "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "818d7944_535aab0c",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-09T11:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5766db01_76844e42",
       "revId": "f41ebb9c230cf91af4a4a0cc3cd5e177d8c10ea1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
