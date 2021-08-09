@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "09d31f6a_da3006c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-08-09T15:17:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "803a9980_74786b2c",
+      "range": {
+        "startLine": 12,
+        "startChar": 24,
+        "endLine": 12,
+        "endChar": 32
+      },
+      "revId": "18a849673530f2ac237b96f5078679f9ec7302d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7e877eae_635e231c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -54,6 +78,24 @@
       "writtenOn": "2021-08-09T15:14:19Z",
       "side": 1,
       "message": "LGTM, with hesitation. Zapping things is good. It flushes out bugs.",
+      "revId": "18a849673530f2ac237b96f5078679f9ec7302d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7467ad48_142e8f3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-08-09T15:17:15Z",
+      "side": 1,
+      "message": "Ack, it was nice as long as it was easily doable. Making the page inaccessible should have a similar effect though, just slightly reduced reproducibility because the whole page must be unused in order to get a crash.",
+      "parentUuid": "a4c5c6ce_0ce26dd8",
       "revId": "18a849673530f2ac237b96f5078679f9ec7302d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
