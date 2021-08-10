@@ -128,6 +128,30 @@
       },
       "revId": "ab8e8ca91fe15ac5d100b082e0a680873fb5e446",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf4e6c16_0f9da42a",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-10T09:01:42Z",
+      "side": 1,
+      "message": "+1 for the alternative option, it seems more expected behavior to finish in-progress tasks first.",
+      "parentUuid": "927054ef_45d2e543",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 18
+      },
+      "revId": "ab8e8ca91fe15ac5d100b082e0a680873fb5e446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
