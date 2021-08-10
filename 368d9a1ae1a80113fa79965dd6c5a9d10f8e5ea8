@@ -16,6 +16,23 @@
       "message": "PTAL.",
       "revId": "368d9a1ae1a80113fa79965dd6c5a9d10f8e5ea8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6123a04_35a2c0c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-10T10:53:11Z",
+      "side": 1,
+      "message": "There might be some #ifdef-wasm missing.",
+      "revId": "368d9a1ae1a80113fa79965dd6c5a9d10f8e5ea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
