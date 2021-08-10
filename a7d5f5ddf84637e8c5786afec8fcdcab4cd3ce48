@@ -16,6 +16,23 @@
       "message": "PTAL (some random helper script I use from time to time)",
       "revId": "a7d5f5ddf84637e8c5786afec8fcdcab4cd3ce48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcd6402a_24a2bb3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-10T07:30:16Z",
+      "side": 1,
+      "message": "-1 python2, nice!",
+      "revId": "a7d5f5ddf84637e8c5786afec8fcdcab4cd3ce48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
