@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad58f91f_4831e5b0",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-10T07:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4740841_1b3f6a26",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 16
+      },
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c851fdc_6ae93443",
@@ -96,6 +120,24 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "3c851fdc_6ae93443",
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a06c22_d8860f0d",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-10T07:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee78d2b4_8928b196",
       "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -184,6 +226,30 @@
       "side": 1,
       "message": "I like that, thanks!",
       "parentUuid": "e21c2b69_72489f1f",
+      "range": {
+        "startLine": 297,
+        "startChar": 36,
+        "endLine": 297,
+        "endChar": 64
+      },
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5d67e9b_6770be05",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-10T07:58:55Z",
+      "side": 1,
+      "message": "(OptimizeFunctionOnNextCall will then still have to be called with the old \"concurrent\" parameter.)\n\nDone.",
+      "parentUuid": "88c91424_9d5312fb",
       "range": {
         "startLine": 297,
         "startChar": 36,
