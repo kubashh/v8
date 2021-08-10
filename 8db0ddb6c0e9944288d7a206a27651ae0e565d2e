@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ddf6144_5fb0d4ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-08-10T08:52:20Z",
+      "side": 1,
+      "message": "For now, I didn\u0027t change the iteration through num_types, but I\u0027ll be sure to change it in the next CL. Thanks!",
+      "revId": "8db0ddb6c0e9944288d7a206a27651ae0e565d2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

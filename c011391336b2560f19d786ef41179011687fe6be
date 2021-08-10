@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c428ff01_ef1a0118",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-08-10T08:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0180fc7_a638bb34",
+      "range": {
+        "startLine": 801,
+        "startChar": 4,
+        "endLine": 801,
+        "endChar": 24
+      },
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3df4b249_2bd47148",
@@ -117,6 +141,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb7aee17_fd97be5c",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-08-10T08:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57d71187_87db1f84",
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9456657d_759b0e23",
@@ -130,6 +172,24 @@
       "writtenOn": "2021-08-09T16:28:15Z",
       "side": 1,
       "message": "nit: field_index.empty().",
+      "revId": "c011391336b2560f19d786ef41179011687fe6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c76147_2ef97154",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-08-10T08:52:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9456657d_759b0e23",
       "revId": "c011391336b2560f19d786ef41179011687fe6be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
