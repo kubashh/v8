@@ -16,6 +16,23 @@
       "message": "For now, I didn\u0027t change the iteration through num_types, but I\u0027ll be sure to change it in the next CL. Thanks!",
       "revId": "8db0ddb6c0e9944288d7a206a27651ae0e565d2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa297c49_8ecdb999",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-08-10T09:08:50Z",
+      "side": 1,
+      "message": "LGTM, given that the type traversal will be improved in a future CL.",
+      "revId": "8db0ddb6c0e9944288d7a206a27651ae0e565d2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
