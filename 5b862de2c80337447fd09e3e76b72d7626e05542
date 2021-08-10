@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74a55b42_70922e4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-10T15:59:55Z",
+      "side": 1,
+      "message": "No really good answers as the tear down is pretty unstructured (these days).",
+      "revId": "5b862de2c80337447fd09e3e76b72d7626e05542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9dae87dd_48d3753f",
@@ -41,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7488ed41_334db538",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5865,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-10T15:59:55Z",
+      "side": 1,
+      "message": "I am not changing the marking part. I think we would implicitly stop the tasks through stoppingthe jobs at some point.\n\nWe should not have any allocations on the main thread below this part as half of the system is already torn down.",
+      "parentUuid": "9dae87dd_48d3753f",
+      "range": {
+        "startLine": 5865,
+        "startChar": 2,
+        "endLine": 5865,
+        "endChar": 22
+      },
+      "revId": "5b862de2c80337447fd09e3e76b72d7626e05542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75c188ec_fadc628d",
@@ -54,6 +95,24 @@
       "writtenOn": "2021-08-10T12:36:05Z",
       "side": 1,
       "message": "Can we actually turn off allocations and fail? Or is this inherently not possible?",
+      "revId": "5b862de2c80337447fd09e3e76b72d7626e05542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2eaf94f_bade4f9a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5876,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-10T15:59:55Z",
+      "side": 1,
+      "message": "I am not changing this part. I think we just allow allocations to go over any limit.",
+      "parentUuid": "75c188ec_fadc628d",
       "revId": "5b862de2c80337447fd09e3e76b72d7626e05542",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
