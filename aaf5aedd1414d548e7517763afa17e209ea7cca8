@@ -60,6 +60,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a15e23cd_f4694056",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-10T18:31:10Z",
+      "side": 1,
+      "message": "Reshuffled the sentence slightly to make it easier to read.",
+      "parentUuid": "f7e06137_4cc9d5ea",
+      "range": {
+        "startLine": 336,
+        "startChar": 66,
+        "endLine": 336,
+        "endChar": 69
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "04c49f88_62ac3264",
         "filename": "src/bigint/bigint.h",
         "patchSetId": 8
@@ -150,6 +174,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93098c0a_8c859959",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-10T18:31:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce887693_44ac4f40",
+      "range": {
+        "startLine": 384,
+        "startChar": 25,
+        "endLine": 384,
+        "endChar": 35
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dac0133d_24333b36",
@@ -163,6 +211,30 @@
       "writtenOn": "2021-08-10T13:55:49Z",
       "side": 1,
       "message": "Is `end` a one past the last valid character or is it the last valid character itself? Just trying to check if we might need a +1 in this computation (in the latter case).",
+      "range": {
+        "startLine": 414,
+        "startChar": 24,
+        "endLine": 414,
+        "endChar": 27
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15108f76_544c61da",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-10T18:31:10Z",
+      "side": 1,
+      "message": "{end} is one past the end, yes. Good idea to point that out explicitly in the declaration.",
+      "parentUuid": "dac0133d_24333b36",
       "range": {
         "startLine": 414,
         "startChar": 24,
@@ -256,6 +328,30 @@
       "side": 1,
       "message": "I\u0027d say it\u0027s more readable to me, as it slightly decreases the nesting. Some people advocate for placing \"failing conditions\" first, to flatten the control flow.",
       "parentUuid": "025e024d_3da669be",
+      "range": {
+        "startLine": 430,
+        "startChar": 70,
+        "endLine": 430,
+        "endChar": 75
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8ab028a_71951707",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-10T18:31:10Z",
+      "side": 1,
+      "message": "Even better :-)",
+      "parentUuid": "c9617a95_5a209110",
       "range": {
         "startLine": 430,
         "startChar": 70,
