@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41d007ce_5afb926b",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1158669
+      },
+      "writtenOn": "2021-08-10T15:25:53Z",
+      "side": 1,
+      "message": "This seems to break the build in Node.js CI. We get the following error:\n\n12:00:52 C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30037\\include\\intrin.h(229,1): error C2732: linkage specification contradicts earlier specification for \u0027__readfsdword\u0027 [c:\\ws\\tools\\v8_gypfiles\\v8_libplatform.vcxproj]\n12:00:52 C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30037\\include\\intrin.h(229): message : see declaration of \u0027__readfsdword\u0027 [c:\\ws\\tools\\v8_gypfiles\\v8_libplatform.vcxproj]",
+      "revId": "fb9e129964cf89d7de13cd8f2a7bcaf6573fb8da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
