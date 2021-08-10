@@ -20,6 +20,46 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1010b652_8eefae85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-10T13:55:49Z",
+      "side": 1,
+      "message": "LGTM, nits only. Thanks!",
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7e06137_4cc9d5ea",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-10T13:55:49Z",
+      "side": 1,
+      "message": "nit: does not, if I read this correctly.",
+      "range": {
+        "startLine": 336,
+        "startChar": 66,
+        "endLine": 336,
+        "endChar": 69
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "04c49f88_62ac3264",
         "filename": "src/bigint/bigint.h",
         "patchSetId": 8
@@ -87,6 +127,52 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce887693_44ac4f40",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-10T13:55:49Z",
+      "side": 1,
+      "message": "nit: could you give a hint (as a comment) how the lookup table is computed?",
+      "range": {
+        "startLine": 384,
+        "startChar": 25,
+        "endLine": 384,
+        "endChar": 35
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dac0133d_24333b36",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-10T13:55:49Z",
+      "side": 1,
+      "message": "Is `end` a one past the last valid character or is it the last valid character itself? Just trying to check if we might need a +1 in this computation (in the latter case).",
+      "range": {
+        "startLine": 414,
+        "startChar": 24,
+        "endLine": 414,
+        "endChar": 27
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "29e9c4d9_a07262c2",
@@ -146,6 +232,30 @@
       "writtenOn": "2021-08-09T10:37:40Z",
       "side": 1,
       "message": "I\u0027ve inverted the logic here: `if (overflow) break` instead of `if (!overflow) /* keep going */ else AddPart()`. I think this new version looks weirder, it\u0027s taken from our decade-old conversions.cc code, and turns out to be significantly faster.",
+      "range": {
+        "startLine": 430,
+        "startChar": 70,
+        "endLine": 430,
+        "endChar": 75
+      },
+      "revId": "aaf5aedd1414d548e7517763afa17e209ea7cca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9617a95_5a209110",
+        "filename": "src/bigint/bigint.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-10T13:55:49Z",
+      "side": 1,
+      "message": "I\u0027d say it\u0027s more readable to me, as it slightly decreases the nesting. Some people advocate for placing \"failing conditions\" first, to flatten the control flow.",
+      "parentUuid": "025e024d_3da669be",
       "range": {
         "startLine": 430,
         "startChar": 70,
