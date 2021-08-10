@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "5b862de2c80337447fd09e3e76b72d7626e05542",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dae87dd_48d3753f",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5865,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-08-10T12:36:05Z",
+      "side": 1,
+      "message": "What if marking is in progress? Is this case handled below? Further allocations may transition into sweeping state.",
+      "range": {
+        "startLine": 5865,
+        "startChar": 2,
+        "endLine": 5865,
+        "endChar": 22
+      },
+      "revId": "5b862de2c80337447fd09e3e76b72d7626e05542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75c188ec_fadc628d",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5876,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2021-08-10T12:36:05Z",
+      "side": 1,
+      "message": "Can we actually turn off allocations and fail? Or is this inherently not possible?",
+      "revId": "5b862de2c80337447fd09e3e76b72d7626e05542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
