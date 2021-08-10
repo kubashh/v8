@@ -80,6 +80,30 @@
       },
       "revId": "ab8e8ca91fe15ac5d100b082e0a680873fb5e446",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "777d415e_425df5d5",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-10T08:49:14Z",
+      "side": 1,
+      "message": "I think that risks us getting TSAN errors from reading finalize_ on the background thread then?",
+      "parentUuid": "6d2a3eea_b69c2933",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 18
+      },
+      "revId": "ab8e8ca91fe15ac5d100b082e0a680873fb5e446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
