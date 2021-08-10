@@ -104,6 +104,30 @@
       },
       "revId": "ab8e8ca91fe15ac5d100b082e0a680873fb5e446",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "927054ef_45d2e543",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-10T08:54:09Z",
+      "side": 1,
+      "message": "Good point, I should make this atomic.\n\nAlternatively, I change %DisableOptimizationFinalization such that it firsts waits for any background jobs to complete, then finalizes those, and only then disables finalization.",
+      "parentUuid": "777d415e_425df5d5",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 18
+      },
+      "revId": "ab8e8ca91fe15ac5d100b082e0a680873fb5e446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
