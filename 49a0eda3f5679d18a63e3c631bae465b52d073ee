@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4740841_1b3f6a26",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-10T07:27:36Z",
+      "side": 1,
+      "message": "Fine with me.",
+      "parentUuid": "9be40e8f_e96771e8",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 16
+      },
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3c851fdc_6ae93443",
         "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
         "patchSetId": 6
@@ -54,6 +78,24 @@
       "writtenOn": "2021-08-09T09:51:32Z",
       "side": 1,
       "message": "const",
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee78d2b4_8928b196",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-10T07:27:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3c851fdc_6ae93443",
       "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -83,6 +125,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "89e2a8a4_aad104c7",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-10T07:27:36Z",
+      "side": 1,
+      "message": "I think it\u0027s fine since tests can\u0027t rely on timing of finalization anyways (unless using the new primitives).",
+      "parentUuid": "92d87b4a_4d1bd9b5",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 3
+      },
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e21c2b69_72489f1f",
         "filename": "src/runtime/runtime-test.cc",
         "patchSetId": 6
@@ -94,6 +160,30 @@
       "writtenOn": "2021-08-09T07:49:28Z",
       "side": 1,
       "message": "Since the skip finalization is a global flag, and %FinalizeOptimization does so for all jobs, maybe \"skip finalization\" should be a separate runtime method? e.g.\n\n%DisableOptimizationFinalization()\n%OptimizeFunctionOnNextCall(f)\n...\n%FinalizeOptimization()",
+      "range": {
+        "startLine": 297,
+        "startChar": 36,
+        "endLine": 297,
+        "endChar": 64
+      },
+      "revId": "49a0eda3f5679d18a63e3c631bae465b52d073ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88c91424_9d5312fb",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-10T07:27:36Z",
+      "side": 1,
+      "message": "I like that, thanks!",
+      "parentUuid": "e21c2b69_72489f1f",
       "range": {
         "startLine": 297,
         "startChar": 36,
