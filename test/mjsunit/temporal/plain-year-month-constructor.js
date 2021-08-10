@@ -1,0 +1,169 @@
+// Copyright 2021 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+// Flags: --harmony-temporal
+
+function assertPlainYearMonth(date, year, month, day) {
+  let fields = date.getISOFields();
+  let keys = Object.keys(fields);
+  assertEquals(4, keys.length);
+  assertEquals("calendar", keys[0]);
+  assertEquals("isoDay", keys[1]);
+  assertEquals("isoMonth", keys[2]);
+  assertEquals("isoYear", keys[3]);
+  assertEquals(year, fields.isoYear, date);
+  assertEquals(month, fields.isoMonth, date);
+  assertEquals(day, fields.isoDay, date);
+  assertEquals(date.calendar, fields.calendar, date);
+}
+
+assertPlainYearMonth(
+    new Temporal.PlainYearMonth(1911, 10, undefined, 10),
+    1911, 10,  10);
+assertPlainYearMonth(
+    new Temporal.PlainYearMonth(2020, 3, undefined, 12),
+    2020, 3, 12);
+assertPlainYearMonth(
+    new Temporal.PlainYearMonth(1, 12, undefined, 25),
+    1, 12,  25);
+assertPlainYearMonth(
+    new Temporal.PlainYearMonth(1970, 1),
+    1970, 1, 1);
+assertPlainYearMonth(
+    new Temporal.PlainYearMonth(-10, 12),
+    -10, 12,  1);
+assertPlainYearMonth(
+    new Temporal.PlainYearMonth(-25406, 1),
+    -25406, 1, 1);
+assertPlainYearMonth(
+    new Temporal.PlainYearMonth(26890, 12, undefined, 31),
+    26890, 12, 31);
+
+assertThrows(() => Temporal.PlainYearMonth(2021, 7, undefined, 1), TypeError,
+    "Method invoked on an object that is not Temporal.PlainYearMonth.");
+assertThrows(() => new Temporal.PlainYearMonth(), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 0), RangeError,
+    "Invalid time value");
+
+assertPlainYearMonth(new Temporal.PlainYearMonth(2021, 7), 2021, 7, 1);
+
+assertThrows(() => new Temporal.PlainYearMonth(2021, 13), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 7, undefined, 0), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 7, undefined, 32), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, -7), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, -7, undefined, 1), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, -7, undefined, -1), RangeError,
+    "Invalid time value");
+// Wrong month
+assertThrows(() => new Temporal.PlainYearMonth(2021, 0, undefined, 1), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 0), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 0, undefined), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 13, undefined, 1), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 13), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 13, undefined), RangeError,
+    "Invalid time value");
+// Right day for month
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 1, undefined, 31)), 2021, 1, 31);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 2, undefined, 28)), 2021, 2, 28);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 3, undefined, 31)), 2021, 3, 31);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 4, undefined, 30)), 2021, 4, 30);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 5, undefined, 31)), 2021, 5, 31);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 6, undefined, 30)), 2021, 6, 30);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 7, undefined, 31)), 2021, 7, 31);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 8, undefined, 31)), 2021, 8, 31);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 9, undefined, 30)), 2021, 9, 30);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 10, undefined, 31)), 2021, 10, 31);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 11, undefined, 30)), 2021, 11, 30);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 12, undefined, 31)), 2021, 12, 31);
+
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 1)), 2021, 1, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 2)), 2021, 2, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 3)), 2021, 3, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 4)), 2021, 4, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 5)), 2021, 5, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 6)), 2021, 6, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 7)), 2021, 7, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 8)), 2021, 8, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 9)), 2021, 9, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 10)), 2021, 10, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 11)), 2021, 11, 1);
+assertPlainYearMonth((new Temporal.PlainYearMonth(2021, 12)), 2021, 12, 1);
+
+// Check Feb 29 for Leap year
+assertThrows(() => new Temporal.PlainYearMonth(1900, 2, undefined, 29), RangeError,
+    "Invalid time value");
+assertPlainYearMonth((new Temporal.PlainYearMonth(2000, 2, undefined, 29)), 2000, 2, 29);
+
+assertThrows(() => new Temporal.PlainYearMonth(2001, 2, undefined, 29), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2002, 2, undefined, 29), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2003, 2, undefined, 29), RangeError,
+    "Invalid time value");
+assertPlainYearMonth((new Temporal.PlainYearMonth(2004, 2, undefined, 29)), 2004, 2, 29);
+assertThrows(() => new Temporal.PlainYearMonth(2100, 2, undefined, 29), RangeError,
+    "Invalid time value");
+
+// Wrong day for month
+assertThrows(() => new Temporal.PlainYearMonth(2021, 1, undefined, 32), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 2, undefined, 29), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 3, undefined, 32), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 4, undefined, 31), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 5, undefined, 32), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 6, undefined, 31), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 7, undefined, 32), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 8, undefined, 32), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 9, undefined, 31), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 10, undefined, 32), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 11, undefined, 31), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 12, undefined, 32), RangeError,
+    "Invalid time value");
+
+// Infinty
+assertThrows(() => new Temporal.PlainYearMonth(Infinity, 12), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(-Infinity, 12), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(Infinity, 12, undefined,  1), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(-Infinity, 12, undefined, 1), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 12, undefined, Infinity), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, 12, undefined, -Infinity), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, -Infinity, 1), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, Infinity, 1), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, -Infinity, undefined, 1), RangeError,
+    "Invalid time value");
+assertThrows(() => new Temporal.PlainYearMonth(2021, Infinity, undefined, 1), RangeError,
+    "Invalid time value");
+
+// TODO Test calendar
+//
