@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "071d7252_30949a50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-11T21:47:08Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "b61405d7cb20fc3042ee395aa367052721352b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49b73779_65f0b93c",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-11T21:47:08Z",
+      "side": 1,
+      "message": "I assume performance is not important for now, so this is okay and nicely readable. If you did want to make this as efficient as possible, you could avoid the conversion to C string, since we have all these string values in the root set already anyway. All you\u0027d need is:\n\n  if (isolate-\u003efactory()-\u003ecalendar_string()-\u003eEquals(*key_str)) {\n\nbut we can always do that in the future if it turns out that it matters.",
+      "range": {
+        "startLine": 1769,
+        "startChar": 6,
+        "endLine": 1769,
+        "endChar": 45
+      },
+      "revId": "b61405d7cb20fc3042ee395aa367052721352b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "192ccb84_f09c1f4a",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-11T21:47:08Z",
+      "side": 1,
+      "message": "nit: the more modern and arguably more readable expression is:\n\n  const std::function\u003cbool(const char*)\u003e\u0026 removes",
+      "range": {
+        "startLine": 349,
+        "startChar": 43,
+        "endLine": 349,
+        "endChar": 71
+      },
+      "revId": "b61405d7cb20fc3042ee395aa367052721352b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a71e5bd1_b96f9503",
+        "filename": "test/intl/enumeration/calendar-sorted.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-11T21:47:08Z",
+      "side": 1,
+      "message": "nit: it seems you have 7 copies of this same file, where only this one word is different. How about reducing duplication by merging them?\n\n [\"calendar\", \"collation\", ...].forEach((name) \u003d\u003e {\n   let items \u003d Intl.supportedValuesOf(name);\n   assertEquals([...items].sort(), items,\n                \"return value of Intl.supportedValuesOf(\u0027\" + name +\n                \"\u0027) should be sorted\");\n });\n\nI don\u0027t feel strongly about it though; if you prefer separate test files for whatever reason that\u0027s okay too.",
+      "range": {
+        "startLine": 8,
+        "startChar": 11,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "b61405d7cb20fc3042ee395aa367052721352b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
