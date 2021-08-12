@@ -64,6 +64,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b63a882_93ae9dda",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-08-12T16:46:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "192ccb84_f09c1f4a",
+      "range": {
+        "startLine": 349,
+        "startChar": 43,
+        "endLine": 349,
+        "endChar": 71
+      },
+      "revId": "b61405d7cb20fc3042ee395aa367052721352b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a71e5bd1_b96f9503",
@@ -77,6 +101,30 @@
       "writtenOn": "2021-08-11T21:47:08Z",
       "side": 1,
       "message": "nit: it seems you have 7 copies of this same file, where only this one word is different. How about reducing duplication by merging them?\n\n [\"calendar\", \"collation\", ...].forEach((name) \u003d\u003e {\n   let items \u003d Intl.supportedValuesOf(name);\n   assertEquals([...items].sort(), items,\n                \"return value of Intl.supportedValuesOf(\u0027\" + name +\n                \"\u0027) should be sorted\");\n });\n\nI don\u0027t feel strongly about it though; if you prefer separate test files for whatever reason that\u0027s okay too.",
+      "range": {
+        "startLine": 8,
+        "startChar": 11,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "b61405d7cb20fc3042ee395aa367052721352b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3466a5d1_ab1956a1",
+        "filename": "test/intl/enumeration/calendar-sorted.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-08-12T16:46:30Z",
+      "side": 1,
+      "message": "yea, I think it should be separated test file.",
+      "parentUuid": "a71e5bd1_b96f9503",
       "range": {
         "startLine": 8,
         "startChar": 11,
