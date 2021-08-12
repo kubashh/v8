@@ -223,8 +223,8 @@ void Decoder::PrintTarget(Instruction* instr) {
   if (Assembler::IsJalr(instr->InstructionBits())) {
     if (Assembler::IsAuipc((instr - 4)->InstructionBits()) &&
         (instr - 4)->RdValue() == instr->Rs1Value()) {
-      int32_t imm = Assembler::BrachlongOffset((instr - 4)->InstructionBits(),
-                                               instr->InstructionBits());
+      int32_t imm = Assembler::BranchlongOffset((instr - 4)->InstructionBits(),
+                                                instr->InstructionBits());
       const char* target =
           converter_.NameOfAddress(reinterpret_cast<byte*>(instr - 4) + imm);
       out_buffer_pos_ +=

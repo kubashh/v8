@@ -767,26 +767,6 @@ bool WasmCodeAllocator::SetWritable(bool writable) {
   return true;
 }
 
-bool WasmCodeAllocator::SetThreadWritable(bool writable) {
-  static thread_local int writable_nesting_level = 0;
-  if (writable) {
-    if (++writable_nesting_level > 1) return true;
-  } else {
-    DCHECK_GT(writable_nesting_level, 0);
-    if (--writable_nesting_level > 0) return true;
-  }
-  writable = writable_nesting_level > 0;
-
-  int key = GetWasmCodeManager()->memory_protection_key_;
-
-  MemoryProtectionKeyPermission permissions =
-      writable ? kNoRestrictions : kDisableWrite;
-
-  TRACE_HEAP("Setting memory protection key %d to writable: %d.\n", key,
-             writable);
-  return SetPermissionsForMemoryProtectionKey(key, permissions);
-}
-
 void WasmCodeAllocator::FreeCode(base::Vector<WasmCode* const> codes) {
   // Zap code area and collect freed code regions.
   DisjointAllocationPool freed_regions;
@@ -837,6 +817,17 @@ size_t WasmCodeAllocator::GetNumCodeSpaces() const {
 // static
 constexpr base::AddressRegion WasmCodeAllocator::kUnrestrictedRegion;
 
+namespace {
+BoundsCheckStrategy GetBoundsChecks(const WasmModule* module) {
+  if (!FLAG_wasm_bounds_checks) return kNoBoundsChecks;
+  if (FLAG_wasm_enforce_bounds_checks) return kExplicitBoundsChecks;
+  // We do not have trap handler support for memory64 yet.
+  if (module->is_memory64) return kExplicitBoundsChecks;
+  if (trap_handler::IsTrapHandlerEnabled()) return kTrapHandler;
+  return kExplicitBoundsChecks;
+}
+}  // namespace
+
 NativeModule::NativeModule(const WasmFeatures& enabled,
                            VirtualMemory code_space,
                            std::shared_ptr<const WasmModule> module,
@@ -849,12 +840,7 @@ NativeModule::NativeModule(const WasmFeatures& enabled,
       module_(std::move(module)),
       import_wrapper_cache_(std::unique_ptr<WasmImportWrapperCache>(
           new WasmImportWrapperCache())),
-      bounds_checks_(!FLAG_wasm_bounds_checks
-                         ? kNoBoundsChecks
-                         : FLAG_wasm_enforce_bounds_checks ||
-                                   !trap_handler::IsTrapHandlerEnabled()
-                               ? kExplicitBoundsChecks
-                               : kTrapHandler) {
+      bounds_checks_(GetBoundsChecks(module_.get())) {
   DCHECK(engine_scope_);
   // We receive a pointer to an empty {std::shared_ptr}, and install ourselve
   // there.
@@ -1741,7 +1727,7 @@ bool WasmCodeManager::CanRegisterUnwindInfoForNonABICompliantCodeRange() {
 
 void WasmCodeManager::Commit(base::AddressRegion region) {
   // TODO(v8:8462): Remove eager commit once perf supports remapping.
-  if (V8_UNLIKELY(FLAG_perf_prof)) return;
+  if (FLAG_perf_prof) return;
   DCHECK(IsAligned(region.begin(), CommitPageSize()));
   DCHECK(IsAligned(region.size(), CommitPageSize()));
   // Reserve the size. Use CAS loop to avoid overflow on
@@ -1800,7 +1786,7 @@ void WasmCodeManager::Commit(base::AddressRegion region) {
 
 void WasmCodeManager::Decommit(base::AddressRegion region) {
   // TODO(v8:8462): Remove this once perf supports remapping.
-  if (V8_UNLIKELY(FLAG_perf_prof)) return;
+  if (FLAG_perf_prof) return;
   PageAllocator* allocator = GetPlatformPageAllocator();
   DCHECK(IsAligned(region.begin(), allocator->CommitPageSize()));
   DCHECK(IsAligned(region.size(), allocator->CommitPageSize()));
@@ -1966,6 +1952,29 @@ size_t WasmCodeManager::EstimateNativeModuleMetaDataSize(
       (sizeof(WasmCode) * num_wasm_functions);   /* code object size */
 
   return wasm_module_estimate + native_module_estimate;
+}
+
+void WasmCodeManager::SetThreadWritable(bool writable) {
+  DCHECK(HasMemoryProtectionKeySupport());
+  static thread_local int writable_nesting_level = 0;
+  if (writable) {
+    if (++writable_nesting_level > 1) return;
+  } else {
+    DCHECK_GT(writable_nesting_level, 0);
+    if (--writable_nesting_level > 0) return;
+  }
+  writable = writable_nesting_level > 0;
+
+  MemoryProtectionKeyPermission permissions =
+      writable ? kNoRestrictions : kDisableWrite;
+
+  TRACE_HEAP("Setting memory protection key %d to writable: %d.\n",
+             memory_protection_key_, writable);
+  SetPermissionsForMemoryProtectionKey(memory_protection_key_, permissions);
+}
+
+bool WasmCodeManager::HasMemoryProtectionKeySupport() const {
+  return memory_protection_key_ != kNoMemoryProtectionKey;
 }
 
 std::shared_ptr<NativeModule> WasmCodeManager::NewNativeModule(

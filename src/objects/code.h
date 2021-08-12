@@ -223,6 +223,7 @@ class Code : public HeapObject {
 
   // The metadata section is aligned to this value.
   static constexpr int kMetadataAlignment = kIntSize;
+  static constexpr int kShortMetadataAlignment = kIntSize / 2;
 
   // [safepoint_table_offset]: The offset where the safepoint table starts.
   inline int safepoint_table_offset() const { return 0; }
@@ -437,6 +438,10 @@ class Code : public HeapObject {
   // Migrate code from desc without flushing the instruction cache.
   void CopyFromNoFlush(ByteArray reloc_info, Heap* heap, const CodeDesc& desc);
   void RelocateFromDesc(ByteArray reloc_info, Heap* heap, const CodeDesc& desc);
+
+#ifdef VERIFY_HEAP
+  void VerifyRelocInfo(Isolate* isolate, ByteArray reloc_info);
+#endif
 
   // Copy the RelocInfo portion of |desc| to |dest|. The ByteArray must be
   // exactly the same size as the RelocInfo in |desc|.

@@ -612,6 +612,16 @@ struct TypeInfoHelper<v8::Local<v8::Array>> {
 };
 
 template <>
+struct TypeInfoHelper<v8::Local<v8::Uint32Array>> {
+  static constexpr CTypeInfo::Flags Flags() { return CTypeInfo::Flags::kNone; }
+
+  static constexpr CTypeInfo::Type Type() { return CTypeInfo::Type::kUint32; }
+  static constexpr CTypeInfo::SequenceType SequenceType() {
+    return CTypeInfo::SequenceType::kIsTypedArray;
+  }
+};
+
+template <>
 struct TypeInfoHelper<FastApiCallbackOptions&> {
   static constexpr CTypeInfo::Flags Flags() { return CTypeInfo::Flags::kNone; }
 
@@ -772,7 +782,7 @@ using CFunctionBuilder = internal::CFunctionBuilder;
  * to the requested destination type, is considered unsupported. The operation
  * returns true on success. `type_info` will be used for conversions.
  */
-template <typename T, const CTypeInfo* type_info>
+template <const CTypeInfo* type_info, typename T>
 bool CopyAndConvertArrayToCppBuffer(Local<Array> src, T* dst,
                                     uint32_t max_length);
 

@@ -105,7 +105,7 @@ enum class RefSerializationKind {
   V(JSObject, RefSerializationKind::kBackgroundSerialized)                \
   /* Subtypes of HeapObject */                                            \
   V(AccessorInfo, RefSerializationKind::kNeverSerialized)                 \
-  V(AllocationSite, RefSerializationKind::kSerialized)                    \
+  V(AllocationSite, RefSerializationKind::kNeverSerialized)               \
   V(ArrayBoilerplateDescription, RefSerializationKind::kNeverSerialized)  \
   V(BigInt, RefSerializationKind::kBackgroundSerialized)                  \
   V(CallHandlerInfo, RefSerializationKind::kNeverSerialized)              \
@@ -319,6 +319,8 @@ class JSObjectRef : public JSReceiverRef {
 
   Handle<JSObject> object() const;
 
+  base::Optional<ObjectRef> raw_properties_or_hash() const;
+
   // Usable only for in-object properties. Only use this if the underlying
   // value can be an uninitialized-sentinel, or if HeapNumber construction must
   // be avoided for some reason. Otherwise, use the higher-level
@@ -368,6 +370,8 @@ class JSObjectRef : public JSReceiverRef {
 
   void SerializeObjectCreateMap();
   base::Optional<MapRef> GetObjectCreateMap() const;
+
+  void SerializeAsBoilerplateRecursive();
 };
 
 class JSDataViewRef : public JSObjectRef {
@@ -386,10 +390,11 @@ class JSBoundFunctionRef : public JSObjectRef {
   Handle<JSBoundFunction> object() const;
 
   bool Serialize();
-  bool serialized() const;
 
-  JSReceiverRef bound_target_function() const;
-  ObjectRef bound_this() const;
+  // TODO(neis): Make return types non-optional once JSFunction is no longer
+  // fg-serialized.
+  base::Optional<JSReceiverRef> bound_target_function() const;
+  base::Optional<ObjectRef> bound_this() const;
   FixedArrayRef bound_arguments() const;
 };
 
@@ -469,8 +474,6 @@ class ContextRef : public HeapObjectRef {
 
   // Only returns a value if the index is valid for this ContextRef.
   base::Optional<ObjectRef> get(int index) const;
-
-  SourceTextModuleRef GetModule() const;
 };
 
 // TODO(jgruber): Don't serialize NativeContext fields once all refs can be
@@ -616,18 +619,9 @@ class AllocationSiteRef : public HeapObjectRef {
   AllocationType GetAllocationType() const;
   ObjectRef nested_site() const;
 
-  // {IsFastLiteral} determines whether the given array or object literal
-  // boilerplate satisfies all limits to be considered for fast deep-copying
-  // and computes the total size of all objects that are part of the graph.
-  //
-  // If PointsToLiteral() is false, then IsFastLiteral() is also false.
-  bool IsFastLiteral() const;
+  void SerializeRecursive();
 
-  void SerializeBoilerplate();
-
-  // We only serialize boilerplate if IsFastLiteral is true.
   base::Optional<JSObjectRef> boilerplate() const;
-
   ElementsKind GetElementsKind() const;
   bool CanInlineCall() const;
 };
@@ -967,8 +961,6 @@ class SourceTextModuleRef : public HeapObjectRef {
   DEFINE_REF_CONSTRUCTOR(SourceTextModule, HeapObjectRef)
 
   Handle<SourceTextModule> object() const;
-
-  void Serialize();
 
   base::Optional<CellRef> GetCell(int cell_index) const;
   base::Optional<ObjectRef> import_meta() const;

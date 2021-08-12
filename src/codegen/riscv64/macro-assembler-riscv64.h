@@ -138,8 +138,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 #define COND_ARGS cond, r1, r2
 
   // Cases when relocation is not needed.
-#define DECLARE_NORELOC_PROTOTYPE(Name, target_type) \
-  void Name(target_type target);                     \
+#define DECLARE_NORELOC_PROTOTYPE(Name, target_type)            \
+  void Name(target_type target, bool apply_c_extension = true); \
   void Name(target_type target, COND_TYPED_ARGS);
 
 #define DECLARE_BRANCH_PROTOTYPES(Name)   \
@@ -149,11 +149,12 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   DECLARE_BRANCH_PROTOTYPES(BranchAndLink)
   DECLARE_BRANCH_PROTOTYPES(BranchShort)
 
-  void Branch(Label* target);
+  void Branch(Label* target, bool apply_c_extension = true);
   void Branch(int32_t target);
   void Branch(Label* target, Condition cond, Register r1, const Operand& r2,
               Label::Distance near_jump = Label::kFar);
   void Branch(int32_t target, Condition cond, Register r1, const Operand& r2,
+              bool apply_c_extension = true,
               Label::Distance near_jump = Label::kFar);
 #undef DECLARE_BRANCH_PROTOTYPES
 #undef COND_TYPED_ARGS
@@ -216,19 +217,23 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   Condition cond = al, Register rs = zero_reg, \
             const Operand &rt = Operand(zero_reg)
 
-  void Jump(Register target, COND_ARGS);
-  void Jump(intptr_t target, RelocInfo::Mode rmode, COND_ARGS);
-  void Jump(Address target, RelocInfo::Mode rmode, COND_ARGS);
+  void Jump(Register target, bool apply_c_extension = true, COND_ARGS);
+  void Jump(intptr_t target, RelocInfo::Mode rmode,
+            bool apply_c_extension = true, COND_ARGS);
+  void Jump(Address target, RelocInfo::Mode rmode,
+            bool apply_c_extension = true, COND_ARGS);
   // Deffer from li, this method save target to the memory, and then load
   // it to register use ld, it can be used in wasm jump table for concurrent
   // patching.
   void PatchAndJump(Address target);
-  void Jump(Handle<Code> code, RelocInfo::Mode rmode, COND_ARGS);
-  void Jump(const ExternalReference& reference);
-  void Call(Register target, COND_ARGS);
-  void Call(Address target, RelocInfo::Mode rmode, COND_ARGS);
+  void Jump(Handle<Code> code, RelocInfo::Mode rmode,
+            bool apply_c_extension = true, COND_ARGS);
+  void Jump(const ExternalReference& reference, bool apply_c_extension = true);
+  void Call(Register target, bool apply_c_extension = true, COND_ARGS);
+  void Call(Address target, RelocInfo::Mode rmode,
+            bool apply_c_extension = true, COND_ARGS);
   void Call(Handle<Code> code, RelocInfo::Mode rmode = RelocInfo::CODE_TARGET,
-            COND_ARGS);
+            bool apply_c_extension = true, COND_ARGS);
   void Call(Label* target);
   void LoadAddress(
       Register dst, Label* target,
@@ -407,6 +412,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void instr(Register rs, Register rt) { instr(rs, Operand(rt)); } \
   void instr(Register rs, int32_t j) { instr(rs, Operand(j)); }
 
+#define DEFINE_INSTRUCTION3(instr) void instr(Register rd, int64_t imm);
+
   DEFINE_INSTRUCTION(Add32)
   DEFINE_INSTRUCTION(Add64)
   DEFINE_INSTRUCTION(Div32)
@@ -457,6 +464,10 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 
   DEFINE_INSTRUCTION(Ror)
   DEFINE_INSTRUCTION(Dror)
+
+  DEFINE_INSTRUCTION3(Li)
+  DEFINE_INSTRUCTION2(Mv)
+
 #undef DEFINE_INSTRUCTION
 #undef DEFINE_INSTRUCTION2
 #undef DEFINE_INSTRUCTION3
@@ -582,6 +593,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // Change endianness
   void ByteSwap(Register dest, Register src, int operand_size);
 
+  void Clear_if_nan_d(Register rd, FPURegister fs);
+  void Clear_if_nan_s(Register rd, FPURegister fs);
   // Convert single to unsigned word.
   void Trunc_uw_s(Register rd, FPURegister fs, Register result = no_reg);
 
@@ -920,11 +933,12 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   bool CalculateOffset(Label* L, int32_t* offset, OffsetSize bits,
                        Register* scratch, const Operand& rt);
 
-  void BranchShortHelper(int32_t offset, Label* L);
+  void BranchShortHelper(int32_t offset, Label* L,
+                         bool apply_c_extension = true);
   bool BranchShortHelper(int32_t offset, Label* L, Condition cond, Register rs,
-                         const Operand& rt);
+                         const Operand& rt, bool apply_c_extension = true);
   bool BranchShortCheck(int32_t offset, Label* L, Condition cond, Register rs,
-                        const Operand& rt);
+                        const Operand& rt, bool apply_c_extension = true);
 
   void BranchAndLinkShortHelper(int32_t offset, Label* L);
   void BranchAndLinkShort(int32_t offset);
