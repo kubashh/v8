@@ -256,7 +256,9 @@ class SharedFunctionInfo
   // [feedback metadata] Metadata template for feedback vectors of instances of
   // this function.
   inline bool HasFeedbackMetadata() const;
-  DECL_ACCESSORS(feedback_metadata, FeedbackMetadata)
+  inline bool HasFeedbackMetadata(AcquireLoadTag tag) const;
+  inline FeedbackMetadata feedback_metadata() const;
+  DECL_RELEASE_ACQUIRE_ACCESSORS(feedback_metadata, FeedbackMetadata)
 
   // Returns if this function has been compiled yet. Note: with bytecode
   // flushing, any GC after this call is made could cause the function

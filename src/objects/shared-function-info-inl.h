@@ -446,17 +446,25 @@ bool SharedFunctionInfo::HasFeedbackMetadata() const {
   return raw_outer_scope_info_or_feedback_metadata().IsFeedbackMetadata();
 }
 
+bool SharedFunctionInfo::HasFeedbackMetadata(AcquireLoadTag) const {
+  PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
+  HeapObject maybe_metadata =
+      TaggedField<HeapObject, kOuterScopeInfoOrFeedbackMetadataOffset>::
+          Acquire_Load(cage_base, *this);
+  return maybe_metadata.IsFeedbackMetadata();
+}
+
 FeedbackMetadata SharedFunctionInfo::feedback_metadata() const {
   DCHECK(HasFeedbackMetadata());
   return FeedbackMetadata::cast(raw_outer_scope_info_or_feedback_metadata());
 }
 
-void SharedFunctionInfo::set_feedback_metadata(FeedbackMetadata value,
-                                               WriteBarrierMode mode) {
-  DCHECK(!HasFeedbackMetadata());
-  DCHECK(value.IsFeedbackMetadata());
-  set_raw_outer_scope_info_or_feedback_metadata(value, mode);
-}
+RELEASE_ACQUIRE_ACCESSORS_CHECKED2(SharedFunctionInfo, feedback_metadata,
+                                   FeedbackMetadata,
+                                   kOuterScopeInfoOrFeedbackMetadataOffset,
+                                   HasFeedbackMetadata(kAcquireLoad),
+                                   !HasFeedbackMetadata(kAcquireLoad) &&
+                                       value.IsFeedbackMetadata())
 
 bool SharedFunctionInfo::is_compiled() const {
   Object data = function_data(kAcquireLoad);

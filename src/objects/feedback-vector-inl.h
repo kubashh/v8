@@ -109,7 +109,7 @@ FeedbackCell ClosureFeedbackCellArray::cell(int index) {
 bool FeedbackVector::is_empty() const { return length() == 0; }
 
 FeedbackMetadata FeedbackVector::metadata() const {
-  return shared_function_info().feedback_metadata();
+  return shared_function_info().feedback_metadata(kAcquireLoad);
 }
 
 RELAXED_INT32_ACCESSORS(FeedbackVector, invocation_count,
