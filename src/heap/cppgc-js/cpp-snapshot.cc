@@ -45,6 +45,7 @@ class EmbedderNode : public v8::EmbedderGraph::Node {
   size_t SizeInBytes() final { return name_.name_was_hidden ? 0 : size_; }
 
   void SetWrapperNode(v8::EmbedderGraph::Node* wrapper_node) {
+    DCHECK_NULL(wrapper_node_);
     wrapper_node_ = wrapper_node;
   }
   Node* WrapperNode() final { return wrapper_node_; }
@@ -119,6 +120,7 @@ class StateBase {
 
   void set_node(EmbedderNode* node) {
     CHECK_EQ(Visibility::kVisible, GetVisibility());
+    DCHECK_NULL(node_);
     node_ = node;
   }
 
@@ -425,6 +427,12 @@ class CppGraphBuilderImpl final {
       current.set_node(AddNode(header));
     }
 
+    const auto& it = pending_back_states_.find(&current);
+    if (it != pending_back_states_.end()) {
+      UpdateBackReference(current, it->second);
+      pending_back_states_.erase(it);
+    }
+
     if (!edge_name.empty()) {
       graph_.AddEdge(parent.get_node(), current.get_node(),
                      parent.get_node()->InternalizeEdgeName(edge_name));
@@ -462,13 +470,14 @@ class CppGraphBuilderImpl final {
         // to the same object.
         auto& back_state = states_.GetExistingState(
             HeapObjectHeader::FromObject(back_reference_object));
-        back_state.get_node()->SetWrapperNode(v8_node);
-
-        auto* profiler =
-            reinterpret_cast<Isolate*>(cpp_heap_.isolate())->heap_profiler();
-        if (profiler->HasGetDetachednessCallback()) {
-          back_state.get_node()->SetDetachedness(
-              profiler->GetDetachedness(v8_value, ref.WrapperClassId()));
+        DCHECK_EQ(pending_back_states_.end(),
+                  pending_back_states_.find(&back_state));
+        const BackReferenceItem back_ref_item{v8_node, v8_value,
+                                              ref.WrapperClassId()};
+        if (!back_state.get_node()) {
+          pending_back_states_.emplace(&back_state, back_ref_item);
+        } else {
+          UpdateBackReference(back_state, back_ref_item);
         }
       }
     }
@@ -493,6 +502,23 @@ class CppGraphBuilderImpl final {
   }
 
  private:
+  struct BackReferenceItem {
+    EmbedderGraph::Node* node_;
+    v8::Local<v8::Value> value_;
+    uint16_t wrapper_class_id_;
+  };
+
+  void UpdateBackReference(State& back_state, const BackReferenceItem& item) {
+    back_state.get_node()->SetWrapperNode(item.node_);
+
+    auto* profiler =
+        reinterpret_cast<Isolate*>(cpp_heap_.isolate())->heap_profiler();
+    if (profiler->HasGetDetachednessCallback()) {
+      back_state.get_node()->SetDetachedness(
+          profiler->GetDetachedness(item.value_, item.wrapper_class_id_));
+    }
+  }
+
   class WorkstackItemBase;
   class VisitationItem;
   class VisitationDoneItem;
@@ -501,6 +527,7 @@ class CppGraphBuilderImpl final {
   v8::EmbedderGraph& graph_;
   StateStorage states_;
   std::vector<std::unique_ptr<WorkstackItemBase>> workstack_;
+  std::unordered_map<State*, const BackReferenceItem> pending_back_states_;
 };
 
 // Iterating live objects to mark them as visible if needed.
@@ -733,7 +760,7 @@ void CppGraphBuilderImpl::VisitForVisibility(State* parent,
   } else {
     // No need to mark/unmark pending as the node is immediately processed.
     current.MarkVisible();
-    // In case the names are visible, the graph is no traversed in this phase.
+    // In case the names are visible, the graph is not traversed in this phase.
     // Explicitly trace one level to handle weak containers.
     WeakVisitor weak_visitor(*this);
     header.Trace(&weak_visitor);
@@ -813,6 +840,7 @@ void CppGraphBuilderImpl::Run() {
     cppgc::internal::PersistentRegionLock guard;
     cpp_heap_.GetStrongCrossThreadPersistentRegion().Trace(&object_visitor);
   }
+  CHECK(pending_back_states_.empty());
 }
 
 // static
