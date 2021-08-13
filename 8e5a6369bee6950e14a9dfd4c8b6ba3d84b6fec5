@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6247e55_22355b63",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-08-13T12:56:13Z",
+      "side": 1,
+      "message": "There was only one object for which I observed that the node is set after we try to set the back ref, but I didn\u0027t check which node it was. \nChecking it now, it turns out the cpp node is Window so I guess the v8 node is indeed WindowProxy.",
+      "parentUuid": "a0014b9b_8c2ec3d7",
+      "range": {
+        "startLine": 11,
+        "startChar": 35,
+        "endLine": 11,
+        "endChar": 56
+      },
+      "revId": "8e5a6369bee6950e14a9dfd4c8b6ba3d84b6fec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "68917516_3156a411",
