@@ -16,6 +16,46 @@
       "message": "PTAL. Andreas from a wasm perspective, Maya for owners review.\n\nv8-arm-ports FYI",
       "revId": "fbb36c124c29a94ff21d42d317678c4589570927",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5541cbef_5ab85012",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-13T13:10:15Z",
+      "side": 1,
+      "message": "LGTM overall % a question and possibly a test needs to be updated. Thanks!",
+      "revId": "fbb36c124c29a94ff21d42d317678c4589570927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "215ff55c_dc75177b",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-13T13:10:15Z",
+      "side": 1,
+      "message": "Btw, is this fix necessary for other cases, e.g. MachineRepresentation::kWord16?",
+      "range": {
+        "startLine": 793,
+        "startChar": 27,
+        "endLine": 793,
+        "endChar": 39
+      },
+      "revId": "fbb36c124c29a94ff21d42d317678c4589570927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
