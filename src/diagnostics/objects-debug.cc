@@ -997,8 +997,13 @@ void CodeDataContainer::CodeDataContainerVerify(Isolate* isolate) {
 }
 
 void Code::CodeVerify(Isolate* isolate) {
-  CHECK(IsAligned(InstructionSize(),
-                  static_cast<unsigned>(Code::kMetadataAlignment)));
+  if (FLAG_riscv_c_extension) {
+    CHECK(IsAligned(InstructionSize(),
+                    static_cast<unsigned>(Code::kShortMetadataAlignment)));
+  } else {
+    CHECK(IsAligned(InstructionSize(),
+                    static_cast<unsigned>(Code::kMetadataAlignment)));
+  }
   CHECK_EQ(safepoint_table_offset(), 0);
   CHECK_LE(safepoint_table_offset(), handler_table_offset());
   CHECK_LE(handler_table_offset(), constant_pool_offset());

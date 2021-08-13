@@ -3176,7 +3176,7 @@ void Simulator::DecodeCRType() {
                  instr_.RvcRs2Value() != 0) {  // c.mv
         set_rvc_rd(sext_xlen(rvc_rs2()));
       } else {
-        UNSUPPORTED_RISCV();
+        UNSUPPORTED();
       }
       break;
     case 0b1001:
@@ -3375,13 +3375,13 @@ void Simulator::DecodeCJType() {
 void Simulator::DecodeCBType() {
   switch (instr_.RvcOpcode()) {
     case RO_C_BNEZ:
-      if (rvc_rs1() != 0) {
+      if (rvc_rs1s() != 0) {
         int64_t next_pc = get_pc() + rvc_imm8_b();
         set_pc(next_pc);
       }
       break;
     case RO_C_BEQZ:
-      if (rvc_rs1() == 0) {
+      if (rvc_rs1s() == 0) {
         int64_t next_pc = get_pc() + rvc_imm8_b();
         set_pc(next_pc);
       }

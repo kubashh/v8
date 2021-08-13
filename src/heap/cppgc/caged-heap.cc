@@ -8,13 +8,12 @@
 #error "Must be compiled with caged heap enabled"
 #endif
 
-#include "src/heap/cppgc/caged-heap.h"
-
 #include "include/cppgc/internal/caged-heap-local-data.h"
 #include "include/cppgc/platform.h"
 #include "src/base/bounded-page-allocator.h"
 #include "src/base/logging.h"
 #include "src/base/platform/platform.h"
+#include "src/heap/cppgc/caged-heap.h"
 #include "src/heap/cppgc/globals.h"
 
 namespace cppgc {

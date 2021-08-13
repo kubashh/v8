@@ -29,8 +29,7 @@ class InitialMapDependency final : public CompilationDependency {
  public:
   InitialMapDependency(JSHeapBroker* broker, const JSFunctionRef& function,
                        const MapRef& initial_map)
-      : function_(function), initial_map_(initial_map) {
-  }
+      : function_(function), initial_map_(initial_map) {}
 
   bool IsValid() const override {
     Handle<JSFunction> function = function_.object();
