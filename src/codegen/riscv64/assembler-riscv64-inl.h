@@ -253,7 +253,7 @@ Handle<Code> Assembler::relative_code_target_object_handle_at(
   Instr instr2 = Assembler::instr_at(pc + kInstrSize);
   DCHECK(IsAuipc(instr1));
   DCHECK(IsJalr(instr2));
-  int32_t code_target_index = BrachlongOffset(instr1, instr2);
+  int32_t code_target_index = BranchlongOffset(instr1, instr2);
   return GetCodeTarget(code_target_index);
 }
 

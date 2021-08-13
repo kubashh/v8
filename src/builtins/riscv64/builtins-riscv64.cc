@@ -2561,10 +2561,11 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   __ LoadMap(map, a1);
   __ GetInstanceTypeRange(map, type, FIRST_JS_FUNCTION_TYPE, range);
   __ Jump(masm->isolate()->builtins()->CallFunction(mode),
-          RelocInfo::CODE_TARGET, Uless_equal, range,
+          RelocInfo::CODE_TARGET, false, Uless_equal, range,
           Operand(LAST_JS_FUNCTION_TYPE - FIRST_JS_FUNCTION_TYPE));
   __ Jump(BUILTIN_CODE(masm->isolate(), CallBoundFunction),
-          RelocInfo::CODE_TARGET, eq, type, Operand(JS_BOUND_FUNCTION_TYPE));
+          RelocInfo::CODE_TARGET, false, eq, type,
+          Operand(JS_BOUND_FUNCTION_TYPE));
   Register scratch = map;
   // Check if target has a [[Call]] internal method.
   __ Lbu(scratch, FieldMemOperand(map, Map::kBitFieldOffset));
@@ -2572,8 +2573,8 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   __ Branch(&non_callable, eq, scratch, Operand(zero_reg),
             Label::Distance::kNear);
 
-  __ Jump(BUILTIN_CODE(masm->isolate(), CallProxy), RelocInfo::CODE_TARGET, eq,
-          type, Operand(JS_PROXY_TYPE));
+  __ Jump(BUILTIN_CODE(masm->isolate(), CallProxy), RelocInfo::CODE_TARGET,
+          false, eq, type, Operand(JS_PROXY_TYPE));
 
   // 2. Call to something else, which might have a [[Call]] internal method (if
   // not we raise an exception).
@@ -2681,13 +2682,14 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
   // Dispatch based on instance type.
   __ GetInstanceTypeRange(map, scratch, FIRST_JS_FUNCTION_TYPE, range);
   __ Jump(BUILTIN_CODE(masm->isolate(), ConstructFunction),
-          RelocInfo::CODE_TARGET, Uless_equal, range,
+          RelocInfo::CODE_TARGET, false, Uless_equal, range,
           Operand(LAST_JS_FUNCTION_TYPE - FIRST_JS_FUNCTION_TYPE));
 
   // Only dispatch to bound functions after checking whether they are
   // constructors.
   __ Jump(BUILTIN_CODE(masm->isolate(), ConstructBoundFunction),
-          RelocInfo::CODE_TARGET, eq, scratch, Operand(JS_BOUND_FUNCTION_TYPE));
+          RelocInfo::CODE_TARGET, false, eq, scratch,
+          Operand(JS_BOUND_FUNCTION_TYPE));
 
   // Only dispatch to proxies after checking whether they are constructors.
   __ Branch(&non_proxy, ne, scratch, Operand(JS_PROXY_TYPE),

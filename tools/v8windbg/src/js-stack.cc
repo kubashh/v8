@@ -170,8 +170,7 @@ HRESULT StackFrameIterator::GetAt(uint64_t index, IModelObject** result) const {
   RETURN_IF_FAIL(
       sp_data_model_manager->CreateSyntheticObject(sp_ctx_.Get(), &sp_value));
   RETURN_IF_FAIL(
-      sp_value->SetKey(L"script_name", curr_frame.script_name.Get(),
-      nullptr));
+      sp_value->SetKey(L"script_name", curr_frame.script_name.Get(), nullptr));
   RETURN_IF_FAIL(sp_value->SetKey(L"script_source",
                                   curr_frame.script_source.Get(), nullptr));
   RETURN_IF_FAIL(sp_value->SetKey(L"function_name",

@@ -209,7 +209,7 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   // Get offset from instr.
   int BranchOffset(Instr instr);
-  static int BrachlongOffset(Instr auipc, Instr jalr);
+  static int BranchlongOffset(Instr auipc, Instr jalr);
   static int PatchBranchlongOffset(Address pc, Instr auipc, Instr instr_I,
                                    int32_t offset);
   int JumpOffset(Instr instr);
@@ -394,17 +394,28 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void auipc(Register rd, int32_t imm20);
 
   // Jumps
-  void jal(Register rd, int32_t imm20);
-  void jalr(Register rd, Register rs1, int16_t imm12);
+  void jal(Register rd, int32_t imm20, bool apply_c_extension = false);
+  void jalr(Register rd, Register rs1, int16_t imm12,
+            bool apply_c_extension = false);
 
   // Branches
-  void beq(Register rs1, Register rs2, int16_t imm12);
-  inline void beq(Register rs1, Register rs2, Label* L) {
-    beq(rs1, rs2, branch_offset(L));
+  void beq(Register rs1, Register rs2, int16_t imm12,
+           bool apply_c_extension = false);
+  inline void beq(Register rs1, Register rs2, Label* L,
+                  bool apply_c_extension = false) {
+    if (L != nullptr && !L->is_bound())
+      beq(rs1, rs2, branch_offset(L));
+    else
+      beq(rs1, rs2, branch_offset(L), apply_c_extension);
   }
-  void bne(Register rs1, Register rs2, int16_t imm12);
-  inline void bne(Register rs1, Register rs2, Label* L) {
-    bne(rs1, rs2, branch_offset(L));
+  void bne(Register rs1, Register rs2, int16_t imm12,
+           bool apply_c_extension = false);
+  inline void bne(Register rs1, Register rs2, Label* L,
+                  bool apply_c_extension = false) {
+    if (L != nullptr && !L->is_bound())
+      bne(rs1, rs2, branch_offset(L));
+    else
+      bne(rs1, rs2, branch_offset(L), apply_c_extension);
   }
   void blt(Register rs1, Register rs2, int16_t imm12);
   inline void blt(Register rs1, Register rs2, Label* L) {
@@ -666,6 +677,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void NOP();
   void EBREAK();
 
+  bool isCExtApplicable1(Register reg1, Register reg2, int16_t imm);
+
   // Privileged
   void uret();
   void sret();
@@ -700,10 +713,24 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void fabs_d(FPURegister rd, FPURegister rs) { fsgnjx_d(rd, rs, rs); }
   void fneg_d(FPURegister rd, FPURegister rs) { fsgnjn_d(rd, rs, rs); }
 
-  void beqz(Register rs, int16_t imm13) { beq(rs, zero_reg, imm13); }
-  inline void beqz(Register rs1, Label* L) { beqz(rs1, branch_offset(L)); }
-  void bnez(Register rs, int16_t imm13) { bne(rs, zero_reg, imm13); }
-  inline void bnez(Register rs1, Label* L) { bnez(rs1, branch_offset(L)); }
+  void beqz(Register rs, int16_t imm13, bool apply_c_extension = false) {
+    beq(rs, zero_reg, imm13, apply_c_extension);
+  }
+  inline void beqz(Register rs1, Label* L, bool apply_c_extension = false) {
+    if (L != nullptr && !L->is_bound())
+      beqz(rs1, branch_offset(L));
+    else
+      beqz(rs1, branch_offset(L), apply_c_extension);
+  }
+  void bnez(Register rs, int16_t imm13, bool apply_c_extension = false) {
+    bne(rs, zero_reg, imm13, apply_c_extension);
+  }
+  inline void bnez(Register rs1, Label* L, bool apply_c_extension = false) {
+    if (L != nullptr && !L->is_bound())
+      bnez(rs1, branch_offset(L));
+    else
+      bnez(rs1, branch_offset(L), apply_c_extension);
+  }
   void blez(Register rs, int16_t imm13) { bge(zero_reg, rs, imm13); }
   inline void blez(Register rs1, Label* L) { blez(rs1, branch_offset(L)); }
   void bgez(Register rs, int16_t imm13) { bge(rs, zero_reg, imm13); }
@@ -734,16 +761,35 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
     bleu(rs1, rs2, branch_offset(L));
   }
 
-  void j(int32_t imm21) { jal(zero_reg, imm21); }
-  inline void j(Label* L) { j(jump_offset(L)); }
-  inline void b(Label* L) { j(L); }
+  void j(int32_t imm21, bool apply_c_extension = false) {
+    jal(zero_reg, imm21, apply_c_extension);
+  }
+  inline void j(Label* L, bool apply_c_extension = false) {
+    if (L != nullptr && !L->is_bound())
+      j(jump_offset(L));
+    else
+      j(jump_offset(L), apply_c_extension);
+  }
+  inline void b(Label* L, bool apply_c_extension = false) {
+    j(L, apply_c_extension);
+  }
   void jal(int32_t imm21) { jal(ra, imm21); }
   inline void jal(Label* L) { jal(jump_offset(L)); }
-  void jr(Register rs) { jalr(zero_reg, rs, 0); }
-  void jr(Register rs, int32_t imm12) { jalr(zero_reg, rs, imm12); }
-  void jalr(Register rs, int32_t imm12) { jalr(ra, rs, imm12); }
-  void jalr(Register rs) { jalr(ra, rs, 0); }
-  void ret() { jalr(zero_reg, ra, 0); }
+  void jr(Register rs, bool apply_c_extension = false) {
+    jalr(zero_reg, rs, 0, apply_c_extension);
+  }
+  void jr(Register rs, int32_t imm12, bool apply_c_extension = false) {
+    jalr(zero_reg, rs, imm12, apply_c_extension);
+  }
+  void jalr(Register rs, int32_t imm12, bool apply_c_extension = false) {
+    jalr(ra, rs, imm12, apply_c_extension);
+  }
+  void jalr(Register rs, bool apply_c_extension = false) {
+    jalr(ra, rs, 0, apply_c_extension);
+  }
+  void ret(bool apply_c_extension = false) {
+    jalr(zero_reg, ra, 0, apply_c_extension);
+  }
   void call(int32_t offset) {
     auipc(ra, (offset >> 12) + ((offset & 0x800) >> 11));
     jalr(ra, ra, offset << 20 >> 20);
@@ -795,7 +841,9 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   // Check the number of instructions generated from label to here.
   int InstructionsGeneratedSince(Label* label) {
-    return SizeOfCodeGeneratedSince(label) / kInstrSize;
+    int num = SizeOfCodeGeneratedSince(label) / kInstrSize;
+    DCHECK_EQ(num * kInstrSize, SizeOfCodeGeneratedSince(label));
+    return num;
   }
 
   using BlockConstPoolScope = ConstantPool::BlockScope;
