@@ -69,6 +69,24 @@
       "parentUuid": "b5427cd7_c979e1ae",
       "revId": "2df70d1b3ef24fbe4fd88b2824c641debfb3a407",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51032791_a7b9cea2",
+        "filename": "src/diagnostics/gdb-jit.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-13T20:40:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9882ca38_fa4a33df",
+      "revId": "2df70d1b3ef24fbe4fd88b2824c641debfb3a407",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
