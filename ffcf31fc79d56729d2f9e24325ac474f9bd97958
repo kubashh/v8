@@ -33,6 +33,29 @@
       "message": "LGTM, thanks!",
       "revId": "ffcf31fc79d56729d2f9e24325ac474f9bd97958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0df4cbd_00e1507f",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-08-13T13:50:11Z",
+      "side": 1,
+      "message": "an \"s\" is missing here, isn\u0027t it?",
+      "range": {
+        "startLine": 799,
+        "startChar": 21,
+        "endLine": 799,
+        "endChar": 31
+      },
+      "revId": "ffcf31fc79d56729d2f9e24325ac474f9bd97958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
