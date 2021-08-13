@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "118486e6_ce836e40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-08-13T13:38:13Z",
+      "side": 1,
+      "message": "PTAL. This is the follow-up for 16bit sign extensions.",
+      "revId": "ffcf31fc79d56729d2f9e24325ac474f9bd97958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
