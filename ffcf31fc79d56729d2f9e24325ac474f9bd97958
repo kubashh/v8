@@ -56,6 +56,30 @@
       },
       "revId": "ffcf31fc79d56729d2f9e24325ac474f9bd97958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0175e956_cf0fa45d",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-08-13T13:52:58Z",
+      "side": 1,
+      "message": "No, this is the unsigned case, which uses Ldrh as before.",
+      "parentUuid": "f0df4cbd_00e1507f",
+      "range": {
+        "startLine": 799,
+        "startChar": 21,
+        "endLine": 799,
+        "endChar": 31
+      },
+      "revId": "ffcf31fc79d56729d2f9e24325ac474f9bd97958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
