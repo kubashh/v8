@@ -413,6 +413,16 @@ int Assembler::target_at(int pos, bool is_internal) {
     case AUIPC: {
       Instr instr_auipc = instr;
       Instr instr_I = instr_at(pos + 4);
+      // if(!(IsJalr(instr_I) || IsAddi(instr_I))) {
+      //     disasm::NameConverter converter;
+      //     disasm::Disassembler disasm(converter);
+      //     base::EmbeddedVector<char, 128> disasm_buffer;
+
+      //     disasm.InstructionDecode(disasm_buffer,
+      //                              reinterpret_cast<byte*>(buffer_start_ +
+      //                              pos));
+      //     printf("%s\n", disasm_buffer.begin());
+      // }
       DCHECK(IsJalr(instr_I) || IsAddi(instr_I));
       int32_t offset = BrachlongOffset(instr_auipc, instr_I);
       if (offset == kEndOfJumpChain) return kEndOfChain;
