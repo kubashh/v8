@@ -2421,20 +2421,12 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
   i::Handle<i::String> str = Utils::OpenHandle(*(source->source_string));
 
   std::unique_ptr<i::AlignedCachedData> cached_data;
+  i::BackgroundDeserializeTask* deserialize_task = nullptr;
   if (options == kConsumeCodeCache) {
     if (source->consume_cache_task) {
-      // If there's a cache consume task, finish it
-      i::MaybeHandle<i::SharedFunctionInfo> maybe_function_info =
-          source->consume_cache_task->impl_->Finish(isolate, str,
-                                                    source->resource_options);
-      i::Handle<i::SharedFunctionInfo> result;
-      if (maybe_function_info.ToHandle(&result)) {
-        RETURN_ESCAPED(ToApiHandle<UnboundScript>(result));
-      }
-      // If the above failed, then we must have rejected the cache. Continue
-      // with normal compilation, disabling the code cache consumption.
-      source->cached_data->rejected = true;
-      options = kNoCompileOptions;
+      // Take ownership of the internal deserialization task and clear the
+      // consume task off the source.
+      deserialize_task = source->consume_cache_task->impl_.get();
     } else {
       DCHECK(source->cached_data);
       // AlignedCachedData takes care of pointer-aligning the data.
@@ -2451,10 +2443,14 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
       source->host_defined_options, source->resource_options);
   i::MaybeHandle<i::SharedFunctionInfo> maybe_function_info =
       i::Compiler::GetSharedFunctionInfoForScript(
-          isolate, str, script_details, nullptr, cached_data.get(), options,
-          no_cache_reason, i::NOT_NATIVES_CODE);
+          isolate, str, script_details, nullptr, cached_data.get(),
+          deserialize_task, options, no_cache_reason, i::NOT_NATIVES_CODE);
   if (options == kConsumeCodeCache) {
-    source->cached_data->rejected = cached_data->rejected();
+    if (deserialize_task) {
+      source->cached_data->rejected = deserialize_task->rejected();
+    } else {
+      source->cached_data->rejected = cached_data->rejected();
+    }
   }
   has_pending_exception = !maybe_function_info.ToHandle(&result);
   RETURN_ON_FAILED_EXECUTION(UnboundScript);

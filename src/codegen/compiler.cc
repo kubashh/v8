@@ -2836,7 +2836,7 @@ MaybeHandle<SharedFunctionInfo> CompileScriptOnBothBackgroundAndMainThread(
 MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
     Isolate* isolate, Handle<String> source,
     const ScriptDetails& script_details, v8::Extension* extension,
-    AlignedCachedData* cached_data,
+    AlignedCachedData* cached_data, BackgroundDeserializeTask* deserialize_task,
     ScriptCompiler::CompileOptions compile_options,
     ScriptCompiler::NoCacheReason no_cache_reason, NativesFlag natives) {
   ScriptCompileTimerScope compile_timer(isolate, no_cache_reason);
@@ -2844,9 +2844,10 @@ MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
   if (compile_options == ScriptCompiler::kNoCompileOptions ||
       compile_options == ScriptCompiler::kEagerCompile) {
     DCHECK_NULL(cached_data);
+    DCHECK_NULL(deserialize_task);
   } else {
     DCHECK(compile_options == ScriptCompiler::kConsumeCodeCache);
-    DCHECK(cached_data);
+    DCHECK(cached_data || deserialize_task);
     DCHECK_NULL(extension);
   }
   int source_length = source->length();
@@ -2882,17 +2883,26 @@ MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
       RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileDeserialize);
       TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                    "V8.CompileDeserialize");
-      Handle<SharedFunctionInfo> inner_result;
-      if (CodeSerializer::Deserialize(isolate, cached_data, source,
-                                      script_details.origin_options)
-              .ToHandle(&inner_result) &&
-          inner_result->is_compiled()) {
-        // Promote to per-isolate compilation cache.
-        is_compiled_scope = inner_result->is_compiled_scope(isolate);
-        DCHECK(is_compiled_scope.is_compiled());
-        compilation_cache->PutScript(source, language_mode, inner_result);
-        maybe_result = inner_result;
+      if (deserialize_task) {
+        // If there's a cache consume task, finish it
+        maybe_result = deserialize_task->Finish(isolate, source,
+                                                script_details.origin_options);
       } else {
+        maybe_result = CodeSerializer::Deserialize(
+            isolate, cached_data, source, script_details.origin_options);
+      }
+
+      bool consuming_code_cache_succeeded = false;
+      Handle<SharedFunctionInfo> result;
+      if (maybe_result.ToHandle(&result)) {
+        is_compiled_scope = result->is_compiled_scope(isolate);
+        if (is_compiled_scope.is_compiled()) {
+          consuming_code_cache_succeeded = true;
+          // Promote to per-isolate compilation cache.
+          compilation_cache->PutScript(source, language_mode, result);
+        }
+      }
+      if (!consuming_code_cache_succeeded) {
         // Deserializer failed. Fall through to compile.
         compile_timer.set_consuming_code_cache_failed();
       }

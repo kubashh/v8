@@ -163,6 +163,7 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
       Isolate* isolate, Handle<String> source,
       const ScriptDetails& script_details, v8::Extension* extension,
       AlignedCachedData* cached_data,
+      BackgroundDeserializeTask* deserialize_task,
       ScriptCompiler::CompileOptions compile_options,
       ScriptCompiler::NoCacheReason no_cache_reason,
       NativesFlag is_natives_code);
@@ -570,6 +571,8 @@ class V8_EXPORT_PRIVATE BackgroundDeserializeTask {
   MaybeHandle<SharedFunctionInfo> Finish(Isolate* isolate,
                                          Handle<String> source,
                                          ScriptOriginOptions origin_options);
+
+  bool rejected() const { return cached_data_.rejected(); }
 
  private:
   Isolate* isolate_for_local_isolate_;

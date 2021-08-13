@@ -1575,8 +1575,8 @@ static Handle<SharedFunctionInfo> CompileScript(
     const ScriptDetails& script_details, AlignedCachedData* cached_data,
     v8::ScriptCompiler::CompileOptions options) {
   return Compiler::GetSharedFunctionInfoForScript(
-             isolate, source, script_details, nullptr, cached_data, options,
-             ScriptCompiler::kNoCacheNoReason, NOT_NATIVES_CODE)
+             isolate, source, script_details, nullptr, cached_data, nullptr,
+             options, ScriptCompiler::kNoCacheNoReason, NOT_NATIVES_CODE)
       .ToHandleChecked();
 }
 
@@ -1586,7 +1586,7 @@ static Handle<SharedFunctionInfo> CompileScriptAndProduceCache(
     v8::ScriptCompiler::CompileOptions options) {
   Handle<SharedFunctionInfo> sfi =
       Compiler::GetSharedFunctionInfoForScript(
-          isolate, source, script_details, nullptr, nullptr, options,
+          isolate, source, script_details, nullptr, nullptr, nullptr, options,
           ScriptCompiler::kNoCacheNoReason, NOT_NATIVES_CODE)
           .ToHandleChecked();
   std::unique_ptr<ScriptCompiler::CachedData> cached_data(
