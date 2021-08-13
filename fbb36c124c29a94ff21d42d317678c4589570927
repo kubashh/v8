@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77c96632_5e11218b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-13T13:26:53Z",
+      "side": 1,
+      "message": "Thanks, Clemens!",
+      "revId": "fbb36c124c29a94ff21d42d317678c4589570927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "215ff55c_dc75177b",
@@ -72,6 +89,30 @@
       "side": 1,
       "message": "Yes, 16 bit also seems to be affected. I am working on another reproducer and a follow-up fix.\nThe test will be held back until this CL reached stable. I CCed you on the CL with the test.",
       "parentUuid": "215ff55c_dc75177b",
+      "range": {
+        "startLine": 793,
+        "startChar": 27,
+        "endLine": 793,
+        "endChar": 39
+      },
+      "revId": "fbb36c124c29a94ff21d42d317678c4589570927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6543f9d_5575d5de",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-13T13:26:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a6381214_34792364",
       "range": {
         "startLine": 793,
         "startChar": 27,
