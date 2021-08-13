@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "239875a3_11ef76c6",
+        "filename": "include/cppgc/internal/gc-info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-13T08:25:24Z",
+      "side": 1,
+      "message": "This felt like the version where it\u0027s easiest to check that everything properly dispatches.\n\ntrue/false could be replaced with proper enums, not sure that helps readability.\n\nI used the template specialization approach to avoid relying on the compiler optimizing away dead constexpr branches.\n\nlmk what you think.",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 16
+      },
+      "revId": "bf75a20626a78ff05ad5e2acbea74965aac942db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
