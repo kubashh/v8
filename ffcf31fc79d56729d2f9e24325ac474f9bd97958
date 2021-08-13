@@ -16,6 +16,23 @@
       "message": "PTAL. This is the follow-up for 16bit sign extensions.",
       "revId": "ffcf31fc79d56729d2f9e24325ac474f9bd97958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "138f7cde_541b4f91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-08-13T13:45:24Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "ffcf31fc79d56729d2f9e24325ac474f9bd97958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
