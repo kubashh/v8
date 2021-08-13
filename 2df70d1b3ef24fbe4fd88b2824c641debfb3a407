@@ -33,6 +33,24 @@
       "message": "Wouldn\u0027t it be better to use WriteUnalignedValue to avoid UB, instead of just silencing the sanitizer?\nWe would probably have to completely avoid the RawSlotAt method, because it would return an unaligned pointer, which is already UB AFAIK, even if we then use WriteUnalignedValue to write to it.",
       "revId": "2df70d1b3ef24fbe4fd88b2824c641debfb3a407",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5427cd7_c979e1ae",
+        "filename": "src/diagnostics/gdb-jit.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-13T12:11:28Z",
+      "side": 1,
+      "message": "+1. RawSlotAt (or a differently-named similar helper) can safely return {char*} or {Address}. The former is the standard C++ solution, the latter is V8\u0027s convention for similar cases.\n\nUBSan reports are real bugs and should be fixed rather than silenced/ignored. That said, since this issue isn\u0027t new (and just flushed out by introducing a test), I would be fine with landing the CL with the NO_SANITIZE annotation and fixing it in a follow-up -- because I can\u0027t easily tell just how many changes would be required, e.g. {operator-\u003e} right above is problematic as well.",
+      "parentUuid": "dc573d17_9610a028",
+      "revId": "2df70d1b3ef24fbe4fd88b2824c641debfb3a407",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
