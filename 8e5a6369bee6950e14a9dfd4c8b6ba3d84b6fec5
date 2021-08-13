@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0014b9b_8c2ec3d7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-13T10:56:18Z",
+      "side": 1,
+      "message": "To confirm: Is that for `WindowProxy`? \n\nAll other cases should actually have a node set since we start from the C++ object and find the V8 object by following a TracedReference that should generally point back to the same C++ object (except for WindowProxy)",
+      "range": {
+        "startLine": 11,
+        "startChar": 35,
+        "endLine": 11,
+        "endChar": 56
+      },
+      "revId": "8e5a6369bee6950e14a9dfd4c8b6ba3d84b6fec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "68917516_3156a411",
