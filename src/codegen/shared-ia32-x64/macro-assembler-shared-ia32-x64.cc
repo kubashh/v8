@@ -916,6 +916,40 @@ void SharedTurboAssembler::S128Select(XMMRegister dst, XMMRegister mask,
   }
 }
 
+void SharedTurboAssembler::S128Load8Splat(XMMRegister dst, Operand src,
+                                          XMMRegister scratch) {
+  if (CpuFeatures::IsSupported(AVX2)) {
+    CpuFeatureScope avx2_scope(this, AVX2);
+    vpbroadcastb(dst, src);
+  } else {
+    CpuFeatureScope ssse3_scope(this, SSSE3);
+    Pinsrb(dst, dst, src, uint8_t{0});
+    Pxor(scratch, scratch);
+    Pshufb(dst, scratch);
+  }
+}
+
+void SharedTurboAssembler::S128Load16Splat(XMMRegister dst, Operand src) {
+  if (CpuFeatures::IsSupported(AVX2)) {
+    CpuFeatureScope avx2_scope(this, AVX2);
+    vpbroadcastw(dst, src);
+  } else {
+    Pinsrw(dst, dst, src, uint8_t{0});
+    Pshuflw(dst, dst, uint8_t{0});
+    Punpcklqdq(dst, dst);
+  }
+}
+
+void SharedTurboAssembler::S128Load32Splat(XMMRegister dst, Operand src) {
+  if (CpuFeatures::IsSupported(AVX)) {
+    CpuFeatureScope avx_scope(this, AVX);
+    vbroadcastss(dst, src);
+  } else {
+    movss(dst, src);
+    shufps(dst, dst, byte{0});
+  }
+}
+
 }  // namespace internal
 }  // namespace v8
 
