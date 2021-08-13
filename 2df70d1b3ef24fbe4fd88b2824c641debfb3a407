@@ -51,6 +51,24 @@
       "parentUuid": "dc573d17_9610a028",
       "revId": "2df70d1b3ef24fbe4fd88b2824c641debfb3a407",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9882ca38_fa4a33df",
+        "filename": "src/diagnostics/gdb-jit.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-13T16:44:24Z",
+      "side": 1,
+      "message": "That\u0027s a good idea, I removed the annotations to silence the sanitizer, and used WriteUnalignedValue instead.\nThe \"operator-\u003e\" is not fixed yet, I\u0027m not sure how to fix it, I was thinking we have to change all callsites to build the T then call Slot::set instead of relying on -\u003e. But ubsan is happy here for now so I\u0027m going to leave it for now.",
+      "parentUuid": "b5427cd7_c979e1ae",
+      "revId": "2df70d1b3ef24fbe4fd88b2824c641debfb3a407",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
