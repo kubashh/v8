@@ -16,6 +16,23 @@
       "message": "This is ready for review. The reland includes a fix for UBSan, ptal, thanks!",
       "revId": "2df70d1b3ef24fbe4fd88b2824c641debfb3a407",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc573d17_9610a028",
+        "filename": "src/diagnostics/gdb-jit.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-08-13T11:23:38Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to use WriteUnalignedValue to avoid UB, instead of just silencing the sanitizer?\nWe would probably have to completely avoid the RawSlotAt method, because it would return an unaligned pointer, which is already UB AFAIK, even if we then use WriteUnalignedValue to write to it.",
+      "revId": "2df70d1b3ef24fbe4fd88b2824c641debfb3a407",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
