@@ -2596,7 +2596,15 @@ ParserBase<Impl>::ParseObjectPropertyDefinition(ParsePropertyInfo* prop_info,
             Scanner::Location(next_loc.beg_pos, end_position()),
             MessageTemplate::kInvalidCoverInitializedName);
       } else {
-        value = lhs;
+        if (V8_UNLIKELY(impl()->IsArguments(name) &&
+                        scope()->ShouldBanArguments())) {
+          ReportMessage(
+              MessageTemplate::kArgumentsDisallowedInInitializerAndStaticBlock);
+          value = impl()->ExpressionFromIdentifier(
+              impl()->EmptyIdentifierString(), next_loc.beg_pos);
+        } else {
+          value = lhs;
+        }
       }
 
       ObjectLiteralPropertyT result = factory()->NewObjectLiteralProperty(
