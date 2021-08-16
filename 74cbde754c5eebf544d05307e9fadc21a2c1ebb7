@@ -33,6 +33,91 @@
       "message": "+jgruber for src/debug and src/init owners",
       "revId": "74cbde754c5eebf544d05307e9fadc21a2c1ebb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce05201b_78151b38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-16T09:57:25Z",
+      "side": 1,
+      "message": "lgtm with comments",
+      "revId": "74cbde754c5eebf544d05307e9fadc21a2c1ebb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "034d6663_43d0c71c",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2423,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-16T09:57:25Z",
+      "side": 1,
+      "message": "nit: is the unique_ptr helpful here? We immediately call `get` below.",
+      "revId": "74cbde754c5eebf544d05307e9fadc21a2c1ebb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7949ed09_e6f405ae",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2445,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-16T09:57:25Z",
+      "side": 1,
+      "message": "Wdyt about adding 2 overloads, one that takes a BackgroundDeserializeTask, the other a AlignedCachedData? Seems a bit weird to have 2 mutually exclusive args, together with `if (options \u003d\u003d kConsumeCodeCache)` logic in a few spots.",
+      "revId": "74cbde754c5eebf544d05307e9fadc21a2c1ebb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00d0f75a_f5068efd",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2887,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-16T09:57:25Z",
+      "side": 1,
+      "message": "\u0027.\u0027 or alternatively remove the comment.",
+      "revId": "74cbde754c5eebf544d05307e9fadc21a2c1ebb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "969bda3e_8fac6d8c",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-16T09:57:25Z",
+      "side": 1,
+      "message": "oO this also smells like a 3rd overload.",
+      "revId": "74cbde754c5eebf544d05307e9fadc21a2c1ebb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
