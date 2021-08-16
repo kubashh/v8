@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ee9eec7_c0fb4a53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-08-16T20:23:42Z",
+      "side": 1,
+      "message": "Hi Zhi,\nWould you please take a look at this change, thanks.",
+      "revId": "7fb235950b5bc865d2cd8b158c6b2e68db6b684c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
