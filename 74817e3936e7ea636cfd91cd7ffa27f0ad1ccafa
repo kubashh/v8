@@ -16,6 +16,57 @@
       "message": "Jakob PTAL\nI could manage to minimize the failing test from 2500 lines to ~70 but it is still really flaky (needs hundreds of runs just to fail once). I don\u0027t think it adds much to our test base due to its flakiness so I didn\u0027t add it to the CL.",
       "revId": "74817e3936e7ea636cfd91cd7ffa27f0ad1ccafa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5edc636f_9b6ff30b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-16T09:12:44Z",
+      "side": 1,
+      "message": "lgtm with comments",
+      "revId": "74817e3936e7ea636cfd91cd7ffa27f0ad1ccafa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f8159d1_71b1acbb",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-16T09:12:44Z",
+      "side": 1,
+      "message": "Let\u0027s also explicitly add the tag here.",
+      "revId": "74817e3936e7ea636cfd91cd7ffa27f0ad1ccafa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfccd1c0_4528e3e1",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-16T09:12:44Z",
+      "side": 1,
+      "message": "Please add an acq-rel version of raw_outer_scope_info_or_feedback_metadata and call that here.",
+      "revId": "74817e3936e7ea636cfd91cd7ffa27f0ad1ccafa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
