@@ -16,6 +16,24 @@
       "message": "Main thread uses should continue to use the non-atomic getter. I meant to add acq-rel accessors in addition to the plain getters. Non-initializing sets and bg-thread reads should use acq-rel, everything else nonatomic.",
       "revId": "b127769c9978f6a29a1360f78fb7a48bb856bd1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "124d5f87_96e02433",
+        "filename": "src/heap/object-stats.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-16T15:31:55Z",
+      "side": 1,
+      "message": "Ack, updated.",
+      "parentUuid": "c74c2398_ef0da77b",
+      "revId": "b127769c9978f6a29a1360f78fb7a48bb856bd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

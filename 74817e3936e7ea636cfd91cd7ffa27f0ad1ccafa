@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e3fbbc7_b9134e54",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-16T15:31:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f8159d1_71b1acbb",
+      "revId": "74817e3936e7ea636cfd91cd7ffa27f0ad1ccafa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfccd1c0_4528e3e1",
@@ -65,6 +83,24 @@
       "writtenOn": "2021-08-16T09:12:44Z",
       "side": 1,
       "message": "Please add an acq-rel version of raw_outer_scope_info_or_feedback_metadata and call that here.",
+      "revId": "74817e3936e7ea636cfd91cd7ffa27f0ad1ccafa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de6a8c1f_eabffff1",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-16T15:31:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfccd1c0_4528e3e1",
       "revId": "74817e3936e7ea636cfd91cd7ffa27f0ad1ccafa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
