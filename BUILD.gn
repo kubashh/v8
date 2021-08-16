@@ -4231,7 +4231,6 @@ v8_source_set("v8_base_without_compiler") {
       "src/codegen/ia32/assembler-ia32.cc",
       "src/codegen/ia32/cpu-ia32.cc",
       "src/codegen/ia32/macro-assembler-ia32.cc",
-      "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.cc",
       "src/compiler/backend/ia32/code-generator-ia32.cc",
       "src/compiler/backend/ia32/instruction-scheduler-ia32.cc",
       "src/compiler/backend/ia32/instruction-selector-ia32.cc",
@@ -4243,7 +4242,6 @@ v8_source_set("v8_base_without_compiler") {
     ]
   } else if (v8_current_cpu == "x64") {
     sources += [  ### gcmole(arch:x64) ###
-      "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.cc",
       "src/codegen/x64/assembler-x64.cc",
       "src/codegen/x64/cpu-x64.cc",
       "src/codegen/x64/macro-assembler-x64.cc",
