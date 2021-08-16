@@ -16,6 +16,23 @@
       "message": "Hi Zhi,\nWould you please take a look at this change, thanks.",
       "revId": "7fb235950b5bc865d2cd8b158c6b2e68db6b684c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38542673_75365749",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-16T20:27:13Z",
+      "side": 1,
+      "message": "LGTM, thanks! It would be nice if the test name was something more clear than \"13\", but I guess we are just testing a hodgepodge of of word sized vector instructions. Maybe name it \"WordSizedVectorInstructions\"? Not critical though, leave it up to you.",
+      "revId": "7fb235950b5bc865d2cd8b158c6b2e68db6b684c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
