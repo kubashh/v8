@@ -63,6 +63,138 @@
       "message": "ptal",
       "revId": "8e5a6369bee6950e14a9dfd4c8b6ba3d84b6fec5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3d1f09c_4d9fb621",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-16T08:44:38Z",
+      "side": 1,
+      "message": "lgtm w/ a few suggestions",
+      "revId": "8e5a6369bee6950e14a9dfd4c8b6ba3d84b6fec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c09a848f_64fe3833",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-16T08:44:38Z",
+      "side": 1,
+      "message": "nit:\n  // An embedder node may only be merged with a single wrapper node, as consumers of the graph may merge a node and its wrapper node.",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 15
+      },
+      "revId": "8e5a6369bee6950e14a9dfd4c8b6ba3d84b6fec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e239a4bc_6acfdc24",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-16T08:44:38Z",
+      "side": 1,
+      "message": "Can we move this block into the branch `if (!current.get_node())` above? If we had a node already, the other branch wouldhave updated the back reference, right?",
+      "range": {
+        "startLine": 430,
+        "startChar": 10,
+        "endLine": 430,
+        "endChar": 14
+      },
+      "revId": "8e5a6369bee6950e14a9dfd4c8b6ba3d84b6fec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e51004b_8880e66b",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-16T08:44:38Z",
+      "side": 1,
+      "message": "imho, it would make more sense if this went into `UpdateBackReference`. wdyt?",
+      "range": {
+        "startLine": 463,
+        "startChar": 8,
+        "endLine": 466,
+        "endChar": 56
+      },
+      "revId": "8e5a6369bee6950e14a9dfd4c8b6ba3d84b6fec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d641773e_b4b27cbd",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-16T08:44:38Z",
+      "side": 1,
+      "message": "MergedNodeItem?",
+      "range": {
+        "startLine": 509,
+        "startChar": 9,
+        "endLine": 509,
+        "endChar": 26
+      },
+      "revId": "8e5a6369bee6950e14a9dfd4c8b6ba3d84b6fec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccc4367f_f26a36c0",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-16T08:44:38Z",
+      "side": 1,
+      "message": "CreateMergedNode?",
+      "range": {
+        "startLine": 515,
+        "startChar": 7,
+        "endLine": 515,
+        "endChar": 26
+      },
+      "revId": "8e5a6369bee6950e14a9dfd4c8b6ba3d84b6fec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
