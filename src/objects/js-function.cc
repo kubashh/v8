@@ -348,7 +348,7 @@ void JSFunction::InitializeFeedbackCell(
 
   if (function->has_feedback_vector()) {
     CHECK_EQ(function->feedback_vector().length(),
-             function->feedback_vector().metadata().slot_count());
+             function->feedback_vector().metadata(kAcquireLoad).slot_count());
     return;
   }
 

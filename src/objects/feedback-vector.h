@@ -214,7 +214,7 @@ class FeedbackVector
 
   inline bool is_empty() const;
 
-  inline FeedbackMetadata metadata() const;
+  inline FeedbackMetadata metadata(AcquireLoadTag tag) const;
 
   // Increment profiler ticks, saturating at the maximal value.
   void SaturatingIncrementProfilerTicks();

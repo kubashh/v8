@@ -5,6 +5,7 @@
 #ifndef V8_TEST_FEEDBACK_VECTOR_H_
 #define V8_TEST_FEEDBACK_VECTOR_H_
 
+#include "src/common/globals.h"
 #include "src/objects/feedback-vector.h"
 #include "src/objects/objects.h"
 #include "src/objects/shared-function-info.h"
@@ -20,7 +21,7 @@ class FeedbackVectorHelper {
       : vector_(vector) {
     int slot_count = vector->length();
     slots_.reserve(slot_count);
-    FeedbackMetadataIterator iter(vector->metadata());
+    FeedbackMetadataIterator iter(vector->metadata(kAcquireLoad));
     while (iter.HasNext()) {
       FeedbackSlot slot = iter.Next();
       slots_.push_back(slot);

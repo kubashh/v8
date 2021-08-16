@@ -199,7 +199,8 @@ RUNTIME_FUNCTION(Runtime_TraceUpdateFeedback) {
   CONVERT_SMI_ARG_CHECKED(slot, 1);
   CONVERT_ARG_CHECKED(String, reason, 2);
 
-  int slot_count = function->feedback_vector().metadata().slot_count();
+  int slot_count =
+      function->feedback_vector().metadata(kAcquireLoad).slot_count();
 
   StdoutStream os;
   os << "[Feedback slot " << slot << "/" << slot_count << " in ";

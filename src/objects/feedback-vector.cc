@@ -4,6 +4,7 @@
 
 #include "src/objects/feedback-vector.h"
 
+#include "src/common/globals.h"
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/diagnostics/code-tracer.h"
 #include "src/heap/heap-inl.h"
@@ -204,11 +205,11 @@ bool FeedbackMetadata::HasTypeProfileSlot() const {
 
 FeedbackSlotKind FeedbackVector::GetKind(FeedbackSlot slot) const {
   DCHECK(!is_empty());
-  return metadata().GetKind(slot);
+  return metadata(kAcquireLoad).GetKind(slot);
 }
 
 FeedbackSlot FeedbackVector::GetTypeProfileSlot() const {
-  DCHECK(metadata().HasTypeProfileSlot());
+  DCHECK(metadata(kAcquireLoad).HasTypeProfileSlot());
   FeedbackSlot slot =
       FeedbackVector::ToSlot(FeedbackVectorSpec::kTypeProfileSlotIndex);
   DCHECK_EQ(FeedbackSlotKind::kTypeProfile, GetKind(slot));
@@ -490,7 +491,7 @@ bool FeedbackVector::ClearSlots(Isolate* isolate) {
       FeedbackVector::RawUninitializedSentinel(isolate));
 
   bool feedback_updated = false;
-  FeedbackMetadataIterator iter(metadata());
+  FeedbackMetadataIterator iter(metadata(kAcquireLoad));
   while (iter.HasNext()) {
     FeedbackSlot slot = iter.Next();
 

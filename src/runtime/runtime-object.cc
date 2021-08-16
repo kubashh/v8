@@ -1127,7 +1127,7 @@ RUNTIME_FUNCTION(Runtime_CollectTypeProfile) {
     type = Handle<String>(ReadOnlyRoots(isolate).null_string(), isolate);
   }
 
-  DCHECK(vector->metadata().HasTypeProfileSlot());
+  DCHECK(vector->metadata(kAcquireLoad).HasTypeProfileSlot());
   FeedbackNexus nexus(vector, vector->GetTypeProfileSlot());
   nexus.Collect(type, position->value());
 

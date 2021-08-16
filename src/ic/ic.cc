@@ -307,7 +307,7 @@ void IC::OnFeedbackChanged(Isolate* isolate, FeedbackVector vector,
 
 #ifdef V8_TRACE_FEEDBACK_UPDATES
   if (FLAG_trace_feedback_updates) {
-    int slot_count = vector.metadata().slot_count();
+    int slot_count = vector.metadata(kAcquireLoad).slot_count();
     StdoutStream os;
     if (slot.IsInvalid()) {
       os << "[Feedback slots in ";
