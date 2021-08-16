@@ -57,7 +57,8 @@ class StackArgumentsAccessor {
   DISALLOW_IMPLICIT_CONSTRUCTORS(StackArgumentsAccessor);
 };
 
-class V8_EXPORT_PRIVATE TurboAssembler : public SharedTurboAssembler {
+class V8_EXPORT_PRIVATE TurboAssembler
+    : public SharedTurboAssembler<TurboAssembler> {
  public:
   using SharedTurboAssembler::SharedTurboAssembler;
   AVX_OP(Subsd, subsd)
