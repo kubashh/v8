@@ -359,7 +359,7 @@ void JumpTableAssembler::EmitFarJumpSlot(Address target) {
   Register rd = temp.Acquire();
   auipc(rd, 0);
   ld(rd, rd, 4 * kInstrSize);
-  Jump(rd);
+  Jump(rd, false);
   nop();
   dq(target);
 }

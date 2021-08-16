@@ -414,7 +414,7 @@ int Assembler::target_at(int pos, bool is_internal) {
       Instr instr_auipc = instr;
       Instr instr_I = instr_at(pos + 4);
       DCHECK(IsJalr(instr_I) || IsAddi(instr_I));
-      int32_t offset = BrachlongOffset(instr_auipc, instr_I);
+      int32_t offset = BranchlongOffset(instr_auipc, instr_I);
       if (offset == kEndOfJumpChain) return kEndOfChain;
       return offset + pos;
     } break;
@@ -746,7 +746,7 @@ int Assembler::CJumpOffset(Instr instr) {
   return imm12;
 }
 
-int Assembler::BrachlongOffset(Instr auipc, Instr instr_I) {
+int Assembler::BranchlongOffset(Instr auipc, Instr instr_I) {
   DCHECK(reinterpret_cast<Instruction*>(&instr_I)->InstructionType() ==
          InstructionBase::kIType);
   DCHECK(IsAuipc(auipc));
@@ -767,8 +767,8 @@ int Assembler::PatchBranchlongOffset(Address pc, Instr instr_auipc,
   CHECK(is_int32(offset));
   instr_at_put(pc, SetAuipcOffset(Hi20, instr_auipc));
   instr_at_put(pc + 4, SetJalrOffset(Lo12, instr_jalr));
-  DCHECK(offset ==
-         BrachlongOffset(Assembler::instr_at(pc), Assembler::instr_at(pc + 4)));
+  DCHECK(offset == BranchlongOffset(Assembler::instr_at(pc),
+                                    Assembler::instr_at(pc + 4)));
   return 2;
 }
 
@@ -1377,24 +1377,51 @@ void Assembler::auipc(Register rd, int32_t imm20) {
 
 // Jumps
 
-void Assembler::jal(Register rd, int32_t imm21) {
-  GenInstrJ(JAL, rd, imm21);
-  BlockTrampolinePoolFor(1);
+void Assembler::jal(Register rd, int32_t imm21, bool apply_c_extension) {
+  if (FLAG_riscv_c_extension && rd == zero_reg && is_int12(imm21) &&
+      (imm21 & 0b01) == 0 && apply_c_extension) {
+    int16_t imm12 = imm21;
+    c_j(imm12);
+  } else {
+    GenInstrJ(JAL, rd, imm21);
+    BlockTrampolinePoolFor(1);
+  }
 }
 
-void Assembler::jalr(Register rd, Register rs1, int16_t imm12) {
-  GenInstrI(0b000, JALR, rd, rs1, imm12);
-  BlockTrampolinePoolFor(1);
+void Assembler::jalr(Register rd, Register rs1, int16_t imm12,
+                     bool apply_c_extension) {
+  if (FLAG_riscv_c_extension && rd == zero_reg && rs1 != zero_reg &&
+      imm12 == 0 && apply_c_extension) {
+    c_jr(rs1);
+  } else if (FLAG_riscv_c_extension && rd.code() == 0b01 && rs1 != zero_reg &&
+             imm12 == 0 && apply_c_extension) {
+    c_jalr(rs1);
+  } else {
+    GenInstrI(0b000, JALR, rd, rs1, imm12);
+    BlockTrampolinePoolFor(1);
+  }
 }
 
 // Branches
 
-void Assembler::beq(Register rs1, Register rs2, int16_t imm13) {
-  GenInstrBranchCC_rri(0b000, rs1, rs2, imm13);
+void Assembler::beq(Register rs1, Register rs2, int16_t imm13,
+                    bool apply_c_extension) {
+  if (isCExtApplicable1(rs1, rs2, imm13) & apply_c_extension) {
+    int16_t imm9 = imm13;
+    c_beqz(rs1, imm9);
+  } else {
+    GenInstrBranchCC_rri(0b000, rs1, rs2, imm13);
+  }
 }
 
-void Assembler::bne(Register rs1, Register rs2, int16_t imm13) {
-  GenInstrBranchCC_rri(0b001, rs1, rs2, imm13);
+void Assembler::bne(Register rs1, Register rs2, int16_t imm13,
+                    bool apply_c_extension) {
+  if (isCExtApplicable1(rs1, rs2, imm13) & apply_c_extension) {
+    int16_t imm9 = imm13;
+    c_bnez(rs1, imm9);
+  } else {
+    GenInstrBranchCC_rri(0b001, rs1, rs2, imm13);
+  }
 }
 
 void Assembler::blt(Register rs1, Register rs2, int16_t imm13) {
@@ -2328,6 +2355,15 @@ void Assembler::EBREAK() {
     ebreak();
 }
 
+bool Assembler::isCExtApplicable1(Register reg1, Register reg2, int16_t imm) {
+  if (FLAG_riscv_c_extension && reg2 == zero_reg && is_int9(imm) &&
+      (reg1.code() & 0b11000) == 0b01000 && (reg1.code() & 0xf0) == 0 &&
+      (imm & 0b01) == 0 && imm != 0) {
+    return true;
+  }
+  return false;
+}
+
 // Privileged
 
 void Assembler::uret() {
@@ -2777,7 +2813,7 @@ void Assembler::RelocateRelativeReference(RelocInfo::Mode rmode, Address pc,
   DCHECK(RelocInfo::IsRelativeCodeTarget(rmode));
   if (IsAuipc(instr) && IsJalr(instr1)) {
     int32_t imm;
-    imm = BrachlongOffset(instr, instr1);
+    imm = BranchlongOffset(instr, instr1);
     imm -= pc_delta;
     PatchBranchlongOffset(pc, instr, instr1, imm);
     return;

@@ -48,8 +48,8 @@
 // the cheaper intrin0.h is not available for all build configurations. That is
 // why we declare this intrinsic.
 extern "C" unsigned long __readfsdword(unsigned long);  // NOLINT(runtime/int)
-#endif                                       // V8_CC_MSVC && V8_HOST_ARCH_IA32
-#endif                                       // V8_NO_FAST_TLS
+#endif  // V8_CC_MSVC && V8_HOST_ARCH_IA32
+#endif  // V8_NO_FAST_TLS
 
 namespace v8 {
 

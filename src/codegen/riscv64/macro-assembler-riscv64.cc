@@ -426,7 +426,8 @@ void TurboAssembler::Add64(Register rd, Register rs, const Operand& rt) {
       c_addi16sp(static_cast<int16_t>(rt.immediate()));
     } else if (FLAG_riscv_c_extension && ((rd.code() & 0b11000) == 0b01000) &&
                (rs == sp) && is_uint10(rt.immediate()) &&
-               (rt.immediate() != 0) && !MustUseReg(rt.rmode())) {
+               (rt.immediate() & 0x3) == 0 && (rt.immediate() != 0) &&
+               !MustUseReg(rt.rmode())) {
       c_addi4spn(rd, static_cast<uint16_t>(rt.immediate()));
     } else if (is_int12(rt.immediate()) && !MustUseReg(rt.rmode())) {
       addi(rd, rs, static_cast<int32_t>(rt.immediate()));
@@ -2754,16 +2755,18 @@ void TurboAssembler::Branch(int32_t offset) {
 }
 
 void TurboAssembler::Branch(int32_t offset, Condition cond, Register rs,
-                            const Operand& rt, Label::Distance near_jump) {
-  bool is_near = BranchShortCheck(offset, nullptr, cond, rs, rt);
+                            const Operand& rt, bool apply_c_extension,
+                            Label::Distance near_jump) {
+  bool is_near =
+      BranchShortCheck(offset, nullptr, cond, rs, rt, apply_c_extension);
   DCHECK(is_near);
   USE(is_near);
 }
 
-void TurboAssembler::Branch(Label* L) {
+void TurboAssembler::Branch(Label* L, bool apply_c_extension) {
   if (L->is_bound()) {
     if (is_near(L)) {
-      BranchShort(L);
+      BranchShort(L, apply_c_extension);
     } else {
       BranchLong(L);
     }
@@ -2817,18 +2820,24 @@ void TurboAssembler::Branch(Label* L, Condition cond, Register rs,
   Branch(L, cond, rs, Operand(scratch));
 }
 
-void TurboAssembler::BranchShortHelper(int32_t offset, Label* L) {
+void TurboAssembler::BranchShortHelper(int32_t offset, Label* L,
+                                       bool apply_c_extension) {
   DCHECK(L == nullptr || offset == 0);
   offset = GetOffset(offset, L, OffsetSize::kOffset21);
-  j(offset);
+  if (L != nullptr && !L->is_bound())
+    j(offset);
+  else
+    j(offset, apply_c_extension);
 }
 
-void TurboAssembler::BranchShort(int32_t offset) {
+void TurboAssembler::BranchShort(int32_t offset, bool apply_c_extension) {
   DCHECK(is_int21(offset));
-  BranchShortHelper(offset, nullptr);
+  BranchShortHelper(offset, nullptr, apply_c_extension);
 }
 
-void TurboAssembler::BranchShort(Label* L) { BranchShortHelper(0, L); }
+void TurboAssembler::BranchShort(Label* L, bool apply_c_extension) {
+  BranchShortHelper(0, L, apply_c_extension);
+}
 
 int32_t TurboAssembler::GetOffset(int32_t offset, Label* L, OffsetSize bits) {
   if (L) {
@@ -2868,7 +2877,8 @@ bool TurboAssembler::CalculateOffset(Label* L, int32_t* offset, OffsetSize bits,
 }
 
 bool TurboAssembler::BranchShortHelper(int32_t offset, Label* L, Condition cond,
-                                       Register rs, const Operand& rt) {
+                                       Register rs, const Operand& rt,
+                                       bool apply_c_extension) {
   DCHECK(L == nullptr || offset == 0);
   UseScratchRegisterScope temps(this);
   BlockTrampolinePoolScope block_trampoline_pool(this);
@@ -2884,17 +2894,26 @@ bool TurboAssembler::BranchShortHelper(int32_t offset, Label* L, Condition cond,
     switch (cond) {
       case cc_always:
         if (!CalculateOffset(L, &offset, OffsetSize::kOffset21)) return false;
-        j(offset);
+        if (L != nullptr && !L->is_bound())
+          j(offset);
+        else
+          j(offset, apply_c_extension);
         EmitConstPoolWithJumpIfNeeded();
         break;
       case eq:
         // rs == rt
         if (rt.is_reg() && rs == rt.rm()) {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset21)) return false;
-          j(offset);
+          if (L != nullptr && !L->is_bound())
+            j(offset);
+          else
+            j(offset, apply_c_extension);
         } else {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset13)) return false;
-          beq(rs, scratch, offset);
+          if (L != nullptr && !L->is_bound())
+            beq(rs, scratch, offset);
+          else
+            beq(rs, scratch, offset, apply_c_extension);
         }
         break;
       case ne:
@@ -2903,7 +2922,10 @@ bool TurboAssembler::BranchShortHelper(int32_t offset, Label* L, Condition cond,
           break;  // No code needs to be emitted
         } else {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset13)) return false;
-          bne(rs, scratch, offset);
+          if (L != nullptr && !L->is_bound())
+            bne(rs, scratch, offset);
+          else
+            bne(rs, scratch, offset, apply_c_extension);
         }
         break;
 
@@ -2921,7 +2943,10 @@ bool TurboAssembler::BranchShortHelper(int32_t offset, Label* L, Condition cond,
         // rs >= rt
         if (rt.is_reg() && rs == rt.rm()) {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset21)) return false;
-          j(offset);
+          if (L != nullptr && !L->is_bound())
+            j(offset);
+          else
+            j(offset, apply_c_extension);
         } else {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset13)) return false;
           bge(rs, scratch, offset);
@@ -2940,7 +2965,10 @@ bool TurboAssembler::BranchShortHelper(int32_t offset, Label* L, Condition cond,
         // rs <= rt
         if (rt.is_reg() && rs == rt.rm()) {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset21)) return false;
-          j(offset);
+          if (L != nullptr && !L->is_bound())
+            j(offset);
+          else
+            j(offset, apply_c_extension);
         } else {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset13)) return false;
           ble(rs, scratch, offset);
@@ -2961,7 +2989,10 @@ bool TurboAssembler::BranchShortHelper(int32_t offset, Label* L, Condition cond,
         // rs >= rt
         if (rt.is_reg() && rs == rt.rm()) {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset21)) return false;
-          j(offset);
+          if (L != nullptr && !L->is_bound())
+            j(offset);
+          else
+            j(offset, apply_c_extension);
         } else {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset13)) return false;
           bgeu(rs, scratch, offset);
@@ -2980,7 +3011,10 @@ bool TurboAssembler::BranchShortHelper(int32_t offset, Label* L, Condition cond,
         // rs <= rt
         if (rt.is_reg() && rs == rt.rm()) {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset21)) return false;
-          j(offset);
+          if (L != nullptr && !L->is_bound())
+            j(offset);
+          else
+            j(offset, apply_c_extension);
         } else {
           if (!CalculateOffset(L, &offset, OffsetSize::kOffset13)) return false;
           bleu(rs, scratch, offset);
@@ -2996,7 +3030,8 @@ bool TurboAssembler::BranchShortHelper(int32_t offset, Label* L, Condition cond,
 }
 
 bool TurboAssembler::BranchShortCheck(int32_t offset, Label* L, Condition cond,
-                                      Register rs, const Operand& rt) {
+                                      Register rs, const Operand& rt,
+                                      bool apply_c_extension) {
   BRANCH_ARGS_CHECK(cond, rs, rt);
 
   if (!L) {
@@ -3019,7 +3054,8 @@ void TurboAssembler::BranchShort(Label* L, Condition cond, Register rs,
   BranchShortCheck(0, L, cond, rs, rt);
 }
 
-void TurboAssembler::BranchAndLink(int32_t offset) {
+void TurboAssembler::BranchAndLink(
+    int32_t offset, bool apply_c_extension) {  // the second arg is redundant
   BranchAndLinkShort(offset);
 }
 
@@ -3030,7 +3066,8 @@ void TurboAssembler::BranchAndLink(int32_t offset, Condition cond, Register rs,
   USE(is_near);
 }
 
-void TurboAssembler::BranchAndLink(Label* L) {
+void TurboAssembler::BranchAndLink(
+    Label* L, bool apply_c_extension) {  // the second arg is redundant
   if (L->is_bound()) {
     if (is_near(L)) {
       BranchAndLinkShort(L);
@@ -3102,7 +3139,7 @@ bool TurboAssembler::BranchAndLinkShortHelper(int32_t offset, Label* L,
     jal(offset);
   } else {
     Branch(kInstrSize * 2, NegateCondition(cond), rs,
-           Operand(GetRtAsRegisterHelper(rt, scratch)));
+           Operand(GetRtAsRegisterHelper(rt, scratch)), false);
     offset = GetOffset(offset, L, OffsetSize::kOffset21);
     jal(offset);
   }
@@ -3147,21 +3184,23 @@ void TurboAssembler::LoadRootRegisterOffset(Register destination,
   }
 }
 
-void TurboAssembler::Jump(Register target, Condition cond, Register rs,
-                          const Operand& rt) {
+void TurboAssembler::Jump(Register target, bool apply_c_extension,
+                          Condition cond, Register rs, const Operand& rt) {
   BlockTrampolinePoolScope block_trampoline_pool(this);
   if (cond == cc_always) {
-    jr(target);
+    jr(target, apply_c_extension);
     ForceConstantPoolEmissionWithoutJump();
   } else {
     BRANCH_ARGS_CHECK(cond, rs, rt);
-    Branch(kInstrSize * 2, NegateCondition(cond), rs, rt);
+    Branch(kInstrSize * 2, NegateCondition(cond), rs, rt,
+           false);  // haven't inserted bool var
     jr(target);
   }
 }
 
 void TurboAssembler::Jump(intptr_t target, RelocInfo::Mode rmode,
-                          Condition cond, Register rs, const Operand& rt) {
+                          bool apply_c_extension, Condition cond, Register rs,
+                          const Operand& rt) {
   Label skip;
   if (cond != cc_always) {
     Branch(&skip, NegateCondition(cond), rs, rt);
@@ -3169,20 +3208,22 @@ void TurboAssembler::Jump(intptr_t target, RelocInfo::Mode rmode,
   {
     BlockTrampolinePoolScope block_trampoline_pool(this);
     li(t6, Operand(target, rmode));
-    Jump(t6, al, zero_reg, Operand(zero_reg));
+    Jump(t6, apply_c_extension, al, zero_reg, Operand(zero_reg));
     EmitConstPoolWithJumpIfNeeded();
     bind(&skip);
   }
 }
 
-void TurboAssembler::Jump(Address target, RelocInfo::Mode rmode, Condition cond,
-                          Register rs, const Operand& rt) {
+void TurboAssembler::Jump(Address target, RelocInfo::Mode rmode,
+                          bool apply_c_extension, Condition cond, Register rs,
+                          const Operand& rt) {
   DCHECK(!RelocInfo::IsCodeTarget(rmode));
-  Jump(static_cast<intptr_t>(target), rmode, cond, rs, rt);
+  Jump(static_cast<intptr_t>(target), rmode, apply_c_extension, cond, rs, rt);
 }
 
 void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
-                          Condition cond, Register rs, const Operand& rt) {
+                          bool apply_c_extension, Condition cond, Register rs,
+                          const Operand& rt) {
   DCHECK(RelocInfo::IsCodeTarget(rmode));
 
   BlockTrampolinePoolScope block_trampoline_pool(this);
@@ -3207,35 +3248,37 @@ void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
     int offset = static_cast<int>(code->builtin_id()) * kSystemPointerSize +
                  IsolateData::builtin_entry_table_offset();
     Ld(t6, MemOperand(kRootRegister, offset));
-    Jump(t6, cond, rs, rt);
+    Jump(t6, apply_c_extension, cond, rs, rt);
     return;
   } else if (options().inline_offheap_trampolines &&
              target_is_isolate_independent_builtin) {
     // Inline the trampoline.
     RecordCommentForOffHeapTrampoline(builtin);
     li(t6, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
-    Jump(t6, cond, rs, rt);
+    Jump(t6, apply_c_extension, cond, rs, rt);
     return;
   }
 
   int32_t target_index = AddCodeTarget(code);
-  Jump(static_cast<intptr_t>(target_index), rmode, cond, rs, rt);
+  Jump(static_cast<intptr_t>(target_index), rmode, apply_c_extension, cond, rs,
+       rt);
 }
 
-void TurboAssembler::Jump(const ExternalReference& reference) {
+void TurboAssembler::Jump(const ExternalReference& reference,
+                          bool apply_c_extension) {
   li(t6, reference);
-  Jump(t6);
+  Jump(t6, apply_c_extension);
 }
 
 // Note: To call gcc-compiled C code on riscv64, you must call through t6.
-void TurboAssembler::Call(Register target, Condition cond, Register rs,
-                          const Operand& rt) {
+void TurboAssembler::Call(Register target, bool apply_c_extension,
+                          Condition cond, Register rs, const Operand& rt) {
   BlockTrampolinePoolScope block_trampoline_pool(this);
   if (cond == cc_always) {
-    jalr(ra, target, 0);
+    jalr(ra, target, 0, apply_c_extension);
   } else {
     BRANCH_ARGS_CHECK(cond, rs, rt);
-    Branch(kInstrSize * 2, NegateCondition(cond), rs, rt);
+    Branch(kInstrSize * 2, NegateCondition(cond), rs, rt, false);
     jalr(ra, target, 0);
   }
 }
@@ -3255,14 +3298,16 @@ void MacroAssembler::JumpIfIsInRange(Register value, unsigned lower_limit,
   }
 }
 
-void TurboAssembler::Call(Address target, RelocInfo::Mode rmode, Condition cond,
-                          Register rs, const Operand& rt) {
+void TurboAssembler::Call(Address target, RelocInfo::Mode rmode,
+                          bool apply_c_extension, Condition cond, Register rs,
+                          const Operand& rt) {
   li(t6, Operand(static_cast<int64_t>(target), rmode), ADDRESS_LOAD);
-  Call(t6, cond, rs, rt);
+  Call(t6, apply_c_extension, cond, rs, rt);
 }
 
 void TurboAssembler::Call(Handle<Code> code, RelocInfo::Mode rmode,
-                          Condition cond, Register rs, const Operand& rt) {
+                          bool apply_c_extension, Condition cond, Register rs,
+                          const Operand& rt) {
   Builtin builtin = Builtin::kNoBuiltinId;
   bool target_is_isolate_independent_builtin =
       isolate()->builtins()->IsBuiltinHandle(code, &builtin) &&
@@ -3286,21 +3331,22 @@ void TurboAssembler::Call(Handle<Code> code, RelocInfo::Mode rmode,
     int offset = static_cast<int>(code->builtin_id()) * kSystemPointerSize +
                  IsolateData::builtin_entry_table_offset();
     LoadRootRelative(t6, offset);
-    Call(t6, cond, rs, rt);
+    Call(t6, apply_c_extension, cond, rs, rt);
     return;
   } else if (options().inline_offheap_trampolines &&
              target_is_isolate_independent_builtin) {
     // Inline the trampoline.
     RecordCommentForOffHeapTrampoline(builtin);
     li(t6, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
-    Call(t6, cond, rs, rt);
+    Call(t6, apply_c_extension, cond, rs, rt);
     return;
   }
 
   DCHECK(RelocInfo::IsCodeTarget(rmode));
   DCHECK(code->IsExecutable());
   int32_t target_index = AddCodeTarget(code);
-  Call(static_cast<Address>(target_index), rmode, cond, rs, rt);
+  Call(static_cast<Address>(target_index), rmode, apply_c_extension, cond, rs,
+       rt);
 }
 
 void TurboAssembler::LoadEntryFromBuiltinIndex(Register builtin) {
@@ -3401,7 +3447,7 @@ void TurboAssembler::StoreReturnAddressAndCall(Register target) {
 }
 
 void TurboAssembler::Ret(Condition cond, Register rs, const Operand& rt) {
-  Jump(ra, cond, rs, rt);
+  Jump(ra, true, cond, rs, rt);
   if (cond == al) {
     ForceConstantPoolEmissionWithoutJump();
   }
@@ -3986,7 +4032,7 @@ void MacroAssembler::JumpToExternalReference(const ExternalReference& builtin,
   PrepareCEntryFunction(builtin);
   Handle<Code> code = CodeFactory::CEntry(isolate(), 1, SaveFPRegsMode::kIgnore,
                                           ArgvMode::kStack, builtin_exit_frame);
-  Jump(code, RelocInfo::CODE_TARGET, al, zero_reg, Operand(zero_reg));
+  Jump(code, RelocInfo::CODE_TARGET, true, al, zero_reg, Operand(zero_reg));
 }
 
 void MacroAssembler::JumpToInstructionStream(Address entry) {
@@ -4101,11 +4147,15 @@ void TurboAssembler::Abort(AbortReason reason) {
     // of the Abort macro constant.
     // Currently in debug mode with debug_code enabled the number of
     // generated instructions is 10, so we use this as a maximum value.
-    static const int kExpectedAbortInstructions = 10;
-    int abort_instructions = InstructionsGeneratedSince(&abort_start);
-    DCHECK_LE(abort_instructions, kExpectedAbortInstructions);
-    while (abort_instructions++ < kExpectedAbortInstructions) {
-      nop();
+    static const int kExpectedAbortInstructions_size = 10 * kInstrSize;
+    int abort_instructions_size = SizeOfCodeGeneratedSince(&abort_start);
+    DCHECK_LE(abort_instructions_size, kExpectedAbortInstructions_size);
+    while (abort_instructions_size < kExpectedAbortInstructions_size) {
+      NOP();
+      if (FLAG_riscv_c_extension)
+        abort_instructions_size += kShortInstrSize;
+      else
+        abort_instructions_size += kInstrSize;
     }
   }
 }
@@ -4509,7 +4559,7 @@ void TurboAssembler::FloatMinMaxHelper(FPURegister dst, FPURegister src1,
       fmin_d(dst, src1, src2);
     }
   }
-  j(&done);
+  j(&done, true);
 
   bind(&nan);
   // if any operand is NaN, return NaN (fadd returns NaN if any operand is NaN)
@@ -4733,13 +4783,11 @@ void TurboAssembler::ComputeCodeStartAddress(Register dst) {
   // This push on ra and the pop below together ensure that we restore the
   // register ra, which is needed while computing the code start address.
   push(ra);
-
   auipc(ra, 0);
   addi(ra, ra, kInstrSize * 2);  // ra = address of li
   int pc = pc_offset();
   li(dst, Operand(pc));
   Sub64(dst, ra, dst);
-
   pop(ra);  // Restore ra
 }
 
@@ -4749,13 +4797,13 @@ void TurboAssembler::CallForDeoptimization(Builtin target, int, Label* exit,
   BlockTrampolinePoolScope block_trampoline_pool(this);
   Ld(t6,
      MemOperand(kRootRegister, IsolateData::builtin_entry_slot_offset(target)));
-  Call(t6);
+  Call(t6, false);
   DCHECK_EQ(SizeOfCodeGeneratedSince(exit),
             (kind == DeoptimizeKind::kLazy)
                 ? Deoptimizer::kLazyDeoptExitSize
                 : Deoptimizer::kNonLazyDeoptExitSize);
   if (kind == DeoptimizeKind::kEagerWithResume) {
-    Branch(ret);
+    Branch(ret, false);
     DCHECK_EQ(SizeOfCodeGeneratedSince(exit),
               Deoptimizer::kEagerWithResumeBeforeArgsSize);
   }

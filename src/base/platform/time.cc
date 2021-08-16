@@ -85,8 +85,8 @@ V8_INLINE int64_t ClockNow(clockid_t clk_id) {
     if (thread_cputime(-1, &tc) != 0) {
       UNREACHABLE();
     }
-    return (tc.stime / v8::base::Time::kNanosecondsPerMicrosecond)
-           + (tc.utime / v8::base::Time::kNanosecondsPerMicrosecond);
+    return (tc.stime / v8::base::Time::kNanosecondsPerMicrosecond) +
+           (tc.utime / v8::base::Time::kNanosecondsPerMicrosecond);
 #endif  // defined(__PASE__)
   }
 #endif  // defined(V8_OS_AIX)

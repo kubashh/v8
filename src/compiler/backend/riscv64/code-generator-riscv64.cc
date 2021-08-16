@@ -556,7 +556,7 @@ void CodeGenerator::BailoutIfDeoptimized() {
   __ And(kScratchReg, kScratchReg,
          Operand(1 << Code::kMarkedForDeoptimizationBit));
   __ Jump(BUILTIN_CODE(isolate(), CompileLazyDeoptimizedCode),
-          RelocInfo::CODE_TARGET, ne, kScratchReg, Operand(zero_reg));
+          RelocInfo::CODE_TARGET, false, ne, kScratchReg, Operand(zero_reg));
 }
 
 // Assembles an instruction after register allocation, producing machine code.
