@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf9dd1c7_1a34caa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519610
+      },
+      "writtenOn": "2021-08-16T10:31:38Z",
+      "side": 1,
+      "message": "Seems the v8_presubmit uses incorrect e-mail address. I signed the CLA with a Gmail account having both: gmail.com and iki.fi address registered. Gerrit got both emails too. The commit uses iki.fi, and I now updated Gerrit to have iki.fi as the preferred email. The presubmit check still find the gmail.com address from somewhere. Any ideas? Should I file a bug somewhere?",
+      "revId": "f5e81053d76cd8b96933ba3a9bfeb78a88c3cfa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
