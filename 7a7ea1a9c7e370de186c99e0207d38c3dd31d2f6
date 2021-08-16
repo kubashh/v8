@@ -16,6 +16,23 @@
       "message": "PTAL. Feel free to submit it if I am not there.",
       "revId": "7a7ea1a9c7e370de186c99e0207d38c3dd31d2f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ab56773_68428968",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-16T10:14:40Z",
+      "side": 1,
+      "message": "Sending to CQ since Manos is OOO today.",
+      "revId": "7a7ea1a9c7e370de186c99e0207d38c3dd31d2f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
