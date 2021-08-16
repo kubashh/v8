@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32f463ac_5b15ada2",
+        "filename": "src/codegen/riscv64/assembler-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2358,
+      "author": {
+        "id": 1477547
+      },
+      "writtenOn": "2021-08-16T09:30:34Z",
+      "side": 1,
+      "message": "Why the function name has a \bsuffix “1”？",
+      "revId": "235b24a5e2cc82c2910fa7d3b150ac7cb9d56ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a3c094_3e4e9961",
+        "filename": "src/codegen/riscv64/assembler-riscv64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1477547
+      },
+      "writtenOn": "2021-08-16T09:30:34Z",
+      "side": 1,
+      "message": "Does this condition mean a forward beq should not be emit as c-ext because the offset is unsolved？",
+      "revId": "235b24a5e2cc82c2910fa7d3b150ac7cb9d56ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd3565ec_bd76f87f",
+        "filename": "src/codegen/riscv64/assembler-riscv64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1477547
+      },
+      "writtenOn": "2021-08-16T09:30:34Z",
+      "side": 1,
+      "message": "Why check here？To know whether SizeOfCodeGeneratedSince(label) / kInstrSize has remains？",
+      "revId": "235b24a5e2cc82c2910fa7d3b150ac7cb9d56ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
