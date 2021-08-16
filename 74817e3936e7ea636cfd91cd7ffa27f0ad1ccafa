@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d69ca87d_de249b9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-16T08:41:56Z",
+      "side": 1,
+      "message": "Jakob PTAL\nI could manage to minimize the failing test from 2500 lines to ~70 but it is still really flaky (needs hundreds of runs just to fail once). I don\u0027t think it adds much to our test base due to its flakiness so I didn\u0027t add it to the CL.",
+      "revId": "74817e3936e7ea636cfd91cd7ffa27f0ad1ccafa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
