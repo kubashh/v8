@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66e03b2b_3159f00c",
+        "filename": "src/codegen/riscv64/assembler-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2358,
+      "author": {
+        "id": 1511537
+      },
+      "writtenOn": "2021-08-16T14:25:45Z",
+      "side": 1,
+      "message": "For future refactor, there will be more similar functions that can be used to decide whether to apply c extension.",
+      "parentUuid": "32f463ac_5b15ada2",
+      "revId": "235b24a5e2cc82c2910fa7d3b150ac7cb9d56ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64a3c094_3e4e9961",
         "filename": "src/codegen/riscv64/assembler-riscv64.h",
         "patchSetId": 2
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "309e4676_3aaf339f",
+        "filename": "src/codegen/riscv64/assembler-riscv64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1511537
+      },
+      "writtenOn": "2021-08-16T14:25:45Z",
+      "side": 1,
+      "message": "That\u0027s correct.",
+      "parentUuid": "64a3c094_3e4e9961",
+      "revId": "235b24a5e2cc82c2910fa7d3b150ac7cb9d56ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd3565ec_bd76f87f",
         "filename": "src/codegen/riscv64/assembler-riscv64.h",
         "patchSetId": 2
@@ -48,6 +84,24 @@
       "writtenOn": "2021-08-16T09:30:34Z",
       "side": 1,
       "message": "Why check here？To know whether SizeOfCodeGeneratedSince(label) / kInstrSize has remains？",
+      "revId": "235b24a5e2cc82c2910fa7d3b150ac7cb9d56ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "605a5f9e_9cf6b062",
+        "filename": "src/codegen/riscv64/assembler-riscv64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1511537
+      },
+      "writtenOn": "2021-08-16T14:25:45Z",
+      "side": 1,
+      "message": "When FLAG_riscv_c_extension is true, the number of instructions is not necessarily equal to size/kInstrSize. But this check is not very helpful, I will update the logic.",
+      "parentUuid": "fd3565ec_bd76f87f",
       "revId": "235b24a5e2cc82c2910fa7d3b150ac7cb9d56ce3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
