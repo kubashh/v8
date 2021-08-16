@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b7d1ae2_381abad3",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2423,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-16T11:26:44Z",
+      "side": 1,
+      "message": "We call \u0027get\u0027, not \u0027release\u0027 -- the cached_data stays alive so that it can be checked for `rejected()`",
+      "parentUuid": "034d6663_43d0c71c",
+      "revId": "74cbde754c5eebf544d05307e9fadc21a2c1ebb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7949ed09_e6f405ae",
         "filename": "src/api/api.cc",
         "patchSetId": 1
@@ -82,6 +100,24 @@
       "writtenOn": "2021-08-16T09:57:25Z",
       "side": 1,
       "message": "Wdyt about adding 2 overloads, one that takes a BackgroundDeserializeTask, the other a AlignedCachedData? Seems a bit weird to have 2 mutually exclusive args, together with `if (options \u003d\u003d kConsumeCodeCache)` logic in a few spots.",
+      "revId": "74cbde754c5eebf544d05307e9fadc21a2c1ebb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b329aab_8a82f8ae",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2445,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-16T11:26:44Z",
+      "side": 1,
+      "message": "I could add convenience overloads, but the main GetSharedFunctionInfoForScript differentiates between the two pretty deep in its logic so it would either need heavy refactoring, or something like a \"get cached function\" lambda param. WDYT?",
+      "parentUuid": "7949ed09_e6f405ae",
       "revId": "74cbde754c5eebf544d05307e9fadc21a2c1ebb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
