@@ -2349,11 +2349,13 @@ void LiftoffAssembler::AssertUnreachable(AbortReason reason) {
 }
 
 void LiftoffAssembler::PushRegisters(LiftoffRegList regs) {
-  bailout(kUnsupportedArchitecture, "PushRegisters");
+  MultiPush(regs.GetGpList());
+  MultiPushDoubles(regs.GetFpList());
 }
 
 void LiftoffAssembler::PopRegisters(LiftoffRegList regs) {
-  bailout(kUnsupportedArchitecture, "PopRegisters");
+  MultiPopDoubles(regs.GetFpList());
+  MultiPop(regs.GetGpList());
 }
 
 void LiftoffAssembler::RecordSpillsInSafepoint(Safepoint& safepoint,
