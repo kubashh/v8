@@ -33,6 +33,24 @@
       "message": "Nice! If you pull this through to the TurboAssemblerBase we can avoid a few more virtual methods.\n\nI hope this header isn\u0027t too widely (indirectly) included though? Otherwise it would still be better to keep the implementations in cpp files.",
       "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c408406_19626cf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-17T21:12:30Z",
+      "side": 1,
+      "message": "I couldn\u0027t figure out how to keep it inside the cpp file due to https://isocpp.org/wiki/faq/templates#separate-template-class-defn-from-decl, was getting linker errors, and so moved everything into the .h file. This header is only be included by macro-assembler-ia32.h and macro-assembler-x64.h, so it should cause too much code bloat.",
+      "parentUuid": "81154bd9_c6aca9dd",
+      "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
