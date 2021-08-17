@@ -16,6 +16,24 @@
       "message": "somehow this fix is not good enough and show the following error\nhttps://ci.chromium.org/p/v8/builders/try.triggered/v8_linux_arm_rel_ng_triggered/b8838704584811814321?",
       "revId": "60de6f12ac3c93c5ea8718315c2ea3ca4d078b5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "477df50e_a7c4974c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-17T18:37:27Z",
+      "side": 1,
+      "message": "That\u0027s progress! As of this patch, the code generator can now deal with the bigger offset by first materializing it in a temp register. That\u0027s one more emitted instruction than before, so the Deoptimizer::kLazyDeoptExitSize/kNonLazyDeoptExitSize constants in deoptimizer-arm.cc will have to be updated to reflect that. You can only do that as part of the same CL that increases the offset and thereby causes the extra instruction to be emitted.\n\nThis patch, as is, LGTM.",
+      "parentUuid": "d6deac8b_59e08956",
+      "revId": "60de6f12ac3c93c5ea8718315c2ea3ca4d078b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
