@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d0bdc9d_3a33577c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-08-18T12:22:57Z",
+      "side": 1,
+      "message": "Lg from my side. Not sure if owners are happy with the flag name... I like that it\u0027s short.",
+      "revId": "c17ca5fd74f3b57e86e39cb35605624946d43376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
