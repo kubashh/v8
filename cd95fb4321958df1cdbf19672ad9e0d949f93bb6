@@ -51,6 +51,24 @@
       "parentUuid": "81154bd9_c6aca9dd",
       "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03a10201_46e7dceb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-08-18T14:28:29Z",
+      "side": 1,
+      "message": "Right, I was thinking about the alternative solution suggested there. If it seems reasonable that\u0027s fine by me though. The parser is just slightly nicer isolated from the rest of the system than the macro-assembler files.",
+      "parentUuid": "9c408406_19626cf6",
+      "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
