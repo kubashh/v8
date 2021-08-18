@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddc91b96_8445290e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-08-18T12:13:14Z",
+      "side": 1,
+      "message": "nit: How about:\nAdd D8 flag that ignores exceptions on exit.\n\nThe NumFuzz fuzzers need to make use of this flag to ignore\nMjsunit exceptions and other exceptions.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "f673bb4278aa68ed69c6e31706b86d8c44e4f938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b33335f4_08035f93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-08-18T12:13:14Z",
+      "side": 1,
+      "message": "+ Georg, PTAL. But we probably need Clemens as an owner.",
+      "revId": "f673bb4278aa68ed69c6e31706b86d8c44e4f938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
