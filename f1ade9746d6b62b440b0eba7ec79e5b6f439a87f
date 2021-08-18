@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a24daba1_b33a23a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-08-18T20:59:41Z",
+      "side": 1,
+      "message": "Oops, had a draft and didn\u0027t press send. Lgtm when comment is resolved.",
+      "revId": "f1ade9746d6b62b440b0eba7ec79e5b6f439a87f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49066ece_9f62d526",
@@ -60,6 +77,23 @@
         "endLine": 937,
         "endChar": 38
       },
+      "revId": "f1ade9746d6b62b440b0eba7ec79e5b6f439a87f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48e163c7_94bdf6da",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-08-18T20:59:41Z",
+      "side": 1,
+      "message": "Nit: Pinsrw is not an SSE4_1 op, maybe wrap this particular instruction in something more generic?",
       "revId": "f1ade9746d6b62b440b0eba7ec79e5b6f439a87f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
