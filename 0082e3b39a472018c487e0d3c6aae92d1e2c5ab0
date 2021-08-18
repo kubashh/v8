@@ -68,6 +68,24 @@
       "message": "are you sure it\u0027s deopt? can be that this is caused by something else which is covered by gc_fuzzer below. maybe we need a shortcut for both.",
       "revId": "0082e3b39a472018c487e0d3c6aae92d1e2c5ab0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47e3477c_5605c773",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-08-18T12:52:29Z",
+      "side": 1,
+      "message": "E.g. https://ci.chromium.org/ui/p/v8/builders/ci/V8%20NumFuzz%20-%20debug/15219/overview is from delay-task fuzzer which is part of gc_fuzzer.",
+      "parentUuid": "4217c4cc_4fc56971",
+      "revId": "0082e3b39a472018c487e0d3c6aae92d1e2c5ab0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
