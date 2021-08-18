@@ -39,6 +39,30 @@
       },
       "revId": "a01cd82299d6c9090ec5273a9a0a09f0067cd80d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb833418_ef2c41f1",
+        "filename": "src/inspector/DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-08-18T19:03:29Z",
+      "side": 1,
+      "message": "Indeed. Maybe we can define REGEXP_FLAG_LIST in v8.h or the upcoming v8-regexp.h?",
+      "parentUuid": "2eeb3069_476e909f",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 31
+      },
+      "revId": "a01cd82299d6c9090ec5273a9a0a09f0067cd80d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
