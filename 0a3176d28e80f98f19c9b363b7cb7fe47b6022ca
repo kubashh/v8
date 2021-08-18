@@ -33,6 +33,24 @@
       "message": "Should we link to a bug here and in the other file? (Only useful if it\u0027ll take a while to address.)",
       "revId": "0a3176d28e80f98f19c9b363b7cb7fe47b6022ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f19795d5_f64041c2",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-08-18T08:57:25Z",
+      "side": 1,
+      "message": "ah yeah, let me do this, since it will take a couple of CLs to make this work properly.",
+      "parentUuid": "92944d6c_14a52250",
+      "revId": "0a3176d28e80f98f19c9b363b7cb7fe47b6022ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
