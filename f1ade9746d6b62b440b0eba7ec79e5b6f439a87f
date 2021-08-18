@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da46d0b2_4b412b6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-18T18:09:00Z",
+      "side": 1,
+      "message": "Hi Deepti, saw that you +1 a child change, this is a dependent change, ptal. Thanks!",
+      "revId": "f1ade9746d6b62b440b0eba7ec79e5b6f439a87f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
