@@ -11,6 +11,9 @@
 namespace v8 {
 namespace internal {
 
+// TODO(jgruber,pthier): Decouple more parts of the codebase from
+// JSRegExp::Flags. Consider removing JSRegExp::Flags.
+
 // Order is important! Sorted in alphabetic order by the flag char. Note this
 // means that flag bits are shuffled. Take care to keep them contiguous when
 // adding/removing flags.
@@ -33,6 +36,7 @@ constexpr int kRegExpFlagCount = REGEXP_FLAG_LIST(V);
 #undef V
 
 using RegExpFlags = base::Flags<RegExpFlag>;
+DEFINE_OPERATORS_FOR_FLAGS(RegExpFlags)
 
 #define V(Lower, Camel, ...)                \
   constexpr bool Is##Camel(RegExpFlags f) { \
