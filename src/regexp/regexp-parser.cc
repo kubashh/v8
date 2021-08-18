@@ -139,7 +139,7 @@ class RegExpBuilder : public ZoneObject {
   bool NeedsDesugaringForUnicode(RegExpCharacterClass* cc);
   bool NeedsDesugaringForIgnoreCase(base::uc32 c);
   Zone* zone() const { return zone_; }
-  bool unicode() const { return (flags_ & JSRegExp::kUnicode) != 0; }
+  bool unicode() const { return (flags_ & RegExpFlag::kUnicode) != 0; }
 
   Zone* const zone_;
   bool pending_empty_;
@@ -305,7 +305,9 @@ class RegExpParserImpl final {
   bool failed() { return failed_; }
   // The Unicode flag can't be changed using in-regexp syntax, so it's OK to
   // just read the initial flag value here.
-  bool unicode() const { return (top_level_flags_ & JSRegExp::kUnicode) != 0; }
+  bool unicode() const {
+    return (top_level_flags_ & RegExpFlag::kUnicode) != 0;
+  }
 
   static bool IsSyntaxCharacterOrSlash(base::uc32 c);
 
@@ -777,7 +779,7 @@ RegExpTree* RegExpParserImpl<CharT>::ParseDisjunction() {
               } else {
                 RegExpCapture* capture = GetCapture(index);
                 RegExpTree* atom = zone()->template New<RegExpBackReference>(
-                    capture, JSRegExp::AsJSRegExpFlags(builder->flags()));
+                    capture, builder->flags());
                 builder->AddAtom(atom);
               }
               break;
@@ -1017,7 +1019,7 @@ RegExpParserState* RegExpParserImpl<CharT>::ParseOpenParenthesis(
     }
   }
   if (subexpr_type == CAPTURE) {
-    if (captures_started_ >= JSRegExp::kMaxCaptures) {
+    if (captures_started_ >= RegExpMacroAssembler::kMaxRegisterCount) {
       ReportError(RegExpError::kTooManyCaptures);
       return nullptr;
     }
@@ -1124,7 +1126,7 @@ bool RegExpParserImpl<CharT>::ParseBackReferenceIndex(int* index_out) {
     base::uc32 c = current();
     if (IsDecimalDigit(c)) {
       value = 10 * value + (c - '0');
-      if (value > JSRegExp::kMaxCaptures) {
+      if (value > RegExpMacroAssembler::kMaxRegisterCount) {
         Reset(start);
         return false;
       }
@@ -1252,8 +1254,8 @@ bool RegExpParserImpl<CharT>::ParseNamedBackReference(
   if (state->IsInsideCaptureGroup(name)) {
     builder->AddEmpty();
   } else {
-    RegExpBackReference* atom = zone()->template New<RegExpBackReference>(
-        JSRegExp::AsJSRegExpFlags(builder->flags()));
+    RegExpBackReference* atom =
+        zone()->template New<RegExpBackReference>(builder->flags());
     atom->set_name(name);
 
     builder->AddAtom(atom);
