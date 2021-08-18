@@ -16,6 +16,23 @@
       "message": "I took your CL and made it generic to any memory order. Hopefully you have time before you leave. :)",
       "revId": "d6c65c75ffdcc7f4f46c5bfc42752263232fc997",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85c70d12_1b3be0cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-18T23:39:14Z",
+      "side": 1,
+      "message": "It\u0027s probably easiest to review the PS1, which just plumbs memory order through the TSAN stubs, and then review the latest PS, which emits the seq cst stuff.",
+      "revId": "d6c65c75ffdcc7f4f46c5bfc42752263232fc997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
