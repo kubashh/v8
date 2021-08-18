@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ac940c3_a1b8c2cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-08-18T12:35:56Z",
+      "side": 1,
+      "message": "PTAL. The fuzzers probably pick the gdbjit flag from this test case:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/test/mjsunit/wasm/gdbjit.js?q\u003dgdbjit\u0026start\u003d1\n\nSomething crashes - maybe some flag combination. We don\u0027t really care in correctness fuzzing.\n\nFeel free to also investigate the crash from the linked bug or just review this CL or both.",
+      "revId": "505c158a0976132a7097a58ccdd355ffe9731120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
