@@ -112,6 +112,7 @@ namespace internal {
   V(StringAtAsString)                    \
   V(StringSubstring)                     \
   IF_TSAN(V, TSANRelaxedStore)           \
+  IF_TSAN(V, TSANReleaseStore)           \
   IF_TSAN(V, TSANRelaxedLoad)            \
   V(TypeConversion)                      \
   V(TypeConversionNoContext)             \
@@ -1061,6 +1062,19 @@ class TSANRelaxedStoreDescriptor final
                          MachineType::AnyTagged())  // kValue
 
   DECLARE_DESCRIPTOR(TSANRelaxedStoreDescriptor)
+
+  static constexpr auto registers();
+  static constexpr bool kRestrictAllocatableRegisters = true;
+};
+
+class TSANReleaseStoreDescriptor final
+    : public StaticCallInterfaceDescriptor<TSANReleaseStoreDescriptor> {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kAddress, kValue)
+  DEFINE_PARAMETER_TYPES(MachineType::Pointer(),    // kAddress
+                         MachineType::AnyTagged())  // kValue
+
+  DECLARE_DESCRIPTOR(TSANReleaseStoreDescriptor)
 
   static constexpr auto registers();
   static constexpr bool kRestrictAllocatableRegisters = true;

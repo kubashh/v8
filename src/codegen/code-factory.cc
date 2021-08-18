@@ -400,6 +400,28 @@ Builtin CodeFactory::GetTSANRelaxedStoreStub(SaveFPRegsMode fp_mode, int size) {
 }
 
 // static
+Builtin CodeFactory::GetTSANReleaseStoreStub(SaveFPRegsMode fp_mode, int size) {
+  if (size == kInt8Size) {
+    return fp_mode == SaveFPRegsMode::kIgnore
+               ? Builtin::kTSANReleaseStore8IgnoreFP
+               : Builtin::kTSANReleaseStore8SaveFP;
+  } else if (size == kInt16Size) {
+    return fp_mode == SaveFPRegsMode::kIgnore
+               ? Builtin::kTSANReleaseStore16IgnoreFP
+               : Builtin::kTSANReleaseStore16SaveFP;
+  } else if (size == kInt32Size) {
+    return fp_mode == SaveFPRegsMode::kIgnore
+               ? Builtin::kTSANReleaseStore32IgnoreFP
+               : Builtin::kTSANReleaseStore32SaveFP;
+  } else {
+    CHECK_EQ(size, kInt64Size);
+    return fp_mode == SaveFPRegsMode::kIgnore
+               ? Builtin::kTSANReleaseStore64IgnoreFP
+               : Builtin::kTSANReleaseStore64SaveFP;
+  }
+}
+
+// static
 Builtin CodeFactory::GetTSANRelaxedLoadStub(SaveFPRegsMode fp_mode, int size) {
   if (size == kInt32Size) {
     return fp_mode == SaveFPRegsMode::kIgnore
