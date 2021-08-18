@@ -16,6 +16,52 @@
       "message": "Hi Deepti, saw that you +1 a child change, this is a dependent change, ptal. Thanks!",
       "revId": "f1ade9746d6b62b440b0eba7ec79e5b6f439a87f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49066ece_9f62d526",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-08-18T19:32:57Z",
+      "side": 1,
+      "message": "This instruction depends on the previous value of dst. At least for AVX we can do better:\n\n  Pxor(scratch, scratch);\n  Pinsrb(dst, scratch, src, uint8_t{0});\n  Pshufb(dst, scratch);\n  \nOn SSE it is probably not worth to add an extra MOV instruction to avoid the dependency, but using Xorps instead of Pxor would make it one byte shorter.",
+      "range": {
+        "startLine": 926,
+        "startChar": 4,
+        "endLine": 926,
+        "endChar": 38
+      },
+      "revId": "f1ade9746d6b62b440b0eba7ec79e5b6f439a87f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "986c30d3_b07902db",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-08-18T19:32:57Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 937,
+        "startChar": 4,
+        "endLine": 937,
+        "endChar": 38
+      },
+      "revId": "f1ade9746d6b62b440b0eba7ec79e5b6f439a87f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
