@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "343acc6c_a3020c40",
+        "filename": "src/objects/js-regexp.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-18T12:48:13Z",
+      "side": 1,
+      "message": "Right, rewrote this to use an Optional-style.",
+      "parentUuid": "c286a6cf_427950cc",
+      "range": {
+        "startLine": 115,
+        "startChar": 64,
+        "endLine": 115,
+        "endChar": 77
+      },
+      "revId": "26758c57662f7559635cac62e7cb17e8dca93924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e61a7460_1ed05a1d",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-08-18T11:42:40Z",
       "side": 1,
       "message": "nit: I think we could replace this assert of \"kFlagCount \u003d\u003d 8\" with \"kFlagCount \u003d\u003d kRegExpFlagCount\" now to also match the logic below.",
+      "revId": "26758c57662f7559635cac62e7cb17e8dca93924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f335f66_4dcdf7e9",
+        "filename": "src/objects/js-regexp.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-18T12:48:13Z",
+      "side": 1,
+      "message": "Hmm.. This actually looks like a bug, the buffer should have size count+1. Done.",
+      "parentUuid": "e61a7460_1ed05a1d",
       "revId": "26758c57662f7559635cac62e7cb17e8dca93924",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
