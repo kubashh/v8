@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04fde589_f2a77df0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-08-18T13:09:30Z",
+      "side": 1,
+      "message": "Georg: PTAL. Would you prefer to set other operator properties there? This is the smallest possible delta, and appears to solve the problem.\n\nManos: FYI.",
+      "revId": "f645643cac21f0e6b2e0211c53f95c6776364795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
