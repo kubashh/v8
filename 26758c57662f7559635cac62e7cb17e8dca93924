@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0dc0898_256aa322",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-18T11:42:40Z",
+      "side": 1,
+      "message": "Thanks Jakob! LGTM with nits.",
+      "revId": "26758c57662f7559635cac62e7cb17e8dca93924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c286a6cf_427950cc",
+        "filename": "src/objects/js-regexp.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-18T11:42:40Z",
+      "side": 1,
+      "message": "This is not part of your change, so consider it as a nit: but shouldn\u0027t we initialize *success with false in the beginning, instead of relying on call-sites to initialize it?",
+      "range": {
+        "startLine": 115,
+        "startChar": 64,
+        "endLine": 115,
+        "endChar": 77
+      },
+      "revId": "26758c57662f7559635cac62e7cb17e8dca93924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e61a7460_1ed05a1d",
+        "filename": "src/objects/js-regexp.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-18T11:42:40Z",
+      "side": 1,
+      "message": "nit: I think we could replace this assert of \"kFlagCount \u003d\u003d 8\" with \"kFlagCount \u003d\u003d kRegExpFlagCount\" now to also match the logic below.",
+      "revId": "26758c57662f7559635cac62e7cb17e8dca93924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
