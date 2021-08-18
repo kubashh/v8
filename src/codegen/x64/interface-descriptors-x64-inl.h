@@ -48,6 +48,11 @@ constexpr auto TSANRelaxedStoreDescriptor::registers() {
 }
 
 // static
+constexpr auto TSANReleaseStoreDescriptor::registers() {
+  return RegisterArray(arg_reg_1, arg_reg_2, kReturnRegister0);
+}
+
+// static
 constexpr auto TSANRelaxedLoadDescriptor::registers() {
   return RegisterArray(arg_reg_1, kReturnRegister0);
 }
