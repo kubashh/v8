@@ -49,6 +49,14 @@ namespace internal {
   IF_TSAN(TFC, TSANRelaxedStore32SaveFP, TSANRelaxedStore)                     \
   IF_TSAN(TFC, TSANRelaxedStore64IgnoreFP, TSANRelaxedStore)                   \
   IF_TSAN(TFC, TSANRelaxedStore64SaveFP, TSANRelaxedStore)                     \
+  IF_TSAN(TFC, TSANReleaseStore8IgnoreFP, TSANReleaseStore)                    \
+  IF_TSAN(TFC, TSANReleaseStore8SaveFP, TSANReleaseStore)                      \
+  IF_TSAN(TFC, TSANReleaseStore16IgnoreFP, TSANReleaseStore)                   \
+  IF_TSAN(TFC, TSANReleaseStore16SaveFP, TSANReleaseStore)                     \
+  IF_TSAN(TFC, TSANReleaseStore32IgnoreFP, TSANReleaseStore)                   \
+  IF_TSAN(TFC, TSANReleaseStore32SaveFP, TSANReleaseStore)                     \
+  IF_TSAN(TFC, TSANReleaseStore64IgnoreFP, TSANReleaseStore)                   \
+  IF_TSAN(TFC, TSANReleaseStore64SaveFP, TSANReleaseStore)                     \
                                                                                \
   /* TSAN support for loads in generated code.*/                               \
   IF_TSAN(TFC, TSANRelaxedLoad32IgnoreFP, TSANRelaxedLoad)                     \

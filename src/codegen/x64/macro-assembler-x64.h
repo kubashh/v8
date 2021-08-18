@@ -598,6 +598,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public SharedTurboAssembler {
   void CallTSANRelaxedStoreStub(Register address, Register value,
                                 SaveFPRegsMode fp_mode, int size,
                                 StubCallMode mode);
+  void CallTSANReleaseStoreStub(Register address, Register value,
+                                SaveFPRegsMode fp_mode, int size,
+                                StubCallMode mode);
   void CallTSANRelaxedLoadStub(Register address, SaveFPRegsMode fp_mode,
                                int size, StubCallMode mode);
 #endif  // V8_IS_TSAN
