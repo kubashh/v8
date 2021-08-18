@@ -1051,18 +1051,18 @@ static bool TransitivelyCalledBuiltinHasNoSideEffect(Builtin caller,
     case Builtin::kToObject:
     case Builtin::kToString:
 #ifdef V8_IS_TSAN
-    case Builtin::kTSANRelaxedStore8IgnoreFP:
-    case Builtin::kTSANRelaxedStore8SaveFP:
-    case Builtin::kTSANRelaxedStore16IgnoreFP:
-    case Builtin::kTSANRelaxedStore16SaveFP:
-    case Builtin::kTSANRelaxedStore32IgnoreFP:
-    case Builtin::kTSANRelaxedStore32SaveFP:
-    case Builtin::kTSANRelaxedStore64IgnoreFP:
-    case Builtin::kTSANRelaxedStore64SaveFP:
-    case Builtin::kTSANRelaxedLoad32IgnoreFP:
-    case Builtin::kTSANRelaxedLoad32SaveFP:
-    case Builtin::kTSANRelaxedLoad64IgnoreFP:
-    case Builtin::kTSANRelaxedLoad64SaveFP:
+    case Builtin::kTSANStore8IgnoreFP:
+    case Builtin::kTSANStore8SaveFP:
+    case Builtin::kTSANStore16IgnoreFP:
+    case Builtin::kTSANStore16SaveFP:
+    case Builtin::kTSANStore32IgnoreFP:
+    case Builtin::kTSANStore32SaveFP:
+    case Builtin::kTSANStore64IgnoreFP:
+    case Builtin::kTSANStore64SaveFP:
+    case Builtin::kTSANLoad32IgnoreFP:
+    case Builtin::kTSANLoad32SaveFP:
+    case Builtin::kTSANLoad64IgnoreFP:
+    case Builtin::kTSANLoad64SaveFP:
 #endif  // V8_IS_TSAN
     case Builtin::kWeakMapLookupHashIndex:
       return true;
