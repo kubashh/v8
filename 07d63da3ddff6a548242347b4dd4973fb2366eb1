@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a0767b0_1111e2c1",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-08-18T22:37:45Z",
+      "side": 1,
+      "message": "This looks redundant, as SSE4.1 includes SSSE3",
+      "range": {
+        "startLine": 935,
+        "startChar": 4,
+        "endLine": 935,
+        "endChar": 45
+      },
+      "revId": "07d63da3ddff6a548242347b4dd4973fb2366eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0f8425de_32ce7d82",
         "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.cc",
         "patchSetId": 3
