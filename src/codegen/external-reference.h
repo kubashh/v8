@@ -266,18 +266,12 @@ class StatsCounter;
   V(atomic_pair_exchange_function, "atomic_pair_exchange_function")            \
   V(atomic_pair_compare_exchange_function,                                     \
     "atomic_pair_compare_exchange_function")                                   \
-  IF_TSAN(V, tsan_relaxed_store_function_8_bits,                               \
-          "tsan_relaxed_store_function_8_bits")                                \
-  IF_TSAN(V, tsan_relaxed_store_function_16_bits,                              \
-          "tsan_relaxed_store_function_16_bits")                               \
-  IF_TSAN(V, tsan_relaxed_store_function_32_bits,                              \
-          "tsan_relaxed_store_function_32_bits")                               \
-  IF_TSAN(V, tsan_relaxed_store_function_64_bits,                              \
-          "tsan_relaxed_store_function_64_bits")                               \
-  IF_TSAN(V, tsan_relaxed_load_function_32_bits,                               \
-          "tsan_relaxed_load_function_32_bits")                                \
-  IF_TSAN(V, tsan_relaxed_load_function_64_bits,                               \
-          "tsan_relaxed_load_function_64_bits")                                \
+  IF_TSAN(V, tsan_store_function_8_bits, "tsan_store_function_8_bits")         \
+  IF_TSAN(V, tsan_store_function_16_bits, "tsan_store_function_16_bits")       \
+  IF_TSAN(V, tsan_store_function_32_bits, "tsan_store_function_32_bits")       \
+  IF_TSAN(V, tsan_store_function_64_bits, "tsan_store_function_64_bits")       \
+  IF_TSAN(V, tsan_load_function_32_bits, "tsan_load_function_32_bits")         \
+  IF_TSAN(V, tsan_load_function_64_bits, "tsan_load_function_64_bits")         \
   V(js_finalization_registry_remove_cell_from_unregister_token_map,            \
     "JSFinalizationRegistry::RemoveCellFromUnregisterTokenMap")                \
   V(re_match_for_call_from_js, "IrregexpInterpreter::MatchForCallFromJs")      \

@@ -94,18 +94,18 @@ struct WasmModule;
   V(RecordWriteEmitRememberedSetIgnoreFP) \
   V(RecordWriteOmitRememberedSetIgnoreFP) \
   V(ToNumber)                             \
-  IF_TSAN(V, TSANRelaxedStore8IgnoreFP)   \
-  IF_TSAN(V, TSANRelaxedStore8SaveFP)     \
-  IF_TSAN(V, TSANRelaxedStore16IgnoreFP)  \
-  IF_TSAN(V, TSANRelaxedStore16SaveFP)    \
-  IF_TSAN(V, TSANRelaxedStore32IgnoreFP)  \
-  IF_TSAN(V, TSANRelaxedStore32SaveFP)    \
-  IF_TSAN(V, TSANRelaxedStore64IgnoreFP)  \
-  IF_TSAN(V, TSANRelaxedStore64SaveFP)    \
-  IF_TSAN(V, TSANRelaxedLoad32IgnoreFP)   \
-  IF_TSAN(V, TSANRelaxedLoad32SaveFP)     \
-  IF_TSAN(V, TSANRelaxedLoad64IgnoreFP)   \
-  IF_TSAN(V, TSANRelaxedLoad64SaveFP)     \
+  IF_TSAN(V, TSANStore8IgnoreFP)          \
+  IF_TSAN(V, TSANStore8SaveFP)            \
+  IF_TSAN(V, TSANStore16IgnoreFP)         \
+  IF_TSAN(V, TSANStore16SaveFP)           \
+  IF_TSAN(V, TSANStore32IgnoreFP)         \
+  IF_TSAN(V, TSANStore32SaveFP)           \
+  IF_TSAN(V, TSANStore64IgnoreFP)         \
+  IF_TSAN(V, TSANStore64SaveFP)           \
+  IF_TSAN(V, TSANLoad32IgnoreFP)          \
+  IF_TSAN(V, TSANLoad32SaveFP)            \
+  IF_TSAN(V, TSANLoad64IgnoreFP)          \
+  IF_TSAN(V, TSANLoad64SaveFP)            \
   V(WasmAllocateArray_Uninitialized)      \
   V(WasmAllocateArray_InitNull)           \
   V(WasmAllocateArray_InitZero)           \
@@ -188,39 +188,37 @@ class V8_EXPORT_PRIVATE WasmCode final {
   }
 
 #ifdef V8_IS_TSAN
-  static RuntimeStubId GetTSANRelaxedStoreStub(SaveFPRegsMode fp_mode,
-                                               int size) {
+  static RuntimeStubId GetTSANStoreStub(SaveFPRegsMode fp_mode, int size) {
     if (size == kInt8Size) {
       return fp_mode == SaveFPRegsMode::kIgnore
-                 ? RuntimeStubId::kTSANRelaxedStore8IgnoreFP
-                 : RuntimeStubId::kTSANRelaxedStore8SaveFP;
+                 ? RuntimeStubId::kTSANStore8IgnoreFP
+                 : RuntimeStubId::kTSANStore8SaveFP;
     } else if (size == kInt16Size) {
       return fp_mode == SaveFPRegsMode::kIgnore
-                 ? RuntimeStubId::kTSANRelaxedStore16IgnoreFP
-                 : RuntimeStubId::kTSANRelaxedStore16SaveFP;
+                 ? RuntimeStubId::kTSANStore16IgnoreFP
+                 : RuntimeStubId::kTSANStore16SaveFP;
     } else if (size == kInt32Size) {
       return fp_mode == SaveFPRegsMode::kIgnore
-                 ? RuntimeStubId::kTSANRelaxedStore32IgnoreFP
-                 : RuntimeStubId::kTSANRelaxedStore32SaveFP;
+                 ? RuntimeStubId::kTSANStore32IgnoreFP
+                 : RuntimeStubId::kTSANStore32SaveFP;
     } else {
       CHECK_EQ(size, kInt64Size);
       return fp_mode == SaveFPRegsMode::kIgnore
-                 ? RuntimeStubId::kTSANRelaxedStore64IgnoreFP
-                 : RuntimeStubId::kTSANRelaxedStore64SaveFP;
+                 ? RuntimeStubId::kTSANStore64IgnoreFP
+                 : RuntimeStubId::kTSANStore64SaveFP;
     }
   }
 
-  static RuntimeStubId GetTSANRelaxedLoadStub(SaveFPRegsMode fp_mode,
-                                              int size) {
+  static RuntimeStubId GetTSANLoadStub(SaveFPRegsMode fp_mode, int size) {
     if (size == kInt32Size) {
       return fp_mode == SaveFPRegsMode::kIgnore
-                 ? RuntimeStubId::kTSANRelaxedLoad32IgnoreFP
-                 : RuntimeStubId::kTSANRelaxedLoad32SaveFP;
+                 ? RuntimeStubId::kTSANLoad32IgnoreFP
+                 : RuntimeStubId::kTSANLoad32SaveFP;
     } else {
       CHECK_EQ(size, kInt64Size);
       return fp_mode == SaveFPRegsMode::kIgnore
-                 ? RuntimeStubId::kTSANRelaxedLoad64IgnoreFP
-                 : RuntimeStubId::kTSANRelaxedLoad64SaveFP;
+                 ? RuntimeStubId::kTSANLoad64IgnoreFP
+                 : RuntimeStubId::kTSANLoad64SaveFP;
     }
   }
 #endif  // V8_IS_TSAN

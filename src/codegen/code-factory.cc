@@ -378,38 +378,32 @@ Callable CodeFactory::ArraySingleArgumentConstructor(
 
 #ifdef V8_IS_TSAN
 // static
-Builtin CodeFactory::GetTSANRelaxedStoreStub(SaveFPRegsMode fp_mode, int size) {
+Builtin CodeFactory::GetTSANStoreStub(SaveFPRegsMode fp_mode, int size) {
   if (size == kInt8Size) {
-    return fp_mode == SaveFPRegsMode::kIgnore
-               ? Builtin::kTSANRelaxedStore8IgnoreFP
-               : Builtin::kTSANRelaxedStore8SaveFP;
+    return fp_mode == SaveFPRegsMode::kIgnore ? Builtin::kTSANStore8IgnoreFP
+                                              : Builtin::kTSANStore8SaveFP;
   } else if (size == kInt16Size) {
-    return fp_mode == SaveFPRegsMode::kIgnore
-               ? Builtin::kTSANRelaxedStore16IgnoreFP
-               : Builtin::kTSANRelaxedStore16SaveFP;
+    return fp_mode == SaveFPRegsMode::kIgnore ? Builtin::kTSANStore16IgnoreFP
+                                              : Builtin::kTSANStore16SaveFP;
   } else if (size == kInt32Size) {
-    return fp_mode == SaveFPRegsMode::kIgnore
-               ? Builtin::kTSANRelaxedStore32IgnoreFP
-               : Builtin::kTSANRelaxedStore32SaveFP;
+    return fp_mode == SaveFPRegsMode::kIgnore ? Builtin::kTSANStore32IgnoreFP
+                                              : Builtin::kTSANStore32SaveFP;
   } else {
     CHECK_EQ(size, kInt64Size);
-    return fp_mode == SaveFPRegsMode::kIgnore
-               ? Builtin::kTSANRelaxedStore64IgnoreFP
-               : Builtin::kTSANRelaxedStore64SaveFP;
+    return fp_mode == SaveFPRegsMode::kIgnore ? Builtin::kTSANStore64IgnoreFP
+                                              : Builtin::kTSANStore64SaveFP;
   }
 }
 
 // static
-Builtin CodeFactory::GetTSANRelaxedLoadStub(SaveFPRegsMode fp_mode, int size) {
+Builtin CodeFactory::GetTSANLoadStub(SaveFPRegsMode fp_mode, int size) {
   if (size == kInt32Size) {
-    return fp_mode == SaveFPRegsMode::kIgnore
-               ? Builtin::kTSANRelaxedLoad32IgnoreFP
-               : Builtin::kTSANRelaxedLoad32SaveFP;
+    return fp_mode == SaveFPRegsMode::kIgnore ? Builtin::kTSANLoad32IgnoreFP
+                                              : Builtin::kTSANLoad32SaveFP;
   } else {
     CHECK_EQ(size, kInt64Size);
-    return fp_mode == SaveFPRegsMode::kIgnore
-               ? Builtin::kTSANRelaxedLoad64IgnoreFP
-               : Builtin::kTSANRelaxedLoad64SaveFP;
+    return fp_mode == SaveFPRegsMode::kIgnore ? Builtin::kTSANLoad64IgnoreFP
+                                              : Builtin::kTSANLoad64SaveFP;
   }
 }
 #endif  // V8_IS_TSAN
