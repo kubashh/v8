@@ -494,26 +494,30 @@ void TurboAssembler::CallRecordWriteStub(
 }
 
 #ifdef V8_IS_TSAN
-void TurboAssembler::CallTSANRelaxedStoreStub(Register address, Register value,
-                                              SaveFPRegsMode fp_mode, int size,
-                                              StubCallMode mode) {
+void TurboAssembler::CallTSANStoreStub(Register address, Register value,
+                                       SaveFPRegsMode fp_mode, int size,
+                                       std::memory_order order,
+                                       StubCallMode mode) {
   ASM_CODE_COMMENT(this);
   DCHECK(!AreAliased(address, value));
-  TSANRelaxedStoreDescriptor descriptor;
+  TSANStoreDescriptor descriptor;
   RegList registers = descriptor.allocatable_registers();
 
   MaybeSaveRegisters(registers);
 
   Register address_parameter(
-      descriptor.GetRegisterParameter(TSANRelaxedStoreDescriptor::kAddress));
+      descriptor.GetRegisterParameter(TSANStoreDescriptor::kAddress));
   Register value_parameter(
-      descriptor.GetRegisterParameter(TSANRelaxedStoreDescriptor::kValue));
+      descriptor.GetRegisterParameter(TSANStoreDescriptor::kValue));
+  Register order_parameter(
+      descriptor.GetRegisterParameter(TSANStoreDescriptor::kOrder));
 
-  // Prepare argument registers for calling GetTSANRelaxedStoreStub.
+  // Prepare argument registers for calling GetTSANStoreStub.
   MovePair(address_parameter, address, value_parameter, value);
+  movl(order_parameter, Immediate(static_cast<int32_t>(order)));
 
   if (isolate()) {
-    Builtin builtin = CodeFactory::GetTSANRelaxedStoreStub(fp_mode, size);
+    Builtin builtin = CodeFactory::GetTSANStoreStub(fp_mode, size);
     Handle<Code> code_target = isolate()->builtins()->code_handle(builtin);
     Call(code_target, RelocInfo::CODE_TARGET);
   }
@@ -531,7 +535,7 @@ void TurboAssembler::CallTSANRelaxedStoreStub(Register address, Register value,
   else {
     DCHECK_EQ(mode, StubCallMode::kCallWasmRuntimeStub);
     // Use {near_call} for direct Wasm call within a module.
-    auto wasm_target = wasm::WasmCode::GetTSANRelaxedStoreStub(fp_mode, size);
+    auto wasm_target = wasm::WasmCode::GetTSANStoreStub(fp_mode, size);
     near_call(wasm_target, RelocInfo::WASM_STUB_CALL);
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -539,22 +543,25 @@ void TurboAssembler::CallTSANRelaxedStoreStub(Register address, Register value,
   MaybeRestoreRegisters(registers);
 }
 
-void TurboAssembler::CallTSANRelaxedLoadStub(Register address,
-                                             SaveFPRegsMode fp_mode, int size,
-                                             StubCallMode mode) {
-  TSANRelaxedLoadDescriptor descriptor;
+void TurboAssembler::CallTSANLoadStub(Register address, SaveFPRegsMode fp_mode,
+                                      int size, std::memory_order order,
+                                      StubCallMode mode) {
+  TSANLoadDescriptor descriptor;
   RegList registers = descriptor.allocatable_registers();
 
   MaybeSaveRegisters(registers);
 
   Register address_parameter(
-      descriptor.GetRegisterParameter(TSANRelaxedLoadDescriptor::kAddress));
+      descriptor.GetRegisterParameter(TSANLoadDescriptor::kAddress));
+  Register order_parameter(
+      descriptor.GetRegisterParameter(TSANLoadDescriptor::kOrder));
 
-  // Prepare argument registers for calling TSANRelaxedLoad.
+  // Prepare argument registers for calling TSANLoad.
   Move(address_parameter, address);
+  movl(order_parameter, Immediate(static_cast<int32_t>(order)));
 
   if (isolate()) {
-    Builtin builtin = CodeFactory::GetTSANRelaxedLoadStub(fp_mode, size);
+    Builtin builtin = CodeFactory::GetTSANLoadStub(fp_mode, size);
     Handle<Code> code_target = isolate()->builtins()->code_handle(builtin);
     Call(code_target, RelocInfo::CODE_TARGET);
   }
@@ -572,7 +579,7 @@ void TurboAssembler::CallTSANRelaxedLoadStub(Register address,
   else {
     DCHECK_EQ(mode, StubCallMode::kCallWasmRuntimeStub);
     // Use {near_call} for direct Wasm call within a module.
-    auto wasm_target = wasm::WasmCode::GetTSANRelaxedLoadStub(fp_mode, size);
+    auto wasm_target = wasm::WasmCode::GetTSANLoadStub(fp_mode, size);
     near_call(wasm_target, RelocInfo::WASM_STUB_CALL);
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
