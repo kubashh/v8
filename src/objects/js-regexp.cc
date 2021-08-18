@@ -113,40 +113,21 @@ uint32_t JSRegExp::BacktrackLimit() const {
 // static
 JSRegExp::Flags JSRegExp::FlagsFromString(Isolate* isolate,
                                           Handle<String> flags, bool* success) {
-  int length = flags->length();
-  if (length == 0) {
-    *success = true;
-    return JSRegExp::kNone;
-  }
+  const int length = flags->length();
+
   // A longer flags string cannot be valid.
-  if (length > JSRegExp::kFlagCount) return JSRegExp::Flags(0);
-  JSRegExp::Flags value(0);
-  if (flags->IsSeqOneByteString()) {
-    DisallowGarbageCollection no_gc;
-    SeqOneByteString seq_flags = SeqOneByteString::cast(*flags);
-    for (int i = 0; i < length; i++) {
-      base::Optional<JSRegExp::Flag> maybe_flag =
-          JSRegExp::FlagFromChar(seq_flags.Get(i));
-      if (!maybe_flag.has_value()) return JSRegExp::Flags(0);
-      JSRegExp::Flag flag = *maybe_flag;
-      // Duplicate flag.
-      if (value & flag) return JSRegExp::Flags(0);
-      value |= flag;
-    }
-  } else {
-    flags = String::Flatten(isolate, flags);
-    DisallowGarbageCollection no_gc;
-    String::FlatContent flags_content = flags->GetFlatContent(no_gc);
-    for (int i = 0; i < length; i++) {
-      base::Optional<JSRegExp::Flag> maybe_flag =
-          JSRegExp::FlagFromChar(flags_content.Get(i));
-      if (!maybe_flag.has_value()) return JSRegExp::Flags(0);
-      JSRegExp::Flag flag = *maybe_flag;
-      // Duplicate flag.
-      if (value & flag) return JSRegExp::Flags(0);
-      value |= flag;
-    }
+  if (length > JSRegExp::kFlagCount) return {};
+
+  JSRegExp::Flags value;
+  FlatStringReader reader(isolate, String::Flatten(isolate, flags));
+
+  for (int i = 0; i < length; i++) {
+    base::Optional<JSRegExp::Flag> flag = JSRegExp::FlagFromChar(reader.Get(i));
+    if (!flag.has_value()) return {};
+    if (value & flag.value()) return {};  // Duplicate.
+    value |= flag.value();
   }
+
   *success = true;
   return value;
 }
@@ -161,14 +142,10 @@ Handle<String> JSRegExp::StringFromFlags(Isolate* isolate,
   // Translate to the lexicographically smaller string.
   int cursor = 0;
   char buffer[kFlagCount] = {'\0'};
-  if (flags & JSRegExp::kHasIndices) buffer[cursor++] = 'd';
-  if (flags & JSRegExp::kGlobal) buffer[cursor++] = 'g';
-  if (flags & JSRegExp::kIgnoreCase) buffer[cursor++] = 'i';
-  if (flags & JSRegExp::kLinear) buffer[cursor++] = 'l';
-  if (flags & JSRegExp::kMultiline) buffer[cursor++] = 'm';
-  if (flags & JSRegExp::kDotAll) buffer[cursor++] = 's';
-  if (flags & JSRegExp::kUnicode) buffer[cursor++] = 'u';
-  if (flags & JSRegExp::kSticky) buffer[cursor++] = 'y';
+#define V(Lower, Camel, Upper, Char, Bit) \
+  if (flags & JSRegExp::k##Camel) buffer[cursor++] = Char;
+  REGEXP_FLAG_LIST(V)
+#undef V
   return isolate->factory()->NewStringFromAsciiChecked(buffer);
 }
 
