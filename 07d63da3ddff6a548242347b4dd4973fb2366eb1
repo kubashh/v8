@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28142ee4_00f1db65",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-08-18T22:35:13Z",
+      "side": 1,
+      "message": "movlhps(dst, dst) is one byte shorter",
+      "range": {
+        "startLine": 959,
+        "startChar": 4,
+        "endLine": 959,
+        "endChar": 25
+      },
+      "revId": "07d63da3ddff6a548242347b4dd4973fb2366eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
