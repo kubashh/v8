@@ -16,6 +16,57 @@
       "message": "ptal, this is the final cleanup CL for flags.",
       "revId": "9bcda976c3744c61059f80b49eb043ad8eb721b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb2c8c5a_b635c78c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-18T13:13:16Z",
+      "side": 1,
+      "message": "Nice header cleanup!\n\nSince there are still some uses of JSRegExp::Flags left, can you add a TODO to regexp-flags.h to replace the remaining uses of JSRegExp::Flags?\nAlso a TODO to remove functions that shouldn\u0027t be needed anymore then (e.g. JSRegExp::AsJSRegExpFlag)",
+      "revId": "9bcda976c3744c61059f80b49eb043ad8eb721b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4805510c_1016dfc3",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-18T13:13:16Z",
+      "side": 1,
+      "message": "nit: IsUnicode(flags_)",
+      "revId": "9bcda976c3744c61059f80b49eb043ad8eb721b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6594cbf0_989fff91",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-18T13:13:16Z",
+      "side": 1,
+      "message": "nit: IsUnicode(top_level_flags_)",
+      "revId": "9bcda976c3744c61059f80b49eb043ad8eb721b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
