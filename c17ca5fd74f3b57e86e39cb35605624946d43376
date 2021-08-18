@@ -16,6 +16,24 @@
       "message": "Lg from my side. Not sure if owners are happy with the flag name... I like that it\u0027s short.",
       "revId": "c17ca5fd74f3b57e86e39cb35605624946d43376",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f403d0d9_2e9ce7f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-08-18T12:34:04Z",
+      "side": 1,
+      "message": "Indeed I would prefer a flag name that expresses the intend better. \"--no-throw\" sounds like we forbid/prevent/suppress thrown exceptions, which is not what the flag does. It just ignores uncaught exceptions, and always exits regularly, indicating success.\nSo what would you think about something like --ignore-uncaught-exceptions or --allow-uncaught-exceptions, or if you like it short maybe just --no-fail?",
+      "parentUuid": "5d0bdc9d_3a33577c",
+      "revId": "c17ca5fd74f3b57e86e39cb35605624946d43376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
