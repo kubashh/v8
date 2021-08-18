@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d431d4a_aecef5a7",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-18T11:30:52Z",
+      "side": 1,
+      "message": "If you need sequentially consistent rather than release store, this file is the one to modify (and well... rename everything 😄)",
+      "revId": "730041028f6596f2cd14ee48c920918f1f831029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d85f2e05_36bb5f1c",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2306,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-18T11:30:52Z",
+      "side": 1,
+      "message": "Please change this if you patch it in",
+      "range": {
+        "startLine": 2302,
+        "startChar": 0,
+        "endLine": 2306,
+        "endChar": 76
+      },
+      "revId": "730041028f6596f2cd14ee48c920918f1f831029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
