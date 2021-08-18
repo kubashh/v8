@@ -33,6 +33,7 @@ constexpr int kRegExpFlagCount = REGEXP_FLAG_LIST(V);
 #undef V
 
 using RegExpFlags = base::Flags<RegExpFlag>;
+DEFINE_OPERATORS_FOR_FLAGS(RegExpFlags)
 
 #define V(Lower, Camel, ...)                \
   constexpr bool Is##Camel(RegExpFlags f) { \
