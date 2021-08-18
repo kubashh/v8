@@ -69,6 +69,24 @@
       "parentUuid": "9c408406_19626cf6",
       "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "184da46e_93cf3830",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-18T16:03:44Z",
+      "side": 1,
+      "message": "This solution: \"template class Foo\u003cint\u003e;\"?\nI can try that, I wouldn\u0027t be able to add that to shared-macro-assembler-shared-ia32-x64.cc, but I can probably add it to macro-assembler-ia32.cc and macro-assembler-x64. Let me see if I can do that, otherwise I\u0027ll keep it in the header.",
+      "parentUuid": "03a10201_46e7dceb",
+      "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
