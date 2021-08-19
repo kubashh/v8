@@ -176,6 +176,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2c1afb76_3916b880",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-19T15:10:52Z",
+      "side": 1,
+      "message": "Are we talking about minimizing the call-site effects for TSAN builds (since isn\u0027t the jump to the OOL stub also not emitted in non-TSAN builds)? Is that something we care about?\n\nAnyway thanks for letting me know that runtime parameters matter here, I\u0027ll abandon this and re-use Santiago\u0027s original CL that adds separate builtins.",
+      "parentUuid": "4f8cb04e_6ad98e4c",
+      "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e727d8b_78fdbd8f",
         "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
         "patchSetId": 6
