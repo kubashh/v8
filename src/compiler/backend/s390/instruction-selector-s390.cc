@@ -712,13 +712,16 @@ void InstructionSelector::VisitProtectedLoad(Node* node) {
   UNIMPLEMENTED();
 }
 
-static void VisitGeneralStore(
-    InstructionSelector* selector, Node* node, MachineRepresentation rep,
-    WriteBarrierKind write_barrier_kind = kNoWriteBarrier) {
+static void VisitGeneralStore(InstructionSelector* selector, Node* node,
+                              MachineRepresentation rep,
+                              WriteBarrierKind write_barrier_kind,
+                              base::Optional<AtomicMemoryOrder> atomic_order) {
   S390OperandGenerator g(selector);
   Node* base = node->InputAt(0);
   Node* offset = node->InputAt(1);
   Node* value = node->InputAt(2);
+  const bool is_seqcst =
+      atomic_order && *atomic_order == AtomicMemoryOrder::kSeqCst;
   if (write_barrier_kind != kNoWriteBarrier && !FLAG_disable_write_barriers) {
     DCHECK(CanBeTaggedOrCompressedPointer(rep));
     AddressingMode addressing_mode;
@@ -739,7 +742,8 @@ static void VisitGeneralStore(
         WriteBarrierKindToRecordWriteMode(write_barrier_kind);
     InstructionOperand temps[] = {g.TempRegister(), g.TempRegister()};
     size_t const temp_count = arraysize(temps);
-    InstructionCode code = kArchStoreWithWriteBarrier;
+    InstructionCode code = is_seqcst ? kArchAtomicStoreWithWriteBarrier
+                                     : kArchStoreWithWriteBarrier;
     code |= AddressingModeField::encode(addressing_mode);
     code |= MiscField::encode(static_cast<int>(record_write_mode));
     selector->Emit(code, 0, nullptr, input_count, inputs, temp_count, temps);
@@ -821,7 +825,7 @@ void InstructionSelector::VisitStore(Node* node) {
     write_barrier_kind = kFullWriteBarrier;
   }
 
-  VisitGeneralStore(this, node, rep, write_barrier_kind);
+  VisitGeneralStore(this, node, rep, write_barrier_kind, base::nullopt);
 }
 
 void InstructionSelector::VisitProtectedStore(Node* node) {
@@ -2156,8 +2160,9 @@ void InstructionSelector::VisitWord32AtomicLoad(Node* node) {
 }
 
 void InstructionSelector::VisitWord32AtomicStore(Node* node) {
-  MachineRepresentation rep = AtomicStoreRepresentationOf(node->op());
-  VisitGeneralStore(this, node, rep);
+  AtomicStoreParameters store_params = AtomicStoreParametersOf(node->op());
+  VisitGeneralStore(this, node, store_params.representation(), kNoWriteBarrier,
+                    store_params.order());
 }
 
 void VisitAtomicExchange(InstructionSelector* selector, Node* node,
@@ -2395,8 +2400,9 @@ void InstructionSelector::VisitWord64AtomicLoad(Node* node) {
 }
 
 void InstructionSelector::VisitWord64AtomicStore(Node* node) {
-  MachineRepresentation rep = AtomicStoreRepresentationOf(node->op());
-  VisitGeneralStore(this, node, rep);
+  AtomicStoreParameters store_params = AtomicStoreParametersOf(node->op());
+  VisitGeneralStore(this, node, store_params.representation(), kNoWriteBarrier,
+                    store_params.order());
 }
 
 #define SIMD_TYPES(V) \
