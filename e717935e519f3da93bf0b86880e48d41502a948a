@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f5a2d5e_b18b84f2",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-19T06:39:11Z",
+      "side": 1,
+      "message": "specific",
+      "range": {
+        "startLine": 1183,
+        "startChar": 29,
+        "endLine": 1183,
+        "endChar": 39
+      },
+      "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9838272f_8377bcba",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-19T06:39:11Z",
+      "side": 1,
+      "message": "across (ty :)",
+      "range": {
+        "startLine": 1186,
+        "startChar": 52,
+        "endLine": 1186,
+        "endChar": 59
+      },
+      "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "709cc0ec_1f68be50",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-19T06:39:11Z",
+      "side": 1,
+      "message": "Why not do a Relaxed_Store / Release_Store depending on memory_order? That seems a clearer to me than inlining those methods here. Same for loads below.",
+      "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6252d66b_e2e00964",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-19T06:39:11Z",
+      "side": 1,
+      "message": "nit: kMemoryOrder",
+      "range": {
+        "startLine": 1059,
+        "startChar": 49,
+        "endLine": 1059,
+        "endChar": 55
+      },
+      "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ae1319a_191e4a57",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-19T06:39:11Z",
+      "side": 1,
+      "message": "I think Santiago avoided adding unneeded runtime args back then - the memory order could be handled by selecting the correct target method instead.",
+      "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
