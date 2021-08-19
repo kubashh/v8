@@ -2718,7 +2718,8 @@ void VisitAtomicStore(InstructionSelector* selector, Node* node,
       case MachineRepresentation::kTaggedPointer:  // Fall through.
       case MachineRepresentation::kTagged:
         DCHECK_EQ(AtomicWidthSize(width), kTaggedSize);
-        V8_FALLTHROUGH;
+        code = kArm64StlrCompressTagged;
+        break;
       case MachineRepresentation::kCompressedPointer:  // Fall through.
       case MachineRepresentation::kCompressed:
         CHECK(COMPRESS_POINTERS_BOOL);
