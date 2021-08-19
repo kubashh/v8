@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c010b7f_a33fad73",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-19T08:18:26Z",
+      "side": 1,
+      "message": "nullopt: not in a ternary; and make_optional: due to the symmetry IMO explicitly stating `base::Optional\u003cFlag\u003e` twice here looks better than\n\n  ? make_optional(foo)\n  : base::Optional\u003cFlag\u003e{};\n  \nAnd for switching to an if-else I\u0027d have to remove the constexpr.",
+      "parentUuid": "b6f1e9fc_c4f865e9",
+      "range": {
+        "startLine": 52,
+        "startChar": 27,
+        "endLine": 52,
+        "endChar": 47
+      },
+      "revId": "19c86f5cca14a40ac24b99df533b7f45097a8bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf6b83c3_c9565d9c",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-08-19T07:38:05Z",
       "side": 1,
       "message": "You could probably macro-magic together a static assert that tests this.",
+      "range": {
+        "startLine": 15,
+        "startChar": 38,
+        "endLine": 16,
+        "endChar": 25
+      },
+      "revId": "19c86f5cca14a40ac24b99df533b7f45097a8bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe878673_60e665fd",
+        "filename": "src/regexp/regexp-flags.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-19T08:18:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf6b83c3_c9565d9c",
       "range": {
         "startLine": 15,
         "startChar": 38,
