@@ -25,10 +25,20 @@ RUNTIME_FUNCTION(Runtime_DynamicImportCall) {
     import_assertions = args.at<Object>(2);
   }
 
-  Handle<Script> script(Script::cast(function->shared().script()), isolate);
-
-  while (script->has_eval_from_shared()) {
-    script = handle(Script::cast(script->eval_from_shared().script()), isolate);
+  Handle<Script> script;
+  {
+    DisallowGarbageCollection no_gc;
+    Script origin_script = Script::cast(function->shared().script());
+    while (origin_script.has_eval_from_shared()) {
+      HeapObject maybe_script = origin_script.eval_from_shared().script();
+      if (V8_UNLIKELY(!maybe_script.IsScript())) {
+        Handle<Object> exception = factory()->NewError(
+            error_function(), MessageTemplate::kUnsupported);
+        return NewRejectedPromise(this, api_context, exception);
+      }
+      origin_script = Script::cast(maybe_script);
+    }
+    script = handle(origin_script, isolate);
   }
 
   RETURN_RESULT_OR_FAILURE(isolate,

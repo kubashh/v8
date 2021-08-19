@@ -84,6 +84,7 @@ namespace internal {
   T(DefineDisallowed, "Cannot define property %, object is not extensible")    \
   T(DetachedOperation, "Cannot perform % on a detached ArrayBuffer")           \
   T(DuplicateTemplateProperty, "Object template has duplicate property '%'")   \
+  T(DynamicImportFailed, "Dynamic import failed'%'")                           \
   T(ExtendsValueNotConstructor,                                                \
     "Class extends value % is not a constructor or null")                      \
   T(FirstArgumentNotRegExp,                                                    \
