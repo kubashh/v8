@@ -414,116 +414,113 @@ TF_BUILTIN(EphemeronKeyBarrierIgnoreFP, WriteBarrierCodeStubAssembler) {
 }
 
 #ifdef V8_IS_TSAN
-class TSANRelaxedStoreCodeStubAssembler : public CodeStubAssembler {
+class TSANStoreCodeStubAssembler : public CodeStubAssembler {
  public:
-  explicit TSANRelaxedStoreCodeStubAssembler(
-      compiler::CodeAssemblerState* state)
+  explicit TSANStoreCodeStubAssembler(compiler::CodeAssemblerState* state)
       : CodeStubAssembler(state) {}
 
   TNode<ExternalReference> GetExternalReference(int size) {
     if (size == kInt8Size) {
-      return ExternalConstant(
-          ExternalReference::tsan_relaxed_store_function_8_bits());
+      return ExternalConstant(ExternalReference::tsan_store_function_8_bits());
     } else if (size == kInt16Size) {
-      return ExternalConstant(
-          ExternalReference::tsan_relaxed_store_function_16_bits());
+      return ExternalConstant(ExternalReference::tsan_store_function_16_bits());
     } else if (size == kInt32Size) {
-      return ExternalConstant(
-          ExternalReference::tsan_relaxed_store_function_32_bits());
+      return ExternalConstant(ExternalReference::tsan_store_function_32_bits());
     } else {
       CHECK_EQ(size, kInt64Size);
-      return ExternalConstant(
-          ExternalReference::tsan_relaxed_store_function_64_bits());
+      return ExternalConstant(ExternalReference::tsan_store_function_64_bits());
     }
   }
 
-  void GenerateTSANRelaxedStore(SaveFPRegsMode fp_mode, int size) {
+  void GenerateTSANStore(SaveFPRegsMode fp_mode, int size) {
     TNode<ExternalReference> function = GetExternalReference(size);
-    auto address =
-        UncheckedParameter<IntPtrT>(TSANRelaxedStoreDescriptor::kAddress);
+    auto address = UncheckedParameter<IntPtrT>(TSANStoreDescriptor::kAddress);
     TNode<IntPtrT> value = BitcastTaggedToWord(
-        UncheckedParameter<Object>(TSANRelaxedStoreDescriptor::kValue));
+        UncheckedParameter<Object>(TSANStoreDescriptor::kValue));
+    TNode<Int32T> order =
+        UncheckedParameter<Int32T>(TSANStoreDescriptor::kOrder);
     CallCFunctionWithCallerSavedRegisters(
         function, MachineType::Int32(), fp_mode,
         std::make_pair(MachineType::IntPtr(), address),
-        std::make_pair(MachineType::IntPtr(), value));
+        std::make_pair(MachineType::IntPtr(), value),
+        std::make_pair(MachineType::Int32(), order));
     Return(UndefinedConstant());
   }
 };
 
-TF_BUILTIN(TSANRelaxedStore8IgnoreFP, TSANRelaxedStoreCodeStubAssembler) {
-  GenerateTSANRelaxedStore(SaveFPRegsMode::kIgnore, kInt8Size);
+TF_BUILTIN(TSANStore8IgnoreFP, TSANStoreCodeStubAssembler) {
+  GenerateTSANStore(SaveFPRegsMode::kIgnore, kInt8Size);
 }
 
-TF_BUILTIN(TSANRelaxedStore8SaveFP, TSANRelaxedStoreCodeStubAssembler) {
-  GenerateTSANRelaxedStore(SaveFPRegsMode::kSave, kInt8Size);
+TF_BUILTIN(TSANStore8SaveFP, TSANStoreCodeStubAssembler) {
+  GenerateTSANStore(SaveFPRegsMode::kSave, kInt8Size);
 }
 
-TF_BUILTIN(TSANRelaxedStore16IgnoreFP, TSANRelaxedStoreCodeStubAssembler) {
-  GenerateTSANRelaxedStore(SaveFPRegsMode::kIgnore, kInt16Size);
+TF_BUILTIN(TSANStore16IgnoreFP, TSANStoreCodeStubAssembler) {
+  GenerateTSANStore(SaveFPRegsMode::kIgnore, kInt16Size);
 }
 
-TF_BUILTIN(TSANRelaxedStore16SaveFP, TSANRelaxedStoreCodeStubAssembler) {
-  GenerateTSANRelaxedStore(SaveFPRegsMode::kSave, kInt16Size);
+TF_BUILTIN(TSANStore16SaveFP, TSANStoreCodeStubAssembler) {
+  GenerateTSANStore(SaveFPRegsMode::kSave, kInt16Size);
 }
 
-TF_BUILTIN(TSANRelaxedStore32IgnoreFP, TSANRelaxedStoreCodeStubAssembler) {
-  GenerateTSANRelaxedStore(SaveFPRegsMode::kIgnore, kInt32Size);
+TF_BUILTIN(TSANStore32IgnoreFP, TSANStoreCodeStubAssembler) {
+  GenerateTSANStore(SaveFPRegsMode::kIgnore, kInt32Size);
 }
 
-TF_BUILTIN(TSANRelaxedStore32SaveFP, TSANRelaxedStoreCodeStubAssembler) {
-  GenerateTSANRelaxedStore(SaveFPRegsMode::kSave, kInt32Size);
+TF_BUILTIN(TSANStore32SaveFP, TSANStoreCodeStubAssembler) {
+  GenerateTSANStore(SaveFPRegsMode::kSave, kInt32Size);
 }
 
-TF_BUILTIN(TSANRelaxedStore64IgnoreFP, TSANRelaxedStoreCodeStubAssembler) {
-  GenerateTSANRelaxedStore(SaveFPRegsMode::kIgnore, kInt64Size);
+TF_BUILTIN(TSANStore64IgnoreFP, TSANStoreCodeStubAssembler) {
+  GenerateTSANStore(SaveFPRegsMode::kIgnore, kInt64Size);
 }
 
-TF_BUILTIN(TSANRelaxedStore64SaveFP, TSANRelaxedStoreCodeStubAssembler) {
-  GenerateTSANRelaxedStore(SaveFPRegsMode::kSave, kInt64Size);
+TF_BUILTIN(TSANStore64SaveFP, TSANStoreCodeStubAssembler) {
+  GenerateTSANStore(SaveFPRegsMode::kSave, kInt64Size);
 }
 
-class TSANRelaxedLoadCodeStubAssembler : public CodeStubAssembler {
+class TSANLoadCodeStubAssembler : public CodeStubAssembler {
  public:
-  explicit TSANRelaxedLoadCodeStubAssembler(compiler::CodeAssemblerState* state)
+  explicit TSANLoadCodeStubAssembler(compiler::CodeAssemblerState* state)
       : CodeStubAssembler(state) {}
 
   TNode<ExternalReference> GetExternalReference(int size) {
     if (size == kInt32Size) {
-      return ExternalConstant(
-          ExternalReference::tsan_relaxed_load_function_32_bits());
+      return ExternalConstant(ExternalReference::tsan_load_function_32_bits());
     } else {
       CHECK_EQ(size, kInt64Size);
-      return ExternalConstant(
-          ExternalReference::tsan_relaxed_load_function_64_bits());
+      return ExternalConstant(ExternalReference::tsan_load_function_64_bits());
     }
   }
 
-  void GenerateTSANRelaxedLoad(SaveFPRegsMode fp_mode, int size) {
+  void GenerateTSANLoad(SaveFPRegsMode fp_mode, int size) {
     TNode<ExternalReference> function = GetExternalReference(size);
-    auto address =
-        UncheckedParameter<IntPtrT>(TSANRelaxedLoadDescriptor::kAddress);
+    auto address = UncheckedParameter<IntPtrT>(TSANLoadDescriptor::kAddress);
+    TNode<Int32T> order =
+        UncheckedParameter<Int32T>(TSANLoadDescriptor::kOrder);
     CallCFunctionWithCallerSavedRegisters(
         function, MachineType::Int32(), fp_mode,
-        std::make_pair(MachineType::IntPtr(), address));
+        std::make_pair(MachineType::IntPtr(), address),
+        std::make_pair(MachineType::Int32(), order));
     Return(UndefinedConstant());
   }
 };
 
-TF_BUILTIN(TSANRelaxedLoad32IgnoreFP, TSANRelaxedLoadCodeStubAssembler) {
-  GenerateTSANRelaxedLoad(SaveFPRegsMode::kIgnore, kInt32Size);
+TF_BUILTIN(TSANLoad32IgnoreFP, TSANLoadCodeStubAssembler) {
+  GenerateTSANLoad(SaveFPRegsMode::kIgnore, kInt32Size);
 }
 
-TF_BUILTIN(TSANRelaxedLoad32SaveFP, TSANRelaxedLoadCodeStubAssembler) {
-  GenerateTSANRelaxedLoad(SaveFPRegsMode::kSave, kInt32Size);
+TF_BUILTIN(TSANLoad32SaveFP, TSANLoadCodeStubAssembler) {
+  GenerateTSANLoad(SaveFPRegsMode::kSave, kInt32Size);
 }
 
-TF_BUILTIN(TSANRelaxedLoad64IgnoreFP, TSANRelaxedLoadCodeStubAssembler) {
-  GenerateTSANRelaxedLoad(SaveFPRegsMode::kIgnore, kInt64Size);
+TF_BUILTIN(TSANLoad64IgnoreFP, TSANLoadCodeStubAssembler) {
+  GenerateTSANLoad(SaveFPRegsMode::kIgnore, kInt64Size);
 }
 
-TF_BUILTIN(TSANRelaxedLoad64SaveFP, TSANRelaxedLoadCodeStubAssembler) {
-  GenerateTSANRelaxedLoad(SaveFPRegsMode::kSave, kInt64Size);
+TF_BUILTIN(TSANLoad64SaveFP, TSANLoadCodeStubAssembler) {
+  GenerateTSANLoad(SaveFPRegsMode::kSave, kInt64Size);
 }
 #endif  // V8_IS_TSAN
 
