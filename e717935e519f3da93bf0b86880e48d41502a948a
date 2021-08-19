@@ -100,6 +100,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "acc983b5_90ba736b",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-19T15:30:37Z",
+      "side": 1,
+      "message": "It was for combinatorial explosion reasons, but for now it\u0027s fine to duplicate because x64 will only need SC additionally.\n\nPer the comment below, I\u0027ll abandon this and re-adopt Santiago\u0027s CL.",
+      "parentUuid": "709cc0ec_1f68be50",
+      "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6252d66b_e2e00964",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 6
