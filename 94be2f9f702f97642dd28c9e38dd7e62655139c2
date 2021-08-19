@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcc01658_177beb8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-19T20:30:28Z",
+      "side": 1,
+      "message": "adamk@ for OWNER stamp on base/atomicops.h\n\njgruber@ for main review\n\n(I didn\u0027t see cbruni@ was OOO before tagging, but since I don\u0027t own this CL I can\u0027t remove you now, sorry.)",
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
