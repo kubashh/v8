@@ -16,6 +16,29 @@
       "message": "adamk@ for OWNER stamp on base/atomicops.h\n\njgruber@ for main review\n\n(I didn\u0027t see cbruni@ was OOO before tagging, but since I don\u0027t own this CL I can\u0027t remove you now, sorry.)",
       "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dc8dfe3_d0b7843f",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-19T20:33:24Z",
+      "side": 1,
+      "message": "Anticipatory comment: this branch exists because the seqcst AtomicStore opcodes, in following consistency with the AtomicExchange opcodes, have the value as the first input instead of the last input.",
+      "range": {
+        "startLine": 587,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 47
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
