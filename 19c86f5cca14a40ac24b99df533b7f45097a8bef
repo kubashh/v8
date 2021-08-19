@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aee0f585_a490e679",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-19T09:01:24Z",
+      "side": 1,
+      "message": "\u003e And for switching to an if-else I\u0027d have to remove the constexpr.\n\nReally? I thought we were using modern enough C++ for that to no longer be the case. Either way, this is fine too.",
+      "parentUuid": "1c010b7f_a33fad73",
+      "range": {
+        "startLine": 52,
+        "startChar": 27,
+        "endLine": 52,
+        "endChar": 47
+      },
+      "revId": "19c86f5cca14a40ac24b99df533b7f45097a8bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf6b83c3_c9565d9c",
