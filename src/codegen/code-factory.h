@@ -91,6 +91,7 @@ class V8_EXPORT_PRIVATE CodeFactory final {
 
 #ifdef V8_IS_TSAN
   static Builtin GetTSANRelaxedStoreStub(SaveFPRegsMode fp_mode, int size);
+  static Builtin GetTSANSeqCstStoreStub(SaveFPRegsMode fp_mode, int size);
   static Builtin GetTSANRelaxedLoadStub(SaveFPRegsMode fp_mode, int size);
 #endif  // V8_IS_TSAN
 };
