@@ -87,6 +87,24 @@
       "parentUuid": "03a10201_46e7dceb",
       "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "966a6257_aa95bb02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-19T23:29:08Z",
+      "side": 1,
+      "message": "Yea, it doesn\u0027t work. I would need `template class SharedTurboAssembler\u003cTurboAssembler\u003e` in macro-assembler-shared-ia32-x64.cc, but TurboAssembler is not defined at that point. Explicitly instantiating the SharedTurboAssembler class anywhere else doesn\u0027t work, since we won\u0027t have the definitions of the member functions anywhere but in macro-assembler-shared-ia32-x64.cc.",
+      "parentUuid": "184da46e_93cf3830",
+      "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
