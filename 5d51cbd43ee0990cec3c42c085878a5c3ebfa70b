@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac5c9da9_b8c76a50",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-19T06:16:10Z",
+      "side": 1,
+      "message": "I\u0027d mention the flag name here.",
+      "revId": "5d51cbd43ee0990cec3c42c085878a5c3ebfa70b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a63ce2f6_6b0a85f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-19T06:16:10Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "5d51cbd43ee0990cec3c42c085878a5c3ebfa70b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b86aa6b6_38f090f7",
         "filename": "src/d8/d8.cc",
         "patchSetId": 6
@@ -14,6 +48,30 @@
       "writtenOn": "2021-08-18T15:58:21Z",
       "side": 1,
       "message": "I think the following would be slightly clearer:\n \n  if (Shell::options.no_fail) return 0;\n  return success \u003d\u003d Shell::options.expected_to_throw ? 1 : 0;",
+      "range": {
+        "startLine": 4520,
+        "startChar": 0,
+        "endLine": 4521,
+        "endChar": 58
+      },
+      "revId": "5d51cbd43ee0990cec3c42c085878a5c3ebfa70b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f6b5fa5_de9902e5",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4521,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-19T06:16:10Z",
+      "side": 1,
+      "message": "Agreed, and I\u0027d also put parentheses around the ?:",
+      "parentUuid": "b86aa6b6_38f090f7",
       "range": {
         "startLine": 4520,
         "startChar": 0,
