@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6902f29a_59205301",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-19T07:38:05Z",
+      "side": 1,
+      "message": "ast and websnapshot lgtm",
+      "revId": "19c86f5cca14a40ac24b99df533b7f45097a8bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f1e9fc_c4f865e9",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-19T07:38:05Z",
+      "side": 1,
+      "message": "Can you use make_optional and nullopt here?",
+      "range": {
+        "startLine": 52,
+        "startChar": 27,
+        "endLine": 52,
+        "endChar": 47
+      },
+      "revId": "19c86f5cca14a40ac24b99df533b7f45097a8bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6b83c3_c9565d9c",
+        "filename": "src/regexp/regexp-flags.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-19T07:38:05Z",
+      "side": 1,
+      "message": "You could probably macro-magic together a static assert that tests this.",
+      "range": {
+        "startLine": 15,
+        "startChar": 38,
+        "endLine": 16,
+        "endChar": 25
+      },
+      "revId": "19c86f5cca14a40ac24b99df533b7f45097a8bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
