@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2cc7ec83_e178fa7d",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-19T20:26:47Z",
+      "side": 1,
+      "message": "Renamed since SC was what was neede.",
+      "parentUuid": "05caebfd_f589b96a",
+      "revId": "730041028f6596f2cd14ee48c920918f1f831029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d85f2e05_36bb5f1c",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 1
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "Unresolving to make it visible. Also see the TODO right below.",
       "parentUuid": "d85f2e05_36bb5f1c",
+      "range": {
+        "startLine": 2302,
+        "startChar": 0,
+        "endLine": 2306,
+        "endChar": 76
+      },
+      "revId": "730041028f6596f2cd14ee48c920918f1f831029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96ee53da_4562da07",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2306,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-19T20:26:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67c003f3_26afb325",
       "range": {
         "startLine": 2302,
         "startChar": 0,
