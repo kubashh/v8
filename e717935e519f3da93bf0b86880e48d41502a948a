@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53358618_b19ee85e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-19T07:54:21Z",
+      "side": 1,
+      "message": "There are two changes here: One is adding the parameter, and the other is adding the atomic use. I\u0027d recommend splitting them into two CLs since it will make it easier to review, see the changes which are relevant to one part or the other, and see if the timeout is due to parametrization or not, among other things.",
+      "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f5a2d5e_b18b84f2",
@@ -135,6 +152,29 @@
       "side": 1,
       "message": "Yes, we had CLs to de-parametrize stubs for both the TSAN OOL and RecordWrite (Camillo did it for RecordWrite), in order to save run time. CL: https://chromium-review.googlesource.com/c/v8/v8/+/2917037\nRecordWrite CL: https://chromium-review.googlesource.com/c/v8/v8/+/2902731\n\nI\u0027d be hesitant to add another parameter because we spent time removing them. At the same time, I know we would be having more memory orders so it could be a combinatorial explosion.\nWe have: size (8/16/32/64 for stores, 32/64 for loads), FP saved (yes/no), and now memory order (release-acquire/relaxed/seq-cst?). If we are trying to optimize for less builtins I\u0027d say to parametrize size instead of order.\n\nCCing Camillo since he might have some more input on whether parametrization makes sense",
       "parentUuid": "3ae1319a_191e4a57",
+      "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e727d8b_78fdbd8f",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-19T07:54:21Z",
+      "side": 1,
+      "message": "The uniqueness is done automatically for you using reg_kind above. Line 576 could be changed to:\n  auto reg_kind \u003d is_seqcst ? OperandGenerator::RegisterUseKind::kUseUniqueRegister : OperandGenerator::RegisterUseKind::kUseRegister;",
+      "range": {
+        "startLine": 589,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 62
+      },
       "revId": "e717935e519f3da93bf0b86880e48d41502a948a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

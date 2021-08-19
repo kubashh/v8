@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "743719bd_af59f1da",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-19T07:54:21Z",
+      "side": 0,
+      "message": "What happened to the atomic_width. Is that not needed anymore? If so, please remove the parameter.",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 39
+      },
+      "revId": "723c418bffde843a2940483050bb55770f2cdad8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
