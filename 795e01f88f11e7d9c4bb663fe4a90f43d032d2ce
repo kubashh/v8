@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3e6ef11_a1f559f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-08-19T16:53:59Z",
+      "side": 1,
+      "message": "Hello Yang,\n\nHere is another small fix similar to the one you reviewed yesterday. Would you please take a look? Thanks!",
+      "revId": "795e01f88f11e7d9c4bb663fe4a90f43d032d2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
