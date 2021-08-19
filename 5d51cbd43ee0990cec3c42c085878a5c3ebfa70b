@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "25d79ff9_ba04fac5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-08-19T07:43:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac5c9da9_b8c76a50",
+      "revId": "5d51cbd43ee0990cec3c42c085878a5c3ebfa70b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a63ce2f6_6b0a85f8",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "Agreed, and I\u0027d also put parentheses around the ?:",
       "parentUuid": "b86aa6b6_38f090f7",
+      "range": {
+        "startLine": 4520,
+        "startChar": 0,
+        "endLine": 4521,
+        "endChar": 58
+      },
+      "revId": "5d51cbd43ee0990cec3c42c085878a5c3ebfa70b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "176481f3_668e7c46",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4521,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-08-19T07:43:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f6b5fa5_de9902e5",
       "range": {
         "startLine": 4520,
         "startChar": 0,
