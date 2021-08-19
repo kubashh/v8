@@ -63,6 +63,30 @@
       },
       "revId": "a01cd82299d6c9090ec5273a9a0a09f0067cd80d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb114a01_f8505eb5",
+        "filename": "src/inspector/DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-19T05:31:34Z",
+      "side": 1,
+      "message": "Ack, thanks - I reverted the inspector/ change, the previous code was simple enough.",
+      "parentUuid": "fb833418_ef2c41f1",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 31
+      },
+      "revId": "a01cd82299d6c9090ec5273a9a0a09f0067cd80d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
