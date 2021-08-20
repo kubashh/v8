@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a91bc73_92dfd5ac",
+        "filename": "src/base/atomicops.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-20T15:38:37Z",
+      "side": 1,
+      "message": "Eh, I don\u0027t feel very strongly either way but for something like basic atomic ops completeness seemed preferable to me.",
+      "parentUuid": "a07c29a8_02f637d8",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 1
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "45dedb45_3bd32b0d",
@@ -122,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "812ec474_c1a35994",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-20T15:38:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af961560_a7c9b87c",
+      "range": {
+        "startLine": 1373,
+        "startChar": 0,
+        "endLine": 1373,
+        "endChar": 65
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f725b562_0b0a1f15",
@@ -135,6 +183,30 @@
       "writtenOn": "2021-08-20T08:54:36Z",
       "side": 1,
       "message": "Q: Why do we have \"Word64\" twice on this opcode?",
+      "range": {
+        "startLine": 399,
+        "startChar": 4,
+        "endLine": 399,
+        "endChar": 30
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27494233_21889c79",
+        "filename": "src/compiler/backend/x64/instruction-codes-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-20T15:38:37Z",
+      "side": 1,
+      "message": "The naming scheme of atomic ops seems to be \u003cAtomicWidth\u003eAtomic\u003cLoad|Store\u003e\u003cOperandWidth\u003e\n\nThe first Word64 says to use an instruction that treats Word64s-at-a-time, the second Word64 says the value to store is itself a Word64.",
+      "parentUuid": "f725b562_0b0a1f15",
       "range": {
         "startLine": 399,
         "startChar": 4,
@@ -182,6 +254,30 @@
       "side": 1,
       "message": "I am not familiar with the AtomicExchange opcodes. Is that just a formatting, or is there an use? If it\u0027s just aesthetics I\u0027d rather not have the if here",
       "parentUuid": "7dc8dfe3_d0b7843f",
+      "range": {
+        "startLine": 587,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 47
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c750a4c0_9f989f2a",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-20T15:38:37Z",
+      "side": 1,
+      "message": "Not sure I understood the question. The AtomicExchange opcodes themselves are used for JS\u0027s `Atomics.exchange` as well as wasm\u0027s atomic exchange ops. It so happens that on x64 the common way to emit seqcst stores is to use xchg, since they\u0027re implicitly locked.",
+      "parentUuid": "4fd3b8f4_bbb03d70",
       "range": {
         "startLine": 587,
         "startChar": 0,
