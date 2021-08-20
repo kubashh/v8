@@ -18,6 +18,133 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd6f9684_79ead82d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-20T08:54:36Z",
+      "side": 1,
+      "message": "Moved Camillo to CC, also starting review (was WIP)",
+      "parentUuid": "bcc01658_177beb8e",
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b8c9d68_8f8905d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-20T08:54:36Z",
+      "side": 1,
+      "message": "Shu will continue this CL. Copying from another comment:\n  adamk@ for OWNER stamp on base/atomicops.h\n  jgruber@ for main review\n\nPipelining LGTM, with a couple of comments (but I am getting removed from OWNERs soon so please wait until Jakob\u0027s review). Haven\u0027t reviewed the xchg changes in detail.\n\nThere are some timeouts on the CQ bots. We had seen timeouts when adding the loads/stores in regular TSAN too. We marked some tests as SLOW (mostly benchmarks though).\nI\u0027d expect them to be timeouting due to this, and not due to deadlocks or similar, but I am not familiar with those tests.",
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a07c29a8_02f637d8",
+        "filename": "src/base/atomicops.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-20T08:54:36Z",
+      "side": 1,
+      "message": "I wouldn\u0027t add it if we are not using it, but I don\u0027t mind adding it for completeness. Up to you.",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 1
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45dedb45_3bd32b0d",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-20T08:54:36Z",
+      "side": 1,
+      "message": "I like this!",
+      "range": {
+        "startLine": 356,
+        "startChar": 6,
+        "endLine": 356,
+        "endChar": 35
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af961560_a7c9b87c",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-20T08:54:36Z",
+      "side": 1,
+      "message": "super nit: move this upwards before the if so that it catches the if else on line 1383 too. If the 1370 if/else gets removed, we will still have the DCHECK",
+      "range": {
+        "startLine": 1373,
+        "startChar": 0,
+        "endLine": 1373,
+        "endChar": 65
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f725b562_0b0a1f15",
+        "filename": "src/compiler/backend/x64/instruction-codes-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-20T08:54:36Z",
+      "side": 1,
+      "message": "Q: Why do we have \"Word64\" twice on this opcode?",
+      "range": {
+        "startLine": 399,
+        "startChar": 4,
+        "endLine": 399,
+        "endChar": 30
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7dc8dfe3_d0b7843f",
@@ -31,6 +158,30 @@
       "writtenOn": "2021-08-19T20:33:24Z",
       "side": 1,
       "message": "Anticipatory comment: this branch exists because the seqcst AtomicStore opcodes, in following consistency with the AtomicExchange opcodes, have the value as the first input instead of the last input.",
+      "range": {
+        "startLine": 587,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 47
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fd3b8f4_bbb03d70",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-20T08:54:36Z",
+      "side": 1,
+      "message": "I am not familiar with the AtomicExchange opcodes. Is that just a formatting, or is there an use? If it\u0027s just aesthetics I\u0027d rather not have the if here",
+      "parentUuid": "7dc8dfe3_d0b7843f",
       "range": {
         "startLine": 587,
         "startChar": 0,
