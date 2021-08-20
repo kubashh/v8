@@ -16,6 +16,29 @@
       "message": "This is largely cribbed from the question I asked yesterday in the group chat. Hopefully it will help other people who hit this DCHECK in the future.",
       "revId": "ccf6232075731201c77f84e6e8ce75f7ac2933fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae9fe8f1_20c3a8f3",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-20T08:29:20Z",
+      "side": 1,
+      "message": "I think this is such an exceptional case (and probably would use an \"explicit\" policy rather than a \"scoped\" one), this could be smth like: \"kDoNotRunMicrotasks should be used to annotate calls not intended to trigger microtasks\" (as it is in the MicrotaskScope doc comment). I\u0027d add that running microtasks mostly makes sense for making calls that trigger user code, and not running microtasks mostly makes sense when making calls that aren\u0027t intended to call any user code at all.",
+      "range": {
+        "startLine": 187,
+        "startChar": 43,
+        "endLine": 190,
+        "endChar": 42
+      },
+      "revId": "ccf6232075731201c77f84e6e8ce75f7ac2933fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
