@@ -16,6 +16,23 @@
       "message": "Looks like jgruber is ooo today -- zhin, could you stamp this?",
       "revId": "cf1e9dc21953263d2d9e1e51b8b57eb5569471e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea29d293_9d6a9f8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-20T16:08:36Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "cf1e9dc21953263d2d9e1e51b8b57eb5569471e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
