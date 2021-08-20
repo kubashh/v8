@@ -122,6 +122,24 @@
       "message": "Oh well, thanks for trying anyway :)\n\n2 other options could be:\n- try to generalise the subtleties between the 2 assemblers so there\u0027s no diff\n- a clearer separation between the CRTP bit and the shared superclass through delegation; similar to the classes in elements.h/.cc.\n\nbut I wouldn\u0027t be surprised if it ends up more messy. I\u0027m fine with the current design too (hence the +1).",
       "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a404090e_7c5c253a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-20T18:20:03Z",
+      "side": 1,
+      "message": "Thanks for the suggestions! In the latest PS, I added a class template to the inheritance hierarchy, instead of changing the current base class. Functionally nothing changes, but we are able to keep the cc file and function definition out of the header, let me know what you think.",
+      "parentUuid": "abd33cba_24ffd744",
+      "revId": "cd95fb4321958df1cdbf19672ad9e0d949f93bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
