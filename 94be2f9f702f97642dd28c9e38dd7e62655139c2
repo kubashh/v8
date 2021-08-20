@@ -286,6 +286,30 @@
       },
       "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75874c45_f3377d93",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2021-08-20T15:53:22Z",
+      "side": 1,
+      "message": "I mean that if value can be the last input, we could get rid of the if.",
+      "parentUuid": "c750a4c0_9f989f2a",
+      "range": {
+        "startLine": 587,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 47
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
