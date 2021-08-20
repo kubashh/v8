@@ -16,6 +16,23 @@
       "message": "Dan PTAL",
       "revId": "4d4ace0ff6de460fa737af9aef69ae781ed9d492",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cd7ac7d_a48b1ba2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2021-08-20T14:20:44Z",
+      "side": 1,
+      "message": "😞",
+      "revId": "4d4ace0ff6de460fa737af9aef69ae781ed9d492",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
