@@ -182,6 +182,13 @@ class V8_NODISCARD CallDepthScope {
     if (do_callback) {
       if (microtask_queue && microtask_queue->microtasks_policy() ==
                                  v8::MicrotasksPolicy::kScoped) {
+        // If this DCHECK fires, code that could trigger microtask
+        // execution is not correctly wrapped in a `MicrotasksScope`.
+        // In general, it is most common to simply allow microtasks to run.
+        // Code that does something more unusual (e.g. simulating a sync
+        // call by making an async call and waiting on the result) may want
+        // to defer microtask execution to avoid unexpected reordering of
+        // tasks.
         DCHECK(microtask_queue->GetMicrotasksScopeDepth() ||
                !microtask_queue->DebugMicrotasksScopeDepthIsZero());
       }
