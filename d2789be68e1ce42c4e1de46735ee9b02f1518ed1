@@ -34,6 +34,23 @@
       "parentUuid": "14a71f03_c96cd33b",
       "revId": "d2789be68e1ce42c4e1de46735ee9b02f1518ed1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02ef8810_d1c37beb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-20T16:29:16Z",
+      "side": 1,
+      "message": "Ah wait, no, this approach of re-performing the store is wildly unsafe unless the whole thing is locked! You can\u0027t duplicate an atomic store, which is causing futex tests to iloop since they tend to do a cmpxchg in a busy loop in one thread and a store in a busy loop in another thread.\n\nHm, we need to rethink our approach, like replacing the actual store with a call to the OOL stub, but we can\u0027t duplicate.",
+      "revId": "d2789be68e1ce42c4e1de46735ee9b02f1518ed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
