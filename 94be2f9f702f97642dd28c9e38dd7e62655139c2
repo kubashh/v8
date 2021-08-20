@@ -310,6 +310,30 @@
       },
       "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "493d73df_111be6c6",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-20T15:58:07Z",
+      "side": 1,
+      "message": "There are also some other differences like the value can\u0027t be an immediate, and fewer addressing modes are available. I still think a separate branch is easier to read.",
+      "parentUuid": "75874c45_f3377d93",
+      "range": {
+        "startLine": 587,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 47
+      },
+      "revId": "94be2f9f702f97642dd28c9e38dd7e62655139c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
