@@ -67,6 +67,23 @@
       "message": "Looks like this could still use a test too?",
       "revId": "82fb83a523d82973cf96967d0417ba57899f5b23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b7f5ee5_affddff4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-08-23T13:42:37Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "82fb83a523d82973cf96967d0417ba57899f5b23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
