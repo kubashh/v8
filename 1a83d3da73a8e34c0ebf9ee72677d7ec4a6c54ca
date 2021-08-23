@@ -16,6 +16,23 @@
       "message": "Hi Marja.\nCan you take a look at this small fix?",
       "revId": "1a83d3da73a8e34c0ebf9ee72677d7ec4a6c54ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dddb872d_c6698e65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2021-08-23T18:21:59Z",
+      "side": 1,
+      "message": "Hi Leszek.\n\nCan you take a look at this small fix?\n\nThanks!",
+      "revId": "1a83d3da73a8e34c0ebf9ee72677d7ec4a6c54ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
