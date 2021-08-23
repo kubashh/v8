@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "674fdd83_da3fe48e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-08-23T12:13:52Z",
+      "side": 1,
+      "message": "Hey Jaro,\n\nHere\u0027s the fix for the inspector to treat promise rejections like exceptions.\nPlease take a look.\n\nthanks,\nBenedikt",
+      "revId": "c4a49440cfb8f293cb2c0c48dda27d7f001c1686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
