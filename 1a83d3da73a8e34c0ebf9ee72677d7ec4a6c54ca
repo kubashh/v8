@@ -33,6 +33,52 @@
       "message": "Hi Leszek.\n\nCan you take a look at this small fix?\n\nThanks!",
       "revId": "1a83d3da73a8e34c0ebf9ee72677d7ec4a6c54ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32985e5c_24d57d2c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2577,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-24T10:27:46Z",
+      "side": 1,
+      "message": "I\u0027m wondering if we could somehow re-use ParseAndClassifyIdentifier here, which includes the ShouldBanArguments check as well as this IsValidIdentifier / is AWAIT logic.\n\nThen again, ParseAndClassifyIdentifier calls GetIdentifier, which has already been called here by ParsePropertyName, so if we did want to reuse the logic we\u0027d need to pass that in as an already known parsed name.\n\nSo if not reusing ParseAndClassifyIdentifier, maybe at least a \"ClassifyIdentifier\" helper method that encapsulates the logic here and is defined close to ParseAndClassifyIdentifier so that we know to keep the logic in both up-to-date?",
+      "range": {
+        "startLine": 2565,
+        "startChar": 0,
+        "endLine": 2577,
+        "endChar": 7
+      },
+      "revId": "1a83d3da73a8e34c0ebf9ee72677d7ec4a6c54ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "291de818_6abbb06b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2600,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-08-24T10:27:46Z",
+      "side": 1,
+      "message": "This doesn\u0027t have to be in an \u0027else\u0027, it can also be used in the ASSIGN case, since \u0027CoverInitializedName\u0027 also covers \u0027IdentifierReference\u0027 -- though I couldn\u0027t come up with an example test that exercises this via object destructuring, because the \"arguments\" identifier would get caught later on as an invalid strict mode use of \"arguments\".",
+      "range": {
+        "startLine": 2599,
+        "startChar": 8,
+        "endLine": 2600,
+        "endChar": 57
+      },
+      "revId": "1a83d3da73a8e34c0ebf9ee72677d7ec4a6c54ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
