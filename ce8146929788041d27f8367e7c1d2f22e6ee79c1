@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "975b8ff8_6042b4fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-24T20:53:47Z",
+      "side": 1,
+      "message": "Toon, I went ahead to merge this, since this is inline with your recommendations, and is better than moving everything to the header file. Let me know if there are other improvements you\u0027ld like to see done.",
+      "revId": "ce8146929788041d27f8367e7c1d2f22e6ee79c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
