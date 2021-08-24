@@ -51,6 +51,24 @@
       "parentUuid": "e9eaa11c_1fdcfa73",
       "revId": "f8a3768f3a0aced8c557058fb8300c42d0a20eb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83bdc49f_34b6cb30",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-08-24T18:41:02Z",
+      "side": 1,
+      "message": "I do find your alternate if-statement preferable, if it\u0027s all the same to you. But I don\u0027t feel strongly.\n\nThanks for the background.",
+      "parentUuid": "8ef29c54_95d08731",
+      "revId": "f8a3768f3a0aced8c557058fb8300c42d0a20eb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
