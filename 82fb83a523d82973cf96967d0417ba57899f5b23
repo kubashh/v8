@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "33701531_5bd780e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-24T05:30:10Z",
+      "side": 1,
+      "message": "I don\u0027t think so, it\u0027s a helper function for FrameSummary (not StackTraceFrameIterator) and has a bunch of valid use sites.",
+      "parentUuid": "680538b8_b9877b41",
+      "revId": "82fb83a523d82973cf96967d0417ba57899f5b23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d976cdb3_9d671683",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -82,6 +100,24 @@
       "writtenOn": "2021-08-23T13:42:37Z",
       "side": 1,
       "message": "thanks!",
+      "revId": "82fb83a523d82973cf96967d0417ba57899f5b23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff9d0994_7a7d56bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-24T05:30:10Z",
+      "side": 1,
+      "message": "Camillo landed a test in a non-public repo. Maybe we should revert the original quick-fix and turn it into a CHECK (followup).",
+      "parentUuid": "c2ea76dd_b424c7e3",
       "revId": "82fb83a523d82973cf96967d0417ba57899f5b23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
