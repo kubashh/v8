@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4796c24a_fed96afa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-24T20:16:48Z",
+      "side": 1,
+      "message": "Hi Adam, this is a merge cl to cherry-pick the fix to 9.4, since the bug was introduced right before 9.4 cut.",
+      "revId": "81e9d1fd6400f8f0e485db6d73981d40544637f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
