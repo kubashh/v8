@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a19805ec_c910c72b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-08-24T18:21:31Z",
+      "side": 1,
+      "message": "lgtm % typo in comment",
+      "revId": "6e4f69010ebf53599e46de1fe72f384e100c007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79b0d431_1398f550",
+        "filename": "test/mjsunit/regress/wasm/regress-1242689.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-08-24T18:21:31Z",
+      "side": 1,
+      "message": "Typo: s/ovewriting/overwriting/",
+      "range": {
+        "startLine": 6,
+        "startChar": 42,
+        "endLine": 6,
+        "endChar": 52
+      },
+      "revId": "6e4f69010ebf53599e46de1fe72f384e100c007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
