@@ -69,6 +69,24 @@
       "parentUuid": "8ef29c54_95d08731",
       "revId": "f8a3768f3a0aced8c557058fb8300c42d0a20eb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c7d893_088182d4",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-24T20:23:12Z",
+      "side": 1,
+      "message": "Sg, fixed, ptal.",
+      "parentUuid": "83bdc49f_34b6cb30",
+      "revId": "f8a3768f3a0aced8c557058fb8300c42d0a20eb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
