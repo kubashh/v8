@@ -16,6 +16,23 @@
       "message": "Hi Adam, ptal, thanks!",
       "revId": "f8a3768f3a0aced8c557058fb8300c42d0a20eb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9eaa11c_1fdcfa73",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-08-24T18:31:17Z",
+      "side": 1,
+      "message": "This case looks like the one to me that\u0027s not necessarily improved by merging the opcodes, since you\u0027re now using register choices as a proxy for CPU support. Do you like this better because your hope is that in the long run, there are no \"SSE\" or \"AVX\" prefixes on SIMD ops?",
+      "revId": "f8a3768f3a0aced8c557058fb8300c42d0a20eb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
