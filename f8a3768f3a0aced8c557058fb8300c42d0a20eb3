@@ -33,6 +33,24 @@
       "message": "This case looks like the one to me that\u0027s not necessarily improved by merging the opcodes, since you\u0027re now using register choices as a proxy for CPU support. Do you like this better because your hope is that in the long run, there are no \"SSE\" or \"AVX\" prefixes on SIMD ops?",
       "revId": "f8a3768f3a0aced8c557058fb8300c42d0a20eb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ef29c54_95d08731",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-24T18:37:37Z",
+      "side": 1,
+      "message": "You are right, I would like there to be no SSE or AVX prefixes on SIMD ops.\nHere, the conditionals are a bit weird, I can change the conditionals to read:\n\nif (AVX supported) {\n  // avx codegen using scratch\n} else {\n  DCHECK(dst \u003d\u003d src1)\n  // sse codegen\n}\n\nand it will be the same.\nAlso, CpuFeatureScope will DCHECK if AVX is not supported, so it will catch the case we forget to require dst \u003d\u003d src1 in SSE case.\n\nEventually, I would move this to shared-macro-assembler, and have Liftoff also use this. I will then update this check to support all cases, AVX, SSE, and remove the restriction that dst \u003d\u003d src1.",
+      "parentUuid": "e9eaa11c_1fdcfa73",
+      "revId": "f8a3768f3a0aced8c557058fb8300c42d0a20eb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
