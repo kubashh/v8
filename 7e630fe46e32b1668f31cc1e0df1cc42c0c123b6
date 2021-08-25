@@ -16,6 +16,40 @@
       "message": "Hi Adam, ptal, thanks!",
       "revId": "7e630fe46e32b1668f31cc1e0df1cc42c0c123b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf328682_15d8cc3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-08-25T01:25:31Z",
+      "side": 1,
+      "message": "Looks good except for a stylistic point related to CRTP, see below.",
+      "revId": "7e630fe46e32b1668f31cc1e0df1cc42c0c123b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6075e975_e718653c",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-08-25T01:25:31Z",
+      "side": 1,
+      "message": "The other CRTP code I know of in V8, ParserBase, doesn\u0027t create forwarding stubs like this one, and instead just calls through impl() as needed. I don\u0027t think consistency is deeply-needed here but I\u0027m curious for your thoughts on this question.",
+      "revId": "7e630fe46e32b1668f31cc1e0df1cc42c0c123b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
