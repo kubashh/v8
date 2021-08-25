@@ -68,6 +68,24 @@
       "parentUuid": "6075e975_e718653c",
       "revId": "7e630fe46e32b1668f31cc1e0df1cc42c0c123b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2473ae8b_3d389bbf",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-08-25T18:03:55Z",
+      "side": 1,
+      "message": "Thanks for the pointer. And I\u0027ll admit that the ParserBase example, from experience writing there, feels pretty noisy. Thanks for consideration, lgtm as-is.",
+      "parentUuid": "c01f61c9_3dd9e4cd",
+      "revId": "7e630fe46e32b1668f31cc1e0df1cc42c0c123b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
