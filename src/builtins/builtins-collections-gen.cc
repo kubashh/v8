@@ -46,7 +46,8 @@ class BaseCollectionsAssembler : public CodeStubAssembler {
   void AddConstructorEntries(Variant variant, TNode<Context> context,
                              TNode<Context> native_context,
                              TNode<HeapObject> collection,
-                             TNode<Object> initial_entries);
+                             TNode<Object> initial_entries,
+                             TNode<Object> size_hint);
 
   // Fast path for adding constructor entries.  Assumes the entries are a fast
   // JS array (see CodeStubAssembler::BranchIfFastJSArray()).
@@ -121,7 +122,8 @@ class BaseCollectionsAssembler : public CodeStubAssembler {
   // entries passed in the constructor. AllocateTable() can use this to avoid
   // the time of growing/rehashing when adding the constructor entries.
   TNode<IntPtrT> EstimatedInitialSize(TNode<Object> initial_entries,
-                                      TNode<BoolT> is_fast_jsarray);
+                                      TNode<BoolT> is_fast_jsarray,
+                                      TNode<Object> size_hint);
 
   void GotoIfNotJSReceiver(const TNode<Object> obj, Label* if_not_receiver);
 
@@ -169,11 +171,12 @@ void BaseCollectionsAssembler::AddConstructorEntry(
 
 void BaseCollectionsAssembler::AddConstructorEntries(
     Variant variant, TNode<Context> context, TNode<Context> native_context,
-    TNode<HeapObject> collection, TNode<Object> initial_entries) {
+    TNode<HeapObject> collection, TNode<Object> initial_entries,
+    TNode<Object> size_hint) {
   TVARIABLE(BoolT, use_fast_loop,
             IsFastJSArrayWithNoCustomIteration(context, initial_entries));
   TNode<IntPtrT> at_least_space_for =
-      EstimatedInitialSize(initial_entries, use_fast_loop.value());
+      EstimatedInitialSize(initial_entries, use_fast_loop.value(), size_hint);
   Label allocate_table(this, &use_fast_loop), exit(this), fast_loop(this),
       slow_loop(this, Label::kDeferred);
   Goto(&allocate_table);
@@ -419,8 +422,10 @@ void BaseCollectionsAssembler::GenerateConstructor(
     Variant variant, Handle<String> constructor_function_name,
     TNode<Object> new_target, TNode<IntPtrT> argc, TNode<Context> context) {
   const int kIterableArg = 0;
+  const int kSizeHintArg = 1;
   CodeStubArguments args(this, argc);
   TNode<Object> iterable = args.GetOptionalArgumentValue(kIterableArg);
+  TNode<Object> size_hint = args.GetOptionalArgumentValue(kSizeHintArg);
 
   Label if_undefined(this, Label::kDeferred);
   GotoIf(IsUndefined(new_target), &if_undefined);
@@ -429,7 +434,8 @@ void BaseCollectionsAssembler::GenerateConstructor(
   TNode<JSObject> collection = AllocateJSCollection(
       context, GetConstructor(variant, native_context), CAST(new_target));
 
-  AddConstructorEntries(variant, context, native_context, collection, iterable);
+  AddConstructorEntries(variant, context, native_context, collection, iterable,
+                        size_hint);
   Return(collection);
 
   BIND(&if_undefined);
@@ -512,11 +518,16 @@ int BaseCollectionsAssembler::GetTableOffset(Variant variant) {
 }
 
 TNode<IntPtrT> BaseCollectionsAssembler::EstimatedInitialSize(
-    TNode<Object> initial_entries, TNode<BoolT> is_fast_jsarray) {
+    TNode<Object> initial_entries, TNode<BoolT> is_fast_jsarray,
+    TNode<Object> size_hint) {
   return Select<IntPtrT>(
       is_fast_jsarray,
       [=] { return SmiUntag(LoadFastJSArrayLength(CAST(initial_entries))); },
-      [=] { return IntPtrConstant(0); });
+      [=] {
+        return Select<IntPtrT>(
+            TaggedIsSmi(size_hint), [=] { return SmiUntag(CAST(size_hint)); },
+            [=] { return IntPtrConstant(0); });
+      });
 }
 
 void BaseCollectionsAssembler::GotoIfNotJSReceiver(const TNode<Object> obj,
@@ -841,10 +852,18 @@ TNode<HeapObject> CollectionsBuiltinsAssembler::AllocateJSCollectionIterator(
 
 TNode<HeapObject> CollectionsBuiltinsAssembler::AllocateTable(
     Variant variant, TNode<IntPtrT> at_least_space_for) {
+  TNode<IntPtrT> at_least_space_for_rounded_up =
+      IntPtrRoundUpToPowerOfTwo32(at_least_space_for);
   if (variant == kMap || variant == kWeakMap) {
-    return AllocateOrderedHashMap();
+    TNode<IntPtrT> capacity =
+        IntPtrMax(at_least_space_for_rounded_up,
+                  IntPtrConstant(OrderedHashMap::kInitialCapacity));
+    return AllocateOrderedHashMap(capacity);
   } else {
-    return AllocateOrderedHashSet();
+    TNode<IntPtrT> capacity =
+        IntPtrMax(at_least_space_for_rounded_up,
+                  IntPtrConstant(OrderedHashSet::kInitialCapacity));
+    return AllocateOrderedHashSet(capacity);
   }
 }
 

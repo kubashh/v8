@@ -1980,7 +1980,8 @@ TEST(AllocateOrderedNameDictionary) {
 TEST(AllocateOrderedHashSet) {
   // ignoring capacitites, as the API cannot take them
   auto csa_alloc = [](CodeStubAssembler& m, TNode<IntPtrT> cap) {
-    return m.AllocateOrderedHashSet();
+    return m.AllocateOrderedHashSet(
+        IntPtrConstant(OrderedHashSet::kInitialCapacity));
   };
   auto alloc = [](Isolate* isolate, int capacity) {
     return OrderedHashSet::Allocate(isolate, OrderedHashSet::kInitialCapacity)
@@ -1992,7 +1993,8 @@ TEST(AllocateOrderedHashSet) {
 TEST(AllocateOrderedHashMap) {
   // ignoring capacities, as the API cannot take them
   auto csa_alloc = [](CodeStubAssembler& m, TNode<IntPtrT> cap) {
-    return m.AllocateOrderedHashMap();
+    return m.AllocateOrderedHashMap(
+        IntPtrConstant(OrderedHashMap::kInitialCapacity));
   };
   auto alloc = [](Isolate* isolate, int capacity) {
     return OrderedHashMap::Allocate(isolate, OrderedHashMap::kInitialCapacity)

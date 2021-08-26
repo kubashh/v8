@@ -1841,9 +1841,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<NameDictionary> CopyNameDictionary(TNode<NameDictionary> dictionary,
                                            Label* large_object_fallback);
 
-  TNode<OrderedHashSet> AllocateOrderedHashSet();
+  TNode<OrderedHashSet> AllocateOrderedHashSet(TNode<IntPtrT> capacity);
 
-  TNode<OrderedHashMap> AllocateOrderedHashMap();
+  TNode<OrderedHashMap> AllocateOrderedHashMap(TNode<IntPtrT> capacity);
 
   // Allocates an OrderedNameDictionary of the given capacity. This guarantees
   // that |capacity| entries can be added without reallocating.

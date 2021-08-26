@@ -3757,14 +3757,14 @@ TNode<OrderedNameDictionary> CodeStubAssembler::AllocateOrderedNameDictionary(
   return AllocateOrderedNameDictionary(IntPtrConstant(capacity));
 }
 
-TNode<OrderedHashSet> CodeStubAssembler::AllocateOrderedHashSet() {
-  return AllocateOrderedHashTableWithCapacity<OrderedHashSet>(
-      IntPtrConstant(OrderedHashSet::kInitialCapacity));
+TNode<OrderedHashSet> CodeStubAssembler::AllocateOrderedHashSet(
+    TNode<IntPtrT> capacity) {
+  return AllocateOrderedHashTableWithCapacity<OrderedHashSet>(capacity);
 }
 
-TNode<OrderedHashMap> CodeStubAssembler::AllocateOrderedHashMap() {
-  return AllocateOrderedHashTableWithCapacity<OrderedHashMap>(
-      IntPtrConstant(OrderedHashMap::kInitialCapacity));
+TNode<OrderedHashMap> CodeStubAssembler::AllocateOrderedHashMap(
+    TNode<IntPtrT> capacity) {
+  return AllocateOrderedHashTableWithCapacity<OrderedHashMap>(capacity);
 }
 
 TNode<JSObject> CodeStubAssembler::AllocateJSObjectFromMap(
