@@ -16,6 +16,24 @@
       "message": "thanks. sorry that I missed that redness....",
       "revId": "c8c7bae07e1b7e7cf6acf4404166cbba267237d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09537a0c_1630a5ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-26T17:18:52Z",
+      "side": 1,
+      "message": "Unfortunately the failures are very mysterious, I have no idea why your CL should cause some SIMD tests to fail.",
+      "parentUuid": "ea184da4_c0f3022f",
+      "revId": "c8c7bae07e1b7e7cf6acf4404166cbba267237d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
