@@ -52,6 +52,97 @@
       "parentUuid": "0d8d64d0_835bb699",
       "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d81f7165_220414d7",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-26T07:14:09Z",
+      "side": 1,
+      "message": "I\u0027d suggest folding these into a single TSANStore descriptor (and rename TSANRelaxedLoad to TSANLoad).",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21c42879_6fa131e3",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-26T07:14:09Z",
+      "side": 1,
+      "message": "Could we fold this with the below and take perhaps an std::memory_order arg? \n\nIn general it\u0027d be nice to have consistent naming conventions for everything related to memory ordering. We currently have AtomicTag internal types (like RelaxedLoadTag) and use these everywhere. Then there\u0027s std::memory_order with a different naming style, and things like the atomic functions in base/. I think we should settle on a consistent style in V8, and define a memory order enum that we can use in places like this.",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "171aa13a_05252ec6",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-26T07:14:09Z",
+      "side": 1,
+      "message": "This part is entirely determine by the tsan_op and size args, no? Could we avoid it by defining an EmitStore(tsan_op, size) function and calling that from the macro?\n\nIn fact, then maybe you could replace the macro by a function (the string paste below could be replaced by an EmitTSAN(RelaxedLoadTag tag, ...) function and friends).",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5755286_01a5fc61",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-26T07:14:09Z",
+      "side": 1,
+      "message": "Please add a short comment explaining that EmitTSANFoo can\u0027t handle FOR_TESTING.",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d297ab73_c0ee9337",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-26T07:14:09Z",
+      "side": 1,
+      "message": "This is now outdated, same below in L463 and L494",
+      "range": {
+        "startLine": 445,
+        "startChar": 51,
+        "endLine": 445,
+        "endChar": 68
+      },
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
