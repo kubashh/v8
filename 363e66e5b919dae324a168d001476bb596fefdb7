@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60e73b69_6739e299",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-26T11:00:47Z",
+      "side": 1,
+      "message": "ptal, this is purely a bug fix. I think this area can be simplified but will do so in a separate CL.\n\nThe regression test performs stress allocation; I am not sure it\u0027s worth adding.",
+      "revId": "363e66e5b919dae324a168d001476bb596fefdb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
