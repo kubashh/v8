@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da6b0c26_46516e84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-27T08:32:12Z",
+      "side": 1,
+      "message": "Thanks, I think there\u0027s more to do here wrt getters/constness/initialization (using placement new) :) ",
+      "revId": "8be27e2088efede7ebc19ed7acd6f64bf6de29d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
