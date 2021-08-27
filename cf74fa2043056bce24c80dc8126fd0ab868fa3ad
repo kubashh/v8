@@ -16,6 +16,46 @@
       "message": "ptal, delta in https://chromium-review.googlesource.com/c/v8/v8/+/3123412/1..2\n\nI missed this flag the in the last reland...",
       "revId": "cf74fa2043056bce24c80dc8126fd0ab868fa3ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c12fac00_24de2e0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-08-27T08:24:25Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "cf74fa2043056bce24c80dc8126fd0ab868fa3ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fb374ea_14b733f4",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-08-27T08:24:25Z",
+      "side": 1,
+      "message": "drive-by: can this be made const?",
+      "range": {
+        "startLine": 213,
+        "startChar": 30,
+        "endLine": 213,
+        "endChar": 31
+      },
+      "revId": "cf74fa2043056bce24c80dc8126fd0ab868fa3ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
