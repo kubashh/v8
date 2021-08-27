@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdfaac6b_d980cd05",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-27T08:34:17Z",
+      "side": 0,
+      "message": "I don\u0027t think we can avoid the optional type, the value might be a pending allocation.",
+      "revId": "44d3832d43819a85abdbcef6790a27b802d2f4d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
