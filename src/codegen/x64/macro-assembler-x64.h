@@ -418,16 +418,10 @@ class V8_EXPORT_PRIVATE TurboAssembler
   // Non-SSE2 instructions.
   void Pextrd(Register dst, XMMRegister src, uint8_t imm8);
 
-  void Pinsrb(XMMRegister dst, XMMRegister src1, Register src2, uint8_t imm8);
-  void Pinsrb(XMMRegister dst, XMMRegister src1, Operand src2, uint8_t imm8);
-  void Pinsrw(XMMRegister dst, XMMRegister src1, Register src2, uint8_t imm8);
-  void Pinsrw(XMMRegister dst, XMMRegister src1, Operand src2, uint8_t imm8);
-  void Pinsrd(XMMRegister dst, XMMRegister src1, Register src2, uint8_t imm8);
-  void Pinsrd(XMMRegister dst, XMMRegister src1, Operand src2, uint8_t imm8);
-  void Pinsrd(XMMRegister dst, Register src2, uint8_t imm8);
-  void Pinsrd(XMMRegister dst, Operand src2, uint8_t imm8);
   void Pinsrq(XMMRegister dst, XMMRegister src1, Register src2, uint8_t imm8);
   void Pinsrq(XMMRegister dst, XMMRegister src1, Operand src2, uint8_t imm8);
+  void PinsrdPreSse41(XMMRegister dst, Register src, uint8_t imm8);
+  void PinsrdPreSse41(XMMRegister dst, Operand src, uint8_t imm8);
 
   void CompareRoot(Register with, RootIndex index);
   void CompareRoot(Operand with, RootIndex index);

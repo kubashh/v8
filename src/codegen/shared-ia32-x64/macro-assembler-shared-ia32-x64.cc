@@ -84,6 +84,30 @@ void SharedTurboAssembler::Movapd(XMMRegister dst, XMMRegister src) {
   }
 }
 
+void SharedTurboAssembler::Pinsrb(XMMRegister dst, XMMRegister src1,
+                                  Register src2, uint8_t imm8) {
+  PinsrHelper(this, &Assembler::vpinsrb, &Assembler::pinsrb, dst, src1, src2,
+              imm8, base::Optional<CpuFeature>(SSE4_1));
+}
+
+void SharedTurboAssembler::Pinsrb(XMMRegister dst, XMMRegister src1,
+                                  Operand src2, uint8_t imm8) {
+  PinsrHelper(this, &Assembler::vpinsrb, &Assembler::pinsrb, dst, src1, src2,
+              imm8, base::Optional<CpuFeature>(SSE4_1));
+}
+
+void SharedTurboAssembler::Pinsrw(XMMRegister dst, XMMRegister src1,
+                                  Register src2, uint8_t imm8) {
+  PinsrHelper(this, &Assembler::vpinsrw, &Assembler::pinsrw, dst, src1, src2,
+              imm8);
+}
+
+void SharedTurboAssembler::Pinsrw(XMMRegister dst, XMMRegister src1,
+                                  Operand src2, uint8_t imm8) {
+  PinsrHelper(this, &Assembler::vpinsrw, &Assembler::pinsrw, dst, src1, src2,
+              imm8);
+}
+
 void SharedTurboAssembler::Shufps(XMMRegister dst, XMMRegister src1,
                                   XMMRegister src2, uint8_t imm8) {
   if (CpuFeatures::IsSupported(AVX)) {

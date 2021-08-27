@@ -2013,71 +2013,9 @@ void TurboAssembler::Pextrd(Register dst, XMMRegister src, uint8_t imm8) {
   shrq(dst, Immediate(32));
 }
 
-namespace {
-
-template <typename Src>
-using AvxFn = void (Assembler::*)(XMMRegister, XMMRegister, Src, uint8_t);
-template <typename Src>
-using NoAvxFn = void (Assembler::*)(XMMRegister, Src, uint8_t);
-
-template <typename Src>
-void PinsrHelper(Assembler* assm, AvxFn<Src> avx, NoAvxFn<Src> noavx,
-                 XMMRegister dst, XMMRegister src1, Src src2, uint8_t imm8,
-                 base::Optional<CpuFeature> feature = base::nullopt) {
-  if (CpuFeatures::IsSupported(AVX)) {
-    CpuFeatureScope scope(assm, AVX);
-    (assm->*avx)(dst, src1, src2, imm8);
-    return;
-  }
-
-  if (dst != src1) {
-    assm->movaps(dst, src1);
-  }
-  if (feature.has_value()) {
-    DCHECK(CpuFeatures::IsSupported(*feature));
-    CpuFeatureScope scope(assm, *feature);
-    (assm->*noavx)(dst, src2, imm8);
-  } else {
-    (assm->*noavx)(dst, src2, imm8);
-  }
-}
-}  // namespace
-
-void TurboAssembler::Pinsrb(XMMRegister dst, XMMRegister src1, Register src2,
-                            uint8_t imm8) {
-  PinsrHelper(this, &Assembler::vpinsrb, &Assembler::pinsrb, dst, src1, src2,
-              imm8, base::Optional<CpuFeature>(SSE4_1));
-}
-
-void TurboAssembler::Pinsrb(XMMRegister dst, XMMRegister src1, Operand src2,
-                            uint8_t imm8) {
-  PinsrHelper(this, &Assembler::vpinsrb, &Assembler::pinsrb, dst, src1, src2,
-              imm8, base::Optional<CpuFeature>(SSE4_1));
-}
-
-void TurboAssembler::Pinsrw(XMMRegister dst, XMMRegister src1, Register src2,
-                            uint8_t imm8) {
-  PinsrHelper(this, &Assembler::vpinsrw, &Assembler::pinsrw, dst, src1, src2,
-              imm8);
-}
-
-void TurboAssembler::Pinsrw(XMMRegister dst, XMMRegister src1, Operand src2,
-                            uint8_t imm8) {
-  PinsrHelper(this, &Assembler::vpinsrw, &Assembler::pinsrw, dst, src1, src2,
-              imm8);
-}
-
-void TurboAssembler::Pinsrd(XMMRegister dst, XMMRegister src1, Register src2,
-                            uint8_t imm8) {
-  // Need a fall back when SSE4_1 is unavailable. Pinsrb and Pinsrq are used
-  // only by Wasm SIMD, which requires SSE4_1 already.
-  if (CpuFeatures::IsSupported(SSE4_1)) {
-    PinsrHelper(this, &Assembler::vpinsrd, &Assembler::pinsrd, dst, src1, src2,
-                imm8, base::Optional<CpuFeature>(SSE4_1));
-    return;
-  }
-
-  Movd(kScratchDoubleReg, src2);
+void TurboAssembler::PinsrdPreSse41(XMMRegister dst, Register src,
+                                    uint8_t imm8) {
+  Movd(kScratchDoubleReg, src);
   if (imm8 == 1) {
     punpckldq(dst, kScratchDoubleReg);
   } else {
@@ -2086,31 +2024,15 @@ void TurboAssembler::Pinsrd(XMMRegister dst, XMMRegister src1, Register src2,
   }
 }
 
-void TurboAssembler::Pinsrd(XMMRegister dst, XMMRegister src1, Operand src2,
-                            uint8_t imm8) {
-  // Need a fall back when SSE4_1 is unavailable. Pinsrb and Pinsrq are used
-  // only by Wasm SIMD, which requires SSE4_1 already.
-  if (CpuFeatures::IsSupported(SSE4_1)) {
-    PinsrHelper(this, &Assembler::vpinsrd, &Assembler::pinsrd, dst, src1, src2,
-                imm8, base::Optional<CpuFeature>(SSE4_1));
-    return;
-  }
-
-  Movd(kScratchDoubleReg, src2);
+void TurboAssembler::PinsrdPreSse41(XMMRegister dst, Operand src,
+                                    uint8_t imm8) {
+  Movd(kScratchDoubleReg, src);
   if (imm8 == 1) {
     punpckldq(dst, kScratchDoubleReg);
   } else {
     DCHECK_EQ(0, imm8);
     Movss(dst, kScratchDoubleReg);
   }
-}
-
-void TurboAssembler::Pinsrd(XMMRegister dst, Register src2, uint8_t imm8) {
-  Pinsrd(dst, dst, src2, imm8);
-}
-
-void TurboAssembler::Pinsrd(XMMRegister dst, Operand src2, uint8_t imm8) {
-  Pinsrd(dst, dst, src2, imm8);
 }
 
 void TurboAssembler::Pinsrq(XMMRegister dst, XMMRegister src1, Register src2,

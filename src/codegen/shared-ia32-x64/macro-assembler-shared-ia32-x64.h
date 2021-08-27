@@ -59,6 +59,11 @@ class V8_EXPORT_PRIVATE SharedTurboAssembler : public TurboAssemblerBase {
     }
   }
 
+  void Pinsrb(XMMRegister dst, XMMRegister src1, Register src2, uint8_t imm8);
+  void Pinsrb(XMMRegister dst, XMMRegister src1, Operand src2, uint8_t imm8);
+  void Pinsrw(XMMRegister dst, XMMRegister src1, Register src2, uint8_t imm8);
+  void Pinsrw(XMMRegister dst, XMMRegister src1, Operand src2, uint8_t imm8);
+
   // Supports both SSE and AVX. Move src1 to dst if they are not equal on SSE.
   template <typename Op>
   void Pshufb(XMMRegister dst, XMMRegister src, Op mask) {
@@ -420,6 +425,33 @@ class V8_EXPORT_PRIVATE SharedTurboAssembler : public TurboAssemblerBase {
   void S128Load32Splat(XMMRegister dst, Operand src);
   void S128Store64Lane(Operand dst, XMMRegister src, uint8_t laneidx);
 
+  template <typename Src>
+  using AvxFn = void (Assembler::*)(XMMRegister, XMMRegister, Src, uint8_t);
+  template <typename Src>
+  using NoAvxFn = void (Assembler::*)(XMMRegister, Src, uint8_t);
+
+  template <typename Src>
+  void PinsrHelper(Assembler* assm, AvxFn<Src> avx, NoAvxFn<Src> noavx,
+                   XMMRegister dst, XMMRegister src1, Src src2, uint8_t imm8,
+                   base::Optional<CpuFeature> feature = base::nullopt) {
+    if (CpuFeatures::IsSupported(AVX)) {
+      CpuFeatureScope scope(assm, AVX);
+      (assm->*avx)(dst, src1, src2, imm8);
+      return;
+    }
+
+    if (dst != src1) {
+      assm->movaps(dst, src1);
+    }
+    if (feature.has_value()) {
+      DCHECK(CpuFeatures::IsSupported(*feature));
+      CpuFeatureScope scope(assm, *feature);
+      (assm->*noavx)(dst, src2, imm8);
+    } else {
+      (assm->*noavx)(dst, src2, imm8);
+    }
+  }
+
  private:
   template <typename Op>
   void I8x16SplatPreAvx2(XMMRegister dst, Op src, XMMRegister scratch);
@@ -483,6 +515,24 @@ class V8_EXPORT_PRIVATE SharedTurboAssemblerBase : public SharedTurboAssembler {
     Xorps(dst, src,
           ExternalReferenceAsOperand(
               ExternalReference::address_of_float_neg_constant(), tmp));
+  }
+
+  template <typename Op>
+  void Pinsrd(XMMRegister dst, XMMRegister src1, Op src2, uint8_t imm8) {
+    if (!CpuFeatures::IsSupported(SSE4_1)) {
+      if (dst != src1) {
+        movaps(dst, src1);
+      }
+      impl()->PinsrdPreSse41(dst, src2, imm8);
+    } else {
+      PinsrHelper(this, &Assembler::vpinsrd, &Assembler::pinsrd, dst, src1,
+                  src2, imm8, base::Optional<CpuFeature>(SSE4_1));
+    }
+  }
+
+  template <typename Op>
+  void Pinsrd(XMMRegister dst, Op src2, uint8_t imm8) {
+    Pinsrd(dst, dst, src2, imm8);
   }
 
   void F64x2ConvertLowI32x4U(XMMRegister dst, XMMRegister src,
