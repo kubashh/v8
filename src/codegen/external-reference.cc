@@ -193,6 +193,10 @@ ExternalReference ExternalReference::handle_scope_implementer_address(
   return ExternalReference(isolate->handle_scope_implementer_address());
 }
 
+ExternalReference ExternalReference::cage_base_address(Isolate* isolate) {
+  return ExternalReference(isolate->cage_base_address());
+}
+
 #ifdef V8_HEAP_SANDBOX
 ExternalReference ExternalReference::external_pointer_table_address(
     Isolate* isolate) {

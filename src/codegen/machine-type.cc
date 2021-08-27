@@ -53,6 +53,8 @@ const char* MachineReprToString(MachineRepresentation rep) {
       return "kRepTagged";
     case MachineRepresentation::kCompressedPointer:
       return "kRepCompressedPointer";
+    case MachineRepresentation::kCagedPointer:
+      return "kRepCagedPointer";
     case MachineRepresentation::kCompressed:
       return "kRepCompressed";
     case MachineRepresentation::kMapWord:

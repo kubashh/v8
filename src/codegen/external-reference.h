@@ -84,13 +84,13 @@ class StatsCounter;
   V(re_grow_stack, "NativeRegExpMacroAssembler::GrowStack()")                  \
   V(re_word_character_map, "NativeRegExpMacroAssembler::word_character_map")   \
   V(javascript_execution_assert, "javascript_execution_assert")                \
+  V(cage_base_address, "Isolate::cage_base_address()")                         \
   EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V)
 
 #ifdef V8_HEAP_SANDBOX
-#define EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V) \
-  V(external_pointer_table_address,                          \
-    "Isolate::external_pointer_table_address("               \
-    ")")
+#define EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V)                   \
+  V(external_pointer_table_address, "Isolate::external_pointer_table_address(" \
+                                    ")")
 #else
 #define EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V)
 #endif  // V8_HEAP_SANDBOX

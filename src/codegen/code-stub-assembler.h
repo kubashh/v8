@@ -1029,6 +1029,51 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Works only with V8_ENABLE_FORCE_SLOW_PATH compile time flag. Nop otherwise.
   void GotoIfForceSlowPath(Label* if_true);
 
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+
+  //
+  // Caged pointer related functionality.
+  //
+
+  // Load a caged pointer value from an object.
+  TNode<RawPtrT> LoadCagedPointerFromObject(TNode<HeapObject> object,
+                                            int offset) {
+    return LoadCagedPointerFromObject(object, IntPtrConstant(offset));
+  }
+
+  TNode<RawPtrT> LoadCagedPointerFromObject(TNode<HeapObject> object,
+                                            TNode<IntPtrT> offset);
+  TNode<RawPtrT> LoadCagedPointerFromObjectAllowNullptr(
+      TNode<HeapObject> object, int offset) {
+    return LoadCagedPointerFromObjectAllowNullptr(object,
+                                                  IntPtrConstant(offset));
+  }
+
+  TNode<RawPtrT> LoadCagedPointerFromObjectAllowNullptr(
+      TNode<HeapObject> object, TNode<IntPtrT> offset);
+
+  // Stored a caged pointer value to an object.
+  void StoreCagedPointerToObject(TNode<HeapObject> object, int offset,
+                                 TNode<RawPtrT> pointer) {
+    StoreCagedPointerToObject(object, IntPtrConstant(offset), pointer);
+  }
+
+  void StoreCagedPointerToObject(TNode<HeapObject> object,
+                                 TNode<IntPtrT> offset, TNode<RawPtrT> pointer);
+
+  void StoreCagedPointerToObjectAllowNullptr(TNode<HeapObject> object,
+                                             int offset,
+                                             TNode<RawPtrT> pointer) {
+    StoreCagedPointerToObjectAllowNullptr(object, IntPtrConstant(offset),
+                                          pointer);
+  }
+
+  void StoreCagedPointerToObjectAllowNullptr(TNode<HeapObject> object,
+                                             TNode<IntPtrT> offset,
+                                             TNode<RawPtrT> pointer);
+
+#endif  // V8_VIRTUAL_MEMORY_CAGE
+
   //
   // ExternalPointerT-related functionality.
   //
@@ -1107,14 +1152,30 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<RawPtrT> LoadJSTypedArrayExternalPointerPtr(
       TNode<JSTypedArray> holder) {
+#ifdef V8_HEAP_SANDBOX
+    return LoadCagedPointerFromObject(holder,
+                                      JSTypedArray::kExternalPointerOffset);
+#else
     return LoadObjectField<RawPtrT>(holder,
                                     JSTypedArray::kExternalPointerOffset);
+#endif
   }
+
+  /*TNode<RawPtrT> LoadJSTypedArrayExternalPointerPtrOrNullPtr(
+      TNode<JSTypedArray> holder) {
+    return LoadCagedPointerFromObjectWithNullptrCheck(
+        holder, JSTypedArray::kExternalPointerOffset);
+  }*/
 
   void StoreJSTypedArrayExternalPointerPtr(TNode<JSTypedArray> holder,
                                            TNode<RawPtrT> value) {
-    StoreObjectFieldNoWriteBarrier<RawPtrT>(
+#ifdef V8_HEAP_SANDBOX
+    StoreCagedPointerToObjectAllowNullptr(
         holder, JSTypedArray::kExternalPointerOffset, value);
+#else
+    return StoreObjectFieldNoWriteBarrier<RawPtrT>(
+        holder, JSTypedArray::kExternalPointerOffset, value);
+#endif
   }
 
   // Load value from current parent frame by given offset in bytes.
@@ -3569,6 +3630,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<IntPtrT> RabGsabElementsKindToElementByteSize(
       TNode<Int32T> elementsKind);
   TNode<RawPtrT> LoadJSTypedArrayDataPtr(TNode<JSTypedArray> typed_array);
+  /*TNode<RawPtrT> LoadJSTypedArrayDataPtrOrNullPtr(
+      TNode<JSTypedArray> typed_array);*/
   TNode<JSArrayBuffer> GetTypedArrayBuffer(TNode<Context> context,
                                            TNode<JSTypedArray> array);
 

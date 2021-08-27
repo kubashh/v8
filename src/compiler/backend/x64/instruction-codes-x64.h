@@ -397,7 +397,16 @@ namespace compiler {
   V(X64Word64AtomicOrUint64)              \
   V(X64Word64AtomicXorUint64)             \
   V(X64Word64AtomicExchangeUint64)        \
-  V(X64Word64AtomicCompareExchangeUint64)
+  V(X64Word64AtomicCompareExchangeUint64) \
+  OPCODE_LIST_VIRTUAL_MEMORY_CAGE(V)
+
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+#define OPCODE_LIST_VIRTUAL_MEMORY_CAGE(V) \
+  V(X64MovqUncagePointer)                  \
+  V(X64MovqCagePointer)
+#else
+#define OPCODE_LIST_VIRTUAL_MEMORY_CAGE(V)
+#endif  // V8_VIRTUAL_MEMORY_CAGE
 
 // Addressing modes represent the "shape" of inputs to an instruction.
 // Many instructions support multiple addressing modes. Addressing modes

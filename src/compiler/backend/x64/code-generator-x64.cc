@@ -2276,6 +2276,34 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     }
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+    case kX64MovqUncagePointer: {
+      CHECK(instr->HasOutput());
+      Operand address(i.MemoryOperand());
+      __ LoadCagedPointerField(i.OutputRegister(), address);
+      EmitTSANLoadOOLIfNeeded(zone(), this, tasm(), address, i,
+                              DetermineStubCallMode(),
+                              kInt64Size);  // TODO(saelo) what on 32-bit ?
+      break;
+    }
+    case kX64MovqCagePointer: {
+      CHECK(!instr->HasOutput());
+      size_t index = 0;
+      Operand operand = i.MemoryOperand(&index);
+      if (HasImmediateInput(instr, index)) {
+        Immediate value(i.InputImmediate(index));
+        __ StoreCagedPointerField(operand, value);
+        EmitTSANStoreOOLIfNeeded(zone(), this, tasm(), operand, value, i,
+                                 DetermineStubCallMode(), kTaggedSize);
+      } else {
+        Register value(i.InputRegister(index));
+        __ StoreCagedPointerField(operand, value);
+        EmitTSANStoreOOLIfNeeded(zone(), this, tasm(), operand, value, i,
+                                 DetermineStubCallMode(), kTaggedSize);
+      }
+      break;
+    }
+#endif  // V8_VIRTUAL_MEMORY_CAGE
     case kX64Movq:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       if (instr->HasOutput()) {

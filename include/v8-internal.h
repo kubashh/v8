@@ -494,25 +494,35 @@ constexpr size_t kVirtualMemoryCagePointerCageSize =
     Internals::kPtrComprCageReservationSize;
 
 // Size of the virtual memory cage, excluding the guard regions surrounding it.
-constexpr size_t kVirtualMemoryCageSize = size_t{1} << 40;  // 1 TB
+constexpr size_t kVirtualMemoryCageSizeLog2 = 40;  // 1 TB
+constexpr size_t kVirtualMemoryCageSize = size_t{1}
+                                          << kVirtualMemoryCageSizeLog2;
 
 static_assert(kVirtualMemoryCageSize > kVirtualMemoryCagePointerCageSize,
               "The virtual memory cage must be larger than the pointer "
               "compression cage contained within it.");
 
-// Required alignment of the virtual memory cage. For simplicity, we require the
-// size of the guard regions to be a multiple of this, so that this specifies
-// the alignment of the cage including and excluding surrounding guard regions.
-// The alignment requirement is due to the pointer compression cage being
-// located at the start of the virtual memory cage.
-constexpr size_t kVirtualMemoryCageAlignment =
-    Internals::kPtrComprCageBaseAlignment;
+// CagedPointers are guaranteed to point into the virtual memory cage. This is
+// achieved by storing them as offset from the cage base rather than as raw
+// pointers. For efficiency, the offset is stored shifted to the left, so that
+// it is guaranteed that the offset is smaller than the cage size after
+// shifting it to the right again. This constant specifies the shift amount.
+constexpr uint64_t kCagedPointerShift = 64 - kVirtualMemoryCageSizeLog2;
 
 // Size of the guard regions surrounding the virtual memory cage. This assumes a
 // worst-case scenario of a 32-bit unsigned index being used to access an array
 // of 64-bit values.
 constexpr size_t kVirtualMemoryCageGuardRegionSize = size_t{32} << 30;  // 32 GB
 
+// Required alignment of the virtual memory cage. The alignment requirement is
+// due to the pointer compression cage being located at the start of the
+// virtual memory cage.
+constexpr size_t kVirtualMemoryCageAlignment =
+    Internals::kPtrComprCageBaseAlignment;
+
+// For simplicity, we require the size of the guard regions to be a multiple of
+// the cage alignment, so that the alignment is valid for the cage including
+// and excluding its surrounding guard regions.
 static_assert((kVirtualMemoryCageGuardRegionSize %
                kVirtualMemoryCageAlignment) == 0,
               "The size of the virtual memory cage guard region must be a "

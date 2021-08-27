@@ -67,9 +67,9 @@ transitioning macro AllocateTypedArray(implicit context: Context)(
   } else {
     typed_array::SetJSTypedArrayOffHeapDataPtr(
         typedArray, buffer.backing_store_ptr, byteOffset);
-    assert(
-        typedArray.data_ptr ==
-        (buffer.backing_store_ptr + Convert<intptr>(byteOffset)));
+    // assert(
+    //    typedArray.data_ptr ==
+    //    (buffer.backing_store_ptr + Convert<intptr>(byteOffset)));
   }
   SetupTypedArrayEmbedderFields(typedArray);
   return typedArray;

@@ -1534,6 +1534,74 @@ void CodeStubAssembler::BranchIfToBooleanIsTrue(TNode<Object> value,
   }
 }
 
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+
+TNode<RawPtrT> CodeStubAssembler::LoadCagedPointerFromObject(
+    TNode<HeapObject> object, TNode<IntPtrT> field_offset) {
+  return ReinterpretCast<RawPtrT>(
+      LoadObjectField<CagedPtrT>(object, field_offset));
+}
+
+TNode<RawPtrT> CodeStubAssembler::LoadCagedPointerFromObjectAllowNullptr(
+    TNode<HeapObject> object, TNode<IntPtrT> field_offset) {
+  // TODO(saelo) this can be improved.
+  TVariable<IntPtrT> pointer(LoadObjectField<IntPtrT>(object, field_offset),
+                             this);
+  Label done(this), is_null(this, Label::kDeferred);
+  GotoIf(
+      IntPtrEqual(pointer.value(), IntPtrConstant(kCagedPointerNullptrValue)),
+      &is_null);
+  pointer = ReinterpretCast<IntPtrT>(
+      LoadObjectField<CagedPtrT>(object, field_offset));  // TODO(saelo) fix?
+  Goto(&done);
+  BIND(&is_null);
+  pointer = IntPtrConstant(0);
+  Goto(&done);
+  BIND(&done);
+  return ReinterpretCast<RawPtrT>(pointer.value());
+}
+
+void CodeStubAssembler::StoreCagedPointerToObject(TNode<HeapObject> object,
+                                                  TNode<IntPtrT> offset,
+                                                  TNode<RawPtrT> pointer) {
+  TNode<IntPtrT> value = ReinterpretCast<IntPtrT>(pointer);
+  // nullptr is forbidden.
+  // TODO(saelo) make release build check?
+  CSA_ASSERT(this, WordNotEqual(value, IntPtrConstant(0)));
+#ifdef DEBUG
+  TNode<ExternalReference> cage_base_address =
+      ExternalConstant(ExternalReference::cage_base_address(isolate()));
+  TNode<IntPtrT> cage_base = Load<IntPtrT>(cage_base_address);
+  TNode<IntPtrT> cage_end =
+      IntPtrAdd(cage_base, IntPtrConstant(kVirtualMemoryCageSize));
+  CSA_ASSERT(this, IntPtrGreaterThanOrEqual(value, cage_base));
+  CSA_ASSERT(this, IntPtrLessThan(value, cage_end));
+#endif
+  StoreObjectFieldNoWriteBarrier<CagedPtrT>(object, offset,
+                                            ReinterpretCast<CagedPtrT>(value));
+}
+
+void CodeStubAssembler::StoreCagedPointerToObjectAllowNullptr(
+    TNode<HeapObject> object, TNode<IntPtrT> offset, TNode<RawPtrT> pointer) {
+  TNode<IntPtrT> value = ReinterpretCast<IntPtrT>(pointer);
+  Label is_not_null(this), is_null(this, Label::kDeferred), done(this);
+  Branch(IntPtrEqual(value, IntPtrConstant(0)), &is_null, &is_not_null);
+  BIND(&is_not_null);
+  {
+    StoreCagedPointerToObject(object, offset, pointer);
+    Goto(&done);
+  }
+  BIND(&is_null);
+  {
+    StoreObjectFieldNoWriteBarrier<IntPtrT>(
+        object, offset, IntPtrConstant(kCagedPointerNullptrValue));
+    Goto(&done);
+  }
+  BIND(&done);
+}
+
+#endif  // V8_VIRTUAL_MEMORY_CAGE
+
 TNode<ExternalPointerT> CodeStubAssembler::ChangeUint32ToExternalPointer(
     TNode<Uint32T> value) {
   STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
@@ -2316,6 +2384,32 @@ TNode<RawPtrT> CodeStubAssembler::LoadJSTypedArrayDataPtr(
   }
   return RawPtrAdd(external_pointer, base_pointer);
 }
+
+/*
+TNode<RawPtrT> CodeStubAssembler::LoadJSTypedArrayDataPtrOrNullPtr(
+    TNode<JSTypedArray> typed_array) {
+  // TODO(saelo) avoid code duplication with previous method
+  // Data pointer = external_pointer + static_cast<Tagged_t>(base_pointer).
+  TNode<RawPtrT> external_pointer =
+      LoadJSTypedArrayExternalPointerPtrOrNullPtr(typed_array);
+
+  TNode<IntPtrT> base_pointer;
+  if (COMPRESS_POINTERS_BOOL) {
+    TNode<Int32T> compressed_base =
+        LoadObjectField<Int32T>(typed_array, JSTypedArray::kBasePointerOffset);
+    // Zero-extend TaggedT to WordT according to current compression scheme
+    // so that the addition with |external_pointer| (which already contains
+    // compensated offset value) below will decompress the tagged value.
+    // See JSTypedArray::ExternalPointerCompensationForOnHeapArray() for
+    // details.
+    base_pointer = Signed(ChangeUint32ToWord(compressed_base));
+  } else {
+    base_pointer =
+        LoadObjectField<IntPtrT>(typed_array, JSTypedArray::kBasePointerOffset);
+  }
+  return RawPtrAdd(external_pointer, base_pointer);
+}
+*/
 
 TNode<BigInt> CodeStubAssembler::LoadFixedBigInt64ArrayElementAsTagged(
     TNode<RawPtrT> data_pointer, TNode<IntPtrT> offset) {
@@ -13788,8 +13882,13 @@ void CodeStubAssembler::ThrowIfArrayBufferViewBufferIsDetached(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSArrayBufferBackingStorePtr(
     TNode<JSArrayBuffer> array_buffer) {
+#ifdef V8_HEAP_SANDBOX
+  return LoadCagedPointerFromObjectAllowNullptr(
+      array_buffer, JSArrayBuffer::kBackingStoreOffset);
+#else
   return LoadObjectField<RawPtrT>(array_buffer,
                                   JSArrayBuffer::kBackingStoreOffset);
+#endif
 }
 
 TNode<JSArrayBuffer> CodeStubAssembler::LoadJSArrayBufferViewBuffer(
@@ -14026,6 +14125,7 @@ TNode<JSArrayBuffer> CodeStubAssembler::GetTypedArrayBuffer(
 
   TNode<JSArrayBuffer> buffer = LoadJSArrayBufferViewBuffer(array);
   GotoIf(IsDetachedBuffer(buffer), &call_runtime);
+  // TODO(saelo) can maybe optimize this check?
   TNode<RawPtrT> backing_store = LoadJSArrayBufferBackingStorePtr(buffer);
   GotoIf(WordEqual(backing_store, IntPtrConstant(0)), &call_runtime);
   var_result = buffer;
