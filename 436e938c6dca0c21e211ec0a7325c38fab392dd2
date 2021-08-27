@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "217c58ce_5428d05d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-08-27T06:12:52Z",
+      "side": 1,
+      "message": "I am not using a helper assertion function for these test. please review this AS IS.",
+      "revId": "436e938c6dca0c21e211ec0a7325c38fab392dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
