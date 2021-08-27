@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "64aefd6e_c55b6ae4",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-27T02:13:30Z",
+      "side": 1,
+      "message": "I originally didn\u0027t want to make codegen slower for non-TSAN builds. Happy to do this refactoring though, agree it\u0027ll be cleaner.",
+      "parentUuid": "171aa13a_05252ec6",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5755286_01a5fc61",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 12
