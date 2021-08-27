@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1c2dc9c_5b1970b1",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-27T08:23:08Z",
+      "side": 0,
+      "message": "We already do this via TryMakeRef in value().",
+      "revId": "90bfbb5cd33d10a45061ccce311c5e2e7d9fd57d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
