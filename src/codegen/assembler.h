@@ -420,6 +420,10 @@ class V8_EXPORT_PRIVATE AssemblerBase : public Malloced {
   CodeCommentsWriter code_comments_writer_;
 
   // Relocation information when code allocated directly on heap.
+  // Constants from:
+  // https://docs.google.com/spreadsheets/d/1SjTwIXXD1cKWPjuGrUtfr1gLH46_e9F3sJzxQ3UYct8/edit#gid=0
+  const int kSavedHandleForRawObjectsInitialSize = 60;
+  const int kSavedOffsetForRuntimeEntriesInitialSize = 100;
   std::vector<std::pair<uint32_t, Address>> saved_handles_for_raw_object_ptr_;
   std::vector<std::pair<uint32_t, uint32_t>> saved_offsets_for_runtime_entries_;
 
