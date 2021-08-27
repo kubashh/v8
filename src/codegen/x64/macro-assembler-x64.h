@@ -429,11 +429,6 @@ class V8_EXPORT_PRIVATE TurboAssembler
   void Pinsrq(XMMRegister dst, XMMRegister src1, Register src2, uint8_t imm8);
   void Pinsrq(XMMRegister dst, XMMRegister src1, Operand src2, uint8_t imm8);
 
-  void Absps(XMMRegister dst, XMMRegister src);
-  void Negps(XMMRegister dst, XMMRegister src);
-  void Abspd(XMMRegister dst, XMMRegister src);
-  void Negpd(XMMRegister dst, XMMRegister src);
-
   void CompareRoot(Register with, RootIndex index);
   void CompareRoot(Operand with, RootIndex index);
 

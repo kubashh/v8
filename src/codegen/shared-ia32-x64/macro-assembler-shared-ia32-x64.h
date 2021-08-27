@@ -445,6 +445,46 @@ class V8_EXPORT_PRIVATE SharedTurboAssemblerBase : public SharedTurboAssembler {
   using SharedTurboAssembler::SharedTurboAssembler;
 
  public:
+  void Abspd(XMMRegister dst, XMMRegister src, Register tmp) {
+    if (!CpuFeatures::IsSupported(AVX) && (dst != src)) {
+      movaps(dst, src);
+      src = dst;
+    }
+    Andps(dst, src,
+          ExternalReferenceAsOperand(
+              ExternalReference::address_of_double_abs_constant(), tmp));
+  }
+
+  void Absps(XMMRegister dst, XMMRegister src, Register tmp) {
+    if (!CpuFeatures::IsSupported(AVX) && (dst != src)) {
+      movaps(dst, src);
+      src = dst;
+    }
+    Andps(dst, src,
+          ExternalReferenceAsOperand(
+              ExternalReference::address_of_float_abs_constant(), tmp));
+  }
+
+  void Negpd(XMMRegister dst, XMMRegister src, Register tmp) {
+    if (!CpuFeatures::IsSupported(AVX) && (dst != src)) {
+      movaps(dst, src);
+      src = dst;
+    }
+    Xorps(dst, src,
+          ExternalReferenceAsOperand(
+              ExternalReference::address_of_double_neg_constant(), tmp));
+  }
+
+  void Negps(XMMRegister dst, XMMRegister src, Register tmp) {
+    if (!CpuFeatures::IsSupported(AVX) && (dst != src)) {
+      movaps(dst, src);
+      src = dst;
+    }
+    Xorps(dst, src,
+          ExternalReferenceAsOperand(
+              ExternalReference::address_of_float_neg_constant(), tmp));
+  }
+
   void F64x2ConvertLowI32x4U(XMMRegister dst, XMMRegister src,
                              Register scratch) {
     ASM_CODE_COMMENT(this);
