@@ -109,7 +109,6 @@ bool S390Debugger::GetValue(const char* desc, intptr_t* value) {
              1;
     }
   }
-  return false;
 }
 
 bool S390Debugger::GetFPDoubleValue(const char* desc, double* value) {
@@ -1776,50 +1775,50 @@ void Simulator::TrashCallerSaveRegisters() {
 #endif
 }
 
-uint32_t Simulator::ReadWU(intptr_t addr, Instruction* instr) {
+uint32_t Simulator::ReadWU(intptr_t addr) {
   uint32_t* ptr = reinterpret_cast<uint32_t*>(addr);
   return *ptr;
 }
 
-int64_t Simulator::ReadW64(intptr_t addr, Instruction* instr) {
+int64_t Simulator::ReadW64(intptr_t addr) {
   int64_t* ptr = reinterpret_cast<int64_t*>(addr);
   return *ptr;
 }
 
-int32_t Simulator::ReadW(intptr_t addr, Instruction* instr) {
+int32_t Simulator::ReadW(intptr_t addr) {
   int32_t* ptr = reinterpret_cast<int32_t*>(addr);
   return *ptr;
 }
 
-void Simulator::WriteW(intptr_t addr, uint32_t value, Instruction* instr) {
+void Simulator::WriteW(intptr_t addr, uint32_t value) {
   uint32_t* ptr = reinterpret_cast<uint32_t*>(addr);
   *ptr = value;
   return;
 }
 
-void Simulator::WriteW(intptr_t addr, int32_t value, Instruction* instr) {
+void Simulator::WriteW(intptr_t addr, int32_t value) {
   int32_t* ptr = reinterpret_cast<int32_t*>(addr);
   *ptr = value;
   return;
 }
 
-uint16_t Simulator::ReadHU(intptr_t addr, Instruction* instr) {
+uint16_t Simulator::ReadHU(intptr_t addr) {
   uint16_t* ptr = reinterpret_cast<uint16_t*>(addr);
   return *ptr;
 }
 
-int16_t Simulator::ReadH(intptr_t addr, Instruction* instr) {
+int16_t Simulator::ReadH(intptr_t addr) {
   int16_t* ptr = reinterpret_cast<int16_t*>(addr);
   return *ptr;
 }
 
-void Simulator::WriteH(intptr_t addr, uint16_t value, Instruction* instr) {
+void Simulator::WriteH(intptr_t addr, uint16_t value) {
   uint16_t* ptr = reinterpret_cast<uint16_t*>(addr);
   *ptr = value;
   return;
 }
 
-void Simulator::WriteH(intptr_t addr, int16_t value, Instruction* instr) {
+void Simulator::WriteH(intptr_t addr, int16_t value) {
   int16_t* ptr = reinterpret_cast<int16_t*>(addr);
   *ptr = value;
   return;
@@ -2037,7 +2036,6 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
               break;
             default:
               UNREACHABLE();
-              break;
           }
           if (!stack_aligned) {
             PrintF(" with unaligned stack %08" V8PRIxPTR "\n",
@@ -2077,7 +2075,6 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
           }
           default:
             UNREACHABLE();
-            break;
         }
         if (::v8::internal::FLAG_trace_sim || !stack_aligned) {
           switch (redirection->type()) {
@@ -2091,7 +2088,6 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
               break;
             default:
               UNREACHABLE();
-              break;
           }
         }
       } else if (redirection->type() == ExternalReference::DIRECT_API_CALL) {
@@ -3193,7 +3189,7 @@ EVALUATE(VSTEF) {
   DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
   intptr_t addr = GET_ADDRESS(x2, b2, d2);
   int32_t value = get_simd_register_by_lane<int32_t>(r1, m3);
-  WriteW(addr, value, instr);
+  WriteW(addr, value);
   return length;
 }
 
@@ -3201,7 +3197,7 @@ EVALUATE(VLEF) {
   DCHECK_OPCODE(VLEF);
   DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
   intptr_t addr = GET_ADDRESS(x2, b2, d2);
-  int32_t value = ReadW(addr, instr);
+  int32_t value = ReadW(addr);
   set_simd_register_by_lane<int32_t>(r1, m3, value);
   return length;
 }
@@ -4588,7 +4584,7 @@ EVALUATE(L) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t addr = b2_val + x2_val + d2_val;
-  int32_t mem_val = ReadW(addr, instr);
+  int32_t mem_val = ReadW(addr);
   set_low_register(r1, mem_val);
   return length;
 }
@@ -4737,7 +4733,7 @@ EVALUATE(LGF) {
   DCHECK_OPCODE(LGF);
   DECODE_RXY_A_INSTRUCTION(r1, x2, b2, d2);
   intptr_t addr = GET_ADDRESS(x2, b2, d2);
-  int64_t mem_val = static_cast<int64_t>(ReadW(addr, instr));
+  int64_t mem_val = static_cast<int64_t>(ReadW(addr));
   set_register(r1, mem_val);
   return length;
 }
@@ -4749,7 +4745,7 @@ EVALUATE(ST) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t addr = b2_val + x2_val + d2_val;
-  WriteW(addr, r1_val, instr);
+  WriteW(addr, r1_val);
   return length;
 }
 
@@ -4767,7 +4763,7 @@ EVALUATE(STY) {
   DECODE_RXY_A_INSTRUCTION(r1, x2, b2, d2);
   intptr_t addr = GET_ADDRESS(x2, b2, d2);
   uint32_t value = get_low_register<uint32_t>(r1);
-  WriteW(addr, value, instr);
+  WriteW(addr, value);
   return length;
 }
 
@@ -4775,7 +4771,7 @@ EVALUATE(LY) {
   DCHECK_OPCODE(LY);
   DECODE_RXY_A_INSTRUCTION(r1, x2, b2, d2);
   intptr_t addr = GET_ADDRESS(x2, b2, d2);
-  uint32_t mem_val = ReadWU(addr, instr);
+  uint32_t mem_val = ReadWU(addr);
   set_low_register(r1, mem_val);
   return length;
 }
@@ -5176,7 +5172,7 @@ EVALUATE(STH) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t mem_addr = b2_val + x2_val + d2_val;
-  WriteH(mem_addr, r1_val, instr);
+  WriteH(mem_addr, r1_val);
 
   return length;
 }
@@ -5258,7 +5254,7 @@ EVALUATE(LH) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t mem_addr = x2_val + b2_val + d2_val;
 
-  int32_t result = static_cast<int32_t>(ReadH(mem_addr, instr));
+  int32_t result = static_cast<int32_t>(ReadH(mem_addr));
   set_low_register(r1, result);
   return length;
 }
@@ -5276,7 +5272,7 @@ EVALUATE(AH) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t addr = b2_val + x2_val + d2_val;
-  int32_t mem_val = static_cast<int32_t>(ReadH(addr, instr));
+  int32_t mem_val = static_cast<int32_t>(ReadH(addr));
   int32_t alu_out = 0;
   bool isOF = false;
   isOF = CheckOverflowForIntAdd(r1_val, mem_val, int32_t);
@@ -5295,7 +5291,7 @@ EVALUATE(SH) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t addr = b2_val + x2_val + d2_val;
-  int32_t mem_val = static_cast<int32_t>(ReadH(addr, instr));
+  int32_t mem_val = static_cast<int32_t>(ReadH(addr));
   int32_t alu_out = 0;
   bool isOF = false;
   isOF = CheckOverflowForIntSub(r1_val, mem_val, int32_t);
@@ -5313,7 +5309,7 @@ EVALUATE(MH) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t addr = b2_val + x2_val + d2_val;
-  int32_t mem_val = static_cast<int32_t>(ReadH(addr, instr));
+  int32_t mem_val = static_cast<int32_t>(ReadH(addr));
   int32_t alu_out = 0;
   alu_out = r1_val * mem_val;
   set_low_register(r1, alu_out);
@@ -5351,7 +5347,7 @@ EVALUATE(N) {
   int32_t r1_val = get_low_register<int32_t>(r1);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2_val, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2_val);
   int32_t alu_out = 0;
   alu_out = r1_val & mem_val;
   SetS390BitWiseConditionCode<uint32_t>(alu_out);
@@ -5366,7 +5362,7 @@ EVALUATE(CL) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t addr = b2_val + x2_val + d2_val;
-  int32_t mem_val = ReadW(addr, instr);
+  int32_t mem_val = ReadW(addr);
   SetS390ConditionCode<uint32_t>(r1_val, mem_val);
   return length;
 }
@@ -5378,7 +5374,7 @@ EVALUATE(O) {
   int32_t r1_val = get_low_register<int32_t>(r1);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2_val, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2_val);
   int32_t alu_out = 0;
   alu_out = r1_val | mem_val;
   SetS390BitWiseConditionCode<uint32_t>(alu_out);
@@ -5393,7 +5389,7 @@ EVALUATE(X) {
   int32_t r1_val = get_low_register<int32_t>(r1);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2_val, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2_val);
   int32_t alu_out = 0;
   alu_out = r1_val ^ mem_val;
   SetS390BitWiseConditionCode<uint32_t>(alu_out);
@@ -5408,7 +5404,7 @@ EVALUATE(C) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t addr = b2_val + x2_val + d2_val;
-  int32_t mem_val = ReadW(addr, instr);
+  int32_t mem_val = ReadW(addr);
   SetS390ConditionCode<int32_t>(r1_val, mem_val);
   return length;
 }
@@ -5420,7 +5416,7 @@ EVALUATE(A) {
   int32_t r1_val = get_low_register<int32_t>(r1);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2_val, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2_val);
   int32_t alu_out = 0;
   bool isOF = false;
   isOF = CheckOverflowForIntAdd(r1_val, mem_val, int32_t);
@@ -5438,7 +5434,7 @@ EVALUATE(S) {
   int32_t r1_val = get_low_register<int32_t>(r1);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2_val, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2_val);
   int32_t alu_out = 0;
   bool isOF = false;
   isOF = CheckOverflowForIntSub(r1_val, mem_val, int32_t);
@@ -5456,7 +5452,7 @@ EVALUATE(M) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t addr = b2_val + x2_val + d2_val;
   DCHECK_EQ(r1 % 2, 0);
-  int32_t mem_val = ReadW(addr, instr);
+  int32_t mem_val = ReadW(addr);
   int32_t r1_val = get_low_register<int32_t>(r1 + 1);
   int64_t product =
       static_cast<int64_t>(r1_val) * static_cast<int64_t>(mem_val);
@@ -5521,7 +5517,7 @@ EVALUATE(STE) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t addr = b2_val + x2_val + d2_val;
   int32_t frs_val = get_fpr<int32_t>(r1);
-  WriteW(addr, frs_val, instr);
+  WriteW(addr, frs_val);
   return length;
 }
 
@@ -5530,7 +5526,7 @@ EVALUATE(MS) {
   DECODE_RX_A_INSTRUCTION(x2, b2, r1, d2_val);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2_val, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2_val);
   int32_t r1_val = get_low_register<int32_t>(r1);
   set_low_register(r1, r1_val * mem_val);
   return length;
@@ -5743,7 +5739,7 @@ EVALUATE(STM) {
   // Store each register in ascending order.
   for (int i = 0; i <= r3 - r1; i++) {
     int32_t value = get_low_register<int32_t>((r1 + i) % 16);
-    WriteW(rb_val + offset + 4 * i, value, instr);
+    WriteW(rb_val + offset + 4 * i, value);
   }
   return length;
 }
@@ -5803,7 +5799,7 @@ EVALUATE(LM) {
 
   // Store each register in ascending order.
   for (int i = 0; i <= r3 - r1; i++) {
-    int32_t value = ReadW(rb_val + offset + 4 * i, instr);
+    int32_t value = ReadW(rb_val + offset + 4 * i);
     set_low_register((r1 + i) % 16, value);
   }
   return length;
@@ -9264,7 +9260,7 @@ EVALUATE(LT) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t addr = x2_val + b2_val + d2;
-  int32_t value = ReadW(addr, instr);
+  int32_t value = ReadW(addr);
   set_low_register(r1, value);
   SetS390ConditionCode<int32_t>(value, 0);
   return length;
@@ -9277,7 +9273,7 @@ EVALUATE(LGH) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t addr = x2_val + b2_val + d2;
-  int64_t mem_val = static_cast<int64_t>(ReadH(addr, instr));
+  int64_t mem_val = static_cast<int64_t>(ReadH(addr));
   set_register(r1, mem_val);
   return length;
 }
@@ -9289,7 +9285,7 @@ EVALUATE(LLGF) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t addr = x2_val + b2_val + d2;
-  uint64_t mem_val = static_cast<uint64_t>(ReadWU(addr, instr));
+  uint64_t mem_val = static_cast<uint64_t>(ReadWU(addr));
   set_register(r1, mem_val);
   return length;
 }
@@ -9308,7 +9304,7 @@ EVALUATE(AGF) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
   uint64_t alu_out = r1_val;
-  uint32_t mem_val = ReadW(b2_val + d2_val + x2_val, instr);
+  uint32_t mem_val = ReadW(b2_val + d2_val + x2_val);
   alu_out += mem_val;
   SetS390ConditionCode<int64_t>(alu_out, 0);
   set_register(r1, alu_out);
@@ -9323,7 +9319,7 @@ EVALUATE(SGF) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
   uint64_t alu_out = r1_val;
-  uint32_t mem_val = ReadW(b2_val + d2_val + x2_val, instr);
+  uint32_t mem_val = ReadW(b2_val + d2_val + x2_val);
   alu_out -= mem_val;
   SetS390ConditionCode<int64_t>(alu_out, 0);
   set_register(r1, alu_out);
@@ -9348,8 +9344,7 @@ EVALUATE(MSGF) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
-  int64_t mem_val =
-      static_cast<int64_t>(ReadW(b2_val + d2_val + x2_val, instr));
+  int64_t mem_val = static_cast<int64_t>(ReadW(b2_val + d2_val + x2_val));
   int64_t r1_val = get_register(r1);
   int64_t product = r1_val * mem_val;
   set_register(r1, product);
@@ -9363,8 +9358,7 @@ EVALUATE(DSGF) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
-  int64_t mem_val =
-      static_cast<int64_t>(ReadW(b2_val + d2_val + x2_val, instr));
+  int64_t mem_val = static_cast<int64_t>(ReadW(b2_val + d2_val + x2_val));
   int64_t r1_val = get_register(r1 + 1);
   int64_t quotient = r1_val / mem_val;
   int64_t remainder = r1_val % mem_val;
@@ -9379,7 +9373,7 @@ EVALUATE(LRVG) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t mem_addr = b2_val + x2_val + d2;
-  int64_t mem_val = ReadW64(mem_addr, instr);
+  int64_t mem_val = ReadW64(mem_addr);
   set_register(r1, ByteReverse(mem_val));
   return length;
 }
@@ -9390,7 +9384,7 @@ EVALUATE(LRV) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t mem_addr = b2_val + x2_val + d2;
-  int32_t mem_val = ReadW(mem_addr, instr);
+  int32_t mem_val = ReadW(mem_addr);
   set_low_register(r1, ByteReverse(mem_val));
   return length;
 }
@@ -9402,7 +9396,7 @@ EVALUATE(LRVH) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t mem_addr = b2_val + x2_val + d2;
-  int16_t mem_val = ReadH(mem_addr, instr);
+  int16_t mem_val = ReadH(mem_addr);
   int32_t result = ByteReverse(mem_val) & 0x0000FFFF;
   result |= r1_val & 0xFFFF0000;
   set_low_register(r1, result);
@@ -9488,7 +9482,7 @@ EVALUATE(STRV) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t mem_addr = b2_val + x2_val + d2;
-  WriteW(mem_addr, ByteReverse(r1_val), instr);
+  WriteW(mem_addr, ByteReverse(r1_val));
   return length;
 }
 
@@ -9511,7 +9505,7 @@ EVALUATE(STRVH) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t mem_addr = b2_val + x2_val + d2;
   int16_t result = static_cast<int16_t>(r1_val >> 16);
-  WriteH(mem_addr, ByteReverse(result), instr);
+  WriteH(mem_addr, ByteReverse(result));
   return length;
 }
 
@@ -9527,7 +9521,7 @@ EVALUATE(MSY) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
-  int32_t mem_val = ReadW(b2_val + d2_val + x2_val, instr);
+  int32_t mem_val = ReadW(b2_val + d2_val + x2_val);
   int32_t r1_val = get_low_register<int32_t>(r1);
   set_low_register(r1, mem_val * r1_val);
   return length;
@@ -9539,7 +9533,7 @@ EVALUATE(MSC) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
-  int32_t mem_val = ReadW(b2_val + d2_val + x2_val, instr);
+  int32_t mem_val = ReadW(b2_val + d2_val + x2_val);
   int32_t r1_val = get_low_register<int32_t>(r1);
   int64_t result64 =
       static_cast<int64_t>(r1_val) * static_cast<int64_t>(mem_val);
@@ -9558,7 +9552,7 @@ EVALUATE(NY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int32_t alu_out = get_low_register<int32_t>(r1);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2);
   alu_out &= mem_val;
   SetS390BitWiseConditionCode<uint32_t>(alu_out);
   set_low_register(r1, alu_out);
@@ -9571,7 +9565,7 @@ EVALUATE(CLY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   uint32_t alu_out = get_low_register<uint32_t>(r1);
-  uint32_t mem_val = ReadWU(b2_val + x2_val + d2, instr);
+  uint32_t mem_val = ReadWU(b2_val + x2_val + d2);
   SetS390ConditionCode<uint32_t>(alu_out, mem_val);
   return length;
 }
@@ -9582,7 +9576,7 @@ EVALUATE(OY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int32_t alu_out = get_low_register<int32_t>(r1);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2);
   alu_out |= mem_val;
   SetS390BitWiseConditionCode<uint32_t>(alu_out);
   set_low_register(r1, alu_out);
@@ -9595,7 +9589,7 @@ EVALUATE(XY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int32_t alu_out = get_low_register<int32_t>(r1);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2);
   alu_out ^= mem_val;
   SetS390BitWiseConditionCode<uint32_t>(alu_out);
   set_low_register(r1, alu_out);
@@ -9608,7 +9602,7 @@ EVALUATE(CY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int32_t alu_out = get_low_register<int32_t>(r1);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2);
   SetS390ConditionCode<int32_t>(alu_out, mem_val);
   return length;
 }
@@ -9619,7 +9613,7 @@ EVALUATE(AY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int32_t alu_out = get_low_register<int32_t>(r1);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2);
   bool isOF = false;
   isOF = CheckOverflowForIntAdd(alu_out, mem_val, int32_t);
   alu_out += mem_val;
@@ -9635,7 +9629,7 @@ EVALUATE(SY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int32_t alu_out = get_low_register<int32_t>(r1);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2);
   bool isOF = false;
   isOF = CheckOverflowForIntSub(alu_out, mem_val, int32_t);
   alu_out -= mem_val;
@@ -9651,7 +9645,7 @@ EVALUATE(MFY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   DCHECK_EQ(r1 % 2, 0);
-  int32_t mem_val = ReadW(b2_val + x2_val + d2, instr);
+  int32_t mem_val = ReadW(b2_val + x2_val + d2);
   int32_t r1_val = get_low_register<int32_t>(r1 + 1);
   int64_t product =
       static_cast<int64_t>(r1_val) * static_cast<int64_t>(mem_val);
@@ -9669,7 +9663,7 @@ EVALUATE(ALY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   uint32_t alu_out = get_low_register<uint32_t>(r1);
-  uint32_t mem_val = ReadWU(b2_val + x2_val + d2, instr);
+  uint32_t mem_val = ReadWU(b2_val + x2_val + d2);
   alu_out += mem_val;
   set_low_register(r1, alu_out);
   SetS390ConditionCode<uint32_t>(alu_out, 0);
@@ -9682,7 +9676,7 @@ EVALUATE(SLY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   uint32_t alu_out = get_low_register<uint32_t>(r1);
-  uint32_t mem_val = ReadWU(b2_val + x2_val + d2, instr);
+  uint32_t mem_val = ReadWU(b2_val + x2_val + d2);
   alu_out -= mem_val;
   set_low_register(r1, alu_out);
   SetS390ConditionCode<uint32_t>(alu_out, 0);
@@ -9697,7 +9691,7 @@ EVALUATE(STHY) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t addr = x2_val + b2_val + d2;
   uint16_t value = get_low_register<uint32_t>(r1);
-  WriteH(addr, value, instr);
+  WriteH(addr, value);
   return length;
 }
 
@@ -9769,7 +9763,7 @@ EVALUATE(LHY) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t addr = x2_val + b2_val + d2;
-  int32_t result = static_cast<int32_t>(ReadH(addr, instr));
+  int32_t result = static_cast<int32_t>(ReadH(addr));
   set_low_register(r1, result);
   return length;
 }
@@ -9787,8 +9781,7 @@ EVALUATE(AHY) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
-  int32_t mem_val =
-      static_cast<int32_t>(ReadH(b2_val + d2_val + x2_val, instr));
+  int32_t mem_val = static_cast<int32_t>(ReadH(b2_val + d2_val + x2_val));
   int32_t alu_out = 0;
   bool isOF = false;
   alu_out = r1_val + mem_val;
@@ -9806,8 +9799,7 @@ EVALUATE(SHY) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
-  int32_t mem_val =
-      static_cast<int32_t>(ReadH(b2_val + d2_val + x2_val, instr));
+  int32_t mem_val = static_cast<int32_t>(ReadH(b2_val + d2_val + x2_val));
   int32_t alu_out = 0;
   bool isOF = false;
   alu_out = r1_val - mem_val;
@@ -9929,7 +9921,7 @@ EVALUATE(LLGH) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
-  uint16_t mem_val = ReadHU(b2_val + d2_val + x2_val, instr);
+  uint16_t mem_val = ReadHU(b2_val + d2_val + x2_val);
   set_register(r1, mem_val);
   return length;
 }
@@ -9941,7 +9933,7 @@ EVALUATE(LLH) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   intptr_t d2_val = d2;
-  uint16_t mem_val = ReadHU(b2_val + d2_val + x2_val, instr);
+  uint16_t mem_val = ReadHU(b2_val + d2_val + x2_val);
   set_low_register(r1, mem_val);
   return length;
 }
@@ -9952,7 +9944,7 @@ EVALUATE(ML) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   DCHECK_EQ(r1 % 2, 0);
-  uint32_t mem_val = ReadWU(b2_val + x2_val + d2, instr);
+  uint32_t mem_val = ReadWU(b2_val + x2_val + d2);
   uint32_t r1_val = get_low_register<uint32_t>(r1 + 1);
   uint64_t product =
       static_cast<uint64_t>(r1_val) * static_cast<uint64_t>(mem_val);
@@ -9970,7 +9962,7 @@ EVALUATE(DL) {
   int64_t x2_val = (x2 == 0) ? 0 : get_register(x2);
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   DCHECK_EQ(r1 % 2, 0);
-  uint32_t mem_val = ReadWU(b2_val + x2_val + d2, instr);
+  uint32_t mem_val = ReadWU(b2_val + x2_val + d2);
   uint32_t r1_val = get_low_register<uint32_t>(r1 + 1);
   uint64_t quotient =
       static_cast<uint64_t>(r1_val) / static_cast<uint64_t>(mem_val);
@@ -10099,7 +10091,7 @@ EVALUATE(MVHI) {
   DECODE_SIL_INSTRUCTION(b1, d1, i2);
   int64_t b1_val = (b1 == 0) ? 0 : get_register(b1);
   intptr_t src_addr = b1_val + d1;
-  WriteW(src_addr, i2, instr);
+  WriteW(src_addr, i2);
   return length;
 }
 
@@ -10471,12 +10463,12 @@ EVALUATE(ASI) {
   int d1_val = d1;
   intptr_t addr = b1_val + d1_val;
 
-  int32_t mem_val = ReadW(addr, instr);
+  int32_t mem_val = ReadW(addr);
   bool isOF = CheckOverflowForIntAdd(mem_val, i2, int32_t);
   int32_t alu_out = mem_val + i2;
   SetS390ConditionCode<int32_t>(alu_out, 0);
   SetS390OverflowCode(isOF);
-  WriteW(addr, alu_out, instr);
+  WriteW(addr, alu_out);
   return length;
 }
 
@@ -10555,7 +10547,7 @@ EVALUATE(STMY) {
   // Store each register in ascending order.
   for (int i = 0; i <= r3 - r1; i++) {
     int32_t value = get_low_register<int32_t>((r1 + i) % 16);
-    WriteW(b2_val + offset + 4 * i, value, instr);
+    WriteW(b2_val + offset + 4 * i, value);
   }
   return length;
 }
@@ -10581,7 +10573,7 @@ EVALUATE(LMY) {
 
   // Store each register in ascending order.
   for (int i = 0; i <= r3 - r1; i++) {
-    int32_t value = ReadW(b2_val + offset + 4 * i, instr);
+    int32_t value = ReadW(b2_val + offset + 4 * i);
     set_low_register((r1 + i) % 16, value);
   }
   return length;
@@ -11242,7 +11234,7 @@ EVALUATE(STEY) {
   int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
   intptr_t addr = x2_val + b2_val + d2;
   int32_t frs_val = get_fpr<int32_t>(r1);
-  WriteW(addr, frs_val, instr);
+  WriteW(addr, frs_val);
   return length;
 }
 
