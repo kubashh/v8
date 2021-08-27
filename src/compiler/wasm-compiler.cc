@@ -7414,7 +7414,7 @@ std::pair<WasmImportCallKind, Handle<JSReceiver>> ResolveWasmImportCall(
       return std::make_pair(WasmImportCallKind::kUseCallBuiltin, callable);
     }
 
-    if (shared->internal_formal_parameter_count() ==
+    if (shared->internal_formal_parameter_count_without_receiver() ==
         expected_sig->parameter_count()) {
       return std::make_pair(WasmImportCallKind::kJSFunctionArityMatch,
                             callable);
