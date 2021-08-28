@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80c20497_85bcddd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-28T00:57:20Z",
+      "side": 1,
+      "message": "lgtm, but a question about the error checking.\n\nThe cause string is optional, and checking for it makes the test more brittle for the future since they\u0027ll fail when error messages change. Are you sure you want to hardcode the error messages in tests at this stage?",
+      "revId": "5024782a22171667460589a541da0b76ccd3d869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d05a793_468532ed",
+        "filename": "test/mjsunit/temporal/instant-compare.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-28T00:57:20Z",
+      "side": 1,
+      "message": "Please leave the cause string undefined in this case, and below.",
+      "range": {
+        "startLine": 15,
+        "startChar": 16,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "5024782a22171667460589a541da0b76ccd3d869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
