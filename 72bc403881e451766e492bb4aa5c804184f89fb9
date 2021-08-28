@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67a68aca_15361e4a",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-28T00:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d81f7165_220414d7",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21c42879_6fa131e3",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "To clarify, you\u0027re not asking for plumbing the memory order through as a runtime argument to the store helpers, right? That was explicitly decided against in a previous CL that did that, since it affects performance.\n\n\nAs for making the memory order style consistent, I\u0027d like to just use std::memory_order, but that\u0027s not desirable for exhaustiveness checking in switches. The compiler doesn\u0027t have a notion of relaxed or consume or separate release/acquire orders. Rather than typing a lot of \"default: UNREACHABLE()\" I opted for a new enum.\n\nStill, if you don\u0027t think the extra checking for unused memory orders is an issue, I\u0027d like to try to move towards a world where we only have the tags and std::memory_order. I can whip up a doc and get other folks\u0027 opinions.",
       "parentUuid": "21c42879_6fa131e3",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0628667f_f76368fc",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-28T00:39:57Z",
+      "side": 1,
+      "message": "I think the refactor covered everything you asked for, but it wasn\u0027t as succinct as I\u0027d hoped because SeqCst stores can\u0027t handle immediates due to XCHG, so had to play some template specialization tricks.",
+      "parentUuid": "a830492f_e9584c4f",
       "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -141,6 +177,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96482e56_da789c35",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-28T00:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64aefd6e_c55b6ae4",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5755286_01a5fc61",
@@ -158,6 +212,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49017cb0_144b4daa",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-28T00:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5755286_01a5fc61",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d297ab73_c0ee9337",
@@ -171,6 +243,30 @@
       "writtenOn": "2021-08-26T07:14:09Z",
       "side": 1,
       "message": "This is now outdated, same below in L463 and L494",
+      "range": {
+        "startLine": 445,
+        "startChar": 51,
+        "endLine": 445,
+        "endChar": 68
+      },
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0f9c5df_477d821a",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-28T00:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d297ab73_c0ee9337",
       "range": {
         "startLine": 445,
         "startChar": 51,
