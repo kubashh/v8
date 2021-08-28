@@ -57,18 +57,17 @@ HeapBase::HeapBase(
     StackSupport stack_support)
     : raw_heap_(this, custom_spaces),
       platform_(std::move(platform)),
-      oom_handler_(std::make_unique<FatalOutOfMemoryHandler>(this)),
 #if defined(LEAK_SANITIZER)
       lsan_page_allocator_(std::make_unique<v8::base::LsanPageAllocator>(
           platform_->GetPageAllocator())),
 #endif  // LEAK_SANITIZER
 #if defined(CPPGC_CAGED_HEAP)
       caged_heap_(this, page_allocator()),
-      page_backend_(std::make_unique<PageBackend>(caged_heap_.allocator(),
-                                                  *oom_handler_.get())),
+      page_backend_(
+          std::make_unique<PageBackend>(caged_heap_.allocator(), oom_handler_)),
 #else   // !CPPGC_CAGED_HEAP
-      page_backend_(std::make_unique<PageBackend>(*page_allocator(),
-                                                  *oom_handler_.get())),
+      page_backend_(
+          std::make_unique<PageBackend>(*page_allocator(), oom_handler_)),
 #endif  // !CPPGC_CAGED_HEAP
       stats_collector_(std::make_unique<StatsCollector>(platform_.get())),
       stack_(std::make_unique<heap::base::Stack>(
