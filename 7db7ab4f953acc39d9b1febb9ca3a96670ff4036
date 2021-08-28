@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d83e99bb_859386d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-08-28T17:13:26Z",
+      "side": 1,
+      "message": "I saw that we always assume a non-null oom_handler and always pass around a reference. Is there are a reason not to embed the oom_handler into HeapBase?",
+      "revId": "7db7ab4f953acc39d9b1febb9ca3a96670ff4036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
