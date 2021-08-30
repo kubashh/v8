@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4271046d_aafb4fd5",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-30T11:04:33Z",
+      "side": 1,
+      "message": "\u003e I opted for a new enum.\n\nThis didn\u0027t happen, did it? I do think a new enum makes sense 1. for exhaustive switches and 2. for naming consistency with existing tags (like AcquireLoadTag). This\u0027d be fine in follow-up work though.",
+      "parentUuid": "0628667f_f76368fc",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "171aa13a_05252ec6",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 12

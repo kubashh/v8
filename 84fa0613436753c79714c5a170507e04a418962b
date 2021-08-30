@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c715da09_4c70ec6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-30T11:04:33Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3123900_c89c975a",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-30T11:04:33Z",
+      "side": 1,
+      "message": "GetTSANStoreStub",
+      "range": {
+        "startLine": 513,
+        "startChar": 44,
+        "endLine": 513,
+        "endChar": 66
+      },
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5db0279b_62a600b7",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-30T11:04:33Z",
+      "side": 1,
+      "message": "nit: const",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d248303_d70ea074",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-30T11:04:33Z",
+      "side": 1,
+      "message": "Are these additions actually needed here?",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
