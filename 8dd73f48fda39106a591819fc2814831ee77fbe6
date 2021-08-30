@@ -16,6 +16,24 @@
       "message": "Just to make sure: only a few fuzzers were still using this, others are using the newer mechanism?",
       "revId": "8dd73f48fda39106a591819fc2814831ee77fbe6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42dc94fa_3f575485",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-08-30T07:33:14Z",
+      "side": 1,
+      "message": "Only our 2 best fuzzers that are actually able to make use of the runtime functions :( - I don\u0027t think that fuzzilli creates any runtime function that it\u0027s not knowing.\n\nThe other one is not really owned by us (or anyone).",
+      "parentUuid": "b2da727c_594d826a",
+      "revId": "8dd73f48fda39106a591819fc2814831ee77fbe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
