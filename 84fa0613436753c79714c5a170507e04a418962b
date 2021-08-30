@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fb9cdcd_c780577a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-08-30T14:23:52Z",
+      "side": 1,
+      "message": "LGTM\n\nFor CLs of that size it always helps me with the review if the CL description gives at least a brief summary of what (and why it) is changed.",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3123900_c89c975a",
@@ -36,6 +53,29 @@
         "startChar": 44,
         "endLine": 513,
         "endChar": 66
+      },
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f116b854_2635a722",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-08-30T14:23:52Z",
+      "side": 1,
+      "message": "Why didn\u0027t you split this into template specializations like EmitStore below?",
+      "range": {
+        "startLine": 330,
+        "startChar": 0,
+        "endLine": 377,
+        "endChar": 1
       },
       "revId": "84fa0613436753c79714c5a170507e04a418962b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
